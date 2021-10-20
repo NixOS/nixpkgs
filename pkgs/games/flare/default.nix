@@ -1,14 +1,14 @@
 { lib, buildEnv, callPackage, makeWrapper, Cocoa }:
 
 buildEnv {
-  name = "flare-1.11";
+  name = "flare-1.12";
 
   paths = [
     (callPackage ./engine.nix { inherit Cocoa; })
     (callPackage ./game.nix {})
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     mkdir -p $out/bin
     makeWrapper $out/games/flare $out/bin/flare --run "cd $out/share/games/flare"

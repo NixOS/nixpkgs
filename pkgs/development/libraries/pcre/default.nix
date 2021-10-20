@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pcre, windows ? null
 , variant ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
@@ -23,7 +23,8 @@ in stdenv.mkDerivation {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
@@ -50,7 +51,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular

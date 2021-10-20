@@ -4,7 +4,7 @@ let
   rcon-port = 43000;
 in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "minecraft-server";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
   nodes.server = { ... }: {
     environment.systemPackages = [ pkgs.mcrcon ];
@@ -24,7 +24,7 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
       };
     };
 
-    virtualisation.memorySize = 2048;
+    virtualisation.memorySize = 2047;
   };
 
   testScript = ''

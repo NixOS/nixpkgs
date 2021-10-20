@@ -2,28 +2,35 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.22.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "1mjfb39h6z8dbrqxlvrvnzid7la6wj709kx7dva4126i84cmpyf1";
+    sha256 = "sha256-o2P14Nsu77AXO+UnMBXthhP3Q7kI7nd/lI6GFE2cs3M=";
   };
 
-  vendorSha256 = "08c4brwvjp9f7cpzywxns6dkhl3jzq9ckyvphm2jnm2kxmkawbbn";
+  vendorSha256 = "sha256-zzckZI/n00BBl166S7uonJFNQ4RJGLCkDyfLRoHZOtA=";
 
-  doCheck = false;
-
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
   ];
 
+  HOME = "$TMPDIR";
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/conftest --version | grep ${version} > /dev/null
+  '';
+
   meta = with lib; {
     description = "Write tests against structured configuration data";
+    downloadPage = "https://github.com/open-policy-agent/conftest";
+    homepage = "https://www.conftest.dev";
+    license = licenses.asl20;
     longDescription = ''
       Conftest helps you write tests against structured configuration data.
       Using Conftest you can write tests for your Kubernetes configuration,
@@ -34,8 +41,6 @@ buildGoModule rec {
       assertions. You can read more about Rego in 'How do I write policies' in
       the Open Policy Agent documentation.
     '';
-    inherit (src.meta) homepage;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [ jk superherointj yurrriq ];
   };
 }

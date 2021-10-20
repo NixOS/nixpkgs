@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   version = "1.0.3";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "06lsjndgfjsgfjr43px2n2wk3nr7whz6r405mks3887y7vpwwl22";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.netfilter.org/projects/libnetfilter_acct/";
+  meta = with lib; {
+    homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";
     description = "Userspace library providing interface to extended accounting infrastructure";
     license = licenses.gpl2;
     platforms = platforms.linux;

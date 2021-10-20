@@ -1,36 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
-, xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
+, xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pangolin";
 
-  version = "2017-08-02";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "stevenlovegrove";
     repo = "Pangolin";
-    rev = "f05a8cdc4f0e32cc1664a430f1f85e60e233c407";
-    sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
+    rev = "v${version}";
+    sha256 = "0abjajxj7lc2yajshimar4w8kf8115prsjnhy83s6jc7cbz63wj8";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ];
+  nativeBuildInputs = [ cmake pkg-config doxygen ];
 
   buildInputs = [
     libGL
     glew
     xorg.libX11
-    ffmpeg_3
-    python3
+    ffmpeg
     libjpeg
     libpng
     libtiff
     eigen
   ]
   ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
-
-  enableParallelBuilding = true;
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
@@ -50,8 +47,8 @@ stdenv.mkDerivation {
       graphical data.
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.expipiplus1 ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.expipiplus1 ];
+    platforms = lib.platforms.all;
   };
 }

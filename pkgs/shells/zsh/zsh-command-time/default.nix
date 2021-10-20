@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 # To make use of this plugin, need to add
 #   programs.zsh.interactiveShellInit = ''
@@ -19,13 +19,13 @@ stdenv.mkDerivation {
     sha256 = "1bvyjgz6bhgg1nwr56r50p6fblgah6yiql55pgm5abnn2h876fjq";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     install -Dm0444 $src/command-time.plugin.zsh --target-directory=$out/share/zsh/plugins/command-time
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin that output time: xx after long commands";
     homepage = "https://github.com/popstas/zsh-command-time";
     license = licenses.mit;

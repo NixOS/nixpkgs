@@ -1,26 +1,67 @@
-{ stdenv, fetchurl
-, pkgconfig, cmake, python3, ffmpeg_3, phonon, automoc4
-, chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
-, id3lib, taglib, mp4v2, flac, libogg, libvorbis
-, zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
+{ lib
+, stdenv
+, fetchurl
+, automoc4
+, chromaprint
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl
+, ffmpeg
+, flac
+, id3lib
+, libogg
+, libvorbis
+, libxslt
+, mp4v2
+, phonon
+, pkg-config
+, python3
+, qtbase
+, qtmultimedia
+, qtquickcontrols
+, qttools
+, readline
+, taglib
 , wrapQtAppsHook
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "kid3";
-  version = "3.8.4";
+  version = "3.8.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-WYuEOqMu2VMOv6mkVCRXnmInFER/DWfPNqYuaTJ3vAc=";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Dr+NLh5ajG42jRKt1Swq6mccPfuAXRvhhoTNuO8lnI0=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    docbook_xml_dtd_45
+    docbook_xsl
+    pkg-config
+    python3
+    wrapQtAppsHook
+  ];
   buildInputs = [
-    pkgconfig cmake python3 ffmpeg_3 phonon automoc4
-    chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
-    id3lib taglib mp4v2 flac libogg libvorbis zlib readline
-    qtbase qttools qtmultimedia qtquickcontrols ];
+    automoc4
+    chromaprint
+    ffmpeg
+    flac
+    id3lib
+    libogg
+    libvorbis
+    libxslt
+    mp4v2
+    phonon
+    qtbase
+    qtmultimedia
+    qtquickcontrols
+    qttools
+    readline
+    taglib
+    zlib
+  ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
@@ -29,9 +70,8 @@ stdenv.mkDerivation rec {
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://kid3.kde.org/";
     description = "A simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
@@ -62,7 +102,6 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
-    homepage = "http://kid3.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

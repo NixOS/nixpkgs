@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-fuse'';
-  version = ''20200925-git'';
+  baseName = "cl-fuse";
+  version = "20200925-git";
 
-  description = ''CFFI bindings to FUSE (Filesystem in user space)'';
+  description = "CFFI bindings to FUSE (Filesystem in user space)";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-utilities" args."iterate" args."trivial-backtrace" args."trivial-features" args."trivial-utf-8" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-fuse/2020-09-25/cl-fuse-20200925-git.tgz'';
-    sha256 = ''1c5cn0l0md77asw804qssylcbbphw81mfpbijydd0s25q6xga7dp'';
+    url = "http://beta.quicklisp.org/archive/cl-fuse/2020-09-25/cl-fuse-20200925-git.tgz";
+    sha256 = "1c5cn0l0md77asw804qssylcbbphw81mfpbijydd0s25q6xga7dp";
   };
 
   packageName = "cl-fuse";

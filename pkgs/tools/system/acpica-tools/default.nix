@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20200430";
+  version = "20210730";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0z19bniqsa8y0n1qrxmb6gz7m63jpwx22zgk5ablyriixhfpz07v";
+    sha256 = "1pmm977nyl3bs71ipzcl4dh30qm8x9wm2p2ml0m62rl62kai832a";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
@@ -16,20 +16,25 @@ stdenv.mkDerivation rec {
   buildFlags = [
     "acpibin"
     "acpidump"
+    "acpiexamples"
     "acpiexec"
     "acpihelp"
-    "acpinames"
+    "acpisrc"
     "acpixtract"
+    "iasl"
   ];
 
   nativeBuildInputs = [ bison flex ];
 
+  # We can handle stripping ourselves.
+  INSTALLFLAGS = "-m 555";
+
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ACPICA Tools";
     homepage = "https://www.acpica.org/";
-    license = with licenses; [ gpl2 bsd3 ];
+    license = with licenses; [ iasl gpl2Only bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tadfisher ];
   };

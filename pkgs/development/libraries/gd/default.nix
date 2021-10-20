@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , autoconf
 , automake
 , pkg-config
@@ -14,30 +14,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gd";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
-    sha256 = "0n5czhxzinvjvmhkf5l9fwjdx5ip69k5k7pj6zwb6zs1k9dibngc";
+    sha256 = "1yypywkh8vphcy4qqpf51kxpb0a3r7rjqk3fc61rpn70hiq092j7";
   };
 
   hardeningDisable = [ "format" ];
   patches = [
-    # Fixes an issue where some other packages would fail to build
-    # their documentation with an error like:
-    # "Error: Problem doing text layout"
-    #
-    # Can be removed if Wayland can still be built successfully with
-    # documentation.
     (fetchpatch {
-      url = "https://github.com/libgd/libgd/commit/3dd0e308cbd2c24fde2fc9e9b707181252a2de95.patch";
-      excludes = [ "tests/gdimagestringft/.gitignore" ];
-      sha256 = "12iqlanl9czig9d7c3rvizrigw2iacimnmimfcny392dv9iazhl1";
+      name = "CVE-2021-40812.partial.patch";
+      url = "https://github.com/libgd/libgd/commit/6f5136821be86e7068fcdf651ae9420b5d42e9a9.patch";
+      sha256 = "11rvhd23bl05ksj8z39hwrhqqjm66svr4hl3y230wrc64rvnd2d2";
     })
   ];
 
   # -pthread gets passed to clang, causing warnings
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
+  configureFlags = lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
@@ -52,7 +46,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libgd.github.io/";
     description = "A dynamic image creation library";
     license = licenses.free; # some custom license

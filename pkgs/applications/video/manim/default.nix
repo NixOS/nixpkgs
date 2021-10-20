@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
-, cairo, ffmpeg_3, sox, xdg_utils, texlive
+, cairo, ffmpeg, sox, xdg-utils, texlive
 , colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
 , pbr, fetchPypi
 }:
@@ -28,14 +28,14 @@ buildPythonApplication rec {
     pycairo
     pydub
 
-    cairo sox ffmpeg_3 xdg_utils
+    cairo sox ffmpeg xdg-utils
   ];
 
   # Test with texlive to see whether it works but don't propagate
   # because it's huge and optional
   # TODO: Use smaller TexLive distribution
   #       Doesn't need everything but it's hard to figure out what it needs
-  checkInputs = [ cairo sox ffmpeg_3 xdg_utils texlive.combined.scheme-full ];
+  checkInputs = [ cairo sox ffmpeg xdg-utils texlive.combined.scheme-full ];
 
   # Simple test and complex test with LaTeX
   checkPhase = ''
@@ -44,7 +44,7 @@ buildPythonApplication rec {
       python3 manim.py example_scenes.py $scene -l
       tail -n 20 files/Tex/*.log  # Print potential LaTeX erorrs
       ${file}/bin/file videos/example_scenes/480p15/$scene.mp4 \
-        | tee | grep -F "ISO Media, MP4 Base Media v1 [IS0 14496-12:2003]"
+        | tee | grep -F "ISO Media, MP4 Base Media v1 [ISO 14496-12:2003]"
     done
   '';
 

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "headphones";
-  version = "0.5.19";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "rembo10";
     repo = "headphones";
     rev = "v${version}";
-    sha256 = "0z39gyan3ksdhnjxxs7byamrzmrk8cn15g300iqigzvgidff1lq0";
+    sha256 = "0m234fr1i8bb8mgmjsdpkbaa3l16y23ca6s7nyyl5ismmjxhi4mz";
   };
 
   dontBuild = true;
@@ -18,16 +18,18 @@ python2.pkgs.buildPythonApplication rec {
   buildInputs = [ python2 ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -R {data,headphones,lib,Headphones.py} $out/
+    mkdir -p $out/bin $out/opt/headphones
+    cp -R {data,headphones,lib,Headphones.py} $out/opt/headphones
 
-    makeWrapper $out/Headphones.py $out/bin/headphones
+    echo v${version} > $out/opt/headphones/version.txt
+
+    makeWrapper $out/opt/headphones/Headphones.py $out/bin/headphones
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic music downloader for SABnzbd";
     license     = licenses.gpl3;
     homepage    = "https://github.com/rembo10/headphones";
-    maintainers = with stdenv.lib.maintainers; [ rembo10 ];
+    maintainers = with lib.maintainers; [ rembo10 ];
   };
 }

@@ -1,12 +1,11 @@
-{stdenv, fetchurl, tlsSupport ? true, openssl ? null}:
+{ lib, stdenv, fetchurl, tlsSupport ? true, openssl }:
 
-assert tlsSupport -> openssl != null;
-
-stdenv.mkDerivation {
-  name = "ssmtp-2.64";
+stdenv.mkDerivation rec {
+  pname = "ssmtp";
+  version = "2.64";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/s/ssmtp/ssmtp_2.64.orig.tar.bz2";
+    url = "mirror://debian/pool/main/s/ssmtp/ssmtp_${version}.orig.tar.bz2";
     sha256 = "0dps8s87ag4g3jr6dk88hs9zl46h3790marc5c2qw7l71k4pvhr2";
   };
 
@@ -16,29 +15,29 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--sysconfdir=/etc"
-    (stdenv.lib.enableFeature tlsSupport "ssl")
+    (lib.enableFeature tlsSupport "ssl")
   ];
 
-  postConfigure =
-    ''
-      # Don't run the script that interactively generates a config file.
-      # Also don't install the broken, cyclic symlink /lib/sendmail.
-      sed -e '/INSTALLED_CONFIGURATION_FILE/d' \
-          -e 's|/lib/sendmail|$(TMPDIR)/sendmail|' \
-          -i Makefile
-      substituteInPlace Makefile \
-        --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
-    '';
+  postConfigure = ''
+    # Don't run the script that interactively generates a config file.
+    # Also don't install the broken, cyclic symlink /lib/sendmail.
+    sed -e '/INSTALLED_CONFIGURATION_FILE/d' \
+        -e 's|/lib/sendmail|$(TMPDIR)/sendmail|' \
+        -i Makefile
+    substituteInPlace Makefile \
+      --replace '$(INSTALL) -s' '$(INSTALL) -s --strip-program $(STRIP)'
+  '';
 
   installFlags = [ "etcdir=$(out)/etc" ];
 
   installTargets = [ "install" "install-sendmail" ];
 
-  buildInputs = stdenv.lib.optional tlsSupport openssl;
+  buildInputs = lib.optional tlsSupport openssl;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString tlsSupport "-lcrypto";
+  NIX_LDFLAGS = lib.optionalString tlsSupport "-lcrypto";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    description = "simple MTA to deliver mail from a computer to a mail hub";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ basvandijk ];

@@ -1,8 +1,10 @@
-{ pkgs, stdenv, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
+{ pkgs, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
 let
   package = (import ./node.nix { inherit pkgs system; }).package;
 in
 package.override rec {
+  # don't upgrade! Newer versions cause stack overflows and fail trunk-combined
+  # see https://github.com/NixOS/nixpkgs/pull/118400
   version = "1.16.2";
   reconstructLock = true;
 
@@ -15,7 +17,7 @@ package.override rec {
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
 
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     license = licenses.gpl3;
     homepage = https://github.com/Koenkk/zigbee2mqtt;

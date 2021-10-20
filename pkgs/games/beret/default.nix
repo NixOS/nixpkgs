@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
 
 stdenv.mkDerivation {
-  name = "beret-1.2.0";
+  pname = "beret";
+  version = "1.2.0";
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_mixer ];
 
   NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
     "-framework CoreFoundation -framework OpenGL -framework Cocoa";
 
   patches = [ ./use-home-dir.patch ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     cp -av tahoma.ttf images music rooms sfx $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
     homepage    = "http://kiwisauce.com/beret/";
     license     = licenses.lgpl2;

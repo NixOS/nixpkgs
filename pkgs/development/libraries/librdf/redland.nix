@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
+{ lib, stdenv, fetchurl, pkg-config, openssl, libxslt, perl
 , curl, pcre, libxml2, librdf_rasqal, gmp
 , libmysqlclient, withMysql ? false
 , postgresql, withPostgresql ? false
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
   };
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 gmp ]
-    ++ stdenv.lib.optional withMysql libmysqlclient
-    ++ stdenv.lib.optional withSqlite sqlite
-    ++ stdenv.lib.optional withPostgresql postgresql
-    ++ stdenv.lib.optional withBdb db;
+    ++ lib.optional withMysql libmysqlclient
+    ++ lib.optional withSqlite sqlite
+    ++ lib.optional withPostgresql postgresql
+    ++ lib.optional withBdb db;
 
   propagatedBuildInputs = [ librdf_rasqal ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-threads" ]
-    ++ stdenv.lib.optionals withBdb [
+    ++ lib.optionals withBdb [
       "--with-bdb-include=${db.dev}/include"
       "--with-bdb-lib=${db.out}/lib"
     ];
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 out of 17 tests with a segmentation fault
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C libraries that provide support for the Resource Description Framework (RDF)";
-    homepage = "http://librdf.org/";
+    homepage = "https://librdf.org/";
     platforms = platforms.unix;
     license = licenses.asl20;
   };

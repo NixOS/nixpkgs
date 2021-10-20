@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "plpgsql_check";
-  version = "1.15.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rjbzcdvwx19ql0ilccr47inilf7kh5hn7aacjqs1nxk91g3x7yf";
+    sha256 = "0a3p0hqya0g87rdc0ka024als07xa7xgpv6fs0q3mj80v6416r3v";
   };
 
   buildInputs = [ postgresql ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linter tool for language PL/pgSQL";
     homepage = "https://github.com/okbob/plpgsql_check";
     platforms = postgresql.meta.platforms;

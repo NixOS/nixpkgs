@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml }:
 
 buildPythonPackage rec {
   pname = "ua-parser";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   doCheck = false; # requires files from uap-core
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python implementation of the UA Parser";
     homepage = "https://github.com/ua-parser/uap-python";
     license = licenses.asl20;

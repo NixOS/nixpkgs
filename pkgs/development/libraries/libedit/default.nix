@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "libedit";
-  version = "20191231-3.1";
+  version = "20210714-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/${pname}-${version}.tar.gz";
-    sha256 = "0wch48nml28jj6ild889745dsg2agm7mpvrmbl1gi98nw6vjrf6v";
+    sha256 = "sha256-MCO0mK1ZP9d0WuOyCrrVRt5Qa2e4+7VXljfKaauC28k=";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.thrysoee.dk/editline/";
     description = "A port of the NetBSD Editline library (libedit)";
     license = licenses.bsd3;

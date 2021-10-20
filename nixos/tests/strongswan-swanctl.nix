@@ -31,7 +31,7 @@ let
   proposals     = [ "aes128-sha256-x25519" ];
 in {
   name = "strongswan-swanctl";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ basvandijk ];
+  meta.maintainers = with pkgs.lib.maintainers; [ basvandijk ];
   nodes = {
 
     alice = { ... } : {

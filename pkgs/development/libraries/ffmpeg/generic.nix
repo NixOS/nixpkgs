@@ -1,7 +1,8 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
-, alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
+, alsa-lib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
+, libssh, libtheora, libva, libdrm, libvorbis, libvpx, xz, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, srt ? null
 , openglSupport ? false, libGLU ? null, libGL ? null
 , libmfxSupport ? false, intel-media-sdk ? null
 , libaomSupport ? false, libaom ? null
@@ -17,7 +18,8 @@
 # Darwin frameworks
 , Cocoa, darwinFrameworks ? [ Cocoa ]
 # Inherit generics
-, branch, sha256, version, patches ? [], ...
+, branch, sha256, version, patches ? [], knownVulnerabilities ? []
+, doCheck ? true, ...
 }:
 
 /* Maintainer notes:
@@ -44,7 +46,7 @@
 
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
-  inherit (stdenv.lib) optional optionals optionalString enableFeature filter;
+  inherit (lib) optional optionals optionalString enableFeature filter;
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
   inherit patches;
 
   outputs = [ "bin" "dev" "out" "man" ]
@@ -94,6 +96,7 @@ stdenv.mkDerivation rec {
     # Build flags
       "--enable-shared"
       (ifMinVer "0.6" "--enable-pic")
+      (ifMinVer "4.0" (enableFeature (srt != null) "libsrt"))
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
     ] ++
@@ -167,11 +170,11 @@ stdenv.mkDerivation rec {
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
+    libvorbis xz soxr x264 x265 xvidcore zlib libopus speex srt nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
@@ -179,7 +182,7 @@ stdenv.mkDerivation rec {
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libdrm
-    ++ optional isLinux alsaLib
+    ++ optional isLinux alsa-lib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
     ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
@@ -187,7 +190,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails
+  inherit doCheck;
+  checkPhase = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    ${ldLibraryPathEnv}="libavcodec:libavdevice:libavfilter:libavformat:libavresample:libavutil:libpostproc:libswresample:libswscale:''${${ldLibraryPathEnv}}" \
+      make check -j$NIX_BUILD_CORES
+  '';
 
   # ffmpeg 3+ generates pkg-config (.pc) files that don't have the
   # form automatically handled by the multiple-outputs hooks.
@@ -211,9 +220,10 @@ stdenv.mkDerivation rec {
     inherit vaapiSupport vdpauSupport;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = "http://www.ffmpeg.org/";
+    homepage = "https://www.ffmpeg.org/";
+    changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines
@@ -224,6 +234,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];
-    inherit branch;
+    inherit branch knownVulnerabilities;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchurl, xpdf }:
+{ lib, pythonPackages, fetchurl, xpdf }:
 let
   py = pythonPackages;
 in
@@ -13,9 +13,9 @@ py.buildPythonApplication rec {
 
   buildInputs = [  pythonPackages.wrapPython ];
 
+  dontConfigure = true;
+  dontBuild = true;
   doCheck = false;
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   unpackPhase = "cp $src pdfdiff.py";
 
@@ -32,7 +32,7 @@ py.buildPythonApplication rec {
     substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${pythonPackages.python.interpreter}"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html";
     description = "Tool to view the difference between two PDF or PS files";
     license = licenses.gpl2Plus;

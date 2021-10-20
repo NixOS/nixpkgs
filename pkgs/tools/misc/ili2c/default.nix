@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, jdk8, ant, makeWrapper, jre8 }:
+{ lib, stdenv, fetchFromGitHub, jdk8, ant, makeWrapper, jre8 }:
 
 let jdk = jdk8; jre = jre8; in
 stdenv.mkDerivation rec {
   pname = "ili2c";
-  version = "5.0.8";
+  version = "5.1.1";
 
   nativeBuildInputs = [ ant jdk makeWrapper ];
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "claeis";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1yhsyh940kb33y2n6xl7zhf0f6q0nrxbyg6c4g5n2imllpn54sgi";
+    sha256 = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
   };
 
   buildPhase = "ant jar";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         --add-flags "-jar $out/share/${pname}/ili2c.jar"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The INTERLIS Compiler";
     longDescription = ''
       Checks the syntactical correctness of an INTERLIS data model.

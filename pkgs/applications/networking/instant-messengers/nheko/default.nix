@@ -6,9 +6,10 @@
 , cmark
 , lmdb
 , lmdbxx
-, tweeny
+, libsecret
 , mkDerivation
 , qtbase
+, qtkeychain
 , qtmacextras
 , qtmultimedia
 , qttools
@@ -17,45 +18,67 @@
 , mtxclient
 , boost17x
 , spdlog
+, fmt
 , olm
-, pkgconfig
+, pkg-config
 , nlohmann_json
+, voipSupport ? true
+, gst_all_1
+, libnice
 }:
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.7.2";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1cbhgaf9klgxdirrxj571fqwspm0byl75c1xc40l727a6qswvp7s";
+    sha256 = "sha256-w4l91/W6F1FL+Q37qWSjYRHv4vad/10fxdKwfNeEwgw=";
   };
 
   nativeBuildInputs = [
     lmdbxx
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     nlohmann_json
-    tweeny
     mtxclient
     olm
     boost17x
+    libsecret
     lmdb
     spdlog
+    fmt
     cmark
     qtbase
     qtmultimedia
     qttools
     qtquickcontrols2
     qtgraphicaleffects
-  ] ++ lib.optional stdenv.isDarwin qtmacextras;
+    qtkeychain
+  ] ++ lib.optional stdenv.isDarwin qtmacextras
+    ++ lib.optionals voipSupport (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      (gst-plugins-good.override { qt5Support = true; })
+      gst-plugins-bad
+      libnice
+    ]);
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+  ];
+
+  preFixup = lib.optionalString voipSupport ''
+    # add gstreamer plugins path to the wrapper
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
+  meta = with lib; {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];

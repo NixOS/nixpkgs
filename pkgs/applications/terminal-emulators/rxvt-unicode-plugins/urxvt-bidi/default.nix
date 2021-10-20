@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, pkgconfig, fribidi }:
+{ lib, fetchurl, perlPackages, pkg-config, fribidi }:
 
 perlPackages.buildPerlPackage rec {
   pname = "urxvt-bidi";
@@ -9,7 +9,7 @@ perlPackages.buildPerlPackage rec {
     sha256 = "1w65xbi4mw5acsrpv3phyzv82ghb29kpbb3b1b1gcinlfxl6f61m";
   };
 
-  nativeBuildInputs = [ pkgconfig perlPackages.ExtUtilsPkgConfig ];
+  nativeBuildInputs = [ pkg-config perlPackages.ExtUtilsPkgConfig ];
   buildInputs = [ fribidi ];
 
   postInstall = ''

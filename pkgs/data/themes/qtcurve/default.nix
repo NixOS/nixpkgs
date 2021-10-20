@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, mkDerivation
+{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, mkDerivation
 , gtk2Support ? true, gtk2
 , qtbase, qtsvg, qtx11extras # Toolkit dependencies
 , karchive, kconfig, kconfigwidgets, kio, frameworkintegration
@@ -17,8 +17,6 @@ mkDerivation rec {
     sha256 = "XP9VTeiVIiMm5mkXapCKWxfcvaYCkhY3S5RXZNR3oWo=";
   };
 
-  enableParallelBuilding = true;
-
   patches = [
     # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {
@@ -32,7 +30,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
     qtbase qtsvg qtx11extras
@@ -66,6 +64,6 @@ mkDerivation rec {
     description = "Widget styles for Qt5/Plasma 5 and gtk2";
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = [ ];
   };
 }

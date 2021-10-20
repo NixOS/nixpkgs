@@ -1,13 +1,13 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsaLib ? null
+{ lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
+, alsaSupport ? true, alsa-lib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
 
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
   pname = "fmit";
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
   buildInputs = [ fftw qtbase qtmultimedia ]
-    ++ optionals alsaSupport [ alsaLib ]
+    ++ optionals alsaSupport [ alsa-lib ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals portaudioSupport [ portaudio ];
 
@@ -37,8 +37,6 @@ mkDerivation rec {
       CONFIG+=${optionalString portaudioSupport "acs_portaudio"} \
       PREFIXSHORTCUT=$out"
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Free Musical Instrument Tuner";

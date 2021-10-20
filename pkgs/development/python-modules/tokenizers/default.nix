@@ -1,12 +1,11 @@
-{ stdenv
-, rustPlatform
+{ lib
 , fetchFromGitHub
 , fetchurl
-, pipInstallHook
+, buildPythonPackage
+, rustPlatform
 , setuptools-rust
-, wheel
 , numpy
-, python
+, datasets
 , pytestCheckHook
 , requests
 }:
@@ -48,39 +47,40 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in rustPlatform.buildRustPackage rec {
+in buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.9.4";
+  version = "unstable-2021-08-13";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "python-v${version}";
-    hash = "sha256-JXoH9yfhMIFg5qDY5zrF6iWb7XKugjMfk1NxSizfaWg=";
+    rev = "e7dd6436dd4a4ffd9e8a4f110ca68e6a38677cb6";
+    sha256 = "1p7w9a43a9h6ys5nsa4g89l65dj11037p7a1lqkj4x1yc9kv2y1r";
   };
 
-  cargoSha256 = "sha256-u9qitrOxJSABs0VjwHUZgmw7VTQXNbp6l8fKKE/RQ7M=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    sha256 = "1yb4jsx6mp9jgd1g3mli6vr6mri2afnwqlmxq1rpvn34z6b3iw9q";
+  };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [
-    pipInstallHook
-    setuptools-rust
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   propagatedBuildInputs = [
     numpy
-    python
   ];
 
-  installCheckInputs = [
+  checkInputs = [
+    datasets
     pytestCheckHook
     requests
   ];
-
-  doCheck = false;
-  doInstallCheck = true;
 
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access.
@@ -97,19 +97,24 @@ in rustPlatform.buildRustPackage rec {
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
-  buildPhase = ''
-    ${python.interpreter} setup.py bdist_wheel
+  postPatch = ''
+    echo 'import multiprocessing; multiprocessing.set_start_method("fork")' >> tests/__init__.py
   '';
 
-  installPhase = ''
-    pipInstallPhase
+  preCheck = ''
+    HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Downloads data using the datasets module.
+    "TestTrainFromIterators"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/huggingface/tokenizers";
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

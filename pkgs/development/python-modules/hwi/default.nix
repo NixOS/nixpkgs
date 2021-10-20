@@ -1,46 +1,40 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, mnemonic
+, fetchFromGitHub
+, bitbox02
 , ecdsa
-, typing-extensions
 , hidapi
 , libusb1
+, mnemonic
 , pyaes
-, trezor
-, btchip
-, ckcc-protocol
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "1.2.1";
+  version = "2.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d0d220a4967d7f106b828b12a98b78c220d609d7cc6c811898e24fcf1a6f04f3";
+  src = fetchFromGitHub {
+    owner = "bitcoin-core";
+    repo = "HWI";
+    rev = version;
+    sha256 = "sha256-s0pKYqesZjHE6YndqsMwCuqLK7eE82oRiSXxBdUtEX4=";
   };
 
   propagatedBuildInputs = [
-    mnemonic
+    bitbox02
     ecdsa
-    typing-extensions
     hidapi
     libusb1
+    mnemonic
     pyaes
-    trezor
-    btchip
-    ckcc-protocol
+    typing-extensions
   ];
 
-  patches = [ ./relax-deps.patch ];
-
-  # tests are not packaged in the released tarball
+  # tests require to clone quite a few firmwares
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hwilib"
-  ];
+  pythonImportsCheck = [ "hwilib" ];
 
   meta = {
     description = "Bitcoin Hardware Wallet Interface";

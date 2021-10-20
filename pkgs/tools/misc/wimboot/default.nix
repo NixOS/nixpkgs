@@ -1,33 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libbfd, zlib, libiberty }:
+{ lib, stdenv, fetchFromGitHub, libbfd, zlib, libiberty }:
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
-  version = "2.6.0";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
     rev = "v${version}";
-    sha256 = "134wqqr147az5vbj4szd0xffwa99b4rar7w33zm3119zsn7sd79k";
+    sha256 = "12c677agkmiqs35qfpqfj7c4kxkizhbk9l6hig36dslzp4fwpl70";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-address-of-packed-member"; # Fails on gcc9
-
-  patches = [
-    # Fix for newer binutils
-    (fetchpatch {
-      url =
-        "https://github.com/ipxe/wimboot/commit/91be50c17d4d9f463109d5baafd70f9fdadd86db.patch";
-      sha256 = "113448n49hmk8nz1dxbhxiciwl281zwalvb8z5p9xfnjvibj8274";
-    })
-  ];
-
-  # We cannot use sourceRoot because the patch wouldn't apply
-  postPatch = ''
-    cd src
-  '';
-
-  hardeningDisable = [ "pic" ];
+  sourceRoot = "source/src";
 
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];
@@ -37,10 +21,10 @@ stdenv.mkDerivation rec {
     cp wimboot.x86_64.efi $out/share/wimboot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ das_j ajs124 ];
     platforms = platforms.x86; # Fails on aarch64
   };

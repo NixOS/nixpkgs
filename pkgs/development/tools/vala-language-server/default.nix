@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-language-server";
-  version = "0.48.1";
+  version = "0.48.3";
 
   src = fetchFromGitHub {
-    owner = "benwaffle";
+    owner = "Prince781";
     repo = pname;
     rev = version;
-    sha256 = "12k095052jkvbiyz8gzkj6w7r7p16d5m18fyikl48yvh5nln8fw0";
+    sha256 = "sha256-MhVwK4RtEAJcwcJe71ganCaXQHa9jzxyknzc9kJi274=";
   };
 
   passthru = {
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code Intelligence for Vala & Genie";
-    homepage = "https://github.com/benwaffle/vala-language-server";
+    homepage = "https://github.com/Prince781/vala-language-server";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ andreasfelix worldofpeace ];
+    maintainers = with maintainers; [ andreasfelix ];
     platforms = platforms.linux;
   };
 }

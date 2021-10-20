@@ -27,7 +27,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.gnupg;
-      defaultText = "pkgs.gnupg";
+      defaultText = literalExpression "pkgs.gnupg";
       description = ''
         The gpg package that should be used.
       '';

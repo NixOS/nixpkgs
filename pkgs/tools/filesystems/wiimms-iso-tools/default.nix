@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, ncurses, fuse}:
+{lib, stdenv, fetchurl, zlib, ncurses, fuse}:
 
 stdenv.mkDerivation rec {
   name = "wiimms-iso-tools";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ./install.sh --no-sudo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wit.wiimm.de";
     description = "A set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
     license = licenses.gpl2;

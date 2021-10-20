@@ -1,13 +1,14 @@
 # Python 2 expression
 
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , python
 , stdenv
 , pytest
 , glibcLocales
 , cython
-, dateutil
+, python-dateutil
 , scipy
 , moto
 , numexpr
@@ -26,11 +27,7 @@
 , libcxx ? null
 }:
 
-let
-  inherit (stdenv.lib) optional optionals optionalString;
-  inherit (stdenv) isDarwin;
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pandas";
   version = "0.24.2";
 
@@ -42,9 +39,9 @@ in buildPythonPackage rec {
   checkInputs = [ pytest glibcLocales moto hypothesis ];
 
   nativeBuildInputs = [ cython ];
-  buildInputs = optional isDarwin libcxx;
+  buildInputs = lib.optional stdenv.isDarwin libcxx;
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     scipy
     numexpr
     pytz
@@ -61,8 +58,8 @@ in buildPythonPackage rec {
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = optionalString isDarwin ''
-    cpp_sdk="${libcxx}/include/c++/v1";
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    cpp_sdk="${lib.getDev libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \
@@ -70,8 +67,8 @@ in buildPythonPackage rec {
   '';
 
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
-    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+  disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) ([
+    # since python-dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     "test_fallback_plural"
     "test_ambiguous_flags"
@@ -86,7 +83,7 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
-  ] ++ optionals isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
   ]);
@@ -98,7 +95,7 @@ in buildPythonPackage rec {
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
-  + optionalString isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     echo "#!${runtimeShell}" > pbcopy
     echo "#!${runtimeShell}" > pbpaste
@@ -109,14 +106,14 @@ in buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
     homepage = "https://pandas.pydata.org/";
     description = "Python Data Analysis Library";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin knedlsepp ];
+    platforms = platforms.unix;
   };
 }

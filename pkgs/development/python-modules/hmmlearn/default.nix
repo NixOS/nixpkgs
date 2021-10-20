@@ -1,20 +1,20 @@
-{ lib, fetchurl, buildPythonPackage, numpy, scikitlearn, setuptools_scm, cython, pytest }:
+{ lib, fetchurl, buildPythonPackage, numpy, scikit-learn, setuptools-scm, cython, pytest }:
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${pname}-${version}.tar.gz";
-    sha256 = "0f5cb598a7494b9703c6188246dc89e529d46cbb6700eca70cc895085f0b3cc3";
+    sha256 = "2a289cf28b31be59fa8ba5d3253d4a2a992401d45a8cdc221ae484fbf390c0d7";
   };
 
-  buildInputs = [ setuptools_scm cython ];
-  propagatedBuildInputs = [ numpy scikitlearn ];
+  buildInputs = [ setuptools-scm cython ];
+  propagatedBuildInputs = [ numpy scikit-learn ];
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    pytest --doctest-modules --pyargs hmmlearn
+    pytest --pyargs hmmlearn
   '';
 
   meta = with lib; {

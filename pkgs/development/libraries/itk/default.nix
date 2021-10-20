@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper
-, pkgconfig, libX11, libuuid, xz, vtk_7, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper
+, pkg-config, libX11, libuuid, xz, vtk_7, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
     rev = "v${version}";
-    sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
+    sha256 = "sha256-KaVe9FMGm4ZVMpwAT12fA67T0qZS3ZueiI8z85+xSwE=";
   };
 
   postPatch = ''
@@ -28,19 +28,17 @@ stdenv.mkDerivation rec {
     "-DModule_ITKReview=ON"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake xz makeWrapper ];
-  buildInputs = [ libX11 libuuid vtk_7 ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ libX11 libuuid vtk_7 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   postInstall = ''
-    wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkgconfig}/bin"
+    wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkg-config}/bin"
   '';
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
     homepage = "https://www.itk.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [viric];
   };
 }

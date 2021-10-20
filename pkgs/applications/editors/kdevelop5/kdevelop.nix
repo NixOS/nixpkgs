@@ -1,5 +1,5 @@
 
-{ mkDerivation, lib, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules
+{ mkDerivation, lib, fetchurl, cmake, gettext, pkg-config, extra-cmake-modules
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
@@ -10,20 +10,20 @@
 
 mkDerivation rec {
   pname = "kdevelop";
-  version = "5.6.0";
+  version = "5.6.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "0cpmavxz5fi0f1rjinvn6id1nplvjwg00l0n36s0ybygqkacgb9q";
+    sha256 = "sha256-D4a8P+U/dhwePj91RFd6DEFDO+i/8xDPLnKfdvQ2O/Y=";
   };
 
   nativeBuildInputs = [
-    cmake gettext pkgconfig extra-cmake-modules makeWrapper
+    cmake gettext pkg-config extra-cmake-modules makeWrapper
   ];
 
   buildInputs = [
     kdevelop-pg-qt
-    llvmPackages.llvm llvmPackages.clang-unwrapped
+    llvmPackages.llvm llvmPackages.libclang
   ];
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
   # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
   # required as nixos seems to be unable to find CLANG_BUILTIN_DIR
   cmakeFlags = [
-    "-DCLANG_BUILTIN_DIR=${llvmPackages.clang-unwrapped}/lib/clang/${lib.getVersion llvmPackages.clang}/include"
+    "-DCLANG_BUILTIN_DIR=${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include"
   ];
 
   dontWrapQtApps = true;

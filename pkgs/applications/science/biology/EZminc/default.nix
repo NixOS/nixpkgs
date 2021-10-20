@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libminc, bicpl, itk4, fftwFloat, gsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk4, fftwFloat, gsl }:
 
 stdenv.mkDerivation rec {
   pname = "EZminc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wy8cppf5xpgfqvgb3mqs1cjh81n6qzkk6zxv29wvng8nar9wsy4";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ itk4 libminc bicpl fftwFloat gsl ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
                  "-DEZMINC_BUILD_MRFSEG=TRUE"
                  "-DEZMINC_BUILD_DD=TRUE" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];

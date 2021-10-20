@@ -1,31 +1,35 @@
-diff -Naur imake-1.0.7-orig/imake.c imake-1.0.7/imake.c
---- imake-1.0.7-orig/imake.c	2013-08-17 10:11:50.000000000 +0000
-+++ imake-1.0.7/imake.c	2015-02-04 09:41:59.000000000 +0000
-@@ -1045,6 +1045,7 @@
- static void
- get_distrib(FILE *inFile)
- {
-+#if 0
-   struct stat sb;
+Disable imake autodetection for:
+- LinuxDistribution to avoid injection of /usr paths
+- gcc to avoid use uf /usr/bin/gcc
+
+https://github.com/NixOS/nixpkgs/issues/135337
+--- a/imake.c
++++ b/imake.c
+@@ -1065,6 +1065,7 @@ get_distrib(FILE *inFile)
+   fprintf (inFile, "%s\n", "#define LinuxWare       11");
+   fprintf (inFile, "%s\n", "#define LinuxYggdrasil  12");
  
-   static const char*   suse = "/etc/SuSE-release";
-@@ -1090,6 +1091,7 @@
++#if 0 /* disable system autodetection. Fall through to LinuxUnknown. */
+ # ifdef CROSSCOMPILE
+   if (CrossCompiling) {
+       fprintf (inFile, "%s\n",
+@@ -1090,6 +1091,7 @@ get_distrib(FILE *inFile)
       * at the content of /etc/debian_version */
      return;
    }
-+#endif  
++#endif
    /* what's the definitive way to tell what any particular distribution is? */
  
    fprintf (inFile, "%s\n", "#define DefaultLinuxDistribution LinuxUnknown");
-@@ -1337,6 +1339,7 @@
+@@ -1337,6 +1339,7 @@ get_gcc_version(FILE *inFile, char *name)
  static boolean
  get_gcc(char *cmd)
  {
-+#if 0
++#if 0 /* disable gcc autodetection. Fall through to explicitly set. */
    struct stat sb;
      static const char* gcc_path[] = {
  #if defined(linux) || \
-@@ -1385,6 +1388,9 @@
+@@ -1385,6 +1388,9 @@ get_gcc(char *cmd)
  	}
        }
      return FALSE;

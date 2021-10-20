@@ -4,7 +4,7 @@
 , meson
 , ninja
 , intreehooks
-, pytoml
+, toml
 , pythonOlder
 }:
 
@@ -12,17 +12,15 @@
 
 buildPythonPackage rec {
   pname = "mesonpep517";
-  version = "0.1.9999994";
+  version = "0.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5bcca61024164c4a51d29e6921ea1f756d54197c8f052e4c66a2b8399aa9349";
+    sha256 = "sha256-Fyo7JfLqHJqbahEjVDt/0xJxOfVLqLn3xNJ4lSB7KIw=";
   };
 
-  nativeBuildInputs = [ intreehooks  ];
-
-  propagatedBuildInputs = [ pytoml ];
+  propagatedBuildInputs = [ toml ];
 
   # postPatch = ''
   #   # Meson tries to detect ninja as well, so we should patch meson as well.

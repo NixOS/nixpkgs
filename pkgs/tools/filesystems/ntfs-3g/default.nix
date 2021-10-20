@@ -1,26 +1,29 @@
-{stdenv, fetchurl, util-linux, libuuid
-, crypto ? false, libgcrypt, gnutls, pkgconfig}:
+{ lib, stdenv, fetchurl, pkg-config, mount, libuuid
+, macfuse-stubs, DiskArbitration
+, crypto ? false, libgcrypt, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2017.3.23";
+  version = "2021.8.22";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
-  nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
+  buildInputs = [ libuuid ] ++ lib.optionals crypto [ gnutls libgcrypt ]
+    ++ lib.optionals stdenv.isDarwin [ macfuse-stubs DiskArbitration ];
+  nativeBuildInputs = [ pkg-config ];
 
   src = fetchurl {
     url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
-    sha256 = "1mb228p80hv97pgk3myyvgp975r9mxq56c6bdn1n24kngcfh4niy";
+    sha256 = "55b883aa05d94b2ec746ef3966cb41e66bed6db99f22ddd41d1b8b94bb202efb";
   };
 
   patchPhase = ''
     substituteInPlace src/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace ntfsprogs/Makefile.in --replace /sbin '@sbindir@'
     substituteInPlace libfuse-lite/mount_util.c \
-      --replace /bin/mount ${util-linux}/bin/mount \
-      --replace /bin/umount ${util-linux}/bin/umount
+      --replace /bin/mount ${mount}/bin/mount \
+      --replace /bin/umount ${mount}/bin/umount
   '';
 
   configureFlags = [
@@ -39,11 +42,14 @@ stdenv.mkDerivation rec {
       ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
     '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://www.tuxera.com/community/open-source-ntfs-3g/";
+  meta = with lib; {
+    homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus; # and (lib)fuse-lite under LGPL2+
+    platforms = with platforms; darwin ++ linux;
+    license = with licenses; [
+      gpl2Plus # ntfs-3g itself
+      lgpl2Plus # fuse-lite
+    ];
   };
 }

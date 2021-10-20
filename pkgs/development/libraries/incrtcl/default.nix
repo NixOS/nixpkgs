@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, writeText, tcl }:
+{ lib, stdenv, fetchurl, writeText, tcl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "incrtcl";
   version = "4.2.0";
 
@@ -9,23 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "0w28v0zaraxcq1s9pa6cihqqwqvvwfgz275lks7w4gl7hxjxmasw";
   };
 
-  buildInputs = [ tcl ];
-  configureFlags = [ "--with-tcl=${tcl}/lib" ];
   enableParallelBuilding = true;
 
   patchPhase = ''
     substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
   '';
 
-  preConfigure = ''
-    configureFlags="--exec_prefix=$prefix $configureFlags"
-  '';
-
   postInstall = ''
     rmdir $out/bin
     mv $out/lib/itcl${version}/* $out/lib
     ln -s libitcl${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
-      $out/lib/libitcl${stdenv.lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
+      $out/lib/libitcl${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itcl${version}
   '';
 
@@ -35,7 +29,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
     license     = licenses.tcltk;

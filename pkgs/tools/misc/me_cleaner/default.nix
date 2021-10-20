@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib, python2, fetchFromGitHub }:
 
-buildPythonPackage rec {
+python2.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1bdj2clm13ir441vn7sv860xsc5gh71ja5lc2wn0gggnff0adxj4";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Tool for partial deblobbing of Intel ME/TXE firmware images";
     longDescription = ''
@@ -19,6 +19,6 @@ buildPythonPackage rec {
       with the final purpose of reducing its ability to interact with the system.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

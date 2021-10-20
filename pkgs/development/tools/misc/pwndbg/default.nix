@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3
 , fetchFromGitHub
 , makeWrapper
@@ -21,14 +21,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pwndbg";
-  version = "2020.07.23";
+  version = "2021.06.22";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
     rev = version;
-    sha256 = "0w1dmjy8ii12367wza8c35a9q9x204fppf6x328q75bhb3gd845c";
+    sha256 = "sha256-8jaWhpn7Q3X7FBHURX6nyOAhu+C113DnC4KBSE3FBuE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,11 +42,11 @@ in stdenv.mkDerivation rec {
       --set NIX_PYTHONPATH ${pythonPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Exploit Development and Reverse Engineering with GDB Made Easy";
     homepage = "https://github.com/pwndbg/pwndbg";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
   };
 }

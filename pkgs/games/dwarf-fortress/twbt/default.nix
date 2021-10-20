@@ -1,4 +1,7 @@
-{ stdenvNoCC, lib, fetchurl, unzip
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
 , dfVersion
 }:
 
@@ -47,11 +50,18 @@ let
       sha256 = "092dgp8fh1j4nqr9wbzn89ib1nhscclr8m91lfxsvg0mgn7j8xlv";
       prerelease = true;
     };
+    "0.47.05" = {
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.05-r1";
+      sha256 = "1nqhaf7271bm9rq9dmilhhk9q7v3841d0rv4y3fid40vfi4gpi3p";
+      prerelease = true;
+    };
   };
 
-  release = if hasAttr dfVersion twbt-releases
-            then getAttr dfVersion twbt-releases
-            else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if hasAttr dfVersion twbt-releases
+    then getAttr dfVersion twbt-releases
+    else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
 in
 
 stdenvNoCC.mkDerivation rec {
@@ -71,7 +81,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputs = [ "lib" "art" "out" ];
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $lib/hack/{plugins,lua} $art/data/art
@@ -80,7 +90,7 @@ stdenvNoCC.mkDerivation rec {
     cp -a *.png $art/data/art/
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A plugin for Dwarf Fortress / DFHack that improves various aspects the game interface.";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;

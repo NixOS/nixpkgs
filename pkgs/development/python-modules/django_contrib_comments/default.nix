@@ -1,22 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
-, six
 }:
 
 buildPythonPackage rec {
   pname = "django-contrib-comments";
-  version = "1.9.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1232bade3094de07dcc205fc833204384e71ba9d30caadcb5bb2882ce8e8d31";
+    sha256 = "d82f1d04690550df026553053903deec0c52dc54212e1b79241b08f0355cff2c";
   };
 
-  propagatedBuildInputs = [ django six ];
+  propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/django/django-contrib-comments";
     description = "The code formerly known as django.contrib.comments";
     license = licenses.bsd0;

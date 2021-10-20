@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, qmake, mkDerivation,
-  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio, ffmpeg-full,
+{ lib, stdenv, fetchFromGitHub, pkg-config, which, qmake, mkDerivation,
+  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio_1, ffmpeg-full,
   CoreFoundation }:
 
 mkDerivation rec {
@@ -14,7 +14,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     which
     qmake
     wrapQtAppsHook
@@ -23,11 +23,11 @@ mkDerivation rec {
   buildInputs = [
     ffmpeg-full
     frei0r
-    opencolorio
+    opencolorio_1
     qtmultimedia
-  ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Professional open-source NLE video editor";
     homepage = "https://www.olivevideoeditor.org/";
     downloadPage = "https://www.olivevideoeditor.org/download.php";

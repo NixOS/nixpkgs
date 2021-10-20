@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub , gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec  {
   pname = "flat-remix-icon-theme";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec  {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat remix is a pretty simple icon theme inspired on material design";
     homepage = "https://drasite.com/flat-remix";
     license = with licenses; [ gpl3 ];

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchFromGitHub, python, stdenv, django }:
+{ buildPythonPackage, fetchFromGitHub, python, lib, django }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkPhase = "${python.interpreter} runtests.py";
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "Tweak the form field rendering in templates, not in python-level form definitions.";
       homepage = "https://github.com/jazzband/django-widget-tweaks";
       license = licenses.mit;

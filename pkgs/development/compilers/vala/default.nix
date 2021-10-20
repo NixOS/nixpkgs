@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, autoreconfHook
-, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
 let
@@ -38,6 +38,12 @@ let
 
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
+        "0.50" = ./disable-graphviz-0.46.1.patch;
+
+        "0.52" = ./disable-graphviz-0.46.1.patch;
+
+        "0.54" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -65,12 +71,12 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkgconfig flex bison libxslt
+      pkg-config flex bison libxslt
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ extraNativeBuildInputs;
@@ -84,48 +90,53 @@ let
 
     doCheck = false; # fails, requires dbus daemon
 
-    # Wait for PR #59372
-    # passthru = {
-    #  updateScript = gnome3.updateScript {
-    #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-    #    packageName = pname;
-    #  };
-    # };
+    passthru = {
+      updateScript = gnome.updateScript {
+        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        packageName = pname;
+        freeze = true;
+      };
+    };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Compiler for GObject type system";
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
+      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 
 in rec {
-  vala_0_36 = generic {
-    version = "0.36.20";
-    sha256 = "19v7zjhr9yxkh9lxg46n9gjr0lb7j6v0xqfhrdvgz18xhj3hm5my";
-  };
-
   vala_0_40 = generic {
-    version = "0.40.18";
-    sha256 = "1f7cdkjdysg4dcri1wbzdddm46amk2s48jkwb5ghpdvhjb4l5j2m";
-  };
-
-  vala_0_44 = generic {
-    version = "0.44.11";
-    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
+    version = "0.40.25";
+    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
   vala_0_46 = generic {
-    version = "0.46.5";
-    sha256 = "07fv895sp9wq74b20qig7hic0r4ynrr5pfaqba02r44xb794fy0s";
+    version = "0.46.13";
+    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
   };
 
   vala_0_48 = generic {
-    version = "0.48.9";
-    sha256 = "1agyrvslv2yh9ikiw7k5nw6j6il1l2zrzfan0pzdpb9xpg9idslw";
+    version = "0.48.19";
+    sha256 = "sha256-gLdlijfZhE/NG0Mdr8WATeYWpYGW5PHxGeWyrraLSgE=";
   };
 
-  vala = vala_0_48;
+  vala_0_50 = generic {
+    version = "0.50.10";
+    sha256 = "sha256-vnIf8/AYHqttM+zKzygfZvMI+qHl5VTwj99nFZpFlRU=";
+  };
+
+  vala_0_52 = generic {
+    version = "0.52.5";
+    sha256 = "sha256-hKG7MSs+Xcrkt7JcRVmNN14stpIzzvtZoV0jUMdr3ZE=";
+  };
+
+  vala_0_54 = generic {
+    version = "0.54.1";
+    sha256 = "0jlhd6hr9mai7hhc2c78w6zmnzf7xncp7fhyiavkqqzhhsn7gpjx";
+  };
+
+  vala = vala_0_54;
 }

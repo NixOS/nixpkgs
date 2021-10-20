@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+# sweethome3d 6.5.2 does not yet fully build&run with jdk 9 and later?
+, jdk8
+, jre8
+, ant
+, gtk3
+, gsettings-desktop-schemas
+, p7zip
+, libXxf86vm
+, unzip
+}:
 
 let
 
@@ -17,7 +30,7 @@ let
 
   stdenv.mkDerivation rec {
     inherit pname version src description;
-    exec = stdenv.lib.toLower module;
+    exec = lib.toLower module;
     sweethome3dItem = makeDesktopItem {
       inherit exec desktopName;
       name = pname;
@@ -27,23 +40,30 @@ let
       categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
-    patchPhase = ''
+    postPatch = ''
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_awt.so
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_x11.so
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_awt.so
       patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
     '';
 
-    buildInputs = [ ant jdk makeWrapper p7zip gtk3 gsettings-desktop-schemas ];
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas ];
 
     buildPhase = ''
+      runHook preBuild
+
       ant furniture textures help
       mkdir -p $out/share/{java,applications}
       mv "build/"*.jar $out/share/java/.
       ant
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp install/${module}-${version}.jar $out/share/java/.
 
@@ -55,10 +75,12 @@ let
       # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
       # exception is thrown on startup.
       # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
-      makeWrapper ${jre}/bin/java $out/bin/$exec \
+      makeWrapper ${jre8}/bin/java $out/bin/$exec \
         --set MESA_GL_VERSION_OVERRIDE 2.1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+
+      runHook postInstall
     '';
 
     dontStrip = true;
@@ -67,25 +89,24 @@ let
       homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
-      maintainers = [ stdenv.lib.maintainers.edwtjo ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ lib.maintainers.edwtjo ];
+      platforms = lib.platforms.linux;
     };
   };
 
-  d2u = stdenv.lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceChars ["."] ["_"];
 
 in {
 
   application = mkSweetHome3D rec {
-    pname = stdenv.lib.toLower module + "-application";
-    version = "6.4.2";
+    pname = lib.toLower module + "-application";
+    version = "6.6";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
-    license = stdenv.lib.licenses.gpl2Plus;
-    src = fetchsvn {
-      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
-      sha256 = "13rczayakwb5246hqnp8lnw61p0p7ywr2294bnlp4zwsrz1in9z4";
-      rev = "7504";
+    license = lib.licenses.gpl2Plus;
+    src = fetchurl {
+      url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
+      sha256 = "sha256-CnVXpmodmyoZdqmt7OgRyzuLeDhkPhrAS/CldFM8SQs=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

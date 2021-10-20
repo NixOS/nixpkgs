@@ -1,19 +1,17 @@
 { lib, python3Packages, fetchFromGitHub }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "0.11.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "0wkk107s0bpvbknapns0qdzf8csrzc2j6gliy6pa8z208fcfzyy3";
+    sha256 = "0didqsbvrn06aylp71jl3hqb4rd95d8s613xz6jw6mngyjqv0hq2";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     binaryornot
     boolean-py
     debian
@@ -21,10 +19,10 @@ buildPythonApplication rec {
     license-expression
     requests
     setuptools
-    setuptools_scm
+    setuptools-scm
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool for compliance with the REUSE Initiative recommendations";

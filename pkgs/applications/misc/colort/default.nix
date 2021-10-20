@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "colort-unstable-2017-03-12";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   makeFlags = ["PREFIX=$(out)"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program for 'tinting' color values";
     homepage = "https://github.com/neeasade/colort";
     license = licenses.mit;

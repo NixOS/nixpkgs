@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 , sigtools
 , six
 , attrs
@@ -10,24 +10,24 @@
 , repeated_test
 , pygments
 , unittest2
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f54dedcf6fea90a3e75c30cb65e0ab1e832760121f393b8d68edd711dbaf7187";
+    sha256 = "06p47i6hri006v7xbx7myj02as1a6f34rv88wfa9rb067p13nmyz";
   };
 
   checkInputs = [
-    dateutil
+    pytestCheckHook
+    python-dateutil
     pygments
     repeated_test
     unittest2
-    pytest
   ];
 
   propagatedBuildInputs = [
@@ -38,14 +38,12 @@ buildPythonPackage rec {
     six
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "clize" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

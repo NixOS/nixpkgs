@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qmake, qtbase, qtdeclarative }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase, qtdeclarative }:
 
 mkDerivation rec {
   pname = "firebird-emu";
@@ -11,8 +11,6 @@ mkDerivation rec {
     sha256 = "0pdca6bgnmzfgf5kp83as99y348gn4plzbxnqxjs61vp489baahq";
     fetchSubmodules = true;
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ qmake ];
 
@@ -30,9 +28,9 @@ mkDerivation rec {
   meta = {
     homepage = "https://github.com/nspire-emus/firebird";
     description = "Third-party multi-platform emulator of the ARM-based TI-Nspire™ calculators";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ pneumaticat ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pneumaticat ];
     # Only tested on Linux, but likely possible to build on, e.g. macOS
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

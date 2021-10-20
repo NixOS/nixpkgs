@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, ncurses
+{ lib, stdenv, fetchurl, ncurses
 , patches ? [] # allow users to easily override config.def.h
 }:
 
 stdenv.mkDerivation rec {
   pname = "sacc";
-  version = "1.02";
+  version = "1.03";
 
   src = fetchurl {
     url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tgz";
-    sha512 = "18ja95cscgjaj1xqn70dj0482f76d0561bdcc47flqfsjh4mqckjqr65qv7awnw6rzm03i5cp45j1qx12y0y83skgsar4pplmy8q014";
+    sha512 = "sha512-vOjAGBM2+080JZv4C4b5dNRTTX45evWFEJfK1DRaWCYrHRCAe07QdEIrHhbaIxhSYfrBd3D1y75rmDnuPC4THA==";
   };
 
   inherit patches;
 
   buildInputs = [ ncurses ];
+
+  CFLAGS = lib.optionals stdenv.isDarwin [
+    "-D_DARWIN_C_SOURCE"
+  ];
 
   postPatch = ''
     substituteInPlace config.mk \
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal gopher client";
     homepage = "gopher://bitreich.org/1/scm/sacc";
     license = licenses.isc;

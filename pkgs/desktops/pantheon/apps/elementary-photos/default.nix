@@ -1,16 +1,17 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , meson
 , ninja
-, pkgconfig
-, vala
+, pkg-config
+, vala_0_52
 , desktop-file-utils
 , gtk3
 , libaccounts-glib
 , libexif
 , libgee
+, libhandy
 , geocode-glib
 , gexiv2
 , libgphoto2
@@ -27,14 +28,13 @@
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.0";
+  version = "2.7.2";
 
   repoName = "photos";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-bTk4shryAWWMrKX3mza6xQ05qpBPf80Ey7fmYgKLUiY=";
+    sha256 = "1zq9zfsc987vvrzadw9xqi3rlbi4jv2s82axkgy7ijm3ibi58ddc";
   };
 
   passthru = {
@@ -56,9 +56,11 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
-    vala
+    # Does not build with vala 0.54
+    # https://github.com/elementary/photos/issues/638
+    vala_0_52
     wrapGAppsHook
   ];
 
@@ -79,10 +81,10 @@ stdenv.mkDerivation rec {
     libgee
     libgphoto2
     libgudev
+    libhandy
     libraw
     librest
     libsoup
-    libunity
     libwebp
     scour
     sqlite
@@ -98,11 +100,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta =  with stdenv.lib; {
+  meta =  with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

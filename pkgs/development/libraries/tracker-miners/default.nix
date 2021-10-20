@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , asciidoc
@@ -11,7 +11,7 @@
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , bzip2
@@ -20,13 +20,12 @@
 , exempi
 , giflib
 , glib
-, gnome3
+, gnome
 , gst_all_1
 , icu
 , json-glib
 , libcue
 , libexif
-, libgrss
 , libgsf
 , libgxps
 , libiptcdata
@@ -48,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.0.1";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfi5d6pccqx28hbnja6k1mpwjd53k5zs704sg01rlzmbshz1zn6";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Bi+C3VSKYq7IUQWFAROskBpiK8UcbPxjIFY2Xof4GYE=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -86,7 +85,6 @@ stdenv.mkDerivation rec {
     json-glib
     libcue
     libexif
-    libgrss
     libgsf
     libgxps
     libiptcdata
@@ -108,6 +106,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+
+    # libgrss is unmaintained and has no new releases since 2015, and an open
+    # security issue since then. Despite a patch now being availab, we're opting
+    # to be safe due to the general state of the project
+    "-Dminer_rss=false"
   ];
 
   patches = [
@@ -122,13 +125,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

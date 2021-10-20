@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, gradle, jre, perl, writeText, runtimeShell }:
+{ lib, stdenv, fetchFromGitLab, gradle, jre, perl, writeText, runtimeShell }:
 
 let
   pname = "pdftk";
@@ -85,12 +85,11 @@ in stdenv.mkDerivation rec {
     cp ${src}/pdftk.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin averelld ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

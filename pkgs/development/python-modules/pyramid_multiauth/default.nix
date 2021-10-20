@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pyramid
@@ -15,10 +15,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyramid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
     homepage = "https://github.com/mozilla-services/pyramid_multiauth";
     license = licenses.mpl20;
+    maintainers = with maintainers; [];
   };
-
 }

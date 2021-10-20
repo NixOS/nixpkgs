@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
+{ lib, stdenv, fetchFromGitHub
+, meson, ninja, pkg-config, scdoc
 , wayland, wayland-protocols, cairo, gdk-pixbuf
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
-    rev = version;
-    sha256 = "1lmqz5bmig90gq2m7lwf02d2g7z4hzf8fhqz78c8vk92c6p4xwbc";
+    rev = "v${version}";
+    sha256 = "17508q9wsw6c1lsxlcbxj74z2naqhwi5c7lkbq24m4lk8qmy0576";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 
   mesonFlags = [
     "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";
     longDescription = ''
       A wallpaper utility for Wayland compositors, that is compatible with any

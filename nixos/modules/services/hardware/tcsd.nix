@@ -119,33 +119,40 @@ in
 
     environment.systemPackages = [ pkgs.trousers ];
 
-#    system.activationScripts.tcsd =
-#      ''
-#        chown ${cfg.user}:${cfg.group} ${tcsdConf}
-#      '';
+    services.udev.extraRules = ''
+      # Give tcsd ownership of all TPM devices
+      KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${cfg.user}", GROUP="${cfg.group}"
+      # Tag TPM devices to create a .device unit for tcsd to depend on
+      ACTION=="add", KERNEL=="tpm[0-9]*", TAG+="systemd"
+    '';
+
+    systemd.tmpfiles.rules = [
+      # Initialise the state directory
+      "d ${cfg.stateDir} 0770 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.tcsd = {
-      description = "TCSD";
-      after = [ "systemd-udev-settle.service" ];
+      description = "Manager for Trusted Computing resources";
+      documentation = [ "man:tcsd(8)" ];
+
+      requires = [ "dev-tpm0.device" ];
+      after = [ "dev-tpm0.device" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.trousers ];
-      preStart =
-        ''
-        mkdir -m 0700 -p ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
-      serviceConfig.ExecStart = "${pkgs.trousers}/sbin/tcsd -f -c ${tcsdConf}";
+
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.trousers}/sbin/tcsd -f -c ${tcsdConf}";
+      };
     };
 
     users.users = optionalAttrs (cfg.user == "tss") {
       tss = {
         group = "tss";
-        uid = config.ids.uids.tss;
+        isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "tss") {
-      tss.gid = config.ids.gids.tss;
-    };
+    users.groups = optionalAttrs (cfg.group == "tss") { tss = {}; };
   };
 }

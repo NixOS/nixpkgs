@@ -21,7 +21,7 @@ let
           each .dtb file matching "compatible" of the overlay.
         '';
         default = null;
-        example = literalExample "./dts/overlays.dts";
+        example = literalExpression "./dts/overlays.dts";
       };
 
       dtsText = mkOption {
@@ -31,7 +31,7 @@ let
           Literal DTS contents, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
-        example = literalExample ''
+        example = ''
           /dts-v1/;
           /plugin/;
           / {
@@ -68,11 +68,11 @@ let
       patchShebangs scripts/*
       substituteInPlace scripts/Makefile.lib \
         --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.platform.kernelBaseConfig} ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
+      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
     '';
     installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
     '';
   };
 
@@ -115,7 +115,7 @@ in
   options = {
       hardware.deviceTree = {
         enable = mkOption {
-          default = pkgs.stdenv.hostPlatform.platform.kernelDTB or false;
+          default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
           type = types.bool;
           description = ''
             Build device tree files. These are used to describe the
@@ -125,8 +125,8 @@ in
 
         kernelPackage = mkOption {
           default = config.boot.kernelPackages.kernel;
-          defaultText = "config.boot.kernelPackages.kernel";
-          example = literalExample "pkgs.linux_latest";
+          defaultText = literalExpression "config.boot.kernelPackages.kernel";
+          example = literalExpression "pkgs.linux_latest";
           type = types.path;
           description = ''
             Kernel package containing the base device-tree (.dtb) to boot. Uses
@@ -156,7 +156,7 @@ in
 
         overlays = mkOption {
           default = [];
-          example = literalExample ''
+          example = literalExpression ''
             [
               { name = "pps"; dtsFile = ./dts/pps.dts; }
               { name = "spi";

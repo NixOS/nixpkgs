@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''bordeaux-threads'';
-  version = ''v0.8.8'';
+  baseName = "bordeaux-threads";
+  version = "v0.8.8";
 
   parasites = [ "bordeaux-threads/test" ];
 
-  description = ''Bordeaux Threads makes writing portable multi-threaded apps simple.'';
+  description = "Bordeaux Threads makes writing portable multi-threaded apps simple.";
 
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/bordeaux-threads/2020-06-10/bordeaux-threads-v0.8.8.tgz'';
-    sha256 = ''1ppb7lvr796k1j4hi0jnp717v9zxy6vq4f5cyzgn7svg1ic6l0pp'';
+    url = "http://beta.quicklisp.org/archive/bordeaux-threads/2020-06-10/bordeaux-threads-v0.8.8.tgz";
+    sha256 = "1ppb7lvr796k1j4hi0jnp717v9zxy6vq4f5cyzgn7svg1ic6l0pp";
   };
 
   packageName = "bordeaux-threads";

@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "3.5.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bnsd1kx0ji2s3w1v7sskc3x82avaqjn2arnax55bmh1yjma6z8p";
+    sha256 = "sha256-g3Yb0LAa9Ukp32p0OoXxjmw9RQwyVpi0KXQBIpKunbU=";
   };
 
-  vendorSha256 = "0ppcrp6jp23ycn70mcgi5bsa0hr20hk7044ldw304krawy2vjgz8";
+  vendorSha256 = "sha256-RBe9XzvdgE5XWBTUhvAokElNwARgwVhkMwPmdKUroC0=";
 
   subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";

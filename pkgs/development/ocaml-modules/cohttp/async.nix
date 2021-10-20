@@ -1,22 +1,60 @@
-{ stdenv, buildDunePackage, async, cohttp, conduit-async, uri, ppx_sexp_conv
-, logs, magic-mime }:
+{ lib
+, buildDunePackage
+, ppx_sexp_conv
+, base
+, async
+, async_kernel
+, async_unix
+, cohttp
+, conduit-async
+, uri
+, uri-sexp
+, logs
+, fmt
+, sexplib0
+, ipaddr
+, magic-mime
+, ounit
+, mirage-crypto
+, core
+}:
 
-if !stdenv.lib.versionAtLeast cohttp.version "0.99" then
-	cohttp
-else if !stdenv.lib.versionAtLeast async.version "0.13" then
-	throw "cohttp-async needs async-0.13 (hence OCaml >= 4.08)"
-else
+buildDunePackage {
+  pname = "cohttp-async";
 
-	buildDunePackage {
-		pname = "cohttp-async";
-		useDune2 = true;
-		inherit (cohttp) version src;
+  inherit (cohttp)
+    version
+    src
+    minimumOCamlVersion
+    useDune2
+    ;
 
-		buildInputs = [ ppx_sexp_conv ];
+  buildInputs = [ ppx_sexp_conv ];
 
-		propagatedBuildInputs = [ async cohttp conduit-async logs magic-mime uri ];
+  propagatedBuildInputs = [
+    cohttp
+    conduit-async
+    async_kernel
+    async_unix
+    async
+    base
+    magic-mime
+    logs
+    fmt
+    sexplib0
+    uri
+    uri-sexp
+    ipaddr
+  ];
 
-		meta = cohttp.meta // {
-			description = "CoHTTP implementation for the Async concurrency library";
-		};
-	}
+  doCheck = true;
+  checkInputs = [
+    ounit
+    mirage-crypto
+    core
+  ];
+
+  meta = cohttp.meta // {
+    description = "CoHTTP implementation for the Async concurrency library";
+  };
+}

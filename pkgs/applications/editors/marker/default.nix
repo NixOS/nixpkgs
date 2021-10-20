@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pandoc
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop";
     maintainers = with maintainers; [ trepetti ];

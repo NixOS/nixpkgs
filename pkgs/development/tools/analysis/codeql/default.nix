@@ -1,18 +1,8 @@
-{ stdenv
-, fetchzip
-, zlib
-, xorg
-, freetype
-, alsaLib
-, jdk11
-, curl
-, lttng-ust
-, autoPatchelfHook
-}:
+{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.4.0";
+  version = "2.6.2";
 
   dontConfigure = true;
   dontBuild = true;
@@ -20,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    sha256 = "1mplya2dyqqmm6gj4if2k4h2fra15rxf2yfnhphqhz40kz75sxk8";
+    sha256 = "096w9w52rj854i7rmpgy99k9z9ja2dfvj2d02dnpagwd7pc6a6bl";
   };
 
   nativeBuildInputs = [
@@ -31,12 +21,9 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrender
     freetype
-    alsaLib
     jdk11
     stdenv.cc.cc.lib
     curl
-    lttng-ust
-    autoPatchelfHook
   ];
 
   installPhase = ''
@@ -47,14 +34,14 @@ stdenv.mkDerivation rec {
 
     ln -sf $out/codeql/tools/linux64/lib64trace.so $out/codeql/tools/linux64/libtrace.so
 
-    sed -i 's;"$CODEQL_DIST/tools/$CODEQL_PLATFORM/java/bin/java";"${jdk11}/bin/java";' $out/codeql/codeql
+    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java%\${jdk11}%g' $out/codeql/codeql
 
     ln -s $out/codeql/codeql $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Semantic code analysis engine";
-    homepage = "https://semmle.com/codeql";
+    homepage = "https://codeql.github.com";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.unfree;
   };

@@ -164,7 +164,7 @@ in
       settings = mkOption {
         type = configType;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { # enable webserver
             ncdns.httplistenaddr = ":8202";
 
@@ -243,8 +243,12 @@ in
         xlog.journal = true;
     };
 
-    users.users.ncdns =
-      { description = "ncdns daemon user"; };
+    users.users.ncdns = {
+      isSystemUser = true;
+      group = "ncdns";
+      description = "ncdns daemon user";
+    };
+    users.groups.ncdns = {};
 
     systemd.services.ncdns = {
       description = "ncdns daemon";

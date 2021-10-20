@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "serviio";
@@ -9,14 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0mxpdyhjf4w83q8ssmvpxm95hw4x7lfkh48vvdablccfndh82x2i";
   };
 
-  phases = ["unpackPhase" "installPhase"];
-
   installPhase = ''
     mkdir -p $out
     cp -R config legal lib library plugins LICENCE.txt NOTICE.txt README.txt RELEASE_NOTES.txt $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://serviio.org";
     description = "UPnP Media Streaming Server";
     longDescription = ''

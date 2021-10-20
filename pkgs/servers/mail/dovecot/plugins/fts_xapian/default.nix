@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64, sqlite }:
-stdenv.mkDerivation {
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64 }:
+stdenv.mkDerivation rec {
   pname = "fts-xapian";
-  version = "1.3.1";
+  version = "1.4.11";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
-    rev = "1.3.1";
-    sha256 = "10yl5fyfbx2ijqckx13vbmzj9mpm5pkh8qzichbdgplrzm738q43";
+    rev = version;
+    sha256 = "sha256-HPmS2Z1PIEM9fc6EerCEigQJg5BK/115zOW2uxFqjP0=";
   };
 
-  buildInputs = [ dovecot xapian icu64 sqlite ];
+  buildInputs = [ dovecot xapian icu64 ];
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
@@ -25,11 +25,12 @@ stdenv.mkDerivation {
     "--with-moduledir=$(out)/lib/dovecot"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/grosjo/fts-xapian";
     description = "Dovecot FTS plugin based on Xapian";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ julm ];
+    changelog = "https://github.com/grosjo/fts-xapian/releases";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ julm symphorien ];
     platforms = platforms.unix;
   };
 }

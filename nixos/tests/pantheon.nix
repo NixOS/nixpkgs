@@ -1,10 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ...} :
 
 {
   name = "pantheon";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = pkgs.pantheon.maintainers;
+  meta = with lib; {
+    maintainers = teams.pantheon.members;
   };
 
   machine = { ... }:
@@ -45,8 +45,8 @@ import ./make-test-python.nix ({ pkgs, ...} :
     with subtest("Check if pantheon session components actually start"):
         machine.wait_until_succeeds("pgrep gala")
         machine.wait_for_window("gala")
-        machine.wait_until_succeeds("pgrep wingpanel")
-        machine.wait_for_window("wingpanel")
+        machine.wait_until_succeeds("pgrep -f io.elementary.wingpanel")
+        machine.wait_for_window("io.elementary.wingpanel")
         machine.wait_until_succeeds("pgrep plank")
         machine.wait_for_window("plank")
 

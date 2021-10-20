@@ -1,8 +1,8 @@
-{ stdenv, fetchzip, which, ocaml, findlib
+{ lib, stdenv, fetchzip, which, ocaml, findlib
 , camlzip, extlib
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.04"
+if !lib.versionAtLeast ocaml.version "4.04"
 then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
@@ -25,10 +25,12 @@ stdenv.mkDerivation rec {
 
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   propagatedBuildInputs = [ camlzip extlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that parses Java .class files into OCaml data structures";
     homepage = "https://javalib-team.github.io/javalib/";
     license = licenses.lgpl3;

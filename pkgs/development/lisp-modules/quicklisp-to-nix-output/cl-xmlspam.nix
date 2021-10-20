@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-xmlspam'';
-  version = ''20101006-http'';
+  baseName = "cl-xmlspam";
+  version = "20101006-http";
 
-  description = ''Streaming pattern matching for XML'';
+  description = "Streaming pattern matching for XML";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."puri" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-xmlspam/2010-10-06/cl-xmlspam-20101006-http.tgz'';
-    sha256 = ''1mx1a6ab4irncrx5pamh7zng35m4c5wh0pw68avaz7fbz81s953h'';
+    url = "http://beta.quicklisp.org/archive/cl-xmlspam/2010-10-06/cl-xmlspam-20101006-http.tgz";
+    sha256 = "1mx1a6ab4irncrx5pamh7zng35m4c5wh0pw68avaz7fbz81s953h";
   };
 
   packageName = "cl-xmlspam";

@@ -1,10 +1,10 @@
-{stdenv, fetchgit, xorgproto, libX11, libXft, libXcomposite, libXdamage
-, libXext, libXinerama, libjpeg, giflib, pkgconfig
+{lib, stdenv, fetchgit, xorgproto, libX11, libXft, libXcomposite, libXdamage
+, libXext, libXinerama, libjpeg, giflib, pkg-config
 }:
 let
   buildInputs = [
     xorgproto libX11 libXft libXcomposite libXdamage libXext
-    libXinerama libjpeg giflib pkgconfig
+    libXinerama libjpeg giflib pkg-config
   ];
 in
 stdenv.mkDerivation rec {
@@ -21,10 +21,9 @@ stdenv.mkDerivation rec {
     sed -e "s@/etc/xdg@$out&@" -i Makefile
   '';
   meta = {
-    inherit version;
-    description = ''Expose-style compositing-based standalone window switcher'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Expose-style compositing-based standalone window switcher";
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchurl, makeWrapper
 , curly, fmt, bos, cmdliner, re, rresult, logs
-, odoc, opam-format, opam-core, opam-state, yojson
+, odoc, opam-format, opam-core, opam-state, yojson, astring
 , opam, git, findlib, mercurial, bzip2, gnutar, coreutils
 , alcotest, mdx
 }:
@@ -10,18 +10,18 @@
 let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
-  version = "1.4.0";
+  version = "1.5.0";
 
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1frinv1rsrm30q6jclicsswpshkdwwdgxx7sp6q9w4c2p211n1ln";
+    sha256 = "1lyfaczskdbqnhmpiy6wga9437frds3m8prfk2rhwyb96h69y3pv";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson ];
+                  rresult logs odoc bos yojson astring ];
   checkInputs = [ alcotest mdx ] ++ runtimeInputs;
   doCheck = true;
 
@@ -32,11 +32,16 @@ in buildDunePackage rec {
     # to have a fixed path to the binary in nix store
     sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
 
-    # set bogus user info in git so git commit doesn't fail
-    sed -i '/git init/ a \    $ git config user.name test; git config user.email "pseudo@pseudo.invalid"' \
-      tests/bin/{delegate_info,errors,tag,no_doc,x-commit-hash}/run.t
     # ignore weird yes error message
-    sed -i 's/yes |/yes 2>\/dev\/null |/' tests/bin/no_doc/run.t
+    sed -i 's/yes |/yes 2>\/dev\/null |/' \
+      tests/bin/no_doc/run.t \
+      tests/bin/draft/run.t \
+      tests/bin/url-file/run.t
+  '';
+
+  preCheck = ''
+    # it fails when it tries to reference "./make_check_deterministic.exe"
+    rm -r tests/bin/check
   '';
 
   # tool specific env vars have been deprecated, use PATH

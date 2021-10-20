@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, pkgconfig, ghostscript, cairo }:
+{ fetchurl, lib, stdenv, pkg-config, ghostscript, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "libspectre-0.2.7";
+  pname = "libspectre";
+  version = "0.2.7";
 
   src = fetchurl {
-    url = "https://libspectre.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://libspectre.freedesktop.org/releases/${pname}-${version}.tar.gz";
     sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
 
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Need `libgs.so'.
-    pkgconfig ghostscript cairo /*for tests*/
+    pkg-config ghostscript cairo /*for tests*/
   ];
 
   doCheck = true;
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
       handling and rendering Postscript documents.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

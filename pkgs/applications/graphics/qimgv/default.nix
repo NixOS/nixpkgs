@@ -4,7 +4,7 @@
 , fetchpatch
 
 , cmake
-, pkgconfig
+, pkg-config
 
 , exiv2
 , mpv
@@ -16,18 +16,18 @@
 
 mkDerivation rec {
   pname = "qimgv";
-  version = "0.9.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b2hddps969gjim2r9a22zaxmnzp600av2zz6icq66ksfrx1rpac";
+    sha256 = "1wybpmqvj7vj7cl6r4gif7mkrcdr6zpb939mmz46xsil5vb4pirh";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

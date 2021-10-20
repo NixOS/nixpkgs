@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonApplication
 , fetchPypi
 # buildInputs
@@ -25,16 +25,16 @@
 
 buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.0";
+  version = "5.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y8r1pjav0gyrbnyqjnc202sa962n1gasi8233xj7jc39lv3iq40";
+    sha256 = "24ac6d94108996efad4ff5185dabb1e5120ae238134b8175d6de2ca9e766cd92";
   };
 
-  buildInputs = [ glibcLocales pkginfo check-manifest ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools ];
+  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
 
   checkInputs = [
     pytest pytest-flake8 webtest mock
@@ -49,7 +49,9 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;

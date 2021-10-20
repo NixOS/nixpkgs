@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libconfig, pkgconfig, libevent, openssl }:
+{ lib, stdenv, fetchFromGitHub, libconfig, pkg-config, libevent, openssl }:
 
 stdenv.mkDerivation {
   pname = "nntp-proxy";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0jwxh71am83fbnq9mn06jl06rq8qybm506js79xmmc3xbk5pqvy4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libconfig libevent openssl ];
 
   installFlags = [ "INSTALL_DIR=$(out)/bin/" ];
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple NNTP proxy with SSL support";
     homepage = "https://github.com/nieluj/nntp-proxy";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.fadenb ];
+    platforms = lib.platforms.all;
   };
 }

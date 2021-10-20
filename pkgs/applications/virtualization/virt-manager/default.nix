@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, python3Packages, intltool, file
+{ lib, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3
+, gsettings-desktop-schemas, libosinfo, gnome
 , gtksourceview4, docutils
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
+, cdrtools
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "virt-manager";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
-    sha256 = "0al34lxlywqnj98hdm72a38zk8ns91wkqgrc3h1mhv1kikd8pjfc";
+    url = "https://releases.pagure.org/virt-manager/${pname}-${version}.tar.gz";
+    sha256 = "11kvpzcmyir91qz0dsnk7748jbb4wr8mrc744w117qc91pcy6vrb";
   };
 
   nativeBuildInputs = [
@@ -26,15 +27,14 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3Packages;
-    [
-      pygobject3 ipaddress libvirt libxml2 requests
-    ];
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3 ipaddress libvirt libxml2 requests cdrtools
+  ];
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
@@ -53,10 +53,24 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
-  # Failed tests
-  doCheck = false;
+  checkInputs = with python3Packages; [ cpio cdrtools pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = [
+    "tests/test_cli.py"
+    "tests/test_disk.py"
+    "tests/test_checkprops.py"
+    "tests/test_storage.py"
+  ]; # Error logs: https://gist.github.com/superherointj/fee040872beaafaaa19b8bf8f3ff0be5
+
+  preCheck = ''
+    export HOME=.
+  ''; # <- Required for "tests/test_urldetect.py".
+
+  postCheck = ''
+    $out/bin/virt-manager --version | grep -Fw ${version} > /dev/null
+  '';
+
+  meta = with lib; {
     homepage = "http://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''

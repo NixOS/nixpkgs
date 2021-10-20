@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage }:
+{ lib, stdenv, fetchurl, callPackage }:
 
 let
  # Probably a bug in some FreeDict release files, but easier to trivially
@@ -12,7 +12,7 @@ let
      inherit src;
      locale = _locale;
      dbName = _name;
-     buildPhase = ":";
+     dontBuild = true;
      unpackPhase = ''
        tar xf  ${src}
      '';
@@ -24,7 +24,7 @@ let
 
      meta = {
        description = "dictd-db dictionary for dictd";
-       platforms = stdenv.lib.platforms.linux;
+       platforms = lib.platforms.linux;
      };
    };
 in rec {
@@ -91,5 +91,5 @@ in rec {
     locale = "en_UK";
   };
   wordnet = callPackage ./dictd-wordnet.nix {};
-  wiktionary = callPackage ./dictd-wiktionary.nix {};
+  wiktionary = callPackage ./wiktionary {};
 }

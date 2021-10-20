@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, nettle }:
+{ lib, stdenv, fetchurl, nettle }:
 
 stdenv.mkDerivation rec {
   pname = "rdfind";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://rdfind.pauldreik.se/${pname}-${version}.tar.gz";
-    sha256 = "132y3wwgnbpdx6f90q0yahd3nkr4cjzcy815ilc8p97b4vn17iih";
+    sha256 = "103hfqzgr6izmj57fcy4jsa2nmb1ax43q4b5ij92pcgpaq9fsl21";
   };
 
   buildInputs = [ nettle ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rdfind.pauldreik.se/";
     description = "Removes or hardlinks duplicate files very swiftly";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
   };

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
+, fetchFromGitLab
 , fetchpatch
-, fetchurl
-, pythonPackages
+, python3
 , librsync
 , ncftp
 , gnupg
@@ -9,21 +9,23 @@
 , par2cmdline
 , util-linux
 , rsync
-, backblaze-b2
 , makeWrapper
 , gettext
 }:
 let
-  inherit (stdenv.lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (stdenv.lib.take 3 (splitVersion v));
+  pythonPackages = python3.pkgs;
+  inherit (lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.13";
+  version = "0.8.20";
 
-  src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "0lflg1ay4q4w9qzpmh6y2hza4fc3ig12q44qkd80ks17hj21bxa6";
+  src = fetchFromGitLab {
+    owner = "duplicity";
+    repo = "duplicity";
+    rev = "rel.${version}";
+    sha256 = "13ghra0myq6h6yx8qli55bh8dg91nf1hpd8l7d7xamgrw6b188sm";
   };
 
   patches = [
@@ -33,22 +35,42 @@ pythonPackages.buildPythonApplication rec {
     # Our Python infrastructure runs test in installCheckPhase so we need
     # to make the testing code stop assuming it is run from the source directory.
     ./use-installed-scripts-in-test.patch
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+
+    # https://gitlab.com/duplicity/duplicity/-/merge_requests/64
+    # remove on next release
+    (fetchpatch {
+      url = "https://gitlab.com/duplicity/duplicity/-/commit/5c229a9b42f67257c747fbc0022c698fec405bbc.patch";
+      sha256 = "05v931rnawfv11cyxj8gykmal8rj5vq2ksdysyr2mb4sl81mi7v0";
+    })
+  ] ++ lib.optionals stdenv.isLinux [
+    # Broken on Linux in Nix' build environment
     ./linux-disable-timezone-test.patch
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  preConfigure = ''
+    # fix version displayed by duplicity --version
+    # see SourceCopy in setup.py
+    ls
+    for i in bin/*.1 duplicity/__init__.py; do
+      substituteInPlace "$i" --replace '$version' "${version}"
+    done
+  '';
 
   nativeBuildInputs = [
     makeWrapper
     gettext
     pythonPackages.wrapPython
+    pythonPackages.setuptools-scm
   ];
   buildInputs = [
     librsync
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  pythonPath = with pythonPackages; [
     b2sdk
-    boto
+    boto3
     cffi
     cryptography
     ecdsa
@@ -62,7 +84,7 @@ pythonPackages.buildPythonApplication rec {
     pycrypto
     pydrive
     future
-  ] ++ stdenv.lib.optionals (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     enum
   ];
 
@@ -71,19 +93,19 @@ pythonPackages.buildPythonApplication rec {
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     util-linux # Add 'setsid' to PATH.
   ] ++ (with pythonPackages; [
     lockfile
     mock
     pexpect
     pytest
-    pytestrunner
+    pytest-runner
   ]);
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
+      --prefix PATH : "${lib.makeBinPath [ gnupg ncftp rsync ]}"
   '';
 
   preCheck = ''
@@ -99,7 +121,10 @@ pythonPackages.buildPythonApplication rec {
 
     # Don't run developer-only checks (pep8, etc.).
     export RUN_CODE_TESTS=0
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+
+    # check version string
+    duplicity --version | grep ${version}
+  '' + lib.optionalString stdenv.isDarwin ''
     # Work around the following error when running tests:
     # > Max open files of 256 is too low, should be >= 1024.
     # > Use 'ulimit -n 1024' or higher to correct.
@@ -111,11 +136,10 @@ pythonPackages.buildPythonApplication rec {
   # > OSError: out of pty devices
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://www.nongnu.org/duplicity";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;
   };
 }

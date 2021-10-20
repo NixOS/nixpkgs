@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
+{ lib, stdenv, fetchurl, automake, autoconf, libtool, flex, bison, texinfo, fetchpatch
 
 # Optional Dependencies
 , ncurses ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "gpm-1.20.7";
+  pname = "gpm";
+  version = "1.20.7";
 
   src = fetchurl {
-    url = "https://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
+    url = "https://www.nico.schottelius.org/software/gpm/archives/gpm-${version}.tar.bz2";
     sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
   };
 
@@ -36,6 +37,11 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/gentoo/musl/5aed405d87dfa92a5cab1596f898e9dea07169b8/sys-libs/gpm/files/gpm-1.20.7-sysmacros.patch";
       sha256 = "0lg4l9phvy2n8gy17qsn6zn0qq52vm8g01pgq5kqpr8sd3fb21c2";
     })
+    (fetchpatch {
+      # upstream build fix against -fno-common compilers like >=gcc-10
+      url = "https://github.com/telmich/gpm/commit/f04f24dd5ca5c1c13608b144ab66e2ccd47f106a.patch";
+      sha256 = "1q5hl5m61pci2f0x7r5in99rmqh328v1k0zj2693wdlafk9dabks";
+    })
   ];
   preConfigure = ''
     ./autogen.sh
@@ -52,7 +58,7 @@ stdenv.mkDerivation rec {
     ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "A daemon that provides mouse support on the Linux console";
     license = licenses.gpl2;

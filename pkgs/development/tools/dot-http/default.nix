@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dot-http";
@@ -11,15 +11,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1s2q4kdldhb5gd14g2h6vzrbjgbbbs9zp2dgmna0rhk1h4qv0mml";
   };
 
-  cargoSha256 = "0an3hskq1k2j4gdn8wvhfb9pqsc34ibs5bv7sjznkp5jma6fdr9w";
+  cargoSha256 = "013jyp2bgmssj1c18lm8jkb6q6jlhdrqzmyri6k5lgmfmb9dvkii";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     libiconv Security
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based scriptable HTTP client";
     homepage = "https://github.com/bayne/dot-http";
     license = licenses.asl20;

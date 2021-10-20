@@ -1,9 +1,13 @@
-{ stdenv, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
-mkDerivation {
+{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
+mkDerivation rec {
   pname = "kernelshark";
-  version = "1.1.0";
+  version = "1.2";
 
-  src = fetchgit (import ./src.nix);
+  src = fetchgit {
+    url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
+    rev    = "kernelshark-v${version}";
+    sha256 = "0wzzm2imk9n94v96v6sbvbff6j47lz4qj0snhiyv3nj3slg0anvh";
+  };
 
   patches = [ ./fix-Makefiles.patch ];
 
@@ -21,6 +25,7 @@ mkDerivation {
     "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include"
     "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/trace-cmd/libtracecmd.a"
     "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/traceevent/libtraceevent.a"
+    "-DTRACEFS_LIBRARY=${trace-cmd.lib}/lib/tracefs/libtracefs.a"
   ];
 
   preInstall = ''
@@ -30,7 +35,7 @@ mkDerivation {
     pushd kernel-shark/build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
     homepage    = "https://kernelshark.org/";
     license     = licenses.gpl2;

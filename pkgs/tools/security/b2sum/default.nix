@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, openmp ? null }:
+{ lib, stdenv, fetchzip, openmp ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "b2sum";

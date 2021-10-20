@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, flex, bison, file }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, file }:
 
 stdenv.mkDerivation rec {
   pname = "libstdc++5";
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     ./no-sys-dirs.patch
     (fetchpatch {
       name = "siginfo.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/siginfo.patch?h=packages/libstdc%2B%2B5&id=e36ee8ed9bb5942db14cf6249a2ead14974a2bfa";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/e36ee8ed9bb5942db14cf6249a2ead14974a2bfa/trunk/siginfo.patch";
       sha256 = "15zldbm33yba293dgrgsbv3j332hkc3iqpyc8fa7zl42mh9qk22j";
       extraPrefix = "";
     })
     (fetchpatch {
       name = "gcc-3.4.3-no_multilib_amd64.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/gcc-3.4.3-no_multilib_amd64.patch?h=packages/libstdc%2B%2B5&id=e36ee8ed9bb5942db14cf6249a2ead14974a2bfa";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/e36ee8ed9bb5942db14cf6249a2ead14974a2bfa/trunk/gcc-3.4.3-no_multilib_amd64.patch";
       sha256 = "11m5lc51b0addhc4yq4rz0dwpv6k73rrj73wya3lqdk8rly6cjpm";
       extraPrefix = "";
     })
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/!(libstdc++*)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl3Plus;
     description = "GNU Compiler Collection, version ${version} -- C++ standard library";

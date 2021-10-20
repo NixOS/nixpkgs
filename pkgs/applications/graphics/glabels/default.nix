@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, barcode, gnome3, autoreconfHook
+{ lib, stdenv, fetchurl, barcode, gnome, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
-, intltool, itstool, makeWrapper, pkgconfig, yelp-tools
+, intltool, itstool, makeWrapper, pkg-config, yelp-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
   version = "3.4.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0f2rki8i27pkd9r0gz03cdl1g4vnmvp0j49nhxqn275vi8lmgr0q";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper intltool ];
   buildInputs = [
     barcode gtk3 gtk-doc yelp-tools
-    gnome3.gnome-common gsettings-desktop-schemas
+    gnome.gnome-common gsettings-desktop-schemas
     itstool libxml2 librsvg libe-book libtool
   ];
 
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create labels and business cards";
     homepage = "https://glabels.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus ];

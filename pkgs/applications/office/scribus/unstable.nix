@@ -2,7 +2,6 @@
 , cairo
 , cmake
 , cups
-, fetchpatch
 , fetchurl
 , fontconfig
 , freetype
@@ -14,7 +13,7 @@
 , libxml2
 , mkDerivation
 , pixman
-, pkgconfig
+, pkg-config
 , podofo
 , poppler
 , poppler_data
@@ -22,7 +21,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, stdenv
+, lib
 }:
 
 let
@@ -36,18 +35,16 @@ in
 mkDerivation rec {
   pname = "scribus";
 
-  version = "1.5.6.1";
+  version = "1.5.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
+    sha256 = "sha256-MYMWss/Hp2GR0+DT+MImUUfa6gVwFiAo4kPCktgm+M4=";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -72,7 +69,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [
       erictapen
       kiwi

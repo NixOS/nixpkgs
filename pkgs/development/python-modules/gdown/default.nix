@@ -5,18 +5,19 @@
 , requests
 , tqdm
 , setuptools
+, six
 }:
 
 buildPythonApplication rec {
   pname = "gdown";
-  version = "3.12.2";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b3a1301e57bfd8dce939bf25ef8fbb4b23967fd0f878eede328bdcc41386bac";
+    sha256 = "sha256-XSYc3mCsFW+x6aZFDNtUE9lHv9vPUvkdsqmbtFX7aQw=";
   };
 
-  propagatedBuildInputs = [ filelock requests tqdm setuptools ];
+  propagatedBuildInputs = [ filelock requests tqdm setuptools six ];
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null

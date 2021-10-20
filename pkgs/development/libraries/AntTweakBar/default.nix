@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, unzip, xorg, libGLU, libGL }:
+{ lib, stdenv, fetchurl, unzip, xorg, libGLU, libGL }:
 
-stdenv.mkDerivation {
-  name = "AntTweakBar-1.16";
+stdenv.mkDerivation rec {
+  pname = "AntTweakBar";
+  version = "1.16";
 
-  buildInputs = [ unzip xorg.libX11 libGLU libGL ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ xorg.libX11 libGLU libGL ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_116.zip";
+    url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_${lib.replaceStrings ["."] [""] version}.zip";
     sha256 = "0z3frxpzf54cjs07m6kg09p7nljhr7140f4pznwi7srwq4cvgkpv";
   };
 
@@ -26,8 +28,8 @@ stdenv.mkDerivation {
       to interactively tweak parameters on-screen
     '';
     homepage = "http://anttweakbar.sourceforge.net/";
-    license = stdenv.lib.licenses.zlib;
-    maintainers = [ stdenv.lib.maintainers.razvan ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.razvan ];
+    platforms = lib.platforms.linux;
   };
 }

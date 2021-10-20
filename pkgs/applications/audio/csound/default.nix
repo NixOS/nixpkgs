@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
-, alsaLib ? null
+{ lib, stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
+, alsa-lib ? null
 , libpulseaudio ? null
 , libjack2 ? null
 , liblo ? null
@@ -14,12 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "csound";
-  # When updating, please check if https://github.com/csound/csound/issues/1078
-  # has been fixed in the new version so we can use the normal fluidsynth
-  # version and remove fluidsynth 1.x from nixpkgs again.
-  version = "6.15.0";
-
-  enableParallelBuilding = true;
+  version = "6.16.2";
 
   hardeningDisable = [ "format" ];
 
@@ -27,20 +22,20 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "csound";
     rev = version;
-    sha256 = "1vld6v55jxvv3ddr21kh41s4cdkhnm5wpffvd097zqrqh1aq08r0";
+    sha256 = "sha256-1rcS3kOspU9ACx45yB8betph4G0hso1OSJQRiabX6tE=";
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
-    ++ stdenv.lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
+    ++ lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
 
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
     ++ builtins.filter (optional: optional != null) [
-      alsaLib libpulseaudio libjack2
+      alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen
       curl tcltk fltk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = "http://www.csounds.com/";
     license = licenses.gpl2;

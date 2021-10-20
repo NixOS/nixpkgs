@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , coverage
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = true;
   checkInputs = [ coverage nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/mjschultz/py-radix";
     license = with licenses; [ isc bsdOriginal ];

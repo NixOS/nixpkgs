@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest-runner, pytest }:
 
 buildPythonPackage rec {
   pname = "Cerberus";
@@ -9,9 +9,9 @@ buildPythonPackage rec {
     sha256 = "1pxzr8sfm2hc5s96m9k044i44nwkva70n0ypr6a35v73zn891cx5";
   };
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [ pytest-runner pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://python-cerberus.org/";
     description = "Lightweight, extensible schema and data validation tool for Python dictionaries";
     license = licenses.mit;

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , patchelf
 , requireFile
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , gcc
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = requireFile {
     name = "Mathematica_9.0.0_LINUX.sh";
-    message = '' 
+    message = ''
       This nix expression requires that Mathematica_9.0.0_LINUX.sh is
       already part of the store. Find the file on your Mathematica CD
       and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     fontconfig
     freetype
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
     libxcb
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -117,6 +117,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

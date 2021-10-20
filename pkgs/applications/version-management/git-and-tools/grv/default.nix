@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkgconfig, readline
+{ lib, buildGoPackage, fetchFromGitHub, curl, ncurses, pkg-config, readline
 , cmake }:
 let
   version = "0.3.2";
@@ -8,7 +8,7 @@ buildGoPackage {
   inherit version;
 
   buildInputs = [ ncurses readline curl ];
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   goPackagePath = "github.com/rgburke/grv";
 
@@ -40,7 +40,7 @@ buildGoPackage {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRV is a terminal interface for viewing Git repositories";
     homepage = "https://github.com/rgburke/grv";
     license = licenses.gpl3;

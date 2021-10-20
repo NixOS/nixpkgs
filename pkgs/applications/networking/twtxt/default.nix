@@ -1,23 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildPythonApplication, aiohttp, python-dateutil, humanize, click, pytestCheckHook, tox }:
 
-buildGoModule rec {
+buildPythonApplication rec {
   pname = "twtxt";
-  version = "0.1.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
-    owner = "jointwt";
+    owner = "buckket";
     repo = pname;
-    rev = version;
-    sha256 = "15jhfnhpk34nmad04f7xz1w041dba8cn17hq46p9n5sarjgkjiiw";
+    rev = "v${version}";
+    sha256 = "sha256-AdM95G2Vz3UbVPI7fs8/D78BMxscbTGrCpIyyHzSmho=";
   };
 
-  vendorSha256 = "1lnf8wd2rv9d292rp8jndfdg0rjs6gfw0yg49l9spw4yzifnd7f7";
+  # Relax some dependencies
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'aiohttp>=2.2.5,<3' 'aiohttp' \
+      --replace 'click>=6.7,<7' 'click' \
+      --replace 'humanize>=0.5.1,<1' 'humanize'
+  '';
 
-  subPackages = [ "cmd/twt" "cmd/twtd" ];
+  propagatedBuildInputs = [ aiohttp python-dateutil humanize click ];
+
+  checkInputs = [ pytestCheckHook tox ];
 
   meta = with lib; {
-    description = "Self-hosted, Twitter-like decentralised microblogging platform";
-    homepage = "https://github.com/jointwt/twtxt";
+    description = "Decentralised, minimalist microblogging service for hackers";
+    homepage = "https://github.com/buckket/twtxt";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
   };

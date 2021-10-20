@@ -1,11 +1,12 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, fetchpatch
+, pythonOlder
 , click
 , click-log
 , click-threading
-, requests_toolbelt
+, requests-toolbelt
 , requests
 , requests_oauthlib # required for google oauth sync
 , atomicwrites
@@ -13,29 +14,31 @@
 , pytestCheckHook
 , pytest-localserver
 , pytest-subtesthack
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "0.16.8";
+  version = "0.18.0";
   pname = "vdirsyncer";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfdb422f52e1d4d60bd0635d203fb59fa7f613397d079661eb48e79464ba13c5";
+    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
   };
 
   propagatedBuildInputs = [
-    click click-log click-threading
-    requests_toolbelt
+    atomicwrites
+    click
+    click-log
+    click-threading
     requests
     requests_oauthlib # required for google oauth sync
-    atomicwrites
+    requests-toolbelt
   ];
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
@@ -46,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "click>=5.0,<6.0" "click"
+    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
   '';
 
   preCheck = ''
@@ -54,11 +57,12 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_verbosity"
     "test_create_collections" # Flaky test exceeds deadline on hydra: https://github.com/pimutils/vdirsyncer/issues/837
+    "test_request_ssl"
+    "test_verbosity"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
     license = licenses.mit;

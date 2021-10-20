@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libevent, libtirpc }:
+{ lib, stdenv, fetchurl, libevent, libtirpc }:
 
 stdenv.mkDerivation rec {
-  name = "trickle-1.07";
+  pname = "trickle";
+  version = "1.07";
 
   src = fetchurl {
-    url = "https://monkey.org/~marius/trickle/${name}.tar.gz";
+    url = "https://monkey.org/~marius/trickle/trickle-${version}.tar.gz";
     sha256 = "0s1qq3k5mpcs9i7ng0l9fvr1f75abpbzfi1jaf3zpzbs1dz50dlx";
   };
 
@@ -27,8 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight userspace bandwidth shaper";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://monkey.org/~marius/pages/?page=trickle";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

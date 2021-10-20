@@ -75,15 +75,15 @@ apprun() {
 
 wrap() {
 
-  cd "$APPDIR" || exit
   # quite same in appimageTools
   export APPIMAGE_SILENT_INSTALL=1
 
   if [ -n "$APPIMAGE_DEBUG_EXEC" ]; then
+    cd "$APPDIR" || true
     exec "$APPIMAGE_DEBUG_EXEC"
   fi
 
-  exec ./AppRun "$@"
+  exec "$APPDIR/AppRun" "$@"
 }
 
 usage() {

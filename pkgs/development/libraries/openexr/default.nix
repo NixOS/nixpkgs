@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, buildPackages
 , fetchFromGitHub
 , zlib
 , ilmbase
@@ -10,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "2.5.3";
+  version = "2.5.7";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
@@ -18,21 +17,21 @@ stdenv.mkDerivation rec {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "xyYdRrwAYdnRZmErIK0tZspguqtrXvixO5+6nMDoOh8=";
+    sha256 = "1vja0rbilcd1wn184w8nbcmck00n7bfwlddwiaxw8dhj64nx4468";
   };
 
   patches = [
     # Fix pkg-config paths
     (fetchpatch {
-      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/6442fb71a86c09fb0a8118b6dbd93bcec4883a3c.patch";
-      sha256 = "bwD5WTKPT4DjOJDnPXIvT5hJJkH0b71Vo7qupWO9nPA=";
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/2f19a01923885fda75ec9d19332de080ec7102bd.patch";
+      sha256 = "1yxmrdzq1x1911wdzwnzr29jmg2r4wd4yx3vhjn0y5dpny0ri5y5";
     })
   ];
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";
     license = licenses.bsd3;

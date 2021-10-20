@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "man-db-2.9.3";
+  pname = "man-db";
+  version = "2.9.4";
 
   src = fetchurl {
-    url = "mirror://savannah/man-db/${name}.tar.xz";
-    sha256 = "1f4palf5bdyf3f8sa0981cqxn9cjcr2pz53ngrrsybb9n0da2nps";
+    url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
+    sha256 = "sha256-tmyZ7frRatkoyIn4fPdjgCY8FgkyPCgLOp5pY/2xZ1Y=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkgconfig makeWrapper groff ];
+  nativeBuildInputs = [ pkg-config makeWrapper groff ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = stdenv.lib.optionalString (buildPackages.groff != groff) ''
+  postFixup = lib.optionalString (buildPackages.groff != groff) ''
     # Check to make sure none of the outputs depend on build-time-only groff:
     for outName in $outputs; do
       out=''${!outName}
@@ -72,10 +73,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
+    mainProgram = "man";
   };
 }

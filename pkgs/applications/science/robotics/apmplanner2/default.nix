@@ -1,21 +1,21 @@
 { lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake
 , qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
-, alsaLib, libsndfile, flite, openssl, udev, SDL2
+, alsa-lib, libsndfile, flite, openssl, udev, SDL2
 }:
 
 mkDerivation rec {
   pname = "apmplanner2";
-  version = "2.0.28-rc1";
+  version = "2.0.28";
 
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
     rev = version;
-    sha256 = "18yn8bdz5hmgb0m5hlk8bibz4cj4g25w75pm1rvc4ds0mr1qgyjd";
+    sha256 = "0wvbfjnnf7sh6fpgw8gimh5hgzywj3nwrgr80r782f5gayd3v2l1";
   };
 
   buildInputs = [
-    alsaLib libsndfile flite openssl udev SDL2
+    alsa-lib libsndfile flite openssl udev SDL2
     qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
   ];
 
@@ -29,8 +29,6 @@ mkDerivation rec {
     substituteInPlace $out/share/applications/apmplanner2.desktop \
       --replace /usr $out
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Ground station software for autonomous vehicles";

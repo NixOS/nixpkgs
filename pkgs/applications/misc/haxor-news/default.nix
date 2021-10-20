@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, fetchpatch }:
+{ lib, fetchFromGitHub, python3, fetchpatch }:
 
 
 let
@@ -7,7 +7,7 @@ let
       self = py;
 
       # not compatible with prompt_toolkit >=2.0
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
         name = "${oldAttrs.pname}-${version}";
         version = "1.0.18";
         src = oldAttrs.src.override {
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     colorama
     requests
     pygments
-    prompt_toolkit
+    prompt-toolkit
     six
   ];
 
@@ -50,7 +50,7 @@ buildPythonApplication rec {
     ${python.interpreter} -m unittest discover -s tests -v
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";
     description = "Browse Hacker News like a haxor";
     license = licenses.asl20;

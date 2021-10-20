@@ -1,6 +1,7 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
-  pkgconfig, fontforge, makeWrapper, flex, bison,
+  bison, flex, fontforge, makeWrapper, pkg-config,
+  autoconf, hexdump, perl,
   supportFlags,
   patches,
   buildScript ? null, configureFlags ? []
@@ -18,16 +19,24 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   inherit name src configureFlags;
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
-  # FIXME Breaks wineStaging builds
-  strictDeps = supportFlags.mingwSupport;
+  strictDeps = true;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex bison
+    bison
+    flex
+    fontforge
+    makeWrapper
+    pkg-config
+
+    # Required by staging
+    autoconf
+    hexdump
+    perl
   ]
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype ]
+  [ pkgs.freetype pkgs.perl pkgs.xorg.libX11 ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
@@ -50,7 +59,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
-  ++ lib.optional alsaSupport            pkgs.alsaLib
+  ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
@@ -65,15 +74,14 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
   ])
   ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
      libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])
-  ++ [ pkgs.xorg.libX11 pkgs.perl ]));
+  ])));
 
   patches = [ ] ++ patches';
 
@@ -91,14 +99,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # elements specified above.
   dontPatchELF = true;
 
-  # Disable stripping to avoid breaking placeholder DLLs/EXEs.
-  # Symptoms of broken placeholders are: when the wineprefix is created
-  # drive_c/windows/system32 will only contain a few files instead of
-  # hundreds, there will be an error about winemenubuilder and MountMgr
-  # on startup of Wine, and the Drives tab in winecfg will show an error.
-  # TODO: binutils 2.34 contains a fix for this bug, re-enable stripping once available.
-  dontStrip = true;
-
   ## FIXME
   # Add capability to ignore known failing tests
   # and enable doCheck
@@ -106,7 +106,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
-  in ''
+  in lib.optionalString supportFlags.embedInstallers ''
     mkdir -p $out/share/wine/gecko $out/share/wine/mono/
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
@@ -148,8 +148,9 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   meta = {
     inherit version platforms;
     homepage = "https://www.winehq.org/";
-    license = with stdenv.lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; [ lgpl21Plus ];
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = with stdenv.lib.maintainers; [ avnik raskin bendlas ];
+    maintainers = with lib.maintainers; [ avnik raskin bendlas ];
+    mainProgram = "wine";
   };
 })

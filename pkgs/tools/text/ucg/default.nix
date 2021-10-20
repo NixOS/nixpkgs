@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ pcre ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gvansickle/ucg/";
     description = "Grep-like tool for searching large bodies of source code";
     longDescription = ''

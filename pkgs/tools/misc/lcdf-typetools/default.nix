@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "lcdf-typetools";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-kpathsea" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for manipulating OpenType, PostScript Type 1, and Multiple Master fonts";
     homepage = "https://www.lcdf.org/type";
     license = licenses.gpl2;

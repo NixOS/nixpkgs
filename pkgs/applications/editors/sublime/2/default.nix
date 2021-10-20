@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, glib, xorg, cairo, gtk2, makeDesktopItem }:
+{ fetchurl, lib, stdenv, glib, xorg, cairo, gtk2, makeDesktopItem }:
 let
-  libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo];
+  libPath = lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo];
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         name = "sublimetext-2.0.2.tar.bz2";
-        url = [
+        urls = [
           "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2.tar.bz2"
           "https://download.sublimetext.com/Sublime%20Text%202.0.2.tar.bz2"
         ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         name = "sublimetext-2.0.2.tar.bz2";
-        url = [
+        urls = [
           "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2.tar.bz2"
           "https://download.sublimetext.com/Sublime%20Text%202.0.2%20x64.tar.bz2"
         ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     echo ${libPath}
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
+      --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
       $out/sublime/sublime_text
 
     mkdir -p $out/share/icons
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

@@ -3,15 +3,15 @@
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
-, callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python, ruby, perl
+, callPackage, ghostscriptX, harfbuzz
+, makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
+, fetchpatch
 }:
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
-    poppler = poppler_min; # otherwise depend on various X stuff
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
@@ -19,13 +19,12 @@ let
   };
 
   # map: name -> fixed-output hash
-  # sha1 in base32 was chosen as a compromise between security and length
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python ruby perl;
+      stdenv python3 ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -57,6 +56,37 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
+
+      texdoc = orig.texdoc // {
+        # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
+        postUnpack = let
+          # commit that ensures reproducibility of Data.tlpdb.lua
+          # remove on the next texdoc update
+          reproPatch = fetchpatch {
+            name = "make-data-tlpdb-lua-reproducible.patch";
+            url = "https://github.com/TeX-Live/texdoc/commit/82aff83d5453a887c1117b9e771a98bddd8a605a.patch";
+            sha256 = "0y04y468i7db4p5bsyyhgzip8q4fi1756x9a15ndha9xfnasbf44";
+            stripLen = 2;
+            extraPrefix = "scripts/texdoc/";
+          };
+        in ''
+          if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
+            patch -p1 -d "$out" < "${reproPatch}"
+
+            unxz --stdout "${tlpdb}" > texlive.tlpdb
+
+            # create dummy doc file to ensure that texdoc does not return an error
+            mkdir -p support/texdoc
+            touch support/texdoc/NEWS
+
+            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
+              -c texlive_tlpdb=texlive.tlpdb -lM texdoc
+
+            cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
+          fi
+        '';
+      };
     }); # overrides
 
     # tl =
@@ -78,8 +108,13 @@ let
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns
-          else { inherit pname version; tlType = "run"; }
+            # the fake derivations are used for filtering of hyphenation patterns and formats
+          else {
+            inherit pname version;
+            tlType = "run";
+            hasFormats = attrs.hasFormats or false;
+            hasHyphens = attrs.hasHyphens or false;
+          }
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
@@ -87,6 +122,22 @@ let
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
     };
+
+  snapshot = {
+    year = "2021";
+    month = "04";
+    day = "08";
+  };
+
+  tlpdb = fetchurl {
+    # use the same mirror(s) as urlPrefixes below
+    urls = [
+      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
+    ];
+    sha512 = "1dsj4bza84g2f2z0w31yil3iwcnggcyg9f1xxwmp6ljk5xlzyr39cb556prx9691zbwpbrwbb5hnbqxqlnwsivgk0pmbl9mbjbk9cz0";
+  };
 
   # create a derivation that contains an unpacked upstream TL package
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
@@ -110,47 +161,31 @@ let
         #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive
+        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
-      src = fetchurl { inherit urls sha512; };
-
-      passthru = {
-        inherit pname tlType version;
-      } // lib.optionalAttrs (sha512 != "") { inherit src; };
-      unpackCmd = file: ''
-        tar -xf ${file} \
-          '--strip-components=${toString stripPrefix}' \
-          -C "$out" --anchored --exclude=tlpkg --keep-old-files
-      '' + postUnpack;
-
-    in if sha512 == "" then
-      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
-      fetchurl {
-        inherit urls;
-        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
-          else fixedHash;
-        name = tlName;
-        recursiveHash = true;
-        downloadToTemp = true;
-        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
-        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
-     }
-        // passthru
-
-    else runCommand "texlive-${tlName}"
-      ( { # lots of derivations, not meant to be cached
-          preferLocalBuild = true; allowSubstitutes = false;
-          inherit passthru;
+    in runCommand "texlive-${tlName}"
+      ( {
+          src = fetchurl { inherit urls sha512; };
+          inherit stripPrefix;
+          # metadata for texlive.combine
+          passthru = {
+            inherit pname tlType version;
+            hasFormats = args.hasFormats or false;
+            hasHyphens = args.hasHyphens or false;
+          };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
-          outputHashAlgo = "sha1";
+          outputHashAlgo = "sha256";
           outputHashMode = "recursive";
         }
       )
       ( ''
           mkdir "$out"
-        '' + unpackCmd "'${src}'"
+          tar -xf "$src" \
+          --strip-components="$stripPrefix" \
+          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+        '' + postUnpack
       );
 
   # combine a set of TL packages into a single TL meta-package
@@ -174,6 +209,7 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
+            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)

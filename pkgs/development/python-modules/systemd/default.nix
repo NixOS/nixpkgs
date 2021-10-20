@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, systemd, pkgconfig }:
+{ lib, buildPythonPackage, fetchFromGitHub, systemd, pkg-config }:
 
 buildPythonPackage rec {
   pname = "systemd";
@@ -12,11 +12,11 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ systemd ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python module for native access to the systemd facilities";
     homepage = "http://www.freedesktop.org/software/systemd/python-systemd/";
     license = licenses.lgpl21;

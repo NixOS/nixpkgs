@@ -28,30 +28,21 @@ let
     ];
   };
 
-  nixos-rebuild =
-    let fallback = import ./nix-fallback-paths.nix; in
-    makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
-      inherit (pkgs) runtimeShell;
-      nix = config.nix.package.out;
-      nix_x86_64_linux = fallback.x86_64-linux;
-      nix_i686_linux = fallback.i686-linux;
-      path = makeBinPath [ pkgs.jq ];
-    };
+  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
+    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    xserverEnabled = config.services.xserver.enable;
   };
 
   nixos-option =
-    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
     then null
-    else pkgs.callPackage ./nixos-option { };
+    else pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -97,8 +88,8 @@ in
 
     desktopConfiguration = mkOption {
       internal = true;
-      type = types.str;
-      default = "";
+      type = types.listOf types.lines;
+      default = [];
       description = ''
         Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
         saves to <literal>/etc/nixos/configuration.nix</literal>.
@@ -113,7 +104,20 @@ in
     };
   };
 
-  config = {
+  options.system.disableInstallerTools = mkOption {
+    internal = true;
+    type = types.bool;
+    default = false;
+    description = ''
+      Disable nixos-rebuild, nixos-generate-config, nixos-installer
+      and other NixOS tools. This is useful to shrink embedded,
+      read-only systems which are not expected to be rebuild or
+      reconfigure themselves. Use at your own risk!
+    '';
+  };
+
+  config = lib.mkIf (!config.system.disableInstallerTools) {
+
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
       # your system.  Help is available in the configuration.nix(5) man page
@@ -146,6 +150,8 @@ in
         #   keyMap = "us";
         # };
 
+      $xserverConfig
+
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
@@ -170,7 +176,8 @@ in
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   wget vim
+        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        #   wget
         #   firefox
         # ];
 

@@ -1,12 +1,12 @@
-diff -Nuar a/Alc/helpers.c b/Alc/helpers.c
---- a/Alc/helpers.c	1970-01-01 00:00:01.000000000 +0000
-+++ b/Alc/helpers.c	1970-01-01 00:00:02.000000000 +0000
-@@ -951,6 +951,8 @@
-             }
-         }
+diff --git a/alc/helpers.cpp b/alc/helpers.cpp
+index 8c1c856..19bbc0f 100644
+--- a/alc/helpers.cpp
++++ b/alc/helpers.cpp
+@@ -402,6 +402,7 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
  
-+        DirectorySearch("@OUT@/share", ext, &results);
-+
-         alstr_reset(&path);
+         DirectorySearch(path.c_str(), ext, &results);
      }
++    DirectorySearch("@OUT@/share/", ext, &results);
  
+     return results;
+ }

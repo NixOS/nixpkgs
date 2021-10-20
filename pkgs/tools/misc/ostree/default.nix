@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -12,6 +12,8 @@
 , xz
 , e2fsprogs
 , libsoup
+, glib-networking
+, wrapGAppsHook
 , gpgme
 , which
 , makeWrapper
@@ -25,7 +27,7 @@
 , libarchive
 , libcap
 , bzip2
-, yacc
+, bison
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
@@ -39,13 +41,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2020.8";
+  version = "2021.3";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "16v73v63h16ika73kgh2cvgm0v27r2d48m932mbj3xm6s295kapx";
+    sha256 = "sha256-D6Wjnww+WMIEATPkIpyyhmDGG5eM1KKj0vbpfvTI0LM=";
   };
 
   patches = [
@@ -74,10 +76,11 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     which
     makeWrapper
-    yacc
+    bison
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -85,6 +88,7 @@ in stdenv.mkDerivation rec {
     systemd
     e2fsprogs
     libsoup
+    glib-networking
     gpgme
     fuse
     libselinux
@@ -119,7 +123,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = let
-    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
       (placeholder "out")
       gobject-introspection
     ];
@@ -135,7 +139,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git for operating system binaries";
     homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;

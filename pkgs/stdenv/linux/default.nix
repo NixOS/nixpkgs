@@ -42,7 +42,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   commonPreHook =
     ''
@@ -61,7 +61,16 @@ let
 
 
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) { inherit system bootstrapFiles; };
+  bootstrapTools = import (if localSystem.libc == "musl" then ./bootstrap-tools-musl else ./bootstrap-tools) {
+    inherit system bootstrapFiles;
+    extraAttrs = lib.optionalAttrs
+      (config.contentAddressedByDefault or false)
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+  };
 
   getLibc = stage: stage.${localSystem.libc};
 
@@ -107,15 +116,11 @@ let
           bintools = prevStage.binutils;
           isGNU = true;
           libc = getLibc prevStage;
+          inherit lib;
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
-        extraAttrs = {
-          # Having the proper 'platform' in all the stdenvs allows getting proper
-          # linuxHeaders for example.
-          inherit platform;
-        };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -154,7 +159,8 @@ in
       # create a dummy Glibc here, which will be used in the stdenv of
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
-        name = "bootstrap-stage0-${localSystem.libc}";
+        pname = "bootstrap-stage0-${localSystem.libc}";
+        version = "bootstrap";
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -171,6 +177,7 @@ in
         nativeLibc = false;
         buildPackages = { };
         libc = getLibc self;
+        inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         bintools = bootstrapTools;
       };
@@ -251,6 +258,25 @@ in
         # Rewrap the binutils with the new glibc, so both the next
         # stage's wrappers use it.
         libc = getLibc self;
+
+        # Unfortunately, when building gcc in the next stage, its LTO plugin
+        # would use the final libc but `ld` would use the bootstrap one,
+        # and that can fail to load.  Therefore we upgrade `ld` to use newer libc;
+        # apparently the interpreter needs to match libc, too.
+        bintools = self.stdenvNoCC.mkDerivation {
+          inherit (prevStage.bintools.bintools) name;
+          dontUnpack = true;
+          dontBuild = true;
+          # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
+          installPhase = ''
+            mkdir -p "$out"/bin
+            cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
+            chmod +w "$out"/bin/ld.bfd
+            patchelf --set-interpreter '${getLibc self}'/lib/ld*.so.? \
+              --set-rpath "${getLibc self}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
+              "$out"/bin/ld.bfd
+          '';
+        };
       };
     };
   })
@@ -277,6 +303,10 @@ in
       isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
       gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_20;
+        # Use a deterministically built compiler
+        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+        reproducibleBuild = true;
+        profiledCompiler = false;
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf ] ++
@@ -317,6 +347,7 @@ in
         cc = prevStage.gcc-unwrapped;
         bintools = self.binutils;
         libc = getLibc self;
+        inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         shell = self.bash + "/bin/bash";
       };
@@ -369,7 +400,7 @@ in
         # TODO: remove this!
         inherit (prevStage) glibc;
 
-        inherit platform bootstrapTools;
+        inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
 

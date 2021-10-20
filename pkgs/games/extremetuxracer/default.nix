@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
+{ lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
 , sfml, libXi
 , libXmu, libXext, libXt, libSM, libICE
-, libpng, pkgconfig, gettext, intltool
+, libpng, pkg-config, gettext, intltool
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "0.8.1";
   pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
-    sha256 = "05ysaxvsgps9fxc421kdifsxmc1sn6n79cjaa0k0i3fs9qqrja2b";
+    sha256 = "sha256-ktqWPtMqub/xJjRu37lUnocdfDzsdT9KxQmODVPDg0E=";
   };
 
   buildInputs = [
     libGLU libGL libX11 xorgproto tcl freeglut freetype
     sfml libXi
     libXmu libXext libXt libSM libICE
-    libpng pkgconfig gettext intltool
+    libpng pkg-config gettext intltool
   ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/extremetuxracer/";
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

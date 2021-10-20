@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "lv";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful multi-lingual file viewer / grep";
     homepage = "https://web.archive.org/web/20160310122517/www.ff.iij4u.or.jp/~nrt/lv/";
     license = licenses.gpl2;

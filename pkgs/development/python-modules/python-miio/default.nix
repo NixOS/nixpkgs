@@ -1,51 +1,76 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, appdirs
+, poetry
 , click
-, construct
-, croniter
 , cryptography
-, importlib-metadata
-, pytest
-, pytest-mock
+, construct
 , zeroconf
 , attrs
 , pytz
+, appdirs
 , tqdm
 , netifaces
+, android-backup
+, importlib-metadata
+, croniter
+, defusedxml
+, pytestCheckHook
+, pytest-mock
+, pyyaml
 }:
 
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.4";
+  version = "0.5.8";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a6fd3bb2cc2f75cdfe5673f36a5a418144d08add6e53b384cb146e99f27bd39";
+    sha256 = "sha256-16XEah5rgem/L8A/zo1zPrifrU15VMk652rFLZcvjig=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace  "zeroconf>=0.25.1,<0.26.0" "zeroconf"
-    substituteInPlace setup.py \
-      --replace  "pytz>=2019.3,<2020.0" "pytz"
-    substituteInPlace setup.py \
-      --replace  "cryptography>=2.9,<3.0" "cryptography"
-    '';
-
-  checkInputs = [ pytest pytest-mock];
-  propagatedBuildInputs = [ appdirs click construct croniter cryptography importlib-metadata zeroconf attrs pytz tqdm netifaces ];
-
-  checkPhase = ''
-    pytest
+    substituteInPlace pyproject.toml \
+      --replace 'click = "^7"' 'click = "*"' \
+      --replace 'croniter = "^0"' 'croniter = "*"' \
+      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    poetry
+  ];
+
+  propagatedBuildInputs = [
+    android-backup
+    appdirs
+    attrs
+    click
+    construct
+    croniter
+    cryptography
+    defusedxml
+    netifaces
+    pytz
+    pyyaml
+    tqdm
+    zeroconf
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  pythonImportsCheck = [ "miio" ];
+
+  meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ flyfloh ];
   };
 }

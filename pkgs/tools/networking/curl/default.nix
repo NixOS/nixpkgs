@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkg-config, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -7,7 +7,16 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
+, gssSupport ? with stdenv.hostPlatform; (
+    !isWindows &&
+    # disable gss becuase of: undefined reference to `k5_bcmp'
+    # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    !isStatic &&
+    # the "mig" tool does not configure its compiler correctly. This could be
+    # fixed in mig, but losing gss support on cross compilation to darwin is
+    # not worth the effort.
+    !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+  ), libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -34,27 +43,35 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.73.0";
+  version = "7.76.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-zzT+Cwe4APHAGkmabosq9Uj20OBE3KSinYikvuFG0TE=";
+    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
   };
+
+  patches = [
+    ./CVE-2021-22897.patch
+    ./CVE-2021-22898.patch
+    ./CVE-2021-22901.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
-  propagatedBuildInputs = with stdenv.lib;
+  propagatedBuildInputs = with lib;
     optional http2Support nghttp2 ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
@@ -79,23 +96,23 @@ stdenv.mkDerivation rec {
       "--without-ca-bundle"
       "--without-ca-path"
       # The build fails when using wolfssl with --with-ca-fallback
-      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
+      (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
-      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
-      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
-      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
-      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
-      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
+      (lib.withFeatureAs sslSupport "ssl" openssl.dev)
+      (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
+      (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
+      (lib.enableFeature ldapSupport "ldap")
+      (lib.enableFeature ldapSupport "ldaps")
+      (lib.withFeatureAs idnSupport "libidn" libidn.dev)
+      (lib.withFeature brotliSupport "brotli")
     ]
-    ++ stdenv.lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
-    ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+    ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+    ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
+    ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
        # For the 'urandom', maybe it should be a cross-system option
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isWindows [
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
     ];
@@ -110,9 +127,9 @@ stdenv.mkDerivation rec {
 
     # Install completions
     make -C scripts install
-  '' + stdenv.lib.optionalString scpSupport ''
+  '' + lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
-  '' + stdenv.lib.optionalString gnutlsSupport ''
+  '' + lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
@@ -122,11 +139,13 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.haxx.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
+    # Fails to link against static brotli or gss
+    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
   };
 }

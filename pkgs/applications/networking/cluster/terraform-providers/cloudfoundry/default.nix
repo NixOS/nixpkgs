@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-cloudfoundry";
-  version = "0.12.6";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0n5ybpzk6zkrnd9vpmbjlkm8fdp7nbfr046wih0jk72pmiyrcygi";
+    sha256 = "12mx87dip6vn10zvkf4rgrd27k708lnl149j9xj7bmb8v9m1082v";
   };
 
-  vendorSha256 = "01lfsd9aw9w3kr1a2a5b7ac6d8jaij83lhxl4y4qsnjlqk86fbxq";
+  vendorSha256 = "0kydjnwzj0fylizvk1vg42zyiy17qhz40z3iwa1r5bb20qkrlz93";
 
   # needs a running cloudfoundry
   doCheck = false;
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   passthru = { provider-source-address = "registry.terraform.io/cloudfoundry-community/cloudfoundry"; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;

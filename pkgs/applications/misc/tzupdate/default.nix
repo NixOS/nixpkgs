@@ -1,4 +1,4 @@
-{ stdenv, python3 }:
+{ lib, python3 }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Update timezone information based on geoip";
     homepage = "https://github.com/cdown/tzupdate";
     maintainers = [ maintainers.michaelpj ];

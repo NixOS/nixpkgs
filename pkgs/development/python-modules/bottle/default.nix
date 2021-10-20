@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchPypi, setuptools }:
 
 buildPythonPackage rec {
   pname = "bottle";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://bottlepy.org";
     description = "A fast and simple micro-framework for small web-applications";
     license = licenses.mit;

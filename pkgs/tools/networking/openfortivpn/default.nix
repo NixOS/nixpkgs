@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , openssl, ppp
 , systemd ? null }:
 
@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qsfgpxg553s8rc9cyrc4k96z0pislxsdxb9wyhp8fdprkak2mw2";
+    sha256 = "sha256-wijP9VGKXlxCAU3xN6+cv9+NGwBS55ql8WsZZ592b/k=";
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(confdir)' /tmp
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl ppp
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for PPP+SSL VPN tunnel services";
     homepage = "https://github.com/adrienverge/openfortivpn";
     license = licenses.gpl3;

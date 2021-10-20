@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4 }:
+{ lib, stdenv, fetchurl, autoreconfHook, flex, bison, texinfo, help2man, m4 }:
 
 stdenv.mkDerivation {
   name = "flex-2.5.35";
@@ -16,14 +16,14 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ac_cv_func_malloc_0_nonnull=yes
+    ac_cv_func_realloc_0_nonnull=yes
+  '';
 
   doCheck = false; # fails 2 out of 46 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "2.5.35";
     homepage = "http://flex.sourceforge.net/";
     description = "A fast lexical analyser generator";

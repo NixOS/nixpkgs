@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   doCheck = (!isPy3k);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/versiontools";
     description = "Smart replacement for plain tuple used in __version__";
     license = licenses.lgpl2;

@@ -1,11 +1,11 @@
 { rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
-, pkg-config, openssl
+, pkg-config, curl, openssl
 , CoreFoundation, libiconv, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.6.18";
+  version = "0.9.2";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-source-${version}";
@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
       owner = "lu-zero";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1dh5z210nl8grjxb8zxch8h7799w61bah7r2j0s07091rcpfsrsb";
+      sha256 = "0hvlrhmbplx4cj4l5fynihgr9cdh0rkpwvipizk1gpp6p1ksr5hz";
     };
     cargoLock = fetchurl {
       url = "https://github.com/lu-zero/${pname}/releases/download/v${version}/Cargo.lock";
-      sha256 = "1h5wmfmm2a2ilyw3ar88rqm7yvdc2vhyx4pgg781615ax52fhjli";
+      sha256 = "0ckn31asz7013206j153ig96602dxvxm6skdz1plan0h05j5mgah";
     };
 
     installPhase = ''
@@ -28,11 +28,22 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "0ll9p2rbnw46zd9m2bmdmn99v9jjjf8i33xpkvd1rx42ki7sys62";
+  cargoSha256 = "0c0vn2pcy5px02mc0l4a3w7z9n8hc6br5w3ww6nrav5w6911jp52";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+
+  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
+  buildInputs = [ openssl curl ]
+  ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+
+  # Ensure that we are avoiding build of the curl vendored in curl-sys
+  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ldd "$out/bin/cargo-cbuild" | grep libcurl.so
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries";
@@ -45,6 +56,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

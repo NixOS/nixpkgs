@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-accesscontrol";
-  version = "0.3.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5cead7051df3816a3382a74033efa0b8774cb7f8cdf5871c6825dd1638289189";
+    sha256 = "565aa26336d560c028775e8ae50d0691aa7089e96170e78342371b773da3137c";
     extension = "zip";
   };
 
@@ -19,6 +19,9 @@ buildPythonPackage rec {
     azure-core
     msrest
   ];
+
+  # zero tests run
+  doCheck = false;
 
   pythonImportsCheck = [ "azure.synapse.accesscontrol" ];
 

@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "VASSAL-3.3.2";
+  pname = "VASSAL";
+  version = "3.5.8";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/vassalengine/${name}-linux.tar.bz2";
-    sha256 = "1abhlkl27gyfa1lghvv76xa6ks5hiwv2s9wb9ddadm0m07f87n1w";
+  src = fetchzip {
+    url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
+    sha256 = "sha256-IJ3p7+0fs/2dCbE1BOb2580upR9W/1R2/e3xmkAsJ+M=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/vassal $out/doc
 
-    cp CHANGES LICENSE README $out
+    cp CHANGES LICENSE README.md $out
     cp -R lib/* $out/share/vassal
     cp -R doc/* $out/doc
 
@@ -25,11 +26,11 @@ stdenv.mkDerivation rec {
   # Don't move doc to share/, VASSAL expects it to be in the root
   forceShare = [ "man" "info" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "A free, open-source boardgame engine";
       homepage = "http://www.vassalengine.org/";
-      license = licenses.lgpl21;
+      license = licenses.lgpl21Only;
       maintainers = with maintainers; [ tvestelind ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
   };
 }

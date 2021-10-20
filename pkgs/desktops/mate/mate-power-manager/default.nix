@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate-panel, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome3, gtk3, libtool, polkit, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate-panel, libnotify, libcanberra-gtk3, libsecret, dbus-glib, upower, gtk3, libtool, polkit, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fni41p3kraxwjnx9l5mdspng0zib1gfdxwlaiyq31mh4g79yjyj";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0ybvwv24g8awxjl2asgvx6l2ghn4limcm48ylha68dkpy3607di6";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     libtool
     wrapGAppsHook
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
      libxml2
      libcanberra-gtk3
      gtk3
-     gnome3.libgnome-keyring
+     libsecret
      libnotify
      dbus-glib
      upower
@@ -34,11 +34,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "The MATE Power Manager";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3;
+    license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo chpatrick ];
+    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
   };
 }

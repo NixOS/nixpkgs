@@ -3,23 +3,18 @@
 with lib;
 
 let cfg = config.services.xserver.libinput;
+
     xorgBool = v: if v then "on" else "off";
-in {
 
-  options = {
-
-    services.xserver.libinput = {
-
-      enable = mkEnableOption "libinput";
-
+    mkConfigForDevice = deviceType: {
       dev = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/dev/input/event0";
         description =
           ''
-            Path for touchpad device.  Set to null to apply to any
-            auto-detected touchpad.
+            Path for ${deviceType} device.  Set to null to apply to any
+            auto-detected ${deviceType}.
           '';
       };
 
@@ -168,6 +163,15 @@ in {
           '';
       };
 
+      transformationMatrix = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          A  string  of  9 space-separated floating point numbers.  Sets the transformation matrix to
+          the 3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
+        '';
+      };
+
       disableWhileTyping = mkOption {
         type = types.bool;
         default = false;
@@ -185,14 +189,66 @@ in {
           Option "DragLockButtons" "L1 B1 L2 B2"
         '';
         description = ''
-          Additional options for libinput touchpad driver. See
+          Additional options for libinput ${deviceType} driver. See
           <citerefentry><refentrytitle>libinput</refentrytitle><manvolnum>4</manvolnum></citerefentry>
           for available options.";
         '';
       };
-
     };
 
+    mkX11ConfigForDevice = deviceType: matchIs: ''
+      Identifier "libinput ${deviceType} configuration"
+      MatchDriver "libinput"
+      MatchIs${matchIs} "${xorgBool true}"
+      ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
+      Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
+      ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+      ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
+      ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
+      ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
+      ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
+      Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
+      Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
+      Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
+      ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
+      Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
+      Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
+      Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
+      Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
+      Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
+      Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
+      ${cfg.${deviceType}.additionalOptions}
+    '';
+in {
+
+  imports =
+    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "xserver" "libinput" "touchpad" option ]) [
+      "accelProfile"
+      "accelSpeed"
+      "buttonMapping"
+      "calibrationMatrix"
+      "clickMethod"
+      "leftHanded"
+      "middleEmulation"
+      "naturalScrolling"
+      "scrollButton"
+      "scrollMethod"
+      "horizontalScrolling"
+      "sendEventsMode"
+      "tapping"
+      "tappingDragLock"
+      "transformationMatrix"
+      "disableWhileTyping"
+      "additionalOptions"
+    ]);
+
+  options = {
+
+    services.xserver.libinput = {
+      enable = mkEnableOption "libinput";
+      mouse = mkConfigForDevice "mouse";
+      touchpad = mkConfigForDevice "touchpad";
+    };
   };
 
 
@@ -212,32 +268,10 @@ in {
 
     services.udev.packages = [ pkgs.libinput.out ];
 
-    services.xserver.config =
-      ''
-        # General libinput configuration.
-        # See CONFIGURATION DETAILS section of man:libinput(4).
-        Section "InputClass"
-          Identifier "libinputConfiguration"
-          MatchDriver "libinput"
-          ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
-          Option "AccelProfile" "${cfg.accelProfile}"
-          ${optionalString (cfg.accelSpeed != null) ''Option "AccelSpeed" "${cfg.accelSpeed}"''}
-          ${optionalString (cfg.buttonMapping != null) ''Option "ButtonMapping" "${cfg.buttonMapping}"''}
-          ${optionalString (cfg.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.calibrationMatrix}"''}
-          ${optionalString (cfg.clickMethod != null) ''Option "ClickMethod" "${cfg.clickMethod}"''}
-          Option "LeftHanded" "${xorgBool cfg.leftHanded}"
-          Option "MiddleEmulation" "${xorgBool cfg.middleEmulation}"
-          Option "NaturalScrolling" "${xorgBool cfg.naturalScrolling}"
-          ${optionalString (cfg.scrollButton != null) ''Option "ScrollButton" "${toString cfg.scrollButton}"''}
-          Option "ScrollMethod" "${cfg.scrollMethod}"
-          Option "HorizontalScrolling" "${xorgBool cfg.horizontalScrolling}"
-          Option "SendEventsMode" "${cfg.sendEventsMode}"
-          Option "Tapping" "${xorgBool cfg.tapping}"
-          Option "TappingDragLock" "${xorgBool cfg.tappingDragLock}"
-          Option "DisableWhileTyping" "${xorgBool cfg.disableWhileTyping}"
-          ${cfg.additionalOptions}
-        EndSection
-      '';
+    services.xserver.inputClassSections = [
+      (mkX11ConfigForDevice "mouse" "Pointer")
+      (mkX11ConfigForDevice "touchpad" "Touchpad")
+    ];
 
     assertions = [
       # already present in synaptics.nix

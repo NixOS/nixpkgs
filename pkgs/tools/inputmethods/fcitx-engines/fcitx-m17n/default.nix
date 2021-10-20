@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkgconfig }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-m17n";
@@ -9,15 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "15s52h979xz967f8lm0r0qkplig2w3wjck1ymndbg9kvj25ib0ng";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fcitx gettext m17n_lib m17n_db ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx gettext m17n_lib m17n_db ];
 
   preInstall = ''
     substituteInPlace im/cmake_install.cmake \
     --replace ${fcitx} $out
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-m17n";
     downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";

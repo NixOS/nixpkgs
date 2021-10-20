@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "yabai";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp ./doc/yabai.1 $out/share/man/man1/yabai.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A tiling window manager for macOS based on binary space partitioning
     '';

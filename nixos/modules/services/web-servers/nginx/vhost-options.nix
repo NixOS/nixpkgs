@@ -43,7 +43,24 @@ with lib;
         IPv6 addresses must be enclosed in square brackets.
         Note: this option overrides <literal>addSSL</literal>
         and <literal>onlySSL</literal>.
+
+        If you only want to set the addresses manually and not
+        the ports, take a look at <literal>listenAddresses</literal>
       '';
+    };
+
+    listenAddresses = mkOption {
+      type = with types; listOf str;
+
+      description = ''
+        Listen addresses for this virtual host.
+        Compared to <literal>listen</literal> this only sets the addreses
+        and the ports are choosen automatically.
+
+        Note: This option overrides <literal>enableIPv6</literal>
+      '';
+      default = [];
+      example = [ "127.0.0.1" "::1" ];
     };
 
     enableACME = mkOption {
@@ -118,6 +135,18 @@ with lib;
       '';
     };
 
+    rejectSSL = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to listen for and reject all HTTPS connections to this vhost. Useful in
+        <link linkend="opt-services.nginx.virtualHosts._name_.default">default</link>
+        server blocks to avoid serving the certificate for another vhost. Uses the
+        <literal>ssl_reject_handshake</literal> directive available in nginx versions
+        1.19.4 and above.
+      '';
+    };
+
     sslCertificate = mkOption {
       type = types.path;
       example = "/var/host.cert";
@@ -133,7 +162,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "/var/root.cert";
+      example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
@@ -148,6 +177,19 @@ with lib;
         If there is one server block configured to enable http2,then it is
         enabled for all server blocks on this IP.
         See https://stackoverflow.com/a/39466948/263061.
+      '';
+    };
+
+    http3 = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable HTTP 3.
+        This requires using <literal>pkgs.nginxQuic</literal> package
+        which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        Note that HTTP 3 support is experimental and
+        *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
       '';
     };
 
@@ -189,7 +231,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };
@@ -219,7 +261,7 @@ with lib;
         inherit lib;
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

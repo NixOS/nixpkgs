@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dash_table";
-  version = "4.11.0";
+  version = "4.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3170504a8626a9676b016c5ab456ab8c1fb1ea0206dcc2eddb8c4c6589216304";
+    sha256 = "sha256-TJlomoh7/QNSeLFOzV23BwYCM4nlNzXV48zMQW+s2+Q=";
   };
 
   # No tests in archive

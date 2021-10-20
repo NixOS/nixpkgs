@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, python3, qt4 }:
+{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, python3, qt4 }:
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
@@ -11,8 +11,6 @@ in stdenv.mkDerivation {
     sha256 = "1zj8yrxy08iv1pk38djxw3faimm226w6wmi0gm32w4yczblylwz3";
   };
 
-  enableParallelBuilding = true;
-
   outputs = [ "out" "dev" ];
 
   preConfigure = ''
@@ -22,11 +20,11 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pythonEnv ];
   buildInputs = [ qt4 libxml2 libxslt ];
 
-  meta = {
+  meta = with lib; {
     description = "Eases the development of bindings of Qt-based libraries for high level languages by automating most of the process";
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "http://www.pyside.org/docs/apiextractor/";
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

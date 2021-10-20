@@ -1,10 +1,4 @@
----
-title: Preface
-author: Frederik Rietdijk
-date: 2015-11-25
----
-
-# Preface
+# Preface {#preface}
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a
@@ -18,7 +12,7 @@ Nixpkgs. If you like to learn more about the Nix package manager and the Nix
 expression language, then you are kindly referred to the [Nix manual](https://nixos.org/nix/manual/).
 The NixOS distribution is documented in the [NixOS manual](https://nixos.org/nixos/manual/).
 
-## Overview of Nixpkgs
+## Overview of Nixpkgs {#overview-of-nixpkgs}
 
 Nix expressions describe how to build packages from source and are collected in
 the [nixpkgs repository](https://github.com/NixOS/nixpkgs). Also included in the

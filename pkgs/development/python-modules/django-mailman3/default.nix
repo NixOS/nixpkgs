@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
+{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
 , django-allauth, mailmanclient, django, mock
 }:
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.4";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e37b68bb47e9ae196ca19018f576e2c8c90189c5bd82d4e549d0c2f2f3f35fb";
+    sha256 = "cd3cb1ac26a3658bd694b82f00eaab98903bd2edff34956e90c187c9ab5c0dae";
   };
 
   propagatedBuildInputs = [
@@ -21,10 +21,12 @@ buildPythonPackage rec {
     PYTHONPATH=.:$PYTHONPATH django-admin.py test --settings=django_mailman3.tests.settings_test
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "django_mailman3" ];
+
+  meta = with lib; {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ globin peti ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

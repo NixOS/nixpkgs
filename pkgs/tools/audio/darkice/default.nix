@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig
-, libjack2, alsaLib, libpulseaudio
+{ lib, stdenv, fetchurl, pkg-config
+, libjack2, alsa-lib, libpulseaudio
 , faac, lame, libogg, libopus, libvorbis, libsamplerate
 }:
 
 stdenv.mkDerivation rec {
   pname = "darkice";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/darkice/${version}/darkice-${version}.tar.gz";
-    sha256 = "1rlxds7ssq7nk2in4s46xws7xy9ylxsqgcz85hxjgh17lsm0y39c";
+    url = "https://github.com/rafael2k/darkice/releases/download/v${version}/darkice-${version}.tar.gz";
+    sha256 = "05yq7lggxygrkd76yiqby3msrgdn082p0qlvmzzv9xbw8hmyra76";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libopus libvorbis libogg libpulseaudio alsaLib libsamplerate libjack2 lame
+    libopus libvorbis libogg libpulseaudio alsa-lib libsamplerate libjack2 lame
   ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://darkice.org/";
     description = "Live audio streamer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ikervagyok fpletz ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ikervagyok fpletz ];
   };
 }

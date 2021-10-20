@@ -60,7 +60,7 @@ in
           to = root@localhost
           from = smokeping@localhost
         '';
-        example = literalExample ''
+        example = ''
           to = alertee@address.somewhere
           from = smokealert@company.xy
 
@@ -75,7 +75,7 @@ in
       cgiUrl = mkOption {
         type = types.str;
         default = "http://${cfg.hostName}:${toString cfg.port}/smokeping.cgi";
-        defaultText = "http://\${hostName}:\${toString port}/smokeping.cgi";
+        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/smokeping.cgi"'';
         example = "https://somewhere.example.com/smokeping.cgi";
         description = "URL to the smokeping cgi.";
       };
@@ -100,7 +100,7 @@ in
               MIN  0.5 144   720
 
         '';
-        example = literalExample ''
+        example = ''
           # near constant pings.
           step     = 30
           pings    = 20
@@ -124,14 +124,15 @@ in
       };
       hostName = mkOption {
         type = types.str;
-        default = config.networking.hostName;
+        default = config.networking.fqdn;
+        defaultText = literalExpression "config.networking.fqdn";
         example = "somewhere.example.com";
         description = "DNS name for the urls generated in the cgi.";
       };
       imgUrl = mkOption {
         type = types.str;
         default = "http://${cfg.hostName}:${toString cfg.port}/cache";
-        defaultText = "http://\${hostName}:\${toString port}/cache";
+        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/cache"'';
         example = "https://somewhere.example.com/cache";
         description = "Base url for images generated in the cgi.";
       };
@@ -156,19 +157,19 @@ in
       ownerEmail = mkOption {
         type = types.str;
         default = "no-reply@${cfg.hostName}";
+        defaultText = literalExpression ''"no-reply@''${hostName}"'';
         example = "no-reply@yourdomain.com";
         description = "Email contact for owner";
       };
       package = mkOption {
         type = types.package;
         default = pkgs.smokeping;
-        defaultText = "pkgs.smokeping";
+        defaultText = literalExpression "pkgs.smokeping";
         description = "Specify a custom smokeping package";
       };
       port = mkOption {
         type = types.int;
         default = 8081;
-        example = 8081;
         description = "TCP port to use for the web server.";
       };
       presentationConfig = mkOption {
@@ -215,6 +216,7 @@ in
       presentationTemplate = mkOption {
         type = types.str;
         default = "${pkgs.smokeping}/etc/basepage.html.dist";
+        defaultText = literalExpression ''"''${pkgs.smokeping}/etc/basepage.html.dist"'';
         description = "Default page layout for the web UI.";
       };
       probeConfig = mkOption {
@@ -234,30 +236,31 @@ in
       smokeMailTemplate = mkOption {
         type = types.str;
         default = "${cfg.package}/etc/smokemail.dist";
+        defaultText = literalExpression ''"''${package}/etc/smokemail.dist"'';
         description = "Specify the smokemail template for alerts.";
       };
       targetConfig = mkOption {
         type = types.lines;
         default = ''
-					probe = FPing
-					menu = Top
-					title = Network Latency Grapher
-					remark = Welcome to the SmokePing website of xxx Company. \
-									 Here you will learn all about the latency of our network.
-					+ Local
-					menu = Local
-					title = Local Network
-					++ LocalMachine
-					menu = Local Machine
-					title = This host
-					host = localhost
+          probe = FPing
+          menu = Top
+          title = Network Latency Grapher
+          remark = Welcome to the SmokePing website of xxx Company. \
+                   Here you will learn all about the latency of our network.
+          + Local
+          menu = Local
+          title = Local Network
+          ++ LocalMachine
+          menu = Local Machine
+          title = This host
+          host = localhost
         '';
         description = "Target configuration";
       };
       user = mkOption {
         type = types.str;
         default = "smokeping";
-        description = "User that runs smokeping and (optionally) thttpd";
+        description = "User that runs smokeping and (optionally) thttpd. A group of the same name will be created as well.";
       };
       webService = mkOption {
         type = types.bool;
@@ -276,18 +279,23 @@ in
       }
     ];
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
-      fping6.source = "${pkgs.fping}/bin/fping6";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
       isNormalUser = false;
       isSystemUser = true;
-      uid = config.ids.uids.smokeping;
+      group = cfg.user;
       description = "smokeping daemon user";
       home = smokepingHome;
       createHome = true;
     };
+    users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
       serviceConfig = {
@@ -303,7 +311,7 @@ in
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
+      script = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
     };
     systemd.services.thttpd = mkIf cfg.webService {
       wantedBy = [ "multi-user.target"];

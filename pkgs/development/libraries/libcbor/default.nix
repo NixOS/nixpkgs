@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, cmocka }:
+{ lib, stdenv, fetchFromGitHub, cmake, cmocka }:
 
 stdenv.mkDerivation rec {
   pname = "libcbor";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_SHARED_LIBS=on" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;

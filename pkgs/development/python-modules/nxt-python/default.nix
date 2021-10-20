@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , isPy3k
@@ -25,7 +25,7 @@ buildPythonPackage {
   # Tests fail on Mac dependency
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
     homepage = "https://github.com/Eelviny/nxt-python";
     license = licenses.gpl3;

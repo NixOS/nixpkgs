@@ -1,11 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
 let
-  riscvPkgs = import ../.. { crossSystem = pkgs.stdenv.lib.systems.examples.riscv64-embedded; };
+  riscvPkgs = import ../.. { crossSystem = pkgs.lib.systems.examples.riscv64-embedded; };
 in
 {
   name = "spike";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ blitz ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ blitz ]; };
 
   machine = { pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.spike riscvPkgs.riscv-pk riscvPkgs.hello ];
@@ -17,6 +17,6 @@ in
     ''
       machine.wait_for_unit("multi-user.target")
       output = machine.succeed("spike -m64 $(which pk) $(which hello)")
-      assert output == "Hello, world!\n"
+      assert "Hello, world!" in output
     '';
 })

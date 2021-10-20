@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "mop";
@@ -9,7 +9,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   preConfigure = ''
-    for i in $(find . -type f);do
+    for i in *.go **/*.go; do
         substituteInPlace $i --replace michaeldv/termbox-go nsf/termbox-go
     done
     substituteInPlace Makefile --replace mop/cmd mop/mop
@@ -22,7 +22,7 @@ buildGoPackage rec {
     sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple stock tracker implemented in go";
     homepage =  "https://github.com/mop-tracker/mop";
     license = licenses.mit;

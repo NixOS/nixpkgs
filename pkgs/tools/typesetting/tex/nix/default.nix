@@ -77,7 +77,7 @@ rec {
             in if fn != null then [{key = fn;}] ++ xs
                else xs;
 
-        in pkgs.lib.fold foundDeps [] deps;
+        in pkgs.lib.foldr foundDeps [] deps;
     };
 
 

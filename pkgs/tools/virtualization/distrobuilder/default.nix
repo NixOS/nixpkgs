@@ -1,33 +1,53 @@
-{ stdenv, pkgconfig, buildGoPackage, fetchFromGitHub
-, makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
+{ lib
+, pkg-config
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gnupg
+, gnutar
+, squashfsTools
+, debootstrap
 }:
 
-let binPath = stdenv.lib.makeBinPath [
-  coreutils gnupg gnutar squashfsTools debootstrap
-];
+let
+  bins = [
+    coreutils
+    gnupg
+    gnutar
+    squashfsTools
+    debootstrap
+  ];
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "distrobuilder";
-  version = "2019_10_07";
-  rev = "d686c88c21838f5505c3ec14711b2413604d7f5c";
+  version = "1.3";
 
-  goPackagePath = "github.com/lxc/distrobuilder";
+  vendorSha256 = "sha256-FKnpoLA4enZ1vGSJQFLbp/OjoEgdxagL73ucxUgIoKY=";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "lxc";
     repo = "distrobuilder";
-    sha256 = "0k59czgasy4d58bkrin6hvgmh7y3nf177lwd0y4g47af27bgnyc4";
+    rev = "distrobuilder-${version}";
+    sha256 = "sha256-cvxbJbg9yTcAPWQccH+1nQivwRh8CIN3Cga2HKY8VlQ=";
+    fetchSubmodules = false;
   };
 
-  goDeps = ./deps.nix;
+  buildInputs = bins;
+
+  # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
+  doCheck = false;
+
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ] ++ bins;
 
   postInstall = ''
-    wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${binPath}
+    wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
     license = licenses.asl20;
@@ -35,4 +55,3 @@ buildGoPackage rec {
     platforms = platforms.linux;
   };
 }
-

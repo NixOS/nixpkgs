@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchPypi {
     inherit pname version;
     format = "setuptools";
     extension = "zip";
-    sha256 = "7aedd5e003992c6c78b41a0da4bf165359a46ea25ab2a9a1594d13f471ad7287";
+    sha256 = "298605b8f467ce15b412caaf9af331c135e88fa2172333af14b1b2916361cb6b";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -8,6 +8,7 @@
 , glib
 , granite
 , libgee
+, libhandy
 , libcanberra-gtk3
 , pantheon
 , python3
@@ -16,15 +17,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "unstable-2020-03-31";
+  version = "6.0.0";
 
   repoName = "notifications";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "db552b0c3466ba1099c7737c353b7225ab1896cc";
-    sha256 = "1fhf4zx73qka935x5afv6zqsm2l37d1mjbhrbzzzz44dqwa2vp16";
+    rev = version;
+    sha256 = "0jfppafbc8jwhhnillylicz4zfds789d8b31ifsx0qijlxa7kji9";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     libgee
+    libhandy
   ];
 
   postPatch = ''
@@ -50,11 +52,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK notification server for Pantheon";
     homepage = "https://github.com/elementary/notifications";
     license = licenses.gpl3Plus;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

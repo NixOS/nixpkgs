@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "snapraid";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.snapraid.it/";
     description = "A backup program for disk arrays";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.makefu ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.makefu ];
+    platforms = lib.platforms.unix;
   };
 }

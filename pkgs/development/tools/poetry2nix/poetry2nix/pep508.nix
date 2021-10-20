@@ -1,6 +1,6 @@
 { lib, stdenv, poetryLib }: python:
 let
-  inherit (poetryLib) ireplace;
+  inherit (poetryLib) ireplace targetMachine;
 
   # Like builtins.substring but with stop being offset instead of length
   substr = start: stop: s: builtins.substring start (stop - start) s;
@@ -95,7 +95,7 @@ let
           else if stdenv.isDarwin then "darwin"
           else throw "Unsupported platform"
         );
-        platform_machine = stdenv.platform.kernelArch;
+        platform_machine = targetMachine;
         platform_python_implementation =
           let
             impl = python.passthru.implementation;
@@ -129,10 +129,11 @@ let
         if exprs.type == "expr" then
           (
             let
-              mVal = ''[a-zA-Z0-9\'"_\. ]+'';
+              mVal = ''[a-zA-Z0-9\'"_\. \-]+'';
               mOp = "in|[!=<>]+";
               e = stripStr exprs.value;
-              m = builtins.map stripStr (builtins.match ''^(${mVal}) *(${mOp}) *(${mVal})$'' e);
+              m' = builtins.match ''^(${mVal}) +(${mOp}) *(${mVal})$'' e;
+              m = builtins.map stripStr (if m' != null then m' else builtins.match ''^(${mVal}) +(${mOp}) *(${mVal})$'' e);
               m0 = processVar (builtins.elemAt m 0);
               m2 = processVar (builtins.elemAt m 2);
             in
@@ -159,12 +160,12 @@ let
       hasElem = needle: haystack: builtins.elem needle (builtins.filter (x: builtins.typeOf x == "string") (builtins.split " " haystack));
       op = {
         "true" = x: y: true;
-        "<=" = x: y: (unmarshal x) <= (unmarshal y);
-        "<" = x: y: (unmarshal x) < (unmarshal y);
+        "<=" = x: y: op.">=" y x;
+        "<" = x: y: lib.versionOlder (unmarshal x) (unmarshal y);
         "!=" = x: y: x != y;
         "==" = x: y: x == y;
-        ">=" = x: y: (unmarshal x) >= (unmarshal y);
-        ">" = x: y: (unmarshal x) > (unmarshal y);
+        ">=" = x: y: lib.versionAtLeast (unmarshal x) (unmarshal y);
+        ">" = x: y: op."<" y x;
         "~=" = v: c:
           let
             parts = builtins.splitVersion c;

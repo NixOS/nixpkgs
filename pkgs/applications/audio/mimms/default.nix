@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, pythonPackages, libmms }:
+{ fetchurl, lib, python2Packages, libmms }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "mimms";
   version = "3.2";
 
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/mimms/";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     description = "An mms (e.g. mms://) stream downloader";
 
     longDescription = ''

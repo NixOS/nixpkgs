@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "retroarch";
   version = lib.getVersion retroarch;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir -p $out/lib
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     inherit license homepage platforms maintainers;
     description = description
                   + " (with cores: "
-                  + lib.concatStrings (lib.intersperse ", " (map (x: ""+x.name) cores))
+                  + lib.concatStringsSep ", " (map (x: ""+x.name) cores)
                   + ")";
   };
 }

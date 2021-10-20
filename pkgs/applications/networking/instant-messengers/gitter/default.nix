@@ -1,4 +1,4 @@
-{ stdenv, alsaLib, atk, at-spi2-core, cairo, cups, dbus, dpkg, expat, fetchurl
+{ lib, stdenv, alsa-lib, atk, at-spi2-core, cairo, cups, dbus, dpkg, expat, fetchurl
 , fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3,  libdrm, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
@@ -6,8 +6,8 @@
 , pango, systemd }:
 
 let gitterDirectorySuffix = "opt/gitter";
-   libPath = stdenv.lib.makeLibraryPath [
-     alsaLib
+   libPath = lib.makeLibraryPath [
+     alsa-lib
      atk
      at-spi2-core
      cairo
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
     categories = "Network;InstantMessaging;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Where developers come to talk";
     downloadPage = "https://gitter.im/apps";
     license = licenses.mit;

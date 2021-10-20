@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -13,6 +13,7 @@
 , granite
 , gettext
 , mutter
+, mesa
 , json-glib
 , python3
 , elementary-gtk-theme
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.3.2";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mXi600gufUK81Uks9p4+al0tCI7H9KpizZGyoomp42s=";
+    sha256 = "078yi36r452sc33mv2ck8z0icya1lhzhickllrlhc60rdri36sb8";
   };
 
   passthru = {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
+    mesa # for libEGL
   ];
 
   patches = [
@@ -73,15 +75,15 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

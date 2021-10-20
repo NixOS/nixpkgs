@@ -1,13 +1,13 @@
 { buildVersion, sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, gnugrep, coreutils
 }:
 
 let
   pname = "sublime-merge";
-  packageAttribute = "sublime-merge${stdenv.lib.optionalString dev "-dev"}";
+  packageAttribute = "sublime-merge${lib.optionalString dev "-dev"}";
   binaries = [ "sublime_merge" "crash_reporter" "git-credential-sublime" "ssh-askpass-sublime" ];
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
@@ -17,7 +17,7 @@ let
   archSha256 = sha256;
   arch = "x64";
 
-  libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation {
@@ -40,7 +40,7 @@ in let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
@@ -83,7 +83,7 @@ in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   ${primaryBinary} = binaryPackage;
 
@@ -105,11 +105,11 @@ in stdenv.mkDerivation (rec {
   passthru.updateScript = writeScript "${pname}-update-script" ''
     #!${stdenv.shell}
     set -o errexit
-    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+    PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
     latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
         # The script will not perform an update when the version attribute is up to date from previous platform run
         # We need to clear it before each run
         update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
@@ -117,7 +117,7 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
     maintainers = with maintainers; [ zookatron ];

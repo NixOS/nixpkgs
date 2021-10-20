@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "racerd";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoSha256 = "1z0dh2j9ik66i6nww3z7z2gw7nhc0b061zxbjzamk1jybpc845lq";
+  cargoSha256 = "08zn65c5ivhn2qs02aiixyqwhywrw8kfvs0kgzxdzsipic47n2qq";
 
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/racerd --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = true;
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
     homepage = "https://github.com/jwilm/racerd";

@@ -1,35 +1,47 @@
-{ stdenv, fetchurl, cmake, perl, zlib }:
+{ lib, stdenv
+, cmake
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
+}:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
+    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
+    sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
   };
 
-  # Fix pkgconfig file paths
-  postPatch = ''
-    sed -i CMakeLists.txt \
-      -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \
-      -e 's#\\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}#''${CMAKE_INSTALL_FULL_INCLUDEDIR}#'
-  '';
+  outputs = [ "out" "dev" "man" ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
 
   preCheck = ''
     # regress/runtest is a generated file
     patchShebangs regress
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://www.nih.at/libzip";
+  meta = with lib; {
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
 }

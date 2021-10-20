@@ -1,24 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, yasm
-, pkg-config, libjpeg, openssl, libopus, ffmpeg, alsaLib, libpulseaudio
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake, ninja, yasm
+, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
+, openh264, usrsctp, libevent, libvpx
+, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
+, glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
 }:
 
-let
-  rev = "e8fcae73947445db3d418fb7c20b964b59e14706";
-  sha256 = "0s2dd41r71aixhvympiqfks1liv7x78y60n0i87vmyxyfx449b5h";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "git-${rev}";
+  version = "unstable-2021-09-15";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    inherit rev sha256;
+    rev = "575fb17d2853c43329e45f6693370f5e41668055";
+    sha256 = "17lhy5g4apdakspv75zm070k7003crf1i80m8wy8f631s86v30md";
+    fetchSubmodules = true;
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
-  buildInputs = [ libjpeg openssl libopus ffmpeg alsaLib libpulseaudio ];
+  buildInputs = [
+    libjpeg openssl libopus ffmpeg alsa-lib libpulseaudio protobuf
+    openh264 usrsctp libevent libvpx
+    libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
+    glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
+  ];
 
-  meta.license = lib.licenses.bsd3;
+  cmakeFlags = [
+    # Building as a shared library isn't officially supported and may break at any time.
+    "-DBUILD_SHARED_LIBS=OFF"
+  ];
+
+  propagatedBuildInputs = [
+    # Required for linking downstream binaries.
+    abseil-cpp openh264 usrsctp libevent libvpx
+  ];
+
+  meta = with lib; {
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ oxalica ];
+  };
 }

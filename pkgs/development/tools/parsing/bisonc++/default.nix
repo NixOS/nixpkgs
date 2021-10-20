@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitLab
+{lib, stdenv, fetchurl, fetchFromGitLab
 , yodl, icmake, flexcpp, bobcat
 }:
 stdenv.mkDerivation rec {
@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "A parser generator like bison, but it generates C++ code";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];

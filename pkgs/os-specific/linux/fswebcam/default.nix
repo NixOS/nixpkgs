@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libv4l, gd }:
+{ lib, stdenv, fetchurl, libv4l, gd }:
 
 stdenv.mkDerivation rec {
-  name = "fswebcam-20200725";
+  pname = "fswebcam";
+  version = "2020-07-25";
 
   src = fetchurl {
-    url = "https://www.sanslogic.co.uk/fswebcam/files/${name}.tar.gz";
+    url = "https://www.sanslogic.co.uk/fswebcam/files/fswebcam-${lib.replaceStrings ["."] [""] version}.tar.gz";
     sha256 = "1dazsrcaw9s30zz3jpxamk9lkff5dkmflp1s0jjjvdbwa0k6k6ii";
   };
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Neat and simple webcam app";
     homepage = "http://www.sanslogic.co.uk/fswebcam";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

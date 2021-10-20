@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
+{ lib, stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "dictd";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} NEWS README
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dict protocol server and client";
     homepage = "http://www.dict.org";
     license = licenses.gpl2;

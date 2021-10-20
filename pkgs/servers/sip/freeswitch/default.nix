@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff
@@ -88,21 +88,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.5";
+  version = "1.10.6";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18dhyb19k28dcm1i8mhqvvgm2phsrmrwyjmfn79glk8pdlalvcha";
+    sha256 = "1i5n06pds3kvzhhzfwvhwxnvcb2p2fcr8k52157aplm2i7prl4q2";
   };
 
-  patches = [
-    # https://github.com/signalwire/freeswitch/pull/812 fix mod_spandsp, mod_gsmopen build, drop when updating from 1.10.5
-    (fetchpatch {
-      url = "https://github.com/signalwire/freeswitch/commit/51fba83ed3ed2d9753d8e6b13e13001aca50b493.patch";
-      sha256 = "0h2bmifsyyasxjka3pczbmqym1chvz91fmb589njrdbwpkjyvqh3";
-    })
-  ];
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
@@ -117,10 +110,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
+    openssl ncurses gnutls readline libjpeg
+    sqlite pcre speex ldns libedit
     libsndfile libtiff
     libuuid
   ]
@@ -150,8 +144,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
-    license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ misuzu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.mpl11;
+    maintainers = with lib.maintainers; [ misuzu ];
+    platforms = with lib.platforms; unix;
   };
 }

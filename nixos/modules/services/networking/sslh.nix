@@ -132,7 +132,7 @@ in
           { table = "mangle"; command = "OUTPUT ! -o lo -p tcp -m connmark --mark 0x02/0x0f -j CONNMARK --restore-mark --mask 0x0f"; }
         ];
       in {
-        path = [ pkgs.iptables pkgs.iproute pkgs.procps ];
+        path = [ pkgs.iptables pkgs.iproute2 pkgs.procps ];
 
         preStart = ''
           # Cleanup old iptables entries which might be still there

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fftwSinglePrec, freetype, SDL, SDL_ttf}:
+{lib, stdenv, fetchurl, fftwSinglePrec, freetype, SDL, SDL_ttf}:
 let
   s = # Generated upstream information
   rec {
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''Quantum mechanics-based minigolf-like game'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Quantum mechanics-based minigolf-like game";
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

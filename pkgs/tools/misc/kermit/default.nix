@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, ncurses, glibc }:
+{ lib, stdenv, fetchurl, ncurses, glibc }:
 
 stdenv.mkDerivation {
-  name = "kermit-9.0.302";
+  pname = "kermit";
+  version = "9.0.302";
 
   src = fetchurl {
     url = "ftp://ftp.kermitproject.org/kermit/archives/cku302.tar.gz";
@@ -16,12 +17,12 @@ stdenv.mkDerivation {
     tar xvzf $src
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@-I/usr/include/ncurses@@' \
       -e 's@/usr/local@'"$out"@ makefile
   '';
 
-  buildPhase = "make -f makefile linux LNKFLAGS='-lcrypt -lresolv'";
+  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -29,12 +30,11 @@ stdenv.mkDerivation {
     make -f makefile install
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.kermitproject.org/ck90.html";
+  meta = with lib; {
+    homepage = "https://www.kermitproject.org/ck90.html";
     description = "Portable Scriptable Network and Serial Communication Software";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
-    broken = true;
   };
 }

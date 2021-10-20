@@ -1,59 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-# Build inputs
-dateutil, six, text-unidecode, ipaddress ? null
-# Test inputs
-, email_validator
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python-dateutil
+, text-unidecode
 , freezegun
-, mock
-, more-itertools
 , pytestCheckHook
-, pytestrunner
 , ukpostcodeparser
+, pillow
 , validators
 }:
 
-assert pythonOlder "3.3" -> ipaddress != null;
-
 buildPythonPackage rec {
-  pname = "Faker";
-  version = "4.18.0";
+  pname = "faker";
+  version = "8.8.2";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0raxw6mgvf9523v7917zqw76vqnpp0d6v3i310qnjnhpxmm78yb2";
+    pname = "Faker";
+    inherit version;
+    sha256 = "sha256-IlNMOqbS7584QDojTcm3G1y4ePt2XHKZS+Xce06vCGU=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [
+    python-dateutil
+    text-unidecode
+  ];
+
   checkInputs = [
-    email_validator
     freezegun
+    pillow
     pytestCheckHook
     ukpostcodeparser
     validators
-  ]
-  ++ lib.optionals (pythonOlder "3.3") [ mock ]
-  ++ lib.optionals (pythonOlder "3.0") [ more-itertools ];
+  ];
 
   # avoid tests which import random2, an abandoned library
   pytestFlagsArray = [
     "--ignore=tests/providers/test_ssn.py"
   ];
-
-  propagatedBuildInputs = [
-    dateutil
-    six
-    text-unidecode
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=3.8.0,<3.9" "pytest"
-  '';
+  pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {
-    description = "A Python library for generating fake user data";
-    homepage    = "http://faker.rtfd.org";
-    license     = licenses.mit;
+    description = "Python library for generating fake user data";
+    homepage = "http://faker.rtfd.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
   };
 }

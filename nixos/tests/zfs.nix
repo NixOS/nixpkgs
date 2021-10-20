@@ -8,28 +8,44 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest = name:
-    { kernelPackage ? pkgs.linuxPackages_latest
+    { kernelPackage ? if enableUnstable then pkgs.linuxPackages_latest else pkgs.linuxPackages
     , enableUnstable ? false
     , extraTest ? ""
     }:
     makeTest {
       name = "zfs-" + name;
-      meta = with pkgs.stdenv.lib.maintainers; {
+      meta = with pkgs.lib.maintainers; {
         maintainers = [ adisbladis ];
       };
 
-      machine = { pkgs, lib, ... }: {
+      machine = { pkgs, lib, ... }:
+        let
+          usersharePath = "/var/lib/samba/usershares";
+        in {
         virtualisation.emptyDiskImages = [ 4096 ];
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.zfs.enableUnstable = enableUnstable;
 
+        services.samba = {
+          enable = true;
+          extraConfig = ''
+            registry shares = yes
+            usershare path = ${usersharePath}
+            usershare allow guests = yes
+            usershare max shares = 100
+            usershare owner only = no
+          '';
+        };
+        systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+          "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
+
         environment.systemPackages = [ pkgs.parted ];
 
         # Setup regular fileSystems machinery to ensure forceImportAll can be
         # tested via the regular service units.
-        fileSystems = lib.mkVMOverride {
+        virtualisation.fileSystems = {
           "/forcepool" = {
             device = "forcepool";
             fsType = "zfs";
@@ -58,8 +74,15 @@ let
             "udevadm settle",
             "zpool create rpool /dev/vdb1",
             "zfs create -o mountpoint=legacy rpool/root",
+            # shared datasets cannot have legacy mountpoint
+            "zfs create rpool/shared_smb",
             "mount -t zfs rpool/root /tmp/mnt",
             "udevadm settle",
+            # wait for samba services
+            "systemctl is-system-running --wait",
+            "zfs set sharesmb=on rpool/shared_smb",
+            "zfs share rpool/shared_smb",
+            "smbclient -gNL localhost | grep rpool_shared_smb",
             "umount /tmp/mnt",
             "zpool destroy rpool",
             "udevadm settle",

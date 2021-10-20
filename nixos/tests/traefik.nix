@@ -2,7 +2,7 @@
 # and a Docker container.
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "traefik";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ joko ];
   };
 
@@ -11,8 +11,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.curl ];
     };
     traefik = { config, pkgs, ... }: {
-      docker-containers.nginx = {
-        extraDockerOptions = [
+      virtualisation.oci-containers.containers.nginx = {
+        extraOptions = [
           "-l" "traefik.enable=true"
           "-l" "traefik.http.routers.nginx.entrypoints=web"
           "-l" "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
@@ -73,6 +73,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     traefik.wait_for_unit("multi-user.target")
 
     client.wait_for_unit("multi-user.target")
+
+    client.wait_until_succeeds("curl -sSf -H Host:nginx.traefik.test http://traefik/")
 
     with subtest("Check that a container can be reached via Traefik"):
         assert "Hello from NGINX" in client.succeed(

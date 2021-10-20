@@ -1,29 +1,51 @@
-{ stdenv, fetchurl, libX11, xorgproto }:
+{ autoreconfHook
+, docbook_xml_dtd_44
+, docbook-xsl-ns
+, fetchFromGitHub
+, lib
+, libX11
+, libXpm
+, libxslt
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "stalonetray";
-  version = "0.8.3";
+  version = "0.8.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/stalonetray/${pname}-${version}.tar.bz2";
-    sha256 = "0k7xnpdb6dvx25d67v0crlr32cdnzykdsi9j889njiididc8lm1n";
+  src = fetchFromGitHub {
+    owner = "kolbusa";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-grxPqSYPLUstLIOKqzMActaSQ2ftYrjbalfR4HcPDRY=";
   };
 
-  buildInputs = [ libX11 xorgproto ];
+  preConfigure =
+    let
+      db_root = "${docbook-xsl-ns}/share/xml/docbook-xsl-ns";
+      ac_str = "AC_SUBST(DOCBOOK_ROOT)";
+      ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
+    in
+      ''
+        substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
+      '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook-xsl-ns
+    docbook_xml_dtd_44
+    libX11
+    libXpm
+    libxslt
+  ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stand alone tray";
-    homepage = "http://stalonetray.sourceforge.net";
-    license = licenses.gpl2;
+    homepage = "https://github.com/kolbusa/stalonetray";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-  };
-
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://sourceforge.net/projects/stalonetray/files/";
-    };
   };
 }

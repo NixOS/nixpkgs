@@ -8,11 +8,11 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{ stdenv, version }:
+{ lib, version }:
 
-with stdenv.lib;
-with stdenv.lib.kernel;
-with (stdenv.lib.kernel.whenHelpers version);
+with lib;
+with lib.kernel;
+with (lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 
@@ -55,8 +55,8 @@ assert (versionAtLeast version "4.9");
 
   # Wipe higher-level memory allocations on free() with page_poison=1
   PAGE_POISONING           = yes;
-  PAGE_POISONING_NO_SANITY = yes;
-  PAGE_POISONING_ZERO      = yes;
+  PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
+  PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
   # Enable the SafeSetId LSM
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
@@ -65,7 +65,7 @@ assert (versionAtLeast version "4.9");
   PANIC_TIMEOUT = freeform "-1";
 
   GCC_PLUGINS = yes; # Enable gcc plugin options
-  # Gather additional entropy at boot time for systems that may = no;ot have appropriate entropy sources.
+  # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
   GCC_PLUGIN_LATENT_ENTROPY = yes;
 
   GCC_PLUGIN_STRUCTLEAK = whenAtLeast "4.11" yes; # A port of the PaX structleak plugin
@@ -79,8 +79,18 @@ assert (versionAtLeast version "4.9");
   PROC_KCORE         = no; # Exposes kernel text image layout
   INET_DIAG          = no; # Has been used for heap based attacks in the past
 
+  # INET_DIAG=n causes the following options to not exist anymore, but since they are defined in common-config.nix,
+  # make them optional
+  INET_DIAG_DESTROY = option no;
+  INET_RAW_DIAG     = option no;
+  INET_TCP_DIAG     = option no;
+  INET_UDP_DIAG     = option no;
+  INET_MPTCP_DIAG   = option no;
+
   # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
-  CC_STACKPROTECTOR_REGULAR = whenOlder "4.18" no;
+  CC_STACKPROTECTOR_REGULAR = lib.mkForce (whenOlder "4.18" no);
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
+  # Detect out-of-bound reads/writes and use-after-free
+  KFENCE = whenAtLeast "5.12" yes;
 }

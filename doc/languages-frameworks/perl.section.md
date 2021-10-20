@@ -110,7 +110,7 @@ ClassC3Componentised = buildPerlPackage rec {
 On Darwin, if a script has too many `-Idir` flags in its first line (its “shebang line”), it will not run. This can be worked around by calling the `shortenPerlShebang` function from the `postInstall` phase:
 
 ```nix
-{ stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
+{ lib, stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
 
 ImageExifTool = buildPerlPackage {
   pname = "Image-ExifTool";
@@ -121,8 +121,8 @@ ImageExifTool = buildPerlPackage {
     sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = stdenv.lib.optional stdenv.isDarwin ''
+  buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
 };
@@ -151,7 +151,7 @@ $ nix-generate-from-cpan XML::Simple
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
     meta = {
       description = "An API for simple XML files";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 ```

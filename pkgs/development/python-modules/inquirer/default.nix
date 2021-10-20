@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytestcov, pexpect, pytest-mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytest-cov, pexpect, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "inquirer";
@@ -20,13 +20,13 @@ buildPythonPackage rec {
      --replace "readchar==2.0.1" "readchar>=2.0.0"
   '';
 
-  checkInputs = [ pytest pytestcov pexpect pytest-mock ];
+  checkInputs = [ pytest pytest-cov pexpect pytest-mock ];
 
   checkPhase = ''
     pytest --cov-report=term-missing  --cov inquirer --no-cov-on-fail tests/unit tests/integration
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/magmax/python-inquirer";
     description = "A collection of common interactive command line user interfaces, based on Inquirer.js";
     license = licenses.mit;

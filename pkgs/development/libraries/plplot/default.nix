@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, cmake }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, enableWX ? false
+, wxGTK31, wxmac
+, enableXWin ? false
+, libX11
+}:
 
-stdenv.mkDerivation rec {
+let
+  wxWidgets = (if stdenv.isDarwin then wxmac else wxGTK31);
+in stdenv.mkDerivation rec {
   pname   = "plplot";
   version = "5.15.0";
 
@@ -11,11 +21,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = lib.optional enableWX wxWidgets
+    ++ lib.optional enableXWin libX11;
+
+  passthru = {
+    inherit
+      enableWX
+      wxWidgets
+      enableXWin
+      libX11
+    ;
+  };
+
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" "-DBUILD_TEST=ON" ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform scientific graphics plotting library";
     homepage    = "https://plplot.org";
     maintainers = with maintainers; [ bcdarwin ];

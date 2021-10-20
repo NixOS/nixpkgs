@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
+{ lib, stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
 
 let
   version = "5.2.0";
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/jedit
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mature programmer's text editor (Java based)";
     homepage = "http://www.jedit.org";
     license = licenses.gpl2;

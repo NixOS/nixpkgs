@@ -1,68 +1,78 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, pyopenssl
 , libuv
-, psutil
-, isPy27
-, pythonAtLeast
 , CoreServices
 , ApplicationServices
 # Check Inputs
+, aiohttp
+, psutil
+, pyopenssl
 , pytestCheckHook
-# , pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.14.0";
-  disabled = isPy27;
+  version = "0.16.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07j678z9gf41j98w72ysrnb5sa41pl5yxd7ib17lcwfxqz0cjfhj";
+    sha256 = "f74bc20c7b67d1c27c72601c78cf95be99d5c2cdd4514502b4f3eb0933ff1228";
   };
-
-  patches = lib.optional stdenv.isDarwin ./darwin_sandbox.patch;
 
   buildInputs = [
     libuv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
-
-  pythonImportsCheck = [
-    "uvloop"
-    "uvloop.loop"
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    ApplicationServices
   ];
 
   dontUseSetuptoolsCheck = true;
-  checkInputs = [ pytestCheckHook pyopenssl psutil ];
+  checkInputs = [
+    aiohttp
+    pytestCheckHook
+    pyopenssl
+    psutil
+  ];
 
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
     "--capture=no"
     "--assert=plain"
+    "--strict"
     "--tb=native"
-    # ignore code linting tests
-    "--ignore=tests/test_sourcecode.py"
+  ] ++ lib.optionals (stdenv.isAarch64) [
+    # test gets stuck in epoll_pwait on hydras aarch64 builders
+    # https://github.com/MagicStack/uvloop/issues/412
+    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Flaky test: https://github.com/MagicStack/uvloop/issues/412
+    "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
   ];
 
-  disabledTests = [
-    "test_sock_cancel_add_reader_race"  # asyncio version of test is supposed to be skipped but skip doesn't happen. uvloop version runs fine
-  ] ++ lib.optionals (pythonAtLeast "3.8") [ "test_write_to_closed_transport" ];  # https://github.com/MagicStack/uvloop/issues/355
+  disabledTestPaths = [
+    # ignore code linting tests
+    "tests/test_sourcecode.py"
+  ];
 
   # force using installed/compiled uvloop vs source by moving tests to temp dir
   preCheck = ''
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Some tests fail on Darwin
-    rm tests/test_[stu]*.py
   '';
+
   postCheck = ''
     popd
   '';
+
+  pythonImportsCheck = [
+    "uvloop"
+    "uvloop.loop"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -72,6 +82,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/MagicStack/uvloop";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
-    broken = pythonAtLeast "3.9"; # see: https://github.com/MagicStack/uvloop/issues/365
   };
 }

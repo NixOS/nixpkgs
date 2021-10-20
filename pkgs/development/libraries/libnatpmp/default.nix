@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
@@ -10,13 +10,23 @@ stdenv.mkDerivation rec {
     sha256 = "1c1n8n7mp0amsd6vkz32n8zj3vnsckv308bb7na0dg0r8969rap1";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc" \
+      --replace "ar" "${stdenv.cc.targetPrefix}ar"
+  '';
+
   makeFlags = [ "INSTALLPREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  postFixup = ''
+    chmod +x $out/lib/*
+  '';
+
+  meta = with lib; {
     homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,13 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus-glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, dbus-glib }:
 
 stdenv.mkDerivation rec {
   pname = "libunique";
   version = "1.1.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
+
+  # Don't make deprecated usages hard errors
+  prePatch = ''
+    substituteInPlace configure --replace "-Werror" "";
+  '';
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
@@ -20,18 +25,15 @@ stdenv.mkDerivation rec {
     ./1.1.6-include-terminator.patch
   ] ++ [ ./gcc7-bug.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 dbus-glib ];
-
-  # Don't make deprecated usages hard errors
-  preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
 
   doCheck = true;
 
   meta = {
     homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.lgpl21;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -8,18 +8,14 @@
 , nose
 , numpy
 , scipy
+, setuptools
 , six
 , libgpuarray
 , cudaSupport ? false, cudatoolkit
 , cudnnSupport ? false, cudnn
-, nvidia_x11
 }:
 
 assert cudnnSupport -> cudaSupport;
-
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
-                   && cudnn != null;
 
 let
   wrapped = command: buildTop: buildInputs:
@@ -40,8 +36,8 @@ let
     if stdenv.cc.isClang then "clang++" else
     throw "Unknown C++ compiler";
   cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    stdenv.lib.optional cudaSupport libgpuarray_
-      ++ stdenv.lib.optional cudnnSupport cudnn );
+    (    lib.optional cudaSupport libgpuarray_
+      ++ lib.optional cudnnSupport cudnn );
 
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
@@ -60,10 +56,10 @@ in buildPythonPackage rec {
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
       --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
-  '' + stdenv.lib.optionalString cudaSupport ''
+  '' + lib.optionalString cudaSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
-  '' + stdenv.lib.optionalString cudnnSupport ''
+  '' + lib.optionalString cudnnSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
@@ -81,12 +77,20 @@ in buildPythonPackage rec {
 
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+  # setuptools needed for cuda support
+  propagatedBuildInputs = [
+    libgpuarray_
+    numpy
+    numpy.blas
+    scipy
+    setuptools
+    six
+  ];
 
   pythonImportsCheck = [ "theano" ];
 
-  meta = with stdenv.lib; {
-    homepage = "http://deeplearning.net/software/theano/";
+  meta = with lib; {
+    homepage = "https://github.com/Theano/Theano";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ maintainers.bcdarwin ];

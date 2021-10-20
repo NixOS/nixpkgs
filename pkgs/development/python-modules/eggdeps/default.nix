@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # tests fail, see https://hydra.nixos.org/build/4316603/log/raw
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which computes a dependency graph between active Python eggs";
     homepage = "http://thomas-lotze.de/en/software/eggdeps/";
     license = licenses.zpl20;

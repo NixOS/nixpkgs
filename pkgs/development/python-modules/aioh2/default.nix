@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "HTTP/2 implementation with hyper-h2 on Python 3 asyncio";
     license = licenses.bsd3;
     maintainers = [ maintainers.qyliss ];
+    broken = true; # requires h2<4
   };
 }

@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExample mapAttrs optionalString;
+  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
@@ -28,6 +28,8 @@ let
     $ZBX_SERVER_PORT = '${toString cfg.server.port}';
     $ZBX_SERVER_NAME = ''';
     $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+
+    ${cfg.extraConfig}
   '';
 
 in
@@ -41,7 +43,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.web;
-        defaultText = "zabbix.web";
+        defaultText = literalExpression "zabbix.web";
         description = "Which Zabbix package to use.";
       };
 
@@ -114,7 +116,7 @@ in
 
       virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExample ''
+        example = literalExpression ''
           {
             hostName = "zabbix.example.org";
             adminAddr = "webmaster@example.org";
@@ -143,12 +145,24 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional configuration to be copied verbatim into <filename>zabbix.conf.php</filename>.
+        '';
+      };
+
     };
   };
 
   # implementation
 
   config = mkIf cfg.enable {
+
+    services.zabbixWeb.extraConfig = optionalString ((versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")) ''
+      $DB['DOUBLE_IEEE754'] = 'true';
+    '';
 
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0750 ${user} ${group} - -"

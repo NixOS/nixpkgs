@@ -1,24 +1,59 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, mercurial
 }:
 
 buildPythonPackage rec {
   pname = "hg-evolve";
-  version = "10.1.0";
+  version = "10.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a386e6ee2d9a0e332a49f1cb210c4c11ba9844bcd52808270f48e688314783d8";
+    sha256 = "64fd249a7fcabea60953fc3e7f08da6a85960aca367c04d078b999b7f6fd0246";
   };
 
-  doCheck = false;
+  checkInputs = [
+    mercurial
+  ];
 
-  meta = with stdenv.lib; {
+  checkPhase = ''
+    runHook preCheck
+
+    export TESTTMP=$(mktemp -d)
+    export HOME=$TESTTMP
+    cat <<EOF >$HOME/.hgrc
+    [extensions]
+    evolve =
+    topic =
+    EOF
+
+    # Shipped tests use the mercurial testing framework, and produce inconsistent results.
+    # Do a quick smoke-test to see if things do what we expect.
+    hg init $TESTTMP/repo
+    pushd $TESTTMP/repo
+    touch a
+    hg add a
+    hg commit -m "init a"
+    hg topic something
+
+    touch b
+    hg add b
+    hg commit -m "init b"
+
+    echo hi > b
+    hg amend
+
+    hg obslog
+    popd
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Enables the “changeset evolution” feature of Mercurial core";
     homepage = "https://www.mercurial-scm.org/doc/evolution/";
-    maintainers = with maintainers; [ xavierzwirtz ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ xavierzwirtz lukegb ];
+    license = licenses.gpl2Plus;
   };
 }

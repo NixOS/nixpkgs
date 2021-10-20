@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , fetchFromGitHub
 , cmake
 , fftw
 , fftwFloat
 , enablePython ? false
-, pythonPackages
+, pythonPackages ? null
 , llvmPackages
 }:
 let
@@ -30,17 +30,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ fftw fftwFloat ]
-  ++ stdenv.lib.optional enablePython pythonPackages.python
-  ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optional enablePython pythonPackages.python
+  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = stdenv.lib.optional enablePython [
+  propagatedBuildInputs = lib.optional enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = stdenv.lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytestcov ];
+  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enablePython) ''
+  postInstall = lib.optionalString (stdenv.isDarwin && enablePython) ''
     install_name_tool -change libgalario.dylib $out/lib/libgalario.dylib $out/lib/python*/site-packages/galario/double/libcommon.so
     install_name_tool -change libgalario_single.dylib $out/lib/libgalario_single.dylib $out/lib/python*/site-packages/galario/single/libcommon.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPU Accelerated Library for Analysing Radio Interferometer Observations";
     longDescription = ''
       Galario is a library that exploits the computing power of modern

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsaLib, libav, cairo, freetype, pango, gdk-pixbuf, glib }:
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
+, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
   version = "5.1";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsaLib libav cairo freetype pango gdk-pixbuf glib ];
-  systemLibPaths = stdenv.lib.makeLibraryPath systemLibs;
+  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
+  systemLibPaths = lib.makeLibraryPath systemLibs;
 
   installPhase = ''
     mkdir -p $out/share/java $out/share/icons
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     for f in $out/lib/runtime/bin/j*; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${ stdenv.lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
+        --set-rpath "${ lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
     done
 
     for f in $out/lib/runtime/lib/*.so; do
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     cp unpacked/org.jabref/icons/jabref.svg $out/share/icons/jabref.svg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
     license = licenses.gpl2;

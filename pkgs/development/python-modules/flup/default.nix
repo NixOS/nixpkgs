@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "5eb09f26eb0751f8380d8ac43d1dfb20e1d42eca0fa45ea9289fa532a79cd159";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.saddi.com/software/flup/";
     description = "FastCGI Python module set";
     license = licenses.bsd0;

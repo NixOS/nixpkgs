@@ -49,7 +49,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.pgmanage;
-      defaultText = "pkgs.pgmanage";
+      defaultText = literalExpression "pkgs.pgmanage";
       description = ''
         The pgmanage package to use.
       '';
@@ -197,6 +197,7 @@ in {
         group = pgmanage;
         home  = cfg.sqlRoot;
         createHome = true;
+        isSystemUser = true;
       };
       groups.${pgmanage} = {
         name = pgmanage;

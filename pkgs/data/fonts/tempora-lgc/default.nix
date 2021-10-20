@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 let
   srcs = [
     (fetchurl {
@@ -25,7 +25,6 @@ stdenv.mkDerivation {
   name = "tempora-lgc";
   inherit nativeBuildInputs;
   inherit srcs;
-  phases = "installPhase";
   installPhase = ''
     mkdir -p "$out/share/fonts/opentype/public"
     cp ${toString srcs} "$out/share/fonts/opentype/public"
@@ -35,8 +34,8 @@ stdenv.mkDerivation {
   outputHash = "1kwj31cjgdirqvh6bxs4fnvvr1ppaz6z8w40kvhkivgs69jglmzw";
 
   meta = {
-    description = ''Tempora font'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    description = "Tempora font";
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
   };
 }

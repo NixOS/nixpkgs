@@ -1,14 +1,14 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 let
   arch = "amd64";
 in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.7.35160";
+  version = "0.11.44593";
   src = fetchzip {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "00fzycy199l9y738cj71s88qz96ppczb5sqsk3x9w4jj4m6ks239";
+      sha256 = "1f06zmcpvm0f3phwc43ai6v4ykhkrd4f3br2j89nx9bfmj6ss2ic";
       stripRoot = false;
     };
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jotta-cli
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jottad
-    $out/bin/jotta-cli completion > $out/share/bash-completion/completions/jotta-cli.bash
+    $out/bin/jotta-cli completion bash > $out/share/bash-completion/completions/jotta-cli.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "Jottacloud CLI";
     homepage     = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";

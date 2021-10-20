@@ -244,7 +244,8 @@ dependencies that are detected during the install."
     "named-readtables/doc" ;; Dependency cycle between named-readtabes and mgl-pax
     "symbol-munger-test" ;; Dependency cycle between lisp-unit2 and symbol-munger
     "cl-postgres-simple-date-tests" ;; Dependency cycle between cl-postgres and simple-date
-    "cl-containers/with-variates") ;; Symbol conflict between cl-variates:next-element, metabang.utilities:next-element
+    "cl-containers/with-variates" ;; Symbol conflict between cl-variates:next-element, metabang.utilities:next-element
+    "serapeum/docs") ;; Weird issue with FUN-INFO redefinition
   "A vector of systems that shouldn't be loaded by `quickload-parasitic-systems'.
 
 These systems are known to be troublemakers.  In some sense, all

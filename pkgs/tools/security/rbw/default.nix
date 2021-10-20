@@ -2,11 +2,12 @@
 , stdenv
 , rustPlatform
 , fetchCrate
-, pinentry
 , openssl
-, pkgconfig
+, pkg-config
 , makeWrapper
+, installShellFiles
 , Security
+, libiconv
 
 # rbw-fzf
 , withFzf ? false, fzf, perl
@@ -20,27 +21,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "0.5.0";
+  version = "1.3.0";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "0p37kwkp153mkns4bh7k7gnksk6c31214wlw3faf42daav32mmgw";
+    sha256 = "17x4q29rsljbalc70r3ks4r6g5zc6jl4si75i33fcicxsvx6f39q";
   };
 
-  cargoSha256 = "1vkgh0995xx0hr96mnzmdgd15gs6da7ynywqcjgcw5kr48bf1063";
+  cargoSha256 = "14095ds8f5knrqcriphjlbvasc29n9rf8h5vlkmhpxyk7wh9azzc";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
+    installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  postPatch = ''
-    substituteInPlace src/pinentry.rs \
-      --replace 'Command::new("pinentry")' 'Command::new("${pinentry}/${pinentry.binaryPath or "bin/pinentry"}")'
-  '' + lib.optionalString withFzf ''
+  postPatch = lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
         --replace fzf ${fzf}/bin/fzf \
@@ -61,7 +60,12 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR="${openssl.out}/lib"
   '';
 
-  postInstall = lib.optionalString withFzf ''
+  postInstall = ''
+    for shell in bash zsh fish; do
+      $out/bin/rbw gen-completions $shell > rbw.$shell
+      installShellCompletion rbw.$shell
+    done
+  '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin
   '' + lib.optionalString withRofi ''
     cp bin/rbw-rofi $out/bin
@@ -72,6 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Unofficial command line client for Bitwarden";
     homepage = "https://crates.io/crates/rbw";
+    changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham luc65r marsam ];
   };

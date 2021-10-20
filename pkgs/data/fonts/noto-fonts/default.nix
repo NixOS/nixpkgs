@@ -4,10 +4,9 @@
 , fetchFromGitHub
 , fetchurl
 , fetchzip
-, optipng
 , cairo
 , python3
-, pkgconfig
+, pkg-config
 , pngquant
 , which
 , imagemagick
@@ -111,7 +110,7 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2020-09-16-unicode13_1";
+    version = "2.028";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
@@ -122,7 +121,7 @@ in
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
+      sha256 = "0dy7px7wfl6bqkfzz82jm4gvbjp338ddsx0mwfl6m7z48l7ng4v6";
     };
 
     nativeBuildInputs = [
@@ -131,7 +130,7 @@ in
       zopfli
       pngquant
       which
-      pkgconfig
+      pkg-config
       emojiPythonEnv
     ];
 
@@ -141,6 +140,14 @@ in
       # remove check for virtualenv, since we handle
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+      # Remove check for missing zopfli, it doesn't
+      # work and we guarantee its presence already.
+      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
+      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
+
+      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
+      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
 
       # Make the build verbose so it won't get culled by Hydra thinking that
       # it somehow got stuck doing nothing.
@@ -155,7 +162,6 @@ in
     '';
 
     meta = with lib; {
-      inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
@@ -179,7 +185,7 @@ in
       install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Noto Emoji with extended Blob support";
       homepage = "https://github.com/C1710/blobmoji";
       license = with licenses; [ ofl asl20 ];

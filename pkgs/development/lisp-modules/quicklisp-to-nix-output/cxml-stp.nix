@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cxml-stp'';
-  version = ''20200325-git'';
+  baseName = "cxml-stp";
+  version = "20200325-git";
 
   parasites = [ "cxml-stp/test" ];
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."cxml_slash_test" args."parse-number" args."puri" args."rt" args."trivial-features" args."trivial-gray-streams" args."xpath" args."xpath_slash_test" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cxml-stp/2020-03-25/cxml-stp-20200325-git.tgz'';
-    sha256 = ''1y26bksmysvxifqx4lslpbsdvmcqkf7di36a3yyqnjgrb5r0jv1n'';
+    url = "http://beta.quicklisp.org/archive/cxml-stp/2020-03-25/cxml-stp-20200325-git.tgz";
+    sha256 = "1y26bksmysvxifqx4lslpbsdvmcqkf7di36a3yyqnjgrb5r0jv1n";
   };
 
   packageName = "cxml-stp";

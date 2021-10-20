@@ -1,12 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
-, futures
 , identify
 , importlib-metadata
 , importlib-resources
-, isPy27
 , nodeenv
 , python
 , six
@@ -16,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.7.1";
-  disabled = isPy27;
+  version = "2.15.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "0w2a104yhbw1z92rcwpq0gdjsxvr2bwx5ry5xhlf2psnfkjx6ky5";
+    sha256 = "sha256-PCWt1429+2ooplF4DVwxGsQN0X8WDrOVSgxZ2kClBac=";
   };
 
   patches = [
@@ -53,6 +54,8 @@ buildPythonPackage rec {
     substituteInPlace $out/${python.sitePackages}/pre_commit/languages/node.py \
       --subst-var-by nodeenv ${nodeenv}
   '';
+
+  pythonImportsCheck = [ "pre_commit" ];
 
   meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";

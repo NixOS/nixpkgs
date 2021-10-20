@@ -1,15 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
 
-let
+stdenv.mkDerivation rec {
   version = "1.9";
-  name = "msgviewer-${version}";
-  uname = "MSGViewer-${version}";
-
-in stdenv.mkDerivation {
-  inherit name;
+  pname = "msgviewer";
+  uname = "MSGViewer";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/msgviewer/${uname}/${uname}.zip";
+    url    = "mirror://sourceforge/msgviewer/${uname}-${version}/${uname}-${version}.zip";
     sha256 = "0igmr8c0757xsc94xlv2470zv2mz57zaj52dwr9wj8agmj23jbjz";
   };
 
@@ -17,18 +14,18 @@ in stdenv.mkDerivation {
     dir=$out/lib/msgviewer
     mkdir -p $out/bin $dir
     unzip $src -d $dir
-    mv $dir/${uname}/* $dir
-    rmdir $dir/${uname}
+    mv $dir/${uname}-${version}/* $dir
+    rmdir $dir/${uname}-${version}
     cat <<_EOF > $out/bin/msgviewer
     #!${runtimeShell} -eu
-    exec ${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
+    exec ${lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
     _EOF
     chmod 755 $out/bin/msgviewer
   '';
 
   nativeBuildInputs = [ makeWrapper unzip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Viewer for .msg files (MS Outlook)";
     homepage    = "https://www.washington.edu/alpine/";
     license     = licenses.asl20;

@@ -1,5 +1,5 @@
-{ config, stdenv, fetchFromGitHub
-, addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
+{ config, lib, stdenv, fetchFromGitHub, fetchpatch
+, addOpenGLRunpath, docutils, perl, pkg-config, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
@@ -30,7 +30,7 @@
   , libdrm ? null
   , mesa   ? null
 
-, alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, alsaSupport        ? stdenv.isLinux, alsa-lib       ? null
 , archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
@@ -56,12 +56,12 @@
 , zimgSupport        ? true,           zimg          ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   available = x: x != null;
 in
-assert alsaSupport        -> available alsaLib;
+assert alsaSupport        -> available alsa-lib;
 assert archiveSupport     -> available libarchive;
 assert bluraySupport      -> available libbluray;
 assert bs2bSupport        -> available libbs2b;
@@ -95,14 +95,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.33.0";
+  version = "0.33.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
+    sha256 = "06rw1f55zcsj78ql8w70j9ljp2qb1pv594xj7q9cmq7i92a7hq45";
   };
+
+  patches = [
+    # To make mpv build with libplacebo 3.104.0:
+    (fetchpatch { # vo_gpu: placebo: update for upstream API changes
+      url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
+      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
@@ -141,17 +151,16 @@ in stdenv.mkDerivation rec {
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
   ] # Disable whilst Swift isn't supported
-    ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils perl pkgconfig python3 wafHook which
-  ]
-    ++ optional swiftSupport swift;
+    addOpenGLRunpath docutils perl pkg-config python3 wafHook which
+  ] ++ optional swiftSupport swift;
 
   buildInputs = [
     ffmpeg freetype libass libpthreadstubs
     luaEnv libuchardet mujs
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optional alsaSupport        alsa-lib
     ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
     ++ optional bs2bSupport        libbs2b
@@ -196,6 +205,11 @@ in stdenv.mkDerivation rec {
 
     cp TOOLS/mpv_identify.sh $out/bin
     cp TOOLS/umpv $out/bin
+    cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
+    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
+
+    substituteInPlace $out/lib/pkgconfig/mpv.pc \
+      --replace "$out/include" "$dev/include"
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
@@ -207,7 +221,7 @@ in stdenv.mkDerivation rec {
     addOpenGLRunpath $out/bin/mpv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = "https://mpv.io";
     license = licenses.gpl2Plus;

@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''puri'';
-  version = ''20201016-git'';
+  baseName = "puri";
+  version = "20201016-git";
 
   parasites = [ "puri/test" ];
 
-  description = ''Portable Universal Resource Indentifier Library'';
+  description = "Portable Universal Resource Indentifier Library";
 
   deps = [ args."ptester" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/puri/2020-10-16/puri-20201016-git.tgz'';
-    sha256 = ''16h7gip6d0564s9yba3jg0rjzndmysv531hcrngvi3j3sandjfzx'';
+    url = "http://beta.quicklisp.org/archive/puri/2020-10-16/puri-20201016-git.tgz";
+    sha256 = "16h7gip6d0564s9yba3jg0rjzndmysv531hcrngvi3j3sandjfzx";
   };
 
   packageName = "puri";

@@ -1,29 +1,29 @@
 { cmake
 , pkg-config
-, alsaLib
+, alsa-lib
 , boost
 , curl
 , fetchFromGitHub
-, ffmpeg_3
+, ffmpeg
 , lame
 , libev
 , libmicrohttpd
 , ncurses
 , pulseaudio
-, stdenv
+, lib, stdenv
 , taglib
 , systemdSupport ? stdenv.isLinux, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.1";
+  version = "0.96.7";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "0gpyr25q6g9b8f9hi6jx3p4ijl7xrrjc78vw1fyjd59a7690d7kr";
+    sha256 = "1y00vwn1h10cfflxrm5bk271ak9gilhjycgi44hlkkhmf5bdgn35";
   };
 
   nativeBuildInputs = [
@@ -31,23 +31,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     boost
     curl
-    ffmpeg_3
+    ffmpeg
     lame
     libev
     libmicrohttpd
     ncurses
     pulseaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optional systemdSupport systemd;
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
     maintainers = [ maintainers.aanderse ];

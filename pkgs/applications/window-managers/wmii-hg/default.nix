@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, pkgconfig, libixp_hg, txt2tags, dash, python, which
+{ lib, stdenv, fetchurl, unzip, pkg-config, libixp_hg, txt2tags, dash, python, which
 , libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ unzip libixp_hg txt2tags dash python which
+  nativeBuildInputs = [ pkg-config unzip ];
+  buildInputs = [ libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
@@ -39,9 +39,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://suckless.org/"; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
-    maintainers = with stdenv.lib.maintainers; [ kovirobi ];
-    license = stdenv.lib.licenses.mit;
-    inherit version;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ kovirobi ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux;
   };
 }

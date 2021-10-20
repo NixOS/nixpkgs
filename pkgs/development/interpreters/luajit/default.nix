@@ -1,13 +1,16 @@
-{ stdenv, fetchFromGitHub, buildPackages
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256
 , rev
 , version
-, extraMeta ? {}
+, extraMeta ? { }
 , callPackage
 , self
-, packageOverrides ? (self: super: {})
+, packageOverrides ? (final: prev: {})
 , enableFFI ? true
 , enableJIT ? true
 , enableJITDebugModule ? enableJIT
@@ -24,29 +27,33 @@ assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;
 assert enableValgrindSupport -> valgrind != null;
 let
-  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = callPackage ../../lua-modules { lua = self; overrides = packageOverrides; };
 
-  XCFLAGS = with stdenv.lib;
-     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
-  ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
-  ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
-  ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
-  ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
-  ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
-  ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
-  ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-  ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+  XCFLAGS = with lib;
+    optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+    ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+    ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+    ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
+    ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+    ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+    ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+    ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
   ;
 in
 stdenv.mkDerivation rec {
   inherit name version;
   src = fetchFromGitHub {
-    owner  = "LuaJIT";
-    repo   = "LuaJIT";
+    owner = "LuaJIT";
+    repo = "LuaJIT";
     inherit sha256 rev;
   };
 
   luaversion = "5.1";
+
+  # Fix for pcall on aarch64-darwin.
+  # Upstream issue: https://github.com/LuaJIT/LuaJIT/issues/698
+  patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [ ./aarch64-darwin-disable-unwind-external.patch ];
 
   postPatch = ''
     substituteInPlace Makefile --replace ldconfig :
@@ -55,11 +62,20 @@ stdenv.mkDerivation rec {
       # passed by nixpkgs CC wrapper is insufficient on its own
       substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
+
+    {
+      echo -e '
+        #undef  LUA_PATH_DEFAULT
+        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
+        #undef  LUA_CPATH_DEFAULT
+        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
+      '
+    } >> src/luaconf.h
   '';
 
   configurePhase = false;
 
-  buildInputs = stdenv.lib.optional enableValgrindSupport valgrind;
+  buildInputs = lib.optional enableValgrindSupport valgrind;
 
   buildFlags = [
     "amalg" # Build highly optimized version
@@ -70,40 +86,37 @@ stdenv.mkDerivation rec {
     "CROSS=${stdenv.cc.targetPrefix}"
     # TODO: when pointer size differs, we would need e.g. -m32
     "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = XCFLAGS;
 
   postInstall = ''
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
-  '' + stdenv.lib.optionalString (!isStable) ''
+  '' + lib.optionalString (!isStable) ''
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
-  LuaPathSearchPaths = [
-    "lib/lua/${luaversion}/?.lua" "share/lua/${luaversion}/?.lua"
-    "share/lua/${luaversion}/?/init.lua" "lib/lua/${luaversion}/?/init.lua"
-    "share/${name}/?.lua"
-  ];
-  LuaCPathSearchPaths = [ "lib/lua/${luaversion}/?.so" "share/lua/${luaversion}/?.so" ];
-  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+
+  setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList luaPackages.lib.luaCPathList;
 
   passthru = rec {
     buildEnv = callPackage ../lua-5/wrapper.nix {
       lua = self;
       inherit (luaPackages) requiredLuaModules;
     };
-    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
+    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages; };
     pkgs = luaPackages;
     interpreter = "${self}/bin/lua";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance JIT compiler for Lua 5.1";
-    homepage    = "http://luajit.org";
-    license     = licenses.mit;
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "http://luajit.org";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice smironov vcunat andir lblasc ];
   } // extraMeta;
 }

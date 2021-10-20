@@ -25,10 +25,11 @@ gccStdenv.mkDerivation rec {
   inherit src version git-version;
   bootstrap = gambit-support.gambit-bootstrap;
 
+  nativeBuildInputs = [ git autoconf ];
   # TODO: if/when we can get all the library packages we depend on to have static versions,
   # we could use something like (makeStaticLibraries openssl) to enable creation
   # of statically linked binaries by gsc.
-  buildInputs = [ git autoconf bootstrap openssl ];
+  buildInputs = [ openssl ];
 
   # TODO: patch gambit's source so it has the full path to sed, grep, fgrep? Is there more?
   # Or wrap relevant programs to add a suitable PATH ?
@@ -62,11 +63,11 @@ gccStdenv.mkDerivation rec {
     lib.optional (!gccStdenv.isDarwin) "--enable-poll";
 
   configurePhase = ''
-    export CC=${gcc}/bin/gcc \
-           CXX=${gcc}/bin/g++ \
-           CPP=${gcc}/bin/cpp \
-           CXXCPP=${gcc}/bin/cpp \
-           LD=${gcc}/bin/ld \
+    export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
+           CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \
+           CPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           CXXCPP=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}cpp \
+           LD=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}ld \
            XMKMF=${coreutils}/bin/false
     unset CFLAGS LDFLAGS LIBS CPPFLAGS CXXFLAGS
 
@@ -76,22 +77,23 @@ gccStdenv.mkDerivation rec {
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      --replace /usr/local/opt/openssl/lib "${openssl.out}/lib" \
-      --replace /usr/local/opt/openssl@1.1/lib "${openssl.out}/lib"
+      --replace "/usr/local/opt/openssl@1.1" "${openssl.out}" \
+      --replace "/usr/local/opt/openssl" "${openssl.out}"
+
     ./config.status
   '';
 
   buildPhase = ''
     # Make bootstrap compiler, from release bootstrap
-    mkdir -p boot &&
-    cp -rp ${bootstrap}/gambit/. boot/. &&
-    chmod -R u+w boot &&
-    cd boot &&
-    cp ../gsc/makefile.in ../gsc/*.scm gsc/ && # */
-    ./configure &&
-    for i in lib gsi gsc ; do (cd $i ; make -j$NIX_BUILD_CORES) ; done &&
-    cd .. &&
-    cp boot/gsc/gsc gsc-boot &&
+    mkdir -p boot
+    cp -rp ${bootstrap}/gambit/. boot/.
+    chmod -R u+w boot
+    cd boot
+    cp ../gsc/makefile.in ../gsc/*.scm gsc/
+    ./configure
+    for i in lib gsi gsc ; do (cd $i ; make -j$NIX_BUILD_CORES) ; done
+    cd ..
+    cp boot/gsc/gsc gsc-boot
 
     # Now use the bootstrap compiler to build the real thing!
     make -j$NIX_BUILD_CORES from-scratch

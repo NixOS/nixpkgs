@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , intltool
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/the-cavalry/light-locker";
     description = "A simple session-locker for LightDM";
     longDescription = ''
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       ConsoleKit/UPower or logind/systemd.
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ obadz ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
   };
 }

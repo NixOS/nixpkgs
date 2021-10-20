@@ -1,17 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, mcpp, bzip2, expat, openssl, db5
+{ stdenv, lib, fetchFromGitHub
+, mcpp, bzip2, expat, openssl, db5
 , darwin, libiconv, Security
+, zeroc-ice # to share meta
 , cpp11 ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.6.3";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "05xympbns32aalgcfcpxwfd7bvg343f16xpg6jv5s335ski3cjy2";
+    sha256 = "073h7v1f2sw77cr1a6xxa5l9j547pz24sxa9qdjc4zki0ivcnq15";
   };
 
   buildInputs = [ mcpp bzip2 expat openssl db5 ]
@@ -21,19 +23,14 @@ stdenv.mkDerivation rec {
     sourceRoot=$sourceRoot/cpp
   '';
 
-  prePatch = lib.optional stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/Make.rules.Darwin \
         --replace xcrun ""
   '';
 
   patches = [
-    # Fixes compilation issues with GCC 8 using one of the patches
-    # provided in https://github.com/zeroc-ice/ice/issues/82
-    ( fetchpatch {
-      url = "https://github.com/zeroc-ice/ice/commit/a6a4981616b669432ff7b588179d6e93694d9e3f.patch";
-      sha256 = "17j5r7gsa3izrm7zln4mrp7l16h532gvmpas0kzglybicbiz7d56";
-      stripLen = 1;
-    })
+    # Fixes compilation warning about uninitialied variables (in test code)
+    ./uninitialized-variable-warning.patch
   ];
 
   preBuild = ''
@@ -58,10 +55,5 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/slice
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://www.zeroc.com/ice.html";
-    description = "The internet communications engine";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-  };
+  inherit (zeroc-ice) meta;
 }

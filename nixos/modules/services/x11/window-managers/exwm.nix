@@ -21,7 +21,8 @@ in
       enable = mkEnableOption "exwm";
       loadScript = mkOption {
         default = "(require 'exwm)";
-        example = literalExample ''
+        type = types.lines;
+        example = ''
           (require 'exwm)
           (exwm-enable)
         '';
@@ -37,8 +38,10 @@ in
         description = "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
-        default = self: [];
-        example = literalExample ''
+        type = types.functionTo (types.listOf types.package);
+        default = epkgs: [];
+        defaultText = literalExpression "epkgs: []";
+        example = literalExpression ''
           epkgs: [
             epkgs.emms
             epkgs.magit
@@ -48,7 +51,7 @@ in
         description = ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
-          <varname>emacsPackages</varname> as the sole argument.
+          <varname>emacs.pkgs</varname> as the sole argument.
         '';
       };
     };

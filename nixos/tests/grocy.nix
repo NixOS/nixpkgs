@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "grocy";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ma27 ];
   };
 
@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     assert task_name == "Test Task"
 
-    machine.succeed("curl -sSfI http://localhost/api/tasks 2>&1 | grep '401 Unauthorized'")
+    machine.succeed("curl -sSI http://localhost/api/tasks 2>&1 | grep '401 Unauthorized'")
 
     machine.shutdown()
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python }:
+{ lib, stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python }:
 
 stdenv.mkDerivation rec {
   pname = "rapidsvn";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Multi-platform GUI front-end for the Subversion revision system";
     homepage = "http://rapidsvn.tigris.org/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.viric ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.viric ];
   };
 }

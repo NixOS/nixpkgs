@@ -7,14 +7,12 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
-  libsForQt5 = pkgs.libsForQt514;
-  qt5 = pkgs.qt514;
+  libsForQt5 = pkgs.plasma5Packages;
+  inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
   pactl = "${getBin pulseaudio.package}/bin/pactl";
-  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
   sed = "${getBin pkgs.gnused}/bin/sed";
 
   gtkrc2 = writeText "gtkrc-2.0" ''
@@ -137,9 +135,6 @@ let
           fi
       fi
 
-    ''
-    + ''
-      exec "${startplasma-x11}"
     '';
 
 in
@@ -173,6 +168,12 @@ in
           disabled by default.
         '';
       };
+
+      useQtScaling = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable HiDPI scaling in Qt.";
+      };
     };
 
   };
@@ -184,27 +185,35 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = ''
+      system.nixos-generate-config.desktopConfiguration = [''
         # Enable the Plasma 5 Desktop Environment.
-        services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
-      '';
+      ''];
 
-      services.xserver.desktopManager.session = singleton {
-        name = "plasma5";
-        bgSupport = true;
-        start = startplasma;
-      };
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin pkgs.kdeFrameworks.kinit}/libexec/kf5/start_kdeinit";
-        kwin_wayland = {
-          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
-          capabilities = "cap_sys_nice+ep";
-        };
+        kcheckpass =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+          };
+        start_kdeinit =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+          };
+        kwin_wayland =
+          { owner = "root";
+            group = "root";
+            capabilities = "cap_sys_nice+ep";
+            source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          };
       };
 
       # DDC support
@@ -214,8 +223,8 @@ in
       '';
 
       environment.systemPackages =
-        with qt5; with libsForQt5;
-        with plasma5; with kdeApplications; with kdeFrameworks;
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -238,6 +247,7 @@ in
           kidletime
           kimageformats
           kinit
+          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -253,6 +263,7 @@ in
           kwallet-pam
           kwalletmanager
           kwayland
+          kwayland-integration
           kwidgetsaddons
           kxmlgui
           kxmlrpcclient
@@ -272,13 +283,14 @@ in
           kmenuedit
           kscreen
           kscreenlocker
-          ksysguard
+          ksystemstats
           kwayland
           kwin
           kwrited
           libkscreen
           libksysguard
           milou
+          plasma-systemmonitor
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
@@ -307,6 +319,10 @@ in
           qtvirtualkeyboard
 
           pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+
+          elisa
+          gwenview
+          okular
         ]
 
         # Phonon audio backend
@@ -317,6 +333,7 @@ in
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+        ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
@@ -328,6 +345,8 @@ in
       ];
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
+
+      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
@@ -371,6 +390,7 @@ in
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+      services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , Carbon ? null
 , libjpeg ? null
@@ -13,31 +13,34 @@ assert stdenv.isDarwin -> Carbon != null;
 
 stdenv.mkDerivation rec {
   pname = "tachyon";
-  version = "0.99b2";
+  version = "0.99b6";
   src = fetchurl {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
-    sha256 = "04m0bniszyg7ryknj8laj3rl5sspacw5nr45x59j2swcsxmdvn1v";
+    sha256 = "15wv2748ngk2iid798a774sjxhhijq7kjm32yl897x54fsfazp7l";
   };
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     Carbon
-  ] ++ stdenv.lib.optionals withJpegSupport [
+  ] ++ lib.optionals withJpegSupport [
     libjpeg
-  ] ++ stdenv.lib.optionals withPngSupport [
+  ] ++ lib.optionals withPngSupport [
     libpng
   ];
   preBuild = ''
     cd unix
-  '' + stdenv.lib.optionalString withJpegSupport ''
+  '' + lib.optionalString withJpegSupport ''
     export USEJPEG=" -DUSEJPEG"
     export JPEGLIB=" -ljpeg"
-  '' + stdenv.lib.optionalString withPngSupport ''
+  '' + lib.optionalString withPngSupport ''
     export USEPNG=" -DUSEPNG"
     export PNGLIB=" -lpng -lz"
   '';
   arch = if stdenv.hostPlatform.system == "x86_64-linux"   then "linux-64-thr"  else
          if stdenv.hostPlatform.system == "i686-linux"     then "linux-thr"     else
-         if stdenv.hostPlatform.system == "aarch64-linux"  then "linux-arm-thr" else
-         if stdenv.hostPlatform.system == "armv7l-linux"   then "linux-arm-thr" else
+         # 2021-03-29: multithread (-DTHR -D_REENTRANT) was disabled on linux-arm
+         # because it caused Sage's 3D plotting tests to hang indefinitely.
+         # see https://github.com/NixOS/nixpkgs/pull/117465
+         if stdenv.hostPlatform.system == "aarch64-linux"  then "linux-arm"     else
+         if stdenv.hostPlatform.system == "armv7l-linux"   then "linux-arm"     else
          if stdenv.hostPlatform.system == "x86_64-darwin"  then "macosx-thr"    else
          if stdenv.hostPlatform.system == "i686-darwin"    then "macosx-64-thr" else
          if stdenv.hostPlatform.system == "i686-cygwin"    then "win32"         else
@@ -45,14 +48,18 @@ stdenv.mkDerivation rec {
          if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
          throw "Don't know what arch to select for tachyon build";
   makeFlags = [ arch ];
+
   patches = [
     # Remove absolute paths in Make-config (and unset variables so they can be set in preBuild)
     ./no-absolute-paths.patch
     # Include new targets (like arm)
     ./make-archs.patch
-  ] ++
-  # Ensure looks for nix-provided Carbon, not system frameworks
-  stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  ];
+  postPatch = ''
+    # Ensure looks for nix-provided Carbon, not system frameworks
+    substituteInPlace unix/Make-arch \
+      --replace '-F/System/Library/Frameworks' ""
+  '';
 
   installPhase = ''
     cd ../compile/${arch}
@@ -65,11 +72,10 @@ stdenv.mkDerivation rec {
     cp -r scenes "$out/share/tachyon/scenes"
   '';
   meta = {
-    inherit version;
-    description = ''A Parallel / Multiprocessor Ray Tracing System'';
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;
+    description = "A Parallel / Multiprocessor Ray Tracing System";
+    license = lib.licenses.bsd3;
+    maintainers = [lib.maintainers.raskin];
+    platforms = with lib.platforms; linux ++ cygwin ++ darwin;
     homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
 }

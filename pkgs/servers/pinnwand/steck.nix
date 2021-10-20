@@ -1,13 +1,22 @@
-{ lib, pkgs, python3Packages, nixosTests }:
+{ lib
+, pkgs
+, python3Packages
+, nixosTests
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "steck";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "07gc5iwbyprb8nihnjjl2zd06z8p4nl3a3drzh9a8ny35ig1khq0";
+    sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'click>=7.0,<8.0' 'click'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     pkgs.git
@@ -18,6 +27,9 @@ python3Packages.buildPythonApplication rec {
     termcolor
     toml
   ];
+
+  # tests are not in pypi package
+  doCheck = false;
 
   passthru.tests = nixosTests.pinnwand;
 

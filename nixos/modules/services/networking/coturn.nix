@@ -16,6 +16,7 @@ ${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
 ${lib.optionalString cfg.no-auth "no-auth"}
 ${lib.optionalString cfg.use-auth-secret "use-auth-secret"}
 ${lib.optionalString (cfg.static-auth-secret != null) ("static-auth-secret=${cfg.static-auth-secret}")}
+${lib.optionalString (cfg.static-auth-secret-file != null) ("static-auth-secret=#static-auth-secret#")}
 realm=${cfg.realm}
 ${lib.optionalString cfg.no-udp "no-udp"}
 ${lib.optionalString cfg.no-tcp "no-tcp"}
@@ -67,7 +68,7 @@ in {
       alt-listening-port = mkOption {
         type = types.int;
         default = cfg.listening-port + 1;
-        defaultText = "listening-port + 1";
+        defaultText = literalExpression "listening-port + 1";
         description = ''
           Alternative listening port for UDP and TCP listeners;
           default (or zero) value means "listening port plus one".
@@ -82,7 +83,7 @@ in {
       alt-tls-listening-port = mkOption {
         type = types.int;
         default = cfg.tls-listening-port + 1;
-        defaultText = "tls-listening-port + 1";
+        defaultText = literalExpression "tls-listening-port + 1";
         description = ''
           Alternative listening port for TLS and DTLS protocols.
         '';
@@ -180,6 +181,13 @@ in {
           will try to use the 'dynamic' value in turn_secret table
           in user database (if present). The database-stored  value can be changed on-the-fly
           by a separate program, so this is why that other mode is 'dynamic'.
+        '';
+      };
+      static-auth-secret-file = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to the file containing the static authentication secret.
         '';
       };
       realm = mkOption {
@@ -293,42 +301,64 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users.turnserver =
-      { uid = config.ids.uids.turnserver;
-        description = "coturn TURN server user";
-      };
-    users.groups.turnserver =
-      { gid = config.ids.gids.turnserver;
-        members = [ "turnserver" ];
-      };
+  config = mkIf cfg.enable (mkMerge ([
+    { assertions = [
+      { assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null ;
+        message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
+      }
+    ];}
 
-    systemd.services.coturn = {
-      description = "coturn TURN server";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    {
+      users.users.turnserver =
+        { uid = config.ids.uids.turnserver;
+          group = "turnserver";
+          description = "coturn TURN server user";
+        };
+      users.groups.turnserver =
+        { gid = config.ids.gids.turnserver;
+          members = [ "turnserver" ];
+        };
 
-      unitConfig = {
-        Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
-      };
+      systemd.services.coturn = let
+        runConfig = "/run/coturn/turnserver.cfg";
+      in {
+        description = "coturn TURN server";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.coturn}/bin/turnserver -c ${configFile}";
-        RuntimeDirectory = "turnserver";
-        User = "turnserver";
-        Group = "turnserver";
-        AmbientCapabilities =
-          mkIf (
-            cfg.listening-port < 1024 ||
-            cfg.alt-listening-port < 1024 ||
-            cfg.tls-listening-port < 1024 ||
-            cfg.alt-tls-listening-port < 1024 ||
-            cfg.min-port < 1024
-          ) "cap_net_bind_service";
-        Restart = "on-abort";
+        unitConfig = {
+          Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
+        };
+
+        preStart = ''
+          cat ${configFile} > ${runConfig}
+          ${optionalString (cfg.static-auth-secret-file != null) ''
+            STATIC_AUTH_SECRET="$(head -n1 ${cfg.static-auth-secret-file} || :)"
+            sed -e "s,#static-auth-secret#,$STATIC_AUTH_SECRET,g" \
+              -i ${runConfig}
+          '' }
+          chmod 640 ${runConfig}
+        '';
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.coturn}/bin/turnserver -c ${runConfig}";
+          RuntimeDirectory = "turnserver";
+          User = "turnserver";
+          Group = "turnserver";
+          AmbientCapabilities =
+            mkIf (
+              cfg.listening-port < 1024 ||
+              cfg.alt-listening-port < 1024 ||
+              cfg.tls-listening-port < 1024 ||
+              cfg.alt-tls-listening-port < 1024 ||
+              cfg.min-port < 1024
+            ) "cap_net_bind_service";
+          Restart = "on-abort";
+        };
       };
-    };
-  };
+    systemd.tmpfiles.rules = [
+      "d  /run/coturn 0700 turnserver turnserver - -"
+    ];
+  }]));
 }

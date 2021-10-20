@@ -1,32 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "utf8cpp";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "nemtrif";
     repo = "utfcpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1s2pda75488z7c3w3a6qv31bj239248696yk5j2a1drbg2x1dpfh";
+    sha256 = "0gsbwif97i025bxgyax4fbf6v9z44zrca4s6wwd8x36ac8qzjppf";
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=None"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DINSTALL_GTEST=OFF"
   ];
 
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nemtrif/utfcpp";
     description = "UTF-8 with C++ in a Portable Way";
-    license = licenses.free;
+    license = licenses.boost;
     maintainers = with maintainers; [ jobojeha ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

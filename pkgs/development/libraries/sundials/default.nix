@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , fetchurl
 , python
@@ -12,61 +12,57 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "5.3.0";
+  version = "5.7.0";
+
+  outputs = [ "out" "examples" ];
+
+  src = fetchurl {
+    url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
+    hash = "sha256-SNp7qoFS3bIq7RsC2C0du0+/6iKs9nY0ARqgMDoQCkM=";
+  };
+
+  nativeBuildInputs = [ cmake gfortran ];
 
   buildInputs = [
     python
   ]
-    ++ stdenv.lib.optionals (lapackSupport)
+    ++ lib.optionals (lapackSupport)
     # Check that the same index size is used for both libraries
     (assert (blas.isILP64 == lapack.isILP64); [
-      gfortran
       blas
       lapack
     ])
   # KLU support is based on Suitesparse.
   # It is tested upstream according to the section 1.1.4 of
   # [INSTALL_GUIDE.pdf](https://raw.githubusercontent.com/LLNL/sundials/master/INSTALL_GUIDE.pdf)
-  ++ stdenv.lib.optionals (kluSupport) [
+  ++ lib.optionals (kluSupport) [
     suitesparse
   ];
 
-  nativeBuildInputs = [ cmake ];
-
-  src = fetchurl {
-    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "19xwi7pz35s2nqgldm6r0jl2k0bs36zhbpnmmzc56s1n3bhzgpw8";
-  };
-
-  patches = [
-    (fetchurl {
-      # https://github.com/LLNL/sundials/pull/19
-      url = "https://github.com/LLNL/sundials/commit/1350421eab6c5ab479de5eccf6af2dcad1eddf30.patch";
-      sha256 = "0g67lixp9m85fqpb9rzz1hl1z8ibdg0ldwq5z6flj5zl8a7cw52l";
-    })
-  ];
-
   cmakeFlags = [
-    "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
-  ] ++ stdenv.lib.optionals (lapackSupport) [
-    "-DLAPACK_ENABLE=ON"
+    "-DEXAMPLES_INSTALL_PATH=${placeholder "examples"}/share/examples"
+  ] ++ lib.optionals (lapackSupport) [
+    "-DENABLE_LAPACK=ON"
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ stdenv.lib.optionals (kluSupport) [
-    "-DKLU_ENABLE=ON"
+  ] ++ lib.optionals (kluSupport) [
+    "-DENABLE_KLU=ON"
     "-DKLU_INCLUDE_DIR=${suitesparse.dev}/include"
     "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
-  ] ++ stdenv.lib.optionals (lapackSupport && !lapack.isILP64) [
-    # Use the correct index type according to lapack which is supposed to be
-    # the same index type compatible with blas, thanks to the assertion of
-    # buildInputs
-    "-DSUNDIALS_INDEX_TYPE=int32_t"
-  ]
+  ] ++ [(
+    # Use the correct index type according to lapack and blas used. They are
+    # already supposed to be compatible but we check both for extra safety. 64
+    # should be the default but we prefer to be explicit, for extra safety.
+    if blas.isILP64 then
+      "-DSUNDIALS_INDEX_SIZE=64"
+    else
+      "-DSUNDIALS_INDEX_SIZE=32"
+  )]
   ;
 
   doCheck = true;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;

@@ -3,8 +3,9 @@
 , which, procps , qrencode , makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin , dmenuSupport ? x11Support
+, x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
 , waylandSupport ? false, wl-clipboard ? null
+, ydotool ? null, dmenu-wayland ? null
 
 # For backwards-compatibility
 , tombPluginSupport ? false
@@ -13,12 +14,14 @@
 with lib;
 
 assert x11Support -> xclip != null;
-
-assert dmenuSupport -> dmenu != null
-                       && xdotool != null
-                       && x11Support;
-
 assert waylandSupport -> wl-clipboard != null;
+
+assert dmenuSupport -> x11Support || waylandSupport;
+assert dmenuSupport && x11Support
+  -> dmenu != null && xdotool != null;
+assert dmenuSupport && waylandSupport
+  -> dmenu-wayland != null && ydotool != null;
+
 
 let
   passExtensions = import ./extensions { inherit pkgs; };
@@ -26,7 +29,7 @@ let
   env = extensions:
     let
       selected = [ pass ] ++ extensions passExtensions
-        ++ stdenv.lib.optional tombPluginSupport passExtensions.tomb;
+        ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
       name = "pass-extensions-env";
       paths = selected;
@@ -52,21 +55,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.4";
   pname = "password-store";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
-    sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
+    sha256 = "1h4k6w7g8pr169p5w9n6mkdhxl3pw51zphx7www6pvgjb7vgmafg";
   };
 
   patches = [
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
-  ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
-    # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
-    # version bump.
-    ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
+  ] ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -74,15 +74,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Install Emacs Mode. NOTE: We can't install the necessary
-    # dependencies (s.el and f.el) here. The user has to do this
-    # himself.
+    # dependencies (s.el) here. The user has to do this themselves.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
   '' + optionalString dmenuSupport ''
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
-  wrapperPath = with stdenv.lib; makeBinPath ([
+  wrapperPath = with lib; makeBinPath ([
     coreutils
     findutils
     getopt
@@ -96,8 +95,10 @@ stdenv.mkDerivation rec {
     procps
   ] ++ optional stdenv.isDarwin openssl
     ++ optional x11Support xclip
-    ++ optionals dmenuSupport [ xdotool dmenu ]
-    ++ optional waylandSupport wl-clipboard);
+    ++ optional waylandSupport wl-clipboard
+    ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
+    ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
+  );
 
   postFixup = ''
     # Fix program name in --help
@@ -107,7 +108,7 @@ stdenv.mkDerivation rec {
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
       --prefix PATH : "${wrapperPath}"
-  '' + stdenv.lib.optionalString dmenuSupport ''
+  '' + lib.optionalString dmenuSupport ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.
     wrapProgram $out/bin/passmenu \
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
            -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
            -e '/which gpg/ d' \
       tests/setup.sh
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # 'pass edit' uses hdid, which is not available from the sandbox.
     rm -f tests/t0200-edit-tests.sh
     rm -f tests/t0010-generate-tests.sh
@@ -149,7 +150,7 @@ stdenv.mkDerivation rec {
     withExtensions = env;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;

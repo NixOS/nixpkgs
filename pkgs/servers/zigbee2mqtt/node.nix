@@ -5,8 +5,8 @@
   }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-12_x"}:
 
 let
-  nodeEnv = import ../../development/node-packages/node-env.nix {
-    inherit (pkgs) stdenv python2 util-linux runCommand writeTextFile;
+  nodeEnv = import ./node-env.nix {
+    inherit (pkgs) lib stdenv python2 util-linux runCommand writeTextFile;
     inherit nodejs;
     libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
   };

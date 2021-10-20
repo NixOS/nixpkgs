@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
 , pango , cairo, libX11 , libXi, libXcursor, libXext, libXfixes
-, libXrender, libXcomposite , alsaLib, libXdamage, libXtst, libXrandr
+, libXrender, libXcomposite , alsa-lib, libXdamage, libXtst, libXrandr
 , expat, libcap, systemd , dbus, gtk2 , gdk-pixbuf, libnotify
 }:
 
@@ -24,9 +24,9 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
-    libXcursor libXext libXfixes libXrender libXcomposite alsaLib
+    libXcursor libXext libXfixes libXrender libXcomposite alsa-lib
     libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf
     libnotify stdenv.cc.cc
   ];
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   # its application and shows a generic page
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spideroak.com/solutions/encryptr";
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;

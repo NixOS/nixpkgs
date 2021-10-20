@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
+{ lib, stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
 , zlib, libzen, libmediainfo, curl, libmms, glib
 }:
 
@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "filebot";
-  version = "4.9.2";
+  version = "4.9.4";
 
   src = fetchurl {
-    url = "https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "0hcyam8l0fzc9fnp1dpawk0s3rwhfph78w99y7zlcv5l4l4h04lz";
+    url = "https://web.archive.org/web/20210326102451/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    sha256 = "sha256-fz0B9P/UBrlKGPZkheMd/4cFnWHt+brS3zRTv4nVt9o=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
       --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license'
     wrapProgram $out/opt/filebot.sh \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ openjdk11 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV

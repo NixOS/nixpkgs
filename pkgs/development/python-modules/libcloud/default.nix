@@ -5,7 +5,7 @@
 , mock
 , pycrypto
 , requests
-, pytestrunner
+, pytest-runner
 , pytest
 , requests-mock
 , typing
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b14b1f5f91ceeff5cf228613e76577d7b41e790dccd53a0f647ef816fb5495c";
+    sha256 = "d7450453eaf5904eb4fb4f74cf9f37dc83721a719bce34f5abb336b1a1ab974d";
   };
 
-  checkInputs = [ mock pytest pytestrunner requests-mock ];
+  checkInputs = [ mock pytest pytest-runner requests-mock ];
   propagatedBuildInputs = [ pycrypto requests ] ++ lib.optionals isPy27 [ typing ];
 
   preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
@@ -28,9 +28,12 @@ buildPythonPackage rec {
   # requires a certificates file
   doCheck = false;
 
+  pythonImportsCheck = [ "libcloud" ];
+
   meta = with lib; {
     description = "A unified interface to many cloud providers";
-    homepage = "http://incubator.apache.org/libcloud/";
+    homepage = "https://libcloud.apache.org/";
+    changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
   };
 

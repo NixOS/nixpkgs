@@ -1,23 +1,31 @@
 { lib, python3Packages, fetchFromGitHub }:
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
-  version = "unstable-2018-10-16";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "janten";
     repo = pname;
-    rev = "4551b4432f8470de5f2ad9171105f731a6259395";
-    sha256 = "176y5j31aci1vpi8v6r5ki55432fbdsazh9bsyzr90im9zimkffl";
+    rev = "v${version}";
+    sha256 = "1jgkfn5kfnx98xs0dmym1h9mv1mrzlglk7x0fzs2jlc56c18w9dk";
   };
 
   doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
+    anytree
+    fusepy
     httpsig
-    requests
     pbkdf2
+    pyyaml
+    requests
+    setuptools
+    tqdm
     urllib3
+    zeroconf
   ];
+
+  pythonImportsCheck = [ "dptrp1" ];
 
   meta = with lib; {
     homepage = "https://github.com/janten/dpt-rp1-py";

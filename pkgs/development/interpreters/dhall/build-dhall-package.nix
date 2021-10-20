@@ -37,6 +37,12 @@
   #
   # If `null`, then no documentation is generated.
 , documentationRoot ? null
+
+  # Base URL prepended to paths copied to the clipboard
+  #
+  # This is used in conjunction with `documentationRoot`, and is unused if
+  # `documentationRoot` is `null`.
+, baseImportUrl ? null
 }:
 
 let
@@ -85,6 +91,12 @@ in
     ${lib.optionalString (documentationRoot != null) ''
     mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --input '${documentationRoot}' --output-link $out/docs
+    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
+      base-import-url = baseImportUrl;
+
+      input = documentationRoot;
+
+      package-name = name;
+    }}
     ''}
   ''

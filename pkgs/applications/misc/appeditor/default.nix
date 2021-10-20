@@ -1,27 +1,28 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , gettext
 , glib
 , gtk3
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "appeditor";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "donadigo";
     repo = "appeditor";
     rev = version;
-    sha256 = "04x2f4x4dp5ca2y3qllqjgirbyl6383pfl4bi9bkcqlg8b5081rg";
+    sha256 = "14ycw1b6v2sa4vljpnx2lpx4w89mparsxk6s8w3yx4dqjglcg5bp";
   };
 
   nativeBuildInputs = [
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -39,11 +40,6 @@ stdenv.mkDerivation rec {
     gtk3
     pantheon.granite
     libgee
-  ];
-
-  patches = [
-    # See: https://github.com/donadigo/appeditor/issues/88
-    ./fix-build-vala-0.46.patch
   ];
 
   postPatch = ''
@@ -57,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Edit the Pantheon desktop application menu";
     homepage = "https://github.com/donadigo/appeditor";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, gtk-engine-murrine }:
+{ lib, stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "theme-jade1";
-  version = "1.10";
+  version = "1.14";
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-jade-1/releases/download/v${version}/jade-1-theme.tar.xz";
-    sha256 = "17s4r8yjhnz9wrnrma6m8qjp02r47xkjk062sdb8s91dxhh7l8q2";
+    sha256 = "01p1g0gy6d1c8aa9y7inhn6zhm0qy0fzmwlniiv07h15g32appvd";
   };
 
   sourceRoot = ".";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Based on Linux Mint theme with dark menus and more intensive green";
     homepage = "https://github.com/madmaxms/theme-jade-1";
     license = with licenses; [ gpl3Only ];

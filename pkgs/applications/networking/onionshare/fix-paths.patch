@@ -1,68 +1,31 @@
-diff --git a/onionshare/common.py b/onionshare/common.py
-index 3373462..7fd245b 100644
---- a/onionshare/common.py
-+++ b/onionshare/common.py
-@@ -87,66 +87,16 @@ class Common(object):
-                 ),
-                 "share",
-             )
--            if not os.path.exists(prefix):
--                # While running tests during stdeb bdist_deb, look 3 directories up for the share folder
--                prefix = os.path.join(
--                    os.path.dirname(
--                        os.path.dirname(os.path.dirname(os.path.dirname(prefix)))
--                    ),
--                    "share",
--                )
--
--        elif self.platform == "BSD" or self.platform == "Linux":
--            # Assume OnionShare is installed systemwide in Linux, since we're not running in dev mode
--            prefix = os.path.join(sys.prefix, "share/onionshare")
--
--        elif getattr(sys, "frozen", False):
--            # Check if app is "frozen"
--            # https://pythonhosted.org/PyInstaller/#run-time-information
--            if self.platform == "Darwin":
--                prefix = os.path.join(sys._MEIPASS, "share")
--            elif self.platform == "Windows":
--                prefix = os.path.join(os.path.dirname(sys.executable), "share")
-+        else:
-+            prefix = "@common@/share/onionshare"
-
-         return os.path.join(prefix, filename)
+--- a/onionshare_cli/common.py
++++ b/onionshare_cli/common.py
+@@ -308,33 +308,10 @@ class Common:
+         return path
 
      def get_tor_paths(self):
 -        if self.platform == "Linux":
--            tor_path = "/usr/bin/tor"
--            tor_geo_ip_file_path = "/usr/share/tor/geoip"
--            tor_geo_ipv6_file_path = "/usr/share/tor/geoip6"
--            obfs4proxy_file_path = "/usr/bin/obfs4proxy"
+-            tor_path = shutil.which("tor")
+-            if not tor_path:
+-                raise CannotFindTor()
+-            obfs4proxy_file_path = shutil.which("obfs4proxy")
+-            prefix = os.path.dirname(os.path.dirname(tor_path))
+-            tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
+-            tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
 -        elif self.platform == "Windows":
--            base_path = os.path.join(
--                os.path.dirname(os.path.dirname(self.get_resource_path(""))), "tor"
--            )
--            tor_path = os.path.join(os.path.join(base_path, "Tor"), "tor.exe")
--            obfs4proxy_file_path = os.path.join(
--                os.path.join(base_path, "Tor"), "obfs4proxy.exe"
--            )
--            tor_geo_ip_file_path = os.path.join(
--                os.path.join(os.path.join(base_path, "Data"), "Tor"), "geoip"
--            )
--            tor_geo_ipv6_file_path = os.path.join(
--                os.path.join(os.path.join(base_path, "Data"), "Tor"), "geoip6"
--            )
+-            base_path = self.get_resource_path("tor")
+-            tor_path = os.path.join(base_path, "Tor", "tor.exe")
+-            obfs4proxy_file_path = os.path.join(base_path, "Tor", "obfs4proxy.exe")
+-            tor_geo_ip_file_path = os.path.join(base_path, "Data", "Tor", "geoip")
+-            tor_geo_ipv6_file_path = os.path.join(base_path, "Data", "Tor", "geoip6")
 -        elif self.platform == "Darwin":
--            base_path = os.path.dirname(
--                os.path.dirname(os.path.dirname(self.get_resource_path("")))
--            )
--            tor_path = os.path.join(base_path, "Resources", "Tor", "tor")
--            tor_geo_ip_file_path = os.path.join(base_path, "Resources", "Tor", "geoip")
--            tor_geo_ipv6_file_path = os.path.join(
--                base_path, "Resources", "Tor", "geoip6"
--            )
--            obfs4proxy_file_path = os.path.join(
--                base_path, "Resources", "Tor", "obfs4proxy"
--            )
+-            tor_path = shutil.which("tor")
+-            if not tor_path:
+-                raise CannotFindTor()
+-            obfs4proxy_file_path = shutil.which("obfs4proxy")
+-            prefix = os.path.dirname(os.path.dirname(tor_path))
+-            tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
+-            tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
 -        elif self.platform == "BSD":
 -            tor_path = "/usr/local/bin/tor"
 -            tor_geo_ip_file_path = "/usr/local/share/tor/geoip"
@@ -75,60 +38,4 @@ index 3373462..7fd245b 100644
 
          return (
              tor_path,
-diff --git a/setup.py b/setup.py
-index 9af72fc..53ca47b 100644
---- a/setup.py
-+++ b/setup.py
-@@ -70,41 +70,41 @@ classifiers = [
- ]
- data_files = [
-     (
--        os.path.join(sys.prefix, "share/applications"),
-+        "share/applications",
-         ["install/org.onionshare.OnionShare.desktop"],
-     ),
-     (
--        os.path.join(sys.prefix, "share/icons/hicolor/scalable/apps"),
-+        "share/icons/hicolor/scalable/apps",
-         ["install/org.onionshare.OnionShare.svg"],
-     ),
-     (
--        os.path.join(sys.prefix, "share/metainfo"),
-+        "share/metainfo",
-         ["install/org.onionshare.OnionShare.appdata.xml"],
-     ),
--    (os.path.join(sys.prefix, "share/onionshare"), file_list("share")),
--    (os.path.join(sys.prefix, "share/onionshare/images"), file_list("share/images")),
--    (os.path.join(sys.prefix, "share/onionshare/locale"), file_list("share/locale")),
-+    ( "share/onionshare", file_list("share")),
-+    ( "share/onionshare/images", file_list("share/images")),
-+    ( "share/onionshare/locale", file_list("share/locale")),
-     (
--        os.path.join(sys.prefix, "share/onionshare/templates"),
-+        "share/onionshare/templates",
-         file_list("share/templates"),
-     ),
-     (
--        os.path.join(sys.prefix, "share/onionshare/static/css"),
-+        "share/onionshare/static/css",
-         file_list("share/static/css"),
-     ),
-     (
--        os.path.join(sys.prefix, "share/onionshare/static/img"),
-+        "share/onionshare/static/img",
-         file_list("share/static/img"),
-     ),
-     (
--        os.path.join(sys.prefix, "share/onionshare/static/js"),
-+        "share/onionshare/static/js",
-         file_list("share/static/js"),
-     ),
- ]
- if not platform.system().endswith("BSD") and platform.system() != "DragonFly":
-     data_files.append(
-         (
--            "/usr/share/nautilus-python/extensions/",
-+            "share/nautilus-python/extensions/",
-             ["install/scripts/onionshare-nautilus.py"],
-         )
-     )
+

@@ -1,38 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 37745b5..cad11a0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -9,13 +9,6 @@ include(cmake/CopyFiles.cmake)
- set(CMAKE_CXX_STANDARD 11)
- set(CMAKE_INSTALL_PREFIX $ENV{HOME}/.vscode/extensions/vscode-lldb CACHE PATH "Install location")
+@@ -16,13 +16,6 @@ endif()
+ set(VERSION "${VERSION}${VERSION_SUFFIX}")
+ message("Version ${VERSION}")
  
--set(LLDB_ROOT $ENV{LLDB_ROOT} CACHE PATH "Root of LLDB build directory")
--if (LLDB_ROOT)
--    message("Using LLDB from ${LLDB_ROOT}")
+-set(LLDB_PACKAGE $ENV{LLDB_PACKAGE} CACHE PATH "Zip archive containing LLDB files")
+-if (LLDB_PACKAGE)
+-    message("Using LLDB_PACKAGE=${LLDB_PACKAGE}")
 -else()
--    message(FATAL_ERROR "LLDB_ROOT not set." )
+-    message(FATAL_ERROR "LLDB_PACKAGE not set." )
 -endif()
 -
+ set(TEST_TIMEOUT 5000 CACHE STRING "Test timeout [ms]")
+ 
  # General OS-specific definitions
- if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-     set(DylibPrefix lib)
-@@ -64,8 +57,9 @@ set(UpdateFile ${CMAKE_COMMAND} -E copy_if_different)
- 
- # Adapter
- 
--add_subdirectory(adapter)
--add_subdirectory(lldb)
-+add_custom_target(adapter)
-+add_custom_target(lldb)
-+add_custom_target(codelldb)
- 
- # Extension package content
- 
-@@ -74,16 +68,6 @@ configure_file(package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json @ONLY)
+@@ -87,16 +80,6 @@ configure_file(package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json @ONLY)
  configure_file(webpack.config.js ${CMAKE_CURRENT_BINARY_DIR}/webpack.config.js @ONLY)
  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
  
 -# Run 'npm install'
 -execute_process(
--    COMMAND ${NPM} install
+-    COMMAND ${NPM} ci # like install, but actually respects package-lock file.
 -    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 -    RESULT_VARIABLE Result
 -)
@@ -43,3 +33,4 @@
  # Copy it back, so we can commit the lock file.
  file(COPY ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
  
+

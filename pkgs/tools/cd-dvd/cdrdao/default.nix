@@ -1,16 +1,17 @@
-{stdenv, fetchurl, libvorbis, libmad, pkgconfig, libao}:
+{lib, stdenv, fetchurl, libvorbis, libmad, pkg-config, libao}:
 
-stdenv.mkDerivation {
-  name = "cdrdao-1.2.3";
+stdenv.mkDerivation rec {
+  pname = "cdrdao";
+  version = "1.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdrdao/cdrdao-1.2.3.tar.bz2";
+    url = "mirror://sourceforge/cdrdao/cdrdao-${version}.tar.bz2";
     sha256 = "0pmpgx91j984snrsxbq1dgf3ximks2dfh1sqqmic72lrls7wp4w1";
   };
 
   makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libvorbis libmad libao ];
 
   hardeningDisable = [ "format" ];
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
   # Needed on gcc >= 6.
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = "http://cdrdao.sourceforge.net/";
     platforms = platforms.linux;

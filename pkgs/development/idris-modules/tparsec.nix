@@ -8,7 +8,7 @@ build-idris-package  {
   version = "2020-02-11";
 
   ipkgName = "TParsec";
-  
+
   idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {

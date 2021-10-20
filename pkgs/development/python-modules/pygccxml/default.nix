@@ -1,14 +1,14 @@
-{ stdenv, castxml, fetchFromGitHub, buildPythonPackage,
+{ lib, castxml, fetchFromGitHub, buildPythonPackage,
 llvmPackages }:
 buildPythonPackage rec {
   pname = "pygccxml";
-  version = "1.9.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner  = "gccxml";
     repo   = "pygccxml";
     rev    = "v${version}";
-    sha256 = "02ip03s0vmp7czzflbvf7qnybibfrd0rzqbc5zfmq3zmpnck3hvm";
+    sha256 = "1msqpg3dqn7wjlf91ddljxzz01a3b1p2sy91n36lrsy87lz499gh";
   };
 
   buildInputs = [ castxml llvmPackages.libcxxStdenv];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # but the format doesn't accept -isystem directives
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gccxml/pygccxml";
     description = "Python package for easy C++ declarations navigation";
     license = licenses.boost;

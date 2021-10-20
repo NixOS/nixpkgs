@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clunit2'';
-  version = ''20201016-git'';
+  baseName = "clunit2";
+  version = "20201016-git";
 
-  description = ''CLUnit is a Common Lisp unit testing framework.'';
+  description = "CLUnit is a Common Lisp unit testing framework.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clunit2/2020-10-16/clunit2-20201016-git.tgz'';
-    sha256 = ''1mj3c125drq9a3pxrh0r8q3gqgq68yk7qi0zbqh4mkpavl1aspdp'';
+    url = "http://beta.quicklisp.org/archive/clunit2/2020-10-16/clunit2-20201016-git.tgz";
+    sha256 = "1mj3c125drq9a3pxrh0r8q3gqgq68yk7qi0zbqh4mkpavl1aspdp";
   };
 
   packageName = "clunit2";

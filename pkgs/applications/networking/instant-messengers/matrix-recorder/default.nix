@@ -1,4 +1,4 @@
-{ stdenv, pkgs }:
+{ lib, stdenv, pkgs }:
 (import ./composition.nix {
   inherit pkgs;
   inherit (stdenv.hostPlatform) system;
@@ -21,7 +21,7 @@
   meta = {
     description = "Matrix message recorder";
     homepage = "https://gitlab.com/argit/matrix-recorder/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
   };
 }

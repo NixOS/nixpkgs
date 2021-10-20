@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   # XXX: Ran 0 tests in 0.217s
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and extensible STOMP messaging client";
     homepage = "https://bitbucket.org/hozn/stompclient";
     license = licenses.asl20;

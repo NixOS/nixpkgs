@@ -1,4 +1,4 @@
-{ stdenv, kernel, libcap }:
+{ lib, stdenv, kernel, libcap }:
 
 stdenv.mkDerivation {
   pname = "turbostat";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     cd tools/power/x86/turbostat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Report processor frequency and idle statistics";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;

@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.7.2";
+  version = "2.7.3";
 
   repoName = "videos";
 
@@ -28,8 +29,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-MSyhCXsziQ0MD4lGp9X/9odidjT/L+2Aihwd1qCGvB0=";
+    sha256 = "04nl9kn33dysvsg0n5qx1z8qgrifkgfwsm7gh1l308v3n8c69lh7";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/videos/pull/233
+    (fetchpatch {
+      url = "https://github.com/elementary/videos/commit/19ba2a9148be09ea521d2e9ac29dede6b9c6fa07.patch";
+      sha256 = "0ffp7ana98846xi7vxrzfg6dbs4yy28x2i4ky85mqs1gj6fjqin5";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -41,7 +51,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -67,11 +77,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video player and library app designed for elementary OS";
     homepage = "https://github.com/elementary/videos";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

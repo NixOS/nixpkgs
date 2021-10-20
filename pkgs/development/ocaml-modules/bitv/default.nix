@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, autoreconfHook, which, ocaml, findlib }:
+{ stdenv, lib, fetchzip, autoreconfHook, which, ocaml, findlib }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "bitv is not available for OCaml ${ocaml.version}"
 else
 
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A bit vector library for OCaml";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "https://github.com/backtracking/bitv";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

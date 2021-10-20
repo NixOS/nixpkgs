@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonPackage rec {
   pname = "qnotero";
 
-  version = "2.1.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "ealbiter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16ckcjxa3dgmz1y8gd57q2h84akra3j4bgl4fwv4m05bam3ml1xs";
+    sha256 = "0y2xph4ha07slni039s034cn1wsk3q2d86hihy97h4ch47ignv20";
   };
 
   propagatedBuildInputs = [ python3Packages.pyqt5 wrapQtAppsHook ];
@@ -26,11 +26,14 @@ python3Packages.buildPythonPackage rec {
     wrapQtApp "$out"/bin/qnotero
   '';
 
+  # no tests executed
+  doCheck = false;
+
   meta = {
     description = "Quick access to Zotero references";
     homepage = "http://www.cogsci.nl/software/qnotero";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_topn";
-  version = "2.3.1";
+  version = "2.4.0";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-topn";
     rev    = "refs/tags/v${version}";
-    sha256 = "0ai07an90ywhk10q52hajgb33va5q76j7h8vj1r0rvq6dyii0wal";
+    sha256 = "1appxriw7h29kyhv3h6b338g5m2nz70q3mxasy4mjimqhbz1zyqs";
   };
 
   installPhase = ''
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
     homepage    = "https://github.com/citusdata/postgresql-topn";
-    changelog   = "https://github.com/citusdata/postgresql-topn/blob/v${version}/CHANGELOG.md";
+    changelog   = "https://github.com/citusdata/postgresql-topn/raw/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
-    license     = licenses.agpl3;
+    license     = licenses.agpl3Only;
   };
 }

@@ -1,33 +1,44 @@
-{ stdenv
-, pkgconfig
+{ lib
+, stdenv
+, pkg-config
 , glib
 , libxml2
 , expat
-, fftw
-, orc
-, lcms
-, imagemagick
-, openexr
-, libtiff
-, libjpeg
-, libgsf
-, libexif
-, libheif
-, librsvg
 , ApplicationServices
-, python27
-, libpng
+, Foundation
+, python3
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
 , gtk-doc
 , gobject-introspection
-,
+  # Optional dependencies
+, libjpeg
+, libexif
+, librsvg
+, poppler
+, libgsf
+, libtiff
+, fftw
+, lcms2
+, libpng
+, libimagequant
+, imagemagick
+, pango
+, orc
+, matio
+, cfitsio
+, libwebp
+, openexr
+, openjpeg
+, libjxl
+, openslide
+, libheif
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.10.2";
+  version = "8.11.3";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
@@ -35,7 +46,7 @@ stdenv.mkDerivation rec {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "1psi39a4h0awwbyizbsk467z0djwq0rh8hvkklbsd5b92m7768sp";
+    sha256 = "sha256-CWuULuUMBV2VUCZEBg0MzS7rXI8UUkNh5XPV2eA8xt8=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -44,7 +55,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gtk-doc
     gobject-introspection
@@ -53,22 +64,31 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libxml2
-    fftw
-    orc
-    lcms
-    imagemagick
-    openexr
-    libtiff
-    libjpeg
-    libgsf
-    libexif
-    libheif
-    libpng
-    librsvg
-    python27
-    libpng
     expat
-  ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+    (python3.withPackages (p: [ p.pycairo ]))
+    # Optional dependencies
+    libjpeg
+    libexif
+    librsvg
+    poppler
+    libgsf
+    libtiff
+    fftw
+    lcms2
+    libpng
+    libimagequant
+    imagemagick
+    pango
+    orc
+    matio
+    cfitsio
+    libwebp
+    openexr
+    openjpeg
+    libjxl
+    openslide
+    libheif
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [
@@ -79,7 +99,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;

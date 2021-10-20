@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, writeText }:
+{ lib, stdenv, fetchurl, ocaml, writeText }:
 
 let
   pname = "camlidl";
-  webpage = "http://caml.inria.fr/pub/old_caml_site/camlidl/";
+  webpage = "https://caml.inria.fr/pub/old_caml_site/camlidl/";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "A stub code generator and COM binding for Objective Caml";
     homepage = webpage;
     license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

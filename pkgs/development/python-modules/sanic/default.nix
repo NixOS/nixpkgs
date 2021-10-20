@@ -1,45 +1,99 @@
-{ lib, buildPythonPackage, fetchPypi
-, aiofiles, httptools, httpx, multidict, ujson, uvloop, websockets
-, pytestCheckHook, beautifulsoup4, gunicorn, httpcore, uvicorn
-, pytest-asyncio, pytest-benchmark, pytest-dependency, pytest-sanic, pytest-sugar, pytestcov
+{ lib
+, aiofiles
+, beautifulsoup4
+, buildPythonPackage
+, doCheck ? true
+, fetchFromGitHub
+, fetchpatch
+, gunicorn
+, httptools
+, multidict
+, pytest-asyncio
+, pytest-benchmark
+, pytest-sanic
+, pytest-sugar
+, pytestCheckHook
+, sanic-routing
+, sanic-testing
+, ujson
+, uvicorn
+, uvloop
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "20.9.1";
+  version = "21.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06p0lsxqbfbka2yaqlpp0bg5pf7ma44zi6kq7qbb6hhry48dp1w6";
+  src = fetchFromGitHub {
+    owner = "sanic-org";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0vldlic8gqcf56fqb31igycqf11syd9csk66v34w6dim54lcny2b";
   };
 
-  patchPhase = ''
+  patches = [
+    # Allow later websockets release, https://github.com/sanic-org/sanic/pull/2154
+    (fetchpatch {
+      name = "later-websockets.patch";
+      url = "https://github.com/sanic-org/sanic/commit/5fb820b5c1ce395e86a1ee11996790c65ec7bc65.patch";
+      sha256 = "1glvq23pf1sxqjnrz0w8rr7nsnyz82k1479b3rm8szfkjg9q5d1w";
+    })
+  ];
+
+  postPatch = ''
+    # Loosen dependency requirements.
     substituteInPlace setup.py \
-      --replace '"multidict==5.0.0"' '"multidict"' \
-      --replace '"httpx==0.15.4"' '"httpx"' \
-      --replace '"httpcore==0.3.0"' '"httpcore"' \
-      --replace '"pytest==5.2.1"' '"pytest"'
+      --replace '"pytest==5.2.1"' '"pytest"' \
+      --replace '"gunicorn==20.0.4"' '"gunicorn"' \
+      --replace '"pytest-sanic",' "" \
+    # Patch a request headers test to allow brotli encoding
+    # (we build httpx with brotli support, upstream doesn't).
+    substituteInPlace tests/test_headers.py \
+      --replace "deflate\r\n" "deflate, br\r\n"
   '';
 
   propagatedBuildInputs = [
-    aiofiles httptools httpx multidict ujson uvloop websockets
+    aiofiles
+    httptools
+    multidict
+    sanic-routing
+    ujson
+    uvloop
+    websockets
   ];
 
   checkInputs = [
-    pytestCheckHook beautifulsoup4 gunicorn httpcore uvicorn
-    pytest-asyncio pytest-benchmark pytest-dependency pytest-sanic pytest-sugar pytestcov
+    beautifulsoup4
+    gunicorn
+    pytest-asyncio
+    pytest-benchmark
+    pytest-sanic
+    pytest-sugar
+    pytestCheckHook
+    sanic-testing
+    uvicorn
   ];
+
+  inherit doCheck;
 
   disabledTests = [
-    "test_gunicorn" # No "examples" directory in pypi distribution.
-    "test_logo" # Fails to filter out "DEBUG asyncio:selector_events.py:59 Using selector: EpollSelector"
-    "test_zero_downtime" # No "examples.delayed_response.app" module in pypi distribution.
+    # Tests are flaky
+    "test_keep_alive_client_timeout"
+    "test_check_timeouts_request_timeout"
+    "test_check_timeouts_response_timeout"
+    "test_reloader_live"
+    "test_zero_downtime"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "sanic" ];
+
   meta = with lib; {
-    description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = "http://github.com/channelcat/sanic/";
+    description = "Web server and web framework";
+    homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc AluisioASG ];
   };
 }

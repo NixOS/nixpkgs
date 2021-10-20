@@ -1,4 +1,5 @@
 { buildPythonPackage
+, addOpenGLRunpath
 , fetchPypi
 , fetchFromGitHub
 , Mako
@@ -12,7 +13,7 @@
 , cudatoolkit
 , python
 , mkDerivation
-, stdenv
+, lib
 }:
 let
   compyte = import ./compyte.nix {
@@ -21,14 +22,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2020.1";
+  version = "2021.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "effa3b99b55af67f3afba9b0d1b64b4a0add4dd6a33bdd6786df1aa4cc8761a5";
+    sha256 = "ab87312d0fc349d9c17294a087bb9615cffcf966ad7b115f5b051008a48dd6ed";
   };
 
-  preConfigure = with stdenv.lib.versions; ''
+  preConfigure = with lib.versions; ''
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
@@ -40,12 +41,23 @@ buildPythonPackage rec {
     ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte
   '';
 
+  postFixup = ''
+    find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting opengl runpath for $lib..."
+      addOpenGLRunpath "$lib"
+    done
+  '';
+
   # Requires access to libcuda.so.1 which is provided by the driver
   doCheck = false;
 
   checkPhase = ''
     py.test
   '';
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -60,7 +72,7 @@ buildPythonPackage rec {
     Mako
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python.";
     license = licenses.mit;

@@ -1,35 +1,44 @@
-{ attrs
+{ lib
+, attrs
 , buildPythonPackage
 , defusedxml
 , fetchPypi
 , hypothesis
 , isPy3k
+, jbig2dec
 , lxml
+, mupdf
 , pillow
+, psutil
 , pybind11
+, pytest-xdist
 , pytestCheckHook
-, pytest-helpers-namespace
-, pytest-timeout
-, pytest_xdist
-, pytestrunner
 , python-dateutil
 , python-xmp-toolkit
-, python3
 , qpdf
+, setuptools
+, setuptools-scm
 , setuptools-scm-git-archive
-, setuptools_scm
-, stdenv
+, substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "2.2.0";
+  version = "3.2.0";
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74300a32c41b3d578772f6933f23a88b19f74484185e71e5225ce2f7ea5aea78";
+    sha256 = "a0582f00440668c07edb8403e82724961c7812c8e6c30655e34825b2645f15cd";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
+      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+    })
+  ];
 
   buildInputs = [
     pybind11
@@ -38,40 +47,33 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm-git-archive
-    setuptools_scm
+    setuptools-scm
   ];
 
   checkInputs = [
     attrs
     hypothesis
-    pillow
+    pytest-xdist
+    psutil
     pytestCheckHook
-    pytest-helpers-namespace
-    pytest-timeout
-    pytest_xdist
-    pytestrunner
     python-dateutil
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [ defusedxml lxml ];
+  propagatedBuildInputs = [
+    defusedxml
+    lxml
+    pillow
+    setuptools
+  ];
 
-  postPatch = ''
-    sed -i \
-      -e 's/^pytest .*/pytest/g' \
-      -e 's/^attrs .*/attrs/g' \
-      -e 's/^hypothesis .*/hypothesis/g' \
-      requirements/test.txt
-  '';
+  pythonImportsCheck = [ "pikepdf" ];
 
-  preBuild = ''
-    HOME=$TMPDIR
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = with maintainers; [ kiwi dotlambda ];
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
   };
 }

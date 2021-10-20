@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsndfile, freeglut, alsaLib, mesa, libGLU, libX11, libXmu
+{ lib, stdenv, fetchurl, libsndfile, freeglut, alsa-lib, mesa, libGLU, libX11, libXmu
 , libXext, libXi }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    alsaLib
+    alsa-lib
     mesa
     libGLU
     libsndfile
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv sndpeek $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time 3D animated audio display/playback";
     longDescription = ''
        sndpeek is just what it sounds (and looks) like:

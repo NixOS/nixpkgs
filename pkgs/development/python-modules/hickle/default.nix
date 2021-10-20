@@ -9,8 +9,8 @@
 , pandas
 , codecov
 , pytest
-, pytestcov
-, pytestrunner
+, pytest-cov
+, pytest-runner
 , coveralls
 , twine
 , check-manifest
@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "4.0.1";
+  version = "4.0.4";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcf2c4f9e4b7f0d9dae7aa6c59a58473884017875d3b17898d56eaf8a9c1da96";
+    sha256 = "0d35030a76fe1c7fa6480088cde932689960ed354a2539ffaf5f3c90c578c06f";
   };
 
   postPatch = ''
@@ -36,12 +36,14 @@ buildPythonPackage rec {
 
   doCheck = false; # incompatible with latest astropy
   checkInputs = [
-    pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
+    pytest pytest-cov pytest-runner coveralls scipy pandas astropy twine check-manifest codecov
   ];
 
   pythonImportsCheck = [ "hickle" ];
 
   meta = {
+    # incompatible with h5py>=3.0, see https://github.com/telegraphic/hickle/issues/143
+    broken = true;
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     license = lib.licenses.mit;

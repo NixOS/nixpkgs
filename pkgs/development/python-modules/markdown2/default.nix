@@ -1,16 +1,24 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, pygments }:
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.3.6";
+  version = "2.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "08a124043aa0ad36ba2136239547d5011a2b770278abb11a5609611e0040ea05";
+  # PyPI does not contain tests, so using GitHub instead.
+  src = fetchFromGitHub {
+    owner = "trentm";
+    repo = "python-markdown2";
+    rev = version;
+    sha256 = "0y7kh9jj8ys00qkfmmyqj63y21g7wn7yr715kj0j1nabs6xbp0y7";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pygments ];
+
+  checkPhase = ''
+    ${python.interpreter} ./test/test.py
+  '';
+
+  meta = with lib; {
     description = "A fast and complete Python implementation of Markdown";
     homepage =  "https://github.com/trentm/python-markdown2";
     license = licenses.mit;

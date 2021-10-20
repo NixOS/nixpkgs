@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, lockfileProgs, perlPackages }:
+{ lib, stdenv, fetchurl, lockfileProgs, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
-  version = "1.3.20";
+  version = "1.3.23";
   _name    = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
-    sha256 = "1rmkvxhcwr9gb6z4dlgr6rrx5l70hshlxdggs6qx0w1ljcmx1dlz";
+    sha256 = "sha256-ohiLpUn/9EEsggdLJxiE/2bSXz/bKkGRboF85naFWyk=";
   };
 
   prePatch = ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "SHAREDIR=share/logtail/detectrotate"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mails anomalies in the system logfiles to the administrator";
     longDescription = ''
       Mails anomalies in the system logfiles to the administrator.
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.bluescreen303 ];
   };
 }

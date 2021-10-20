@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.20";
+  version = "1.21";
   pname = "commons-compress";
 
   src = fetchurl {
     url    = "mirror://apache/commons/compress/binaries/${pname}-${version}-bin.tar.gz";
-    sha256 = "0zx1sc0rw3vzjan69vxr2qw82y9b0hqdzp4plcahc3c1y0vkz3fg";
+    sha256 = "sha256-sWF0K5MSOSXUxBLC9+1/RF5ST4tIzVKGnKQvStuVLvM=";
   };
 
   installPhase = ''
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "http://commons.apache.org/proper/commons-compress";
     description = "Allows manipulation of ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE and Z files";
-    maintainers = with stdenv.lib.maintainers; [ copumpkin ];
-    license     = stdenv.lib.licenses.asl20;
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    license     = lib.licenses.asl20;
+    platforms = with lib.platforms; unix;
   };
 }

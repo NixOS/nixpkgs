@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
+{ lib, stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.13.2";
+  version = "3.13.6";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "1l9i9667wppwxbbnf6kxamnqlbxzkz9ync4rsypfla124b6cidpz"
-      else "0qhd05abiycsgc16r1p6y8bfdrl6zji21xaqwdizpr0jb01z335g";
+      then "sha256-U3BNJ4Jjhd39gD7iMsHT8CGtm/GFQDE2kYQa2btyK+w="
+      else "sha256-8UKiFedv6w5bmqNvo3AXwQnUROwbZnU0ZTh9V17zmxQ=";
   };
 
   buildInputs = [ stdenv.cc.cc postgresql.lib ];
@@ -18,6 +18,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
+    runHook preInstall
+
     # Install files.
     mkdir -p $out/lib/teamspeak
     mv * $out/lib/teamspeak/
@@ -26,18 +28,20 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update-teampeak-server" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused
+    #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused jq pup
 
     set -eu -o pipefail
 
     version=$( \
-        curl -s "https://www.teamspeak.de/download/teamspeak-3-amd64-server-linux/" \
-        | grep softwareVersion \
-        | sed -E -e 's/^.*<span itemprop="softwareVersion">([^<]+)<\/span>.*$/\1/' \
+      curl https://www.teamspeak.com/en/downloads/ \
+        | pup "#server .linux .version json{}" \
+        | jq -r ".[0].text"
     )
 
     versionOld=$(nix-instantiate --eval --strict -A "teamspeak_server.version")
@@ -51,7 +55,7 @@ in stdenv.mkDerivation rec {
     update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "nasm";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nasm.us/";
     description = "An 80x86 and x86-64 assembler designed for portability and modularity";
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, makeWrapper}:
+{stdenv, lib, fetchurl, unzip, makeWrapper}:
 
 let
   # Gradle is a build system that bootstraps itself. This is what it actually
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   }
   else throw "Platform: ${stdenv.system} not supported!";
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   buildCommand = ''
     mkdir -p $out
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     # Patch maven central repository with our own local directory. This prevents the builder from downloading Maven artifacts
     sed -i -e 's|mavenCentral()|maven { url "${fakeMavenRepo}" }|' android/templates/build/proguard.gradle
 
-    ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+    ${lib.optionalString (stdenv.system == "x86_64-darwin") ''
       # Patch the strip frameworks script in the iPhone build template to not let
       # it skip the strip phase. This is caused by an assumption on the file
       # permissions in which Nix deviates from the standard.

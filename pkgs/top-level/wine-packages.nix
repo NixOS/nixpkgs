@@ -27,6 +27,7 @@ rec {
     xineramaSupport = true;
     xmlSupport = true;
     sdlSupport = true;
+    mingwSupport = true;
   };
 
   full = base.override {
@@ -46,6 +47,7 @@ rec {
     ldapSupport = true;
     faudioSupport = true;
     vkd3dSupport = true;
+    embedInstallers = true;
   };
 
   stable = base.override { wineRelease = "stable"; };

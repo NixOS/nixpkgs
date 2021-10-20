@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , makeWrapper
 , which
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "132l0xv00ld1svvv9wh99wfra4zzjv2885h2sq0dsl98wiyvi5zl";
   };
+
+  patches = [ ./clean-extra-logfile-output-from-pari.patch ];
 
   postUnpack = ''
     patchShebangs .
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
     "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute special values of symmetric power elliptic curve L-functions";
     license = {
       shortName = "sympow";

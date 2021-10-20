@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
+{ lib, buildPythonPackage, fetchPypi, click, prompt-toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mcmz95595nrp4r58spy1ac993db26hk4q97isghbmn4md99vwmr";
+    sha256 = "cd12f68d745bf6151210790540b4cb064c7b13e571bc64b6957d98d120dacfd8";
   };
 
-  propagatedBuildInputs = [ click prompt_toolkit ];
+  propagatedBuildInputs = [ click prompt-toolkit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = licenses.mit;

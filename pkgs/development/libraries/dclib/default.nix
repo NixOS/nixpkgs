@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libxml2, openssl, bzip2}:
+{lib, stdenv, fetchurl, libxml2, openssl, bzip2}:
 
 stdenv.mkDerivation {
   name = "dclib-0.3.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [libxml2 openssl bzip2];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Peer-to-Peer file sharing client";
     homepage = "http://dcgui.berlios.de";
     platforms = platforms.linux;

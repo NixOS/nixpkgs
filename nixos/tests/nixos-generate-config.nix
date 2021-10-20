@@ -11,12 +11,11 @@ import ./make-test-python.nix ({ lib, ... } : {
       }
     '';
 
-    system.nixos-generate-config.desktopConfiguration = ''
+    system.nixos-generate-config.desktopConfiguration = [''
       # DESKTOP
-      # services.xserver.enable = true;
-      # services.xserver.displayManager.gdm.enable = true;
-      # services.xserver.desktopManager.gnome3.enable = true;
-    '';
+      services.xserver.displayManager.gdm.enable = true;
+      services.xserver.desktopManager.gnome.enable = true;
+    ''];
   };
   testScript = ''
     start_all()
@@ -36,7 +35,7 @@ import ./make-test-python.nix ({ lib, ... } : {
 
     # Test if the Perl variable $desktopConfiguration is spliced correctly
     machine.succeed(
-        "grep 'services\\.xserver\\.desktopManager\\.gnome3\\.enable = true;' /etc/nixos/configuration.nix"
+        "grep 'services\\.xserver\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
     )
   '';
 })

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   port = 1888;
@@ -7,7 +7,7 @@ let
   topic = "test/foo";
 in {
   name = "mosquitto";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ peterhoeg ];
   };
 
@@ -30,6 +30,9 @@ in {
           ];
         };
       };
+
+      # disable private /tmp for this test
+      systemd.services.mosquitto.serviceConfig.PrivateTmp = lib.mkForce false;
     };
 
     client1 = client;

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , glibc
 , gtk3
 , gtkmm3
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     jre
     swig
     wrapGAppsHook
@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design

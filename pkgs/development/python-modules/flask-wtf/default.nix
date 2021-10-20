@@ -1,19 +1,19 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
+{ lib, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-WTF";
-  version = "0.14.3";
+  version = "0.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "086pvg2x69n0nczcq7frknfjd8am1zdy8qqpva1sanwb02hf65yl";
+    sha256 = "ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc";
   };
 
   propagatedBuildInputs = [ flask wtforms nose ];
 
   doCheck = false; # requires external service
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];

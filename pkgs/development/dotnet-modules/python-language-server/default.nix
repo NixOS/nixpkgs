@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
@@ -10,8 +10,7 @@
 }:
 
 let deps = import ./deps.nix { inherit fetchurl; };
-
-    version = "2020-06-19";
+    version = "2021-05-20";
 
     # Build the nuget source needed for the later build all by itself
     # since it's a time-consuming step that only depends on ./deps.nix.
@@ -49,8 +48,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "python-language-server";
-    rev = "838ba78e00173d639bd90f54d8610ec16b4ba3a2";
-    sha256 = "0nj8l1apcb67gqwy5i49v0f01fs4lvdfmmp4w2hvrpss9if62c1m";
+    rev = "86825796eae15d4d46919bc6e32f1197196ba1b3";
+    sha256 = "sha256-izDE7Oil9g47Jf3eHPtW5coNixF71t9i0oYSuelakCo=";
   };
 
   buildInputs = [dotnet-sdk_3 openssl icu];
@@ -62,6 +61,8 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir home
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -75,14 +76,20 @@ stdenv.mkDerivation {
     pushd src/LanguageServer/Impl
     dotnet publish --no-restore -c Release -r linux-x64
     popd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r output/bin/Release/linux-x64/publish $out/lib
 
     mkdir $out/bin
     makeWrapper $out/lib/Microsoft.Python.LanguageServer $out/bin/python-language-server
+
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -94,7 +101,7 @@ stdenv.mkDerivation {
   # to find some of the packaged DLLs.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Microsoft Language Server for Python";
     homepage = "https://github.com/microsoft/python-language-server";
     license = licenses.asl20;

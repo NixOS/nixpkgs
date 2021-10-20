@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkgconfig, git, libmicrohttpd_0_9_70 }:
+{ stdenv, lib, fetchgit, pkg-config, git, libmicrohttpd }:
 
 stdenv.mkDerivation rec {
   pname = "fileshare";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sed -i 's,$(shell git rev-parse --short HEAD),/${version},g' Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig git ];
-  buildInputs = [ libmicrohttpd_0_9_70 ];
+  nativeBuildInputs = [ pkg-config git ];
+  buildInputs = [ libmicrohttpd ];
 
   makeFlags = [ "BUILD=release" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp bin/release/fileshare $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small HTTP Server for quickly sharing files over the network";
     longDescription = "Fileshare is a simple tool for sharing the contents of a directory via a webserver and optionally allowing uploads.";
     homepage = "https://git.tkolb.de/Public/fileshare";

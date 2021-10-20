@@ -1,6 +1,7 @@
-{ lib, stdenv, python, isLinux ? stdenv.isLinux }:
+{ lib, stdenv, poetryLib, python, isLinux ? stdenv.isLinux }:
 let
   inherit (lib.strings) hasSuffix hasInfix splitString removeSuffix;
+  inherit (poetryLib) targetMachine;
 
   # The 'cpxy" as determined by `python.version`
   #
@@ -72,12 +73,17 @@ let
       withPlatform =
         if isLinux
         then
-          (
-            x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-              || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-              || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
-              || x.platform == "any"
-          )
+          if targetMachine != null
+          then
+            (
+              x: x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
+                "manylinux1_${targetMachine}"
+                "manylinux2010_${targetMachine}"
+                "manylinux2014_${targetMachine}"
+              ]
+            )
+          else
+            (x: x.platform == "any")
         else (x: hasInfix "macosx" x.platform || x.platform == "any");
       filterWheel = x:
         let

@@ -23,13 +23,13 @@ let
     label nixos
       MENU LABEL ^NixOS using nfsroot
       KERNEL bzImage
-      append ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
+      append ip=dhcp nfsroot=/home/pcroot init=${config.system.build.toplevel}/init rw
 
     # I don't know how to make this boot with nfsroot (using the initrd)
     label nixos_initrd
       MENU LABEL NixOS booting the poor ^initrd.
       KERNEL bzImage
-      append initrd=initrd ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
+      append initrd=initrd ip=dhcp nfsroot=/home/pcroot init=${config.system.build.toplevel}/init rw
 
     label memtest
       MENU LABEL ^${pkgs.memtest86.name}
@@ -114,7 +114,7 @@ in
   # To be able to use the systemTarball to catch troubles.
   boot.crashDump = {
     enable = true;
-    kernelPackages = pkgs.linuxPackages_3_4;
+    kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
   };
 
   # No grub for the tarball.

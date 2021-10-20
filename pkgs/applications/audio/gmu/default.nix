@@ -1,14 +1,15 @@
-{stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
+{lib, stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
 , speex, ncurses
 , keymap ? "default"
 , conf ? "unknown"
 }:
 
 stdenv.mkDerivation rec {
-  name = "gmu-0.10.1";
+  pname = "gmu";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "http://wejp.k.vu/files/${name}.tar.gz";
+    url = "https://wej.k.vu/files/${pname}-${version}.tar.gz";
     sha256 = "03x0mc0xw2if0bpf0a15yprcyx1xccki039zvl2099dagwk6xskv";
   };
 
@@ -26,6 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://wejp.k.vu/projects/gmu";
     description = "Open source music player for portable gaming consoles and handhelds";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

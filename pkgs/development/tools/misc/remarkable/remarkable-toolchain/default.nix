@@ -1,36 +1,35 @@
-{ stdenv, fetchurl, libarchive, python3, file }:
+{ lib, stdenv, fetchurl, libarchive, python3, file, which }:
 
 stdenv.mkDerivation rec {
   pname = "remarkable-toolchain";
-  version = "1.8-23.9.2019";
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://remarkable.engineering/oecore-x86_64-cortexa9hf-neon-toolchain-zero-gravitas-${version}.sh";
-    sha256 = "6299955721bcd9bef92a87ad3cfe4d31df8e2da95b0c4b2cdded4431aa6748b0";
+    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa9hf-neon-rm10x-toolchain-${version}.sh";
+    sha256 = "sha256-ocODUUx2pgmqxMk8J+D+OvqlSHBSay6YzcqnxC9n59w=";
+    executable = true;
   };
 
   nativeBuildInputs = [
     libarchive
     python3
     file
+    which
   ];
 
-  unpackCmd = "mkdir src; install $curSrc src/install-toolchain.sh";
-
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
-    patchShebangs install-toolchain.sh
-    sed -i -e '3,9d' install-toolchain.sh # breaks PATH
-    sed -i 's|PYTHON=.*$|PYTHON=${python3}/bin/python|' install-toolchain.sh
-    ./install-toolchain.sh -D -y -d $out
+    mkdir -p $out
+    ENVCLEANED=1 $src -y -d $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolchain for cross-compiling to reMarkable tablets";
     homepage = "https://remarkable.engineering/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.nickhu ];
-    platforms = platforms.x86_64;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ nickhu siraben ];
+    platforms = [ "x86_64-linux" ];
   };
 }

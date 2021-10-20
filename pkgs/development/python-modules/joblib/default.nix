@@ -5,7 +5,7 @@
 , stdenv
 , numpydoc
 , pytestCheckHook
-, python-lz4
+, lz4
 , setuptools
 , sphinx
 }:
@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "0.17.0";
-  disabled = pythonOlder "3.6";
+  version = "1.0.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e284edd6be6b71883a63c9b7f124738a3c16195513ad940eae7e3438de885d5";
+    sha256 = "9c17567692206d2f3fb9ecf5e991084254fe631665c450b443761c4186a613f7";
   };
 
   checkInputs = [ sphinx numpydoc pytestCheckHook ];
-  propagatedBuildInputs = [ python-lz4 setuptools ];
+  propagatedBuildInputs = [ lz4 setuptools ];
 
   pytestFlagsArray = [ "joblib/test" ];
   disabledTests = [

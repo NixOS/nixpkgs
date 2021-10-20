@@ -1,4 +1,4 @@
-{ stdenv, version, src
+{ lib, stdenv, version, src
 , liboggSupport ? true, libogg ? null # if disabled only the library will be built
 , prePatch ? ""
 , ...
@@ -15,11 +15,11 @@ stdenv.mkDerivation {
   inherit prePatch;
 
   buildInputs = []
-    ++ stdenv.lib.optional liboggSupport libogg;
+    ++ lib.optional liboggSupport libogg;
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra-low delay audio codec";
     homepage    = "http://www.celt-codec.org/";
     license     = licenses.bsd2;

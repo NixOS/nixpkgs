@@ -58,7 +58,7 @@ in {
     port = mkOption {
       description = "Docker registry port to bind to.";
       default = 5000;
-      type = types.int;
+      type = types.port;
     };
 
     storagePath = mkOption {
@@ -151,7 +151,9 @@ in {
         home = cfg.storagePath;
       }
       else {}) // {
+        group = "docker-registry";
         isSystemUser = true;
       };
+    users.groups.docker-registry = {};
   };
 }

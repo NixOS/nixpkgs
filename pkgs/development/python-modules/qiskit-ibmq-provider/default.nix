@@ -22,6 +22,7 @@
 , nbconvert
 , nbformat
 , pproxy
+, qiskit-aer
 , vcrpy
 }:
 
@@ -38,7 +39,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.11.1";
+  version = "0.13.1";
 
   disabled = pythonOlder "3.6";
 
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "0b5mnq8f5844idnsmp84lpkvlpszfwwi998yvggcgaayw1dbk53h";
+    hash = "sha256-DlHlXncttzGo4uVoh2aQ7urW6krN3ej2sJ/EwuxeF2I=";
   };
 
   propagatedBuildInputs = [
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     nbconvert
     nbformat
     pproxy
+    qiskit-aer
     vcrpy
   ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
@@ -81,7 +83,9 @@ buildPythonPackage rec {
 
   # Skip tests that rely on internet access (mostly to IBM Quantum Experience cloud).
   # Options defined in qiskit.terra.test.testing_options.py::get_test_options
-  QISKIT_TESTS = "skip_online";
+  preCheck = ''
+    export QISKIT_TESTS=skip_online
+  '';
 
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";

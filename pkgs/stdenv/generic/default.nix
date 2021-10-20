@@ -48,6 +48,10 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , # The platform which build tools (especially compilers) build for in this stage,
   targetPlatform
+
+, # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
+  # This is convient to have as a parameter so the stdenv "adapters" work better
+  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
 }:
 
 let
@@ -84,6 +88,11 @@ let
       allowedRequisites = allowedRequisites
         ++ defaultNativeBuildInputs ++ defaultBuildInputs;
     }
+    // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    }
     // {
       inherit name;
 
@@ -106,6 +115,8 @@ let
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+        export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
       ''
       # TODO this should be uncommented, but it causes stupid mass rebuilds. I
       # think the best solution would just be to fixup linux RPATHs so we don't
@@ -137,7 +148,7 @@ let
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
-        isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
+        isDarwin isLinux isSunOS isCygwin isBSD isFreeBSD isOpenBSD
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
@@ -148,13 +159,7 @@ let
       # to correct type of machine.
       inherit (hostPlatform) system;
 
-      inherit (import ./make-derivation.nix {
-        inherit lib config stdenv;
-      }) mkDerivation;
-
-      # For convenience, bring in the library functions in lib/ so
-      # packages don't have to do that themselves.
-      inherit lib;
+      mkDerivation = mkDerivationFromStdenv stdenv;
 
       inherit fetchurlBoot;
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, avahi, cups, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, avahi, cups, fetchpatch }:
 
 # TODO: Add a service for gcp-cups-connector and perhaps some other
 # kind of configuration for the same thing that gcp-connector-util
@@ -52,7 +52,7 @@ buildGoPackage rec {
 
   buildInputs = [ avahi cups ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Share printers from your Windows, Linux, FreeBSD or macOS computer with ChromeOS and Android devices, using the Cloud Print Connector";
     homepage = "https://github.com/google/cloud-print-connector";
     license = licenses.bsd3;

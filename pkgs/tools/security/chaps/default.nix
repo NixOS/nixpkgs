@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
-, scons, pkgconfig, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
+{ lib, stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
+, scons, pkg-config, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
 }:
 
 let
@@ -23,7 +23,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "chaps-0.42-6812";
+  pname = "chaps";
   version = "0.42-6812";
 
   src = fetchFromGitHub {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace @@NIXOS_LEVELDB@@ ${leveldb}
     '';
 
-  nativeBuildInputs = [ unzip scons pkgconfig ];
+  nativeBuildInputs = [ unzip scons pkg-config ];
 
   buildInputs = [ trousers glib dbus_cplusplus dbus protobuf openssl snappy leveldb pam ];
 
@@ -59,28 +59,28 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${name}/out/chapsd $out/bin/.
-    cp ${name}/out/chaps_client $out/bin/.
+    cp ${pname}-${version}/out/chapsd $out/bin/.
+    cp ${pname}-${version}/out/chaps_client $out/bin/.
 
     mkdir -p $out/lib
-    cp ${name}/out/libchaps.so.* $out/lib/.
+    cp ${pname}-${version}/out/libchaps.so.* $out/lib/.
     mkdir -p $out/lib/security
-    cp ${name}/out/pam_chaps.so $out/lib/security/.
+    cp ${pname}-${version}/out/pam_chaps.so $out/lib/security/.
 
     mkdir -p $out/include
-    cp -r ${name}/out/chaps $out/include/.
+    cp -r ${pname}-${version}/out/chaps $out/include/.
 
     mkdir -p $out/etc/dbus-1/system.d
-    cp ${name}/out/org.chromium.Chaps.conf $out/etc/dbus-1/system.d/.
+    cp ${pname}-${version}/out/org.chromium.Chaps.conf $out/etc/dbus-1/system.d/.
     mkdir -p $out/etc/dbus-1/system-services
-    cp ${name}/platform2/chaps/org.chromium.Chaps.service $out/etc/dbus-1/system-services/.
+    cp ${pname}-${version}/platform2/chaps/org.chromium.Chaps.service $out/etc/dbus-1/system-services/.
 
     mkdir -p $out/usr/share/pam-configs/chaps
     mkdir -p $out/usr/share/man/man8
-    cp ${name}/man/* $out/usr/share/man/man8/.
+    cp ${pname}-${version}/man/* $out/usr/share/man/man8/.
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PKCS #11 implementation based on trusted platform module (TPM)";
     homepage = "https://www.chromium.org/developers/design-documents/chaps-technical-design";
     maintainers = [ maintainers.tstrobel ];

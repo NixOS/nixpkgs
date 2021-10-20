@@ -1,0 +1,64 @@
+From bbb71507b7bab52002f9b1e0880bed6a32834511 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Fri, 23 Apr 2021 10:54:10 +0200
+Subject: [PATCH] schannel: don't use static to store selected ciphers
+
+CVE-2021-22897
+
+Bug: https://curl.se/docs/CVE-2021-22897.html
+---
+ lib/vtls/schannel.c | 9 +++++----
+ lib/vtls/schannel.h | 3 +++
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/lib/vtls/schannel.c b/lib/vtls/schannel.c
+index 8c25ac5dd5a5..dba7072273a9 100644
+--- a/lib/vtls/schannel.c
++++ b/lib/vtls/schannel.c
+@@ -328,12 +328,12 @@ get_alg_id_by_name(char *name)
+ }
+ 
+ static CURLcode
+-set_ssl_ciphers(SCHANNEL_CRED *schannel_cred, char *ciphers)
++set_ssl_ciphers(SCHANNEL_CRED *schannel_cred, char *ciphers,
++                int *algIds)
+ {
+   char *startCur = ciphers;
+   int algCount = 0;
+-  static ALG_ID algIds[45]; /*There are 45 listed in the MS headers*/
+-  while(startCur && (0 != *startCur) && (algCount < 45)) {
++  while(startCur && (0 != *startCur) && (algCount < NUMOF_CIPHERS)) {
+     long alg = strtol(startCur, 0, 0);
+     if(!alg)
+       alg = get_alg_id_by_name(startCur);
+@@ -593,7 +593,8 @@ schannel_connect_step1(struct Curl_easy *data, struct connectdata *conn,
+     }
+ 
+     if(SSL_CONN_CONFIG(cipher_list)) {
+-      result = set_ssl_ciphers(&schannel_cred, SSL_CONN_CONFIG(cipher_list));
++      result = set_ssl_ciphers(&schannel_cred, SSL_CONN_CONFIG(cipher_list),
++                               BACKEND->algIds);
+       if(CURLE_OK != result) {
+         failf(data, "Unable to set ciphers to passed via SSL_CONN_CONFIG");
+         return result;
+diff --git a/lib/vtls/schannel.h b/lib/vtls/schannel.h
+index 2952caa1a5a1..77853aa30f96 100644
+--- a/lib/vtls/schannel.h
++++ b/lib/vtls/schannel.h
+@@ -71,6 +71,8 @@ CURLcode Curl_verify_certificate(struct Curl_easy *data,
+ #endif
+ #endif
+ 
++#define NUMOF_CIPHERS 45 /* There are 45 listed in the MS headers */
++
+ struct Curl_schannel_cred {
+   CredHandle cred_handle;
+   TimeStamp time_stamp;
+@@ -102,6 +104,7 @@ struct ssl_backend_data {
+ #ifdef HAS_MANUAL_VERIFY_API
+   bool use_manual_cred_validation; /* true if manual cred validation is used */
+ #endif
++  ALG_ID algIds[NUMOF_CIPHERS];
+ };
+ #endif /* EXPOSE_SCHANNEL_INTERNAL_STRUCTS */
+ 

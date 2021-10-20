@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+{ lib, stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, git
-, pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
+, pkg-config, groff, curl, json_c, luajit, zeromq, rrdtool
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
 # directory, but we use luajit, zeromq, and rrdtool from nixpkgs
 
 stdenv.mkDerivation rec {
-  name = "ntopng-2.0";
+  pname = "ntopng";
+  version = "2.0";
 
   src = fetchurl {
     urls = [
-      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tar.gz"
-      "mirror://sourceforge/project/ntop/ntopng/${name}.tar.gz"
+      "mirror://sourceforge/project/ntop/ntopng/old/ntopng-${version}.tar.gz"
+      "mirror://sourceforge/project/ntop/ntopng/ntopng-${version}.tar.gz"
     ];
     sha256 = "0l82ivh05cmmqcvs26r6y69z849d28njipphqzvnakf43ggddgrw";
   };
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
-    sqlite which autoreconfHook git pkgconfig groff curl json_c luajit zeromq
+    sqlite which autoreconfHook git pkg-config groff curl json_c luajit zeromq
     rrdtool ];
 
 
@@ -50,14 +51,14 @@ stdenv.mkDerivation rec {
 
     rm -rf httpdocs/geoip
     ln -s ${geolite-legacy}/share/GeoIP httpdocs/geoip
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
   NIX_CFLAGS_COMPILE = "-fpermissive"
-    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
+    + lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = "http://www.ntop.org/products/ntop/";
     license = licenses.gpl3Plus;

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , withMySQL ? true, withPSQL ? false, withSQLite ? false
-, mysql, postgresql, sqlite, gawk, gnugrep, findutils, gnused
+, mariadb, postgresql, sqlite, gawk, gnugrep, findutils, gnused
 , lib
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace shmig \
-      --replace "\`which mysql\`" "${lib.optionalString withMySQL "${mysql.client}/bin/mysql"}" \
+      --replace "\`which mysql\`" "${lib.optionalString withMySQL "${mariadb.client}/bin/mysql"}" \
       --replace "\`which psql\`" "${lib.optionalString withPSQL "${postgresql}/bin/psql"}" \
       --replace "\`which sqlite3\`" "${lib.optionalString withSQLite "${sqlite}/bin/sqlite3"}" \
       --replace "awk" "${gawk}/bin/awk" \
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalistic database migration tool with MySQL, PostgreSQL and SQLite support";
     homepage = "https://github.com/mbucc/shmig";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

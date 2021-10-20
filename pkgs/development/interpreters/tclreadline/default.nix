@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , automake
 , autoconf
@@ -8,7 +8,7 @@
 , tk
 }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "tclreadline";
   version = "2.3.8";
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     readline
-    tcl
     tk
   ];
 
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-tclshrl"
     "--enable-wishrl"
-    "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-readline-includes=${readline.dev}/include/readline"
     "--with-libtool=${libtool}"
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # The provided makefile leaves a wrong reference to /build/ in RPATH,
   # so we fix it after checking that everything is also present in $out
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     needed_libraries=$(ls .libs | grep '\.\(so\|la\)$')
     for lib in $needed_libraries; do
       if ! ls $out/lib | grep "$lib"; then
@@ -58,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU readline for interactive tcl shells";
     homepage = "https://github.com/flightaware/tclreadline";
     license = licenses.bsd3;

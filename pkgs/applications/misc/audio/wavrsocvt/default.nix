@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "wavrsocvt-1.0.2.0";
@@ -8,10 +8,8 @@ stdenv.mkDerivation {
     sha256 = "15qlvdfwbiclljj7075ycm78yzqahzrgl4ky8pymix5179acm05h";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   unpackPhase = ''
-    tar -zxf $src 
+    tar -zxf $src
     '';
 
   installPhase = ''
@@ -19,7 +17,7 @@ stdenv.mkDerivation {
     cp wavrsocvt $out/bin
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert .wav files into sound files for Lego NXT brick";
     longDescription = ''
     wavrsocvt is a command-line utility which can be used from a

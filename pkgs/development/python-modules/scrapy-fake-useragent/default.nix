@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytestcov, pytest-mock, fake-useragent, faker, scrapy }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, pytest-cov, pytest-mock, fake-useragent, faker, scrapy }:
 
 buildPythonPackage rec {
   pname = "scrapy-fake-useragent";
@@ -14,9 +14,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fake-useragent faker ];
 
-  checkInputs = [ pytestCheckHook scrapy pytestcov pytest-mock ];
+  checkInputs = [ pytestCheckHook scrapy pytest-cov pytest-mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Random User-Agent middleware based on fake-useragent";
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     license = licenses.mit;

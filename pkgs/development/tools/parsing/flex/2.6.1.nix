@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, m4 }:
+{ lib, stdenv, fetchurl, bison, m4 }:
 
 stdenv.mkDerivation {
   name = "flex-2.6.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs tests
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Makefile.in --replace "tests" " ";
   '';
 
@@ -18,16 +18,16 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ac_cv_func_malloc_0_nonnull=yes
+    ac_cv_func_realloc_0_nonnull=yes
+  '';
 
-  postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
+  postConfigure = lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/westes/flex";
     description = "A fast lexical analyser generator";
     license = licenses.bsd2;

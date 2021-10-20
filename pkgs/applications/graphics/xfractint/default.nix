@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libXft}:
+{lib, stdenv, fetchurl, libX11, libXft}:
 stdenv.mkDerivation rec {
   pname = "xfractint";
   version = "20.04p16";
@@ -17,13 +17,12 @@ stdenv.mkDerivation rec {
   makeFlags = ["PREFIX=$(out)"];
 
   meta = {
-    inherit version;
     description = "";
     # Code cannot be used in commercial programs
     # Looks like the definition hinges on the price, not license
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://www.fractint.net/";
   };
 }

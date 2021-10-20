@@ -29,12 +29,12 @@
 
 let
 
-  name = "hylafaxplus-${version}";
-  version = "7.0.3";
-  sha256 = "139iwcwrn9i5lragxi33ilzah72w59wg4midfjjgx5cly3ah0iy4";
+  pname = "hylafaxplus";
+  version = "7.0.4";
+  sha256 = "1y4b178rxa4ivxm8cnypnnyc8db7cjqyyzy60hiw215x4cyyj4i5";
 
   configSite = substituteAll {
-    name = "hylafaxplus-config.site";
+    name = "${pname}-config.site";
     src = ./config.site;
     config_maxgid = lib.optionalString (maxgid!=null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
     ghostscript_version = ghostscript.version;
@@ -43,7 +43,7 @@ let
   };
 
   postPatch = substituteAll {
-    name = "hylafaxplus-post-patch.sh";
+    name = "${pname}-post-patch.sh";
     src = ./post-patch.sh;
     inherit configSite;
     maxuid = lib.optionalString (maxuid!=null) (builtins.toString maxuid);
@@ -54,7 +54,7 @@ let
   };
 
   postInstall = substituteAll {
-    name = "hylafaxplus-post-install.sh";
+    name = "${pname}-post-install.sh";
     src = ./post-install.sh;
     inherit fakeroot libfaketime;
   };
@@ -62,11 +62,15 @@ let
 in
 
 stdenv.mkDerivation {
-  inherit name version;
+  inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/hylafax/hylafax-${version}.tar.gz";
     inherit sha256;
   };
+  patches = [
+    # adjust configure check to work with libtiff > 4.1
+    ./libtiff-4.patch
+  ];
   # Note that `configure` (and maybe `faxsetup`) are looking
   # for a couple of standard binaries in the `PATH` and
   # hardcode their absolute paths in the new package.
@@ -83,10 +87,10 @@ stdenv.mkDerivation {
     openldap  # optional
     pam  # optional
   ];
-  postPatch = ''. ${postPatch}'';
+  postPatch = ". ${postPatch}";
   dontAddPrefix = true;
-  postInstall = ''. ${postInstall}'';
-  postInstallCheck = ''. ${./post-install-check.sh}'';
+  postInstall = ". ${postInstall}";
+  postInstallCheck = ". ${./post-install-check.sh}";
   meta = {
     description = "enterprise-class system for sending and receiving facsimiles";
     downloadPage = "https://hylafax.sourceforge.io/download.php";

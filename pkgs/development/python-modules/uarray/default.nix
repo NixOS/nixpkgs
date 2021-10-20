@@ -1,33 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , matchpy
 , numpy
 , astunparse
 , typing-extensions
-, black
-, pytest
-, pytestcov
-, numba
-, nbval
-, python
-, isPy37
+, pytestCheckHook
+, pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.6.0";
+  version = "0.8.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "fa63ae7034833a99bc1628d3cd5501d4d00f2e6437b6cbe73f710dcf212a6bea";
+  src = fetchFromGitHub {
+    owner = "Quansight-Labs";
+    repo = pname;
+    rev = version;
+    sha256 = "1x2jp7w2wmn2awyv05xs0frpq0fa0rprwcxyg72wgiss0bnzxnhm";
   };
 
-  doCheck = false; # currently has circular dependency module import, remove when bumping to >0.5.1
-  checkInputs = [ pytest nbval pytestcov numba ];
-  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions black ];
+  patches = [(
+    # Fixes a compile error with newer versions of GCC -- should be included
+    # in the next release after 0.8.2
+    fetchpatch {
+      url = "https://github.com/Quansight-Labs/uarray/commit/a2012fc7bb94b3773eb402c6fe1ba1a894ea3d18.patch";
+      sha256 = "1qqh407qg5dz6x766mya2bxrk0ffw5h17k478f5kcs53g4dyfc3s";
+    }
+  )];
 
+  checkInputs = [ pytestCheckHook pytest-cov ];
+  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
+
+  # Tests must be run from outside the source directory
+  preCheck = ''
+    cd $TMP
+  '';
+  pytestFlagsArray = ["--pyargs" "uarray"];
   pythonImportsCheck = [ "uarray" ];
 
   meta = with lib; {

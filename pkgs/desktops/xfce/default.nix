@@ -15,9 +15,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
 
-  # Samba is a rather heavy dependency
-  gvfs = pkgs.gvfs.override { samba = null; };
-
   #### CORE
 
   exo = callPackage ./core/exo { };
@@ -37,6 +34,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   thunar-archive-plugin = callPackage ./thunar-plugins/archive { };
 
   thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
+
+  thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
   tumbler = callPackage ./core/tumbler { };
 
@@ -83,7 +82,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-terminal = callPackage ./applications/xfce4-terminal { };
 
   xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
-    inherit (pkgs.gnome3) libsoup;
+    inherit (pkgs.gnome) libsoup;
   };
 
   xfdashboard = callPackage ./applications/xfdashboard {};
@@ -94,15 +93,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfburn = callPackage ./applications/xfburn { };
 
+  xfce4-panel-profiles = callPackage ./applications/xfce4-panel-profiles { };
+
   #### ART
 
-  xfce4-icon-theme = callPackage ./art/xfce4-icon-theme.nix { };
+  xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };
 
-  xfwm4-themes = callPackage ./art/xfwm4-themes.nix { };
+  xfwm4-themes = callPackage ./art/xfwm4-themes { };
 
   #### PANEL PLUGINS
-
-  xfce4-vala-panel-appmenu-plugin = callPackage ./panel-plugins/xfce4-vala-panel-appmenu-plugin { };
 
   xfce4-battery-plugin = callPackage ./panel-plugins/xfce4-battery-plugin { };
 
@@ -110,47 +109,49 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-cpufreq-plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin { };
 
-  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix { };
+  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
   xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
-  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix { };
+  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
-  xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin.nix { };
+  xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
-  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin.nix { };
+  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
-  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix { };
+  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
-  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin.nix { };
+  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
-  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
+  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin { };
 
-  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin.nix { };
+  xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
+
+  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
 
   xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
-  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin.nix { };
+  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
 
-  xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix { };
+  xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin { };
 
-  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin.nix { };
+  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin.nix { };
+  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
 
-  xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix { };
+  xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
-  xfce4-timer-plugin = callPackage ./panel-plugins/xfce4-timer-plugin.nix { };
+  xfce4-timer-plugin = callPackage ./panel-plugins/xfce4-timer-plugin { };
 
   xfce4-verve-plugin = callPackage ./panel-plugins/xfce4-verve-plugin { };
 
   xfce4-xkb-plugin = callPackage ./panel-plugins/xfce4-xkb-plugin { };
 
-  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin.nix { };
+  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin { };
 
   xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
 
-  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin.nix { };
+  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin { };
 
   xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 
@@ -214,7 +215,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libxfcegui4 = throw "libxfcegui4 is the deprecated Xfce GUI library. It has been superseded by the libxfce4ui library";
   xinitrc = xfce4-session.xinitrc;
   inherit (pkgs.gnome2) libglade;
-  inherit (pkgs.gnome3) vte gtksourceview;
+  inherit (pkgs.gnome) vte gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
     thunarPlugins = [];

@@ -6,38 +6,43 @@
 , msgpack
 , mecab-python3
 , jieba
-, pytest
-, pythonOlder
+, pytestCheckHook
+, isPy27
 , fetchFromGitHub
 }:
 
 buildPythonPackage rec {
   pname = "wordfreq";
-  version = "2.3.2";
-  disabled = pythonOlder "3";
+  version = "2.5.1";
+  disabled = isPy27;
 
    src = fetchFromGitHub {
     owner = "LuminosoInsight";
     repo = "wordfreq";
-    # upstream don't tag by version
     rev = "v${version}";
-    sha256 = "078657iiksrqzcc2wvwhiilf3xxq5vlinsv0kz03qzqr1qyvbmas";
+    sha256 = "1lw7kbsydd89hybassnnhqnj9s5ch9wvgd6pla96198nrq9mj7fw";
    };
 
-  propagatedBuildInputs = [ regex langcodes ftfy msgpack mecab-python3 jieba ];
+  propagatedBuildInputs = [
+    regex
+    langcodes
+    ftfy
+    msgpack
+    mecab-python3
+    jieba
+  ];
 
-  # patch to relax version requirements for regex
-  # dependency to prevent break in upgrade
   postPatch = ''
     substituteInPlace setup.py --replace "regex ==" "regex >="
   '';
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    # These languages require additional dictionaries
-    pytest tests -k 'not test_japanese and not test_korean and not test_languages and not test_french_and_related'
-  '';
+  checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # These languages require additional dictionaries that aren't packaged
+    "test_languages"
+    "test_japanese"
+    "test_korean"
+  ];
 
   meta = with lib; {
     description = "A library for looking up the frequencies of words in many languages, based on many sources of data";

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, tcl, tk, incrtcl }:
+{ lib, stdenv, fetchurl, tcl, tk, incrtcl }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "itk-tcl";
   version = "4.1.0";
 
@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1iy964jfgsfnc1agk1w6bbm44x18ily8d4wmr7cc9z9f4acn2r6s";
   };
 
-  buildInputs = [ tcl tk incrtcl ];
+  buildInputs = [ tk incrtcl ];
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-itcl=${incrtcl}/lib"
     "--with-tkinclude=${tk.dev}/include"
@@ -23,13 +22,13 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
     mv $out/lib/itk${version}/* $out/lib
     ln -s libitk${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
-      $out/lib/libitk${stdenv.lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
+      $out/lib/libitk${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
     rmdir $out/lib/itk${version}
   '';
 
   outputs = [ "out" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
     license     = licenses.tcltk;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, writeText }:
+{ lib, stdenv, fetchurl, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.35.0";
+  version = "1.36.1";
 
-  src = with stdenv.lib; fetchurl {
+  src = with lib; fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "1m1f7yaabmfpp3ma394j9nqhx9xv47vpbc48qrbknlq3xhfvqzrs";
+    sha256 = "0ymda3x58a7ic4bwhbkxc7rskkwn164nplxzq9g4w9qnmwcqnsg6";
   };
 
   prePatch = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -12,17 +12,19 @@
 , c-ares
 , abseil-cpp
 , zlib
+, sqlite
+, re2
 }:
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.3";
+  version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "1abx5h6xy0h3mz29ial5si8smkmjzla050d130pcc6dzr4ic642w";
+    sha256 = "0qy96dyd29bjvfhi46y30hli5cvshw8am0spvcv9v43660wbczd7";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -38,6 +40,8 @@ stdenv.mkDerivation rec {
     c-ares
     abseil-cpp
     zlib
+    sqlite
+    re2
   ];
 
   patches = [
@@ -45,7 +49,10 @@ stdenv.mkDerivation rec {
     ./no-double-relative.patch
   ];
 
-  meta = with stdenv.lib; {
+  # 'path' is unavailable: introduced in macOS 10.15
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-D_LIBCPP_DISABLE_AVAILABILITY";
+
+  meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands
@@ -55,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.babariviere ];
+    maintainers = with maintainers; [ babariviere qyliss ];
   };
 }

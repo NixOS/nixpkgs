@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pbr
 , six
 , simplegeneric
@@ -21,11 +22,13 @@
 
 buildPythonPackage rec {
   pname = "WSME";
-  version = "0.10.0";
+  version = "0.11.0";
+
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "965b9ce48161e5c50d84aedcf50dca698f05bf07e9d489201bccaec3141cd304";
+    sha256 = "bd2dfc715bedcc8f4649611bc0c8a238f483dc01cff7102bc1efa6bea207b64b";
   };
 
   nativeBuildInputs = [ pbr ];

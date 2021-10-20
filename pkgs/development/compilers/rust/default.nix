@@ -5,12 +5,16 @@
 , bootstrapHashes
 , selectRustPackage
 , rustcPatches ? []
+, llvmBootstrapForDarwin
+, llvmShared
+, llvmSharedForBuild
+, llvmSharedForHost
+, llvmSharedForTarget
 }:
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
-, CoreFoundation, Security
-, llvmPackages
+, CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild
 , makeRustPlatform
 }: rec {
@@ -31,9 +35,14 @@
       "armv7a" = "armv7";
       "armv7l" = "armv7";
       "armv6l" = "arm";
+      "armv5tel" = "armv5te";
+      "riscv64" = "riscv64gc";
     }.${cpu.name} or cpu.name;
+    vendor_ = platform.rustc.platform.vendor or {
+      "w64" = "pc";
+    }.${vendor.name} or vendor.name;
   in platform.rustc.config
-    or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+    or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
   # Returns the name of the rust target if it is standard, or the json file
   # containing the custom target spec.
@@ -76,16 +85,17 @@
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget;
 
         patches = rustcPatches;
 
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmPackages.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages.stdenv; };
+        stdenv = llvmBootstrapForDarwin.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
       });
       rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
       cargo = self.callPackage ./cargo.nix {
@@ -94,7 +104,7 @@
         inherit CoreFoundation Security;
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
+      rls = self.callPackage ./rls { inherit CoreFoundation Security SystemConfiguration; };
     });
   };
 }

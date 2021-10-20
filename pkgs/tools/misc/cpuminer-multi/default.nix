@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
 , aesni ? stdenv.hostPlatform.aesSupport }:
 
 let
@@ -6,7 +6,7 @@ let
   date = "20160316";
 in
 stdenv.mkDerivation {
-  name = "cpuminer-multi-${date}-${stdenv.lib.strings.substring 0 7 rev}";
+  name = "cpuminer-multi-${date}-${lib.strings.substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "hyc";
@@ -23,11 +23,10 @@ stdenv.mkDerivation {
 
   configureFlags = [ (if aesni then "--enable-aes-ni" else "--disable-aes-ni") ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-algo CPUMiner";
     homepage = "https://github.com/wolf9466/cpuminer-multi";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
     # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27
     platforms = [ "x86_64-linux" ];
   };

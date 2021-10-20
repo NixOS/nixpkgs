@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
+{ lib, stdenv, fetchurl, pkg-config, pruneLibtoolFiles, flex, bison
 , libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
 , nftablesCompat ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "1.8.6";
+  version = "1.8.7";
   pname = "iptables";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    sha256 = "0rvp0k8a72h2snrdx48cfn75bfa0ycrd2xl3kjysbymq7q6gxx50";
+    sha256 = "1w6qx3sxzkv80shk21f63rq41c84irpx68k62m2cv629n1mwj2f1";
   };
 
-  nativeBuildInputs = [ pkgconfig pruneLibtoolFiles flex bison ];
+  nativeBuildInputs = [ pkg-config pruneLibtoolFiles flex bison ];
 
   buildInputs = [ libmnl libnetfilter_conntrack libnfnetlink libnftnl libpcap ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall = optional nftablesCompat ''
+  postInstall = optionalString nftablesCompat ''
     rm $out/sbin/{iptables,iptables-restore,iptables-save,ip6tables,ip6tables-restore,ip6tables-save}
     ln -sv xtables-nft-multi $out/bin/iptables
     ln -sv xtables-nft-multi $out/bin/iptables-restore
@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
-    inherit version;
   };
 }

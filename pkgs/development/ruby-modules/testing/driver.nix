@@ -5,7 +5,7 @@ nix-build -E 'with import <nixpkgs> { }; callPackage ./test.nix {}' --show-trace
 Confusingly, the ideal result ends with something like:
 error: build of ‘/nix/store/3245f3dcl2wxjs4rci7n069zjlz8qg85-test-results.tap.drv’ failed
 */
-{ writeText, lib, callPackage, testFiles, stdenv, ruby }@defs:
+{ writeText, lib, callPackage, testFiles, ruby }@defs:
 let
   testTools = rec {
     test = import ./testing.nix;

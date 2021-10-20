@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "Regina-REXX";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "--libdir=$(out)/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "REXX interpreter";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

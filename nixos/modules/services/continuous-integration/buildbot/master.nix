@@ -93,6 +93,7 @@ in {
         type = types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
+        defaultText = literalDocBook ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
@@ -210,23 +211,24 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.python3Packages.buildbot-full;
-        defaultText = "pkgs.python3Packages.buildbot-full";
+        defaultText = literalExpression "pkgs.python3Packages.buildbot-full";
         description = "Package to use for buildbot.";
-        example = literalExample "pkgs.python3Packages.buildbot";
+        example = literalExpression "pkgs.python3Packages.buildbot";
       };
 
       packages = mkOption {
         default = [ pkgs.git ];
-        example = literalExample "[ pkgs.git ]";
+        defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
 
       pythonPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = pythonPackages: with pythonPackages; [ ];
-        defaultText = "pythonPackages: with pythonPackages; [ ]";
+        defaultText = literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
-        example = literalExample "pythonPackages: with pythonPackages; [ requests ]";
+        example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
       };
     };
   };
@@ -282,5 +284,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
+  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
 }

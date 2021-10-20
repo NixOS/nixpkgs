@@ -1,23 +1,23 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ssmsh";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mgx4q21f6rxih79l0hwgzwafxviz5a33dpvc5k0z172sfw0dmj1";
+    sha256 = "sha256-WZ2glv/f4LwTK/G8QdaVRIAHvgGLPLPL8xjAg/kUokQ=";
   };
 
-  vendorSha256 = "147f02bl3sf073dy2ximbavdcbphdn7djgisla1cyyy4ng6dhf7f";
+  vendorSha256 = "sha256-17fmdsfOrOaySPsXofLzz0+vmiemg9MbnWhRoZ67EuQ=";
 
   doCheck = true;
 
-  buildFlagsArray = [ "-ldflags=-w -s -X main.Version=${version}" ];
+  ldflags = [ "-w" "-s" "-X main.Version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";
     description = "An interactive shell for AWS Parameter Store";
     license = licenses.mit;

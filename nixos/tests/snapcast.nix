@@ -4,9 +4,11 @@ let
   port = 10004;
   tcpPort = 10005;
   httpPort = 10080;
+  tcpStreamPort = 10006;
+  bufferSize = 742;
 in {
   name = "snapcast";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -17,17 +19,30 @@ in {
         port = port;
         tcp.port = tcpPort;
         http.port = httpPort;
+        buffer = bufferSize;
         streams = {
           mpd = {
             type = "pipe";
             location = "/run/snapserver/mpd";
+            query.mode = "create";
           };
           bluetooth = {
             type = "pipe";
             location = "/run/snapserver/bluetooth";
           };
+          tcp = {
+            type = "tcp";
+            location = "127.0.0.1:${toString tcpStreamPort}";
+          };
+          meta = {
+            type = "meta";
+            location = "/mpd/bluetooth/tcp";
+          };
         };
       };
+    };
+    client = {
+      environment.systemPackages = [ pkgs.snapcast ];
     };
   };
 
@@ -42,6 +57,7 @@ in {
     server.wait_until_succeeds("ss -ntl | grep -q ${toString port}")
     server.wait_until_succeeds("ss -ntl | grep -q ${toString tcpPort}")
     server.wait_until_succeeds("ss -ntl | grep -q ${toString httpPort}")
+    server.wait_until_succeeds("ss -ntl | grep -q ${toString tcpStreamPort}")
 
     with subtest("check that pipes are created"):
         server.succeed("test -p /run/snapserver/mpd")
@@ -54,5 +70,12 @@ in {
         server.succeed(
             "curl --fail http://localhost:${toString httpPort}/jsonrpc -d '{json.dumps(get_rpc_version)}'"
         )
+
+    with subtest("test a connection"):
+        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
+        server.wait_until_succeeds(
+            "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
+        )
+        client.wait_until_succeeds("journalctl -o cat -u snapcast-client | grep -q 'buffer: ${toString bufferSize}'")
   '';
 })

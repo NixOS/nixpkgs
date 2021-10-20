@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "teleconsole";
@@ -25,9 +25,8 @@ buildGoPackage rec {
   '';
 
   CGO_ENABLED = 1;
-  buildFlags = [ "-ldflags" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.teleconsole.com/";
     description = "Share your terminal session with people you trust";
     license = licenses.asl20;

@@ -56,7 +56,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.rsync ]";
+        example = literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
 
@@ -67,11 +67,16 @@ in
   config = mkIf cfg.enable {
 
     warnings = optional (cfg.allow != null && cfg.deny != null)
-      ''If `services.incron.allow` is set then `services.incron.deny` will be ignored.'';
+      "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
 
     environment.systemPackages = [ pkgs.incron ];
 
-    security.wrappers.incrontab.source = "${pkgs.incron}/bin/incrontab";
+    security.wrappers.incrontab =
+    { setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.incron}/bin/incrontab";
+    };
 
     # incron won't read symlinks
     environment.etc."incron.d/system" = {

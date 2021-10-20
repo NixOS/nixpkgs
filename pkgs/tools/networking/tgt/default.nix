@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
 , docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.79";
+  version = "1.0.80";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18bp7fcpv7879q3ppdxlqj7ayqmlh5zwrkz8gch6rq9lkmmrklrf";
+    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/sbin/tgt-admin \
-      --replace "#!/usr/bin/perl" "#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}"
+      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
     wrapProgram $out/sbin/tgt-admin --prefix PATH : \
       ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "http://stgt.sourceforge.net/";
     license = licenses.gpl2;

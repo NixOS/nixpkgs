@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, writeText, php, makeWrapper }:
 let
-  version = "2.4.0";
+  version = "2.5.0";
 
   completion = fetchurl {
     url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
-    sha256 = "15d330x6d3fizrm6ckzmdknqg6wjlx5fr87bmkbd5s6a1ihs0g24";
+    sha256 = "sha256-RDygYQzK6NLWrOug7EqnkpuH7Wz1T2Zq/tGNZjoYo5U=";
   };
 
   ini = writeText "php.ini" ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
-    sha256 = "0h5mjxrw4z3648v4wb4pvapz2a1mlmbszgggg4b7bvrrxn3cr78k";
+    sha256 = "sha256-vghT6fRD84SFZgcIcdNE6K2B6x4V0V3PkyS0p14nJ4k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

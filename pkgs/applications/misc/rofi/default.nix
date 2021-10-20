@@ -1,16 +1,35 @@
-{ stdenv, lib, fetchurl
-, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
-, cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
-, bison, flex, librsvg, check
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libxkbcommon
+, pango
+, which
+, git
+, cairo
+, libxcb
+, xcbutil
+, xcbutilwm
+, xcbutilxrm
+, xcb-util-cursor
+, libstartup_notification
+, bison
+, flex
+, librsvg
+, check
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.6.1";
+  version = "1.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/davatorium/rofi/releases/download/${version}/rofi-${version}.tar.gz";
-    sha256 = "04glljqbf9ckkc6x6fv4x1gqmy468n1agya0kd8rxdvz24wzf7cd";
+  src = fetchFromGitHub {
+    owner = "davatorium";
+    repo = "rofi";
+    rev = version;
+    fetchSubmodules = true;
+    sha256 = "03wdy56b3g8p2czb0qydrddyyhj3x037pirnhyqr5qbfczb9a63v";
   };
 
   preConfigure = ''
@@ -19,9 +38,23 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
-    libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    libxkbcommon
+    pango
+    cairo
+    git
+    bison
+    flex
+    librsvg
+    check
+    libstartup_notification
+    libxcb
+    xcbutil
+    xcbutilwm
+    xcbutilxrm
+    xcb-util-cursor
+    which
   ];
 
   doCheck = false;
@@ -30,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke ];
+    maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
   };
 }

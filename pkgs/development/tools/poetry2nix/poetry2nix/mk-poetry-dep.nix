@@ -28,17 +28,17 @@ pythonPackages.callPackage
     }@args:
     let
       inherit (pkgs) stdenv;
-      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi moduleName;
+      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromLegacy fetchFromPypi moduleName;
 
       inherit (import ./pep425.nix {
-        inherit lib python;
+        inherit lib poetryLib python;
         inherit (pkgs) stdenv;
       }) selectWheel
         ;
       fileCandidates =
         let
-          supportedRegex = ("^.*?(" + builtins.concatStringsSep "|" supportedExtensions + ")");
-          matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." ] [ "\\." ] version + ".*$") fname != null;
+          supportedRegex = ("^.*(" + builtins.concatStringsSep "|" supportedExtensions + ")");
+          matchesVersion = fname: builtins.match ("^.*" + builtins.replaceStrings [ "." "+" ] [ "\\." "\\+" ] version + ".*$") fname != null;
           hasSupportedExtension = fname: builtins.match supportedRegex fname != null;
           isCompatibleEgg = fname: ! lib.strings.hasSuffix ".egg" fname || lib.strings.hasSuffix "py${python.pythonVersion}.egg" fname;
         in
@@ -47,7 +47,9 @@ pythonPackages.callPackage
       isSource = source != null;
       isGit = isSource && source.type == "git";
       isUrl = isSource && source.type == "url";
-      isLocal = isSource && source.type == "directory";
+      isDirectory = isSource && source.type == "directory";
+      isFile = isSource && source.type == "file";
+      isLegacy = isSource && source.type == "legacy";
       localDepPath = toPath source.url;
 
       buildSystemPkgs =
@@ -70,7 +72,10 @@ pythonPackages.callPackage
           sourceDist = builtins.filter isSdist fileCandidates;
           eggs = builtins.filter isEgg fileCandidates;
           entries = (if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
-          lockFileEntry = builtins.head entries;
+          lockFileEntry = (
+            if lib.length entries > 0 then builtins.head entries
+            else throw "Missing suitable source/wheel file entry for ${name}"
+          );
           _isEgg = isEgg lockFileEntry;
         in
         rec {
@@ -91,9 +96,13 @@ pythonPackages.callPackage
         "setuptools_scm"
         "setuptools-scm"
         "toml" # Toml is an extra for setuptools-scm
+        "tomli" # tomli is an extra for later versions of setuptools-scm
+        "packaging"
+        "six"
+        "pyparsing"
       ];
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
-      format = if isLocal || isGit || isUrl then "pyproject" else fileInfo.format;
+      format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
     in
     buildPythonPackage {
       pname = moduleName name;
@@ -117,7 +126,7 @@ pythonPackages.callPackage
         baseBuildInputs
         ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
-        ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optional isDirectory buildSystemPkgs
         ++ lib.optional (!__isBootstrap) pythonPackages.poetry
       );
 
@@ -161,7 +170,7 @@ pythonPackages.callPackage
             builtins.fetchGit {
               inherit (source) url;
               rev = source.resolved_reference or source.reference;
-              ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
+              ref = sourceSpec.branch or sourceSpec.rev or (if sourceSpec?tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             }
           )
         else if isUrl then
@@ -169,12 +178,23 @@ pythonPackages.callPackage
             {
               inherit (source) url;
             }
-        else if isLocal then
+        else if isDirectory then
           (poetryLib.cleanPythonSources { src = localDepPath; })
+        else if isFile then
+          localDepPath
+        else if isLegacy then
+          fetchFromLegacy
+            {
+              pname = name;
+              inherit python;
+              inherit (fileInfo) file hash;
+              inherit (source) url;
+            }
         else
           fetchFromPypi {
             pname = name;
             inherit (fileInfo) file hash kind;
+            inherit version;
           };
     }
   )

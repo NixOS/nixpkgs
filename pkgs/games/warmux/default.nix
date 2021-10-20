@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, autoconf, automake
 , zlib, curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
-, SDL_net, SDL_ttf, libunwind, libX11, xorgproto, libxml2, pkgconfig
+, SDL_net, SDL_ttf, libunwind, libX11, xorgproto, libxml2, pkg-config
 , gettext, intltool, libtool, perl
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
   nativeBuildInputs = [
-    autoconf automake gettext intltool libtool pkgconfig
+    autoconf automake gettext intltool libtool pkg-config
   ];
   buildInputs = [
     zlib curl gnutls fribidi libpng SDL SDL_gfx SDL_image SDL_mixer
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ballistics turn-based battle game between teams - unofficial copy";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

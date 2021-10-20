@@ -1,23 +1,27 @@
 { lib, buildPythonPackage, fetchPypi
-, billiard, click, click-didyoumean, click-repl, kombu, pytz, vine
+, billiard, click, click-didyoumean, click-plugins, click-repl, kombu, pytz, vine
 , boto3, case, moto, pytest, pytest-celery, pytest-subtests, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.0.2";
+  version = "5.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "012c814967fe89e3f5d2cf49df2dba3de5f29253a7f4f2270e8fce6b901b4ebf";
+    sha256 = "8d9a3de9162965e97f8e8cc584c67aad83b3f7a267584fa47701ed11c3e0d4b0";
   };
 
+  # click  is only used for the repl, in most cases this shouldn't impact
+  # downstream packages
   postPatch = ''
     substituteInPlace requirements/test.txt \
       --replace "moto==1.3.7" moto
+    substituteInPlace requirements/default.txt \
+      --replace "click>=7.0,<8.0" click
   '';
 
-  propagatedBuildInputs = [ billiard click click-didyoumean click-repl kombu pytz vine ];
+  propagatedBuildInputs = [ billiard click click-didyoumean click-plugins click-repl kombu pytz vine ];
 
   checkInputs = [ boto3 case moto pytest pytest-celery pytest-subtests pytest-timeout ];
 
@@ -38,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/celery/";
     description = "Distributed task queue";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtk2-x11
+{ stdenv, fetchurl, makeWrapper, pkg-config, gtk2, gtk2-x11
 , gtkspell2, aspell
 , gst_all_1, startupnotification, gettext
 , perlPackages, libxml2, nss, nspr, farstream
-, libXScrnSaver, ncurses, avahi, dbus, dbus-glib, intltool, libidn
-, lib, python, libICE, libXext, libSM
+, libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
+, lib, python3, libICE, libXext, libSM
+, libgnt, ncurses
 , cyrus_sasl ? null
 , openssl ? null
 , gnutls ? null
@@ -16,26 +17,27 @@
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
   majorVersion = "2";
-  version = "${majorVersion}.13.0";
+  version = "${majorVersion}.14.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.bz2";
-    sha256 = "13vdqj70315p9rzgnbxjp9c51mdzf1l4jg1kvnylc4bidw61air7";
+    sha256 = "bb45f7c032f9efd6922a5dbf2840995775e5584771b23992d04f6eff7dff5336";
   };
-
-  inherit nss ncurses;
 
   nativeBuildInputs = [ makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
-  buildInputs = [
+  buildInputs = let
+    python-with-dbus = python3.withPackages (pp: with pp; [ dbus-python ]);
+  in [
     aspell startupnotification
     gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     libxml2 nss nspr
-    libXScrnSaver ncurses python
+    libXScrnSaver python-with-dbus
     avahi dbus dbus-glib intltool libidn
     libICE libXext libSM cyrus_sasl
+    libgnt ncurses # optional: build finch - the console UI
   ]
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)
@@ -44,7 +46,7 @@ let unwrapped = stdenv.mkDerivation rec {
   ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
 
 
-  propagatedBuildInputs = [ pkgconfig gettext ]
+  propagatedBuildInputs = [ pkg-config gettext ]
     ++ (with perlPackages; [ perl XMLParser ])
     ++ (lib.optional (stdenv.isLinux) gtk2)
     ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
@@ -60,6 +62,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"
+    "--disable-gevolution"
   ]
   ++ (lib.optionals (cyrus_sasl != null) [ "--enable-cyrus-sasl=yes" ])
   ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"])
@@ -72,7 +75,23 @@ let unwrapped = stdenv.mkDerivation rec {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with stdenv.lib; {
+  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  # In particular, this detects missing python imports in some of the tools.
+  postFixup = let
+    # TODO: python is a script, so it doesn't work as interpreter on darwin
+    binsToTest = lib.optionalString stdenv.isLinux "purple-remote," + "pidgin,finch";
+  in lib.optionalString doInstallCheck ''
+    for f in "''${!outputBin}"/bin/{${binsToTest}}; do
+      echo "Testing: $f --help"
+      "$f" --help
+    done
+  '';
+
+  passthru = {
+    makePluginPath = lib.makeSearchPathOutput "lib" "lib/purple-${majorVersion}";
+  };
+
+  meta = with lib; {
     description = "Multi-protocol instant messaging client";
     homepage = "http://pidgin.im";
     license = licenses.gpl2Plus;

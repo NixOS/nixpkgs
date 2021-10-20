@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, qttools
-, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools
+, alsa-lib, ftgl, libGLU, libjack2, qtbase, rtmidi, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
-  buildInputs = [ alsaLib ftgl libGLU libjack2 qtbase rtmidi ];
+  buildInputs = [ alsa-lib ftgl libGLU libjack2 qtbase rtmidi ];
 
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A MIDI file player that teaches you how to play the piano";
     homepage = "https://github.com/captnfab/PianoBooster";
     license = licenses.gpl3Plus;

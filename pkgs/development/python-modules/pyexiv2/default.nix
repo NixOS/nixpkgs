@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, python, exiv2, scons, boost }:
+{ lib, buildPythonPackage, fetchurl, python, exiv2, scons, boost }:
 
 buildPythonPackage rec {
   pname = "pyexiv2";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   buildInputs = [ python exiv2 scons boost ];
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    platforms = platforms.linux;
     # Likely needs an older boost which does not have `boost_pythonXY` but `boost_python`.
     broken = true; # 2018-06-23
   };

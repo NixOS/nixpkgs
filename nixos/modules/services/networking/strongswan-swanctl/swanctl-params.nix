@@ -1273,7 +1273,7 @@ in {
         provided the user is prompted during an interactive
         <literal>--load-creds</literal> call.
       '';
-    } ''Definition for a private key that's stored on a token/smartcard/TPM.'';
+    } "Definition for a private key that's stored on a token/smartcard/TPM.";
 
   };
 

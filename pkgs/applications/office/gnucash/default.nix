@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -11,7 +11,8 @@ let
     name = perl.name + "-wrapper-for-gnucash";
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ perl ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
-    phases = [ "installPhase" ];
+    dontUnpack = true;
+
     installPhase = ''
       mkdir -p $out/bin
       for script in ${perl}/bin/*; do
@@ -25,17 +26,26 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.2";
+  version = "4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
+    sha256 = "0csp8iddhc901vv09gl5lj970g6ili696vwj4vdpkiprp7gh26r5";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
+  patches = [
+    # Fixes a warning about an initialized variable that kills enableDebugging gnucash builds on nix.
+    # This will most likely be part of the 4.7 release, it will be safe to remove then.
+    (fetchpatch {
+      url = "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
+      sha256 = "092957c8jqj4v70fv0ia1wpgl6x34hbwjrichxfbk5ja8l6535gc";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
+    boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
     webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
@@ -64,7 +74,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   # TODO: The following tests FAILED:
@@ -82,8 +92,6 @@ stdenv.mkDerivation rec {
   '';
   doCheck = false;
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Personal and small-business financial-accounting application";
 
@@ -98,11 +106,11 @@ stdenv.mkDerivation rec {
       accounting principles to ensure balanced books and accurate reports.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "http://www.gnucash.org/";
 
-    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.domenkozar ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

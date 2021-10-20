@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "re2";
-  version = "20201001";
+  version = "2021-09-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
-    rev = "2020-10-01";
-    sha256 = "0a5f7av1pk6p3jxc2w6prl00lyrplap97m68hnhw7jllnwljk0bx";
+    rev = version;
+    sha256 = "1fyhypw345xz8zdh53gz6j1fwgrx0gszk1d349ja37dpxh4jp2jh";
   };
 
   preConfigure = ''
@@ -17,9 +17,13 @@ stdenv.mkDerivation {
     substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
   '';
 
+  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+
   preCheck = "patchShebangs runtests";
   doCheck = true;
   checkTarget = "test";
+
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
@@ -27,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/google/re2";
     description = "An efficient, principled regular expression library";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
   };
 }

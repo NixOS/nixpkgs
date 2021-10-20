@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, git, fetchFromGitHub
+{ lib, buildEnv, git, fetchFromGitHub
 , gitwebTheme ? false }:
 
 let
@@ -15,13 +15,13 @@ let
     sha256 = "17hypq6jvhy6zhh26lp3nyi52npfd5wy5752k6sq0shk4na2acqi";
   };
 in buildEnv {
-  name = "gitweb-${stdenv.lib.getVersion git}";
+  name = "gitweb-${lib.getVersion git}";
 
   ignoreCollisions = true;
-  paths = stdenv.lib.optional gitwebTheme gitwebThemeSrc
+  paths = lib.optional gitwebTheme gitwebThemeSrc
        ++ [ "${git}/share/gitweb" ];
 
   meta = git.meta // {
-    maintainers = with stdenv.lib.maintainers; [ gnidorah ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

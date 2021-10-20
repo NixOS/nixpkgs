@@ -1,12 +1,13 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ed, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "patch-2.7.6";
+  pname = "patch";
+  version = "2.7.6";
 
   src = fetchurl {
-    url = "mirror://gnu/patch/${name}.tar.xz";
+    url = "mirror://gnu/patch/patch-${version}.tar.xz";
     sha256 = "1zfqy4rdcy279vwn2z1kbv19dcfw25d2aqy9nzvdkq5bjzd0nqdc";
   };
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 
@@ -50,9 +51,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://savannah.gnu.org/projects/patch";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

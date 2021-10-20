@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
+{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, fetchpatch }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
   version = "2.1.27";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext libkrb5 ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
 

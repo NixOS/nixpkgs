@@ -62,7 +62,11 @@ in
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
       export QTCOMPOSE=${xorg.libX11}/share/X11/locale
       export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
+      # Allows `conda activate` to work properly
+      source ${installationPath}/etc/profile.d/conda.sh
     '';
+
+    runScript = "bash -l";
 
     meta = {
       description = "Conda is a package manager for Python";

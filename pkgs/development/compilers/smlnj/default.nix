@@ -1,11 +1,9 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, Libsystem }:
 let
   version = "110.95";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
 
-  isArch64 = stdenv.system == "x86_64-linux";
-
-  arch = if isArch64
+  arch = if stdenv.is64bit
     then "64"
     else "32";
 
@@ -14,7 +12,7 @@ let
   boot64 = { url = "${baseurl}/boot.amd64-unix.tgz";
              sha256 = "1zn96a83kb6bn6228yfjsvb58m2qxw9k4j3qz0p9c8za479w4ch6"; };
 
-  bootBinary = if isArch64
+  bootBinary = if stdenv.is64bit
                then boot64
                else boot32;
 
@@ -53,6 +51,10 @@ in stdenv.mkDerivation {
     sed -i '/PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
     patch --verbose config/_heap2exec ${./heap2exec.diff}
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Locate standard headers like <unistd.h>
+    substituteInPlace base/runtime/config/gen-posix-names.sh \
+      --replace "\$SDK_PATH/usr" "${Libsystem}"
   '';
 
   unpackPhase = ''
@@ -79,11 +81,11 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Standard ML of New Jersey, a compiler";
     homepage    = "http://smlnj.org";
     license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "i686-linux" ];
+    platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

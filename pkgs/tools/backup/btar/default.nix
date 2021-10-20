@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, librsync }:
+{ lib, stdenv, fetchurl, fetchpatch, librsync }:
 
 stdenv.mkDerivation rec {
-  name = "btar-1.1.1";
+  pname = "btar";
+  version = "1.1.1";
+
   src = fetchurl {
-    url = "http://vicerveza.homeunix.net/~viric/soft/btar/${name}.tar.gz";
+    url = "https://vicerveza.homeunix.net/~viric/soft/btar/btar-${version}.tar.gz";
     sha256 = "0miklk4bqblpyzh1bni4x6lqn88fa8fjn15x1k1n8bxkx60nlymd";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/btar/btar-librsync.patch?rev=2";
+      sha256 = "1awqny9489vsfffav19s73xxg26m7zrhvsgf1wxb8c2izazwr785";
+    })
+  ];
+
   buildInputs = [ librsync ];
 
-  installPhase = "make install PREFIX=$out";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tar-compatible block-based archiver";
-    license = stdenv.lib.licenses.gpl3Plus;
-    homepage = "http://viric.name/cgi-bin/btar";
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = lib.licenses.gpl3Plus;
+    homepage = "https://viric.name/cgi-bin/btar";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ viric ];
   };
 }

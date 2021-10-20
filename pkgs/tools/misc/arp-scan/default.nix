@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     URI
   ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perlPackages.perl libpcap makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  buildInputs = [ perlPackages.perl libpcap ];
 
   postInstall = ''
     for name in get-{oui,iab}; do
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ARP scanning and fingerprinting tool";
     longDescription = ''
       Arp-scan is a command-line tool that uses the ARP protocol to discover
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.nta-monitor.com/wiki/index.php/Arp-scan_Documentation";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor mikoim ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ bjornfor mikoim r-burns ];
   };
 }

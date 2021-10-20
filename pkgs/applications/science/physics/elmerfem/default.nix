@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, git, gfortran, openmpi, blas, liblapack, qt4, qwt6_qt4, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, qt4, qwt6_qt4, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ cmake pkg-config git ];
-  buildInputs = [ gfortran openmpi blas liblapack qt4 qwt6_qt4 ];
+  nativeBuildInputs = [ cmake gfortran pkg-config git ];
+  buildInputs = [ mpi blas liblapack qt4 qwt6_qt4 ];
 
   preConfigure = ''
     patchShebangs ./
@@ -36,9 +36,7 @@ stdenv.mkDerivation rec {
     ./fix-cmake.patch
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://elmerfem.org/";
     description = "A finite element software for multiphysical problems";
     platforms = platforms.unix;

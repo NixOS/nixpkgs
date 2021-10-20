@@ -2,15 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "kdev-php";
-  version = "5.6.0";
+  version = "5.6.2";
 
   src = fetchurl {
     url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "1j5m9mhjzp2r4wdwnnnckms8ic536s6y0iyry2zdndbsy215hqlz";
+    sha256 = "sha256-P7u/KIf/1YkJ2uWsuVThILP87vaYSbHpx5CtnSR3YbU=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ kdevelop-pg-qt threadweaver ktexteditor kdevelop-unwrapped ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     maintainers = [ maintainers.aanderse ];

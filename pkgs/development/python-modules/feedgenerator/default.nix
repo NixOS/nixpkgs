@@ -1,23 +1,44 @@
-{ stdenv, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, glibcLocales
+, pytestCheckHook
+, pythonOlder
+, pytz
+, six
+}:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "1.9.1";
+  version = "1.9.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m6fjnrx3sd0bm6pnbhxxx5ywlwqh8bx0lka386kj28mg3fmm2m2";
+    sha256 = "sha256-sG1pQej9aiyecXkQeehsvno3iMciRKzAbwWTtJzaN5s=";
   };
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [
+    glibcLocales
+  ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ six pytz ];
+  propagatedBuildInputs = [
+    pytz
+    six
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Standalone version of django.utils.feedgenerator, compatible with Py3k";
-    homepage = "https://github.com/dmdm/feedgenerator-py3k.git";
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "feedgenerator" ];
+
+  meta = with lib; {
+    description = "Standalone version of Django's feedgenerator module";
+    homepage = "https://github.com/getpelican/feedgenerator";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }

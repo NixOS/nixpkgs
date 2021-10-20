@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qttools, alsaLib, drumstick, qtbase, qtsvg }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, qttools, alsa-lib, drumstick, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0bzm6vzlm32kjrgn1nvp096b2d41ybys2sk145nhy992wg56v32s";
+    sha256 = "1ln0nm24w6bj7wc8cay08j5azzznigd39cbbw3h4skg6fxd8p0s7";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
-  buildInputs = [ alsaLib drumstick qtbase qtsvg ];
+  buildInputs = [ alsa-lib drumstick qtbase qtsvg ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     homepage = "https://kmetronome.sourceforge.io/";
     description = "ALSA MIDI metronome with Qt interface";
     license = licenses.gpl2Plus;

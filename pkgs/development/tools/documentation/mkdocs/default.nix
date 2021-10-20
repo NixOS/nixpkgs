@@ -1,52 +1,67 @@
-{ stdenv, lib, python3, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mkdocs";
-  version = "1.0.4";
+  version = "1.2.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "mkdocs";
-    repo = "mkdocs";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "1x35vgiskgz4wwrvi4m1mri5wlphf15p90fr3rxsy5bf19v3s9hs";
+    sha256 = "sha256-JF3Zz1ObxeKsIF0pa8duJxqjLgMvmWsWMApHT43Z+EY=";
   };
 
-  checkInputs = [
-    nose nose-exclude mock
-  ];
-
-  NOSE_EXCLUDE_TESTS = lib.concatStringsSep ";" [
-    "mkdocs.tests.gh_deploy_tests.TestGitHubDeploy"
-    "mkdocs.tests.config.config_tests.ConfigTests"
-    "mkdocs.tests.config.config_options_tests.DirTest"
-  ];
-
-  checkPhase = "nosetests mkdocs";
-
   propagatedBuildInputs = [
-    tornado
-    livereload
     click
-    pyyaml
-    markdown
     jinja2
-    backports_tempfile
+    markdown
+    mergedeep
+    pyyaml
+    pyyaml-env-tag
+    ghp-import
+    importlib-metadata
+    watchdog
+    packaging
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    Babel
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # Remove test due to missing requirement
+    rm mkdocs/tests/theme_tests.py
+  '';
+
+  pytestFlagsArray = [ "mkdocs/tests/*.py" ];
+
+  disabledTests = [
+    # Don't start a test server
+    "testing_server"
+  ];
+
+  pythonImportsCheck = [ "mkdocs" ];
+
+  meta = with lib; {
     description = "Project documentation with Markdown / static website generator";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's
       geared towards building project documentation. Documentation source files
       are written in Markdown, and configured with a single YAML configuration file.
-      
-      MkDocs can also be used to generate general-purpose Websites.
+
+      MkDocs can also be used to generate general-purpose websites.
     '';
     homepage = "http://mkdocs.org/";
-    license = lib.licenses.bsd2;
+    license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.rkoe ];
+    maintainers = with maintainers; [ rkoe ];
   };
 }

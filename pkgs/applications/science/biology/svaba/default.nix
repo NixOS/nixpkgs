@@ -1,4 +1,4 @@
-{ stdenv, zlib, bzip2, lzma, fetchFromGitHub } :
+{ lib, stdenv, zlib, bzip2, xz, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ zlib bzip2 lzma ];
+  buildInputs = [ zlib bzip2 xz ];
 
   installPhase = ''
     runHook preInstall
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Structural variant and INDEL caller for DNA sequencing data, using genome-wide local assembly";
     license = licenses.gpl3;
     homepage = "https://github.com/walaj/svaba";

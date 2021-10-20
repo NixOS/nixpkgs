@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, pythonPackages, makeDesktopItem }:
+{ lib, fetchurl, pythonPackages, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "winpdb-1.4.8";
+  pname = "winpdb";
+  version = "1.4.8";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://winpdb.googlecode.com/files/${name}.tar.gz";
+    url = "https://winpdb.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "0vkpd24r40j928vc04c721innv0168sbllg97v4zw10adm24d8fs";
   };
 
@@ -36,7 +37,10 @@ pythonPackages.buildPythonApplication rec {
     cp artwork/winpdb-icon.svg "$out"/share/icons/winpdb.svg
   '';
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "Platform independent Python debugger";
     longDescription = ''
       Winpdb is a platform independent GPL Python debugger with support for

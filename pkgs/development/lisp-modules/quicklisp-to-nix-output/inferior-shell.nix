@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''inferior-shell'';
-  version = ''20200925-git'';
+  baseName = "inferior-shell";
+  version = "20200925-git";
 
   parasites = [ "inferior-shell/test" ];
 
-  description = ''spawn local or remote processes and shell pipes'';
+  description = "spawn local or remote processes and shell pipes";
 
   deps = [ args."alexandria" args."closer-mop" args."fare-mop" args."fare-quasiquote" args."fare-quasiquote-extras" args."fare-quasiquote-optima" args."fare-quasiquote-readtable" args."fare-utils" args."hu_dot_dwim_dot_stefil" args."introspect-environment" args."iterate" args."lisp-namespace" args."named-readtables" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_quasiquote" args."trivia_dot_trivial" args."trivial-cltl2" args."type-i" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/inferior-shell/2020-09-25/inferior-shell-20200925-git.tgz'';
-    sha256 = ''1hykybcmdpcjk0irl4f1lmqc4aawpp1zfvh27qp6mldsibra7l80'';
+    url = "http://beta.quicklisp.org/archive/inferior-shell/2020-09-25/inferior-shell-20200925-git.tgz";
+    sha256 = "1hykybcmdpcjk0irl4f1lmqc4aawpp1zfvh27qp6mldsibra7l80";
   };
 
   packageName = "inferior-shell";

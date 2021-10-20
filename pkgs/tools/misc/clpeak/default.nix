@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ocl-icd, opencl-clhpp }:
+{ lib, stdenv, fetchFromGitHub, cmake, ocl-icd, opencl-clhpp }:
 
 stdenv.mkDerivation rec {
   pname = "clpeak";
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocl-icd opencl-clhpp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which profiles OpenCL devices to find their peak capacities";
     homepage = "https://github.com/krrishnarraj/clpeak/";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

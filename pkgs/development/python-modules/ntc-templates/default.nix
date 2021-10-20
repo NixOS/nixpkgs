@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
+, poetry-core
 , textfsm
 , pytestCheckHook
 , ruamel_yaml
@@ -10,22 +11,36 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "1.6.0";
+  version = "2.3.2";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "dc27599b0c5f3bb6ff23049e781b5dab2849c2c3";  # not tagged
-    sha256 = "1vg5y5c51vc9dj3b8qcffh6dz85ri11zb1azxmyvgbq86pcvbx9f";
+    rev = "v${version}";
+    sha256 = "0sga86ajbh3a8wsb7q5mxzxhlg4fds8pr33ybjgi1sda4bvp2dvp";
   };
 
-  propagatedBuildInputs = [ textfsm ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkInputs = [ pytestCheckHook ruamel_yaml yamllint ];
+  propagatedBuildInputs = [
+    textfsm
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    ruamel_yaml
+    yamllint
+  ];
 
   # https://github.com/networktocode/ntc-templates/issues/743
-  disabledTests = [ "test_raw_data_against_mock" "test_verify_parsed_and_reference_data_exists" ];
+  disabledTests = [
+    "test_raw_data_against_mock"
+    "test_verify_parsed_and_reference_data_exists"
+  ];
 
   meta = with lib; {
     description = "TextFSM templates for parsing show commands of network devices";

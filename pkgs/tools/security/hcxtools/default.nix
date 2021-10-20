@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, curl, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, curl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
-  version = "6.0.3";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = pname;
     rev = version;
-    sha256 = "0s9l5mvzcv6hnj7h28piabnm66b09hk2l57vb85ny35w99hzpkc0";
+    sha256 = "sha256-C6nAZkkdtBSv4WDxoXPsHzcGglB8PEX3ioFaTydiHsU=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl openssl zlib ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for capturing wlan traffic and conversion to hashcat and John the Ripper formats";
     homepage = "https://github.com/ZerBea/hcxtools";
     license = licenses.mit;

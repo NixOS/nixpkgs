@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline, gettext, ncurses }:
+{ lib, stdenv, fetchurl, readline, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "gnu-apl";
@@ -12,14 +12,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline gettext ncurses ];
 
   # Needed with GCC 8
-  NIX_CFLAGS_COMPILE = with stdenv.lib; toString ((optionals stdenv.cc.isGNU [
+  NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"
     "-Wno-error=format-truncation"
+    # Needed with GCC 10
+    "-Wno-error=maybe-uninitialized"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
 
@@ -28,13 +30,13 @@ stdenv.mkDerivation rec {
     find $out/share/doc/support-files -name 'Makefile*' -delete
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free interpreter for the APL programming language";
     homepage    = "https://www.gnu.org/software/apl/";
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
     platforms   = with platforms; linux ++ darwin;
-    inherit version;
+    mainProgram = "apl";
 
     longDescription = ''
       GNU APL is a free interpreter for the programming language APL, with an

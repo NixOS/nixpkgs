@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub , alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
-, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkgconfig, zlib, xorg
+{ lib, stdenv, fetchFromGitHub , alsa-lib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
+, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkg-config, zlib, xorg
 }:
 
 assert stdenv ? glibc;
@@ -16,11 +16,11 @@ stdenv.mkDerivation  rec {
     sha256 = "0bgcc5fbgwpdjircq00wlii30pakf45yzligpbnf02a554hh4j01";
   };
   buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU libGL
+    alsa-lib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU libGL
     minixml zlib xorg.libpthreadstubs pcre
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   patchPhase = ''
     substituteInPlace src/Misc/Config.cpp --replace /usr $out
@@ -31,7 +31,7 @@ stdenv.mkDerivation  rec {
 
   cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";
     longDescription = ''
       Yoshimi delivers the same synthesizer capabilities as

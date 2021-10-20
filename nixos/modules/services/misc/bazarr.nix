@@ -64,6 +64,7 @@ in
 
     users.users = mkIf (cfg.user == "bazarr") {
       bazarr = {
+        isSystemUser = true;
         group = cfg.group;
         home = "/var/lib/${config.systemd.services.bazarr.serviceConfig.StateDirectory}";
       };

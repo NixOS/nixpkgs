@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''chipz'';
-  version = ''20190202-git'';
+  baseName = "chipz";
+  version = "20190202-git";
 
-  description = ''A library for decompressing deflate, zlib, and gzip data'';
+  description = "A library for decompressing deflate, zlib, and gzip data";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/chipz/2019-02-02/chipz-20190202-git.tgz'';
-    sha256 = ''1vk8nml2kvkpwydcnm49gz2j9flvl8676kbvci5qa7qm286dhn5a'';
+    url = "http://beta.quicklisp.org/archive/chipz/2019-02-02/chipz-20190202-git.tgz";
+    sha256 = "1vk8nml2kvkpwydcnm49gz2j9flvl8676kbvci5qa7qm286dhn5a";
   };
 
   packageName = "chipz";

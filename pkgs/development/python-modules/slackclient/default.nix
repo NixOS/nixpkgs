@@ -1,55 +1,61 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{ lib
 , aiohttp
-, black
+, buildPythonPackage
 , codecov
+, fetchFromGitHub
 , flake8
 , isPy3k
 , mock
+, psutil
+, pytest-cov
 , pytest-mock
 , pytestCheckHook
-, pytestcov
-, pytestrunner
+, pytest-runner
 , requests
 , responses
 , six
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
-  pname = "python-slackclient";
-  version = "2.5.0";
+  pname = "slackclient";
+  version = "2.9.3";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "slackapi";
-    repo   = pname;
-    rev    = version;
-    sha256 = "1ngj1mivbln19546195k400w9yaw69g0w6is7c75rqwyxr8wgzsk";
+    owner = "slackapi";
+    repo = "python-slack-sdk";
+    rev = "v${version}";
+    sha256 = "1rfb7izgddv28ag37gdnv3sd8z2zysrxs7ad8x20x690zshpaq16";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    websocket_client
+    websocket-client
     requests
     six
   ];
 
   checkInputs = [
-    black
     codecov
     flake8
     mock
+    psutil
+    pytest-cov
     pytest-mock
     pytestCheckHook
-    pytestcov
-    pytestrunner
+    pytest-runner
     responses
   ];
 
-  meta = with stdenv.lib; {
+  # Exclude tests that requires network features
+  pytestFlagsArray = [ "--ignore=integration_tests" ];
+  disabledTests = [ "test_start_raises_an_error_if_rtm_ws_url_is_not_returned" ];
+
+  pythonImportsCheck = [ "slack" ];
+
+  meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 let
   playerglobal_ver = "27.0";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ jre ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
   postPatch = ''
     shopt -s extglob
@@ -38,16 +38,16 @@ in stdenv.mkDerivation rec {
     for i in $out/bin/!(aasdoc|acompc|amxmlc); do
       wrapProgram $i \
         --set FLEX_HOME $t \
-        --set PLAYERGLOBAL_HOME $t/frameworks/libs/player/ 
+        --set PLAYERGLOBAL_HOME $t/frameworks/libs/player/
     done
 
     mkdir -p $t/frameworks/libs/player/${playerglobal_ver}/
     cp ${playerglobal} $t/frameworks/libs/player/${playerglobal_ver}/playerglobal.swc
   '';
-  
-  fixupPhase = ":";
 
-  meta = with stdenv.lib; {
+  dontFixup = true;
+
+  meta = with lib; {
     description = "Flex SDK for Adobe Flash / ActionScript";
     homepage = "https://flex.apache.org/";
     license = with licenses; [ asl20 ];

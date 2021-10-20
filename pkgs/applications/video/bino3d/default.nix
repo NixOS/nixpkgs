@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
+{ mkDerivation, lib, fetchurl, pkg-config, ffmpeg, glew, libass, openal, qtbase }:
 
 mkDerivation rec {
   pname = "bino";
@@ -9,7 +9,7 @@ mkDerivation rec {
     sha256 = "04yl7ibnhajlli4a5x77az8jxbzw6b2wjay8aa6px551nmiszn9k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ffmpeg glew libass openal qtbase ];
 

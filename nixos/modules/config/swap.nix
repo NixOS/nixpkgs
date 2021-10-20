@@ -114,6 +114,28 @@ let
         '';
       };
 
+      discardPolicy = mkOption {
+        default = null;
+        example = "once";
+        type = types.nullOr (types.enum ["once" "pages" "both" ]);
+        description = ''
+          Specify the discard policy for the swap device. If "once", then the
+          whole swap space is discarded at swapon invocation. If "pages",
+          asynchronous discard on freed pages is performed, before returning to
+          the available pages pool. With "both", both policies are activated.
+          See swapon(8) for more information.
+        '';
+      };
+
+      options = mkOption {
+        default = [ "defaults" ];
+        example = [ "nofail" ];
+        type = types.listOf types.nonEmptyStr;
+        description = ''
+          Options used to mount the swap.
+        '';
+      };
+
       deviceName = mkOption {
         type = types.str;
         internal = true;
@@ -185,8 +207,6 @@ in
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            # If swap is encrypted, depending on rngd resolves a possible entropy starvation during boot
-            after = mkIf (config.security.rngd.enable && sw.randomEncryption.enable) [ "rngd.service" ];
             path = [ pkgs.util-linux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             script =
@@ -204,7 +224,7 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${optionalString (sw.discardPolicy != null) "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

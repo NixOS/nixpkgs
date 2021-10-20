@@ -1,5 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, pytestpep8
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
 , pytest
 , pyflakes
 }:
@@ -16,8 +15,9 @@ buildPythonPackage rec {
     sha256 = "bf070c5485dad82d5b5f5d0eb08d269737e378492d9a68f5223b0a90924c7754";
   };
 
-  checkInputs = [ pytestpep8 pytest ];
-  propagatedBuildInputs = [ pytest pyflakes ];
+  buildInputs = [ pytest ];
+  propagatedBuildInputs = [ pyflakes ];
+  checkInputs = [ pytest ];
 
   # no longer passes
   doCheck = false;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     py.test test_flakes.py -k 'not test_syntax_error'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-flakes";
     description = "pytest plugin to check source code with pyflakes";

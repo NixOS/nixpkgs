@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -12,18 +12,28 @@
 , wingpanel
 , accountsservice
 , libgee
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-session";
-  version = "unstable-2020-09-13";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "e65c95f46adbfd598ad61933394d7bc3c5998278";
-    sha256 = "sha256-QKOfgAc6pDQYpETrFunZB6+rF1P8XIf0pjft/t9aWW0=";
+    rev = version;
+    sha256 = "0hww856qjl4kjmmksd5gp8bc5vj4fhs2s9fmbnpbf88lg5ds0wv0";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/wingpanel-indicator-session/pull/162
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-session/commit/e85032da8e923df4589dc75ccded10026b6c1cd7.patch";
+      sha256 = "139b2zbc6qjaw41nwfjkqv4npahkzryv4p5m6v10273clv6l72ng";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -34,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -43,14 +53,15 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     wingpanel
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-session";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

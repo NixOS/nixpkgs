@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, darwin, lib
+{ stdenv, fetchurl, pkg-config, darwin, lib
 , zlib, ghostscript, imagemagick, plotutils, gd
 , libjpeg, libwebp, libiconv
 }:
 
 stdenv.mkDerivation rec {
-  name = "pstoedit-3.75";
+  pname = "pstoedit";
+  version = "3.75";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pstoedit/${name}.tar.gz";
+    url = "mirror://sourceforge/pstoedit/pstoedit-${version}.tar.gz";
     sha256 = "1kv46g2wsvsvcngkavxl5gnw3l6g5xqnh4kmyx4b39a01d8xiddp";
   };
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   patches = [ ./pstoedit-gs-9.22-compat.patch  ];
 
   outputs = [ "out" "dev" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     libiconv ApplicationServices
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/pstoedit.pc.in --replace '@LIBPNG_LDFLAGS@' ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Translates PostScript and PDF graphics into other vector formats";
     homepage = "https://sourceforge.net/projects/pstoedit/";
     license = licenses.gpl2;

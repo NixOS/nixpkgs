@@ -1,12 +1,12 @@
-{stdenv, fetchurl, java, makeWrapper}:
+{lib, stdenv, fetchurl, java, makeWrapper}:
 let
   s = # Generated upstream information
   rec {
     baseName="apache-jena";
-    version = "3.7.0";
+    version = "4.2.0";
     name="${baseName}-${version}";
     url="http://archive.apache.org/dist/jena/binaries/apache-jena-${version}.tar.gz";
-    sha256 = "12w125hlhcib23cckk77cx7p9rzs57dbmmn90f7v8107d437j4mq";
+    sha256 = "1yiqlsp1g2fladal8mj164b9s0qsl5csllg54p7x7w63wf7gixnq";
   };
   buildInputs = [
     makeWrapper
@@ -26,10 +26,10 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''RDF database'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "RDF database";
+    license = lib.licenses.asl20;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://jena.apache.org";
     downloadPage = "http://archive.apache.org/dist/jena/binaries/";
     updateWalker = true;

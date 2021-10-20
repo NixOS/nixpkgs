@@ -53,15 +53,14 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.logstash;
-        defaultText = "pkgs.logstash";
-        example = literalExample "pkgs.logstash";
+        defaultText = literalExpression "pkgs.logstash";
         description = "Logstash package to use.";
       };
 
       plugins = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExample "[ pkgs.logstash-contrib ]";
+        example = literalExpression "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
       };
 
@@ -100,14 +99,16 @@ in
 
       inputConfig = mkOption {
         type = types.lines;
-        default = ''generator { }'';
+        default = "generator { }";
         description = "Logstash input configuration.";
-        example = ''
-          # Read from journal
-          pipe {
-            command => "''${pkgs.systemd}/bin/journalctl -f -o json"
-            type => "syslog" codec => json {}
-          }
+        example = literalExpression ''
+          '''
+            # Read from journal
+            pipe {
+              command => "''${pkgs.systemd}/bin/journalctl -f -o json"
+              type => "syslog" codec => json {}
+            }
+          '''
         '';
       };
 
@@ -131,7 +132,7 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = ''stdout { codec => rubydebug }'';
+        default = "stdout { codec => rubydebug }";
         description = "Logstash output configuration.";
         example = ''
           redis { host => ["localhost"] data_type => "list" key => "logstash" codec => json }
@@ -159,10 +160,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.logstash = with pkgs; {
+    systemd.services.logstash = {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-      environment = { JAVA_HOME = jre; };
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';

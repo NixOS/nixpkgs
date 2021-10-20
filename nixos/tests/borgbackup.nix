@@ -36,7 +36,7 @@ let
 
 in {
   name = "borgbackup";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 

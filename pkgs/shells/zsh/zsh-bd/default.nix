@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub}:
+{ lib, stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   pname = "zsh-bd";
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Jump back to a specific directory, without doing `cd ../../..` ";
     homepage = "https://github.com/Tarrasch/zsh-bd";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.olejorgenb ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.olejorgenb ];
   };
 }

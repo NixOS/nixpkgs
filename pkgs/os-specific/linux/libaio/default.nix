@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "0.3.112";
@@ -18,18 +18,18 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "prefix=${placeholder ''out''}"
-  ];
+    "prefix=${placeholder "out"}"
+  ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
 
-  hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
+  hardeningDisable = lib.optional (stdenv.isi686) "stackprotector";
 
   checkTarget = "partcheck"; # "check" needs root
 
   meta = {
     description = "Library for asynchronous I/O in Linux";
     homepage = "http://lse.sourceforge.net/io/aio.html";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ ];
   };
 }

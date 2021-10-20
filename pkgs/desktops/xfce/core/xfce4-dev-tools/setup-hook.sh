@@ -1,5 +1,5 @@
 xdtEnvHook() {
-    addToSearchPath ACLOCAL_PATH $1/share/xfce4/dev-tools/m4macros
+    addToSearchPath ACLOCAL_PATH $1/share/aclocal
 }
 
 envHooks+=(xdtEnvHook)

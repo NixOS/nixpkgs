@@ -1,22 +1,55 @@
-{ stdenv, fetchurl, pkgconfig, gettext, m4, intltool, libxmlxx, keybinder
-, gtk2, libX11, libfm, libwnck, libXmu, libXpm, cairo, gdk-pixbuf, gdk-pixbuf-xlib
-, menu-cache, lxmenu-data, wirelesstools, curl
-, supportAlsa ? false, alsaLib
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, m4
+, intltool
+, libxmlxx
+, keybinder
+, gtk2
+, libX11
+, libfm
+, libwnck2
+, libXmu
+, libXpm
+, cairo
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, menu-cache
+, lxmenu-data
+, wirelesstools
+, curl
+, supportAlsa ? false, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
-  name = "lxpanel-0.10.0";
+  pname = "lxpanel";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxde/${name}.tar.xz";
-    sha256 = "0zis3b815p375s6mymhf5sn1a0c1xv0ixxzb0mh3fqhrby6cqy26";
+    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
+    sha256 = "sha256-HjGPV9fja2HCOlBNA9JDDHja0ULBgERRBh8bPqVEHug=";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext m4 intltool libxmlxx ];
+  nativeBuildInputs = [ pkg-config gettext m4 intltool libxmlxx ];
   buildInputs = [
-    keybinder gtk2 libX11 libfm libwnck libXmu libXpm cairo gdk-pixbuf gdk-pixbuf-xlib.dev
-    menu-cache lxmenu-data m4 wirelesstools curl
-  ] ++ stdenv.lib.optional supportAlsa alsaLib;
+    keybinder
+    gtk2
+    libX11
+    libfm
+    libwnck2
+    libXmu
+    libXpm
+    cairo
+    gdk-pixbuf
+    gdk-pixbuf-xlib.dev
+    menu-cache
+    lxmenu-data
+    m4
+    wirelesstools
+    curl
+  ] ++ lib.optional supportAlsa alsa-lib;
 
   postPatch = ''
     substituteInPlace src/Makefile.in \
@@ -25,11 +58,11 @@ stdenv.mkDerivation rec {
       --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight X11 desktop panel for LXDE";
     homepage = "https://lxde.org/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.ryneeverett ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.ryneeverett ];
+    platforms = platforms.linux;
   };
 }

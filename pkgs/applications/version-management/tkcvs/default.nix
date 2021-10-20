@@ -1,4 +1,4 @@
-{stdenv, fetchurl, tcl, tk}:
+{lib, stdenv, fetchurl, tcl, tk}:
 
 stdenv.mkDerivation
 {
@@ -22,7 +22,7 @@ stdenv.mkDerivation
   meta = {
     homepage = "https://tkcvs.sourceforge.io";
     description = "TCL/TK GUI for cvs and subversion";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

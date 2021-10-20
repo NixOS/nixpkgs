@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   # proto_path. By default the current directory is automatically added to the
   # proto_path. I tried using --proto_path ${./.} ${./simple.proto} and it did
   # not work because they end up in the store at different locations.
-  installPhase = ":";
+  dontInstall = true;
   buildPhase = ''
     mkdir $out
 

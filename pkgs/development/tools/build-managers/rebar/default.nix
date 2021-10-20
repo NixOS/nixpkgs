@@ -1,12 +1,8 @@
-{ stdenv, fetchurl, erlang }:
+{ lib, stdenv, fetchurl, erlang }:
 
-
-let
-  version = "2.6.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rebar";
-  inherit version;
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar/archive/${version}.tar.gz";
@@ -35,7 +31,8 @@ stdenv.mkDerivation {
       variety of locations (git, hg, etc).
       '';
 
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.beam.members;
   };
 }

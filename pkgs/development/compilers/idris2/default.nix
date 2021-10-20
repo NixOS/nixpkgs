@@ -1,41 +1,55 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, clang, chez
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, clang
+, chez
+, gmp
+, zsh
 }:
+
+# NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
 
 # Uses scheme to bootstrap the build of idris2
 stdenv.mkDerivation rec {
   pname = "idris2";
-  version = "0.2.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
     rev = "v${version}";
-    sha256 = "044slgl2pwvj939kz3z92n6l182plc5fzng1n4z4k6bg11msqq14";
+    sha256 = "sha256-6CTn8o5geWSesXO7vTrrV/2EOQ3f+nPQ2M5cem13ZSY=";
   };
 
+  # We do not add any propagatedNativeBuildInputs because we do not want the
+  # executables idris2 produces to depend on the nix-store. As such, it is left
+  # to the user to guarantee chez (or any other codgen dependency) is available
+  # in the path during compilation of programs with idris2.
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper clang chez ];
-  buildInputs = [ chez ];
+  nativeBuildInputs = [ makeWrapper clang chez ]
+    ++ lib.optional stdenv.isDarwin [ zsh ];
+  buildInputs = [ gmp ];
 
   prePatch = ''
     patchShebangs --build tests
   '';
 
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "OS=";
+    ++ lib.optional stdenv.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
-  buildFlags = [ "bootstrap-build" "SCHEME=scheme" ];
+  buildFlags = [ "bootstrap" "SCHEME=scheme" ];
 
-  checkTarget = "bootstrap-test";
+  checkTarget = "test";
 
   # TODO: Move this into its own derivation, such that this can be changed
   #       without having to recompile idris2 every time.
   postInstall = let
     includedLibs = [ "base" "contrib" "network" "prelude" ];
     name = "${pname}-${version}";
-    packagePaths = builtins.map (l: "$out/${name}/" + l) includedLibs;
+    packagePaths =
+      builtins.map (l: "$out/${name}/${l}-${version}") includedLibs;
     additionalIdris2Paths = builtins.concatStringsSep ":" packagePaths;
   in ''
     # Remove existing idris2 wrapper that sets incorrect LD_LIBRARY_PATH
@@ -71,8 +85,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A purely functional programming language with first class types";
     homepage = "https://github.com/idris-lang/Idris2";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ wchresta ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fabianhjr wchresta ];
     inherit (chez.meta) platforms;
   };
 }

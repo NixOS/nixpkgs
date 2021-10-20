@@ -2,24 +2,20 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_9
+, electron
 , common-updater-scripts
 , writeShellScript
-, jq
 , makeDesktopItem
 }:
 
-let
-  electron = electron_9;
-in
 stdenv.mkDerivation rec {
 
   pname = "stretchly";
-  version = "1.2.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "07v9yk9qgya9ladfgbfkwwnbzvczs1cv6yn3zrg9rviyv8zlqjls";
+    sha256 = "sha256-F6p+g0yuDMpNq+cVgA3ZhUwCIiIU1QfYM90lmaNnRWw=";
   };
 
   icon = fetchurl {
@@ -66,7 +62,7 @@ stdenv.mkDerivation rec {
     categories = "Utility;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take

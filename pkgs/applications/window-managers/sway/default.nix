@@ -1,41 +1,56 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, meson, ninja, pkg-config, wayland, scdoc
-, libxkbcommon, pcre, json_c, dbus, libevdev
+{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+, meson, ninja, pkg-config, wayland-scanner, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols
+, wlroots, wayland-protocols, libdrm
+, nixosTests
+# Used by the NixOS module:
+, isNixOS ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1xsa3h8zhf29p0mi90baxpr76jkd9pd1gr97ky8cnjbcs4isj9j0";
+    sha256 = "0j4sdbsrlvky1agacc0pcz9bwmaxjmrapjnzscbd2i0cria2fc5j";
   };
 
   patches = [
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
+
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit swaybg;
+    })
   ];
 
+  postPatch = lib.optionalString isNixOS ''
+    echo -e '\ninclude /etc/sway/config.d/*' >> config.in
+  '';
+
   nativeBuildInputs = [
-    meson ninja pkg-config wayland scdoc
+    meson ninja pkg-config wayland-scanner scdoc
   ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
     pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wlroots wayland-protocols
+    wlroots wayland-protocols libdrm
   ];
 
   mesonFlags = [
     "-Ddefault-wallpaper=false"
+    "-Dsd-bus-provider=libsystemd"
   ];
 
-  meta = with stdenv.lib; {
+  passthru.tests.basic = nixosTests.sway;
+
+  meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface cryptography application gmpy2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure python implementation of OTR";
     homepage = "https://github.com/AGProjects/python-otr";
     license = licenses.lgpl21Plus;

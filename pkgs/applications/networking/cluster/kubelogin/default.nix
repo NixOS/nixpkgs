@@ -1,25 +1,24 @@
-{ stdenv, fetchFromGitHub, buildGoModule, go }:
+{ lib, fetchFromGitHub, buildGoModule, go }:
 
 buildGoModule rec {
   pname = "kubelogin";
-  version = "0.0.7";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jw8v6ff0iwkwxlhcr35cvhy4zg31dsm1s3q4fxgi901yj1wn6zy";
+    sha256 = "sha256-YLYyU3k3I74ZuczFZBwcJoJSfCR4B9Z1EbFupA+xkiE=";
   };
 
-  vendorSha256 = "0al8y65xvnwl34jkpqyf6zwr21xn30zswknlym9nnn1n47fyayxb";
+  vendorSha256 = "sha256-vJfTf9gD/qrsPAfJeMYLjGa90mYLOshgDehv2Fcl6xM=";
 
-  buildFlagsArray = ''
-    -ldflags=
-        -X main.version=${version}
-        -X main.goVersion=${stdenv.lib.getVersion go}
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.goVersion=${lib.getVersion go}"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Kubernetes credential plugin implementing Azure authentication";
     inherit (src.meta) homepage;
     license = licenses.mit;

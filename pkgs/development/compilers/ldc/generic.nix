@@ -1,5 +1,5 @@
 { version, ldcSha256 }:
-{ stdenv, fetchurl, cmake, ninja, llvm_11, curl, tzdata
+{ lib, stdenv, fetchurl, cmake, ninja, llvm_11, curl, tzdata
 , libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
@@ -17,8 +17,6 @@ in
 stdenv.mkDerivation rec {
   pname = "ldc";
   inherit version;
-
-  enableParallelBuilding = true;
 
   src = fetchurl {
     url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/ldc-${version}-src.tar.gz";
@@ -39,7 +37,7 @@ stdenv.mkDerivation rec {
       # test depends on current year
       rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
   ''
-  + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # https://github.com/NixOS/nixpkgs/issues/34817
       rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
   '';
@@ -48,20 +46,20 @@ stdenv.mkDerivation rec {
     # Setting SHELL=$SHELL when dmd testsuite is run doesn't work on Linux somehow
     substituteInPlace tests/d2/dmd-testsuite/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
   ''
-  + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   ''
-  + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace runtime/phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_11 makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_11.dev makeWrapper ninja unzip
   ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ]
-  ++ stdenv.lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
     gdb
   ];
@@ -79,7 +77,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DMD=$DMD" ];
 
-  fixNames = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin  ''
+  fixNames = lib.optionalString stdenv.hostPlatform.isDarwin  ''
     fixDarwinDylibNames() {
       local flags=()
 
@@ -99,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   # https://github.com/ldc-developers/ldc/issues/2497#issuecomment-459633746
-  additionalExceptions = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin
+  additionalExceptions = lib.optionalString stdenv.hostPlatform.isDarwin
     "|druntime-test-shared";
 
   checkPhase = ''
@@ -128,7 +126,7 @@ stdenv.mkDerivation rec {
         --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The LLVM-based D compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE

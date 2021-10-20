@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, libpulseaudio, nas }:
 
-stdenv.mkDerivation {
-  name = "gbsplay-2016-12-17";
+stdenv.mkDerivation rec {
+  pname = "gbsplay";
+  version = "0.0.94";
 
   src = fetchFromGitHub {
     owner = "mmitch";
     repo = "gbsplay";
-    rev = "2c4486e17fd4f4cdea8c3fd79ae898c892616b70";
-    sha256 = "1214j67sr87zfhvym41cw2g823fmqh4hr451r7y1s9ql3jpjqhpz";
+    rev = version;
+    sha256 = "VpaXbjotmc/Ref1geiKkBX9UhbPxfAGkFAdKVxP8Uxo=";
   };
 
-  buildInputs = [ libpulseaudio ];
+  configureFlags = [
+    "--without-test" # See mmitch/gbsplay#62
+    "--without-contrib"
+  ];
 
-  configureFlags =
-   [ "--without-test" "--without-contrib" "--disable-devdsp"
-     "--enable-pulse" "--disable-alsa" "--disable-midi"
-     "--disable-nas" "--disable-dsound" "--disable-i18n" ];
+  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ libpulseaudio nas ];
 
-  makeFlags = [ "tests=" ];
+  postInstall = ''
+    installShellCompletion --bash --name gbsplay contrib/gbsplay.bashcompletion
+  '';
 
-  meta = with stdenv.lib; {
-    description = "gameboy sound player";
+  meta = with lib; {
+    description = "Gameboy sound player";
     license = licenses.gpl1;
-    platforms = ["i686-linux" "x86_64-linux"];
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ dasuxullebt ];
   };
 }

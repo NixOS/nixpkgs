@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyside, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pyside, pytest }:
 
 buildPythonPackage rec {
   pname = "QtPy";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13cw8l7zrhbdi03k1wl1pg9xdl4ahdfa7yz8gd0f23sxnm22rdrd";
+    sha256 = "3d20f010caa3b2c04835d6a2f66f8873b041bdaf7a76085c2a0d7890cdd65ea9";
   };
 
   # no concrete propagatedBuildInputs as multiple backends are supposed
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     py.test qtpy/tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Abstraction layer for PyQt5/PyQt4/PySide2/PySide";
     homepage = "https://github.com/spyder-ide/qtpy";
     license = licenses.mit;

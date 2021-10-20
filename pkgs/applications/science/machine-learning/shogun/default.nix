@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, ctags, swig
 # data, compression
-, bzip2, curl, hdf5, json_c, lzma, lzo, protobuf, snappy
+, bzip2, curl, hdf5, json_c, xz, lzo, protobuf, snappy
 # maths
 , blas, lapack, eigen, nlopt, lp_solve, colpack, glpk
 # libraries
@@ -8,6 +8,7 @@
 # extra support
 , pythonSupport ? true, pythonPackages ? null
 , opencvSupport ? false, opencv ? null
+, withSvmLight ? false
 }:
 
 assert pythonSupport -> pythonPackages != null;
@@ -60,13 +61,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/awild82/shogun/commit/365ce4c4c700736d2eec8ba6c975327a5ac2cd9b.patch";
       sha256 = "158hqv4xzw648pmjbwrhxjp7qcppqa7kvriif87gn3zdn711c49s";
     })
-  ];
+  ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
   CCACHE_DISABLE="1";
   CCACHE_DIR=".ccache";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
-      blas lapack bzip2 cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve xz lzo
       protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
@@ -85,14 +87,29 @@ stdenv.mkDerivation rec {
     (flag "CMAKE_VERBOSE_MAKEFILE:BOOL" doCheck)
     (flag "PythonModular" pythonSupport)
     (flag "OpenCV" opencvSupport)
+    (flag "USE_SVMLIGHT" withSvmLight)
   ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    # Fix preprocessing SVMlight code
+    sed -i \
+        -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
+        -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
+        src/shogun/kernel/string/CommUlongStringKernel.cpp
+    sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
+    sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
+    sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
+  '' + lib.optionalString (!withSvmLight) ''
+    # Run SVMlight scrubber
+    patchShebangs scripts/light-scrubber.sh
+    echo "removing SVMlight code"
+    ./scripts/light-scrubber.sh
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
-    license = licenses.gpl3;
+    license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
     maintainers = with maintainers; [ edwtjo ];
   };
 }

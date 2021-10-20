@@ -2,12 +2,12 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
-, pkgconfig
-, gtk3
+, cmake
+, pkg-config
+, adwaita-qt
 , glib
+, gtk3
 , qtbase
-, qmake
-, qtx11extras
 , pantheon
 , substituteAll
 , gsettings-desktop-schemas
@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "1mwqg2zk0sfjq54vz2jjahbgi5sxw8rb71h6mgg459wp99mhlqi0";
+    sha256 = "C/n8i5j0UWfxhP10c4j89U+LrpPozXnam4fIPYMXZAA=";
   };
 
   patches = [
@@ -33,24 +33,21 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
-    qmake
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
+    adwaita-qt
     glib
     gtk3
     qtbase
-    qtx11extras
   ];
 
-  postPatch = ''
-    # Fix plugin dir
-    substituteInPlace decoration/decoration.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-    substituteInPlace theme/theme.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '';
+  cmakeFlags = [
+    "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
+    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -62,7 +59,7 @@ mkDerivation rec {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.linux;
   };
 }

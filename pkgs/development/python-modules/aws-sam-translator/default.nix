@@ -1,35 +1,54 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
 , boto3
+, buildPythonPackage
 , enum34
+, fetchFromGitHub
 , jsonschema
+, mock
+, parameterized
+, pytestCheckHook
+, pythonOlder
+, pyyaml
 , six
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.31.0";
+  version = "1.38.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3a1d73d098161e60966b0d53bb310c98e4f66101688cce3d1697903643782d79";
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "serverless-application-model";
+    rev = "v${version}";
+    sha256 = "0nn9jfqz13kzmxm0r9vy24p8sqxv3mrm5d3lx7ah6rc581q8nv1k";
   };
-
-  # Tests are not included in the PyPI package
-  doCheck = false;
 
   propagatedBuildInputs = [
     boto3
     jsonschema
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [ enum34 ];
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    enum34
+  ];
 
-  meta = {
-    homepage = "https://github.com/awslabs/serverless-application-model";
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+  '';
+
+  checkInputs = [
+    mock
+    parameterized
+    pytestCheckHook
+    pyyaml
+  ];
+
+  pythonImportsCheck = [ "samtranslator" ];
+
+  meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.andreabedini ];
+    homepage = "https://github.com/awslabs/serverless-application-model";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

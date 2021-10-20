@@ -1,25 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, lib, python3
+{ stdenv, fetchFromGitHub, lib, python3
 , cmake, lingeling, btor2tools, gtest, gmp
 }:
 
 stdenv.mkDerivation rec {
   pname = "boolector";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "boolector";
-    rev    = "refs/tags/${version}";
-    sha256 = "0jkmaw678njqgkflzj9g374yk1mci8yqvsxkrqzlifn6bwhwb7ci";
+    rev    = version;
+    sha256 = "1smcy6yp8wvnw2brgnv5bf40v87k4v4fbdbrhi7987vja632k50z";
   };
-
-  # excludes development artifacts from install, will be included in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Boolector/boolector/commit/4d240436e34e65096671099766344dd9126145b1.patch";
-      sha256 = "1girsbvlhkkl1hldl2gsjynwc3m92jskn798qhx0ydg6whrfgcgw";
-    })
-  ];
 
   postPatch = ''
     sed s@REPLACEME@file://${gtest.src}@ ${./cmake-gtest.patch} | patch -p1
@@ -40,7 +32,7 @@ stdenv.mkDerivation rec {
     in
       # tests modelgen and modelgensmt2 spawn boolector in another processes and
       # macOS strips DYLD_LIBRARY_PATH, hardcode it for testing
-      stdenv.lib.optionalString stdenv.isDarwin ''
+      lib.optionalString stdenv.isDarwin ''
         cp -r bin bin.back
         install_name_tool -change libboolector.dylib $(pwd)/lib/libboolector.dylib bin/boolector
       '' + ''
@@ -48,7 +40,7 @@ stdenv.mkDerivation rec {
         patchShebangs ..
       '';
 
-  postCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+  postCheck = lib.optionalString stdenv.isDarwin ''
     rm -rf bin
     mv bin.back bin
   '';
@@ -59,7 +51,7 @@ stdenv.mkDerivation rec {
     cp $out/include/boolector/btortypes.h $out/include/btortypes.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extremely fast SMT solver for bit-vectors and arrays";
     homepage    = "https://boolector.github.io";
     license     = licenses.mit;

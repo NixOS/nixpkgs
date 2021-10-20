@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , curl
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jftui";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Aanok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0riwqfh5lyjg7as75kyx7jw6zq4gikbglhv8s05y7pzgsc9xy75j";
+    sha256 = "sha256-/QVSywS0O+HZpwY9W3le3RK3OhCkmdLYMCGTyyBdsFw=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm555 build/jftui $out/bin/jftui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jellyfin Terminal User Interface ";
     homepage = "https://github.com/Aanok/jftui";
     license = licenses.unlicense;

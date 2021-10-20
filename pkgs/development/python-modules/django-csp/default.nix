@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, django }:
+{ lib, fetchPypi, buildPythonPackage, django }:
 
 buildPythonPackage rec {
   pname = "django-csp";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds Content-Security-Policy headers to Django";
     homepage = "https://github.com/mozilla/django-csp";
     license = licenses.bsd3;

@@ -1,14 +1,15 @@
-{ fetchurl, stdenv, pkgconfig, gtk2 }:
+{ fetchurl, lib, stdenv, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "gtkimageview-1.6.4";
+  pname = "gtkimageview";
+  version = "1.6.4";
 
   src = fetchurl {
-    url = "http://trac.bjourne.webfactional.com/chrome/common/releases/${name}.tar.gz";
-    sha256 = "1if3yh5z6nkv5wnkk0qyy9pkk03vn5rqbfk23q87kj39pqscgr37";
+    url = "https://sources.archlinux.org/other/packages/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1wj63af9j9p5i067lpwi9lxvwalamakrmklvl983kvi7s4w1ss2c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
   preConfigure = ''
@@ -31,9 +32,9 @@ stdenv.mkDerivation rec {
          interpolation; GIF animation support.
        '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

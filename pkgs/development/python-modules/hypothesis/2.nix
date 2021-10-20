@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+, doCheck ? true, pytest, pytest-xdist, flaky, mock
 , sortedcontainers
 }:
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     sortedcontainers
   ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
+  checkInputs = [ pytest pytest-xdist flaky mock pexpect ];
   inherit doCheck;
 
   checkPhase = ''

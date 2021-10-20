@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkg-config }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "itm-tools";
@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0rl2ph5igwjl7rwpwcf6afnxly5av7cd6va6wn82lxm606giyq75";
+  cargoSha256 = "1hqv530x8k4rf9zzyl5p5z58bymk1p4qwrcxs21gr0zm2hqjlxy4";
 
   nativeBuildInputs = [ pkg-config ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for analyzing ITM traces";
     homepage = "https://github.com/japaric/itm-tools";
     license = with licenses; [ asl20 mit ];

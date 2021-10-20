@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "git-appraise-unstable";
@@ -17,7 +17,7 @@ buildGoPackage rec {
   meta = {
     description = "Distributed code review system for Git repos";
     homepage = "https://github.com/google/git-appraise";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.vdemeester ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.vdemeester ];
   };
 }

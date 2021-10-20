@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
+{ lib, stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     mkdir -vp $out/bin $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A clock application that morphs digits when they are changed";
-    maintainers = with maintainers; [ raskin rycee ];
+    maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";

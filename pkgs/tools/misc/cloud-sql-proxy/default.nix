@@ -1,27 +1,24 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cloud-sql-proxy";
-  version = "1.13";
+  version = "1.25.0";
 
-  goPackagePath = "github.com/GoogleCloudPlatform/cloudsql-proxy";
+  src = fetchFromGitHub {
+    owner = "GoogleCloudPlatform";
+    repo = "cloudsql-proxy";
+    rev = "v${version}";
+    sha256 = "0vz5fm1bgh2g7b320hchpfb4iql1src1rpm7324sqcd26p7w3mnl";
+  };
 
   subPackages = [ "cmd/cloud_sql_proxy" ];
 
-  src = fetchgit {
-    rev = version;
-    url = "https://${goPackagePath}";
-    sha256 = "07n2hfhqa9hinabmx79aqqwxzzkky76x3jvpd89kch14fijbh532";
-  };
+  vendorSha256 = "04y6zx3jdyj07d68a4vk4p5rzvvjnvdwk9kkipmlmqg1xqwlb84m";
 
-  goDeps = ./deps.nix;
-
-  buildFlagsArray = [ "-ldflags=" "-X main.versionString=${version}" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An authenticating proxy for Second Generation Google Cloud SQL databases";
-    homepage = "https://${goPackagePath}";
+    homepage = "https://github.com/GoogleCloudPlatform/cloudsql-proxy";
     license = licenses.asl20;
-    maintainers = [ maintainers.nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski ];
   };
 }

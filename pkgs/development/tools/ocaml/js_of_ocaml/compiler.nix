@@ -1,28 +1,28 @@
 { lib, fetchurl, buildDunePackage
-, ocaml, findlib, cmdliner, dune_2, cppo, yojson, ocaml-migrate-parsetree
-, menhir
+, ocaml, cmdliner, cppo, yojson, ppxlib
+, menhir, menhirLib
 }:
 
 buildDunePackage rec {
-	pname = "js_of_ocaml-compiler";
-	version = "3.7.0";
-	useDune2 = true;
+  pname = "js_of_ocaml-compiler";
+  version = "3.10.0";
+  useDune2 = true;
 
-	src = fetchurl {
-		url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
-		sha256 = "0rw6cfkl3zlyav8q2w7grxxqjmg35mz5rgvmkiqb58nl4gmgzx6w";
-	};
+  src = fetchurl {
+    url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
+    sha256 = "09k19bygxl766dmshrp5df3i99jfm8bmamb4jggm62p3hg19bzkv";
+  };
 
-	nativeBuildInputs = [ ocaml findlib dune_2 cppo menhir ];
-  buildInputs = [ cmdliner ];
+  nativeBuildInputs = [ cppo menhir ];
+  buildInputs = [ cmdliner menhirLib ];
 
   configurePlatforms = [];
-	propagatedBuildInputs = [ yojson ocaml-migrate-parsetree ];
+  propagatedBuildInputs = [ yojson ppxlib ];
 
-	meta = {
-		description = "Compiler from OCaml bytecode to Javascript";
-		license = lib.licenses.gpl2;
-		maintainers = [ lib.maintainers.vbgl ];
-		homepage = "https://ocsigen.org/js_of_ocaml/";
-	};
+  meta = {
+    description = "Compiler from OCaml bytecode to Javascript";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://ocsigen.org/js_of_ocaml/";
+  };
 }

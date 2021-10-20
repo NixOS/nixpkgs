@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.11.0";
+  version = "0.11.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "390f8437b14f5ce845062f2865ad51656464c306d09bb97d7764c6cba1dd607c";
+    sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
   };
 
   checkInputs = [ nose ];
@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   # Computationally very demanding tests
   doCheck = false;
+  pythonImportsCheck= [ "seaborn" ];
 
   meta = {
     description = "Statisitical data visualization";

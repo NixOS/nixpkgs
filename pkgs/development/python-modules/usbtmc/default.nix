@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pyusb }:
+{ lib, fetchurl, buildPythonPackage, pyusb }:
 
 buildPythonPackage rec {
   pname = "usbtmc";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python implementation of the USBTMC instrument control protocol";
     homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;

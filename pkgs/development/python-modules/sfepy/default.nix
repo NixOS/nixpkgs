@@ -9,15 +9,21 @@
 , cython
 , python
 , sympy
+, meshio
+, mpi4py
+, psutil
+, openssh
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  name = "sfepy_${version}";
-  version = "2019.4";
+  name = "sfepy";
+  version = "2021.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchurl {
     url="https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
-    sha256 = "1l9vgcw09l6bwhgfzlbn68fzpvns25r6nkd1pcp7hz5165hs6zzn";
+    sha256 = "1vnynxzbspj900wjyy6020l71jdv2l1wkyax7nhi6w5wvav4kfwz";
   };
 
   propagatedBuildInputs = [
@@ -28,12 +34,15 @@ buildPythonPackage rec {
     pyparsing
     tables
     sympy
+    meshio
+    mpi4py
+    psutil
+    openssh
   ];
 
   postPatch = ''
-    # broken test
-    rm tests/test_homogenization_perfusion.py
-    rm tests/test_splinebox.py
+    # broken tests
+    rm tests/test_meshio.py
 
     # slow tests
     rm tests/test_input_*.py
@@ -47,6 +56,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
+    export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
     export HOME=$TMPDIR
     mv sfepy sfepy.hidden
     mkdir -p $HOME/.matplotlib

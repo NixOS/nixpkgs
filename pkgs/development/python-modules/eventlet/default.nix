@@ -1,43 +1,57 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , dnspython
-, enum34
 , greenlet
 , monotonic
 , six
 , nose
+, pyopenssl
+, iana-etc
+, libredirect
 }:
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.29.1";
+  version = "0.32.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9faff63631b01277c463ae91cd4ab3f25a2f0f5abe3219d43a386ef1daa6159a";
+    sha256 = "2f0bb8ed0dc0ab21d683975d5d8ab3c054d588ce61def9faf7a465ee363e839b";
   };
 
-  propagatedBuildInputs = [ dnspython greenlet monotonic six ]
-    ++ lib.optional (pythonOlder "3.4") enum34;
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "dnspython >= 1.15.0, < 2.0.0" "dnspython"
-  '';
+  propagatedBuildInputs = [ dnspython greenlet pyopenssl six ]
+    ++ lib.optional (pythonOlder "3.5") monotonic;
 
   checkInputs = [ nose ];
 
-  doCheck = false;  # too much transient errors to bother
+  doCheck = !stdenv.isDarwin;
+
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+
+    export EVENTLET_IMPORT_VERSION_ONLY=0
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network
+
+    runHook postCheck
+  '';
 
   # unfortunately, it needs /etc/protocol to be present to not fail
-  #pythonImportsCheck = [ "eventlet" ];
+  # pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/eventlet/";
+    homepage = "https://github.com/eventlet/eventlet/";
     description = "A concurrent networking library for Python";
+    maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.mit;
   };
-
 }

@@ -2,23 +2,24 @@
 
 buildGoModule rec {
   pname = "mmv-go";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "0kpf6abzhsikm7vyk5735p8sfjhsh7klla9qnmc43mgh0560f020";
+    sha256 = "sha256-n7yW+0cabJGDgppt6Qcj7ID3sD85094NDOPk2o9xDwY=";
   };
 
-  vendorSha256 = "1nnfi5zad7nlp44mj0fdg09q8pm093di7rr7pknl9whqghv36dfi";
+  vendorSha256 = "sha256-3Xk8S2Em28r5R7894Ubo2OOlGhrKplV/gY4ftCjPvMo=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.revision=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.revision=${src.rev}" ];
 
   meta = with lib; {
     homepage = "https://github.com/itchyny/mmv";
     description = "Rename multiple files using your $EDITOR";
     license = licenses.mit;
     maintainers = with maintainers; [ zowoq ];
+    mainProgram = "mmv";
   };
 }

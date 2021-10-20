@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "tegola";
-  version = "0.12.1";
+  version = "0.13.0";
 
   goPackagePath = "github.com/go-spatial/tegola";
 
@@ -10,14 +10,14 @@ buildGoPackage rec {
     owner = "go-spatial";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x8wv9xx0dafn55y0i7x43plg1blnslzj0l5047laipw7gnmfwad";
+    sha256 = "sha256-NA2KwyhLLIusf6a6v+OcmHz91kPcIhvG9PRmRk8h+fQ=";
   };
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
 
   excludedPackages = [ "example" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     maintainers = with maintainers; [ ingenieroariel ];

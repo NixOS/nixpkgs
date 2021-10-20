@@ -50,9 +50,6 @@ cmakeConfigurePhase() {
     # because we usually do not package the framework
     cmakeFlags="-DCMAKE_FIND_FRAMEWORK=LAST $cmakeFlags"
 
-    # on macOS i686 was only relevant for 10.5 or earlier.
-    cmakeFlags="-DCMAKE_OSX_ARCHITECTURES=x86_64 $cmakeFlags"
-
     # we never want to use the global macOS SDK
     cmakeFlags="-DCMAKE_OSX_SYSROOT= $cmakeFlags"
 

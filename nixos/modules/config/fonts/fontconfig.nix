@@ -78,14 +78,6 @@ let
         </edit>
       </match>
 
-      ${optionalString (cfg.dpi != 0) ''
-      <match target="pattern">
-        <edit name="dpi" mode="assign">
-          <double>${toString cfg.dpi}</double>
-        </edit>
-      </match>
-      ''}
-
     </fontconfig>
   '';
 
@@ -237,6 +229,7 @@ in
     (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
   ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
      (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
        The fonts.fontconfig.ultimate module and configuration is obsolete.
@@ -279,15 +272,6 @@ in
             Enable font antialiasing. At high resolution (> 200 DPI),
             antialiasing has no visible effect; users of such displays may want
             to disable this option.
-          '';
-        };
-
-        dpi = mkOption {
-          type = types.int;
-          default = 0;
-          description = ''
-            Force DPI setting. Setting to <literal>0</literal> disables DPI
-            forcing; the DPI detected for the display will be used.
           '';
         };
 
@@ -436,7 +420,7 @@ in
         useEmbeddedBitmaps = mkOption {
           type = types.bool;
           default = false;
-          description = ''Use embedded bitmaps in fonts like Calibri.'';
+          description = "Use embedded bitmaps in fonts like Calibri.";
         };
 
       };
@@ -448,6 +432,40 @@ in
     (mkIf cfg.enable {
       environment.systemPackages    = [ pkgs.fontconfig ];
       environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+      security.apparmor.includes."abstractions/fonts" = ''
+        # fonts.conf
+        r ${pkg.out}/etc/fonts/fonts.conf,
+
+        # fontconfig default config files
+        r ${pkg.out}/etc/fonts/conf.d/*.conf,
+
+        # 00-nixos-cache.conf
+        r ${cacheConf},
+
+        # 10-nixos-rendering.conf
+        r ${renderConf},
+
+        # 50-user.conf
+        ${optionalString cfg.includeUserConf ''
+        r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+        ''}
+
+        # local.conf (indirect priority 51)
+        ${optionalString (cfg.localConf != "") ''
+        r ${localConf},
+        ''}
+
+        # 52-nixos-default-fonts.conf
+        r ${defaultFontsConf},
+
+        # 53-no-bitmaps.conf
+        r ${rejectBitmaps},
+
+        ${optionalString (!cfg.allowType1) ''
+        # 53-nixos-reject-type1.conf
+        r ${rejectType1},
+        ''}
+      '';
     })
     (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];

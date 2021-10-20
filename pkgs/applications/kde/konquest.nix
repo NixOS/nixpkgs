@@ -2,16 +2,28 @@
 , mkDerivation
 , extra-cmake-modules
 , kdoctools
-, kdelibs4support
+, kconfig
+, kcoreaddons
+, kcrash
+, kdbusaddons
+, kguiaddons
+, kxmlgui
+, kwidgetsaddons
 , libkdegames
 , qtquickcontrols
 }:
 
 mkDerivation {
-  name = "konquest";
+  pname = "konquest";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kdelibs4support libkdegames qtquickcontrols ];
+  buildInputs = [
+    kconfig kcoreaddons kcrash kdbusaddons kguiaddons kxmlgui kwidgetsaddons
+    libkdegames
+    qtquickcontrols
+  ];
   meta = {
+    homepage = "https://apps.kde.org/konquest/";
+    description = "Galactic strategy game";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ lheckemann ];
   };

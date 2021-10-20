@@ -1,5 +1,5 @@
 { callPackage
-, stdenv
+
 }:
 
 # TODO(@oxij) on new Xen version: generalize this to generate [vanilla slim

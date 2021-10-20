@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
 , gdbm
-, lzma
+, xz
+, mime-types ? null, mimetypesSupport ? true
 , ncurses
 , openssl
 , readline
@@ -11,6 +12,7 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
+, tzdata ? null
 , self
 , configd
 , autoreconfHook
@@ -33,12 +35,18 @@
 , stripTests ? false
 , stripTkinter ? false
 , rebuildBytecode ? true
-, stripBytecode ? false
+, stripBytecode ? true
 , includeSiteCustomize ? true
-, static ? false
-# Not using optimizations on Darwin
-# configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
-, enableOptimizations ? (!stdenv.isDarwin)
+, static ? stdenv.hostPlatform.isStatic
+, enableOptimizations ? false
+# enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+# clang starts supporting `-fno-sematic-interposition` with version 10
+, enableNoSemanticInterposition ? (!stdenv.cc.isClang || (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "10"))
+# enableLTO is a subset of the enableOptimizations flag that doesn't harm reproducibility.
+# enabling LTO on 32bit arch causes downstream packages to fail when linking
+# enabling LTO on *-darwin causes python3 to fail when linking.
+, enableLTO ? stdenv.is64bit && stdenv.isLinux
+, reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
 
@@ -54,11 +62,27 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-with stdenv.lib;
+assert mimetypesSupport -> mime-types != null;
+
+assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
+  "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
+
+assert lib.assertMsg (reproducibleBuild -> stripBytecode)
+  "Deterministic builds require stripping bytecode.";
+
+assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
+  "Deterministic builds are not achieved when optimizations are enabled.";
+
+assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
+  "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
+
+with lib;
 
 let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
+
+  tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -77,6 +101,8 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
+  strictDeps = true;
+
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
   ] ++ optionals (!stdenv.isDarwin && passthru.pythonAtLeast "3.10") [
@@ -86,19 +112,72 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
+  ] ++ optionals (stdenv.cc.isClang && enableLTO) [
+    stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
-    ++ optionals stdenv.isDarwin [ configd ]);
+    ++ optionals stdenv.isDarwin [ configd ])
+    ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
   else pythonForBuild.interpreter;
+
+  # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+  # module that is imported by the sysconfig and distutils.sysconfig modules.
+  # The sysconfigdata module is generated at build time and contains settings
+  # required for building Python extension modules, such as include paths and
+  # other compiler flags. By default, the sysconfigdata module is loaded from
+  # the currently running interpreter (ie. the build platform interpreter), but
+  # when cross-compiling we want to load it from the host platform interpreter.
+  # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+  # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+  # platform suffix on extension modules. The correct values for these variables
+  # are not documented, and must be derived from the configure script (see links
+  # below).
+  sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
+    # The configure script uses "arm" as the CPU name for all 32-bit ARM
+    # variants when cross-compiling, but native builds include the version
+    # suffix, so we do the same.
+    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
+    multiarchCpu =
+      if isAarch32 then
+        if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
+      else if isx86_32 then "i386"
+      else parsed.cpu.name;
+    pythonAbiName =
+      # python's build doesn't differentiate between musl and glibc in its
+      # abi detection, our wrapper should match.
+      if stdenv.hostPlatform.isMusl then
+        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
+        else parsed.abi.name;
+    multiarch =
+      if isDarwin then "darwin"
+      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
+
+    abiFlags = optionalString (isPy36 || isPy37) "m";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+  in ''
+    sysconfigdataHook() {
+      if [ "$1" = '${placeholder "out"}' ]; then
+        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+        export _PYTHON_SYSCONFIGDATA_NAME='${pythonSysconfigdataName}'
+      fi
+    }
+
+    addEnvHooks "$hostOffset" sysconfigdataHook
+  '';
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
@@ -125,6 +204,13 @@ in with passthru; stdenv.mkDerivation {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    # Make sure that the virtualenv activation scripts are
+    # owner-writable, so venvs can be recreated without permission
+    # errors.
+    ./virtualenv-permissions.patch
+  ] ++ optionals mimetypesSupport [
+    # Make the mimetypes module refer to the right file
+    ./mimetypes.patch
   ] ++ optionals (isPy35 || isPy36) [
     # Determinism: Write null timestamps when compiling python files.
     ./3.5/force_bytecode_determinism.patch
@@ -135,7 +221,12 @@ in with passthru; stdenv.mkDerivation {
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
-  ] ++ optionals (isPy37 || isPy38 || isPy39) [
+    # The workaround is for unittests on Win64, which we don't support.
+    # It does break aarch64-darwin, which we do support. See:
+    # * https://bugs.python.org/issue35523
+    # * https://github.com/python/cpython/commit/e6b247c8e524
+    ./3.7/no-win64-workaround.patch
+  ] ++ optionals (pythonAtLeast "3.7") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
@@ -146,6 +237,9 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.5/profile-task.patch
     )
+  ] ++ optionals (pythonAtLeast "3.9" && stdenv.isDarwin) [
+    # Stop checking for TCL/TK in global macOS locations
+    ./3.9/darwin-tcl-tk.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -154,7 +248,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 || isPy38 || isPy39 then
+      else if pythonAtLeast "3.7" then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -165,11 +259,24 @@ in with passthru; stdenv.mkDerivation {
   ] ++ [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
+    # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
+    (
+      if isPy36 then
+        ./3.6/fix-finding-headers-when-cross-compiling.patch
+      else
+        ./3.7/fix-finding-headers-when-cross-compiling.patch
+    )
+  ] ++ optionals (isPy36) [
+    # Backport a fix for ctypes.util.find_library.
+    ./3.6/find_library.patch
   ];
 
   postPatch = ''
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
+  '' + optionalString mimetypesSupport ''
+    substituteInPlace Lib/mimetypes.py \
+      --replace "@mime-types@" "${mime-types}"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
@@ -182,12 +289,15 @@ in with passthru; stdenv.mkDerivation {
   PYTHONHASHSEED=0;
 
   configureFlags = [
-    "--enable-shared"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (!static) [
+    "--enable-shared"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals enableLTO [
+    "--with-lto"
   ] ++ optionals (pythonOlder "3.7") [
     # This is unconditionally true starting in CPython 3.7.
     "--with-threads"
@@ -220,6 +330,8 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals tzdataSupport [
+    "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
 
   preConfigure = ''
@@ -229,17 +341,37 @@ in with passthru; stdenv.mkDerivation {
   '' + optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
     export MACOSX_DEPLOYMENT_TARGET=10.6
+    # Override the auto-detection in setup.py, which assumes a universal build
+    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
     # Determinism: The interpreter is patched to write null timestamps when compiling Python files
     #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
     export DETERMINISTIC_BUILD=1;
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
+  '' +
+
+  # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
+  # which changes how symbols are looked up. This essentially means we can't override
+  # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
+  # that uses --enable-optimizations has the same "issue".
+  #
+  # The Fedora wiki has a good article about their journey towards enabling this flag:
+  # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+  optionalString enableNoSemanticInterposition ''
+    export CFLAGS_NODIST="-fno-semantic-interposition"
   '';
 
   setupHook = python-setup-hook sitePackages;
 
-  postInstall = ''
+  postInstall = let
+    # References *not* to nuke from (sys)config files
+    keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
+      (placeholder "out")
+    ] ++ optionals tzdataSupport [
+      tzdata
+    ]);
+  in ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/${libPrefix}/test/*; do
@@ -275,9 +407,18 @@ in with passthru; stdenv.mkDerivation {
     done
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
-    find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
-    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
+    find $out/lib/python*/config-* -type f -print -exec nuke-refs ${keep-references} '{}' +
+    find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs ${keep-references} '{}' +
 
+    # Make the sysconfigdata module accessible on PYTHONPATH
+    # This allows build Python to import host Python's sysconfigdata
+    mkdir -p "$out/${sitePackages}"
+    ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
+
+    # debug info can't be separated from a static library and would otherwise be
+    # left in place by a separateDebugInfo build. force its removal here to save
+    # space in output.
+    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -291,34 +432,55 @@ in with passthru; stdenv.mkDerivation {
     '' + optionalString includeSiteCustomize ''
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-    '' + optionalString rebuildBytecode ''
 
-    # Determinism: rebuild all bytecode
-    # We exclude lib2to3 because that's Python 2 code which fails
-    # We rebuild three times, once for each optimization level
+    '' + optionalString stripBytecode ''
+    # Determinism: deterministic bytecode
+    # First we delete all old bytecode.
+    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
+    '' + optionalString rebuildBytecode ''
     # Python 3.7 implements PEP 552, introducing support for deterministic bytecode.
-    # This is automatically used when `SOURCE_DATE_EPOCH` is set.
-    find $out -name "*.py" | ${pythonForBuildInterpreter}     -m compileall -q -f -x "lib2to3" -i -
+    # compileall uses the therein introduced checked-hash method by default when
+    # `SOURCE_DATE_EPOCH` is set.
+    # We exclude lib2to3 because that's Python 2 code which fails
+    # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
+    # is not reproducible yet. https://bugs.python.org/issue29708
+    # Not creating bytecode will result in a large performance loss however, so we do build it.
+    find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
-    '' + optionalString stripBytecode ''
-    find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
+    '' + ''
+    # *strip* shebang from libpython gdb script - it should be dual-syntax and
+    # interpretable by whatever python the gdb in question is using, which may
+    # not even match the major version of this python. doing this after the
+    # bytecode compilations for the same reason - we don't want bytecode generated.
+    mkdir -p $out/share/gdb
+    sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
   '';
 
-  preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${stdenv.lib.makeBinPath [ "$out" bash ]}:$PATH
+    export PATH=${lib.makeBinPath [ "$out" bash ]}:$PATH
+  '';
+
+  # Add CPython specific setup-hook that configures distutils.sysconfig to
+  # always load sysconfigdata from host Python.
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    cat << "EOF" >> "$out/nix-support/setup-hook"
+    ${sysconfigdataHook}
+    EOF
   '';
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    stdenv.lib.optionals (openssl != null && !static) [ openssl.dev ]
-    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash
   ];
+
+  separateDebugInfo = true;
 
   inherit passthru;
 

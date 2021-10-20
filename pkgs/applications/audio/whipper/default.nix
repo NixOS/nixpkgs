@@ -1,61 +1,80 @@
-{ stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
-, sox, accuraterip-checksum, libsndfile, util-linux, substituteAll }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, libcdio-paranoia
+, cdrdao
+, libsndfile
+, flac
+, sox
+, util-linux
+}:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  bins = [ libcdio-paranoia cdrdao flac sox util-linux ];
+in python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
-  version = "0.9.1.dev7+g${stdenv.lib.substring 0 7 src.rev}";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
-    rev = "9e95f0604fa30ab06445fe46e3bc93bba6092a05";
-    sha256 = "1c2qldw9vxpvdfh5wl6mfcd7zzz3v8r86ffqll311lcp2zin33dg";
+    rev = "v${version}";
+    sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
-  pythonPath = with python3.pkgs; [
+  patches = [
+    (fetchpatch {
+      # Use custom YAML subclass to be compatible with ruamel_yaml>=0.17
+      # https://github.com/whipper-team/whipper/pull/543
+      url = "https://github.com/whipper-team/whipper/commit/3ce5964dfe8be1e625c3e3b091360dd0bc34a384.patch";
+      sha256 = "0n9dmib884y8syvypsg88j0h71iy42n1qsrh0am8pwna63sl15ah";
+    })
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+    docutils
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     musicbrainzngs
     mutagen
     pycdio
     pygobject3
-    requests
     ruamel_yaml
-    setuptools
-    setuptools_scm
+    discid
+    pillow
   ];
 
   buildInputs = [ libsndfile ];
 
   checkInputs = with python3.pkgs; [
     twisted
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit cdparanoia;
-    })
-  ];
+  ] ++ bins;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
+    "--prefix" "PATH" ":" (lib.makeBinPath bins)
   ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
-  # some tests require internet access
-  # https://github.com/JoeLametta/whipper/issues/291
-  doCheck = false;
-
-  preCheck = ''
-    HOME=$TMPDIR
+  checkPhase = ''
+    runHook preCheck
+    # disable tests that require internet access
+    # https://github.com/JoeLametta/whipper/issues/291
+    substituteInPlace whipper/test/test_common_accurip.py \
+      --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
+    HOME=$TMPDIR ${python3.interpreter} -m unittest discover
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ rycee emily ];
+    maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

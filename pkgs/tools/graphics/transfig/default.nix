@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, zlib, libjpeg, libpng, imake, gccmakedep }:
 
-stdenv.mkDerivation {
-  name = "transfig-3.2.4";
+stdenv.mkDerivation rec {
+  pname = "transfig";
+  version = "3.2.4";
+
   src = fetchurl {
-    url = "ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz";
+    url = "ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.${version}.tar.gz";
     sha256 = "0429snhp5acbz61pvblwlrwv8nxr6gf12p37f9xxwrkqv4ir7dd4";
   };
 
@@ -56,6 +58,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

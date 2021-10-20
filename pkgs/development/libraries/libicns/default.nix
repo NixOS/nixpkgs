@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, openjpeg }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, openjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "libicns";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng openjpeg ];
   NIX_CFLAGS_COMPILE = [ "-I${openjpeg.dev}/include/${openjpeg.incDir}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for manipulation of the Mac OS icns resource format";
     homepage = "https://icns.sourceforge.io";
     license = with licenses; [ gpl2 lgpl2 lgpl21 ];

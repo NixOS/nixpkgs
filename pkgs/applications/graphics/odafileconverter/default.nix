@@ -43,7 +43,7 @@ in mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "For converting between different versions of .dwg and .dxf";
     homepage = "https://www.opendesign.com/guestfiles/oda_file_converter";
     license = licenses.unfree;

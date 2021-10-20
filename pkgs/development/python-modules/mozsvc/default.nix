@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pyramid
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false; # too many dependencies and conflicting versions; I (nadrieril) gave up
   propagatedBuildInputs = [ pyramid simplejson konfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mozilla-services/mozservices";
     description = "Various utilities for Mozilla apps";
     license = licenses.mpl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, openssh
+{ lib, stdenv, fetchFromGitHub, cmake, openssh
 , gfortran, mpi, blas, lapack
 } :
 
@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c10d18gj3kvpmyv5q246x35hjxaqn4ygy1cygaydhyxnm4klzdj";
   };
 
-  nativeBuildInputs = [ cmake openssh ];
-  buildInputs = [ mpi gfortran blas lapack ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake openssh gfortran ];
+  buildInputs = [ mpi blas lapack ];
 
   doCheck = true;
 
@@ -38,13 +36,16 @@ stdenv.mkDerivation rec {
     # make sure the test starts even if we have less than 4 cores
     export OMPI_MCA_rmaps_base_oversubscribe=1
 
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+
     # Run single threaded
     export OMP_NUM_THREADS=1
 
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;

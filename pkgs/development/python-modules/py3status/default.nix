@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -14,7 +14,7 @@
 , file
 , acpi
 , coreutils
-, alsaUtils
+, alsa-utils
 , i3
 , procps
 , lm_sensors
@@ -24,24 +24,23 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.31";
+  version = "3.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "426cff33c1d3a5ee6ae388089fd41dc47c4221800f43bd51779f823c781fb83b";
+    sha256 = "d2a11dde0cc82d0eb5e938fe624f223d852ed848c57299ff562827bc4557375f";
   };
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
+    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
   ];
-  buildInputs = [ file ];
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
     sed -i -e "s|notify-send|${libnotify}/bin/notify-send|" py3status/modules/battery_level.py
     sed -i -e "s|/usr/bin/whoami|${coreutils}/bin/whoami|" py3status/modules/external_script.py
-    sed -i -e "s|'amixer|'${alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
+    sed -i -e "s|'amixer|'${alsa-utils}/bin/amixer|" py3status/modules/volume_status.py
     sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
     sed -i -e "s|'free|'${procps}/bin/free|" py3status/modules/sysdata.py
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
@@ -49,7 +48,7 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
     homepage = "https://github.com/ultrabug/py3status";

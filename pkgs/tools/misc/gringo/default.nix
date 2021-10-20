@@ -1,15 +1,11 @@
-{ stdenv, fetchurl,
+{ lib, stdenv, fetchurl,
   bison, re2c, sconsPackages,
   libcxx
 }:
 
-let
-  version = "4.5.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gringo";
-  inherit version;
+  version = "4.5.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/gringo/${version}/gringo-${version}-source.tar.gz";
@@ -23,7 +19,7 @@ stdenv.mkDerivation {
     ./gringo-4.5.4-to_string.patch
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace ./SConstruct \
       --replace \
         "env['CXX']            = 'g++'" \
@@ -32,12 +28,12 @@ stdenv.mkDerivation {
     substituteInPlace ./SConstruct \
       --replace \
         "env['CPPPATH']        = []" \
-        "env['CPPPATH']        = ['${libcxx}/include/c++/v1']"
+        "env['CPPPATH']        = ['${lib.getDev libcxx}/include/c++/v1']"
 
     substituteInPlace ./SConstruct \
       --replace \
         "env['LIBPATH']        = []" \
-        "env['LIBPATH']        = ['${libcxx}/lib']"
+        "env['LIBPATH']        = ['${lib.getLib libcxx}/lib']"
   '';
 
   buildPhase = ''
@@ -49,7 +45,7 @@ stdenv.mkDerivation {
     cp build/release/gringo $out/bin/gringo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts input programs with first-order variables to equivalent ground programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;

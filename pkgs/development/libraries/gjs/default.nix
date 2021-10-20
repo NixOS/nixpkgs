@@ -1,10 +1,10 @@
 { fetchurl
-, fetchpatch
+, lib
 , stdenv
 , meson
 , ninja
-, pkgconfig
-, gnome3
+, pkg-config
+, gnome
 , gtk3
 , atk
 , gobject-introspection
@@ -16,32 +16,41 @@
 , libxml2
 , dbus
 , gdk-pixbuf
+, harfbuzz
 , makeWrapper
 , which
-, xvfb_run
+, xvfb-run
 , nixosTests
 }:
 
 let
   testDeps = [
     gobject-introspection # for Gio and cairo typelibs
-    gtk3 atk pango.out gdk-pixbuf
+    gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.66.1";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0k1ld2bc4c3zbyjpfgx15v5n02iywdvm106rys5jqr7zbr2l0hld";
-  };
+  version = "1.70.0";
 
   outputs = [ "out" "dev" "installedTests" ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-SwYpNBoxigI3ThE6uX+anzMlQjJp/B4LBDpf+wGGHF8=";
+  };
+
+  patches = [
+    # Hard-code various paths
+    ./fix-paths.patch
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
@@ -56,7 +65,7 @@ in stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ] ++ testDeps;
 
   propagatedBuildInputs = [
@@ -66,14 +75,6 @@ in stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ];
-
-  patches = [
-    # Hard-code various paths
-    ./fix-paths.patch
-
-    # Allow installing installed tests to a separate output.
-    ./installed-tests-path.patch
   ];
 
   doCheck = true;
@@ -91,6 +92,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
     ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libgjstesttools/libgjstesttools.so $installedTests/libexec/installed-tests/gjs/libgjstesttools.so
     ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
     ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
@@ -105,7 +107,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
-      --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 
   checkPhase = ''
@@ -122,12 +124,13 @@ in stdenv.mkDerivation rec {
       installed-tests = nixosTests.installed-tests.gjs;
     };
 
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "gjs";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;

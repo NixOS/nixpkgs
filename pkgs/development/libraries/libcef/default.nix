@@ -1,29 +1,93 @@
-{ stdenv, fetchurl, cmake, alsaLib, atk, cairo, cups, dbus, expat, fontconfig
-, GConf, gdk-pixbuf, glib, gtk2, libX11, libxcb, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXScrnSaver
-, libXtst, nspr, nss, pango, libpulseaudio, systemd, at-spi2-atk, at-spi2-core
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, glib
+, nss
+, nspr
+, atk
+, at-spi2-atk
+, libdrm
+, expat
+, libxcb
+, libxkbcommon
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, mesa
+, gtk3
+, pango
+, cairo
+, alsa-lib
+, dbus
+, at-spi2-core
+, cups
+, libxshmfence
 }:
 
 let
-  libPath =
-    stdenv.lib.makeLibraryPath [
-      alsaLib atk cairo cups dbus expat fontconfig GConf gdk-pixbuf glib gtk2
-      libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes libXi
-      libXrandr libXrender libXScrnSaver libXtst nspr nss pango libpulseaudio
-      systemd at-spi2-core at-spi2-atk
-    ];
+  rpath = lib.makeLibraryPath [
+    glib
+    nss
+    nspr
+    atk
+    at-spi2-atk
+    libdrm
+    expat
+    libxcb
+    libxkbcommon
+    libX11
+    libXcomposite
+    libXdamage
+    libXext
+    libXfixes
+    libXrandr
+    mesa
+    gtk3
+    pango
+    cairo
+    alsa-lib
+    dbus
+    at-spi2-core
+    cups
+    libxshmfence
+  ];
+  platforms = {
+    "aarch64-linux" = {
+      platformStr = "linuxarm64";
+      projectArch = "arm64";
+      sha256 = "1j93qawh9h6k2ic70i10npppv5f9dch961lc1wxwsi68daq8r081";
+    };
+    "i686-linux" = {
+      platformStr = "linux32";
+      projectArch = "x86";
+      sha256 = "0ki4zr8ih06kirgbpxbinv4baw3qvacx208q6qy1cvpfh6ll4fwb";
+    };
+    "x86_64-linux" = {
+      platformStr = "linux64";
+      projectArch = "x86_64";
+      sha256 = "1ja711x9fdlf21qw1k9xn3lvjc5zsfgnjga1w1r8sysam73jk7xj";
+    };
+  };
+
+  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "75.1.14-gc81164e";
+  version = "90.6.7";
+  gitRevision = "19ba721";
+  chromiumVersion = "90.0.4430.212";
 
   src = fetchurl {
-    name = "cef_binary_75.1.14+gc81164e+chromium-75.0.3770.100_linux64_minimal.tar.bz2";
-    url = "http://opensource.spotify.com/cefbuilds/cef_binary_75.1.14%2Bgc81164e%2Bchromium-75.0.3770.100_linux64_minimal.tar.bz2";
-    sha256 = "0985b2bx505j0q693hifjgidzb597wqf5idql5aqxs8lfxhc2pgg";
+    url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${platformInfo.platformStr}_minimal.tar.bz2";
+    inherit (platformInfo) sha256;
   };
 
   nativeBuildInputs = [ cmake ];
+  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;
@@ -32,17 +96,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ $out/share/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
-    patchelf --set-rpath "${libPath}" $out/lib/libcef.so
+    patchelf --set-rpath "${rpath}" $out/lib/libcef.so
     cp ../Release/*.bin $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
-    homepage = "http://opensource.spotify.com/cefbuilds/index.html";
+    homepage = "https://cef-builds.spotifycdn.com/index.html";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.bsd3;
-    platforms = with platforms; linux;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -1,20 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, olm }:
 
 buildGoModule {
   pname = "go-neb";
-  version = "unstable-2020-04-09";
+  version = "unstable-2021-07-21";
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "go-neb";
-    rev = "1e297c50ad2938e511a3c86f4b190fd3fc3559d6";
-    sha256 = "1azwy4s4kmypps1fjbz76flpi1b7sjzjj4qwx94cry0hn3qfnrc6";
+    rev = "8916c80f8ce1732f64b50f9251242ca189082e76";
+    sha256 = "sha256-kuH4vbvS4G1bczxUdY4bd4oL4pIZzuueUxdEp4xuzJM=";
   };
 
   subPackages = [ "." ];
 
-  patches = [ ./go-mod.patch ];
+  buildInputs = [ olm ];
 
-  vendorSha256 = "1k3980yf6zl00dkd1djwhm2f9nnffzrsbs3kq3alpw2gm0aln739";
+  vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
 
   doCheck = false;
 

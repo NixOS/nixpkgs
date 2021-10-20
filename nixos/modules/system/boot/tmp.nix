@@ -2,6 +2,9 @@
 
 with lib;
 
+let
+  cfg = config.boot;
+in
 {
 
   ###### interface
@@ -24,13 +27,30 @@ with lib;
       '';
     };
 
+    boot.tmpOnTmpfsSize = mkOption {
+      type = types.oneOf [ types.str types.types.ints.positive ];
+      default = "50%";
+      description = ''
+        Size of tmpfs in percentage.
+        Percentage is defined by systemd.
+      '';
+    };
+
   };
 
   ###### implementation
 
   config = {
 
-    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpOnTmpfs "tmp.mount";
+    # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
+    systemd.mounts = mkIf cfg.tmpOnTmpfs [
+      {
+        what = "tmpfs";
+        where = "/tmp";
+        type = "tmpfs";
+        mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=${toString cfg.tmpOnTmpfsSize}" ];
+      }
+    ];
 
     systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
 

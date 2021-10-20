@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonPackage, fetchPypi }:
+{ lib, python, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pony";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     rm -rf $out/${python.sitePackages}/pony/orm/tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pony is a Python ORM with beautiful query syntax";
     homepage = "https://ponyorm.org/";
     maintainers = with maintainers; [ d-goldin xvapx ];

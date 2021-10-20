@@ -1,36 +1,47 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , cmake
-, pkgconfig
-, gtk3
-, perl
-, vte
-, pcre2
 , glib
+, gtk3
 , makeWrapper
+, pcre2
+, perl
+, pkg-config
+, vte
 }:
 
 stdenv.mkDerivation rec {
   pname = "sakura";
-  version = "3.7.1";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
+    sha256 = "sha256-UEDc3TjoqjLNZtWGlIZB3VTVQC+31AP0ASQH0fu+U+Q=";
   };
 
-  nativeBuildInputs = [ cmake perl pkgconfig makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ gtk3 vte pcre2 glib ];
+  buildInputs = [
+    glib
+    gtk3
+    pcre2
+    vte
+  ];
 
-  # Set path to gsettings-schemata so sakura knows
-  # where to find colorchooser, fontchooser etc.
+  # Set path to gsettings-schemata so sakura knows where to find colorchooser,
+  # fontchooser etc.
   postInstall = ''
     wrapProgram $out/bin/sakura \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";
     description = "A terminal emulator based on GTK and VTE";
     longDescription = ''

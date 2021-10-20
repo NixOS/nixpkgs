@@ -1,37 +1,21 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
+{ fetchurl, lib, stdenv, python3, ncurses, ocamlPackages, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "coccinelle";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchurl {
-    url = "http://coccinelle.lip6.fr/distrib/${pname}-${version}.tgz";
-    sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
+    url = "https://coccinelle.gitlabpages.inria.fr/website/distrib/${pname}-${version}.tar.gz";
+    sha256 = "0k0x4qnxzj8fymkp6y9irggcah070hj7hxq8l6ddj8ccpmjbhnsb";
   };
 
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
-    ocaml_pcre pycaml
-    python ncurses pkgconfig
+    ocaml_pcre parmap stdcompat
+    python3 ncurses pkg-config
   ];
 
-  doCheck = !stdenv.isDarwin;
-
-  # The build system builds two versions of spgen:
-  # 'spgen' with ocamlc -custom (bytecode specially linked)
-  # and 'spgen.opt' using ocamlopt.
-  # I'm not sure of the intentions here, but the way
-  # the 'spgen' binary is produced results in an
-  # invalid/incorrect interpreter path (/lib/ld-linux*).
-  # We could patch it, but without knowing why it's
-  # finding the wrong path it seems safer to use
-  # the .opt version that is built correctly.
-  # All that said, our fix here is simple: remove 'spgen'.
-  # The bin/spgen entrypoint is really a bash script
-  # and will use spgen.opt if 'spgen' doesn't exist.
-  postInstall = ''
-    rm $out/lib/coccinelle/spgen/spgen
-  '';
+  doCheck = false;
 
   meta = {
     description = "Program to apply semantic patches to C code";
@@ -50,8 +34,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://coccinelle.lip6.fr/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

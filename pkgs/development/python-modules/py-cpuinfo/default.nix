@@ -1,41 +1,46 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, pytest
+, pytestCheckHook
+, sysctl
 }:
 
 buildPythonPackage rec {
   pname = "py-cpuinfo";
-  version = "5.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
      owner = "workhorsy";
      repo = pname;
      rev = "v${version}";
-     sha256 = "0lxl9n6djaz5h1zrb2jca4qwl41c2plxy8chr7yhcxnzg0srddqi";
+     sha256 = "sha256-Mgzj1HTasUNHeHMVwV6d+TeyVqnBNUwCJ1EC3kfovf8=";
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    pytest -k "not TestActual"
-    runHook postCheck
+  # On Darwin sysctl is used to read CPU information.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cpuinfo/cpuinfo.py \
+      --replace "len(_program_paths('sysctl')) > 0" "True" \
+      --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
   '';
 
-  meta = {
-    description = "Get CPU info with pure Python 2 & 3";
+  pythonImportsCheck = [ "cpuinfo" ];
+
+  meta = with lib; {
+    description = "Get CPU info with pure Python";
     longDescription = ''
       Py-cpuinfo gets CPU info with pure Python and should work without any
       extra programs or libraries, beyond what your OS provides. It does not
       require any compilation (C/C++, assembly, etc.) to use and works with
-      Python 2 and 3.
+      Python.
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ costrouc ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , perl
 , python3
@@ -17,13 +17,13 @@ let
   blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "blis";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "flame";
     repo = "blis";
     rev = version;
-    sha256 = "0fp0nskydan3i7sj7qkabwc9sjh7mw73pjpgzh50qchkkcv0s3n1";
+    sha256 = "sha256-D5T/itq9zyD5TkeJ4Ae1vS4yEWU51omyJoIkKQ2NLhY=";
   };
 
   inherit blas64;
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-cblas"
     "--blas-int-size=${blasIntSize}"
-  ] ++ stdenv.lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
     ++ [ withArchitecture ];
 
   postPatch = ''
@@ -54,11 +54,11 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
     license = licenses.bsd3;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

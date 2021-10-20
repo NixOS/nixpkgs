@@ -5,16 +5,26 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ fetchurl, unzip }:
+{ lib, fetchurl, unzip }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
-, url
+, url ? ""
+, urls ? []
 , extraPostFetch ? ""
 , name ? "source"
+, # Allows to set the extension for the intermediate downloaded
+  # file. This can be used as a hint for the unpackCmdHooks to select
+  # an appropriate unpacking tool.
+  extension ? null
 , ... } @ args:
 
-(fetchurl ({
+(fetchurl (let
+  tmpFilename =
+    if extension != null
+    then "download.${extension}"
+    else baseNameOf (if url != "" then url else builtins.head urls);
+in {
   inherit name;
 
   recursiveHash = true;
@@ -27,9 +37,10 @@
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${tmpFilename}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
+      chmod -R +w "$unpackDir"
     ''
     + (if stripRoot then ''
       if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
@@ -45,20 +56,15 @@
     '' else ''
       mv "$unpackDir" "$out"
     '')
-    + extraPostFetch
-    # Remove write permissions for files unpacked with write bits set
-    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
-    #
-    # However, we should (for the moment) retain write permission on the directory
-    # itself, to avoid tickling https://github.com/NixOS/nix/issues/4295 in
-    # single-user Nix installations. This is because in sandbox mode we'll try to
-    # move the path, and if we don't have write permissions on the directory,
-    # then we can't update the ".." entry.
     + ''
-      chmod -R a-w "$out"
-      chmod u+w "$out"
+      ${extraPostFetch}
+    ''
+    # Remove non-owner write permissions
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+    + ''
+      chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" ])).overrideAttrs (x: {
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "extension" ])).overrideAttrs (x: {
   # Hackety-hack: we actually need unzip hooks, too
   nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
 })

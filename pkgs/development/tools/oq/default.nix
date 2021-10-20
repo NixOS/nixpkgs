@@ -1,35 +1,26 @@
-{ lib, fetchFromGitHub, crystal, jq, libxml2, makeWrapper, fetchpatch }:
+{ lib
+, fetchFromGitHub
+, crystal
+, jq
+, libxml2
+, makeWrapper
+}:
 
 crystal.buildCrystalPackage rec {
   pname = "oq";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zg4kxpfi3sap4cwp42zg46j5dv0nf926qdqm7k22ncm6jdrgpgw";
+    sha256 = "sha256-oLy8Ts+wnI0LxtAH6vVqhS7nqNkaLs0/vK9GxfG4vU8=";
   };
-
-  patches = [
-    (fetchpatch {
-        # remove once we have upgraded to oq 1.1.2+
-        name = "yaml-test-leniency.patch";
-        url = "https://github.com/Blacksmoke16/oq/commit/93ed2fe50c9ce3fd8d35427e007790ddaaafce60.patch";
-        sha256 = "1iyz0c0w0ykz268bkrlqwvh1jnnrja0mqip6y89sbpa14lp0l37n";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jq libxml2 ];
 
-  format = "crystal";
-  crystalBinaries.oq.src = "src/oq_cli.cr";
-
-  preCheck = ''
-    mkdir bin
-    cp oq bin/oq
-  '';
+  format = "shards";
 
   postInstall = ''
     wrapProgram "$out/bin/oq" \

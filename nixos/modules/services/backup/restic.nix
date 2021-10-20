@@ -93,10 +93,12 @@ in
         };
 
         paths = mkOption {
-          type = types.listOf types.str;
-          default = [];
+          type = types.nullOr (types.listOf types.str);
+          default = null;
           description = ''
-            Which paths to backup.
+            Which paths to backup.  If null or an empty array, no
+            backup command will be run.  This can be used to create a
+            prune-only job.
           '';
           example = [
             "/var/lib/postgresql"
@@ -217,7 +219,7 @@ in
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
           backupPaths = if (backup.dynamicFilesFrom == null)
-                        then concatStringsSep " " backup.paths
+                        then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
                         else "--files-from ${filesFromTmpFile}";
           pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
             ( resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts) )
@@ -243,9 +245,12 @@ in
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ] ++ pruneCmd;
+            ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+                        ++ pruneCmd;
             User = backup.user;
             RuntimeDirectory = "restic-backups-${name}";
+            CacheDirectory = "restic-backups-${name}";
+            CacheDirectoryMode = "0700";
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };

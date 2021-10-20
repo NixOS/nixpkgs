@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20200714";
+  version = "20210714";
   pname = "x42-plugins";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    sha256 = "1av05ykph8x67018hm9zfgh1vk0zi39mvrsxkj6bm4hkarxf0vvl";
+    sha256 = "sha256-X389bA+cf3N5eJpAlpDn/CJQ6xM4qzrBQ47fYPIyIHk=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
 
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Collection of LV2 plugins by Robin Gareus";
       homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon ];

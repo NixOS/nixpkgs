@@ -1,28 +1,28 @@
-{ stdenv, fetchurl, ocaml, findlib, cppo, minimal ? true }:
+{ stdenv, lib, fetchurl, ocaml, findlib, cppo
+# De facto, option minimal seems to be the default. See the README.
+, minimal ? true
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
-
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-extlib-1.7.7";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-extlib";
+  version = "1.7.8";
 
   src = fetchurl {
-    url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.7.tar.gz";
-    sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
+    url = "https://ygrek.org/p/release/ocaml-extlib/extlib-${version}.tar.gz";
+    sha256 = "0npq4hq3zym8nmlyji7l5cqk6drx2rkcx73d60rxqh5g8dla8p4k";
   };
 
   buildInputs = [ ocaml findlib cppo ];
 
   createFindlibDestdir = true;
 
-  dontConfigure = true;      # Skip configure
-  # De facto, option minimal=1 seems to be the default.  See the README.
-  buildPhase     = "make ${if minimal then "minimal=1" else ""} build";
-  installPhase   = "make ${if minimal then "minimal=1" else ""} install";
+  makeFlags = lib.optional minimal "minimal=1";
 
   meta = {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21Only;
     platforms = ocaml.meta.platforms or [];
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

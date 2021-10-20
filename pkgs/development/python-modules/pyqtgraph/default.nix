@@ -1,30 +1,61 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, numpy
-, pyopengl
-, pyqt5
+, fetchFromGitHub
 , scipy
+, numpy
+, pyqt5
+, pyopengl
+, qt5
+, python
+, pytestCheckHook
+, freefont_ttf
+, makeFontsConf
+, fetchpatch
 }:
 
+let
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
+in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.11.0";
+  version = "0.12.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0p5k73wjfh0zzjvby8b5107cx7x0c2rdj66zh1nc8y95i0anf2na";
+  src = fetchFromGitHub {
+    owner = "pyqtgraph";
+    repo = "pyqtgraph";
+    rev = "pyqtgraph-${version}";
+    sha256 = "093kkxwj75nb508vz7px4x7lxrwpaff10pl15m4h74hjwyvbsg3d";
   };
 
-  propagatedBuildInputs = [ numpy pyopengl pyqt5 scipy ];
+  # TODO: remove when updating to 0.12.3
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pyqtgraph/pyqtgraph/commit/2de5cd78da92b48e48255be2f41ae332cf8bb675.patch";
+      sha256 = "1hy86psqyl6ipvbg23zvackkd6f7ajs6qll0mbs0x2zmrj92hk00";
+    })
+  ];
 
-  doCheck = false;  # tries to create windows (QApps) on collection, which fails (probably due to no display)
+  propagatedBuildInputs = [
+    numpy
+    pyqt5
+    scipy
+    pyopengl
+  ];
 
-  pythonImportsCheck = [ "pyqtgraph" ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  preCheck = ''
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+    export FONTCONFIG_FILE=${fontsConf}
+  '';
+
+  meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";
-    homepage = "http://www.pyqtgraph.org/";
+    homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
     license = licenses.mit;
     platforms = platforms.unix;

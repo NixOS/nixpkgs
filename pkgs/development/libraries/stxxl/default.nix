@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , parallel ? true
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     inherit parallel;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;

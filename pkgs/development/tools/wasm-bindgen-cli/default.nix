@@ -1,36 +1,40 @@
-{ rustPlatform, fetchFromGitHub, lib, openssl, pkgconfig, stdenv, curl, Security
+{ lib
+, rustPlatform
+, fetchCrate
+, nodejs
+, pkg-config
+, openssl
+, stdenv
+, curl
+, Security
 , runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.67";
+  version = "0.2.78";
 
-  src =
-    let
-      tarball = fetchFromGitHub {
-        owner = "rustwasm";
-        repo = "wasm-bindgen";
-        rev = version;
-        sha256 = "0qx178aicbn59b150j5r78zya5n0yljvw4c4lhvg8x4cpfshjb5j";
-      };
-    in runCommand "source" { } ''
-      cp -R ${tarball} $out
-      chmod -R +w $out
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-5s+HidnVfDV0AXA+/YcXNGVjv/E9JeK0Ttng4mCVX8M=";
+  };
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
-  nativeBuildInputs = [ pkgconfig ];
+  cargoSha256 = "sha256-CbtjUFwowP/QqyAMCzmUiSib4EpRhQAmO4ekX00xYGE=";
 
-  cargoSha256 = "0chpw6syqxn824cbkdjx1s26vmajx511gc4mp9y64vy7b7asba6x";
-  cargoBuildFlags = [ "-p" pname ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
+
+  checkInputs = [ nodejs ];
+
+  # other tests require it to be ran in the wasm-bindgen monorepo
+  cargoTestFlags = [ "--test=interface-types" ];
 
   meta = with lib; {
     homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 /* or */ mit ];
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ma27 nitsky rizary ];
+    mainProgram = "wasm-bindgen";
   };
 }

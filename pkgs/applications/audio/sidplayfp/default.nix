@@ -1,40 +1,54 @@
 { stdenv
 , lib
-, fetchurl
-, pkgconfig
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, perl
+, pkg-config
 , libsidplayfp
 , alsaSupport ? stdenv.hostPlatform.isLinux
-, alsaLib
+, alsa-lib
 , pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
+, out123Support ? stdenv.hostPlatform.isDarwin
+, mpg123
 }:
 
-assert alsaSupport -> alsaLib != null;
-assert pulseSupport -> libpulseaudio != null;
-let
-  inherit (lib) optional;
-  inherit (lib.versions) majorMinor;
-in
 stdenv.mkDerivation rec {
   pname = "sidplayfp";
-  version = "2.0.2";
+  version = "2.2.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/sidplayfp/${majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "1s2dfs9z1hwarpfzawg11wax9nh0zcqx4cafwq7iysckyg4scz4k";
+  src = fetchFromGitHub {
+    owner = "libsidplayfp";
+    repo = "sidplayfp";
+    rev = "v${version}";
+    sha256 = "sha256-DBZZf3A0AYkeQxQvHGyHHbsQ2EDuxsZnZPbxkWTNcHA=";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport libpulseaudio;
+  nativeBuildInputs = [ autoreconfHook perl pkg-config ];
 
-  buildInputs = [ libsidplayfp ];
+  buildInputs = [ libsidplayfp ]
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional out123Support mpg123;
+
+  configureFlags = lib.optionals out123Support [
+    "--with-out123"
+  ];
+
+  enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "A SID player using libsidplayfp";
-    homepage = "https://sourceforge.net/projects/sidplay-residfp/";
+    homepage = "https://github.com/libsidplayfp/sidplayfp";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ dezgeg OPNA2608 ];
+    platforms = platforms.all;
   };
 }

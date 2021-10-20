@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsaneUDevRuleNumber ? "49"}:
+{ lib, stdenv, fetchurl, libsaneUDevRuleNumber ? "49"}:
 
 stdenv.mkDerivation rec {
   name = "brother-udev-rule-type1-1.0.0-1";
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother type1 scanners udev rules";
     homepage = "http://www.brother.com";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

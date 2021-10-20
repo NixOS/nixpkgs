@@ -1,33 +1,42 @@
-{ stdenv, fetchFromGitHub, cmake, libuuid, gnutls }:
+{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls, python3, xdg-utils }:
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     rev = "v${version}";
-    sha256 = "0jv5b56v75qhdqbrfsddfwizmbizcsv3mn8gp92nckwlx9hrk5id";
+    sha256 = "sha256-2wVjRecfIlNFAxXFaiKfxy9zArDIYDTfDdrnSM7H8fM=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake libuuid gnutls ];
+  postPatch = ''
+    substituteInPlace src/commands/CmdNews.cpp \
+      --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
+  '';
+
+  nativeBuildInputs = [ cmake libuuid gnutls python3 ];
+
+  doCheck = true;
+  preCheck = ''
+    patchShebangs --build test
+  '';
+  checkTarget = "test";
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
     ln -s "../../doc/task/scripts/bash/task.sh" "$out/share/bash-completion/completions/task.bash"
     mkdir -p "$out/share/fish/vendor_completions.d"
     ln -s "../../../share/doc/task/scripts/fish/task.fish" "$out/share/fish/vendor_completions.d/"
-    mkdir -p "$out/share/zsh/site-functions"
-    ln -s "../../../share/doc/task/scripts/zsh/_task" "$out/share/zsh/site-functions/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ marcweber ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ marcweber oxalica ];
+    platforms = platforms.unix;
   };
 }

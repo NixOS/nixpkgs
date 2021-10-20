@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core
 , girara, gettext, libarchive }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i6cf0vks501cggwvfsl6qb7mdaf3sszdymphimfvnspw810faj5";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext ];
   buildInputs = [ libarchive zathura_core girara ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";

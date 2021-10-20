@@ -10,8 +10,8 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 in python.pkgs.buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "gns3-gui";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -24,7 +24,7 @@ in python.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with python.pkgs; [
     sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+    sip_4 (pyqt5.override { withWebSockets = true; }) distro setuptools
   ];
 
   doCheck = false; # Failing
@@ -44,6 +44,6 @@ in python.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

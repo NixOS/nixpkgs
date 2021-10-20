@@ -4,15 +4,14 @@
 , # Ignored
   config ? null
 , # Nixpkgs, for qemu, lib and more
-  pkgs
+  pkgs, lib
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , # NixOS configuration to add to the VMs
   extraConfigurations ? []
 }:
 
-with pkgs.lib;
-with import ../lib/qemu-flags.nix { inherit pkgs; };
+with lib;
 
 rec {
 
@@ -36,6 +35,13 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; documentation.nixos.enable = false; }
+          { key = "no-revision";
+            # Make the revision metadata constant, in order to avoid needless retesting.
+            # The human version (e.g. 21.05-pre) is left as is, because it is useful
+            # for external modules that test with e.g. nixosTest and rely on that
+            # version number.
+            config.system.nixos.revision = mkForce "constant-nixos-revision";
+          }
           { key = "nodes"; _module.args.nodes = nodes; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
     };
@@ -62,9 +68,8 @@ rec {
                       prefixLength = 24;
                   } ];
                 });
-            in
-            { key = "ip-address";
-              config =
+
+              networkConfig =
                 { networking.hostName = mkDefault m.fst;
 
                   networking.interfaces = listToAttrs interfaces;
@@ -86,10 +91,19 @@ rec {
                          "${config.networking.hostName}\n"));
 
                   virtualisation.qemu.options =
-                    forEach interfacesNumbered
-                      ({ fst, snd }: qemuNICFlags snd fst m.snd);
+                    let qemu-common = import ../lib/qemu-common.nix { inherit lib pkgs; };
+                    in flip concatMap interfacesNumbered
+                      ({ fst, snd }: qemu-common.qemuNICFlags snd fst m.snd);
                 };
-            }
+
+              in
+                { key = "ip-address";
+                  config = networkConfig // {
+                    # Expose the networkConfig items for tests like nixops
+                    # that need to recreate the network config.
+                    system.build.networkConfig = networkConfig;
+                  };
+                }
           )
           (getAttr m.fst nodes)
         ] );

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper,
-  maim, slop, ffmpeg_3, byzanz, libnotify, xdpyinfo }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper,
+  maim, slop, ffmpeg, byzanz, libnotify, xdpyinfo }:
 
 stdenv.mkDerivation rec {
   pname = "yaxg";
@@ -13,16 +13,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ maim slop ffmpeg_3 byzanz libnotify xdpyinfo ];
+  buildInputs = [ maim slop ffmpeg byzanz libnotify xdpyinfo ];
 
   installPhase = ''
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
-    wrapProgram $out/bin/yaxg --prefix PATH : ${ stdenv.lib.makeBinPath [ maim slop ffmpeg_3 byzanz libnotify xdpyinfo ]}
+    wrapProgram $out/bin/yaxg --prefix PATH : ${ lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Yet Another X Grabber script";
     longDescription = ''

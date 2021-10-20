@@ -5,12 +5,14 @@ then cstruct
 else
 
 buildDunePackage rec {
-	pname = "cstruct-sexp";
-	inherit (cstruct) version src useDune2 meta;
+  pname = "cstruct-sexp";
+  inherit (cstruct) version src useDune2 meta;
 
-	doCheck = lib.versionAtLeast ocaml.version "4.03";
-	checkInputs = lib.optional doCheck alcotest;
+  minimumOCamlVersion = "4.03";
 
-	propagatedBuildInputs = [ cstruct sexplib ];
+  # alcotest is only available on OCaml >= 4.05 due to fmt
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  checkInputs = [ alcotest ];
+
+  propagatedBuildInputs = [ cstruct sexplib ];
 }
-

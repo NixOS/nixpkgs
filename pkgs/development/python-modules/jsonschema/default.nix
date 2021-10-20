@@ -6,7 +6,7 @@
 , nose
 , pyperf
 , pyrsistent
-, setuptools_scm
+, setuptools-scm
 , twisted
 , vcversioner
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs importlib-metadata functools32 pyrsistent ];
   checkInputs = [ nose mock pyperf twisted vcversioner ];
 

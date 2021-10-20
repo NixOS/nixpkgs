@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtx11extras
@@ -16,18 +16,18 @@
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1pz0ird5vyrz1xycfn2vqh628f2mzwrx0psnp4hqdmj1xk9bjkbp";
+    sha256 = "1xajsblk2954crvligvrgwp7q1pj7124xdfnlq9k9q0ya2xc36lx";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
@@ -45,9 +45,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "The image viewer and screenshot tool for lxqt";
     homepage = "https://github.com/lxqt/lximage-qt";
-    license = licenses.gpl2;
+    description = "The image viewer and screenshot tool for lxqt";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };

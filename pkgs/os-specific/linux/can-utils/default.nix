@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "can-utils";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''makeFlagsArray+=(PREFIX="$out")'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
     homepage = "https://github.com/linux-can/can-utils";
     license = licenses.gpl2Plus;

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''type-i'';
-  version = ''20191227-git'';
+  baseName = "type-i";
+  version = "20191227-git";
 
-  description = ''Type Inference Utility on Fundamentally 1-arg Predicates'';
+  description = "Type Inference Utility on Fundamentally 1-arg Predicates";
 
   deps = [ args."alexandria" args."closer-mop" args."introspect-environment" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_trivial" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/type-i/2019-12-27/type-i-20191227-git.tgz'';
-    sha256 = ''0f8q6klqjgz1kdyhisfkk07izvgs04jchlv2kl3srjxfr5dj5jl5'';
+    url = "http://beta.quicklisp.org/archive/type-i/2019-12-27/type-i-20191227-git.tgz";
+    sha256 = "0f8q6klqjgz1kdyhisfkk07izvgs04jchlv2kl3srjxfr5dj5jl5";
   };
 
   packageName = "type-i";

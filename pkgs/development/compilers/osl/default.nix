@@ -1,6 +1,6 @@
-{ clangStdenv, stdenv, fetchFromGitHub, cmake, zlib, openexr,
+{ clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
-util-linux, python
+util-linux, python3
 }:
 
 let boost_static = boost165.override { enableStatic = true; };
@@ -17,19 +17,27 @@ in clangStdenv.mkDerivation rec {
     sha256 = "1dwf10f2fpxc55pymwkapql20nc462mq61hv21c527994c2qp1ll";
   };
 
-  cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DUSE_BOOST_WAVE=ON"
+    "-DENABLERTTI=ON"
 
-  preConfigure = '' patchShebangs src/liboslexec/serialize-bc.bash '';
-  
+    # Build system implies llvm-config and llvm-as are in the same directory.
+    # Override defaults.
+    "-DLLVM_DIRECTORY=${llvm}"
+    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+  ];
+
+  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
+
+  nativeBuildInputs = [ cmake boost_static flex bison];
   buildInputs = [
-     cmake zlib openexr openimageio llvm
-     boost_static flex bison partio pugixml
+     zlib openexr openimageio llvm
+     partio pugixml
      util-linux # needed just for hexdump
-     python # CMake doesn't check this?
+     python3 # CMake doesn't check this?
   ];
   # TODO: How important is partio? CMake doesn't seem to find it
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced shading language for production GI renderers";
     homepage = "http://opensource.imageworks.com/?p=osl";
     maintainers = with maintainers; [ hodapp ];

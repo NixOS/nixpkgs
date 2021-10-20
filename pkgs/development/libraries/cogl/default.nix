@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
+, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome
 , mesa, automake, autoconf
 , gstreamerSupport ? true, gst_all_1 }:
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0nfph4ai60ncdx7hy6hl1i1cmp761jgnyjfhagzi0iqq36qb41d8";
   };
 
@@ -33,38 +33,39 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig libintl automake autoconf ];
+  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
 
   configureFlags = [
     "--enable-introspection"
     "--enable-kms-egl-platform"
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
-  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
-  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
+  ] ++ lib.optional gstreamerSupport "--enable-cogl-gst"
+  ++ lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
       glib gdk-pixbuf gobject-introspection wayland mesa
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
-    ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gstreamer
                                                gst_all_1.gst-plugins-base ];
 
-  buildInputs = stdenv.lib.optionals pangoSupport [ pango cairo ];
+  buildInputs = lib.optionals pangoSupport [ pango cairo ];
 
   COGL_PANGO_DEP_CFLAGS
-    = stdenv.lib.optionalString (stdenv.isDarwin && pangoSupport)
+    = lib.optionalString (stdenv.isDarwin && pangoSupport)
       "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
 
   #doCheck = true; # all tests fail (no idea why)
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small open source library for using 3D graphics hardware for rendering";
     maintainers = with maintainers; [ lovek323 ];
 

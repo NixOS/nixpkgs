@@ -1,4 +1,4 @@
-{ stdenv, darwin, fetchurl, openal }:
+{ lib, stdenv, darwin, fetchurl, openal }:
 
 stdenv.mkDerivation rec {
   name = "freealut-1.1.0";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openal
-  ] ++ stdenv.lib.optional stdenv.isDarwin
+  ] ++ lib.optional stdenv.isDarwin
     darwin.apple_sdk.frameworks.OpenAL
   ;
 
   meta = {
     homepage = "http://openal.org/";
     description = "Free implementation of OpenAL's ALUT standard";
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

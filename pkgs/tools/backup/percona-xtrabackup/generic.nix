@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkgconfig
-, curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpgerror, lz4
+{ lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkg-config
+, curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpg-error, lz4
 , ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
 , perlPackages
 , version, sha256, extraPatches ? [], extraPostInstall ? "", ...
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ bison boost cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
-    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpgerror lz4
+    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
     ncurses numactl openssl protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/plugin/debug
   '' + extraPostInstall;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;

@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig
-, makeWrapper, nixosTests, writeScript, common-updater-scripts, git, nixfmt, nix
-, gnused, coreutils, enableDecLocator ? true }:
+{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
+, pkg-config, makeWrapper, nixosTests, writeScript, common-updater-scripts, git
+, nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "362";
+  version = "369";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "HU/+Im+o8CGFm7wwB3iP9jpGoxJC2b2ae9fr4k6BrKI=";
+    sha256 = "ce1qSNBkiT0hSXQaACeBqXNJb9JNUtrdNk9jQ5p2TiY=";
   };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
 
   buildInputs = [
     xorg.libXaw
@@ -24,15 +28,12 @@ stdenv.mkDerivation rec {
     xorg.libICE
     ncurses
     freetype
-    fontconfig
-    pkgconfig
     xorg.libXft
     xorg.luit
-    makeWrapper
   ];
 
   patches = [ ./sixel-256.support.patch ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+    ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
       name = "posix-ptys.patch";
       url =
         "https://git.alpinelinux.org/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     "--enable-mini-luit"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
-  ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
+  ] ++ lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
   NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
@@ -79,14 +80,14 @@ stdenv.mkDerivation rec {
 
     updateScript = let
       # Tags that end in letters are unstable
-      suffixes = stdenv.lib.concatStringsSep " "
+      suffixes = lib.concatStringsSep " "
         (map (c: "-c versionsort.suffix='${c}'")
-          (stdenv.lib.stringToCharacters "abcdefghijklmnopqrstuvwxyz"));
+          (lib.stringToCharacters "abcdefghijklmnopqrstuvwxyz"));
     in writeScript "update.sh" ''
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           git
           nixfmt
@@ -112,8 +113,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://invisible-island.net/xterm";
-    license = with stdenv.lib.licenses; [ mit ];
-    maintainers = with stdenv.lib.maintainers; [ nequissimus vrthra ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ nequissimus vrthra ];
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://invisible-island.net/xterm/xterm.log.html";
   };
 }

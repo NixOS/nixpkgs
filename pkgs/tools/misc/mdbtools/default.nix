@@ -1,32 +1,26 @@
 { stdenv, lib, fetchFromGitHub, glib, readline
-, bison, flex, pkgconfig, autoreconfHook, libxslt, makeWrapper
+, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
 , txt2man, which
-# withUi currently doesn't work. It compiles but fails to run.
-, withUi ? false, gtk2, gnome2
 }:
 
-let
-  uiDeps = [ gtk2 ] ++ (with gnome2; [ GConf libglade libgnomeui gnome-doc-utils ]);
-
-in
 stdenv.mkDerivation rec {
   pname = "mdbtools";
-  version = "0.8.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
-    owner = "cyberemissary";
+    owner = "mdbtools";
     repo = "mdbtools";
-    rev = version;
-    sha256 = "12rhf6rgnws6br5dn1l2j7i77q9p4l6ryga10jpax01vvzhr26qc";
+    rev = "v${version}";
+    sha256 = "sha256-Hnub8h0a3qx5cxVn1tp/IVbz9aORjGGWizD3Z4rPl2s=";
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];
 
   nativeBuildInputs = [
-    pkgconfig bison flex autoreconfHook txt2man which
-  ] ++ lib.optional withUi libxslt;
+    pkg-config bison flex autoreconfHook txt2man which
+  ];
 
-  buildInputs = [ glib readline ] ++ lib.optionals withUi uiDeps;
+  buildInputs = [ glib readline ];
 
   enableParallelBuilding = true;
 

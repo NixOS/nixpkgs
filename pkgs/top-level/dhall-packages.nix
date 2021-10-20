@@ -19,6 +19,7 @@ let
 
     in
       { inherit
+          callPackage
           buildDhallPackage
           buildDhallGitHubPackage
           buildDhallDirectoryPackage
@@ -28,9 +29,6 @@ let
 
         dhall-kubernetes =
           callPackage ../development/dhall-modules/dhall-kubernetes.nix { };
-
-        dhall-packages =
-          callPackage ../development/dhall-modules/dhall-packages.nix { };
 
         Prelude =
           callPackage ../development/dhall-modules/Prelude.nix { };

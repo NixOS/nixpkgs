@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, openmpi, python3, petsc }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "180db4nlir2409wzdnsc1bkyrllnki8d551qbm1rg82zkz3vdmqg";
+    sha256 = "sha256-XEdrKhxG0dhsfJH6glrzc+JZeCgPEVIswj0ofP838lg=";
   };
 
   cmakeFlags = [
@@ -21,8 +21,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];
 
   nativeBuildInputs = [ cmake gcc ];
-  buildInputs = [ boost eigen libxml2 openmpi python3 python3.pkgs.numpy ];
-  enableParallelBuilding = true;
+  buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";

@@ -80,6 +80,12 @@ def fetch_versions() -> FactorioVersionsJSON:
 def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersionJSON:
     rec_dd = lambda: defaultdict(rec_dd)
     output = rec_dd()
+
+    # Deal with times where there's no experimental version
+    for rc in RELEASE_CHANNELS:
+        if not factorio_versions[rc.name]:
+            factorio_versions[rc.name] = factorio_versions['stable']
+
     for system in SYSTEMS:
         for release_type in RELEASE_TYPES:
             for release_channel in RELEASE_CHANNELS:

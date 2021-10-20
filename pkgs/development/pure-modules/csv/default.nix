@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure }:
+{ lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "csv";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "fe7c4edebe8208c54d5792a9eefaeb28c4a58b9094d161a6dda8126f0823ab3c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Comma Separated Value Interface for the Pure Programming Language";
     homepage = "http://puredocs.bitbucket.org/pure-csv.html";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

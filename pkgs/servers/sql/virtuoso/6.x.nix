@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libxml2, openssl, readline, gawk }:
+{ lib, stdenv, fetchurl, libxml2, openssl, readline, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "virtuoso-opensource-6.1.6";
+  pname = "virtuoso-opensource";
+  version = "6.1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/virtuoso/${name}.tar.gz";
+    url = "mirror://sourceforge/virtuoso/${pname}-${version}.tar.gz";
     sha256 = "0dx0lp7cngdchi0772hp93zzn6sdap7z8s3vay3mzb9xgf0sdgy6";
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     echo Moving documentation
     mkdir -pv $out/share/doc
-    mv -v $out/share/virtuoso/doc $out/share/doc/${name}
+    mv -v $out/share/virtuoso/doc $out/share/doc/${pname}-${version}
 
     echo Removing jars and empty directories
     find $out -name "*.a" -delete -o -name "*.jar" -delete -o -type d -empty -delete
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SQL/RDF database used by, e.g., KDE-nepomuk";
     homepage = "http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/";
     platforms = platforms.linux;

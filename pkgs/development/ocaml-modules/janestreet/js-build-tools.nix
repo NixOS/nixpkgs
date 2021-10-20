@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchurl, ocaml_oasis, opaline }:
+{ lib, buildOcaml, fetchurl, ocaml_oasis, opaline }:
 
 buildOcaml rec {
   name = "js-build-tools";
@@ -16,12 +16,14 @@ buildOcaml rec {
   buildInputs = [ ocaml_oasis opaline ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
   configurePhase = "./configure --prefix $prefix";
   installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR ${name}.install";
 
   patches = [ ./js-build-tools-darwin.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jane Street Build Tools";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;

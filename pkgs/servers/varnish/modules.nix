@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils, removeReferencesTo }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   version = "0.15.0";
-  name = "${varnish.name}-modules-${version}";
+  pname = "${varnish.name}-modules";
 
   src = fetchFromGitHub {
     owner = "varnish";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docutils
-    pkgconfig
+    pkg-config
     removeReferencesTo
     varnish.python  # use same python version as varnish server
   ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
     homepage = "https://github.com/varnish/varnish-modules";
     inherit (varnish.meta) license platforms maintainers;

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , asciitree
 , numpy
 , fasteners
@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.6.1";
+  version = "2.10.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa7eac1e4ff47ff82d09c42bb4679e18e8a05a73ee81ce59cee6a441a210b2fd";
+    sha256 = "8ca8e505cadb4f7f97aab4e4193bb302b6338bf54593c98fe7581bf574ed864c";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

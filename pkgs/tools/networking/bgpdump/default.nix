@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, autoreconfHook, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "bgpdump";
-  version = "1.6.0";
+  version = "1.6.2";
 
-  src = fetchurl {
-    url = "https://ris.ripe.net/source/bgpdump/libbgpdump-1.6.0.tgz";
-    sha256 = "144369gj35mf63nz4idqwsvgsirw7fybm8kkk07yymrjp8jr3aqk";
+  src = fetchFromGitHub {
+    owner = "RIPE-NCC";
+    repo = "bgpdump";
+    rev = "v${version}";
+    sha256 = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib bzip2 ];
 
   meta = {
-    homepage = "https://bitbucket.org/ripencc/bgpdump/";
-    description = ''Analyze dump files produced by Zebra/Quagga or MRT'';
-    license = stdenv.lib.licenses.hpnd;
-    maintainers = with stdenv.lib.maintainers; [ lewo ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://github.com/RIPE-NCC/bgpdump";
+    description = "Analyze dump files produced by Zebra/Quagga or MRT";
+    license = lib.licenses.hpnd;
+    maintainers = with lib.maintainers; [ lewo ];
+    platforms = with lib.platforms; linux;
   };
 }

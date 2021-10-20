@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, linuxHeaders } :
+{ lib, stdenv, fetchurl, linuxHeaders } :
 
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "3.1";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxptp/${pname}-${version}.tgz";
-    sha256 = "0zff502w3nlycgv2ad8cy8nd0hqf34kzpzcygi7prp0lrw8mp3zm";
+    sha256 = "1nf0w4xyzg884v8blb81zkk6q8p6zbiq9lx61jdqwbbzkdgqbmll";
   };
 
   postPatch = ''
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
     homepage = "http://linuxptp.sourceforge.net/";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

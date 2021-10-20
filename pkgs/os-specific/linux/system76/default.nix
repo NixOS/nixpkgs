@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 let
-  version = "1.0.9";
-  sha256 = "0i4825y2vd679kdjv30ifzj1i1066d3x37z4lgk39hx16993k162";
+  version = "1.0.13";
+  sha256 = "162hhmnww8z9k0795ffs8v3f61hlfm375law156sk5l08if19a4r";
 in
 stdenv.mkDerivation {
   name = "system76-module-${version}-${kernel.version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" ];

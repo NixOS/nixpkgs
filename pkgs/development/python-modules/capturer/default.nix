@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytest, pytestcov }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "capturer";
@@ -13,10 +13,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ humanfriendly ];
 
-  checkPhase = ''
-    PATH=$PATH:$out/bin pytest .
-  '';
-  checkInputs = [ pytest ];
+  # hangs on darwin
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Easily capture stdout/stderr of the current process and subprocesses";

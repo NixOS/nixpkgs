@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , curl
 , file
 , gtk3
 , intltool
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rkxaqb62w4mv86fcnmr32lq6y0h4hh92wmsy5ddb9a8jnzx6r7w";
   };
 
-  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  nativeBuildInputs = [ intltool makeWrapper pkg-config ];
   buildInputs = [ curl gtk3 ];
 
   postInstall = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free touch typing tutor program";
     homepage = "http://klavaro.sourceforge.net/";
     changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";

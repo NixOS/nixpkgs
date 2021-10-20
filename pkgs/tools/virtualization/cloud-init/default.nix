@@ -8,7 +8,6 @@
 , requests
 , jsonschema
 , jsonpatch
-, pytest
 , httpretty
 , dmidecode
 , pytestCheckHook
@@ -17,18 +16,16 @@
 , openssh
 }:
 
-let version = "20.3";
-
-in buildPythonApplication {
+buildPythonApplication rec {
   pname = "cloud-init";
-  inherit version;
+  version = "21.2";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = version;
-    sha256 = "1fmckxf4q4sxjqs758vw7ca0rnhl9hyq67cqpqzz2v3s1gqzjhm4";
+    sha256 = "0vhjkgs49ixfa3kkj5s3v3gcxvypm3cdvfk6adrk2bx3wv2cbhvz";
   };
 
   patches = [ ./0001-add-nixos-support.patch ];
@@ -62,9 +59,7 @@ in buildPythonApplication {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      dmidecode cloud-utils.guest
-    ]}/bin"
+    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
   ];
 
   disabledTests = [
@@ -74,6 +69,29 @@ in buildPythonApplication {
     "test_path_env_gets_set_from_main"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
+    # Doesn't work in the sandbox
+    "TestEphemeralDhcpNoNetworkSetup"
+    "TestHasURLConnectivity"
+    "TestReadFileOrUrl"
+    "TestConsumeUserDataHttp"
+    # Chef Omnibus
+    "TestInstallChefOmnibus"
+    # https://github.com/canonical/cloud-init/pull/893
+    "TestGetPackageMirrorInfo"
+  ];
+
+  disabledTestPaths = [
+    # Oracle tests are not passing
+    "cloudinit/sources/tests/test_oracle.py"
+    # Disable the integration tests. pycloudlib would be required
+    "tests/unittests/test_datasource/test_aliyun.py"
+    "tests/unittests/test_datasource/test_azure.py"
+    "tests/unittests/test_datasource/test_ec2.py"
+    "tests/unittests/test_datasource/test_exoscale.py"
+    "tests/unittests/test_datasource/test_gce.py"
+    "tests/unittests/test_datasource/test_openstack.py"
+    "tests/unittests/test_datasource/test_scaleway.py"
+    "tests/unittests/test_ec2_util.py"
   ];
 
   preCheck = ''
@@ -81,10 +99,13 @@ in buildPythonApplication {
     export TMPDIR=/tmp
   '';
 
-  meta = {
+  pythonImportsCheck = [ "cloudinit" ];
+
+  meta = with lib; {
     homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
-    maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ asl20 gpl3Plus ];
+    maintainers = with maintainers; [ madjar phile314 ];
+    platforms = platforms.all;
   };
 }

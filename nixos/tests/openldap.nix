@@ -1,4 +1,9 @@
-{ pkgs, system ? builtins.currentSystem, ... }: let
+{ pkgs ? (import ../.. { inherit system; config = { }; })
+, system ? builtins.currentSystem
+, ...
+}:
+
+let
   dbContents = ''
     dn: dc=example
     objectClass: domain
@@ -16,7 +21,7 @@
   '';
 in {
   # New-style configuration
-  current = import ./make-test-python.nix {
+  current = import ./make-test-python.nix ({ pkgs, ... }: {
     inherit testScript;
     name = "openldap";
 
@@ -53,10 +58,10 @@ in {
         declarativeContents."dc=example" = dbContents;
       };
     };
-  };
+  }) { inherit pkgs system; };
 
   # Old-style configuration
-  oldOptions = import ./make-test-python.nix {
+  oldOptions = import ./make-test-python.nix ({ pkgs, ... }: {
     inherit testScript;
     name = "openldap";
 
@@ -72,10 +77,10 @@ in {
         declarativeContents."dc=example" = dbContents;
       };
     };
-  };
+  }) { inherit system pkgs; };
 
   # Manually managed configDir, for example if dynamic config is essential
-  manualConfigDir = import ./make-test-python.nix {
+  manualConfigDir = import ./make-test-python.nix ({ pkgs, ... }: {
     name = "openldap";
 
     machine = { pkgs, ... }: {
@@ -121,5 +126,5 @@ in {
           "systemctl restart openldap",
       )
     '' + testScript;
-  };
+  }) { inherit system pkgs; };
 }

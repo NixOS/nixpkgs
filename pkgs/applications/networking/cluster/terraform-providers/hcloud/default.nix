@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-hcloud";
-  version = "1.22.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h4kplrmpsbwa0nq3zyqa0cnvhv1s5avdrjyf1k1f2z6b6h4gynf";
+    sha256 = "04fa3qr65hg1ylq2933ark5q1za6k0a4ky36a6vrw2dcgpr4f9zs";
   };
 
-  vendorSha256 = "070p34g0ca55rmfdwf1l53yr8vyhmm5sb8hm8q036n066yp03yfs";
+  vendorSha256 = "15gcnwylxkgjriqscd4lagmwfssagq0ksrlb2svidw9aahmr7hw0";
 
   # Spends an awful time in other test folders, apparently tries to reach
   # opencensus and fails.
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/terraform-provider-hcloud{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;

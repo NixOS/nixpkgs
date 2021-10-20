@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
   pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.14.0";
+  version = "2.15.1";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0q52k6mq1jfsv0ix55mjd5ljlalhklhqfrma3l61dzhgihmfawa1";
+    sha256 = "0vgijwycf3wvzv9v811jrfr5rlwmihlxwpf16spl6k9n6zaswysw";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper util-linux openssl libcap_ng pythonEnv
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =

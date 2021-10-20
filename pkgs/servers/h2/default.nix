@@ -1,15 +1,15 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
 
-  version = "1.4.193";
+  version = "1.4.199";
 
   src = fetchzip {
-    url = "https://www.h2database.com/h2-2016-10-31.zip";
-    sha256 = "1da1qcfwi5gvh68i6w6y0qpcqp3rbgakizagkajmjxk2ryc4b3z9";
+    url = "https://h2database.com/h2-2019-03-13.zip";
+    sha256 = "0pdvbnx7nqfqs7x1zkwz2q34331l55jknpk6arf6dksvnd71hinj";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     let
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/*.sh
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Java SQL database";
     homepage = "http://www.h2database.com/html/main.html";
     license = licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ mahe ];
   };
 }

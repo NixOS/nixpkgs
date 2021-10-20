@@ -1,4 +1,5 @@
 { stdenv
+, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
 , python
@@ -13,7 +14,7 @@
 
 let
   pname = "setuptools";
-  version = "50.3.1";
+  version = "57.2.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "Z4KHB3Pv4wZPou/Vbp1DFDgDp47OTDfVChGP55GtIJE=";
+      sha256 = "sha256-zFmndVoATNxfvDsacY+gj5bzIbbd/8ldbsJj4qOawTA=";
       name = "${pname}-${version}-source";
     };
 
@@ -32,13 +33,13 @@ let
     ];
 
     buildPhase = ''
-      ${python.pythonForBuild.interpreter} bootstrap.py
+      ${python.pythonForBuild.interpreter} setup.py egg_info
       ${python.pythonForBuild.interpreter} setup.py sdist --formats=gztar
 
       # Here we untar the sdist and retar it in order to control the timestamps
       # of all the files included
       tar -xzf dist/${pname}-${version}.post0.tar.gz -C dist/
-      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH"  ${pname}-${version}.post0
+      tar -czf dist/${name} -C dist/ --mtime="@$SOURCE_DATE_EPOCH" --sort=name ${pname}-${version}.post0
     '';
 
     installPhase = ''
@@ -61,7 +62,7 @@ in buildPythonPackage rec {
     (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
   ];
 
-  preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';
 
@@ -73,7 +74,7 @@ in buildPythonPackage rec {
   # Requires pytest, causing infinite recursion.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://pypi.python.org/pypi/setuptools";
     license = with licenses; [ psfl zpl20 ];

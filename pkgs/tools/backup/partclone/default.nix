@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
+, pkg-config, libuuid, e2fsprogs, nilfs-utils, ntfs3g, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "partclone";
-  version = "0.3.11";
+  version = "0.3.17";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = version;
-    sha256 = "0bv15i0gxym4dv48rgaavh8p94waryn1l6viis6qh5zm9cd08skg";
+    sha256 = "sha256-tMdBo26JvHxbVI/Y2KDMejH+YT4IVx2H/y36u9ss0C8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
-    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g 
-    (stdenv.lib.getOutput "static" stdenv.cc.libc)
+    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g openssl
+    (lib.getOutput "static" stdenv.cc.libc)
   ];
 
   configureFlags = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Utilities to save and restore used blocks on a partition";
     longDescription = ''
       Partclone provides utilities to save and restore used blocks on a
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       ext2 partition.
     '';
     homepage = "https://partclone.org";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
   };
 }

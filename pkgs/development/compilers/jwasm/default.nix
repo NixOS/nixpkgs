@@ -1,33 +1,42 @@
-{ stdenv, fetchFromGitHub
-, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "jwasm";
-  version = "2.13";
+  version = "2.14";
 
   src = fetchFromGitHub {
-    owner = "JWasm";
+    owner = "Baron-von-Riedesel";
     repo  = "JWasm";
-    rev = version;
-    sha256 = "0m972pc8vk8s9yv1pi85fsjgm6hj24gab7nalw2q04l0359nqi7w";
+    rev = "v${version}";
+    hash = "sha256-BUSsF73Q2vq6tF/YHMUyAmmFE/WWVQLRFJZkOD8T7f8=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  outputs = [ "out" "doc" ];
 
-  installPhase = ''
-    install -Dpm755 jwasm -t $out/bin/
-    install -Dpm644 $src/History.txt  $src/Readme.txt \
-                    $src/Doc/enh.txt $src/Doc/fixes.txt \
-                    $src/Doc/gencode.txt $src/Doc/overview.txt \
-                    -t $out/share/doc/jwasm/
+  dontConfigure = true;
+
+  preBuild = ''
+    cp ${if stdenv.cc.isClang then "CLUnix.mak" else "GccUnix.mak"} Makefile
+    substituteInPlace Makefile \
+      --replace "/usr/local/bin" "${placeholder "out"}/bin"
   '';
 
-  meta = {
+  postInstall = ''
+    install -Dpm644 $src/Html/License.html \
+                    $src/Html/Manual.html \
+                    $src/Html/Readme.html \
+                    -t $doc/share/doc/jwasm/
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/Baron-von-Riedesel/JWasm/";
     description = "A MASM-compatible x86 assembler";
-    homepage = "http://jwasm.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.unix;
   };
 }
+# TODO: generalize for Windows builds

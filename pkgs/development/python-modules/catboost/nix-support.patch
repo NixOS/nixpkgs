@@ -1,0 +1,181 @@
+diff --git a/catboost/python-package/setup.py b/catboost/python-package/setup.py
+index 17f1d8ff14..07da618cd1 100644
+--- a/catboost/python-package/setup.py
++++ b/catboost/python-package/setup.py
+@@ -80,7 +80,7 @@ class Helper(object):
+         self.with_cuda = os.environ.get('CUDA_PATH') or os.environ.get('CUDA_ROOT') or None
+         self.os_sdk = 'local'
+         self.with_ymake = True
+-        self.parallel = None
++        self.parallel = os.environ.get('NIX_BUILD_CORES') or None
+ 
+     def finalize_options(self):
+         if os.path.exists(str(self.with_cuda)):
+@@ -222,11 +222,12 @@ class build_ext(_build_ext):
+ 
+     def build_with_make(self, topsrc_dir, build_dir, catboost_ext, put_dir, verbose, dry_run):
+         logging.info('Buildling {} with gnu make'.format(catboost_ext))
+-        makefile = 'python{}.{}CLANG50-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
++        makefile = 'python{}.{}CLANG7-LINUX-X86_64.makefile'.format(python_version()[0], 'CUDA.' if self.with_cuda else '')
+         make_cmd = [
+             'make', '-f', '../../make/' + makefile,
+-            'CC=clang-5.0',
+-            'CXX=clang++-5.0',
++            'CC=clang',
++            'CXX=clang++',
++            'PYTHON=python2',
+             'BUILD_ROOT=' + build_dir,
+             'SOURCE_ROOT=' + topsrc_dir,
+         ]
+diff --git a/make/python2.CLANG7-LINUX-X86_64.makefile b/make/python2.CLANG7-LINUX-X86_64.makefile
+index e54b7078e8..fb7b208af9 100644
+--- a/make/python2.CLANG7-LINUX-X86_64.makefile
++++ b/make/python2.CLANG7-LINUX-X86_64.makefile
+@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+ SOURCE_ROOT = $(shell pwd)
+ PYTHON = $(shell which python)
+ 
+-ifneq ($(MAKECMDGOALS),help)
+-define _CC_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
+-$(info _CC_VERSION = '$(_CC_VERSION)')
+-
+-ifneq '$(_CC_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-ifneq ($(MAKECMDGOALS),help)
+-define _CXX_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
+-$(info _CXX_VERSION = '$(_CXX_VERSION)')
+-
+-ifneq '$(_CXX_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-
+ all\
+         ::\
+         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
+diff --git a/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile b/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
+index 2a22a79b25..522fb54a7c 100644
+--- a/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
++++ b/make/python2.CUDA.CLANG7-LINUX-X86_64.makefile
+@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+ SOURCE_ROOT = $(shell pwd)
+ PYTHON = $(shell which python)
+ 
+-ifneq ($(MAKECMDGOALS),help)
+-define _CC_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
+-$(info _CC_VERSION = '$(_CC_VERSION)')
+-
+-ifneq '$(_CC_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-ifneq ($(MAKECMDGOALS),help)
+-define _CXX_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
+-$(info _CXX_VERSION = '$(_CXX_VERSION)')
+-
+-ifneq '$(_CXX_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-
+ all\
+         ::\
+         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
+diff --git a/make/python3.CLANG7-LINUX-X86_64.makefile b/make/python3.CLANG7-LINUX-X86_64.makefile
+index fee6750bcb..dc55908371 100644
+--- a/make/python3.CLANG7-LINUX-X86_64.makefile
++++ b/make/python3.CLANG7-LINUX-X86_64.makefile
+@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+ SOURCE_ROOT = $(shell pwd)
+ PYTHON = $(shell which python)
+ 
+-ifneq ($(MAKECMDGOALS),help)
+-define _CC_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
+-$(info _CC_VERSION = '$(_CC_VERSION)')
+-
+-ifneq '$(_CC_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-ifneq ($(MAKECMDGOALS),help)
+-define _CXX_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
+-$(info _CXX_VERSION = '$(_CXX_VERSION)')
+-
+-ifneq '$(_CXX_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-
+ all\
+         ::\
+         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\
+diff --git a/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile b/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
+index 5146830476..ff8535b03e 100644
+--- a/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
++++ b/make/python3.CUDA.CLANG7-LINUX-X86_64.makefile
+@@ -4,33 +4,6 @@ BUILD_ROOT = $(shell pwd)
+ SOURCE_ROOT = $(shell pwd)
+ PYTHON = $(shell which python)
+ 
+-ifneq ($(MAKECMDGOALS),help)
+-define _CC_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CC_VERSION = $(shell echo '$(_CC_TEST)' | $(CC) -E -P -)
+-$(info _CC_VERSION = '$(_CC_VERSION)')
+-
+-ifneq '$(_CC_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-ifneq ($(MAKECMDGOALS),help)
+-define _CXX_TEST
+-__clang_major__ __clang_minor__
+-endef
+-
+-_CXX_VERSION = $(shell echo '$(_CXX_TEST)' | $(CXX) -E -P -)
+-$(info _CXX_VERSION = '$(_CXX_VERSION)')
+-
+-ifneq '$(_CXX_VERSION)' '7 0'
+-    $(error clang 7.0 is required)
+-endif
+-endif
+-
+-
+ all\
+         ::\
+         $(BUILD_ROOT)/catboost/python-package/catboost/_catboost.so\

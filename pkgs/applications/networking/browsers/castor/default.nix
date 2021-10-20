@@ -1,5 +1,5 @@
-{ stdenv
-, fetchurl
+{ lib
+, fetchFromSourcehut
 , rustPlatform
 , pkg-config
 , wrapGAppsHook
@@ -13,14 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "castor";
-  version = "0.8.16";
+  version = "0.8.18";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~julienxx/castor/archive/${version}.tar.gz";
-    sha256 = "1qwsprwazkzcs70h219fhh5jj5s5hm1k120fn3pk4qivii4lyhah";
+  src = fetchFromSourcehut {
+    owner = "~julienxx";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-sv6hiSTVFe3jxNuaM6Jyn7UeqFqUNmRvYtWfkJTJ4tA=";
   };
 
-  cargoSha256 = "0yn2kfiaz6d8wc8rdqli2pwffp5vb1v3zi7520ysrd5b6fc2csf2";
+  cargoSha256 = "sha256-/IHxvTW9VYZmgjmDh0zJFDQqfw/H5CXVwEuLKq6Hnys=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,9 +41,9 @@ rustPlatform.buildRustPackage rec {
   postInstall = "make PREFIX=$out copy-data";
 
   # Sometimes tests fail when run in parallel
-  cargoParallelTestThreads = false;
+  dontUseCargoParallelThreads = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
     homepage = "https://sr.ht/~julienxx/Castor";
     license = licenses.mit;

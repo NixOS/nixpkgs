@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
   # Darwin
   libiconv, CoreFoundation, Security }:
 
@@ -13,16 +13,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "06xkhlfix0h6di6cnvc4blbj3mjy90scbh89dvywbx16wjlc79pf";
   };
 
-  buildInputs = [ cmake libzip gnupg ] ++
-    (if stdenv.isDarwin then [ libiconv CoreFoundation Security ] else []);
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libzip gnupg ]
+    ++ (lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  cargoSha256 = "092yfpr2svp1qy7xis1q0sdkbsjmmswmdwb0rklrc0yhydcsghp9";
+  cargoSha256 = "1ghr01jcq12ddna5qadvjy6zbgqgma5nf0qv06ayxnra37d2l92l";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serverless Information Tracker";
     homepage = "https://sit.fyi/";
     license = with licenses; [ asl20 /* or */ mit ];

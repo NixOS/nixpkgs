@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-who'';
-  version = ''20190710-git'';
+  baseName = "cl-who";
+  version = "20190710-git";
 
   parasites = [ "cl-who-test" ];
 
-  description = ''(X)HTML generation macros'';
+  description = "(X)HTML generation macros";
 
   deps = [ args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-who/2019-07-10/cl-who-20190710-git.tgz'';
-    sha256 = ''0pbigwn38xikdwvjy9696z9f00dwg565y3wh6ja51q681y8zh9ir'';
+    url = "http://beta.quicklisp.org/archive/cl-who/2019-07-10/cl-who-20190710-git.tgz";
+    sha256 = "0pbigwn38xikdwvjy9696z9f00dwg565y3wh6ja51q681y8zh9ir";
   };
 
   packageName = "cl-who";

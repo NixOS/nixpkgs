@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, python3Packages, sqlite, which }:
+{ lib, fetchFromGitHub, python3Packages, sqlite, which }:
 
 python3Packages.buildPythonApplication rec {
   pname = "s3ql";
-  version = "3.3.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "release-${version}";
-    sha256 = "1x0xj8clfs8fdczn8skc2wag5i4z47bsvlczn22iaf20hll1bb2w";
+    sha256 = "042fvkvranfnv2xxxz9d92cgia14p1hwmpjgm0rr94pjd36n1sfs";
   };
 
-  checkInputs = [ which ] ++ (with python3Packages; [ cython pytest ]);
+  checkInputs = [ which ] ++ (with python3Packages; [ cython pytest pytest-trio ]);
   propagatedBuildInputs = with python3Packages; [
-    sqlite apsw pycrypto requests defusedxml dugong llfuse
-    cython pytest pytest-catchlog google_auth google-auth-oauthlib
+    sqlite apsw pycrypto requests defusedxml dugong
+    google-auth google-auth-oauthlib trio pyfuse3
   ];
 
   preBuild = ''
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
     license = licenses.gpl3;

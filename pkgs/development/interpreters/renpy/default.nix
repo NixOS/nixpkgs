@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python2Packages, pkgconfig, SDL2
-, libpng, ffmpeg_3, freetype, glew, libGL, libGLU, fribidi, zlib
+{ lib, stdenv, fetchurl, python2Packages, pkg-config, SDL2
+, libpng, ffmpeg, freetype, glew, libGL, libGLU, fribidi, zlib
 , glib
 }:
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "renpy";
   version = "7.3.5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ren'Py Visual Novel Engine";
     homepage = "https://renpy.org/";
     license = licenses.mit;
@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
     substituteInPlace launcher/game/choose_directory.rpy --replace /usr/bin/python ${python.interpreter}
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     python cython wrapPython tkinter
-    SDL2 libpng ffmpeg_3 freetype glew libGLU libGL fribidi zlib pygame_sdl2 glib
+    SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib pygame_sdl2 glib
   ];
 
   pythonPath = [ pygame_sdl2 tkinter ];
 
-  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg_3 ffmpeg_3.out freetype glew.dev glew.out libGLU libGL fribidi zlib
+  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
+    SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU libGL fribidi zlib
   ]);
 
   buildPhase = ''

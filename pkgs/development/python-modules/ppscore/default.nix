@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
 , pandas
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 }:
 
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pandas
-    scikitlearn
+    scikit-learn
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
     license = licenses.mit;

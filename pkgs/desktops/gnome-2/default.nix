@@ -58,7 +58,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
-  gtksourceview = callPackage ./desktop/gtksourceview { };
+  gtksourceview = callPackage ./desktop/gtksourceview {
+    autoreconfHook = pkgs.autoreconfHook269;
+  };
 
   vte = callPackage ./desktop/vte { };
 
@@ -72,7 +74,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
 
     # Included for backwards compatibility
-    libsoup libwnck gtk-doc gnome-doc-utils rarian
+    libsoup libwnck2 gtk-doc gnome-doc-utils rarian
 
     gvfs # added 2019-09-03
   ;

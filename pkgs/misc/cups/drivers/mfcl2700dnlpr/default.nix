@@ -1,4 +1,4 @@
-{ coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused, makeWrapper, perl, stdenv, which }:
+{ lib, stdenv, coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused, makeWrapper, perl, which }:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2700dnlpr";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2700DN \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         coreutils ghostscript gnugrep gnused which
       ]}
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L2700DN LPR driver";
     homepage = "http://www.brother.com/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.tv ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.tv ];
     platforms = [ "i686-linux" ];
   };
 }

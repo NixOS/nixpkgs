@@ -1,26 +1,28 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
 , graphviz
 , makeFontsConf
 , freefont_ttf
 , mock
-, pytest
+, pytestCheckHook
 , pytest-mock
-, pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.14.1";
+  version = "0.17";
+
+  disabled = pythonOlder "3.6";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "02bdiac5x93f2mjw5kpgs6kv81hzg07y0mw1nxvhyg8aignzmh3c";
+    sha256 = "sha256-K6z2C7hQH2A9bqgRR4MRqxVAH/k2NQBEelb2/6KDUr0=";
   };
 
   patches = [
@@ -30,15 +32,19 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytest pytest-mock pytestcov ];
+  checkInputs = [ mock pytestCheckHook pytest-mock ];
 
-  checkPhase = ''
-    pytest
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
   meta = with lib; {

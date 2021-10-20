@@ -5,41 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.11.1";
+  version = "1.13.1.41";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
-    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
+    fetchSubmodules = true;
+    sha256 = "1phg0szc9g018zxs5wbys4drzq1cdhyzajfg45l6a3fmi6qdi1kw";
   };
 
-  patches = [
-    ./build-tests.patch
-    (fetchpatch {
-      name = "CVE-2020-15117.patch";
-      url = "https://github.com/symless/synergy-core/commit/"
-          + "0a97c2be0da2d0df25cb86dfd642429e7a8bea39.patch";
-      sha256 = "03q8m5n50fms7fjfjgmqrgy9mrxwi9kkz3f3vlrs2x5h21dl6bmj";
-    })
-  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
-
-  # Since the included gtest and gmock don't support clang and the
-  # segfault when built with gcc9, we replace it with 1.10.0 for
-  # synergy-1.11.0. This should become unnecessary when upstream
-  # updates these dependencies.
-  googletest = fetchFromGitHub {
-    owner = "google";
-    repo = "googletest";
-    rev = "release-1.10.0";
-    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
-  };
+  patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
   postPatch = ''
-    rm -r ext/*
-    cp -r ${googletest}/googlemock ext/gmock/
-    cp -r ${googletest}/googletest ext/gtest/
-    chmod -R +w ext/
+    substituteInPlace src/gui/src/SslCertificate.cpp \
+      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
   '';
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
@@ -63,7 +43,7 @@ stdenv.mkDerivation rec {
     cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
   '' + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
-    wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+    wrapQtApp $out/bin/synergy
   '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
@@ -80,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "http://synergy-project.org/";
+    homepage = "https://synergy-project.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ enzime ];
+    maintainers = with maintainers; [ talyz ];
     platforms = platforms.all;
   };
 }

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, dateutil
+, python-dateutil
 , ipython_genutils
 , decorator
 , pyzmq
@@ -11,7 +11,7 @@
 , ipykernel
 , tornado
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  propagatedBuildInputs = [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+  propagatedBuildInputs = [ python-dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
   ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # Requires access to cluster

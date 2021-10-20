@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
 , pkg-config
 , gettext
-, alsaLib
+, alsa-lib
 , acpid
 , bc
 , ddcutil
@@ -13,6 +13,7 @@
 , xkeyboard_config
 , udisks2
 
+, waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 }:
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
     bc # for the Everything module calculator mode
     ddcutil # specifically libddcutil.so.2 for backlight control
@@ -43,8 +44,9 @@ stdenv.mkDerivation rec {
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting
   ]
-  ++ stdenv.lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
-  ++ stdenv.lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+  ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+  ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+  ++ lib.optionals waylandSupport [ wayland-protocols xwayland ]
   ;
 
   patches = [
@@ -62,11 +64,11 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-D systemdunitdir=lib/systemd/user"
-  ];
+  ] ++ lib.optional waylandSupport "-Dwl=true";
 
   passthru.providedSessions = [ "enlightenment" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;

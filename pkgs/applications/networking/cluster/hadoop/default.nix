@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
-, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, which, maven, cmake, jre, jdk8, bash
+, coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2, fetchpatch, libtirpc
 }:
 
 let
-  common = { version, sha256, dependencies-sha256, tomcat, opensslPkg ? openssl }:
+  maven-jdk8 = maven.override {
+    jdk = jdk8;
+  };
+  common = { version, sha256, dependencies-sha256, maven, tomcat, opensslPkg ? openssl }:
     let
       # compile the hadoop tarball from sources, it requires some patches
       binary-distributon = stdenv.mkDerivation rec {
@@ -13,7 +16,7 @@ let
           inherit sha256;
         };
 
-        postUnpack = stdenv.lib.optionalString (tomcat != null) ''
+        postUnpack = lib.optionalString (tomcat != null) ''
           install -D ${tomcat.src} $sourceRoot/hadoop-hdfs-project/hadoop-hdfs-httpfs/downloads/apache-tomcat-${tomcat.version}.tar.gz
           install -D ${tomcat.src} $sourceRoot/hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
         '';
@@ -34,9 +37,20 @@ let
           outputHash = dependencies-sha256;
         };
 
-        nativeBuildInputs = [ maven cmake pkgconfig ];
-        buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ];
+        nativeBuildInputs = [ maven cmake pkg-config ];
+        buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 libtirpc ];
+        NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+        NIX_LDFLAGS = [ "-ltirpc" ];
+
         # most of the hardcoded pathes are fixed in 2.9.x and 3.0.0, this list of patched files might be reduced when 2.7.x and 2.8.x will be deprecated
+
+        patches = [
+          (fetchpatch {
+            url = "https://patch-diff.githubusercontent.com/raw/apache/hadoop/pull/2886.patch";
+            sha256 = "1fim1d8va050za5i8a6slphmx015fzvhxkc2wi4rwg7kbj31sv0r";
+          })
+        ];
+
         postPatch = ''
           for file in hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/HardLink.java \
                       hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/util/Shell.java \
@@ -59,8 +73,8 @@ let
           # 'maven.repo.local' must be writable
           mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetched-maven-deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 ${mavenFlags}
           # remove runtime dependency on $jdk/jre/lib/amd64/server/libjvm.so
-          patchelf --set-rpath ${stdenv.lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhadoop.so.1.0.0
-          patchelf --set-rpath ${stdenv.lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhdfs.so.0.0.0
+          patchelf --set-rpath ${lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhadoop.so.1.0.0
+          patchelf --set-rpath ${lib.makeLibraryPath [glibc]} hadoop-dist/target/hadoop-${version}/lib/native/libhdfs.so.0.0.0
         '';
         installPhase = "mv hadoop-dist/target/hadoop-${version} $out";
       };
@@ -86,16 +100,16 @@ let
             if [ -f "$n" ]; then # only regular files
               mv $n $out/bin.wrapped/
               makeWrapper $out/bin.wrapped/$(basename $n) $n \
-                --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
-                --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
+                --prefix PATH : "${lib.makeBinPath [ which jre bash coreutils ]}" \
+                --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath [ opensslPkg snappy zlib bzip2 ]}" \
                 --set JAVA_HOME "${jre}" \
                 --set HADOOP_PREFIX "$out"
             fi
           done
         '';
 
-        meta = with stdenv.lib; {
-          homepage = "http://hadoop.apache.org/";
+        meta = with lib; {
+          homepage = "https://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = licenses.asl20;
 
@@ -131,6 +145,7 @@ in {
     dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
     opensslPkg = openssl_1_0_2;
+    maven = maven-jdk8;
   };
   hadoop_2_8 = common {
     version = "2.8.4";
@@ -138,6 +153,7 @@ in {
     dependencies-sha256 = "1j4f461487fydgr5978nnm245ksv4xbvskfr8pbmfhcyss6b7w03";
     tomcat = tomcat_6_0_48;
     opensslPkg = openssl_1_0_2;
+    maven = maven-jdk8;
   };
   hadoop_2_9 = common {
     version = "2.9.1";
@@ -145,17 +161,20 @@ in {
     dependencies-sha256 = "1d5i8jj5y746rrqb9lscycnd7acmxlkz64ydsiyqsh5cdqgy2x7x";
     tomcat = tomcat_6_0_48;
     opensslPkg = openssl_1_0_2;
+    maven = maven-jdk8;
   };
   hadoop_3_0 = common {
     version = "3.0.3";
     sha256 = "1vvkci0kx4b48dg0niifn2d3r4wwq8pb3c5z20wy8pqsqrqhlci5";
     dependencies-sha256 = "1kzkna9ywacm2m1cirj9cyip66bgqjhid2xf9rrhq6g10lhr8j9m";
     tomcat = null;
+    maven = maven-jdk8;
   };
   hadoop_3_1 = common {
     version = "3.1.1";
     sha256 = "04hhdbyd4x1hy0fpy537f8mi0864hww97zap29x7dk1smrffwabd";
     dependencies-sha256 = "1q63jsxg3d31x0p8hvhpvbly2b07almyzsbhwphbczl3fhlqgiwn";
     tomcat = null;
+    maven = maven-jdk8;
   };
 }

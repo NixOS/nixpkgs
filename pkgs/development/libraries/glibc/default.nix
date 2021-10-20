@@ -1,4 +1,4 @@
-{ stdenv, callPackage
+{ lib, stdenv, callPackage
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
@@ -14,7 +14,7 @@ let
 in
 
 callPackage ./common.nix { inherit stdenv; } {
-    name = "glibc" + stdenv.lib.optionalString withGd "-gd";
+    pname = "glibc" + lib.optionalString withGd "-gd";
 
     inherit withLinuxHeaders profilingLibraries withGd;
 
@@ -46,15 +46,15 @@ callPackage ./common.nix { inherit stdenv; } {
     hardeningDisable = [ "stackprotector" "fortify" ]
     # XXX: Not actually musl-speciic but since only musl enables pie by default,
     #      limit rebuilds by only disabling pie w/musl
-      ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
+      ++ lib.optional stdenv.hostPlatform.isMusl "pie";
 
-    NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " "
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
       (builtins.concatLists [
-        (stdenv.lib.optionals withGd gdCflags)
+        (lib.optionals withGd gdCflags)
         # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
         # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
-        (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-        (stdenv.lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
+        (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+        (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
           # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
           # New warning as of GCC 9
           # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
@@ -81,14 +81,14 @@ callPackage ./common.nix { inherit stdenv; } {
     postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
-    '' else stdenv.lib.optionalString stdenv.buildPlatform.isLinux ''
+    '' else lib.optionalString stdenv.buildPlatform.isLinux ''
       # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
       # Instead of using their patch to build a build-native localedef,
       # we simply use the one from buildPackages
       pushd ../glibc-2*/localedata
       export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
       mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
-      ${stdenv.lib.getBin buildPackages.glibc}/bin/localedef \
+      ${lib.getBin buildPackages.glibc}/bin/localedef \
         --alias-file=../intl/locale.alias \
         -i locales/C \
         -f charmaps/UTF-8 \
@@ -122,7 +122,7 @@ callPackage ./common.nix { inherit stdenv; } {
     ''
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
-    + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
 
       for i in "$out"/lib/*.a; do
           [ "$i" = "$out/lib/libm.a" ] || $STRIP -S "$i"

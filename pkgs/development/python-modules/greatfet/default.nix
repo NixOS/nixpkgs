@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "GreatFET";
   version = "2019.5.1.dev0";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
-    rev = "a927f21d59ccface00635146103a807c1d2b0ad8";
+    rev = "v${version}";
     sha256 = "054vkx4xkbhxhh5grjbs9kw3pjkv1zapp91ysrqr0c8mg1pc7zxv";
   };
 

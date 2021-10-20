@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "9229193ee719568d482192d9d913b3c4bb96af7c589d6c31ed4a62caf5054278";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dependencies for mwlib markup";
     homepage = "http://pediapress.com/code/";
     license = licenses.bsd3;

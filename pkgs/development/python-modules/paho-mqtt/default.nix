@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, stdenv, pytestrunner, pytest, mock }:
+, stdenv, pytest-runner, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
-  version = "1.5.0";
+  version = "1.5.1";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
     rev = "v${version}";
-    sha256 = "1fq5z53g2k18iiqnz5qq87vzjpppfza072nx0dwllmhimm2dskh5";
+    sha256 = "1y537i6zxkjkmi80w5rvd18npz1jm5246i2x8p3q7ycx94i8ixs0";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--pylama" ""
   '';
 
-  checkInputs = [ pytestrunner pytest ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [ pytest-runner pytest ] ++ lib.optional (!isPy3k) mock;
 
   doCheck = !stdenv.isDarwin;
 

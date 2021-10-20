@@ -29,8 +29,10 @@ in
       description = "Tvheadend Service user";
       home        = "/var/lib/tvheadend";
       createHome  = true;
-      uid         = config.ids.uids.tvheadend;
+      isSystemUser = true;
+      group = "tvheadend";
     };
+    users.groups.tvheadend = {};
 
     systemd.services.tvheadend = {
       description = "Tvheadend TV streaming server";

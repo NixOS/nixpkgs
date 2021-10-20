@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
-, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gnutls, freetype
+, SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsa-lib, libjack2, libvorbis
 , libSM, libsndfile, libogg, libtool
 }:
 let
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
+  nativeBuildInputs = [ pkg-config autoreconfHook libtool ];
   buildInputs = [
     freetype SDL SDL_gfx SDL_ttf
-    liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
+    liblo libxml2 libjack2 alsa-lib libvorbis libsndfile libogg libSM
     (gnutls.overrideAttrs (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
     }))
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     '' ;
 
     homepage = "http://freewheeling.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.sepi ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.sepi ];
+    platforms = lib.platforms.linux;
   };
 }

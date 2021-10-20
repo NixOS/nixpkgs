@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, help2man }:
+{ lib, stdenv, fetchFromGitHub, cmake, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "postsrsd";
-  version = "1.9";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "0kmdm8nwb40cs4wvxv2kapjbiy4h6924zmx8h1kk7j3j9yjshl1p";
+    sha256 = "sha256-M1VtH+AToLh9J4zwIznInfFJzqmKElTvqAgI+qqL+Lw=";
   };
 
   cmakeFlags = [ "-DGENERATE_SRS_SECRET=OFF" "-DINIT_FLAVOR=systemd" ];
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake help2man ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
   };
 }

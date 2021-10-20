@@ -1,9 +1,13 @@
-{ stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
+{ lib, stdenv, buildPackages
+, appleDerivation', cpio, xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutil, hfs, darling, darwin-stubs }:
+, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
+, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
+, headersOnly ? false
+, withLibresolv ? !headersOnly
+}:
 
-appleDerivation {
+appleDerivation' stdenv {
   dontBuild = true;
   dontFixup = true;
 
@@ -21,13 +25,13 @@ appleDerivation {
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
-               ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
-               ${libutil} ${libpthread} ${hfs}; do
+               ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
-    (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
+    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
 
     mkdir -p $out/include/os
 
@@ -65,7 +69,13 @@ appleDerivation {
     #define TARGET_OS_UNIX          0
     #define TARGET_OS_EMBEDDED      0
     #define TARGET_OS_IPHONE        0
+    #define TARGET_OS_IOS           0
+    #define TARGET_OS_WATCH         0
+    #define TARGET_OS_BRIDGE        0
+    #define TARGET_OS_TV            0
+    #define TARGET_OS_SIMULATOR     0
     #define TARGET_IPHONE_SIMULATOR 0
+    #define TARGET_OS_NANO          0
     #define TARGET_OS_LINUX         0
 
     #define TARGET_CPU_PPC          0
@@ -84,6 +94,7 @@ appleDerivation {
     #define TARGET_RT_64_BIT        1
     #endif  /* __TARGETCONDITIONALS__ */
     EOF
+  '' + lib.optionalString (!headersOnly) ''
 
     # The startup object files
     cp ${Csu}/lib/* $out/lib
@@ -101,21 +112,24 @@ appleDerivation {
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
       ln -s libSystem.tbd $out/lib/lib$name.tbd
     done
+  '' + lib.optionalString withLibresolv ''
 
     # This probably doesn't belong here, but we want to stay similar to glibc, which includes resolv internally...
     cp ${libresolv}/lib/libresolv.9.dylib $out/lib/libresolv.9.dylib
-    resolv_libSystem=$(otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
+    resolv_libSystem=$(${stdenv.cc.bintools.targetPrefix}otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
     echo $libs
 
     chmod +w $out/lib/libresolv.9.dylib
-    install_name_tool \
+    ${stdenv.cc.bintools.targetPrefix}install_name_tool \
       -id $out/lib/libresolv.9.dylib \
       -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 
-  meta = with stdenv.lib; {
+  appleHeaders = builtins.readFile ./headers.txt;
+
+  meta = with lib; {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
     platforms   = platforms.darwin;

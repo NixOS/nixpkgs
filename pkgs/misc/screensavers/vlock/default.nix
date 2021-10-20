@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, pam }:
+{ lib, stdenv, fetchurl, pam }:
 
-stdenv.mkDerivation {
-  name = "vlock-2.2.2";
-  src = fetchurl
-  {
-    url = "mirror://debian/pool/main/v/vlock/vlock_2.2.2.orig.tar.gz";
+stdenv.mkDerivation rec {
+  pname = "vlock";
+  version = "2.2.2";
+
+  src = fetchurl {
+    url = "mirror://debian/pool/main/v/vlock/vlock_${version}.orig.tar.gz";
     sha256 = "1b9gv7hmlb8swda5bn40lp1yki8b8wv29vdnhcjqfl6ir98551za";
   };
 
@@ -20,10 +21,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ pam ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual console locking program";
     license = licenses.gpl2;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

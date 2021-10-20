@@ -1,4 +1,4 @@
-{ alsaLib
+{ alsa-lib
 , cmake
 , fetchFromGitHub
 , fmt
@@ -15,11 +15,11 @@
 , libxml2
 , makeWrapper
 , perl
-, pkgconfig
+, pkg-config
 , portaudio
 , SDL2
 , soundtouch
-, stdenv
+, lib, stdenv
 , udev
 , wrapGAppsHook
 , wxGTK
@@ -68,10 +68,10 @@ stdenv.mkDerivation {
       --set __GL_THREADED_OPTIMIZATIONS 1
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper perl pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fmt
     gettext
     glib
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription= ''
       PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose
@@ -101,7 +101,8 @@ stdenv.mkDerivation {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
-    maintainers = with maintainers; [ hrdinka samuelgrf govanify ];
+    maintainers = with maintainers; [ hrdinka govanify ];
+    mainProgram = "PCSX2";
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.

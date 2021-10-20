@@ -1,37 +1,71 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy3k
 , decorator
 , http-parser
-, importlib-metadata
-, python
 , python_magic
-, six
-, urllib3 }:
+, urllib3
+, pytestCheckHook
+, pytest-mock
+, aiohttp
+, gevent
+, redis
+, requests
+, sure
+, pook
+}:
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.9.4";
+  version = "3.10.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b3nx8qa66isfl7rm3ljgxflr087qwabnf0a2xa1l5s28rikfj04";
+    sha256 = "1fcb4203ae257145b97c865135b3a064b47f20f42dde88c8579f43d88f1a7dfb";
   };
-
-  patchPhase = ''
-    sed -iE "s,python-magic==.*,python-magic," requirements.txt
-    sed -iE "s,urllib3==.*,urllib3," requirements.txt
-    substituteInPlace setup.py --replace 'setup_requires=["pipenv"]' "setup_requires=[]"
-  '';
 
   propagatedBuildInputs = [
     decorator
     http-parser
     python_magic
     urllib3
-    six
-  ] ++ lib.optionals (isPy27) [ six ];
+  ];
 
-  # Pypi has no runtests.py, github has no requirements.txt. No way to test, no way to install.
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+    aiohttp
+    gevent
+    redis
+    requests
+    sure
+    pook
+  ];
+
+  pytestFlagsArray = [
+    # Requires a live Redis instance
+    "--ignore=tests/main/test_redis.py"
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    # Uses IsolatedAsyncioTestCase which is only available >= 3.8
+    "--ignore=tests/tests38/test_http_aiohttp.py"
+  ];
+
+  disabledTests = [
+    # tests that require network access (like DNS lookups)
+    "test_truesendall"
+    "test_truesendall_with_chunk_recording"
+    "test_truesendall_with_gzip_recording"
+    "test_truesendall_with_recording"
+    "test_wrongpath_truesendall"
+    "test_truesendall_with_dump_from_recording"
+    "test_truesendall_with_recording_https"
+    "test_truesendall_after_mocket_session"
+    "test_real_request_session"
+    "test_asyncio_record_replay"
+  ];
 
   pythonImportsCheck = [ "mocket" ];
 

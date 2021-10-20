@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gdbm";
-  version = "1.18.1";
+  version = "1.20";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
-    sha256 = "1p4ibds6z3ccy65lkmd6lm7js0kwifvl53r0fd759fjxgr917rl6";
+    sha256 = "sha256-OurAVkizSCoQotqYa586OAoprWUL6AuYF6Q1+4EUopI=";
   };
 
   doCheck = true; # not cross;
-
-  patches = [ ./0001-Remove-duplicate-assignments.patch ];
 
   # Linking static stubs on cygwin requires correct ordering.
   # Consider upstreaming this.

@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "git-fire-unstable-2017-08-27";
+  pname = "git-fire";
+  version = "unstable-2017-08-27";
 
   src = fetchFromGitHub {
     owner = "qw3rtman";
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
     install -D -m755 $src/git-fire $out/bin/git-fire
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Push ALL changes in a git repository
     '';
@@ -23,7 +24,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/qw3rtman/git-fire";
     license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.swflint ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ swflint ];
+    mainProgram = "git-fire";
   };
 }

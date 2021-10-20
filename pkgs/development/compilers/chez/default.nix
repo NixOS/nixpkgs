@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , coreutils, cctools
 , ncurses, libiconv, libX11, libuuid
 }:
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ coreutils ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ coreutils ] ++ lib.optional stdenv.isDarwin cctools;
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
   ** We patch out a very annoying 'feature' in ./configure, which
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
     homepage     = "https://cisco.github.io/ChezScheme/";
-    license      = stdenv.lib.licenses.asl20;
-    maintainers  = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms    = stdenv.lib.platforms.unix;
+    license      = lib.licenses.asl20;
+    maintainers  = with lib.maintainers; [ thoughtpolice ];
+    platforms    = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" ];
   };
 }

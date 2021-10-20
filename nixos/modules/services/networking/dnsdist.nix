@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.dnsdist;
-  configFile = pkgs.writeText "dndist.conf" ''
+  configFile = pkgs.writeText "dnsdist.conf" ''
     setLocal('${cfg.listenAddress}:${toString cfg.listenPort}')
     ${cfg.extraConfig}
   '';
@@ -26,8 +26,7 @@ in {
 
       extraConfig = mkOption {
         type = types.lines;
-        default = ''
-        '';
+        default = "";
         description = ''
           Extra lines to be added verbatim to dnsdist.conf.
         '';

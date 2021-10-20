@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''net-telent-date'';
-  version = ''net-telent-date_0.42'';
+  baseName = "net-telent-date";
+  version = "net-telent-date_0.42";
 
-  description = ''System lacks description'';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/net-telent-date/2010-10-06/net-telent-date_0.42.tgz'';
-    sha256 = ''06vdlddwi6kx999n1093chwgw0ksbys4j4w9i9zqvw768wxp4li1'';
+    url = "http://beta.quicklisp.org/archive/net-telent-date/2010-10-06/net-telent-date_0.42.tgz";
+    sha256 = "06vdlddwi6kx999n1093chwgw0ksbys4j4w9i9zqvw768wxp4li1";
   };
 
   packageName = "net-telent-date";

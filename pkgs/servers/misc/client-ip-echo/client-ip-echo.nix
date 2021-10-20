@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, base, bytestring, network, stdenv }:
+{ mkDerivation, fetchFromGitHub, base, bytestring, network, lib }:
 mkDerivation {
   pname = "client-ip-echo";
   version = "0.1.0.5";
@@ -12,5 +12,5 @@ mkDerivation {
   isExecutable = true;
   executableHaskellDepends = [ base bytestring network ];
   description = "accepts TCP connections and echoes the client's IP address back to it";
-  license = stdenv.lib.licenses.lgpl3;
+  license = lib.licenses.lgpl3;
 }

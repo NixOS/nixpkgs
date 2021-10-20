@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , mock, pytest, pytest-mock, pytest-server-fixtures, pytest-localserver
 , termcolor, click, markdown2, six, jsonref, pyyaml, xmltodict, attrs
 }:
@@ -12,11 +12,11 @@ buildPythonPackage rec {
     sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python RAML parser.";
     homepage    = "https://ramlfications.readthedocs.org";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.all;
   };
 

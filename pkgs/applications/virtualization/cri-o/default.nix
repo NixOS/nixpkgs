@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , btrfs-progs
 , buildGoModule
 , fetchFromGitHub
@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "1lrr8y0k6609z4gb8cg277rq58sh0bqd2b4mzjlynyjdgp3xskfq";
+    sha256 = "sha256-lY/kHvJBN7idFn3YUEHMR4w+M3F89RKMsvvyHmH/EPc=";
   };
   vendorSha256 = null;
 
@@ -37,14 +37,17 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
+    runHook preBuild
     make binaries docs BUILDTAGS="$BUILDTAGS"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/* -t $out/bin
 
     for shell in bash fish zsh; do
@@ -52,11 +55,12 @@ buildGoModule rec {
     done
 
     installManPage docs/*.[1-9]
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the

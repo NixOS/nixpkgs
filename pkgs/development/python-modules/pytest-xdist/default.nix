@@ -1,31 +1,45 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest_6
-, setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, pytestCheckHook
+, filelock
+, execnet
+, pytest
+, pytest-forked
+, psutil
+}:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.1.0";
-  disabled = !isPy3k;
+  version = "2.3.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wh6pn66nncfs6ay0n863bgyriwsgppn8flx5l7551j1lbqkinc2";
+    sha256 = "e8ecde2f85d88fbcadb7d28cb33da0fa29bca5cf7d5967fa89fc0e97e5299ea5";
   };
 
-  nativeBuildInputs = [ setuptools_scm pytest_6 ];
-  checkInputs = [ pytest_6 filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
+  nativeBuildInputs = [ setuptools-scm ];
+  buildInputs = [
+    pytest
+  ];
+  checkInputs = [ pytestCheckHook filelock ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
-  # pytest6 doesn't allow for new lines
-  # capture_deprecated not compatible with latest pytest6
-  checkPhase = ''
-    # Excluded tests access file system
-    export HOME=$TMPDIR
-    pytest -n $NIX_BUILD_CORES \
-      -k "not (distribution_rsyncdirs_example or rsync or warning_captured_deprecated_in_pytest_6)"
-  '';
+  # access file system
+  disabledTests = [
+    "test_distribution_rsyncdirs_example"
+    "test_rsync_popen_with_path"
+    "test_popen_rsync_subdir"
+    "test_rsync_report"
+    "test_init_rsync_roots"
+    "test_rsyncignore"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+  meta = with lib; {
+    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

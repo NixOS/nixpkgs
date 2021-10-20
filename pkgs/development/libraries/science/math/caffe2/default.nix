@@ -90,26 +90,26 @@ stdenv.mkDerivation rec {
     ./fix_compilation_on_gcc7.patch
   ] ++ lib.optional stdenv.cc.isClang [ ./update_clang_cvtsh_bugfix.patch ];
 
-  cmakeFlags = [ ''-DBUILD_TEST=OFF''
-                 ''-DBUILD_PYTHON=ON''
-                 ''-DUSE_CUDA=${if useCuda then ''ON''else ''OFF''}''
-                 ''-DUSE_OPENMP=${if useOpenmp then ''ON''else ''OFF''}''
-                 ''-DUSE_OPENCV=${if useOpencv3 then ''ON''else ''OFF''}''
-                 ''-DUSE_MPI=${if useMpi then ''ON''else ''OFF''}''
-                 ''-DUSE_LEVELDB=${if useLeveldb then ''ON''else ''OFF''}''
-                 ''-DUSE_LMDB=${if useLmdb then ''ON''else ''OFF''}''
-                 ''-DUSE_ROCKSDB=${if useRocksdb then ''ON''else ''OFF''}''
-                 ''-DUSE_ZMQ=${if useZeromq  then ''ON''else ''OFF''}''
-                 ''-DUSE_GLOO=OFF''
-                 ''-DUSE_NNPACK=OFF''
-                 ''-DUSE_NCCL=OFF''
-                 ''-DUSE_REDIS=OFF''
-                 ''-DUSE_FFMPEG=OFF''
+  cmakeFlags = [ "-DBUILD_TEST=OFF"
+                 "-DBUILD_PYTHON=ON"
+                 ''-DUSE_CUDA=${if useCuda then "ON"else "OFF"}''
+                 ''-DUSE_OPENMP=${if useOpenmp then "ON"else "OFF"}''
+                 ''-DUSE_OPENCV=${if useOpencv3 then "ON"else "OFF"}''
+                 ''-DUSE_MPI=${if useMpi then "ON"else "OFF"}''
+                 ''-DUSE_LEVELDB=${if useLeveldb then "ON"else "OFF"}''
+                 ''-DUSE_LMDB=${if useLmdb then "ON"else "OFF"}''
+                 ''-DUSE_ROCKSDB=${if useRocksdb then "ON"else "OFF"}''
+                 ''-DUSE_ZMQ=${if useZeromq  then "ON"else "OFF"}''
+                 "-DUSE_GLOO=OFF"
+                 "-DUSE_NNPACK=OFF"
+                 "-DUSE_NCCL=OFF"
+                 "-DUSE_REDIS=OFF"
+                 "-DUSE_FFMPEG=OFF"
                ]
                ++ lib.optional useCuda [
-                 ''-DCUDA_TOOLKIT_ROOT_DIR=${cudatoolkit}''
-                 ''-DCUDA_FAST_MATH=ON''
-                 ''-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc''
+                 "-DCUDA_TOOLKIT_ROOT_DIR=${cudatoolkit}"
+                 "-DCUDA_FAST_MATH=ON"
+                 "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
                ];
 
   preConfigure = ''
@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://caffe2.ai/";
@@ -137,8 +136,12 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
+    # fails to compile with
+    # error: invalid conversion from 'const char*' to 'char*'
+    # TODO: Remove usage of python2, protobuf overwrite
+    broken = true;
   };
 }

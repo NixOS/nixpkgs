@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
-, clang-unwrapped
-, llvm
+, pkg-config
+, libclang
+, libllvm
 , libdrm
 , libX11
 , libpthreadstubs
@@ -30,18 +30,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang_llvm.patch ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc/OpenCL/vendors "\''${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors"
     patchShebangs src/git_sha1.sh
   '';
 
-  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${clang-unwrapped}/lib" ];
+  cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${libclang.lib}/lib" ];
 
   buildInputs = [
-    llvm
-    clang-unwrapped
+    libllvm
+    libclang
     libX11
     libXext
     libpthreadstubs
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -66,12 +64,10 @@ stdenv.mkDerivation rec {
       cd utests
     '';
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [
       cmake
       python3
-      pkgconfig
+      pkg-config
       makeWrapper
     ];
 
@@ -100,7 +96,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/beignet/";
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''

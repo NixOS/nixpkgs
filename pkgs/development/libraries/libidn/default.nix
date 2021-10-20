@@ -1,23 +1,19 @@
-{ fetchurl, stdenv, libiconv }:
+{ fetchurl, lib, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libidn-1.36";
+  pname = "libidn";
+  version = "1.38";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "0f20n634whpmdwr81c2r0vxxjwchgkvhsr1i8s2bm0ad6h473dhl";
+    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
+    sha256 = "sha256-3gC4QPdXzTuxTdmiDVk2RzI13cugbUvC2oBGVLi78PY=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
-  # broken with gcc-7
-  #doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isMusl;
-
   hardeningDisable = [ "format" ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
-
-  doCheck = false; # fails
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/";
@@ -40,8 +36,8 @@ stdenv.mkDerivation rec {
     '';
 
     repositories.git = "git://git.savannah.gnu.org/libidn.git";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ lsix ];
   };
 }

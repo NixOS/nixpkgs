@@ -7,7 +7,7 @@ let
   };
 in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nsd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
   };
 
@@ -43,6 +43,10 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       services.nsd.enable = true;
       services.nsd.rootServer = true;
       services.nsd.interfaces = lib.mkForce [];
+      services.nsd.keys."tsig.example.com." = {
+        algorithm = "hmac-sha256";
+        keyFile = pkgs.writeTextFile { name = "tsig.example.com."; text = "aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc="; };
+      };
       services.nsd.zones."example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         ipv4 A 1.2.3.4
@@ -51,6 +55,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         ns A 192.168.0.1
         ns AAAA dead:beef::1
       '';
+      services.nsd.zones."example.com.".provideXFR = [ "0.0.0.0 tsig.example.com." ];
       services.nsd.zones."deleg.example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         @ A 9.8.7.6
@@ -71,11 +76,16 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
     clientv6.wait_for_unit("network.target")
     server.wait_for_unit("nsd.service")
 
+    with subtest("server tsig.example.com."):
+        expected_tsig = "  secret: \"aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc=\"\n"
+        tsig=server.succeed("cat /var/lib/nsd/private/tsig.example.com.")
+        assert expected_tsig == tsig, f"Expected /var/lib/nsd/private/tsig.example.com. to contain '{expected_tsig}', but found '{tsig}'"
 
     def assert_host(type, rr, query, expected):
         self = clientv4 if type == 4 else clientv6
         out = self.succeed(f"host -{type} -t {rr} {query}").rstrip()
         self.log(f"output: {out}")
+        import re
         assert re.search(
             expected, out
         ), f"DNS IPv{type} query on {query} gave '{out}' instead of '{expected}'"

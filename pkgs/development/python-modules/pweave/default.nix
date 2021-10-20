@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -26,9 +26,9 @@ buildPythonPackage rec {
   # fails due to trying to run CSS as test
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
-    homepage = "http://mpastell.com/pweave/";
+    homepage = "https://mpastell.com/pweave/";
     license = licenses.bsd3;
   };
 

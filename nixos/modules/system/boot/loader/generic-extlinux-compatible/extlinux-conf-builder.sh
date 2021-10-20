@@ -109,7 +109,7 @@ addEntry() {
             exit 1
         fi
     fi
-    echo "  APPEND systemConfig=$path init=$path/init $extraParams"
+    echo "  APPEND init=$path/init $extraParams"
 }
 
 tmpFile="$target/extlinux/extlinux.conf.tmp.$$"

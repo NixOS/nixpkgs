@@ -1,12 +1,13 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 # !!! Duplication: this package is almost exactly the same as `bsd-fingerd'.
 
-stdenv.mkDerivation {
-  name = "bsd-fingerd-0.17";
+stdenv.mkDerivation rec {
+  pname = "bsd-fingerd";
+  version = "0.17";
 
   src = fetchurl {
-    url = "ftp://ftp.metalab.unc.edu/pub/linux/system/network/finger/bsd-finger-0.17.tar.gz";
+    url = "ftp://ftp.metalab.unc.edu/pub/linux/system/network/finger/bsd-finger-${version}.tar.gz";
     sha256 = "1yhkiv0in588il7f84k2xiy78g9lv12ll0y7047gazhiimk5v244";
   };
 
@@ -16,9 +17,9 @@ stdenv.mkDerivation {
 
   preBuild = "cd fingerd";
 
-  preInstall = '' mkdir -p $out/man/man8 $out/sbin '';
+  preInstall = "mkdir -p $out/man/man8 $out/sbin ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
   };

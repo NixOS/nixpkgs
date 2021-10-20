@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qmake, boost }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qmake, boost }:
 
 mkDerivation rec {
   pname = "glogg";
@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "0hf1c2m8n88frmxmyn0ndr8129p7iky49nq565sw1asaydm5z6pb";
   };
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace glogg.pro \
       --replace "boost_program_options-mt" "boost_program_options"
   '';
@@ -20,16 +20,15 @@ mkDerivation rec {
   buildInputs = [ boost ];
 
   qmakeFlags = [ "VERSION=${version}" ];
-  enableParallelBuilding = true;
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/glogg.app $out/Applications/glogg.app
     rm -fr $out/{bin,share}
     wrapQtApp $out/Applications/glogg.app/Contents/MacOS/glogg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The fast, smart log explorer";
     longDescription = ''
       A multi-platform GUI application to browse and search through long or complex log files. It is designed with programmers and system administrators in mind. glogg can be seen as a graphical, interactive combination of grep and less.

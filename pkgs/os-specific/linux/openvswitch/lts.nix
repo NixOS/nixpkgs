@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
-, procps, libcap_ng, openssl, python2, iproute , perl
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
+, procps, libcap_ng, openssl, python2, perl
 , automake, autoconf, libtool, kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
 in stdenv.mkDerivation rec {
-  version = "2.5.9";
+  version = "2.5.12";
   pname = "openvswitch";
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0iv0ncwl6s4qyyb655yj5xvqrjr1zbymmab96q259wa09xnyw7b7";
+    sha256 = "0a8wa1lj5p28x3vq0yaxjhqmppp4hvds6hhm0j3czpp8mc09fsfq";
   };
 
   patches = [ ./patches/lts-ssl.patch ];
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ autoconf libtool automake pkgconfig  ];
-  buildInputs = [ makeWrapper util-linux openssl libcap_ng python2
-                  perl procps which ];
+  nativeBuildInputs = [ autoconf libtool automake pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng python2 perl procps which ];
 
   preConfigure = "./boot.sh";
 
@@ -61,7 +60,7 @@ in stdenv.mkDerivation rec {
       --replace "self.cert_dir" "root_prefix + self.cert_dir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =

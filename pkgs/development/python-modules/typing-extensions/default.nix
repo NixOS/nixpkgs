@@ -4,11 +4,11 @@ let
 
 in buildPythonPackage rec {
   pname = "typing_extensions";
-  version = "3.7.4.3";
+  version = "3.10.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c";
+    sha256 = "49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e";
   };
 
   checkInputs = lib.optional (pythonOlder "3.5") typing;

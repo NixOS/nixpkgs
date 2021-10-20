@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "decorator";
-  version = "4.4.2";
+  version = "5.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rxzhk5zwiggk45hl53zydvy70lk654kg0nc1p54090p402jz9p3";
+    sha256 = "72ecfba4320a893c53f9706bebb2d55c270c1e51a28789361aa93e4a21319ed5";
   };
 
   meta = with lib; {

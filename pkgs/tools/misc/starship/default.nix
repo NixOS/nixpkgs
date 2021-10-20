@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -10,19 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.47.0";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vdfdwsaqrah0hgvr62qsww7s5znb1rg5kk068qpf06lmyc4gd8w";
+    sha256 = "sha256-s84fIpCyTF7FrJZGATjIJHt/+aknlhlz1V9s+c4f+Ig=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -31,20 +32,13 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "01brsckfa2zy1aqs9vjwrn4w416i8b621bvkhicanz9q56xlnd77";
+  cargoSha256 = "sha256-5YOF0nXn4rdp3uxatzdvaqdAbLlHK6nq5H4+ZX/7joM=";
 
-  checkFlags = [
-    "--skip=directory_in_home"
-    "--skip=home_directory"
-    "--skip=directory_in_root"
-    "--skip=truncation_symbol_not_truncated_home"
-    "--skip=truncation_symbol_truncated_home"
-    "--skip=folder_with_glide_yaml"
-    "--skip=shows_multiple_tfms"
-    "--skip=shows_pinned_in_project_below_root_with_global_json"
-  ];
+  preCheck = ''
+    HOME=$TMPDIR
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;

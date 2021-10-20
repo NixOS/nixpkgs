@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, freetype
+, cmake
+, static ? stdenv.hostPlatform.isStatic
+, libgcc
+}:
 
 stdenv.mkDerivation rec {
   version = "1.3.14";
@@ -10,15 +18,31 @@ stdenv.mkDerivation rec {
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ freetype ];
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [ freetype ]
+    # On aarch64-darwin libgcc won't even build currently, and it doesn't seem needed.
+    ++ lib.optionals (with stdenv; !cc.isGNU && !(isDarwin && isAarch64)) [ libgcc ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
-  checkInputs = [ python ];
-  doCheck = false; # fails, probably missing something
+  cmakeFlags = lib.optionals static [
+    "-DBUILD_SHARED_LIBS=OFF"
+  ];
 
-  meta = with stdenv.lib; {
+  # Remove a test that fails to statically link (undefined reference to png and
+  # freetype symbols)
+  postConfigure = lib.optionalString static ''
+    sed -e '/freetype freetype.c/d' -i ../tests/examples/CMakeLists.txt
+  '';
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src/
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src/
+  '';
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "An advanced font engine";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

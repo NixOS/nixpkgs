@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
+{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
 , qtquickcontrols, qtgraphicaleffects, qmake }:
 
 mkDerivation rec {
@@ -25,11 +25,9 @@ mkDerivation rec {
     mv $out/usr/share $out/share
     mv $out/usr/bin $out/bin
     rmdir $out/usr
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     ln -s $out/bin/cool-retro-term.app/Contents/MacOS/cool-retro-term $out/bin/cool-retro-term
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Terminal emulator which mimics the old cathode display";
@@ -39,8 +37,8 @@ mkDerivation rec {
       eye-candy, customizable, and reasonably lightweight.
     '';
     homepage = "https://github.com/Swordfish90/cool-retro-term";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ skeidel ];
   };
 }

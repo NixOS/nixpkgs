@@ -56,6 +56,7 @@ void bind_mount_item(const gchar *host, const gchar *guest, const gchar *name) {
 
 void bind(const gchar *host, const gchar *guest) {
   mount_tmpfs(guest);
+
   pivot_host(guest);
 
   g_autofree gchar *host_dir = g_build_filename("/host", host, NULL);
@@ -105,7 +106,11 @@ int main(gint argc, gchar **argv) {
     uid_t uid = getuid();
     gid_t gid = getgid();
 
-    if (unshare(CLONE_NEWNS | CLONE_NEWUSER) < 0) {
+    int namespaces = CLONE_NEWNS;
+    if (uid != 0) {
+      namespaces |= CLONE_NEWUSER;
+    }
+    if (unshare(namespaces) < 0) {
       int unshare_errno = errno;
 
       g_message("Requires Linux version >= 3.19 built with CONFIG_USER_NS");
@@ -116,9 +121,14 @@ int main(gint argc, gchar **argv) {
       fail("unshare", unshare_errno);
     }
 
-    spit("/proc/self/setgroups", "deny");
-    spit("/proc/self/uid_map", "%d %d 1", uid, uid);
-    spit("/proc/self/gid_map", "%d %d 1", gid, gid);
+    // hide all mounts we do from the parent
+    fail_if(mount(0, "/", 0, MS_SLAVE | MS_REC, 0));
+
+    if (uid != 0) {
+      spit("/proc/self/setgroups", "deny");
+      spit("/proc/self/uid_map", "%d %d 1", uid, uid);
+      spit("/proc/self/gid_map", "%d %d 1", gid, gid);
+    }
 
     // If there is a /host directory, assume this is nested chrootenv and use it as host instead.
     gboolean nested_host = g_file_test("/host", G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);

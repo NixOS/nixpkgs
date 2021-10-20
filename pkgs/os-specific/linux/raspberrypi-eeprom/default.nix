@@ -1,15 +1,15 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, raspberrypi-tools
+, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "unstable-2020-10-05";
+  version = "2021.04.29-138a1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "718820bcebd21d4a619fa262d9b9cf3acbf110f8";
-    sha256 = "1277jsiyv34dqpandva8kxy1s0y5ql344pl9gk84avzp1mqjnv4g";
+    rev = "v${version}";
+    sha256 = "sha256-nzAMPa4gqCAcROFa7z34IoMA3aoMHX9fYCsPFde9dac=";
   };
 
   buildInputs = [ python3 ];
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
     # Don't try to verify md5 signatures from /var/lib/dpkg and
     # fix path to the configuration.
     substituteInPlace rpi-eeprom-update \
-      --replace 'IGNORE_DPKG_CHECKSUMS=$LOCAL_MODE' 'IGNORE_DPKG_CHECKSUMS=1' \
+      --replace 'IGNORE_DPKG_CHECKSUMS=''${LOCAL_MODE}' 'IGNORE_DPKG_CHECKSUMS=1' \
       --replace '/etc/default' '/etc'
   '';
 
@@ -28,23 +28,25 @@ stdenvNoCC.mkDerivation {
 
     cp rpi-eeprom-config rpi-eeprom-update $out/bin
     cp -r firmware/{beta,critical,old,stable} $out/share/rpi-eeprom
-    cp -r firmware/vl805 $out/bin
+    cp -P firmware/default firmware/latest $out/share/rpi-eeprom
   '';
 
   fixupPhase = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/rpi-eeprom-update \
-      --set FIRMWARE_ROOT $out/share/rpi-eeprom \
-      ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${raspberrypi-tools}/bin/vcmailbox"} \
-      --prefix PATH : "${lib.makeBinPath ([
-        binutils-unwrapped
-        findutils
-        kmod
-        pciutils
-        (placeholder "out")
-      ] ++ lib.optionals stdenvNoCC.isAarch64 [
-        raspberrypi-tools
-      ])}"
+    for i in rpi-eeprom-update rpi-eeprom-config; do
+      wrapProgram $out/bin/$i \
+        --set FIRMWARE_ROOT $out/share/rpi-eeprom \
+        ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
+        --prefix PATH : "${lib.makeBinPath ([
+          binutils-unwrapped
+          findutils
+          kmod
+          pciutils
+          (placeholder "out")
+        ] ++ lib.optionals stdenvNoCC.isAarch64 [
+          libraspberrypi
+        ])}"
+    done
   '';
 
   meta = with lib; {

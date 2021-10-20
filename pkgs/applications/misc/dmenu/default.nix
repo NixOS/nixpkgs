@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
 
 stdenv.mkDerivation rec {
   name = "dmenu-5.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "A generic, highly customizable, and efficient menu for the X Window System";
       homepage = "https://tools.suckless.org/dmenu";
       license = licenses.mit;

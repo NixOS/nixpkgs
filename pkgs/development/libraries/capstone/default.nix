@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ lib, stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   # replace faulty macos detection
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i 's/^IS_APPLE := .*$/IS_APPLE := 1/' Makefile
   '';
 
-  configurePhase = '' patchShebangs make.sh '';
+  configurePhase = "patchShebangs make.sh ";
   buildPhase = "PREFIX=$out ./make.sh";
 
   doCheck = true;
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     make check
   '';
 
-  installPhase = (stdenv.lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
+  installPhase = (lib.optionalString stdenv.isDarwin "HOMEBREW_CAPSTONE=1 ")
     + "PREFIX=$out ./make.sh install";
-  
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   enableParallelBuilding = true;
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ris ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ris ];
   };
 }

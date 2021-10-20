@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.2.4";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e79d83d4947a0945488699324802eda4ad4a63c7680ad5b2a42c71f4faa2cd8b";
+    sha256 = "51d9d923ebbfefe392582f6e3d0faa83f52e5eb6f190607820e055318dd2d2f8";
   };
 
   propagatedBuildInputs = [
@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://www.snowflake.net/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -1,14 +1,15 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tclap-1.2.2";
+  pname = "tclap";
+  version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tclap/${name}.tar.gz";
-    sha256 = "0dsqvsgzam3mypj2ladn6v1yjq9zd47p3lg21jx6kz5azkkkn0gm";
+    url = "mirror://sourceforge/tclap/${pname}-${version}.tar.gz";
+    sha256 = "sha256-Y0xbWduxzLydal9t5JSiV+KaP1nctvwwRF/zm0UYhXQ=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tclap.sourceforge.net/";
     description = "Templatized C++ Command Line Parser Library";
     platforms = platforms.all;

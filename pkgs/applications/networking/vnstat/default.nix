@@ -1,26 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, gd, ncurses, sqlite, check }:
+{ lib, stdenv
+, fetchFromGitHub
+, pkg-config
+, gd, ncurses
+, sqlite
+, check
+}:
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.6";
+  version = "2.8";
 
-  src = fetchurl {
-    sha256 = "1xvzkxkq1sq33r2s4f1967f4gnca4xw411sbapdkx541f856w9w9";
-    url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "vergoh";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-r+dmsL3bPgCDdBje7uzg+ArhMkqj+R/hepNLMDqe350=";
   };
 
   postPatch = ''
     substituteInPlace src/cfg.c --replace /usr/local $out
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gd ncurses sqlite ];
 
   checkInputs = [ check ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console-based network statistics utility for Linux";
     longDescription = ''
       vnStat is a console-based network traffic monitor for Linux and BSD that
@@ -32,5 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://humdi.net/vnstat/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ evils ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , isPy3k
@@ -6,9 +6,9 @@
 , greenlet
 , httplib2
 , six
-, dateutil
+, python-dateutil
 , fusepy
-, google_api_python_client
+, google-api-python-client
 }:
 
 buildPythonPackage rec {
@@ -22,14 +22,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gipc greenlet httplib2 six ];
-  propagatedBuildInputs = [ dateutil fusepy google_api_python_client ];
+  propagatedBuildInputs = [ python-dateutil fusepy google-api-python-client ];
 
   patchPhase = ''
     substituteInPlace gdrivefs/resources/requirements.txt \
       --replace "==" ">="
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mount Google Drive as a local file system";
     longDescription = ''
       GDriveFS is a FUSE wrapper for Google Drive developed. Design goals:

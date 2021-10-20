@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , dill
 , filelock
+, fsspec
+, huggingface-hub
 , multiprocess
 , numpy
 , pandas
@@ -14,18 +16,20 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.1.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = version;
-    hash = "sha256-upXZ2rOfmjnJbDo6RMGeHv/fe10RQAf/zwDWWKdt6SA=";
+    sha256 = "0pm14cp7xaagpf4j96v0ybi5gn3r9p0if3pc197ckwx6sw3lx29p";
   };
 
   propagatedBuildInputs = [
     dill
     filelock
+    fsspec
+    huggingface-hub
     multiprocess
     numpy
     pandas
@@ -49,6 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,9 +1,9 @@
-{stdenvNoCC, git, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert}: let
   urlToName = url: rev: let
-    inherit (stdenvNoCC.lib) removeSuffix splitString last;
+    inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
-    matched = builtins.match "(.*).git" base;
+    matched = builtins.match "(.*)\\.git" base;
 
     short = builtins.substring 0 7 rev;
 
@@ -20,6 +20,12 @@ in
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
 , preferLocalBuild ? true
+, fetchLFS ? false
+, # Shell code to build a netrc file for BASIC auth
+  netrcPhase ? null
+, # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+  # needed for netrcPhase
+  netrcImpureEnvVars ? []
 }:
 
 /* NOTE:
@@ -53,18 +59,27 @@ stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
-  nativeBuildInputs = [git];
+
+  nativeBuildInputs = [ git ]
+    ++ lib.optionals fetchLFS [ git-lfs ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName postFetch;
+
+  postHook = if netrcPhase == null then null else ''
+    ${netrcPhase}
+    # required that git uses the netrc file
+    mv {,.}netrc
+    export HOME=$PWD
+  '';
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
+    "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
   inherit preferLocalBuild;

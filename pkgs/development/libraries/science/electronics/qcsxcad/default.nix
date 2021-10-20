@@ -37,8 +37,6 @@ mkDerivation {
     qtbase
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Qt library for CSXCAD";
     homepage = "https://github.com/thliebig/QCSXCAD";

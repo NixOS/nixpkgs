@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 # native
@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-network-displays";
-  version = "0.90.4";
+  version = "0.90.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04snnfz5jxxpjkrwa7dchc2h4shszi8mq9g3ihvsvipgzjw3d498";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-2SBVQK4fJeK8Y2UrrL0g5vQIerDdGE1nhFc6ke4oIpI=";
   };
 
   patches = [
@@ -35,11 +35,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-network-displays/-/commit/ef3f3ff565acd8238da46de604a1e750d4f02f07.diff";
       sha256 = "1ljiwgqia6am4lansg70qnwkch9mp1fr6bga98s5fwyiaw6b6f4p";
-    })
-    # Fixes an upstream bug: https://gitlab.gnome.org/GNOME/gnome-network-displays/-/issues/147
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-network-displays/-/commit/23164b58f4d5dd59de988525906d6e5e82c5a63c.patch";
-      sha256 = "0x32dvkzv9m04q41aicscpf4aspghx81a65462kjqnsavi64lga5";
     })
   ];
 
@@ -72,7 +67,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
     description = "Miracast implementation for GNOME";
     maintainers = with maintainers; [ doronbehar ];

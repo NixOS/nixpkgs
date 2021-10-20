@@ -1,18 +1,7 @@
-From 06b2c6dd6439c01bfb5a4c7b0ec6909c349a66b1 Mon Sep 17 00:00:00 2001
-From: Frederik Rietdijk <freddyrietdijk@fridh.nl>
-Date: Thu, 28 Feb 2019 16:25:49 +0100
-Subject: [PATCH] allow setting paths in makefile
-
-and install headers and libs
----
- Makefile | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index b507e2b0..d21e5c56 100644
---- a/Makefile
-+++ b/Makefile
-@@ -19,13 +19,13 @@ BUILD_DIR = out
+diff -u a/Makefile b/Makefile
+--- a/Makefile	2020-12-27 18:48:53.934098765 +0100
++++ b/Makefile	2020-12-27 18:50:44.022674117 +0100
+@@ -19,13 +19,13 @@
  # http://www.gnu.org/prep/standards/html_node/Directory-Variables.html
  PREFIX ?= /usr/local
  EXEC_PREFIX = $(PREFIX)
@@ -20,24 +9,16 @@ index b507e2b0..d21e5c56 100644
 +BINDIR ?= $(EXEC_PREFIX)/bin
  DATAROOTDIR = $(PREFIX)/share
  DOCDIR = $(DATAROOTDIR)/doc/$(CPROG)
- SYSCONFDIR = $(PREFIX)/etc
+ SYSCONFDIR ?= $(PREFIX)/etc
  HTMLDIR = $(DOCDIR)
 -INCLUDEDIR = $(DESTDIR)$(PREFIX)/include
 -LIBDIR = $(DESTDIR)$(EXEC_PREFIX)/lib
 +INCLUDEDIR ?= $(DESTDIR)$(PREFIX)/include
 +LIBDIR ?= $(DESTDIR)$(EXEC_PREFIX)/lib
+ PID_FILE ?= /var/run/$(CPROG).pid
  
  # build tools
- MKDIR = mkdir -p
-@@ -270,17 +270,17 @@ build: $(CPROG) $(CXXPROG)
- unit_test: $(UNIT_TEST_PROG)
- 
- ifeq ($(CAN_INSTALL),1)
--install: $(HTMLDIR)/index.html $(SYSCONFDIR)/civetweb.conf
-+install: install-headers install-slib $(HTMLDIR)/index.html $(SYSCONFDIR)/civetweb.conf
- 	install -d -m 755  "$(DOCDIR)"
- 	install -m 644 *.md "$(DOCDIR)"
- 	install -d -m 755 "$(BINDIR)"
+@@ -337,10 +337,10 @@
  	install -m 755 $(CPROG) "$(BINDIR)/"
  
  install-headers:
@@ -50,6 +31,3 @@ index b507e2b0..d21e5c56 100644
  
  install-slib: lib$(CPROG).so
  	$(eval version=$(shell grep -w "define CIVETWEB_VERSION" include/civetweb.h | sed 's|.*VERSION "\(.*\)"|\1|g'))
--- 
-2.19.2
-

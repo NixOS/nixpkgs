@@ -1,17 +1,18 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-translations";
-  version = "4.8.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1j3azjwin89z5v6nphx0wsa35p224h2gps50kcq9gwankkfcf3q1";
+    hash = "sha256-qBLg0z0ZoS7clclKsIxMG6378Q1iv1NnhS9cz3f4cEc=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     mv usr $out # files get installed like so: msgfmt -o usr/share/locale/$lang/LC_MESSAGES/$dir.mo $file
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-translations";
     description = "Translations files for the Cinnamon desktop";
     license = licenses.gpl2;

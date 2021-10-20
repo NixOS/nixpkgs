@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # circular deps
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Exception interfaces and implementations";
     homepage = "https://pypi.python.org/pypi/zope.exceptions";
     license = licenses.zpl20;

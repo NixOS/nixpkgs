@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, bigloo }:
+{ lib, stdenv, fetchurl, bigloo }:
 
 # Compute the “release” version of bigloo (before the first dash, if any)
 let bigloo-release =
-  let inherit (stdenv.lib) head splitString; in
+  let inherit (lib) head splitString; in
   head (splitString "-" (builtins.parseDrvName bigloo.name).version)
 ; in
 
 stdenv.mkDerivation rec {
-  name = "hop-3.3.0";
+  pname = "hop";
+  version = "3.4.4";
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/${name}.tar.gz";
-    sha256 = "14gf9ihmw95zdnxsqhn5jymfivpfq5cg9v0y7yjd5i7c787dncp5";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Hop/hop-${version}.tar.gz";
+    sha256 = "sha256-GzXh4HC+SFFoUi7SMqu36iYRPAJ6tMnOHd+he6n9k1I=";
   };
 
   postPatch = ''
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     "--bigloolibdir=${bigloo}/lib/bigloo/${bigloo-release}/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-tier programming language for the Web 2.0 and the so-called diffuse Web";
     homepage = "http://hop.inria.fr/";
     license = licenses.gpl2Plus;

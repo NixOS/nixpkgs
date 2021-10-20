@@ -1,9 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest, eth-hash, eth-typing,
+{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, eth-hash, eth-typing,
   cytoolz, hypothesis }:
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "1.8.4";
+  version = "1.10.0";
 
   # Tests are missing from the PyPI source tarball so let's use GitHub
   # https://github.com/ethereum/eth-utils/issues/130
@@ -11,20 +11,13 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hfzb3xz3j50dgp51nx2jssh9j07np24fqmpnyr2ycsll90g1j6q";
+    sha256 = "sha256-sq3H4HmUFUipqVYleZxWLG1gBsQEoNwcZAXiKckacek=";
   };
 
-  checkInputs = [ pytest hypothesis ];
+  checkInputs = [ pytestCheckHook hypothesis ];
   propagatedBuildInputs = [ eth-hash eth-typing cytoolz ];
 
-  # setuptools-markdown uses pypandoc which is broken at the moment
-  preConfigure = ''
-    substituteInPlace setup.py --replace \'setuptools-markdown\' ""
-  '';
-
-  checkPhase = ''
-    pytest .
-  '';
+  pythonImportsCheck = [ "eth_utils" ];
 
   meta = {
     description = "Common utility functions for codebases which interact with ethereum";

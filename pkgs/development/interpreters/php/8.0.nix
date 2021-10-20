@@ -1,17 +1,51 @@
-{ callPackage, lib, stdenv, nixosTests, ... }@_args:
+{ callPackage, lib, stdenv, ... }@_args:
 
 let
-  generic = (import ./generic.nix) _args;
-
-  base = callPackage generic (_args // {
-    version = "8.0.0";
-    sha256 = "02cx3gvxqvkllp54jfvs83kl8bmpcqyzp9jf1d0l9x5bgv1jv0sy";
+  base = callPackage ./generic.nix (_args // {
+    version = "8.0.11";
+    sha256 = "0fj0yk0h0fvr9ckszp496wdyvf8kdfsvydw95qg0q0g4hm18gvbh";
   });
 
-in base.withExtensions ({ all, ... }: with all; ([
-  bcmath calendar curl ctype dom exif fileinfo filter ftp gd
-  gettext gmp iconv intl ldap mbstring mysqli mysqlnd opcache
-  openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
-  posix readline session simplexml sockets soap sodium sqlite3
-  tokenizer xmlreader xmlwriter zip zlib
+in
+base.withExtensions ({ all, ... }: with all; ([
+  bcmath
+  calendar
+  curl
+  ctype
+  dom
+  exif
+  fileinfo
+  filter
+  ftp
+  gd
+  gettext
+  gmp
+  iconv
+  intl
+  ldap
+  mbstring
+  mysqli
+  mysqlnd
+  opcache
+  openssl
+  pcntl
+  pdo
+  pdo_mysql
+  pdo_odbc
+  pdo_pgsql
+  pdo_sqlite
+  pgsql
+  posix
+  readline
+  session
+  simplexml
+  sockets
+  soap
+  sodium
+  sqlite3
+  tokenizer
+  xmlreader
+  xmlwriter
+  zip
+  zlib
 ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]))

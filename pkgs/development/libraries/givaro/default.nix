@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
 stdenv.mkDerivation rec {
   pname = "givaro";
   version = "4.1.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-optimization"
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
     "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    inherit version;
-    description = ''A C++ library for arithmetic and algebraic computations'';
-    license = stdenv.lib.licenses.cecill-b;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "A C++ library for arithmetic and algebraic computations";
+    license = lib.licenses.cecill-b;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

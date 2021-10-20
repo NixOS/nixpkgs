@@ -1,32 +1,107 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, lib
+
+, bzip2
+, cmocka
+, cracklib
+, cyrus_sasl
+, db
+, doxygen
+, icu
+, libevent
+, libkrb5
+, lm_sensors
+, net-snmp
+, nspr
+, nss
+, openldap
+, openssl
+, pcre
+, perl
+, perlPackages
+, pkg-config
+, python3
+, svrcore
+, zlib
+
+, enablePamPassthru ? true
+, pam
+
+, enableCockpit ? true
+, rsync
+
+, enableDna ? true
+, enableLdapi ? true
+, enableAutobind ? false
+, enableAutoDnSuffix ? false
+, enableBitwise ? true
+, enableAcctPolicy ? true
+, enablePosixWinsync ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "1.3.9.1";
+  version = "2.0.7";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "141iv1phgk1lw74sfjj3v7wy6qs0q56lvclwv2p0hqn1wg8ic4q6";
+  src = fetchFromGitHub {
+    owner = "389ds";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
-  buildInputs = [
-    perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net-snmp kerberos pcre libevent openssl python
-  ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
 
-  patches = [
-    (fetchpatch {
-      name = "389-ds-nss.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/nss.patch?h=389-ds-base&id=b80ed52cc65ff9b1d72f8ebc54dbd462b12f6be9";
-      sha256 = "07z7jl9z4gzhk3k6qyfn558xl76js8041llyr5n99h20ckkbwagk";
-    })
-  ];
+  buildInputs = [
+    bzip2
+    cracklib
+    cyrus_sasl
+    db
+    icu
+    libevent
+    libkrb5
+    lm_sensors
+    net-snmp
+    nspr
+    nss
+    openldap
+    openssl
+    pcre
+    perl
+    python3
+    svrcore
+    zlib
+
+    # tests
+    cmocka
+    libevent
+
+    # lib389
+    (python3.withPackages (ps: with ps; [
+      setuptools
+      ldap
+      six
+      pyasn1
+      pyasn1-modules
+      python-dateutil
+      argcomplete
+      libselinux
+    ]))
+
+    # logconv.pl
+    perlPackages.DBFile
+    perlPackages.ArchiveTar
+  ]
+  ++ lib.optional enableCockpit rsync
+  ++ lib.optional enablePamPassthru pam;
+
   postPatch = ''
     substituteInPlace Makefile.am \
       --replace 's,@perlpath\@,$(perldir),g' 's,@perlpath\@,$(perldir) $(PERLPATH),g'
+
+    patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
   '';
 
   preConfigure = ''
@@ -38,20 +113,36 @@ stdenv.mkDerivation rec {
     export PERLPATH
   '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-openldap"
-    "--with-db"
-    "--with-db-inc=${db.dev}/include"
-    "--with-db-lib=${db.out}/lib"
-    "--with-sasl=${cyrus_sasl.dev}"
-    "--with-netsnmp=yes"
-    "--with-netsnmp-inc=${stdenv.lib.getDev net-snmp}/include"
-    "--with-netsnmp-lib=${stdenv.lib.getLib net-snmp}/lib"
-  ];
+  configureFlags =
+    let
+      mkEnable = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
+    in
+    [
+      "--enable-cmocka"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-db-inc=${db.dev}/include"
+      "--with-db-lib=${db.out}/lib"
+      "--with-db=yes"
+      "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+      "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+      "--with-netsnmp=yes"
+      "--with-openldap"
+
+      "${mkEnable enableCockpit "cockpit"}"
+      "${mkEnable enablePamPassthru "pam-passthru"}"
+      "${mkEnable enableDna "dna"}"
+      "${mkEnable enableLdapi "ldapi"}"
+      "${mkEnable enableAutobind "autobind"}"
+      "${mkEnable enableAutoDnSuffix "auto-dn-suffix"}"
+      "${mkEnable enableBitwise "bitwise"}"
+      "${mkEnable enableAcctPolicy "acctpolicy"}"
+      "${mkEnable enablePosixWinsync "posix-winsync"}"
+    ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -60,7 +151,7 @@ stdenv.mkDerivation rec {
 
   passthru.version = version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.port389.org/";
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;

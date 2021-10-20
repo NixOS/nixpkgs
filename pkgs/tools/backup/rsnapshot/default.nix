@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, perl, openssh, rsync, logger }:
+{ fetchurl, lib, stdenv, perl, openssh, rsync, logger }:
 
 stdenv.mkDerivation rec {
-  name = "rsnapshot-1.4.3";
+  pname = "rsnapshot";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "https://rsnapshot.org/downloads/${name}.tar.gz";
-    sha256 = "1lavqmmsf53pim0nvming7fkng6p0nk2a51k2c2jdq0l7snpl31b";
+    url = "https://rsnapshot.org/downloads/rsnapshot-${version}.tar.gz";
+    sha256 = "sha256-wct8t0jFqWVsOGNivfbCZ5WXN3JKu1Bfv56UCp2YhXk=";
   };
 
   propagatedBuildInputs = [perl openssh rsync logger];
@@ -18,10 +19,10 @@ stdenv.mkDerivation rec {
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A filesystem snapshot utility for making backups of local and remote systems";
     homepage = "https://rsnapshot.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

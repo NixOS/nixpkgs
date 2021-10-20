@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     setuptools six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for

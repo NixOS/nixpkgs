@@ -1,22 +1,24 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
-  version = "0.5.0";
+  version = "2.0.0";
   disabled = pythonOlder "3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4eb76230c38525b71eb1addefebd265bc3d9b68ba7ff60ce5356d39f68ed2837";
+    sha256 = "bec6bdfaeb55b4fdd159f2055e8875bf50a720bb0fce80a816e92a2359b898c8";
     extension = "zip";
   };
 
   propagatedBuildInputs = [
     azure-common
+    azure-mgmt-core
     msrest
     msrestazure
   ];

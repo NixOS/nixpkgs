@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
+{ lib, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "rtslib";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six pyudev pygobject3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python object API for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
     license = licenses.asl20;

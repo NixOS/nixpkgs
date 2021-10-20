@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -8,29 +8,29 @@
 , nixosTests ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2006.0";
+  version = "8.2108.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "15wfhw2nmpiyjpp82jxqgcjy7wgbc2fswk5g6rbdqbvghrj9wn6r";
+    sha256 = "sha256-SCbCttCBqclfRp+wEVvj+VEgZSl9PeAOxRN1jNswsdk=";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
     postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc libmaxminddb
-  ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
-    ++ stdenv.lib.optional stdenv.isLinux systemd;
+  ] ++ lib.optional (libmysqlclient != null) libmysqlclient
+    ++ lib.optional stdenv.isLinux systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"

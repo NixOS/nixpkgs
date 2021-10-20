@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , nixosTests
@@ -11,7 +11,7 @@
 , gettext
 , libxml2
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 
 , acl
@@ -46,13 +46,13 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.0.11";
+  version = "1.0.14";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "EYNLdrvSs8S/GCYy0jGsnP1+C988y1j7WzcLfczM1Ew=";
+    sha256 = "sha256-abZa9PY4BBJ1GMVFGE+d/JqTWM3tqr7yseUGI64rjYs=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     gettext
     libxml2
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
   ];
 
@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to build flatpaks from source";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = licenses.lgpl21Plus;

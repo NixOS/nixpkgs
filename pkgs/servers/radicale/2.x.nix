@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "Radicale";
@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkInputs = with python3.pkgs; [
-    pytestrunner
+    pytest-runner
     pytest
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.radicale.org/2.x.nix";
     description = "CalDAV CardDAV server";
     longDescription = ''

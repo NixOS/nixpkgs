@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , perl
 , python3
@@ -6,10 +6,10 @@
 # Enable BLAS interface with 64-bit integer width.
 , blas64 ? false
 
-# Target architecture, use "zen" or "zen2", optimization for Zen and
-# other families is pretty much mutually exclusive in the AMD fork of
-# BLIS.
-, withArchitecture ? "zen"
+# Target architecture. "amd64" compiles kernels for all Zen
+# generations. To build kernels for specific Zen generations,
+# use "zen", "zen2", or "zen3".
+, withArchitecture ? "amd64"
 
 # Enable OpenMP-based threading.
 , withOpenMP ? true
@@ -20,13 +20,13 @@ let
   blasIntSize = if blas64 then "64" else "32";
 in stdenv.mkDerivation rec {
   pname = "amd-blis";
-  version = "2.2";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
     rev = version;
-    sha256 = "1b2f5bwi0gkw2ih2rb7wfzn3m9hgg7k270kg43rmzpr2acpy86xa";
+    hash = "sha256-bbbeo1yOKse9pzbsB6lQ7pULKdzu3G7zJzTUgPXiMZY=";
   };
 
   inherit blas64;
@@ -36,14 +36,17 @@ in stdenv.mkDerivation rec {
     python3
   ];
 
-  doCheck = true;
+  # Tests currently fail with non-Zen CPUs due to a floating point
+  # exception in one of the generic kernels. Try to re-enable the
+  # next release.
+  doCheck = false;
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-cblas"
     "--blas-int-size=${blasIntSize}"
-  ] ++ stdenv.lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
     ++ [ withArchitecture ];
 
   postPatch = ''
@@ -51,17 +54,17 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ln -s $out/lib/libblis${threadingSuffix}.so.2 $out/lib/libblas.so.3
-    ln -s $out/lib/libblis${threadingSuffix}.so.2 $out/lib/libcblas.so.3
+    ln -s $out/lib/libblis${threadingSuffix}.so.3 $out/lib/libblas.so.3
+    ln -s $out/lib/libblis${threadingSuffix}.so.3 $out/lib/libcblas.so.3
     ln -s $out/lib/libblas.so.3 $out/lib/libblas.so
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

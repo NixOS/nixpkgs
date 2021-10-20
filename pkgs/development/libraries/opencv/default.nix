@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
@@ -6,9 +6,10 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableFfmpeg ? false, ffmpeg_3
+, enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
+, enableUnfree ? false
 , Cocoa, QTKit
 }:
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableFfmpeg ffmpeg_3
+    ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -67,13 +68,11 @@ stdenv.mkDerivation rec {
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "GSTREAMER" enableGStreamer)
-  ];
-
-  enableParallelBuilding = true;
+  ] ++ lib.optional (!enableUnfree) "-DBUILD_opencv_nonfree=OFF";
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  # Fix pkgconfig file that gets broken with multiple outputs
+  # Fix pkg-config file that gets broken with multiple outputs
   postFixup = ''
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
@@ -81,10 +80,10 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = licenses.bsd3;
+    license = if enableUnfree then licenses.unfree else licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

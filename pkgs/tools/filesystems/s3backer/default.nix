@@ -1,30 +1,36 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config
 , fuse, curl, expat }:
 
 stdenv.mkDerivation rec {
   pname = "s3backer";
-  version = "1.5.4";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
-    sha256 = "1228qlfgz48k9vv72hrz488zg73zls99cppb9vmikc0pzv1xndsx";
+    sha256 = "sha256-b64EEES7gO9s24hk3sZMd9guEhJNfc3DV4/NnBIcJYw=";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl expat ];
+
+  # AC_CHECK_DECLS doesn't work with clang
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace configure.ac --replace \
+      'AC_CHECK_DECLS(fdatasync)' ""
+  '';
 
   autoreconfPhase = ''
     patchShebangs ./autogen.sh
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

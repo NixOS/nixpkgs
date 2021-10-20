@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, p7zip }:
+{ lib, stdenv, fetchurl, p7zip }:
 
 stdenv.mkDerivation  {
   name = "win-qemu-0.1.105-1";
   version = "0.1.105-1";
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.105-1/virtio-win.iso";
@@ -28,7 +28,7 @@ stdenv.mkDerivation  {
     in
       (copy "amd64" "w8.1") + (copy "x86" "w8.1");
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Windows QEMU Drivers";
     homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
     maintainers = [ maintainers.tstrobel ];

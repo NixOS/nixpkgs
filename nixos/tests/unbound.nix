@@ -27,10 +27,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         # disable the root anchor update as we do not have internet access during
         # the test execution
         services.unbound.enableRootTrustAnchor = false;
+
+        # we want to test the full-variant of the package to also get DoH support
+        services.unbound.package = pkgs.unbound-full;
       };
     };
 
-    cert = pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
       openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=dns.example.local'
       mkdir -p $out
       cp key.pem cert.pem $out
@@ -38,7 +41,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   in
   {
     name = "unbound";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ andir ];
     };
 
@@ -58,13 +61,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         services.unbound = {
           enable = true;
-          interfaces = [ "192.168.0.1" "fd21::1" "::1" "127.0.0.1" ];
-          allowedAccess = [ "192.168.0.0/24" "fd21::/64" "::1" "127.0.0.0/8" ];
-          extraConfig = ''
-            server:
-              local-data: "example.local. IN A 1.2.3.4"
-              local-data: "example.local. IN AAAA abcd::eeff"
-          '';
+          settings = {
+            server = {
+              interface = [ "192.168.0.1" "fd21::1" "::1" "127.0.0.1" ];
+              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              local-data = [
+                ''"example.local. IN A 1.2.3.4"''
+                ''"example.local. IN AAAA abcd::eeff"''
+              ];
+            };
+          };
         };
       };
 
@@ -81,22 +87,31 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         networking.firewall.allowedTCPPorts = [
           53 # regular DNS
           853 # DNS over TLS
+          443 # DNS over HTTPS
         ];
         networking.firewall.allowedUDPPorts = [ 53 ];
 
         services.unbound = {
           enable = true;
-          allowedAccess = [ "192.168.0.0/24" "fd21::/64" "::1" "127.0.0.0/8" ];
-          interfaces = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2" "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853" ];
-          forwardAddresses = [
-            (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
-            (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
-          ];
-          extraConfig = ''
-            server:
-              tls-service-pem: ${cert}/cert.pem
-              tls-service-key: ${cert}/key.pem
-          '';
+          settings = {
+            server = {
+              interface = [ "::1" "127.0.0.1" "192.168.0.2" "fd21::2"
+                            "192.168.0.2@853" "fd21::2@853" "::1@853" "127.0.0.1@853"
+                            "192.168.0.2@443" "fd21::2@443" "::1@443" "127.0.0.1@443" ];
+              access-control = [ "192.168.0.0/24 allow" "fd21::/64 allow" "::1 allow" "127.0.0.0/8 allow" ];
+              tls-service-pem = "${cert}/cert.pem";
+              tls-service-key = "${cert}/key.pem";
+            };
+            forward-zone = [
+              {
+                name = ".";
+                forward-addr = [
+                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
+                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
+                ];
+              }
+            ];
+          };
         };
       };
 
@@ -116,30 +131,45 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
         services.unbound = {
           enable = true;
-          allowedAccess = [ "::1" "127.0.0.0/8" ];
-          interfaces = [ "::1" "127.0.0.1" ];
+          settings = {
+            server = {
+              interface = [ "::1" "127.0.0.1" ];
+              access-control = [ "::1 allow" "127.0.0.0/8 allow" ];
+            };
+            include = "/etc/unbound/extra*.conf";
+          };
           localControlSocketPath = "/run/unbound/unbound.ctl";
-          extraConfig = ''
-            include: "/etc/unbound/extra*.conf"
-          '';
         };
 
         users.users = {
           # user that is permitted to access the unix socket
-          someuser.extraGroups = [
-            config.users.users.unbound.group
-          ];
+          someuser = {
+            isSystemUser = true;
+            group = "someuser";
+            extraGroups = [
+              config.users.users.unbound.group
+            ];
+          };
 
           # user that is not permitted to access the unix socket
+          unauthorizeduser = {
+            isSystemUser = true;
+            group = "unauthorizeduser";
+          };
+
+        };
+        users.groups = {
+          someuser = {};
           unauthorizeduser = {};
         };
 
+        # Used for testing configuration reloading
         environment.etc = {
           "unbound-extra1.conf".text = ''
             forward-zone:
-              name: "example.local."
-              forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}
-              forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}
+            name: "example.local."
+            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}
+            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}
           '';
           "unbound-extra2.conf".text = ''
             auth-zone:
@@ -171,7 +201,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     testScript = { nodes, ... }: ''
       import typing
-      import json
 
       zone = "example.local."
       records = [("AAAA", "abcd::eeff"), ("A", "1.2.3.4")]
@@ -216,6 +245,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
                           zone,
                           expected,
                           ["+tcp", "+tls"] + args,
+                      )
+                      query(
+                          machine,
+                          remote,
+                          query_type,
+                          zone,
+                          expected,
+                          ["+https"] + args,
                       )
 
 

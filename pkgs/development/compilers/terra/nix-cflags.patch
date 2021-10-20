@@ -1,12 +1,11 @@
 diff --git a/src/terralib.lua b/src/terralib.lua
-index 351238d..e638c90 100644
+index 532ed18..2c265dc 100644
 --- a/src/terralib.lua
 +++ b/src/terralib.lua
-@@ -3395,6 +3395,17 @@ function terra.includecstring(code,cargs,target)
+@@ -3426,6 +3426,16 @@ function terra.includecstring(code,cargs,target)
      	args:insert("-internal-isystem")
      	args:insert(path)
      end
-+
 +    -- NOTE(aseipp): include relevant Nix header files
 +    args:insert("-isystem")
 +    args:insert("@NIX_LIBC_INCLUDE@")
@@ -17,6 +16,6 @@ index 351238d..e638c90 100644
 +          args:insert(w)
 +        end
 +    end
-     
-     if cargs then
-         args:insertall(cargs)
+     -- Obey the SDKROOT variable on macOS to match Clang behavior.
+     local sdkroot = os.getenv("SDKROOT")
+     if sdkroot then

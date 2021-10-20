@@ -1,30 +1,30 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
-, boost, libGLU, lua, cmake,  which, }:
+{ fetchFromGitHub, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, libsecret, qtmultimedia, qttools, yajl, libzip, hunspell
+, boost, libGLU, lua, cmake,  which, pkg-config, }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
+  luaEnv = lua.withPackages(ps: with ps; [
+    luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.9.1";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "0i022qcmlq4xwl2yh4xd5qdc0ag52605qmqqz6bim0h8f3dp8cx1";
+    sha256 = "023plm5mwm15xikmdh1mq3gx1n7y4a0r0kw9fvk3rvm9brm78hzp";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook git qttools which ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook git qttools which ];
   buildInputs = [
-    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libzip libGLU yajl boost hunspell
+    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libsecret libzip libGLU yajl boost hunspell
   ];
 
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
-
-  enableParallelBuilding = true;
 
   installPhase =  ''
     mkdir -pv $out/lib
@@ -41,13 +41,11 @@ stdenv.mkDerivation rec {
     cp -r ../mudlet.png $out/share/pixmaps/
 
     makeQtWrapper $out/mudlet $out/bin/mudlet \
-      --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
       --run "cd $out";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crossplatform mud client";
     homepage = "http://mudlet.org/";
     maintainers = [ maintainers.wyvie maintainers.pstn ];

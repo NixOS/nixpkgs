@@ -1,16 +1,16 @@
-{ buildPythonPackage, fetchPypi, pytestrunner, pytestCheckHook, glib, vips, cffi
+{ buildPythonPackage, fetchPypi, pytest-runner, pytestCheckHook, glib, vips, cffi
 , pkg-config, pkgconfig, lib }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.1.13";
+  version = "2.1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f1f6fa19893048bf6b950eb7eb2d4cdfeb8b940a9defaca5d4f79e5acd5085f";
+    sha256 = "8bca4077dbdc1434dcbc6759407367b6561e3505aa9555b1bc0b45989dcf50b2";
   };
 
-  nativeBuildInputs = [ pytestrunner pkgconfig pkg-config ];
+  nativeBuildInputs = [ pytest-runner pkgconfig pkg-config ];
 
   buildInputs = [ glib vips ];
 

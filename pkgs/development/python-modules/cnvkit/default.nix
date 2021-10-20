@@ -2,12 +2,11 @@
 , fetchFromGitHub
 , fetchpatch
 , rPackages
-, rWrapper
 , buildPythonPackage
 , biopython
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pandas
 , matplotlib
 , reportlab
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     biopython
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pandas
     matplotlib
     reportlab
@@ -54,11 +53,6 @@ buildPythonPackage rec {
     pomegranate
     rPackages.DNAcopy
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
-  '';
 
   checkInputs = [ R ];
 

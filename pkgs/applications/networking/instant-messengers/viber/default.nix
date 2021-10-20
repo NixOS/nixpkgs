@@ -1,5 +1,5 @@
-{fetchurl, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+{fetchurl, lib, stdenv, dpkg, makeWrapper,
+ alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
  nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
@@ -9,16 +9,18 @@ stdenv.mkDerivation {
   version = "13.3.1.22";
 
   src = fetchurl {
-    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
+    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
     sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
   };
 
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ dpkg ];
 
   dontUnpack = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
-      alsaLib
+  libPath = lib.makeLibraryPath [
+      alsa-lib
       cups
       curl
       dbus
@@ -80,7 +82,8 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/viber/Viber \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QML2_IMPORT_PATH "$out/opt/viber/qml"
     ln -s $out/opt/viber/Viber $out/bin/viber
 
     mv $out/usr/share $out/share
@@ -98,9 +101,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ jagajaga ];
+    maintainers = with lib.maintainers; [ jagajaga ];
   };
 
 }

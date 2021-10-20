@@ -1,52 +1,39 @@
-{ stdenv, fetchurl
-, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool, runtimeShell
+{ lib, stdenv, fetchFromGitLab, xorgproto, motif, libX11, libXt, libXpm, bison
+, flex, automake, autoconf, libtool
 }:
 
 stdenv.mkDerivation rec {
   pname = "alliance";
-  version = "5.1.1";
+  version = "unstable-2021-09-15";
 
-  src = fetchurl {
-    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${pname}-${version}.tar.bz2";
-    sha256 = "046c9qwl1vbww0ljm4xyxf5jpz9nq62b2q0wdz9xjimgh4c207w1";
+  src = fetchFromGitLab {
+    domain = "gitlab.lip6.fr";
+    owner = "vlsi-eda";
+    repo = "alliance";
+    rev = "5e83c92d0307cce9d599f7099fb0023f81d26d65";
+    sha256 = "Vd3MTT4eKn4FMt0/F4fQUPcWq25kH0FpeGxQUOetKPY=";
   };
 
+  prePatch = "cd alliance/src";
 
   nativeBuildInputs = [ libtool automake autoconf flex ];
   buildInputs = [ xorgproto motif libX11 libXt libXpm bison ];
 
-  sourceRoot = "alliance/src/";
+  ALLIANCE_TOP = placeholder "out";
 
   configureFlags = [
-    "--prefix=$(out)"
+    "--prefix=${placeholder "out"}" "--enable-alc-shared"
   ];
 
-  preConfigure = ''
-    mkdir -p $out/etc
-
-    #texlive for docs seems extreme
-    mkdir -p $out/share/alliance
-    mv ./documentation $out/share/alliance
+  postPatch = ''
+    # texlive for docs seems extreme
     substituteInPlace autostuff \
-      --replace "$newdirs documentation" "$newdirs" \
-      --replace documentation Solaris
+      --replace "$newdirs documentation" "$newdirs"
 
-    substituteInPlace sea/src/DEF_grammar_lex.l \
-      --replace "ifndef FLEX_BETA" "if (YY_FLEX_MAJOR_VERSION <= 2) && (YY_FLEX_MINOR_VERSION < 6)"
+    substituteInPlace sea/src/DEF_grammar_lex.l --replace "ifndef FLEX_BETA" \
+      "if (YY_FLEX_MAJOR_VERSION <= 2) && (YY_FLEX_MINOR_VERSION < 6)"
+
     ./autostuff
-  '';
-
-  allianceInstaller = ''
-    #!${runtimeShell}
-    cp -v -r -n --no-preserve=mode  $out/etc/* /etc/ > /etc/alliance-install.log
-  '';
-
-  allianceUnInstaller = ''
-    #!${runtimeShell}
-    awk '{print \$3}' /etc/alliance-install.log | xargs rm
-    awk '{print \$3}' /etc/alliance-install.log | xargs rmdir
-    rm /etc/alliance-install.log
   '';
 
   postInstall = ''
@@ -55,20 +42,13 @@ stdenv.mkDerivation rec {
     cp -p distrib/*.desktop $out/share/applications/
     mkdir -p $out/icons/hicolor/48x48/apps/
     cp -p distrib/*.png $out/icons/hicolor/48x48/apps/
-
-    echo "${allianceInstaller}" > $out/bin/alliance-install
-    chmod +x $out/bin/alliance-install
-
-    echo "${allianceUnInstaller}" > $out/bin/alliance-uninstall
-    chmod +x $out/bin/alliance-uninstall
   '';
 
-  meta = with stdenv.lib; {
-    description = "Complete set of free CAD tools and portable libraries for VLSI design";
-    homepage = "http://www-asim.lip6.fr/recherche/alliance/";
+  meta = with lib; {
+    description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
+    homepage = "http://coriolis.lip6.fr/";
     license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ l-as ];
     platforms = with platforms; linux;
-    broken = true;
   };
 }

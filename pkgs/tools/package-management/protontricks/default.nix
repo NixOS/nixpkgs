@@ -1,59 +1,65 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonApplication
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
+, setuptools
 , vdf
-, wine
+, bash
+, steam-run
 , winetricks
-, zenity
-, pytest
+, yad
+, pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.4.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "0ri4phi1rna9snrxa6gl23walyack09mgax7zpjqfpxivwls3ach";
+    hash = "sha256-sbYIqVsuDZ2Htb6SVIe/gBA1UIvUzu4fjTjWQ7k1WFs=";
   };
 
-  # Fix interpreter in mock run.sh for tests
-  postPatch = ''
-    substituteInPlace tests/conftest.py \
-      --replace '#!/bin/bash' '#!${stdenv.shell}' \
-  '';
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ vdf ];
-
-  # The wine install shipped with Proton must run under steam's
-  # chrootenv, but winetricks and zenity break when running under
-  # it. See https://github.com/NixOS/nix/issues/902.
-  #
-  # The current workaround is to use wine from nixpkgs
-  makeWrapperArgs = [
-    "--set STEAM_RUNTIME 0"
-    "--set-default WINE ${wine}/bin/wine"
-    "--set-default WINESERVER ${wine}/bin/wineserver"
-    "--prefix PATH : ${lib.makeBinPath [ winetricks zenity ]}"
+  patches = [
+    # Use steam-run to run Proton binaries
+    ./steam-run.patch
   ];
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    setuptools # implicit dependency, used to find data/icon_placeholder.png
+    vdf
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [
+      bash
+      steam-run
+      winetricks
+      yad
+    ]}"
+  ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
+  # In most cases the script is unnecessary and should be removed as part of the packaging process.
+  postInstall = ''
+    rm "$out/bin/protontricks-desktop-install"
+  '';
+
+  pythonImportsCheck = [ "protontricks" ];
+
+  meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ metadark ];
-    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

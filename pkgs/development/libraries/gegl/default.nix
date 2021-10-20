@@ -1,45 +1,117 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
+, vala
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, glib
 , babl
 , libpng
 , cairo
 , libjpeg
 , librsvg
+, lensfun
+, libspiro
+, maxflow
+, netsurf
 , pango
-, gtk2
+, poly2tri-c
+, poppler
 , bzip2
-, intltool
-, libintl
-, OpenGL ? null }:
+, json-glib
+, gettext
+, meson
+, ninja
+, libraw
+, gexiv2
+, libwebp
+, luajit
+, openexr
+, OpenCL
+, suitesparse
+}:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.2.0";
+  version = "0.4.30";
+
+  outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "dev";
 
   src = fetchurl {
-    url = "ftp://ftp.gtk.org/pub/gegl/0.2/${pname}-${version}.tar.bz2";
-    sha256 = "df2e6a0d9499afcbc4f9029c18d9d1e0dd5e8710a75e17c9b1d9a6480dd8d426";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-wRJ4LPQJaWniMhfM36vkIoTjXVQ1/wxD1A5McPrsqN0=";
   };
 
-  patches = [( fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/"
-      + "gegl-0.2.0-CVE-2012-4433.patch?h=packages/gegl&id=57a60fbda5d7bbbd1cc4767cb0724baa80c5e3e9";
-    sha256 = "0p8mxj3w09nn1cc6cbxrd9hx742c5y27903i608wx6ja3kdjis59";
-    name = "CVE-2012-4433.patch";
-  })];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    meson
+    ninja
+    vala
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ];
 
-  # needs fonts otherwise don't know how to pass them
-  configureFlags = [ "--disable-docs" ];
+  buildInputs = [
+    libpng
+    cairo
+    libjpeg
+    librsvg
+    lensfun
+    libspiro
+    maxflow
+    netsurf.libnsgif
+    pango
+    poly2tri-c
+    poppler
+    bzip2
+    libraw
+    libwebp
+    gexiv2
+    luajit
+    openexr
+    suitesparse
+  ] ++ lib.optional stdenv.isDarwin OpenCL;
 
-  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk2 bzip2 intltool libintl ]
-    ++ stdenv.lib.optional stdenv.isDarwin OpenGL;
+  # for gegl-4.0.pc
+  propagatedBuildInputs = [
+    glib
+    json-glib
+    babl
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dmrg=disabled" # not sure what that is
+    "-Dsdl2=disabled"
+    "-Dpygobject=disabled"
+    "-Dlibav=disabled"
+    "-Dlibv4l=disabled"
+    "-Dlibv4l2=disabled"
+    # Disabled due to multiple vulnerabilities, see
+    # https://github.com/NixOS/nixpkgs/pull/73586
+    "-Djasper=disabled"
+  ];
 
-  doCheck = false; # fails 3 out of 19 tests
+  # TODO: Fix missing math symbols in gegl seamless clone.
+  # It only appears when we use packaged poly2tri-c instead of vendored one.
+  NIX_CFLAGS_COMPILE = "-lm";
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    chmod +x tests/opencl/opencl_test.sh
+    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tools/xml_insert.sh
+  '';
+
+  # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = licenses.lgpl3Plus;

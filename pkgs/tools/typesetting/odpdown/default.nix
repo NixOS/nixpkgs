@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, libreoffice }:
+{ lib, fetchurl, pythonPackages, libreoffice }:
 
 pythonPackages.buildPythonApplication rec {
 
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     nose
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/thorstenb/odpdown";
     repositories.git = "https://github.com/thorstenb/odpdown.git";
     description = "Create nice-looking slides from your favourite text editor";

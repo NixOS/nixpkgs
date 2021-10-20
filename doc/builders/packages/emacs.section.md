@@ -2,12 +2,12 @@
 
 ## Configuring Emacs {#sec-emacs-config}
 
-The Emacs package comes with some extra helpers to make it easier to configure. `emacsWithPackages` allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use `company` `counsel`, `flycheck`, `ivy`, `magit`, `projectile`, and `use-package` you could use this as a `~/.config/nixpkgs/config.nix` override:
+The Emacs package comes with some extra helpers to make it easier to configure. `emacs.pkgs.withPackages` allows you to manage packages from ELPA. This means that you will not have to install that packages from within Emacs. For instance, if you wanted to use `company` `counsel`, `flycheck`, `ivy`, `magit`, `projectile`, and `use-package` you could use this as a `~/.config/nixpkgs/config.nix` override:
 
 ```nix
 {
   packageOverrides = pkgs: with pkgs; {
-    myEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+    myEmacs = emacs.pkgs.withPackages (epkgs: (with epkgs.melpaStablePackages; [
       company
       counsel
       flycheck
@@ -36,7 +36,7 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
       ;; load some packages
 
       (use-package company
-        :bind ("&lt;C-tab&gt;" . company-complete)
+        :bind ("<C-tab>" . company-complete)
         :diminish company-mode
         :commands (company-mode global-company-mode)
         :defer 1
@@ -84,7 +84,7 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
         (projectile-global-mode))
     '';
 
-    myEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+    myEmacs = emacs.pkgs.withPackages (epkgs: (with epkgs.melpaStablePackages; [
       (runCommand "default.el" {} ''
          mkdir -p $out/share/emacs/site-lisp
          cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
@@ -103,14 +103,14 @@ You can install it like any other packages via `nix-env -iA myEmacs`. However, t
 
 This provides a fairly full Emacs start file. It will load in addition to the user's presonal config. You can always disable it by passing `-q` to the Emacs command.
 
-Sometimes `emacsWithPackages` is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in `pkgs/top-level/emacs-packages.nix`). But you can't control this priorities when some package is installed as a dependency. You can override it on per-package-basis, providing all the required dependencies manually - but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package you can use `overrideScope'`.
+Sometimes `emacs.pkgs.withPackages` is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to Melpa Unstable, and the highest for packages manually defined in `pkgs/top-level/emacs-packages.nix`). But you can't control this priorities when some package is installed as a dependency. You can override it on per-package-basis, providing all the required dependencies manually - but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package you can use `overrideScope'`.
 
 ```nix
 overrides = self: super: rec {
   haskell-mode = self.melpaPackages.haskell-mode;
   ...
 };
-((emacsPackagesGen emacs).overrideScope' overrides).emacsWithPackages
+((emacsPackagesFor emacs).overrideScope' overrides).withPackages
   (p: with p; [
     # here both these package will use haskell-mode of our own choice
     ghc-mod

@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, libav, libkeyfinder }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg, libkeyfinder }:
 
 stdenv.mkDerivation rec {
   pname = "keyfinder-cli";
-  version = "2015-09-13";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
-    rev = "8579282f15ab3ebad937fed398ec5c88843be03d";
-    sha256 = "0jylykigxmsqvdny265k58vpxa4cqs1hq2f7mph1nl3apfx2shrh";
+    rev = "v${version}";
+    sha256 = "1mlcygbj3gqii3cz8jd6ks1lz612i4jp0343qjg293xm39fg47ns";
   };
 
-  buildInputs = [ libav libkeyfinder ];
+  buildInputs = [ ffmpeg libkeyfinder ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''

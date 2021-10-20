@@ -1,21 +1,24 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+, python3Packages
+, enableDeserialize ? false
+}:
 
 assert interactive -> readline != null && ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.33.0";
+  version = "3.36.0";
 
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "05dvdfaxd552gj5p7k0i72sfam7lykaw1g2pfn52jnppqx42qshh";
+    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "sha256-vZDD65a+6ZYga4O+cGXJzhmu84w/T7Uwc62g0LabvOM=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -23,9 +26,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ] ++ optionals interactive [ readline ncurses ];
 
+  # required for aarch64 but applied for all arches for simplicity
+  preConfigure = ''
+    patchShebangs configure
+  '';
+
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -41,7 +49,10 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ];
+  ] ++ lib.optionals enableDeserialize [
+    # Can be removed in v3.36+, as this will become the default
+    "-DSQLITE_ENABLE_DESERIALIZE"
+  ]);
 
   # Test for features which may not be available at compile time
   preBuild = ''
@@ -72,6 +83,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails to link against tcl
+
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+  };
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";

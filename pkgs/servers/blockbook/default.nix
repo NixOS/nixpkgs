@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , packr
@@ -9,6 +9,7 @@
 , snappy
 , zeromq
 , zlib
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -32,14 +33,13 @@ buildGoModule rec {
 
   buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X github.com/trezor/blockbook/common.version=${version}
-       -X github.com/trezor/blockbook/common.gitcommit=${commit}
-       -X github.com/trezor/blockbook/common.buildDate=unknown
-  '';
+  ldflags = [
+    "-X github.com/trezor/blockbook/common.version=${version}"
+    "-X github.com/trezor/blockbook/common.gitcommit=${commit}"
+    "-X github.com/trezor/blockbook/common.buildDate=unknown"
+  ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
     export CGO_LDFLAGS="-L${stdenv.cc.cc.lib}/lib -lrocksdb -lz -lbz2 -lsnappy -llz4 -lm -lstdc++"
@@ -54,11 +54,18 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    smoke-test = nixosTests.blockbook-frontend;
+  };
+
+  meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mmahut _1000101 ];
     platforms = platforms.unix;
+    # go dependency tecbot/gorocksdb requires rocksdb 5.x but nixpkgs has only rocksdb 6.x
+    # issue in upstream can be tracked here: https://github.com/trezor/blockbook/issues/617
+    broken = true;
   };
 }

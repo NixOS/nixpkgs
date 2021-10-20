@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
 , pkg-config
@@ -10,10 +10,10 @@
 }:
 
 let
-  version = "1.15.1";
+  version = "1.19";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "1hrp2rfwl06ff2b2i12ccka58l1brvn6xqgm1f38k36s61mbs1py";
+    sha256 = "sha256-h2+TIhguaqxqWNsTNPQiWFXvOhfq68gKq2YB2dHsuGc=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ijar1cycj42p39cgpnwdwr6nz5pyr6vacr1gvc0f6k92pl8vr13";
+    sha256 = "sha256-IR4FTbVtHp9rRm0U4d1zkl0u+oR5FeElJ91NIspSKWg=";
   };
 
   # postPatch:
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

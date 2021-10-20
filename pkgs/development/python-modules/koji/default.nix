@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, dateutil }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pycurl, six, rpm, python-dateutil }:
 
 buildPythonPackage rec {
   pname = "koji";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0a3kn3qvspvx15imgzzzjsbvw6bqmbk29apbliqwifa9cj7pvb40";
   };
 
-  propagatedBuildInputs = [ pycurl six rpm dateutil ];
+  propagatedBuildInputs = [ pycurl six rpm python-dateutil ];
 
   # Judging from SyntaxError
   disabled = isPy3k;
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     rm -rf $out/nix
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An RPM-based build system";
     homepage = "https://pagure.io/koji";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
   };
 }

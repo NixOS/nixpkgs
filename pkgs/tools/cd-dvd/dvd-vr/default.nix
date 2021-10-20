@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "dvd-vr";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.pixelbeat.org/programs/dvd-vr/";
     downloadPage = "https://www.pixelbeat.org/programs/dvd-vr/";
     description = "A utility to identify and optionally copy recordings from a DVD-VR format disc";

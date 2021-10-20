@@ -6,7 +6,6 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
-      boot.extraModulePackages = [ config.boot.kernelPackages.wireguard ];
       systemd.network = {
         enable = true;
         netdevs = {
@@ -61,7 +60,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
     };
 in import ./make-test-python.nix ({pkgs, ... }: {
   name = "networkd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
   };
   nodes = {

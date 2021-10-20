@@ -1,19 +1,22 @@
 { lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonPackage rec {
-  name = "mpfshell-${version}";
-  version = "0.8.1";
+  pname = "mpfshell-unstable";
+  version = "2020-04-11";
 
   src = fetchFromGitHub {
     owner = "wendlers";
     repo = "mpfshell";
-    rev = version;
-    sha256 = "1n4ap4yfii54y125f9n9krc0lc0drwg3hsq4z6g89xbswdx9sygr";
+    rev = "429469fcccbda770fddf7a4277f5db92b1217664";
+    sha256 = "0md6ih9vp65dacqy8gki3b2p4v76xb9ijqmxymk4b4f9z684x2m7";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyserial colorama websocket_client
+    pyserial colorama websocket-client
   ];
+
+  doCheck = false;
+  pythonImportsCheck = [ "mp.mpfshell" ];
 
   meta = with lib; {
     homepage = "https://github.com/wendlers/mpfshell";

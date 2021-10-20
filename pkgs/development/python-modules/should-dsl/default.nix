@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "should-dsl";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Should assertions in Python as clear and readable as possible";
     homepage = "http://www.should-dsl.info/";
     license = licenses.mit;

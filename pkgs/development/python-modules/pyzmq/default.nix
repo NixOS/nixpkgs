@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "20.0.0";
+  version = "22.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "824ad5888331aadeac772bce27e1c2fbcab82fade92edbd234542c4e12f0dca9";
+    sha256 = "6d18c76676771fd891ca8e0e68da0bbfb88e30129835c0ade748016adb3b6242";
   };
 
   checkInputs = [

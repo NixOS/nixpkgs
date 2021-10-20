@@ -10,9 +10,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256:04k0maxy39k7qzcsqsv1byddsmjszmnyjffrf22nzbvml83p3l0y";
   };
 
-  cargoSha256 = "1v2az0v6l8mqryvq3898hm7bpvqdd2c4kpv6ck7932jfjyna512k";
+  cargoSha256 = "1nlzhkhk1y0jhj6n3wn4dm783ldsxn7dk0d2xjx6ylczf9z3gp12";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/wg-bond --set PATH ${
       lib.makeBinPath [ wireguard-tools ]

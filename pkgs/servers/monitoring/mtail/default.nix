@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.0.0-rc38";
+  version = "3.0.0-rc46";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mtail";
     rev = "v${version}";
-    sha256 = "0a9xwv8c4ivpyh1hm3nzssnqpr4c6br0qb27mz3sy6fp2p46c0ms";
+    sha256 = "sha256-/PiwrXr/oG/euWDOqcXvKKvyvQbp11Ks8LjmmJjDtdU=";
   };
 
-  vendorSha256 = "03hicp3h4jrq7ihirpcmgkk5siiny3w2wnwhibaf36j9xllmf57f";
+  vendorSha256 = "sha256-aBGJ+JJjm9rt7Ic90iWY7vGtZQN0u6jlBnAMy1nivQM=";
 
   doCheck = false;
 
@@ -21,8 +21,8 @@ buildGoModule rec {
     go generate -x ./internal/vm/
   '';
 
-  buildFlagsArray = [
-    "-ldflags=-X main.Version=${version}"
+  ldflags = [
+    "-X main.Version=${version}"
   ];
 
   meta = with lib; {

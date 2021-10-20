@@ -11,18 +11,19 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.6.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "13fy25qxn4xwzlr2w35v6jhlpd70lv9r6srv4dizc4brj63hnw50";
+    sha256 = "0yyi3w03fk19i32jmns1baq3rpmf7xfykzkivc7dmnxmjmxvq2gr";
   };
 
   postConfigure = ''
     substituteInPlace setup.py \
-      --replace "\"cmake\"" "\"${cmake}/bin/cmake\""
+      --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
+      --replace "'cython>=0.29.24'" "'cython'"
 
     substituteInPlace cmake/FindCython.cmake \
       --replace "SET(CYTHON_BIN cython" "SET(CYTHON_BIN ${cython}/bin/cython"

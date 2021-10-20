@@ -1,4 +1,6 @@
-{ config, stdenv
+{ config
+, lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -17,9 +19,10 @@
 , libv4l
 , x264
 , curl
+, wayland
 , xorg
 , makeWrapper
-, pkgconfig
+, pkg-config
 , libvlc
 , mbedtls
 
@@ -29,28 +32,45 @@
 , python3
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pipewireSupport ? stdenv.isLinux
+, pipewire
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "obs-studio";
-  version = "26.0.2";
+  version = "27.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = "refs/tags/${version}";
-    sha256 = "1bf56z2yb7gq1knqwcqj369c3wl9jr3wll5vlngmfy2gwqrczjmw";
+    rev = version;
+    sha256 = "04fzsr9yizmxy0r7z2706crvnsnybpnv5kgfn77znknxxjacfhkn";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+
+    # Lets obs-browser build against CEF 91.1.0+
+    ./Change-product_version-to-user_agent_product.patch
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cmake
+    pkg-config
+    makeWrapper
+  ]
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -67,14 +87,15 @@ in mkDerivation rec {
     qtx11extras
     qtsvg
     speex
+    wayland
     x264
     libvlc
-    makeWrapper
     mbedtls
   ]
-  ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
-  ++ optional pulseaudioSupport libpulseaudio;
+  ++ optionals scriptingSupport [ luajit python3 ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optional pipewireSupport pipewire;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -100,17 +121,16 @@ in mkDerivation rec {
     "-DCEF_ROOT_DIR=../../cef"
   ];
 
-  postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+  ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    addOpenGLRunpath $out/lib/lib*.so
+    addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
-      addOpenGLRunpath $out/lib/lib*.so
-      addOpenGLRunpath $out/lib/obs-plugins/*.so
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster
@@ -118,8 +138,8 @@ in mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ jb55 MP2E V ];
+    license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
   };
 }

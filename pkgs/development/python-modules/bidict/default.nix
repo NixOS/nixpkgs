@@ -1,45 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools_scm
+{ lib
+, buildPythonPackage
+, fetchPypi
 , sphinx
 , hypothesis
 , py
-, pytest
+, pytestCheckHook
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.21.2";
-  disabled = !isPy3k;
+  version = "0.21.3";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4fa46f7ff96dc244abfc437383d987404ae861df797e2fd5b190e233c302be09";
+    sha256 = "sha256-1QvYH65140GY/8lJeaDrCTn/mts+8yvMk6kT2LPj7R0=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ sphinx ];
-
-  # this can be removed >0.19.0
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "setuptools_scm < 4" "setuptools_scm"
-  '';
+  propagatedBuildInputs = [
+    sphinx
+  ];
 
   checkInputs = [
     hypothesis
     py
-    pytest
+    pytestCheckHook
     pytest-benchmark
     sortedcollections
     sortedcontainers
   ];
-  checkPhase = ''
-    pytest tests
-  '';
+
+  pythonImportsCheck = [ "bidict" ];
 
   meta = with lib; {
     homepage = "https://github.com/jab/bidict";

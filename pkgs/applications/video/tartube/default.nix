@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , gdk-pixbuf
 , gobject-introspection
@@ -10,17 +9,19 @@
 , wrapGAppsHook
 , youtube-dl
 , glib
+, ffmpeg
+, aria
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.1.0";
+  version = "2.3.332";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     rev = "v${version}";
-    sha256 = "1klqjwqm29y2f6nc8gn222ykfvb5d64z1w2kifw9bq5bv0np9bda";
+    sha256 = "1m7p4chpvbh4mswsymh89dksdgwhmnkpfbx9zi2jzqgkinfd6a2k";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,9 @@ python3Packages.buildPythonApplication rec {
     requests
     feedparser
     playsound
+    ffmpeg
+    matplotlib
+    aria
   ];
 
   buildInputs = [
@@ -48,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i "/^\s*install_requires/s/, 'gi'\|'gi', \|'gi'//" setup.py
+    sed -i "/^\s*'pgi',$/d" setup.py
   '';
 
   postInstall = ''
@@ -61,7 +65,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${stdenv.lib.makeBinPath [ youtube-dl ]}"
+    "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
   ];
 
   meta = with lib; {

@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitLab
 , cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "libaec";
-  version  = "1.0.4";
+  version  = "1.0.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.dkrz.de";
     owner = "k202009";
     repo = "libaec";
     rev = "v${version}";
-    sha256 = "1rpma89i35ahbalaqz82y201syxni7jkf9892jlyyrhhrvlnm4l2";
+    sha256 = "sha256-Vi0fCd9V/EH+PcD+e6RZK2/isR1xGX25POhm1Xen5ak=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";
     description = "Adaptive Entropy Coding library";
     license = licenses.bsd2;

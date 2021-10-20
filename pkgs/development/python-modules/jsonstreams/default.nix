@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "jsonstreams";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "dcbaker";
     repo = pname;
     rev = version;
-    sha256 = "0c85fdqkj5k4b0v0ngx2d9qbmzdsvglh4j9k9h7508bvn7l8fa4b";
+    sha256 = "0qw74wz9ngz9wiv89vmilbifsbvgs457yn1bxnzhrh7g4vs2wcav";
   };
 
   propagatedBuildInputs = [ six ];

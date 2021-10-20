@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
+{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "patchelf-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # Drop test that fails on musl (?)
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace tests/Makefile.am \
       --replace "set-rpath-library.sh" ""
   '';
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/NixOS/patchelf/blob/master/README";
+  meta = with lib; {
+    homepage = "https://github.com/NixOS/patchelf";
     license = licenses.gpl3;
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
     maintainers = [ maintainers.eelco ];

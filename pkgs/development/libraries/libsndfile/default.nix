@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkgconfig, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
 , Carbon, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
-  version = "1.0.30";
+  version = "1.0.31";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1rh79y4s4m2wcm2kahmzs2kijpdpayif2gyca6m71f3k7jbhgcwa";
+    rev = version;
+    sha256 = "1alba3iv8i7i2jb5fd6q5s7j9bcj48sf28nfjd3qigz2n2is5jl2";
   };
 
-  nativeBuildInputs = [ autoreconfHook autogen pkgconfig python3 ];
+  nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
   buildInputs = [ flac libogg libopus libvorbis ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+    ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
+  preConfigure = lib.optionalString stdenv.isDarwin
     ''
       NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
     '';
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";
     license     = licenses.lgpl2Plus;

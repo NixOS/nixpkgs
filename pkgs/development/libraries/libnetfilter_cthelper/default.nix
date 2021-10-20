@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cthelper";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
   meta = {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
       library, you register, configure, enable and disable user-space helpers. This library
       is used by conntrack-tools.
     '';
-    homepage = "http://www.netfilter.org/projects/libnetfilter_cthelper/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.netfilter.org/projects/libnetfilter_cthelper/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

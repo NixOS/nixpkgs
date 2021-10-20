@@ -1,13 +1,14 @@
-{ stdenv, mysql_jdbc }:
+{ lib, stdenv, mysql_jdbc }:
 
 stdenv.mkDerivation {
-  name = "tomcat-mysql-jdbc";
+  pname = "tomcat-mysql-jdbc";
   builder = ./builder.sh;
   buildInputs = [ mysql_jdbc ];
 
   inherit mysql_jdbc;
+  version = mysql_jdbc.version;
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,8 +1,11 @@
 { stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
-{ name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
-, extraBuildCommands ? "", extraBuildCommandsMulti ? ""
+{ name
+, profile ? ""
+, targetPkgs ? pkgs: []
+, multiPkgs ? pkgs: []
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
 }:
 
@@ -23,7 +26,8 @@
 
 let
   is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  # multi-lib glibc is only supported on x86_64
+  isMultiBuild  = multiPkgs != null && stdenv.hostPlatform.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -81,6 +85,9 @@ let
       # compatibility with NixOS
       ln -s /host/etc/static static
 
+      # symlink nix config
+      ln -s /host/etc/nix nix
+
       # symlink some NSS stuff
       ln -s /host/etc/passwd passwd
       ln -s /host/etc/group group
@@ -88,6 +95,9 @@ let
       ln -s /host/etc/hosts hosts
       ln -s /host/etc/resolv.conf resolv.conf
       ln -s /host/etc/nsswitch.conf nsswitch.conf
+
+      # symlink user profiles
+      ln -s /host/etc/profiles profiles
 
       # symlink sudo and su stuff
       ln -s /host/etc/login.defs login.defs

@@ -1,56 +1,74 @@
-{ stdenv, fetchFromGitHub, alsaLib, boost
-, qt4, libpulseaudio, codec2, libconfig
-, gnuradio, gr-osmosdr, gsm
-, libopus, libjpeg, protobuf, qwt, speex
-} :
+{ lib
+, fetchFromGitHub
+, libpulseaudio
+, libconfig
+# Needs a gnuradio built with qt gui support
+, gnuradio3_8
+# Not gnuradioPackages'
+, codec2
+, log4cpp
+, gmp
+, gsm
+, libopus
+, libjpeg
+, libsndfile
+, libftdi
+, protobuf
+, speex
+, speexdsp
+}:
 
-let
-  version = "0.5.0";
-
-in stdenv.mkDerivation {
+gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
-  inherit version;
+  version = "0.8.5-2";
 
   src = fetchFromGitHub {
-    owner = "kantooon";
+    owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
-    sha256 = "0xhg5zhjznmls5m3rhpk1qx0dipxmca12s85w15d0i7qwva2f1gi";
+    sha256 = "MgHfKR3AJW3pIN9oCBr4BWxk1fGSCpLmMzjxvuTmuFA=";
   };
 
   preBuild = ''
-    cd ext
+    cd src/ext
     protoc --cpp_out=. Mumble.proto
     protoc --cpp_out=. QRadioLink.proto
-    cd ..
+    cd ../..
     qmake
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp qradiolink $out/bin
+    install -D qradiolink $out/bin/qradiolink
+    install -Dm644 src/res/icon.png $out/share/pixmaps/qradiolink.png
+    install -Dm644 qradiolink.desktop $out/share/applications/qradiolink.desktop
   '';
 
   buildInputs = [
-    qt4
-    alsaLib
-    boost
-    libpulseaudio
+    gnuradio3_8.unwrapped.boost
     codec2
+    log4cpp
+    gmp
+    libpulseaudio
     libconfig
     gsm
-    gnuradio
-    gr-osmosdr
+    gnuradio3_8.pkgs.osmosdr
     libopus
     libjpeg
-    protobuf
     speex
-    qwt
+    speexdsp
+    gnuradio3_8.qt.qtbase
+    gnuradio3_8.qt.qtmultimedia
+    libftdi
+    libsndfile
+    gnuradio3_8.qwt
+  ];
+  nativeBuildInputs = [
+    protobuf
+    gnuradio3_8.qt.qmake
+    gnuradio3_8.qt.wrapQtAppsHook
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDR transceiver application for analog and digital modes";
     homepage = "http://qradiolink.org/";
     license = licenses.agpl3;

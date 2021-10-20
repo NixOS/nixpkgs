@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , enum34
 , glibcLocales
 , matplotlib
@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2020.12.3";
+  version = "2022.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7ae7aba87e88965c3e1490f5b9742c95e06150f2fc73da69647a9366dd88018";
+    sha256 = "bad712c883a12d774a8a58c35abc5d582c5e5eafdbb5351dc06ebe98c28bd135";
   };
 
   nativeBuildInputs = [ glibcLocales ];
@@ -52,8 +52,9 @@ buildPythonPackage rec {
 
   # No tests in pypi tarball.
   doCheck = false;
+  pythonImportsCheck = [ "pymatgen" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     license = licenses.mit;

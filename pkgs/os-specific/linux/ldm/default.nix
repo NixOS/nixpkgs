@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, udev, util-linux, mountPath ? "/media/" }:
+{ lib, stdenv, fetchgit, udev, util-linux, mountPath ? "/media/" }:
 
 assert mountPath != "";
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight device mounter, with libudev as only dependency";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     repositories.git = git;
   };
 }

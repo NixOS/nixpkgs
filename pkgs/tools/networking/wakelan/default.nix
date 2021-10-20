@@ -1,10 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wakelan-1.1";
+  pname = "wakelan";
+  version = "1.1";
 
   src = fetchurl {
-    url = "mirror://metalab/system/network/misc/${name}.tar.gz";
+    url = "mirror://metalab/system/network/misc/wakelan-${version}.tar.gz";
     sha256 = "0vydqpf44146ir6k87gmqaq6xy66xhc1gkr3nsd7jj3nhy7ypx9x";
   };
 
@@ -21,9 +22,9 @@ stdenv.mkDerivation rec {
          power on.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.unix;
   };
 }

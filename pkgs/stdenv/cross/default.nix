@@ -35,12 +35,16 @@ in lib.init bootStages ++ [
   })
 
   # Run Packages
-  (buildPackages: {
+  (buildPackages: let
+    adaptStdenv =
+      if crossSystem.isStatic
+      then buildPackages.stdenvAdapters.makeStatic
+      else lib.id;
+  in {
     inherit config;
-    overlays = overlays ++ crossOverlays
-      ++ (if (with crossSystem; isWasm || isRedox) then [(import ../../top-level/static.nix)] else []);
+    overlays = overlays ++ crossOverlays;
     selfBuild = false;
-    stdenv = buildPackages.stdenv.override (old: rec {
+    stdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
       hostPlatform = crossSystem;
       targetPlatform = crossSystem;
@@ -48,7 +52,9 @@ in lib.init bootStages ++ [
       # Prior overrides are surely not valid as packages built with this run on
       # a different platform, and so are disabled.
       overrides = _: _: {};
-      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      extraBuildInputs = [ ] # Old ones run on wrong platform
+         ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
+         ;
       allowedRequisites = null;
 
       hasCC = !targetPlatform.isGhcjs;
@@ -66,7 +72,7 @@ in lib.init bootStages ++ [
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.clang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages_8.lldClang
+             then buildPackages.llvmPackages.clangUseLLVM
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
@@ -81,7 +87,7 @@ in lib.init bootStages ++ [
            # to recognize 64-bit DLLs
         ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
         ;
-    });
+    }));
   })
 
 ]

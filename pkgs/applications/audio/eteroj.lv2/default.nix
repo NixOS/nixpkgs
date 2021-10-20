@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libuv, lv2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuv, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "eteroj.lv2";
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libuv lv2 ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OSC injection/ejection from/to UDP/TCP/Serial for LV2";
     homepage = "https://open-music-kontrollers.ch/lv2/eteroj";
     license = licenses.artistic2;

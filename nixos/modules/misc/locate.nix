@@ -25,8 +25,8 @@ in {
     locate = mkOption {
       type = package;
       default = pkgs.findutils;
-      defaultText = "pkgs.findutils";
-      example = "pkgs.mlocate";
+      defaultText = literalExpression "pkgs.findutils";
+      example = literalExpression "pkgs.mlocate";
       description = ''
         The locate implementation to use
       '';
@@ -43,6 +43,9 @@ in {
         The format is described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
         <manvolnum>7</manvolnum></citerefentry>.
+
+        To disable automatic updates, set to <literal>"never"</literal>
+        and run <command>updatedb</command> manually.
       '';
     };
 
@@ -73,7 +76,72 @@ in {
 
     pruneFS = mkOption {
       type = listOf str;
-      default = ["afs" "anon_inodefs" "auto" "autofs" "bdev" "binfmt" "binfmt_misc" "cgroup" "cifs" "coda" "configfs" "cramfs" "cpuset" "debugfs" "devfs" "devpts" "devtmpfs" "ecryptfs" "eventpollfs" "exofs" "futexfs" "ftpfs" "fuse" "fusectl" "gfs" "gfs2" "hostfs" "hugetlbfs" "inotifyfs" "iso9660" "jffs2" "lustre" "misc" "mqueue" "ncpfs" "nnpfs" "ocfs" "ocfs2" "pipefs" "proc" "ramfs" "rpc_pipefs" "securityfs" "selinuxfs" "sfs" "shfs" "smbfs" "sockfs" "spufs" "nfs" "NFS" "nfs4" "nfsd" "sshfs" "subfs" "supermount" "sysfs" "tmpfs" "ubifs" "udf" "usbfs" "vboxsf" "vperfctrfs" ];
+      default = [
+        "afs"
+        "anon_inodefs"
+        "auto"
+        "autofs"
+        "bdev"
+        "binfmt"
+        "binfmt_misc"
+        "cgroup"
+        "cifs"
+        "coda"
+        "configfs"
+        "cramfs"
+        "cpuset"
+        "debugfs"
+        "devfs"
+        "devpts"
+        "devtmpfs"
+        "ecryptfs"
+        "eventpollfs"
+        "exofs"
+        "futexfs"
+        "ftpfs"
+        "fuse"
+        "fusectl"
+        "fuse.sshfs"
+        "gfs"
+        "gfs2"
+        "hostfs"
+        "hugetlbfs"
+        "inotifyfs"
+        "iso9660"
+        "jffs2"
+        "lustre"
+        "misc"
+        "mqueue"
+        "ncpfs"
+        "nnpfs"
+        "ocfs"
+        "ocfs2"
+        "pipefs"
+        "proc"
+        "ramfs"
+        "rpc_pipefs"
+        "securityfs"
+        "selinuxfs"
+        "sfs"
+        "shfs"
+        "smbfs"
+        "sockfs"
+        "spufs"
+        "nfs"
+        "NFS"
+        "nfs4"
+        "nfsd"
+        "sshfs"
+        "subfs"
+        "supermount"
+        "sysfs"
+        "tmpfs"
+        "ubifs"
+        "udf"
+        "usbfs"
+        "vboxsf"
+        "vperfctrfs"
+      ];
       description = ''
         Which filesystem types to exclude from indexing
       '';
@@ -127,6 +195,18 @@ in {
       { LOCATE_PATH = cfg.output;
       };
 
+    environment.etc = {
+      # write /etc/updatedb.conf for manual calls to `updatedb`
+      "updatedb.conf" = {
+        text = ''
+          PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
+          PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
+          PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
+          PRUNE_BIND_MOUNTSFR="${lib.boolToString cfg.pruneBindMounts}"
+        '';
+      };
+    };
+
     warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
@@ -150,7 +230,7 @@ in {
           ''
           else ''
             exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
+              ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         environment = optionalAttrs (!isMLocate) {
@@ -173,7 +253,7 @@ in {
         serviceConfig.ReadWritePaths = dirOf cfg.output;
       };
 
-    systemd.timers.update-locatedb =
+    systemd.timers.update-locatedb = mkIf (cfg.interval != "never")
       { description = "Update timer for locate database";
         partOf      = [ "update-locatedb.service" ];
         wantedBy    = [ "timers.target" ];

@@ -8,10 +8,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.8p15";
+  pname = "ntp";
+  version = "4.2.8p15";
 
   src = fetchurl {
-    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
     sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
   };
 
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
-  ] ++ stdenv.lib.optional stdenv.isLinux "--enable-linuxcaps"
-    ++ stdenv.lib.optional withSeccomp "--enable-libseccomp";
+  ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps"
+    ++ lib.optional withSeccomp "--enable-libseccomp";
 
   buildInputs = [ libcap openssl perl ]
     ++ lib.optional withSeccomp libseccomp
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.ntp.org/";
     description = "An implementation of the Network Time Protocol";
     license = {
@@ -47,6 +48,6 @@ stdenv.mkDerivation rec {
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
     maintainers = with maintainers; [ eelco thoughtpolice ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

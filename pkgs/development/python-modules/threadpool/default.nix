@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "197gzrxn9lbk0q1v079814c6s05cr4rwzyl6c1m6inkyif4yzr6c";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://chrisarndt.de/projects/threadpool/";
     description = "Easy to use object-oriented thread pool framework";
     license = licenses.mit;

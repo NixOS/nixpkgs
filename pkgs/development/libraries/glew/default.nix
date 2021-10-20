@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+, OpenGL
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "glew-2.2.0";
+  pname = "glew";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${name}.tgz";
+    url = "mirror://sourceforge/glew/${pname}-${version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
-  buildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
@@ -41,11 +43,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
     homepage = "http://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freeglut, glew, libGL, libGLU, libX11, libXext, mesa, pkg-config, wayland }:
+{ lib, stdenv, fetchurl, freeglut, glew, libGL, libGLU, libX11, libXext, mesa, pkg-config, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "mesa-demos";
@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ freeglut glew libX11 libXext libGL libGLU mesa mesa.osmesa wayland ];
   nativeBuildInputs = [ pkg-config ];
 
+  configureFlags = [ "--with-system-data-files" ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of demos and test programs for OpenGL and Mesa";
     homepage = "https://www.mesa3d.org/";
     license = licenses.mit;

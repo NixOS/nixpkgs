@@ -1,5 +1,5 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
-, libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
+, libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -9,22 +9,22 @@
 null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
 
-  version = "2.2.24";
+  version = "2.2.27";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "0ilcp7m1dvwnri3i7q9wanf5pvhwxk7h106pd62g0d5fz80b944h";
+    sha256 = "1693s2rp9sjwvdslj94n03wnb6rxysjy0dli0q1698af044h1ril";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig texinfo ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
-    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  ''; #" fix Emacs syntax highlighting :-(
+  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
+    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  '';
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ln -s -t $out/bin $out/libexec/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ peti fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz vrthra ];
     platforms = platforms.all;
   };
 }

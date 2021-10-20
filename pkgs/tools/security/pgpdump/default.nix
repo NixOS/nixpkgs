@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , supportCompressedPackets ? true, zlib, bzip2
 }:
 
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pi9qdbmcmi58gmljin51ylbi3zkknl8fm26jm67cpl55hvfsn23";
   };
 
-  buildInputs = stdenv.lib.optionals supportCompressedPackets [ zlib bzip2 ];
+  buildInputs = lib.optionals supportCompressedPackets [ zlib bzip2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PGP packet visualizer";
     longDescription = ''
       pgpdump is a PGP packet visualizer which displays the packet format of

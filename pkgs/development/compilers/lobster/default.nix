@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , cmake
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lobster";
-  version = "unstable-2020-10-04";
+  version = "unstable-2021-06-18";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = pname;
-    rev = "4c5e78f021ce9d06592fb3a66388e5e31fac1adb";
-    sha256 = "1wnbc8kr1dyfs53nlcxah22ghphmazzrlcj9z47cgkdsj1qfy84x";
+    rev = "a785316e44b1690da56a3646f90971a72f470a49";
+    sha256 = "eY/8mhJ4SUH5QYWqykl0u+8W7AU0FVVya3GNTEUSOP4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,14 +45,15 @@ stdenv.mkDerivation rec {
     ];
 
   preConfigure = "cd dev";
-  enableParallelBuilding = true;
 
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/aardappel/lobster";
+    };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://strlen.com/lobster";
     description = "The Lobster programming language";
     longDescription = ''

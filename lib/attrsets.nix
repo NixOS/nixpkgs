@@ -5,7 +5,7 @@ let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep sanitizeDerivationName;
-  inherit (lib.lists) fold concatMap concatLists;
+  inherit (lib.lists) foldr foldl' concatMap concatLists elemAt;
 in
 
 rec {
@@ -55,10 +55,13 @@ rec {
        => { a = { b = 3; }; }
   */
   setAttrByPath = attrPath: value:
-    if attrPath == [] then value
-    else listToAttrs
-      [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
-
+    let
+      len = length attrPath;
+      atDepth = n:
+        if n == len
+        then value
+        else { ${elemAt attrPath n} = atDepth (n + 1); };
+    in atDepth 0;
 
   /* Like `attrByPath' without a default value. If it doesn't find the
      path it will throw.
@@ -152,8 +155,8 @@ rec {
        => { a = [ 2 3 ]; }
   */
   foldAttrs = op: nul: list_of_attrs:
-    fold (n: a:
-        fold (name: o:
+    foldr (n: a:
+        foldr (name: o:
           o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
@@ -182,6 +185,24 @@ rec {
       concatMap (collect pred) (attrValues attrs)
     else
       [];
+
+  /* Return the cartesian product of attribute set value combinations.
+
+    Example:
+      cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+      => [
+           { a = 1; b = 10; }
+           { a = 1; b = 20; }
+           { a = 2; b = 10; }
+           { a = 2; b = 20; }
+         ]
+  */
+  cartesianProductOfSets = attrsOfLists:
+    foldl' (listOfAttrs: attrName:
+      concatMap (attrs:
+        map (listValue: attrs // { ${attrName} = listValue; }) attrsOfLists.${attrName}
+      ) listOfAttrs
+    ) [{}] (attrNames attrsOfLists);
 
 
   /* Utility function that creates a {name, value} pair as expected by
@@ -224,6 +245,10 @@ rec {
 
   /* Call a function for each attribute in the given set and return
      the result in a list.
+
+     Type:
+       mapAttrsToList ::
+         (String -> a -> b) -> AttrSet -> [b]
 
      Example:
        mapAttrsToList (name: value: name + value)
@@ -433,7 +458,7 @@ rec {
        => true
    */
   matchAttrs = pattern: attrs: assert isAttrs pattern;
-    fold and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
+    foldr and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
       if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs pat val
@@ -493,5 +518,4 @@ rec {
   zipWithNames = zipAttrsWithNames;
   zip = builtins.trace
     "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
-
 }

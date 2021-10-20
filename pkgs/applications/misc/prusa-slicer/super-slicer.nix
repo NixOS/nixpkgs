@@ -1,49 +1,57 @@
-{
-  stdenv, lib, fetchFromGitHub, makeDesktopItem, prusa-slicer
-}:
+{ lib, fetchFromGitHub, makeDesktopItem, prusa-slicer }:
 let
   appname = "SuperSlicer";
-  version = "2.2.54.2";
   pname = "super-slicer";
   description = "PrusaSlicer fork with more features and faster development cycle";
-  override = super: {
+
+  versions = {
+    stable = { version = "2.3.56.9"; sha256 = "sha256-vv01wGQkrasKKjpGSDeDqZbd1X5/iTfGXYN5Jwz+FKE="; };
+    staging = { version = "2.3.57.0"; sha256 = "sha256-7o0AqgQcKYc6c+Hi3x5pC/pKJZPlEsYOYk9sC21+mvM="; };
+  };
+
+  override = { version, sha256 }: super: {
     inherit version pname;
 
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
+      inherit sha256;
       rev = version;
+      fetchSubmodules = true;
     };
+
+    # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
+    postInstall = null;
+    separateDebugInfo = true;
 
     # See https://github.com/supermerill/SuperSlicer/issues/432
     cmakeFlags = super.cmakeFlags ++ [
       "-DSLIC3R_BUILD_TESTS=0"
     ];
 
-    postInstall = ''
-      mkdir -p "$out/share/pixmaps/"
-      ln -s "$out/share/SuperSlicer/icons/Slic3r.png" "$out/share/pixmaps/${appname}.png"
-      mkdir -p "$out/share/applications"
-      cp "$desktopItem"/share/applications/* "$out/share/applications/"
-    '';
+    desktopItems = [
+      (makeDesktopItem {
+        name = appname;
+        exec = "superslicer";
+        icon = appname;
+        comment = description;
+        desktopName = appname;
+        genericName = "3D printer tool";
+        categories = "Development;";
+      })
+    ];
 
-    desktopItem = makeDesktopItem {
-      name = appname;
-      exec = "superslicer";
-      icon = appname;
-      comment = description;
-      desktopName = appname;
-      genericName = "3D printer tool";
-      categories = "Development;";
-    };
-
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit description;
       homepage = "https://github.com/supermerili/SuperSlicer";
       license = licenses.agpl3;
       maintainers = with maintainers; [ cab404 moredread ];
     };
 
+    passthru = allVersions;
+
   };
-in prusa-slicer.overrideAttrs override
+
+  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer.overrideAttrs (override version))) versions;
+in
+allVersions.stable

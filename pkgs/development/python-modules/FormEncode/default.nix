@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, dnspython, pycountry, nose, setuptools_scm, six, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, dnspython, pycountry, nose, setuptools-scm, six, isPy27 }:
 
 buildPythonPackage rec {
   pname = "FormEncode";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 
   checkInputs = [ dnspython pycountry nose ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sed -i 's/test_unicode_ascii_subgroup/noop/' formencode/tests/test_email.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FormEncode validates and converts nested structures";
     homepage = "http://formencode.org";
     license = licenses.mit;

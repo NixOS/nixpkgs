@@ -1,9 +1,12 @@
-sourcePerArch:
+{ sourcePerArch, knownVulnerabilities ? [] }:
 
 { swingSupport ? true # not used for now
-, stdenv
+, lib, stdenv
 , fetchurl
+, setJavaClassPath
 }:
+
+assert (stdenv.isDarwin && stdenv.isx86_64);
 
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     result = stdenv.mkDerivation {
@@ -23,6 +26,9 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     mv $sourceRoot $out
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
+
     rm -rf $out/Home/demo
 
     # Remove some broken manpages.
@@ -30,7 +36,11 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     ln -s $out/Contents/Home/* $out/
 
+    # Propagate the setJavaClassPath setup hook from the JDK so that
+    # any package that depends on the JDK has $CLASSPATH set up
+    # properly.
     mkdir -p $out/nix-support
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
@@ -43,11 +53,13 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   passthru.home = result;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = [ "x86_64-darwin" ]; # some inherit jre.meta.platforms
-    maintainers = with stdenv.lib.maintainers; [ taku0 ];
+    maintainers = with lib.maintainers; [ taku0 ];
+    inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result

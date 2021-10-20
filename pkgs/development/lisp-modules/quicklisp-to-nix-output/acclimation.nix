@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''acclimation'';
-  version = ''20200925-git'';
+  baseName = "acclimation";
+  version = "20200925-git";
 
-  description = ''Library supporting internationalization'';
+  description = "Library supporting internationalization";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/acclimation/2020-09-25/acclimation-20200925-git.tgz'';
-    sha256 = ''11vw1h5zxicj5qxb1smiyjxafw8xk0isnzcf5g0lqis3y9ssqxbw'';
+    url = "http://beta.quicklisp.org/archive/acclimation/2020-09-25/acclimation-20200925-git.tgz";
+    sha256 = "11vw1h5zxicj5qxb1smiyjxafw8xk0isnzcf5g0lqis3y9ssqxbw";
   };
 
   packageName = "acclimation";

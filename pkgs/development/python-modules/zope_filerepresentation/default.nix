@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_schema
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     cd src/zope/filerepresentation && python -m unittest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zopefilerepresentation.readthedocs.io/";
     description = "File-system Representation Interfaces";
     license = licenses.zpl20;

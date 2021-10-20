@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, SDL2, glew, xcftools, python, pillow, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools, python2Packages, makeWrapper }:
 
 let
   vasm =
@@ -25,7 +25,8 @@ stdenv.mkDerivation {
     url = "https://www.retrodev.com/repos/blastem/archive/3d48cb0c28be.tar.gz";
     sha256 = "07wzbmzp0y8mh59jxg81q17gqagz3psxigxh8dmzsipgg68y6a8r";
   };
-  buildInputs = [ pkgconfig SDL2 glew xcftools python pillow vasm makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ pkg-config SDL2 glew xcftools python2Packages.python python2Packages.pillow vasm ];
   preBuild = ''
     patchShebangs img2tiles.py
   '';
@@ -41,9 +42,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.retrodev.com/blastem/";
     description = "The fast and accurate Genesis emulator";
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     # Makefile:140: *** aarch64 is not a supported architecture.  Stop.
     badPlatforms = [ "aarch64-linux" ];
   };

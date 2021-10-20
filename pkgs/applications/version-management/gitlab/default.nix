@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace
+, fixup_yarn_lock, replace, file, cacert
 }:
 
 let
@@ -32,6 +32,10 @@ let
         openssl = x.openssl // {
           buildInputs = [ openssl ];
         };
+        ruby-magic = x.ruby-magic // {
+          buildInputs = [ file ];
+          buildFlags = [ "--enable-system-libraries" ];
+        };
       };
     groups = [
       "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
@@ -47,7 +51,7 @@ let
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.
@@ -75,11 +79,6 @@ let
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
-
-      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
-      # url, so we have to do it manually
-      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
-                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
@@ -118,12 +117,16 @@ stdenv.mkDerivation {
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [
+    # Change hardcoded paths to the NixOS equivalent
+    ./remove-hardcoded-locations.patch
+  ];
 
   postPatch = ''
     ${lib.optionalString (!gitlabEnterprise) ''
       # Remove all proprietary components
       rm -rf ee
+      sed -i 's/-ee//' ./VERSION
     ''}
 
     # For reasons I don't understand "bundle exec" ignores the
@@ -137,6 +140,7 @@ stdenv.mkDerivation {
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
     sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
 
+    mv config/puma.rb.example config/puma.rb
     # Always require lib-files and application.rb through their store
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
@@ -173,6 +177,7 @@ stdenv.mkDerivation {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    gitlabEnv.FOSS_ONLY = lib.boolToString (!gitlabEnterprise);
     tests = {
       nixos-test-passes = nixosTests.gitlab;
     };
@@ -181,7 +186,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

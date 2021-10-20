@@ -16,10 +16,15 @@ stdenv.mkDerivation rec {
     (fetchurl {
       # 2020-06-19: NOTE: # Fix build with C++11
       # Close when https://github.com/TechSmith/mp4v2/pull/36 merged/closed.
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/libmp4v2-c++11.patch?id=203f5a72bc97ffe089b424c47b07dd9eaea35713";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/203f5a72bc97ffe089b424c47b07dd9eaea35713/trunk/libmp4v2-c++11.patch";
       sha256 = "0sbn0il7lmk77yrjyb4f0a3z3h8gsmdkscvz5n9hmrrrhrwf672w";
     })
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # unbreak build with Clang≥6 (C++14 by default). Based on https://reviews.freebsd.org/rP458678
+    ./fix-build-clang.patch
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ];
 
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";

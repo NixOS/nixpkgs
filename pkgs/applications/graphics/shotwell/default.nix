@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -11,8 +11,8 @@
 , vala
 , sqlite
 , webkitgtk
-, pkgconfig
-, gnome3
+, pkg-config
+, gnome
 , gst_all_1
 , libgudev
 , libraw
@@ -32,6 +32,7 @@
 , itstool
 , libgdata
 , libchamplain
+, libsecret
 , gsettings-desktop-schemas
 , python3
 }:
@@ -40,18 +41,18 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.2";
+  version = "0.30.14";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ywzr6vgcz8yy60v0jp55na9lgqi4dbh2vakfphkcml1gpah0r2l";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-McLkgzkI02GcssNnWgXw2lnCuqduKLkFOF/VbADBKJU=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     itstool
     gettext
     desktop-file-utils
@@ -83,9 +84,10 @@ stdenv.mkDerivation rec {
     librsvg
     librest
     gcr
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     libgdata
     libchamplain
+    libsecret
   ];
 
   postPatch = ''
@@ -94,17 +96,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [domenkozar];
+    maintainers = with maintainers; [];
     platforms = platforms.linux;
   };
 }

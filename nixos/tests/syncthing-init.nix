@@ -4,20 +4,19 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
 
 in {
   name = "syncthing-init";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ lassulus ];
+  meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
 
   machine = {
     services.syncthing = {
       enable = true;
-      declarative = {
-        devices.testDevice = {
-          id = testId;
-        };
-        folders.testFolder = {
-          path = "/tmp/test";
-          devices = [ "testDevice" ];
-        };
+      devices.testDevice = {
+        id = testId;
       };
+      folders.testFolder = {
+        path = "/tmp/test";
+        devices = [ "testDevice" ];
+      };
+      extraOptions.gui.user = "guiUser";
     };
   };
 
@@ -27,5 +26,6 @@ in {
 
     assert "testFolder" in config
     assert "${testId}" in config
+    assert "guiUser" in config
   '';
 })

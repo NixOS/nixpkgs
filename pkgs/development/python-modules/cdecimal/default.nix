@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
-
-with stdenv.lib;
+{ lib, buildPythonPackage, fetchurl, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cdecimal";
@@ -16,7 +14,7 @@ buildPythonPackage rec {
   # Upstream tests are not included s. a. http://www.bytereef.org/mpdecimal/testing.html
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast drop-in replacement for decimal.py";
     homepage    = "http://www.bytereef.org/mpdecimal/";
     license     = licenses.bsd2;

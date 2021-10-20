@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, zlib }:
+{ lib, stdenv, fetchurl, libpcap, zlib }:
 
 stdenv.mkDerivation rec {
   version = "3.0.719";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network statistics web interface";
     longDescription = ''
       Captures network traffic, calculates statistics about usage, and serves

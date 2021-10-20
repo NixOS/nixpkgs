@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, python3, zip, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
 , which, readline, zlib, icu, cargo, rustc, llvmPackages }:
 
-with stdenv.lib;
+with lib;
 
 let
   python3Env = buildPackages.python3.withPackages (p: [p.six]);
@@ -14,12 +14,21 @@ in stdenv.mkDerivation rec {
     sha256 = "0azdinwqjfv2q37gqpxmfvzsk86pvsi6cjaq1310zs26gric5j1f";
   };
 
+  patches = [
+    # Backport a change from Firefox 75 that fixes finding the
+    # location of clang and libclang.
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ccd1356fc8f1d0bfa9d896e88d3cc924425623da";
+      sha256 = "005g3mfmal9nw32khrgyiv3221z7pazfhhm2qvgc8d48i2yzj3j0";
+    })
+  ];
+
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
   nativeBuildInputs = [
     autoconf213
-    pkgconfig
+    pkg-config
     perl
     which
     python2
@@ -55,9 +64,6 @@ in stdenv.mkDerivation rec {
     "--with-system-zlib"
     "--with-system-icu"
 
-    "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
-
     "--enable-shared-js"
     "--enable-readline"
     # Fedora and Arch disable optimize, but it doesn't seme to be necessary
@@ -85,11 +91,12 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.abbradar ];
+    badPlatforms = [ "riscv32-linux" "riscv64-linux" ];
     platforms = platforms.linux;
   };
 }

@@ -1,19 +1,19 @@
-{ mkDerivation, lib, fetchurl, pkgconfig, qtbase, qttools, alsaLib, libjack2 }:
+{ mkDerivation, lib, fetchurl, pkg-config, qtbase, qttools, alsa-lib, libjack2 }:
 
 mkDerivation rec {
-  version = "0.6.3";
+  version = "0.9.4";
   pname = "qmidinet";
 
   src = fetchurl {
     url = "mirror://sourceforge/qmidinet/${pname}-${version}.tar.gz";
-    sha256 = "04jbvnf6yp9l0bhl1ym6zqkmaz8c2az3flq7qgflaxzj3isns1p1";
+    sha256 = "sha256-7Ui4kUgYgpPVAaaINrd6WGZoYon5UuHszGVaHafb/p0=";
   };
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [  qtbase qttools alsaLib libjack2 ];
+  buildInputs = [  qtbase qttools alsa-lib libjack2 ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "A MIDI network gateway application that sends and receives MIDI data (ALSA Sequencer and/or JACK MIDI) over the network";

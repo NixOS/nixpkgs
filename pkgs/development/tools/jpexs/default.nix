@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, makeDesktopItem, jdk8 }:
+{ lib, stdenv, fetchzip, makeWrapper, makeDesktopItem, jdk8 }:
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flash SWF decompiler and editor";
     longDescription = ''
       Open-source Flash SWF decompiler and editor. Extract resources,
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jindrapetrik/jpexs-decompiler";
     license = licenses.gpl3;
     platforms = jdk8.meta.platforms;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = [ ];
   };
 }

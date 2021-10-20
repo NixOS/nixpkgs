@@ -1,24 +1,39 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPy27, pytest, testfixtures, lib }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, testfixtures
+}:
 
 buildPythonApplication rec {
   pname = "bump2version";
-  version = "1.0.0";
-  disabled = isPy27;
+  version = "1.0.1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "c4urself";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "10p7rg569rk3qvzs5kjj17894bqlsg3ihhbln6ciwwfhkfq1kpja";
+    rev = "v${version}";
+    sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
-  checkInputs = [ pytest testfixtures ];
-  # X's in pytest are git tests which won't run in sandbox
-  checkPhase = ''
-    pytest tests/ -k 'not usage_string_fork'
-  '';
+  checkInputs = [
+    pytestCheckHook
+    testfixtures
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # X's in pytest are git tests which won't run in sandbox
+    "usage_string_fork"
+    "test_usage_string"
+    "test_defaults_in_usage_with_config"
+  ];
+
+  pythonImportsCheck = [ "bumpversion" ];
+
+  meta = with lib; {
     description = "Version-bump your software with a single command";
     longDescription = ''
       A small command line tool to simplify releasing software by updating

@@ -1,28 +1,30 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
+{ lib, fetchurl, buildDunePackage, stdlib-shims, ounit }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-fileutils-0.5.3";
+buildDunePackage rec {
+  pname = "fileutils";
+  version = "0.6.3";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1728/ocaml-fileutils-0.5.3.tar.gz";
-    sha256 = "1rc4cqlvdhbs55i85zfbfhz938fsy4fj6kwlkfm3ra7bpwn8bmpd";
+    url = "https://github.com/gildor478/ocaml-fileutils/releases/download/v${version}/fileutils-v${version}.tbz";
+    sha256 = "0qhlhc7fzcq0yfg1wyszsi0gyc4w9hyzmfv84aq9wc79i3283xgg";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit ];
+  minimumOCamlVersion = "4.03";
+  useDune2 = true;
 
-  configureFlags = [ "--enable-tests" ];
+  propagatedBuildInputs = [
+    stdlib-shims
+  ];
+
+  checkInputs = [
+    ounit
+  ];
   doCheck = true;
-  checkTarget = "test";
 
-  createFindlibDestdir = true;
-
-  preInstall = "make doc";
-
-  meta = {
-    homepage = "https://forge.ocamlcore.org/projects/ocaml-fileutils/";
-    platforms = ocaml.meta.platforms or [];
-    description = "Library to provide pure OCaml functions to manipulate real file (POSIX like) and filename";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+  meta = with lib; {
+    description = "OCaml API to manipulate real files (POSIX like) and filenames";
+    homepage = "https://github.com/gildor478/ocaml-fileutils";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

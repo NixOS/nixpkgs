@@ -1,10 +1,7 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
-let
-  version = "0.14.0";
-in
-stdenv.mkDerivation {
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
+stdenv.mkDerivation rec {
   name = "ocamlbuild-${version}";
-  inherit version;
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ocaml";
@@ -15,17 +12,25 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  strictDeps = true;
+
+  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
+  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
 
   configurePhase = ''
+  runHook preConfigure
+
   make -f configure.make Makefile.config \
     "OCAMLBUILD_PREFIX=$out" \
     "OCAMLBUILD_BINDIR=$out/bin" \
     "OCAMLBUILD_MANDIR=$out/share/man" \
     "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
+
+  runHook postConfigure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ocaml/ocamlbuild/";
     description = "A build system with builtin rules to easily build most OCaml projects";
     license = licenses.lgpl2;

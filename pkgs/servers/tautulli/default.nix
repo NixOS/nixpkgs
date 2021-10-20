@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, python, buildPythonApplication, bash, setuptools, wrapPython, makeWrapper }:
+{ lib, fetchFromGitHub, buildPythonApplication, setuptools, wrapPython, makeWrapper }:
 
 buildPythonApplication rec {
   pname = "Tautulli";
-  version = "2.6.1";
+  version = "2.7.6";
   format = "other";
 
   pythonPath = [ setuptools ];
@@ -12,10 +12,8 @@ buildPythonApplication rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "QHpVIOtGFzNqAEcBCv48YWO4pYatbTe/CWwcwjbj+34=";
+    sha256 = "1j57n8bi8qzzx1nw23rfr1g8yidg7p600pbbfv4b1dfiw8633jsl";
   };
-
-  doBuild = false;
 
   installPhase = ''
     mkdir -p $out/bin $out/libexec/tautulli

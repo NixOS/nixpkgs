@@ -1,32 +1,36 @@
-{ stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , meson
 , ninja
 , wayland
 , cairo
 , pango
 , gtk
-, pkgconfig
-, cmake
+, pkg-config
 , scdoc
 , libnotify
-, gio-sharp
 , glib
+, wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
-  name = "swappy-${version}";
-  version = "1.2.1";
+  pname = "swappy";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jtheoof";
-    repo = "swappy";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14ac2jmnak7avcz0jhqjm30vk7pv3gq5aq5rdyh84k8c613kkicf";
+    sha256 = "sha256-sINX7pJ0msis7diGFTCgD4Mamd3yGGJew1uD8de4VOg=";
   };
 
-  nativeBuildInputs = [ glib meson ninja pkgconfig cmake scdoc ];
+  nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook ];
 
-  buildInputs = [ cairo pango gtk libnotify wayland glib ];
+  buildInputs = [
+    cairo pango gtk libnotify wayland glib hicolor-icon-theme
+  ];
 
   strictDeps = true;
 
@@ -35,9 +39,9 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jtheoof/swappy";
-    description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS ";
+    description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;

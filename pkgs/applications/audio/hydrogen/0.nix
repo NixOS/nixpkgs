@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, cmake
-, alsaLib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
+{ lib, stdenv, fetchurl, pkg-config, cmake
+, alsa-lib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1dy2jfkdw0nchars4xi4isrz66fqn53a9qk13bqza7lhmsg3s3qy";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    alsaLib boost glib lash libjack2 libarchive libsndfile lrdf qt4
+    alsa-lib boost glib lash libjack2 libarchive libsndfile lrdf qt4
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;

@@ -1,7 +1,8 @@
-{ fetchFromGitHub, kernel, stdenv }:
+{ fetchFromGitHub, kernel, lib, stdenv }:
 
 stdenv.mkDerivation {
-  name = "mba6x_bl-2016-12-08";
+  pname = "mba6x_bl";
+  version = "unstable-2016-12-08";
 
   src = fetchFromGitHub {
     owner = "patjak";
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = "https://github.com/patjak/mba6x_bl";
     license = licenses.gpl2;

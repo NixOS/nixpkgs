@@ -1,6 +1,7 @@
 { mkDerivation
 , cmake
 , fetchFromGitLab
+, nix-update-script
 , gst_all_1
 , lib
 , libpulseaudio
@@ -11,17 +12,23 @@
 , qttools
 , taglib
 , zlib
+, python3
 }:
 
+let
+  py = python3.withPackages (ps: with ps; [
+    pydbus
+  ]);
+in
 mkDerivation rec {
-  pname = "sayonara-player";
-  version = "1.6.0-beta6";
+  pname = "sayonara";
+  version = "1.7.0-stable3";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
     rev = version;
-    sha256 = "sha256-SbJS0DQvbW++CNXbuDHQxFlLRb1kTtDdIdHOqu0YxeQ=";
+    sha256 = "sha256-tJ/8tGNkmTwWRCpPy/h85SP/6QDAgcaKWJdM5MSAXJw=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config qttools ];
@@ -32,6 +39,7 @@ mkDerivation rec {
     qtbase
     taglib
     zlib
+    py
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -53,6 +61,12 @@ mkDerivation rec {
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Sayonara music player";

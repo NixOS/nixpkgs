@@ -1,55 +1,69 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, cmake
-, pkgconfig
-, vala_0_40
-, pantheon
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook
 , curl
+, dht
 , glib
 , gtk3
 , libb64
 , libevent
 , libgee
 , libnatpmp
-, libunity
+, libtransmission
+, libutp
 , miniupnpc
 , openssl
-, wrapGAppsHook
+, pantheon
 }:
 
 stdenv.mkDerivation rec {
   pname = "torrential";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "davidmhewitt";
     repo = "torrential";
     rev = version;
-    fetchSubmodules = true;
-    sha256 = "17aby0c17ybyzyzyc1cg1j6q1a186801fy84avlaxahqp7vdammx";
+    sha256 = "sha256-78eNIz7Lgeq4LTog04TMNuL27Gv0UZ0poBaw8ia1R/g=";
   };
 
   nativeBuildInputs = [
-    cmake
-    vala_0_40 # https://github.com/davidmhewitt/torrential/issues/135
-    pkgconfig
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
     wrapGAppsHook
   ];
 
   buildInputs = [
     curl
+    dht
     glib
     gtk3
     libb64
     libevent
     libgee
     libnatpmp
-    libunity
+    libtransmission
+    libutp
     miniupnpc
     openssl
     pantheon.granite
   ];
+
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -57,11 +71,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Download torrents in style with this speedy, minimalist torrent client for elementary OS";
     homepage = "https://github.com/davidmhewitt/torrential";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
   };
 }

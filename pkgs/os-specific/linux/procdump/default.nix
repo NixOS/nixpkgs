@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, bash, coreutils, gdb, zlib }:
+{ lib, stdenv, fetchFromGitHub, bash, coreutils, gdb, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "procdump";
-  version = "1.1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "ProcDump-for-Linux";
     rev = version;
-    sha256 = "0h5fhk39d10kjbinzw1yp6nr8w8l300mn9qxrkpivdkyfn6bpq2f";
+    sha256 = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
   };
 
   nativeBuildInputs = [ zlib ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux version of the ProcDump Sysinternals tool";
     homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
     license = licenses.mit;

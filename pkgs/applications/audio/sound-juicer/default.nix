@@ -1,40 +1,70 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
-, libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
-, gsettings-desktop-schemas, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk3
+, itstool
+, libxml2
+, brasero
+, libcanberra-gtk3
+, gnome
+, gst_all_1
+, libmusicbrainz5
+, libdiscid
+, isocodes
+, gsettings-desktop-schemas
+, wrapGAppsHook
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "sound-juicer";
-  version = "3.24.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "19qg4xv0f9rkq34lragkmhii1llxsa87llbl28i759b0ks4f6sny";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08d5d81rz9sj3m5paw8fwbgxmhlbr7bcjdzpmzj832qvg8smydxf";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    itstool
+    libxml2
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    glib gtk3 brasero libcanberra-gtk3 gnome3.adwaita-icon-theme
-    gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
+    glib
+    gtk3
+    brasero
+    libcanberra-gtk3
+    gnome.adwaita-icon-theme
+    gsettings-desktop-schemas
+    libmusicbrainz5
+    libdiscid
+    isocodes
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
   ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=format-nonliteral";
-
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gnome CD Ripper";
     homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
     maintainers = [ maintainers.bdimcheff ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

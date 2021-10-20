@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
@@ -11,18 +11,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1f6kzsmxgdms9lq5z9ynnmxymk9k2lzlp3caa52wqjvdw1grw0rb";
   };
 
-  cargoSha256 = "0d797cisiydblh64vqpfdjf37wmxrvs77phdrqh582lbrvnfhx2j";
+  cargoSha256 = "1c22aal3i7zbyxr2c41fimfx13fwp9anmhh641951yd7cqb8xij2";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   # Test checks against machine code output, which fails with some
   # LLVM/compiler versions.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display the assembly or LLVM-IR generated for Rust source code";
     homepage = "https://github.com/gnzlbg/cargo-asm";
     license = licenses.mit;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
+{ lib, isPyPy, buildPythonPackage, fetchPypi
+, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 
 buildPythonPackage rec {
@@ -11,15 +11,15 @@ buildPythonPackage rec {
     sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };
 
+  buildInputs = [ pytest ];
   checkInputs = [ cmdline pytest ];
-  propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
-  nativeBuildInputs = [ pytest ];
+  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
 
   checkPhase = ''
     py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A goodie-bag of unix shell and environment tools for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];

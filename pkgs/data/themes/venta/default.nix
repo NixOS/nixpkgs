@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "venta";
-  version = "2020-08-20";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = "f9b7ea560def5c9d25a14015d265ba559d3501ca";
-    sha256 = "13rdavspz1q3zk2h04jpd77hxdcifg42kd71qq13ryg4b5yzqqgb";
+    rev = version;
+    sha256 = "14ckkvyarq1xmf48fh47by5h3jnkmksj2n4y6zvx3aw7pfg2jc51";
   };
 
   buildInputs = [
@@ -33,11 +34,10 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/themes
     cp -a Venta* $out/share/themes
-    rm $out/share/themes/*/COPYING
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gtk theme based on windows 10 style";
     homepage = "https://www.pling.com/p/1386774/";
     license = licenses.gpl3Only;

@@ -23,12 +23,20 @@ sed -i -e "s/version =.*/version = \"${TARGET_VERSION}\";/" \
 sed -i -e "s/hassVersion =.*/hassVersion = \"${TARGET_VERSION}\";/" \
     default.nix
 
+(
+    # update the frontend before running parse-requirements, so it doesn't get shown as outdated
+    cd ../../..
+    nix-update --version "$FRONTEND_VERSION" home-assistant.python.pkgs.home-assistant-frontend
+)
+
 ./parse-requirements.py
+
+read
+
 (
     cd ../../..
-    nix-update --version "$FRONTEND_VERSION" home-assistant.hass-frontend
     nix-update --version "$TARGET_VERSION" --build home-assistant
 )
 
-git add ./component-packages.nix ./default.nix ./frontend.nix
-git commit -m "homeassistant: ${CURRENT_VERSION} -> ${TARGET_VERSION}"
+#git add ./component-packages.nix ./default.nix ./frontend.nix
+#git commit -m "home-assistant: ${CURRENT_VERSION} -> ${TARGET_VERSION}"

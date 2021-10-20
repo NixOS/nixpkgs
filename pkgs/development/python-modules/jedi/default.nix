@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  checkInputs = [ pytest glibcLocales tox pytestcov ];
+  checkInputs = [ pytest glibcLocales tox pytest-cov ];
 
   propagatedBuildInputs = [ parso ];
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # tox required for tests: https://github.com/davidhalter/jedi/issues/808
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;

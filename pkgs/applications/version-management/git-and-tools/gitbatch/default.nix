@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gitbatch-unstable";
@@ -15,7 +15,7 @@ buildGoPackage rec {
     sha256 = "0613vfqdn3k0w7fm25rqnqdr67w9vii3i56dfslqcn1vqjfrff3q";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Running git UI commands";
     homepage = "https://github.com/isacikgoz/gitbatch";
     license = licenses.mit;

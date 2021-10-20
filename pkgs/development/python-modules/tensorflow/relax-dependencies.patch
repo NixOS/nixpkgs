@@ -1,0 +1,51 @@
+diff --git a/tensorflow/tools/pip_package/setup.py b/tensorflow/tools/pip_package/setup.py
+index 65133afdafe..8ef6364ff7e 100644
+--- a/tensorflow/tools/pip_package/setup.py
++++ b/tensorflow/tools/pip_package/setup.py
+@@ -75,23 +75,23 @@ if '--project_name' in sys.argv:
+ # comment the versioning scheme.
+ # NOTE: Please add test only packages to `TEST_PACKAGES` below.
+ REQUIRED_PACKAGES = [
+-    'absl-py ~= 0.10',
+-    'astunparse ~= 1.6.3',
+-    'flatbuffers ~= 1.12.0',
+-    'google_pasta ~= 0.2',
+-    'h5py ~= 2.10.0',
+-    'keras_preprocessing ~= 1.1.2',
+-    'numpy ~= 1.19.2',
+-    'opt_einsum ~= 3.3.0',
++    'absl-py >= 0.10',
++    'astunparse >= 1.6.3',
++    'flatbuffers >= 1.12.0',
++    'google_pasta >= 0.2',
++    'h5py >= 2.10.0',
++    'keras_preprocessing >= 1.1.2',
++    'numpy >= 1.19.1',
++    'opt_einsum >= 3.3.0',
+     'protobuf >= 3.9.2',
+-    'six ~= 1.15.0',
+-    'termcolor ~= 1.1.0',
+-    'typing_extensions ~= 3.7.4',
+-    'wheel ~= 0.35',
+-    'wrapt ~= 1.12.1',
++    'six >= 1.15.0',
++    'termcolor >= 1.1.0',
++    'typing_extensions >= 3.7.4',
++    'wheel >= 0.34.2',
++    'wrapt >= 1.12.1',
+     # These packages needs to be pinned exactly as newer versions are
+     # incompatible with the rest of the ecosystem
+-    'gast == 0.3.3',
++    'gast >= 0.3.3',
+     # TensorFlow ecosystem packages that TF exposes API for
+     # These need to be in sync with the existing TF version
+     # They are updated during the release process
+@@ -118,7 +118,7 @@ if 'tf_nightly' in project_name:
+ # BoringSSL support.
+ # See https://github.com/tensorflow/tensorflow/issues/17882.
+ if sys.byteorder == 'little':
+-  REQUIRED_PACKAGES.append('grpcio ~= 1.32.0')
++  REQUIRED_PACKAGES.append('grpcio >= 1.31.0')
+ 
+ 
+ # Packages which are only needed for testing code.

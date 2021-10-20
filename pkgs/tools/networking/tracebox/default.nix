@@ -1,12 +1,14 @@
-{ stdenv, fetchzip, autoreconfHook, libcrafter, libpcap, lua }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libcrafter, libpcap, lua }:
 
 stdenv.mkDerivation rec {
   pname = "tracebox";
   version = "0.2";
 
-  src = fetchzip {
-    url = "https://github.com/tracebox/tracebox/archive/v${version}.zip";
-    sha256 = "0gxdapm6b5a41gymi1f0nr2kyz70vllnk10085yz3pq527gp9gns";
+  src = fetchFromGitHub {
+    owner = "tracebox";
+    repo = "tracebox";
+    rev = "v${version}";
+    hash = "sha256-2r503xEF3/F9QQCEaSnd4Hw/RbbAhVj9C0SVZepVrT8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -22,11 +24,11 @@ stdenv.mkDerivation rec {
     sed '/libcrafter/d' -i src/tracebox/Makefile.am
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ maintainers.lethalman ];
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

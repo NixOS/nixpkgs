@@ -1,28 +1,37 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jdk11, runtimeShell, unzip, chromium }:
 
-let
-  version = "2020.1";
-  jar = fetchurl {
-    name = "burpsuite.jar";
-    url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "12awfy0f8fyqjc0kza1gkmdx1g8bniw1xqaps2dhjimi6s0lq5jx";
-  };
-  launcher = ''
-    #!${runtimeShell}
-    exec ${jre}/bin/java -jar ${jar} "$@"
-  '';
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "burpsuite";
-  inherit version;
-  buildCommand = ''
+  version = "2021.8.1";
+
+  src = fetchurl {
+    name = "burpsuite.jar";
+    urls = [
+      "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
+    ];
+    sha256 = "sha256-R1WV3oaweW4nfszUOtmrfBlbKJm8HDNjwtbj97dFzB0=";
+  };
+
+  dontUnpack = true;
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
-    echo "${launcher}" > $out/bin/burpsuite
+    echo '#!${runtimeShell}
+    eval "$(${unzip}/bin/unzip -p ${src} chromium.properties)"
+    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
+    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
+    exec ${jdk11}/bin/java -jar ${src} "$@"' > $out/bin/burpsuite
     chmod +x $out/bin/burpsuite
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;
 
-  meta = {
+  meta = with lib; {
     description = "An integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -32,9 +41,9 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
-    license = [ stdenv.lib.licenses.unfree ];
-    platforms = jre.meta.platforms;
+    license = licenses.unfree;
+    platforms = jdk11.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
+    maintainers = with maintainers; [ bennofs ];
   };
 }

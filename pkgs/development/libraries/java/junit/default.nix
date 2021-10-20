@@ -1,4 +1,4 @@
-{ stdenv, antBuild, fetchgit, perl }:
+{ lib, antBuild, fetchgit, perl }:
 
 let
   version = "4.11";
@@ -22,7 +22,7 @@ in antBuild {
   meta = {
     homepage = "http://www.junit.org/";
     description = "A framework for repeatable tests in Java";
-    license = stdenv.lib.licenses.epl10;
+    license = lib.licenses.epl10;
     broken = true;
   };
 }

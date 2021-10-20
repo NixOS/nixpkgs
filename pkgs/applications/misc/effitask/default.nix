@@ -1,31 +1,29 @@
-{ stdenv
+{ lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
 , gtk3
+, stdenv
 , rust
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "effitask";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "sanpii";
     repo = pname;
     rev = version;
-    sha256 = "09bffxdp43s8b1rpmsgqr2kyz3i4jbd2yrwbxw21fj3sf3mwb9ig";
+    sha256 = "sha256-nZn+mINIqAnaCKZCiywG8/BOPx6TlSe0rKV/8gcW/B4=";
   };
 
-  # workaround for missing Cargo.lock file https://github.com/sanpii/effitask/issues/48
-  cargoPatches = [ ./cargo-lock.patch ];
-
-  cargoSha256 = "0dvmp23kny6rlv6c0mfyy3cmz1bi5wcm1mxps4z67lym5kxfd362";
-
-  buildInputs = [ openssl gtk3 ];
+  cargoSha256 = "sha256-aCjZRJNsxx75ghK0N95Q9w0h5H5mW9/77j/fumDrvyM=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl gtk3 ];
 
   # default installPhase don't install assets
   installPhase = ''
@@ -34,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical task manager, based on the todo.txt format";
     longDescription = ''
       To use it as todo.sh add-on, create a symlink like this:

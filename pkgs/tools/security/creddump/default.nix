@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python2, python2Packages }:
+{ lib, fetchFromGitLab, python2, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "creddump";
@@ -24,7 +24,7 @@ python2Packages.buildPythonApplication rec {
     cp lsadump.py ${placeholder "out"}/bin/lsadump
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python tool to extract various credentials and secrets from Windows registry hives";
     homepage = "https://gitlab.com/kalilinux/packages/creddump";
     license = licenses.gpl3;

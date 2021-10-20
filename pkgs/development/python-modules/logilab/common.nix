@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # and is not currently in nixos
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python packages and modules used by Logilab ";
     homepage = "https://www.logilab.org/project/logilab-common";
     license = licenses.lgpl21;

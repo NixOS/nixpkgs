@@ -1,25 +1,22 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytest, pytestrunner, pytestcov
+, pytestCheckHook, pytest-runner, pytest-cov
 , isPy3k
-, isPy38
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e5bf89fe57f702a046c7ec718fe330ed50efd4bcf74722940db2eb0919cddb1c";
+    sha256 = "25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5";
   };
 
-  checkInputs = [ pytest pytestrunner pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-runner pytest-cov ];
 
   disabled = !isPy3k;
-  # pickle files needed for 3.8 https://github.com/aio-libs/multidict/pull/363
-  doCheck = !isPy38;
 
   meta = with lib; {
     description = "Multidict implementation";

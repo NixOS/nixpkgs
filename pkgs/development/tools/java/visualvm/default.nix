@@ -1,12 +1,12 @@
 { stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5";
+  version = "2.1";
   pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
-    sha256 = "19xf79rbilslpibi1mi31jplrgf8anpm06s6sxqh8v1qs84vkxdm";
+    sha256 = "sha256-faKBYwyBGrMjNMO/0XzQIG+XI1p783p26Bpoj+mSY7s=";
   };
 
   desktopItem = makeDesktopItem {
@@ -27,13 +27,10 @@ stdenv.mkDerivation rec {
       --replace "#visualvm_jdkhome=" "visualvm_jdkhome=" \
       --replace "/path/to/jdk" "${jdk.home}" \
 
-    substituteInPlace platform/lib/nbexec \
-      --replace /usr/bin/\''${awk} ${gawk}/bin/awk
-
     cp -r . $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A visual interface for viewing information about Java applications";
     longDescription = ''
       VisualVM is a visual tool integrating several commandline JDK

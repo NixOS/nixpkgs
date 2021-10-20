@@ -1,6 +1,7 @@
-{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
+, getconf
 , less
 # batgrep
 , ripgrep
@@ -13,7 +14,7 @@
 , withEntr ? entr != null, entr ? null
 # batdiff
 , gitMinimal
-, withDelta ? gitAndTools?delta, gitAndTools ? null
+, withDelta ? delta != null, delta ? null
 }:
 
 let
@@ -21,15 +22,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    # there hasn't been a release since 2020-05-01 but there are important bugfixes
-    # to the test suite so we'll pull the latest commit as of 2020-06-17.
-    version = "20200515-dev"; # latest commit was dated 2020-05-15
+    version = "2021.04.06";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
-      rev    = "3029b6749f61f7514e9eef30e035cfab0e31eb1d";
-      sha256 = "08mb94k2n182ql97c5s5j1v7np25ivynn5g0418whrx11ra41wr7";
+      rev    = "v${version}";
+      sha256 = "sha256-MphI2n+oHZrw8bPohNGeGdST5LS1c6s/rKqtpcR9cLo=";
       fetchSubmodules = true;
     };
 
@@ -50,6 +49,7 @@ let
 
     # Run the library tests as they don't have external dependencies
     doCheck = true;
+    checkInputs = lib.optionals stdenv.isDarwin [ getconf ];
     checkPhase = ''
       runHook preCheck
       # test list repeats suites. Unique them
@@ -76,7 +76,7 @@ let
     # The per-script derivations will go ahead and patch the files they actually install.
     dontPatchShebangs = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];
@@ -106,6 +106,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
+      checkInputs = lib.optionals stdenv.isDarwin [ getconf ];
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
@@ -116,9 +117,9 @@ let
         runHook preInstall
         mkdir -p $out/bin
         cp -p bin/${name} $out/bin/${name}
-      '' + stdenv.lib.optionalString (dependencies != []) ''
+      '' + lib.optionalString (dependencies != []) ''
         wrapProgram $out/bin/${name} \
-          --prefix PATH : ${stdenv.lib.makeBinPath dependencies}
+          --prefix PATH : ${lib.makeBinPath dependencies}
       '' + ''
         runHook postInstall
       '';
@@ -130,10 +131,10 @@ let
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;
-    stdenv.lib.optional cond dep;
+    lib.optional cond dep;
 in
 {
-  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta gitAndTools.delta);
+  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
   batman = script "batman" [];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);

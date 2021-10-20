@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, m4, expat
+{ lib, stdenv, fetchurl, openssl, m4, expat
 , libX11, libXt, libXaw, libXmu, bdftopcf, mkfontdir
 , fontadobe100dpi, fontadobeutopia100dpi, fontbh100dpi
 , fontbhlucidatypewriter100dpi, fontbitstream100dpi
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     expat
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";
     homepage = "http://x3270.bgp.nu/index.html";
     license = licenses.bsd3;

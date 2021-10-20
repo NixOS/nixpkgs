@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , qmake
 , wrapQtAppsHook
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zegrapher.com/";
     description = "An open source math plotter";
     longDescription = ''

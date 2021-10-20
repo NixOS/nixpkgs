@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchhg, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
+{ lib, stdenv, fetchhg, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
 
 stdenv.mkDerivation rec {
   version = "10.8";
   pname = "textadept";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2 ncurses glib zip
   ];
 
   src = fetchhg {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;

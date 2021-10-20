@@ -1,27 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google_api_core }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, google-api-core, mock, proto-plus, protobuf, pytest-asyncio }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "0.1.2";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ncgcnbvmgqph54yh2pjx2hh82gnkhsrw5yirp4wlf7jclh6j9xh";
+    sha256 = "c6811f8bde6019b18f5f0d154078000405af6fd38836713c05cbb9c1512f181a";
   };
 
-  disabled = pythonOlder "3.5";
+  propagatedBuildInputs = [ google-api-core proto-plus ];
 
-  propagatedBuildInputs = [ google_api_core ];
-
-  # No tests in repo
-  doCheck = false;
-
+  # prevent google directory from shadowing google imports
+  preCheck = ''
+    rm -r google
+  '';
+  checkInputs = [ mock protobuf pytest-asyncio pytestCheckHook ];
   pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
   meta = with lib; {
     description = "Protobufs for Google Cloud Organization Policy.";
     homepage = "https://github.com/googleapis/python-org-policy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };
 }

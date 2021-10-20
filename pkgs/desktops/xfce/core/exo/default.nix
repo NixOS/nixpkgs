@@ -1,25 +1,25 @@
-{ mkXfceDerivation, docbook_xsl, glib, libxslt, perlPackages, gtk2, gtk3
-, libxfce4ui, libxfce4util }:
+{ mkXfceDerivation, docbook_xsl, glib, libxslt, gtk3
+, libxfce4ui, libxfce4util, perl }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "0.12.11";
+  version = "4.16.2";
 
-  sha256 = "1db7w6jk3i501x4qw0hs0ydrm1fjdkxmahzbv5iag859wnnlg0pd";
+  sha256 = "sha256-O9Ak1sGxcSl9xB//+/vqJjXuEv9WIZlnliVPSKRIV2c=";
 
   nativeBuildInputs = [
     libxslt
-    perlPackages.URI
     docbook_xsl
   ];
 
   buildInputs = [
-    gtk2 # some xfce plugins still uses gtk2
     gtk3
     glib
     libxfce4ui
     libxfce4util
+
+    (perl.withPackages(ps: with ps; [ URI ])) # for $out/lib/xfce4/exo/exo-compose-mail
   ];
 
   # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825

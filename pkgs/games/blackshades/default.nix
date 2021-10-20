@@ -1,34 +1,36 @@
-{stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image}:
+{ lib, stdenv, fetchFromSourcehut
+, SDL, stb, libGLU, libGL, openal, libvorbis, freealut }:
 
-stdenv.mkDerivation {
-  name = "blackshades-svn-110";
-  src = fetchsvn {
-    url = "svn://svn.icculus.org/blackshades/trunk";
-    rev = "110";
-    sha256 = "0kbrh1dympk8scjxr6av24qs2bffz44l8qmw2m5gyqf4g3rxf6ra";
+stdenv.mkDerivation rec {
+  pname = "blackshades";
+  version = "1.3.1";
+
+  src = fetchFromSourcehut {
+    owner = "~cnx";
+    repo = pname;
+    rev = version;
+    sha256 = "0yzp74ynkcp6hh5m4zmvrgx5gwm186hq7p3m7qkww54qdyijb3rv";
   };
 
-  NIX_LDFLAGS = "-lSDL_image";
+  buildInputs = [ SDL stb libGLU libGL openal libvorbis freealut ];
 
-  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
-
-  patchPhase = ''
-    sed -i -e s,Data/,$out/opt/$name/Data/,g \
-      -e s,Data:,$out/opt/$name/Data/,g \
-      Source/*.cpp
+  postPatch = ''
+    sed -i -e s,Data/,$out/share/$pname/,g \
+      -e s,Data:,$out/share/$pname/,g \
+      src/*.cpp
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/opt/$name
-    cp objs/blackshades $out/bin
-    cp -R Data IF* Readme $out/opt/$name/
+    mkdir -p $out/bin $out/share
+    cp build/blackshades $out/bin
+    cp -R Data $out/share/$pname
   '';
 
   meta = {
-    homepage = "http://icculus.org/blackshades/";
-    description = "Protect the VIP";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://sr.ht/~cnx/blackshades";
+    description = "A psychic bodyguard FPS";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ McSinyx viric ];
+    platforms = with lib.platforms; linux;
   };
 }

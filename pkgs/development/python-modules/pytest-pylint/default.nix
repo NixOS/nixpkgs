@@ -5,7 +5,7 @@
 , pytest
 , pylint
 , six
-, pytestrunner
+, pytest-runner
 , toml
 }:
 
@@ -19,10 +19,11 @@ buildPythonPackage rec {
     sha256 = "790c7a8019fab08e59bd3812db1657a01995a975af8b1c6ce95b9aa39d61da27";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    pytest
     pylint
     six
     toml

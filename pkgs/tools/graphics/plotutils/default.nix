@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libpng, autoreconfHook }:
+{ fetchurl, lib, stdenv, libpng, autoreconfHook }:
 
 # debian splits this package into plotutils and libplot2c2
 
@@ -6,10 +6,11 @@
 # I'm only interested in making pstoedit convert to svg
 
 stdenv.mkDerivation rec {
-  name = "plotutils-2.6";
+  pname = "plotutils";
+  version = "2.6";
 
   src = fetchurl {
-    url = "mirror://gnu/plotutils/${name}.tar.gz";
+    url = "mirror://gnu/plotutils/plotutils-${version}.tar.gz";
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
@@ -51,8 +52,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/plotutils/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

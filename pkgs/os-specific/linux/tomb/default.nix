@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tomb";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner  = "dyne";
     repo   = "Tomb";
     rev    = "v${version}";
-    sha256 = "sha256-bmkUwj0FFq51MUPbNK7xsyyq4swjZcwFeMwOO3fXCzA=";
+    sha256 = "0d6vmfcf4kd0p2bcljmdnyc2fmbwvar81cc472zx86r7yc3ih102";
   };
 
   buildInputs = [ sudo zsh pinentry ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry util-linux e2fsprogs ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File encryption on GNU/Linux";
     homepage    = "https://www.dyne.org/software/tomb/";
     license     = licenses.gpl3;

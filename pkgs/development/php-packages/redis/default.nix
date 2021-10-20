@@ -3,8 +3,8 @@
 buildPecl {
   pname = "redis";
 
-  version = "5.3.2";
-  sha256 = "1cfsbxf3q3im0cmalgk76jpz581zr92z03c1viy93jxb53k2vsgl";
+  version = "5.3.4";
+  sha256 = "1k5l7xxb06rlwq9jbmbbr03pc74d75vgv7h5bqjkbwan6dphafab";
 
   internalDeps = with php.extensions; [
     session
@@ -14,5 +14,10 @@ buildPecl {
     hash
   ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "PHP extension for interfacing with Redis";
+    license = licenses.php301;
+    homepage = "https://github.com/phpredis/phpredis/";
+    maintainers = teams.php.members;
+  };
 }

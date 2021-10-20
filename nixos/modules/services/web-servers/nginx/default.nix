@@ -22,10 +22,39 @@ let
     } // (optionalAttrs (vhostConfig.enableACME || vhostConfig.useACMEHost != null) {
       sslCertificate = "${certs.${certName}.directory}/fullchain.pem";
       sslCertificateKey = "${certs.${certName}.directory}/key.pem";
-      sslTrustedCertificate = "${certs.${certName}.directory}/chain.pem";
+      sslTrustedCertificate = if vhostConfig.sslTrustedCertificate != null
+                              then vhostConfig.sslTrustedCertificate
+                              else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
+
+  defaultFastcgiParams = {
+    SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
+    QUERY_STRING      = "$query_string";
+    REQUEST_METHOD    = "$request_method";
+    CONTENT_TYPE      = "$content_type";
+    CONTENT_LENGTH    = "$content_length";
+
+    SCRIPT_NAME       = "$fastcgi_script_name";
+    REQUEST_URI       = "$request_uri";
+    DOCUMENT_URI      = "$document_uri";
+    DOCUMENT_ROOT     = "$document_root";
+    SERVER_PROTOCOL   = "$server_protocol";
+    REQUEST_SCHEME    = "$scheme";
+    HTTPS             = "$https if_not_empty";
+
+    GATEWAY_INTERFACE = "CGI/1.1";
+    SERVER_SOFTWARE   = "nginx/$nginx_version";
+
+    REMOTE_ADDR       = "$remote_addr";
+    REMOTE_PORT       = "$remote_port";
+    SERVER_ADDR       = "$server_addr";
+    SERVER_PORT       = "$server_port";
+    SERVER_NAME       = "$server_name";
+
+    REDIRECT_STATUS   = "200";
+  };
 
   recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
     proxy_set_header        Host $host;
@@ -52,6 +81,8 @@ let
       include ${pkgs.mailcap}/etc/nginx/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
+
+      default_type application/octet-stream;
   '';
 
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
@@ -125,10 +156,10 @@ let
 
       ${optionalString (cfg.recommendedProxySettings) ''
         proxy_redirect          off;
-        proxy_connect_timeout   90;
-        proxy_send_timeout      90;
-        proxy_read_timeout      90;
-        proxy_http_version      1.0;
+        proxy_connect_timeout   ${cfg.proxyTimeout};
+        proxy_send_timeout      ${cfg.proxyTimeout};
+        proxy_read_timeout      ${cfg.proxyTimeout};
+        proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
 
@@ -138,6 +169,14 @@ let
 
       ${optionalString (cfg.mapHashMaxSize != null) ''
         map_hash_max_size ${toString cfg.mapHashMaxSize};
+      ''}
+
+      ${optionalString (cfg.serverNamesHashBucketSize != null) ''
+        server_names_hash_bucket_size ${toString cfg.serverNamesHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.serverNamesHashMaxSize != null) ''
+        server_names_hash_max_size ${toString cfg.serverNamesHashMaxSize};
       ''}
 
       # $connection_upgrade is used for websocket proxying
@@ -179,6 +218,12 @@ let
       ${cfg.httpConfig}
     }''}
 
+    ${optionalString (cfg.streamConfig != "") ''
+    stream {
+      ${cfg.streamConfig}
+    }
+    ''}
+
     ${cfg.appendConfig}
   '';
 
@@ -195,13 +240,13 @@ let
 
         defaultListen =
           if vhost.listen != [] then vhost.listen
-          else ((optionals hasSSL (
-            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
-          )) ++ optionals (!onlySSL) (
-            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
-            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
-          ));
+          else
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else (
+              [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]"
+            );
+            in
+          optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
+          ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -214,7 +259,15 @@ let
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";";
+          + ";"
+          + (if ssl && vhost.http3 then ''
+          # UDP listener for **QUIC+HTTP/3
+          listen ${addr}:${toString port} http3 reuseport;
+          # Advertise that HTTP/3 is available
+          add_header Alt-Svc 'h3=":443"';
+          # Sent when QUIC was used
+          add_header QUIC-Status $quic;
+          '' else "");
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
@@ -260,6 +313,9 @@ let
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
+          ${optionalString vhost.rejectSSL ''
+            ssl_reject_handshake on;
+          ''}
 
           ${mkBasicAuth vhostName vhost}
 
@@ -283,6 +339,10 @@ let
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
       ''}
+      ${concatStringsSep "\n"
+        (mapAttrsToList (n: v: ''fastcgi_param ${n} "${v}";'')
+          (optionalAttrs (config.fastcgiParams != {})
+            (defaultFastcgiParams // config.fastcgiParams)))}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
@@ -354,10 +414,22 @@ in
         ";
       };
 
+      proxyTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = "
+          Change the proxy related timeouts in recommendedProxySettings.
+        ";
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
-        defaultText = "pkgs.nginxStable";
+        defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
+        apply = p: p.override {
+          modules = p.modules ++ cfg.additionalModules;
+        };
         description = "
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
@@ -365,8 +437,20 @@ in
         ";
       };
 
+      additionalModules = mkOption {
+        default = [];
+        type = types.listOf (types.attrsOf types.anything);
+        example = literalExpression "[ pkgs.nginxModules.brotli ]";
+        description = ''
+          Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
+          to install. Packaged modules are available in
+          <literal>pkgs.nginxModules</literal>.
+        '';
+      };
+
       logError = mkOption {
         default = "stderr";
+        type = types.str;
         description = "
           Configures logging.
           The first parameter defines a file that will store the log. The
@@ -390,13 +474,24 @@ in
       };
 
       config = mkOption {
+        type = types.str;
         default = "";
-        description = "
-          Verbatim nginx.conf configuration.
-          This is mutually exclusive with the structured configuration
-          via virtualHosts and the recommendedXyzSettings configuration
-          options. See appendConfig for appending to the generated http block.
-        ";
+        description = ''
+          Verbatim <filename>nginx.conf</filename> configuration.
+          This is mutually exclusive to any other config option for
+          <filename>nginx.conf</filename> except for
+          <itemizedlist>
+          <listitem><para><xref linkend="opt-services.nginx.appendConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.httpConfig" />
+          </para></listitem>
+          <listitem><para><xref linkend="opt-services.nginx.logError" />
+          </para></listitem>
+          </itemizedlist>
+
+          If additional verbatim config in addition to other options is needed,
+          <xref linkend="opt-services.nginx.appendConfig" /> should be used instead.
+        '';
       };
 
       appendConfig = mkOption {
@@ -438,6 +533,21 @@ in
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendHttpConfig for appending to the generated http block.
+        ";
+      };
+
+      streamConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          server {
+            listen 127.0.0.1:53 udp reuseport;
+            proxy_timeout 20s;
+            proxy_pass 192.168.0.1:53535;
+          }
+        '';
+        description = "
+          Configuration lines to be set inside the stream block.
         ";
       };
 
@@ -541,13 +651,30 @@ in
           '';
       };
 
+      serverNamesHashBucketSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the bucket size for the server names hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      serverNamesHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the server names hash tables.
+          '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
               description = "List of resolvers to use";
             };
             valid = mkOption {
@@ -596,6 +723,7 @@ in
                 Defines the address and other parameters of the upstream servers.
               '';
               default = {};
+              example = { "127.0.0.1:8000" = {}; };
             };
             extraConfig = mkOption {
               type = types.lines;
@@ -610,6 +738,14 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
+        example = literalExpression ''
+          "backend_server" = {
+            servers = { "127.0.0.1:8000" = {}; };
+            extraConfig = ''''
+              keepalive 16;
+            '''';
+          };
+        '';
       };
 
       virtualHosts = mkOption {
@@ -619,7 +755,7 @@ in
         default = {
           localhost = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             "hydra.example.com" = {
               forceSSL = true;
@@ -665,20 +801,27 @@ in
       }
 
       {
-        assertion = all (conf: with conf;
-          !(addSSL && (onlySSL || enableSSL)) &&
-          !(forceSSL && (onlySSL || enableSSL)) &&
-          !(addSSL && forceSSL)
+        assertion = all (host: with host;
+          count id [ addSSL (onlySSL || enableSSL) forceSSL rejectSSL ] <= 1
         ) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.addSSL,
-          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
-          are mutually exclusive.
+          services.nginx.virtualHosts.<name>.onlySSL,
+          services.nginx.virtualHosts.<name>.forceSSL and
+          services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
         '';
       }
 
       {
-        assertion = all (conf: !(conf.enableACME && conf.useACMEHost != null)) (attrValues virtualHosts);
+        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
+          1.19.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
+        assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
@@ -722,28 +865,38 @@ in
         # Logs directory and mode
         LogsDirectory = "nginx";
         LogsDirectoryMode = "0750";
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
+        # New file permissions
+        UMask = "0027"; # 0640 / 0750
         # Capabilities
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
         # Security
         NoNewPrivileges = true;
-        # Sandboxing
+        # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
         ProtectSystem = "strict";
         ProtectHome = mkDefault true;
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
+        SystemCallFilter = "~@cpu-emulation @debug @keyring @ipc @mount @obsolete @privileged @setuid";
       };
     };
 
@@ -751,8 +904,9 @@ in
       source = configFile;
     };
 
-    # postRun hooks on cert renew can't be used to restart Nginx since renewal
-    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
+    # This service waits for all certificates to be available
+    # before reloading nginx configuration.
+    # sslTargets are added to wantedBy + before
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let
@@ -790,6 +944,7 @@ in
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {
         group = cfg.group;
+        isSystemUser = true;
         uid = config.ids.uids.nginx;
       };
     };

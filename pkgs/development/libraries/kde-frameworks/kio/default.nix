@@ -1,6 +1,6 @@
 {
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools, qttools,
+  mkDerivation, fetchpatch,
+  util-linux, extra-cmake-modules, kdoctools, qttools,
   karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
   kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
   kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
@@ -9,10 +9,9 @@
 
 mkDerivation {
   name = "kio";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
+    util-linux karchive kconfigwidgets kdbusaddons ki18n kiconthemes knotifications
     ktextwidgets kwallet kwidgetsaddons kwindowsystem qtscript qtx11extras
     kcrash
   ];
@@ -22,7 +21,7 @@ mkDerivation {
   ];
   outputs = [ "out" "dev" ];
   patches = [
-    ./samba-search-path.patch
-    ./kio-debug-module-loader.patch
-  ];
+    ./0001-Remove-impure-smbd-search-path.patch
+    ./0002-Debug-module-loader.patch
+ ];
 }

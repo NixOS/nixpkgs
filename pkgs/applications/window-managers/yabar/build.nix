@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkgconfig
-, xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
+{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkg-config
+, xcbutilwm, alsa-lib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
 , rev, sha256, version, patches ? []
 }:
@@ -19,16 +19,33 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+    docbook_xsl
+    libxslt
+    makeWrapper
+    libconfig
+    pango
+  ];
   buildInputs = [
-    cairo gdk-pixbuf libconfig pango xcbutilwm docbook_xsl
-    alsaLib wirelesstools asciidoc libxslt makeWrapper
+    cairo
+    gdk-pixbuf
+    libconfig
+    pango
+    xcbutilwm
+    alsa-lib
+    wirelesstools
   ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace "\$(shell git describe)" "${version}" \
-      --replace "a2x" "${asciidoc}/bin/a2x --no-xmllint"
+      --replace "a2x" "a2x --no-xmllint"
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
@@ -45,11 +62,11 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern and lightweight status bar for X window managers";
     homepage    = "https://github.com/geommer/yabar";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,21 +1,28 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "subfinder";
-  version = "2.3.0";
-
-  goPackagePath = "github.com/projectdiscovery/subfinder";
+  version = "2.4.8";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vjxi2h4njakyqkfzwwaacy37kqx66j2y3k5l752z9va73gv7xv1";
+    sha256 = "1g1j3il1a595g7z8blhvyd5l03h6kccl7mzrx51c33jz74cms5kn";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1jmik0zmfy1n3g4yjkskiqzd28dpywf0hw6adgz2jshlhka58iw0";
 
-  meta = with stdenv.lib; {
+  modRoot = "./v2";
+
+  subPackages = [
+    "cmd/subfinder/"
+  ];
+
+  meta = with lib; {
     description = "Subdomain discovery tool";
     longDescription = ''
       SubFinder is a subdomain discovery tool that discovers valid

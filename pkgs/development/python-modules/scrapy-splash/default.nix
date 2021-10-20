@@ -1,17 +1,21 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, hypothesis, scrapy }:
+{ lib, fetchPypi, buildPythonPackage, scrapy, six }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dg7csdza2hzqskd9b9gx0v3saqsch4f0fwdp0a3p0822aqqi488";
+    sha256 = "a7c17735415151ae01f07b03c7624e7276a343779b3c5f4546f655f6133df42f";
   };
 
-  checkInputs = [ pytest hypothesis scrapy ];
+  propagatedBuildInputs = [ scrapy six ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "scrapy_splash" ];
+
+  meta = with lib; {
     description = "Scrapy+Splash for JavaScript integration";
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
     license = licenses.bsd3;

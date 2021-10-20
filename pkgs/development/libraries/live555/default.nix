@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed \
       -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
       -i config.linux
-  '' + stdenv.lib.optionalString (stdenv ? glibc) ''
+  '' + lib.optionalString (stdenv ? glibc) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
-    }.${stdenv.hostPlatform.system}}
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}")}
 
     runHook postConfigure
   '';

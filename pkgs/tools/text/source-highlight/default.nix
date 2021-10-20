@@ -1,32 +1,53 @@
-{ stdenv, fetchurl, boost }:
+{ lib, stdenv, fetchpatch, fetchurl, boost }:
 
-let
-  name = "source-highlight";
+stdenv.mkDerivation rec {
+  pname = "source-highlight";
   version = "3.1.9";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
+    url = "mirror://gnu/src-highlite/${pname}-${version}.tar.gz";
     sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
   };
 
+  patches = [
+    # gcc-11 compat upstream patch
+    (fetchpatch {
+      url = "http://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=904949c9026cb772dc93fbe0947a252ef47127f4";
+      sha256 = "1wnj0jmkmrwjww7qk9dvfxh8h06jdn7mi8v2fvwh95b6x87z5l47";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
+
+  # source-highlight uses it's own binary to generate documentation.
+  # During cross-compilation, that binary was built for the target
+  # platform architecture, so it can't run on the build host.
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace Makefile.in --replace "src doc tests" "src tests"
+  '';
+
+  strictDeps = true;
   buildInputs = [ boost ];
 
   configureFlags = [ "--with-boost=${boost.out}" ];
 
-  enableParallelBuilding = false;
+  doCheck = !stdenv.cc.isClang;
 
-  meta = {
+  enableParallelBuilding = true;
+  # Upstream uses the same intermediate files in multiple tests, running
+  # them in parallel by make will eventually break one or more tests.
+  enableParallelChecking = false;
+
+  outputs = [ "out" "doc" "dev" ];
+
+  meta = with lib; {
     description = "Source code renderer with syntax highlighting";
+    longDescription = ''
+      GNU Source-highlight, given a source file, produces a document
+      with syntax highlighting.
+    '';
     homepage = "https://www.gnu.org/software/src-highlite/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    longDescription =
-      ''
-        GNU Source-highlight, given a source file, produces a document
-        with syntax highlighting.
-      '';
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

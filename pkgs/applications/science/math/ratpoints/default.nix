@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gmp }:
+{ lib, stdenv, fetchurl, fetchpatch, gmp }:
 stdenv.mkDerivation rec {
   pname = "ratpoints";
   version = "2.1.3.p4";
@@ -19,18 +19,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
-  makeFlags = [ "CC=cc" ];
-  buildFlags = stdenv.lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags = lib.optional stdenv.isDarwin ["CCFLAGS2=-lgmp -lc -lm" "CCFLAGS=-UUSE_SSE"];
   installFlags = [ "INSTALL_DIR=$(out)" ];
 
   preInstall = ''mkdir -p "$out"/{bin,share,lib,include}'';
 
   meta = {
-    inherit version;
-    description = ''A program to find rational points on hyperelliptic curves'';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "A program to find rational points on hyperelliptic curves";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
     updateWalker = true;
   };

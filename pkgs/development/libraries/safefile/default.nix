@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, path, runtimeShell }:
+{ lib, stdenv, fetchurl, path, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "safefile";
   version = "1.0.5";
@@ -17,11 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    inherit version;
     description = "File open routines to safely open a file when in the presence of an attack";
-    license = stdenv.lib.licenses.asl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.all;
     homepage = "https://research.cs.wisc.edu/mist/safefile/";
     updateWalker = true;
   };

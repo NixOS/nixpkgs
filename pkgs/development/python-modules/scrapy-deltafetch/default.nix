@@ -1,19 +1,21 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, scrapy, bsddb3 }:
+{ lib, fetchPypi, buildPythonPackage, scrapy, bsddb3 }:
 
 buildPythonPackage rec {
   pname = "scrapy-deltafetch";
-  version = "1.2.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1m511psddvlapg492ny36l8rzy7z4i39yx6a1agxzfz6s9b83fq8";
+    sha256 = "13f7968bd0ffae133e2a1dede215e683b8c95285f046260603a5c3e25f2d57b0";
   };
 
   propagatedBuildInputs = [ bsddb3 scrapy ];
 
-  checkInputs = [ pytest ];
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "scrapy_deltafetch" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scrapy spider middleware to ignore requests to pages containing items seen in previous crawls";
     homepage = "https://github.com/scrapy-plugins/scrapy-deltafetch";
     license = licenses.bsd3;

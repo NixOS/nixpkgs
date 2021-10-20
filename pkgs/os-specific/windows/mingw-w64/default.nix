@@ -1,14 +1,14 @@
-{ stdenv, windows, fetchurl }:
+{ lib, stdenv, windows, fetchurl }:
 
 let
-  version = "6.0.0";
+  version = "9.0.0";
 in stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";
-    sha256 = "1w28mynv500y03h92nh87rgw3fnp82qwnjbxrrzqkmr63q812pl0";
+    sha256 = "10a15bi4lyfi0k0haj0klqambicwma6yi7vssgbz8prg815vja8r";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" "fortify" ];
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
   };
 }

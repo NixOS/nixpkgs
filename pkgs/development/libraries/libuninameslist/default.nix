@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/fontforge/libuninameslist/";
     description = "A Library of Unicode names and annotation data";
     license = licenses.bsd3;

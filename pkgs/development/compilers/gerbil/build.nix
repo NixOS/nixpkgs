@@ -1,4 +1,4 @@
-{ pkgs, gccStdenv, lib, coreutils, bash, # makeStaticLibraries,
+{ pkgs, gccStdenv, lib, coreutils,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version,
   gambit-support,

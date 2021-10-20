@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 let
   s = # Generated upstream information
   rec {
@@ -32,10 +32,10 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (s) version;
-    description = ''MIDI to Lilypond converter'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "MIDI to Lilypond converter";
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     broken = true; # 2018-04-11
   };
 }

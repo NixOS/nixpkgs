@@ -42,8 +42,7 @@ in {
 
       extraConfig = mkOption {
         type = types.lines;
-        default = ''
-        '';
+        default = "";
         description = ''
           Configuration lines appended to the generated connman configuration file.
         '';
@@ -78,10 +77,11 @@ in {
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         description = "The connman package / build flavor";
         default = connman;
-        example = literalExample "pkgs.connmanFull";
+        defaultText = literalExpression "pkgs.connman";
+        example = literalExpression "pkgs.connmanFull";
       };
 
     };
@@ -151,6 +151,7 @@ in {
       useDHCP = false;
       wireless = {
         enable = mkIf (!enableIwd) true;
+        dbusControlled = true;
         iwd = mkIf enableIwd {
           enable = true;
         };

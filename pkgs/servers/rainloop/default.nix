@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
+{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
-      pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
-      version = "1.14.0";
+      pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
+      version = "1.16.0";
 
-      buildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip ];
 
       unpackPhase = ''
         mkdir rainloop
@@ -12,7 +12,7 @@
       '';
 
       src = fetchurl {
-        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${stdenv.lib.optionalString (edition != "") "-"}${version}.zip";
+        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${lib.optionalString (edition != "") "-"}${version}.zip";
         sha256 = sha256;
       };
 
@@ -38,7 +38,7 @@
         chmod 700 $out/data
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
@@ -50,10 +50,10 @@
 in {
   rainloop-community = common {
     edition = "community";
-    sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";
+    sha256 = "sha256-25ScQ2OwSKAuqg8GomqDhpebhzQZjCk57h6MxUNiymc=";
   };
   rainloop-standard = common {
     edition = "";
-    sha256 = "0961g4mci080f7y98zx9r4qw620l4z3na1ivvlyhhr1v4dywqvch";
+    sha256 = "sha256-aYCwqFqhJEeakn4R0MUDGcSp+M47JbbCrbYaML8aeSs=";
   };
 }

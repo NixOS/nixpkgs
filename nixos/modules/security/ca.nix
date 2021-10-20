@@ -10,15 +10,10 @@ let
     blacklist = cfg.caCertificateBlacklist;
   };
 
-  caCertificates = pkgs.runCommand "ca-certificates.crt"
-    { files =
-        cfg.certificateFiles ++
-        [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
-      preferLocalBuild = true;
-     }
-    ''
-      cat $files > $out
-    '';
+  caCertificates = pkgs.runCommand "ca-certificates.crt" {
+    files = cfg.certificateFiles ++ [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
+    preferLocalBuild = true;
+  } "awk 1 $files > $out";  # awk ensures a newline between each pair of consecutive files
 
 in
 
@@ -29,7 +24,7 @@ in
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ \"\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt\" ]";
+      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -42,7 +37,7 @@ in
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [ '''
             NixOS.org
             =========

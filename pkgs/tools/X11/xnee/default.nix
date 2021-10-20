@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, libX11, xorgproto, libXext, libXtst
-, gtk2, libXi, pkgconfig, texinfo }:
+{ fetchurl, lib, stdenv, libX11, xorgproto, libXext, libXtst
+, gtk2, libXi, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   version = "3.19";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libX11 xorgproto libXext libXtst gtk2
-      libXi pkgconfig
+      libXi pkg-config
       texinfo
     ];
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
          "macros", retype a file.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/xnee/";
 
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

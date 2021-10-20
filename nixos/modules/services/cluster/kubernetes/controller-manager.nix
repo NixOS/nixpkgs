@@ -38,7 +38,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes controller manager extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
@@ -145,6 +145,9 @@ in
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
         Group = "kubernetes";
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
       path = top.path;
     };

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-mysql'';
-  version = ''20200610-git'';
+  baseName = "cl-mysql";
+  version = "20200610-git";
 
-  description = ''Common Lisp MySQL library bindings'';
+  description = "Common Lisp MySQL library bindings";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-mysql/2020-06-10/cl-mysql-20200610-git.tgz'';
-    sha256 = ''0fzyqzz01zn9fy8v766lib3dghg9yq5wawa0hcmxslms7knzxz7w'';
+    url = "http://beta.quicklisp.org/archive/cl-mysql/2020-06-10/cl-mysql-20200610-git.tgz";
+    sha256 = "0fzyqzz01zn9fy8v766lib3dghg9yq5wawa0hcmxslms7knzxz7w";
   };
 
   packageName = "cl-mysql";

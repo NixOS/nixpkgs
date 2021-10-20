@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   buildInputs = [pep8];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generator library for concise, unambiguous and URL-safe UUIDs";
     homepage = "https://github.com/stochastic-technologies/shortuuid/";
     license = licenses.bsd3;

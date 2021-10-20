@@ -1,13 +1,13 @@
-{ lib, mkXfceDerivation, gobject-introspection }:
+{ lib, mkXfceDerivation, gobject-introspection, vala }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4util";
-  version = "4.14.0";
+  version = "4.16.0";
 
-  sha256 = "0vq16bzmnykiikg4dhiaj0qbyj76nkdd54j6k6n568h3dc9ix6q4";
+  sha256 = "sha256-q2vH4k1OiergjITOaA9+m92C3Q/sbPoKVrAFxG60Gtw=";
 
-  nativeBuildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ gobject-introspection vala ];
 
   meta = with lib; {
     description = "Extension library for Xfce";

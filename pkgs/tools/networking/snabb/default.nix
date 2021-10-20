@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, bash, makeWrapper, git, mysql, diffutils, which, coreutils, procps, nettools
+{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools
 ,supportOpenstack ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "snabb";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sas9d9kk92mc2wrwgmm0xxz7ycmh388dwvyxf1hy183yvin1nac";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     done
   '' + optionalString supportOpenstack ''
     # We need a way to pass $PATH to the scripts
-    sed -i '2iexport PATH=${git}/bin:${mysql}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
+    sed -i '2iexport PATH=${git}/bin:${mariadb}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
     sed -i '2iexport PATH=${git}/bin:${coreutils}/bin:${diffutils}/bin:${nettools}/bin' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
   '';
 
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.domenkozar ];
+    maintainers = [ maintainers.lukego ];
   };
 }

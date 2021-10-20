@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pymysqlsa umemcache WSGIProxy requests pybrowserid
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = cornice.version != "0.17";
     description = "The SyncServer server software, as used by Firefox Sync";
     homepage = "https://github.com/mozilla-services/server-syncstorage";

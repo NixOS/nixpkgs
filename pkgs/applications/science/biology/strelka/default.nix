@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, zlib, python2}:
+{lib, stdenv, fetchFromGitHub, cmake, zlib, python2}:
 
 stdenv.mkDerivation rec {
   pname = "strelka";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Germline and small variant caller";
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/strelka";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "gnugo";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU Go - A computer go player";
     homepage = "https://www.gnu.org/software/gnugo/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkgconfig, openssl, darwin }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkg-config, openssl, darwin }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   pname = "git-ignore";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "sondr3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0krz50pw9bkyzl78bvppk6skbpjp8ga7bd34jya4ha1xfmd8p89c";
+    sha256 = "sha256-bKIBPqGKiS3ey8vH2F4EoleV1H2PTOp+71d/YW3jkT0=";
   };
 
-  cargoSha256 = "0vcg2pl0s329fr8p23pwdx2jy7qahbr7n337ib61f69aaxi1xmq0";
+  cargoSha256 = "sha256-7jPNVBf5DYtE8nsh7LIywMCjU7ODZ3qFsmBie2mZ3h8=";
 
-  nativeBuildInputs = [ pkgconfig installShellFiles ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -26,7 +26,7 @@ buildRustPackage rec {
     installManPage $releaseDir/build/git-ignore-*/out/git-ignore.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;

@@ -1,31 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, elk7Version, buildGoPackage, libpcap, systemd }:
+{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
 
-let beat = package : extraArgs : buildGoPackage (rec {
-      name = "${package}-${version}";
-      version = elk7Version;
+let beat = package: extraArgs: buildGoModule (rec {
+  pname = package;
+  version = elk7Version;
 
-      src = fetchFromGitHub {
-        owner = "elastic";
-        repo = "beats";
-        rev = "v${version}";
-        sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
+  src = fetchFromGitHub {
+    owner = "elastic";
+    repo = "beats";
+    rev = "v${version}";
+    sha256 = "sha256-zr0a0LBR4G9okS2pUixDYtYZ0yCp4G6j08jx/zlIKOA=";
+  };
+
+  vendorSha256 = "sha256-xmw432vY1T2EixkDcXdGrnMdc8fYOI4R2lEjbkav3JQ=";
+
+  subPackages = [ package ];
+
+  meta = with lib; {
+    homepage = "https://www.elastic.co/products/beats";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fadenb basvandijk ];
+    platforms = platforms.linux;
+  };
+} // extraArgs);
+in
+rec {
+  filebeat7 = beat "filebeat" { meta.description = "Lightweight shipper for logfiles"; };
+  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
+  metricbeat7 = beat "metricbeat" {
+    meta.description = "Lightweight shipper for metrics";
+    passthru.tests =
+      assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath;
+      {
+        elk = nixosTests.elk.ELK-7;
       };
-
-      goPackagePath = "github.com/elastic/beats";
-
-      subPackages = [ package ];
-
-      meta = with stdenv.lib; {
-        homepage = "https://www.elastic.co/products/beats";
-        license = licenses.asl20;
-        maintainers = with maintainers; [ fadenb basvandijk ];
-        platforms = platforms.linux;
-      };
-    } // extraArgs);
-in {
-  filebeat7   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat7  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat7 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
@@ -39,14 +47,15 @@ in {
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
   };
-  journalbeat7  = beat "journalbeat" {
+  journalbeat7 = beat "journalbeat" {
     meta.description = ''
       Journalbeat is an open source data collector to read and forward
       journal entries from Linuxes with systemd.
     '';
     buildInputs = [ systemd.dev ];
-    postFixup = let libPath = stdenv.lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
-      patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
-    '';
+    postFixup = let libPath = lib.makeLibraryPath [ (lib.getLib systemd) ]; in
+      ''
+        patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
+      '';
   };
 }

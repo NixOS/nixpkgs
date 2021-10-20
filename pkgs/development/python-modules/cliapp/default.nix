@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , sphinx
@@ -21,7 +21,7 @@ buildPythonPackage {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://liw.fi/cliapp/";
     description = "Python framework for Unix command line programs";
     license = licenses.gpl2;

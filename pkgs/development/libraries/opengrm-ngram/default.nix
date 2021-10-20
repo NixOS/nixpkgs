@@ -1,12 +1,12 @@
-{ stdenv, autoreconfHook, fetchurl, openfst }:
+{ lib, stdenv, autoreconfHook, fetchurl, openfst }:
 
 stdenv.mkDerivation rec {
   pname = "opengrm-ngram";
-  version = "1.3.11";
+  version = "1.3.13";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/GRM/NGramDownload/ngram-${version}.tar.gz";
-    sha256 = "0wwpcj8qncdr9f2pmi0vhlw277dyxr85ygdi8g57xp2ifysigm05";
+    sha256 = "sha256-5CXf6OXs7owny3yZQrWYA6yhIyN0dgA2B8TSDEUTF1Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to make and modify n-gram language models encoded as weighted finite-state transducers";
     homepage = "http://www.openfst.org/twiki/bin/view/GRM/NGramLibrary";
     license = licenses.asl20;

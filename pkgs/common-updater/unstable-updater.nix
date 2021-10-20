@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , writeShellScript
 , coreutils
 , git
@@ -9,6 +9,7 @@
 # This is an updater for unstable packages that should always use the latest
 # commit.
 { url ? null # The git url, if empty it will be set to src.url
+, branch ? null
 }:
 
 let
@@ -26,7 +27,9 @@ let
 
     # Get info about HEAD from a shallow git clone
     tmpdir="$(${coreutils}/bin/mktemp -d)"
-    ${git}/bin/git clone --bare --depth=1 "$url" "$tmpdir"
+    ${git}/bin/git clone --bare --depth=1 \
+      ${lib.optionalString (branch != null) "--branch ${branch}"} \
+      "$url" "$tmpdir"
     pushd "$tmpdir"
     commit_date="$(${git}/bin/git show -s --pretty='format:%cs')"
     commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"

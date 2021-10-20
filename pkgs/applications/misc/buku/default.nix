@@ -1,20 +1,41 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
-with python3.pkgs; buildPythonApplication rec {
-  version = "4.4";
+let
+  python3' = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+        };
+      });
+      sqlalchemy-utils = super.sqlalchemy-utils.overridePythonAttrs (oldAttrs: rec {
+        version = "0.36.6";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0srs5w486wp5zydjs70igi5ypgxhm6h73grb85jz03fqpqaanzvs";
+        };
+      });
+    };
+  };
+in
+with python3'.pkgs; buildPythonApplication rec {
+  version = "4.6";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "10r5f1n0vcxxmqqqsgmlvibwg1xffijrr2id6r140rgiyhprz556";
+    sha256 = "sha256-hr9qiP7SbloigDcs+6KVWu0SOlggMaBr7CCfY8zoJG0=";
   };
 
   checkInputs = [
-    pytestcov
+    pytest-cov
     hypothesis
     pytest
+    pytest-vcr
     pylint
     flake8
     pyyaml
@@ -55,8 +76,8 @@ with python3.pkgs; buildPythonApplication rec {
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
-      --replace "self.assertEqual(url, 'https://www.google.com')" ""
+      --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
+      --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
   '';
@@ -70,12 +91,12 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private cmdline bookmark manager";
     homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer infinisil ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthiasbeyer infinisil ma27 ];
   };
 }
 

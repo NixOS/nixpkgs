@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
+{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
 , gtk2, halibut, ncurses, perl, darwin
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.74";
+  version = "0.76";
   pname = "putty";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "0zc43g8ycyf712cdrja4k8ih5s3agw1k0nq0jkifdn8xwn4d7mfx";
+    sha256 = "0gvi8phabszqksj2by5jrjmshm7bpirhgavz0dqyz1xaimxdjz2l";
   };
 
   # glib-2.62 deprecations
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '' else null;
 
-  nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
+  nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk2 ncurses
   ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;

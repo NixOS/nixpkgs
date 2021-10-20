@@ -1,30 +1,31 @@
-{ stdenv
+{ lib
 , python3
 , fetchFromGitHub
-, nixFlakes
+, nixUnstable
 , git
-, lib
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.5.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = version;
-    sha256 = "1k4i54j5if86qf9dmwm8ybfc4j7ap40y82f03hxfxb7lzq5cqmcv";
+    sha256 = "0991jz2l834pyzwcrkvjf3wlp122fkkz6avs4j5n9idv549c5xc0";
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nixFlakes git ])
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ nixUnstable git ]}"
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 SuperSandro2000 ];
   };
 }

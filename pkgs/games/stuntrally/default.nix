@@ -1,39 +1,62 @@
-{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
-, makeWrapper, enet, libXcursor, bullet, openal }:
+{ lib
+, fetchFromGitHub
+, stdenv
+, cmake
+, boost
+, ogre
+, mygui
+, ois
+, SDL2
+, libvorbis
+, pkg-config
+, makeWrapper
+, enet
+, libXcursor
+, bullet
+, openal
+}:
 
 stdenv.mkDerivation rec {
   pname = "stunt-rally";
   version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/stuntrally/stuntrally/archive/${version}.tar.gz";
-    sha256 = "1zxq3x2g9pzafa2awx9jzqd33z6gnqj231cs07paxzrm89y51w4v";
+  src = fetchFromGitHub {
+    owner = "stuntrally";
+    repo = "stuntrally";
+    rev = version;
+    hash = "sha256-1+Cc9I6TTa3b++/7Z2V+vAXcmFb2+wX7TnXEH6CRDWU=";
   };
-
-  tracks = fetchurl {
-    url = "https://github.com/stuntrally/tracks/archive/${version}.tar.gz";
-    sha256 = "0x6lgpa4c2grl0vrhqrcs7jcysa3mmvpdl1v5xa0dsf6vkvfr0zs";
+  tracks = fetchFromGitHub {
+    owner = "stuntrally";
+    repo = "tracks";
+    rev = version;
+    hash = "sha256-FbZc87j/9cp4LxNaEO2wNTvwk1Aq/IWcKD3rTGkzqj0=";
   };
 
   # include/OGRE/OgreException.h:265:126: error: invalid conversion from
   # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE="-fpermissive";
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
-    pushd data
-    tar xf ${tracks}
-    mv tracks-${version} tracks
-    popd
+    ln -s ${tracks} data/tracks
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 
-    makeWrapper enet libXcursor bullet openal
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    boost
+    ogre
+    mygui
+    ois
+    SDL2
+    libvorbis
+    makeWrapper
+    enet
+    libXcursor
+    bullet
+    openal
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = "http://stuntrally.tuxfamily.org/";
     license = licenses.gpl3Plus;

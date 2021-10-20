@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
-  version = "5.8.1";
+  version = "5.8.2";
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
   buildInputs = [ libffi gmp ];
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 
   configureFlags = [
     "--enable-shared"
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     owner = "polyml";
     repo = "polyml";
     rev = "v${version}";
-    sha256 = "0gcx2fjiwsiazlyfhm7zlrd563blc4fy9w2mspib9divbavaxin6";
+    sha256 = "0vvla816g9rk9aa75gq63rb7bf6yla27p8wh1s1ycgq2in2zk0py";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.

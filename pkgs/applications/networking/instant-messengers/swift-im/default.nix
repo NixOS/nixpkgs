@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, pkgconfig, qttools, sconsPackages
+{ mkDerivation, lib, fetchurl, pkg-config, qttools, sconsPackages
 , GConf, avahi, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2
 , lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   patches = [ ./qt-5.11.patch ./scons.patch ];
 
-  nativeBuildInputs = [ pkgconfig qttools sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ pkg-config qttools sconsPackages.scons_3_1_2 ];
 
   buildInputs = [
     GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2
@@ -34,7 +34,7 @@ mkDerivation rec {
   installTargets = [ (placeholder "out") ];
   installFlags = [ "SWIFT_INSTALLDIR=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://swift.im/";
     description = "Qt XMPP client";
     license = licenses.gpl3;

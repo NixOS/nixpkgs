@@ -1,48 +1,35 @@
 { buildGoModule
 , buildGoPackage
 , fetchFromGitHub
+, fetchurl
 , go-bindata
 , lib
 , llvmPackages
-, mkYarnPackage
 , pkg-config
 , rustPlatform
+, stdenv
+, libiconv
 }:
 
 # Note for maintainers: use ./update-influxdb2.sh to update the Yarn
 # dependencies nix expression.
 
 let
-  version = "2.0.2";
-  shorthash = "84496e507a"; # git rev-parse HEAD with 2.0.2 checked out
-  libflux_version = "0.95.0";
+  version = "2.0.8";
+  shorthash = "e91d41810f"; # git rev-parse HEAD with 2.0.8 checked out
+  libflux_version = "0.124.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "05s09crqgbyfdck33zwax5l47jpc4wh04yd8zsm658iksdgzpmnn";
+    sha256 = "0hbinnja13xr9ziyynjsnsbrxmyrvag7xdgfwq2ya28g07lw5wgq";
   };
 
-  ui = mkYarnPackage {
-    src = src;
-    packageJSON = ./influx-ui-package.json;
-    yarnLock = "${src}/ui/yarn.lock";
-    yarnNix = ./influx-ui-yarndeps.nix;
-    configurePhase = ''
-      cp -r $node_modules ui/node_modules
-      rsync -r $node_modules/../deps/chronograf-ui/node_modules/ ui/node_modules
-    '';
-    INFLUXDB_SHA = shorthash;
-    buildPhase = ''
-      pushd ui
-      yarn build:ci
-      popd
-    '';
-    installPhase = ''
-      mv ui/build $out
-    '';
-    distPhase = "true";
+  ui = fetchurl {
+    url = "https://github.com/influxdata/ui/releases/download/OSS-v${version}/build.tar.gz";
+    # https://github.com/influxdata/ui/releases/download/OSS-v${version}/sha256.txt
+    sha256 = "94965ae999a1098c26128141fbb849be3da9a723d509118eb6e0db4384ee01fc";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -52,12 +39,13 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "07jz2nw3zswg9f4p5sb5r4hpg3n4qibjcgs9sk9csns70h5rp9j3";
+      sha256 = "1g1qilfzxqbbjbfvgkf7k7spcnhzvlmrqacpqdl05418ywkp3v29";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "0y5xjkqpaxp9qq1qj39zw3mnvkbbb9g4fa5cli77nhfwz288xx6h";
+    cargoSha256 = "0farcjwnwwgfvcgbs5r6vsdrsiwq2mp82sjxkqb1pzqfls4ixcxj";
     nativeBuildInputs = [ llvmPackages.libclang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -71,32 +59,18 @@ let
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace /out $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
-  };
-
-  # Can't use the nixpkgs version of go-bindata, it's an ancient
-  # ancestor of this more modern one.
-  bindata = buildGoPackage {
-    pname = "go-bindata";
-    version = "v3.22.0";
-    src = fetchFromGitHub {
-      owner = "kevinburke";
-      repo = "go-bindata";
-      rev = "v3.22.0";
-      sha256 = "10dq77dml5jvvq2jkdq81a9yjg7rncq8iw8r84cc3dz6l9hxzj0x";
-    };
-
-    goPackagePath = "github.com/kevinburke/go-bindata";
-    subPackages = [ "go-bindata" ];
   };
 in buildGoModule {
   pname = "influxdb";
   version = version;
   src = src;
 
-  nativeBuildInputs = [ bindata pkg-config ];
+  nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "0lviz7l5zbghyfkp0lvlv8ykpak5hhkfal8d7xwvpsm8q3sghc8a";
+  vendorSha256 = "1kar88vlm6px7smlnajpyf8qx6d481xk979qafpfb1xy8931781m";
   subPackages = [ "cmd/influxd" "cmd/influx" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -106,18 +80,19 @@ in buildGoModule {
   # the relevant go:generate directives, and run them by hand without
   # breaking hermeticity.
   preBuild = ''
-    ln -s ${ui} ui/build
+    tar -xzf ${ui} -C static/data
+
     grep -RI -e 'go:generate.*go-bindata' | cut -f1 -d: | while read -r filename; do
       sed -i -e 's/go:generate.*go-bindata/go:generate go-bindata/' $filename
       pushd $(dirname $filename)
       go generate
       popd
     done
-    export buildFlagsArray=(
-      -tags="assets"
-      -ldflags="-X main.commit=${shorthash} -X main.version=${version}"
-    )
   '';
+
+  tags = [ "assets" ];
+
+  ldflags = [ "-X main.commit=${shorthash}" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "An open-source distributed time series database";

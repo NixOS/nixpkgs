@@ -1,12 +1,12 @@
-{ lib, python3Packages, radicale3 }:
+{ lib, stdenv, python3Packages, radicale3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.30.6";
+  version = "0.30.8";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0cjz4p3a750fwvrxbzwda0sidw7nscahvppdshbsx49i6qrczpbg";
+    sha256 = "sha256-HBLQsq3B6TMdcnUt8ukbk3+S0Ed44+gePkpuGZ2AyC4=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -24,5 +24,6 @@ python3Packages.buildPythonApplication rec {
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     license = licenses.gpl3;
     maintainers = with maintainers; [ valodim ];
+    broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }

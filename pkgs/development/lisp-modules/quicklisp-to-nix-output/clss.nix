@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clss'';
-  version = ''20191130-git'';
+  baseName = "clss";
+  version = "20191130-git";
 
-  description = ''A DOM tree searching engine based on CSS selectors.'';
+  description = "A DOM tree searching engine based on CSS selectors.";
 
   deps = [ args."array-utils" args."documentation-utils" args."plump" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clss/2019-11-30/clss-20191130-git.tgz'';
-    sha256 = ''0cbjzsc90fpa8zqv5s0ri7ncbv6f8azgbbfsxswqfphbibkcpcka'';
+    url = "http://beta.quicklisp.org/archive/clss/2019-11-30/clss-20191130-git.tgz";
+    sha256 = "0cbjzsc90fpa8zqv5s0ri7ncbv6f8azgbbfsxswqfphbibkcpcka";
   };
 
   packageName = "clss";

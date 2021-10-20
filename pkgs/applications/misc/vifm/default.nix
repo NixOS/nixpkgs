@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, pkgconfig
+, pkg-config
 , ncurses, libX11
 , util-linux, file, which, groff
 
@@ -10,14 +10,14 @@
 let isFullPackage = mediaSupport;
 in stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    sha256 = "0rqyd424y0g5b5basw2ybb60r9gar4f40d1xgzr3c2dsy4jpwvyh";
+    sha256 = "1h5j4y704nciyzg3aaav8sl3r5h9mpwq8f28cj65nnxk6a7n3a9k";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ ncurses libX11 util-linux file which groff ];
 
   postFixup = let
@@ -31,14 +31,14 @@ in stdenv.mkDerivation rec {
     ${if mediaSupport then wrapVifmMedia else ""}
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}'';
+  meta = with lib; {
+    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;
     downloadPage = "https://vifm.info/downloads.shtml";
     homepage = "https://vifm.info/";
-    inherit version;
     updateWalker = true;
+    changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
   };
 }

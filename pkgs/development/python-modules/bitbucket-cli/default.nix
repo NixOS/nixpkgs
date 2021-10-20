@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
 
 buildPythonPackage rec {
   pname = "bitbucket-cli";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitbucket command line interface";
     homepage = "https://bitbucket.org/zhemao/bitbucket-cli";
     maintainers = with maintainers; [ refnil ];

@@ -1,7 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, requests
+{ buildPythonPackage
+, cryptography
+, fetchPypi
+, lib
+, pythonOlder
 , protobuf
 , pycryptodome
+, requests
 }:
 
 buildPythonPackage rec {
@@ -14,11 +18,17 @@ buildPythonPackage rec {
     sha256 = "0ampvsv97r3hy1cakif4kmyk1ynf3scbvh4fbk02x7xrxn4kl38w";
   };
 
-  propagatedBuildInputs = [ requests protobuf pycryptodome ];
+  # package doesn't contain unit tests
+  # scripts in ./test require networking
+  doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "gpapi.googleplay" ];
+
+  propagatedBuildInputs = [ cryptography protobuf pycryptodome requests ];
+
+  meta = with lib; {
     homepage = "https://github.com/NoMore201/googleplay-api";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     description = "Google Play Unofficial Python API";
     maintainers = with maintainers; [ ];
   };

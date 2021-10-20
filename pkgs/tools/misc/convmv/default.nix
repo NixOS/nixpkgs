@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "convmv-2.05";
+  pname = "convmv";
+  version = "2.05";
 
   src = fetchurl {
-    url = "https://www.j3e.de/linux/convmv/${name}.tar.gz";
+    url = "https://www.j3e.de/linux/convmv/convmv-${version}.tar.gz";
     sha256 = "19hwv197p7c23f43vvav5bs19z9b72jzca2npkjsxgprwj5ardjk";
   };
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts filenames from one encoding to another";
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ ];

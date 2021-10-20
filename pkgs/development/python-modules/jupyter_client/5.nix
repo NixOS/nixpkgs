@@ -4,7 +4,7 @@
 , traitlets
 , jupyter_core
 , pyzmq
-, dateutil
+, python-dateutil
 , isPyPy
 , py
 , tornado
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     traitlets
     jupyter_core
     pyzmq
-    dateutil
+    python-dateutil
     tornado
   ] ++ lib.optional isPyPy py;
 

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''myway'';
-  version = ''20200325-git'';
+  baseName = "myway";
+  version = "20200325-git";
 
-  description = ''Sinatra-compatible routing library.'';
+  description = "Sinatra-compatible routing library.";
 
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."map-set" args."quri" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz'';
-    sha256 = ''07r0mq9n0gmm7n20mkpsnmjvcr4gj9nckpnh1c2mddrb3sag8n15'';
+    url = "http://beta.quicklisp.org/archive/myway/2020-03-25/myway-20200325-git.tgz";
+    sha256 = "07r0mq9n0gmm7n20mkpsnmjvcr4gj9nckpnh1c2mddrb3sag8n15";
   };
 
   packageName = "myway";

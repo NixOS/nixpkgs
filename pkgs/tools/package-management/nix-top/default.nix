@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     install -D -m755 ./nix-top $out/bin/nix-top
     wrapProgram $out/bin/nix-top \
       --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     ln -s /bin/stty $out/libexec/nix-top
   '';
 
@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
     platforms = platforms.linux ++ platforms.darwin;
-    inherit version;
   };
 }

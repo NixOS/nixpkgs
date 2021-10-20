@@ -1,6 +1,6 @@
 # Ruby {#sec-language-ruby}
 
-## Using Ruby
+## Using Ruby {#using-ruby}
 
 Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_2_y`, `jruby`, or `mruby`.
 
@@ -12,7 +12,7 @@ The interpreters have common attributes, namely `gems`, and `withPackages`. So y
 
 Since not all gems have executables like `nokogiri`, it's usually more convenient to use the `withPackages` function like this: `ruby.withPackages (p: with p; [ nokogiri ])`. This will also make sure that the Ruby in your environment will be able to find the gem and it can be used in your Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"` as usual.
 
-### Temporary Ruby environment with `nix-shell`
+### Temporary Ruby environment with `nix-shell` {#temporary-ruby-environment-with-nix-shell}
 
 Rather than having a single Ruby environment shared by all Ruby development projects on a system, Nix allows you to create separate environments per project. `nix-shell` gives you the possibility to temporarily load another environment akin to a combined `chruby` or `rvm` and `bundle exec`.
 
@@ -30,7 +30,7 @@ $ nix-shell -p ruby.gems.nokogiri ruby.gems.pry
 
 Again, it's possible to launch the interpreter from the shell. The Ruby interpreter has the attribute `gems` which contains all Ruby gems for that specific interpreter.
 
-#### Load Ruby environment from `.nix` expression
+#### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
 As explained in the Nix manual, `nix-shell` can also load an expression from a `.nix` file. Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
@@ -45,7 +45,7 @@ What's happening here?
 2. Then we create a Ruby environment with the `withPackages` function.
 3. The `withPackages` function expects us to provide a function as an argument that takes the set of all ruby gems and returns a list of packages to include in the environment. Here, we select the packages `nokogiri` and `pry` from the package set.
 
-#### Execute command with `--run`
+#### Execute command with `--run` {#execute-command-with---run}
 
 A convenient flag for `nix-shell` is `--run`. It executes a command in the `nix-shell`. We can e.g. directly open a `pry` REPL:
 
@@ -65,7 +65,7 @@ Or run a script using this environment:
 $ nix-shell -p "ruby.withPackages (ps: with ps; [ nokogiri pry ])" --run "ruby example.rb"
 ```
 
-#### Using `nix-shell` as shebang
+#### Using `nix-shell` as shebang {#using-nix-shell-as-shebang}
 
 In fact, for the last case, there is a more convenient method. You can add a [shebang](<https://en.wikipedia.org/wiki/Shebang_(Unix)>) to your script specifying which dependencies `nix-shell` needs. With the following shebang, you can just execute `./example.rb`, and it will run with all dependencies.
 
@@ -80,9 +80,9 @@ body = RestClient.get('http://example.com').body
 puts Nokogiri::HTML(body).at('h1').text
 ```
 
-## Developing with Ruby
+## Developing with Ruby {#developing-with-ruby}
 
-### Using an existing Gemfile
+### Using an existing Gemfile {#using-an-existing-gemfile}
 
 In most cases, you'll already have a `Gemfile.lock` listing all your dependencies. This can be used to generate a `gemset.nix` which is used to fetch the gems and combine them into a single environment. The reason why you need to have a separate file for this, is that Nix requires you to have a checksum for each input to your build. Since the `Gemfile.lock` that `bundler` generates doesn't provide us with checksums, we have to first download each gem, calculate its SHA256, and store it in this separate file.
 
@@ -106,7 +106,7 @@ let
     name = "gems-for-some-project";
     gemdir = ./.;
   };
-in mkShell { buildInputs = [ gems gems.wrappedRuby ]; }
+in mkShell { packages = [ gems gems.wrappedRuby ]; }
 ```
 
 With this file in your directory, you can run `nix-shell` to build and use the gems. The important parts here are `bundlerEnv` and `wrappedRuby`.
@@ -120,7 +120,7 @@ One common issue that you might have is that you have Ruby 2.6, but also `bundle
 mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
 ```
 
-### Gem-specific configurations and workarounds
+### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}
 
 In some cases, especially if the gem has native extensions, you might need to modify the way the gem is built.
 
@@ -201,7 +201,7 @@ $ nix-shell --run 'ruby -rpg -e "puts PG.library_version"'
 
 Of course for this use-case one could also use overlays since the configuration for `pg` depends on the `postgresql` alias, but for demonstration purposes this has to suffice.
 
-### Adding a gem to the default gemset
+### Adding a gem to the default gemset {#adding-a-gem-to-the-default-gemset}
 
 Now that you know how to get a working Ruby environment with Nix, it's time to go forward and start actually developing with Ruby. We will first have a look at how Ruby gems are packaged on Nix. Then, we will look at how you can use development mode with your code.
 
@@ -215,7 +215,7 @@ To test that it works, you can then try using the gem with:
 NIX_PATH=nixpkgs=$PWD nix-shell -p "ruby.withPackages (ps: with ps; [ name-of-your-gem ])"
 ```
 
-### Packaging applications
+### Packaging applications {#packaging-applications}
 
 A common task is to add a ruby executable to nixpkgs, popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables, otherwise the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
 
@@ -229,10 +229,10 @@ end
 
 If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by simply running the `bundle lock` and `bundix` steps again.
 
-Now you can also also make a `default.nix` that looks like this:
+Now you can also make a `default.nix` that looks like this:
 
 ```nix
-{ lib, bundlerApp }:
+{ bundlerApp }:
 
 bundlerApp {
   pname = "mdl";
@@ -243,7 +243,7 @@ bundlerApp {
 
 All that's left to do is to generate the corresponding `Gemfile.lock` and `gemset.nix` as described above in the `Using an existing Gemfile` section.
 
-#### Packaging executables that require wrapping
+#### Packaging executables that require wrapping {#packaging-executables-that-require-wrapping}
 
 Sometimes your app will depend on other executables at runtime, and tries to find it through the `PATH` environment variable.
 

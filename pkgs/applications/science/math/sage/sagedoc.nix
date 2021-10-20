@@ -1,6 +1,6 @@
 { stdenv
 , sage-with-env
-, python
+, python3
 , maxima-ecl
 , tachyon
 , jmol
@@ -17,16 +17,16 @@ stdenv.mkDerivation rec {
   # modules are imported and because matplotlib is used to produce plots.
   buildInputs = [
     sage-with-env.env.lib
-    python
+    python3
     maxima-ecl
     tachyon
     jmol
     cddlib
-  ] ++ (with python.pkgs; [
+  ] ++ (with python3.pkgs; [
+    sage_docbuild
     psutil
     future
     sphinx
-    sagenb
     scipy
     sympy
     matplotlib
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     ipykernel
     ipywidgets
     jupyter_client
-    typing
-    pybrial
   ]);
 
   unpackPhase = ''
@@ -53,9 +51,15 @@ stdenv.mkDerivation rec {
     mkdir -p "$HOME"
 
     # needed to link them in the sage docs using intersphinx
-    export PPLPY_DOCS=${python.pkgs.pplpy.doc}/share/doc/pplpy
+    export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
 
-    ${sage-with-env}/bin/sage -python -m sage_setup.docbuild \
+    # adapted from src/doc/bootstrap (which we don't run)
+    OUTPUT_DIR="$SAGE_DOC_SRC_OVERRIDE/en/reference/repl"
+    mkdir -p "$OUTPUT_DIR"
+    OUTPUT="$OUTPUT_DIR/options.txt"
+    ${sage-with-env}/bin/sage -advanced > "$OUTPUT"
+
+    ${sage-with-env}/bin/sage --docbuild \
       --mathjax \
       --no-pdf-links \
       all html
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
     mv html/en/_static{,.tmp}
     for _dir in `find -name _static` ; do
           rm -r $_dir
-          ln -s /share/doc/sage/html/en/_static $_dir
+          ln -rs html/en/_static $_dir
     done
     mv html/en/_static{.tmp,}
   '';

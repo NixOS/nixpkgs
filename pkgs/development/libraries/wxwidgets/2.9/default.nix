@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
@@ -9,14 +9,11 @@
 
 assert withMesa -> libGLU != null && libGL != null;
 
-with stdenv.lib;
+with lib;
 
-let
-  version = "2.9.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  inherit version;
+  version = "2.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
@@ -36,7 +33,7 @@ stdenv.mkDerivation {
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

@@ -1,29 +1,42 @@
-{
-stdenv, fetchFromGitHub, pkgconfig, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, gtk2
+, gtk3
+, qt4
+, qt5
+, libXtst
+, lib
+, libchewing
+, unixtools
+, anthy
 }:
 
-# chewing and anthy do not work well
-# so we do not enable these input method at this moment
-
-stdenv.mkDerivation {
-  name = "hime";
-  version = "unstable-2020-06-27";
+stdenv.mkDerivation rec {
+  pname = "hime";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
+    repo = pname;
     owner = "hime-ime";
-    repo = "hime";
-    rev = "c89751a58836906e6916355fd037fc74fd7a7a15";
-    sha256 = "024w67q0clzxigsrvqbxpiy8firjvrqi7wbkkcapzzhzapv3nm8x";
+    rev = "v${version}";
+    sha256 = "sha256-fCqet+foQjI+LpTQ/6Egup1GzXELlL2hgbh0dCKLwPI=";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
-  buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase ];
+  nativeBuildInputs = [ which pkg-config unixtools.whereis ];
+  buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase libchewing anthy ];
 
   preConfigure = "patchShebangs configure";
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];
+  dontWrapQtApps = true;
+  postFixup = ''
+    hime_rpath=$(patchelf --print-rpath $out/bin/hime)
+    patchelf --set-rpath $out/lib/hime:$hime_rpath $out/bin/hime
+  '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
     description = "A useful input method engine for Asia region";

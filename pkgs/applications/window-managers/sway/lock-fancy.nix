@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, coreutils, grim, gawk, swaylock
+{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, swaylock
 , imagemagick, getopt, fontconfig, makeWrapper
 }:
 
 let
-  depsPath = stdenv.lib.makeBinPath [
+  depsPath = lib.makeBinPath [
     coreutils
     grim
     gawk
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${depsPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This is an swaylock bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;

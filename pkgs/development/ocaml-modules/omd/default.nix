@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-omd-1.3.1";
@@ -11,13 +11,17 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  configurePhase = ''
+    runHook preConfigure
+    ocaml setup.ml -configure --prefix $out
+    runHook postConfigure
+  '';
 
   meta = {
     description = "Extensible Markdown library and tool in OCaml";
     homepage = "https://github.com/ocaml/omd";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

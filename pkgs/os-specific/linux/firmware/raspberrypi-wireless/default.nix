@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2019-08-16";
+  version = "2021-06-28";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "96eefffcccc725425fd83be5e0704a5c32b79e54";
-      sha256 = "05h57gcxhb2c84h99cyxxx4mzi6kd5fm8pjqkz3nq5vs3nv8cqhr";
+      rev = "e7fd166981ab4bb9a36c2d1500205a078a35714d";
+      sha256 = "1dkg8mzn7n4afi50ibrda2s33nw2qj52jjjdv9w560q601gms47b";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "130cb86fa30cafbd575d38865fa546350d4c5f9c";
-      sha256 = "0jmhgbpldzz8n8lncpzwfl5ym8zgss05y952rfpwcf9v5c7vgabx";
+      rev = "00de3194a96397c913786945ac0af1fd6fbec45b";
+      sha256 = "1xnr364dkiq6gmr21lcrj23hwc0g9y5qad8dm2maij647bgzp07r";
     })
   ];
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
@@ -37,14 +38,15 @@ stdenv.mkDerivation {
 
     # Bluetooth firmware
     cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    runHook postInstall
   '';
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "1r4alf1fbj6vkkf54d0anm47ymb6gn2ykl4a2hhd34b0hnf1dnhn";
+  outputHash = "0a54gyrq6jfxxvimaa4yjfiyfwf7wv58v0a32l74yrzyarr3ldby";
 
-  meta = with stdenv.lib; {
-    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3 and Zero W";
+  meta = with lib; {
+    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
     homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;

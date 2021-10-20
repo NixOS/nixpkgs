@@ -1,41 +1,38 @@
-{ stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  lib,
-  requests,
-  future,
-  enum34,
-  mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, requests
+, pytestCheckHook
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "4.1.8b1"; # NOTE: this is a beta, and the API may change in future versions.
-
-  disabled = (pythonOlder "2.7");
-
-  propagatedBuildInputs = [ requests future ]
-                             ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
-
-  postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''
-    sed -i -e '/"enum34",/d' setup.py
-  '');
-
-  doCheck = true;
-  checkInputs = [ mock ];
+  version = "5.0.0";
+  disabled = pythonOlder "3.6";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "linode";
     repo = "python-linode-api";
-    sha256 = "0qfqn92fr876dncwbkf2vhm90hnf7lwpg80hzwyzyzwz1hcngvjg";
+    rev = version;
+    sha256 = "0lqi15vks4fxbki1l7n1bfzygjy3w17d9wchjxvp22ijmas44yai";
   };
 
-  meta = {
+  propagatedBuildInputs = [ requests ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "linode_api4" ];
+
+  meta = with lib; {
+    description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
-    description = "The official python library for the Linode API v4 in python.";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ glenns ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ glenns ];
   };
 }

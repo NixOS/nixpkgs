@@ -7,7 +7,7 @@ let
 in {
   name = "gitdaemon";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ tilpner ];
   };
 
@@ -17,6 +17,11 @@ in {
         networking.firewall.allowedTCPPorts = [ config.services.gitDaemon.port ];
 
         environment.systemPackages = [ pkgs.git ];
+
+        systemd.tmpfiles.rules = [
+          # type path mode user group age arg
+          " d    /git 0755 root root  -   -"
+        ];
 
         services.gitDaemon = {
           enable = true;
@@ -35,7 +40,6 @@ in {
 
     with subtest("create project.git"):
         server.succeed(
-            "mkdir /git",
             "git init --bare /git/project.git",
             "touch /git/project.git/git-daemon-export-ok",
         )

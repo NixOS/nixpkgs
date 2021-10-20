@@ -14,7 +14,7 @@ with lib;
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
-        example = literalExample "pkgs.glibcLocales";
+        example = literalExpression "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
 
@@ -84,7 +84,7 @@ with lib;
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
       ''
         LANG=${config.i18n.defaultLocale}
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
       '';
 
   };

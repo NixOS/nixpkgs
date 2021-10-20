@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bison, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
 , libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
 , darwin, writeScriptBin, cups, makeWrapper
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     bison flex fontconfig freetype gperf icu openssl
     libjpeg libpng perl python ruby sqlite qtwebkit qtbase
     makeWrapper
-  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL
     darwin.libobjc fakeClang cups
   ]);
@@ -73,15 +73,15 @@ in stdenv.mkDerivation rec {
   # invalid suffix on literal; C++11 requires a space between litend identifier
   NIX_CFLAGS_COMPILE = "-Wno-reserved-user-defined-literal";
 
-  __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
+  __impureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 
-  enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs
     cp -a bin $out
     cp -a ChangeLog examples LICENSE.BSD README.md third-party.txt $out/share/doc/phantomjs
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change \
         ${darwin.CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
         /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
@@ -92,10 +92,10 @@ in stdenv.mkDerivation rec {
   '' + ''
     wrapProgram $out/bin/phantomjs \
     --set QT_QPA_PLATFORM offscreen \
-    --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
+    --prefix PATH : ${lib.makeBinPath [ qtbase ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Headless WebKit with JavaScript API";
     longDescription = ''
       PhantomJS2 is a headless WebKit with JavaScript API.

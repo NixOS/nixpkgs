@@ -34,7 +34,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
-        defaultText = "pkgs.consul";
+        defaultText = literalExpression "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';
@@ -99,6 +99,7 @@ in
 
       extraConfig = mkOption {
         default = { };
+        type = types.attrsOf types.anything;
         description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
@@ -120,7 +121,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
-          defaultText = "pkgs.consul-alerts";
+          defaultText = literalExpression "pkgs.consul-alerts";
           type = types.package;
         };
 
@@ -158,10 +159,12 @@ in
 
       users.users.consul = {
         description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
+        isSystemUser = true;
+        group = "consul";
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
+      users.groups.consul = {};
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
@@ -190,7 +193,7 @@ in
           ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
+        path = with pkgs; [ iproute2 gnugrep gawk consul ];
         preStart = ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}

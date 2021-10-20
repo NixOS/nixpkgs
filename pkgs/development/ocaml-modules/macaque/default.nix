@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, pgocaml, camlp4 }:
+{ lib, stdenv, fetchzip, ocaml, findlib, ocamlbuild, pgocaml, camlp4 }:
 
 stdenv.mkDerivation {
   name = "ocaml-macaque-0.7.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Macros for Caml Queries";
     homepage = "https://github.com/ocsigen/macaque";
     license = licenses.lgpl2;

@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "emailthreads";
-  version = "0.1.0";
+  version = "0.1.3";
   disabled = !isPy3k;
 
   # pypi is missing files for tests
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "emersion";
     repo = "python-emailthreads";
     rev = "v${version}";
-    sha256 = "17pfal8kbxhs025apkijqbkppw2lljca8x1cwcx49jv60h05c3cn";
+    sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
   PKGVER = version;

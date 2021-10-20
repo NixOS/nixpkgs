@@ -1,22 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, pytest
-, glibcLocales
+, pythonAtLeast
+, fetchFromGitHub
 , libarchive
+, glibcLocales
 , mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "libarchive-c";
-  version = "2.9";
+  version = "3.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9919344cec203f5db6596a29b5bc26b07ba9662925a05e24980b84709232ef60";
+  src = fetchFromGitHub {
+    owner = "Changaco";
+    repo = "python-${pname}";
+    rev = version;
+    sha256 = "1z4lqy9zlzymshzrcldsc9ipys2l7grqg4yff6ndl6dgbfb0g4jb";
   };
-
-  checkInputs = [ mock pytest glibcLocales ];
 
   LC_ALL="en_US.UTF-8";
 
@@ -25,11 +28,22 @@ buildPythonPackage rec {
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkPhase = ''
-    py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
-  '';
+  pythonImportsCheck = [
+    "libarchive"
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    glibcLocales
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.9") [
+    # causes python3.9 to segfault
+    "test_custom_writer_and_stream_reader"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = licenses.cc0;

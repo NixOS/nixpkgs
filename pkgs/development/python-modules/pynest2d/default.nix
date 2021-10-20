@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python3, cmake
-, pythonOlder, libnest2d, sip, clipper }:
+{ lib, buildPythonPackage, fetchFromGitHub, python3, cmake
+, pythonOlder, libnest2d, sip_4, clipper }:
 
 buildPythonPackage rec {
-  version = "4.8.0";
+  version = "4.10.0";
   pname = "pynest2d";
   format = "other";
 
@@ -10,10 +10,10 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "pynest2d";
     rev = version;
-    sha256 = "18dn92vgr4gvf9scfh93yg9bwrhdjvq62di08rpi7pqjrrvq2nvp";
+    sha256 = "03aj0whxj9rs9nz3idld7w4vpmnr6vr40vpwmzcf5w2pi2n4z4lk";
   };
 
-  propagatedBuildInputs = [ libnest2d sip clipper ];
+  propagatedBuildInputs = [ libnest2d sip_4 clipper ];
   nativeBuildInputs = [ cmake ];
 
   CLIPPER_PATH = "${clipper.out}";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' cmake/SIPMacros.cmake
    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
     license = licenses.lgpl3;

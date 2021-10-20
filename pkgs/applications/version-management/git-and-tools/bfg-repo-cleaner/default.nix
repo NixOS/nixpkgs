@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let
   version = "1.13.0";
@@ -15,9 +15,10 @@ in
       sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
     };
 
-    buildInputs = [ jre makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ jre ];
 
-    phases = "installPhase";
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/share/java
@@ -26,7 +27,7 @@ in
       makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
       # Descriptions taken with minor modification from the homepage of bfg-repo-cleaner
       description = "Removes large or troublesome blobs in a git repository like git-filter-branch does, but faster";

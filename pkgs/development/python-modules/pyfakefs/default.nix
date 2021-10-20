@@ -1,13 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, python, pytest, glibcLocales }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "4.3.2";
+  version = "4.5.1";
   pname = "pyfakefs";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfeed4715e2056e3e56b9c5f51a679ce2934897eef926f3d14e5364e43f19070";
+    sha256 = "002a065dcbf59c2caa039e4fc4ba01d1d636aa63ee9c794d4c9fc01f0e2d6dc0";
   };
 
   postPatch = ''
@@ -17,28 +23,22 @@ buildPythonPackage rec {
     substituteInPlace pyfakefs/tests/fake_os_test.py \
       --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
       --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
-    substituteInPlace pyfakefs/tests/fake_filesystem_unittest_test.py \
-      --replace "test_copy_real_file" "notest_copy_real_file"
-  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString stdenv.isDarwin ''
     # this test fails on darwin due to case-insensitive file system
     substituteInPlace pyfakefs/tests/fake_os_test.py \
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytestCheckHook ];
+  # https://github.com/jmcgeheeiv/pyfakefs/issues/581 (OSError: [Errno 9] Bad file descriptor)
+  disabledTests = [ "test_open_existing_pipe" ];
+  pythonImportsCheck = [ "pyfakefs" ];
 
-  checkPhase = ''
-    export LC_ALL=en_US.UTF-8
-    ${python.interpreter} -m pyfakefs.tests.all_tests
-    ${python.interpreter} -m pyfakefs.tests.all_tests_without_extra_packages
-    ${python.interpreter} -m pytest pyfakefs/pytest_tests/pytest_plugin_test.py
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
-    license     = licenses.asl20;
-    homepage    = "http://pyfakefs.org/";
-    changelog   = "https://github.com/jmcgeheeiv/pyfakefs/blob/master/CHANGES.md";
+    homepage = "http://pyfakefs.org/";
+    changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/master/CHANGES.md";
+    license = licenses.asl20;
     maintainers = with maintainers; [ gebner ];
   };
 }

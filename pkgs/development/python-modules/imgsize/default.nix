@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0k24qj4i996fz7lpjrs36il6lp51rh13b0j2wip87cy5v9109m2d";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python image size library";
     homepage = "https://github.com/ojii/imgsize";
     license = with licenses; [ bsd3 ];

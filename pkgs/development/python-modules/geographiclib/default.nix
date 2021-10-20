@@ -1,22 +1,27 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "geographiclib";
-  version = "1.50";
+  version = "1.52";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cn6ap5fkh3mkfa57l5b44z3gvz7j6lpmc9rl4g2jny2gvp4dg8j";
+    sha256 = "sha256-rEANZyuJVLAwa8qJCwiLuLoqdX3IEzzKC4ePNLM7J0A=";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "geographiclib" ];
+
+  meta = with lib; {
     homepage = "https://geographiclib.sourceforge.io";
     description = "Algorithms for geodesics (Karney, 2013) for solving the direct and inverse problems for an ellipsoid of revolution";
     license = licenses.mit;
-    maintainers = with maintainers; [ va1entin ];
   };
-
 }

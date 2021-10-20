@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, ncurses, libX11, boost, cmake }:
 
 let
   pname = "tome2";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     license = licenses.unfree;
     maintainers = with maintainers; [ cizra ];

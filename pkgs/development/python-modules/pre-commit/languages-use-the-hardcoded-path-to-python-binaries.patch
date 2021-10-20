@@ -12,15 +12,15 @@ index 26f4919..4885ec1 100644
          if version != C.DEFAULT:
              cmd.extend(['-n', version])
 diff --git a/pre_commit/languages/python.py b/pre_commit/languages/python.py
-index e17376e..0c1d2ab 100644
+index 43b7280..f0f2338 100644
 --- a/pre_commit/languages/python.py
 +++ b/pre_commit/languages/python.py
-@@ -204,7 +204,7 @@ def install_environment(
+@@ -192,7 +192,7 @@ def install_environment(
+         additional_dependencies: Sequence[str],
  ) -> None:
      envdir = prefix.path(helpers.environment_dir(ENVIRONMENT_DIR, version))
+-    venv_cmd = [sys.executable, '-mvirtualenv', envdir]
++    venv_cmd = ['@virtualenv@/bin/virtualenv', envdir]
      python = norm_version(version)
--    venv_cmd = (sys.executable, '-mvirtualenv', envdir, '-p', python)
-+    venv_cmd = ('@virtualenv@/bin/virtualenv', envdir, '-p', python)
-     install_cmd = ('python', '-mpip', 'install', '.', *additional_dependencies)
-
-     with clean_path_on_failure(envdir):
+     if python is not None:
+         venv_cmd.extend(('-p', python))

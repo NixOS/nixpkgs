@@ -1,4 +1,4 @@
-{ stdenv, python27Packages, fetchgit }:
+{ lib, python27Packages, fetchgit }:
 let
   py = python27Packages;
   python = py.python;
@@ -28,7 +28,7 @@ py.buildPythonApplication {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Password Safe V3 compatible password vault";
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;

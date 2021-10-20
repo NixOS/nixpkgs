@@ -1,24 +1,47 @@
-{ lib, fetchurl, buildDunePackage, fmt, logs, mtime, stdlib-shims }:
+{ lib, fetchurl, buildDunePackage
+, repr, ppx_repr, fmt, logs, mtime, stdlib-shims
+, cmdliner, progress, semaphore-compat, optint
+, alcotest, crowbar, re
+}:
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.2.1";
-
-  minimumOCamlVersion = "4.07";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "1a9b6rsazrjy07syxl9ix5002i95mlvx5vk7nl2x9cs6s0zw906d";
+    sha256 = "13xd858c50fs651p1y8x70323ff0gzbf6zgc0a25f6xh3rsmkn4c";
   };
 
-  buildInputs = [ stdlib-shims ];
-  propagatedBuildInputs = [ fmt logs mtime ];
+  minimumOCamlVersion = "4.08";
+  useDune2 = true;
 
-  meta = {
-    homepage = "https://github.com/mirage/index";
+  buildInputs = [
+    stdlib-shims
+  ];
+  propagatedBuildInputs = [
+    cmdliner
+    fmt
+    logs
+    mtime
+    ppx_repr
+    progress
+    repr
+    semaphore-compat
+    optint
+  ];
+
+  checkInputs = [
+    alcotest
+    crowbar
+    re
+  ];
+  doCheck = true;
+
+  meta = with lib; {
     description = "A platform-agnostic multi-level index";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/mirage/index";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vbgl ];
   };
-
 }

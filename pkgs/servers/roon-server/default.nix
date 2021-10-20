@@ -1,5 +1,5 @@
-{ alsaLib
-, alsaUtils
+{ alsa-lib
+, alsa-utils
 , autoPatchelfHook
 , cifs-utils
 , fetchurl
@@ -9,18 +9,23 @@
 , makeWrapper
 , stdenv
 , zlib
-}: stdenv.mkDerivation rec {
-  name = "roon-server";
-  version = "100700571";
+}:
+stdenv.mkDerivation rec {
+  pname = "roon-server";
+  version = "1.8-831";
 
-  src = fetchurl {
-    url = "http://download.roonlabs.com/updates/stable/RoonServer_linuxx64_${version}.tar.bz2";
-    sha256 = "191vlzf10ypkk1prp6x2rszlmsihdwpd3wvgf2jg6ckwyxy2hc6k";
-  };
+  src =
+    let
+      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
+    in
+    fetchurl {
+      url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+      sha256 = "sha256-SeMSC7K6DV7rVr1w/SqMnLvipoWbypS/gJnSZmpfXZk=";
+    };
 
   buildInputs = [
-    alsaLib
-    alsaUtils
+    alsa-lib
+    alsa-utils
     cifs-utils
     ffmpeg
     freetype
@@ -44,7 +49,7 @@
         ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
       '';
       wrapFix = bin: ''
-        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsaUtils cifs-utils ffmpeg ]}
+        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}
       '';
     in
     ''
@@ -60,9 +65,10 @@
 
   meta = with lib; {
     description = "The music player for music lovers";
+    changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

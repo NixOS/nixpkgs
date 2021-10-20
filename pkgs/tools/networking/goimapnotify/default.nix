@@ -1,19 +1,23 @@
-{ buildGoPackage, fetchFromGitLab, lib }:
+{ buildGoModule, fetchFromGitLab, lib, runtimeShell }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.0";
-
-  goPackagePath = "gitlab.com/shackra/goimapnotify";
+  version = "2.3.2";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    sha256 = "1d42gd3m2rkvy985d181dbcm5i3f7xsg2z8z6s4bpvw24pfnzs42";
+    sha256 = "sha256-pkpdIkabxz9bu0LnyU1/wu1qqPc/pQqCn8tePc2fIfg=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-4+2p/7BAEk+1V0TII9Q2O2YNX0rvBiw2Ss7k1dsvUbk=";
+
+  postPatch = ''
+    for f in command.go command_test.go; do
+      substituteInPlace $f --replace '"sh"' '"${runtimeShell}"'
+    done
+  '';
 
   meta = with lib; {
     description =

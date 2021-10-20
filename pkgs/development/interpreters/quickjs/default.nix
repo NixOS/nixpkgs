@@ -1,16 +1,36 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, texinfo
+}:
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
-  version = "2019-12-21";
+  version = "2021-03-27";
 
-  src = fetchurl {
-    url = "https://bellard.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "13hlx6qwrrxmlvvqcr3irxba6zmf05cf54l32vj50wc66s1qd41p";
+  src = fetchFromGitHub {
+    owner = "bellard";
+    repo = pname;
+    rev = "b5e62895c619d4ffc75c9d822c8d85f1ece77e5b";
+    hash = "sha256-VMaxVVQuJ3DAwYrC14uJqlRBg0//ugYvtyhOXsTUbCA=";
   };
 
-  makeFlags = [ "prefix=${placeholder ''out''}" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
   enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    texinfo
+  ];
+
+  postBuild = ''
+    (cd doc
+     makeinfo *texi)
+  '';
+
+  postInstall = ''
+    (cd doc
+     install -Dt $out/share/doc *texi *info)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -19,7 +39,6 @@ stdenv.mkDerivation rec {
     # Programs exit with code 1 when testing help, so grep for a string
     set +o pipefail
     qjs     --help 2>&1 | grep "QuickJS version"
-    qjsbn   --help 2>&1 | grep "QuickJS version"
     qjscalc --help 2>&1 | grep "QuickJS version"
     set -o pipefail
 
@@ -27,15 +46,13 @@ stdenv.mkDerivation rec {
     echo "console.log('Output from compiled program');" > "$temp"
     set -o verbose
     out=$(mktemp) && qjsc         "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
-    out=$(mktemp) && qjsbnc       "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
     out=$(mktemp) && qjsc   -flto "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
-    out=$(mktemp) && qjsbnc -flto "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small and embeddable Javascript engine";
     homepage = "https://bellard.org/quickjs/";
-    maintainers = with maintainers; [ stesie ];
+    maintainers = with maintainers; [ stesie AndersonTorres ];
     platforms = platforms.linux;
     license = licenses.mit;
   };

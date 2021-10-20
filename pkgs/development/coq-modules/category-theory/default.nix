@@ -1,54 +1,29 @@
-{ stdenv, fetchgit, coq, ssreflect, equations }:
+{ lib, mkCoqDerivation, coq, ssreflect, equations, version ? null }:
 
-let
-  params =
-    let
-    v20180709 = {
-      version = "20180709";
-      rev = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
-      sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
-    };
-    v20190414 = {
-      version = "20190414";
-      rev = "706fdb4065cc2302d92ac2bce62cb59713253119";
-      sha256 = "16lg4xs2wzbdbsn148xiacgl4wq4xwfqjnjkdhfr3w0qh1s81hay";
-    };
-  in {
-    "8.6" = v20180709;
-    "8.7" = v20180709;
-    "8.8" = v20190414;
-    "8.9" = v20190414;
-  };
-  param = params.${coq.coq-version};
-in
+with lib; mkCoqDerivation {
 
-stdenv.mkDerivation {
+  pname = "category-theory";
+  owner = "jwiegley";
 
-  name = "coq${coq.coq-version}-category-theory-${param.version}";
+  release."20210730".rev    = "d87937faaf7460bcd6985931ac36f551d67e11af";
+  release."20210730".sha256 = "04x7433yvibxknk6gy4971yzb4saa3z4dnfy9n6irhyafzlxyf0f";
+  release."20190414".rev    = "706fdb4065cc2302d92ac2bce62cb59713253119";
+  release."20190414".sha256 = "16lg4xs2wzbdbsn148xiacgl4wq4xwfqjnjkdhfr3w0qh1s81hay";
+  release."20180709".rev    = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
+  release."20180709".sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
 
-  src = fetchgit {
-    url = "git://github.com/jwiegley/category-theory.git";
-    inherit (param) rev sha256;
-  };
+  inherit version;
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = range "8.10" "8.13"; out = "20210730"; }
+    { case = range "8.8" "8.9"; out = "20190414"; }
+    { case = range "8.6" "8.7"; out = "20180709"; }
+  ] null;
 
-  buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ]);
+  mlPlugin = true;
   propagatedBuildInputs = [ ssreflect equations ];
 
-  buildFlags = [ "JOBS=$(NIX_BUILD_CORES)" ];
-
-  installPhase = ''
-    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/jwiegley/category-theory";
+  meta = {
     description = "A formalization of category theory in Coq for personal study and practical work";
     maintainers = with maintainers; [ jwiegley ];
-    platforms = coq.meta.platforms;
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.hasAttr v params;
-  };
-
 }

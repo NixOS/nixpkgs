@@ -15,14 +15,14 @@ let
   apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
     mkdir -p $out/bin
     cp ${pkg}/bin/apachectl $out/bin/apachectl
-    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f ${httpdConf}|'
+    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
-
-  httpdConf = cfg.configFile;
 
   php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
-  phpMajorVersion = lib.versions.major (lib.getVersion php);
+  phpModuleName = let
+    majorVersion = lib.versions.major (lib.getVersion php);
+  in (if majorVersion == "8" then "php" else "php${majorVersion}");
 
   mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = pkg; };
 
@@ -36,11 +36,12 @@ let
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
 
   mkListenInfo = hostOpts:
-    if hostOpts.listen != [] then hostOpts.listen
-    else (
-      optional (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) { ip = "*"; port = 443; ssl = true; } ++
-      optional (!hostOpts.onlySSL) { ip = "*"; port = 80; ssl = false; }
-    );
+    if hostOpts.listen != [] then
+      hostOpts.listen
+    else
+      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (map (addr: { ip = addr; port = 443; ssl = true; }) hostOpts.listenAddresses) ++
+      optionals (!hostOpts.onlySSL) (map (addr: { ip = addr; port = 80; ssl = false; }) hostOpts.listenAddresses)
+    ;
 
   listenInfo = unique (concatMap mkListenInfo vhosts);
 
@@ -63,7 +64,7 @@ let
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
     ++ optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
-    ++ optional cfg.enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+    ++ optional cfg.enablePHP { name = phpModuleName; path = "${php}/modules/lib${phpModuleName}.so"; }
     ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
     ++ cfg.extraModules;
 
@@ -123,6 +124,17 @@ let
 
     <IfModule mod_mime_magic.c>
         MIMEMagicFile ${pkg}/conf/magic
+    </IfModule>
+  '';
+
+  luaSetPaths = let
+    # support both lua and lua.withPackages derivations
+    luaversion = cfg.package.lua5.lua.luaversion or cfg.package.lua5.luaversion;
+    in
+  ''
+    <IfModule mod_lua.c>
+      LuaPackageCPath ${cfg.package.lua5}/lib/lua/${luaversion}/?.so
+      LuaPackagePath  ${cfg.package.lua5}/share/lua/${luaversion}/?.lua
     </IfModule>
   '';
 
@@ -191,7 +203,7 @@ let
     let
       documentRoot = if hostOpts.documentRoot != null
         then hostOpts.documentRoot
-        else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
+        else pkgs.emptyDirectory
       ;
 
       mkLocations = locations: concatStringsSep "\n" (map (config: ''
@@ -326,6 +338,8 @@ let
 
     ${sslConf}
 
+    ${optionalString cfg.package.luaSupport luaSetPaths}
+
     # Fascist default - deny access to everything.
     <Directory />
         Options FollowSymLinks
@@ -393,7 +407,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd;
-        defaultText = "pkgs.apacheHttpd";
+        defaultText = literalExpression "pkgs.apacheHttpd";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -402,8 +416,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = confFile;
-        defaultText = "confFile";
-        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
+        defaultText = literalExpression "confFile";
+        example = literalExpression ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
@@ -423,7 +437,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "proxy_connect"
             { name = "jk"; path = "''${pkgs.tomcat_connectors}/modules/mod_jk.so"; }
@@ -449,7 +463,7 @@ in
         default = "common";
         example = "combined";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent.
+          Log format for log files. Possible values are: combined, common, referer, agent, none.
           See <link xlink:href="https://httpd.apache.org/docs/2.4/logs.html"/> for more details.
         '';
       };
@@ -502,7 +516,14 @@ in
             documentRoot = "${pkg}/htdocs";
           };
         };
-        example = literalExample ''
+        defaultText = literalExpression ''
+          {
+            localhost = {
+              documentRoot = "''${package.out}/htdocs";
+            };
+          }
+        '';
+        example = literalExpression ''
           {
             "foo.example.com" = {
               forceSSL = true;
@@ -536,7 +557,7 @@ in
       phpPackage = mkOption {
         type = types.package;
         default = pkgs.php;
-        defaultText = "pkgs.php";
+        defaultText = literalExpression "pkgs.php";
         description = ''
           Overridable attribute of the PHP package to use.
         '';
@@ -667,6 +688,8 @@ in
       }) (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
     in listToAttrs acmePairs;
 
+    # httpd requires a stable path to the configuration file for reloads
+    environment.etc."httpd/httpd.conf".source = cfg.configFile;
     environment.systemPackages = [
       apachectl
       pkg
@@ -738,6 +761,7 @@ in
         wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
         after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
         before = map (certName: "acme-${certName}.service") dependentCertNames;
+        restartTriggers = [ cfg.configFile ];
 
         path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 
@@ -756,9 +780,9 @@ in
           '';
 
         serviceConfig = {
-          ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
-          ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
-          ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
+          ExecStart = "@${pkg}/bin/httpd httpd -f /etc/httpd/httpd.conf";
+          ExecStop = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful-stop";
+          ExecReload = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful";
           User = cfg.user;
           Group = cfg.group;
           Type = "forking";
@@ -785,6 +809,7 @@ in
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
+      restartTriggers = [ cfg.configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames;
@@ -792,7 +817,7 @@ in
         Type = "oneshot";
         TimeoutSec = 60;
         ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active httpd.service";
-        ExecStartPre = "${pkg}/bin/httpd -f ${httpdConf} -t";
+        ExecStartPre = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -t";
         ExecStart = "/run/current-system/systemd/bin/systemctl reload httpd.service";
       };
     };

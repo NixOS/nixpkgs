@@ -1,4 +1,4 @@
-{ source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
+{ source ? "default", callPackage, lib, stdenv, ncurses, pkg-config, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
@@ -72,10 +72,9 @@ in stdenv.mkDerivation rec {
     default = common.src; # latest release
   };
 
-  patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
+  patches = [ ./cflags-prune.diff ] ++ lib.optional ftNixSupport ./ft-nix-support.patch;
 
   configureFlags = [
-    "--enable-gui=${guiSupport}"
     "--with-features=${features}"
     "--disable-xsmp"              # XSMP session management
     "--disable-xsmp_interact"     # XSMP interaction
@@ -94,51 +93,75 @@ in stdenv.mkDerivation rec {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "vim_cv_toupper_broken=no"
+    "--with-tlib=ncurses"
+    "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
+    "vim_cv_tty_group=tty"
+    "vim_cv_tty_mode=0660"
+    "vim_cv_getcwd_broken=no"
+    "vim_cv_stat_ignores_slash=yes"
+    "vim_cv_memmove_handles_overlap=yes"
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin
+    ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
+  ++ lib.optional stdenv.isDarwin
      (if darwinSupport then "--enable-darwin" else "--disable-darwin")
-  ++ stdenv.lib.optionals luaSupport [
+  ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
-  ] ++ stdenv.lib.optional lua.pkgs.isLuaJIT [
+  ] ++ lib.optional lua.pkgs.isLuaJIT [
     "--with-luajit"
   ]
-  ++ stdenv.lib.optionals pythonSupport [
+  ++ lib.optionals pythonSupport [
     "--enable-python3interp=yes"
     "--with-python3-config-dir=${python3}/lib"
     # Disables Python 2
     "--disable-pythoninterp"
   ]
-  ++ stdenv.lib.optional nlsSupport          "--enable-nls"
-  ++ stdenv.lib.optional perlSupport         "--enable-perlinterp"
-  ++ stdenv.lib.optional rubySupport         "--enable-rubyinterp"
-  ++ stdenv.lib.optional tclSupport          "--enable-tclinterp"
-  ++ stdenv.lib.optional multibyteSupport    "--enable-multibyte"
-  ++ stdenv.lib.optional cscopeSupport       "--enable-cscope"
-  ++ stdenv.lib.optional netbeansSupport     "--enable-netbeans"
-  ++ stdenv.lib.optional ximSupport          "--enable-xim";
+  ++ lib.optional nlsSupport          "--enable-nls"
+  ++ lib.optional perlSupport         "--enable-perlinterp"
+  ++ lib.optional rubySupport         "--enable-rubyinterp"
+  ++ lib.optional tclSupport          "--enable-tclinterp"
+  ++ lib.optional multibyteSupport    "--enable-multibyte"
+  ++ lib.optional cscopeSupport       "--enable-cscope"
+  ++ lib.optional netbeansSupport     "--enable-netbeans"
+  ++ lib.optional ximSupport          "--enable-xim";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ]
-  ++ stdenv.lib.optional wrapPythonDrv makeWrapper
-  ++ stdenv.lib.optional nlsSupport gettext
-  ++ stdenv.lib.optional perlSupport perl
-  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
+  ++ lib.optional wrapPythonDrv makeWrapper
+  ++ lib.optional nlsSupport gettext
+  ++ lib.optional perlSupport perl
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
-  buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
-    libXmu glib libICE ]
-    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
-    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
-    ++ stdenv.lib.optional luaSupport lua
-    ++ stdenv.lib.optional pythonSupport python3
-    ++ stdenv.lib.optional tclSupport tcl
-    ++ stdenv.lib.optional rubySupport ruby;
+  buildInputs = [
+    ncurses
+    glib
+  ]
+    # All X related dependencies
+    ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
+      libSM
+      libICE
+      libX11
+      libXext
+      libXpm
+      libXt
+      libXaw
+      libXau
+      libXmu
+    ]
+    ++ lib.optional (guiSupport == "gtk2") gtk2-x11
+    ++ lib.optional (guiSupport == "gtk3") gtk3-x11
+    ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
+    ++ lib.optional luaSupport lua
+    ++ lib.optional pythonSupport python3
+    ++ lib.optional tclSupport tcl
+    ++ lib.optional rubySupport ruby;
 
-  preConfigure = ''
-    '' + stdenv.lib.optionalString ftNixSupport ''
+  preConfigure = "" + lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
       cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
@@ -150,20 +173,21 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
+      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
       "$out"/bin/vim
     if [[ -e "$out"/bin/gvim ]]; then
       patchelf --set-rpath \
-        "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
+        "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
         "$out"/bin/gvim
     fi
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
-  '' + stdenv.lib.optionalString wrapPythonDrv ''
-    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin"
-  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
+  '' + lib.optionalString wrapPythonDrv ''
+    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
+      --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
+  '' + lib.optionalString (guiSupport == "gtk3") ''
 
     rewrap () {
       rm -f "$out/bin/$1"

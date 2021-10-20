@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gfortran
 , blas, lapack
@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
-  version = "5.8.1";
+  version = "5.9.0";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${version}";
-    sha256 = "0qjlyfxs8s48rs63c2fzspisgq1kk4bwkgnhmh125hgkdhrq2w1c";
+    sha256 = "sha256-tvwpSVgZrfYZHXHN8OQF0Y/aJM03JHGPFok7hUqPE/4=";
   };
 
   nativeBuildInputs = [
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   # Use compatible indexing for lapack and blas used
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gfortran.cc.lib
     gmp
     mpfr
-  ] ++ stdenv.lib.optional enableCuda cudatoolkit;
+  ] ++ lib.optional enableCuda cudatoolkit;
 
   preConfigure = ''
     # Mongoose and GraphBLAS are packaged separately
@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
     "INSTALL_INCLUDE=${placeholder "dev"}/include"
     "JOBS=$(NIX_BUILD_CORES)"
     "MY_METIS_LIB=-lmetis"
-  ] ++ stdenv.lib.optionals blas.isILP64 [
+  ] ++ lib.optionals blas.isILP64 [
     "CFLAGS=-DBLAS64"
-  ] ++ stdenv.lib.optionals enableCuda [
+  ] ++ lib.optionals enableCuda [
     "CUDA_PATH=${cudatoolkit}"
     "CUDART_LIB=${cudatoolkit.lib}/lib/libcudart.so"
     "CUBLAS_LIB=${cudatoolkit}/lib/libcublas.so"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.8.1/SuiteSparse_config/SuiteSparse_config.mk#L368
+    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.9.0/SuiteSparse_config/SuiteSparse_config.mk#L368
     "BLAS=-lblas"
     "LAPACK=-llapack"
   ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "library"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];

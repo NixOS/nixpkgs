@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildGoPackage
 , fetchFromGitHub
 }:
@@ -18,11 +18,11 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/starkandwayne/safe";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X main.Version=${version}")
-  '';
+  ldflags = [
+    "-X main.Version=${version}"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Vault CLI";
     homepage = "https://github.com/starkandwayne/safe";
     license = licenses.mit;

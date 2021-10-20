@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cython ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Memory Usage Analyzer";
     homepage = "https://launchpad.net/meliae";
     license = licenses.gpl3;

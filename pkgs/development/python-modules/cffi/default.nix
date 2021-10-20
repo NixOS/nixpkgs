@@ -1,23 +1,24 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytestCheckHook }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.14.4";
+  version = "1.14.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c";
+    sha256 = "c9a875ce9d7fe32887784274dd533c57909b7b1dcadcc128a2ac21331a9765dd";
   };
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ libffi pycparser ];
-  checkInputs = [ pytest ];
+  buildInputs = [ libffi ];
+
+  propagatedBuildInputs = [ pycparser ];
 
   # On Darwin, the cffi tests want to hit libm a lot, and look for it in a global
   # impure search path. It's obnoxious how much repetition there is, and how difficult
   # it is to get it to search somewhere else (since we do actually have a libm symlink in libSystem)
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace testing/cffi0/test_parsing.py \
       --replace 'lib_m = "m"' 'lib_m = "System"' \
       --replace '"libm" in name' '"libSystem" in name'
@@ -29,18 +30,17 @@ if isPyPy then null else buildPythonPackage rec {
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-unused-command-line-argument -Wno-unreachable-code";
 
   doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
-  checkPhase = ''
-    py.test -k "not test_char_pointer_conversion"
-  '';
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = "https://cffi.readthedocs.org/";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     description = "Foreign Function Interface for Python calling C code";
   };
 }

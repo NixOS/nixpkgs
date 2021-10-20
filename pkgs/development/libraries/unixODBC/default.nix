@@ -1,17 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "unixODBC";
-  version = "2.3.7";
+  version = "2.3.9";
 
   src = fetchurl {
-    url = "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz";
-    sha256 = "0xry3sg497wly8f7715a7gwkn2k36bcap0mvzjw74jj53yx6kwa5";
+    urls = [
+      "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz"
+      "http://www.unixodbc.org/${pname}-${version}.tar.gz"
+    ];
+    sha256 = "sha256-UoM+rD1oHIsMmlpl8uvXRbOpZPII/HSPl35EAVoxsgc=";
   };
 
   configureFlags = [ "--disable-gui" "--sysconfdir=/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ODBC driver manager for Unix";
     homepage = "http://www.unixodbc.org/";
     license = licenses.lgpl2;

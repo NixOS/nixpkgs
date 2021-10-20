@@ -16,14 +16,14 @@ let
       ''}
       dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.private_key=${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
       else
-        ''dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
       }
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
       else
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
       }
       dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
       dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
@@ -179,7 +179,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.neo4j;
-      defaultText = "pkgs.neo4j";
+      defaultText = literalExpression "pkgs.neo4j";
       description = ''
         Neo4j package to use.
       '';
@@ -651,10 +651,12 @@ in {
       environment.systemPackages = [ cfg.package ];
 
       users.users.neo4j = {
-        uid = config.ids.uids.neo4j;
+        isSystemUser = true;
+        group = "neo4j";
         description = "Neo4j daemon user";
         home = cfg.directories.home;
       };
+      users.groups.neo4j = {};
     };
 
   meta = {

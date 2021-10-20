@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, libintl }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libintl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";
@@ -11,8 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1nc3bwjdrpcrkbdmzvhckq0yngbcxspwj2n1r7jr3gmx1jk5vpm1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libintl ];
+
+  postPatch = ''
+    substituteInPlace src/install.c \
+      --replace \"update-desktop-database\" \"$out/bin/update-desktop-database\"
+  '';
 
   setupHook = ./setup-hook.sh;
 

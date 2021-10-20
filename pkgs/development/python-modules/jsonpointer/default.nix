@@ -1,21 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "jsonpointer";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qjkjy1qlyc1nl3k95wd03ssxac0a717x8889ypgs1cfcj3bm4n1";
+    sha256 = "5a34b698db1eb79ceac454159d3f7c12a451a91f6334a4f638454327b7a89962";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Resolve JSON Pointers in Python";
     homepage = "https://github.com/stefankoegl/python-json-pointer";
-    license = stdenv.lib.licenses.bsd2; # "Modified BSD license, says pypi"
+    license = licenses.bsd2; # "Modified BSD license, says pypi"
   };
 
 }

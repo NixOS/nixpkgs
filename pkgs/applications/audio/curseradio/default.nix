@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, python3Packages, mpv }:
+{ lib, fetchFromGitHub, substituteAll, python3Packages, mpv }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.2";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line radio player";
     homepage = "https://github.com/chronitis/curseradio";
     license = licenses.mit;

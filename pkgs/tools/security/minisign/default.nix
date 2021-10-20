@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, libsodium }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "minisign";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libsodium ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple tool for signing files and verifying signatures";
     longDescription = ''
       minisign uses public key cryptography to help facilitate secure (but not

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   pname = "ps3netsrv";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   meta = {
     description = "C++ implementation of the ps3netsrv server";
     homepage = "https://github.com/dirkvdb/ps3netsrv--";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

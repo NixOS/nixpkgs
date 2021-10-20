@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.17.0";
+  version = "0.19.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zcxirpdvvl54pbfkgw7vz984879xwvdygqfpggnam24is2zjp78";
+    sha256 = "895e318e5ec5e8cea9f60b473b6edb95b215e82d99556a03eb2d20c5e027efe1";
   };
 
   checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
@@ -34,6 +34,8 @@ buildPythonPackage rec {
     "getprotobyname"
     "waitpid"
     "static_tool_sees_all_symbols"
+    # tests pytest more than python
+    "fallback_when_no_hook_claims_it"
   ];
 
   propagatedBuildInputs = [

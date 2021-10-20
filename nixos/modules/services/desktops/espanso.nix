@@ -12,7 +12,6 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.espanso = {
       description = "Espanso daemon";
-      path = with pkgs; [ espanso libnotify xclip ];
       serviceConfig = {
         ExecStart = "${pkgs.espanso}/bin/espanso daemon";
         Restart = "on-failure";

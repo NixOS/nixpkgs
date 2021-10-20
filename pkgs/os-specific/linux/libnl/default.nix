@@ -1,5 +1,5 @@
-{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig
-, pythonSupport ? false, swig ? null, python}:
+{ stdenv, file, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkg-config
+, pythonSupport ? false, swig ? null, python ? null}:
 
 stdenv.mkDerivation rec {
   pname = "libnl";
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig file ]
+  nativeBuildInputs = [ autoreconfHook bison flex pkg-config file ]
     ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''
       cd python
-      ${python}/bin/python setup.py install --prefix=../pythonlib
+      ${python.interpreter} setup.py install --prefix=../pythonlib
       cd -
   '';
 
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    inherit version;
     homepage = "http://www.infradead.org/~tgr/libnl/";
     description = "Linux Netlink interface library suite";
     license = licenses.lgpl21;

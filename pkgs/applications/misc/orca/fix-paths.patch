@@ -1,6 +1,8 @@
+diff --git a/src/orca/debug.py b/src/orca/debug.py
+index e79482ed4..cbf3a24ec 100644
 --- a/src/orca/debug.py
 +++ b/src/orca/debug.py
-@@ -474,7 +474,7 @@
+@@ -502,7 +502,7 @@ def traceit(frame, event, arg):
      return traceit
  
  def getOpenFDCount(pid):
@@ -9,7 +11,7 @@
      procs = procs.decode('UTF-8').split('\n')
      files = list(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs))
  
-@@ -482,7 +482,7 @@
+@@ -510,7 +510,7 @@ def getOpenFDCount(pid):
  
  def getCmdline(pid):
      try:
@@ -18,7 +20,7 @@
          cmdline = openFile.read()
          openFile.close()
      except:
-@@ -492,7 +492,7 @@
+@@ -520,7 +520,7 @@ def getCmdline(pid):
      return cmdline
  
  def pidOf(procName):
@@ -27,9 +29,11 @@
                                  shell=True,
                                  stdout=subprocess.PIPE).stdout
      pids = openFile.read()
+diff --git a/src/orca/orca.py b/src/orca/orca.py
+index 2fe0a0bf2..087526556 100644
 --- a/src/orca/orca.py
 +++ b/src/orca/orca.py
-@@ -239,7 +239,7 @@
+@@ -285,7 +285,7 @@ def updateKeyMap(keyboardEvent):
  
  def _setXmodmap(xkbmap):
      """Set the keyboard map using xkbcomp."""
@@ -38,7 +42,7 @@
          stdin=subprocess.PIPE, stdout=None, stderr=None)
      p.communicate(xkbmap)
  
-@@ -297,7 +297,7 @@
+@@ -363,7 +363,7 @@ def _storeXmodmap(keyList):
      """
  
      global _originalXmodmap
@@ -47,7 +51,7 @@
  
  def _restoreXmodmap(keyList=[]):
      """Restore the original xmodmap values for the keys in keyList.
-@@ -309,7 +309,7 @@
+@@ -375,7 +375,7 @@ def _restoreXmodmap(keyList=[]):
  
      global _capsLockCleared
      _capsLockCleared = False
@@ -56,9 +60,11 @@
          stdin=subprocess.PIPE, stdout=None, stderr=None)
      p.communicate(_originalXmodmap)
  
+diff --git a/src/orca/orca_bin.py.in b/src/orca/orca_bin.py.in
+index 8c9d40153..eec0d5437 100644
 --- a/src/orca/orca_bin.py.in
 +++ b/src/orca/orca_bin.py.in
-@@ -59,7 +59,7 @@
+@@ -62,7 +62,7 @@ class ListApps(argparse.Action):
                  name = "[DEAD]"
  
              try:
@@ -67,12 +73,12 @@
              except:
                  cmdline = '(exception encountered)'
              else:
-@@ -192,7 +192,7 @@
+@@ -197,7 +197,7 @@ def inGraphicalDesktop():
  def otherOrcas():
      """Returns the pid of any other instances of Orca owned by this user."""
  
--    openFile = subprocess.Popen('pgrep -u %s orca' % os.getuid(),
-+    openFile = subprocess.Popen('@pgrep@ -u %s orca' % os.getuid(),
+-    openFile = subprocess.Popen('pgrep -u %s -x orca' % os.getuid(),
++    openFile = subprocess.Popen('@pgrep@ -u %s -x orca' % os.getuid(),
                                  shell=True,
                                  stdout=subprocess.PIPE).stdout
      pids = openFile.read()

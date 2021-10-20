@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonPackages }:
+{ lib, buildPythonPackage, fetchPypi, pythonPackages }:
 
 buildPythonPackage rec {
   pname = "rfc6555";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
     py.test tests/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Python implementation of the Happy Eyeballs Algorithm";
     homepage = "https://pypi.org/project/rfc6555";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ endocrimes ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ endocrimes ];
   };
 }

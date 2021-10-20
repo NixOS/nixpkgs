@@ -16,7 +16,7 @@
 #
 # To use at startup, see hardware.bumblebee options.
 
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, help2man, makeWrapper
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, help2man, makeWrapper
 , glib, libbsd
 , libX11, xorgserver, kmod, xf86videonouveau
 , nvidia_x11, virtualgl, libglvnd
@@ -33,8 +33,6 @@
 }:
 
 let
-  version = "3.2.1";
-
   nvidia_x11s = [ nvidia_x11 ]
                 ++ lib.optional nvidia_x11.useGLVND libglvnd
                 ++ lib.optionals (nvidia_x11_i686 != null)
@@ -57,7 +55,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "bumblebee";
-  inherit version;
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://bumblebee-project.org/${pname}-${version}.tar.gz";
@@ -103,7 +101,7 @@ in stdenv.mkDerivation rec {
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
   buildInputs = [ libX11 glib libbsd kmod ];
-  nativeBuildInputs = [ makeWrapper pkgconfig help2man automake111x autoconf ];
+  nativeBuildInputs = [ makeWrapper pkg-config help2man automake111x autoconf ];
 
   # The order of LDPATH is very specific: First X11 then the host
   # environment then the optional sub architecture paths.
@@ -133,7 +131,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${virtualgl}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     platforms = platforms.linux;

@@ -19,7 +19,7 @@
 , requests
 , simplegeneric
 , traitlets
-, prompt_toolkit
+, prompt-toolkit
 , pexpect
 , appnope
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
   propagatedBuildInputs = [
-    backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
+    backports_shutil_get_terminal_size decorator pickleshare prompt-toolkit
     simplegeneric traitlets requests pathlib2 pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 

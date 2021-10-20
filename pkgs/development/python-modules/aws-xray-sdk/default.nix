@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "abf5b90f740e1f402e23414c9670e59cb9772e235e271fef2bce62b9100cbc77";
+    sha256 = "90c2fcc982a770e86d009a4c3d2b5c3e372da91cb8284d982bae458e2c0bb268";
   };
 
   propagatedBuildInputs = [

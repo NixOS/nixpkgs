@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, bash }:
+{ lib, stdenv, fetchFromGitHub, python3, bash }:
 
 stdenv.mkDerivation rec {
   pname = "autojump";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A `cd' command that learns";
     longDescription = ''
       One of the most used shell commands is “cd”.  A quick survey

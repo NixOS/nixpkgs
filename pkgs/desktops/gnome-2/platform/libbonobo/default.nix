@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, glib, libxml2, popt
+{ stdenv, fetchurl, flex, bison, pkg-config, glib, libxml2, popt
 , intltool, ORBit2, procps }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = # still using stuff deprecated in new glib versions
     "sed 's/-DG_DISABLE_DEPRECATED//g' -i configure activation-server/Makefile.in";
 
-  nativeBuildInputs = [ flex bison pkgconfig intltool procps ];
+  nativeBuildInputs = [ flex bison pkg-config intltool procps ];
   buildInputs = [ libxml2 ];
   propagatedBuildInputs = [ popt glib ORBit2 ];
 }

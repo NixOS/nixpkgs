@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   pname = "mqtt-bench";
@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mosquitto benchmark tool";
     homepage = "https://github.com/takanorig/mqtt-bench";
     maintainers = with maintainers; [ disassembler ];

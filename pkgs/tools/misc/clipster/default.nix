@@ -1,4 +1,4 @@
-{fetchFromGitHub , stdenv, python3, gtk3, libwnck3,
+{fetchFromGitHub , lib, stdenv, python3, gtk3, libwnck,
  gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation  rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck3 gobject-introspection wrapGAppsHook ];
+  buildInputs =  [ pythonEnv gtk3 libwnck gobject-introspection wrapGAppsHook ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -22,7 +22,7 @@ stdenv.mkDerivation  rec {
     cp clipster $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "lightweight python clipboard manager";
     longDescription = ''
       Clipster was designed to try to add a good selection of useful features, while avoiding bad design decisions or becoming excessively large.

@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
@@ -27,6 +27,6 @@ buildGoModule rec {
     description = "User-friendly pager for grep/git-grep/ripgrep";
     homepage = "https://github.com/vrothberg/vgrep";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

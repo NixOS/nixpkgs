@@ -1,19 +1,19 @@
 { stdenv, fetchurl, lib
-, pandoc, pkgconfig, makeWrapper, curl, openssl, tpm2-tss
+, pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
 , abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "4.1.3";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0117r0zzdnblkibv81y71v3limixsw5m7g9xwf7lcx8fc8836pdv";
+    sha256 = "sha256-VQCBD3r5mTkbq7EyFtdYQ77p8/nRVE/u1eUD2AEXSjs=";
   };
 
-  nativeBuildInputs = [ pandoc pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [
-    curl openssl tpm2-tss
+    curl openssl tpm2-tss libuuid
   ];
 
   preFixup = let
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
       tpm2-tss
     ] ++ (lib.optional abrmdSupport tpm2-abrmd));
   in ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin \
-        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
-    done
+    wrapProgram $out/bin/tpm2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+    wrapProgram $out/bin/tss2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
   '';
 
 

@@ -1,4 +1,4 @@
-{ lib, version, hostPlatform
+{ lib, version, hostPlatform, targetPlatform
 , gnatboot ? null
 , langAda ? false
 , langJava ? false
@@ -57,4 +57,11 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # table entries that can't be stripped".
 + lib.optionalString (hostPlatform.isDarwin && langJit) ''
   export STRIP='strip -x'
+''
+
+# HACK: if host and target config are the same, but the platforms are
+# actually different we need to convince the configure script that it
+# is in fact building a cross compiler although it doesn't believe it.
++ lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
+  substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
 ''

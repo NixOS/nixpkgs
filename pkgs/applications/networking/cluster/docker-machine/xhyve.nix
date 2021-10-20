@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig, cctools, Hypervisor, vmnet }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkg-config, cctools, Hypervisor, vmnet }:
 
 buildGoPackage rec {
   pname = "docker-machine-xhyve";
@@ -17,7 +17,7 @@ buildGoPackage rec {
     export CGO_CFLAGS=-I$(pwd)/go/src/${goPackagePath}/vendor/github.com/jceel/lib9p
     export CGO_LDFLAGS=$(pwd)/go/src/${goPackagePath}/vendor/build/lib9p/lib9p.a
   '';
-  buildFlags = "--tags lib9p";
+  tags = [ "lib9p" ];
 
   src = fetchFromGitHub {
     rev    = "v${version}";
@@ -26,10 +26,10 @@ buildGoPackage rec {
     sha256 = "0000v97fr8xc5b39v44hsa87wrbk4bcwyaaivxv4hxlf4vlgg863";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ Hypervisor vmnet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/machine-drivers/docker-machine-driver-xhyve";
     description = "Xhyve driver for docker-machine";
     license = licenses.bsd3;

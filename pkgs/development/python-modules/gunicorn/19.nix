@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , coverage
 , mock
 , pytest
-, pytestcov
+, pytest-cov
 , setuptools
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytest mock pytestcov coverage ];
+  checkInputs = [ pytest mock pytest-cov coverage ];
 
   prePatch = ''
     substituteInPlace requirements_test.txt --replace "==" ">=" \
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/benoitc/gunicorn";
     description = "WSGI HTTP Server for UNIX";
     license = licenses.mit;

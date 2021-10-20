@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , docutils, installShellFiles
-, google_api_python_client, simplejson, oauth2client, setuptools, xdg
+, google-api-python-client, simplejson, oauth2client, setuptools, xdg
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ docutils installShellFiles ];
   propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools xdg
+    google-api-python-client simplejson oauth2client setuptools xdg
   ];
 
   postInstall = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goobook" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access your Google contacts from the command line";
     longDescription = ''
       The purpose of GooBook is to make it possible to use your Google Contacts

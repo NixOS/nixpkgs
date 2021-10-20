@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "kubeless";
@@ -17,9 +17,9 @@ buildGoPackage rec {
 
   subPackages = [ "cmd/kubeless" ];
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X github.com/kubeless/kubeless/pkg/version.Version=${version}
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
+  ];
 
   postInstall = ''
     for shell in bash; do
@@ -28,7 +28,7 @@ buildGoPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kubeless.io";
     description = "The Kubernetes Native Serverless Framework";
     license = licenses.asl20;

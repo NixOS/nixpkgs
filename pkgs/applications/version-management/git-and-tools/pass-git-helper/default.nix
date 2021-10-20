@@ -1,26 +1,26 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, pyxdg, pytest }:
+{ lib, buildPythonApplication, fetchFromGitHub, pyxdg, pytest, pytest-mock }:
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner  = "languitar";
     repo   = "pass-git-helper";
     rev    = "v${version}";
-    sha256 = "18nvwlp0w4aqj268wly60rnjzqw2d8jl0hbs6bkwp3hpzzz5g6yd";
+    sha256 = "sha256-HEdOR6jS16c4UIatlgB6HeBtyyxePSab+6e2hu85dsI=";
   };
 
   propagatedBuildInputs = [ pyxdg ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-mock ];
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "A git credential helper interfacing with pass, the standard unix password manager";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vanzef ];
+    maintainers = with maintainers; [ hmenke vanzef ];
   };
 }

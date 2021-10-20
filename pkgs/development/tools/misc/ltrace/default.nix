@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, elfutils, libunwind }:
+{ lib, stdenv, fetchurl, elfutils, libunwind }:
 
-stdenv.mkDerivation {
-  name = "ltrace-0.7.3";
+stdenv.mkDerivation rec {
+  pname = "ltrace";
+  version = "0.7.3";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/l/ltrace/ltrace_0.7.3.orig.tar.bz2";
+    url = "mirror://debian/pool/main/l/${pname}/${pname}_${version}.orig.tar.bz2";
     sha256 = "00wmbdghqbz6x95m1mcdd3wd46l6hgcr4wggdp049dbifh3qqvqf";
   };
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
       patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library call tracer";
     homepage = "https://www.ltrace.org/";
     platforms = [ "i686-linux" "x86_64-linux" ];

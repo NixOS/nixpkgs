@@ -8,20 +8,25 @@ stdenv.mkDerivation rec {
   version = "0.52.21";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/n/e/${pname}/${pname}-${version}.tar.gz";
+    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0cdvbancr7y4nrj8257y5n45hmhizr8isynagy4fpsnpammv8pi6";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e s,/usr/bin/install,install, -e s,-I/usr/include/slang,, Makefile.in po/Makefile
 
     substituteInPlace configure \
       --replace "/usr/include/python" "${pythonIncludePath}"
     substituteInPlace configure.ac \
       --replace "/usr/include/python" "${pythonIncludePath}"
+
+    substituteInPlace Makefile.in \
+      --replace "ar rv" "${stdenv.cc.targetPrefix}ar rv"
   '';
 
-  buildInputs = [ slang popt python ];
+  strictDeps = true;
+  nativeBuildInputs = [ python ];
+  buildInputs = [ slang popt ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -31,12 +36,12 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://fedorahosted.org/newt/";
+  meta = with lib; {
+    homepage = "https://pagure.io/newt";
     description = "Library for color text mode, widget based user interfaces";
 
     license = licenses.lgpl2;

@@ -1,5 +1,4 @@
-{ stdenv
-, fetchFromGitHub
+{ lib
 , fetchurl
 , pkg-config
 , gettext
@@ -12,7 +11,7 @@
 , gobject-introspection
 , libpeas
 , librsvg
-, gnome3
+, gnome
 , libnotify
 , gsound
 , meson
@@ -22,13 +21,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2020.09.2";
+  version = "2021.05";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hzvv4wia4rk0kvq16y27imq2qd4q5lg3vx99hdcjdb1x3zqqfg0";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
   };
 
   patches = [
@@ -53,9 +52,9 @@ python3Packages.buildPythonApplication rec {
     gtk3
     libpeas
     librsvg
-    gnome3.gnome-desktop
+    gnome.gnome-desktop
     gsound
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -90,13 +89,13 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = "pitivi";
       versionPolicy = "none"; # we are using dev version, since the stable one is too old
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage = "http://pitivi.org/";
     longDescription = ''

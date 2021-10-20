@@ -1,22 +1,24 @@
-{ stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config
+{ lib, stdenv, fetchFromGitHub
+, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
+, bc, coreutils, which, libsndfile, pkg-config, libxcb
 }:
 
 stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "2.5.4";
+  version = "2.5.5";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
     rev = version;
-    sha256 = "0npn8fvq8iafyamq4wrj1k1bmk4xd0my2sp3gi5jdjfx6hc1sm3n";
+    sha256 = "0qbn05nq170ckycwalkk5fppklc4g457mapr7p7ryrhc1hwzffm9";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook ];
+
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd_0_9_70 libjack2 alsaLib faust curl
-    bc coreutils which libsndfile pkg-config
+    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
+    bc coreutils which libsndfile libxcb
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     install rsrc/FaustLive.desktop "$out/share/applications"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A standalone just-in-time Faust compiler";
     longDescription = ''
       FaustLive is a standalone just-in-time Faust compiler. It tries to bring
@@ -39,5 +41,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://faust.grame.fr/";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ magnetophon ];
   };
 }

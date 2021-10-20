@@ -1,29 +1,56 @@
-{ stdenv
-, rustPlatform
+{ pkgs
+, lib
+, stdenv
+, buildRustCrate
+, defaultCrateOverrides
 , fetchFromGitHub
-, IOKit
 , Security
+, features ? [ ]
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "meilisearch";
-  version = "0.9.0";
-
+let
+  version = "0.21.1";
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "00i5vsbcyrbsvhr5n1b3pxa87v0kfw6pg931i2kzyf4wh021k6sw";
+    sha256 = "sha256-wyyhTNhVw8EJhahstLK+QuEhufQC68rMpw/ngK8FL8Y=";
   };
-
-  cargoSha256 = "0axjygk8a7cykpa5skk4a6mkm8rndkr76l10h3z3gjdc88b17qcz";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit Security ];
-
-  meta = with stdenv.lib; {
-    description = "Ultra relevant and instant full-text search API";
-    homepage = "https://meilisearch.com/";
+  customBuildRustCrateForPkgs = pkgs: buildRustCrate.override {
+    defaultCrateOverrides = defaultCrateOverrides // {
+      meilisearch-http = attrs: {
+        src = "${src}/meilisearch-http";
+        buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+      };
+      meilisearch-error = attrs: {
+        src = "${src}/meilisearch-error";
+      };
+    };
+  };
+  cargo_nix = import ./Cargo.nix {
+    inherit pkgs;
+    buildRustCrateForPkgs = customBuildRustCrateForPkgs;
+  };
+  meilisearch-http = cargo_nix.workspaceMembers."meilisearch-http".build.override {
+    inherit features;
+  };
+in
+stdenv.mkDerivation {
+  pname = "meilisearch";
+  inherit version src;
+  dontUnpack = true;
+  dontBuild = true;
+  installPhase = ''
+    mkdir -p $out/bin
+    cp ${meilisearch-http}/bin/meilisearch $out/bin/meilisearch
+  '';
+  dontCheck = true;
+  dontFixup = true;
+  meta = with lib; {
+    description = "Powerful, fast, and an easy to use search engine ";
+    homepage = https://docs.meilisearch.com/;
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ happysalada ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

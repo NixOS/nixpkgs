@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  version = "20200910";
   pname = "numix-solarized-gtk-theme";
+  version = "20210831";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
-    repo = "numix-solarized-gtk-theme";
+    repo = pname;
     rev = version;
-    sha256 = "05h1563sy6sfz76jadxsf730mav6bbjsk9xnadv49r16b8n8p9a9";
+    sha256 = "1q8qhpw0hfv625sm626zp4vbz2106b0g5m11ygk87s6kbxrfg6lr";
   };
 
   nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];
@@ -23,13 +23,15 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installPhase = ''
-    HOME="$NIX_BUILD_ROOT"  # shut up inkscape's warnings
-    for theme in *.colors; do
+    runHook preInstall
+    for theme in colors/*.colors; do
+      theme="''${theme##*/}"
       make THEME="''${theme/.colors/}" install
     done
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Solarized versions of Numix GTK2 and GTK3 theme";
     longDescription = ''
       This is a fork of the Numix GTK theme that replaces the colors of the theme
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.offline ];
   };

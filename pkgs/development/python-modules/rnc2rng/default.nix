@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "rnc2rng";
-  version = "2.6.4";
+  version = "2.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kmp3iwxxyzjsd47j2sprd47ihhkwhb3yydih3af5bbfq0ibh1w8";
+    sha256 = "5a01d157857b5f010a94167e7092cc49efe2531d58e013f12c4e60b8c4df78f1";
   };
 
   propagatedBuildInputs = [ rply ];

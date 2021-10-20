@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
  /*
  This derivation is impure: it relies on an Xcode toolchain being installed
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iterm2";
-  version = "3.3.9";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "06mq3gfjgy8jw2f3fzdsi3pbfkdijfzzlhlw6ixa5bfb4hbcgn5j";
+    sha256 = "09nhrmi25zxw3vp0wlib9kjr3p1j6am2zpwimdzqn0c80fq1lwvi";
   };
 
   patches = [ ./disable_updates.patch ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
      (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
     license = licenses.gpl2;

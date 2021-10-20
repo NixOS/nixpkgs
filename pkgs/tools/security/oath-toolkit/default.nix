@@ -1,48 +1,30 @@
-{ stdenv, fetchFromGitLab, fetchpatch, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
+{ lib, stdenv, fetchurl, pam, xmlsec }:
 
 let
+  # TODO: Switch to OpenPAM once https://gitlab.com/oath-toolkit/oath-toolkit/-/issues/26 is addressed upstream
   securityDependency =
     if stdenv.isDarwin then xmlsec
     else pam;
 
-in stdenv.mkDerivation {
-  name = "oath-toolkit-2.6.2";
+in stdenv.mkDerivation rec {
+  pname = "oath-toolkit";
+  version = "2.6.7";
 
-  src = fetchFromGitLab {
-    owner = "oath-toolkit";
-    repo = "oath-toolkit";
-    rev = "0dffdec9c5af5c89a5af43add29d8275eefe7414";
-    sha256 = "0n2sl444723f1k0sjmc0mzdwslx51yxac39c2cx2bl3ykacgfv74";
+  src = fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1aa620k05lsw3l3slkp2mzma40q3p9wginspn9zk8digiz7dzv9n";
   };
 
-  patches = [
-    # fix for glibc>=2.28
-    (fetchpatch {
-      name   = "new_glibc_check.patch";
-      url    = "https://sources.debian.org/data/main/o/oath-toolkit/2.6.1-1.3/debian/patches/new-glibc-check.patch";
-      sha256 = "0h75xyy3xsl485v7w27yqkks6z9sgsjmrv6wiswy15fdj5wyciv3";
-    })
-  ];
+  buildInputs = [ securityDependency ];
 
-  buildInputs = [ securityDependency libxml2 perl gengetopt bison ];
+  configureFlags = lib.optionals stdenv.isDarwin [ "--disable-pam" ];
 
-  nativeBuildInputs = [ autoreconfHook gtk-doc help2man pkgconfig ];
+  passthru.updateScript = ./update.sh;
 
-  # man file generation fails when true
-  enableParallelBuilding = false;
-
-  configureFlags = [ "--disable-pskc" ];
-
-  # Replicate the steps from cfg.mk
-  preAutoreconf = ''
-    printf "gdoc_MANS =\ngdoc_TEXINFOS =\n" > liboath/man/Makefile.gdoc
-    printf "gdoc_MANS =\ngdoc_TEXINFOS =\n" > libpskc/man/Makefile.gdoc
-    touch ChangeLog
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Components for building one-time password authentication systems";
     homepage = "https://www.nongnu.org/oath-toolkit/";
+    maintainers = with maintainers; [ schnusch ];
     platforms = with platforms; linux ++ darwin;
   };
 }

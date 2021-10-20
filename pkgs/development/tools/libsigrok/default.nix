@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, libzip, glib, libusb1, libftdi1, check
-, libserialport, librevisa, doxygen, glibmm, python
-, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4"
+{ lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
+, libserialport, librevisa, doxygen, glibmm, python3
+, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4", doInstallCheck ? true
 }:
 
 stdenv.mkDerivation rec {
-  inherit version;
+  inherit version doInstallCheck;
   pname = "libsigrok";
 
   src = fetchurl {
@@ -17,21 +17,28 @@ stdenv.mkDerivation rec {
     sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport
-    librevisa doxygen glibmm python
-  ];
+  nativeBuildInputs = [ doxygen pkg-config python3 ];
+  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport librevisa glibmm ];
+
+  strictDeps = true;
 
   postInstall = ''
     mkdir -p "$out/share/sigrok-firmware/"
     tar --strip-components=1 -xvf "${firmware}" -C "$out/share/sigrok-firmware/"
   '';
 
-  meta = with stdenv.lib; {
+  installCheckPhase = ''
+    # assert that c++ bindings are included
+    # note that this is only true for modern (>0.5) versions; the 0.3 series does not have these
+    [[ -f $out/include/libsigrokcxx/libsigrokcxx.hpp ]] \
+      || { echo 'C++ bindings were not generated; check configure output'; false; }
+  '';
+
+  meta = with lib; {
     description = "Core library of the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

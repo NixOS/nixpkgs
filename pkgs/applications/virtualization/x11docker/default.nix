@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nx-libs, xorg, getopt, gnugrep, gawk, ps, mount, iproute2 }:
 stdenv.mkDerivation rec {
   pname = "x11docker";
-  version = "6.6.2";
+  version = "6.9.0";
   src = fetchFromGitHub {
     owner = "mviereck";
     repo = "x11docker";
     rev = "v${version}";
-    sha256 = "1skdgr2hipd7yx9c7r7nr3914gm9cm1xj6h3qdsa9f92xxm3aml1";
+    sha256 = "sha256-O+lab3K7J2Zz9t+yB/kYWtBOvQGOQMDFNDUVXzTj/h4=";
   };
   nativeBuildInputs = [ makeWrapper ];
 
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D x11docker "$out/bin/x11docker";
     wrapProgram "$out/bin/x11docker" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ getopt gnugrep gawk ps mount iproute nx-libs xorg.xdpyinfo xorg.xhost xorg.xinit ]}"
+      --prefix PATH : "${lib.makeBinPath [ getopt gnugrep gawk ps mount iproute2 nx-libs xorg.xdpyinfo xorg.xhost xorg.xinit ]}"
   '';
 
   meta = {
     description = "Run graphical applications with Docker";
     homepage = "https://github.com/mviereck/x11docker";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

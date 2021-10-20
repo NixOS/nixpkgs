@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   name = "speedread-unstable-2016-09-21";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install -m755 -D speedread $out/bin/speedread
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple terminal-based open source Spritz-alike";
     longDescription = ''
       Speedread is a command line filter that shows input text as a

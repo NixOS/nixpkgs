@@ -1,22 +1,32 @@
 { lib
 , python3
 , glibcLocales
-, fetchpatch
 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.22.2";
+  version = "1.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
+    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
   };
 
   propagatedBuildInputs = [
-    paramiko pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
+    cli-helpers
+    click
+    configobj
+    importlib-resources
+    paramiko
+    prompt-toolkit
+    pyaes
+    pycrypto
+    pygments
+    pymysql
+    pyperclip
+    sqlparse
   ];
 
   checkInputs = [ pytest mock glibcLocales ];
@@ -29,18 +39,10 @@ buildPythonApplication rec {
       --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
-  patches = [
-    # TODO: remove with next release (v1.22.3 or v1.23)
-    (fetchpatch {
-      url = "https://github.com/dbcli/mycli/commit/17f093d7b70ab2d9f3c6eababa041bf76f029aac.patch";
-      sha256 = "sha256-VwfbtzUtElV+ErH+NJb+3pRtSaF0yVK8gEWCvlzZNHI=";
-      excludes = [ "changelog.md" "mycli/AUTHORS" ];
-    })
-  ];
-
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse"
+      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
+      --replace "importlib_resources >= 5.0.0" "importlib_resources"
   '';
 
   meta = with lib; {

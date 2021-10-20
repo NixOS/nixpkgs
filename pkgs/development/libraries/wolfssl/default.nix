@@ -1,21 +1,39 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "4.5.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "138ppnwkqkfi7nnqpd0b93dqaph72ma65m9286bz2qzlis1x8r0v";
+    sha256 = "1w9gs9cq2yhj5s3diz3x1l15pgrc1pbm00jccizvcjyibmwyyf2h";
   };
 
-  configureFlags = [ "--enable-all" ];
+  # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
+  configureFlags = [
+    "--enable-all"
+    "--enable-base64encode"
+    "--enable-pkcs11"
+    "--enable-reproducible-build"
+    "--enable-tls13"
+  ];
 
-  outputs = [ "out" "dev" "doc" "lib" ];
+  outputs = [
+    "dev"
+    "doc"
+    "lib"
+    "out"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   postInstall = ''
      # fix recursive cycle:
@@ -25,11 +43,11 @@ stdenv.mkDerivation rec {
      mkdir -p "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
-    homepage    = "https://www.wolfssl.com/";
-    platforms   = platforms.all;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ mcmtroffaes ];
+    homepage = "https://www.wolfssl.com/";
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, b43FirmwareCutter }:
+{ lib, stdenv, fetchurl, b43FirmwareCutter }:
 
 stdenv.mkDerivation rec {
   pname = "b43-firmware";
@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ b43FirmwareCutter ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   sourceRoot = ".";
 
   installPhase = ''
@@ -20,9 +18,9 @@ stdenv.mkDerivation rec {
     b43-fwcutter -w $out *.wl_apsta.o
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
+    homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
     downloadPage = "http://www.lwfinger.com/b43-firmware";
     license = licenses.unfree;
   };

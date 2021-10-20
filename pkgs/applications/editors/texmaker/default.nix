@@ -1,16 +1,16 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qtwebengine, qmake, zlib, pkg-config, poppler }:
 
 mkDerivation rec {
   pname = "texmaker";
-  version = "5.0.4";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "http://www.xm1math.net/texmaker/${pname}-${version}.tar.bz2";
-    sha256 = "1qnh5g8zkjpjmw2l8spcynpfgs3wpcfcla5ms2kkgvkbdlzspqqx";
+    sha256 = "sha256-UmiW8sGuVhEw7seq6BW53Nqejut3K2VB0NyUzpGnEEQ=";
   };
 
-  buildInputs = [ qtbase qtscript poppler zlib ];
-  nativeBuildInputs = [ pkgconfig poppler qmake ];
+  buildInputs = [ qtbase qtscript poppler zlib qtwebengine ];
+  nativeBuildInputs = [ pkg-config poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [
@@ -19,15 +19,13 @@ mkDerivation rec {
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
-	This editor is a full fledged IDE for TeX and
-	LaTeX editing with completion, structure viewer, preview,
-	spell checking and support of any compilation chain.
-	'';
+      This editor is a full fledged IDE for TeX and
+      LaTeX editing with completion, structure viewer, preview,
+      spell checking and support of any compilation chain.
+    '';
     homepage = "http://www.xm1math.net/texmaker/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

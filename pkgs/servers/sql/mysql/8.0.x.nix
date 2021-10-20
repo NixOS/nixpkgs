@@ -1,31 +1,38 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkgconfig
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto
+{ lib, stdenv, fetchurl, bison, cmake, pkg-config
+, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd
+, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools
 }:
 
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.17";
+  version = "8.0.26";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
+    sha256 = "sha256-293Nx3L4BscRo3MTY6UPPTWeqsnF0UgAhHKKHCzl2k0=";
   };
 
   patches = [
     ./abi-check.patch
-    ./libutils.patch
   ];
 
-  nativeBuildInputs = [ bison cmake pkgconfig rpcsvc-proto ];
+  nativeBuildInputs = [ bison cmake pkg-config ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+
+  ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
+  postPatch = ''
+    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  '';
 
   buildInputs = [
-    boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    boost curl icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds
+    cctools CoreServices developer_cmds DarwinTools
   ];
 
   outputs = [ "out" "static" ];

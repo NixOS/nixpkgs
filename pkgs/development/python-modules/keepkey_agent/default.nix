@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , keepkey
@@ -20,7 +20,10 @@ buildPythonPackage rec {
     keepkey libagent setuptools wheel
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = false;
+  pythonImportsChecks = [ "keepkey_agent" ];
+
+  meta = with lib; {
     description = "Using KeepKey as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;

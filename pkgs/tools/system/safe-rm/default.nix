@@ -1,34 +1,36 @@
-{ stdenv, fetchgit, perl, coreutils }:
+{ lib, rustPlatform, fetchgit, coreutils, installShellFiles }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "safe-rm";
-  version = "0.12";
+  version = "1.1.0";
 
   src = fetchgit {
     url = "https://git.launchpad.net/safe-rm";
     rev = "refs/tags/${pname}-${version}";
-    sha256 = "0zkmwxyl1870ar6jr9h537vmqgkckqs9jd1yv6m4qqzdsmg5gdbq";
+    sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 
-  propagatedBuildInputs = [ perl coreutils ];
+  cargoSha256 = "sha256-durb4RTzEun7HPeYfvDJpvO+6L7tNFmAxdIwINbwZrg=";
 
-  postFixup = ''
-    sed -e 's@/bin/rm@${coreutils}/bin/rm@' -i $out/bin/safe-rm
+  postPatch = ''
+    substituteInPlace src/main.rs \
+      --replace "/bin/rm" "${coreutils}/bin/rm"
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp safe-rm $out/bin
+  nativeBuildInputs = [ installShellFiles ];
 
-    mkdir -p $out/share/man/man1
-    pod2man safe-rm > $out/share/man/man1/safe-rm.1
+  # uses lots of absolute paths outside of the sandbox
+  doCheck = false;
+
+  postInstall = ''
+    installManPage safe-rm.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool intended to prevent the accidental deletion of important files";
     homepage = "https://launchpad.net/safe-rm";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

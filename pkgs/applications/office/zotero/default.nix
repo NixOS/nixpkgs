@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
 , atk
 , cairo
 , coreutils
@@ -26,7 +26,7 @@
 , libXrender
 , libXt
 , libnotify
-, gnome3
+, gnome
 , libGLU, libGL
 , nspr
 , nss
@@ -36,22 +36,22 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.89";
+  version = "5.0.96.3";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "18p4qnnfx9f2frk7f2nk1d7jr4cjzg9z7lfzrk7vq11qgbjdpqbl";
+    sha256 = "sha256-eqSNzmkGNopGJ7VByvUffFEPJz3WHS7b5+jgUAW/hU4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome3.adwaita-icon-theme dconf ];
+  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       atk
       cairo
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
   '';
 
@@ -103,45 +103,49 @@ stdenv.mkDerivation rec {
     mimeType = "text/plain";
   };
 
-  installPhase =
-  ''
-     mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
-     cp -r * "$prefix/usr/lib/zotero-bin-${version}"
-     mkdir -p "$out/bin"
-     ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
+  installPhase = ''
+    runHook preInstall
 
-     # install desktop file and icons.
-     mkdir -p $out/share/applications
-     cp ${desktopItem}/share/applications/* $out/share/applications/
-     for size in 16 32 48 256; do
-       install -Dm444 chrome/icons/default/default$size.png \
-         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
-     done
+    mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
+    cp -r * "$prefix/usr/lib/zotero-bin-${version}"
+    mkdir -p "$out/bin"
+    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
-     for executable in \
-       zotero-bin plugin-container \
-       updater minidump-analyzer
-     do
-       if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
-         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-           "$out/usr/lib/zotero-bin-${version}/$executable"
-       fi
-     done
-     find . -executable -type f -exec \
-       patchelf --set-rpath "$libPath" \
-         "$out/usr/lib/zotero-bin-${version}/{}" \;
+    # install desktop file and icons.
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+    for size in 16 32 48 256; do
+      install -Dm444 chrome/icons/default/default$size.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
+    done
+
+    for executable in \
+      zotero-bin plugin-container \
+      updater minidump-analyzer
+    do
+      if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          "$out/usr/lib/zotero-bin-${version}/$executable"
+      fi
+    done
+    find . -executable -type f -exec \
+      patchelf --set-rpath "$libPath" \
+        "$out/usr/lib/zotero-bin-${version}/{}" \;
+
+    runHook postInstall
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ i077 ];
   };
 }

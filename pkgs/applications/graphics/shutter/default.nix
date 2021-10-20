@@ -1,42 +1,106 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, imagemagick, gdk-pixbuf, librsvg
-, hicolor-icon-theme, procps
+{ lib
+, stdenv
+, fetchFromGitHub
+, perlPackages
+, wrapGAppsHook
+, imagemagick
+, gdk-pixbuf
+, librsvg
+, hicolor-icon-theme
+, procps
+, libwnck
+, libappindicator-gtk3
 }:
 
 let
-  perlModules = with perlPackages;
-    [ Gnome2 Gnome2Canvas Gtk2 Glib Pango Gnome2VFS Gnome2Wnck Gtk2ImageView
-      Gtk2Unique FileBaseDir FileWhich FileCopyRecursive XMLSimple NetDBus XMLTwig
-      XMLParser HTTPMessage ProcSimple SortNaturally LocaleGettext
-      ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWP JSON
-      PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONMaybeXS
-      commonsense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
-      EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
+  perlModules = with perlPackages; [
+      # Not sure if these are needed
+      # Gnome2 Gnome2Canvas Gnome2VFS Gtk2AppIndicator Gtk2Unique
+      ImageMagick
+      Cairo
+      FileBaseDir
+      FileWhich
+      FileCopyRecursive
+      XMLSimple
+      XMLTwig
+      XMLParser
+      SortNaturally
+      LocaleGettext
+      ProcProcessTable
+      X11Protocol
+      ProcSimple
+      ImageExifTool
+      JSON
+      JSONMaybeXS
+      NetOAuth
+      PathClass
+      LWP
+      LWPProtocolHttps
+      NetDBus
+      TryTiny
+      WWWMechanize
+      HTTPMessage
+      HTTPDate
+      HTMLForm
+      HTMLParser
+      HTMLTagset
+      HTTPCookies
+      EncodeLocale
+      URI
+      CarpAlways
+      GlibObjectIntrospection
+      NumberBytesHuman
+      CairoGObject
+      Readonly
+      Gtk3ImageView
+      Gtk3
+      Glib
+      Pango
+      GooCanvas2
+      GooCanvas2CairoTypes
+      commonsense
+      TypesSerialiser
     ];
 in
-stdenv.mkDerivation {
-  name = "shutter-0.94.3";
+stdenv.mkDerivation rec {
+  pname = "shutter";
+  version = "0.99";
 
-  src = fetchurl {
-    url = "https://launchpad.net/shutter/0.9x/0.94.3/+download/shutter-0.94.3.tar.gz";
-    sha256 = "01wv5k6zqfqa2rss461lpdpjxpfk4awzfdc6j2qk6bh4g4zgmgl5";
+  src = fetchFromGitHub {
+    owner = "shutter-project";
+    repo = "shutter";
+    rev = "v${version}";
+    sha256 = "sha256-n5M+Ggk8ulJQMWjAW+/fC8fbqiBGzsx6IXlYxvf8utA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perlPackages.perl procps gdk-pixbuf librsvg ] ++ perlModules;
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [
+    perlPackages.perl
+    procps
+    gdk-pixbuf
+    librsvg
+    libwnck
+    libappindicator-gtk3
+  ] ++ perlModules;
 
-  installPhase = ''
-    mkdir -p "$out"
-    cp -a . "$out"
-    (cd "$out" && mv CHANGES README COPYING "$out/share/doc/shutter")
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+  ];
 
-    wrapProgram $out/bin/shutter \
-      --set PERL5LIB "${perlPackages.makePerlPath perlModules}" \
-      --prefix PATH : "${imagemagick.out}/bin" \
-      --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+  postPatch = ''
+    patchShebangs po2mo.sh
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set PERL5LIB ${perlPackages.makePerlPath perlModules} \
+      --prefix PATH : ${lib.makeBinPath [ imagemagick ] } \
+      --suffix XDG_DATA_DIRS : ${hicolor-icon-theme}/share \
+      --set GDK_PIXBUF_MODULE_FILE $GDK_PIXBUF_MODULE_FILE
+    )
+  '';
+
+  meta = with lib; {
     description = "Screenshot and annotation tool";
     homepage = "https://shutter-project.org/";
     license = licenses.gpl3Plus;

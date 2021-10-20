@@ -15,7 +15,7 @@
   # Utility functions, could just import but passing in for efficiency
   lib
 
-, # Use to reevaluate Nixpkgs; a dirty hack that should be removed
+, # Use to reevaluate Nixpkgs
   nixpkgsFun
 
   ## Other parameters
@@ -65,7 +65,12 @@
 
 let
   stdenvAdapters = self: super:
-    let res = import ../stdenv/adapters.nix self; in res // {
+    let
+      res = import ../stdenv/adapters.nix {
+        inherit lib config;
+        pkgs = self;
+      };
+    in res // {
       stdenvAdapters = res;
     };
 
@@ -151,12 +156,27 @@ let
   otherPackageSets = self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
-    # that target system. For instance, pkgsCross.rasberryPi.hello,
+    # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem:
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
+
+    pkgsLLVM = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsLLVM = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the LLVM toolchain.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useLLVM = true;
+        linker = "lld";
+      };
+    };
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
@@ -198,7 +218,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -215,7 +235,6 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-      crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
@@ -224,9 +243,13 @@ let
             gnu = lib.systems.parse.abis.musl;
             gnueabi = lib.systems.parse.abis.musleabi;
             gnueabihf = lib.systems.parse.abis.musleabihf;
+            musleabi = lib.systems.parse.abis.musleabi;
+            musleabihf = lib.systems.parse.abis.musleabihf;
           }.${stdenv.hostPlatform.parsed.abi.name}
             or lib.systems.parse.abis.musl;
         };
+      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+        gcc.abi = "elfv2";
       };
     });
   };

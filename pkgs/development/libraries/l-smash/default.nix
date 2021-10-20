@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which }:
 
 stdenv.mkDerivation rec {
   pname = "l-smash";
@@ -13,7 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  meta = with stdenv.lib; {
+  configureFlags = [
+    "--cc=cc"
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+  ];
+
+  meta = with lib; {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
     license = licenses.isc;

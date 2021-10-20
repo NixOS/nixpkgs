@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_trivial'';
-  version = ''trivia-20200925-git'';
+  baseName = "trivia_dot_trivial";
+  version = "trivia-20210411-git";
 
-  description = ''Base level system of Trivia with a trivial optimizer.
+  description = "Base level system of Trivia with a trivial optimizer.
  Systems that intend to enhance Trivia should depend on this package, not the TRIVIA system,
- in order to avoid the circular dependency.'';
+ in order to avoid the circular dependency.";
 
   deps = [ args."alexandria" args."closer-mop" args."lisp-namespace" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivial-cltl2" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz'';
-    sha256 = ''192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z'';
+    url = "http://beta.quicklisp.org/archive/trivia/2021-04-11/trivia-20210411-git.tgz";
+    sha256 = "1dy35yhjhzcqsq5rwsan1f9x2ss8wcw55n2jzzgymj1vqvzp5mn8";
   };
 
   packageName = "trivia.trivial";
@@ -23,9 +24,9 @@ rec {
     Base level system of Trivia with a trivial optimizer.
  Systems that intend to enhance Trivia should depend on this package, not the TRIVIA system,
  in order to avoid the circular dependency.
-    SHA256 192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z URL
-    http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz
-    MD5 c6546ecf272e52e051a9d3946242511b NAME trivia.trivial FILENAME
+    SHA256 1dy35yhjhzcqsq5rwsan1f9x2ss8wcw55n2jzzgymj1vqvzp5mn8 URL
+    http://beta.quicklisp.org/archive/trivia/2021-04-11/trivia-20210411-git.tgz
+    MD5 3fde6243390481d089cda082573876f6 NAME trivia.trivial FILENAME
     trivia_dot_trivial DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME closer-mop FILENAME closer-mop)
@@ -37,7 +38,7 @@ rec {
     DEPENDENCIES
     (alexandria closer-mop lisp-namespace trivia.level0 trivia.level1
      trivia.level2 trivial-cltl2)
-    VERSION trivia-20200925-git SIBLINGS
+    VERSION trivia-20210411-git SIBLINGS
     (trivia trivia.balland2006 trivia.benchmark trivia.cffi trivia.level0
      trivia.level1 trivia.level2 trivia.ppcre trivia.quasiquote trivia.test)
     PARASITES NIL) */

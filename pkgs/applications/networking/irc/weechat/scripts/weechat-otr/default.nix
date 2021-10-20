@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
+{ lib, stdenv, substituteAll, buildEnv, fetchgit, fetchFromGitHub, python3Packages, gmp }:
 
 let
   # pure-python-otr (potr) requires an older version of pycrypto, which is
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     cp weechat_otr.py $out/share/weechat_otr.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mmb/weechat-otr";
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];

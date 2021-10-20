@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config
 , freetype, SDL, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "agg-2.5";
+  pname = "agg";
+  version = "2.5";
   src = fetchurl {
-    url = "http://www.antigrain.com/${name}.tar.gz";
+    url = "https://www.antigrain.com/${pname}-${version}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
 
   postPatch = ''
@@ -40,8 +41,8 @@ stdenv.mkDerivation rec {
       of course, AGG can do much more than that.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.antigrain.com/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

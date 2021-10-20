@@ -1,34 +1,21 @@
-{ stdenv, fetchFromGitHub, coq, coq-ext-lib }:
+{ lib, mkCoqDerivation, coq, coq-ext-lib, version ? null }:
 
-stdenv.mkDerivation rec {
-  version = "1.3.0";
-  name = "coq${coq.coq-version}-simple-io-${version}";
-  src = fetchFromGitHub {
-    owner = "Lysxia";
-    repo = "coq-simple-io";
-    rev = version;
-    sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
-  };
-
-  buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml ocamlbuild ]);
-
+with lib; mkCoqDerivation {
+  pname = "simple-io";
+  owner = "Lysxia";
+  repo = "coq-simple-io";
+  inherit version;
+  defaultVersion = if versions.range "8.7" "8.13" coq.coq-version then "1.3.0" else null;
+  release."1.3.0".sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
+  extraBuildInputs = (with coq.ocamlPackages; [ ocaml ocamlbuild ]);
   propagatedBuildInputs = [ coq-ext-lib ];
 
   doCheck = true;
   checkTarget = "test";
 
-  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
-
   meta = {
     description = "Purely functional IO for Coq";
-    inherit (src.meta) homepage;
-    inherit (coq.meta) platforms;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
-  };
-
 }

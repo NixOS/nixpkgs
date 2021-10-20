@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "spooles";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./spooles.patch
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace makefile --replace '-Wl,-soname' '-Wl,-install_name'
   '';
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.netlib.org/linalg/spooles/";
     description = "Library for solving sparse real and complex linear systems of equations";
     license = licenses.publicDomain;

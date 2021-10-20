@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "mailcommon";
+  pname = "mailcommon";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-file-size'';
-  version = ''20200427-git'';
+  baseName = "trivial-file-size";
+  version = "20200427-git";
 
   parasites = [ "trivial-file-size/tests" ];
 
-  description = ''Stat a file's size.'';
+  description = "Stat a file's size.";
 
   deps = [ args."fiveam" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-file-size/2020-04-27/trivial-file-size-20200427-git.tgz'';
-    sha256 = ''1vspkgygrldbjb4gdm1fsn04j50rwil41x0fvvm4fxm84rwrscsa'';
+    url = "http://beta.quicklisp.org/archive/trivial-file-size/2020-04-27/trivial-file-size-20200427-git.tgz";
+    sha256 = "1vspkgygrldbjb4gdm1fsn04j50rwil41x0fvvm4fxm84rwrscsa";
   };
 
   packageName = "trivial-file-size";

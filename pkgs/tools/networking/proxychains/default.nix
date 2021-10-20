@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub } :
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
+
 stdenv.mkDerivation rec {
   pname = "proxychains";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "haad";
-    repo = "proxychains";
+    repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "015skh3z1jmm8kxbm3nkqv1w56kcvabdmcbmpwzywxr4xnh3x3pc";
+    sha256 = "083xdg6fsn8c2ns93lvy794rixxq8va6jdf99w1z0xi4j7f1nyjw";
   };
 
   postPatch = ''
-    # Temporary work-around; most likely fixed by next upstream release
-    sed -i Makefile -e '/-lpthread/a LDFLAGS+=-ldl'
-  '';
-  postInstall = ''
-    cp src/proxychains.conf $out/etc
+    # Suppress compiler warning. Remove it when upstream fix arrives
+    substituteInPlace Makefile --replace "-Werror" "-Werror -Wno-stringop-truncation"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Proxifier for SOCKS proxies";
     homepage = "http://proxychains.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

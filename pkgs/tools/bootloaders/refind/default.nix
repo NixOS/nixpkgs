@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnu-efi }:
+{ lib, stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {
@@ -14,15 +14,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.12.0";
-  srcName = "refind-src-${version}";
+  version = "0.13.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1i5p3sir3mx4i2q5w78360xn2kbgsj8rmgrqvsvag1zzr5dm1f3v";
+    url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
+    sha256 = "0w6990ggns4xsdmgj3aq527q15frrxfmxwa3m6igabd4ai498n6x";
   };
 
   patches = [
+    # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
   ];
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin/
     install -d $out/share/refind/drivers_${efiPlatform}/
     install -d $out/share/refind/tools_${efiPlatform}/
@@ -101,9 +103,11 @@ stdenv.mkDerivation rec {
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-install
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mvrefind
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based

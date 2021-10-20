@@ -1,18 +1,24 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip, stdenvNoCC, writeText }:
 
 let
-  version = "20200729";
-in fetchzip {
+  version = "20210225";
+in stdenvNoCC.mkDerivation {
   name = "iana-etc-${version}";
-  url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-  sha256 = "05cymmisfvpyd7fwzc6axvm5fsi1v6hzs0pjr4xp1i95wvpz7qpm";
+  src = fetchzip {
+    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
+    sha256 = "sha256:1bbbnj2ya0apyyhnw37521yl1hrz3zy3l8dw6sacmir0y6pmx9gi";
+  };
 
-  postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
+  installPhase = ''
     install -D -m0644 -t $out/etc services protocols
   '';
 
-  meta = with stdenv.lib; {
+  setupHook = writeText "setup-hook" ''
+    export NIX_ETC_PROTOCOLS=@out@/etc/protocols
+    export NIX_ETC_SERVICES=@out@/etc/services
+  '';
+
+  meta = with lib; {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = platforms.unix;

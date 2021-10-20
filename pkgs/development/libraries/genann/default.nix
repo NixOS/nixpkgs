@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "genann";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp ./genann.{h,c} $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/codeplea/genann";
     description = "Simple neural network library in ANSI C";
     license = licenses.zlib;

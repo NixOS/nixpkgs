@@ -4,7 +4,7 @@
 { gcc6Stdenv, lib, fetchurl, fetchFromGitHub
 
 , which, findutils, m4, gawk
-, python, openjdk, mono, libressl
+, python2, openjdk, mono, libressl
 , ...
 }:
 
@@ -21,7 +21,7 @@ let
     };
 
     dontConfigure = true;
-    buildPhase = ":";
+    dontBuild = true;
     installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
   };
 
@@ -51,7 +51,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
+        nativeBuildInputs = [ python2 openjdk gawk which m4 findutils mono ];
         buildInputs = [ libressl boost ];
 
         inherit patches;
@@ -139,7 +139,7 @@ let
 
         outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
-        meta = with gcc6Stdenv.lib; {
+        meta = with lib; {
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;

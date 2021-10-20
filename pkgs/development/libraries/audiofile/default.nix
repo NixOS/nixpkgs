@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
+{ stdenv, lib, fetchurl, fetchpatch, alsa-lib, AudioUnit, CoreServices }:
 
 let
 
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   name = "audiofile-0.3.6";
 
   buildInputs =
-    stdenv.lib.optionals stdenv.isLinux [
-      alsaLib
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ] ++ lib.optionals stdenv.isDarwin [
       CoreServices AudioUnit
     ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   #
   # There might be a more sensible way to do this with autotools, but I am not
   # smart enough to discover it.
-  preBuild = lib.optionalString stdenv.targetPlatform.isStatic ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
     make -C libaudiofile $makeFlags
     sed -i "s/dependency_libs=.*/dependency_libs=' -lstdc++'/" libaudiofile/libaudiofile.la
   '';
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing audio files in various formats";
     homepage    = "http://www.68k.org/~michael/audiofile/";
     license     = licenses.lgpl21Plus;

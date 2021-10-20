@@ -1,24 +1,23 @@
-{ stdenv, buildPythonPackage , fetchPypi, pythonOlder
-, pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
+{ lib, buildPythonPackage , fetchPypi, pythonOlder
+, jupyter_core, pandas, ipywidgets, jupyter }:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "3.4.0";
+  version = "3.5.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f343ceb11add58d24cd320d69e410b111a56c98c9069ebb4ef89c608c4c1950d";
+    sha256 = "1c22877758cef97e81dbb665c83d31f7427bbc804a01503fa2845a35403c54ad";
   };
 
-  buildInputs = [ pytest ];
   propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
 
   # currently, recommonmark is broken on python3
   doCheck = false;
-  checkInputs = [ altair ];
+  pythonImportsCheck = [ "vega" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:

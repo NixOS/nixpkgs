@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/cstrahan/tree-sitter-nix",
+  "rev": "83ee5993560bf15854c69b77d92e34456f8fb655",
+  "date": "2021-07-21T20:36:40-05:00",
+  "path": "/nix/store/n5pq9gba570874akpwpvs052d7vyalhh-tree-sitter-nix",
+  "sha256": "03jhvyrsxq49smk9p2apjj839wmzjmrzy045wcxawz1g7xssp9pr",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

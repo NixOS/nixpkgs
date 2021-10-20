@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1f37qlw4nxdhlqlqzzb4j11gsv26abk2nk2qhbzj77kp4v2b125x";
   };
 
-  cargoSha256 = "0g5fjj677qzhw3nw7f3n5gghsj2y811bdclxpy8aq2n58gbwvhvc";
+  cargoSha256 = "1rjnparpcn8rnqy43xl4gg151p1a0zj9sna600hz01r41g1hgccq";
 
   buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
@@ -35,10 +35,11 @@ rustPlatform.buildRustPackage rec {
   # and i can't disable just this one
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
+    mainProgram = "tldr";
   };
 }

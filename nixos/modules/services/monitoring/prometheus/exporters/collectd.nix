@@ -20,7 +20,7 @@ in
       port = mkOption {
         type = types.int;
         default = 25826;
-        description = ''Network address on which to accept collectd binary network packets.'';
+        description = "Network address on which to accept collectd binary network packets.";
       };
 
       listenAddress = mkOption {
@@ -41,11 +41,11 @@ in
     };
 
     logFormat = mkOption {
-      type = types.str;
-      default = "logger:stderr";
-      example = "logger:syslog?appname=bob&local=7 or logger:stdout?json=true";
+      type = types.enum [ "logfmt" "json" ];
+      default = "logfmt";
+      example = "json";
       description = ''
-        Set the log target and format.
+        Set the log format.
       '';
     };
 
@@ -59,16 +59,16 @@ in
   };
   serviceOpts = let
     collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
-      -collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
-      -collectd.security-level ${cfg.collectdBinary.securityLevel} \
+      --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
+      --collectd.security-level ${cfg.collectdBinary.securityLevel} \
     '' else "";
   in {
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-collectd-exporter}/bin/collectd_exporter \
-          -log.format ${escapeShellArg cfg.logFormat} \
-          -log.level ${cfg.logLevel} \
-          -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --log.format ${escapeShellArg cfg.logFormat} \
+          --log.level ${cfg.logLevel} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           ${collectSettingsArgs} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

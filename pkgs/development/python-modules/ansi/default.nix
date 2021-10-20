@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ansi";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02sknsbx55r6nylznslmmzzkfi3rsw7akpyzi6f1bqvr2ila8p0f";
+    sha256 = "98e9b27c4bb187867a69480cbc63b843331622fec7e7d090873d806e1b5d8a80";
   };
 
   checkPhase = ''

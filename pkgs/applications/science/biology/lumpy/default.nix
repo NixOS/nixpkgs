@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, htslib, zlib, curl, openssl, samblaster, sambamba
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, curl, openssl, samblaster, sambamba
 , samtools, hexdump, python2Packages, which }:
 
 let
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     sed -i 's|/build/source|'$out'|' $out/bin/lumpyexpress.config
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Probabilistic structural variant caller";
     homepage = "https://github.com/arq5x/lumpy-sv";
     maintainers = with maintainers; [ jbedo ];

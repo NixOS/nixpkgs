@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg     = config.services.monero;
-  dataDir = "/var/lib/monero";
 
   listToConf = option: list:
     concatMapStrings (value: "${option}=${value}\n") list;
@@ -53,11 +52,19 @@ in
 
       enable = mkEnableOption "Monero node daemon";
 
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/monero";
+        description = ''
+          The directory where Monero stores its data files.
+        '';
+      };
+
       mining.enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether to mine moneroj.
+          Whether to mine monero.
         '';
       };
 
@@ -103,7 +110,7 @@ in
       };
 
       rpc.port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 18081;
         description = ''
           Port the RPC server will bind to.
@@ -198,15 +205,14 @@ in
   config = mkIf cfg.enable {
 
     users.users.monero = {
-      uid  = config.ids.uids.monero;
+      isSystemUser = true;
+      group = "monero";
       description = "Monero daemon user";
-      home = dataDir;
+      home = cfg.dataDir;
       createHome = true;
     };
 
-    users.groups.monero = {
-      gid = config.ids.gids.monero;
-    };
+    users.groups.monero = { };
 
     systemd.services.monero = {
       description = "monero daemon";

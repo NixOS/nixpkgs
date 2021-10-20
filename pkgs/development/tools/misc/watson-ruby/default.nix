@@ -1,10 +1,10 @@
-{ stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
+{ lib, stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
 stdenv.mkDerivation rec {
   pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "watson-ruby";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An inline issue manager";
     homepage    = "https://goosecode.com/watson/";
     license     = with licenses; mit;

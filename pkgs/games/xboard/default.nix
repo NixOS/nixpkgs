@@ -1,5 +1,5 @@
-{stdenv, fetchurl, libX11, xorgproto, libXt, libXaw, libSM, libICE, libXmu
-, libXext, gnuchess, texinfo, libXpm, pkgconfig, librsvg, cairo, pango
+{lib, stdenv, fetchurl, libX11, xorgproto, libXt, libXaw, libSM, libICE, libXmu
+, libXext, gnuchess, texinfo, libXpm, pkg-config, librsvg, cairo, pango
 , gtk2
 }:
 let
@@ -14,7 +14,7 @@ let
   };
   buildInputs = [
     libX11 xorgproto libXt libXaw libSM libICE libXmu
-    libXext gnuchess texinfo libXpm pkgconfig librsvg
+    libXext gnuchess texinfo libXpm pkg-config librsvg
     cairo pango gtk2
   ];
 in
@@ -26,10 +26,10 @@ stdenv.mkDerivation {
   };
   meta = {
     inherit (s) version;
-    description = ''GUI for chess engines'';
+    description = "GUI for chess engines";
     homepage = "https://www.gnu.org/software/xboard/";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
   };
 }

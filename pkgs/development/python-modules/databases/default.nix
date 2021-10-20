@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , sqlalchemy
 , aiocontextvars
-, isPy27
-, pytest
+, aiopg
+, pythonOlder
+, pytestCheckHook
+, pymysql
 , asyncpg
 , aiomysql
 , aiosqlite
@@ -12,38 +14,48 @@
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.2.6";
-  disabled = isPy27;
+  version = "0.5.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0cdb4vln4zdmqbbcj7711b81b2l64jg1miihqcg8gpi35v404h2q";
+    sha256 = "sha256-67ykx7HKGgRvJ+GRVEI/e2+x51kfHHFjh/iI4tY+6aE=";
   };
 
   propagatedBuildInputs = [
+    aiopg
+    aiomysql
+    aiosqlite
+    asyncpg
+    pymysql
     sqlalchemy
+  ] ++ lib.optionals (pythonOlder "3.7") [
     aiocontextvars
   ];
 
   checkInputs = [
-    pytest
-    asyncpg
-    aiomysql
-    aiosqlite
+    pytestCheckHook
   ];
 
-  # big chunk to tests depend on existing posgresql and mysql databases
-  # some tests are better than no tests
-  checkPhase = ''
-    pytest --ignore=tests/test_integration.py --ignore=tests/test_databases.py
-  '';
+  disabledTestPaths = [
+    # circular dependency on starlette
+    "tests/test_integration.py"
+    # TEST_DATABASE_URLS is not set.
+    "tests/test_databases.py"
+    "tests/test_connection_options.py"
+  ];
+
+  pythonImportsCheck = [
+    "databases"
+  ];
 
   meta = with lib; {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

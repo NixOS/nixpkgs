@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''fiveam'';
-  version = ''20200925-git'';
+  baseName = "fiveam";
+  version = "20200925-git";
 
   parasites = [ "fiveam/test" ];
 
-  description = ''A simple regression testing framework'';
+  description = "A simple regression testing framework";
 
   deps = [ args."alexandria" args."net_dot_didierverna_dot_asdf-flv" args."trivial-backtrace" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fiveam/2020-09-25/fiveam-20200925-git.tgz'';
-    sha256 = ''0j9dzjs4prlx33f5idbcic4amx2mcgnjcyrpc3dd4b7lrw426l0d'';
+    url = "http://beta.quicklisp.org/archive/fiveam/2020-09-25/fiveam-20200925-git.tgz";
+    sha256 = "0j9dzjs4prlx33f5idbcic4amx2mcgnjcyrpc3dd4b7lrw426l0d";
   };
 
   packageName = "fiveam";

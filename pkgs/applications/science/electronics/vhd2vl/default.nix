@@ -1,9 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
 , flex
 , verilog
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "17va2pil4938j8c93anhy45zzgnvq3k71a7glj02synfrsv6fs8n";
   };
 
-  patches = stdenv.lib.optionals (!stdenv.isAarch64) [
+  patches = lib.optionals (!stdenv.isAarch64) [
     # fix build with verilog 11.0 - https://github.com/ldoolitt/vhd2vl/pull/15
     # for some strange reason, this is not needed for aarch64
     (fetchpatch {
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     flex
+    which
   ];
 
   buildInputs = [
@@ -36,11 +38,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp src/vhd2vl $out/bin/
+    runHook preInstall
+    install -D -m755 src/vhd2vl $out/bin/vdh2vl
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VHDL to Verilog converter";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = licenses.gpl2Plus;

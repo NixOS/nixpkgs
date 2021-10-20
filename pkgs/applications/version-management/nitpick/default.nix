@@ -1,6 +1,6 @@
 { fetchFromGitHub
 , buildPythonPackage
-, stdenv
+, lib
 , isPy27
 }:
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   format = "other";
   disabled = !isPy27;
-  
+
   src = fetchFromGitHub {
     owner = "travisb-ca";
     repo = pname;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   installPhase = ''
     mkdir -p $out/share/src
     install -m 755 -t $out/share/src nitpick.py
-  
+
     mkdir -p $out/bin
     ln -s $out/share/src/nitpick.py $out/bin/nitpick
   '';
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       follow the code via whatever VCS or distribution mechanism.
     '';
     homepage = "http://travisbrown.ca/projects/nitpick/docs/nitpick.html";
-    license = with stdenv.lib.licenses; gpl2;
+    license = with lib.licenses; gpl2;
     maintainers = [];
   };
 }

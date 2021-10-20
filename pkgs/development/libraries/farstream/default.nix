@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , libnice
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , gstreamer
 , gst-plugins-base
@@ -14,12 +14,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.2.8";
+  pname = "farstream";
+  version = "0.2.8";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
+    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${pname}-${version}.tar.gz";
     sha256 = "0249ncd20x5mf884fd8bw75c3118b9fdml837v4fib349xmrqfrb";
   };
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gobject-introspection
   ];
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     gst-libav
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = platforms.linux;

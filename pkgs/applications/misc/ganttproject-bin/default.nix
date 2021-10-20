@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchzip, makeDesktopItem, makeWrapper
 , jre
 }:
 
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
-
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = let
 
@@ -47,7 +45,7 @@ stdenv.mkDerivation rec {
     cp -rv "${desktopItem}/share/applications" "$out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project scheduling and management";
     homepage = "https://www.ganttproject.biz/";
     downloadPage = "https://www.ganttproject.biz/download";

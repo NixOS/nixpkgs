@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libevent, c-ares, pkg-config }:
+{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent openssl c-ares ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pgbouncer.github.io";
     description = "Lightweight connection pooler for PostgreSQL";
     license = licenses.isc;

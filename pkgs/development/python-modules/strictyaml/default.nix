@@ -7,14 +7,19 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.1.1";
+  version = "1.5.0";
   pname = "strictyaml";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea2bb97aacc12fff7df11bd4cb4ae64b1418a0311fbd1611445cc59dc650bdd3";
+    sha256 = "273a6382cc98a404d20779351cd5bb12e746397fbe18a8e9ccec4ae3c0ffa0e2";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "ruamel.yaml==0.17.4" "ruamel.yaml"
+  '';
 
   propagatedBuildInputs = [ ruamel_yaml python-dateutil ];
 

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc
+{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "901";
-  jtype = "release-f";
+  version = "902";
+  jtype = "release-b";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "1776021m0j1aanzwg60by83n53pw7i6afd5wplfzczwk8bywax4p";
+    sha256 = "0j67vgikqflwjqacsdicasvyv1k54s2c8vjgwmf0ix7l41p4xqz0";
     name = "jsource";
   };
 
@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Causes build failure due to warning
-  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
+  # Causes build failure due to warning
+  # https://github.com/jsoftware/jsource/issues/16
+  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
 
   buildPhase = ''
     export SOURCE_DIR=$(pwd)
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
     cp -r $JLIB/bin "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "J programming language, an ASCII-based APL successor";
     maintainers = with maintainers; [ raskin synthetica ];
     platforms = with platforms; linux ++ darwin;

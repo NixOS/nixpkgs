@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
+{ lib, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.34.0";
+  version = "1.41.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db5a6f0130256d534cbe35eab37d37a448d96f4fd736e5051c6be1aee49cea1d";
+    sha256 = "3891b1df82369acbc8451d4952cd20755f49a82398dce62437511ad17b47290e";
   };
 
   outputs = [ "out" "dev" ];
@@ -18,7 +18,9 @@ buildPythonPackage rec {
   # no tests in the package
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "grpc_tools" ];
+
+  meta = with lib; {
     description = "Protobuf code generator for gRPC";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";

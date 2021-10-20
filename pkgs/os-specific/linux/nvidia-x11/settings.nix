@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchFromGitHub, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+{ stdenv, lib, fetchFromGitHub, pkg-config, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -24,7 +24,7 @@ let
       cd src/libXNVCtrl
     '';
 
-    makeFlags = [
+    makeFlags = nvidia_x11.makeFlags ++ [
       "OUTPUTDIR=." # src/libXNVCtrl
     ];
 
@@ -45,13 +45,13 @@ stdenv.mkDerivation {
   version = nvidia_x11.settingsVersion;
   inherit src;
 
-  nativeBuildInputs = [ pkgconfig m4 ];
+  nativeBuildInputs = [ pkg-config m4 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
+  makeFlags = nvidia_x11.makeFlags ++ [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   postPatch = lib.optionalString nvidia_x11.useProfiles ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   preBuild = ''
     if [ -e src/libXNVCtrl/libXNVCtrl.a ]; then
       ( cd src/libXNVCtrl
-        make
+        make $makeFlags
       )
     fi
   '';
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;

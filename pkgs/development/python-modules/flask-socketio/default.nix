@@ -1,18 +1,21 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, flask
-, python-socketio
 , coverage
+, fetchFromGitHub
+, flask
+, pytestCheckHook
+, python-socketio
 }:
 
 buildPythonPackage rec {
   pname = "Flask-SocketIO";
-  version = "4.3.2";
+  version = "5.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "37001b3507f2fa5d1c8d9c8e211dd88da6c5286ff0ebce16f27cb1b467d25d68";
+  src = fetchFromGitHub {
+    owner = "miguelgrinberg";
+    repo = "Flask-SocketIO";
+    rev = "v${version}";
+    sha256 = "01zf6cy95pgc4flgn0740z2my90l7rxwliahp6rb2xbp7rh32cng";
   };
 
   propagatedBuildInputs = [
@@ -20,9 +23,12 @@ buildPythonPackage rec {
     python-socketio
   ];
 
-  checkInputs = [ coverage ];
-  # tests only on github, but lates release there is not tagged
-  doCheck = false;
+  checkInputs = [
+    coverage
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "flask_socketio" ];
 
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";

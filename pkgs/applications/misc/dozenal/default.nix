@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
+{ lib, stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
 
 stdenv.mkDerivation rec {
   version = "12010904";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
          Defaults to dozenal Roman numerals.
     '';
     homepage = "https://github.com/dgoodmaniii/dozenal/";
-    maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
-    license = stdenv.lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ CharlesHD ];
+    license = lib.licenses.gpl3;
   };
 }

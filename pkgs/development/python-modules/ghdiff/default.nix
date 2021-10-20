@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , zope_testrunner, six, chardet}:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   checkInputs = [ zope_testrunner ];
   propagatedBuildInputs = [ six chardet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage =  "https://github.com/kilink/ghdiff";
     license = licenses.mit;
     description = "Generate Github-style HTML for unified diffs.";

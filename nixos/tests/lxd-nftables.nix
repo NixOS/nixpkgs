@@ -8,7 +8,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "lxd-nftables";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ patryk27 ];
   };
 

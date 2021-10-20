@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, zlib }:
+{ lib, stdenv, fetchurl, kernel, kmod, zlib }:
 
 let
   version = "3.1";
@@ -12,10 +12,16 @@ stdenv.mkDerivation {
     sha256 = "0qjw8glfdmngfvbn1w63q128vxdz2jlabw13y140ga9i5ibl6vvk";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [ kmod zlib ];
 
   hardeningDisable = [ "pic" ];
 
+  patches = [
+    # fix paths in netatop.service
+    ./fix-paths.patch
+    # Specify PIDFile in /run, not /var/run to silence systemd warning
+    ./netatop.service.patch
+  ];
   preConfigure = ''
     patchShebangs mkversion
     sed -i -e 's,^KERNDIR.*,KERNDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build,' \
@@ -24,20 +30,22 @@ stdenv.mkDerivation {
         -e s,/usr,$out, \
         -e /init.d/d \
         -e /depmod/d \
-        -e /netatop.service/d \
+        -e s,/lib/systemd,$out/lib/systemd, \
         Makefile
+
+    kmod=${kmod} substituteAllInPlace netatop.service
   '';
 
   preInstall = ''
-    mkdir -p $out/bin $out/sbin $out/share/man/man{4,8}
+    mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/extra
   '';
 
   meta = {
     description = "Network monitoring module for atop";
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ viric ];
   };
 }

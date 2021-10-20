@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , unzip
 }:
 
 stdenv.mkDerivation rec {
-  name = "smos-${version}";
+  pname = "smos";
   version = "0.1.0";
 
   src = fetchurl {
@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:07yavk7xl92yjwwjdig90yq421n8ldv4fjfw7izd4hfpzw849a12";
   };
 
-  phases = [ "unpackPhase" ];
+  dontInstall = true;
+
   unpackCmd = "${unzip}/bin/unzip -d $out $curSrc";
   sourceRoot = ".";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A comprehensive self-management system";
     homepage = https://smos.online;
     license = licenses.mit;

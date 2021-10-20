@@ -1,54 +1,48 @@
 { base58
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , lib
 , morphys
-, pytest
-, pytestcov
-, pytestrunner
+, pytest-runner
+, pytestCheckHook
+, pythonOlder
 , six
-, variants
 , varint
 }:
 
 buildPythonPackage rec {
   pname = "py-multihash";
-  version = "1.0.0";
+  version = "2.0.1";
+  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07qglrbgcb8sr9msqw2v7dqj9s4rs6nyvhdnx02i5w6xx5ibzi3z";
+    sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
   nativeBuildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   propagatedBuildInputs = [
     base58
     morphys
     six
-    variants
     varint
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "multihash" ];
-
-  disabled = isPy27;
 
   meta = with lib; {
     description = "Self describing hashes - for future proofing";
     homepage = "https://github.com/multiformats/py-multihash";
     license = licenses.mit;
     maintainers = with maintainers; [ rakesh4g ];
-    broken = true; # no longer compatible with base58, no updates in 5 years. Added 2020-11-05
   };
 }

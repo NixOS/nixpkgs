@@ -1,18 +1,19 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
+{ lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
   unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.46";
+  version = "2.48.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "0zyclydgyg8nhwxrzw7x4f82975cqdmp12py33k6sballx6jhgiy";
+    sha256 = "sha256-HkAgKPvf8TUgUlgsGWVgjuYJaRPGi8obOFQEtmzDtLE=";
   };
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip makeWrapper icoutils ];
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ icoutils ];
 
   patches = [
     (substituteAll {
@@ -69,7 +70,7 @@ with builtins; buildDotnetPackage rec {
     desktopName = "Keepass";
     genericName = "Password manager";
     categories = "Utility;";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "application/x-keepass2"
       ""
     ];
@@ -83,9 +84,9 @@ with builtins; buildDotnetPackage rec {
   # after loading. It is brought into plugins bin/ directory using
   # buildEnv in the plugin derivation. Wrapper below makes sure it
   # is found and does not pollute output path.
-  binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
+  binPaths = lib.concatStringsSep ":" (map (x: x + "/bin") plugins);
 
-  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   postInstall =
   let
@@ -111,8 +112,8 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
-    platforms = with stdenv.lib.platforms; all;
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ amorsillo obadz ];
+    platforms = with lib.platforms; all;
+    license = lib.licenses.gpl2;
   };
 }

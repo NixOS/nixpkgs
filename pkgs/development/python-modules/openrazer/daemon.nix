@@ -1,4 +1,5 @@
-{ buildPythonApplication
+{ lib
+, buildPythonApplication
 , isPy3k
 , daemonize
 , dbus-python
@@ -10,12 +11,11 @@
 , pygobject3
 , pyudev
 , setproctitle
-, stdenv
 , wrapGAppsHook
 }:
 
 let
-  common = import ./common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
 buildPythonApplication (common // rec {
   pname = "openrazer_daemon";
@@ -37,6 +37,10 @@ buildPythonApplication (common // rec {
     pyudev
     setproctitle
   ];
+
+  postPatch = ''
+    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+  '';
 
   postBuild = ''
     DESTDIR="$out" PREFIX="" make install manpages

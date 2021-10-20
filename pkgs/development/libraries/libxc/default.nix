@@ -1,32 +1,34 @@
-{ stdenv, fetchurl, gfortran, perl }:
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl }:
 
-let
-  version = "4.3.4";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libxc";
-  inherit version;
-  src = fetchurl {
-    url = "http://www.tddft.org/programs/octopus/down.php?file=libxc/${version}/libxc-${version}.tar.gz";
-    sha256 = "0dw356dfwn2bwjdfwwi4h0kimm69aql2f4yk9f2kk4q7qpfkgvm8";
+  version = "5.1.6";
+
+  src = fetchFromGitLab {
+    owner = "libxc";
+    repo = "libxc";
+    rev = version;
+    sha256 = "07iljmv737kx24kd33x9ndf5l854mwslg9x2psqm12k07jmq9wjw";
   };
 
-  buildInputs = [ gfortran ];
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
     patchShebangs ./
   '';
 
-  configureFlags = [ "--enable-shared" ];
+  cmakeFlags = [ "-DENABLE_FORTRAN=ON" "-DBUILD_SHARED_LIBS=ON" ];
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$(pwd)
+  '';
 
   doCheck = true;
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library of exchange-correlation functionals for density-functional theory";
-    homepage = "https://octopus-code.org/wiki/Libxc";
-    license = licenses.lgpl3;
+    homepage = "https://www.tddft.org/programs/Libxc/";
+    license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markuskowa ];
   };

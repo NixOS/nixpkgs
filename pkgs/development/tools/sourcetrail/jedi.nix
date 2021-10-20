@@ -1,6 +1,6 @@
 # Taken from a past commit of nixpkgs
 
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytest-cov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
   };
 
-  checkInputs = [ pytest glibcLocales tox pytestcov ];
+  checkInputs = [ pytest glibcLocales tox pytest-cov ];
 
   propagatedBuildInputs = [ parso ];
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # tox required for tests: https://github.com/davidhalter/jedi/issues/808
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;

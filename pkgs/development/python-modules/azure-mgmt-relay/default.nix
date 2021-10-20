@@ -5,22 +5,24 @@
 , isPy3k
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-relay";
-  version = "0.2.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0s5z4cil750wn770m0hdzcrpshj4bj1bglkkvxdx9l9054dk9s57";
+    sha256 = "c93b7550e64b6734bf23ce57ca974a3ea929b734c58d1fe3669728c4fd2d2eb3";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
@@ -28,6 +30,7 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.mgmt.relay" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Relay Client Library";

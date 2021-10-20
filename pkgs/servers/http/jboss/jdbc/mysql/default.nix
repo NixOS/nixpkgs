@@ -1,13 +1,14 @@
-{ stdenv, mysql_jdbc }:
+{ lib, stdenv, mysql_jdbc }:
 
 stdenv.mkDerivation {
-  name = "jboss-mysql-jdbc";
+  pname = "jboss-mysql-jdbc";
 
   builder = ./builder.sh;
 
   inherit mysql_jdbc;
+  version = mysql_jdbc.version;
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

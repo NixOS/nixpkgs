@@ -6,6 +6,7 @@
 , jinja2
 , pylint
 , pyyaml
+, six
 }:
 
 buildPythonApplication rec {
@@ -21,7 +22,7 @@ buildPythonApplication rec {
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };
 
-  propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml ];
+  propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml six ];
 
   doCheck = false;
 

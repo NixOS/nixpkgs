@@ -7,17 +7,16 @@
 , nbformat
 , sphinx
 , traitlets
-, python
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.8.0";
+  version = "0.8.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "369c16fe93af14c878d61fb3e81d838196fb35b27deade2cd7b95efe1fe56ea0";
+    sha256 = "ff91b5b14ceb1a9d44193b5fc3dd3617e7b8ab59c788f7710049ce5faff2750c";
   };
 
   propagatedBuildInputs = [
@@ -29,9 +28,13 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m nbsphinx
-  '';
+  # The package has not tests
+  doCheck = false;
+
+  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  pythonImportsCheck = [
+    "nbsphinx"
+  ];
 
   disabled = !isPy3k;
 

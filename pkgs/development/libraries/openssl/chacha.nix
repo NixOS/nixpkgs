@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, perl, zlib
+{ lib, stdenv, fetchFromGitHub, perl, zlib
 , withCryptodev ? false, cryptodev
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation {
   pname = "openssl-chacha";
   version = "2016-08-22";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   setOutputFlags = false;
 
   nativeBuildInputs = [ perl zlib ];
-  buildInputs = stdenv.lib.optional withCryptodev cryptodev;
+  buildInputs = lib.optional withCryptodev cryptodev;
 
   configureScript = "./config";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     "enable-gost"
     "--libdir=lib"
     "--openssldir=etc/ssl"
-  ] ++ stdenv.lib.optionals withCryptodev [
+  ] ++ lib.optionals withCryptodev [
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     homepage = "https://www.openssl.org/";
     description = "A cryptographic library that implements the SSL and TLS protocols";
     platforms = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.cstrahan ];
+    maintainers = [ lib.maintainers.cstrahan ];
     license = licenses.openssl;
     priority = 10; # resolves collision with ‘man-pages’
   };

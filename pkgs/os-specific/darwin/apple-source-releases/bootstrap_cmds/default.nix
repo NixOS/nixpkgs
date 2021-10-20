@@ -1,29 +1,27 @@
-{ stdenv, appleDerivation, yacc, flex }:
+{ lib, appleDerivation, stdenv, bison, flex }:
+
+let
+
+  # Hard to get CC to pull this off without infinite recursion
+  targetTargetPrefix = lib.optionalString
+    (with stdenv; hostPlatform != targetPlatform)
+    (stdenv.targetPlatform.config + "-");
+
+in
 
 appleDerivation {
-  nativeBuildInputs = [ yacc flex ];
+  nativeBuildInputs = [ bison flex ];
 
   buildPhase = ''
     cd migcom.tproj
+
+    # redundant file, don't know why apple not removing it.
+    rm handler.c
+
     yacc -d parser.y
     flex --header-file=lexxer.yy.h -o lexxer.yy.c lexxer.l
 
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o error.o error.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o global.o global.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o handler.o header.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o header.o header.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o mig.o mig.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o routine.o routine.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o server.o server.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o statement.o statement.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o string.o string.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o type.o type.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o user.o user.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o utils.o utils.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o lexxer.yy.o lexxer.yy.c
-    cc -Os -pipe -DMIG_VERSION="" -Wall -mdynamic-no-pic -I. -c -o y.tab.o y.tab.c
-
-    cc -dead_strip -o migcom error.o global.o header.o mig.o routine.o server.o statement.o string.o type.o user.o utils.o lexxer.yy.o y.tab.o
+    $CC -std=gnu99 -Os -dead_strip -DMIG_VERSION=\"$pname-$version\" -I. -o migcom *.c
   '';
 
   installPhase = ''
@@ -37,13 +35,9 @@ appleDerivation {
     cp migcom.1 $out/share/man/man1
 
     substituteInPlace $out/bin/mig \
-      --replace 'arch=`/usr/bin/arch`' 'arch=i386' \
+      --replace 'arch=`/usr/bin/arch`' 'arch=${stdenv.targetPlatform.darwinArch}' \
       --replace '/usr/bin/' "" \
       --replace '/bin/rmdir' "rmdir" \
-      --replace 'C=''${MIGCC}' "C=cc"
+      --replace 'C=''${MIGCC}' "C=${targetTargetPrefix}cc"
   '';
-
-  meta = {
-    platforms = stdenv.lib.platforms.darwin;
-  };
 }

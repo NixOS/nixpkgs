@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
-, pkgconfig
+, pkg-config
 , cmake
 , llvm
 , emscripten
@@ -16,21 +16,21 @@
 , which
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
-  version = "unstable-2020-08-27";
+  version = "2.30.5";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = "c10f316fa90f338e248787ebf55e3795c3a0d70e";
-    sha256 = "068pm04ddafbsj2r8akdpqyzb0m8mp9ql0rgi83hcqs4ndr8v7sb";
+    rev = version;
+    sha256 = "0cs52w4rwaj5d8pjak4cxsg02sxvx4y07592nc3ck81clqjmszmm";
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
@@ -45,7 +45,7 @@ let
 
     inherit src;
 
-    nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
+    nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
     buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
@@ -168,17 +168,22 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ pkg-config makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
+      libPath = lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 
         # export parts of the build environment
         for script in "$out"/bin/*; do
+          # e.g. NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+          nix_cc_wrapper_target_host="$(printenv | grep ^NIX_CC_WRAPPER_TARGET_HOST | sed 's/=.*//')"
+
+          # e.g. NIX_BINTOOLS_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+          nix_bintools_wrapper_target_host="$(printenv | grep ^NIX_BINTOOLS_WRAPPER_TARGET_HOST | sed 's/=.*//')"
+
           wrapProgram "$script" \
             --set FAUSTLDDIR "${faust}/lib" \
             --set FAUSTLIB "${faust}/share/faust" \
@@ -188,7 +193,9 @@ let
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
             --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
             --set NIX_LDFLAGS "$NIX_LDFLAGS -lpthread" \
-            --prefix LIBRARY_PATH $libPath
+            --set "$nix_cc_wrapper_target_host" "''${!nix_cc_wrapper_target_host}" \
+            --set "$nix_bintools_wrapper_target_host" "''${!nix_bintools_wrapper_target_host}" \
+            --prefix LIBRARY_PATH "$libPath"
         done
       '';
     });
@@ -209,7 +216,7 @@ let
 
     in stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       postFixup = ''
         for script in "$out"/bin/*; do

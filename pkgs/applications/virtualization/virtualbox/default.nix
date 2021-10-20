@@ -1,8 +1,8 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
+, alsa-lib, curl, libvpx, nettools, dbus, substituteAll
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -16,44 +16,34 @@
 , enable32bitGuests ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   python = python3;
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.16";
-
-  iasl' = iasl.overrideAttrs (old: rec {
-    inherit (old) pname;
-    version = "20190108";
-    src = fetchurl {
-      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
-    };
-    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
-  });
+  version = "6.1.26";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "49c1990da16d8a3d5bda8cdb961ec8195a901e67e4c79aea44c1521a5fc2f9f1";
+    sha256 = "0212602eea878d6c9fd7f4a3e0182da3e4505f31d25f5539fb8f7b1fbe366195";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ]
+  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
+    [ acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+      libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
@@ -82,7 +72,7 @@ in stdenv.mkDerivation {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+      s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
     export USER=nix
     set +x
@@ -104,6 +94,11 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+    # Temporary workaround for broken build
+    # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
+    ./fix-configure-pkgconfig-qt.patch
+    # https://github.com/NixOS/nixpkgs/issues/123851
+    ./fix-audio-driver-loading.patch
   ];
 
   postPatch = ''
@@ -205,6 +200,11 @@ in stdenv.mkDerivation {
         mkdir -p $out/share/icons/hicolor/$size/apps
         ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
       done
+    ''}
+
+    # https://github.com/NixOS/nixpkgs/issues/137104
+    ${optionalString (enableHardening || headless) ''
+      rm $libexec/components/VBoxREM.so
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"

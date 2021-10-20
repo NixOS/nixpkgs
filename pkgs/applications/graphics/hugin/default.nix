@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig, fetchpatch
+{ lib, stdenv, cmake, fetchurl, gnumake, makeWrapper, pkg-config, fetchpatch
 , autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
 , glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
 , libXmu, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes build with exiv2 0.27.1
     (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/hugin-exiv2-0.27.1.patch?h=packages/hugin";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/0467d8ba362b9c196e4c1dc4be7de0c1b336335b/hugin/trunk/hugin-exiv2-0.27.1.patch";
       sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
     })
   ];
@@ -26,12 +26,10 @@ stdenv.mkDerivation rec {
     wxGTK zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
-
-  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hugin.sourceforge.net/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;

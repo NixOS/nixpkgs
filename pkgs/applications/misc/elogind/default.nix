@@ -8,7 +8,7 @@
 , getent
 , libcap
 , gettext
-, pkgconfig
+, pkg-config
 , udev
 , eudev
 , libxslt
@@ -25,24 +25,24 @@
 , enableSystemd ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";
-  version = "243.7";
+  version = "246.10";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cihdf7blhncm2359qxli24j9l3dkn15gjys5vpjwny80zlym5ma";
+    sha256 = "sha256-+Nv6FL9Yjmfxs24+2mUTP//wbjzGUq4ftgJLfuEqBJg=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     m4
-    pkgconfig
+    pkg-config
     gperf
     getent
     libcap

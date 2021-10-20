@@ -191,9 +191,8 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" "systemd-udev-settle.service" ];
+        wants = [ "network.target" ];
         before = [ "network-online.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         restartTriggers = [ exitHook ];
 

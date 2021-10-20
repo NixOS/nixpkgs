@@ -1,21 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, python3, vulkan-loader,
- vulkan-headers, glslang, pkgconfig, xlibsWrapper, libxcb,
- libXrandr, wayland }:
+{ stdenv, lib, fetchFromGitHub, cmake, glslang, libX11, libxcb
+, libXrandr, vulkan-headers, vulkan-loader, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.2.141.0";
+  version = "1.2.182.0";
 
-  src = fetchFromGitHub {
-    owner = "KhronosGroup";
-    repo = "Vulkan-Tools";
-    rev = "sdk-${version}";
-    sha256 = "1ch56ihm7rmilipfyc4i4ww7l6i20fb3qikkpm1ch43kzn42zjaw";
-  };
+  # It's not strictly necessary to have matching versions here, however
+  # since we're using the SDK version we may as well be consistent with
+  # the rest of nixpkgs.
+  src = (assert version == vulkan-headers.version;
+    fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "Vulkan-Tools";
+      rev = "sdk-${version}";
+      sha256 = "028l2l7jx4443k8207q8jmjq1mnnm9kgyl2417jrkrvylcbv8ji9";
+    });
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ glslang libX11 libxcb libXrandr vulkan-headers vulkan-loader wayland ];
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 
@@ -24,12 +26,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
-    "-DGLSLANG_INSTALL_DIR=${glslang}"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
+    # Hide dev warnings that are useless for packaging
+    "-Wno-dev"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist

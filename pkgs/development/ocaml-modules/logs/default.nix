@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, topkg, result, lwt, cmdliner, fmt }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
+, topkg, result, lwt, cmdliner, fmt
+, js_of_ocaml
+, jsooSupport ? true
+}:
 let
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "logs is not available for OCaml ${ocaml.version}"
 else
 
@@ -19,14 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg fmt cmdliner lwt ];
+  buildInputs = [ findlib topkg fmt cmdliner lwt ]
+    ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml false";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logging infrastructure for OCaml";
     homepage = webpage;
     inherit (ocaml.meta) platforms;

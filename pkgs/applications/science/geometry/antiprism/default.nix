@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , libX11
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libX11 libGLU libGL.dev freeglut.dev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.antiprism.com";
     description = "A collection of programs for generating, manipulating, transforming and viewing polyhedra";
     license = with licenses; [ mit ];

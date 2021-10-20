@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ocaml, makeWrapper, ncurses }:
+{ fetchurl, lib, stdenv, ocaml, makeWrapper, ncurses }:
 
 let version = "0.92"; in
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./ocaml-includes.patch ./ocaml-3.12.patch ];
-  
+
   buildInputs = [ ocaml ncurses ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,6 +42,6 @@ stdenv.mkDerivation {
     license = "non-commercial";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

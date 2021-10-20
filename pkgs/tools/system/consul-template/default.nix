@@ -1,24 +1,27 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "consul-template";
-  version = "0.19.4";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/hashicorp/consul-template";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "hashicorp";
     repo = "consul-template";
-    sha256 = "06agjzpax45gw7s9b69cz9w523nx7ksikqcg0z0vipwrp7pwrydd";
+    rev = "v${version}";
+    sha256 = "sha256-XzsewkHaFIq1kvFDHIsnhfhtLPLFRin7YrhiZuF1+co=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = "sha256-/4ZY4YRGsUSL2e6uYPJ9tWEvXDjU5/L56yf49pUkJ2E=";
+
+  # consul-template tests depend on vault and consul services running to
+  # execute tests so we skip them here
+  doCheck = false;
+
+  meta = with lib; {
     homepage = "https://github.com/hashicorp/consul-template/";
     description = "Generic template rendering and notifications with Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pradeepchhetri ];
+    maintainers = with maintainers; [ cpcloud pradeepchhetri ];
   };
 }

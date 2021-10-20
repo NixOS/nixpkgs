@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, ib-tws, xpra }:
+{ lib, stdenv, fetchurl, unzip, jdk, ib-tws, xpra }:
 
 stdenv.mkDerivation rec {
   version = "2.14.0";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ unzip jdk ib-tws ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ jdk ib-tws ];
 
   installPhase = ''
     mkdir -p $out $out/bin $out/etc/ib/controller $out/share/IBController
@@ -152,7 +153,7 @@ stdenv.mkDerivation rec {
     '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automation Controller for the Trader Work Station of Interactive Brokers";
     homepage = "https://github.com/ib-controller/ib-controller";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "kona";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   preInstall = ''mkdir -p "$out/bin"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interpreter of K, APL-like programming language";
     homepage = "https://github.com/kevinlawler/kona/";
     maintainers = with maintainers; [ raskin ];

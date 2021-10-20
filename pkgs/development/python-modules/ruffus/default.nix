@@ -4,7 +4,7 @@
 , hostname
 , pytest
 , python
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "ruffus" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Light-weight Python Computational Pipeline Management";
     homepage = "http://www.ruffus.org.uk";
     license = licenses.mit;

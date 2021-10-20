@@ -1,51 +1,96 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, uthash, asciidoc, docbook_xml_dtd_45
-, docbook_xsl, libxslt, libxml2, makeWrapper, meson, ninja
-, xorgproto, libxcb ,xcbutilrenderutil, xcbutilimage, pixman, libev
-, dbus, libconfig, libdrm, libGL, pcre, libX11
-, libXinerama, libXext, xwininfo, libxdg_basedir }:
+{ asciidoc
+, dbus
+, docbook_xml_dtd_45
+, docbook_xsl
+, fetchFromGitHub
+, lib
+, libconfig
+, libdrm
+, libev
+, libGL
+, libX11
+, libxcb
+, libxdg_basedir
+, libXext
+, libXinerama
+, libxml2
+, libxslt
+, makeWrapper
+, meson
+, ninja
+, pcre
+, pixman
+, pkg-config
+, stdenv
+, uthash
+, xcbutilimage
+, xcbutilrenderutil
+, xorgproto
+, xwininfo
+, withDebug ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "picom";
   version = "8.2";
 
   src = fetchFromGitHub {
-    owner  = "yshui";
-    repo   = "picom";
-    rev    = "v${version}";
+    owner = "yshui";
+    repo = "picom";
+    rev = "v${version}";
     sha256 = "0gjksayz2xpmgglvw17ppsan2imrd1fijs579kbf27xwp503xgfl";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    meson ninja
-    pkgconfig
-    uthash
     asciidoc
     docbook_xml_dtd_45
     docbook_xsl
     makeWrapper
+    meson
+    ninja
+    pkg-config
+    uthash
   ];
 
   buildInputs = [
-    dbus libX11 libXext
-    xorgproto
-    libXinerama libdrm pcre libxml2 libxslt libconfig libGL
-    libxcb xcbutilrenderutil xcbutilimage
-    pixman libev
+    dbus
+    libconfig
+    libdrm
+    libev
+    libGL
+    libX11
+    libxcb
     libxdg_basedir
+    libXext
+    libXinerama
+    libxml2
+    libxslt
+    pcre
+    pixman
+    xcbutilimage
+    xcbutilrenderutil
+    xorgproto
   ];
 
-  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
+  # Use "debugoptimized" instead of "debug" so perhaps picom works better in
+  # normal usage too, not just temporary debugging.
+  mesonBuildType = if withDebug then "debugoptimized" else "release";
+  dontStrip = withDebug;
 
   mesonFlags = [
-    "-Dbuild_docs=true"
+    "-Dwith_docs=true"
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  # In debug mode, also copy src directory to store. If you then run `gdb picom`
+  # in the bin directory of picom store path, gdb finds the source files.
   postInstall = ''
     wrapProgram $out/bin/picom-trans \
       --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
+  '' + lib.optionalString withDebug ''
+    cp -r ../src $out/
   '';
 
   meta = with lib; {
@@ -56,10 +101,17 @@ stdenv.mkDerivation rec {
       extensions. It enables basic eye-candy effects. This fork adds
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
+
+      The package can be installed in debug mode as:
+
+        picom.override { withDebug = true; }
+
+      For gdb to find the source files, you need to run gdb in the bin directory
+      of picom package in the nix store.
     '';
     license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [ ertes enzime twey ];
+    maintainers = with maintainers; [ ertes twey thiagokokada ];
     platforms = platforms.linux;
   };
 }

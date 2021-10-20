@@ -12,17 +12,15 @@ let
 
 in
 
-{ # We combine legacy `system` and `platform` into `localSystem`, if
-  # `localSystem` was not passed. Strictly speaking, this is pure desugar, but
-  # it is most convient to do so before the impure `localSystem.system` default,
-  # so we do it now.
-  localSystem ? builtins.intersectAttrs { system = null; platform = null; } args
+{ # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
+  # If neither is passed, assume we are building packages on the current
+  # (build, in GNU Autotools parlance) platform.
+  localSystem ? { system = args.system or builtins.currentSystem; }
 
-, # These are needed only because nix's `--arg` command-line logic doesn't work
-  # with unnamed parameters allowed by ...
-  system ? localSystem.system
-, platform ? localSystem.platform
-, crossSystem ? null
+# These are needed only because nix's `--arg` command-line logic doesn't work
+# with unnamed parameters allowed by ...
+, system ? localSystem.system
+, crossSystem ? localSystem
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
@@ -77,15 +75,11 @@ in
 , ...
 } @ args:
 
-# If `localSystem` was explicitly passed, legacy `system` and `platform` should
-# not be passed.
-assert args ? localSystem -> !(args ? system || args ? platform);
+# If `localSystem` was explicitly passed, legacy `system` should
+# not be passed, and vice-versa.
+assert args ? localSystem -> !(args ? system);
+assert args ? system -> !(args ? localSystem);
 
-import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
-  inherit config overlays crossSystem crossOverlays;
-  # Fallback: Assume we are building packages on the current (build, in GNU
-  # Autotools parlance) system.
-  localSystem = if builtins.isString localSystem then localSystem
-                else (if args ? localSystem then {}
-                      else { system = builtins.currentSystem; }) // localSystem;
+import ./. (builtins.removeAttrs args [ "system" ] // {
+  inherit config overlays localSystem;
 })

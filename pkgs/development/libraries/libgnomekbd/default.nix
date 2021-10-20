@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
@@ -7,18 +7,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0y962ykn3rr9gylj0pwpww7bi20lmhvsw6qvxs5bisbn2mih5jpp";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
   };
 
   nativeBuildInputs = [
     file
     intltool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -29,7 +25,14 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = with lib; {
     description = "Keyboard management library";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

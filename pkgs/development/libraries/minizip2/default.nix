@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, zlib, bzip2, xz, zstd, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, bzip2, xz, zstd, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "minizip";
-  version = "2.10.4";
+  version = "2.10.6";
 
   src = fetchFromGitHub {
     owner = "nmoinvaz";
     repo = pname;
     rev = version;
-    sha256 = "15bbagngvm738prkzv7lfs64pn4pq7jkhwz571j0w0nb5nw9c01x";
+    sha256 = "sha256-OAm4OZeQdP2Q/UKYI9bR7OV9RmLmYF/j2NpK5TPoE60=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 xz zstd openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compression library implementing the deflate compression method found in gzip and PKZIP";
     homepage = "https://github.com/nmoinvaz/minizip";
     license = licenses.zlib;

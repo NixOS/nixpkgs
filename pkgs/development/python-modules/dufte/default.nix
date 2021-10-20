@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
 , pythonOlder
 , importlib-metadata
 , matplotlib
@@ -11,31 +10,31 @@
 
 buildPythonPackage rec {
   pname = "dufte";
-  version = "0.2.9";
-  disabled = !isPy3k;
+  version = "0.2.27";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0nkaczipbsm8c14j9svxry2wigmn5iharibb6b8g062sjaph8x17";
+  src = fetchFromGitHub {
+    owner = "nschloe";
+    repo = pname;
+    rev = version;
+    sha256 = "1i68h224hx9clxj3l0rd2yigsi6fqsr3x10vj5hf3j6s69iah7r3";
   };
   format = "pyproject";
 
   propagatedBuildInputs = [
     matplotlib
     numpy
-  ] ++ stdenv.lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/.matplotlib
-    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-  '';
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "dufte" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clean matplotlib plots";
     homepage = "https://github.com/nschloe/dufte";
     license = licenses.gpl3Plus;

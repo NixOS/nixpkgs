@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
 
 stdenv.mkDerivation rec {
   pname = "unar";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for f in Makefile.linux ../UniversalDetector/Makefile.linux ; do
       substituteInPlace $f \
-        --replace "= gcc" "=cc" \
-        --replace "= g++" "=c++" \
+        --replace "= gcc" "=${stdenv.cc.targetPrefix}cc" \
+        --replace "= g++" "=${stdenv.cc.targetPrefix}c++" \
         --replace "-DGNU_RUNTIME=1" "" \
         --replace "-fgnu-runtime" "-fobjc-nonfragile-abi"
     done
@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://theunarchiver.com";
     description = "An archive unpacker program";
     longDescription = ''
-      The Unarchiver is an archive unpacker program with support for the popular \
-      zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN, \
-      and split file formats, as well as the old Stuffit, Stuffit X, DiskDouble, \
-      Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH, \
+      The Unarchiver is an archive unpacker program with support for the popular
+      zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,
+      and split file formats, as well as the old Stuffit, Stuffit X, DiskDouble,
+      Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH,
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

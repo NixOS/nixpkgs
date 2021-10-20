@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , SDL2
 , qtdeclarative
 , libpulseaudio
@@ -13,17 +13,17 @@
 
 mkDerivation rec {
   pname = "projectm";
-  version = "3.1.8";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
     rev = "v${version}";
-    sha256 = "17zyxj1q0zj17jskq8w9bn2ijn34ldvdq61wy01yf5wgngax2r4z";
+    sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     which
   ];
@@ -56,7 +56,7 @@ mkDerivation rec {
     description = "Cross-platform Milkdrop-compatible music visualizer";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ajs124 ];
+    maintainers = with lib.maintainers; [ ];
     longDescription = ''
       The open-source project that reimplements the esteemed Winamp Milkdrop by Geiss in a more modern, cross-platform reusable library.
       Read an audio input and produces mesmerizing visuals, detecting tempo, and rendering advanced equations into a limitless array of user-contributed visualizations.

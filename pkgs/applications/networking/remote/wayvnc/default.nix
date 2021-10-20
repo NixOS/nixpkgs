@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
-, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc, wayland-scanner
+, pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml, pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vlrk6zdkv0kl1ckxv65nay9vm6yjrs4kadsdvp42nryiifrdhad";
+    sha256 = "0q48fgh6gf3jicy4bk3kq18h9lhqfq9qz32ri6j9ffvbb8mcw64s";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland ];
-  buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml ];
+  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland-scanner ];
+  buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml pam ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches

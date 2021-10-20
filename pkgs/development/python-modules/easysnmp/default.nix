@@ -1,12 +1,11 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , pythonAtLeast
 , fetchFromGitHub
 , net-snmp
 , openssl
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-flake8
 , pytest-sugar
 , termcolor
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-flake8
     pytest-sugar
     termcolor

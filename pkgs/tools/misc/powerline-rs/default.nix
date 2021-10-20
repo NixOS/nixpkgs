@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitLab, pkgconfig, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitLab, pkg-config, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
@@ -12,9 +12,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0rqlxxl58dpfvm2idhi0vzinraf4bgiapmawiih9wxs599fnhm3y";
   };
 
-  cargoSha256 = "0a41a6kgwgz4040c2369jldvk6xy6s6fkgayca0qy7hdwc4bcxdp";
+  cargoSha256 = "1i29wps7wz6b0qarqqg8rplq7ak1zz83k6m182sjk17cni74n21l";
 
-  nativeBuildInputs = [ pkgconfig file perl cmake curl ];
+  nativeBuildInputs = [ pkg-config file perl cmake curl ];
   buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
 
   COMPLETION_OUT = "out";
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "kapowbang";
-  version = "0.5.4";
+  version = "0.7.0";
 
   subPackages = [ "." ];
 
@@ -10,14 +10,14 @@ buildGoModule rec {
     owner = "BBVA";
     repo = "kapow";
     rev = "v${version}";
-    sha256 = "09qr631vzlgibz6q64f35lqzz9h1g3gxqfbapkrci5i0n3h04yr4";
+    sha256 = "sha256-0ftdc3ol1g0WnZgicXl46Xpph4cUYk/G/eeu+9JnPyA=";
   };
 
-  vendorSha256 = "159s46rhg67mgglaxgddx3k8kssl0cqiq8yjdqgjhhxppf16r7dy";
+  vendorSha256 = "sha256-41Jk3aTe4EA5dwkriEo48QNJg2k3T/R/8i8XWcURcG8=";
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BBVA/kapow";
     description = "Expose command-line tools over HTTP";
     license = licenses.asl20;

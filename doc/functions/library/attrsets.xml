@@ -7,7 +7,7 @@
  <section xml:id="function-library-lib.attrsets.attrByPath">
   <title><function>lib.attrset.attrByPath</function></title>
 
-  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
+  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet -> Any</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.attrByPath" />
@@ -166,7 +166,7 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
   <xi:include href="./locations.xml" xpointer="lib.attrsets.getAttrFromPath" />
 
   <para>
-   Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except without a default, and it will throw if the value doesn't exist.
+   Like [](#function-library-lib.attrsets.attrByPath) except without a default, and it will throw if the value doesn't exist.
   </para>
 
   <variablelist>
@@ -772,7 +772,7 @@ nameValuePair "some" 6
    <title>Modifying each value of an attribute set</title>
 <programlisting><![CDATA[
 lib.attrsets.mapAttrs
-  (name: value: name + "-" value)
+  (name: value: name + "-" + value)
   { x = "foo"; y = "bar"; }
 => { x = "x-foo"; y = "y-bar"; }
 ]]></programlisting>
@@ -855,7 +855,7 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
   <title><function>lib.attrsets.mapAttrsToList</function></title>
 
   <subtitle><literal>mapAttrsToList :: (String -> Any -> Any) ->
-   AttrSet -> Any</literal>
+   AttrSet -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />
@@ -1480,7 +1480,7 @@ lib.attrsets.zipAttrsWith
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
 
   <para>
-   Merge sets of attributes and combine each attribute value in to a list. Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" /> where the merge function returns a list of all values.
+   Merge sets of attributes and combine each attribute value in to a list. Similar to [](#function-library-lib.attrsets.zipAttrsWith) where the merge function returns a list of all values.
   </para>
 
   <variablelist>
@@ -1677,8 +1677,7 @@ recursiveUpdate
   <xi:include href="./locations.xml" xpointer="lib.attrsets.recurseIntoAttrs" />
 
   <para>
-   Make various Nix tools consider the contents of the resulting
-   attribute set when looking for what to build, find, etc.
+   Make various Nix tools consider the contents of the resulting attribute set when looking for what to build, find, etc.
   </para>
 
   <para>
@@ -1711,4 +1710,42 @@ recursiveUpdate
   </example>
  </section>
 
+ <section xml:id="function-library-lib.attrsets.cartesianProductOfSets">
+  <title><function>lib.attrsets.cartesianProductOfSets</function></title>
+
+  <subtitle><literal>cartesianProductOfSets :: AttrSet -> [ AttrSet ]</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.cartesianProductOfSets" />
+
+  <para>
+   Return the cartesian product of attribute set value combinations.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      An attribute set with attributes that carry lists of values.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.cartesianProductOfSets-example">
+   <title>Creating the cartesian product of a list of attribute values</title>
+<programlisting><![CDATA[
+cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+=> [
+     { a = 1; b = 10; }
+     { a = 1; b = 20; }
+     { a = 2; b = 10; }
+     { a = 2; b = 20; }
+   ]
+]]></programlisting>
+  </example>
+ </section>
 </section>

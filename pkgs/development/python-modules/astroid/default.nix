@@ -1,35 +1,54 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy, pythonAtLeast
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, isPyPy
+, lazy-object-proxy
+, wrapt
+, typed-ast
+, pytestCheckHook
+, setuptools-scm
+, pylint
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.4.2";
+  version = "2.7.3"; # Check whether the version is compatible with pylint
 
-  disabled = pythonOlder "3.4" || pythonAtLeast "3.9";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2f4078c2a41bf377eea06d71c9d2ba4eb8f6b1af2135bec27bbbb7d8f12bb703";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "08qxw58cdyglkni6ahyil4cmnb48zz0wr4v05gzqk4r5ifs4gl2m";
   };
 
-  postPatch = ''
-    substituteInPlace astroid/__pkginfo__.py --replace "lazy_object_proxy==1.4.*" "lazy_object_proxy"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION=version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (!isPyPy) typed-ast;
+  propagatedBuildInputs = [
+    lazy-object-proxy
+    wrapt
+  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  passthru.tests = {
+    inherit pylint;
+  };
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
-    license = licenses.lgpl2;
+    license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

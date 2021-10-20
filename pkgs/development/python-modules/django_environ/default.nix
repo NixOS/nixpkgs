@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "django-environ";
-  version = "0.4.5";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde";
+    sha256 = "b99bd3704221f8b717c8517d8146e53fdee509d9e99056be560060003b92213e";
   };
 
   # The testsuite fails to modify the base environment
   doCheck = false;
   propagatedBuildInputs = [ django six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
     license = licenses.mit;

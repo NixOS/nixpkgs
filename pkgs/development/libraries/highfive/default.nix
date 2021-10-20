@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , boost
@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
     "-DHIGHFIVE_UNIT_TESTS=OFF"
     "-DHIGHFIVE_USE_INSTALL_DEPS=ON"
   ]
-  ++ (stdenv.lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
+  ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "Header-only C++ HDF5 interface";
     license = licenses.boost;
     homepage = "https://bluebrain.github.io/HighFive/";

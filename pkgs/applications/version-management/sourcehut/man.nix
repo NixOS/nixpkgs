@@ -1,15 +1,20 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, pygit2
 , python
-, srht, pygit2 }:
+}:
 
 buildPythonPackage rec {
   pname = "mansrht";
-  version = "0.15.4";
+  version = "0.15.12";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/man.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "man.sr.ht";
     rev = version;
-    sha256 = "0spi0yy2myxw4kggy54yskda14c4vaq2ng9dd9krqsajnsy7anrw";
+    sha256 = "sha256-MqH/8K9XRvEg6P7GHE6XXtWnhDP3wT8iGoNaFtYQbio=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -21,9 +26,10 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
+    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3;

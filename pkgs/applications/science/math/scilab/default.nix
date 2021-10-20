@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "1adk6jqlj7i3gjklvlf1j3il1nb22axnp4rvwl314an62siih0sc";
   };
 
-  buildInputs = [gfortran ncurses]
-  ++ lib.optionals withGtk [gtk2]
-  ++ lib.optionals withOCaml [ocaml]
-  ++ lib.optional withX xlibsWrapper
-  ;
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ ncurses ]
+    ++ lib.optionals withGtk [ gtk2 ]
+    ++ lib.optionals withOCaml [ ocaml ]
+    ++ lib.optional withX xlibsWrapper;
 
 
 /*
@@ -35,14 +36,14 @@ stdenv.mkDerivation rec {
     # do not compile with PVM library
     "--without-pvm"
     # compile with GTK
-    (stdenv.lib.enableFeature withGtk "gtk")
-    (stdenv.lib.enableFeature withGtk "gtk2")
+    (lib.enableFeature withGtk "gtk")
+    (lib.enableFeature withGtk "gtk2")
     # compile with ocaml
-    (stdenv.lib.withFeature withOCaml "ocaml")
+    (lib.withFeature withOCaml "ocaml")
     # do not compile Java interface
     "--without-java"
     # use the X Window System
-    (stdenv.lib.withFeature withX "x")
+    (lib.withFeature withX "x")
     # compile with TCL/TK
   ] ++ lib.optionals withTk [
     "--with-tk"

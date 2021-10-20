@@ -4,7 +4,7 @@
 , tox
 , pytest
 , coverage
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     tox
     pytest
     coverage
-    pytestcov
+    pytest-cov
   ];
 
   checkPhase = ''

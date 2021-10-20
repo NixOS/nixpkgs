@@ -34,7 +34,11 @@ in {
 
     users = {
       groups._tuptime.members = [ "_tuptime" ];
-      users._tuptime.description = "tuptime database owner";
+      users._tuptime = {
+        isSystemUser = true;
+        group = "_tuptime";
+        description = "tuptime database owner";
+      };
     };
 
     systemd = {

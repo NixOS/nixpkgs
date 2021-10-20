@@ -5,7 +5,7 @@ symlinkJoin {
 
   paths = [ thunar ] ++ thunarPlugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram "$out/bin/thunar" \
@@ -36,6 +36,6 @@ symlinkJoin {
 
     description = thunar.meta.description + optionalString
       (0 != length thunarPlugins)
-      " (with plugins: ${concatStrings (intersperse ", " (map (x: x.name) thunarPlugins))})";
+      " (with plugins: ${concatStringsSep  ", " (map (x: x.name) thunarPlugins)})";
   };
 }

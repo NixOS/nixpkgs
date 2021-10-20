@@ -1,23 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, blessings, mock, nose, pyte, wcwidth, typing }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, blessings, mock, nose, pyte, cwcwidth, typing ? null}:
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.3.0";
+  version = "0.3.5";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89c802ec051d01dec6fc983e9856a3706e4ea8265d2940b1f6d504a9e26ed3a9";
+    sha256 = "1g8dwafx4vx06isjkn28r3cwb0hw1bv67lgygaz34yk66lrzz1x5";
   };
 
-  patches = [
-    # Fix dependency on typing. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/bpython/curtsies/commit/217b4f83e954837f8adc4c549c1f2f9f2bb272a7.patch";
-      sha256 = "1d3zwx9c7i0drb4nvydalm9mr83jrvdm75ffgisri89h337hiffs";
-    })
-  ];
-
-  propagatedBuildInputs = [ blessings wcwidth ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  propagatedBuildInputs = [ blessings cwcwidth ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [ mock pyte nose ];
 
@@ -25,7 +17,7 @@ buildPythonPackage rec {
     nosetests tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Curses-like terminal wrapper, with colored strings!";
     homepage = "https://github.com/bpython/curtsies";
     license = licenses.mit;

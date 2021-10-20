@@ -1,10 +1,11 @@
-{stdenv, fetchurl, perl}:
+{lib, stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "halibut-1.2";
+  pname = "halibut";
+  version = "1.2";
 
   src = fetchurl {
-    url = "http://ww.chiark.greenend.org.uk/~sgtatham/halibut/${name}/${name}.tar.gz";
+    url = "http://ww.chiark.greenend.org.uk/~sgtatham/halibut/halibut-${version}/halibut-${version}.tar.gz";
     sha256 = "0gqnhfqf555rfpk5xj1imbdxnbkkrv4wl3rrdb1r0wgj81igpv8s";
   };
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Documentation production system for software manuals";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/halibut/";
     license = licenses.mit;

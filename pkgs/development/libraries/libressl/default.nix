@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
+{ stdenv
+, fetchurl
+, lib
+, cmake
+, cacert
+, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
+  ldLibPathEnvName = if stdenv.isDarwin
+    then "DYLD_LIBRARY_PATH"
+    else "LD_LIBRARY_PATH";
 
   generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
@@ -40,7 +50,14 @@ let
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
 
-    enableParallelBuilding = true;
+    doCheck = true;
+    preCheck = ''
+      export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
+      export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
+    '';
+    postCheck = ''
+      export ${ldLibPathEnvName}=$PREVIOUS_${ldLibPathEnvName}
+    '';
 
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 
@@ -63,13 +80,18 @@ let
   };
 
 in {
-  libressl_3_0 = generic {
-    version = "3.0.2";
-    sha256 = "13ir2lpxz8y1m151k7lrx306498nzfhwlvgkgv97v5cvywmifyyz";
+  libressl_3_2 = generic {
+    version = "3.2.5";
+    sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
+    patches = [
+      ./CVE-2021-41581.patch
+    ];
   };
-
-  libressl_3_1 = generic {
-    version = "3.1.4";
-    sha256 = "1dnbbnr43jashxivnafmh9gnn57c7ayva788ba03z633k6f18k21";
+  libressl_3_4 = generic {
+    version = "3.4.0";
+    sha256 = "1lhn76nd59p1dfd27b4636zj6wh3f5xsi8b3sxqnl820imsswbp5";
+    patches = [
+      ./CVE-2021-41581.patch
+    ];
   };
 }

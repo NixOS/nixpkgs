@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2 }:
 
 stdenv.mkDerivation {
   name = "gtk-engine-bluecurve-1.0";
@@ -8,14 +8,14 @@ stdenv.mkDerivation {
     sha256 = "1nim3lhmbs5mw1hh76d9258c1p923854x2j6i30gmny812c7qjnm";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   buildInputs = [ gtk2 ];
 
   meta = {
     description = "Original Bluecurve engine from Red Hat's artwork package";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

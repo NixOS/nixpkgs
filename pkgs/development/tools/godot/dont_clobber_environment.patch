@@ -1,18 +1,19 @@
 diff --git a/SConstruct b/SConstruct
-index b3d033dc90..04b8dcc832 100644
+index d138c7b250..c925bf908e 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -62,10 +62,9 @@ elif platform_arg == "javascript":
-     custom_tools = ["cc", "c++", "ar", "link", "textfile", "zip"]
- 
+@@ -65,10 +65,10 @@ elif platform_arg == "javascript":
+ # want to have to pull in manually.
+ # Then we prepend PATH to make it take precedence, while preserving SCons' own entries.
  env_base = Environment(tools=custom_tools)
--if "TERM" in os.environ:
+-env_base.PrependENVPath("PATH", os.getenv("PATH"))
+-env_base.PrependENVPath("PKG_CONFIG_PATH", os.getenv("PKG_CONFIG_PATH"))
+-if "TERM" in os.environ:  # Used for colored output.
 -    env_base["ENV"]["TERM"] = os.environ["TERM"]
--env_base.AppendENVPath("PATH", os.getenv("PATH"))
--env_base.AppendENVPath("PKG_CONFIG_PATH", os.getenv("PKG_CONFIG_PATH"))
 +for k in ("TERM", "PATH", "PKG_CONFIG_PATH"):
 +    if (k in os.environ):
 +        env_base["ENV"][k] = os.environ[k]
++
+
  env_base.disabled_modules = []
  env_base.use_ptrcall = False
- env_base.module_version_string = ""

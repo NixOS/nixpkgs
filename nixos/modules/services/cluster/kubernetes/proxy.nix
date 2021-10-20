@@ -25,7 +25,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes proxy extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
@@ -59,7 +59,7 @@ in
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kubernetes.target" ];
       after = [ "kube-apiserver.service" ];
-      path = with pkgs; [ iptables conntrack_tools ];
+      path = with pkgs; [ iptables conntrack-tools ];
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-proxy \
@@ -76,6 +76,9 @@ in
         WorkingDirectory = top.dataDir;
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 

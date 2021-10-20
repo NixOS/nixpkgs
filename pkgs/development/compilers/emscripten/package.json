@@ -1,15 +1,21 @@
 {
   "name": "emscripten",
-  "version": "2.0.1",
+  "version": "2.0.26",
   "private": true,
   "devDependencies": {
+    "es-check": "^5.2.4",
+    "eslint": "^7.29.0",
+    "eslint-config-google": "^0.14.0",
+    "source-map": "0.5.7",
     "ws": "~0.4.28"
   },
   "dependencies": {
-    "google-closure-compiler": "20200224.0.0",
-    "html-minifier-terser": "5.0.2",
-    "source-map": "0.5.6",
-    "wasm2c": "1.0.0",
-    "acorn": "7.3.1"
+    "acorn": "8.4.1",
+    "google-closure-compiler": "20210601.0.0",
+    "html-minifier-terser": "5.1.1",
+    "wasm2c": "1.0.0"
+  },
+  "scripts": {
+    "lint": "eslint src/parseTools.js"
   }
 }

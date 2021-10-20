@@ -2,23 +2,26 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, aenum
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.11.0";
+  version = "0.13.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = pname;
     rev = version;
-    sha256 = "097k83zr0z71pha7bafzhs4ink174wk9ls2883bic274rihsnc5r";
+    sha256 = "sha256-aY19qMYW7KziiXVY3lxdnHk7OCAJaNh+aTvlQyJWmDw=";
   };
 
-  disabled = pythonOlder "3.5";
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.6") [ aenum ];
+  pythonImportsCheck = [ "bytecode" ];
 
   meta = with lib; {
     homepage = "https://github.com/vstinner/bytecode";

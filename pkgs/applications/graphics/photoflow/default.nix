@@ -20,9 +20,9 @@
 , ninja
 , openexr
 , pcre
-, pkgconfig
+, pkg-config
 , pugixml
-, stdenv
+, lib, stdenv
 , swig
 , vips
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     libxml2
     ninja
-    pkgconfig
+    pkg-config
     swig
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     "-DBUNDLED_GEXIV2=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fully non-destructive photo retouching program providing a complete RAW image editing workflow";
     homepage = "https://aferrero2707.github.io/PhotoFlow/";
     license = licenses.gpl3Plus;
@@ -86,5 +86,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # sse3 is not supported on aarch64
     badPlatforms = [ "aarch64-linux" ];
+    # added 2021-09-30
+    # upstream seems pretty dead
+    #/build/source/src/operations/denoise.cc:30:10: fatal error: vips/cimg_funcs.h: No such file or directory
+    broken = true;
   };
 }

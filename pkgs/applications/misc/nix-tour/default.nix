@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, electron, runtimeShell } :
+{ lib, stdenv, fetchgit, electron, runtimeShell } :
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nix-tour
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "'the tour of nix' from nixcloud.io/tour as offline version";
     homepage = "https://nixcloud.io/tour";
     license = licenses.gpl2;

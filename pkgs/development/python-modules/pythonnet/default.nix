@@ -2,11 +2,10 @@
 , fetchPypi
 , fetchNuGet
 , buildPythonPackage
-, python
-, pytest
+, pytestCheckHook
 , pycparser
 , psutil
-, pkgconfig
+, pkg-config
 , dotnetbuildhelpers
 , clang
 , glib
@@ -15,29 +14,36 @@
 
 let
 
-  UnmanagedExports127 = fetchNuGet {
-    baseName = "UnmanagedExports";
-    version = "1.2.7";
-    sha256 = "0bfrhpmq556p0swd9ssapw4f2aafmgp930jgf00sy89hzg2bfijf";
-    outputFiles = [ "*" ];
-  };
-
-  NUnit371 = fetchNuGet {
-    baseName = "NUnit";
-    version = "3.7.1";
-    sha256 = "1yc6dwaam4w2ss1193v735nnl79id78yswmpvmjr1w4bgcbdza4l";
-    outputFiles = [ "*" ];
-  };
+  dotnetPkgs = [
+    (fetchNuGet {
+      baseName = "UnmanagedExports";
+      version = "1.2.7";
+      sha256 = "0bfrhpmq556p0swd9ssapw4f2aafmgp930jgf00sy89hzg2bfijf";
+      outputFiles = [ "*" ];
+    })
+    (fetchNuGet {
+      baseName = "NUnit";
+      version = "3.12.0";
+      sha256 = "1880j2xwavi8f28vxan3hyvdnph4nlh5sbmh285s4lc9l0b7bdk2";
+      outputFiles = [ "*" ];
+    })
+    (fetchNuGet {
+      baseName = "System.ValueTuple";
+      version = "4.5.0";
+      sha256 = "00k8ja51d0f9wrq4vv5z2jhq8hy31kac2rg0rv06prylcybzl8cy";
+      outputFiles = [ "*" ];
+    })
+  ];
 
 in
 
 buildPythonPackage rec {
   pname = "pythonnet";
-  version = "2.4.0";
+  version = "2.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ach9jic7a9rd3vmc4bphkr9fq01a0qk81f8a7gr9npwzmkqx8x3";
+    sha256 = "1qzdc6jd7i9j7p6bcihnr98y005gv1358xqdr1plpbpnl6078a5p";
   };
 
   postPatch = ''
@@ -50,22 +56,23 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pytest
     pycparser
 
-    pkgconfig
+    pkg-config
     dotnetbuildhelpers
     clang
 
     mono
 
-    NUnit371
-    UnmanagedExports127
-  ];
+  ] ++ dotnetPkgs;
 
   buildInputs = [
     glib
     mono
+  ];
+
+  checkInputs = [
+    pytestCheckHook
     psutil # needed for memory leak tests
   ];
 
@@ -73,22 +80,21 @@ buildPythonPackage rec {
     rm -rf packages
     mkdir packages
 
-    ln -s ${NUnit371}/lib/dotnet/NUnit/ packages/NUnit.3.7.1
-    ln -s ${UnmanagedExports127}/lib/dotnet/NUnit/ packages/UnmanagedExports.1.2.7
+    ${builtins.concatStringsSep "\n" (
+        builtins.map (
+            x: ''ln -s ${x}/lib/dotnet/${x.baseName} ./packages/${x.baseName}.${x.version}''
+          ) dotnetPkgs)}
 
     # Setting TERM=xterm fixes an issue with terminfo in mono: System.Exception: Magic number is wrong: 542
     export TERM=xterm
-  '';
-
-  checkPhase = ''
-    ${python.interpreter} -m pytest
   '';
 
   meta = with lib; {
     description = ".Net and Mono integration for Python";
     homepage = "https://pythonnet.github.io";
     license = licenses.mit;
+    # <https://github.com/pythonnet/pythonnet/issues/898>
+    badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ jraygauthier ];
-    broken = true;
   };
 }

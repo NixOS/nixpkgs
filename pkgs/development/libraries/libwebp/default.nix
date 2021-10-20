@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
 , openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
 , pngSupport ? true, libpng ? null # PNG image format
@@ -24,7 +24,7 @@ let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";
   version = "1.1.0";

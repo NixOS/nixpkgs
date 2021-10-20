@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "iamy";
@@ -15,11 +15,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [''-ldflags=
-    -X main.Version=v${version} -s -w
-  ''];
+  ldflags = [
+    "-X main.Version=v${version}" "-s" "-w"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cli tool for importing and exporting AWS IAM configuration to YAML files";
     homepage = "https://github.com/99designs/iamy";
     license = licenses.mit;

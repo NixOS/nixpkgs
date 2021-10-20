@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liburcu, python }:
+{ lib, stdenv, fetchurl, pkg-config, liburcu, numactl, python3 }:
 
 # NOTE:
 #   ./configure ...
@@ -13,25 +13,28 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-ust";
-  version = "2.10.5";
+  version = "2.13.0";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
-    sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
+    sha256 = "0l0p6y2zrd9hgd015dhafjmpcj7waz762n6wf5ws1xlwcwrwkr2l";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ numactl python3 ];
 
   preConfigure = ''
     patchShebangs .
   '';
-  
+
   propagatedBuildInputs = [ liburcu ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "LTTng Userspace Tracer libraries";
     homepage = "https://lttng.org/";
-    license = licenses.lgpl21Plus;
+    license = with licenses; [ lgpl21Only gpl2Only mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

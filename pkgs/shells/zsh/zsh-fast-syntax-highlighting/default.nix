@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-fast-syntax-highlighting";
-  version = "1.54";
+  version = "1.55";
 
   src = fetchFromGitHub {
     owner = "zdharma";
     repo = "fast-syntax-highlighting";
     rev = "v${version}";
-    sha256 = "019hda2pj8lf7px4h1z07b9l6icxx4b2a072jw36lz9bh6jahp32";
+    sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
   };
 
   dontConfigure = true;
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
     plugindir="$out/share/zsh/site-functions"
 
     mkdir -p "$plugindir"
-    cp -r -- {,_,-}fast-* chroma themes "$plugindir"/
+    cp -r -- {,_,-,.}fast-* *chroma themes "$plugindir"/
   '';
 
   meta = with lib; {

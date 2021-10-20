@@ -1,25 +1,25 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , Babel
 , pytz
 , nine
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Kajiki";
-  version = "0.8.2";
+  pname = "kajiki";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbec46b19285d42769d7c4f5a8a0195b72a62b54cd360a26a8875319d58efef6";
+    sha256 = "c7a1f033b5cfaafa97bda5a475f58a7abcd76b348494995428fdcf6c8f648ad9";
   };
 
   propagatedBuildInputs = [ Babel pytz nine ];
-  checkInputs = [ nose ];
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";
     homepage = "https://github.com/nandoflorestan/kajiki";
     license = licenses.mit;

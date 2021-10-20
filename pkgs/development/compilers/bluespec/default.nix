@@ -1,66 +1,45 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , fontconfig
-, gmp-static
-, gperf
 , libX11
-, libpoly
 , perl
 , flex
 , bison
-, pkgconfig
-, itktcl
-, incrtcl
+, pkg-config
 , tcl
 , tk
-, verilog
 , xorg
 , yices
 , zlib
 , ghc
-}:
+, gmp-static
+, verilog
+, asciidoctor
+, tex }:
 
 let
-  ghcWithPackages = ghc.withPackages (g: (with g; [old-time regex-compat syb split ]));
+  ghcWithPackages = ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
+
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "unstable-2020.11.04";
+  version = "2021.07";
 
   src = fetchFromGitHub {
-      owner  = "B-Lang-org";
-      repo   = "bsc";
-      rev    = "103357f32cf63f2ca2b16ebc8e2c675ec5562464";
-      sha256 = "0iikzx0fxky0fmc31lyxfldy1wixr2mayzcn24b8d76wd4ix1vk3";
-    };
+    owner = "B-Lang-org";
+    repo = "bsc";
+    rev = version;
+    sha256 = "0gw8wyp65lpkyfhv3laazz9qypdl8qkp1j7cqp0gv11592a9p5qw";
+  };
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "doc" ];
+
+  # https://github.com/B-Lang-org/bsc/pull/278
   patches = [ ./libstp_stub_makefile.patch ];
-
-  buildInputs = yices.buildInputs ++ [
-    zlib
-    tcl tk
-    libX11 # tcltk
-    xorg.libXft
-    fontconfig
-  ];
-
-  nativeBuildInputs = [
-    automake autoconf
-    perl
-    flex
-    bison
-    pkgconfig
-    ghcWithPackages
-  ];
-
-  checkInputs = [
-    verilog
-  ];
-
 
   postUnpack = ''
     mkdir -p $sourceRoot/src/vendor/yices/v2.6/yices2
@@ -79,28 +58,68 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/comp/Makefile \
       --replace 'BINDDIR' 'BINDIR' \
       --replace 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
+
     # allow running bsc to bootstrap
-    export LD_LIBRARY_PATH=/build/source/inst/lib/SAT
+    export LD_LIBRARY_PATH=$PWD/inst/lib/SAT
   '';
 
+  buildInputs = yices.buildInputs ++ [
+    fontconfig
+    libX11 # tcltk
+    tcl
+    tk
+    xorg.libXft
+    zlib
+  ];
+
+  nativeBuildInputs = [
+    automake
+    autoconf
+    asciidoctor
+    bison
+    flex
+    ghcWithPackages
+    perl
+    pkg-config
+    tex
+  ];
+
   makeFlags = [
+    "release"
     "NO_DEPS_CHECKS=1" # skip the subrepo check (this deriviation uses yices.src instead of the subrepo)
     "NOGIT=1" # https://github.com/B-Lang-org/bsc/issues/12
     "LDCONFIG=ldconfig" # https://github.com/B-Lang-org/bsc/pull/43
     "STP_STUB=1"
   ];
 
-  installPhase = "mv inst $out";
-
   doCheck = true;
+
+  checkInputs = [
+    gmp-static
+    verilog
+  ];
+
+  checkTarget = "check-smoke";
+
+  installPhase = ''
+    mkdir -p $out
+    mv inst/bin $out
+    mv inst/lib $out
+
+    # fragile, I know..
+    mkdir -p $doc/share/doc/bsc
+    mv inst/README $doc/share/doc/bsc
+    mv inst/ReleaseNotes.* $doc/share/doc/bsc
+    mv inst/doc/*.pdf $doc/share/doc/bsc
+  '';
 
   meta = {
     description = "Toolchain for the Bluespec Hardware Definition Language";
-    homepage    = "https://github.com/B-Lang-org/bsc";
-    license     = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/B-Lang-org/bsc";
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
     # aarch64 fails, as GHC fails with "ghc: could not execute: opt"
-    maintainers = with stdenv.lib.maintainers; [ jcumming thoughtpolice ];
+    maintainers = with lib.maintainers; [ jcumming thoughtpolice ];
   };
 }

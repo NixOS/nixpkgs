@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, frozendict
+, simplejson
+, six
+, isPy27
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,10 +19,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    frozendict simplejson six
+    frozendict
+    simplejson
+    six
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_frozen_dict"
+  ];
+
+  meta = with lib; {
     homepage = "https://github.com/matrix-org/python-canonicaljson";
     description = "Encodes objects and arrays as RFC 7159 JSON.";
     license = licenses.asl20;

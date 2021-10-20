@@ -1,13 +1,13 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , xorg
 , freetype
-, alsaLib
+, alsa-lib
 , curl
 , libjack2
 , lv2
-, pkgconfig
+, pkg-config
 , libGLU
 , libGL
 }:
@@ -26,10 +26,13 @@
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib curl libjack2 pkgconfig libGLU libGL lv2
+    freetype alsa-lib curl libjack2 libGLU libGL lv2
   ];
+  nativeBuildInputs = [ pkg-config ];
 
   CXXFLAGS = "-DHAVE_LROUND";
+  enableParallelBuilding = true;
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
@@ -41,18 +44,10 @@
 
   prePatch = ''
     sed -i 's|usr/||g' Makefile
+    sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
   '';
 
-  buildPhase = ''
-    make lv2
-    make standalone
-  '';
-
-  installPhase = ''
-   make DESTDIR="$out" install
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tytel.org/helm";
     description = "A free, cross-platform, polyphonic synthesizer";
     longDescription = ''
@@ -72,7 +67,7 @@
         Simple arpeggiator
         Effects: Formant filter, stutter, delay
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };

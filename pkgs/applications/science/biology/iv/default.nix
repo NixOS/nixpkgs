@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, neuron-version
+{ lib, stdenv, fetchurl, neuron-version
 , libX11, libXext, patchelf
 }:
 
@@ -15,15 +15,15 @@ stdenv.mkDerivation rec
     postInstall = ''
       for dir in $out/*; do # */
         if [ -d $dir/lib ]; then
-	  mv $dir/* $out # */
+    mv $dir/* $out # */
           rmdir $dir
           break
         fi
       done
-    '' + stdenv.lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.isLinux ''
       patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
     '';
-    meta = with stdenv.lib;
+    meta = with lib;
       { description = "InterViews graphical library for Neuron";
         license     = licenses.bsd3;
         homepage    = "http://www.neuron.yale.edu/neuron";

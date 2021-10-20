@@ -1,9 +1,9 @@
-{stdenv, fetchurl, gettext, ncurses
+{lib, stdenv, fetchurl, gettext, ncurses
 , gtkGUI ? false
-, pkgconfig ? null
+, pkg-config ? null
 , gtk2 ? null}:
 
-assert gtkGUI -> pkgconfig != null && gtk2 != null;
+assert gtkGUI -> pkg-config != null && gtk2 != null;
 
 stdenv.mkDerivation rec {
   name = "aumix-2.9.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gettext ncurses ]
-    ++ (if gtkGUI then [pkgconfig gtk2] else []);
+    ++ (if gtkGUI then [pkg-config gtk2] else []);
 
   meta = {
     description = "Audio mixer for X and the console";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
       the command line or a script.
     '';
     homepage = "http://www.jpj.net/~trevor/aumix.html";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

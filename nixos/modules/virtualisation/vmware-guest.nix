@@ -37,6 +37,28 @@ in
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
       };
 
+    # Mount the vmblock for drag-and-drop and copy-and-paste.
+    systemd.mounts = [
+      {
+        description = "VMware vmblock fuse mount";
+        documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
+        before = [ "vmware.service" ];
+        wants = [ "vmware.service" ];
+        what = "${open-vm-tools}/bin/vmware-vmblock-fuse";
+        where = "/run/vmblock-fuse";
+        type = "fuse";
+        options = "subtype=vmware-vmblock,default_permissions,allow_other";
+        wantedBy = [ "multi-user.target" ];
+      }
+    ];
+
+    security.wrappers.vmware-user-suid-wrapper =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${open-vm-tools}/bin/vmware-user-suid-wrapper";
+      };
+
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
@@ -56,5 +78,7 @@ in
           ${open-vm-tools}/bin/vmware-user-suid-wrapper
         '';
     };
+
+    services.udev.packages = [ open-vm-tools ];
   };
 }

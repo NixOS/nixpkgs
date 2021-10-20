@@ -1,20 +1,53 @@
-{ lib, fetchzip, buildDunePackage
-, cppo, ppxfind, ppx_tools, ppx_derivers, result, ounit, ocaml-migrate-parsetree
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, ppxlib
+, ppx_derivers
+, result
+, ounit
+, ocaml-migrate-parsetree
+, ocaml-migrate-parsetree-2
 }:
+
+let params =
+  if lib.versionAtLeast ppxlib.version "0.20" then {
+    version = "5.2.1";
+    sha256 = "11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
+    useOMP2 = true;
+  } else if lib.versionAtLeast ppxlib.version "0.15" then {
+    version = "5.1";
+    sha256 = "1i64fd7qrfzbam5hfbl01r0sx4iihsahcwqj13smmrjlnwi3nkxh";
+    useOMP2 = false;
+  } else {
+    version = "5.0";
+    sha256 = "0fkzrn4pdyvf1kl0nwvhqidq01pnq3ql8zk1jd56hb0cxaw851w3";
+    useOMP2 = false;
+  }
+; in
 
 buildDunePackage rec {
   pname = "ppx_deriving";
-  version = "4.5";
+  inherit (params) version;
 
-  src = fetchzip {
-    url = "https://github.com/ocaml-ppx/ppx_deriving/archive/v${version}.tar.gz";
-    sha256 = "1v2xldag54n0xk69vv3j4nln9bzkkpq3rildq118sydzsc9v239z";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-v${version}.tbz";
+    inherit (params) sha256;
   };
 
-  buildInputs = [ ppxfind cppo ounit ];
-  propagatedBuildInputs = [ ocaml-migrate-parsetree ppx_derivers ppx_tools result ];
+  buildInputs = [ ppxlib cppo ];
+  propagatedBuildInputs = [
+    (if params.useOMP2
+    then ocaml-migrate-parsetree-2
+    else ocaml-migrate-parsetree)
+    ppx_derivers
+    result
+  ];
 
   doCheck = true;
+  checkInputs = [ ounit ];
 
   meta = with lib; {
     description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";

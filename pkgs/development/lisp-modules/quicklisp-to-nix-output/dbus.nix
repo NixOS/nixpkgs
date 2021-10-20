@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dbus'';
-  version = ''20200610-git'';
+  baseName = "dbus";
+  version = "20200610-git";
 
-  description = ''A D-BUS client library for Common Lisp'';
+  description = "A D-BUS client library for Common Lisp";
 
   deps = [ args."alexandria" args."asdf-package-system" args."babel" args."cl-xmlspam" args."flexi-streams" args."ieee-floats" args."iolib" args."ironclad" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/dbus/2020-06-10/dbus-20200610-git.tgz'';
-    sha256 = ''1njwjf1z9xngsfmlddmbcan49vcjqvvxfkhbi62xcxwbn9rgqn79'';
+    url = "http://beta.quicklisp.org/archive/dbus/2020-06-10/dbus-20200610-git.tgz";
+    sha256 = "1njwjf1z9xngsfmlddmbcan49vcjqvvxfkhbi62xcxwbn9rgqn79";
   };
 
   packageName = "dbus";

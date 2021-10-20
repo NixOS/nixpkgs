@@ -1,7 +1,17 @@
-{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
+let
+  gradleSpec = { version, nativeVersion, sha256 }: rec {
+    inherit nativeVersion;
+    name = "gradle-${version}";
+    src = fetchurl {
+      inherit sha256;
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
+    };
+  };
+in
 rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
+  gradleGen = { name, src, nativeVersion }: stdenv.mkDerivation {
     inherit name src nativeVersion;
 
     dontBuild = true;
@@ -18,22 +28,24 @@ rec {
     '';
 
     fixupPhase = if (!stdenv.isLinux) then ":" else
-      let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
-        mkdir patching
-        pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
-        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
-        mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
-        popd
+    let arch = if stdenv.is64bit then "amd64" else "i386"; in
+    ''
+      mkdir patching
+      pushd patching
+      jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
+      patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
+      jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
+      mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
+      popd
 
-        # The scanner doesn't pick up the runtime dependency in the jar.
-        # Manually add a reference where it will be found.
-        mkdir $out/nix-support
-        echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
-      '';
+      # The scanner doesn't pick up the runtime dependency in the jar.
+      # Manually add a reference where it will be found.
+      mkdir $out/nix-support
+      echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
+    '';
 
-    buildInputs = [ unzip java makeWrapper ];
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ java ];
 
     meta = {
       description = "Enterprise-grade build system";
@@ -46,40 +58,34 @@ rec {
         build-by-convention behavior.
       '';
       homepage = "http://www.gradle.org/";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.unix;
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
     };
   };
 
-  gradle_latest = gradle_6_7;
+  gradle_latest = gradle_7;
 
-  gradle_6_7 = gradleGen rec {
-    name = "gradle-6.7";
-    nativeVersion = "0.22-milestone-8";
+  gradle_7 = gradleGen (gradleSpec {
+    version = "7.2";
+    nativeVersion = "0.22-milestone-21";
+    sha256 = "1pg6w5czysywsgdvmll5bwd2p6y99cn5sn3gw69cps9mkjd710gm";
+  });
 
-    src = fetchurl {
-      url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1i6zm55wzy13wvvmf3804b0rs47yrqqablf4gpf374ls05cpgmca";
-    };
-  };
+  gradle_6_8 = gradleGen (gradleSpec {
+    version = "6.8.3";
+    nativeVersion = "0.22-milestone-9";
+    sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
+  });
 
-  gradle_5_6 = gradleGen rec {
-    name = "gradle-5.6.4";
+  gradle_5_6 = gradleGen (gradleSpec {
+    version = "5.6.4";
     nativeVersion = "0.18";
+    sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
+  });
 
-    src = fetchurl {
-      url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
-    };
-  };
-
-  gradle_4_10 = gradleGen rec {
-    name = "gradle-4.10.3";
+  gradle_4_10 = gradleGen (gradleSpec {
+    version = "4.10.3";
     nativeVersion = "0.14";
-
-    src = fetchurl {
-      url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    };
-  };
+    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
+  });
 }

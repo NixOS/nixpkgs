@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig, openssl
+, rustPlatform, pkg-config, openssl
 # testing packages
 , cargo-insta
 # darwin dependencies
@@ -17,19 +17,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1z920p8i3gkjadyd6bqjk4i5yr5ds3m3sbcnf7plcqr69dsjr4b8";
   };
 
-  cargoSha256 = "1zh6fjfynkn4kgk1chigzd0sh4x1bagizyn7x6qyxgzc57a49bp7";
+  cargoSha256 = "1wf9758gyaxgyajjzy5phirg922n9wv0qmy67zjmxj56ayf0l9lm";
 
   checkPhase = ''
     ${cargo-insta}/bin/cargo-insta test
   '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no
   # corresponding implementation in the sources from opensource.apple.com.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
   '';
 

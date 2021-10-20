@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "sfsexp";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "18gdwxjja0ip378hlzs8sp7q2g6hrmy7x10yf2wnxfmmylbpqn8k";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, fast s-expression library";
     homepage = "http://sexpr.sourceforge.net/";
     maintainers = with maintainers; [ jb55 ];

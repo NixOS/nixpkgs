@@ -1,4 +1,4 @@
-{ stdenv, mkFranzDerivation, fetchurl }:
+{ lib, mkFranzDerivation, fetchurl }:
 
 mkFranzDerivation rec {
   pname = "franz";
@@ -8,7 +8,7 @@ mkFranzDerivation rec {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
     sha256 = "1gn0n1hr6z2gsdnpxysyq6sm8y7cjr9jafhsam8ffw0bq74kph7p";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = "https://meetfranz.com";
     license = licenses.free;

@@ -10,7 +10,7 @@ let
 
 in {
   name = "teeworlds";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hax404 ];
   };
 

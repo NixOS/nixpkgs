@@ -1,7 +1,14 @@
-{ stdenv, stdenvNoCC, fetchcvs, lib, groff, mandoc, zlib, yacc, flex
-, writeText, buildPackages, splicePackages, symlinkJoin }:
+{ stdenv, lib, stdenvNoCC
+, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
+, buildPackages, splicePackages, newScope
+, bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
+, zlib
+, writeText, symlinkJoin
+}:
 
 let
+  inherit (buildPackages.buildPackages) rsync;
+
   fetchNetBSD = path: version: sha256: fetchcvs {
     cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
     module = "src/${path}";
@@ -9,35 +16,71 @@ let
     tag = "netbsd-${lib.replaceStrings ["."] ["-"] version}-RELEASE";
   };
 
-  # Splice packages so we get the correct package when using
-  # nativeBuildInputs...
-  nbSplicedPackages = splicePackages {
-    pkgsBuildBuild = buildPackages.buildPackages.netbsd;
-    pkgsBuildHost = buildPackages.netbsd;
-    pkgsBuildTarget = {};
-    pkgsHostHost = {};
-    pkgsHostTarget = netbsd;
-    pkgsTargetTarget = {};
+  netbsdSetupHook = makeSetupHook {
+    name = "netbsd-setup-hook";
+  } ./setup-hook.sh;
+
+  otherSplices = {
+    selfBuildBuild = pkgsBuildBuild.netbsd;
+    selfBuildHost = pkgsBuildHost.netbsd;
+    selfBuildTarget = pkgsBuildTarget.netbsd;
+    selfHostHost = pkgsHostHost.netbsd;
+    selfTargetTarget = pkgsTargetTarget.netbsd or {}; # might be missing
   };
 
-  netbsd = with nbSplicedPackages; {
+  defaultMakeFlags = [
+    "MKSOFTFLOAT=${if stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
+      then "yes"
+      else "no"}"
+  ];
+
+in lib.makeScopeWithSplicing
+  splicePackages
+  newScope
+  otherSplices
+  (_: {})
+  (_: {})
+  (self: let
+    inherit (self) mkDerivation;
+  in {
+
+  # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
+  #
+  # We use `lib.makeScopeWithSplicing` because this should be used for all
+  # nested package sets which support cross, so the inner `callPackage` works
+  # correctly. But for the inline packages we don't bother to use
+  # `callPackage`.
+  #
+  # We still could have tried to `with` a big spliced packages set, but
+  # splicing is jank and causes a number of bootstrapping infinite recursions
+  # if one is not careful. Pulling deps out of the right package set directly
+  # side-steps splicing entirely and avoids those footguns.
+  #
+  # For non-bootstrap-critical packages, we might as well use `callPackage` for
+  # consistency with everything else, and maybe put in separate files too.
+
+  compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
 
   mkDerivation = lib.makeOverridable (attrs: let
     stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
   in stdenv'.mkDerivation ({
     name = "${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
-    src = attrs.src or fetchNetBSD attrs.path attrs.version attrs.sha256;
+    src = fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];
 
-    nativeBuildInputs = [ makeMinimal install tsort lorder mandoc groff stat ];
-    buildInputs = [ compat ];
-    # depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install tsort lorder mandoc groff statHook rsync
+    ];
+    buildInputs = with self; compatIfNeeded;
 
-    OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
-    HOST_SH = "${buildPackages.bash}/bin/sh";
+    HOST_SH = stdenv'.shell;
 
     MACHINE_ARCH = {
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
@@ -45,32 +88,35 @@ let
     MACHINE = {
       x86_64 = "amd64";
       aarch64 = "evbarm64";
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
-    AR = "${stdenv'.cc.targetPrefix or ""}ar";
-    CC = "${stdenv'.cc.targetPrefix or ""}cc";
-    CPP = "${stdenv'.cc.targetPrefix or ""}cpp";
-    CXX = "${stdenv'.cc.targetPrefix or ""}c++";
-    LD = "${stdenv'.cc.targetPrefix or ""}ld";
-    STRIP = "${stdenv'.cc.targetPrefix or ""}strip";
+    BSD_PATH = attrs.path;
 
-    NETBSD_PATH = attrs.path;
+    makeFlags = defaultMakeFlags;
 
-    builder = ./builder.sh;
+    strictDeps = true;
 
     meta = with lib; {
-      maintainers = with maintainers; [matthewbauer];
+      maintainers = with maintainers; [ matthewbauer qyliss ];
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
+
+  } // lib.optionalAttrs stdenv'.hasCC {
+    # TODO should CC wrapper set this?
+    CPP = "${stdenv'.cc.targetPrefix}cpp";
   } // lib.optionalAttrs stdenv'.isDarwin {
     MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
     HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
     HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+  } // lib.optionalAttrs (stdenv'.isx86_32) {
+    USE_SSP = "no";
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
@@ -81,18 +127,19 @@ let
   ##
   makeMinimal = mkDerivation {
     path = "tools/make";
-    sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
-    version = "8.0";
+    sha256 = "0fh0nrnk18m613m5blrliq2aydciv51qhc0ihsj4k63incwbk90n";
+    version = "9.2";
 
-    buildInputs = [];
-    nativeBuildInputs = [];
+    buildInputs = with self; [];
+    nativeBuildInputs = with buildPackages.netbsd; [ bsdSetupHook netbsdSetupHook rsync ];
 
     skipIncludesPhase = true;
 
     postPatch = ''
       patchShebangs configure
-      ${make.postPatch}
+      ${self.make.postPatch}
     '';
+
     buildPhase = ''
       runHook preBuild
 
@@ -100,72 +147,106 @@ let
 
       runHook postBuild
     '';
+
     installPhase = ''
       runHook preInstall
 
       install -D nbmake $out/bin/nbmake
       ln -s $out/bin/nbmake $out/bin/make
       mkdir -p $out/share
-      cp -r $NETBSDSRCDIR/share/mk $out/share/mk
+      cp -r $BSDSRCDIR/share/mk $out/share/mk
 
       runHook postInstall
     '';
-    extraPaths = [ make.src ] ++ make.extraPaths;
+
+    extraPaths = with self; [ make.src ] ++ make.extraPaths;
   };
 
-  compat = if stdenv.hostPlatform.isNetBSD then stdenv else mkDerivation rec {
+  compat = mkDerivation (let
+    version = "9.2";
+    commonDeps = [ zlib ];
+  in {
     path = "tools/compat";
-    sha256 = "050449lq5gpxqsripdqip5ks49g5ypjga188nd3ss8dg1zf7ydz3";
-    version = "8.0";
+    sha256 = "1vsxg7136nlhc72vpa664vs22874xh7ila95nkmsd8crn3z3cyn0";
+    inherit version;
 
     setupHooks = [
       ../../../build-support/setup-hooks/role.bash
       ./compat-setup-hook.sh
     ];
 
-    # override defaults to prevent infinite recursion
-    nativeBuildInputs = [ makeMinimal ];
-    buildInputs = [ zlib ];
+    preConfigure = ''
+      make include/.stamp configure nbtool_config.h.in defs.mk.in
+    '';
 
-    # the build system re-runs `./configure` with `HOST_CC` (which is their
-    # name for Build CC) as a compiler to make `defs.mk`, which is installed
-    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ buildInputs;
-    HOST_CC = "${buildPackages.stdenv.cc.targetPrefix}cc";
+    configurePlatforms = [ "build" "host" ];
+    configureFlags = [
+      "--cache-file=config.cache"
+    ];
+
+    nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      rsync
+    ];
+
+    buildInputs = with self; commonDeps;
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
-    makeFlags = [
+    makeFlags = defaultMakeFlags ++ [
       "INSTALL=${buildPackages.coreutils}/bin/install"
-      "TOOLDIR=$(out)"
+      "DATADIR=$(out)/share"
+      # Can't sort object files yet
+      "LORDER=echo"
+      "TSORT=cat"
+      # Can't process man pages yet
+      "MKSHARE=no"
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # GNU objcopy produces broken .a libs which won't link into dependers.
+      # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
+      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
     ];
     RENAME = "-D";
 
-    patches = [ ./compat.patch ];
+    passthru.tests = { netbsd-install = self.install; };
+
+    patches = [
+      ./compat-cxx-safe-header.patch
+      ./compat-dont-configure-twice.patch
+      ./compat-no-force-native.patch
+    ];
+
+    preInstall = ''
+      makeFlagsArray+=('INSTALL_FILE=''${INSTALL} ''${COPY} ''${PRESERVE} ''${RENAME}')
+      makeFlagsArray+=('INSTALL_DIR=''${INSTALL} -d')
+      makeFlagsArray+=('INSTALL_SYMLINK=''${INSTALL} ''${SYMLINK} ''${RENAME}')
+    '';
 
     postInstall = ''
-      mv $out/include/compat/* $out/include
-      rmdir $out/include/compat
-
       # why aren't these installed by netbsd?
       install -D compat_defs.h $out/include/compat_defs.h
-      install -D $NETBSDSRCDIR/include/cdbw.h $out/include/cdbw.h
-      install -D $NETBSDSRCDIR/sys/sys/cdbr.h $out/include/cdbr.h
-      install -D $NETBSDSRCDIR/sys/sys/featuretest.h \
+      install -D $BSDSRCDIR/include/cdbw.h $out/include/cdbw.h
+      install -D $BSDSRCDIR/sys/sys/cdbr.h $out/include/cdbr.h
+      install -D $BSDSRCDIR/sys/sys/featuretest.h \
                  $out/include/sys/featuretest.h
-      install -D $NETBSDSRCDIR/sys/sys/md5.h $out/include/md5.h
-      install -D $NETBSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
-      install -D $NETBSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
-      install -D $NETBSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
-      install -D $NETBSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
-      install -D $NETBSDSRCDIR/include/vis.h $out/include/vis.h
-      install -D $NETBSDSRCDIR/include/db.h $out/include/db.h
-      install -D $NETBSDSRCDIR/include/netconfig.h $out/include/netconfig.h
-      install -D $NETBSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
-      install -D $NETBSDSRCDIR/include/utmpx.h $out/include/utmpx.h
-      install -D $NETBSDSRCDIR/include/tzfile.h $out/include/tzfile.h
-      install -D $NETBSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
-      install -D $NETBSDSRCDIR/include/nl_types.h $out/include/nl_types.h
-      install -D $NETBSDSRCDIR/include/stringlist.h $out/include/stringlist.h
+      install -D $BSDSRCDIR/sys/sys/md5.h $out/include/md5.h
+      install -D $BSDSRCDIR/sys/sys/rmd160.h $out/include/rmd160.h
+      install -D $BSDSRCDIR/sys/sys/sha1.h $out/include/sha1.h
+      install -D $BSDSRCDIR/sys/sys/sha2.h $out/include/sha2.h
+      install -D $BSDSRCDIR/sys/sys/queue.h $out/include/sys/queue.h
+      install -D $BSDSRCDIR/include/vis.h $out/include/vis.h
+      install -D $BSDSRCDIR/include/db.h $out/include/db.h
+      install -D $BSDSRCDIR/include/netconfig.h $out/include/netconfig.h
+      install -D $BSDSRCDIR/include/utmpx.h $out/include/utmpx.h
+      install -D $BSDSRCDIR/include/tzfile.h $out/include/tzfile.h
+      install -D $BSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
+      install -D $BSDSRCDIR/include/nl_types.h $out/include/nl_types.h
+      install -D $BSDSRCDIR/include/stringlist.h $out/include/stringlist.h
+
+      # Collapse includes slightly to fix dangling reference
+      install -D $BSDSRCDIR/common/include/rpc/types.h $out/include/rpc/types.h
+      sed -i '1s;^;#include "nbtool_config.h"\n;' $out/include/rpc/types.h
    '' + lib.optionalString stdenv.isDarwin ''
       mkdir -p $out/include/ssp
       touch $out/include/ssp/ssp.h
@@ -175,12 +256,12 @@ let
         --subst-var-by out $out \
         --subst-var-by version ${version}
     '';
-    extraPaths = [ libc.src libutil.src
-      (fetchNetBSD "include" "8.0" "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq")
-      (fetchNetBSD "external/bsd/flex" "8.0" "0yxcjshz9nj827qhmjwwjmzvmmqgaf0d25b42k7lj84vliwrgyr6")
-      (fetchNetBSD "sys/sys" "8.0" "0b0yjjy0c0cvk5nyffppqwxlwh2s1qr2xzl97a9ldck00dibar94")
-    ] ++ libutil.extraPaths ++ libc.extraPaths;
-  };
+    extraPaths = with self; [ include.src libc.src libutil.src
+      (fetchNetBSD "external/bsd/flex" "9.2" "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
+      (fetchNetBSD "sys/sys" "9.2" "0zawhw51klaigqqwkx0lzrx3mim2jywrc24cm7c66qsf1im9awgd")
+      (fetchNetBSD "common/include/rpc/types.h" "9.2" "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a")
+    ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
+  });
 
   # HACK: to ensure parent directories exist. This emulates GNU
   # install’s -D option. No alternative seems to exist in BSD install.
@@ -191,12 +272,16 @@ let
     xinstall "$@"
   ''; in mkDerivation {
     path = "usr.bin/xinstall";
-    version = "8.0";
+    version = "9.2";
     sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
-    extraPaths = [ mtree.src make.src ];
-    nativeBuildInputs = [ makeMinimal mandoc groff ];
+    extraPaths = with self; [ mtree.src make.src ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      mandoc groff rsync
+    ];
     skipIncludesPhase = true;
-    buildInputs = [ compat fts ];
+    buildInputs = with self; compatIfNeeded ++ [ fts ];
     installPhase = ''
       runHook preInstall
 
@@ -207,19 +292,22 @@ let
 
       runHook postInstall
     '';
+    setupHook = ./install-setup-hook.sh;
   };
 
   fts = mkDerivation {
     pname = "fts";
     path = "include/fts.h";
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
-    version = "8.0";
-    nativeBuildInputs = [ ];
-    propagatedBuildInputs = [ compat ];
-    extraPaths = [
-      (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
-      (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "1sjvh9nw3prnk4rmdwrfsxh6gdb9lmilkn46jcfh3q5c8glqzrd7")
-      (fetchNetBSD "lib/libc/gen/fts.3" "8.0" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
+    version = "9.2";
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook rsync
+    ];
+    propagatedBuildInputs = with self; compatIfNeeded;
+    extraPaths = with self; [
+      (fetchNetBSD "lib/libc/gen/fts.c" "9.2" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
+      (fetchNetBSD "lib/libc/include/namespace.h" "9.2" "0kksr3pdwdc1cplqf5z12ih4cml6l11lqrz91f7hjjm64y7785kc")
+      (fetchNetBSD "lib/libc/gen/fts.3" "9.2" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
     ];
     skipIncludesPhase = true;
     buildPhase = ''
@@ -243,25 +331,49 @@ let
     ];
   };
 
+  # Don't add this to nativeBuildInputs directly.  Use statHook instead.
   stat = mkDerivation {
     path = "usr.bin/stat";
-    version = "8.0";
-    sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    version = "9.2";
+    sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff rsync
+    ];
   };
+
+  # stat isn't in POSIX, and NetBSD stat supports a completely
+  # different range of flags than GNU stat, so including it in PATH
+  # breaks stdenv.  Work around that with a hook that will point
+  # NetBSD's build system and NetBSD stat without including it in
+  # PATH.
+  statHook = makeSetupHook {
+    name = "netbsd-stat-hook";
+  } (writeText "netbsd-stat-hook-impl" ''
+    makeFlagsArray+=(TOOL_STAT=${self.stat}/bin/stat)
+  '');
 
   tsort = mkDerivation {
     path = "usr.bin/tsort";
-    version = "8.0";
+    version = "9.2";
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff rsync
+    ];
   };
 
   lorder = mkDerivation {
     path = "usr.bin/lorder";
-    version = "8.0";
+    version = "9.2";
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
-    nativeBuildInputs = [ makeMinimal install mandoc groff ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff rsync
+    ];
   };
   ##
   ## END BOOTSTRAPPING
@@ -272,58 +384,92 @@ let
   ##
   make = mkDerivation {
     path = "usr.bin/make";
-    sha256 = "103643qs3w5kiahir6cca2rkm5ink81qbg071qyzk63qvspfq10c";
-    version = "8.0";
-    postPatch = ''
+    sha256 = "0vi73yicbmbp522qzqvd979cx6zm5jakhy77xh73c1kygf8klccs";
+    version = "9.2";
+
+   postPatch = ''
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.doc.mk \
+       --replace '-o ''${DOCOWN}' "" \
+       --replace '-g ''${DOCGRP}' ""
+     for mk in $BSDSRCDIR/share/mk/bsd.inc.mk $BSDSRCDIR/share/mk/bsd.kinc.mk; do
+       substituteInPlace $mk \
+         --replace '-o ''${BINOWN}' "" \
+         --replace '-g ''${BINGRP}' ""
+     done
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.kmodule.mk \
+       --replace '-o ''${KMODULEOWN}' "" \
+       --replace '-g ''${KMODULEGRP}' ""
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
+       --replace '-o ''${LIBOWN}' "" \
+       --replace '-g ''${LIBGRP}' "" \
+       --replace '-o ''${DEBUGOWN}' "" \
+       --replace '-g ''${DEBUGGRP}' ""
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.lua.mk \
+       --replace '-o ''${LIBOWN}' "" \
+       --replace '-g ''${LIBGRP}' ""
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.man.mk \
+       --replace '-o ''${MANOWN}' "" \
+       --replace '-g ''${MANGRP}' ""
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.nls.mk \
+       --replace '-o ''${NLSOWN}' "" \
+       --replace '-g ''${NLSGRP}' ""
+     substituteInPlace $BSDSRCDIR/share/mk/bsd.prog.mk \
+       --replace '-o ''${BINOWN}' "" \
+       --replace '-g ''${BINGRP}' "" \
+       --replace '-o ''${RUMPBINOWN}' "" \
+       --replace '-g ''${RUMPBINGRP}' "" \
+       --replace '-o ''${DEBUGOWN}' "" \
+       --replace '-g ''${DEBUGGRP}' ""
+
       # make needs this to pick up our sys make files
       export NIX_CFLAGS_COMPILE+=" -D_PATH_DEFSYSPATH=\"$out/share/mk\""
 
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.lib.mk \
         --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.kinc.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.kinc.mk \
         --replace /bin/rm rm
     '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.sys.mk \
+      substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
         --replace '-Wl,--warn-shared-textrel' ""
     '';
     postInstall = ''
-      make -C $NETBSDSRCDIR/share/mk FILESDIR=$out/share/mk install
+      make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
     '';
     extraPaths = [
-      (fetchNetBSD "share/mk" "8.0" "033q4w3rmvwznz6m7fn9xcf13chyhwwl8ijj3a9mrn80fkwm55qs")
+      (fetchNetBSD "share/mk" "9.2" "0w9x77cfnm6zwy40slradzi0ip9gz80x6lk7pvnlxzsr2m5ra5sy")
     ];
   };
 
   mtree = mkDerivation {
     path = "usr.sbin/mtree";
-    version = "8.0";
-    sha256 = "0hanmzm8bgwz2bhsinmsgfmgy6nbdhprwmgwbyjm6bl17vgn7vid";
-    extraPaths = [ mknod.src ];
+    version = "9.2";
+    sha256 = "04p7w540vz9npvyb8g8hcf2xa05phn1y88hsyrcz3vwanvpc0yv9";
+    extraPaths = with self; [ mknod.src ];
   };
 
   mknod = mkDerivation {
     path = "sbin/mknod";
-    version = "8.0";
-    sha256 = "0vq66v0hj0r4z2r2z2d3l3c5vh48pvcdmddc8bhm8hzq2civ5df2";
+    version = "9.2";
+    sha256 = "1d9369shzwgixz3nph991i8q5vk7hr04py3n9avbfbhzy4gndqs2";
   };
 
   getent = mkDerivation {
     path = "usr.bin/getent";
-    sha256 = "1ylhw4dnpyrmcy8n5kjcxywm8qc9p124dqnm17x4magiqx1kh9iz";
-    version = "8.0";
+    sha256 = "1qngywcmm0y7nl8h3n8brvkxq4jw63szbci3kc1q6a6ndhycbbvr";
+    version = "9.2";
     patches = [ ./getent.patch ];
   };
 
   getconf = mkDerivation {
     path = "usr.bin/getconf";
     sha256 = "122vslz4j3h2mfs921nr2s6m078zcj697yrb75rwp2hnw3qz4s8q";
-    version = "8.0";
+    version = "9.2";
   };
 
   locale = mkDerivation {
     path = "usr.bin/locale";
-    version = "8.0";
+    version = "9.2";
     sha256 = "0kk6v9k2bygq0wf9gbinliqzqpzs9bgxn0ndyl2wcv3hh2bmsr9p";
     patches = [ ./locale.patch ];
     NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
@@ -331,41 +477,72 @@ let
 
   rpcgen = mkDerivation {
     path = "usr.bin/rpcgen";
-    version = "8.0";
+    version = "9.2";
     sha256 = "1kfgfx54jg98wbg0d95p0rvf4w0302v8fz724b0bdackdsrd4988";
   };
 
   genassym = mkDerivation {
     path = "usr.bin/genassym";
-    version = "8.0";
+    version = "9.2";
     sha256 = "1acl1dz5kvh9h5806vkz2ap95rdsz7phmynh5i3x5y7agbki030c";
   };
 
   gencat = mkDerivation {
     path = "usr.bin/gencat";
-    version = "8.0";
-    sha256 = "1696lgh2lhz93247lklvpvkd0f5asg6z27w2g4bmpfijlgw2h698";
+    version = "9.2";
+    sha256 = "0gd463x1hg36bhr7y0xryb5jyxk0z0g7xvy8rgk82nlbnlnsbbwb";
   };
 
   nbperf = mkDerivation {
     path = "usr.bin/nbperf";
-    version = "8.0";
-    sha256 = "0gzm0zv2400lasnsswnjw9bwzyizhxzdbrcjwcl1k65aj86aqyqb";
+    version = "9.2";
+    sha256 = "1nxc302vgmjhm3yqdivqyfzslrg0vjpbss44s74rcryrl19mma9r";
   };
 
   tic = mkDerivation {
     path = "tools/tic";
-    version = "8.0";
+    version = "9.2";
     sha256 = "092y7db7k4kh2jq8qc55126r5qqvlb8lq8mhmy5ipbi36hwb4zrz";
     HOSTPROG = "tic";
-    buildInputs = [ compat ];
-    nativeBuildInputs = [ makeMinimal install mandoc groff nbperf ];
-    makeFlags = [ "TOOLDIR=$(out)" ];
-    extraPaths = [
-      libterminfo.src
-      (fetchNetBSD "usr.bin/tic" "8.0" "0diirnzmdnpc5bixyb34c9rid9paw2a4zfczqrpqrfvjsf1nnljf")
-      (fetchNetBSD "tools/Makefile.host" "8.0" "1p23dsc4qrv93vc6gzid9w2479jwswry9qfn88505s0pdd7h6nvp")
+    buildInputs = with self; compatIfNeeded;
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff nbperf
     ];
+    makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
+    extraPaths = with self; [
+      libterminfo.src
+      (fetchNetBSD "usr.bin/tic" "9.2" "1mwdfg7yx1g43ss378qsgl5rqhsxskqvsd2mqvrn38qw54i8v5i1")
+      (fetchNetBSD "tools/Makefile.host" "9.2" "15b4ab0n36lqj00j5lz2xs83g7l8isk3wx1wcapbrn66qmzz2sxy")
+    ];
+  };
+
+  uudecode = mkDerivation {
+    path = "usr.bin/uudecode";
+    version = "9.2";
+    sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
+    NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
+  };
+
+  cksum = mkDerivation {
+    path = "usr.bin/cksum";
+    version = "9.2";
+    sha256 = "0msfhgyvh5c2jmc6qjnf12c378dhw32ffsl864qz4rdb2b98rfcq";
+    meta.platforms = lib.platforms.netbsd;
+  };
+
+  config = mkDerivation {
+    path = "usr.bin/config";
+    version = "9.2";
+    sha256 = "1yz3n4hncdkk6kp595fh2q5lg150vpqg8iw2dccydkyw4y3hgsjj";
+    NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal install mandoc byacc flex rsync
+    ];
+    buildInputs = with self; compatIfNeeded;
+    extraPaths = with self; [ cksum.src ];
   };
   ##
   ## END COMMAND LINE TOOLS
@@ -376,41 +553,111 @@ let
   ##
   include = mkDerivation {
     path = "include";
-    version = "8.0";
-    sha256 = "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq";
-    nativeBuildInputs = [ makeMinimal install mandoc groff nbperf rpcgen ];
-    extraPaths = [ common.src ];
+    version = "9.2";
+    sha256 = "0nxnmj4c8s3hb9n3fpcmd0zl3l1nmhivqgi9a35sis943qvpgl9h";
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff rsync nbperf rpcgen
+    ];
+
+    # The makefiles define INCSDIR per subdirectory, so we have to set
+    # something else on the command line so those definitions aren't
+    # overridden.
+    postPatch = ''
+      find "$BSDSRCDIR" -name Makefile -exec \
+        sed -i -E \
+          -e 's_/usr/include_''${INCSDIR0}_' \
+          {} \;
+    '';
+
+    # multiple header dirs, see above
+    postConfigure = ''
+      makeFlags=''${makeFlags/INCSDIR/INCSDIR0}
+    '';
+
+    extraPaths = with self; [ common ];
     headersOnly = true;
     noCC = true;
-    # meta.platforms = lib.platforms.netbsd;
-    makeFlags = [ "RPCGEN_CPP=${buildPackages.gcc-unwrapped}/bin/cpp" ];
+    meta.platforms = lib.platforms.netbsd;
+    makeFlags = defaultMakeFlags ++ [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
   };
 
-  common = mkDerivation {
-    path = "common";
-    version = "8.0";
-    sha256 = "1fsm2b7p7zkhiz523jw75088cq2h39iknp0fp3di9a64bikwbhi1";
-  };
+  common = fetchNetBSD "common" "9.2" "1pfylz9r3ap5wnwwbwczbfjb1m5qdyspzbnmxmcdkpzz2zgj64b9";
 
-  # The full kernel
-  sys = mkDerivation {
+  sys-headers = mkDerivation {
+    pname = "sys-headers";
     path = "sys";
-    version = "8.0";
-    sha256 = "123ilg8fqmp69bw6bs6nh98fpi1v2n9lamrzar61p27ji6sj7g0w";
-    propagatedBuildInputs = [ include ];
-    #meta.platforms = lib.platforms.netbsd;
-    extraPaths = [ common.src ];
+    version = "9.2";
+    sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
+
+    patches = [
+      # Fix this error when building bootia32.efi and bootx64.efi:
+      # error: PHDR segment not covered by LOAD segment
+      ./no-dynamic-linker.patch
+
+      # multiple header dirs, see above
+      ./sys-headers-incsdir.patch
+    ];
+
+    # multiple header dirs, see above
+    inherit (self.include) postPatch;
+
+    CONFIG = "GENERIC";
+
+    propagatedBuildInputs = with self; [ include ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal install tsort lorder statHook rsync uudecode config genassym
+    ];
+
+    postConfigure = ''
+      pushd arch/$MACHINE/conf
+      config $CONFIG
+      popd
+    ''
+      # multiple header dirs, see above
+      + self.include.postConfigure;
+
+    makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
+    hardeningDisable = [ "pic" ];
     MKKMOD = "no";
+    NIX_CFLAGS_COMPILE = [ "-Wa,--no-warn" ];
+
+    postBuild = ''
+      make -C arch/$MACHINE/compile/$CONFIG $makeFlags
+    '';
+
+    postInstall = ''
+      cp arch/$MACHINE/compile/$CONFIG/netbsd $out
+    '';
+
+    meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ common ];
+
+    installPhase = "includesPhase";
+    dontBuild = true;
+    noCC = true;
+  };
+
+  # The full kernel. We do the funny thing of overridding the headers to the
+  # full kernal and not vice versa to avoid infinite recursion -- the headers
+  # come earlier in the bootstrap.
+  sys = self.sys-headers.override {
+    pname = "sys";
+    installPhase = null;
+    noCC = false;
+    dontBuild = false;
   };
 
   headers = symlinkJoin {
-    name = "netbsd-headers-8.0";
-    paths = [ include ] ++ map (pkg: pkg.override (_: {
-      installPhase = "includesPhase";
-      dontBuild = true;
-      noCC = true;
-      meta.platforms = lib.platforms.all;
-    })) [ sys libpthread ];
+    name = "netbsd-headers-9.2";
+    paths = with self; [
+      include
+      sys-headers
+      libpthread-headers
+    ];
+    meta.platforms = lib.platforms.netbsd;
   };
   ##
   ## END HEADERS
@@ -421,17 +668,26 @@ let
   ##
   libutil = mkDerivation {
     path = "lib/libutil";
-    version = "8.0";
-    sha256 = "077syyxd303m4x7avs5nxzk4c9n13d5lyk5aicsacqjvx79qrk3i";
-    extraPaths = [ common.src ];
+    version = "9.2";
+    sha256 = "02gm5a5zhh8qp5r5q5r7x8x6x50ir1i0ncgsnfwh1vnrz6mxbq7z";
+    extraPaths = with self; [ common libc.src sys.src ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      byacc install tsort lorder mandoc statHook
+    ];
+    buildInputs = with self; [ headers ];
+    SHLIBINSTALLDIR = "$(out)/lib";
   };
 
   libedit = mkDerivation {
     path = "lib/libedit";
-    version = "8.0";
-    sha256 = "0pmqh2mkfp70bwchiwyrkdyq9jcihx12g1awd6alqi9bpr3f9xmd";
-    buildInputs = [ libterminfo libcurses ];
-    propagatedBuildInputs = [ compat ];
+    version = "9.2";
+    sha256 = "1wqhngraxwqk4jgrf5f18jy195yrp7c06n1gf31pbplq79mg1bcj";
+    buildInputs = with self; [ libterminfo libcurses ];
+    propagatedBuildInputs = with self; compatIfNeeded;
+    SHLIBINSTALLDIR = "$(out)/lib";
+    makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = ''
       sed -i '1i #undef bool_t' el.h
       substituteInPlace config.h \
@@ -447,34 +703,43 @@ let
 
   libterminfo = mkDerivation {
     path = "lib/libterminfo";
-    version = "8.0";
-    sha256 = "14gp0d6fh6zjnbac2yjhyq5m6rca7gm6q1s9gilhzpdgl9m7vb9r";
-    buildInputs = [ compat ];
+    version = "9.2";
+    sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal install tsort lorder mandoc statHook nbperf tic
+    ];
+    buildInputs = with self; compatIfNeeded;
+    SHLIBINSTALLDIR = "$(out)/lib";
     postPatch = ''
       substituteInPlace term.c --replace /usr/share $out/share
       substituteInPlace setupterm.c \
         --replace '#include <curses.h>' 'void use_env(bool);'
     '';
-    postInstall = ''
-      make -C $NETBSDSRCDIR/share/terminfo BINDIR=$out/share install
+    postBuild = ''
+      make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share
     '';
-    extraPaths = [
-      (fetchNetBSD "share/terminfo" "8.0" "18db0fk1dw691vk6lsm6dksm4cf08g8kdm0gc4052ysdagg2m6sm")
+    postInstall = ''
+      make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share install
+    '';
+    extraPaths = with self; [
+      (fetchNetBSD "share/terminfo" "9.2" "1vh9rl4w8118a9qdpblfxmv1wkpm83rm9gb4rzz5bpm56i6d7kk7")
     ];
   };
 
   libcurses = mkDerivation {
     path = "lib/libcurses";
-    version = "8.0";
-    sha256 = "0azhzh1910v24dqx45zmh4z4dl63fgsykajrbikx5xfvvmkcq7xs";
-    buildInputs = [ libterminfo ];
+    version = "9.2";
+    sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
+    buildInputs = with self; [ libterminfo ];
     NIX_CFLAGS_COMPILE = [
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
     ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
-    propagatedBuildInputs = [ compat ];
+    propagatedBuildInputs = with self; compatIfNeeded;
     MKDOC = "no"; # missing vfontedpr
+    makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = lib.optionalString (!stdenv.isDarwin) ''
       substituteInPlace printw.c \
         --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
@@ -484,122 +749,161 @@ let
     '';
   };
 
-  libkern = mkDerivation {
-    path = "lib/libkern";
-    version = "8.0";
-    sha256 = "1wirqr9bms69n4b5sr32g1b1k41hcamm7c9n7i8c440m73r92yv4";
-    meta.platforms = lib.platforms.netbsd;
-  };
-
   column = mkDerivation {
     path = "usr.bin/column";
-    version = "8.0";
+    version = "9.2";
     sha256 = "0r6b0hjn5ls3j3sv6chibs44fs32yyk2cg8kh70kb4cwajs4ifyl";
   };
 
   libossaudio = mkDerivation {
     path = "lib/libossaudio";
-    version = "8.0";
-    sha256 = "03azp5anavhjr15sinjlik9792lyf7w4zmkcihlkksrywhs05axh";
+    version = "9.2";
+    sha256 = "16l3bfy6dcwqnklvh3x0ps8ld1y504vf57v9rx8f9adzhb797jh0";
     meta.platforms = lib.platforms.netbsd;
-    postPatch = ''
-      substituteInPlace rpc/Makefile --replace /usr $out
-    '';
   };
 
   librpcsvc = mkDerivation {
     path = "lib/librpcsvc";
-    version = "8.0";
-    sha256 = "14ri9w6gdhsm4id5ck133syyvbmkbknfa8w0xkklm726nskhfkj7";
-    makeFlags = [ "INCSDIR=$(out)/include/rpcsvc" ];
+    version = "9.2";
+    sha256 = "1q34pfiyjbrgrdqm46jwrsqms49ly6z3b0xh1wg331zga900vq5n";
+    makeFlags = defaultMakeFlags ++ [ "INCSDIR=$(out)/include/rpcsvc" ];
     meta.platforms = lib.platforms.netbsd;
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install tsort lorder rpcgen statHook
+    ];
   };
 
   librt = mkDerivation {
     path = "lib/librt";
-    version = "8.0";
-    sha256 = "078qsi4mg1hyyxr1awvjs9b0c2gicg3zw4vl603g1m9vm8gfxw9l";
+    version = "9.2";
+    sha256 = "07f8mpjcqh5kig5z5sp97fg55mc4dz6aa1x5g01nv2pvbmqczxc6";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
+    postPatch = ''
+      sed -i 's,/usr\(/include/sys/syscall.h\),${self.headers}\1,g' \
+        $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
+    '';
   };
 
   libcrypt = mkDerivation {
     path = "lib/libcrypt";
-    version = "8.0";
+    version = "9.2";
     sha256 = "0siqan1wdqmmhchh2n8w6a8x1abbff8n4yb6jrqxap3hqn8ay54g";
+    SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
   };
 
-  libpthread = mkDerivation {
+  libpthread-headers = mkDerivation {
+    pname = "libpthread-headers";
     path = "lib/libpthread";
-    version = "8.0";
-    sha256 = "0pcz61klc3ijf5z2zf8s78nj7bwjfblzjllx7vr4z5qv3m0sdb3j";
+    version = "9.2";
+    sha256 = "0mlmc31k509dwfmx5s2x010wxjc44mr6y0cbmk30cfipqh8c962h";
+    installPhase = "includesPhase";
+    dontBuild = true;
+    noCC = true;
     meta.platforms = lib.platforms.netbsd;
+  };
+
+  libpthread = self.libpthread-headers.override {
+    pname = "libpthread";
+    installPhase = null;
+    noCC = false;
+    dontBuild = false;
+    buildInputs = with self; [ headers ];
+    SHLIBINSTALLDIR = "$(out)/lib";
+    extraPaths = with self; [ common libc.src librt.src sys.src ];
   };
 
   libresolv = mkDerivation {
     path = "lib/libresolv";
-    version = "8.0";
-    sha256 = "11vpb3p2343wyrhw4v9gwz7i0lcpb9ysmfs9gsx56b5gkgipdy4v";
+    version = "9.2";
+    sha256 = "1am74s74mf1ynwz3p4ncjkg63f78a1zjm983q166x4sgzps15626";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ libc.src ];
   };
 
   libm = mkDerivation {
     path = "lib/libm";
-    version = "8.0";
-    sha256 = "0i22603cgj6n00gn2m446v4kn1pk109qs1g6ylrslmihfmiy2h1d";
+    version = "9.2";
+    sha256 = "1apwfr26shdmbqqnmg7hxf7bkfxw44ynqnnnghrww9bnhqdnsy92";
+    SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ sys.src ];
   };
 
   i18n_module = mkDerivation {
     path = "lib/i18n_module";
-    version = "8.0";
+    version = "9.2";
     sha256 = "0w6y5v3binm7gf2kn7y9jja8k18rhnyl55cvvfnfipjqdxvxd9jd";
     meta.platforms = lib.platforms.netbsd;
+    extraPaths = with self; [ libc.src ];
   };
 
   csu = mkDerivation {
     path = "lib/csu";
-    version = "8.0";
-    sha256 = "0630lbvz6v4ic13bfg8ccwfhqkgcv76bfdw9f36rfsnwfgpxqsmq";
+    version = "9.2";
+    sha256 = "0al5jfazvhlzn9hvmnrbchx4d0gm282hq5gp4xs2zmj9ycmf6d03";
     meta.platforms = lib.platforms.netbsd;
-    nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          yacc genassym gencat lorder tsort stat ];
-    extraPaths = [ sys.src ld_elf_so.src ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff flex
+      byacc genassym gencat lorder tsort statHook rsync
+    ];
+    buildInputs = with self; [ headers ];
+    extraPaths = with self; [ sys.src ld_elf_so.src ];
   };
 
   ld_elf_so = mkDerivation {
     path  = "libexec/ld.elf_so";
-    version = "8.0";
-    sha256 = "1jmqpi0kg2daiqnvpwdyfy8rpnszxsm70sxizz0r7wn53xjr5hva";
+    version = "9.2";
+    sha256 = "0ia9mqzdljly0vqfwflm5mzz55k7qsr4rw2bzhivky6k30vgirqa";
     meta.platforms = lib.platforms.netbsd;
+    LIBC_PIC = "${self.libc}/lib/libc_pic.a";
+    # Hack to prevent a symlink being installed here for compatibility.
+    SHLINKINSTALLDIR = "/usr/libexec";
     USE_FORT = "yes";
-    extraPaths = [ libc.src ] ++ libc.extraPaths;
+    makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/libexec" "CLIBOBJ=${self.libc}/lib" ];
+    extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
   };
+
+  _mainLibcExtraPaths = with self; [
+      common i18n_module.src sys.src
+      ld_elf_so.src libpthread.src libm.src libresolv.src
+      librpcsvc.src libutil.src librt.src libcrypt.src
+  ];
 
   libc = mkDerivation {
     path = "lib/libc";
-    version = "8.0";
-    sha256 = "0lgbc58qgn8kwm3l011x1ml1kgcf7jsgq7hbf0hxhlbvxq5bljl3";
+    version = "9.2";
+    sha256 = "1y9c13igg0kai07sqvf9cm6yqmd8lhfd8hq3q7biilbgs1l99as3";
     USE_FORT = "yes";
     MKPROFILE = "no";
-    extraPaths = [ common.src i18n_module.src sys.src
-                   ld_elf_so.src libpthread.src libm.src libresolv.src
-                   librpcsvc.src libutil.src librt.src libcrypt.src ];
-    buildInputs = [ buildPackages.netbsd.headers csu ];
-    nativeBuildInputs = [ makeMinimal install mandoc groff flex
-                          yacc genassym gencat lorder tsort stat ];
-    NIX_CFLAGS_COMPILE = "-B${csu}/lib";
+    extraPaths = with self; _mainLibcExtraPaths ++ [
+      (fetchNetBSD "external/bsd/jemalloc" "9.2" "0cq704swa0h2yxv4gc79z2lwxibk9k7pxh3q5qfs7axx3jx3n8kb")
+    ];
+    nativeBuildInputs = with buildPackages.netbsd; [
+      bsdSetupHook netbsdSetupHook
+      makeMinimal
+      install mandoc groff flex
+      byacc genassym gencat lorder tsort statHook rsync rpcgen
+    ];
+    buildInputs = with self; [ headers csu ];
+    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
+    MKPICINSTALL = "yes";
     NLSDIR = "$(out)/share/nls";
-    makeFlags = [ "FILESDIR=$(out)/var/db"];
+    makeFlags = defaultMakeFlags ++ [ "FILESDIR=$(out)/var/db"];
     postInstall = ''
-      pushd ${buildPackages.netbsd.headers}
+      pushd ${self.headers}
       find . -type d -exec mkdir -p $out/\{} \;
       find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
       popd
 
-      pushd ${csu}
+      pushd ${self.csu}
       find . -type d -exec mkdir -p $out/\{} \;
       find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
       popd
@@ -608,34 +912,31 @@ let
       NIX_CFLAGS_COMPILE+=" -I$out/include"
       NIX_LDFLAGS+=" -L$out/lib"
 
-      make -C $NETBSDSRCDIR/lib/libpthread $makeFlags
-      make -C $NETBSDSRCDIR/lib/libpthread $makeFlags install
+      make -C $BSDSRCDIR/lib/libpthread $makeFlags
+      make -C $BSDSRCDIR/lib/libpthread $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libm $makeFlags
-      make -C $NETBSDSRCDIR/lib/libm $makeFlags install
+      make -C $BSDSRCDIR/lib/libm $makeFlags
+      make -C $BSDSRCDIR/lib/libm $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libresolv $makeFlags
-      make -C $NETBSDSRCDIR/lib/libresolv $makeFlags install
+      make -C $BSDSRCDIR/lib/libresolv $makeFlags
+      make -C $BSDSRCDIR/lib/libresolv $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags
-      make -C $NETBSDSRCDIR/lib/librpcsv $makeFlags install
+      make -C $BSDSRCDIR/lib/librpcsvc $makeFlags
+      make -C $BSDSRCDIR/lib/librpcsvc $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags
-      make -C $NETBSDSRCDIR/lib/i18n_module $makeFlags install
+      make -C $BSDSRCDIR/lib/i18n_module $makeFlags
+      make -C $BSDSRCDIR/lib/i18n_module $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libutil $makeFlags
-      make -C $NETBSDSRCDIR/lib/libutil $makeFlags install
+      make -C $BSDSRCDIR/lib/libutil $makeFlags
+      make -C $BSDSRCDIR/lib/libutil $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/librt $makeFlags
-      make -C $NETBSDSRCDIR/lib/librt $makeFlags install
+      make -C $BSDSRCDIR/lib/librt $makeFlags
+      make -C $BSDSRCDIR/lib/librt $makeFlags install
 
-      make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags
-      make -C $NETBSDSRCDIR/lib/libcrypt $makeFlags install
+      make -C $BSDSRCDIR/lib/libcrypt $makeFlags
+      make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
     '';
-    postPatch = ''
-      substituteInPlace sys/Makefile.inc \
-        --replace /usr/include/sys/syscall.h ${buildPackages.netbsd.headers}/include/sys/syscall.h
-    '';
+    inherit (self.librt) postPatch;
   };
   #
   # END LIBRARIES
@@ -647,30 +948,28 @@ let
   dict = mkDerivation {
     path = "share/dict";
     noCC = true;
-    version = "8.0";
-    sha256 = "1pk0y3xc5ihc2k89wjkh33qqx3w9q34k03k2qcffvbqh1l6wm36l";
-    makeFlags = [ "BINDIR=$(out)/share" ];
+    version = "9.2";
+    sha256 = "0svfc0byk59ri37pyjslv4c4rc7zw396r73mr593i78d39q5g3ad";
+    makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/share" ];
   };
 
   misc = mkDerivation {
     path = "share/misc";
     noCC = true;
-    version = "8.0";
-    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch8";
-    makeFlags = [ "BINDIR=$(out)/share" ];
+    version = "9.2";
+    sha256 = "1j2cdssdx6nncv8ffj7f7ybl7m9hadjj8vm8611skqdvxnjg6nbc";
+    makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/share" ];
   };
 
   man = mkDerivation {
     path = "share/man";
     noCC = true;
-    version = "8.0";
-    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch0";
-    makeFlags = [ "FILESDIR=$(out)/share" ];
+    version = "9.2";
+    sha256 = "1l4lmj4kmg8dl86x94sr45w0xdnkz8dn4zjx0ipgr9bnq98663zl";
+    makeFlags = defaultMakeFlags ++ [ "FILESDIR=$(out)/share" ];
   };
   #
   # END MISCELLANEOUS
   #
 
-  };
-
-in netbsd
+})

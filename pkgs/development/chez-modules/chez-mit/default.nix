@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, chez, chez-srfi }:
+{ stdenv, lib, fetchgit, chez, chez-srfi }:
 
 stdenv.mkDerivation {
   pname = "chez-mit";
@@ -22,11 +22,11 @@ stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "This is a MIT/GNU Scheme compatibility library for Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-mit/";
-    maintainers = [ stdenv.lib.maintainers.jitwit ];
-    license = stdenv.lib.licenses.free;
+    maintainers = [ maintainers.jitwit ];
+    license = licenses.free;
   };
 
 }

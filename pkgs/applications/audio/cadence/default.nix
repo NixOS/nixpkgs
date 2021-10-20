@@ -1,12 +1,11 @@
-{ stdenv
+{ lib
 , a2jmidid
 , coreutils
-, lib
 , libjack2
 , fetchpatch
 , fetchzip
 , jack_capture
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , qtbase
 , makeWrapper
@@ -48,7 +47,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -98,8 +97,8 @@ mkDerivation rec {
   meta = {
     homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ worldofpeace ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

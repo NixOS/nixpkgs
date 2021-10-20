@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "gwt-dnd-2.6.5";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "07zdlr8afs499asnw0dcjmw1cnjc646v91lflx5dv4qj374c97fw";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.unix;
     license = licenses.asl20;
   };

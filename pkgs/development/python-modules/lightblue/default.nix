@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchurl
 , pkgs
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.bluez pkgs.openobex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://lightblue.sourceforge.net";
     description = "Cross-platform Bluetooth API for Python";
     maintainers = with maintainers; [ leenaars ];

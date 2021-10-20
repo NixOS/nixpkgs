@@ -1,15 +1,10 @@
 { stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
 
-let version = "10.12"; in
-
-# Ensure appleSdkVersion is up to date.
-assert stdenv.isDarwin -> stdenv.appleSdkVersion == version;
-
 let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
-    inherit version;
+    version = "10.12";
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
@@ -51,7 +46,7 @@ let
       popd
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK ${version}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
@@ -176,14 +171,14 @@ let
     setupHook = ./framework-setup-hook.sh;
 
     # Not going to be more specific than this for now
-    __propagatedImpureHostDeps = stdenv.lib.optionals (name != "Kernel") [
+    __propagatedImpureHostDeps = lib.optionals (name != "Kernel") [
       # The setup-hook ensures that everyone uses the impure CoreFoundation who uses these SDK frameworks, so let's expose it
       "/System/Library/Frameworks/CoreFoundation.framework"
       "/System/Library/Frameworks/${name}.framework"
       "/System/Library/Frameworks/${name}.framework/${name}"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
@@ -197,6 +192,20 @@ let
       mkdir -p $out/Library/Frameworks/
       cp -r ${darwin-stubs}/System/Library/${lib.optionalString private "Private"}Frameworks/${name}.framework \
         $out/Library/Frameworks
+
+      cd $out/Library/Frameworks/${name}.framework
+
+      versions=(./Versions/*)
+      if [ "''${#versions[@]}" != 1 ]; then
+        echo "Unable to determine current version of framework ${name}"
+        exit 1
+      fi
+      current=$(basename ''${versions[0]})
+
+      chmod u+w -R .
+      ln -s "$current" Versions/Current
+      ln -s Versions/Current/* .
+
       # NOTE there's no re-export checking here, this is probably wrong
     '';
   };
@@ -246,45 +255,57 @@ in rec {
         popd >/dev/null
       '';
     };
+
+    sandbox = stdenv.mkDerivation {
+      name = "apple-lib-sandbox";
+      dontUnpack = true;
+
+      installPhase = ''
+        mkdir -p $out/include $out/lib
+        ln -s "${lib.getDev sdk}/include/sandbox.h" $out/include/sandbox.h
+        cp "${darwin-stubs}/usr/lib/libsandbox.1.tbd" $out/lib
+        ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
+      '';
+    };
   };
 
   overrides = super: {
-    AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
+    AppKit = lib.overrideDerivation super.AppKit (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
     });
 
-    Carbon = stdenv.lib.overrideDerivation super.Carbon (drv: {
+    Carbon = lib.overrideDerivation super.Carbon (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/HTMLRendering.framework/Versions/A/HTMLRendering.tbd" ];
     });
 
-    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+    CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
       setupHook = ./cf-setup-hook.sh;
     });
 
-    CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
+    CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/Frameworks/CoreImage.framework"
       ];
     });
 
-    CoreMIDI = stdenv.lib.overrideDerivation super.CoreMIDI (drv: {
+    CoreMIDI = lib.overrideDerivation super.CoreMIDI (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
-    IMServicePlugIn = stdenv.lib.overrideDerivation super.IMServicePlugIn (drv: {
+    IMServicePlugIn = lib.overrideDerivation super.IMServicePlugIn (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/IMServicePlugInSupport.framework/Versions/A/IMServicePlugInSupport.tbd" ];
     });
 
-    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+    Security = lib.overrideDerivation super.Security (drv: {
       setupHook = ./security-setup-hook.sh;
     });
 
-    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+    QuartzCore = lib.overrideDerivation super.QuartzCore (drv: {
       installPhase = drv.installPhase + ''
         f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
         substituteInPlace "$f" \
@@ -292,22 +313,22 @@ in rec {
       '';
     });
 
-    MetalKit = stdenv.lib.overrideDerivation super.MetalKit (drv: {
+    MetalKit = lib.overrideDerivation super.MetalKit (drv: {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
         cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
       '';
     });
 
-    WebKit = stdenv.lib.overrideDerivation super.WebKit (drv: {
+    WebKit = lib.overrideDerivation super.WebKit (drv: {
       extraTBDFiles = [
         "Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore.tbd"
         "Versions/A/Frameworks/WebKitLegacy.framework/Versions/A/WebKitLegacy.tbd"
       ];
     });
-  } // lib.genAttrs [ "ContactsPersistence" "UIFoundation" "GameCenter" ] (x: tbdOnlyFramework x {});
+  } // lib.genAttrs [ "ContactsPersistence" "CoreSymbolication" "GameCenter" "SkyLight" "UIFoundation" ] (x: tbdOnlyFramework x {});
 
-  bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
+  bareFrameworks = lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
     inherit (pkgs.darwin) libobjc;
   });

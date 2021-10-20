@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchzip, cmake, pkgconfig, lv2, alsaLib, libjack2,
+{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, pkg-config, lv2, alsa-lib, libjack2,
   freetype, libX11, gtk3, pcre, libpthreadstubs, libXdmcp, libxkbcommon,
   epoxy, at-spi2-core, dbus, curl, fftwFloat }:
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ lv2 alsaLib libjack2 freetype libX11 gtk3 pcre
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [ lv2 alsa-lib libjack2 freetype libX11 gtk3 pcre
     libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus curl fftwFloat ];
 
   cmakeFlags = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cp  -r ${impulseDB}/* $out/share/${pname}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www2.ika.ruhr-uni-bochum.de/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
     license = licenses.gpl2Plus;

@@ -1,10 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i perl -p perl perlPackages.LWPProtocolhttps perlPackages.FileSlurp
+#!nix-shell -i perl -p perl perlPackages.LWPProtocolHttps perlPackages.FileSlurp
 
 use strict;
 use List::Util qw(reduce);
 use File::Slurp;
 use LWP::Simple;
+
+my $only_free = grep { $_ eq "--only-free" } @ARGV;
 
 sub semantic_less {
   my ($a, $b) = @_;
@@ -14,7 +16,7 @@ sub semantic_less {
 }
 
 sub get_latest_versions {
-  my @channels = get("http://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
+  my @channels = get("https://www.jetbrains.com/updates/updates.xml") =~ /(<channel .+?<\/channel>)/gs;
   my %h = {};
   for my $ch (@channels) {
     my ($id) = $ch =~ /^<channel id="[^"]+" name="([^"]+)"/;
@@ -55,17 +57,23 @@ sub update_nix_block {
       die "no version in $block" unless $version;
       if ($version eq $latest_versions{$channel}) {
         print("$channel is up to date at $version\n");
+      } elsif ($only_free && $block =~ /licenses\.unfree/) {
+        print("$channel is unfree, skipping\n");
       } else {
-        print("updating $channel: $version -> $latest_versions{$channel}\n");
+        my $version_string = $latest_versions{$channel};
+        my $versionMajorMinor = $version_string =~ s/^([0-9]+[.][0-9]+).*/$1/r;
+
+        print("updating $channel: $version -> $version_string\n");
         my ($url) = $block =~ /url\s*=\s*"([^"]+)"/;
         # try to interpret some nix
         my ($name) = $block =~ /name\s*=\s*"([^"]+)"/;
-        $name =~ s/\$\{version\}/$latest_versions{$channel}/;
-        $url =~ s/\$\{name\}/$name/;
-        $url =~ s/\$\{version\}/$latest_versions{$channel}/;
+        $name =~ s/\$\{version\}/$version_string/;
+        # Some url pattern contain variables more than once
+        $url =~ s/\$\{name\}/$name/g;
+        $url =~ s/\$\{version\}/$version_string/g;
+        $url =~ s/\$\{versionMajorMinor\}/$versionMajorMinor/g;
         die "$url still has some interpolation" if $url =~ /\$/;
         my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
-        my $version_string = $latest_versions{$channel};
         unless ( $sha256 ) {
           my $full_version = $latest_versions{"full1_" . $channel};
           $url =~ s/$version_string/$full_version/;
@@ -78,6 +86,7 @@ sub update_nix_block {
         print "Jetbrains published SHA256: $sha256\n";
         print "Conversion into base32 yields: $sha256Base32\n";
         $block =~ s#version\s*=\s*"([^"]+)".+$#version = "$version_string"; /* updated by script */#m;
+        $block =~ s#versionMajorMinor\s*=\s*"([^"]+)".+$#versionMajorMinor = "$versionMajorMinor"; /* updated by script */#m;
         $block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256Base32"; /* updated by script */#m;
       }
     } else {

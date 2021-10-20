@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
+{ lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
 , nettools, lsof, procps }:
 
 stdenv.mkDerivation rec {
-  name = "lsh-2.0.4";
+  pname = "lsh";
+  version = "2.0.4";
+
   src = fetchurl {
-    url = "mirror://gnu/lsh/${name}.tar.gz";
+    url = "mirror://gnu/lsh/lsh-${version}.tar.gz";
     sha256 = "614b9d63e13ad3e162c82b6405d1f67713fc622a8bc11337e72949d613713091";
   };
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://www.lysator.liu.se/~nisse/lsh/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];

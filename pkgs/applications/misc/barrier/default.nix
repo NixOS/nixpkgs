@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
+{ lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
   openssl, wrapGAppsHook,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
 }:
@@ -23,7 +23,7 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    ''--prefix PATH : ${stdenv.lib.makeBinPath [ openssl ]}''
+    ''--prefix PATH : ${lib.makeBinPath [ openssl ]}''
   ];
 
   meta = {
@@ -35,8 +35,8 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/debauchee/barrier";
     downloadPage = "https://github.com/debauchee/barrier/releases";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.phryneas ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.phryneas ];
+    platforms = lib.platforms.linux;
   };
 }

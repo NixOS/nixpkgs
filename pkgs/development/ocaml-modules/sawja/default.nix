@@ -1,27 +1,31 @@
-{ stdenv, fetchFromGitHub, which, perl, ocaml, findlib, javalib }:
+{ lib, stdenv, fetchFromGitHub, which, ocaml, findlib, javalib }:
 
 let
   pname = "sawja";
-  version = "1.5.8";
+  version = "1.5.10";
   webpage = "http://sawja.inria.fr/";
 in
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+if !lib.versionAtLeast ocaml.version "4.07"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml${ocaml.version}-${pname}";
+
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "javalib-team";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0rawr0jav33rvagm8sxc0arc7ya1fd9w5nng3lhfk8p02f9z8wrp";
+    rev = version;
+    sha256 = "sha256:0k51rscs9mdgpg3qn4cahql5ncdvlb207m015hr8v6r1vfgn0ddq";
   };
 
-  buildInputs = [ which perl ocaml findlib ];
+  nativeBuildInputs = [ which ];
+
+  buildInputs = [ ocaml findlib ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -31,10 +35,12 @@ stdenv.mkDerivation {
 
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   propagatedBuildInputs = [ javalib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
     homepage = webpage;
     license = licenses.gpl3Plus;

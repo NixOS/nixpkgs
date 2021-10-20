@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, valgrind, fetchpatch
-, enableStatic ? false, enableShared ? true
+{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +14,23 @@ stdenv.mkDerivation rec {
     owner = pname;
   };
 
+  patches = [
+    (fetchpatch { # https://github.com/lz4/lz4/pull/972
+      name = "CVE-2021-3520.patch";
+      url = "https://github.com/lz4/lz4/commit/8301a21773ef61656225e264f4f06ae14462bca7.patch";
+      sha256 = "0r1cwpqdkdc8im0pf2r5jp7mwwn69xcw405rrk7rc0mpjcp5ydfk";
+    })
+    (fetchpatch { # https://github.com/lz4/lz4/pull/973
+      name = "avoid-null-pointer-dereference.patch";
+      url = "https://github.com/lz4/lz4/commit/29a6a1f4941e7243241fe00d6c13b749fd6b60c2.patch";
+      sha256 = "0v5yl5hd3qrfm3xm7m06j4b21qwllb4cqkjn2az7x1vnzqgpf8y7";
+    })
+  ];
+
   # TODO(@Ericson2314): Separate binaries and libraries
   outputs = [ "bin" "out" "dev" ];
 
-  buildInputs = stdenv.lib.optional doCheck valgrind;
+  buildInputs = lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
@@ -28,7 +42,7 @@ stdenv.mkDerivation rec {
     "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
   ]
     # TODO make full dictionary
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+    ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
     ;
 
   doCheck = false; # tests take a very long time
@@ -36,7 +50,7 @@ stdenv.mkDerivation rec {
 
   # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
   postInstall =
-    stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
+    lib.optionalString stdenv.hostPlatform.isWindows ''
       mv $out/bin/*.dll $out/lib
       ln -s $out/lib/*.dll
     ''
@@ -44,7 +58,7 @@ stdenv.mkDerivation rec {
       moveToOutput bin "$bin"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast compression algorithm";
     longDescription = ''
       Very fast lossless compression algorithm, providing compression speed

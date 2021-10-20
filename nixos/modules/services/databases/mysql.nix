@@ -34,7 +34,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mysql";
+        example = literalExpression "pkgs.mariadb";
         description = "
           Which MySQL derivation to use. MariaDB packages are supported too.
         ";
@@ -43,12 +43,12 @@ in
       bind = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = literalExample "0.0.0.0";
+        example = "0.0.0.0";
         description = "Address to bind to. The default is to bind to all addresses.";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3306;
         description = "Port of MySQL.";
       };
@@ -74,12 +74,12 @@ in
       configFile = mkOption {
         type = types.path;
         default = settingsFile;
-        defaultText = "settingsFile";
+        defaultText = literalExpression "settingsFile";
         description = ''
           Override the configuration file used by MySQL. By default,
           NixOS generates one automatically from <option>services.mysql.settings</option>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           pkgs.writeText "my.cnf" '''
             [mysqld]
             datadir = /var/lib/mysql
@@ -109,7 +109,7 @@ in
             </para>
           </note>
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             mysqld = {
               key_buffer_size = "6G";
@@ -167,7 +167,7 @@ in
           of MySQL. The schema attribute is optional: If not specified, an empty database is created.
         '';
         example = [
-          { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
+          { name = "foodatabase"; schema = literalExpression "./foodatabase.sql"; }
           { name = "bardatabase"; }
         ];
       };
@@ -217,7 +217,7 @@ in
                 <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
                 The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   "database.*" = "ALL PRIVILEGES";
                   "*.*" = "SELECT, LOCK TABLES";
@@ -235,7 +235,7 @@ in
           option is changed. This means that users created and permissions assigned once through this option or
           otherwise have to be removed manually.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [
             {
               name = "nextcloud";
@@ -375,6 +375,18 @@ in
           fi
         '';
 
+        script = ''
+          # https://mariadb.com/kb/en/getting-started-with-mariadb-galera-cluster/#systemd-and-galera-recovery
+          if test -n "''${_WSREP_START_POSITION}"; then
+            if test -e "${cfg.package}/bin/galera_recovery"; then
+              VAR=$(cd ${cfg.package}/bin/..; ${cfg.package}/bin/galera_recovery); [[ $? -eq 0 ]] && export _WSREP_START_POSITION=$VAR || exit 1
+            fi
+          fi
+
+          # The last two environment variables are used for starting Galera clusters
+          exec ${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION
+        '';
+
         postStart = let
           # The super user account to use on *first* run of MySQL server
           superUser = if isMariaDB then cfg.user else "root";
@@ -481,8 +493,7 @@ in
           Type = if hasNotify then "notify" else "simple";
           Restart = "on-abort";
           RestartSec = "5s";
-          # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+
           # User and group
           User = cfg.user;
           Group = cfg.group;

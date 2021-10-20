@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
 , nodejs, yarn, electron_7, jre8, tor }:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    phases = [ "unpackPhase" "buildPhase" ];
+    dontInstall = true;
     nativeBuildInputs = [ yarn ];
     buildPhase = ''
       export HOME=$NIX_BUILD_ROOT
@@ -90,11 +90,11 @@ in stdenv.mkDerivation rec {
     '';
   };
 
-  passthru.prefetchYarnCache = stdenv.lib.overrideDerivation yarnCache (d: {
-    outputHash = stdenv.lib.fakeSha256;
+  passthru.prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+    outputHash = lib.fakeSha256;
   });
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop GUI for Whirlpool by Samourai-Wallet";
     homepage = https://www.samouraiwallet.com/whirlpool;
     license = licenses.unlicense;

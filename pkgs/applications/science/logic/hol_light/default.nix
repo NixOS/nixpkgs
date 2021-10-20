@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
 
 let
   load_num =
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/hol_light"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage    = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
     license     = licenses.bsd2;

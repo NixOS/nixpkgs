@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , defcon, fonttools, lxml, fs
 , mutatormath, fontmath, fontparts
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     defcon
@@ -25,6 +25,15 @@ buildPythonPackage rec {
     fontparts
     mutatormath
   ];
+
+  checkPhase = ''
+    runHook preCheck
+    for t in Tests/*.py; do
+      # https://github.com/LettError/ufoProcessor/issues/32
+      [[ "$(basename "$t")" = "tests_fp.py" ]] || python "$t"
+    done
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Read, write and generate UFOs with designspace data";

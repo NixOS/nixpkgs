@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
 , curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
 , Cocoa
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype SDL2 SDL2_image libGL zlib curl glew opusfile openal libogg
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
@@ -55,11 +55,9 @@ stdenv.mkDerivation rec {
     cp $notoFont $out/share/games/openspades/Resources/
   '';
 
-  enableParallelBuilding = true;
-
   NIX_CFLAGS_LINK = "-lopenal";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;

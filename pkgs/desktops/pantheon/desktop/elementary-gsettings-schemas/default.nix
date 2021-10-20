@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , runCommand
 , mutter
 , elementary-default-settings
@@ -6,7 +6,7 @@
 , glib
 , gala
 , epiphany
-, elementary-settings-daemon
+, gnome-settings-daemon
 , gtk3
 , elementary-dock
 , gsettings-desktop-schemas
@@ -18,7 +18,7 @@ let
 
   gsettingsOverridePackages = [
     elementary-dock
-    elementary-settings-daemon
+    gnome-settings-daemon
     epiphany
     gala
     gsettings-desktop-schemas
@@ -28,7 +28,7 @@ let
 
 in
 
-with stdenv.lib;
+with lib;
 
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
 runCommand "elementary-gsettings-desktop-schemas" {}

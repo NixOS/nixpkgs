@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "syncthing";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ chkno ];
+  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
   nodes = rec {
     a = {
@@ -25,7 +25,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
             "xmllint --xpath 'string(configuration/gui/apikey)' %s/config.xml" % confdir
         ).strip()
         oldConf = host.succeed(
-            "curl -Ssf -H 'X-API-Key: %s' 127.0.0.1:8384/rest/system/config" % APIKey
+            "curl -Ssf -H 'X-API-Key: %s' 127.0.0.1:8384/rest/config" % APIKey
         )
         conf = json.loads(oldConf)
         conf["devices"].append({"deviceID": deviceID, "id": name})
@@ -39,7 +39,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         )
         newConf = json.dumps(conf)
         host.succeed(
-            "curl -Ssf -H 'X-API-Key: %s' 127.0.0.1:8384/rest/system/config -d %s"
+            "curl -Ssf -H 'X-API-Key: %s' 127.0.0.1:8384/rest/config -X PUT -d %s"
             % (APIKey, shlex.quote(newConf))
         )
 

@@ -1,41 +1,46 @@
-{ buildPythonPackage
-, fetchPypi
+{ stdenv
 , lib
-, stdenv
+, buildPythonPackage
 , pythonOlder
 , isPy27
-, appdirs
-, contextlib2
+, backports-entry-points-selectable
+, cython
 , distlib
+, fetchPypi
 , filelock
+, flaky
 , importlib-metadata
 , importlib-resources
 , pathlib2
-, setuptools_scm
+, platformdirs
+, pytest-freezegun
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, setuptools-scm
 , six
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.2.1";
+  version = "20.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0aac7525e880a429764cefd3aaaff54afb5d9f25c82627563603f5d7de5a6e5";
+    sha256 = "9ef4e8ee4710826e98ff3075c9a4739e2cb1040de6a2a8d35db0055840dc96a0";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    appdirs
+    backports-entry-points-selectable
     distlib
     filelock
+    platformdirs
     six
-  ] ++ lib.optionals isPy27 [
-    contextlib2
-  ] ++ lib.optionals (isPy27 && !stdenv.hostPlatform.isWindows) [
+  ] ++ lib.optionals (pythonOlder "3.4" && !stdenv.hostPlatform.isWindows) [
     pathlib2
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
@@ -47,10 +52,39 @@ buildPythonPackage rec {
     ./0001-Check-base_prefix-and-base_exec_prefix-for-Python-2.patch
   ];
 
-  meta = {
+  checkInputs = [
+    cython
+    flaky
+    pytest-freezegun
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Ignore tests which require network access
+  disabledTestPaths = [
+    "tests/unit/create/test_creator.py"
+    "tests/unit/seed/embed/test_bootstrap_link_via_app_data.py"
+  ];
+
+  disabledTests = [
+    "test_can_build_c_extensions"
+    "test_xonsh" # imports xonsh, which is not in pythonPackages
+    # tests search `python3`, fail on python2, pypy
+    "test_python_via_env_var"
+    "test_python_multi_value_prefer_newline_via_env_var"
+  ];
+
+  pythonImportsCheck = [ "virtualenv" ];
+
+  meta = with lib; {
     description = "A tool to create isolated Python environments";
     homepage = "http://www.virtualenv.org";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ goibhniu ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ goibhniu ];
   };
 }

@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 
 , abiVersion ? "6"
 , mouseSupport ? false
 , unicode ? true
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !enableStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.ncurses
   ];

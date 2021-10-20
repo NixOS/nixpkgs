@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "vapor";
@@ -14,13 +14,13 @@ let
     name = "Vapor";
     exec = pname;
     icon = icon;
-    comment = "LÖVE Distribution Client"; 
+    comment = "LÖVE Distribution Client";
     desktopName = "Vapor";
     genericName = "vapor";
     categories = "Game;";
   };
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase =
   ''
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LÖVE Distribution Client allowing access to many games";
     platforms = platforms.linux;
     license = licenses.zlib;

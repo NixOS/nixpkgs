@@ -2,8 +2,8 @@
 , fetchFromGitHub
 , git
 , go
-, python
-, stdenv
+, python3
+, lib, stdenv
 }:
 
 let
@@ -22,7 +22,7 @@ buildBazelPackage rec {
     sha256 = "0gigl1lg8sb4bj5crvj54329ws4yirldbncs15f96db6vhp0ig7r";
   };
 
-  nativeBuildInputs = [ go git python ];
+  nativeBuildInputs = [ go git python3 ];
   removeRulesCC = false;
 
   bazelTarget = "//ibazel";
@@ -56,7 +56,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0yl5rs6y1xifxjfsa9zv8bjcwiky7rxk9y3rmi01pqpsm7ik12a9";
+    sha256 = "1j175z3d4fbi4pl35py7yjq7ywrvwin6id131jv32hx0ck4g1m46";
   };
 
   buildAttrs = {
@@ -73,7 +73,7 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;

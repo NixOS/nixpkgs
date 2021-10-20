@@ -1,5 +1,20 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
-, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg, fetchpatch
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, cairo
+, cmake
+, curl
+, fontconfig
+, freetype
+, lcms
+, libiconv
+, libintl
+, libjpeg
+, ninja
+, openjpeg
+, pkg-config
+, zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
@@ -12,25 +27,38 @@ let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
-  name = "poppler-${suffix}-${version}";
+  pname = "poppler-${suffix}";
+  inherit version;
 
   src = fetchurl {
-    url = "${meta.homepage}/poppler-${version}.tar.xz";
+    url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
     sha256 = "1afdrxxkaivvviazxkg5blsf2x24sjkfj92ib0d3q5pm8dihjrhj";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [
+    # Fix internal crash: a negative number that should not be
     (fetchpatch {
       name = "CVE-2018-13988";
       url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=004e3c10df0abda214f0c293f9e269fdd979c5ee";
       sha256 = "1l8713s57xc6g81bldw934rsfm140fqc7ggd50ha5mxdl1b3app2";
     })
+    # Fix internal crash: a negative number that should not be (not the above!)
     ./0.61-CVE-2019-9959.patch
   ];
 
-  buildInputs = [ libiconv libintl ] ++ lib.optional withData poppler_data;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    libiconv
+    libintl
+  ]
+  ++ lib.optional withData poppler_data;
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
@@ -39,10 +67,8 @@ stdenv.mkDerivation rec {
     ++ optional qt5Support qtbase
     ++ optional introspectionSupport gobject-introspection;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
-
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")
@@ -53,15 +79,15 @@ stdenv.mkDerivation rec {
     (mkFlag qt5Support "QT5")
   ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
     description = "A PDF rendering library";
-
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base.
     '';
-
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
+{ lib, pkg-config, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "systrayhelper";
@@ -16,18 +16,18 @@ buildGoPackage rec {
 
   # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
   # > .. keep the derivation deterministic. Otherwise, we would have to rebuild it every time.
-  buildFlagsArray = [ ''-ldflags=
-    -X main.version=v${version}
-    -X main.commit=${rev}
-    -X main.date="nix-byrev"
-    -s
-    -w
-  '' ];
+  ldflags = [
+    "-X main.version=v${version}"
+    "-X main.commit=${rev}"
+    "-X main.date=nix-byrev"
+    "-s"
+    "-w"
+  ];
 
-  nativeBuildInputs = [ pkgconfig libappindicator-gtk3 ];
+  nativeBuildInputs = [ pkg-config libappindicator-gtk3 ];
   buildInputs = [ libappindicator-gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A systray utility written in go, using json over stdio for control and events";
     homepage    = "https://github.com/ssbc/systrayhelper";
     maintainers = with maintainers; [ cryptix ];

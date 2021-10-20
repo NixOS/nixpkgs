@@ -1,49 +1,49 @@
 { mkDerivation
 , stdenv
+, lib
 , fetchFromGitHub
 , qmake
-, qtbase
+, pkg-config
 , qttools
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsaLib
-, pulseSupport ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, jackSupport ? stdenv.hostPlatform.isUnix
-, libjack2
+, qtbase
+, rtaudio
+, rtmidi
 }:
-let
 
-  inherit (stdenv.lib) optional optionals;
-
-in
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.4.5";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "rerrahkr";
+    owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${version}";
-    sha256 = "0ibi0sykxf6cp5la2c4pgxf5gvy56yv259fbmdwdrdyv6vlddf42";
+    fetchSubmodules = true;
+    sha256 = "1mpbvhsmrn0wdmxfp3n5dwv4474qlhy47r3vwc2jwdslq6vgl1fa";
   };
 
-  sourceRoot = "source/BambooTracker";
+  nativeBuildInputs = [ qmake qttools pkg-config ];
 
-  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtbase rtaudio rtmidi ];
 
-  buildInputs = [ qtbase ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport libpulseaudio
-    ++ optional jackSupport libjack2;
+  qmakeFlags = [ "CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi" ];
 
-  qmakeFlags = [ "CONFIG+=release" "CONFIG-=debug" ]
-    ++ optional pulseSupport "CONFIG+=use_pulse"
-    ++ optionals jackSupport [ "CONFIG+=use_jack" "CONFIG+=jack_has_rename" ];
+  postConfigure = "make qmake_all";
 
-  meta = with stdenv.lib; {
+  # 1. installs app bundle on darwin, move to app bundle dir & link binary to bin
+  # 2. wrapQtAppsHook fails to wrap mach-o binaries automatically, manually call wrapper
+  #    (see https://github.com/NixOS/nixpkgs/issues/102044)
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/{bin,Applications}/BambooTracker.app
+    wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
+    ln -s $out/{Applications/BambooTracker.app/Contents/MacOS,bin}/BambooTracker
+  '';
+
+  meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
-    homepage = "https://github.com/rerrahkr/BambooTracker";
-    license = licenses.gpl2Only;
+    homepage = "https://bambootracker.github.io/BambooTracker/";
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
   };

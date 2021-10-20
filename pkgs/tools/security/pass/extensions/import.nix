@@ -1,47 +1,60 @@
-{ stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, fetchpatch }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, gnupg
+, pass
+, makeWrapper
+}:
 
-let
-  pythonEnv = pythonPackages.python.withPackages (p: [
-    p.defusedxml
-    p.setuptools
-    p.pyaml
-    p.pykeepass
-    p.filemagic
-    p.cryptography
-    p.secretstorage
-  ]);
-
-in stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "pass-import";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-import";
     rev = "v${version}";
-    sha256 = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
+    sha256 = "0hrpg7yiv50xmbajfy0zdilsyhbj5iv0qnlrgkfv99q1dvd5qy56";
   };
 
-  patches = [ ./0001-Fix-installation-with-Nix.patch ];
+  propagatedBuildInputs = with python3Packages; [
+    cryptography
+    defusedxml
+    pyaml
+    pykeepass
+    python_magic # similar API to "file-magic", but already in nixpkgs.
+    secretstorage
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  checkInputs = [
+    gnupg
+    pass
+    python3Packages.pytestCheckHook
+  ];
 
-  buildInputs = [ pythonEnv ];
-
-  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
+  disabledTests = [
+    "test_import_gnome_keyring" # requires dbus, which pytest doesn't support
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/pimport \
-      --prefix PATH : "${pythonEnv}/bin" \
-      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
+    mkdir -p $out/lib/password-store/extensions
+    cp ${src}/import.bash $out/lib/password-store/extensions/import.bash
     wrapProgram $out/lib/password-store/extensions/import.bash \
-      --prefix PATH : "${pythonEnv}/bin" \
-      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
+      --prefix PATH : "${python3Packages.python.withPackages (_: propagatedBuildInputs)}/bin" \
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}" \
+      --run "export PREFIX"
+    cp -r ${src}/share $out/
   '';
 
-  meta = with stdenv.lib; {
+  postCheck = ''
+    $out/bin/pimport --list-exporters --list-importers
+  '';
+
+  meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
     homepage = "https://github.com/roddhjav/pass-import";
+    changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
     platforms = platforms.unix;

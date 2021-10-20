@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, libGLU, libGL, zlib, libjpeg, libogg, libvorbis
-, openal, curl }:
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, libGLU, libGL, zlib, libjpeg, libogg, libvorbis
+, openal, curl, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "dhewm3";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "dhewm";
     repo = "dhewm3";
     rev = version;
-    sha256 = "0wsabvh1x4g12xmhzs2m2pgri2q9sir1w3m2r7fpy6kzxp32hqdk";
+    sha256 = "sha256-QI2INtNP+TSXdGSNxBcJ+lQK9dvDStrir20z3kCY8v4=";
   };
 
   # Add libGLU libGL linking
@@ -21,17 +21,24 @@ stdenv.mkDerivation rec {
     cd "$(ls -d dhewm3-*.src)"/neo
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake copyDesktopItems ];
   buildInputs = [ SDL2 libGLU libGL zlib libjpeg libogg libvorbis openal curl ];
 
-  enableParallelBuilding = true;
+  desktopItems = [
+    (makeDesktopItem {
+      name = "dhewm3";
+      exec = "dhewm3";
+      desktopName = "Doom 3";
+      categories = "Game;";
+    })
+  ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dhewm/dhewm3";
     description = "Doom 3 port to SDL";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = with maintainers; [ MP2E ];
     platforms = with platforms; linux;
   };

@@ -1,18 +1,32 @@
-{ stdenv, fetchurl, tzdata, iana-etc, runCommand
-, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
-, mailcap, runtimeShell
+{ lib
+, stdenv
+, fetchurl
+, tzdata
+, iana-etc
+, runCommand
+, perl
+, which
+, pkg-config
+, patch
+, procps
+, pcre
+, cacert
+, Security
+, Foundation
+, mailcap
+, runtimeShell
 , buildPackages
 , pkgsBuildTarget
 , fetchpatch
+, callPackage
 }:
 
 let
+  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
 
-  inherit (stdenv.lib) optionals optionalString;
-
-  goBootstrap = runCommand "go-bootstrap" {} ''
+  goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out
-    cp -rf ${buildPackages.go_bootstrap}/* $out/
+    cp -rf ${go_bootstrap}/* $out/
     chmod -R u+w $out
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
@@ -27,6 +41,7 @@ let
     "armv6l" = "arm";
     "armv7l" = "arm";
     "powerpc64le" = "ppc64le";
+    "mips" = "mips";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
   # We need a target compiler which is still runnable at build time,
@@ -36,20 +51,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.15.6";
+  version = "1.15.15";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "05sqcx4fm1nxfm46j6xriq0fnnah4bm8bqw027xrzcg2qmrvl2w9";
+    sha256 = "sha256-BmKuOBMzAoDV8al6LuI7vb46Wnz6YAGySphzoZoNx+w=";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch procps ];
+  nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
-    ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
 
@@ -109,14 +124,14 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
-  '' + optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
 
-  '' + optionalString stdenv.isAarch32 ''
+  '' + lib.optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
@@ -152,6 +167,14 @@ stdenv.mkDerivation rec {
     ./skip-external-network-tests-1.15.patch
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
+    ./go_no_vendor_checks.patch
+
+    # support TZ environment variable starting with colon
+    (fetchpatch {
+      name = "tz-support-colon.patch";
+      url = "https://github.com/golang/go/commit/58fe2cd4022c77946ce4b598cf3e30ccc8367143.patch";
+      sha256 = "0vphwiqrm0qykfj3rfayr65qzk22fksg7qkamvaz0lmf6fqvbd2f";
+    })
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
     (if stdenv.isAarch32
@@ -173,16 +196,18 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CC_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CXX_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
 
-  GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -192,7 +217,7 @@ stdenv.mkDerivation rec {
   # Some tests assume things like home directories and users exists
   GO_BUILDER_NAME = "nix";
 
-  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   postConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -201,7 +226,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
@@ -229,12 +254,12 @@ stdenv.mkDerivation rec {
   '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
   '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
     rm -rf bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+    ${lib.optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
     ''}
   '' else "");
@@ -249,12 +274,12 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ goBootstrap ];
 
-  meta = with stdenv.lib; {
-    branch = "1.15";
+  meta = with lib; {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }

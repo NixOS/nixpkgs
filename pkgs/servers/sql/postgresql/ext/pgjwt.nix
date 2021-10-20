@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation {
   pname = "pgjwt";
@@ -11,13 +11,13 @@ stdenv.mkDerivation {
     sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/share/postgresql/extension
     cp pg*sql *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
     longDescription = ''
       sign() and verify() functions to create and verify JSON Web Tokens.

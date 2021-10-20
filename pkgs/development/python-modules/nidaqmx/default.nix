@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # Fixture "x_series_device" called directly. Fixtures are not meant to be called directly
   doCheck = false;
 
-  pythonCheckImports = [
+  pythonImportsCheck = [
     "nidaqmx.task"
   ];
 

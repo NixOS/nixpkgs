@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchurl, nasm }:
+{ stdenv, lib, fetchFromGitLab, nasm
+, enableShared ? !stdenv.hostPlatform.isStatic
+ }:
 
 stdenv.mkDerivation rec {
   pname = "x264";
-  version = "20191217-2245";
+  version = "unstable-2021-06-13";
 
-  src = fetchurl {
-    url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "0q214q4rhbhigyx3dfhp6d5v5gzln01cxccl153ps5ih567mqjdj";
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = pname;
+    rev = "5db6aa6cab1b146e07b60cc1736a01f21da01154";
+    sha256 = "0swyrkz6nvajivxvrr08py0jrfcsjvpxw78xm1k5gd9xbdrxvknh";
   };
 
   # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
@@ -28,13 +33,13 @@ stdenv.mkDerivation rec {
     export AS=$CC
   '';
 
-  configureFlags = [ "--enable-shared" ]
-    ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic"
-    ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
+  configureFlags = lib.optional enableShared "--enable-shared"
+    ++ lib.optional (!stdenv.isi686) "--enable-pic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isi686) nasm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for encoding H264/AVC video streams";
     homepage    = "http://www.videolan.org/developers/x264.html";
     license     = licenses.gpl2;

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1lvwv238p8hrl4sc5pmnvaargl2dd25p44gxl3kibq5ng03afd0n";
   };
 
-  cargoSha256 = "1ibn22v24brdlrar6j7fryiwimbbw7byak265hrw7a5agf1799x0";
+  cargoSha256 = "0lhcazcih48gc23q484h344bzz7p3lh189ljhswdyph2i11caarp";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,10 +42,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion finalfrontier.{bash,fish,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for training word and subword embeddings";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

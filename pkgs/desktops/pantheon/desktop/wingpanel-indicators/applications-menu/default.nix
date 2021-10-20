@@ -1,25 +1,22 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , substituteAll
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , vala
 , granite
 , libgee
 , gettext
 , gtk3
-, appstream
 , gnome-menus
 , json-glib
 , elementary-dock
 , bamf
 , switchboard-with-plugs
-, libunity
 , libsoup
 , wingpanel
 , zeitgeist
@@ -29,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.7.1";
+  version = "2.9.0";
 
   repoName = "applications-menu";
 
@@ -37,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
+    sha256 = "0mwjw2ghbdj336ax5srxbqnjprdhj1if7sm9k9idqkmifpzccs7i";
   };
 
   passthru = {
@@ -47,11 +44,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    appstream
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];
@@ -59,14 +55,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    gnome-menus
     granite
     gtk3
     json-glib
     libgee
     libhandy
     libsoup
-    libunity
     switchboard-with-plugs
     wingpanel
     zeitgeist
@@ -83,12 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Port to Libhandy-1
-    (fetchpatch {
-      url = "https://github.com/elementary/applications-menu/commit/8eb2430e8513e9d37f875c5c9b8b15a968c27127.patch";
-      sha256 = "8Uw9mUw7U5nrAwUDGVpAwoRqb9ah503wQCr9kPbBJIo=";
-    })
-
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";
@@ -100,11 +88,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
     homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

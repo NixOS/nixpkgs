@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "m-cli";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 completion/zsh/_m
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
     repositories.git = "git://github.com/rgcr/m-cli.git";
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
 
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [];
   };
 }

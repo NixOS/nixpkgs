@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , bison
 , pam
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doas";
-  version = "6.8";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "1dlwnvy8r6slxcy260gfkximp1ms510wdslpfq9y6xvd2qi5izcb";
+    sha256 = "sha256-F0FVVspGDZmzxy4nsb/wsEoCw4eHscymea7tIKrWzD0=";
   };
 
   # otherwise confuses ./configure
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
     (lib.optionalString (!withPAM) "--without-pam")
-    "--pamdir=${placeholder "out"}/etc/pam.d"
   ];
 
   patches = [

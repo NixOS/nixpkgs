@@ -1,11 +1,11 @@
 { lib, appimageTools, fetchurl, makeDesktopItem
-, gsettings-desktop-schemas, gtk2
+, gsettings-desktop-schemas, gtk3
 }:
 
 let
   pname = "MyCrypto";
-  version = "1.7.12";
-  sha256 = "0zmdmkli9zxygrcvrd4lbi0xqyq32dqlkxby8lsjknj1nd6l26n3";
+  version = "1.7.17";
+  sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -30,7 +30,7 @@ in appimageTools.wrapType2 rec {
   inherit name src;
 
   profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk2}/share/gsettings-schemas/${gtk2.name}:$XDG_DATA_DIRS
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   multiPkgs = null; # no p32bit needed

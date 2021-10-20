@@ -1,14 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , cmake
 , gettext
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 
 , glib
 , gsettings-desktop-schemas
 , gtk3
+, librsvg
 , libsndfile
 , libxml2
 , libzip
@@ -22,20 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.0.19";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = version;
-    sha256 = "05nx4cmrka6hwdn7r91yy4h46qpa9k7iy9dkgaq3hrkh9z3fxlkq";
+    sha256 = "sha256-FIIpWgWvq1uo/lIQXpOkUTZ6YJPtOtxKF8VjXSgqrlE=";
   };
 
-  nativeBuildInputs = [ cmake gettext pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
   buildInputs =
     [ glib
       gsettings-desktop-schemas
       gtk3
+      librsvg
       libsndfile
       libxml2
       libzip
@@ -44,15 +46,13 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ stdenv.lib.optional withLua lua;
+    ++ lib.optional withLua lua;
 
   buildFlags = "translations";
 
   hardeningDisable = [ "format" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
     homepage    = "https://xournalpp.github.io/";
     license     = licenses.gpl2Plus;

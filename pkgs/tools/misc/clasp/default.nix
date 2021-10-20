@@ -1,12 +1,8 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-let
-  version = "3.1.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "clasp";
-  inherit version;
+  version = "3.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";
@@ -23,7 +19,7 @@ stdenv.mkDerivation {
     cp bin/clasp $out/bin/clasp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Answer set solver for (extended) normal and disjunctive logic programs";
     homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;

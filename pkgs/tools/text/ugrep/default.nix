@@ -1,19 +1,35 @@
-{ stdenv, fetchFromGitHub, boost, bzip2, lz4, pcre2, xz, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, bzip2
+, lz4
+, pcre2
+, xz
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "ugrep";
-  version = "3.0.6";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s8glpk7li45rcf2xi21qv65dldl8sd3mmalf54pbzfcjri5fwz6";
+    sha256 = "sha256-FnSOurICD4n2Z/snP0ysWZ30DnyEDZMqpjRrS1WxG+Q=";
   };
 
-  buildInputs = [ boost bzip2 lz4 pcre2 xz zlib ];
+  buildInputs = [
+    boost
+    bzip2
+    lz4
+    pcre2
+    xz
+    zlib
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
     maintainers = with maintainers; [ numkem ];

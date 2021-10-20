@@ -1,9 +1,19 @@
 import ./make-test-python.nix ({ pkgs, ...} :
 
-{
+let
+  sqlcipher-signal = pkgs.writeShellScriptBin "sqlcipher" ''
+    set -eu
+
+    readonly CFG=~/.config/Signal/config.json
+    readonly KEY="$(${pkgs.jq}/bin/jq --raw-output '.key' $CFG)"
+    readonly DB="$1"
+    readonly SQL="SELECT * FROM sqlite_master where type='table'"
+    ${pkgs.sqlcipher}/bin/sqlcipher "$DB" "PRAGMA key = \"x'$KEY'\"; $SQL"
+  '';
+in {
   name = "signal-desktop";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ flokli ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ flokli primeos ];
   };
 
   machine = { ... }:
@@ -16,7 +26,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     services.xserver.enable = true;
     test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.signal-desktop ];
+    environment.systemPackages = with pkgs; [
+      signal-desktop file sqlite sqlcipher-signal
+    ];
     virtualisation.memorySize = 1024;
   };
 
@@ -39,5 +51,20 @@ import ./make-test-python.nix ({ pkgs, ...} :
     machine.wait_for_text("Signal")
     machine.wait_for_text("File Edit View Window Help")
     machine.screenshot("signal_desktop")
+
+    # Test if the database is encrypted to prevent these issues:
+    # - https://github.com/NixOS/nixpkgs/issues/108772
+    # - https://github.com/NixOS/nixpkgs/pull/117555
+    print(machine.succeed("su - alice -c 'file ~/.config/Signal/sql/db.sqlite'"))
+    machine.fail(
+        "su - alice -c 'file ~/.config/Signal/sql/db.sqlite' | grep -e SQLite -e database"
+    )
+    # Only SQLCipher should be able to read the encrypted DB:
+    machine.fail(
+        "su - alice -c 'sqlite3 ~/.config/Signal/sql/db.sqlite .databases'"
+    )
+    print(machine.succeed(
+        "su - alice -c 'sqlcipher ~/.config/Signal/sql/db.sqlite'"
+    ))
   '';
 })

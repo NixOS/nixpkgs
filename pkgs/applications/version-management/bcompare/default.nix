@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bcompare";
-  version = "4.3.7.25118";
+  version = "4.4.0.25886";
 
   src = fetchurl {
     url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-    sha256 = "165d6d81vy29pr62y4rcvl4abqqhfwdzcsx77p0dqlzgqswj88v8";
+    sha256 = "sha256-zQZrCjXzoOZ5o5M4t1n5/HhGoGTcZSj5rlf9Uz9UZko=";
   };
 
   unpackPhase = ''
@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  dontWrapQtApps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI application that allows to quickly and easily compare files and folders";
     longDescription = ''
       Beyond Compare is focused. Beyond Compare allows you to quickly and easily compare your files and folders.

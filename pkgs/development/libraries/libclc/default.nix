@@ -1,36 +1,34 @@
-{ stdenv, fetchFromGitHub, python, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages }:
 
 let
   llvm = llvmPackages.llvm;
-  clang = llvmPackages.clang;
   clang-unwrapped = llvmPackages.clang-unwrapped;
 in
 
-stdenv.mkDerivation {
-  name = "libclc-2019-06-09";
+stdenv.mkDerivation rec {
+  pname = "libclc";
+  version = "11.0.1";
 
   src = fetchFromGitHub {
-    owner = "llvm-mirror";
-    repo = "libclc";
-    rev = "9f6204ec04a8cadb6bef57caa71e3161c4f398f2";
-    sha256 = "03l9frx3iw3qdsb9rrscgzdwm6872gv6mkssvn027ndf9y321xk7";
+    owner = "llvm";
+    repo = "llvm-project";
+    rev = "llvmorg-${version}";
+    sha256 = "0bxh43hp1vl4axl3s9n2nb2ii8x1cbq98xz9c996f8rl5jy84ags";
   };
+  sourceRoot = "source/libclc";
 
-  nativeBuildInputs = [ python ];
-  buildInputs = [ llvm clang clang-unwrapped ];
-
+  # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
-    sed -i 's,llvm_clang =.*,llvm_clang = "${clang-unwrapped}/bin/clang",' configure.py
-    sed -i 's,cxx_compiler =.*,cxx_compiler = "${clang}/bin/clang++",' configure.py
+    substituteInPlace CMakeLists.txt \
+      --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
+                'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )'
   '';
 
-  configurePhase = ''
-    ${python.interpreter} ./configure.py --prefix=$out
-  '';
+  nativeBuildInputs = [ cmake ninja python3 ];
+  buildInputs = [ llvm clang-unwrapped ];
+  strictDeps = true;
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;

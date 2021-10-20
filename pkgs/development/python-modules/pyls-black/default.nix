@@ -1,25 +1,27 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, black, toml, pytest, python-language-server, isPy3k
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, black
+, toml
+, pytestCheckHook
+, python-language-server
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pyls-black";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "rupert";
     repo = "pyls-black";
     rev = "v${version}";
-    sha256 = "0cjf0mjn156qp0x6md6mncs31hdpzfim769c2lixaczhyzwywqnj";
+    sha256 = "0bkhfnlik89j3yamr20br4wm8975f20v33wabi2nyxvj10whr5dj";
   };
 
   disabled = !isPy3k;
 
-  checkPhase = ''
-    pytest
-  '';
-
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ black toml python-language-server ];
 
@@ -27,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rupert/pyls-black";
     description = "Black plugin for the Python Language Server";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
   };
 }

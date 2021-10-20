@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre }:
+{ lib, stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   version = "2.6.5";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ripayv1vf4f4ylxr7h9kad2xhy3y98ca8s4p38z7dn8l47zg0qw";
   };
 
-  buildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   postPatch = "patchShebangs .";
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java based, open source, static site/blog generator for developers & designers";
     homepage = "https://jbake.org/";
     license = licenses.mit;

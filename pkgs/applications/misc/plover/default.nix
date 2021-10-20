@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl,
+{ lib, fetchurl, python27Packages, python3Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {
@@ -6,7 +6,7 @@
     pname = "plover";
     version = "3.1.1";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;
@@ -17,18 +17,18 @@
       sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
     };
 
-    nativeBuildInputs     = [ setuptools_scm ];
+    nativeBuildInputs     = [ setuptools-scm ];
     buildInputs           = [ pytest mock ];
     propagatedBuildInputs = [
       six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
     ];
   };
 
-  dev = with python36Packages; mkDerivationWith buildPythonPackage rec {
+  dev = with python3Packages; mkDerivationWith buildPythonPackage rec {
     pname = "plover";
-    version = "4.0.0.dev8";
+    version = "4.0.0.dev10";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;
@@ -36,7 +36,7 @@
 
     src = fetchurl {
       url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1wxkmik1zyw5gqig5r0cas5v6f5408fbnximzw610rdisqy09rxp";
+      sha256 = "sha256-Eun+ZgmOIjYw6FS/2OGoBvYh52U/Ue0+NtIqrvV2Tqc=";
     };
 
     # I'm not sure why we don't find PyQt5 here but there's a similar

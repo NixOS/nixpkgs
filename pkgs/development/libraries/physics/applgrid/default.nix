@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
+{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "applgrid";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yw9wrk3vjv84kd3j4s1scfhinirknwk6xq0hvj7x2srx3h93q9p";
   };
 
+  nativeBuildInputs = [ gfortran ];
+
   # For some reason zlib was only needed after bump to gfortran8
-  buildInputs = [ gfortran hoppet lhapdf root5 zlib ];
+  buildInputs = [ hoppet lhapdf root5 zlib ];
 
   patches = [
     ./bad_code.patch
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
     license     = licenses.gpl3;
     homepage    = "http://applgrid.hepforge.org";

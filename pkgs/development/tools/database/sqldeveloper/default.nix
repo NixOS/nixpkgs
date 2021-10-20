@@ -1,7 +1,7 @@
-{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
+{ lib, stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
 let
-  version = "20.2.0.175.1842";
+  version = "20.4.0.379.2205";
 
   desktopItem = makeDesktopItem {
     name = "sqldeveloper";
@@ -46,10 +46,10 @@ in
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    sha256 = "1fcaq7ffn1q35f7rvp3ybs2191lvfc0jgjx7y4wn1nqglgj7zy7n";
+    sha256 = "1h53gl41ydr7kim6q9ckg3xyhb0rhmwj7jnis0xz6vms52b3h59k";
   };
 
-  buildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   unpackCmd = "unzip $curSrc";
 
@@ -65,7 +65,7 @@ in
       --run "cd $out/libexec/sqldeveloper/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle's Oracle DB GUI client";
     longDescription = ''
       Oracle SQL Developer is a free integrated development environment that
@@ -79,6 +79,6 @@ in
     homepage = "http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ardumont ma27 ];
+    maintainers = with maintainers; [ ardumont ];
   };
 }

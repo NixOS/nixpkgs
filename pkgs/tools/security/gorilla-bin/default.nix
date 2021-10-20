@@ -1,4 +1,4 @@
-{ fetchurl, makeWrapper, patchelf, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
+{ fetchurl, makeWrapper, patchelf, lib, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "gorilla-bin";
@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
-  phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''
     mkdir gorilla;
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = let
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
-    libPath = stdenv.lib.makeLibraryPath [ libXft libX11 freetype fontconfig libXrender libXScrnSaver libXext ];
+    libPath = lib.makeLibraryPath [ libXft libX11 freetype fontconfig libXrender libXScrnSaver libXext ];
   in ''
     mkdir -p $out/opt/password-gorilla
     mkdir -p $out/bin
@@ -34,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Password Gorilla is a Tk based password manager";
     homepage = "https://github.com/zdia/gorilla/wiki";
-    maintainers = [ stdenv.lib.maintainers.namore ];
+    maintainers = [ lib.maintainers.namore ];
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_location
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zope.schema";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20fbbce8a0726ba34f0e3958676498feebb818f06575193254e139d8d7214f26";
+    sha256 = "9fa04d95e8e7e9056091eed9819da6e65dde68de39c2b93617d361d1eb8a7c0c";
   };
 
   propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # Package seems to work fine.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.schema";
     description = "zope.interface extension for defining data schemas";
     license = licenses.zpl20;

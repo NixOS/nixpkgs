@@ -1,35 +1,35 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+{ stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
 , minimal ? false, libva-minimal
-, libX11, libXext, libXfixes, libffi, libGL
+, libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.9.1"; # Also update the hash for libva-utils!
+  pname = "libva" + lib.optionalString minimal "minimal";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "1c9rwrz30q2p47spzb9gsakwci9c5mw6i309z7p7hr2d8233ay4x";
+    sha256 = "0vsvli3xc0gqqp06p7wkm973lhr7c5qgnyz5jfjmf8kv75rajazp";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   mesonFlags = [
-    # Add FHS paths for non-NixOS applications:
-    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
+    # Add FHS and Debian paths for non-NixOS applications
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides

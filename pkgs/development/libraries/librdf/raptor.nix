@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, curl }:
+{ lib, stdenv, fetchurl, libxml2, curl }:
 
 stdenv.mkDerivation rec {
   name = "raptor-1.4.21";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The RDF Parser Toolkit";
-    homepage = "http://librdf.org/raptor";
-    license = with stdenv.lib.licenses; [ lgpl21 asl20 ];
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://librdf.org/raptor";
+    license = with lib.licenses; [ lgpl21 asl20 ];
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

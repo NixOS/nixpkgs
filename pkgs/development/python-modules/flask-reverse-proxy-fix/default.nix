@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Flask middleware for applications running under a reverse proxy";
     maintainers = with maintainers; [ matthiasbeyer ];
     homepage = "https://github.com/antarctica/flask-reverse-proxy-fix";

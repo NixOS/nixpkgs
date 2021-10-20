@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, makeWrapper }:
+{ lib, fetchFromGitHub, python3, makeWrapper }:
 
 python3.pkgs.buildPythonApplication rec {
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ crcmod python-lzo ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "installCheckPhase" ];
+  dontBuild = true;
 
   patchPhase = ''
     sed -i '1s;^;#!${python3.interpreter}\n;' ubidump.py
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/ubidump -h  > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View or extract the contents of UBIFS images";
     homepage = "https://github.com/nlitsme/ubidump";
     license = licenses.mit;

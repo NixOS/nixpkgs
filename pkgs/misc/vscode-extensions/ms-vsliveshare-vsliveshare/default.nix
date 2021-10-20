@@ -1,9 +1,10 @@
-# Baseed on previous attempts:
+# Based on previous attempts:
 #  -  <https://github.com/msteen/nixos-vsliveshare/blob/master/pkgs/vsliveshare/default.nix>
 #  -  <https://github.com/NixOS/nixpkgs/issues/41189>
-{ lib, gccStdenv, vscode-utils, autoPatchelfHook, bash, file, makeWrapper, dotnet-sdk_3
-, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust, openssl, util-linux, zlib
-, desktop-file-utils, xprop
+{ lib, gccStdenv, vscode-utils
+, jq, autoPatchelfHook, bash, makeWrapper
+, dotnet-sdk_3, curl, gcc, icu, libkrb5, libsecret, libunwind, libX11, lttng-ust, openssl, util-linux, zlib
+, desktop-file-utils, xprop, xsel
 }:
 
 with lib;
@@ -37,11 +38,17 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.2902";
-    sha256 = "0fx2vi0wxamcwqcgcx7wpg8hi7f1c2pibrmd2qy2whilpsv3gzmb";
+    version = "1.0.4836";
+    sha256 = "7hK2ptNU2mQt3iTZgkrKU9ZTVN+m7VFmAlXHxkiPL+o=";
   };
-}).overrideAttrs(attrs: {
-  buildInputs = attrs.buildInputs ++ libs ++ [ autoPatchelfHook bash file makeWrapper ];
+}).overrideAttrs({ nativeBuildInputs ? [], buildInputs ? [], ... }: {
+  nativeBuildInputs = nativeBuildInputs ++ [
+    bash
+    jq
+    autoPatchelfHook
+    makeWrapper
+  ];
+  buildInputs = buildInputs ++ libs;
 
   # Using a patch file won't work, because the file changes too often, causing the patch to fail on most updates.
   # Rather than patching the calls to functions, we modify the functions to return what we want,
@@ -57,32 +64,31 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
 
     # Fix extension attempting to write to 'modifiedInternalSettings.json'.
     # Move this write to the tmp directory indexed by the nix store basename.
-    sed -i \
-      -E -e $'s/path\.resolve\(constants_1\.EXTENSION_ROOT_PATH, \'\.\/modifiedInternalSettings\.json\'\)/path.join\(os.tmpdir(), "'$ext_unique_id'" + "-modifiedInternalSettings.json"\)/g' \
-      out/prod/extension-prod.js
+    substituteInPlace out/prod/extension-prod.js \
+      --replace "path.resolve(constants_1.EXTENSION_ROOT_PATH, './modifiedInternalSettings.json')" \
+                "path.join(os.tmpdir(), '$ext_unique_id-modifiedInternalSettings.json')"
 
     # Fix extension attempting to write to 'vsls-agent.lock'.
     # Move this write to the tmp directory indexed by the nix store basename.
-    sed -i \
-      -E -e $'s/(Agent_1.getAgentPath\(\) \+ \'.lock\')/path.join\(os.tmpdir(), "'$ext_unique_id'" + "-vsls-agent.lock"\)/g' \
-      out/prod/extension-prod.js
+    substituteInPlace out/prod/extension-prod.js \
+      --replace "path + '.lock'" \
+                "__webpack_require__('path').join(__webpack_require__('os').tmpdir(), '$ext_unique_id-vsls-agent.lock')"
 
-    # TODO: Under 'node_modules/@vsliveshare/vscode-launcher-linux' need to hardcode path to 'desktop-file-install'
-    # 'update-desktop-database' and 'xprop'. Might want to wrap the script instead.
+    # Hardcode executable paths
+    echo '#!/bin/sh' >node_modules/@vsliveshare/vscode-launcher-linux/check-reqs.sh
+    substituteInPlace node_modules/@vsliveshare/vscode-launcher-linux/install.sh \
+      --replace desktop-file-install ${desktop-file-utils}/bin/desktop-file-install
+    substituteInPlace node_modules/@vsliveshare/vscode-launcher-linux/uninstall.sh \
+      --replace update-desktop-database ${desktop-file-utils}/bin/update-desktop-database
+    substituteInPlace node_modules/@vsliveshare/vscode-launcher-linux/vsls-launcher \
+      --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace out/prod/extension-prod.js \
+      --replace xprop ${xprop}/bin/xprop \
+      --replace "'xsel'" "'${xsel}/bin/xsel'"
   '';
 
-  # Support for the `postInstall` hook was added only in nixos-20.03,
-  # so for backwards compatibility reasons lets not use it yet.
-  installPhase = attrs.installPhase + ''
-    # Support both the new and old directory structure of vscode extensions.
-    if [[ -d $out/ms-vsliveshare.vsliveshare ]]; then
-      cd $out/ms-vsliveshare.vsliveshare
-    elif [[ -d $out/share/vscode/extensions/ms-vsliveshare.vsliveshare ]]; then
-      cd $out/share/vscode/extensions/ms-vsliveshare.vsliveshare
-    else
-      echo "Could not find extension directory 'ms-vsliveshare.vsliveshare'." >&2
-      exit 1
-    fi
+  postInstall = ''
+    cd $out/share/vscode/extensions/ms-vsliveshare.vsliveshare
 
     bash -s <<ENDSUBSHELL
     shopt -s extglob
@@ -98,41 +104,31 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
 
     # The required executables are already copied over,
     # and the other runtimes won't be used and thus are just a waste of space.
-    rm -r dotnet_modules/exes dotnet_modules/runtimes/!(linux-x64)
+    rm -r dotnet_modules/exes dotnet_modules/runtimes/!(linux-x64|unix)
 
     # Not all executables and libraries are executable, so make sure that they are.
-    find . -type f ! -executable -exec file {} + | grep -w ELF | cut -d ':' -f1 | xargs -rd'\n' chmod +x
-
-    # Not all scripts are executed by passing them to a shell, so they need to be executable as well.
-    find . -type f -name '*.sh' ! -executable -exec chmod +x {} +
+    jq <package.json '.executables.linux[]' -r | xargs chmod +x
 
     # Lock the extension downloader.
     touch install-linux.Lock externalDeps-linux.Lock
     ENDSUBSHELL
   '';
 
-  rpath = makeLibraryPath libs;
-
   postFixup = ''
     # We cannot use `wrapProgram`, because it will generate a relative path,
     # which will break when copying over the files.
     mv dotnet_modules/vsls-agent{,-wrapped}
     makeWrapper $PWD/dotnet_modules/vsls-agent{-wrapped,} \
-      --prefix LD_LIBRARY_PATH : "$rpath" \
+      --prefix LD_LIBRARY_PATH : "${makeLibraryPath libs}" \
       --set LD_PRELOAD $PWD/dotnet_modules/noop-syslog.so \
       --set DOTNET_ROOT ${dotnet-sdk_3}
-
-    for bn in check-reqs.sh install.sh uninstall.sh; do
-      wrapProgram "$PWD/node_modules/@vsliveshare/vscode-launcher-linux/$bn" \
-        --prefix PATH : "${makeBinPath [desktop-file-utils xprop]}"
-    done
   '';
 
   meta = {
     description = "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
     homepage = "https://aka.ms/vsls-docs";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [ jraygauthier V ];
     platforms = [ "x86_64-linux" ];
   };
 })

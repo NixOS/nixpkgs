@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages }:
 
 stdenv.mkDerivation {
-  name= "yaml-merge-2016-02-16";
+  pname = "yaml-merge";
+  version = "unstable-2016-02-16";
 
   src = fetchFromGitHub {
     owner = "abbradar";
@@ -18,11 +19,11 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Merge YAML data files";
     homepage = "https://github.com/abbradar/yaml-merge";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }

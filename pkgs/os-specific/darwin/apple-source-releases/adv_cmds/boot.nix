@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchzip, bsdmake, perl, flex, yacc
+{ lib, stdenv, buildPackages, appleDerivation, fetchzip, bsdmake, perl, flex, bison
 }:
 
 # this derivation sucks
@@ -16,7 +16,8 @@ let recentAdvCmds = fetchzip {
 };
 
 in appleDerivation {
-  nativeBuildInputs = [ bsdmake perl yacc flex ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bsdmake perl bison flex ];
   buildInputs = [ flex ];
 
   patchPhase = ''
@@ -61,7 +62,7 @@ in appleDerivation {
 
     bsdmake -C usr-share-locale.tproj
 
-    clang ${recentAdvCmds}/ps/*.c -o ps
+    ${stdenv.cc.targetPrefix}clang ${recentAdvCmds}/ps/*.c -o ps
   '';
 
   installPhase = ''
@@ -85,7 +86,7 @@ in appleDerivation {
   setOutputFlags = false;
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ gridaphobe ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ gridaphobe ];
   };
 }

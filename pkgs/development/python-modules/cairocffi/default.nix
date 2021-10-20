@@ -8,10 +8,11 @@
 , makeFontsConf
 , freefont_ttf
 , pytest
-, pytestrunner
+, pytest-runner
 , glibcLocales
 , cairo
 , cffi
+, numpy
 , withXcffib ? false, xcffib
 , python
 , glib
@@ -19,8 +20,8 @@
 }@args:
 
 import ./generic.nix ({
-  version = "1.1.0";
-  sha256 = "1nq53f5jipgy9jgyfxp43j40qfbmrhgn1cj8bp5rrb3liy3wbh7i";
+  version = "1.2.0";
+  sha256 = "sha256-mpebUAxkyBef7ChvM36P5kTsovLNBYYM4LYtJfIuoUA=";
   dlopen_patch = ./dlopen-paths.patch;
   disabled = pythonOlder "3.5";
   inherit withXcffib;

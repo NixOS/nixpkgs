@@ -1,31 +1,29 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, flex, bison
 , llvmPackages, kernel, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.11.4";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
-    rev    = "refs/tags/v${version}";
-    sha256 = "0y4qgm2cpccrsm20rnh92hqplddqsc5q5zhw9nqn2igm3h9i0z7h";
+    rev    = "v${version}";
+    sha256 = "sha256-BKWBdFzj0j7rAfG30A0fwyYCpOG/5NFRPODW46EP1u0=";
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = with llvmPackages;
-    [ llvm clang-unwrapped
+    [ llvm libclang
       kernel elfutils libelf bcc
       libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
     # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
   # also in theory make this an environment variable around bpftrace, but this works
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;

@@ -1,48 +1,58 @@
-{ lib, stdenv, fetchurl, unzip, darwin }:
-
-# TODO: consider unvendoring various dependencies (libpng, libjpeg,
-# libwebp, zlib, ...)
+{ lib, stdenv, fetchsvn, darwin, libtiff
+, libpng, zlib, libwebp, libraw, openexr, openjpeg
+, libjpeg, jxrlib, pkg-config
+, fixDarwinDylibNames }:
 
 stdenv.mkDerivation {
-  name = "freeimage-3.18.0";
+  pname = "freeimage";
+  version = "unstable-2020-07-04";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/freeimage/FreeImage3180.zip";
-    sha256 = "1z9qwi9mlq69d5jipr3v2jika2g0kszqdzilggm99nls5xl7j4zl";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/freeimage/svn/";
+    rev = "1859";
+    sha256 = "1d94935aqbkb994nqkw7m8xcynyz9rm6k7k59igrbjak8b63qpi6";
   };
+  sourceRoot = "svn-r1859/FreeImage/trunk";
 
-  patches = lib.optional stdenv.isDarwin ./dylib.patch;
+  # Ensure that the bundled libraries are not used at all
+  prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
+  patches = [ ./unbundle.diff ];
 
-  buildInputs = [ unzip ] ++ lib.optional stdenv.isDarwin darwin.cctools;
-
-  prePatch = if stdenv.isDarwin then ''
-    sed -e 's/$(shell xcrun -find clang)/clang/g' \
-        -e 's/$(shell xcrun -find clang++)/clang++/g' \
-        -e "s|PREFIX = /usr/local|PREFIX = $out|" \
-        -e 's|-Wl,-syslibroot $(MACOSX_SYSROOT)||g' \
-        -e 's|-isysroot $(MACOSX_SYSROOT)||g' \
-        -e 's|	install -d -m 755 -o root -g wheel $(INCDIR) $(INSTALLDIR)||' \
-        -e 's| -m 644 -o root -g wheel||g' \
-        -i ./Makefile.osx
-    # Fix LibJXR performance timers
-    sed 's|^SRCS = \(.*\)$|SRCS = \1 Source/LibJXR/image/sys/perfTimerANSI.c|' -i ./Makefile.srcs
-  '' else ''
-    sed -e s@/usr/@$out/@ \
-        -e 's@-o root -g root@@' \
-        -e 's@ldconfig@echo not running ldconfig@' \
-        -i Makefile.gnu Makefile.fip
+  postPatch = ''
+    # To support cross compilation, use the correct `pkg-config`.
+    substituteInPlace Makefile.fip \
+      --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile.gnu \
+      --replace "pkg-config" "$PKG_CONFIG"
   '';
+
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.cctools
+    fixDarwinDylibNames
+  ];
+  buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 
   postBuild = lib.optionalString (!stdenv.isDarwin) ''
     make -f Makefile.fip
   '';
 
+  INCDIR = "${placeholder "out"}/include";
+  INSTALLDIR = "${placeholder "out"}/lib";
+
   preInstall = ''
-    mkdir -p $out/include $out/lib
+    mkdir -p $INCDIR $INSTALLDIR
+  ''
+  # Workaround for Makefiles.osx not using ?=
+  + lib.optionalString stdenv.isDarwin ''
+    makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
   '';
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     make -f Makefile.fip install
+  '' + lib.optionalString stdenv.isDarwin ''
+    ln -s $out/lib/libfreeimage.3.dylib $out/lib/libfreeimage.dylib
   '';
 
   enableParallelBuilding = true;
@@ -51,9 +61,7 @@ stdenv.mkDerivation {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
     license = "GPL";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [viric l-as];
     platforms = with lib.platforms; unix;
-    # see https://github.com/NixOS/nixpkgs/issues/77653
-    broken = stdenv.isAarch64;
   };
 }

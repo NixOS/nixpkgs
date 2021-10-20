@@ -1,19 +1,34 @@
-{ stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
-  python3, gtk3, gnome3, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, sassc
+, pkg-config
+, glib
+, ninja
+, python3
+, gtk3
+, gnome
+, gtk-engine-murrine
+, humanity-icon-theme
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "20.10.2";
+  version = "21.10.2";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    sha256 = "0vxs17nbahrdix1q9xj06nflm344lfgj2mrafsvyfcr2isn61iv6";
+    sha256 = "sha256-VN/jgKGM2Th+2nv91vEz47kmQiBx8xAiEVbtXwhZg6U=";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
-  buildInputs = [ gtk3 gnome3.gnome-themes-extra ];
+
+  buildInputs = [ gtk3 gnome.gnome-themes-extra ];
+
   propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
@@ -22,11 +37,11 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
-    license = with licenses; [ cc-by-sa-40 gpl3 ];
+    license = with licenses; [ cc-by-sa-40 gpl3Plus lgpl21Only lgpl3Only ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.jD91mZM2 ];
+    maintainers = with maintainers; [ fortuneteller2k maxeaubrey ];
   };
 }

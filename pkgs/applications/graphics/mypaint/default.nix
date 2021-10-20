@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , gtk3
 , gettext
@@ -11,7 +11,7 @@
 , hicolor-icon-theme
 , mypaint-brushes
 , gdk-pixbuf
-, pkgconfig
+, pkg-config
 , python3
 , swig
 , wrapGAppsHook
@@ -33,7 +33,7 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    pkgconfig
+    pkg-config
     swig
     wrapGAppsHook
     gobject-introspection # for setup hook
@@ -90,7 +90,7 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphics application for digital painters";
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;

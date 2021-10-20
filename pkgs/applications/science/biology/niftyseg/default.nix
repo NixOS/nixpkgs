@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, eigen, zlib }:
+{ lib, stdenv, fetchurl, cmake, eigen, zlib }:
 
 stdenv.mkDerivation rec {
   pname   = "niftyseg";
@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen zlib ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cmictig.cs.ucl.ac.uk/research/software/software-nifty/niftyseg";
     description = "Software for medical image segmentation, bias field correction, and cortical thickness calculation";
     maintainers = with maintainers; [ bcdarwin ];

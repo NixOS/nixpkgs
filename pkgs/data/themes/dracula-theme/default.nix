@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
 
 let
   themeName = "Dracula";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dracula variant of the Ant theme";
     homepage = "https://github.com/dracula/gtk";
     license = licenses.gpl3;

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, SDL_mixer, SDL, autoreconfHook }:
+{ lib, stdenv, fetchurl, SDL_mixer, SDL, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "ri_li-2.0.1";
+stdenv.mkDerivation rec {
+  pname = "ri_li";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ri-li/Ri-li-2.0.1.tar.bz2";
+    url = "mirror://sourceforge/ri-li/Ri-li-${version}.tar.bz2";
     sha256 = "f71ccc20c37c601358d963e087ac0d524de8c68e96df09c3aac1ae65edd38dbd";
   };
 
@@ -17,14 +18,14 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://ri-li.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "A children's train game";
     longDescription = ''
      Ri-li is an arcade game licensed under the GPL (General Public License).
 You drive a toy wood engine in many levels and you must collect all the coaches
 to win.
     '';
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ jcumming ];
+    platforms = with lib.platforms; linux;
   };
 }

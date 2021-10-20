@@ -1,7 +1,8 @@
 { stdenv
+, lib
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , fetchFromGitLab
 , fetchpatch
 , python3
@@ -20,15 +21,34 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
+    sha256 = "1phgp8fs0dlj74kbkqlvfniwc32daz47b3pvsxlfxqzyrp77xrfm";
   };
+
+  patches = [
+    # meson install tries to create /var/lib/boltd
+    ./0001-skip-mkdir.patch
+
+    # https://github.com/NixOS/nixpkgs/issues/104429
+    # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
+    (fetchpatch {
+      name = "disable-atime-tests.diff";
+      url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
+      sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
+    })
+
+    # Fix tests with newer umockdev
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/bolt/bolt/-/commit/130e09d1c7ff02c09e4ad1c9c36e9940b68e58d8.patch";
+      sha256 = "HycuM7z4VvtBuZZLU68tBxGT1YjaqJRS4sKyoTGHZEk=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -38,8 +58,8 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
-  ] ++ stdenv.lib.optional (!doCheck) python3;
+    pkg-config
+  ] ++ lib.optional (!doCheck) python3;
 
   buildInputs = [
     glib
@@ -61,19 +81,6 @@ stdenv.mkDerivation rec {
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 
-  patches = [
-    # meson install tries to create /var/lib/boltd
-    ./0001-skip-mkdir.patch
-
-    # https://github.com/NixOS/nixpkgs/issues/104429
-    # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
-    (fetchpatch {
-      name = "disable-atime-tests.diff";
-      url = "https://gitlab.freedesktop.org/roberth/bolt/-/commit/1f672a7de2ebc4dd51590bb90f3b873a8ac0f4e6.diff";
-      sha256 = "134f5s6kjqs6612pwq5pm1miy58crn1kxbyyqhzjnzmf9m57fnc8";
-    })
-    ];
-
   postPatch = ''
     patchShebangs scripts tests
   '';
@@ -85,7 +92,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;

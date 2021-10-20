@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''hu_dot_dwim_dot_defclass-star'';
-  version = ''20150709-darcs'';
+  baseName = "hu_dot_dwim_dot_defclass-star";
+  version = "stable-git";
 
-  description = ''Simplify class like definitions with defclass* and friends.'';
+  description = "Simplify class like definitions with defclass* and friends.";
 
   deps = [ args."hu_dot_dwim_dot_asdf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2015-07-09/hu.dwim.defclass-star-20150709-darcs.tgz'';
-    sha256 = ''032982lyp0hm0ssxlyh572whi2hr4j1nqkyqlllaj373v0dbs3vs'';
+    url = "http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-02-28/hu.dwim.defclass-star-stable-git.tgz";
+    sha256 = "1zj4c9pz7y69gclyd7kzf6d6s1r0am49czgvp2axbv7w50j5caf9";
   };
 
   packageName = "hu.dwim.defclass-star";
@@ -19,12 +20,12 @@ rec {
 }
 /* (SYSTEM hu.dwim.defclass-star DESCRIPTION
     Simplify class like definitions with defclass* and friends. SHA256
-    032982lyp0hm0ssxlyh572whi2hr4j1nqkyqlllaj373v0dbs3vs URL
-    http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2015-07-09/hu.dwim.defclass-star-20150709-darcs.tgz
-    MD5 e37f386dca8f789fb2e303a1914f0415 NAME hu.dwim.defclass-star FILENAME
+    1zj4c9pz7y69gclyd7kzf6d6s1r0am49czgvp2axbv7w50j5caf9 URL
+    http://beta.quicklisp.org/archive/hu.dwim.defclass-star/2021-02-28/hu.dwim.defclass-star-stable-git.tgz
+    MD5 adb295fecbe4570f4c03dbd857b2ddbc NAME hu.dwim.defclass-star FILENAME
     hu_dot_dwim_dot_defclass-star DEPS
     ((NAME hu.dwim.asdf FILENAME hu_dot_dwim_dot_asdf)) DEPENDENCIES
-    (hu.dwim.asdf) VERSION 20150709-darcs SIBLINGS
+    (hu.dwim.asdf) VERSION stable-git SIBLINGS
     (hu.dwim.defclass-star+contextl hu.dwim.defclass-star+hu.dwim.def+contextl
      hu.dwim.defclass-star+hu.dwim.def hu.dwim.defclass-star+swank
      hu.dwim.defclass-star.documentation hu.dwim.defclass-star.test)

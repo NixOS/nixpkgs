@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gcj, unzip }:
+{ fetchurl, lib, stdenv, gcj, unzip }:
 
 stdenv.mkDerivation {
   name = "pdftk-2.02";
@@ -35,9 +35,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple tool for doing everyday things with PDF documents";
     homepage = "https://www.pdflabs.com/tools/pdftk-server/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [raskin];
+    platforms = with lib.platforms; linux;
     broken = true; # Broken on Hydra since 2020-08-24
   };
 }

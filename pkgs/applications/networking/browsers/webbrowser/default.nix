@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchgit, makeDesktopItem, pkgconfig, makeWrapper
+{ stdenv, lib, fetchgit, makeDesktopItem, pkg-config, makeWrapper
 # Build
 , python2, autoconf213, yasm, perl
 , unzip, gnome2, gnum4
 
 # Runtime
 , xorg, zip, freetype, fontconfig, glibc, libffi
-, dbus, dbus-glib, gtk2, alsaLib, jack2, ffmpeg
+, dbus, dbus-glib, gtk2, alsa-lib, jack2, ffmpeg
 }:
 
 let
@@ -41,12 +41,12 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkgconfig python2
+    gnum4 makeWrapper perl pkg-config python2 unzip
   ];
 
   buildInputs = [
-    alsaLib dbus dbus-glib ffmpeg fontconfig freetype yasm zip jack2 gtk2
-    unzip gnome2.GConf xorg.libXt
+    alsa-lib dbus dbus-glib ffmpeg fontconfig freetype yasm zip jack2 gtk2
+    gnome2.GConf xorg.libXt
   ];
 
   enableParallelBuilding = true;
@@ -104,5 +104,6 @@ in stdenv.mkDerivation rec {
     license     = [ licenses.mpl20 licenses.gpl3 ];
     maintainers = with maintainers; [ TheBrainScrambler ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
+    broken      = true; # 2021-01-07
   };
 }

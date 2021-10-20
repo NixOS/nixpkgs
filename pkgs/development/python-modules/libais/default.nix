@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  six, pytest, pytestrunner, pytestcov, coverage
+{ lib, buildPythonPackage, fetchPypi,
+  six, pytest, pytest-runner, pytest-cov, coverage
 }:
 buildPythonPackage rec {
   pname = "libais";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
   # data files missing
   doCheck = false;
 
-  checkInputs = [ pytest pytestrunner pytestcov coverage ];
+  checkInputs = [ pytest pytest-runner pytest-cov coverage ];
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/schwehr/libais";
     description = "Library for decoding maritime Automatic Identification System messages";
     license = licenses.asl20;

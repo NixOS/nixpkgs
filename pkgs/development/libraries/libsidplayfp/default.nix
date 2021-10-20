@@ -1,45 +1,81 @@
 { stdenv
 , lib
-, fetchurl
-, pkgconfig
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, pkg-config
+, perl
+, unittest-cpp
+, xa
+, libgcrypt
+, libexsid
 , docSupport ? true
-, doxygen ? null
-, graphviz ? null
+, doxygen
+, graphviz
 }:
 
-assert docSupport -> doxygen != null && graphviz != null;
-let
-  inherit (lib) optionals optionalString;
-  inherit (lib.versions) majorMinor;
-in
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.0.5";
+  version = "2.2.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/${pname}/${majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "04vdrrkh5y9x9rrmj6gdp242ah70b4sslwqfby8wp2riis4hr9z0";
+  src = fetchFromGitHub {
+    owner = "libsidplayfp";
+    repo = "libsidplayfp";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-RiglS0aqLRDOfwxhVE95NaKpRy94xfeul18o3NB5L3I=";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ optionals docSupport [ doxygen graphviz ];
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
+    ++ lib.optionals docSupport [ doxygen graphviz ];
+
+  buildInputs = [ libgcrypt libexsid ];
+
+  doCheck = true;
+
+  checkInputs = [ unittest-cpp ];
+
+  enableParallelBuilding = true;
 
   installTargets = [ "install" ]
-    ++ optionals docSupport [ "doc" ];
+    ++ lib.optionals docSupport [ "doc" ];
 
   outputs = [ "out" ]
-    ++ optionals docSupport [ "doc" ];
+    ++ lib.optionals docSupport [ "doc" ];
 
-  postInstall = optionalString docSupport ''
+  configureFlags = [
+    "--enable-hardsid"
+    "--with-gcrypt"
+    "--with-exsid"
+  ]
+  ++ lib.optional doCheck "--enable-tests";
+
+  postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with lib; {
     description = "A library to play Commodore 64 music derived from libsidplay2";
-    homepage = "https://sourceforge.net/projects/sidplay-residfp/";
+    longDescription = ''
+      libsidplayfp is a C64 music player library which integrates
+      the reSID SID chip emulation into a cycle-based emulator
+      environment, constantly aiming to improve emulation of the
+      C64 system and the SID chips.
+    '';
+    homepage = "https://github.com/libsidplayfp/libsidplayfp";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ ramkromberg OPNA2608 ];
+    platforms = platforms.all;
   };
 }

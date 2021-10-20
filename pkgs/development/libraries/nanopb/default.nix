@@ -5,17 +5,18 @@
 , protobuf
 , python3
 , stdenv
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "nanopb";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0nqfi1b0szjmm1z8wd3ks64h10jblv9ip01kfggxgz6qjjfwgvq7";
+    sha256 = "0cjfkwwzi018kc0b7lia7z2jdfgibqc99mf8rvj2xq2pfapp9kf1";
   };
 
   nativeBuildInputs = [ cmake python3 python3.pkgs.wrapPython ];
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON" # generate $out/lib/libprotobuf-nanopb.so{.0,}
     "-DBUILD_STATIC_LIBS=ON" # generate $out/lib/libprotobuf-nanopb.a
-    "-Dnanopb_PROTOC_PATH=${protobuf}/bin/protoc"
+    "-Dnanopb_PROTOC_PATH=${buildPackages.protobuf}/bin/protoc"
   ];
 
   postInstall = ''

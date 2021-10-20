@@ -1,14 +1,16 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gupnp
 }:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-core";
   version = "0.6.0";
+
+  outputs = [ "out" "dev" ];
 
   setupHook = ./setup-hook.sh;
 
@@ -32,14 +34,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   propagatedBuildInputs = [
     gupnp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
     homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];

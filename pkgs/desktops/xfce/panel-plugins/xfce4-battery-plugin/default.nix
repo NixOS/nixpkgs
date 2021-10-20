@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-battery-plugin";
-  version = "1.1.3";
-  rev-prefix = "";
+  version = "1.1.4";
+  rev-prefix = "xfce4-battery-plugin-";
   odd-unstable = false;
-  sha256 = "0ligdiasrfc3170kd7sif2ml6lvlpp11lbxz3xdvklqkv7p3323y";
+  sha256 = "sha256-LwwlyWhtVM+OHR9KtE4DPyU5V/dMOjcgSjsI3o7qfk8=";
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 

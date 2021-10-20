@@ -4,7 +4,7 @@
 , pytest
 , pytestCheckHook
 , pexpect
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -16,12 +16,14 @@ buildPythonPackage rec {
     sha256 = "0xnsigs0kmpq1za0d4i522sp3f71x5bgpdh3ski0rs74yqy13cr0";
   };
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
 
-  checkInputs = [ pytestCheckHook pexpect pytestcov ];
+  checkInputs = [ pytestCheckHook pexpect pytest-cov ];
 
   disabledTests = [
     "test_suppresses_timeout_when_pdb_is_entered"
+    # Remove until https://github.com/pytest-dev/pytest/pull/7207 or similar
+    "test_suppresses_timeout_when_debugger_is_entered"
   ];
   pytestFlagsArray = [
     "-ra"

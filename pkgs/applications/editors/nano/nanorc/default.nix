@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
+{ lib, stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
@@ -26,13 +26,12 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      stdenv.lib.makeBinPath [
+      lib.makeBinPath [
         common-updater-scripts
         coreutils
         git
         gnused
         nix
-        nixfmt
       ]
     }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"' | sed 's|\\.|-|g')"
@@ -42,7 +41,6 @@ in stdenv.mkDerivation rec {
       default_nix="$nixpkgs/pkgs/applications/editors/nano/nanorc/default.nix"
       newTag=$(echo $latestTag | sed 's|\.|-|g')
       update-source-version ${pname} "$newTag" --version-key=version --print-changes
-      nixfmt "$default_nix"
     else
       echo "${pname} is already up-to-date"
     fi
@@ -51,8 +49,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Improved Nano Syntax Highlighting Files";
     homepage = "https://github.com/scopatz/nanorc";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ nequissimus ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ nequissimus ];
+    platforms = lib.platforms.all;
   };
 }

@@ -9,16 +9,18 @@
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "1.4";
+  version = "1.5";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57edce81c837f3c2cf42fbb346dee26e537d1659e6605269fb13bd179e068744";
+    sha256 = "sha256-rwghLlkLt9qOTMOcQgEnEUlNwg1iLxYhVbopbMLjvBA=";
   };
 
-  disabled = !isPy3k;
-
-  checkInputs = [ pytestCheckHook sphinx ];
+  checkInputs = [
+    pytestCheckHook
+    sphinx
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -31,9 +33,11 @@ buildPythonPackage rec {
      "test_unix_ssl_server" # socket bind error on hydra when built with other packages
    ];
 
+  pythonImportsCheck = [ "curio" ];
+
   meta = with lib; {
     homepage = "https://github.com/dabeaz/curio";
-    description = "Library for performing concurrent I/O with coroutines in Python 3";
+    description = "Library for performing concurrent I/O with coroutines in Python";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

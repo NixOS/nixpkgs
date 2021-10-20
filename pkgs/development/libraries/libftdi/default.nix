@@ -1,10 +1,11 @@
-{stdenv, fetchurl, libusb-compat-0_1}:
+{lib, stdenv, fetchurl, libusb-compat-0_1}:
 
-with stdenv; mkDerivation rec {
-  name = "libftdi-0.20";
+stdenv.mkDerivation rec {
+  pname = "libftdi";
+  version = "0.20";
 
   src = fetchurl {
-    url = "https://www.intra2net.com/en/developer/libftdi/download/${name}.tar.gz";
+    url = "https://www.intra2net.com/en/developer/libftdi/download/${pname}-${version}.tar.gz";
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 
@@ -14,7 +15,7 @@ with stdenv; mkDerivation rec {
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
-  configureFlags = lib.optional (!isDarwin) "--with-async-mode";
+  configureFlags = lib.optional (!stdenv.isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff

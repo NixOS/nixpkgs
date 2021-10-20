@@ -1,28 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.0.7";
+  version = "1.0.9";
 
   # PyPI doesn't contain tests so let's use GitHub
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1811b55wdfg4kbsjcgh1kc938g118jpvif97ilgrmbls25dfpvvw";
+    sha256 = "1rdp9rx197q467ixp53g4cgc3jbsdaxr62pz0a8ayv2lvm944azh";
+    # for some reason, the test data isn't captured in releases, force a git checkout
+    deepClone = true;
   };
 
   dontConfigure = true;
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest python/tests
-  '';
+  pytestFlagsArray = [
+    "python/tests"
+  ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

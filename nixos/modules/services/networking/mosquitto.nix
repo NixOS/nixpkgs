@@ -20,8 +20,7 @@ let
     acl_file ${aclFile}
     persistence true
     allow_anonymous ${boolToString cfg.allowAnonymous}
-    bind_address ${cfg.host}
-    port ${toString cfg.port}
+    listener ${toString cfg.port} ${cfg.host}
     ${passwordConf}
     ${listenerConf}
     ${cfg.extraConf}
@@ -57,7 +56,6 @@ in
 
       port = mkOption {
         default = 1883;
-        example = 1883;
         type = types.int;
         description = ''
           Port on which to listen without SSL.
@@ -96,7 +94,6 @@ in
 
         port = mkOption {
           default = 8883;
-          example = 8883;
           type = types.int;
           description = ''
             Port on which to listen with SSL.
@@ -233,15 +230,50 @@ in
         ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${mosquittoConf}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
-        ProtectSystem = "strict";
-        ProtectHome = true;
+        # Hardening
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
-        ReadWritePaths = "${cfg.dataDir}";
+        PrivateUsers = true;
+        ProtectClock = true;
         ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        NoNewPrivileges = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.dataDir
+          "/tmp"  # mosquitto_passwd creates files in /tmp before moving them
+        ];
+        ReadOnlyPaths = with cfg.ssl; lib.optionals (enable) [
+          certfile
+          keyfile
+          cafile
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"  # for sd_notify() call
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0077";
       };
       preStart = ''
         rm -f ${cfg.dataDir}/passwd

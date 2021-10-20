@@ -1,34 +1,65 @@
-{ stdenv, fetchurl, chipmunk, sqlite, curl, zlib, bzip2, libjpeg
-, libpng, freeglut, libGLU, libGL, SDL, SDL_mixer, SDL_image, SDL_net
-, SDL_ttf, lua5, ode, libxdg_basedir, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gettext, makeWrapper, bzip2
+, curl, libjpeg, libxml2, xz, lua, ode, libGL, libpng, SDL, SDL_mixer, SDL_net
+, SDL_ttf, sqlite, libxdg_basedir, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
-  version = "0.5.11";
+  version = "0.6.1";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/xmoto/xmoto/${version}/xmoto-${version}-src.tar.gz";
-    sha256 = "1ci6r8zd0l7z28cy92ddf9dmqbdqwinz2y1cny34c61b57wsd155";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "00f5ha79lfa2iiaz66wl0hl5dapa1l15qdr7m7knzi0ll7j6z66n";
   };
 
+  patches = [
+    # Fix build with Nix
+    (fetchpatch {
+      url = "https://github.com/xmoto/xmoto/commit/536dcc7ec77a4c4c454b86220e85b1cb3cd1c7f7.patch";
+      sha256 = "0h9lld668jrbmrqva89zqwp63jiagjj86prkxzx6372p3kk9y7g7";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    gettext
+    makeWrapper
+  ];
+
   buildInputs = [
-    chipmunk sqlite curl zlib bzip2 libjpeg libpng
-    freeglut libGLU libGL SDL SDL_mixer SDL_image SDL_net SDL_ttf
-    lua5 ode libxdg_basedir libxml2
+    bzip2
+    curl
+    libjpeg
+    libxml2
+    xz
+    lua
+    ode
+    libGL
+    libpng
+    SDL
+    SDL_mixer
+    SDL_net
+    SDL_ttf
+    sqlite
+    libxdg_basedir
+    zlib
   ];
 
-  CXXFLAGS = [
-    "-fpermissive"
-    # Build using the old C++ ABI to fix issue with missing text; the issue
-    # should be fixed in the next stable release (if that ever does happen)
-    "-D_GLIBCXX_USE_CXX11_ABI=0"
-  ];
+  preFixup = ''
+    wrapProgram "$out/bin/xmoto" \
+      --prefix XDG_DATA_DIRS : "$out/share/"
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Obstacled race game";
+  meta = with lib; {
+    description = "A challenging 2D motocross platform game, where physics play an important role";
+    longDescription = ''
+      X-Moto is a challenging 2D motocross platform game, where physics plays an all important role in the gameplay.
+      You need to control your bike to its limits, if you want to have a chance to finish the most difficult challenges.
+    '';
     homepage = "http://xmoto.tuxfamily.org";
     maintainers = with maintainers; [ raskin pSub ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
   };
 }

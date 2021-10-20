@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsoup, webkitgtk, gtk3, glib-networking
+{ lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk, gtk3, glib-networking
 , gsettings-desktop-schemas, wrapGAppsHook
 }:
 
@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
+  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
   buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
+
+  passthru = {
+    inherit gtk3;
+  };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -27,8 +31,8 @@ stdenv.mkDerivation rec {
       keyboard driven and does not detract you from your daily work.
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

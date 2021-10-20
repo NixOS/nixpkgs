@@ -6,6 +6,7 @@
 , geckodriver
 , urllib3
 , xorg
+, nixosTests
 }:
 
 
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     geckodriver urllib3
   ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
     substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${xorg.libX11.out}/lib/libX11.so.6"
     cc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
@@ -46,6 +47,10 @@ buildPythonPackage rec {
       x_ignore_nofocus.o
     cp -v x_ignore_nofocus.so selenium/webdriver/firefox/${if stdenv.is64bit then "amd64" else "x86"}/
   '';
+
+  passthru.tests = {
+    testing-vaultwarden = nixosTests.vaultwarden;
+  };
 
   meta = with lib; {
     description = "The selenium package is used to automate web browser interaction from Python";

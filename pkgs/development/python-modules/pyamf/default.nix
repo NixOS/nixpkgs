@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
 
 buildPythonPackage rec {
   pname = "PyAMF";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ defusedxml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AMF (Action Message Format) support for Python";
     homepage = "https://pypi.python.org/pypi/PyAMF";
     license = licenses.mit;

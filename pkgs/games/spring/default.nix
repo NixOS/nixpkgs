@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
+{ lib, stdenv, fetchFromGitHub, cmake, xz, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
-, asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
+, asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 
 stdenv.mkDerivation rec {
   pname = "spring";
-  version = "104.0.1-${buildId}-g${shortRev}";
+  version = "105.0.1-${buildId}-g${shortRev}";
   # usually the latest in https://github.com/spring/spring/commits/maintenance
-  rev = "f266c8107b3e5dda5a78061ef00ca0ed8736d6f2";
+  rev = "8581792eac65e07cbed182ccb1e90424ce3bd8fc";
   shortRev = builtins.substring 0 7 rev;
   buildId = "1486";
 
   # taken from https://github.com/spring/spring/commits/maintenance
   src = fetchFromGitHub {
     owner = "spring";
-    repo = "spring";
+    repo = pname;
     inherit rev;
-    sha256 = "1nx68d894yfmqc6df72hmk75ph26fqdvlmmq58cca0vbwpz9hf5v";
+    sha256 = "05lvd8grqmv7vl8rrx02rhl0qhmm58dyi6s78b64j3fkia4sfj1r";
     fetchSubmodules = true;
   };
 
@@ -40,26 +40,25 @@ stdenv.mkDerivation rec {
                 "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
-    xorg.libX11 xorg.libXcursor libGLU libGL glew asciidoc libxslt docbook_xsl curl makeWrapper
-    docbook_xsl_ns systemd libunwind which minizip ]
-    ++ stdenv.lib.optional withAI jdk
-    ++ stdenv.lib.optional withAI python;
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake makeWrapper docbook_xsl docbook_xsl_ns asciidoc ];
+  buildInputs = [ xz boost libdevil zlib p7zip openal libvorbis freetype SDL2
+    xorg.libX11 xorg.libXcursor libGLU libGL glew curl
+    systemd libunwind which minizip ]
+    ++ lib.optional withAI jdk
+    ++ lib.optional withAI python;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar maintainers.sorki ];
+    maintainers = with maintainers; [ phreedom qknight domenkozar sorki ];
     platforms = platforms.linux;
   };
 }

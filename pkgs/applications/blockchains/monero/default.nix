@@ -1,29 +1,21 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
 , CoreData, IOKit, PCSC
-, trezorSupport ? true
-,   libusb1  ? null
-,   protobuf ? null
-,   python3  ? null
+, trezorSupport ? true, libusb1, protobuf, python3
 }:
-
-with stdenv.lib;
-
-assert stdenv.isDarwin -> IOKit != null;
-assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.17.1.5";
+  version = "0.17.2.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0yy9n2qng02j314h8fh5n0mcy6vpdks0yk4d8ifn8hj03f3g2c8b";
+    sha256 = "0nax991fshfh51grhh2ryfrwwws35k16gzl1l3niva28zff2xmq6";
     fetchSubmodules = true;
   };
 
@@ -38,15 +30,15 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf
-  ] ++ optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
-    ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
+    ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -54,15 +46,15 @@ stdenv.mkDerivation rec {
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
+  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 
   outputs = [ "out" "source" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ ehmry rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

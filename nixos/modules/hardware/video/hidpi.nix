@@ -12,5 +12,6 @@ with lib;
     boot.loader.systemd-boot.consoleMode = mkDefault "1";
 
     # TODO Find reasonable defaults X11 & wayland
+    services.xserver.dpi = lib.mkDefault 192;
   };
 }

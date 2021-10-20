@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, libtiff, libjpeg, zlib }:
+{ lib, stdenv, fetchurl, libtiff, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "lcms2-2.11";
+  pname = "lcms2";
+  version = "2.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lcms/${name}.tar.gz";
-    sha256 = "0bkpf315925lhmd9i4mzjnkq5dh255r1lms0c0vzzkfpwk4bjjfw";
+    url = "mirror://sourceforge/lcms/${pname}-${version}.tar.gz";
+    sha256 = "sha256-GGY5hehkEARVrD5QdiXEOMNxA1TYXly7fNQEPhH+EPU=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   # See https://trac.macports.org/ticket/60656
   LDFLAGS = if stdenv.hostPlatform.isDarwin then "-Wl,-w" else null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color management engine";
     homepage = "http://www.littlecms.com/";
     license = licenses.mit;

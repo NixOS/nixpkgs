@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "cri-tools";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dx21ws4nzzizzjb0g172fzvjgwck88ikr5c2av08ii06rys1567";
+    sha256 = "sha256-+36lGLpNnTQnwwmXoVNPt3RMcnE46AdXOpghvhP0Bq0=";
   };
 
   vendorSha256 = null;
@@ -22,16 +22,20 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
+    runHook preBuild
     make binaries VERSION=${version}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make install BINDIR=$out/bin
 
     for shell in bash fish zsh; do
       $out/bin/crictl completion $shell > crictl.$shell
       installShellCompletion crictl.$shell
     done
+    runHook postInstall
   '';
 
   meta = with lib; {

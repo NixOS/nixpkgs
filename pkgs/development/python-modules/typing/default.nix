@@ -1,16 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy3k, isPyPy, python
+, pythonAtLeast }:
 
 let
   testDir = if isPy3k then "src" else "python2";
 
 in buildPythonPackage rec {
   pname = "typing";
-  version = "3.7.4.3";
+  version = "3.10.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1187fb9c82fd670d10aa07bbb6cfcfe4bdda42d6fab8d5134f04e8c4d0b71cc9";
+    sha256 = "13b4ad211f54ddbf93e5901a9967b1e07720c1d1b78d596ac6a439641aa1b130";
   };
+
+  disabled = pythonAtLeast "3.5";
 
   # Error for Python3.6: ImportError: cannot import name 'ann_module'
   # See https://github.com/python/typing/pull/280

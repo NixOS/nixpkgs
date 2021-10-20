@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 buildGoPackage rec {
   pname = "terraform-provider-ansible";
   version = "1.0.3";
@@ -17,7 +17,7 @@ buildGoPackage rec {
   # if the versions are not provided via file paths.
   postBuild = "mv go/bin/terraform-provider-ansible{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Terraform provider serving as an interop layer for an Ansible dynamic inventory script.";
     homepage = "https://github.com/nbering/terraform-provider-ansible";
     license = licenses.mpl20;

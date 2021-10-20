@@ -13,7 +13,7 @@
 , crateRenames
 , crateVersion
 , extraLinkFlags
-, extraRustcOpts
+, extraRustcOptsForBuildRs
 , libName
 , libPath
 , release
@@ -24,7 +24,7 @@ let version_ = lib.splitString "-" crateVersion;
     version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
+        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOptsForBuildRs);
     buildDeps = mkRustcDepArgs buildDependencies crateRenames;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
@@ -144,7 +144,7 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
-  export NUM_JOBS=1
+  export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 

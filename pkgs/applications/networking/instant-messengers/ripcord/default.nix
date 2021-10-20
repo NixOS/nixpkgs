@@ -1,16 +1,16 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools,
-  qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats,
-  autoPatchelfHook, desktop-file-utils, imagemagick, makeWrapper,
-  twemoji-color-font, xorg, libsodium, libopus, libGL, zlib, alsaLib }:
+{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
+, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
+, autoPatchelfHook, desktop-file-utils, imagemagick
+, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
 
 mkDerivation rec {
   pname = "ripcord";
-  version = "0.4.26";
+  version = "0.4.29";
 
   src = let
     appimage = fetchurl {
       url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "0i9l21gyqga27ainzqp6icn8vbc22v1knq01pglgg1lg3p504ikq";
+      sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
       name = "${pname}-${version}.AppImage";
     };
   in appimageTools.extract {
@@ -19,9 +19,9 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
-  buildInputs = [ libsodium libopus libGL alsaLib ] ++
-                [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ] ++
-                (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
+  buildInputs = [ libsodium libopus libGL alsa-lib ]
+    ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
+    ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];
@@ -60,10 +60,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
-
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
-
     maintainers = with maintainers; [ infinisil ];
     platforms = [ "x86_64-linux" ];
   };

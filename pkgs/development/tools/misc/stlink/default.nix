@@ -1,4 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake, libusb1 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libusb1
+, gtk3
+, pkg-config
+, wrapGAppsHook
+, withGUI ? false
+}:
 
 let
   # The Darwin build of stlink explicitly refers to static libusb.
@@ -9,27 +18,33 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "stlink";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "texane";
+    owner = "stlink-org";
     repo = "stlink";
     rev = "v${version}";
-    sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
+    sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
   };
 
-  buildInputs = [ libusb1' ];
-  nativeBuildInputs = [ cmake ];
-  patchPhase = ''
-    sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
-    sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt
-  '';
-  preInstall = ''
-    mkdir -p $out/etc/udev/rules.d
-    mkdir -p $out/etc/modprobe.d
-  '';
+  buildInputs = [
+    libusb1'
+  ] ++ lib.optionals withGUI [
+    gtk3
+  ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals withGUI [
+    pkg-config
+    wrapGAppsHook
+  ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"
+    "-DSTLINK_UDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"
+  ];
+
+  meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
     platforms = platforms.unix;

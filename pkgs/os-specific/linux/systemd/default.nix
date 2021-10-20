@@ -1,15 +1,17 @@
+# NOTE: Make sure to (re-)format this file on changes with `nixpkgs-fmt`!
+
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , buildPackages
 , ninja
 , meson
 , m4
-, pkgconfig
+, pkg-config
 , coreutils
 , gperf
 , getent
-, patchelf
 , glibcLocales
 , glib
 , substituteAll
@@ -30,13 +32,14 @@
 , acl
 , lz4
 , libgcrypt
-, libgpgerror
+, libgpg-error
 , libidn2
 , curl
 , gnutar
 , gnupg
 , zlib
 , xz
+, tpm2-tss
 , libuuid
 , libapparmor
 , intltool
@@ -48,12 +51,18 @@
 , iptables
 , withSelinux ? false
 , libselinux
-, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms
+, withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
 , libseccomp
-, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms
-, kexectools
+, withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools
+, kexec-tools
 , bashInteractive
 , libmicrohttpd
+
+  # the (optional) BPF feature requires bpftool, libbpf, clang and llmv-strip to be avilable during build time.
+  # Only libbpf should be a runtime dependency.
+, bpftools
+, libbpf
+, llvmPackages
 
 , withAnalyze ? true
 , withApparmor ? true
@@ -62,15 +71,18 @@
 , withCryptsetup ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
+, withFido2 ? true
 , withHomed ? false
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? true
+, withLibBPF ? false # currently fails while generating BPF objects
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? true
+, withOomd ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? false
@@ -79,13 +91,13 @@
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
+, withTpm2Tss ? true
 , withUserDb ? true
-, p11-kit
 , libfido2
+, p11-kit
 
   # name argument
 , pname ? "systemd"
-
 
 , libxslt
 , docbook_xsl
@@ -93,7 +105,7 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpgerror != null);
+assert withResolved -> (libgcrypt != null && libgpg-error != null);
 assert withImportd ->
 (curl.dev != null && zlib != null && xz != null && libgcrypt != null
   && gnutar != null && gnupg != null && withCompression);
@@ -104,15 +116,13 @@ assert withCoredump -> withCompression;
 
 assert withHomed -> withCryptsetup;
 
-assert withCryptsetup ->
-(cryptsetup != null);
+assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-
-  version = "246.6";
+  version = "249.4";
 in
 stdenv.mkDerivation {
-  inherit version pname;
+  inherit pname version;
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -120,12 +130,13 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "1yhj2jlighqqpw1xk9q52f3pncjn47ipi224k35d6syb94q2b988";
+    sha256 = "0pqi9gbk9kgwvd0idf13ybxz7s4h5przn01bwj6fna44jr0wy41c";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
   # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git format-patch v${version}`.
+  # patches again via `git -c format.signoff=false format-patch v${version}`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -138,38 +149,162 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-Install-default-configuration-into-out-share-factory.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
-    ./0014-add-rootprefix-to-lookup-dir-paths.patch
-    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0019-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0012-inherit-systemd-environment-when-calling-generators.patch
+    ./0013-add-rootprefix-to-lookup-dir-paths.patch
+    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
+    ./0019-pkg-config-derive-prefix-from-prefix.patch
+
+    # In v249 a bunch of meson files had been touched as part of the migration to
+    # jinja2 for templating. Unfortunately some of those files lost the `install_sysconfdir_samples` check.
+    # The following two patches are part of a PR that was filed to fix those cases.
+    # https://github.com/systemd/systemd/pull/20303
+    ./0020-core-respect-install_sysconfdir_samples-in-meson-fil.patch
+    ./0021-login-respect-install_sysconfdir_samples-in-meson-fi.patch
+
+    # In v248 or v249 we started to get in trouble due to our /etc/systemd/sytem being
+    # a symlink and thus being treated differently by systemd. With the below
+    # patch we mitigate that effect by special casing all our root unit dirs
+    # if they are symlinks. This does exactly what we need (AFAICT).
+    ./0022-core-Handle-lookup-paths-being-symlinks.patch
+
+    # The way files are being tested for being executable changed in v248/v249
+    # which caused our confinement setup to fail as we do not mount /proc by
+    # default.
+    # The issue has been reported upstream and this patch carries the upstream
+    # fix for the same. Upstream now has a test for this scenario.
+    # https://github.com/systemd/systemd/issues/20514
+    ./0023-path-util-make-find_executable-work-without-proc-mounted.patch
   ];
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('ld'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
-      --replace \
       "find_program('objcopy'" \
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + (
+    let
+      # The folllowing patches references to dynamic libraries to ensure that
+      # all the features that are implemented via dlopen(3) are available (or
+      # explicitly deactivated) by pointing dlopen to the absolute store path
+      # instead of relying on the linkers runtime lookup code.
+      #
+      # All of the shared library references have to be handled. When new ones
+      # are introduced by upstream (or one of our patches) they must be
+      # explicitly declared, otherwise the build will fail.
+      #
+      # As of systemd version 247 we've seen a few errors like `libpcre2.… not
+      # found` when using e.g. --grep with journalctl. Those errors should
+      # become less unexpected now.
+      #
+      # There are generally two classes of dlopen(3) calls. Those that we want to
+      # support and those that should be deactivated / unsupported. This change
+      # enforces that we handle all dlopen calls explicitly. Meaning: There is
+      # not a single dlopen call in the source code tree that we did not
+      # explicitly handle.
+      #
+      # In order to do this we introduced a list of attributes that maps from
+      # shared object name to the package that contains them. The package can be
+      # null meaning the reference should be nuked and the shared object will
+      # never be loadable during runtime (because it points at an invalid store
+      # path location).
+      #
+      # To get a list of dynamically loaded libraries issue something like
+      # `grep -ri '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"'' $src` and update the below list.
+      dlopenLibs =
+        let
+          opt = condition: pkg: if condition then pkg else null;
+        in
+        [
+          # bpf compilation support
+          { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+
+          # We did never provide support for libxkbcommon & qrencode
+          { name = "libxkbcommon.so.0"; pkg = null; }
+          { name = "libqrencode.so.4"; pkg = null; }
+
+          # We did not provide libpwquality before so it is safe to disable it for
+          # now.
+          { name = "libpwquality.so.1"; pkg = null; }
+
+          # Only include cryptsetup if it is enabled. We might not be able to
+          # provide it during "bootstrap" in e.g. the minimal systemd build as
+          # cryptsetup has udev (aka systemd) in it's dependencies.
+          { name = "libcryptsetup.so.12"; pkg = opt withCryptsetup cryptsetup; }
+
+          # We are using libidn2 so we only provide that and ignore the others.
+          # Systemd does this decision during configure time and uses ifdef's to
+          # enable specific branches. We can safely ignore (nuke) the libidn "v1"
+          # libraries.
+          { name = "libidn2.so.0"; pkg = libidn2; }
+          { name = "libidn.so.12"; pkg = null; }
+          { name = "libidn.so.11"; pkg = null; }
+
+          # journalctl --grep requires libpcre so lets provide it
+          { name = "libpcre2-8.so.0"; pkg = pcre2; }
+
+          # Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
+          { name = "libtss2-esys.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
+          { name = "libtss2-rc.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
+          { name = "libtss2-mu.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
+          { name = "libfido2.so.1"; pkg = opt withFido2 libfido2; }
+        ];
+
+      patchDlOpen = dl:
+        let
+          library = "${lib.makeLibraryPath [ dl.pkg ]}/${dl.name}";
+        in
+        if dl.pkg == null then ''
+          # remove the dependency on the library by replacing it with an invalid path
+          for file in $(grep -lr '"${dl.name}"' src); do
+            echo "patching dlopen(\"${dl.name}\", …) in $file to an invalid store path ("/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}")…"
+            substituteInPlace "$file" --replace '"${dl.name}"' '"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-not-implemented/${dl.name}"'
+          done
+        '' else ''
+          # ensure that the library we provide actually exists
+          if ! [ -e ${library} ]; then
+            echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+            exit 1
+          fi
+          # make the path to the dependency explicit
+          for file in $(grep -lr '"${dl.name}"' src); do
+            echo "patching dlopen(\"${dl.name}\", …) in $file to ${library}…"
+            substituteInPlace "$file" --replace '"${dl.name}"' '"${library}"'
+          done
+
+        '';
+    in
+    # patch all the dlopen calls to contain absolute paths to the libraries
+    lib.concatMapStringsSep "\n" patchDlOpen dlopenLibs
+  )
+  # finally ensure that there are no left-over dlopen calls (or rather strings pointing to shared libraries) that we didn't handle
+  + ''
+    if grep -qr '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"' src; then
+      echo "Found unhandled dynamic library calls: "
+      grep -r '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"' src
+      exit 1
+    fi
+  ''
+  # Finally patch shebangs that might need patching.
+  # Should no longer be necessary with v250.
+  # https://github.com/systemd/systemd/pull/19638
+  + ''
+    patchShebangs .
   '';
 
   outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
     [
-      pkgconfig
+      pkg-config
       gperf
       ninja
       meson
-      coreutils # meson calls date, stat etc.
       glibcLocales
-      patchelf
       getent
       m4
 
@@ -180,8 +315,14 @@ stdenv.mkDerivation {
       docbook_xsl
       docbook_xml_dtd_42
       docbook_xml_dtd_45
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ python3Packages.lxml ]))
-    ];
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
+    ]
+    ++ lib.optional withLibBPF [
+      bpftools
+      llvmPackages.clang
+      llvmPackages.libllvm
+    ]
+  ;
 
   buildInputs =
     [
@@ -202,19 +343,22 @@ stdenv.mkDerivation {
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
-    ++ lib.optional withKexectools kexectools
+    ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withLibseccomp libseccomp
     ++ lib.optional withNetworkd iptables
     ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
+    ++ lib.optional withResolved libgpg-error
     ++ lib.optional withSelinux libselinux
     ++ lib.optional withRemote libmicrohttpd
-    ++ lib.optionals withHomed [ p11-kit libfido2 ]
+    ++ lib.optionals withHomed [ p11-kit ]
+    ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+    ++ lib.optionals withLibBPF [ libbpf ]
   ;
 
   #dontAddPrefix = true;
 
   mesonFlags = [
+    "-Dversion-tag=${version}"
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
@@ -233,12 +377,13 @@ stdenv.mkDerivation {
     "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${stdenv.lib.boolToString withHomed}"
+    "-Dhomed=${lib.boolToString withHomed}"
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"
     "-Dmachined=${lib.boolToString withMachined}"
     "-Dnetworkd=${lib.boolToString withNetworkd}"
+    "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
     "-Dcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
@@ -259,15 +404,17 @@ stdenv.mkDerivation {
     "-Dldconfig=false"
     "-Dsmack=true"
     "-Db_pie=true"
+    "-Dinstall-sysconfdir=false"
+    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
     /*
-    As of now, systemd doesn't allow runtime configuration of these values. So
-    the settings in /etc/login.defs have no effect on it. Many people think this
-    should be supported however, see
-    - https://github.com/systemd/systemd/issues/3855
-    - https://github.com/systemd/systemd/issues/4850
-    - https://github.com/systemd/systemd/issues/9769
-    - https://github.com/systemd/systemd/issues/9843
-    - https://github.com/systemd/systemd/issues/10184
+      As of now, systemd doesn't allow runtime configuration of these values. So
+      the settings in /etc/login.defs have no effect on it. Many people think this
+      should be supported however, see
+      - https://github.com/systemd/systemd/issues/3855
+      - https://github.com/systemd/systemd/issues/4850
+      - https://github.com/systemd/systemd/issues/9769
+      - https://github.com/systemd/systemd/issues/9843
+      - https://github.com/systemd/systemd/issues/10184
     */
     "-Dsystem-uid-max=999"
     "-Dsystem-gid-max=999"
@@ -303,6 +450,8 @@ stdenv.mkDerivation {
     "-Dnss-mymachines=false"
     "-Dnss-resolve=false"
     "-Dnss-systemd=false"
+  ] ++ lib.optionals withLibBPF [
+    "-Dbpf-framework=true"
   ];
 
   preConfigure = ''
@@ -320,6 +469,7 @@ stdenv.mkDerivation {
       src/shared/generator.c \
       src/shutdown/shutdown.c \
       units/emergency.service.in \
+      units/modprobe@.service \
       units/rescue.service.in \
       units/systemd-logind.service.in \
       units/systemd-nspawn@.service.in; \
@@ -338,7 +488,7 @@ stdenv.mkDerivation {
         --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
     done
 
-    for dir in tools src/resolve test src/test; do
+    for dir in tools src/resolve test src/test src/shared; do
       patchShebangs $dir
     done
 
@@ -350,7 +500,8 @@ stdenv.mkDerivation {
         --replace '"tar"' '"${gnutar}/bin/tar"'
     done
 
-    substituteInPlace src/journal/catalog.c \
+
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
       --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
@@ -411,8 +562,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
   '';
-
-  enableParallelBuilding = true;
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is

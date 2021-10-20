@@ -4,45 +4,50 @@
 , buildDunePackage
 , ocaml
 , gen
-, ppx_tools_versioned
-, ocaml-migrate-parsetree
+, ppxlib
 , uchar
 }:
 
-if lib.versionOlder ocaml.version "4.02.3"
+if lib.versionOlder ocaml.version "4.08"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
 let
+  unicodeVersion = "13.0.0";
+  baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
+
   DerivedCoreProperties = fetchurl {
-    url = "https://www.unicode.org/Public/12.1.0/ucd/DerivedCoreProperties.txt";
-    sha256 = "0s6sn1yr9qmb2i6gf8dir2zpsbjv1frdfzy3i2yjylzvf637msx6";
+    url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
+    sha256 = "0j12x112cd8fpgazkc8izxnhhpia44p1m36ff8yapslxndcmzm55";
   };
   DerivedGeneralCategory = fetchurl {
-    url = "https://www.unicode.org/Public/12.1.0/ucd/extracted/DerivedGeneralCategory.txt";
-    sha256 = "1rifzq9ba6c58dn0lrmcb5l5k4ksx3zsdkira3m5p6h4i2wriy3q";
+    url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
+    sha256 = "0w6mkz4w79k23bnmwgfxc4yqc2ypv8ilrjn6nk25hrafksbg00j5";
   };
   PropList = fetchurl {
-    url = "https://www.unicode.org/Public/12.1.0/ucd/PropList.txt";
-    sha256 = "0gsb1jpj3mnqbjgbavi4l95gl6g4agq58j82km22fdfg63j3w3fk";
+    url = "${baseUrl}/ucd/PropList.txt";
+    sha256 = "1ks0585wimygbk2wqi9hqg8gyl25iffvdad5vya1zgsxs8z5lns8";
   };
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.1";
+  version = "2.4";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "05f6qa8x3vhpdz1fcnpqk37fpnyyq13icqsk2gww5idjnh6kng26";
+    sha256 = "13g8az4zqg6hrnxmy3qrasslppzlag13dd1dsr8vlpg2vpfmfv6i";
   };
 
   propagatedBuildInputs = [
-    gen uchar ocaml-migrate-parsetree ppx_tools_versioned
+    gen uchar ppxlib
   ];
 
   preBuild = ''
+    rm src/generator/data/dune
     ln -s ${DerivedCoreProperties} src/generator/data/DerivedCoreProperties.txt
     ln -s ${DerivedGeneralCategory} src/generator/data/DerivedGeneralCategory.txt
     ln -s ${PropList} src/generator/data/PropList.txt
@@ -54,6 +59,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-community/sedlex";
+    changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
     description = "An OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marsam ];

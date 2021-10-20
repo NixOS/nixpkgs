@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, kdnssd }:
 
 mkDerivation {
-  name = "knavalbattle";
+  pname = "knavalbattle";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.knavalbattle";
     description = "Naval Battle is a ship sinking game";

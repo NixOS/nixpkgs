@@ -1,19 +1,15 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
-  version = "0.3.0";
+  version = "0.4.2";
 
-  src = fetchFromGitHub {
-    owner = "onur";
-    repo = "cargo-license";
-    rev = "v${version}";
-    sha256 = "05a2af84gjyfzhsln0afg16h02pr56jng4xlsg21hicyi1kxjwlf";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-rAHw5B/rK0N8myTzTyv/IUq3o+toWO5HOSaHQko2lPI=";
   };
 
-  cargoPatches = [ ./add-Cargo.lock.patch ];
-
-  cargoSha256 = "0bkaj54avvib1kipk8ky7gyxfs00qm80jd415zp53hhvinphzb5v";
+  cargoSha256 = "sha256-DkINY3j0x0fUynMX8+pxNFwKI/YGqEv1M2a55FuKBGY=";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";

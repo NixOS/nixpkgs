@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl openssl sqlite ];
 
   patches = [
@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch";
       sha256 = "12npqp2skgrj934wwkqicgqksma0fxz09di29n1b5fm5i4njl8d8";
     })
+    # In wpa_supplicant and hostapd 2.9, forging attacks may occur because AlgorithmIdentifier parameters are mishandled in tls/pkcs1.c and tls/x509v3.c.
+    (fetchpatch {
+      name = "CVE-2021-30004.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=a0541334a6394f8237a4393b7372693cd7e96f15";
+      sha256 = "1gbhlz41x1ar1hppnb76pqxj6vimiypy7c4kq6h658637s4am3xg";
+    })
   ];
 
   outputs = [ "out" "man" ];
@@ -75,7 +81,8 @@ stdenv.mkDerivation rec {
     CONFIG_HS20=y
     CONFIG_ACS=y
     CONFIG_GETRANDOM=y
-  '' + stdenv.lib.optionalString (sqlite != null) ''
+    CONFIG_SAE=y
+  '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
@@ -94,7 +101,7 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hostap.epitest.fi";
     repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";

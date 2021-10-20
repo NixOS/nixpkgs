@@ -78,6 +78,13 @@ import ./make-test-python.nix (
               'su - test7 -c "SSH_AUTH_SOCK=HOLEY doas env"'
           ):
               raise Exception("failed to exclude SSH_AUTH_SOCK")
+
+      # Test that the doas setuid wrapper precedes the unwrapped version in PATH after
+      # calling doas.
+      # The PATH set by doas is defined in
+      # ../../pkgs/tools/security/doas/0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+      with subtest("recursive calls to doas from subprocesses should succeed"):
+          machine.succeed('doas -u test0 sh -c "doas -u test0 true"')
     '';
   }
 )

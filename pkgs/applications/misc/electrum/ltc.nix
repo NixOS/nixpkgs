@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchurl
 , python3Packages
 , wrapQtAppsHook
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     $out/bin/electrum-ltc help >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Litecoin thin client";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A twelve-word

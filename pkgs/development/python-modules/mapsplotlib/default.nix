@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , isPy3k
 , fetchPypi
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ matplotlib scipy pandas requests pillow ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Custom Python plots on a Google Maps background";
     homepage = "https://github.com/tcassou/mapsplotlib";
     license = licenses.mit;

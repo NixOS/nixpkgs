@@ -1,22 +1,23 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , aspell
 , pkg-config
 , glib
 , hunspell
 , hspell
+, nuspell
 , unittest-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.2.13";
+  version = "2.3.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "084aqsrkzz2c1ls47p759d9bsi26d0m6wq9901k37483g46zkfga";
+    sha256 = "sha256-e0sa/PLNi/ppHe6mGIQE0zfyMXS7w5ucKt0r80Bzbpw=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     hunspell
+    nuspell
   ];
 
   checkInputs = [
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     "--enable-relocatable" # needed for tests
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic spell checking library";
     homepage = "https://abiword.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers

@@ -250,6 +250,16 @@ let
         (assertRange "ERSPANIndex" 1 1048575)
       ];
 
+      sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
+        (assertOnlyFields [
+          "Port"
+          "Encapsulation"
+          "Protocol"
+        ])
+        (assertPort "Port")
+        (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+      ];
+
       sectionPeer = checkUnitConfig "Peer" [
         (assertOnlyFields [
           "Name"
@@ -384,6 +394,7 @@ let
           "AllMulticast"
           "Unmanaged"
           "RequiredForOnline"
+          "ActivationPolicy"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
@@ -401,6 +412,14 @@ let
           "degraded"
           "enslaved"
           "routable"
+        ]))
+        (assertValueOneOf "ActivationPolicy" ([
+          "up"
+          "always-up"
+          "manual"
+          "always-down"
+          "down"
+          "bound"
         ]))
       ];
 
@@ -436,7 +455,8 @@ let
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
-          "IPv6PrefixDelegation"
+          "IPv6SendRA"
+          "DHCPv6PrefixDelegation"
           "IPv6MTUBytes"
           "Bridge"
           "Bond"
@@ -477,7 +497,8 @@ let
         (assertMinimum "IPv6HopLimit" 0)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
-        (assertValueOneOf "IPv6PrefixDelegation" ["static" "dhcpv6" "yes" "false"])
+        (assertValueOneOf "IPv6SendRA" boolValues)
+        (assertValueOneOf "DHCPv6PrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
@@ -643,18 +664,67 @@ let
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
+          "UseAddress"
           "UseDNS"
           "UseNTP"
+          "RouteMetric"
           "RapidCommit"
+          "MUDURL"
+          "RequestOptions"
+          "SendVendorOption"
           "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
-          "RouteMetric"
+          "WithoutRA"
+          "SendOption"
+          "UserClass"
+          "VendorClass"
+          "DUIDType"
+          "DUIDRawData"
+          "IAID"
         ])
+        (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertInt "RouteMetric")
+        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertRange "SendOption" 1 65536)
+        (assertInt "IAID")
+      ];
+
+      sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
+        (assertOnlyFields [
+          "SubnetId"
+          "Announce"
+          "Assign"
+          "Token"
+        ])
+        (assertValueOneOf "Announce" boolValues)
+        (assertValueOneOf "Assign" boolValues)
+      ];
+
+      sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
+        (assertOnlyFields [
+          "UseDNS"
+          "UseDomains"
+          "RouteTable"
+          "UseAutonomousPrefix"
+          "UseOnLinkPrefix"
+          "RouterDenyList"
+          "RouterAllowList"
+          "PrefixDenyList"
+          "PrefixAllowList"
+          "RouteDenyList"
+          "RouteAllowList"
+          "DHCPv6Client"
+        ])
+        (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertRange "RouteTable" 0 4294967295)
+        (assertValueOneOf "UseAutonomousPrefix" boolValues)
+        (assertValueOneOf "UseOnLinkPrefix" boolValues)
+        (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -669,10 +739,17 @@ let
           "NTP"
           "EmitSIP"
           "SIP"
+          "EmitPOP3"
+          "POP3"
+          "EmitSMTP"
+          "SMTP"
+          "EmitLPR"
+          "LPR"
           "EmitRouter"
           "EmitTimezone"
           "Timezone"
           "SendOption"
+          "SendVendorOption"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -681,11 +758,14 @@ let
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitNTP" boolValues)
         (assertValueOneOf "EmitSIP" boolValues)
+        (assertValueOneOf "EmitPOP3" boolValues)
+        (assertValueOneOf "EmitSMTP" boolValues)
+        (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
       ];
 
-      sectionIPv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+      sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
         (assertOnlyFields [
           "Managed"
           "OtherInformation"
@@ -778,7 +858,6 @@ let
     options = {
       wireguardPeerConfig = mkOption {
         default = {};
-        example = { };
         type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuardPeer;
         description = ''
           Each attribute in this set specifies an option in the
@@ -793,7 +872,6 @@ let
   netdevOptions = commonNetworkOptions // {
 
     netdevConfig = mkOption {
-      default = {};
       example = { Name = "mybridge"; Kind = "bridge"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
       description = ''
@@ -830,7 +908,6 @@ let
 
     vxlanConfig = mkOption {
       default = {};
-      example = { Id = "4"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
@@ -847,6 +924,18 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tunnel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    fooOverUDPConfig = mkOption {
+      default = { };
+      example = { Port = 9001; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[FooOverUDP]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -893,7 +982,7 @@ let
       example = {
         PrivateKeyFile = "/etc/wireguard/secret.key";
         ListenPort = 51820;
-        FwMark = 42;
+        FirewallMark = 42;
       };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
       description = ''
@@ -972,7 +1061,6 @@ let
   addressOptions = {
     options = {
       addressConfig = mkOption {
-        default = {};
         example = { Address = "192.168.0.100/24"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionAddress;
         description = ''
@@ -989,7 +1077,7 @@ let
     options = {
       routingPolicyRuleConfig = mkOption {
         default = { };
-        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ;};
+        example = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoutingPolicyRule;
         description = ''
           Each attribute in this set specifies an option in the
@@ -1080,11 +1168,35 @@ let
 
     dhcpV6Config = mkOption {
       default = {};
-      example = { UseDNS = true; UseRoutes = true; };
+      example = { UseDNS = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpV6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { SubnetId = "auto"; Announce = true; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6AcceptRAConfig = mkOption {
+      default = {};
+      example = { UseDNS = true; DHCPv6Client = "always"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6AcceptRA]</literal> section of the unit. See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1102,13 +1214,20 @@ let
       '';
     };
 
+    # systemd.network.networks.*.ipv6PrefixDelegationConfig has been deprecated
+    # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
     ipv6PrefixDelegationConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
+    };
+
+    ipv6SendRAConfig = mkOption {
       default = {};
       example = { EmitDNS = true; Managed = true; OtherInformation = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6PrefixDelegation;
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
       description = ''
         Each attribute in this set specifies an option in the
-        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <literal>[IPv6SendRA]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1116,7 +1235,7 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = { AddressAutoconfiguration = true; OnLink = true; };
+      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
@@ -1352,6 +1471,10 @@ let
           [Tunnel]
           ${attrsToSection def.tunnelConfig}
         ''
+        + optionalString (def.fooOverUDPConfig != { }) ''
+          [FooOverUDP]
+          ${attrsToSection def.fooOverUDPConfig}
+        ''
         + optionalString (def.peerConfig != { }) ''
           [Peer]
           ${attrsToSection def.peerConfig}
@@ -1457,13 +1580,21 @@ let
           [DHCPv6]
           ${attrsToSection def.dhcpV6Config}
         ''
+        + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
+          [DHCPv6PrefixDelegation]
+          ${attrsToSection def.dhcpV6PrefixDelegationConfig}
+        ''
+        + optionalString (def.ipv6AcceptRAConfig != { }) ''
+          [IPv6AcceptRA]
+          ${attrsToSection def.ipv6AcceptRAConfig}
+        ''
         + optionalString (def.dhcpServerConfig != { }) ''
           [DHCPServer]
           ${attrsToSection def.dhcpServerConfig}
         ''
-        + optionalString (def.ipv6PrefixDelegationConfig != { }) ''
-          [IPv6PrefixDelegation]
-          ${attrsToSection def.ipv6PrefixDelegationConfig}
+        + optionalString (def.ipv6SendRAConfig != { }) ''
+          [IPv6SendRA]
+          ${attrsToSection def.ipv6SendRAConfig}
         ''
         + flip concatMapStrings def.ipv6Prefixes (x: ''
           [IPv6Prefix]
@@ -1479,7 +1610,6 @@ let
 in
 
 {
-
   options = {
 
     systemd.network.enable = mkOption {
@@ -1553,9 +1683,6 @@ in
         wantedBy = [ "multi-user.target" ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
         restartTriggers = map (x: x.source) (attrValues unitFiles);
-        # prevent race condition with interface renaming (#39069)
-        requires = [ "systemd-udev-settle.service" ];
-        after = [ "systemd-udev-settle.service" ];
       };
 
       systemd.services.systemd-networkd-wait-online = {

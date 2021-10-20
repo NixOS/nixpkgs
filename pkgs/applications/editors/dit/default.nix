@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Prototypes.h --replace 'tail' "$(type -P tail)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A console text editor for Unix that you already know how to use";
     homepage = "https://hisham.hm/dit/";
     license = licenses.gpl2;

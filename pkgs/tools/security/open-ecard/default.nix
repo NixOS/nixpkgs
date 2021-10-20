@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
 
 let
   version = "1.2.4";
@@ -23,9 +23,9 @@ in stdenv.mkDerivation rec {
 
   src = srcs.richclient;
 
-  phases = "installPhase";
+  dontUnpack = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = appName;
@@ -50,10 +50,10 @@ in stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${appName} \
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
-      --suffix LD_LIBRARY_PATH ':' ${stdenv.lib.getLib pcsclite}/lib
+      --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client side implementation of the eCard-API-Framework (BSI
       TR-03112) and related international standards, such as ISO/IEC 24727";
     homepage = "https://www.openecard.org/";

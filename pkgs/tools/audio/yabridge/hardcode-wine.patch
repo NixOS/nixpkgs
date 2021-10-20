@@ -1,0 +1,13 @@
+diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
+index 7fb7d1b3..eb227101 100644
+--- a/src/plugin/utils.cpp
++++ b/src/plugin/utils.cpp
+@@ -105,5 +105,5 @@ std::string PluginInfo::wine_version() const {
+         access(wineloader_path.c_str(), X_OK) == 0) {
+         wine_path = wineloader_path;
+     } else {
+-        wine_path = bp::search_path("wine").string();
++        wine_path = "@wine@/bin/wine";
+     }
+
+     bp::ipstream output;

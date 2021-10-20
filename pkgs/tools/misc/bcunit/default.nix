@@ -1,6 +1,6 @@
 { cmake
 , fetchFromGitLab
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # https://gitlab.linphone.org/BC/public/bcunit/issues/1
   version = "unstable-2019-11-19";
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
@@ -19,12 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1237hpmkls2igp60gdfkbknxpgwvxn1vmv2m41vyl25xw1d3g35w";
   };
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "A fork of CUnit test framework";
     homepage = "https://gitlab.linphone.org/BC/public/bcunit";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin jluttine ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,23 +1,25 @@
-{ stdenv, fetchFromGitHub, perl, libxcb, libXft }:
+{ lib, stdenv, fetchFromGitHub, perl, libxcb, libXft }:
 
 stdenv.mkDerivation {
-  name = "lemonbar-xft-unstable-2016-02-17";
+  pname = "lemonbar-xft";
+  version = "unstable-2020-09-10";
 
   src = fetchFromGitHub {
-    owner  = "krypt-n";
-    repo   = "bar";
-    rev    = "a43b801ddc0f015ce8b1211f4c062fad12cd63a9";
-    sha256 = "0iqas07qjvabxyvna2m9aj5bcwnkdii1izl9jxha63vz0zlsc4gd";
+    owner = "drscream";
+    repo = "lemonbar-xft";
+    rev = "481e12363e2a0fe0ddd2176a8e003392be90ed02";
+    sha256 = "sha256-BNYBbUouqqsRQaPkpg+UKg62IV9uI34gKJuiAM94CBU=";
   };
 
   buildInputs = [ libxcb libXft perl ];
 
-  prePatch = ''sed -i "s@/usr@$out@" Makefile'';
+  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  meta = {
+  meta = with lib; {
     description = "A lightweight xcb based bar with XFT-support";
-    homepage = "https://github.com/krypt-n/bar";
-    license = "Custom";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/drscream/lemonbar-xft";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fortuneteller2k ];
   };
 }

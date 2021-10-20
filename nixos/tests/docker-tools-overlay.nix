@@ -3,8 +3,8 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "docker-tools-overlay";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ lnl7 ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ lnl7 roberth ];
   };
 
   nodes = {

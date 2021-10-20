@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
+{ stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -12,7 +12,7 @@ assert use3DOVideos -> requireFile != null && writeText != null
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv requireFile writeText fetchurl haskellPackages;
+    inherit stdenv lib requireFile writeText fetchFromGitHub haskellPackages;
   };
 
   remixPacks = lib.imap1 (num: sha256: fetchurl rec {
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
           spin-offs, thereby making zillions more people happy!
     '';
     homepage = "http://sc2.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;
   };

@@ -1,14 +1,14 @@
 { buildGoModule, lib, fetchFromGitHub }:
 buildGoModule rec {
   pname = "mockgen";
-  version = "1.4.4";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "golang";
     repo = "mock";
     rev = "v${version}";
-    sha256 = "1lj0dvd6div4jaq1s0afpwqaq9ah8cxhkq93wii2ably1xmp2l0a";
+    sha256 = "sha256-5Kp7oTmd8kqUN+rzm9cLqp9nb3jZdQyltGGQDiRSWcE=";
   };
-  vendorSha256 = "1md4cg1zzhc276sc7i2v0xvg5pf6gzy0n9ga2g1lx3d572igq1wy";
+  vendorSha256 = "sha256-5gkrn+OxbNN8J1lbgbxM8jACtKA7t07sbfJ7gVJWpJM=";
 
   doCheck = false;
 

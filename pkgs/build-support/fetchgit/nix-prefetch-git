@@ -9,12 +9,17 @@ hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
+fetchLFS=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
 out=${out:-}
 http_proxy=${http_proxy:-}
+
+# allow overwritting cacert's ca-bundle.crt with a custom one
+# this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE enviroment variables for the nix-daemon
+GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$GIT_SSL_CAINFO}
 
 # populated by clone_user_rev()
 fullRev=
@@ -46,6 +51,7 @@ Options:
       --deepClone     Clone the entire repository.
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
+      --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
@@ -72,6 +78,7 @@ for arg; do
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
+            --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
@@ -103,7 +110,7 @@ fi
 
 init_remote(){
     local url=$1
-    clean_git init
+    clean_git init --initial-branch=master
     clean_git remote add origin "$url"
     ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
@@ -137,7 +144,7 @@ url_to_name(){
     fi
 }
 
-# Fetch everything and checkout the right sha1
+# Fetch and checkout the right sha1
 checkout_hash(){
     local hash="$1"
     local ref="$2"
@@ -146,8 +153,21 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
     clean_git fetch -t ${builder:+--progress} origin || return 1
-    clean_git checkout -b "$branchName" "$hash" || return 1
+
+    local object_type=$(git cat-file -t "$hash")
+    if [[ "$object_type" == "commit" ]]; then
+        clean_git checkout -b "$branchName" "$hash" || return 1
+    elif [[ "$object_type" == "tree" ]]; then
+        clean_git config user.email "nix-prefetch-git@localhost"
+        clean_git config user.name "nix-prefetch-git"
+        local commit_id=$(git commit-tree "$hash" -m "Commit created from tree hash $hash")
+        clean_git checkout -b "$branchName" "$commit_id" || return 1
+    else
+        echo "Unrecognized git object type: $object_type"
+        return 1
+    fi
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -283,6 +303,13 @@ clone_user_rev() {
     local url="$2"
     local rev="${3:-HEAD}"
 
+    if [ -n "$fetchLFS" ]; then
+        tmpHomePath="$(mktemp -d -p nix-prefetch-git-tmp-home-XXXXXXXXXX)"
+        exit_handlers+=(remove_tmpHomePath)
+        HOME="$tmpHomePath"
+        git lfs install
+    fi
+
     # Perform the checkout.
     case "$rev" in
         HEAD|refs/*)
@@ -375,6 +402,7 @@ print_results() {
   "date": "$(json_escape "$commitDateStrict8601")",
   "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
+  "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
@@ -385,6 +413,10 @@ EOF
 
 remove_tmpPath() {
     rm -rf "$tmpPath"
+}
+
+remove_tmpHomePath() {
+    rm -rf "$tmpHomePath"
 }
 
 if test -n "$QUIET"; then

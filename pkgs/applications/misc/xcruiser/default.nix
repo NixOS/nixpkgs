@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext }:
+{ lib, stdenv, fetchurl, gccmakedep, imake, libXt, libXaw, libXpm, libXext }:
 
 stdenv.mkDerivation {
   name = "xcruiser-0.30";
@@ -12,11 +12,13 @@ stdenv.mkDerivation {
   buildInputs = [ libXt libXaw libXpm libXext ];
 
   makeFlags = [
-    "BINDIR=$(out)/bin"
-    "XAPPLOADDIR=$(out)/etc/X11/app-defaults"
+    "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
+    "LIBDIR=${placeholder "out"}/lib/X11"
+    "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filesystem visualization utility";
     longDescription = ''
       XCruiser, formerly known as XCruise, is a filesystem visualization utility.

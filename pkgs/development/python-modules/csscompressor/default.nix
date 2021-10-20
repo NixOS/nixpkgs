@@ -1,4 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
+
 buildPythonPackage rec {
   pname = "csscompressor";
   version = "0.9.5";
@@ -10,10 +11,10 @@ buildPythonPackage rec {
 
   doCheck = false; # No tests
 
-  meta = {
+  meta = with lib; {
     description = "A python port of YUI CSS Compressor";
     homepage = "https://pypi.python.org/pypi/csscompressor";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [];
   };
 }

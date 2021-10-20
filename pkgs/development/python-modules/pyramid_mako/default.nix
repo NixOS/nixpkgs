@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webtest
@@ -18,10 +18,13 @@ buildPythonPackage rec {
   buildInputs = [ webtest ];
   propagatedBuildInputs = [ pyramid Mako ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Pylons/pyramid_mako";
     description = "Mako template bindings for the Pyramid web framework";
     license = licenses.bsd0;
+    maintainers = with maintainers; [];
+    # broken on pyramid>=2.0
+    # https://github.com/Pylons/pyramid_mako/issues/53
+    broken = true;
   };
-
 }

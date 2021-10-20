@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cimg, imagemagick }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cimg, imagemagick }:
 
 stdenv.mkDerivation rec {
   pname = "pHash";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   # at runtime
   propagatedBuildInputs = [ imagemagick ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = ["--enable-video-hash=no" "--enable-audio-hash=no"];
   postInstall = ''
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y4gknfkns5sssfaj0snyx29752my20xmxajg6xggijx0myabbv0";
   };
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "Compute the perceptual hash of an image";
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];

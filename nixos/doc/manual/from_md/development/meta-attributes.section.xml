@@ -1,0 +1,55 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-meta-attributes">
+  <title>Meta Attributes</title>
+  <para>
+    Like Nix packages, NixOS modules can declare meta-attributes to
+    provide extra information. Module meta attributes are defined in the
+    <literal>meta.nix</literal> special module.
+  </para>
+  <para>
+    <literal>meta</literal> is a top level attribute like
+    <literal>options</literal> and <literal>config</literal>. Available
+    meta-attributes are <literal>maintainers</literal> and
+    <literal>doc</literal>.
+  </para>
+  <para>
+    Each of the meta-attributes must be defined at most once per module
+    file.
+  </para>
+  <programlisting language="bash">
+{ config, lib, pkgs, ... }:
+{
+  options = {
+    ...
+  };
+
+  config = {
+    ...
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ ericsagnes ];
+    doc = ./default.xml;
+  };
+}
+</programlisting>
+  <itemizedlist>
+    <listitem>
+      <para>
+        <literal>maintainers</literal> contains a list of the module
+        maintainers.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <literal>doc</literal> points to a valid DocBook file containing
+        the module documentation. Its contents is automatically added to
+        <xref linkend="ch-configuration" />. Changes to a module
+        documentation have to be checked to not break building the NixOS
+        manual:
+      </para>
+      <programlisting>
+$ nix-build nixos/release.nix -A manual.x86_64-linux
+</programlisting>
+    </listitem>
+  </itemizedlist>
+</section>

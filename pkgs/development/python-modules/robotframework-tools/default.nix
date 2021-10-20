@@ -1,14 +1,13 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , robotframework
 , moretools
 , pathpy
 , six
 , zetup
 , modeled
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "0377ikajf6c3zcy3lc0kh4w9zmlqyplk2c2hb0yyc7h3jnfnya96";
   };
 
-  nativeBuildInputs = [
-    zetup
-  ];
+  nativeBuildInputs = [ zetup ];
 
   propagatedBuildInputs = [
     robotframework
@@ -32,19 +29,21 @@ buildPythonPackage rec {
     modeled
   ];
 
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
-    # tests require network
-    pytest test --ignore test/remote/test_remote.py
+  postPatch = ''
+    # Remove upstream's selfmade approach to collect the dependencies
+    # https://github.com/userzimmermann/robotframework-tools/issues/1
+    substituteInPlace setup.py --replace \
+      "setup_requires=SETUP_REQUIRES + (zfg.SETUP_REQUIRES or [])," ""
   '';
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "test" ];
+  pythonImportsCheck = [ "robottools" ];
+
+  meta = with lib; {
     description = "Python Tools for Robot Framework and Test Libraries";
-    homepage = "https://bitbucket.org/userzimmermann/robotframework-tools";
-    license = licenses.gpl3;
+    homepage = "https://github.com/userzimmermann/robotframework-tools";
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.costrouc ];
   };
 }

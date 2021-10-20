@@ -3,28 +3,31 @@
 , libGLU
 , mkDerivationWith
 , muparser
-, pkgconfig
+, pkg-config
 , qtbase
 , qmake
 , qtscript
 , qtsvg
 , qtxmlpatterns
 , qttools
+, lib
 , stdenv
+, installShellFiles
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.25.2.0";
+  version = "3.26.4.7";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "1lz6q9n2p0l7k8rwqsdj6av9p3426423g5avc4y6s7nbk36280mz";
+    sha256 = "sha256-of0wsuHWM2mzGQmu9P4AHqXCHew45ywnnv/Al2o47ZM=";
   };
 
   patches = [
+    # Patch directory lookup, remove __DATE__ and executable name
     ./application-dir.patch
   ];
 
@@ -35,7 +38,7 @@ mkDerivationWith stdenv.mkDerivation rec {
         src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
         src/3rdparty/qt-labs-qtscriptgenerator-${qtbase.version}/qt-labs-qtscriptgenerator-${qtbase.version}.pro
     fi
- '';
+  '';
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
@@ -64,15 +67,27 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
+    cp -r fonts $out/lib/fonts
+    cp -r libraries $out/lib/libraries
+    cp -r linetypes $out/lib/linetypes
+    cp -r ts $out/lib/ts
 
     # workaround to fix the library browser:
     rm -r $out/lib/plugins/sqldrivers
     ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/sqldrivers
 
+    rm -r $out/lib/plugins/printsupport
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/printsupport
+
+    rm -r $out/lib/plugins/imageformats
+    ln -s -t $out/lib/plugins ${qtbase}/${qtbase.qtPluginPrefix}/imageformats
+
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
+    installManPage qcad.1
+
     runHook postInstall
-    '';
+  '';
 
   buildInputs = [
     boost
@@ -85,17 +100,16 @@ mkDerivationWith stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     qttools
+    installShellFiles
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
   };

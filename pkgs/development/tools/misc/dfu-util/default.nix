@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libusb1 }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
-  version = "0.10";
+  version = "0.11";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
   src = fetchurl {
     url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
-    sha256 = "0hlvc47ccf5hry13saqhc1j5cdq5jyjv4i05kj0mdh3rzj6wagd0";
+    sha256 = "sha256-tLU7ohqC7349TEffKVKt9fpJT0mbawtXxYxdBK6P8Z4=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device firmware update (DFU) USB programmer";
     longDescription = ''
       dfu-util is a program that implements the host (PC) side of the USB

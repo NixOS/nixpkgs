@@ -1,6 +1,5 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -11,18 +10,20 @@
 , glslang
 , lcms2
 , epoxy
+, libGL
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "2.72.2";
+  version = "4.157.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ijqpx1pagc6qg63ynqrinvckwc8aaw1i0lx48gg5szwk8afib4i";
+    sha256 = "08kqsd29h8wm0vz7698wh2mdgpwv6anqc5n7d1spnnamwyfwc64h";
   };
 
   nativeBuildInputs = [
@@ -39,13 +40,17 @@ stdenv.mkDerivation rec {
     glslang
     lcms2
     epoxy
+    libGL
+    xorg.libX11
   ];
 
   mesonFlags = [
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
+    "-Ddemos=false" # Don't build and install the demo programs
+    "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable library for GPU-accelerated video/image rendering primitives";
     longDescription = ''
       Reusable library for GPU-accelerated image/view processing primitives and

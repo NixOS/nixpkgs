@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, runCommand, makeWrapper, ruby }@defs:
+{ lib, callPackage, runCommand, makeWrapper, ruby }@defs:
 
 # Use for simple installation of Ruby tools shipped in a Gem.
 # Start with a Gemfile that includes `gem <toolgem>`

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db62, xercesc, xqilla }:
+{ lib, stdenv, fetchurl, db62, xercesc, xqilla }:
 
 stdenv.mkDerivation rec {
   pname = "dbxml";
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     cd dbxml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.oracle.com/database/berkeley-db/xml.html";
     description = "Embeddable XML database based on Berkeley DB";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

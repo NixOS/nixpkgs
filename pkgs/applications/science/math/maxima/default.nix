@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python, makeWrapper, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python3, makeWrapper, autoreconfHook
 , rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
 }:
 
 let
   name    = "maxima";
-  version = "5.44.0";
+  version = "5.45.0";
+
+  lisp-compiler = if ecl-fasl then ecl else sbcl;
 
   searchPath =
-    stdenv.lib.makeBinPath
-      (stdenv.lib.filter (x: x != null) [ sbcl ecl rlwrap tk gnuplot ]);
+    lib.makeBinPath
+      (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation ({
   inherit version;
@@ -16,14 +18,21 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1v6jr5s6hhj6r18gfk6hgxk2qd6z1dxkrjq9ss2z1y6sqi45wgyr";
+    sha256 = "sha256-x2MfMmRIBc67e6/vOrUzHEus0sJ+OE/YgyO1A5pg0Ng=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    lisp-compiler
+    makeWrapper
+    python3
+    texinfo
+  ];
 
-  buildInputs = stdenv.lib.filter (x: x != null) [
-    sbcl ecl texinfo perl python makeWrapper
-    gnuplot   # required in the test suite
+  strictDeps = true;
+
+  checkInputs = [
+    gnuplot
   ];
 
   postPatch = ''
@@ -40,7 +49,7 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (stdenv.lib.optionalString ecl-fasl ''
+   + (lib.optionalString ecl-fasl ''
      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
    '')
   ;
@@ -63,7 +72,7 @@ stdenv.mkDerivation ({
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
     })
-  ] ++ stdenv.lib.optionals ecl-fasl [
+  ] ++ lib.optionals ecl-fasl [
     # build fasl, needed for ECL support
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
@@ -87,10 +96,14 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  passthru = {
+    ecl = ecl;
+  };
+
   meta = {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -99,7 +112,6 @@ stdenv.mkDerivation ({
       symbolic integration, 3D plotting, and an ODE solver.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix;
   };
 })

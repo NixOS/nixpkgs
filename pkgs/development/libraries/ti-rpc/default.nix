@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, autoreconfHook, libkrb5 }:
+{ fetchurl, lib, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
   pname = "libtirpc";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;

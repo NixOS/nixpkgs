@@ -61,6 +61,8 @@ let
           MACAddress = i.macAddress;
         } // optionalAttrs (i.mtu != null) {
           MTUBytes = toString i.mtu;
+        } // optionalAttrs (i.wakeOnLan.enable == true) {
+          WakeOnLan = "magic";
         };
       };
     in listToAttrs (map createNetworkLink interfaces);
@@ -101,7 +103,7 @@ let
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
 
             serviceConfig = {
               Type = "oneshot";
@@ -185,7 +187,7 @@ let
             # Restart rather than stop+start this unit to prevent the
             # network from dying during switch-to-configuration.
             stopIfChanged = false;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
@@ -258,7 +260,7 @@ let
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = true;
@@ -284,7 +286,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
@@ -372,7 +374,7 @@ let
             wants = deps; # if one or more interface fails, the switch should continue to run
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute config.virtualisation.vswitch.package ];
+            path = [ pkgs.iproute2 config.virtualisation.vswitch.package ];
             preStart = ''
               echo "Resetting Open vSwitch ${n}..."
               ovs-vsctl --if-exists del-br ${n} -- add-br ${n} \
@@ -413,7 +415,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute pkgs.gawk ];
+            path = [ pkgs.iproute2 pkgs.gawk ];
             script = ''
               echo "Destroying old bond ${n}..."
               ${destroyBond n}
@@ -451,7 +453,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
@@ -461,6 +463,39 @@ let
             '';
             postStop = ''
               ip link delete "${n}" || true
+            '';
+          });
+
+        createFouEncapsulation = n: v: nameValuePair "${n}-fou-encap"
+          (let
+            # if we have a device to bind to we can wait for its addresses to be
+            # configured, otherwise external sequencing is required.
+            deps = optionals (v.local != null && v.local.dev != null)
+              (deviceDependency v.local.dev ++ [ "network-addresses-${v.local.dev}.service" ]);
+            fouSpec = "port ${toString v.port} ${
+              if v.protocol != null then "ipproto ${toString v.protocol}" else "gue"
+            } ${
+              optionalString (v.local != null) "local ${escapeShellArg v.local.address} ${
+                optionalString (v.local.dev != null) "dev ${escapeShellArg v.local.dev}"
+              }"
+            }";
+          in
+          { description = "FOU endpoint ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute2 ];
+            script = ''
+              # always remove previous incarnation since show can't filter
+              ip fou del ${fouSpec} >/dev/null 2>&1 || true
+              ip fou add ${fouSpec}
+            '';
+            postStop = ''
+              ip fou del ${fouSpec} || true
             '';
           });
 
@@ -476,7 +511,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
@@ -484,7 +519,12 @@ let
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
                 ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
-                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
+                ${optionalString (v.dev != null) "dev \"${v.dev}\""} \
+                ${optionalString (v.encapsulation != null)
+                  "encap ${v.encapsulation.type} encap-dport ${toString v.encapsulation.port} ${
+                    optionalString (v.encapsulation.sourcePort != null)
+                      "encap-sport ${toString v.encapsulation.sourcePort}"
+                  }"}
               ip link set "${n}" up
             '';
             postStop = ''
@@ -504,7 +544,7 @@ let
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
@@ -528,6 +568,7 @@ let
          // mapAttrs' createVswitchDevice cfg.vswitches
          // mapAttrs' createBondDevice cfg.bonds
          // mapAttrs' createMacvlanDevice cfg.macvlans
+         // mapAttrs' createFouEncapsulation cfg.fooOverUDP
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {

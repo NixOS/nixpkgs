@@ -1,16 +1,14 @@
-{ fetchurl, stdenv, coreutils, makeWrapper }:
+{ fetchurl, lib, stdenv, coreutils, makeWrapper }:
 
-let version = "1.10.9"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ant";
-  inherit version;
+  version = "1.10.11";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "1ab8ybczvk12501dnj450a3d4v43ca0pjhk33s175hax46s58z47";
+    sha256 = "19m8xb7h6xm4jykzb79kakbx1pa4awaglw6z31pbfg8m5pmwkipz";
   };
 
   contrib = fetchurl {
@@ -105,8 +103,8 @@ stdenv.mkDerivation {
       by an object that implements a particular Task interface.
     '';
 
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.all;
   };
 }

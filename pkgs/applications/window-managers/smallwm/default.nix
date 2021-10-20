@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , doxygen, graphviz, libX11, libXrandr }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -r README.markdown doc/html doc/latex $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "A small X window manager, extended from tinywm";
     homepage = "https://github.com/adamnew123456/SmallWM";
     license = licenses.bsd2;

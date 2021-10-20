@@ -23,22 +23,20 @@ let
      ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
-
   pname = "postfix";
-
-  version = "3.5.8";
+  version = "3.6.2";
 
   src = fetchurl {
-    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0vs50z5p5xcrdbbkb0dnbx1sk5fx8d2z97sw2p2iip1yrwl2cn12";
+    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
+    sha256 = "sha256-UHMj0g17P3BfSc+MB9Q3xtgJC+0H4Vo8DsQF7a1Up9Q=";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
   buildInputs = [ db openssl cyrus_sasl icu libnsl pcre ]
-                ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withMySQL libmysqlclient
-                ++ lib.optional withSQLite sqlite
-                ++ lib.optional withLDAP openldap;
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withMySQL libmysqlclient
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -50,7 +48,7 @@ in stdenv.mkDerivation rec {
     ./relative-symlinks.patch
   ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
   '' + ''
     sed -e '/^PATH=/d' -i postfix-install
@@ -103,7 +101,6 @@ in stdenv.mkDerivation rec {
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ globin dotlambda lewo ];
   };
-
 }

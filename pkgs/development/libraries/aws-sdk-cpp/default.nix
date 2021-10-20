@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib, fetchpatch
-, aws-c-common, aws-c-event-stream, aws-checksums
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
+, aws-crt-cpp
+, aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
 , CoreAudio, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
@@ -7,16 +8,32 @@
   customMemoryManagement ? true
 }:
 
+let
+  host_os = if stdenv.hostPlatform.isDarwin then "APPLE"
+       else if stdenv.hostPlatform.isAndroid then "ANDROID"
+       else if stdenv.hostPlatform.isWindows then "WINDOWS"
+       else if stdenv.hostPlatform.isLinux then "LINUX"
+       else throw "Unknown host OS";
+in
+
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.7.90";
+  version = "1.9.121";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0zpqi612qmm0n53crxiisv0vdif43ymg13kafy6vv43j2wmh66ga";
+    sha256 = "sha256-VQpWauk0tdJ1QU0HmtdTwQdKbiAuTTXXsUo2cqpqmdU=";
   };
+
+  postPatch = ''
+    # Includes aws-c-auth private headers, so only works with submodule build
+    rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # TestRandomURLMultiThreaded fails
+    rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
+  '';
 
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
@@ -25,12 +42,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake curl ];
 
   buildInputs = [
+    aws-crt-cpp
     curl openssl zlib
-    aws-c-common aws-c-event-stream aws-checksums
   ] ++ lib.optionals (stdenv.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
+
+  # propagation is needed for Security.framework to be available when linking
+  propagatedBuildInputs = [
+    aws-c-cal
+    aws-c-event-stream
+    aws-c-io
+    aws-c-common
+    aws-checksums
+    s2n-tls
+  ];
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -38,33 +65,34 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
-    "-DCURL_HAS_H2=0"
+    "-DCURL_HAS_H2=1"
+    "-DCURL_HAS_TLS_PROXY=1"
+    "-DTARGET_ARCH=${host_os}"
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
   # fix build with gcc9, can be removed after bumping to current version
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  preConfigure =
-    ''
-      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
-    '';
+  # aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+  # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
+  # seem to have a datarace
+  enableParallelChecking = false;
 
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file
     # points to an existing directory.
-    ''mkdir -p $out/include''
+    "mkdir -p $out/include"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/aws/aws-sdk-cpp/commit/42991ab549087c81cb630e5d3d2413e8a9cf8a97.patch";
-      sha256 = "0myq5cm3lvl5r56hg0sc0zyn1clbkd9ys0wr95ghw6bhwpvfv8gr";
-    })
     ./cmake-dirs.patch
   ];
+
+  # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";

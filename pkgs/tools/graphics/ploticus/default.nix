@@ -1,34 +1,74 @@
-{stdenv, fetchurl, zlib, libX11, libpng}:
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libX11
+, libpng
+, gd
+, freetype
+}:
 
-stdenv.mkDerivation {
-  name = "ploticus-2.42";
+stdenv.mkDerivation rec {
+  pname = "ploticus";
+  version = "2.42";
 
-  builder = ./builder.sh;
   src = fetchurl {
-    url = "mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz";
-    sha256 = "1065r0nizjixi9sxxfxrnwg10r458i6fgsd23nrxa200rypvdk7c";
+    url = "mirror://sourceforge/ploticus/ploticus/${version}/ploticus${lib.replaceStrings [ "." ] [ "" ] version}_src.tar.gz";
+    sha256 = "PynkufQFIDqT7+yQDlgW2eG0OBghiB4kHAjKt91m4LA=";
   };
 
-  buildInputs = [ zlib libX11 libpng ];
+  patches = [
+    # Replace hardcoded FHS path with $out.
+    ./ploticus-install.patch
+
+    # Set the location of the PREFABS directory.
+    ./set-prefabs-dir.patch
+
+    # Use gd from Nixpkgs instead of the vendored one.
+    # This is required for non-ASCII fonts to work:
+    # http://ploticus.sourceforge.net/doc/fonts.html
+    ./use-gd-package.patch
+  ];
+
+  buildInputs = [
+    zlib
+    libX11
+    libpng
+    gd
+    freetype
+  ];
 
   hardeningDisable = [ "format" ];
 
-  patches = [ ./ploticus-install.patch ];
-
-  # Make the symlink relative instead of absolute.
-  # Otherwise it breaks when auto-moved to $out/share.
-  preFixup = ''
-    ln -sf pl.1 "$out"/man/man1/ploticus.1
+  preBuild = ''
+    cd src
   '';
 
-  meta = with stdenv.lib; {
+  preInstall = ''
+    mkdir -p "$out/bin"
+  '';
+
+  postInstall = ''
+    cd ..
+
+    # Install the “prefabs”.
+    mkdir -p "$out/share/ploticus/prefabs"
+    cp -rv prefabs/* "$out/share/ploticus/prefabs"
+
+    # Add aliases for backwards compatibility.
+    ln -s "pl" "$out/bin/ploticus"
+  '';
+
+  meta = with lib; {
     description = "A non-interactive software package for producing plots and charts";
-    longDescription = ''Ploticus is a free, GPL'd, non-interactive
+    longDescription = ''
+      Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from
       data.  Ploticus is good for automated or just-in-time graph
       generation, handles date and time data nicely, and has basic
       statistical capabilities.  It allows significant user control
-      over colors, styles, options and details.'';
+      over colors, styles, options and details.
+    '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     homepage = "http://ploticus.sourceforge.net/";

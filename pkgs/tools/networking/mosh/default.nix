@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
 , makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
-, libutempter ? null, withUtempter ? stdenv.isLinux }:
+, withUtempter ? stdenv.isLinux, libutempter }:
 
 stdenv.mkDerivation rec {
   pname = "mosh";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
+  buildInputs = [ protobuf ncurses zlib openssl bash-completion ]
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;
 
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./ssh_path.patch
+    ./mosh-client_path.patch
     ./utempter_path.patch
     # Fix w/c++17, ::bind vs std::bind
     (fetchpatch {
@@ -30,8 +31,18 @@ stdenv.mkDerivation rec {
     ./bash_completion_datadir.patch
   ];
   postPatch = ''
+    # Fix build with Xcode 12.5 toolchain/case-insensitive filesystems
+    # Backport of https://github.com/mobile-shell/mosh/commit/12199114fe4234f791ef4c306163901643b40538;
+    # remove on next upstream release.
+    patch -p0 < ${fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/70ca3f65e622c17582fd938602d800157ed951c3/net/mosh/files/patch-version-subdir.diff";
+      sha256 = "1yyh6d07y9zbdx4fb0r56zkq9nd9knwzj22v4dfi55k4k42qxapd";
+    }}
+
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"
+    substituteInPlace scripts/mosh.pl \
+        --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
@@ -40,9 +51,9 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
@@ -53,8 +64,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.unix;
   };
 }

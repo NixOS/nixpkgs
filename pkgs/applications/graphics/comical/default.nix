@@ -1,4 +1,4 @@
-{stdenv, fetchurl, wxGTK, util-linux, zlib }:
+{lib, stdenv, fetchurl, wxGTK, util-linux, zlib }:
 
 stdenv.mkDerivation rec {
   name = "comical-0.8";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";
     homepage = "http://comical.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

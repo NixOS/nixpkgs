@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
-  version = "2017-12-16";
+  version = "unstable-2017-12-16";
 
   src = fetchFromGitHub {
     owner = "Tarrasch";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "004svkfzhc3ab6q2qvwzgj36wvicg5bs8d2gcibx6adq042di7zj";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/zsh-autoenv-share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically sources whitelisted .autoenv.zsh files";
     longDescription = ''
       zsh-autoenv automatically sources (known/whitelisted)
@@ -35,6 +35,6 @@ stdenv.mkDerivation {
       variables (overwriting and restoring).
     '';
     homepage = "https://github.com/Tarrasch/zsh-autoenv";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

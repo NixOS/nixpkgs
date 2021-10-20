@@ -1,29 +1,31 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkg-config, lib, stdenv
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
 , enableSPF ? true, libspf2
 , enableDMARC ? true, opendmarc
+, enableRedis ? false, hiredis
 }:
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.94";
+  version = "4.95";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    sha256 = "1nsb2i5mqxfz1sl1bmbxmpb2qiaf3wffhfiw4j9vfpagy3xfhzpp";
+    sha256 = "0rzi0kc3qiiaw8vnv5qrpwdvvh4sr5chns026xy99spjzx9vd76c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ coreutils db openssl perl pcre ]
-    ++ stdenv.lib.optional enableLDAP openldap
-    ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
-    ++ stdenv.lib.optional enableAuthDovecot dovecot
-    ++ stdenv.lib.optional enablePAM pam
-    ++ stdenv.lib.optional enableSPF libspf2
-    ++ stdenv.lib.optional enableDMARC opendmarc;
+    ++ lib.optional enableLDAP openldap
+    ++ lib.optionals enableMySQL [ libmysqlclient zlib ]
+    ++ lib.optional enableAuthDovecot dovecot
+    ++ lib.optional enablePAM pam
+    ++ lib.optional enableSPF libspf2
+    ++ lib.optional enableDMARC opendmarc
+    ++ lib.optional enableRedis hiredis;
 
   preBuild = ''
     sed '
@@ -49,34 +51,41 @@ stdenv.mkDerivation rec {
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
       s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
       s:^# \(LOOKUP_DSEARCH=yes\)$:\1:
-      ${stdenv.lib.optionalString enableLDAP ''
+      ${lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
         s:^# \(LOOKUP_LDAP=yes\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lldap -llber:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lldap -llber:
       ''}
-      ${stdenv.lib.optionalString enableMySQL ''
+      ${lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
         s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient.dev}/include/mysql/:
       ''}
-      ${stdenv.lib.optionalString enableAuthDovecot ''
+      ${lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
       ''}
-      ${stdenv.lib.optionalString enablePAM ''
+      ${lib.optionalString enablePAM ''
         s:^# \(SUPPORT_PAM\)=.*:\1=yes:
         s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
         s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
       ''}
-      ${stdenv.lib.optionalString enableSPF ''
+      ${lib.optionalString enableSPF ''
         s:^# \(SUPPORT_SPF\)=.*:\1=yes:
         s:^# \(LDFLAGS += -lspf2\):\1:
       ''}
-      ${stdenv.lib.optionalString enableDMARC ''
+      ${lib.optionalString enableDMARC ''
         s:^# \(SUPPORT_DMARC\)=.*:\1=yes:
         s:^# \(LDFLAGS += -lopendmarc\):\1:
+      ''}
+      ${lib.optionalString enableRedis ''
+        s:^# \(LOOKUP_REDIS=yes\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lhiredis -L${hiredis}/lib/hiredis:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lhiredis -L${hiredis}/lib/hiredis:
+        s:^\(LOOKUP_INCLUDE\)=\(.*\):\1=\2 -I${hiredis}/include/hiredis/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${hiredis}/include/hiredis/:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d
@@ -99,11 +108,12 @@ stdenv.mkDerivation rec {
       done )
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://exim.org/";
+  meta = with lib; {
+    homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
+    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

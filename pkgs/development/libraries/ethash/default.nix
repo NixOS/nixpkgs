@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, gbenchmark, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, gbenchmark, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "ethash";
-  version = "0.5.2";
+  version = "0.7.1";
 
   src =
     fetchFromGitHub {
       owner = "chfast";
       repo = "ethash";
       rev = "v${version}";
-      sha256 = "0shr3m33raxy9j2mpm3q9mdbchs3nhgfaywidyxgmwqaiw1xpyif";
+      sha256 = "sha256-ba8SBtJd0ERunO9KpJZkutkO6ZnZOEGzWn2IjO1Uu28=";
     };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     #"-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PoW algorithm for Ethereum 1.0 based on Dagger-Hashimoto";
     homepage = "https://github.com/ethereum/ethash";
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nand0p ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

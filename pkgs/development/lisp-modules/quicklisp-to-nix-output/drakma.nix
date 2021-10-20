@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''drakma'';
-  version = ''v2.0.7'';
+  baseName = "drakma";
+  version = "v2.0.7";
 
-  description = ''Full-featured http/https client based on usocket'';
+  description = "Full-featured http/https client based on usocket";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-ppcre" args."flexi-streams" args."puri" args."split-sequence" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/drakma/2019-11-30/drakma-v2.0.7.tgz'';
-    sha256 = ''1r0sh0nsx7fq24yybazjw8n7grk1b85l52x523axwchnnaj58kzw'';
+    url = "http://beta.quicklisp.org/archive/drakma/2019-11-30/drakma-v2.0.7.tgz";
+    sha256 = "1r0sh0nsx7fq24yybazjw8n7grk1b85l52x523axwchnnaj58kzw";
   };
 
   packageName = "drakma";

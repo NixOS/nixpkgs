@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, sassc }:
+{ lib, stdenv, fetchFromGitHub, gtk3, sassc }:
 
 stdenv.mkDerivation rec {
   pname = "adementary-theme";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     ./install.sh -d $out/share/themes
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adwaita-based GTK theme with design influence from elementary OS and Vertex GTK theme";
     homepage    = "https://github.com/hrdwrrsk/adementary-theme";
     license     = licenses.gpl3;

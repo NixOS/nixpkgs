@@ -7,7 +7,7 @@
 , decorator
 , nose
 , krb5Full
-, darwin
+, GSS
 , parameterized
 , shouldbe
 , cython
@@ -17,20 +17,20 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.6.10";
+  version = "1.7.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "11w8z9ik6zzv3pw3319mz91cgbfkgx0mffxbapqnhilzij2jad4q";
+    sha256 = "0ybijgsr4ra7x1w86sva4qljhm54ilm2zv4z0ry1r14kq9hmjfa4";
   };
 
   # It's used to locate headers
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_output('krb5-config gssapi --prefix')" "'${lib.getDev krb5Full}'"
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5Full}"'
   '';
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.GSS
+    GSS
   ];
 
   checkInputs = [

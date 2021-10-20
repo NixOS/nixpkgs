@@ -1,23 +1,25 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
-
 , asdf
 , astropy
+, setuptools-scm
 , astropy-helpers
+, astropy-extension-helpers
 , beautifulsoup4
 , drms
 , glymur
+, h5netcdf
 , hypothesis
 , matplotlib
 , numpy
 , pandas
 , parfive
+, pytestCheckHook
 , pytest-astropy
 , pytest-mock
-, pytestcov
 , python-dateutil
 , scikitimage
 , scipy
@@ -29,15 +31,18 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.6";
+  version = "3.0.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "sunpy";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5dcd2c5cbf2f419da00abde00798d067b515c2f082ce63f4fbe1de47682c1c41";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+    astropy-extension-helpers
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -46,6 +51,7 @@ buildPythonPackage rec {
     pandas
     astropy
     astropy-helpers
+    h5netcdf
     parfive
     sqlalchemy
     scikitimage
@@ -61,22 +67,31 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
+    pytestCheckHook
     pytest-astropy
-    pytestcov
     pytest-mock
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
+  # darwin has write permission issues
+  doCheck = stdenv.isLinux;
+
+  preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # darwin has write permission issues
-  doCheck = stdenv.isLinux;
-  # ignore documentation tests
-  checkPhase = ''
-    pytest sunpy -k 'not rst'
-  '';
+  disabledTests = [
+    "rst"
+  ];
+
+  disabledTestPaths = [
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml"
+  ];
+
+  pytestFlagsArray = [
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module"
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module"
+  ];
 
   meta = with lib; {
     description = "SunPy: Python for Solar Physics";

@@ -1,24 +1,35 @@
-{ stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  version = "5.9.13";
+  # having the full version string here makes it easier to update
+  modDirVersion = "5.14.8-zen1";
+  parts = lib.splitString "-" modDirVersion;
+  version = lib.elemAt parts 0;
+  suffix = lib.elemAt parts 1;
+
+  numbers = lib.splitString "." version;
+  branch = "${lib.elemAt numbers 0}.${lib.elemAt numbers 1}";
 in
 
 buildLinux (args // {
-  modDirVersion = "${version}-zen1";
-  inherit version;
+  inherit version modDirVersion;
   isZen = true;
 
   src = fetchFromGitHub {
     owner = "zen-kernel";
     repo = "zen-kernel";
-    rev = "v${version}-zen1";
-    sha256 = "13sv794srmf1p13pb07pl6c4fxw2f1vjkxj8dkdgfhy03b0iasa2";
+    rev = "v${modDirVersion}";
+    sha256 = "sha256-hquMBDjP4fBMNdjxxnJJKx/oVNd2DwBPmVpZQeEQvHQ=";
+  };
+
+  structuredExtraConfig = with lib.kernel; {
+    ZEN_INTERACTIVE = yes;
   };
 
   extraMeta = {
-    branch = "5.9/master";
-    maintainers = with stdenv.lib.maintainers; [ atemu andresilva ];
+    inherit branch;
+    maintainers = with lib.maintainers; [ atemu andresilva ];
+    description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
   };
 
-} // (args.argsOverride or {}))
+} // (args.argsOverride or { }))

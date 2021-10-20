@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ffmpeg_3, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ lib, stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
 
 let version = "1.3.0"; in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ ffmpeg_3 flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
+  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp minidlnad.8 $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully

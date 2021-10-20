@@ -1,4 +1,4 @@
-{ stdenv, lua, buildEnv, makeWrapper
+{ lib, stdenv, lua, buildEnv, makeWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -11,12 +11,17 @@
 let
   env = let
     paths =  requiredLuaModules (extraLibs ++ [ lua ] );
-  in (buildEnv {
+  in buildEnv {
     name = "${lua.name}-env";
 
     inherit paths;
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
+
+    nativeBuildInputs = [
+      makeWrapper
+      (lua.pkgs.lua-setup-hook lua.LuaPathSearchPaths lua.LuaCPathSearchPaths)
+    ];
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''
@@ -28,7 +33,7 @@ let
       addToLuaPath "$out"
 
       # take every binary from lua packages and put them into the env
-      for path in ${stdenv.lib.concatStringsSep " " paths}; do
+      for path in ${lib.concatStringsSep " " paths}; do
         nix_debug "looking for binaries in path = $path"
         if [ -d "$path/bin" ]; then
           cd "$path/bin"
@@ -37,7 +42,12 @@ let
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
                 nix_debug "Making wrapper $prg"
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix LUA_PATH ';' "$LUA_PATH"   --suffix LUA_CPATH ';' "$LUA_CPATH" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
+                  --set-default LUA_PATH ";;" \
+                  --suffix LUA_PATH ';' "$LUA_PATH" \
+                  --set-default LUA_CPATH ";;" \
+                  --suffix LUA_CPATH ';' "$LUA_CPATH" \
+                  ${lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done
@@ -62,8 +72,5 @@ let
         '';
     };
     };
-  }).overrideAttrs (_: {
-    # Add extra deps needed for postBuild hook.
-    nativeBuildInputs = [ makeWrapper lua ];
-  });
+  };
 in env

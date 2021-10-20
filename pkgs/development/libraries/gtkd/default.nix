@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
-, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkgconfig, which, vte }:
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
+, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ dmd pkgconfig which ];
+  nativeBuildInputs = [ ldc pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte
@@ -26,6 +26,11 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/gtkd-developers/GtkD/commit/a9db09117ab27127ca4c3b8d2f308fae483a9199.patch";
       sha256 = "0ngyqifw1kandc1vk01kms3z65pcisfd75q7z09rml96glhfzjd6";
+    })
+    # Fix breakage with dmd ldc 1.26 and newer
+    (fetchpatch {
+      url = "https://github.com/gtkd-developers/GtkD/commit/323ff96c648882eaca2faee170bd9e90c6e1e9c3.patch";
+      sha256 = "1rhyi0isl6fl5i6fgsinvgq6v72xq7c6sajrxcsnmrzpvw91il3d";
     })
   ];
 
@@ -117,7 +122,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags  = [
     "prefix=${placeholder "out"}"
-    "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
+    "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple
@@ -129,7 +134,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D binding and OO wrapper for GTK";
     homepage = "https://gtkd.org";
     license = licenses.lgpl3Plus;

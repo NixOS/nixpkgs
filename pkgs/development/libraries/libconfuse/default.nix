@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, flex }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libconfuse";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Small configuration file parser library for C";
     longDescription = ''

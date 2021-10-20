@@ -1,35 +1,69 @@
-{ stdenv
+{ autoPatchelfHook
 , buildPythonPackage
 , cmake
-, fetchPypi
+, cython
+, fetchFromGitHub
 , h3
-, python
+, lib
+, numpy
+, pytestCheckHook
+, scikit-build
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.0";
+  version = "3.7.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cd27fc8ecd9183f93934079b7c986401f499030ff2e2171eace9de462fab561d";
+  # pypi version does not include tests
+  src = fetchFromGitHub {
+    owner = "uber";
+    repo = "h3-py";
+    rev = "v${version}";
+    sha256 = "0wc1fz8v59r97wlayr4lnsgwzd4fxm991xbs9690d4vwdkapafll";
   };
 
-  patches = [
-    ./disable-custom-install.patch
-    ./hardcode-h3-path.patch
+  dontConfigure = true;
+
+  checkInputs = [ pytestCheckHook ];
+
+  nativeBuildInputs = [
+    scikit-build cmake cython
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # On Linux the .so files ends up referring to libh3.so instead of the full
+    # Nix store path. I'm not sure why this is happening! On Darwin it works
+    # fine.
+    autoPatchelfHook
   ];
 
-  preBuild = ''
-    substituteInPlace h3/h3.py \
-      --subst-var-by libh3_path ${h3}/lib/libh3${stdenv.hostPlatform.extensions.sharedLibrary}
-  '';
+  # This is not needed per-se, it's only added for autoPatchelfHook to work
+  # correctly. See the note above ^^
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ h3 ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ numpy ];
+
+  # The following prePatch replaces the h3lib compilation with using the h3 packaged in nixpkgs.
+  #
+  # - Remove the h3lib submodule.
+  # - Patch CMakeLists to avoid building h3lib, and use h3 instead.
+  prePatch =
+    let
+      cmakeCommands = ''
+        include_directories(${h3}/include/h3)
+        link_directories(${h3}/lib)
+      '';
+    in ''
+      rm -r src/h3lib
+      substituteInPlace CMakeLists.txt --replace "add_subdirectory(src/h3lib)" "${cmakeCommands}"
+    '';
+
+  # Extra check to make sure we can import it from Python
+  pythonImportsCheck = [ "h3" ];
+
+  meta = with lib; {
     homepage = "https://github.com/uber/h3-py";
-    description = "This library provides Python bindings for the H3 Core Library.";
+    description = "Hierarchical hexagonal geospatial indexing system";
     license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.darwin;
     maintainers = [ maintainers.kalbasit ];
   };
 }

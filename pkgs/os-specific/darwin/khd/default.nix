@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "khd";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.khd.plist --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple modal hotkey daemon for OSX";
     homepage = "https://github.com/koekeishiya/khd";
     downloadPage = "https://github.com/koekeishiya/khd/releases";

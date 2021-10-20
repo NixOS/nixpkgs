@@ -14,7 +14,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unit;
-        defaultText = "pkgs.unit";
+        defaultText = literalExpression "pkgs.unit";
         description = "Unit package to use.";
       };
       user = mkOption {
@@ -28,10 +28,12 @@ in {
         description = "Group account under which unit runs.";
       };
       stateDir = mkOption {
+        type = types.path;
         default = "/var/spool/unit";
         description = "Unit data directory.";
       };
       logDir = mkOption {
+        type = types.path;
         default = "/var/log/unit";
         description = "Unit log directory.";
       };
@@ -43,7 +45,7 @@ in {
             "applications": {}
           }
         '';
-        example = literalExample ''
+        example = ''
           {
             "listeners": {
               "*:8300": {

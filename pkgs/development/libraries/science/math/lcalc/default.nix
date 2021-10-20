@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , pari
@@ -65,16 +65,16 @@ stdenv.mkDerivation rec {
 
     (fetchpatch {
       name = "c++11.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/lcalc-c++11.patch?h=packages/lcalc&id=3607b97df5a8c231191115b0cb5c62426b339e71";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/3607b97df5a8c231191115b0cb5c62426b339e71/trunk/lcalc-c++11.patch";
       sha256 = "1ccrl61lv2vvx8ggldq54m5d0n1iy6mym7qz0i8nj6yj0dshnpk3";
     })
-  ] ++ stdenv.lib.optional stdenv.isDarwin
+  ] ++ lib.optional stdenv.isDarwin
   (fetchpatch {
     url = "https://git.sagemath.org/sage.git/plain/build/pkgs/lcalc/patches/clang.patch";
     sha256 = "0bb7656z6cp6i4p2qj745cmq0lhh52v2akl9whi760dynfdxbl18";
   });
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile --replace g++ c++
   '';
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     "PARI_PREFIX=${pari}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://oto.math.uwaterloo.ca/~mrubinst/L_function_public/L.html";
     description = "A program for calculating with L-functions";
     license = with licenses; [ gpl2 ];

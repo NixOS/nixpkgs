@@ -3,7 +3,7 @@
   pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
 }:
 
-pkgs.runCommandNoCC "nixpkgs-lib-tests" {
+pkgs.runCommand "nixpkgs-lib-tests" {
   buildInputs = [
     pkgs.nix
     (import ./check-eval.nix)
@@ -26,7 +26,11 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     nix-store --init
 
     cp -r ${../.} lib
+    echo "Running lib/tests/modules.sh"
     bash lib/tests/modules.sh
+
+    echo "Running lib/tests/sources.sh"
+    TEST_LIB=$PWD/lib bash lib/tests/sources.sh
 
     touch $out
 ''

@@ -1,32 +1,38 @@
-{ stdenv, fetchurl }:
-
-stdenv.mkDerivation {
-  name = "hddtemp-0.3_beta15";
-
-  db = fetchurl{
+{ lib, stdenv, fetchurl }:
+let
+  db = fetchurl {
     url = "mirror://savannah/hddtemp/hddtemp.db";
     sha256 = "1fr6qgns6qv7cr40lic5yqwkkc7yjmmgx8j0z6d93csg3smzhhya";
   };
 
+in
+stdenv.mkDerivation rec {
+  pname = "hddtemp";
+  version = "0.3-beta15";
+
   src = fetchurl {
-    url = "mirror://savannah/hddtemp/hddtemp-0.3-beta15.tar.bz2";
-    sha256 = "0nzgg4nl8zm9023wp4dg007z6x3ir60rwbcapr9ks2al81c431b1";
+    url = "mirror://savannah/hddtemp/hddtemp-${version}.tar.bz2";
+    sha256 = "sha256-YYVBWEBUCT1TvootnoHJcXTzDwCvkcuHAKl+RC1571s=";
   };
 
   # from Gentoo
   patches = [ ./byteswap.patch ./dontwake.patch ./execinfo.patch ./satacmds.patch ];
 
-  configurePhase =
-    ''
-      mkdir -p $out/nix-support
-      cp $db $out/nix-support/hddtemp.db
-      ./configure --prefix=$out --with-db-path=$out/nix-support/hddtemp.db
-    '';
+  configureFlags = [
+    "--with-db-path=${placeholder "out"}/share/${pname}/hddtemp.db"
+  ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    install -Dm444 ${db} $out/share/${pname}/hddtemp.db
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Tool for displaying hard disk temperature";
     homepage = "https://savannah.nongnu.org/projects/hddtemp/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
 }

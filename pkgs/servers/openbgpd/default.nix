@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, m4, yacc }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, m4, bison }:
 
 let
   openbsd_version =
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-TKs6tt/SCWes6kYAGIrSShZgOLf7xKh26xG3Zk7wCCw=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool m4 yacc ];
+  nativeBuildInputs = [ autoconf automake libtool m4 bison ];
 
   preConfigure = ''
     mkdir ./openbsd
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A free implementation of the Border Gateway Protocol, Version 4. It allows ordinary machines to be used as routers exchanging routes with other systems speaking the BGP protocol";
     license = licenses.isc;

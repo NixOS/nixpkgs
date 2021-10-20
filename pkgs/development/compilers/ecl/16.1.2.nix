@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , gmp, mpfr, libffi, makeWrapper
 , noUnicode ? false
@@ -7,15 +7,13 @@
 , useBoehmgc ? true, boehmgc
 }:
 
-assert useBoehmgc -> boehmgc != null;
-
 let
   s = # Generated upstream information
   rec {
     baseName="ecl";
     version="16.1.2";
     name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
+    url="https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
     sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
   };
   buildInputs = [
@@ -23,7 +21,7 @@ let
   ];
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
-  ] ++ stdenv.lib.optionals useBoehmgc [
+  ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -38,12 +36,11 @@ stdenv.mkDerivation {
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
-    "--with-gmp-prefix=${gmp.dev}"
-    "--with-libffi-prefix=${libffi.dev}"
-    ]
-    ++
-    (stdenv.lib.optional (! noUnicode)
-      "--enable-unicode")
+    "--with-gmp-incdir=${lib.getDev gmp}/include"
+    "--with-gmp-libdir=${lib.getLib gmp}/lib"
+    # -incdir, -libdir doesn't seem to be supported for libffi
+    "--with-libffi-prefix=${lib.getDev libffi}"
+    ] ++ lib.optional (! noUnicode) "--enable-unicode"
     ;
 
   patches = [
@@ -69,16 +66,31 @@ stdenv.mkDerivation {
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" \
-      --prefix PATH ':' "${gcc}/bin" \
-      --prefix NIX_LDFLAGS ' ' "-L${gmp.lib or gmp.out or gmp}/lib" \
-      --prefix NIX_LDFLAGS ' ' "-L${libffi.lib or libffi.out or libffi}/lib"
+      --prefix PATH ':' "${
+        lib.makeBinPath [
+          gcc                   # for the C compiler
+          gcc.bintools.bintools # for ar
+        ]
+      }" \
+  ''
+  # ecl 16.1.2 is too old to have -libdir for libffi and boehmgc, so we need to
+  # use NIX_LDFLAGS_BEFORE to make gcc find these particular libraries.
+  # Since it is missing even the prefix flag for boehmgc we also need to inject
+  # the correct -I flag via NIX_CFLAGS_COMPILE. Since we have access to it, we
+  # create the variables with suffixSalt (which seems to be necessary for
+  # NIX_CFLAGS_COMPILE even).
+  + lib.optionalString useBoehmgc ''
+      --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
+  '' + ''
+      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
 
-  meta = {
+  meta = with lib; {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mit ;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
   };
 }

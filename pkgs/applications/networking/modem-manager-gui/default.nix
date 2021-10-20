@@ -1,5 +1,5 @@
-{ stdenv
-, pkgconfig
+{ lib, stdenv
+, pkg-config
 , python3
 , fetchFromGitLab
 , gtk3
@@ -10,7 +10,6 @@
 , itstool
 , libayatana-appindicator-gtk3
 , perlPackages
-, glibcLocales
 , meson
 , ninja
 }:
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     perlPackages.Po4a
     itstool
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     patchShebangs man/manhelper.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono

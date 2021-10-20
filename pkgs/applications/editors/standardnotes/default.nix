@@ -1,19 +1,19 @@
-{ stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-  , fetchurl, runtimeShell }:
+{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
 
 let
-  version = "3.5.11";
+  version = "3.8.18";
   pname = "standardnotes";
   name = "${pname}-${version}";
 
   plat = {
-    i386-linux = "-i386";
+    i386-linux = "i386";
     x86_64-linux = "x86_64";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    i386-linux = "009fnnd7ysxkyykkbmhvr0vn13b21j1j5mzwdvqdkhm9v3c9rbgj";
-    x86_64-linux = "1fij00d03ky57jlnhf9n2iqvfa4dgmkgawrxd773gg03hdsk7xcf";
+    i386-linux = "1xiypsmvpk8i6kab862pipbdfb0y5d5355hdwjmva7v7g26aa7h7";
+    x86_64-linux = "03qlxlgyypnvcr40jh6i4wriyax2jbfhrb798cq0n7qlc1y4pg8r";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -30,6 +30,14 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
+  profile = ''
+    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  '';
+
+  extraPkgs = pkgs: with pkgs; [
+    libsecret
+  ];
+
   extraInstallCommands = ''
     # directory in /nix/store so readonly
     cp -r  ${appimageContents}/* $out
@@ -44,7 +52,7 @@ in appimageTools.wrapType2 rec {
     rm usr/lib/* AppRun standard-notes.desktop .so*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,

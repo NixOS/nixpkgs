@@ -1,8 +1,13 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   pname = "rimshot";
   version = "1.0";
+
+  src = fetchurl {
+    url = "https://stabyourself.net/dl.php?file=${pname}/${pname}-source.zip";
+    sha256 = "08pdkyvki92549605m9bqnr24ipkbwkp5nkr5aagdqnr8ai4rgmi";
+  };
 
   icon = fetchurl {
     url = "http://stabyourself.net/images/screenshots/rimshot-2.png";
@@ -19,24 +24,12 @@ let
     categories = "Audio;AudioVideo;Music";
   };
 
-in
-
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "http://stabyourself.net/dl.php?file=${pname}/${pname}-source.zip";
-    sha256 = "08pdkyvki92549605m9bqnr24ipkbwkp5nkr5aagdqnr8ai4rgmi";
-  };
-
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ lua love ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   unpackPhase = ''
     unzip -j $src
-  '';  
+  '';
 
   installPhase =
   ''
@@ -51,7 +44,7 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create your own music";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

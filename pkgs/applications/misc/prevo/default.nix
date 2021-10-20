@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
+{ lib, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
 
 symlinkJoin rec {
   name = "prevo-${version}";
@@ -13,7 +13,7 @@ symlinkJoin rec {
       --prefix XDG_DATA_DIRS : "${prevo-data}/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "offline version of the Esperanto dictionary Reta Vortaro";
     longDescription = ''
       PReVo is the "portable" ReVo, i.e., the offline version

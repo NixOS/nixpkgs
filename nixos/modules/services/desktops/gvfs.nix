@@ -34,7 +34,8 @@ in
       # gvfs can be built with multiple configurations
       package = mkOption {
         type = types.package;
-        default = pkgs.gnome3.gvfs;
+        default = pkgs.gnome.gvfs;
+        defaultText = literalExpression "pkgs.gnome.gvfs";
         description = "Which GVfs package to use.";
       };
 

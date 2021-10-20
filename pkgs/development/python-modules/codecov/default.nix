@@ -1,28 +1,50 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, coverage, unittest2 }:
+{ lib
+, buildPythonPackage
+, coverage
+, ddt
+, fetchFromGitHub
+, mock
+, pytestCheckHook
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.1.10";
+  version = "2.1.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d30ad6084501224b1ba699cbf018a340bb9553eb2701301c14133995fdd84f33";
+  src = fetchFromGitHub {
+    owner = "codecov";
+    repo = "codecov-python";
+    rev = "v${version}";
+    sha256 = "0bdk1cp3hxydpx9knqfv88ywwzw7yqhywi0inxjd6x53qh75prqy";
   };
 
-  checkInputs = [ unittest2 ]; # Tests only
+  propagatedBuildInputs = [
+    requests
+    coverage
+  ];
 
-  propagatedBuildInputs = [ requests coverage ];
+  checkInputs = [
+    ddt
+    mock
+    pytestCheckHook
+  ];
 
-  postPatch = ''
-    sed -i 's/, "argparse"//' setup.py
-  '';
+  pytestFlagsArray = [ "tests/test.py" ];
 
-  # No tests in archive
-  doCheck = false;
+  disabledTests = [
+    # No git repo available and network
+    "test_bowerrc_none"
+    "test_prefix"
+    "test_send"
+  ];
 
-  meta = {
+  pythonImportsCheck = [ "codecov" ];
+
+  meta = with lib; {
     description = "Python report uploader for Codecov";
     homepage = "https://codecov.io/";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

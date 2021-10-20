@@ -1,8 +1,12 @@
 import ./generic.nix (rec {
-  version = "27.1";
-  sha256 = "0h9f2wpmp6rb5rfwvqwv1ia1nw86h74p7hnz3vb3gjazj67i4k2a";
-  patches = [
-    ./clean-env.patch
+  version = "27.2";
+  sha256 = "sha256-tKfMTnjmPzeGJOCRkhW5EK9bsqCvyBn60pgnLp9Awbk=";
+  patches = fetchpatch: [
     ./tramp-detect-wrapped-gvfsd.patch
+    (fetchpatch {
+      name = "fix-aarch64-darwin-triplet.patch";
+      url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=a88f63500e475f842e5fbdd9abba4ce122cdb082";
+      sha256 = "sha256-RF9b5PojFUAjh2TDUW4+HaWveV30Spy1iAXhaWf1ZVg=";
+    })
   ];
 })

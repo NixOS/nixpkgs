@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "openrouteservice";
-  version = "2.3.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "GIScience";
     repo = "${pname}-py";
     rev = "v${version}";
-    sha256 = "ySXzOQI9NcF1W/otbL7i3AY628/74ZkJjDMQ9ywVEPc=";
+    sha256 = "1d5qbygb81fhpwfdm1a118r3xv45xz9n9avfkgxkvw1n8y6ywz2q";
   };
 
   checkInputs = [ pytestCheckHook responses ];

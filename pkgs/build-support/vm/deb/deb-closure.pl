@@ -50,7 +50,7 @@ sub getDeps {
 # virtual dependencies.
 my %provides;
 
-foreach my $cdata (values %packages) {
+foreach my $cdata (sort {$a->{Package} cmp $b->{Package}} (values %packages)) {
     if (defined $cdata->{Provides}) {
         my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
         foreach my $name (@provides) {

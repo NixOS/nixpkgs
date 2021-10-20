@@ -3,19 +3,19 @@
 , fetchurl
 , gnugrep
 , gnused
-, iproute
+, iproute2
 , ipset
 , iptables
 , perl
 , perlPackages
-, stdenv
+, lib, stdenv
 , tree
 , util-linux
 }:
 let
-  PATH = stdenv.lib.concatStringsSep ":"
+  PATH = lib.concatStringsSep ":"
            [ "${coreutils}/bin"
-             "${iproute}/bin"
+             "${iproute2}/bin"
              "${iptables}/bin"
              "${ipset}/bin"
              "${ebtables}/bin"
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     coreutils
-    iproute
+    iproute2
     ipset
     iptables
     ebtables
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
       not use Netfilter's ipchains compatibility mode and can thus take
       advantage of Netfilter's connection state tracking capabilities.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

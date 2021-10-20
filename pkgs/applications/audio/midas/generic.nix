@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, libX11, libXext, alsaLib, freetype, brand, type, version, homepage, url, sha256, ... }:
+{ stdenv, fetchurl, lib, libX11, libXext, alsa-lib, freetype, brand, type, version, homepage, url, sha256, ... }:
 stdenv.mkDerivation rec {
   inherit type;
   baseName = "${type}-Edit";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libPath = lib.makeLibraryPath [
       libX11           # libX11.so.6
       libXext          # libXext.so.6
-      alsaLib          # libasound.so.2
+      alsa-lib          # libasound.so.2
       freetype         # libfreetype.so.6
       stdenv.cc.cc.lib # libstdc++.so.6
     ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       $out/bin/${baseName}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit homepage;
     description = "Editor for the ${brand} ${type} digital mixer";
     license = licenses.unfree;

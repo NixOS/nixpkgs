@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "6.4.1";
+  version = "6.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "043513b85e33038e38cc0571cea1f3ee8044ec083891c9a5dad1d436894424ea";
+    sha256 = "3f16d3d40f7f2e1f6032132170d8fd4ba2f4f9ea419f13d7a68091bbe1949583";
   };
 
   disabled = pythonOlder "3.5";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # fails to find Console even though it exists on python 3.x
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of scripts and modules for freezing Python scripts into executables";
     homepage = "http://cx-freeze.sourceforge.net/";
     license = licenses.psfl;

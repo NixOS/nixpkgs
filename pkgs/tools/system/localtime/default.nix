@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, m4 }:
+{ lib, fetchFromGitHub, buildGoPackage, m4 }:
 
 buildGoPackage rec {
-  name = "localtime-2017-11-07";
+  pname = "localtime";
+  version = "unstable-2017-11-07";
 
   src = fetchFromGitHub {
     owner = "Stebalien";
@@ -28,9 +29,10 @@ buildGoPackage rec {
     make install $makeFlags
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
     homepage = "https://github.com/Stebalien/localtime";
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

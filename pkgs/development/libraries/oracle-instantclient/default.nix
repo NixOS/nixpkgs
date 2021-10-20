@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , autoPatchelfHook
 , fixDarwinDylibNames
@@ -12,12 +13,12 @@
 assert odbcSupport -> unixODBC != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   # assemble list of components
-  components = [ "basic" "sdk" "sqlplus" ] ++ optional odbcSupport "odbc";
+  components = [ "basic" "sdk" "sqlplus" "tools" ] ++ optional odbcSupport "odbc";
 
   # determine the version number, there might be different ones per architecture
   version = {
@@ -28,22 +29,23 @@ let
   # hashes per component and architecture
   hashes = {
     x86_64-linux = {
-      basic   = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
-      sdk     = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
+      basic = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
+      sdk = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
       sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
-      odbc    = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+      tools = "1q19blr0gz1c8bq0bnv1njzflrp03hf82ngid966xc6gwmqpkdsk";
+      odbc = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
     };
     x86_64-darwin = {
-      basic   = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
-      sdk     = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
+      basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
+      sdk = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
       sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
-      odbc    = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
+      tools = "b2bc474f98da13efdbc77fd05f559498cd8c08582c5b9038f6a862215de33f2c";
+      odbc = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
     };
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # rels per component and architecture, optional
-  rels = {
-  }.${stdenv.hostPlatform.system} or {};
+  rels = { }.${stdenv.hostPlatform.system} or { };
 
   # convert platform to oracle architecture names
   arch = {
@@ -70,13 +72,15 @@ let
   };
 
   # assemble srcs
-  srcs = map (component:
-    (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
-  components;
+  srcs = map
+    (component:
+      (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
+    components;
 
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version srcs;
 
   buildInputs = [ stdenv.cc.cc.lib ]
@@ -87,13 +91,13 @@ in stdenv.mkDerivation {
     ++ optional stdenv.isLinux autoPatchelfHook
     ++ optional stdenv.isDarwin fixDarwinDylibNames;
 
-  outputs = [ "out" "dev" "lib"];
+  outputs = [ "out" "dev" "lib" ];
 
   unpackCmd = "unzip $curSrc";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
-    install -Dm755 {adrci,genezi,uidrvci,sqlplus} $out/bin
+    install -Dm755 {adrci,genezi,uidrvci,sqlplus,exp,expdp,imp,impdp} $out/bin
 
     # cp to preserve symlinks
     cp -P *${extLib}* $lib/lib
@@ -114,7 +118,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle instant client libraries and sqlplus CLI";
     longDescription = ''
       Oracle instant client provides access to Oracle databases (OCI,
@@ -123,7 +127,7 @@ in stdenv.mkDerivation {
     '';
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ pesterhazy flokli ];
-    hydraPlatforms = [];
+    maintainers = with maintainers; [ flokli ];
+    hydraPlatforms = [ ];
   };
 }

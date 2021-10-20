@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 buildGoPackage rec {
   pname = "terraform-provider-gandi";
   version = "1.0.0";
@@ -17,7 +17,7 @@ buildGoPackage rec {
   # if the versions are not provided via file paths.
   postBuild = "mv go/bin/terraform-provider-gandi{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terraform provider for the Gandi LiveDNS service.";
     homepage = "https://github.com/tiramiseb/terraform-provider-gandi";
     license = licenses.mpl20;

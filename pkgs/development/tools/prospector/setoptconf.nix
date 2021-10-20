@@ -4,19 +4,19 @@
 }:
 
 buildPythonPackage rec {
-  pname = "setoptconf";
-  version = "0.2.0";
+  pname = "setoptconf-tmp";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "177l7j68j751i781bgk6pfhxjj7hwqxzdm2ja5fkywbp0275s2sv";
+    sha256 = "0y2pgpraa36wzlzkxigvmz80mqd3mzcc9wv2yx9bliqks7fhlj70";
   };
 
   # Base tests provided via PyPi are broken
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://pypi.org/project/setoptconf";
+    homepage = "https://pypi.org/project/setoptconf-tmp";
     description = "A module for retrieving program settings from various sources in a consistant method";
     license = licenses.mit;
     maintainers = with maintainers; [

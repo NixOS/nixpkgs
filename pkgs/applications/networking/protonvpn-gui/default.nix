@@ -76,11 +76,15 @@ in python3Packages.buildPythonApplication rec {
     done
   '';
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Linux GUI for ProtonVPN, written in Python";
     homepage = "https://github.com/ProtonVPN/linux-gui";
     maintainers = with maintainers; [ offline ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "protonvpn-gui";
   };
 }

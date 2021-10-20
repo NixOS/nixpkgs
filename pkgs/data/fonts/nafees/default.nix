@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "nafees";
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     # more like a modified BSD, but still contains the GPLv2 embedded
     # font exception, and some not-for-resale language.
     license = "unknown";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ bergey ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bergey ];
   };
 }

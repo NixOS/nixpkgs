@@ -1,42 +1,12 @@
-{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
-
-let wrapper = stdenv.mkDerivation rec {
-  pname = "wrapper";
-  version = "3.5.44";
-
-  src = fetchurl {
-    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "1iq4j7srzy5p8q3nci9316bnwx4g71jyvzd1i5hp3s8v1k61910g";
-  };
-
-  buildInputs = [ jdk ];
-
-  buildPhase = ''
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
-    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
-    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-    cp bin/wrapper $out/bin/wrapper
-    cp lib/wrapper.jar $out/lib/wrapper.jar
-    cp lib/libwrapper.so $out/lib/libwrapper.so
-  '';
-};
-
-in
+{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which, java-service-wrapper }:
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "0.9.48";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "0cnm4bwl1gqcx89i96j2qlq6adphy4l72h5whamqwv86n8bmpig8";
+    sha256 = "sha256-JuX02VsaB2aHD5ezDlfJqOmGkCecO/CRmOMO/6vsxFA=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -52,9 +22,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
 
-    cp ${wrapper}/bin/wrapper $out/i2psvc
-    cp ${wrapper}/lib/wrapper.jar $out/lib
-    cp ${wrapper}/lib/libwrapper.so $out/lib
+    cp ${java-service-wrapper}/bin/wrapper $out/i2psvc
+    cp ${java-service-wrapper}/lib/wrapper.jar $out/lib
+    cp ${java-service-wrapper}/lib/libwrapper.so $out/lib
 
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
@@ -72,7 +42,7 @@ stdenv.mkDerivation rec {
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
     license = licenses.gpl2;

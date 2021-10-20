@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "black" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This is a small utility built on top of the black Python code formatter to enable formatting of partial files";
     homepage    = "https://github.com/wbolster/black-macchiato";
     license     = licenses.bsd3;

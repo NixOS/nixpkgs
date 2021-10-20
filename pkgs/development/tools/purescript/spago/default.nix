@@ -1,6 +1,10 @@
 { haskell
 , haskellPackages
 , lib
+
+# The following are only needed for the passthru.tests:
+, cacert
+, git
 , nodejs
 , purescript
 , runCommand
@@ -13,6 +17,8 @@ let
         maintainers = (oldAttrs.maintainers or []) ++ [
           lib.maintainers.cdepillabout
         ];
+        changelog =
+          "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
       }));
 in
 
@@ -32,6 +38,8 @@ spago.overrideAttrs (oldAttrs: {
         {
           __noChroot = true;
           nativeBuildInputs = [
+            cacert
+            git
             nodejs
             purescript
             spago

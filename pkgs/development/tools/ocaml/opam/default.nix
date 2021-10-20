@@ -6,80 +6,96 @@ assert lib.versionAtLeast ocaml.version "4.02.3";
 
 let
   srcs = {
-    cmdliner = fetchurl {
-      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-1.0.2.tbz";
-      sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
+    "0install-solver" = fetchurl {
+      url = "https://github.com/0install/0install/releases/download/v2.17/0install-v2.17.tbz";
+      sha256 = "08q95mzmf9pyyqs68ff52422f834hi313cxmypwrxmxsabcfa10p";
     };
-    cppo = fetchurl {
-      url = "https://github.com/mjambon/cppo/archive/v1.6.5.tar.gz";
-      sha256 = "1dkm3d5h6h56y937gcdk2wixlpzl59vv5pmiafglr89p20kf7gqf";
+    "cmdliner" = fetchurl {
+      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-1.0.4.tbz";
+      sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
     };
-    cudf = fetchurl {
+    "cppo" = fetchurl {
+      url = "https://github.com/ocaml-community/cppo/releases/download/v1.6.7/cppo-v1.6.7.tbz";
+      sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
+    };
+    "cudf" = fetchurl {
       url = "https://gforge.inria.fr/frs/download.php/36602/cudf-0.9.tar.gz";
       sha256 = "0771lwljqwwn3cryl0plny5a5dyyrj4z6bw66ha5n8yfbpcy8clr";
     };
-    dose3 = fetchurl {
+    "dose3" = fetchurl {
       url = "https://gforge.inria.fr/frs/download.php/file/36063/dose3-5.0.1.tar.gz";
       sha256 = "00yvyfm4j423zqndvgc1ycnmiffaa2l9ab40cyg23pf51qmzk2jm";
     };
-    dune-local = fetchurl {
-      url = "https://github.com/ocaml/dune/releases/download/1.6.3/dune-1.6.3.tbz";
-      sha256 = "0dmf0wbfmgdy5plz1bjiisc2hjgblvxsnrqjmw2c8y45v1h23mdz";
+    "dune-local" = fetchurl {
+      url = "https://github.com/ocaml/dune/releases/download/2.9.0/dune-2.9.0.tbz";
+      sha256 = "07m476kgagpd6kzm3jq30yfxqspr2hychah0xfqs14z82zxpq8dv";
     };
-    extlib = fetchurl {
-      url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.5.tar.gz";
-      sha256 = "19slqf5bdj0rrph2w41giwmn6df2qm07942jn058pjkjrnk30d4s";
+    "extlib" = fetchurl {
+      url = "https://ygrek.org/p/release/ocaml-extlib/extlib-1.7.7.tar.gz";
+      sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
     };
-    mccs = fetchurl {
-      url = "https://github.com/AltGr/ocaml-mccs/archive/1.1+11.tar.gz";
-      sha256 = "0mswapf37rav8nvvbjc4c7c7wnl6qwgd3c5v0nfifmr910qygz72";
+    "mccs" = fetchurl {
+      url = "https://github.com/AltGr/ocaml-mccs/archive/1.1+13.tar.gz";
+      sha256 = "05nnji9h8mss3hzjr5faid2v3xfr7rcv2ywmpcxxp28y6h2kv9gv";
     };
-    ocamlgraph = fetchurl {
-      url = "http://ocamlgraph.lri.fr/download/ocamlgraph-1.8.8.tar.gz";
-      sha256 = "0m9g16wrrr86gw4fz2fazrh8nkqms0n863w7ndcvrmyafgxvxsnr";
+    "ocamlgraph" = fetchurl {
+      url = "https://github.com/backtracking/ocamlgraph/releases/download/2.0.0/ocamlgraph-2.0.0.tbz";
+      sha256 = "029692bvdz3hxpva9a2jg5w5381fkcw55ysdi8424lyyjxvjdzi0";
     };
-    opam-file-format = fetchurl {
-      url = "https://github.com/ocaml/opam-file-format/archive/2.0.0.tar.gz";
-      sha256 = "0cjw69r7iilidi7b6arr92kjnjspchvwnmwr1b1gyaxqxpr2s98m";
+    "opam-0install-cudf" = fetchurl {
+      url = "https://github.com/ocaml-opam/opam-0install-solver/releases/download/v0.4.2/opam-0install-cudf-v0.4.2.tbz";
+      sha256 = "10wma4hh9l8hk49rl8nql6ixsvlz3163gcxspay5fwrpbg51fmxr";
     };
-    re = fetchurl {
-      url = "https://github.com/ocaml/ocaml-re/releases/download/1.8.0/re-1.8.0.tbz";
-      sha256 = "0qkv42a4hpqpxvqa4kdkkcbhbg7aym9kv4mqgm3m51vxbd0pq0lv";
+    "opam-file-format" = fetchurl {
+      url = "https://github.com/ocaml/opam-file-format/archive/2.1.3.tar.gz";
+      sha256 = "1bqyrlsvmjf4gqzmzbiyja9m1ph30ic9i18x23p5ziymyylw2sfg";
     };
-    result = fetchurl {
-      url = "https://github.com/janestreet/result/releases/download/1.3/result-1.3.tbz";
-      sha256 = "1lrnbxdq80gbhnp85mqp1kfk0bkh6q1c93sfz2qgnq2qyz60w4sk";
+    "re" = fetchurl {
+      url = "https://github.com/ocaml/ocaml-re/releases/download/1.9.0/re-1.9.0.tbz";
+      sha256 = "1gas4ky49zgxph3870nffzkr6y41kkpqp4nj38pz1gh49zcf12aj";
     };
-    seq = fetchurl {
-      url = "https://github.com/c-cube/seq/archive/0.1.tar.gz";
-      sha256 = "02lb2d9i12bxrz2ba5wygk2bycan316skqlyri0597q7j9210g8r";
+    "result" = fetchurl {
+      url = "https://github.com/janestreet/result/releases/download/1.5/result-1.5.tbz";
+      sha256 = "0cpfp35fdwnv3p30a06wd0py3805qxmq3jmcynjc3x2qhlimwfkw";
+    };
+    "seq" = fetchurl {
+      url = "https://github.com/c-cube/seq/archive/0.2.2.tar.gz";
+      sha256 = "1ck15v3pg8bacdg6d6iyp2jc3kgrzxk5jsgzx3287x2ycb897j53";
+    };
+    "stdlib-shims" = fetchurl {
+      url = "https://github.com/ocaml/stdlib-shims/releases/download/0.3.0/stdlib-shims-0.3.0.tbz";
+      sha256 = "0jnqsv6pqp5b5g7lcjwgd75zqqvcwcl5a32zi03zg1kvj79p5gxs";
     };
     opam = fetchurl {
-      url = "https://github.com/ocaml/opam/archive/2.0.7.zip";
-      sha256 = "03yxj4hw9p5dh34b1yzl3xd0l1v2l2az0n7ix453yjrkn0wn0xic";
+      url = "https://github.com/ocaml/opam/archive/2.1.0.zip";
+      sha256 = "063df5gsvp4yrbqbnd8k7a1f04cf12prc5wh4f1200acs3jwjxwb";
     };
   };
 in stdenv.mkDerivation {
   pname = "opam";
-  version = "2.0.7";
+  version = "2.1.0";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ curl ncurses ocaml getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
 
   src = srcs.opam;
 
   postUnpack = ''
-    ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/cmdliner.tbz
-    ln -sv ${srcs.cppo} $sourceRoot/src_ext/cppo.tar.gz
-    ln -sv ${srcs.cudf} $sourceRoot/src_ext/cudf.tar.gz
-    ln -sv ${srcs.dose3} $sourceRoot/src_ext/dose3.tar.gz
-    ln -sv ${srcs.dune-local} $sourceRoot/src_ext/dune-local.tbz
-    ln -sv ${srcs.extlib} $sourceRoot/src_ext/extlib.tar.gz
-    ln -sv ${srcs.mccs} $sourceRoot/src_ext/mccs.tar.gz
-    ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/ocamlgraph.tar.gz
-    ln -sv ${srcs.opam-file-format} $sourceRoot/src_ext/opam-file-format.tar.gz
-    ln -sv ${srcs.re} $sourceRoot/src_ext/re.tbz
-    ln -sv ${srcs.result} $sourceRoot/src_ext/result.tbz
-    ln -sv ${srcs.seq} $sourceRoot/src_ext/seq.tar.gz
+    ln -sv ${srcs."0install-solver"} $sourceRoot/src_ext/0install-solver.tbz
+    ln -sv ${srcs."cmdliner"} $sourceRoot/src_ext/cmdliner.tbz
+    ln -sv ${srcs."cppo"} $sourceRoot/src_ext/cppo.tbz
+    ln -sv ${srcs."cudf"} $sourceRoot/src_ext/cudf.tar.gz
+    ln -sv ${srcs."dose3"} $sourceRoot/src_ext/dose3.tar.gz
+    ln -sv ${srcs."dune-local"} $sourceRoot/src_ext/dune-local.tbz
+    ln -sv ${srcs."extlib"} $sourceRoot/src_ext/extlib.tar.gz
+    ln -sv ${srcs."mccs"} $sourceRoot/src_ext/mccs.tar.gz
+    ln -sv ${srcs."ocamlgraph"} $sourceRoot/src_ext/ocamlgraph.tbz
+    ln -sv ${srcs."opam-0install-cudf"} $sourceRoot/src_ext/opam-0install-cudf.tbz
+    ln -sv ${srcs."opam-file-format"} $sourceRoot/src_ext/opam-file-format.tar.gz
+    ln -sv ${srcs."re"} $sourceRoot/src_ext/re.tbz
+    ln -sv ${srcs."result"} $sourceRoot/src_ext/result.tbz
+    ln -sv ${srcs."seq"} $sourceRoot/src_ext/seq.tar.gz
+    ln -sv ${srcs."stdlib-shims"} $sourceRoot/src_ext/stdlib-shims.tbz
   '';
 
   patches = [ ./opam-shebangs.patch ];
@@ -110,11 +126,11 @@ in stdenv.mkDerivation {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
     maintainers = [ maintainers.henrytill maintainers.marsam ];
     platforms = platforms.all;
   };
 }
-# Generated by: ./opam.nix.pl -v 2.0.7 -p opam-shebangs.patch
+# Generated by: ./opam.nix.pl -v 2.1.0 -p opam-shebangs.patch

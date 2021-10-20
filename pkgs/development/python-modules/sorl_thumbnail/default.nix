@@ -1,8 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,11 @@ buildPythonPackage rec {
     sha256 = "fbe6dfd66a1aceb7e0203895ff5622775e50266f8d8cfd841fe1500bd3e19018";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sorl-thumbnail.readthedocs.org/en/latest/";
     description = "Thumbnails for Django";
     license = licenses.bsd3;

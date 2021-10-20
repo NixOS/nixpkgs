@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-locale'';
-  version = ''20151031-git'';
+  baseName = "cl-locale";
+  version = "20151031-git";
 
-  description = ''Simple i18n library for Common Lisp'';
+  description = "Simple i18n library for Common Lisp";
 
   deps = [ args."alexandria" args."anaphora" args."arnesi" args."cl-annot" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."collectors" args."iterate" args."named-readtables" args."symbol-munger" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-locale/2015-10-31/cl-locale-20151031-git.tgz'';
-    sha256 = ''14j4xazrx2v5cj4q4irfwra0ksvl2l0s7073fimpwc0xqjfsnjpg'';
+    url = "http://beta.quicklisp.org/archive/cl-locale/2015-10-31/cl-locale-20151031-git.tgz";
+    sha256 = "14j4xazrx2v5cj4q4irfwra0ksvl2l0s7073fimpwc0xqjfsnjpg";
   };
 
   packageName = "cl-locale";

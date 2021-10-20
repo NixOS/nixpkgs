@@ -1,27 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre
-, version ? "1.6" }:
-
-let
-  versionMap = {
-    "1.5" = {
-      flinkVersion = "1.5.5";
-      sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
-    };
-    "1.6" = {
-      flinkVersion = "1.11.1";
-      sha256 = "0338bg2sb427c1rrf2cmsz63sz0yk6gclpli2lskq0mpx72wxpl0";
-    };
-  };
-in
-
-with versionMap.${version};
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "flink-${flinkVersion}";
+  pname = "flink";
+  version = "1.13.2";
 
   src = fetchurl {
-    url = "mirror://apache/flink/${name}/${name}-bin-scala_2.11.tgz";
-    inherit sha256;
+    url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.11.tgz";
+    sha256 = "sha256-GPiHV19Z2Htt75hCXK2nCeQMIBQFEEUxXlBembenFL0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +27,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed stream processing framework";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";

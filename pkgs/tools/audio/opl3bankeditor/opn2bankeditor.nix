@@ -1,14 +1,9 @@
-{ opl3bankeditor, fetchFromGitHub }:
-
-opl3bankeditor.overrideAttrs (oldAttrs: rec {
+import ./common.nix rec {
+  pname = "opn2bankeditor";
+  chip = "OPN2";
   version = "1.3";
-  pname = "OPN2BankEditor";
-
-  src = fetchFromGitHub {
-    owner = "Wohlstand";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xsvv0gxqh1lx22f1jm384f7mq1jp57fmpsx1jjaxz435w5hf8s0";
-    fetchSubmodules = true;
-  };
-})
+  sha256 = "0niam6a6y57msbl0xj23g6l7gisv4a670q0k1zqfm34804532a32";
+  extraPatches = [
+    ./0001-opn2bankeditor-Look-for-system-installed-Rt-libs.patch
+  ];
+}

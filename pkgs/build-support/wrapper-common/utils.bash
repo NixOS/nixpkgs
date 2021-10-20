@@ -13,7 +13,9 @@ accumulateRoles() {
     fi
 }
 
-mangleVarList() {
+mangleVarListGeneric() {
+    local sep="$1"
+    shift
     local var="$1"
     shift
     local -a role_suffixes=("$@")
@@ -25,9 +27,13 @@ mangleVarList() {
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
+            export ${outputVar}+="${!outputVar:+$sep}${!inputVar}"
         fi
     done
+}
+
+mangleVarList() {
+    mangleVarListGeneric " " "$@"
 }
 
 mangleVarBool() {
@@ -45,6 +51,35 @@ mangleVarBool() {
             # We don't use `|| true` because that would silence actual
             # syntax errors from bad variable values.
             let "${outputVar} |= ${!inputVar:-0}" "1"
+        fi
+    done
+}
+
+# Combine a singular value from all roles. If multiple roles are being served,
+# and the value differs in these roles then the request is impossible to
+# satisfy and we abort immediately.
+mangleVarSingle() {
+    local var="$1"
+    shift
+    local -a role_suffixes=("$@")
+
+    local outputVar="${var}_@suffixSalt@"
+    for suffix in "${role_suffixes[@]}"; do
+        local inputVar="${var}${suffix}"
+        if [ -v "$inputVar" ]; then
+            if [ -v "$outputVar" ]; then
+                if [ "${!outputVar}" != "${!inputVar}" ]; then
+                    {
+                        echo "Multiple conflicting values defined for $outputVar"
+                        echo "Existing value is ${!outputVar}"
+                        echo "Attempting to set to ${!inputVar} via $inputVar"
+                    } >&2
+
+                    exit 1
+                fi
+            else
+                declare -gx ${outputVar}="${!inputVar}"
+            fi
         fi
     done
 }
@@ -93,4 +128,39 @@ expandResponseParams() {
             fi
         fi
     done
+}
+
+checkLinkType() {
+    local arg mode
+    type="dynamic"
+    for arg in "$@"; do
+        if [[ "$arg" = -static ]]; then
+            type="static"
+        elif [[ "$arg" = -static-pie ]]; then
+            type="static-pie"
+        fi
+    done
+    echo "$type"
+}
+
+# When building static-pie executables we cannot have rpath
+# set. At least glibc requires rpath to be empty
+filterRpathFlags() {
+    local linkType=$1 ret="" i
+    shift
+
+    if [[ "$linkType" == "static-pie" ]]; then
+        while [[ "$#" -gt 0 ]]; do
+            i="$1"; shift 1
+            if [[ "$i" == -rpath ]]; then
+                # also skip its argument
+                shift
+            else
+                ret+="$i "
+            fi
+        done
+    else
+        ret=$@
+    fi
+    echo $ret
 }

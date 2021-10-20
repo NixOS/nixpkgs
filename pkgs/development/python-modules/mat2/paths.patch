@@ -1,0 +1,113 @@
+diff --git a/dolphin/mat2.desktop b/dolphin/mat2.desktop
+index d365bc5..56313e2 100644
+--- a/dolphin/mat2.desktop
++++ b/dolphin/mat2.desktop
+@@ -8,6 +8,6 @@ Type=Service
+ Name=Clean metadata
+ Name[de]=Metadaten löschen
+ Name[es]=Limpiar metadatos
+-Icon=/usr/share/icons/hicolor/scalable/apps/mat2.svg
+-Exec=kdialog --yesno  "$( mat2 -s %U )" --title "Clean Metadata?" && mat2 %U
+-Exec[de]=kdialog --yesno  "$( mat2 -s %U )" --title "Metadaten löschen?" && mat2 %U
++Icon=@mat2svg@
++Exec=@kdialog@ --yesno  "$( mat2 -s %U )" --title "Clean Metadata?" && mat2 %U
++Exec[de]=@kdialog@ --yesno  "$( mat2 -s %U )" --title "Metadaten löschen?" && mat2 %U
+diff --git a/libmat2/bubblewrap.py b/libmat2/bubblewrap.py
+index 970d5dd..5d3c0b7 100644
+--- a/libmat2/bubblewrap.py
++++ b/libmat2/bubblewrap.py
+@@ -22,11 +22,7 @@ CalledProcessError = subprocess.CalledProcessError
+ 
+ 
+ def _get_bwrap_path() -> str:
+-    which_path = shutil.which('bwrap')
+-    if which_path:
+-        return which_path
+-
+-    raise RuntimeError("Unable to find bwrap")  # pragma: no cover
++    return '@bwrap@'
+ 
+ 
+ def _get_bwrap_args(tempdir: str,
+@@ -37,16 +33,11 @@ def _get_bwrap_args(tempdir: str,
+ 
+     # XXX: use --ro-bind-try once all supported platforms
+     # have a bubblewrap recent enough to support it.
+-    ro_bind_dirs = ['/usr', '/lib', '/lib64', '/bin', '/sbin', '/etc/alternatives', cwd]
++    ro_bind_dirs = ['/nix/store', cwd]
+     for bind_dir in ro_bind_dirs:
+         if os.path.isdir(bind_dir):  # pragma: no cover
+             ro_bind_args.extend(['--ro-bind', bind_dir, bind_dir])
+ 
+-    ro_bind_files = ['/etc/ld.so.cache']
+-    for bind_file in ro_bind_files:
+-        if os.path.isfile(bind_file):  # pragma: no cover
+-            ro_bind_args.extend(['--ro-bind', bind_file, bind_file])
+-
+     args = ro_bind_args + \
+         ['--dev', '/dev',
+          '--proc', '/proc',
+diff --git a/libmat2/exiftool.py b/libmat2/exiftool.py
+index eb65b2a..51a0fa1 100644
+--- a/libmat2/exiftool.py
++++ b/libmat2/exiftool.py
+@@ -1,8 +1,6 @@
+-import functools
+ import json
+ import logging
+ import os
+-import shutil
+ import subprocess
+ from typing import Dict, Union, Set
+ 
+@@ -70,14 +68,5 @@ class ExiftoolParser(abstract.AbstractParser):
+             return False
+         return True
+ 
+-@functools.lru_cache()
+ def _get_exiftool_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('exiftool')
+-    if which_path:
+-        return which_path
+-
+-    # Exiftool on Arch Linux has a weird path
+-    if os.access('/usr/bin/vendor_perl/exiftool', os.X_OK):
+-        return '/usr/bin/vendor_perl/exiftool'
+-
+-    raise RuntimeError("Unable to find exiftool")
++    return '@exiftool@'
+diff --git a/libmat2/parser_factory.py b/libmat2/parser_factory.py
+index 9965432..bd45179 100644
+--- a/libmat2/parser_factory.py
++++ b/libmat2/parser_factory.py
+@@ -8,6 +8,7 @@ from . import abstract, UNSUPPORTED_EXTENSIONS
+ 
+ T = TypeVar('T', bound='abstract.AbstractParser')
+ 
++mimetypes.init(['@mimetypes@'])
+ mimetypes.add_type('application/epub+zip', '.epub')
+ mimetypes.add_type('application/x-dtbncx+xml', '.ncx')  # EPUB Navigation Control XML File
+ 
+diff --git a/libmat2/video.py b/libmat2/video.py
+index b4a3232..3dd7ee5 100644
+--- a/libmat2/video.py
++++ b/libmat2/video.py
+@@ -1,6 +1,4 @@
+ import subprocess
+-import functools
+-import shutil
+ import logging
+ 
+ from typing import Dict, Union
+@@ -135,10 +133,5 @@ class MP4Parser(AbstractFFmpegParser):
+     }
+ 
+ 
+-@functools.lru_cache()
+ def _get_ffmpeg_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('ffmpeg')
+-    if which_path:
+-        return which_path
+-
+-    raise RuntimeError("Unable to find ffmpeg")
++    return '@ffmpeg@'

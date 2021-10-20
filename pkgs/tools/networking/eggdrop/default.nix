@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, tcl }:
+{ lib, stdenv, fetchFromGitHub, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "eggdrop";
-  version = "1.8.4";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "eggheads";
     repo = "eggdrop";
     rev = "v${version}";
-    sha256 = "0xqdrv4ydxw72a740lkmpg3fs7ldicaf08b0sfqdyaj7cq8l5x5l";
+    sha256 = "sha256-vh8nym7aYeTRUQ7FBZRy4ToG2ajwRDhzi4jNiJQOEyQ=";
   };
 
   buildInputs = [ tcl ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--with-tclinc=${tcl}/include/tcl.h"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
     platforms = platforms.unix;
     homepage = "http://www.eggheads.org";

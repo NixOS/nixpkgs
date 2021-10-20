@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , lxml
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     py.test $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of lxml.xmlfile for the standard library";
     longDescription = ''
       et_xmlfile is a low memory library for creating large XML files.

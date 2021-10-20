@@ -1,31 +1,38 @@
-{ stdenv, fetchFromGitHub, cmake, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.6.8";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "1k8ghz8xwy7v4y4r4xc690ig7qmn0mkvynplwn66j44fgdpg0v1s";
+    sha256 = "sha256-JYE4ReFiYSDx/0dlA8OkQw3rEpUEQDguTWoHC1r1fUc=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  patches = [ ./fix-luajit-darwin.patch ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd ];
+
+  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
+
+  patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
+
+  # _FORTIFY_SOURCE requires compiling with optimization (-O)
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
       --replace /lib/systemd $out/lib/systemd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
-    maintainers = with maintainers; [
-      samrose
-    ];
+    maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
     platforms = platforms.unix;
   };

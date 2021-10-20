@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -8,11 +8,11 @@
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, clucene_core, libcdr, lcms
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, bluez5, libtool, carlito
+, fontsConf, pkg-config, bluez5, libtool, carlito
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
+, gnome, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
@@ -58,16 +58,9 @@ in (mkDrv rec {
 
   outputs = [ "out" "dev" ];
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead
-  # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [
-    "-I${librdf_rasqal}/include/rasqal"
-  ] ++ lib.optionals stdenv.isx86_64 [ "-mno-fma" "-mno-avx" ]
-  # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
-  ++ [ "-fno-visibility-inlines-hidden" ];
-
-  patches = [
-    ./xdg-open-brief.patch
+    "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
+    "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
 
   tarballPath = "external/tarballs";
@@ -300,8 +293,6 @@ in (mkDrv rec {
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-
     mkdir -p $dev
     cp -r include $dev
   '' + lib.optionalString kdeIntegration ''
@@ -380,7 +371,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
+  ];
 
   checkPhase = ''
     make unitcheck
@@ -388,12 +379,12 @@ in (mkDrv rec {
   '';
 
   nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkgconfig libtool
+    gdb fontforge autoconf automake bison pkg-config libtool
   ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
-    [ ant ArchiveZip boost cairo clucene_core
+    [ ant ArchiveZip boost box2d cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
@@ -401,12 +392,12 @@ in (mkDrv rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes
       glib libmysqlclient
-      neon nspr nss openldap openssl pam perl pkgconfig poppler
+      neon nspr nss openldap openssl pam perl pkg-config poppler
       python3 sane-backends unzip which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
       librevenge libe-book libmwaw glm ncurses epoxy
-      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
+      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
     ]
     ++ (with gst_all_1; [
       gstreamer

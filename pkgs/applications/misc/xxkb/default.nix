@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
-, svgSupport ? false, librsvg, glib, gdk-pixbuf, pkgconfig
+{ lib, stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
+, svgSupport ? false, librsvg, glib, gdk-pixbuf, pkg-config
 }:
 
 assert svgSupport ->
-  librsvg != null && glib != null && gdk-pixbuf != null && pkgconfig != null;
+  librsvg != null && glib != null && gdk-pixbuf != null && pkg-config != null;
 
 stdenv.mkDerivation rec {
   name = "xxkb-1.11.1";
@@ -16,15 +16,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
     libX11 libXt libXext libXpm
-  ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkgconfig ];
+  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkg-config ];
 
   outputs = [ "out" "man" ];
 
-  imakeFlags = stdenv.lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
+  imakeFlags = lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
     "PIXMAPDIR=${placeholder "out"}/share/xxkb"
+    "LIBDIR=${placeholder "out"}/lib/X11"
     "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
     "MANDIR=${placeholder "man"}/share/man"
   ];
@@ -34,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
-    license = stdenv.lib.licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ rasendubi ];
+    platforms = lib.platforms.linux;
   };
 }

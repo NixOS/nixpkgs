@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-prefetch
+#!nix-shell -i bash -p curl jq nix-prefetch libarchive
 set -euo pipefail
 cd "$(dirname "$0")"
 owner=rust-analyzer
@@ -8,25 +8,25 @@ nixpkgs=../../../../..
 
 # Update lsp
 
-rev=$(
+ver=$(
     curl -s "https://api.github.com/repos/$owner/$repo/releases" |
     jq 'map(select(.prerelease | not)) | .[0].tag_name' --raw-output
 )
-old_rev=$(sed -nE 's/.*\brev = "(.*)".*/\1/p' ./default.nix)
+old_ver=$(sed -nE 's/.*\bversion = "(.*)".*/\1/p' ./default.nix)
 if grep -q 'cargoSha256 = ""' ./default.nix; then
-    old_rev='broken'
+    old_ver='broken'
 fi
-if [[ "$rev" == "$old_rev" ]]; then
-    echo "Up to date: $rev"
+if [[ "$ver" == "$old_ver" ]]; then
+    echo "Up to date: $ver"
     exit
 fi
-echo "$old_rev -> $rev"
+echo "$old_ver -> $ver"
 
-sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$rev")
+sha256=$(nix-prefetch -f "$nixpkgs" rust-analyzer-unwrapped.src --rev "$ver")
 # Clear cargoSha256 to avoid inconsistency.
-sed -e "s#rev = \".*\"#rev = \"$rev\"#" \
-    -e "s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
-    -e "s#cargoSha256 = \".*\"#cargoSha256 = \"\"#" \
+sed -e "s#version = \".*\"#version = \"$ver\"#" \
+    -e "/fetchFromGitHub/,/}/ s#sha256 = \".*\"#sha256 = \"$sha256\"#" \
+    -e "s#cargoSha256 = \".*\"#cargoSha256 = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\"#" \
     --in-place ./default.nix
 node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
 
@@ -46,16 +46,29 @@ sed "s#cargoSha256 = \".*\"#cargoSha256 = \"$cargo_sha256\"#" \
 
 # Update vscode extension
 
+extension_ver=$(curl "https://github.com/rust-analyzer/rust-analyzer/releases/download/$ver/rust-analyzer.vsix" -L |
+    bsdtar -xf - --to-stdout extension/package.json | # Use bsdtar to extract vsix(zip).
+    jq --raw-output '.version')
+echo "Extension version: $extension_ver"
+
 build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 # We need devDependencies to build vsix.
-jq '{ name, version, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
+# `esbuild` is a binary package an is already in nixpkgs so we omit it here.
+jq '{ name, version: $ver, dependencies: (.dependencies + .devDependencies | del(.esbuild)) }' "$node_src/package.json" \
+    --arg ver "$extension_ver" \
     >"$build_deps/package.json.new"
 
-if cmp --quiet "$build_deps"/package.json{.new,}; then
-    echo "package.json not changed, skip updating nodePackages"
-    rm "$build_deps"/package.json.new
+old_deps="$(jq '.dependencies' "$build_deps"/package.json)"
+new_deps="$(jq '.dependencies' "$build_deps"/package.json.new)"
+if [[ "$old_deps" == "$new_deps" ]]; then
+    echo "package.json dependencies not changed, do simple version change"
+
+    sed -E '/^  "rust-analyzer-build-deps/,+3 s/version = ".*"/version = "'"$extension_ver"'"/' \
+        --in-place ../../../node-packages/node-packages.nix
+    mv "$build_deps"/package.json{.new,}
+
 else
-    echo "package.json changed, updating nodePackages"
+    echo "package.json dependencies changed, updating nodePackages"
     mv "$build_deps"/package.json{.new,}
 
     pushd "../../../node-packages"

@@ -1,6 +1,6 @@
-{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, libvlc
+{ lib, stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
-, fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
+, fontconfig, freetype, xorg, makeWrapper, bash, which, gnome, libGLU, glib
 , fetchFromGitHub
 }:
 let
@@ -13,7 +13,7 @@ let
   };
   path-env = buildEnv {
     name = "megaglest-path-env";
-    paths = [ bash which gnome3.zenity ];
+    paths = [ bash which gnome.zenity ];
   };
 in
 stdenv.mkDerivation {
@@ -28,17 +28,17 @@ stdenv.mkDerivation {
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
 
-  configurePhase = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out \
-          -DBUILD_MEGAGLEST=On \
-          -DBUILD_MEGAGLEST_MAP_EDITOR=On \
-          -DBUILD_MEGAGLEST_MODEL_IMPORT_EXPORT_TOOLS=On \
-          -DBUILD_MEGAGLEST_MODEL_VIEWER=On
-  '';
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=$out"
+    "-DBUILD_MEGAGLEST=On"
+    "-DBUILD_MEGAGLEST_MAP_EDITOR=On"
+    "-DBUILD_MEGAGLEST_MODEL_IMPORT_EXPORT_TOOLS=On"
+    "-DBUILD_MEGAGLEST_MODEL_VIEWER=On"
+  ];
 
   postInstall =  ''
     for i in $out/bin/*; do
@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     homepage = "http://megaglest.org/";
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.matejc ];
+    platforms = platforms.linux;
   };
 }

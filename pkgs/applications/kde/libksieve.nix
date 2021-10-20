@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "libksieve";
+  pname = "libksieve";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

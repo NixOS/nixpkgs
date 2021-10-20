@@ -1,46 +1,53 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
-, contextlib2, osxfuse
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, contextlib2
+, cython
+, fuse
+, pkg-config
+, pytestCheckHook
+, python
+, which
 }:
-
-let
-  inherit (stdenv.lib) optionals optionalString;
-in
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.8";
+  version = "1.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1g2cdhdqrb6m7655qp61pn61pwj1ql61cdzhr2jvl3w4i8877ddr";
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "python-llfuse";
+    repo = "python-llfuse";
+    rev = "release-${version}";
+    sha256 = "1dcpdg6cpkmdbyg66fgrylj7dp9zqzg5bf23y6m6673ykgxlv480";
   };
 
-  patches = [
-    # fix tests with pytest 6
-    (fetchpatch {
-      url = "https://github.com/python-llfuse/python-llfuse/commit/1ed8b280d2544eedf8bf209761bef0d2519edd17.diff";
-      sha256 = "0wailfrr1i0n2m9ylwpr00jh79s7z3l36w7x19jx1x4djcz2hdps";
-    })
-  ];
+  nativeBuildInputs = [ cython pkg-config ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs =
-    optionals stdenv.isLinux [ fuse ]
-    ++ optionals stdenv.isDarwin [ osxfuse ];
-  checkInputs = [ pytest which ] ++
-    optionals stdenv.isLinux [ attr ];
+  buildInputs = [ fuse ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
-  checkPhase = ''
-    py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
+  preBuild = ''
+    ${python.interpreter} setup.py build_cython
   '';
 
-  meta = with stdenv.lib; {
+  # On Darwin, the test requires macFUSE to be installed outside of Nix.
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook which ];
+
+  disabledTests = [
+    "test_listdir" # accesses /usr/bin
+  ];
+
+  meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor dotlambda ];
   };
 }

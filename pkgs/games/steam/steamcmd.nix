@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, steam-run, bash, coreutils
+{ lib, stdenv, fetchurl, steam-run, bash, coreutils
 , steamRoot ? "~/.local/share/Steam"
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     chmod 0755 $out/bin/steamcmd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Steam command-line tools";
     homepage = "https://developer.valvesoftware.com/wiki/SteamCMD";
     platforms = platforms.linux;

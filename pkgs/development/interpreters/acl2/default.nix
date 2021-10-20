@@ -1,50 +1,53 @@
-{ stdenv, callPackage, fetchFromGitHub, writeShellScriptBin, substituteAll
+{ lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper, substituteAll
 , sbcl, bash, which, perl, nettools
-, openssl, glucose, minisat, abc-verifier, z3, python2
+, openssl, glucose, minisat, abc-verifier, z3, python
 , certifyBooks ? true
 } @ args:
 
 let
-  # Disable immobile space so we don't run out of memory on large books; see
+  # Disable immobile space so we don't run out of memory on large books, and
+  # supply 2GB of dynamic space to avoid exhausting the heap while building the
+  # ACL2 system itself; see
   # https://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
-  sbcl = args.sbcl.override { disableImmobileSpace = true; };
-
-  # Wrap to add `-model` argument because some of the books in 8.3 need this.
-  # Fixed upstream (https://github.com/acl2/acl2/commit/0359538a), so this can
-  # be removed in ACL2 8.4.
-  glucose = writeShellScriptBin "glucose" ''exec ${args.glucose}/bin/glucose -model "$@"'';
+  sbcl' = args.sbcl.override { disableImmobileSpace = true; };
+  sbcl = runCommandLocal args.sbcl.name { buildInputs = [ makeWrapper ]; } ''
+    makeWrapper ${sbcl'}/bin/sbcl $out/bin/sbcl \
+      --add-flags "--dynamic-space-size 2000"
+  '';
 
 in stdenv.mkDerivation rec {
   pname = "acl2";
-  version = "8.3";
+  version = "8.4";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
     rev = version;
-    sha256 = "0c0wimaf16nrr3d6cxq6p7nr7rxffvpmn66hkpwc1m6zpcipf0y5";
+    sha256 = "16rr9zqmd3y1sd6zxff2f9gdd84l99pr7mdp1sjwmh427h661c68";
   };
 
-  libipasirglucose4 = callPackage ./libipasirglucose4 { };
+  # You can swap this out with any other IPASIR implementation at
+  # build time by using overrideAttrs (make sure the derivation you
+  # use has a "libname" attribute so we can plug it into the patch
+  # below).  Or, you can override it at runtime by setting the
+  # $IPASIR_SHARED_LIBRARY environment variable.
+  libipasir = callPackage ./libipasirglucose4 { };
 
-  patches = [
-    (substituteAll {
-      src = ./0001-Fix-some-paths-for-Nix-build.patch;
-      inherit bash libipasirglucose4;
-      openssl = openssl.out;
-    })
-    ./0002-Restrict-RDTSC-to-x86.patch
-  ];
+  patches = [(substituteAll {
+    src = ./0001-Fix-some-paths-for-Nix-build.patch;
+    libipasir = "${libipasir}/lib/${libipasir.libname}";
+    openssl = openssl.out;
+  })];
 
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
     sbcl
-  ] ++ stdenv.lib.optionals certifyBooks [
+  ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl nettools
+    which perl nettools makeWrapper
     # Some of the books require one or more of these external tools:
-    openssl.out glucose minisat abc-verifier libipasirglucose4
-    z3 (python2.withPackages (ps: [ ps.z3 ]))
+    openssl.out glucose minisat abc-verifier libipasir
+    z3 (python.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -55,7 +58,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     # When certifying books, ACL2 doesn't like $HOME not existing.
     export HOME=$(pwd)/fake-home
-  '' + stdenv.lib.optionalString certifyBooks ''
+  '' + lib.optionalString certifyBooks ''
     # Some books also care about $USER being nonempty.
     export USER=nobody
   '';
@@ -71,7 +74,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = "mkdir -p $HOME";
-  makeFlags="LISP=${sbcl}/bin/sbcl";
+  makeFlags = "LISP=${sbcl}/bin/sbcl ACL2_MAKE_LOG=NONE";
 
   doCheck = true;
   checkTarget = "mini-proveall";
@@ -79,7 +82,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
-  '' + stdenv.lib.optionalString certifyBooks ''
+  '' + lib.optionalString certifyBooks ''
     ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
     ln -s $out/share/${pname}/books/build/clean.pl $out/bin/${pname}-clean
   '';
@@ -90,8 +93,13 @@ in stdenv.mkDerivation rec {
     # Certify the community books
     pushd $out/share/${pname}/books
     makeFlags="ACL2=$out/share/${pname}/saved_acl2"
-    buildFlags="everything"
+    buildFlags="all"
     buildPhase
+
+    # Clean up some stuff to save space
+    find -name '*@useless-runes.lsp' -execdir rm {} +  # saves ~1GB of space
+    find -name '*.cert.out' -execdir gzip {} +         # saves ~400MB of space
+
     popd
   '';
 
@@ -100,7 +108,7 @@ in stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/books
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interpreter and a prover for a Lisp dialect";
     longDescription = ''
       ACL2 is a logic and programming language in which you can model computer

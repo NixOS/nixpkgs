@@ -1,18 +1,18 @@
-{ rustPlatform, lib, fetchFromGitHub, lzma, pkgconfig, openssl, dbus, glib, udev, cairo, pango, atk, gdk-pixbuf, gtk3, wrapGAppsHook }:
+{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, glib, udev, cairo, pango, atk, gdk-pixbuf, gtk3, wrapGAppsHook }:
 rustPlatform.buildRustPackage rec {
   pname = "firmware-manager";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
     rev = version;
-    sha256 = "0x9604jsflqxvbkfp139mzjicpyx8v21139jj8bp88c14ngvmdlw";
+    sha256 = "sha256-aKatdjHa/k7j48upkR1O6PFxCUfJYE3KhhzZ9Ohe0Jc=";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ lzma openssl dbus glib udev cairo pango atk gdk-pixbuf gtk3 ];
+  buildInputs = [ xz openssl dbus glib udev cairo pango atk gdk-pixbuf gtk3 ];
 
   depsExtraArgs.postPatch = "make prefix='$(out)' toml-gen";
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   installPhase = "make prefix='$(out)' install";
 
-  cargoSha256 = "0byc0pqa1w2qnfrx3psrzdq1c8qjslbmzxg872b9v6fr5d4c9cvg";
+  cargoSha256 = "sha256-BUo77ERHvuc8IkDdU3Z/gZZicNHT26IbAgEBnVM3O4U=";
 
   doCheck = false;
 

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libosip }:
+{ lib, stdenv, fetchurl, libosip }:
 
 stdenv.mkDerivation rec {
-  name = "siproxd-0.8.2";
+  pname = "siproxd";
+  version = "0.8.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/siproxd/${name}.tar.gz";
+    url = "mirror://sourceforge/siproxd/siproxd-${version}.tar.gz";
     sha256 = "1l6cyxxhra825jiiw9npa7jrbfgbyfpk4966cqkrw66cn28y8v2j";
   };
 
@@ -15,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://siproxd.sourceforge.net/";
     description = "A masquerading SIP Proxy Server";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

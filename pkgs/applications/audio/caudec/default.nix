@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
+{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
 
 let
   version = "1.7.5";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     patchShebangs ./install.sh
   '';
 
-  buildInputs = [ bash makeWrapper ];
+  nativeBuildInputs = [ bash makeWrapper ];
 
   installPhase = ''
     ./install.sh --prefix=$out/bin
@@ -25,12 +25,12 @@ stdenv.mkDerivation {
 
   postFixup = ''
     for executable in $(cd $out/bin && ls); do
-	wrapProgram $out/bin/$executable \
-	  --prefix PATH : "${stdenv.lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]}"
+  wrapProgram $out/bin/$executable \
+    --prefix PATH : "${lib.makeBinPath [ bc findutils sox procps opusTools lame flac ]}"
     done
   '';
 
-   meta = with stdenv.lib; {
+   meta = with lib; {
     homepage = "http://caudec.net/";
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;

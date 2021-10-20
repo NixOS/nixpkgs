@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-compute-engine-oslogin";
-  version = "20200507.00";
+  version = "20210429.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
-    sha256 = "1np8c96sm29pwnxykc0id8kkgalhw576g43fgi1y936sr2hfvx3v";
+    sha256 = "eHAg9K5oxcygEzqaac81jSFHF+zsW6uB7q2Kfo9hSrA=";
   };
 
   postPatch = ''
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl.dev pam ];
 
-  NIX_CFLAGS_COMPILE="-I${json_c.dev}/include/json-c";
-  NIX_CFLAGS_LINK="-L${json_c}/lib";
+  NIX_CFLAGS_COMPILE = "-I${json_c.dev}/include/json-c";
+  NIX_CFLAGS_LINK = "-L${json_c}/lib";
 
   makeFlags = [
     "VERSION=${version}"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) google-oslogin;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     description = "OS Login Guest Environment for Google Compute Engine";
     license = licenses.asl20;

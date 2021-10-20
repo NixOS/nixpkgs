@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-anonfun'';
-  version = ''20111203-git'';
+  baseName = "cl-anonfun";
+  version = "20111203-git";
 
-  description = ''Anonymous function helpers for Common Lisp'';
+  description = "Anonymous function helpers for Common Lisp";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-anonfun/2011-12-03/cl-anonfun-20111203-git.tgz'';
-    sha256 = ''16r3v3yba41smkqpz0qvzabkxashl39klfb6vxhzbly696x87p1m'';
+    url = "http://beta.quicklisp.org/archive/cl-anonfun/2011-12-03/cl-anonfun-20111203-git.tgz";
+    sha256 = "16r3v3yba41smkqpz0qvzabkxashl39klfb6vxhzbly696x87p1m";
   };
 
   packageName = "cl-anonfun";

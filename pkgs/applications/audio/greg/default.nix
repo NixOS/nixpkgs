@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 with pythonPackages; buildPythonApplication rec {
   pname = "greg";
@@ -15,7 +15,7 @@ with pythonPackages; buildPythonApplication rec {
 
   propagatedBuildInputs = [ setuptools feedparser ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/manolomartinez/greg";
     description = "A command-line podcast aggregator";
     license = licenses.gpl3;

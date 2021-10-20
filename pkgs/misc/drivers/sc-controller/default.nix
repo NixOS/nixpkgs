@@ -1,19 +1,20 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+, pytestCheckHook
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest, bluez
+, evdev, pygobject3, pylibacl, bluez, vdf
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.7";
+  version = "0.4.8.6";
 
   src = fetchFromGitHub {
-    owner  = "kozec";
+    owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1dskjh5qcjf4x21n4nk1zvdfivbgimsrc2lq1id85bibzps29499";
+    sha256 = "1fgizgzm79zl9r2kkwvh1gf9lnxaix15283xxk6bz843inr8b88k";
   };
 
   # see https://github.com/NixOS/nixpkgs/issues/56943
@@ -23,9 +24,9 @@ buildPythonApplication rec {
 
   buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
-  propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
+  propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
@@ -48,12 +49,8 @@ buildPythonApplication rec {
     )
   '';
 
-  checkPhase = ''
-    PYTHONPATH=. py.test
-  '';
-
   meta = with lib; {
-    homepage    = "https://github.com/kozec/sc-controller";
+    homepage    = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
     license     = licenses.gpl2;

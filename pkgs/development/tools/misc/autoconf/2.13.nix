@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4, perl, lzma}:
+{lib, stdenv, fetchurl, m4, perl, xz}:
 
 stdenv.mkDerivation rec {
   name = "autoconf-2.13";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "07krzl4czczdsgzrrw9fiqx35xcf32naf751khg821g5pqv12qgh";
   };
 
-  nativebuildInputs = [ lzma ];
+  nativebuildInputs = [ xz ];
   buildInputs = [ m4 perl ];
 
   doCheck = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

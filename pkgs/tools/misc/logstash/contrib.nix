@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Community-maintained logstash plugins";
     homepage    = "https://github.com/elasticsearch/logstash-contrib";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

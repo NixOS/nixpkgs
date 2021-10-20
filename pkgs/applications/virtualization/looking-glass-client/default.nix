@@ -1,32 +1,55 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_ttf, spice-protocol
-, fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
-, libXi, libXext, wayland, libffi, libGLU, expat, libbfd
+
+{ stdenv, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, cmake, pkg-config
+, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig
+, libXi, libXScrnSaver, libXinerama
+, wayland, wayland-protocols
 }:
 
+let
+  desktopItem = makeDesktopItem {
+    name = "looking-glass-client";
+    desktopName = "Looking Glass Client";
+    type = "Application";
+    exec = "looking-glass-client";
+    icon = "lg-logo";
+    terminal = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B2";
+  version = "B4";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "100b5kzh8gr81kzw5fdqz2jsms25hv3815d31vy3qd6lrlm5gs3d";
+    sha256 = "0fwmz0l1dcfwklgvxmv0galgj2q3nss90kc3jwgf6n80x27rsnhf";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
-    libpthreadstubs libXau libXdmcp libXi libXext wayland libffi libGLU expat
-    libbfd
+    SDL SDL2_ttf freefont_ttf spice-protocol
+    libbfd nettle fontconfig
+    libXi libXScrnSaver libXinerama
+    wayland wayland-protocols
   ];
 
-  sourceRoot = "source/client";
   NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
 
-  meta = with stdenv.lib; {
+  postUnpack = ''
+    echo $version > source/VERSION
+    export sourceRoot="source/client"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    ln -s ${desktopItem}/share/applications $out/share/
+    cp $src/resources/lg-logo.png $out/share/pixmaps
+  '';
+
+  meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
@@ -37,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexbakker ];
+    maintainers = with maintainers; [ alexbakker babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

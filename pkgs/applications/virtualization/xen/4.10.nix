@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+{ lib, callPackage, fetchurl, fetchpatch, fetchgit
 , ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
@@ -10,13 +10,13 @@
 
 # qemu
 , udev, pciutils, xorg, SDL, pixman, acl, glusterfs, spice-protocol, usbredir
-, alsaLib, glib, python2
+, alsa-lib, glib, python2
 , ... } @ args:
 
 assert withInternalSeabios -> !withSeabios;
 assert withInternalOVMF -> !withOVMF;
 
-with stdenv.lib;
+with lib;
 
 # Patching XEN? Check the XSAs at
 # https://xenbits.xen.org/xsa/
@@ -33,7 +33,7 @@ let
 
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
-    alsaLib glib python2
+    alsa-lib glib python2
   ];
 in
 
@@ -160,6 +160,9 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=address-of-packed-member"
     "-Wno-error=format-overflow"
     "-Wno-error=absolute-value"
+    # Fix build with GCC 10
+    "-Wno-error=enum-conversion"
+    "-Wno-error=zero-length-bounds"
   ];
 
   postPatch = ''

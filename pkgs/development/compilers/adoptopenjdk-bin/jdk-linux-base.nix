@@ -1,19 +1,35 @@
-sourcePerArch:
+{ sourcePerArch, knownVulnerabilities ? [] }:
 
 { stdenv
 , lib
 , fetchurl
 , autoPatchelfHook
-, alsaLib
-, freetype
+, makeWrapper
+, setJavaClassPath
+# minimum dependencies
+, alsa-lib
 , fontconfig
-, zlib
-, xorg
+, freetype
 , libffi
+, xorg
+, zlib
+# runtime dependencies
+, cups
+# runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? true
+, cairo
+, glib
+, gtk3
 }:
 
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 in
 
 let result = stdenv.mkDerivation rec {
@@ -28,11 +44,19 @@ let result = stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
-    xorg.libXi xorg.libXrender stdenv.cc.cc.lib
+    alsa-lib # libasound.so wanted by lib/libjsound.so
+    fontconfig
+    freetype
+    stdenv.cc.cc.lib # libstdc++.so.6
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    zlib
   ] ++ lib.optional stdenv.isAarch32 libffi;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
@@ -41,6 +65,9 @@ let result = stdenv.mkDerivation rec {
     cd ..
 
     mv $sourceRoot $out
+
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
 
     rm -rf $out/demo
 
@@ -51,12 +78,26 @@ let result = stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/57733
     find "$out" -name 'libfreetype.so*' -delete
 
+    # Propagate the setJavaClassPath setup hook from the JDK so that
+    # any package that depends on the JDK has $CLASSPATH set up
+    # properly.
     mkdir -p $out/nix-support
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> "$out/nix-support/setup-hook"
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    # We cannot use -exec since wrapProgram is a function but not a command.
+    #
+    # jspawnhelper is executed from JVM, so it doesn't need to wrap it, and it
+    # breaks building OpenJDK (#114495).
+    for bin in $( find "$out" -executable -type f -not -name jspawnhelper ); do
+      if patchelf --print-interpreter "$bin" &> /dev/null; then
+        wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+      fi
+    done
   '';
 
   preFixup = ''
@@ -69,11 +110,13 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];
+    inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result
