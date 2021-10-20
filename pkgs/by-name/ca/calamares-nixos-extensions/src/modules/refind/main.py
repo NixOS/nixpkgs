@@ -108,7 +108,7 @@ def install_refind():
 
     # Might not have a /boot configured in the system at all; warn and don't operate
     if not efi_partitions(efi_boot_path):
-        libcalamares.utils.warn("No partition mounted on {!s}".format(efi_boot_path))
+        libcalamares.utils.warning("No partition mounted on {!s}".format(efi_boot_path))
         # This isn't returned as an error, but the installation
         # probably won't boot because no bootloader was installed.
         return None
