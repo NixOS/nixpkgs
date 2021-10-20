@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
 
-# Note for maintainers:
-# Versions of `element-web` and `element-desktop` should be kept in sync.
-
 let
+  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics
@@ -12,11 +10,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "element-web";
-  version = "1.9.2";
+  inherit (pinData) version;
 
   src = fetchurl {
     url = "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
-    sha256 = "sha256-Qkn0vyZGvBAeOfTzxydWzjFQJwY39INAhwZNX4xsM7U=";
+    sha256 = pinData.webHash;
   };
 
   installPhase = ''

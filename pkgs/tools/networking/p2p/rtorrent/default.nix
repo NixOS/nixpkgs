@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmlrpc-c" "--with-posix-fallocate" ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p $out/share/man/man1 $out/share/doc/rtorrent
     mv doc/old/rtorrent.1 $out/share/man/man1/rtorrent.1
