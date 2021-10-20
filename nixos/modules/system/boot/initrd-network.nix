@@ -39,7 +39,7 @@ let
       fi
     '';
 
-  udhcpcArgs = toString cfg.udhcpc.extraArgs;
+  udhcpcArgs = "-x hostname:${config.networking.hostName} " + toString cfg.udhcpc.extraArgs;
 
 in
 
