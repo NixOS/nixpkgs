@@ -5,6 +5,7 @@
 #include "UsersJob.h"
 
 #include "ViewManager.h"
+#include "utils/Logger.h"
 #include "utils/Variant.h"
 
 #include <QVariant>
@@ -18,6 +19,11 @@ void
 Config::setConfigurationMap( const QVariantMap& cfgMap )
 {
     using namespace CalamaresUtils;
+
+    if ( getBool( cfgMap, "bogus", false ) )
+    {
+        cWarning() << "Configuration key \"bogus\" is still set for *mobile*";
+    }
 
     m_osName = getString( cfgMap, "osName", "(unknown)" );
     m_arch = getString( cfgMap, "arch", "(unknown)" );
