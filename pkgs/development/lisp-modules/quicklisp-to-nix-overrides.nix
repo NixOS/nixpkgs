@@ -292,5 +292,19 @@ $out/lib/common-lisp/query-fs"
     };
   };
   lla = addNativeLibs [ pkgs.openblas ];
+  esrap = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        patch -p1 < ${
+          # Quicklisp 2021-08-07 packages an Esrap that doesn't build with SBCL 2.1.9.
+          # Therefore we pull patches from the Esrap repo to fix this.
+          # See https://github.com/scymtym/parser.common-rules/issues/1
+          pkgs.fetchurl {
+            url = https://github.com/scymtym/esrap/compare/4034df872c2b1b8e91adbccab491645c8138253b...c99c33a33ff58ca85e8ba73912eba45d458eaa72.diff;
+            sha256 = "sha256:1sg2mgzilmwj5kwlmx0s60wk2769c3mpqjl00ga2p74ra5hykvx8";
+          }}
+      '';
+    };
+  };
 #  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }
