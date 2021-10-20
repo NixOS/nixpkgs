@@ -33,10 +33,11 @@
 , nspr
 , nss
 , pango
-, pipewire
 , systemd
 , xdg-utils
 , xorg
+, enablePipewire ? false
+, pipewire ? null
 }:
 
 let
@@ -84,7 +85,7 @@ let
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -92,51 +93,52 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    rpath = lib.makeLibraryPath [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      curl
-      dbus
-      expat
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      gnome2.GConf
-      gtk3
-      libGL
-      libappindicator-gtk3
-      libdrm
-      libnotify
-      libpulseaudio
-      libuuid
-      libxcb
-      libxkbcommon
-      mesa
-      nspr
-      nss
-      pango
-      pipewire
-      stdenv.cc.cc
-      systemd
-      xorg.libX11
-      xorg.libXScrnSaver
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxkbfile
-      xorg.libxshmfence
-    ] + ":${stdenv.cc.cc.lib}/lib64";
+    rpath = lib.makeLibraryPath
+      ([
+        alsa-lib
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cairo
+        cups
+        curl
+        dbus
+        expat
+        fontconfig
+        freetype
+        gdk-pixbuf
+        glib
+        gnome2.GConf
+        gtk3
+        libGL
+        libappindicator-gtk3
+        libdrm
+        libnotify
+        libpulseaudio
+        libuuid
+        libxcb
+        libxkbcommon
+        mesa
+        nspr
+        nss
+        pango
+        stdenv.cc.cc
+        systemd
+        xorg.libX11
+        xorg.libXScrnSaver
+        xorg.libXcomposite
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libXi
+        xorg.libXrandr
+        xorg.libXrender
+        xorg.libXtst
+        xorg.libxkbfile
+        xorg.libxshmfence
+      ] ++ lib.optional enablePipewire pipewire)
+    + ":${stdenv.cc.cc.lib}/lib64";
 
     buildInputs = [
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
