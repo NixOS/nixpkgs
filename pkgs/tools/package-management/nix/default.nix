@@ -22,7 +22,7 @@ common =
   , stateDir
   , confDir
   , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
-  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp, aws-crt-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
   , enableDocumentation ? lib.versionOlder version "2.4pre" ||
                           stdenv.hostPlatform == stdenv.buildPlatform
@@ -65,7 +65,8 @@ common =
         ++ lib.optionals is24 [ libarchive gtest lowdown ]
         ++ lib.optional (is24 && stdenv.isx86_64) libcpuid
         ++ lib.optional withLibseccomp libseccomp
-        ++ lib.optional withAWS
+        ++ lib.optionals withAWS [
+            aws-crt-cpp
             ((aws-sdk-cpp.override {
               apis = ["s3" "transfer"];
               customMemoryManagement = false;
@@ -73,7 +74,7 @@ common =
               patches = args.patches or [] ++ [
                 ./aws-sdk-cpp-TransferManager-ContentEncoding.patch
               ];
-            }));
+            }))];
 
       propagatedBuildInputs = [ boehmgc ];
 
