@@ -28,6 +28,8 @@ buildPythonPackage {
     cffi
   ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   buildInputs = [ blas lapack ];
 
   enableParallelBuilding = true;
