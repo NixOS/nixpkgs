@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.1.0";
+  version = "1.1.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17c5d821834726d3cad010d07bc9951cdf57b0a703e3727520f817286809591e";
+    sha256 = "f66c4b08c3afe2c9f01bc4a377af3c62ea9c1aa7b67ff51f62b9be73d6609e49";
   };
 
   propagatedBuildInputs = [
