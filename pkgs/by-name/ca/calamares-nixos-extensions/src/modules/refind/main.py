@@ -43,8 +43,8 @@ def update_conf(uuid, conf_path):
     partitions = libcalamares.globalstorage.value("partitions")
 
     kernel_params = ["quiet", "systemd.show_status=0"]
-    swap = ""
-    swap_luks = ""
+    swap = None  # Partition UUID
+    swap_luks = None  # LUKS name
     cryptdevice_params = []
     btrfs_params = ""
 
@@ -95,7 +95,7 @@ def install_refind():
     uuid = get_uuid()
     conf_path = os.path.join(install_path, "boot/refind_linux.conf")
     partitions = libcalamares.globalstorage.value("partitions")
-    device = ""
+    device = None
 
     # TODO: some distro's use /boot/efi , so maybe this needs to
     #       become configurable (that depends on what rEFInd likes).
@@ -103,7 +103,6 @@ def install_refind():
 
     for partition in partitions:
         if partition["mountPoint"] == efi_boot_path:
-            libcalamares.utils.debug(partition["device"])
             boot_device = partition["device"]
             boot_p = boot_device[-1:]
             device = boot_device[:-1]
@@ -112,13 +111,13 @@ def install_refind():
 
             if not boot_p or not device:
                 return ("Boot device could not be determined",
-                        "Boot device: \"{!s}\"".format(boot_device))
+                        "Device mounted on {!s}: \"{!s}\"".format(efi_boot_path, boot_device))
             else:
-                print("Boot device: \"{!s}\"".format(device))
+                libcalamares.utils.debug("Mounted on {!s}: \"{!s}\"".format(efi_boot_path, boot_device))
+                libcalamares.utils.debug("Path \"{!s}\" number \"{!s}\"".format(device, boot_p))
 
     if not device:
-        print("WARNING: no EFI system partition or EFI system partition mount point not set.")
-        print("         >>> no EFI bootloader will be installed <<<")
+        libcalamares.utils.warn("WARNING: no EFI system partition or EFI system partition mount point not set.")
         return None
     subprocess.call(
         ["refind-install", "--root", "{!s}".format(install_path)])
