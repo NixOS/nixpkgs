@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{lib, stdenv, nodejs, python2, util-linux, libtool, runCommand, writeTextFile}:
+{lib, stdenv, nodejs, python2, util-linux, libtool, runCommand, writeTextFile, writeShellScript}:
 
 let
   python = if nodejs ? python then nodejs.python else python2;
