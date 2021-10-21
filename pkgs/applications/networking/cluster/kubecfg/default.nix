@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage {
+buildGoPackage rec {
   pname = "kubecfg";
   inherit version;
 
