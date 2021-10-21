@@ -1716,7 +1716,6 @@ broken-packages:
   - gochan
   - godot-haskell
   - gofer-prelude
-  - gogol-core
   - gooey
   - google-cloud
   - GoogleCodeJam
