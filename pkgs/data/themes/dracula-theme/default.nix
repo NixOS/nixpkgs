@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dracula/gtk";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice vonfry ];
+    maintainers = with maintainers; [ alexarice ];
   };
 }
