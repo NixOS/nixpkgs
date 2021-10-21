@@ -41,15 +41,15 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.8";
-  minor = "3";
-  patch = "1";
+  minor = "4";
+  patch = "0";
 }
 # We use our build of volk and not the one bundled with the release
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "0vd39azp8n576dbqsanax7bgsnxwc80riaxid2ihxs4xzyjmbw9r";
+  sourceSha256 = "sha256-C8S3iF7vj9A8SpxriW9y7idrhXzonvenoQtVAMex+Iw=";
   featuresInfo = {
     # Needed always
     basic = {
