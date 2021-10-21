@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchurl, glib, gtk3, meson, ninja, pkg-config, gnome, gettext, itstool, libxml2, libarchive
-, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales
-, unzip, cpio }:
+{ lib
+, stdenv
+, fetchurl
+, desktop-file-utils
+, gettext
+, glibcLocales
+, itstool
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook
+, cpio
+, file
+, glib
+, gnome
+, gtk3
+, json-glib
+, libarchive
+, libnotify
+, nautilus
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
@@ -13,9 +34,30 @@ stdenv.mkDerivation rec {
 
   LANG = "en_US.UTF-8"; # postinstall.py
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkg-config libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    glibcLocales
+    itstool
+    libxml2
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ glib gtk3 json-glib libarchive file gnome.adwaita-icon-theme libnotify nautilus cpio ];
+  buildInputs = [
+    cpio
+    file
+    glib
+    gnome.adwaita-icon-theme
+    gtk3
+    json-glib
+    libarchive
+    libnotify
+    nautilus
+  ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
