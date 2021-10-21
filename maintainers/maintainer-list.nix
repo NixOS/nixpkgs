@@ -8249,6 +8249,12 @@
     githubId = 810877;
     name = "Tom Doggett";
   };
+  noisersup = {
+    email = "patryk@kwiatek.xyz";
+    github = "noisersup";
+    githubId = 42322511;
+    name = "Patryk Kwiatek";
+  };
   nomeata = {
     email = "mail@joachim-breitner.de";
     github = "nomeata";
