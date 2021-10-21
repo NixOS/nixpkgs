@@ -45,14 +45,14 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "2";
+  minor = "3";
   patch = "0";
 }
 , fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "01wyqazrpphmb0fl69j93k0w4vm4d1l4177m1fyg7qx8hzia0aaq";
+  sourceSha256 = "sha256-jVfExv1CcnlOaaj/XtnfhWAHnQsshZJ1l/zXo0uovdo=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -173,6 +173,12 @@ let
         uhd
       ];
       cmakeEnableFlag = "GR_UHD";
+    };
+    gr-uhd-rfnoc = {
+      runtime = [
+        uhd
+      ];
+      cmakeEnableFlag = "UHD_RFNOC";
     };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
