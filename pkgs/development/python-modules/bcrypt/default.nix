@@ -15,6 +15,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ] ++ lib.optional (!isPyPy) cffi;
 
+  propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
+
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
     description = "Modern password hashing for your software and your servers";
