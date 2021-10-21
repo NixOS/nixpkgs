@@ -8,6 +8,7 @@
 , mpir
 , boost
 , gmp
+, thrift
 , fftwFloat
 , python
 , swig
@@ -54,6 +55,9 @@ in mkDerivation {
     soapysdr-with-plugins
   ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     uhd
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then

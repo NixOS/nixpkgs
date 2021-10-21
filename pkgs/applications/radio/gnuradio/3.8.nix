@@ -16,6 +16,7 @@
 , python
 , codec2
 , gsm
+, thrift
 , fftwFloat
 , alsa-lib
 , libjack2
@@ -100,14 +101,15 @@ let
       cmakeEnableFlag = "GNURADIO_RUNTIME";
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.8.2.0/gnuradio-runtime/lib/controlport/thrift/README
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
         swig
       ];
+      runtime = [
+        thrift
+      ];
       pythonRuntime = with python.pkgs; [
+        python.pkgs.thrift
         # For gr-perf-monitorx
         matplotlib
         networkx

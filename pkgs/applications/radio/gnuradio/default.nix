@@ -26,6 +26,7 @@
 , libsodium
 , libsndfile
 , libunwind
+, thrift
 , cppzmq
 , zeromq
 # Needed only if qt-gui is disabled, from some reason
@@ -99,13 +100,12 @@ let
       ];
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.9.0.0/gnuradio-runtime/lib/controlport/thrift/README
       runtime = [
         libunwind
+        thrift
       ];
       pythonRuntime = with python.pkgs; [
+        python.pkgs.thrift
         # For gr-perf-monitorx
         matplotlib
         networkx

@@ -8,6 +8,7 @@
 , openssl
 , gflags
 , gnuradio3_8
+, thrift
 , libpcap
 , orc
 , pkg-config
@@ -56,6 +57,9 @@ gnuradio3_8.pkgs.mkDerivation rec {
     protobuf
     gnuradio3_8.pkgs.osmosdr
     libpcap
+  ] ++ lib.optionals (gnuradio3_8.hasFeature "gr-ctrlport") [
+    thrift
+    gnuradio3_8.unwrapped.python.pkgs.thrift
   ];
 
   cmakeFlags = [
