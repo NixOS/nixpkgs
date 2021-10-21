@@ -357,6 +357,7 @@ else let
         in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )]
           ++ lib.optional (hasOutput "man") "man";
     }
+    // lib.optionalAttrs (attrs ? pname) { mainProgram = attrs.pname; }
     // attrs.meta or {}
     # Fill `meta.position` to identify the source location of the package.
     // lib.optionalAttrs (pos != null) {
