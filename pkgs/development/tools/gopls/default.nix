@@ -1,13 +1,13 @@
-{ lib, buildGoModule, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gopls";
   version = "0.7.3";
 
-  src = fetchgit {
-    url = "https://go.googlesource.com/tools";
+  src = fetchFromGitHub {
+    owner = "golang";
+    repo = "tools";
     rev = "gopls/v${version}";
-    name = "gopls-source-${version}";
     sha256 = "sha256-aaRaStQ35a/SK4YIR5rjvp8gPxvoNuhLh2AGbr0c6p4=";
   };
 
