@@ -178,6 +178,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
