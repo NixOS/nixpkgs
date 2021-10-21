@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
+{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-s0fZzx/sEAUwXY2cx2ODDhwIrJb5LykFgHBcscsZQO0=";
+    sha256 = "sha256-exNOdm17Xg4HVpjX2avoftww/flejL4mB7kSIAJUSco=";
   };
 
   dontUnpack = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    # https://github.com/babashka/babashka/blob/v0.6.1/script/compile#L41-L52
+    # https://github.com/babashka/babashka/blob/v0.6.2/script/compile#L41-L52
     args=("-jar" "$BABASHKA_JAR"
           "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
           # Required to build babashka on darwin. Do not remove.
@@ -56,6 +56,21 @@ stdenv.mkDerivation rec {
     $out/bin/bb --version | grep '${version}'
     $out/bin/bb '(+ 1 2)' | grep '3'
     $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
+  '';
+
+  passthru.updateScript = writeScript "update-babashka" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/babashka/babashka/releases/latest" \
+      | jq -r '.tag_name')"
+
+    # v0.6.2 -> 0.6.2
+    update-source-version babashka "''${latest_version/v/}"
   '';
 
   meta = with lib; {
