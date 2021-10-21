@@ -1,30 +1,48 @@
-# NOTE: this is rakshava's version of libtorrent, used mainly by rtorrent
-# This is NOT libtorrent-rasterbar, used by Deluge, qbitttorent, and others
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, cppunit, openssl, libsigcxx, zlib
+# Note: this is rakshasa's version of libtorrent, used mainly by rtorrent.
+# *Do not* mistake it by libtorrent-rasterbar, used by Deluge, qbitttorent etc.
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
+, cppunit
+, libsigcxx
+, openssl
+, pkg-config
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libtorrent";
-  version = "0.13.8";
+  pname = "rakshasa-libtorrent";
+  version = "0.13.8+date=2021-08-07";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1h5y6ab3gs20yyprdfwcw8fh1c6czs4yrdj0kf54d2vp9qwz685r";
+    repo = "libtorrent";
+    rev = "53596afc5fae275b3fb5753a4bb2a1a7f7cf6a51";
+    hash = "sha256-gyl/jfbptHz/gHkkVGWShhv1Z7o9fa9nJIz27U2A6wg=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ cppunit openssl libsigcxx zlib ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    cppunit
+    libsigcxx
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/rakshasa/libtorrent";
     description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code";
-
-    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry codyopel ];
+    platforms = platforms.unix;
   };
 }
