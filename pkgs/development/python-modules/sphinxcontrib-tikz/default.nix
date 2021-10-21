@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace sphinxcontrib/tikz.py \
-      --replace "config.latex_engine" "${texLive}/bin/pdflatex" \
+      --replace "config.latex_engine" "'${texLive}/bin/pdflatex'" \
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   # no tests in package
   doCheck = false;
+
+  pythonImportsCheck = [ "sphinxcontrib.tikz" ];
 
   meta = with lib; {
     description = "TikZ extension for Sphinx";
