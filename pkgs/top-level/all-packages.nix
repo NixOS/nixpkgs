@@ -23355,9 +23355,9 @@ with pkgs;
 
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
 
-  source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
+  source-sans = callPackage ../data/fonts/source-sans { };
 
-  source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
+  source-serif = callPackage ../data/fonts/source-serif { };
 
   source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 

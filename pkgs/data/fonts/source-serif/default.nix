@@ -1,11 +1,11 @@
 { lib, fetchzip }:
 
 let
-  version = "3.006";
+  version = "4.004";
 in fetchzip {
-  name = "source-sans-pro-${version}";
+  name = "source-serif-${version}";
 
-  url = "https://github.com/adobe-fonts/source-sans-pro/releases/download/${version}R/source-sans-pro-${version}R.zip";
+  url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/{opentype,truetype,variable}
@@ -14,11 +14,11 @@ in fetchzip {
     unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
   '';
 
-  sha256 = "11jd50cqiq2s0z39rclg73iiw2j5yzgs1glfs9psw5wbbisgysmr";
+  sha256 = "06814hcp20abca6p0ii61f23g6h1ibqyhq30lsva59wbwx5iha0h";
 
   meta = with lib; {
-    homepage = "https://adobe-fonts.github.io/source-sans-pro/";
-    description = "A set of OpenType fonts designed by Adobe for UIs";
+    homepage = "https://adobe-fonts.github.io/source-serif/";
+    description = "Typeface for setting text in many sizes, weights, and languages. Designed to complement Source Sans";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
