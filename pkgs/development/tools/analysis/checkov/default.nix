@@ -46,7 +46,7 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.496";
+  version = "2.0.505";
 
   disabled = python3.pythonOlder "3.7";
 
@@ -54,7 +54,7 @@ buildPythonApplication rec {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JDKM706z8e+e+LhZ/3bMcVkYGW+gOF2iOUYLQASlXbc=";
+    sha256 = "sha256-5udTx+aAC72R8wfn+lrWsZXgAyj/eN5nn/ly1JIkmCU=";
   };
 
   nativeBuildInputs = with py.pkgs; [
