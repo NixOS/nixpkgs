@@ -72,5 +72,12 @@ rec {
     gcc = gcc10; # can bump to 11 along with stdenv.cc
   };
 
+  cudatoolkit_11_5 = common {
+    version = "11.5.0";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run";
+    sha256 = "sha256-rgoWk9lJfPPYHmlIlD43lGNpANtxyY1Y7v2sr38aHkw=";
+    gcc = gcc10; # can bump to 11 along with stdenv.cc
+  };
+
   cudatoolkit_11 = cudatoolkit_11_4;
 }
