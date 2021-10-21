@@ -1667,6 +1667,8 @@ with pkgs;
 
   flavours = callPackage ../applications/misc/flavours { };
 
+  flirc = libsForQt5.callPackage ../applications/video/flirc { };
+
   flood = nodePackages.flood;
 
   font-config-info = callPackage ../tools/misc/font-config-info { };
