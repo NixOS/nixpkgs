@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p curl -i bash coreutils nix curl jq
+#!nix-shell -p curl -i bash coreutils nix curl jq gnused
 
 set -eou pipefail
 
