@@ -28906,6 +28906,8 @@ with pkgs;
 
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
+  xdg-desktop-portal-pantheon = callPackage ../development/libraries/xdg-desktop-portal-pantheon { };
+
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
