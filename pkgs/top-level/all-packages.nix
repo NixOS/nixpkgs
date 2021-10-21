@@ -7164,7 +7164,13 @@ with pkgs;
 
   libnids = callPackage ../tools/networking/libnids { };
 
-  libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
+  rakshasa-rtorrent = recurseIntoAttrs
+    (callPackage ../tools/networking/p2p/rakshasa-rtorrent {
+      callPackage = newScope pkgs.rakshasa-rtorrent;
+    });
+
+  rtorrent = rakshasa-rtorrent.rtorrent;
+  libtorrent = rakshasa-rtorrent.libtorrent;
 
   jesec-rtorrent = recurseIntoAttrs
     (callPackage ../tools/networking/p2p/jesec-rtorrent {
@@ -9007,8 +9013,6 @@ with pkgs;
   };
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
-
-  rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
