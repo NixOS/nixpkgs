@@ -33,7 +33,10 @@
 }:
 
 let
+  # We don't check if `python-support` feature is on, as it's unlikely someone
+  # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
+    ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
@@ -44,14 +47,6 @@ let
           []
       )
       ) unwrapped.featuresInfo)
-    ++ lib.optionals
-      (unwrapped.hasFeature "python-support" unwrapped.features)
-      (
-        # Add unwrapped itself as a python module
-        [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
-        # Add all extraPackages as python modules
-        ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
-      )
   ;
   pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
