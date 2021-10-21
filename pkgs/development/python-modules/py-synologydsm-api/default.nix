@@ -9,26 +9,20 @@
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "1.0.2";
+  version = "1.0.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "hacf-fr";
+    owner = "mib1185";
     repo = "synologydsm-api";
     rev = "v${version}";
-    sha256 = "sha256-UQdPwvRdv7SCOTxkA1bfskQ9oL/DB0j1TdJE04ODyj8=";
+    sha256 = "1f9fbcp6dbh1c7q1cpppwggnw4m89w14cjdgl64f1bzv72rggpn1";
   };
 
   nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [ urllib3 requests ];
   pythonImportsCheck = [ "synology_dsm" ];
   checkInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    # was fixed upstream but not released, remove after upgrade to version > 1.0.2
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
 
   meta = with lib; {
     description = "Python API for Synology DSM";
