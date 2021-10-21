@@ -42,7 +42,7 @@
     "anel_pwrctrl" = ps: with ps; [ ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [ ]; # missing inputs: anthemav
     "apache_kafka" = ps: with ps; [ aiokafka ];
-    "apcupsd" = ps: with ps; [ ]; # missing inputs: apcaccess
+    "apcupsd" = ps: with ps; [ apcaccess ];
     "api" = ps: with ps; [ aiohttp-cors ];
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
     "apple_tv" = ps: with ps; [ pyatv ];

@@ -511,6 +511,8 @@ in {
 
   apache-airflow = callPackage ../development/python-modules/apache-airflow { };
 
+  apcaccess = callPackage ../development/python-modules/apcaccess { };
+
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apispec = callPackage ../development/python-modules/apispec { };
