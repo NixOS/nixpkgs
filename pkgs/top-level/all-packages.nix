@@ -2589,6 +2589,8 @@ with pkgs;
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  ddosify = callPackage ../development/tools/ddosify { };
+
   dduper = callPackage ../tools/filesystems/dduper { };
 
   dedup = callPackage ../tools/backup/dedup { };
