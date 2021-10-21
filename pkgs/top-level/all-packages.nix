@@ -22112,6 +22112,8 @@ with pkgs;
 
   go-tools = callPackage ../development/tools/go-tools { };
 
+  gotest = callPackage ../development/tools/gotest { };
+
   gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop { };
