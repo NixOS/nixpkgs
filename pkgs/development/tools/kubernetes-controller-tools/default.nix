@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes-sigs/controller-tools";
     license = licenses.asl20;
     maintainers = with maintainers; [ michojel ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
