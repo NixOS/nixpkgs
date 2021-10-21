@@ -6,7 +6,7 @@ from xml.sax.saxutils import XMLGenerator
 from colorama import Style
 import queue
 import io
-import _thread
+import threading
 import argparse
 import atexit
 import base64
@@ -405,13 +405,14 @@ class Machine:
     keep_vm_state: bool
     allow_reboot: bool
 
-    process: Optional[subprocess.Popen] = None
-    pid: Optional[int] = None
-    monitor: Optional[socket.socket] = None
-    shell: Optional[socket.socket] = None
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
 
-    booted: bool = False
-    connected: bool = False
+    booted: bool
+    connected: bool
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
@@ -443,6 +444,15 @@ class Machine:
         if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
+        self.serial_thread = None
+
+        self.booted = False
+        self.connected = False
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
@@ -921,7 +931,8 @@ class Machine:
                 self.last_lines.put(line)
                 self.log_serial(line)
 
-        _thread.start_new_thread(process_serial_output, ())
+        self.serial_thread = threading.Thread(target=process_serial_output)
+        self.serial_thread.start()
 
         self.wait_for_monitor_prompt()
 
@@ -1021,9 +1032,12 @@ class Machine:
         assert self.process
         assert self.shell
         assert self.monitor
+        assert self.serial_thread
+
         self.process.terminate()
         self.shell.close()
         self.monitor.close()
+        self.serial_thread.join()
 
 
 class VLan:
