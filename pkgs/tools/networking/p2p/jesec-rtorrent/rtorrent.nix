@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , gtest
-, libtorrent-jesec
+, libtorrent
 , curl
 , ncurses
 , xmlrpc_c
@@ -15,7 +15,7 @@ let
   inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
-  pname = "rtorrent-jesec";
+  pname = "jesec-rtorrent";
   version = "0.9.8-r14";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libtorrent-jesec curl ncurses ]
+  buildInputs = [ libtorrent curl ncurses ]
     ++ optional xmlRpcSupport xmlrpc_c
     ++ optional jsonRpcSupport nlohmann_json;
 

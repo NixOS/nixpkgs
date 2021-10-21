@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gtest, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  pname = "libtorrent-jesec";
+  pname = "jesec-libtorrent";
   version = "0.13.8-r2";
 
   src = fetchFromGitHub {
