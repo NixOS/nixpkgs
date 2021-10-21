@@ -69,7 +69,7 @@ let
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
         # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -257,15 +257,15 @@ stdenv.mkDerivation rec {
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
-    + lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake

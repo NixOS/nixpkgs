@@ -52,11 +52,11 @@ in mkDerivation {
     libbladeRF
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional (gnuradio.hasFeature "gr-uhd" gnuradio.features) [
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     uhd
   ];
   cmakeFlags = [
-    (if (gnuradio.hasFeature "python-support" gnuradio.features) then
+    (if (gnuradio.hasFeature "python-support") then
       "-DENABLE_PYTHON=ON"
     else
       "-DENABLE_PYTHON=OFF"
@@ -66,7 +66,7 @@ in mkDerivation {
     cmake
     pkg-config
     swig
-  ] ++ lib.optionals (gnuradio.hasFeature "python-support" gnuradio.features) [
+  ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah
       else

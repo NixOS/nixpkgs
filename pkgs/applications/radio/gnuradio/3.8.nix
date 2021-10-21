@@ -65,7 +65,7 @@ let
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
         # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -233,9 +233,9 @@ stdenv.mkDerivation rec {
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
   cmakeFlags = shared.cmakeFlags
@@ -246,7 +246,7 @@ stdenv.mkDerivation rec {
     #
     # NOTE: qradiolink needs libcodec2 to be detected in
     # order to build, see https://github.com/qradiolink/qradiolink/issues/67
-    ++ lib.optionals (hasFeature "gr-vocoder" features) [
+    ++ lib.optionals (hasFeature "gr-vocoder") [
       "-DLIBCODEC2_FOUND=TRUE"
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
       "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
@@ -255,7 +255,7 @@ stdenv.mkDerivation rec {
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
-    ++ lib.optionals (hasFeature "volk" features && volk != null) [
+    ++ lib.optionals (hasFeature "volk" && volk != null) [
       "-DENABLE_INTERNAL_VOLK=OFF"
     ]
   ;
@@ -263,7 +263,7 @@ stdenv.mkDerivation rec {
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
-    + lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
