@@ -2055,4 +2055,9 @@ EOT
   # https://github.com/recursion-schemes/recursion-schemes/issues/128
   recursion-schemes = appendPatch super.recursion-schemes ./patches/recursion-schemes-128.patch;
 
+  # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
+  # Can't use fetchpatch as it required tweaking the line endings as the .cabal
+  # file revision on hackage was gifted CRLF line endings
+  gogol-core = appendPatch super.gogol-core ./patches/gogol-core-144.patch;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
