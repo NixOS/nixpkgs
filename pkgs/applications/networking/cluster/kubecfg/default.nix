@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "kubecfg";
-  inherit version;
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "bitnami";
