@@ -1,4 +1,4 @@
-{ version, javaVersion, platforms }:
+{ version, javaVersion, platforms, hashes ? import ./hashes.nix }:
 
 { stdenv, lib, fetchurl, autoPatchelfHook, setJavaClassPath, makeWrapper
 # minimum dependencies
@@ -35,9 +35,7 @@ let
         maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
       in
       (lib.remove null
-        (map
-          maybeFetchUrl
-          (import ./hashes.nix { inherit javaVersionPlatform; })));
+        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
