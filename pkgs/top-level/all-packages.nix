@@ -25599,6 +25599,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  image-roll = callPackage ../applications/graphics/image-roll { };
+
   imagej = callPackage ../applications/graphics/imagej { };
 
   imagemagick6_light = imagemagick6.override {
@@ -28119,6 +28121,8 @@ with pkgs;
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
     fftw = fftwSinglePrec;
   };
+
+  timelimit = callPackage ../tools/misc/timelimit { };
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
 
