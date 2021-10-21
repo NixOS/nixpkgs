@@ -590,13 +590,13 @@ class Machine:
         self.shell.send(out_command.encode())
 
         output = ""
-        status_code_pattern = re.compile(r"(.*)\|\!=EOF\s+(\d+)")
+        status_code_pattern = re.compile(r"(.*)\|\!=EOF\s+(\d+)", flags=re.DOTALL)
 
         while True:
             chunk = self.shell.recv(4096).decode(errors="ignore")
-            match = status_code_pattern.match(chunk)
+            match = status_code_pattern.match(output + chunk)
             if match:
-                output += match[1]
+                output = match[1]
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
