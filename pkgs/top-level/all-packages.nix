@@ -12037,7 +12037,6 @@ with pkgs;
     else
       callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
 
-  /* currently maintained LTS JDK */
   openjdk11 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin/11.nix { }
@@ -12053,32 +12052,38 @@ with pkgs;
     else
       openjdk11.override { headless = true; };
 
-  openjdk16-bootstrap =
-    if adoptopenjdk-hotspot-bin-15.meta.available then
-      adoptopenjdk-hotspot-bin-15
+  openjdk17-bootstrap =
+    if adoptopenjdk-hotspot-bin-16.meta.available then
+      adoptopenjdk-hotspot-bin-16
     else
-      /* adoptopenjdk not available for i686, so fall back to our old builds of 12, 13, & 14 for bootstrapping */
-      callPackage ../development/compilers/openjdk/15.nix {
+      /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
+      callPackage ../development/compilers/openjdk/16.nix {
         openjfx = openjfx11; /* need this despite next line :-( */
         enableJavaFX = false;
         headless = true;
         inherit (gnome2) GConf gnome_vfs;
-        openjdk15-bootstrap = callPackage ../development/compilers/openjdk/14.nix {
+        openjdk16-bootstrap = callPackage ../development/compilers/openjdk/15.nix {
           openjfx = openjfx11; /* need this despite next line :-( */
           enableJavaFX = false;
           headless = true;
           inherit (gnome2) GConf gnome_vfs;
-          openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
+          openjdk15-bootstrap = callPackage ../development/compilers/openjdk/14.nix {
             openjfx = openjfx11; /* need this despite next line :-( */
             enableJavaFX = false;
             headless = true;
             inherit (gnome2) GConf gnome_vfs;
-            openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
-              stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+            openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
               openjfx = openjfx11; /* need this despite next line :-( */
               enableJavaFX = false;
               headless = true;
               inherit (gnome2) GConf gnome_vfs;
+              openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
+                stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+                openjfx = openjfx11; /* need this despite next line :-( */
+                enableJavaFX = false;
+                headless = true;
+                inherit (gnome2) GConf gnome_vfs;
+              };
             };
           };
         };
@@ -12088,27 +12093,26 @@ with pkgs;
   jdk11_headless = openjdk11_headless;
 
   /* Latest JDK */
-  openjdk16 =
+  openjdk17 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
     else
-      callPackage ../development/compilers/openjdk/16.nix {
+      callPackage ../development/compilers/openjdk/17.nix {
         openjfx = openjfx15;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk16_headless =
+  openjdk17_headless =
     if stdenv.isDarwin then
-      openjdk16
+      openjdk17
     else
-      openjdk16.override { headless = true; };
+      openjdk17.override { headless = true; };
 
-  jdk16 = openjdk16;
-  jdk16_headless = openjdk16_headless;
+  jdk17 = openjdk17;
+  jdk17_headless = openjdk17_headless;
 
   /* default JDK */
-
-  jdk = jdk16;
+  jdk = jdk17;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -12117,13 +12121,13 @@ with pkgs;
   # 'jre_minimal' to build a bespoke JRE containing only the modules you need.
   #
   # For a general-purpose system, 'jre' defaults to the full JDK:
-  jre = jdk16;
-  jre_headless = jdk16_headless;
+  jre = jdk17;
+  jre_headless = jdk17_headless;
 
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
-  openjdk = openjdk16;
-  openjdk_headless = openjdk16_headless;
+  openjdk = openjdk17;
+  openjdk_headless = openjdk17_headless;
 
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
