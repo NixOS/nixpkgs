@@ -16675,7 +16675,10 @@ with pkgs;
 
   hound = callPackage ../development/tools/misc/hound { };
 
-  hpx = callPackage ../development/libraries/hpx { };
+  hpx = callPackage ../development/libraries/hpx {
+    boost = boost17x;
+    asio = asio.override { boost = boost17x; };
+  };
 
   hspell = callPackage ../development/libraries/hspell { };
 
