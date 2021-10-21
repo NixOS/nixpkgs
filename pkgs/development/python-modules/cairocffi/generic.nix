@@ -23,8 +23,20 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ numpy pytest pytest-runner glibcLocales ];
   propagatedBuildInputs = [ cairo cffi ] ++ lib.optional withXcffib xcffib;
+  propagatedNativeBuildInputs = [ cffi ];
+
+  # pytestCheckHook does not work
+  checkInputs = [ numpy pytest glibcLocales ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" "" \
+      --replace "pytest-cov" "" \
+      --replace "pytest-flake8" "" \
+      --replace "pytest-isort" "" \
+      --replace "--flake8 --isort" ""
+  '';
 
   checkPhase = ''
     py.test $out/${python.sitePackages}
