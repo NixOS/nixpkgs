@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec{
+buildGoModule rec {
   pname = "geek-life";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "ajaxray";
     repo = "geek-life";
-    rev = "0.1.2";
+    rev = version;
     sha256 = "083y2kv5vb217ghy9g2qylqgdgbjjggjj3cq454csnn3cjgq9zfh";
   };
 
