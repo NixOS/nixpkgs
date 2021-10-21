@@ -5995,6 +5995,8 @@ in {
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
 
+  py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
+
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
   py17track = callPackage ../development/python-modules/py17track { };
@@ -6185,6 +6187,8 @@ in {
   pycxx = callPackage ../development/python-modules/pycxx { };
 
   pydaikin = callPackage ../development/python-modules/pydaikin { };
+
+  pydal = callPackage ../development/python-modules/pydal { };
 
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 

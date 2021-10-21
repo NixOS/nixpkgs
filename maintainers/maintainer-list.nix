@@ -7001,6 +7001,12 @@
     githubId = 458783;
     name = "Martin Gammelsæter";
   };
+  martfont = {
+    name = "Martino Fontana";
+    email = "tinozzo123@tutanota.com";
+    github = "SuperSamus";
+    githubId = 40663462;
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
@@ -12393,6 +12399,12 @@
     github = "yrashk";
     githubId = 452;
     name = "Yurii Rashkovskii";
+  };
+  yrd = {
+    name = "Yannik Rödel";
+    email = "nix@yannik.info";
+    github = "yrd";
+    githubId = 1820447;
   };
   ysndr = {
     email = "me@ysndr.de";

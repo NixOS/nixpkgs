@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "0zagdb90bxmf06fzpljhqgsgzg36zc1yhdibacfrx8bmnx3l657h";
   };
 
