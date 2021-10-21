@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cyberelk.net/tim/software/patchutils";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ artturin ];
   };
 }
