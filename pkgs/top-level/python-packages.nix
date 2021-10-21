@@ -3977,7 +3977,7 @@ in {
 
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
+  jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
