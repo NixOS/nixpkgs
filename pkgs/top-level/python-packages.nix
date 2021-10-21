@@ -1822,6 +1822,8 @@ in {
 
   cycler = callPackage ../development/python-modules/cycler { };
 
+  cyclonedx-python-lib = callPackage ../development/python-modules/cyclonedx-python-lib { };
+
   cymem = callPackage ../development/python-modules/cymem { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
