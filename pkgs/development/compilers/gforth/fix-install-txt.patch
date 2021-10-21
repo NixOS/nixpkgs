@@ -1,0 +1,25 @@
+From c03408921ee8f5592e19cfcb64132a320fbd6279 Mon Sep 17 00:00:00 2001
+From: Herwig Hochleitner <herwig@bendlas.net>
+Date: Thu, 9 Sep 2021 18:19:42 +0200
+Subject: [PATCH 1/2] fix install-txt task
+
+---
+ Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 5fe49787..51ad67c6 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -839,7 +839,7 @@ install-gensources:
+ 		done
+ 		echo "\\ empty site-init" > $(siteforthdir)/siteinit.fs
+ 
+-install-txt:	doc
++install-txt:	txt
+ 		$(INSTALL_DATA) doc/gforth.txt $(datadir)/gforth/$(VERSION)/doc/gforth.txt
+ 
+ install-images: install-txt
+-- 
+2.33.0
+
