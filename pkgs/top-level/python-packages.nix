@@ -1491,9 +1491,19 @@ in {
 
   cirq = callPackage ../development/python-modules/cirq { };
 
+  cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
+
   cirq-core = callPackage ../development/python-modules/cirq-core { };
 
+  cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
+
   cirq-google = callPackage ../development/python-modules/cirq-google { };
+
+  cirq-rigetti = callPackage ../development/python-modules/cirq-rigetti { };
+
+  cirq-pasqal = callPackage ../development/python-modules/cirq-pasqal { };
+
+  cirq-web = callPackage ../development/python-modules/cirq-web { };
 
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
@@ -6808,6 +6818,8 @@ in {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
+  pyquil = callPackage ../development/python-modules/pyquil { };
+
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
 
   pyrad = callPackage ../development/python-modules/pyrad { };
@@ -7778,6 +7790,8 @@ in {
 
   qcengine = callPackage ../development/python-modules/qcengine { };
 
+  qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   qdldl = callPackage ../development/python-modules/qdldl { };
@@ -8015,6 +8029,8 @@ in {
 
   retworkx = callPackage ../development/python-modules/retworkx { };
 
+  rfc3339 = callPackage ../development/python-modules/rfc3339 { };
+
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
@@ -8102,6 +8118,8 @@ in {
   ropper = callPackage ../development/python-modules/ropper { };
 
   routes = callPackage ../development/python-modules/routes { };
+
+  rpcq = callPackage ../development/python-modules/rpcq { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
 

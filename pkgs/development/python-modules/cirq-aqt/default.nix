@@ -1,34 +1,32 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , cirq-core
-, google-api-core
-, protobuf
-# test inputs
+, pythonOlder
+, fetchFromGitHub
+, requests
 , pytestCheckHook
-, freezegun
 }:
 
 buildPythonPackage rec {
-  pname = "cirq-google";
+  pname = "cirq-aqt";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "source/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "protobuf~=3.13.0" "protobuf" \
-      --replace "google-api-core[grpc] >= 1.14.0, < 2.0.0dev" "google-api-core[grpc] >= 1.14.0, < 3.0.0dev"
+      --replace "requests~=2.18" "requests"
   '';
 
   propagatedBuildInputs = [
     cirq-core
-    google-api-core
-    protobuf
+    requests
   ];
 
   checkInputs = [
-    freezegun
     pytestCheckHook
   ];
+
+  # cirq's importlib hook doesn't work here
+  #pythonImportsCheck = [ "cirq_aqt" ];
 }
