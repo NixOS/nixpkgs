@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ajaxray";
     repo = "geek-life";
-    rev = version;
+    rev = "v${version}";
     sha256 = "083y2kv5vb217ghy9g2qylqgdgbjjggjj3cq454csnn3cjgq9zfh";
   };
 
