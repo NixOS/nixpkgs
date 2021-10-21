@@ -24619,6 +24619,8 @@ with pkgs;
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
+  geek-life = callPackage ../applications/misc/geek-life { };
+
   genact = callPackage ../applications/misc/genact { };
 
   genxword = callPackage ../applications/misc/genxword { };
