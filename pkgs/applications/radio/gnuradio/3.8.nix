@@ -107,6 +107,11 @@ let
       native = [
         swig
       ];
+      pythonRuntime = with python.pkgs; [
+        # For gr-perf-monitorx
+        matplotlib
+        networkx
+      ];
     };
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
@@ -170,9 +175,14 @@ let
     };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
+      pythonRuntime = with python.pkgs; [
+        # For gr_plot
+        matplotlib
+      ];
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
+        setuptools
         click
         click-plugins
       ];

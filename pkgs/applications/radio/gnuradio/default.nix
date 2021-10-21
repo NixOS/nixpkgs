@@ -105,6 +105,11 @@ let
       runtime = [
         libunwind
       ];
+      pythonRuntime = with python.pkgs; [
+        # For gr-perf-monitorx
+        matplotlib
+        networkx
+      ];
       cmakeEnableFlag = "GR_CTRLPORT";
     };
     gnuradio-companion = {
@@ -139,6 +144,10 @@ let
     gr-filter = {
       runtime = [ fftwFloat ];
       cmakeEnableFlag = "GR_FILTER";
+      pythonRuntime = with python.pkgs; [
+        scipy
+        pyqtgraph
+      ];
     };
     gr-analog = {
       cmakeEnableFlag = "GR_ANALOG";
@@ -181,9 +190,14 @@ let
     };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
+      pythonRuntime = with python.pkgs; [
+        # For gr_plot
+        matplotlib
+      ];
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
+        setuptools
         click
         click-plugins
       ];
