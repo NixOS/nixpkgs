@@ -5057,6 +5057,8 @@
   };
   jakobu5 = {
     email = "m1a2.jakob@gmail.com";
+    github = "Jakobu5";
+    githubId = 32122722;
     name = "Jakob Hagl";
   };
   jakubgs = {
