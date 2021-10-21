@@ -1,6 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles, ... }:
-
-let version = "0.21.0"; in
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage {
   pname = "kubecfg";
