@@ -1,38 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gtest, openssl, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, openssl
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "jesec-libtorrent";
-  version = "0.13.8-r2";
+  version = "0.13.8-r3";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-eIXVTbVOCRHcxSsLPvIm9F60t2upk5ORpDSOOYqTCJ4=";
+    hash = "sha256-S3DOKzXkvU+ZJxfrxwLXCVBnepzmiZ+3iiQqz084BEk=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "test-fallback";
-      url = "https://github.com/jesec/libtorrent/commit/a38205ce06aadc9908478ec3a9c8aefd9be06344.patch";
-      sha256 = "sha256-2TyQ9zYWZw6bzAfVZzTOQSkfIZnDU8ykgpRAFXscEH0=";
-    })
+  nativeBuildInputs = [
+    cmake
   ];
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl zlib ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
-  checkInputs = [ gtest ];
+  checkInputs = [
+    gtest
+  ];
 
   meta = with lib; {
-    description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
     homepage = "https://github.com/jesec/libtorrent";
+    description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winterqt ];
+    maintainers = with maintainers; [ winterqt AndersonTorres ];
     platforms = platforms.linux;
   };
 }
