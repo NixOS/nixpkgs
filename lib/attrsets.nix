@@ -487,7 +487,7 @@ rec {
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
   */
   getOutput = output: pkg:
-    if pkg.outputUnspecified or false
+    if ! pkg ? outputSpecified || ! pkg.outputSpecified
       then pkg.${output} or pkg.out or pkg
       else pkg;
 
