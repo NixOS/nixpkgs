@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2021.10.2";
+  version = "2021.10.6";
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zamFDlahHQGo5g0dlGF6uWG53K/IkEjP0dA8cWYrhtI=";
+    sha256 = "sha256-98V+skgLCMBt6cnEa9kNM5rOm9q6+QYf3TJ9P8eroM8=";
   };
 
   propagatedBuildInputs = [
