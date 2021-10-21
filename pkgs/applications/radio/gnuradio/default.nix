@@ -252,6 +252,15 @@ stdenv.mkDerivation rec {
     dontWrapQtApps
     meta
   ;
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.patch
+    (fetchpatch {
+      # https://github.com/gnuradio/gnuradio/pull/5225
+      url = "https://github.com/gnuradio/gnuradio/commit/4cef46e3ea0faf04e05ca1a5846cd1568fa51bb2.patch";
+      sha256 = "sha256-6AlGbtD1S0c3I9JSoLTMP4YqwDU17i2j+XRkuR+QTuc=";
+    })
+  ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;

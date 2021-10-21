@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -227,6 +228,15 @@ stdenv.mkDerivation rec {
     dontWrapQtApps
     meta
   ;
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.3_8.patch
+    (fetchpatch {
+      # https://github.com/gnuradio/gnuradio/pull/5226
+      url = "https://github.com/gnuradio/gnuradio/commit/9d7343526dd793120b6425cd9a6969416ed32503.patch";
+      sha256 = "sha256-usSoRDDuClUfdX4yFbQNu8wDzve6UEhZYTFj1oZbFic=";
+    })
+  ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
