@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
 
 with lib;
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.45.1";
 
 
-  src = fetchurl (if pkgs.system == "x86_64-linux"
+  src = fetchurl (if stdenv.hostPlatform.system == "x86_64-linux"
   then {
     url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_x86_64.tar.gz";
     sha256 = "sha256-TZcXq51sKoeLPmcRpv4VILDmS6dsS7lxlJzTDH0tEWM=";
