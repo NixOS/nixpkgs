@@ -16,12 +16,12 @@ with lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.15.4";
+  version = "1.15.5";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "sha256-UsaTA6bI5pr3vbvO3jFn8A8qVRi385fbiJQD09Ut/X0=";
+    sha256 = "sha256-W+czWzo4keTLRPDLcTeYl3JSccwfq+P6k4ELADO9FVM=";
   };
 
   unpackPhase = ''
