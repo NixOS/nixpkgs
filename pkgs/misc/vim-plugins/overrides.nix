@@ -496,10 +496,6 @@ self: super: {
       });
   });
 
-  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
   });
