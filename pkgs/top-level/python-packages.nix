@@ -5505,6 +5505,8 @@ in {
 
   parquet = callPackage ../development/python-modules/parquet { };
 
+  parquet-tools = callPackage ../development/python-modules/parquet-tools { };
+
   parse = callPackage ../development/python-modules/parse { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
