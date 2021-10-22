@@ -5,9 +5,8 @@
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
 , mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-, writeScript, common-updater-scripts,
-
-  useWayland ? false
+, writeScript, common-updater-scripts
+, useWayland ? false
 }:
 
 let
