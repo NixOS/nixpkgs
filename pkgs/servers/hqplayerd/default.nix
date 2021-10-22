@@ -1,5 +1,6 @@
 { stdenv
 , alsa-lib
+, addOpenGLRunpath
 , autoPatchelfHook
 , cairo
 , fetchurl
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     ${rpmextract}/bin/rpmextract $src
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook rpmextract ];
+  nativeBuildInputs = [ addOpenGLRunpath autoPatchelfHook rpmextract ];
 
   buildInputs = [
     alsa-lib
@@ -86,8 +87,12 @@ stdenv.mkDerivation rec {
       --replace "NetworkManager-wait-online.service" ""
   '';
 
-  postFixup = ''
-    patchelf --replace-needed libomp.so.5 libomp.so $out/bin/hqplayerd
+  # NB: addOpenGLRunpath needs to run _after_ autoPatchelfHook, which runs in
+  # postFixup, so we tack it on here.
+  doInstallCheck = true;
+  installCheckPhase = ''
+    addOpenGLRunpath $out/bin/hqplayerd
+    $out/bin/hqplayerd --version
   '';
 
   meta = with lib; {
