@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   pname = "alectryon";
-  owner = "cpitclaudel";
   version = "1.4.0";
 
   src = fetchPypi {
