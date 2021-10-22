@@ -1626,6 +1626,8 @@ with pkgs;
 
   enchive = callPackage ../tools/security/enchive { };
 
+  enjarify = callPackage ../tools/misc/enjarify { };
+
   enpass = callPackage ../tools/security/enpass { };
 
   esbuild = callPackage ../development/tools/esbuild { };
