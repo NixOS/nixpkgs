@@ -3573,6 +3573,8 @@ with pkgs;
     libmaxminddb = null;
   };
 
+  xmlbeans = callPackage ../tools/misc/xmlbeans { };
+
   xmlsort = perlPackages.XMLFilterSort;
 
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
