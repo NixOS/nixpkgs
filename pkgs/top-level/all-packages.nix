@@ -904,6 +904,8 @@ with pkgs;
 
   airspy = callPackage ../applications/radio/airspy { };
 
+  airspyhf = callPackage ../applications/radio/airspyhf { };
+
   airtame = callPackage ../applications/misc/airtame { };
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
@@ -17001,6 +17003,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  libad9361 = callPackage ../development/libraries/libad9361 { };
+
   libadwaita = callPackage ../development/libraries/libadwaita { };
 
   libaec = callPackage ../development/libraries/libaec { };
@@ -19248,6 +19252,8 @@ with pkgs;
   sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
+
+  sdrpp = callPackage ../applications/radio/sdrpp { };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
