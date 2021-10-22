@@ -1269,6 +1269,8 @@ with pkgs;
 
   artyFX = callPackage ../applications/audio/artyFX {};
 
+  oggvideotools = callPackage ../tools/misc/oggvideotools { };
+
   owl-lisp = callPackage ../development/compilers/owl-lisp {};
 
   ascii = callPackage ../tools/text/ascii { };
