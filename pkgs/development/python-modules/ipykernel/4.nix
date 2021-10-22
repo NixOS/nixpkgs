@@ -5,7 +5,7 @@
 , isPy27
 , mock
 , ipython
-, jupyter_client
+, jupyter-client
 , pexpect
 , traitlets
 , tornado
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ] ++ lib.optional isPy27 mock;
   propagatedBuildInputs = [
     ipython
-    jupyter_client
+    jupyter-client
     pexpect
     traitlets
     tornado

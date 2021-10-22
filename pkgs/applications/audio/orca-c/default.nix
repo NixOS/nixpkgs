@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ netcrns ];
+    mainProgram = "orca";
   };
 }

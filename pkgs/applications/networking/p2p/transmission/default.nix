@@ -106,7 +106,6 @@ in stdenv.mkDerivation {
       r @{PROC}/@{pid}/environ,
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
-      r /run/systemd/resolve/stub-resolv.conf,
 
       r $out/share/transmission/web/**,
 
