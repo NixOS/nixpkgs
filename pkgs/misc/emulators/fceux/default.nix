@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fceux";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "TASVideos";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-i0mb0vy46D97oOpAjMw3CPbG4w/LWP9YRVEMWjdYgs0=";
+    sha256 = "sha256-k9GkG+HLscSv9Ar58gdj4+WvXRchGqeDcvgiKyxEMHs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
