@@ -85,5 +85,5 @@ mapAliases ({
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
   websocket_client = websocket-client;
-  zc_buildout221 = zc_buildout; # added 2021-07-21
+  zc-buildout221 = zc-buildout; # added 2021-07-21
 })
