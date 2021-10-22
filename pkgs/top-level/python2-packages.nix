@@ -654,7 +654,7 @@ with self; with super; {
 
   WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
 
-  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
+  wxPython_3 = callPackage ../development/python-modules/wxPython/3.nix {
     wxGTK = pkgs.wxGTK30;
   };
 

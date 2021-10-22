@@ -12,7 +12,7 @@
  }:
 
 let
-  inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
+  inherit (python2.pkgs) buildPythonApplication wxPython_3 numpy dbus-python;
 in buildPythonApplication rec {
   pname = "displaycal";
   version = "3.8.9.3";
@@ -32,7 +32,7 @@ in buildPythonApplication rec {
     libXinerama
     libXScrnSaver
     argyllcms
-    wxPython
+    wxPython_3
     numpy
     dbus-python
   ];

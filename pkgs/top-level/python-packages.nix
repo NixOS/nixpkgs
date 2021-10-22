@@ -9826,6 +9826,10 @@ in {
     };
   };
 
+  wxPython_3 = callPackage ../development/python-modules/wxPython/3.nix {
+    wxGTK = pkgs.wxGTK30;
+  };
+
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 
   x256 = callPackage ../development/python-modules/x256 { };
