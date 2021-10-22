@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = if withDNSTAP then "${protobufc}/bin/protoc-c" else null;
+  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure = let
