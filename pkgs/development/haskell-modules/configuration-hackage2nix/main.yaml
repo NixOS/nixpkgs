@@ -104,6 +104,8 @@ default-package-overrides:
   - taskwarrior < 0.4.0.0
   # 2021-10-19: autoapply 0.4.1.1 requires th-desugar 1.12
   - autoapply < 0.4.1.1
+  # 2021-10-22: 1.8 breaks shake-bench
+  - SVGFonts < 1.8
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
