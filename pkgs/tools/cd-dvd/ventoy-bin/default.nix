@@ -5,9 +5,6 @@
 , withQt5 ? false, qt5
 }:
 
-
-with lib;
-
 let arch = {
   x86_64-linux = "x86_64";
   i686-linux = "i386";
@@ -22,10 +19,10 @@ in stdenv.mkDerivation rec {
   version = "1.0.54";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ optional withQt5 qt5.wrapQtAppsHook;
+    ++ lib.optional withQt5 qt5.wrapQtAppsHook;
   buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ]
-    ++ optional withGtk3 gtk3
-    ++ optional withQt5 qt5.qtbase;
+    ++ lib.optional withGtk3 gtk3
+    ++ lib.optional withQt5 qt5.qtbase;
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
@@ -84,18 +81,18 @@ in stdenv.mkDerivation rec {
                     --prefix PATH : "${lib.makeBinPath buildInputs}" \
                     --run "cd '$VENTOY_PATH' || exit 1"
     done
-  '' + optionalString (withGtk3 || withQt5) ''
+  '' + lib.optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
                 --prefix PATH : "${lib.makeBinPath buildInputs}" \
                 --run "cd '$VENTOY_PATH' || exit 1"
-  '' + optionalString (!withGtk3) ''
+  '' + lib.optionalString (!withGtk3) ''
     rm "$out"/share/ventoy/tool/"$ARCH"/Ventoy2Disk.gtk3
-  '' + optionalString (!withQt5) ''
+  '' + lib.optionalString (!withQt5) ''
     rm "$out"/share/ventoy/tool/"$ARCH"/Ventoy2Disk.qt5
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An open source tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
     longDescription = ''
       An open source tool to create bootable USB drive for
