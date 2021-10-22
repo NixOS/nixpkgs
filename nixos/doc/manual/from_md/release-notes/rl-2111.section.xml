@@ -1605,6 +1605,14 @@ Superuser created successfully.
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          initrd’s <literal>udhcpc</literal> DHCP client now supplies
+          the
+          <link xlink:href="options.html#networking.hostName">networking.hostName</link>
+          as a DHCP option.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
