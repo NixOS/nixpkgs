@@ -22,10 +22,10 @@ in stdenv.mkDerivation rec {
   version = "1.0.54";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
-  ++ optional withQt5 qt5.wrapQtAppsHook;
+    ++ optional withQt5 qt5.wrapQtAppsHook;
   buildInputs = [ hexdump exfat dosfstools e2fsprogs xz util-linux bash parted ]
-  ++ optional withGtk3 gtk3
-  ++ optionals withQt5 [ qt5.qtbase ];
+    ++ optional withGtk3 gtk3
+    ++ optional withQt5 qt5.qtbase;
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
