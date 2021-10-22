@@ -782,6 +782,7 @@ mapAliases ({
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
   runwayml = throw "runwayml is now a webapp"; # added 2021-04-17
+  rustracerd = throw "rustracerd has been removed because it is broken and unmaintained"; # added 2021-10-19
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   subversion19 = throw "subversion19 has been removed as it has reached its end of life"; # added 2021-03-31
