@@ -26207,6 +26207,8 @@ with pkgs;
 
   lscolors = callPackage ../applications/misc/lscolors { };
 
+  lucky-commit = callPackage ../applications/version-management/git-and-tools/lucky-commit { };
+
   luddite = with python3Packages; toPythonApplication luddite;
 
   lumail = callPackage ../applications/networking/mailreaders/lumail {
