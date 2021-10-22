@@ -23,6 +23,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('username', '', 'Factorio username for retrieving binaries.')
 flags.DEFINE_string('token', '', 'Factorio token for retrieving binaries.')
 flags.DEFINE_string('out', '', 'Output path for versions.json.')
+flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
 
 
 @dataclass
@@ -85,6 +86,16 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
     for rc in RELEASE_CHANNELS:
         if not factorio_versions[rc.name]:
             factorio_versions[rc.name] = factorio_versions['stable']
+
+    # Sometimes, factorio.com's API just doesn't advertise a demo version for experimental
+    if 'demo' not in factorio_versions['experimental']:
+        logging.debug("No 'demo' release in 'experimental' channel.")
+
+        if factorio_versions['experimental']['alpha'] == factorio_versions['stable']['alpha']:
+            logging.debug("'experimental' is the same as 'stable', setting 'demo' from it.")
+            factorio_versions['experimental']['demo'] = factorio_versions['stable']['demo']
+        else:
+            logging.error("'experimental' isn't the same version as 'stable' and doesn't have a 'demo' release.")
 
     for system in SYSTEMS:
         for release_type in RELEASE_TYPES:
@@ -158,10 +169,14 @@ def fill_in_hash(versions: OurVersionJSON) -> OurVersionJSON:
 
 
 def main(argv):
+    if FLAGS.debug:
+        logging.set_verbosity(logging.DEBUG)
+
     factorio_versions = fetch_versions()
     new_our_versions = generate_our_versions(factorio_versions)
     old_our_versions = None
     our_versions_path = find_versions_json()
+
     if our_versions_path:
         logging.info('Loading old versions.json from %s', our_versions_path)
         with open(our_versions_path, 'r') as f:
