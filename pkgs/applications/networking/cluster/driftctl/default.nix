@@ -10,6 +10,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-rWC4jqquVWJmHV/dnH+DsxlNiAY01xnq9z0/owS4Yis=";
   };
+
   vendorSha256 = "sha256-d8vASP8KnUeUkaHRU8kCE7FCt2QLGu5ET5BN3GM2O9c=";
 
   postUnpack = ''
