@@ -2,40 +2,48 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, gtest
-, libtorrent-jesec
 , curl
+, gtest
+, libtorrent
 , ncurses
-, xmlrpc_c
-, nlohmann_json
-, xmlRpcSupport ? true
-, jsonRpcSupport ? true
+, jsonRpcSupport ? true, nlohmann_json
+, xmlRpcSupport ? true, xmlrpc_c
 }:
-let
-  inherit (lib) optional;
-in
+
 stdenv.mkDerivation rec {
-  pname = "rtorrent-jesec";
-  version = "0.9.8-r14";
+  pname = "jesec-rtorrent";
+  version = "0.9.8-r15";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "rtorrent";
     rev = "v${version}";
-    sha256 = "sha256-AbjzNIha3MkCZi6MuyUfPx9r3zeXeTUzkbD7uHB85lo=";
+    hash = "sha256-yYOw8wsiQd478JijLgPtEWsw2/ewd46re+t9D705rmk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libtorrent-jesec curl ncurses ]
-    ++ optional xmlRpcSupport xmlrpc_c
-    ++ optional jsonRpcSupport nlohmann_json;
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  cmakeFlags = [ "-DUSE_RUNTIME_CA_DETECTION=NO" ]
-    ++ optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO"
-    ++ optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO";
+  buildInputs = [
+    curl
+    libtorrent
+    ncurses
+  ]
+  ++ lib.optional jsonRpcSupport nlohmann_json
+  ++ lib.optional xmlRpcSupport xmlrpc_c;
+
+  cmakeFlags = [
+    "-DUSE_RUNTIME_CA_DETECTION=NO"
+  ]
+  ++ lib.optional (!jsonRpcSupport) "-DUSE_JSONRPC=NO"
+  ++ lib.optional (!xmlRpcSupport) "-DUSE_XMLRPC=NO";
+
 
   doCheck = true;
-  checkInputs = [ gtest ];
+  checkInputs = [
+    gtest
+  ];
 
   prePatch = ''
     substituteInPlace src/main.cc \
@@ -51,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach (jesec's fork)";
     homepage = "https://github.com/jesec/rtorrent";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winterqt ];
+    maintainers = with maintainers; [ winterqt AndersonTorres ];
     platforms = platforms.linux;
   };
 }
