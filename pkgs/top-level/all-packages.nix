@@ -971,6 +971,11 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  winbox = callPackage ../tools/admin/winbox {
+    wine = wineWowPackages.staging;
+    use64 = true;
+  };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
