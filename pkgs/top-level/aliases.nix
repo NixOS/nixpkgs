@@ -1246,4 +1246,6 @@ mapAliases ({
     targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
   });
 
+  inherit (stdenv.hostPlatform) system; # added 2021-10-22
+
 })
