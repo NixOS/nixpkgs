@@ -71,7 +71,7 @@ symlinkJoin {
   meta = with lib; {
     description = "Graphical configuration utility for RouterOS-based devices";
     homepage = "https://mikrotik.com";
-    downloadPage = "https:/ /mikrotik.com/download";
+    downloadPage = "https://mikrotik.com/download";
     changelog = "https://wiki.mikrotik.com/wiki/Winbox_changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ yrd ];
