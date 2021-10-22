@@ -777,17 +777,6 @@ mapAliases ({
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   rpiboot-unstable = rpiboot; # added 2021-07-30
   rtv = throw "rtv was archived by upstream. Consider using tuir, an actively maintained fork"; # added 2021-08-08
-  ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
-  ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
-  ruby_2_2_9 = throw "ruby_2_2_9 was deprecated on 2018-02-13: use a newer version of ruby";
-  ruby_2_3_6 = throw "ruby_2_3_6 was deprecated on 2018-02-13: use a newer version of ruby";
-  ruby_2_3 = throw "ruby_2_3 was deprecated on 2019-09-06: use a newer version of ruby";
-  ruby_2_4_3 = throw "ruby_2_4_3 was deprecated on 2018-02-13: use a newer version of ruby";
-  ruby_2_4 = throw "ruby_2_4 was deprecated in 2019-12: use a newer version of ruby";
-  ruby_2_5_0 = throw "ruby_2_5_0 was deprecated on 2018-02-13: use a newer version of ruby";
-  rubyPackages_2_4 = throw "rubyPackages_2_4 was deprecated in 2019-12: use a newer version of rubyPackages instead";
-  ruby_2_5 = throw "ruby_2_5 was deprecated in 2021-02: use a newer version of ruby";
-  rubyPackages_2_5 = throw "rubyPackages_2_5 was deprecated in 2021-02: use a newer version of rubyPackages instead";
   rubygems = throw "rubygems was deprecated on 2016-03-02: rubygems is now bundled with ruby";
   rubyMinimal = throw "rubyMinimal was removed due to being unused";
   runCommandNoCC = runCommand;
