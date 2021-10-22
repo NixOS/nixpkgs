@@ -8449,6 +8449,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  piping-server-rust = callPackage ../servers/piping-server-rust { };
+
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
   pipr = callPackage ../applications/misc/pipr { };
