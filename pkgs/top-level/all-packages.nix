@@ -8451,6 +8451,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  piping-server-rust = callPackage ../servers/piping-server-rust { };
+
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
   pipr = callPackage ../applications/misc/pipr { };
@@ -26206,6 +26208,8 @@ with pkgs;
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
 
   lscolors = callPackage ../applications/misc/lscolors { };
+
+  lucky-commit = callPackage ../applications/version-management/git-and-tools/lucky-commit { };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
