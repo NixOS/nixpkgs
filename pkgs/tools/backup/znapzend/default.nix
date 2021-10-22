@@ -3,7 +3,7 @@
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/cpanfile
   # pinned versions are listed at https://github.com/oetiker/znapzend/blob/master/thirdparty/cpanfile-5.30.snapshot
-  Mojolicious-8-73 = perlPackages.buildPerlPackage rec {
+  Mojolicious' = perlPackages.buildPerlPackage rec {
     pname = "Mojolicious";
     version = "8.73";
     src = fetchurl {
@@ -11,23 +11,23 @@ let
       sha256 = "118y2264f89bbp5ly2dh36xjq25jk85s2ssxa3y4gsgsk6sjzzk1";
     };
   };
-  MojoIOLoopForkCall-0-20 = perlPackages.buildPerlModule rec {
+  MojoIOLoopForkCall' = perlPackages.buildPerlModule rec {
     pname = "Mojo-IOLoop-ForkCall";
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/${pname}-${version}.tar.gz";
       sha256 = "19pih5x0ayxs2m8j29qwdpi6ky3w4ghv6vrmax3ix9r59hj6569b";
     };
-    propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious-8-73 ];
+    propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious' ];
   };
 
   perl' = perl.withPackages (p:
-    [ MojoIOLoopForkCall-0-20
+    [ MojoIOLoopForkCall'
       p.TAPParserSourceHandlerpgTAP
     ]);
 
   version = "0.21.0";
-  checksum = "1lg46rf2ahlclan29zx8ag5k4fjp28sc9l02z76f0pvdlj4qnihl";
+  sha256 = "1lg46rf2ahlclan29zx8ag5k4fjp28sc9l02z76f0pvdlj4qnihl";
 in
 stdenv.mkDerivation {
   pname = "znapzend";
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     owner = "oetiker";
     repo = "znapzend";
     rev = "v${version}";
-    sha256 = checksum;
+    inherit sha256;
   };
 
   buildInputs = [ wget perl' ];
