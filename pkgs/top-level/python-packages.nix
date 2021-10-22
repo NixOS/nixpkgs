@@ -6963,8 +6963,6 @@ in {
 
   pysmart = callPackage ../development/python-modules/pysmart { };
 
-  pysmart-smartx = callPackage ../development/python-modules/pysmart-smartx { };
-
   pysmartapp = callPackage ../development/python-modules/pysmartapp { };
 
   pysmartthings = callPackage ../development/python-modules/pysmartthings { };
