@@ -48,7 +48,6 @@
   minor = "3";
   patch = "0";
 }
-, fetchSubmodules ? false
 }:
 
 let
@@ -231,7 +230,6 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt5;
     gtk = gtk3;

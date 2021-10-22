@@ -11,7 +11,6 @@
 # the main expressions
 , overrideSrc
 , fetchFromGitHub
-, fetchSubmodules
 }:
 
 rec {
@@ -26,7 +25,6 @@ rec {
       owner = "gnuradio";
       rev = "v${version}";
       sha256 = sourceSha256;
-      inherit fetchSubmodules;
     }
   ;
   # Check if a feature is enabled, while defaulting to true if feat is not

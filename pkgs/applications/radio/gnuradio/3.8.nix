@@ -44,8 +44,6 @@
   minor = "4";
   patch = "0";
 }
-# We use our build of volk and not the one bundled with the release
-, fetchSubmodules ? false
 }:
 
 let
@@ -208,7 +206,6 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt5;
     gtk = gtk3;
