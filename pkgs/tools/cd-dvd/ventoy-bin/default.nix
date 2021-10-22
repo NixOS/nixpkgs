@@ -16,7 +16,7 @@ defaultGuiType = if withGtk3 then "gtk3"
                  else "";
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.54";
+  version = "1.0.56";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
     ++ lib.optional withQt5 qt5.wrapQtAppsHook;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    sha256 = "8304e7833b53e94c3989c57fcf4de16feab3e92cf6947485c92ab5e5aad5aaba";
+    sha256 = "da53d51e653092a170c11dd560e0ad6fb27c497dd77ad0ba483c32935c069dea";
   };
   patches = [
     (fetchpatch {
