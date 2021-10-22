@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "generic-cl_dot_arithmetic";
-  version = "generic-cl-20210807-git";
+  version = "generic-cl-20211020-git";
 
   description = "Generic arithmetic function interface";
 
   deps = [ args."agutil" args."alexandria" args."anaphora" args."arrows" args."cl-environments" args."cl-form-types" args."closer-mop" args."collectors" args."generic-cl_dot_comparison" args."generic-cl_dot_internal" args."introspect-environment" args."iterate" args."lisp-namespace" args."optima" args."parse-declarations-1_dot_0" args."static-dispatch" args."symbol-munger" args."trivia" args."trivia_dot_balland2006" args."trivia_dot_level0" args."trivia_dot_level1" args."trivia_dot_level2" args."trivia_dot_trivial" args."trivial-cltl2" args."type-i" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/generic-cl/2021-08-07/generic-cl-20210807-git.tgz";
-    sha256 = "0jn1hw0m3906iyyg337kb6dfnmyj95l7s9lx1glvgcas450wkk0b";
+    url = "http://beta.quicklisp.org/archive/generic-cl/2021-10-20/generic-cl-20211020-git.tgz";
+    sha256 = "0jryfmxwqhrarmpbb643b7iv5rlib5pcx4i4jcd6h2rscnrbj8sa";
   };
 
   packageName = "generic-cl.arithmetic";
@@ -20,9 +20,9 @@ rec {
 }
 /* (SYSTEM generic-cl.arithmetic DESCRIPTION
     Generic arithmetic function interface SHA256
-    0jn1hw0m3906iyyg337kb6dfnmyj95l7s9lx1glvgcas450wkk0b URL
-    http://beta.quicklisp.org/archive/generic-cl/2021-08-07/generic-cl-20210807-git.tgz
-    MD5 38e30f287963d66f4d56b48918f71568 NAME generic-cl.arithmetic FILENAME
+    0jryfmxwqhrarmpbb643b7iv5rlib5pcx4i4jcd6h2rscnrbj8sa URL
+    http://beta.quicklisp.org/archive/generic-cl/2021-10-20/generic-cl-20211020-git.tgz
+    MD5 ce42f45dd7c5be44de45ee259a46d7b8 NAME generic-cl.arithmetic FILENAME
     generic-cl_dot_arithmetic DEPS
     ((NAME agutil FILENAME agutil) (NAME alexandria FILENAME alexandria)
      (NAME anaphora FILENAME anaphora) (NAME arrows FILENAME arrows)
@@ -52,7 +52,7 @@ rec {
      parse-declarations-1.0 static-dispatch symbol-munger trivia
      trivia.balland2006 trivia.level0 trivia.level1 trivia.level2
      trivia.trivial trivial-cltl2 type-i)
-    VERSION generic-cl-20210807-git SIBLINGS
+    VERSION generic-cl-20211020-git SIBLINGS
     (generic-cl generic-cl.collector generic-cl.comparison generic-cl.container
      generic-cl.internal generic-cl.iterator generic-cl.lazy-seq generic-cl.map
      generic-cl.math generic-cl.object generic-cl.sequence generic-cl.set

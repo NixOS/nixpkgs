@@ -8249,6 +8249,12 @@
     githubId = 810877;
     name = "Tom Doggett";
   };
+  noisersup = {
+    email = "patryk@kwiatek.xyz";
+    github = "noisersup";
+    githubId = 42322511;
+    name = "Patryk Kwiatek";
+  };
   nomeata = {
     email = "mail@joachim-breitner.de";
     github = "nomeata";
@@ -12053,6 +12059,16 @@
     github = "weihua-lu";
     githubId = 9002575;
     name = "Weihua Lu";
+  };
+  welteki = {
+    email = "welteki@pm.me";
+    github = "welteki";
+    githubId = 16267532;
+    name = "Han Verstraete";
+    keys = [{
+      longkeyid = "rsa4096/0x11F7BAEA856743FF";
+      fingerprint = "2145 955E 3F5E 0C95 3458  41B5 11F7 BAEA 8567 43FF";
+    }];
   };
   wheelsandmetal = {
     email = "jakob@schmutz.co.uk";

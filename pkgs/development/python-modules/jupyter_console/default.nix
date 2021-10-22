@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, jupyter_client
+, jupyter-client
 , ipython
 , ipykernel
 , prompt-toolkit
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jupyter_client
+    jupyter-client
     ipython
     ipykernel
     prompt-toolkit

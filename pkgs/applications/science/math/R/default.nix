@@ -119,6 +119,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
 
-    maintainers = with maintainers; teams.sage.members;
+    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
 }

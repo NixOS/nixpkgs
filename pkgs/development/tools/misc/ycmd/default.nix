@@ -3,7 +3,6 @@
 , godef ? null
 , gotools ? null
 , nodePackages ? null
-, rustracerd ? null
 , fixDarwinDylibNames, Cocoa ? null
 }:
 
@@ -74,10 +73,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString (nodePackages != null) ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${nodePackages.typescript} $TARGET
-  '' + lib.optionalString (rustracerd != null) ''
-    TARGET=$out/lib/ycmd/third_party/racerd/target/release
-    mkdir -p $TARGET
-    ln -sf ${rustracerd}/bin/racerd $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so

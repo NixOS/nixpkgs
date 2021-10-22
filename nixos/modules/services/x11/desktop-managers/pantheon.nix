@@ -221,6 +221,7 @@ in
       programs.evince.enable = mkDefault true;
       programs.evince.package = pkgs.pantheon.evince;
       programs.file-roller.enable = mkDefault true;
+      programs.file-roller.package = pkgs.pantheon.file-roller;
 
       # Settings from elementary-default-settings
       environment.sessionVariables.GTK_CSD = "1";

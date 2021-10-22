@@ -52,6 +52,7 @@ mapAliases ({
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
+  jupyter_client = jupyter-client; # added 2021-10-15
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   pam = python-pam; # added 2020-09-07.
@@ -61,6 +62,7 @@ mapAliases ({
   prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
+  pysmart-smartx = pysmart; # added 2021-10-22
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
@@ -83,5 +85,5 @@ mapAliases ({
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
   websocket_client = websocket-client;
-  zc_buildout221 = zc_buildout; # added 2021-07-21
+  zc-buildout221 = zc-buildout; # added 2021-07-21
 })

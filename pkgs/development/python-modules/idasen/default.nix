@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "v${version}";
-    sha256 = "09s1409ln1x6sxsls2ndqz3piapbwf880rrhmydfm6y7hqxlmzvy";
+    sha256 = "122bhbc3zqqm4x1x7a7mydvxxjrdssnqyxyqg0lbgxgn5rm8wbdd";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";
     homepage = "https://github.com/newAM/idasen";
+    changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ newam ];
   };

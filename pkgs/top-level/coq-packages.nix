@@ -37,12 +37,15 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       corn = callPackage ../development/coq-modules/corn {};
+      deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
+      extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
       gaia = callPackage ../development/coq-modules/gaia {};
+      gaia-hydras = callPackage ../development/coq-modules/gaia-hydras {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       goedel = callPackage ../development/coq-modules/goedel {};
       graph-theory = callPackage ../development/coq-modules/graph-theory {};

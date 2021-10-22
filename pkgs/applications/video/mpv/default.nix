@@ -112,6 +112,15 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
       sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
     })
+    # TOREMOVE when > 0.33.1
+    # youtube-dl has been abandonned and is now unusable w/
+    # youtube.com. Mpv migrated to yt-dlp since the 0.33.1 but did not
+    # cut a new release yet. See
+    # https://github.com/mpv-player/mpv/pull/9209
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/d1c92bfd79ef81ac804fcc20aee2ed24e8d587aa.patch";
+      sha256 = "1dwxzng3gsrx0gjljm5jmfcjz3pzdss9z2l0n25rmmb4nbcrcx1f";
+    })
   ];
 
   postPatch = ''
