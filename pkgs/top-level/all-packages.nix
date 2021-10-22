@@ -1176,6 +1176,8 @@ with pkgs;
     stdenv = if stdenv.targetPlatform.isAarch64 then gcc10Stdenv else stdenv;
   });
 
+  anewer = callPackage ../tools/text/anewer { };
+
   angle-grinder = callPackage ../tools/text/angle-grinder {};
 
   ansifilter = callPackage ../tools/text/ansifilter {};
