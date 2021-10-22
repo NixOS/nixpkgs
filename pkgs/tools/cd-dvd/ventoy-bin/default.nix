@@ -5,8 +5,6 @@
 , withQt5 ? false, qt5
 }:
 
-assert withGtk3 -> gtk3 != null;
-assert withQt5 -> qt5 != null;
 
 with lib;
 
