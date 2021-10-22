@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "nightthemeswitcher-gnome-shell-extension";
-    rev = "${version}";
+    rev = version;
     sha256 = "0dgnh1aj0y89jzfkpj8zs4gdbmyc1v8lbki2q30gld17ljv4l6lh";
   };
 
