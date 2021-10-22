@@ -1,0 +1,13 @@
+diff --git a/lib/file_store/local_store.rb b/lib/file_store/local_store.rb
+index 25649532c0..614e062dc1 100644
+--- a/lib/file_store/local_store.rb
++++ b/lib/file_store/local_store.rb
+@@ -88,7 +88,7 @@ module FileStore
+     end
+ 
+     def public_dir
+-      File.join(Rails.root, "public")
++      "/run/discourse/public"
+     end
+ 
+     def tombstone_dir
