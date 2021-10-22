@@ -11,13 +11,13 @@
 , python
 }:
 let
-  version = "0.71.6";
+  version = "0.73.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-c2xp2uIP8+WeRMz0efA1H58Nkot65bc03e7rrrZk3jo=";
+    sha256 = "sha256-/0KYQgl/pfZomD1EEF9iI9HnNR99a8OB3/n5IfgClQk=";
   };
 
   worker = buildGoModule {
@@ -25,7 +25,7 @@ let
     sourceRoot = "source/worker";
     pname = "buildsrht-worker";
 
-    vendorSha256 = "sha256-iMlCZPCIwhppPAYUi6E8td1BoNaqBuQCI5E83cnEBJ0=";
+    vendorSha256 = "sha256-7zlt5305P3KzGrs4wUyAU1+FpoBMyl+yjkLSzqUybxg=";
 
     # What follows is only to update go-redis,
     # and thus also using a patched srht-keys.
