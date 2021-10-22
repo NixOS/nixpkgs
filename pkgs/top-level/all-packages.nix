@@ -2071,8 +2071,6 @@ with pkgs;
 
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
-  bitbucket-cli = python2Packages.bitbucket-cli;
-
   bitbucket-server-cli = callPackage ../applications/version-management/git-and-tools/bitbucket-server-cli { };
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
@@ -2911,8 +2909,6 @@ with pkgs;
   gb-backup = callPackage ../tools/backup/gamerbackup { };
 
   gbsplay = callPackage ../applications/audio/gbsplay { };
-
-  gdrivefs = python27Packages.gdrivefs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
@@ -8642,8 +8638,6 @@ with pkgs;
   pympress = callPackage ../applications/office/pympress { };
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
-
-  pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
     pythonPackages = python27Packages;
@@ -29588,6 +29582,8 @@ with pkgs;
   dhewm3 = callPackage ../games/dhewm3 {};
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
+
+  displaycal = callPackage ../applications/graphics/displaycal { };
 
   domination = callPackage ../games/domination { };
 
