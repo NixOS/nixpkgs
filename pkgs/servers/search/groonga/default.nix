@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchurl, mecab, kytea, libedit, pkg-config
+{ lib, stdenv, fetchurl, autoreconfHook, mecab, kytea, libedit, pkg-config
 , suggestSupport ? false, zeromq, libevent, msgpack
 , lz4Support  ? false, lz4
 , zlibSupport ? false, zlib
-, autoconf, automake
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
+    # To avoid problems due to libc++abi 11 using `#include <version>`.
     rm version
-    aclocal
   '';
 
   buildInputs = with lib;
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ optional zlibSupport zlib
     ++ optionals suggestSupport [ zeromq libevent msgpack ];
 
-  nativeBuildInputs = [ autoconf automake pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = with lib;
        optional zlibSupport "--with-zlib"
