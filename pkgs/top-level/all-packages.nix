@@ -29441,6 +29441,7 @@ with pkgs;
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
+  packetcrypt = callPackage ../applications/blockchains/packetcrypt { };
   pktd = callPackage ../applications/blockchains/pktd { };
 
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx { withGui = true; };
