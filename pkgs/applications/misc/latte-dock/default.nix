@@ -19,10 +19,6 @@ mkDerivation rec {
   patches = [
     ./0001-close-user-autostart.patch
   ];
-  fixupPhase = ''
-    mkdir -p $out/etc/xdg/autostart
-    cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
-  '';
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";

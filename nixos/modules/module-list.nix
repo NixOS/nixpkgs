@@ -160,6 +160,7 @@
   ./programs/java.nix
   ./programs/kdeconnect.nix
   ./programs/kbdlight.nix
+  ./programs/latte-dock.nix
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
