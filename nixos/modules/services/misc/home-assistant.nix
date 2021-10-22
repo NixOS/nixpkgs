@@ -112,7 +112,7 @@ in {
             emptyValue.value = {};
           };
         in valueType;
-      example = literalExample ''
+      example = literalExpression ''
         {
           homeassistant = {
             name = "Home";
@@ -152,7 +152,7 @@ in {
       default = null;
       type = with types; nullOr attrs;
       # from https://www.home-assistant.io/lovelace/yaml-mode/
-      example = literalExample ''
+      example = literalExpression ''
         {
           title = "My Awesome Home";
           views = [ {
@@ -188,13 +188,13 @@ in {
       default = pkgs.home-assistant.overrideAttrs (oldAttrs: {
         doInstallCheck = false;
       });
-      defaultText = literalExample ''
+      defaultText = literalExpression ''
         pkgs.home-assistant.overrideAttrs (oldAttrs: {
           doInstallCheck = false;
         })
       '';
       type = types.package;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.home-assistant.override {
           extraPackages = ps: with ps; [ colorlog ];
         }

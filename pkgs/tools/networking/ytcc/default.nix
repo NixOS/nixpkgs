@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "00fx1zlfz4gj46ahgvawc21rx6s49qrzd8am3p2yzmc12ibfqyhv";
+    sha256 = "1w2frcy51kwsvd486awhpl5kkm11zj1nw3nnv9337316gfs213nw";
   };
 
   nativeBuildInputs = [ gettext ];

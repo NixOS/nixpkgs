@@ -1,0 +1,14 @@
+diff --git a/repl.k b/repl.k
+index e4071e6..70ae276 100755
+--- a/repl.k
++++ b/repl.k
+@@ -3,8 +3,7 @@ repl.banner:"ngn/k, (c) 2019-2021 ngn, GNU AGPLv3. type \\ for more info\n"
+ repl.prompt:," "
+ repl.cmds:""!()
+ repl.cmds["vf"]:{` 0:($!h),'":",'`k'. h:(&(x~"v")=^`o`p`q`r`u`v`w?@'h)#h:``repl_.:0#`}
+-repl.cmds["a"]:{` 1:1:repl.basename[`argv 0],"/LICENSE";}
+-repl.basename:{$[#x:"/"/-1_"/"\x;x;,"."]}
++repl.cmds["a"]:{` 1:1:"@out@/share/ngn-k/LICENSE";}
+ repl.fmt:{$[x~(::);"";(`A~@x)&1<#x;"(",("\n "/`k'x),")\n";`k[x],"\n"]}
+ repl.line:{$[#x;;:0];x:-1_x;$[(3>#x)&("\\"=*x)&~^(!repl.cmds)?x 1;repl.cmds[x 1]x 1;.[` 1:repl.fmt@.:;,x;`epr@]];` 1:repl.prompt;1}
+ {repl.cmds[x[1]1]:{y;` 0:x}2_x}'{(&x~\:80#"-")_x:(1+*&x~\:,"/")_-1_x}@0:`argv 1;

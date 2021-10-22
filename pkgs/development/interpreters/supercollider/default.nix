@@ -35,6 +35,6 @@ mkDerivation rec {
     homepage = "https://supercollider.github.io";
     maintainers = with maintainers; [ mrmebelman ];
     license = licenses.gpl3Plus;
-    platforms = [ "x686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

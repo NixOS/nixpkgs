@@ -311,6 +311,7 @@ in
   nitter = handleTest ./nitter.nix {};
   nix-serve = handleTest ./nix-ssh-serve.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
+  nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
@@ -375,6 +376,7 @@ in
   prosody = handleTest ./xmpp/prosody.nix {};
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
+  prowlarr = handleTest ./prowlarr.nix {};
   pt2-clone = handleTest ./pt2-clone.nix {};
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
   quorum = handleTest ./quorum.nix {};
@@ -429,6 +431,7 @@ in
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
@@ -478,6 +481,7 @@ in
   wasabibackend = handleTest ./wasabibackend.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wireguard = handleTest ./wireguard {};
+  without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   wpa_supplicant = handleTest ./wpa_supplicant.nix {};
   wordpress = handleTest ./wordpress.nix {};

@@ -19,9 +19,11 @@ stdenv.mkDerivation rec {
     substituteInPlace libmultipath/Makefile \
       --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
 
+    # systemd-udev-settle.service is deprecated.
     substituteInPlace multipathd/multipathd.service \
       --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-      --replace /sbin/multipathd "$out/bin/multipathd"
+      --replace /sbin/multipathd "$out/bin/multipathd" \
+      --replace " systemd-udev-settle.service" ""
 
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",

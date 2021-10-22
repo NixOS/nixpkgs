@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
       Just the build products, optionally with the i18n linked in
       the libraries are passed via an env var in the wrapper, default.nix
     '';
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;
     platforms = lib.platforms.all;
   };

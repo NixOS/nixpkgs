@@ -210,6 +210,7 @@ in
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.keycloak;
+      defaultText = lib.literalExpression "pkgs.keycloak";
       description = ''
         Keycloak package to use.
       '';
@@ -228,7 +229,7 @@ in
     extraConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         {
           "subsystem=keycloak-server" = {
             "spi=hostname" = {

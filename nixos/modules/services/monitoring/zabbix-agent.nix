@@ -4,7 +4,7 @@ let
   cfg = config.services.zabbixAgent;
 
   inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExample optionalString types;
+  inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
@@ -34,15 +34,15 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.agent;
-        defaultText = "pkgs.zabbix.agent";
+        defaultText = literalExpression "pkgs.zabbix.agent";
         description = "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools ];
-        defaultText = "[ nettools ]";
-        example = "[ nettools mysql ]";
+        defaultText = literalExpression "with pkgs; [ nettools ]";
+        example = literalExpression "with pkgs; [ nettools mysql ]";
         description = ''
           Packages to be added to the Zabbix <envar>PATH</envar>.
           Typically used to add executables for scripts, but can be anything.
@@ -53,7 +53,7 @@ in
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";

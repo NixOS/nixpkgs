@@ -214,7 +214,7 @@ in
               maxbwRateUp = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                example = literalExample "25 * 1000";
+                example = literalExpression "25 * 1000";
                 description = ''
                   Upload bandwidth rate limit in bytes.
                 '';
@@ -223,7 +223,7 @@ in
               maxbwRateDown = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                example = literalExample "50 * 1000";
+                example = literalExpression "50 * 1000";
                 description = ''
                   Download bandwidth rate limit in bytes.
                 '';
@@ -256,7 +256,7 @@ in
 
         default = {};
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             nixos =
               { directories = [ "/home" "/root/ssl" ];

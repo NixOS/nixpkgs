@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "urlextract";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yxOuiswFOJnAvxwTT++Zhk8nZWK2f4ePsQpUYI7EYS4=";
+    sha256 = "669f07192584b841b49ba8868fbd6b00e7ddc28367d36a3d8ca8c8e429420748";
   };
 
   propagatedBuildInputs = [

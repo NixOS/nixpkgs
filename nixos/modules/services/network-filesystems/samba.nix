@@ -87,10 +87,17 @@ in
           <note>
             <para>If you use the firewall consider adding the following:</para>
           <programlisting>
-            networking.firewall.allowedTCPPorts = [ 139 445 ];
-            networking.firewall.allowedUDPPorts = [ 137 138 ];
+            services.samba.openFirewall = true;
           </programlisting>
           </note>
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open the necessary ports in the firewall.
         '';
       };
 
@@ -117,8 +124,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
-        defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba4Full";
+        defaultText = literalExpression "pkgs.samba";
+        example = literalExpression "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -176,7 +183,7 @@ in
           See <command>man smb.conf</command> for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example = literalExample ''
+        example = literalExpression ''
           { public =
             { path = "/srv/public";
               "read only" = true;
@@ -235,7 +242,10 @@ in
         };
 
         security.pam.services.samba = {};
-        environment.systemPackages = [ config.services.samba.package ];
+        environment.systemPackages = [ cfg.package ];
+
+        networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
+        networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
       })
     ];
 

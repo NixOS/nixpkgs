@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -99,6 +100,12 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+      # Fix compilation on AArch64
+      # XXX: REMOVE ON NEXT RELEASE
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/f8817b439433798bd7217dc4ae72197887b0fc96.diff";
+        sha256 = "0j4xds01h20mc606xp90h5v56kf17hf7n06k0xfa9qmmmfrh7i04";
+      })
     ];
 
     nativeBuildInputs = [

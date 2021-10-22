@@ -13,12 +13,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "LDDLL=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.optional stdenv.hostPlatform.isStatic "DLL=no";
+
   installPhase = ''
     runHook preInstall
     install -D build/brssl $bin/brssl
     install -D build/testcrypto $bin/testcrypto
-    install -Dm644 build/libbearssl.so $lib/lib/libbearssl.so
-    install -Dm644 build/libbearssl.a $lib/lib/libbearssl.a
+    install -Dm644 -t $lib/lib build/libbearssl.*
     install -Dm644 -t $dev/include inc/*.h
     touch $out
     runHook postInstall

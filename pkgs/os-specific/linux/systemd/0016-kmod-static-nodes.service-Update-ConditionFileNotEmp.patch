@@ -1,4 +1,4 @@
-From 330490aa8a44206bc03205654680913ab01408a1 Mon Sep 17 00:00:00 2001
+From 6db7ad4d5526a82e4ed9b135daf1054a8b71e1c7 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sat, 7 Mar 2020 22:40:27 +0100
 Subject: [PATCH 16/19] kmod-static-nodes.service: Update ConditionFileNotEmpty
@@ -23,5 +23,5 @@ index 777e82d16b..b6abc2bba0 100644
  [Service]
  Type=oneshot
 -- 
-2.32.0
+2.33.0
 

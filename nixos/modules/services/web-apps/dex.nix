@@ -23,7 +23,7 @@ in
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           # External url
           issuer = "http://127.0.0.1:5556/dex";

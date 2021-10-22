@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpgerror, gpgme, xorg, AppKit, Security, installShellFiles }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpg-error, gpgme, xorg, AppKit, Security, installShellFiles }:
 
 with rustPlatform;
 buildRustPackage rec {
@@ -20,7 +20,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles ];
   buildInputs = [
-    ncurses openssl libgpgerror gpgme xorg.libxcb
+    ncurses openssl libgpg-error gpgme xorg.libxcb
   ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preCheck = ''

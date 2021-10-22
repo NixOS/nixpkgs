@@ -107,7 +107,7 @@ rec {
       xorg.libICE
       gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; sslSupport = false; })
+      (curl.override { gnutlsSupport = true; opensslSupport = false; })
       nspr
       nss
       fontconfig
@@ -175,7 +175,7 @@ rec {
 
       harfbuzz
       e2fsprogs
-      libgpgerror
+      libgpg-error
       keyutils.lib
       libjack2
       fribidi

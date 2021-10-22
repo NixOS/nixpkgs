@@ -1,5 +1,5 @@
 { fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkg-config, autoreconfHook, wrapGAppsHook
-, libgpgerror, libassuan, qtbase, wrapQtAppsHook
+, libgpg-error, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
 , libcap ? null, libsecret ? null
 , enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
@@ -52,7 +52,7 @@ pinentryMkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
     ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
-  buildInputs = [ libgpgerror libassuan libcap libsecret ]
+  buildInputs = [ libgpg-error libassuan libcap libsecret ]
     ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
 
   dontWrapGApps = true;

@@ -10,6 +10,7 @@
 , stdenvNoCC
 , newScope
 , lib
+, fetchurl
 }:
 
 # When adding a kernel:
@@ -26,16 +27,27 @@ let
 
   # Hardened Linux
   hardenedKernelFor = kernel': overrides:
-    let kernel = kernel'.override overrides;
+    let
+      kernel = kernel'.override overrides;
+      version = kernelPatches.hardened.${kernel.meta.branch}.version;
+      major = lib.versions.major version;
+      sha256 = kernelPatches.hardened.${kernel.meta.branch}.sha256;
+      modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib;
-        inherit (kernel) version;
+        inherit lib version;
+      };
+      argsOverride = {
+        inherit version;
+        src = fetchurl {
+          url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
+          inherit sha256;
+        };
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
+      modDirVersionArg = modDirVersion' + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   };
 in {
@@ -382,6 +394,8 @@ in {
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     isgx = callPackage ../os-specific/linux/isgx { };
+
+    rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 

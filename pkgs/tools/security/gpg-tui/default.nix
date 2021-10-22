@@ -3,7 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , gpgme
-, libgpgerror
+, libgpg-error
 , libxcb
 , libxkbcommon
 , python3
@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
-    libgpgerror # for gpg-error-config
+    libgpg-error # for gpg-error-config
     python3
   ];
 
   buildInputs = [
     gpgme
-    libgpgerror
+    libgpg-error
     libxcb
     libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [

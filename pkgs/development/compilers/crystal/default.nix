@@ -219,28 +219,34 @@ let
 
 in
 rec {
-  binaryCrystal_0_36 = genericBinary {
-    version = "0.36.1";
+  binaryCrystal_1_0 = genericBinary {
+    version = "1.0.0";
     sha256s = {
-      x86_64-linux = "065vzq34g7hgzl2mrzy9gwwsfikc78nj7xxsbrk67r6rz0a7bk1q";
-      i686-linux = "18m4b1lnd682i5ygbg6cljqjny60nn2mlrzrk765h2ip6fljqbm1";
-      x86_64-darwin = "0xggayk92zh64pb5sz77n12hkcd1hg8kw90z7gb18594q551sf1v";
+      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
+      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
+      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
     };
-  };
-
-  crystal_0_36 = generic {
-    version = "0.36.1";
-    sha256 = "sha256-5rjrvwZKM4lHpmxLyUVbi0Zw98xT+iJKonxwfUwS/Wk=";
-    binary = binaryCrystal_0_36;
   };
 
   crystal_1_0 = generic {
     version = "1.0.0";
     sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
-    binary = crystal_0_36;
+    binary = binaryCrystal_1_0;
   };
 
-  crystal = crystal_1_0;
+  crystal_1_1 = generic {
+    version = "1.1.1";
+    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
+    binary = crystal_1_0;
+  };
+
+  crystal_1_2 = generic {
+    version = "1.2.0";
+    sha256 = "sha256-38mmsolzmCnv+MFUMc+AEiklDLBHIr/jqXMLzc0nVq4=";
+    binary = crystal_1_1;
+  };
+
+  crystal = crystal_1_2;
 
   crystal2nix = callPackage ./crystal2nix.nix { };
 }

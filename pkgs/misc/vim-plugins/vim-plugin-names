@@ -15,7 +15,7 @@ alvan/vim-closetag
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
-andersevenrud/compe-tmux@main
+andersevenrud/compe-tmux@cmp
 andrep/vimacs
 andreshazard/vim-logreview
 AndrewRadev/sideways.vim@main
@@ -223,7 +223,6 @@ hecal3/vim-leader-guide
 henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
-hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
 hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
@@ -290,6 +289,7 @@ josa42/coc-lua
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim@main
 jose-elias-alvarez/null-ls.nvim@main
+jose-elias-alvarez/nvim-lsp-ts-utils@main
 joshdick/onedark.vim@main
 jpalardy/vim-slime@main
 jparise/vim-graphql
@@ -428,6 +428,7 @@ mattn/emmet-vim
 mattn/vim-gist
 mattn/webapi-vim
 matze/vim-move
+max397574/better-escape.nvim
 maximbaz/lightline-ale
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
@@ -510,12 +511,14 @@ nicoe/deoplete-khard
 nishigori/increment-activator
 nixprime/cpsm
 NLKNguyen/papercolor-theme
+noahfrederick/vim-noctu
 noc7c9/vim-iced-coffee-script
 norcalli/nvim-colorizer.lua
 norcalli/nvim-terminal.lua
 norcalli/snippets.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
+numtostr/comment.nvim
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
@@ -523,7 +526,9 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-lualine/lualine.nvim
 nvim-neorg/neorg@main
+nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
 nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-native.nvim@main
@@ -546,9 +551,9 @@ ojroques/nvim-bufdel@main
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
-olimorris/onedark.nvim
+olimorris/onedarkpro.nvim@main
+onsails/diaglist.nvim
 onsails/lspkind-nvim
-onsails/vimway-lsp-diag.nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -558,6 +563,7 @@ osyo-manga/vim-watchdogs
 overcache/NeoSolarized
 p00f/nvim-ts-rainbow
 pangloss/vim-javascript
+pantharshit00/vim-prisma
 parsonsmatt/intero-neovim
 PaterJason/cmp-conjure
 pearofducks/ansible-vim

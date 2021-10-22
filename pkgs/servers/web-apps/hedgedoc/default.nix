@@ -6,12 +6,15 @@
 , which
 , nodejs
 , mkYarnPackage
+, fetchYarnDeps
 , python2
 , nixosTests
 , buildGoModule
 }:
 
 let
+  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+
   # we need a different version than the one already available in nixpkgs
   esbuild-hedgedoc = buildGoModule rec {
     pname = "esbuild";
@@ -30,19 +33,22 @@ in
 
 mkYarnPackage rec {
   pname = "hedgedoc";
-  version = "1.9.0";
+  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "sha256-hSKQGkI1+68Zf05RhgRKZo47buyobzjhURSZ30/h0PA=";
+    sha256 = pinData.srcHash;
   };
 
   nativeBuildInputs = [ which makeWrapper ];
   extraBuildInputs = [ python2 esbuild-hedgedoc ];
 
-  yarnNix = ./yarn.nix;
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    sha256 = pinData.yarnHash;
+  };
 
   # FIXME(@Ma27) on the bump to 1.9.0 I had to patch this file manually:
   # I replaced `midi "https://github.com/paulrosen/MIDI.js.git#abcjs"` with
@@ -101,7 +107,10 @@ mkYarnPackage rec {
     runHook postDist
   '';
 
-  passthru.tests = { inherit (nixosTests) hedgedoc; };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) hedgedoc; };
+  };
 
   meta = with lib; {
     description = "Realtime collaborative markdown notes on all platforms";

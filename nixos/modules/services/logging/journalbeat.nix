@@ -27,8 +27,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.journalbeat;
-        defaultText = "pkgs.journalbeat";
-        example = literalExample "pkgs.journalbeat7";
+        defaultText = literalExpression "pkgs.journalbeat";
+        example = literalExpression "pkgs.journalbeat7";
         description = ''
           The journalbeat package to use
         '';

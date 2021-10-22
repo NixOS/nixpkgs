@@ -9,15 +9,15 @@
 with lib;
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
+  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.7.2";
+  version = "8.0.1";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "sha256-jL0XLw0V0ED+lDBn3sGaJmm96zQwXue333UuYGHjB64=";
+    sha256 = "1n88m41424qwsfp2hy58piqpv2dk6i74hcj184aq6njllvnsznnq";
   };
 
   dontBuild = true;

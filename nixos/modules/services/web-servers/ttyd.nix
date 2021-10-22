@@ -78,7 +78,7 @@ in
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExample ''{
+        example = literalExpression ''{
           fontSize = "16";
           fontFamily = "Fira Code";
 

@@ -1,4 +1,4 @@
-From 3f2277b86f39cb55936ae11c2365feb283b547cb Mon Sep 17 00:00:00 2001
+From 9ed24199dd3ce91d3f7fbfbdf823312c124aba56 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 25 Jul 2019 20:46:58 +0300
 Subject: [PATCH 15/19] systemd-sleep: execute scripts in
@@ -22,5 +22,5 @@ index a3aeb24633..0ed6a34d79 100644
          };
  
 -- 
-2.32.0
+2.33.0
 

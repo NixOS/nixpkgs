@@ -45,11 +45,13 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
     name = "${fileName}";
     path =
       let${builtinFetchGit ? `
-        repo = builtins.fetchGit {
+        repo = builtins.fetchGit ({
           url = "${url}";
           ref = "${branch}";
           rev = "${rev}";
-        };
+        } // (if builtins.substring 0 3 builtins.nixVersion == "2.4" then {
+          allRefs = true;
+        } else {}));
       ` : `
         repo = fetchgit {
           url = "${url}";
@@ -79,6 +81,16 @@ function fetchLockedDep(builtinFetchGit) {
     const [url, sha1OrRev] = resolved.split('#')
 
     const fileName = urlToName(url)
+
+    if (resolved.startsWith('https://codeload.github.com/')) {
+      const s = resolved.split('/')
+      const githubUrl = `https://github.com/${s[3]}/${s[4]}.git`
+      const githubRev = s[6]
+
+      const [_, branch] = nameWithVersion.split('#')
+
+      return fetchgit(fileName, githubUrl, githubRev, branch || 'master', builtinFetchGit)
+    }
 
     if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev

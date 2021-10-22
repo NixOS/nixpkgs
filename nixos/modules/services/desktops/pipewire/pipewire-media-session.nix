@@ -37,14 +37,14 @@ in {
       enable = mkOption {
         type = types.bool;
         default = config.services.pipewire.enable;
-        defaultText = "config.services.pipewire.enable";
+        defaultText = literalExpression "config.services.pipewire.enable";
         description = "Example pipewire session manager";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.pipewire.mediaSession;
-        example = literalExample "pkgs.pipewire.mediaSession";
+        defaultText = literalExpression "pkgs.pipewire.mediaSession";
         description = ''
           The pipewire-media-session derivation to use.
         '';

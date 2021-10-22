@@ -1,4 +1,4 @@
-From 57e31a2d4a5d5bd7a9e1cd8a0d8bc6a00624ad68 Mon Sep 17 00:00:00 2001
+From 06a8dbb65584b6f705fee8a486f32dab12f72082 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:46:30 +0100
 Subject: [PATCH 01/19] Start device units for uninitialised encrypted devices
@@ -28,5 +28,5 @@ index 25b8a590a6..d18999ea87 100644
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
  SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"
 -- 
-2.32.0
+2.33.0
 

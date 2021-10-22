@@ -20,7 +20,7 @@ let
           the name of attribute will be used.
         '';
 
-        example = literalExample "office1";
+        example = "office1";
       };
 
       model = mkOption {
@@ -29,7 +29,7 @@ let
           The model of the network device.
         '';
 
-        example = literalExample "ADS-1200";
+        example = "ADS-1200";
       };
 
       ip = mkOption {
@@ -40,7 +40,7 @@ let
           provide a nodename.
         '';
 
-        example = literalExample "192.168.1.2";
+        example = "192.168.1.2";
       };
 
       nodename = mkOption {
@@ -51,7 +51,7 @@ let
           provide an ip.
         '';
 
-        example = literalExample "BRW0080927AFBCE";
+        example = "BRW0080927AFBCE";
       };
 
     };

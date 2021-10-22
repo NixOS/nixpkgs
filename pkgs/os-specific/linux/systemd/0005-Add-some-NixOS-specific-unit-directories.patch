@@ -1,4 +1,4 @@
-From 82698c6a5142e710c302f9c38367ed00d8ec94ba Mon Sep 17 00:00:00 2001
+From 18b45c20499747bcc66714ee87edf34d4f6e3dca Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
 Subject: [PATCH 05/19] Add some NixOS-specific unit directories
@@ -92,7 +92,7 @@ index 05eb17d66c..1cd141d012 100644
  
                  if (!add)
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index fc0f8c34fa..ded74ce50a 100644
+index fc0f8c34fa..162432e77f 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
 @@ -38,10 +38,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
@@ -122,5 +122,5 @@ index fc0f8c34fa..ded74ce50a 100644
  
  systemd_sleep_dir=${root_prefix}/lib/systemd/system-sleep
 -- 
-2.32.0
+2.33.0
 

@@ -72,7 +72,7 @@ in
 
     environment.etc = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";

@@ -106,6 +106,7 @@ in
       path = optional ecfg.enableNotifications pkgs.dbus;
       serviceConfig = {
         StandardOutput = "null";
+        StandardError = "journal";
         ExecStart = ''
           ${pkgs.earlyoom}/bin/earlyoom \
           -m ${toString ecfg.freeMemThreshold} \

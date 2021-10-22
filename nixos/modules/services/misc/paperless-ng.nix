@@ -107,14 +107,14 @@ in
     mediaDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/media";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/media"'';
       description = "Directory to store the Paperless documents.";
     };
 
     consumptionDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/consume";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/consume"'';
       description = "Directory from which new documents are imported.";
     };
 
@@ -167,7 +167,7 @@ in
         See <link xlink:href="https://paperless-ng.readthedocs.io/en/latest/configuration.html">the documentation</link>
         for available options.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           PAPERLESS_OCR_LANGUAGE = "deu+eng";
         }
@@ -183,7 +183,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.paperless-ng;
-      defaultText = "pkgs.paperless-ng";
+      defaultText = literalExpression "pkgs.paperless-ng";
       description = "The Paperless package to use.";
     };
   };

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  preCheck = ''
+  preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
@@ -40,7 +40,9 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network
+    # test_fork-after_monkey_patch fails on aarch64 on hydra only
+    #   AssertionError: Expected single line "pass" in stdout
+    nosetests --exclude test_getaddrinfo --exclude test_hosts_no_network --exclude test_fork_after_monkey_patch
 
     runHook postCheck
   '';

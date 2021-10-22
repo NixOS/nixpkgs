@@ -18,7 +18,7 @@ in {
         <link xlink:href="https://github.com/osrg/gobgp#documentation"/>
         for details on supported values.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           global = {
             config = {

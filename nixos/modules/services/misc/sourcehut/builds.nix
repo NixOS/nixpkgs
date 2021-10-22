@@ -54,7 +54,7 @@ in
     images = mkOption {
       type = types.attrsOf (types.attrsOf (types.attrsOf types.package));
       default = { };
-      example = lib.literalExample ''(let
+      example = lib.literalExpression ''(let
           # Pinning unstable to allow usage with flakes and limit rebuilds.
           pkgs_unstable = builtins.fetchGit {
               url = "https://github.com/NixOS/nixpkgs";

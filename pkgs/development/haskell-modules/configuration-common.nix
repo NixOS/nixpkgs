@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1022ff2x9jvi2a0820lbgmmh54cxh1vbn0qfdwr50w7ggvjp88i6";
+      sha256 = "1yn84q0iy81b2sczbf4gx8b56f9ghb9kgwjc0n7l5xn5lb2wqlqa";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1142,6 +1142,8 @@ self: super: {
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
+  # 2021-10-04: too strict upper bound on Hakyll
+  hakyll-filestore = doJailbreak super.hakyll-filestore;
 
   # 2020-06-22: NOTE: > 0.4.0 => rm Jailbreak: https://github.com/serokell/nixfmt/issues/71
   nixfmt = doJailbreak super.nixfmt;
@@ -1270,10 +1272,21 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
-  # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
-  svgcairo = appendPatch super.svgcairo (pkgs.fetchpatch {
-    url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
-    sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+  svgcairo = overrideCabal super.svgcairo (drv: {
+    patches = [
+      # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
+      (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
+        sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
+      })
+      # The update here breaks svgcairo:
+      # https://github.com/NixOS/nixpkgs/commit/08fcd73d9dc9a28aa901210b259d9bfb3c228018
+      # and updating the call to the header with the correct name fixes it.
+      (pkgs.fetchpatch {
+        url = "https://github.com/dalpd/svgcairo/commit/4dc6d8d3a6c24be0b8c1fd73b282ff247e7b1e6f.patch";
+        sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
+      })
+    ];
   });
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
@@ -1475,7 +1488,11 @@ self: super: {
 
   hercules-ci-cli = generateOptparseApplicativeCompletion "hci" (
     # See hercules-ci-optparse-applicative in non-hackage-packages.nix.
-    addBuildDepend (unmarkBroken super.hercules-ci-cli) super.hercules-ci-optparse-applicative
+    addBuildDepend
+      (overrideCabal
+        (unmarkBroken super.hercules-ci-cli)
+        (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
+      super.hercules-ci-optparse-applicative
   );
 
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
@@ -1913,9 +1930,34 @@ EOT
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
 
-  # 2021-06-20: Outdated upper bounds
-  # https://github.com/Porges/email-validate-hs/issues/58
-  ghcup = doJailbreak super.ghcup;
+  # 2021-10-02: Make optics 0.4 packages work together
+  optics-th_0_4 = super.optics-th_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics-extra_0_4 = super.optics-extra_0_4.override {
+    optics-core = self.optics-core_0_4;
+  };
+  optics_0_4 = super.optics_0_4.override {
+    optics-core = self.optics-core_0_4;
+    optics-extra = self.optics-extra_0_4;
+    optics-th = self.optics-th_0_4;
+  };
+
+  # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
+  hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
+
+  # 2021-10-02: Doesn't compile with optics < 0.4
+  ghcup = overrideCabal (super.ghcup.override {
+    hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
+    optics = self.optics_0_4;
+  }) (drv: {
+    # golden files are not shipped with the hackage tarball and hspec-golden-aeson
+    # needs some encouraging to create the missing files after version 0.8.0.0.
+    # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
+    preCheck = assert drv.version == "0.1.17.2"; ''
+      export CREATE_MISSING_GOLDEN=yes
+    '' + (drv.preCheck or "");
+  });
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
@@ -1959,15 +2001,22 @@ EOT
 
   # Needs Cabal >= 3.4
   chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_1_0;
+    Cabal = self.Cabal_3_6_2_0;
   };
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
+  # https://github.com/hadolint/language-docker/issues/72
+  language-docker_10_2_0 = overrideCabal super.language-docker_10_2_0 (drv: {
+    testFlags = (drv.testFlags or []) ++ [
+      "--skip=/Language.Docker.Integration/parse"
+    ];
+  });
+
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_1_2;
+    language-docker = self.language-docker_10_2_0;
   };
 
   # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
@@ -1992,19 +2041,17 @@ EOT
   hw-xml = assert pkgs.lib.versionOlder self.generic-lens.version "2.2.0.0";
     doJailbreak super.hw-xml;
 
-  # doctests fail due to deprecation warnings in 0.2
-  candid = assert pkgs.lib.versionOlder super.candid.version "0.3";
-    overrideCabal super.candid (drv: {
-      version = "0.3";
-      sha256 = "0zq29zddkkwvlyz9qmxl942ml53m6jawl4m5rkb2510glbkcvr5x";
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        self.file-embed
-      ];
-    });
-
   # Needs network >= 3.1.2
   quic = super.quic.overrideScope (self: super: {
-    network = self.network_3_1_2_2;
+    network = self.network_3_1_2_5;
   });
+
+  http3 = super.http3.overrideScope (self: super: {
+    network = self.network_3_1_2_5;
+  });
+
+  # Fixes https://github.com/NixOS/nixpkgs/issues/140613
+  # https://github.com/recursion-schemes/recursion-schemes/issues/128
+  recursion-schemes = appendPatch super.recursion-schemes ./patches/recursion-schemes-128.patch;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

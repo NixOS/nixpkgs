@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "1.0.88";
+  version = "1.0.126";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ITN/HsXZWH1v23R5TSEd8vq/DkhiCypJM+hg879ZWlc=";
+    sha256 = "sha256-kx7TgQ+ordlgYfnlt9/KkmTMUwfykGnTOEcTtq7EAYA=";
   };
 
-  vendorSha256 = "18mvv70g65pq1c7nn752j26d0vasx6cl2rqp5g1hg3cb61hjbn0n";
+  vendorSha256 = "sha256-u9Jo3/AdW+AhVe/5RwAPfLIjp+H1Omb1SlpctOEQB5Q=";
 
   # One test is failing, disabling for now
   doCheck = false;

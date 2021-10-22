@@ -137,7 +137,7 @@ with lib.maintainers; {
       cleverca22
       disassembler
       jonringer
-      maveru
+      manveru
       nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
@@ -162,6 +162,16 @@ with lib.maintainers; {
       sephalon
     ];
     scope = "Maintain Kodi and related packages.";
+  };
+
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
   };
 
   mate = {

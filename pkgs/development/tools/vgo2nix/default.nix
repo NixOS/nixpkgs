@@ -34,6 +34,6 @@ buildGoModule {
     homepage = "https://github.com/nix-community/vgo2nix";
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis SuperSandro2000 ];
+    mainProgram = "vgo2nix";
   };
-
 }

@@ -52,7 +52,7 @@ in
       systemCronJobs = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
             "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
           ]

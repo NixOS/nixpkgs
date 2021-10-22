@@ -6,20 +6,22 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, tomli
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.9";
+  version = "0.7.10";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qGRZCDo/ACSXtJa4omepjaR0KNWeR4vvvUUbQpKlrtI=";
+    sha256 = "sha256-Zw7ZGV/Hd0MRxxQVwkjtE6MJXNLQ0A0PJlQr4x9h2ww=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     markdown-it-py
+    tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.7") [

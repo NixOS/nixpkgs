@@ -10,6 +10,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.noisetorch;
+      defaultText = literalExpression "pkgs.noisetorch";
       description = ''
         The noisetorch package to use.
       '';

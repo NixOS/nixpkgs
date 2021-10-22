@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2021-07-27";
+  version = "2021-10-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "17x4lqlv6whx8vg0c1nm89j7671l033apn4alqyhjb9qx5w2fa43";
+    sha256 = "1rbwf6z2bda647kw00q2fp349gjzvdc4gyk986fkjli0nr0jh8hp";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do patchShebangs "$file"; done
+    find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do
+      patchShebangs "$file"
+    done
 
     # Do not provide `sudo`, as it is not needed in our use case of the install script
     substituteInPlace lib-core.sh --replace '$(which sudo)' false

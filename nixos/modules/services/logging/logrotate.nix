@@ -111,7 +111,7 @@ in
           can be controlled by the <link linkend="opt-services.logrotate.paths._name_.priority">priority</link> option
           using the same semantics as `lib.mkOrder`. Smaller values have a greater priority.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             httpd = {
               path = "/var/log/httpd/*.log";

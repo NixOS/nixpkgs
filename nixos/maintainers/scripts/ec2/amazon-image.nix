@@ -27,7 +27,7 @@ in {
     };
 
     contents = mkOption {
-      example = literalExample ''
+      example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }

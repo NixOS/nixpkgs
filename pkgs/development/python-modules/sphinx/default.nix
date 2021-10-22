@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 # propagatedBuildInputs
 , Babel
 , alabaster
@@ -29,23 +28,15 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.0.2";
+  version = "4.2.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0QdgHFX4r40BDHjpi9R40lXqT4n5ZgrIny+w070LZPE=";
+    sha256 = "1i38n5bxqiycjwmiv9dl72r3f5ks4zmif30znqg8zilclbx6g16x";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix tests with pygments 2.10
-      url = "https://github.com/sphinx-doc/sphinx/commit/bde6c8d2effc56dc8b9098abee796167f972c306.patch";
-      sha256 = "0d0ddhgrrh7z9ix0f3zrc2gjb4d73f6ffm98zl62fzv5l4fd00lr";
-    })
-  ];
 
   propagatedBuildInputs = [
     Babel

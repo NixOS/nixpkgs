@@ -119,6 +119,7 @@ let
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
         nativeBuildInputs = [ makeWrapper ];
+        inherit (ruby) gemPath meta;
         buildCommand = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do

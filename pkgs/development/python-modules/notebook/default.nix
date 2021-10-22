@@ -13,7 +13,7 @@
 , ipython_genutils
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , ipykernel
@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.4.3";
+  version = "6.4.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03awxl8hr7ibwr6n48gci8jx80f18zll439wyr8gj35h6vnxzdp6";
+    sha256 = "26b0095c568e307a310fd78818ad8ebade4f00462dada4c0e34cbad632b9085d";
   };
 
   LC_ALL = "en_US.utf8";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
     prometheus-client argon2_cffi
   ];
 

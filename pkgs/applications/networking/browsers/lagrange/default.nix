@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-I3U2Jh+PSF+j8Kuv5RejYwiMC1JYBpkYQGsgIFi7LL0=";
+    sha256 = "sha256-iJ6+tc5nls8E/9/Jp5OS9gfJo8SJ5bN+Im/JzEYEAfI=";
     fetchSubmodules = true;
   };
 
@@ -61,8 +61,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
-    # macOS SDK 10.13 or later required
-    # See https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

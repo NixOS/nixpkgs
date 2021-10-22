@@ -6,22 +6,26 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, httpx
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "0.21.0";
+  version = "1.2.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rwp3aag21hdkis2wx680ckja0203grm7naldaj8d2kpy4697m54";
+    sha256 = "05zn923zsr3jdilhj7bl16sabxy3ziwwlz30jq1xappbf824f9sa";
   };
 
   nativeBuildInputs = [
@@ -33,6 +37,7 @@ buildPythonPackage rec {
     aiohttp
     backoff
     beautifulsoup4
+    httpx
     wrapt
   ];
 

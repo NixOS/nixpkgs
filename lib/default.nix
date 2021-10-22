@@ -123,8 +123,8 @@ let
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
-      scrubOptionValue literalExample showOption showFiles
-      unknownModule mkOption;
+      scrubOptionValue literalExpression literalExample literalDocBook
+      showOption showFiles unknownModule mkOption;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

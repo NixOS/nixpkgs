@@ -14,6 +14,7 @@
 , zenity
 , libcanberra
 , ninja
+, xvfb-run
 , xkeyboard_config
 , libxkbfile
 , libXdamage
@@ -45,13 +46,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "40.4";
+  version = "41.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pxwVnNKshKZ32l+nrMSUg7Jifa13L4gPiJ645FMKHiM=";
+    sha256 = "sha256-+oChp0QETYjr/Wd/8DID1ncF7SzWJOoGy7i1iUjN+J4=";
   };
 
   patches = [
@@ -90,6 +91,7 @@ let self = stdenv.mkDerivation rec {
     mesa # needed for gbm
     meson
     ninja
+    xvfb-run
     pkg-config
     python3
     wrapGAppsHook

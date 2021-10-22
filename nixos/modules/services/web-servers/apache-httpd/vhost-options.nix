@@ -1,6 +1,6 @@
 { config, lib, name, ... }:
 let
-  inherit (lib) literalExample mkOption nameValuePair types;
+  inherit (lib) literalExpression mkOption nameValuePair types;
 in
 {
   options = {
@@ -266,7 +266,7 @@ in
     locations = mkOption {
       type = with types; attrsOf (submodule (import ./location-options.nix));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

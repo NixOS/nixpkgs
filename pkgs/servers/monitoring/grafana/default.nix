@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "8.1.5";
+  version = "8.1.6";
 
   excludedPackages = "\\(alert_webhook_listener\\|clean-swagger\\|release_publisher\\|slow_proxy\\|slow_proxy_mac\\|macaron\\)";
 
@@ -10,15 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-Tr5U+bXBW7UIcmqrbmt/e82sZWLDMEObYsxl0INqXxw=";
+    sha256 = "sha256-PUVRFa3b+O2lY6q3vO+rLUcC+fx80iB78tt60f6Vugk=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-yE7mhX3peYnTdiY0YwKJ7SMvz4iXmvJncz002vdFXFg=";
+    sha256 = "sha256-So9xzet9kPkjcDwNts3iXlCd+u2uiXTo0LVcLc8toyk=";
   };
 
-  vendorSha256 = "sha256-DFD6orsM5oDOLgHbCbrD+zNKVGbQT3Izm1VtNCZO40I=";
+  vendorSha256 = "sha256-dn4sliRp58oZALZ8Iu7kE83ntkcMIU84Xr5WoeXlhCI=";
 
   preBuild = ''
     # The testcase makes an API call against grafana.com:

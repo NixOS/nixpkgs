@@ -1,6 +1,7 @@
 { pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
+  inherit (pkgs) lib;
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
   before = (version: pkgs.lib.versionOlder nodejs.version version);
   super = import ./composition.nix {
@@ -88,6 +89,22 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
+    };
+
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
     };
 
     coc-imselect = super.coc-imselect.override {
@@ -280,19 +297,19 @@ let
 
     prisma = super.prisma.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      version = "3.1.1";
+      version = "3.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/prisma/-/prisma-3.1.1.tgz";
-        sha512 = "sha512-+eZtWIL6hnOKUOvqq9WLBzSw2d/EbTmOx1Td1LI8/0XE40ctXMLG2N1p6NK5/+yivGaoNJ9PDpPsPL9lO4nJrQ==";
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.2.0.tgz";
+        sha512 = "sha512-o8+DH0RD5DbP8QTZej2dsY64yvjOwOG3TWOlJyoCHQ+8DH9m4tzxo38j6IF/PqpN4PmAGPpHuNi/nssG1cvYlQ==";
       };
       dependencies = [
         {
           name = "_at_prisma_slash_engines";
           packageName = "@prisma/engines";
-          version = "3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f";
+          version = "3.2.0-34.afdab2f10860244038c4e32458134112852d4dad";
           src = fetchurl {
-            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.1.0-24.c22652b7e418506fab23052d569b85d3aec4883f.tgz";
-            sha512 = "sha512-6NEp0VlLho3hVtIvj2P4h0e19AYqQSXtFGts8gSIXDnV+l5pRFZaDMfGo2RiLMR0Kfrs8c3ZYxYX0sWmVL0tWw==";
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.2.0-34.afdab2f10860244038c4e32458134112852d4dad.tgz";
+            sha512 = "sha512-MiZORXXsGORXTF9RqqKIlN/2ohkaxAWTsS7qxDJTy5ThTYLrXSmzxTSohM4qN/AI616B+o5WV7XTBhjlPKSufg==";
           };
         }
       ];
@@ -317,26 +334,6 @@ let
         ]}
       '';
     };
-
-    netlify-cli =
-      let
-        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
-          version = "0.13.6";
-
-          src = fetchFromGitHub {
-            owner = "netlify";
-            repo = "esbuild";
-            rev = "v${version}";
-            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
-          };
-
-        });
-      in
-      super.netlify-cli.override {
-        preRebuild = ''
-          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
-        '';
-      };
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];

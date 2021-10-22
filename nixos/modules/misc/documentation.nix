@@ -133,7 +133,7 @@ in
           extraOutputsToInstall = ["man"];
           ignoreCollisions = true;
         };
-        defaultText = "all man pages in config.environment.systemPackages";
+        defaultText = literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
         description = ''
           The manual pages to generate caches for if <option>generateCaches</option>
           is enabled. Must be a path to a directory with man pages under
@@ -211,7 +211,7 @@ in
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           # e.g. with options from modules in ''${pkgs.customModules}/nix:
           [ pkgs.customModules ]
         '';

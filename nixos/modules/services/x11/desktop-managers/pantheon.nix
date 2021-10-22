@@ -43,7 +43,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -86,7 +86,7 @@ in
 
     environment.pantheon.excludePackages = mkOption {
       default = [];
-      example = literalExample "[ pkgs.pantheon.elementary-camera ]";
+      example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
     };
@@ -219,7 +219,9 @@ in
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
+      programs.evince.package = pkgs.pantheon.evince;
       programs.file-roller.enable = mkDefault true;
+      programs.file-roller.package = pkgs.pantheon.file-roller;
 
       # Settings from elementary-default-settings
       environment.sessionVariables.GTK_CSD = "1";

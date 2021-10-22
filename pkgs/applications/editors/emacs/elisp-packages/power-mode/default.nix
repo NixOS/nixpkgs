@@ -6,7 +6,7 @@
 
 trivialBuild rec {
   pname = "power-mode";
-  version = "0.0.0+unstable=2021-06-06";
+  version = "0.pre+unstable=2021-06-06";
 
   src = fetchFromGitHub {
     owner = "elizagamedev";

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, environs
 , fetchFromGitHub
 , poetry-core
 , pytest-mock
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "2.3.1";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "browniebroke";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0gkPwIz+nZJjxfucy71D0A5CFkhQaW32UH5t1DkuvEs=";
+    sha256 = "sha256-E1xXtvAcYIi2xxaX+3yMkkvRz+Gt6Nx0JRqV1nI/Ldo=";
   };
 
   nativeBuildInputs = [
@@ -29,9 +30,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
-    pytest-vcr
+    environs
     pytest-mock
+    pytest-vcr
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -47,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "deezer" ];
 
   meta = with lib; {
-    description = "A friendly Python wrapper around the Deezer API";
+    description = "Python wrapper around the Deezer API";
     homepage = "https://github.com/browniebroke/deezer-python";
     license = licenses.mit;
     maintainers = with maintainers; [ synthetica ];
