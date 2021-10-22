@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
     sha256 = "1r94880d4khbjhhfnhaba3y3d4hv2bri82rzfzxn27s5iybpqras";
   };
 
+  patches = [
+    # fix build race bug https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=257667
+    (fetchpatch {
+      url = "https://cgit.freebsd.org/ports/patch/?id=a4faaf6cf7835014b5f69a337b544ea4ee7f9655";
+      sha256 = "sha256-IMBfqtrqBw3DdmJG0qchZFR6Am1PICMnM5P6BcS8oqI=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja

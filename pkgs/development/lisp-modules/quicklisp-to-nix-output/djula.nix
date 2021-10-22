@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "djula";
-  version = "20210630-git";
+  version = "20211020-git";
 
   description = "An implementation of Django templates for Common Lisp.";
 
   deps = [ args."access" args."alexandria" args."anaphora" args."arnesi" args."babel" args."cl-annot" args."cl-interpol" args."cl-locale" args."cl-ppcre" args."cl-slice" args."cl-syntax" args."cl-syntax-annot" args."cl-unicode" args."closer-mop" args."collectors" args."flexi-streams" args."gettext" args."iterate" args."let-plus" args."local-time" args."named-readtables" args."parser-combinators" args."split-sequence" args."symbol-munger" args."trivial-backtrace" args."trivial-features" args."trivial-gray-streams" args."trivial-types" args."yacc" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/djula/2021-06-30/djula-20210630-git.tgz";
-    sha256 = "083psy8x9ni2d5pzmz46pcp0z3kysr8wbnankd656p4ilvajcgbj";
+    url = "http://beta.quicklisp.org/archive/djula/2021-10-20/djula-20211020-git.tgz";
+    sha256 = "1izz1bl5yjcfx7hldj2scdwwr6fybxrw2h4wwkpkwisadh42b648";
   };
 
   packageName = "djula";
@@ -20,9 +20,9 @@ rec {
 }
 /* (SYSTEM djula DESCRIPTION
     An implementation of Django templates for Common Lisp. SHA256
-    083psy8x9ni2d5pzmz46pcp0z3kysr8wbnankd656p4ilvajcgbj URL
-    http://beta.quicklisp.org/archive/djula/2021-06-30/djula-20210630-git.tgz
-    MD5 ec46616b626ece388bba77671d2aa321 NAME djula FILENAME djula DEPS
+    1izz1bl5yjcfx7hldj2scdwwr6fybxrw2h4wwkpkwisadh42b648 URL
+    http://beta.quicklisp.org/archive/djula/2021-10-20/djula-20211020-git.tgz
+    MD5 0b6464f786f65c14d71499fc0114733d NAME djula FILENAME djula DEPS
     ((NAME access FILENAME access) (NAME alexandria FILENAME alexandria)
      (NAME anaphora FILENAME anaphora) (NAME arnesi FILENAME arnesi)
      (NAME babel FILENAME babel) (NAME cl-annot FILENAME cl-annot)
@@ -51,4 +51,4 @@ rec {
      named-readtables parser-combinators split-sequence symbol-munger
      trivial-backtrace trivial-features trivial-gray-streams trivial-types
      yacc)
-    VERSION 20210630-git SIBLINGS (djula-demo djula-test) PARASITES NIL) */
+    VERSION 20211020-git SIBLINGS (djula-demo djula-test) PARASITES NIL) */

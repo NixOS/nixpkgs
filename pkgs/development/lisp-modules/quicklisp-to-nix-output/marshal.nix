@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "marshal";
-  version = "cl-20210411-git";
+  version = "cl-20211020-git";
 
   description = "marshal: Simple (de)serialization of Lisp datastructures.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-marshal/2021-04-11/cl-marshal-20210411-git.tgz";
-    sha256 = "0wi4csgl5qxgl0si5mcg19xx4qlmw125qn0w1i2f3dvvrzp20qrp";
+    url = "http://beta.quicklisp.org/archive/cl-marshal/2021-10-20/cl-marshal-20211020-git.tgz";
+    sha256 = "0zv4bpj352frdrsk7r1yc67385h2n00cy19nz3b72sznsjynqvk8";
   };
 
   packageName = "marshal";
@@ -20,8 +20,8 @@ rec {
 }
 /* (SYSTEM marshal DESCRIPTION
     marshal: Simple (de)serialization of Lisp datastructures. SHA256
-    0wi4csgl5qxgl0si5mcg19xx4qlmw125qn0w1i2f3dvvrzp20qrp URL
-    http://beta.quicklisp.org/archive/cl-marshal/2021-04-11/cl-marshal-20210411-git.tgz
-    MD5 2463314a6bcd1a18bea2690deb6bce55 NAME marshal FILENAME marshal DEPS NIL
-    DEPENDENCIES NIL VERSION cl-20210411-git SIBLINGS (marshal-tests) PARASITES
+    0zv4bpj352frdrsk7r1yc67385h2n00cy19nz3b72sznsjynqvk8 URL
+    http://beta.quicklisp.org/archive/cl-marshal/2021-10-20/cl-marshal-20211020-git.tgz
+    MD5 52eaad7da569610099d15c1d91020e17 NAME marshal FILENAME marshal DEPS NIL
+    DEPENDENCIES NIL VERSION cl-20211020-git SIBLINGS (marshal-tests) PARASITES
     NIL) */

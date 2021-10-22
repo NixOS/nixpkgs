@@ -5,7 +5,7 @@
 , pkgs
 , stdenv
 , fetchzip
-, openjdk16
+, jdk
 , nodejs
 , pathDeps ? [ ]
 }:

@@ -395,6 +395,8 @@ in {
 
     isgx = callPackage ../os-specific/linux/isgx { };
 
+    rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
+
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };

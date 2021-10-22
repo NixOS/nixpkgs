@@ -17,7 +17,7 @@
 , ipykernel
 , pandocfilters
 , tornado
-, jupyter_client
+, jupyter-client
 , defusedxml
 }:
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
+    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
     defusedxml
     (nbclient.override { doCheck = false; }) # avoid infinite recursion
     jupyterlab-pygments

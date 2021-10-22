@@ -2,26 +2,25 @@
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    sha256 = "sha256-ACHHHGT3VGnvZVi1UZb57+g/slcld5e3bh+DDhUVVpQ=";
+    sha256 = "sha256-3qU1gQSWxyKgQcHgT61Q+n6u0rGU0vqTdT/VwMN20yw=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-SVGPMFpQjVOWCfiPpEmqhp6MEO0wqeyAZVyeNmTuXl0=";
+  vendorSha256 = "sha256-xnq0CEfz9uVpDkqY5/Sw9O5uMTHV74vQBXrav3bbH7E=";
 
   buildInputs = [ readline ];
 
-  ldflags = [ "-s" "-w" ];
-
-  postPatch = ''
-    substituteInPlace vars_linux.go \
-      --replace "/usr/share" "${placeholder "out"}/share/"
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.dataDir=${placeholder "out"}/share/hilbish"
+  ];
 
   postInstall = ''
     mkdir -p "$out/share/hilbish"

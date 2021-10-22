@@ -6,16 +6,16 @@
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.26.0";
+  version = "0.27.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
-    rev = "d48098c6724bc0a62170c2f9ff73c792c71c8452";
-    sha256 = "sha256-uu5985llYsi/9ExKZetk48FqU0sJQB1EirdT/pUw0DA=";
+    rev = version;
+    sha256 = "sha256-OUrjMlAWxTPs56ltMt0I/XR9GScD6upXU2arT99u8hk=";
   };
 
   # The build picks this up for ligo --version
-  LIGO_VERSION=version;
+  LIGO_VERSION = version;
 
   useDune2 = true;
 
