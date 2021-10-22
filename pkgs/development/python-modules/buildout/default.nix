@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zc_buildout";
+  pname = "zc-buildout";
   version = "3.0.0b2";
 
   src = fetchFromGitHub {
