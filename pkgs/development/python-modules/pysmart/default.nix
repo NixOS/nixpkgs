@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pySMART/utils.py \
-      --replace "which('smartctl')" "\"${smartmontools}/bin/smartctl\""
+      --replace "which('smartctl')" '"${smartmontools}/bin/smartctl"'
   '';
 
   propagatedBuildInputs = [ humanfriendly ];
