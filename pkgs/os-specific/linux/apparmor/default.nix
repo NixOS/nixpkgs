@@ -4,7 +4,7 @@
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python, python
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python3, python3
 , swig
 , ncurses
 , pam
@@ -68,6 +68,11 @@ let
     name = "libapparmor-${apparmor-version}";
     src = apparmor-sources;
 
+   # checking whether python bindings are enabled... yes
+   # checking for python3... no
+   # configure: error: python is required when enabling python bindings
+    strictDeps = false;
+
     nativeBuildInputs = [
       autoreconfHook
       bison
@@ -77,11 +82,11 @@ let
       ncurses
       which
       perl
-    ];
+    ] ++ lib.optional withPython python3;
 
     buildInputs = []
       ++ lib.optional withPerl perl
-      ++ lib.optional withPython python;
+      ++ lib.optional withPython python3;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -121,7 +126,7 @@ let
 
     buildInputs = [
       perl
-      python
+      python3
       libapparmor
       libapparmor.python
     ];
@@ -143,7 +148,7 @@ let
     postInstall = ''
       sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
       for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
-        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
       done
 
       substituteInPlace $out/bin/aa-notify \
