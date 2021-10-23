@@ -49,6 +49,7 @@ self: super: {
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
+  ghc-vis = disableLibraryProfiling super.ghc-vis;
 
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
@@ -1272,22 +1273,18 @@ self: super: {
   gi-cairo-render = doJailbreak super.gi-cairo-render;
   gi-cairo-connector = doJailbreak super.gi-cairo-connector;
 
-  svgcairo = overrideCabal super.svgcairo (drv: {
-    patches = [
-      # Remove when https://github.com/gtk2hs/svgcairo/pull/10 gets merged.
-      (pkgs.fetchpatch {
-        url = "https://github.com/gtk2hs/svgcairo/commit/df6c6172b52ecbd32007529d86ba9913ba001306.patch";
-        sha256 = "128qrns56y139vfzg1rbyqfi2xn8gxsmpnxv3zqf4v5spsnprxwh";
-      })
-      # The update here breaks svgcairo:
-      # https://github.com/NixOS/nixpkgs/commit/08fcd73d9dc9a28aa901210b259d9bfb3c228018
-      # and updating the call to the header with the correct name fixes it.
-      (pkgs.fetchpatch {
-        url = "https://github.com/dalpd/svgcairo/commit/4dc6d8d3a6c24be0b8c1fd73b282ff247e7b1e6f.patch";
-        sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
-      })
-    ];
-  });
+  svgcairo = appendPatches super.svgcairo [
+    # Remove when https://github.com/gtk2hs/svgcairo/pull/12 goes in.
+    (pkgs.fetchpatch {
+      url = "https://github.com/gtk2hs/svgcairo/commit/348c60b99c284557a522baaf47db69322a0a8b67.patch";
+      sha256 = "0akhq6klmykvqd5wsbdfnnl309f80ds19zgq06sh1mmggi54dnf3";
+    })
+    # Remove when https://github.com/gtk2hs/svgcairo/pull/13 goes in.
+    (pkgs.fetchpatch {
+      url = "https://github.com/dalpd/svgcairo/commit/d1e0d7ae04c1edca83d5b782e464524cdda6ae85.patch";
+      sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
+    })
+  ];
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
@@ -1827,6 +1824,21 @@ self: super: {
     cabal-install-parsers = self.cabal-install-parsers_0_4_2;
   };
 
+  # Build haskell-ci from git repository, including some useful fixes,
+  # e. g. required for generating the workflows for the cabal2nix repository
+  haskell-ci-unstable = (overrideSrc super.haskell-ci {
+    version = "0.13.20211011";
+    src = pkgs.fetchFromGitHub {
+      owner = "haskell-CI";
+      repo = "haskell-ci";
+      rev = "c88e67e675bc4a990da53863c7fb42e67bcf9847";
+      sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
+    };
+  }).overrideScope (self: super: {
+    attoparsec = self.attoparsec_0_14_1;
+    Cabal = self.Cabal_3_6_2_0;
+  });
+
   Frames-streamly = overrideCabal (super.Frames-streamly.override { relude = super.relude_1_0_0_1; }) (drv: {
     # https://github.com/adamConnerSax/Frames-streamly/issues/1
     patchPhase = ''
@@ -2053,5 +2065,10 @@ EOT
   # Fixes https://github.com/NixOS/nixpkgs/issues/140613
   # https://github.com/recursion-schemes/recursion-schemes/issues/128
   recursion-schemes = appendPatch super.recursion-schemes ./patches/recursion-schemes-128.patch;
+
+  # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
+  # Can't use fetchpatch as it required tweaking the line endings as the .cabal
+  # file revision on hackage was gifted CRLF line endings
+  gogol-core = appendPatch super.gogol-core ./patches/gogol-core-144.patch;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
