@@ -125,19 +125,30 @@ let
         };
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
-        if grep --quiet '\[workspace\]' "$tree/Cargo.toml"; then
-          # If the target package is in a workspace, find the crate path
-          # using `cargo metadata`.
-          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
-            ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
 
+        # If the target package is in a workspace, or if it's the top-level
+        # crate, we should find the crate path using `cargo metadata`.
+        crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+          ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
+
+        # If the repository is not a workspace the package might be in a subdirectory.
+        if [[ -z $crateCargoTOML ]]; then
+          for manifest in $(find $tree -name "Cargo.toml"); do
+            echo Looking at $manifest
+            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
             if [[ ! -z $crateCargoTOML ]]; then
-              tree=$(dirname $crateCargoTOML)
-            else
-              >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the Cargo workspace in: $tree"
-              exit 1
+              break
             fi
+          done
+
+          if [[ -z $crateCargoTOML ]]; then
+            >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the tree in: $tree"
+            exit 1
+          fi
         fi
+
+        echo Found crate ${pkg.name} at $crateCargoTOML
+        tree=$(dirname $crateCargoTOML)
 
         cp -prvd "$tree/" $out
         chmod u+w $out
