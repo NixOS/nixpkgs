@@ -6,19 +6,17 @@
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M2g";
+  milestone_id = "M2j";
   version = "1.0.${milestone_id}-alpha";
 
-  src = if (stdenv.isDarwin) then
-    fetchurl {
+  src = fetchurl (if (stdenv.isDarwin) then
+    {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
-      sha256 = "1ib9pdzrfpzbi35fpwm9ym621nlydplvzgbhnyd86dbwbv3i9sga";
-    }
-  else
-    fetchurl {
+      sha256 = "0lrj37mfqzwg9n757ymjb440jx51kj1s8g6qv9vis9pxckmy0m08";
+    } else {
       url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
-      sha256 = "004jx7q657mkcrvilk4lfkp8xcpl2bjflpn9m2p7jzlrlk97v9nj";
-    };
+      sha256 = "0qvin1rlkjwijchsijq3vbnn4injawchh2w97kyq7i3idh8ccl59";
+    });
 
   # The tarball is just the prebuilt binary, in the archive root.
   sourceRoot = ".";
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
-    maintainers = [ maintainers.virusdave ];
+    maintainers = with maintainers; [ superherointj virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }
