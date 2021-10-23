@@ -85,9 +85,9 @@ in {
       description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
     logType = mkOption {
-      type = types.str;
+      type = types.enum [ "syslog" "file" "systemd" "errorlog" ];
       default = "syslog";
-      description = "log driver used, could be errorlog, file, syslog or systemd";
+      description = "Log driver used for nextcloud logging. Possible options: errorlog, file, syslog or systemd (see https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html).";
     };
     https = mkOption {
       type = types.bool;
