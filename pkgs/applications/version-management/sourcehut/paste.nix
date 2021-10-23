@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.12.4";
+  version = "0.13.6";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-hFjWa7L7JiQoG3Hm9NyoP2FNypDiW+nGDmQ2DoZkAIw=";
+    sha256 = "sha256-Khcqk86iD9nxiKXN3+8mSLNoDau2qXNFOrLdkVu+rH8=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
