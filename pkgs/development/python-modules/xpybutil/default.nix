@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xcffib, pillow, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, xcffib, pillow }:
 
 buildPythonPackage rec {
   pname = "xpybutil";
@@ -17,7 +17,12 @@ buildPythonPackage rec {
 
   propagatedNativeBuildInputs = [ xcffib ];
 
-  checkInputs = [ nose ];
+  # no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "xpybutil"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/BurntSushi/xpybutil";
