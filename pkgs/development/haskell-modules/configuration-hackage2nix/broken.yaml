@@ -499,7 +499,6 @@ broken-packages:
   - bytestring-show
   - bytestring-substring
   - bytestring-time
-  - bytestring-trie
   - bytestring-typenats
   - c0parser
   - c10k
