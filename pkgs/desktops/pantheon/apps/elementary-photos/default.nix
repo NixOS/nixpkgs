@@ -1,11 +1,12 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , meson
 , ninja
 , pkg-config
-, vala_0_52
+, vala
 , desktop-file-utils
 , gtk3
 , libaccounts-glib
@@ -45,11 +46,14 @@ stdenv.mkDerivation rec {
     sha256 = "1zq9zfsc987vvrzadw9xqi3rlbi4jv2s82axkgy7ijm3ibi58ddc";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Fix build with vala 0.54
+    # https://github.com/elementary/photos/pull/650
+    (fetchpatch {
+      url = "https://github.com/elementary/photos/commit/bc7feca8caa4c8fc076a759a2d36e26e93c75596.patch";
+      sha256 = "sha256-iOHYKV7rSAuMm4ZhoJWjlpu96zlxwTosQe+z/iEVFR8=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -58,9 +62,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    # Does not build with vala 0.54
-    # https://github.com/elementary/photos/issues/638
-    vala_0_52
+    vala
     wrapGAppsHook
   ];
 
@@ -99,6 +101,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta =  with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
