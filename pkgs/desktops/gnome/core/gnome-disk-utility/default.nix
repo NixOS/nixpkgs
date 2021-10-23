@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-disks";
   };
 }
