@@ -57,22 +57,15 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.10";
+  version = "3.16.12";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-/lsfyTDlkZNIVHg5qgZW7qfOyTC2+1r3ZbsnQmEdy30=";
+    sha256 = "19pr0vby5sy02mhl2gi12mhrjkm8kc8kq7mlnmy41mglf92bwp85";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/qgis/QGIS/commit/fc1ac8bef8dcc3194857ecd32519aca4867b4fa1.patch";
-      sha256 = "106smg3drx8c7yxzfhd1c7xrq757l5cfxx8lklihyvr4a7wc9gpy";
-    })
-  ];
 
   passthru = {
     inherit pythonBuildInputs;
