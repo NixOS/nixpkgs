@@ -8,7 +8,6 @@ import queue
 import io
 import threading
 import argparse
-import atexit
 import base64
 import codecs
 import os
@@ -1128,11 +1127,13 @@ class Driver:
             for cmd in cmd(start_scripts)
         ]
 
-        @atexit.register
-        def clean_up() -> None:
-            with rootlog.nested("clean up"):
-                for machine in self.machines:
-                    machine.release()
+    def __enter__(self) -> "Driver":
+        return self
+
+    def __exit__(self, *_: Any) -> None:
+        with rootlog.nested("cleanup"):
+            for machine in self.machines:
+                machine.release()
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
@@ -1307,14 +1308,13 @@ if __name__ == "__main__":
     if not args.keep_vm_state:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
-    driver = Driver(
+    with Driver(
         args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
-    )
-
-    if args.interactive:
-        ptpython.repl.embed(driver.test_symbols(), {})
-    else:
-        tic = time.time()
-        driver.run_tests()
-        toc = time.time()
-        rootlog.info(f"test script finished in {(toc-tic):.2f}s")
+    ) as driver:
+        if args.interactive:
+            ptpython.repl.embed(driver.test_symbols(), {})
+        else:
+            tic = time.time()
+            driver.run_tests()
+            toc = time.time()
+            rootlog.info(f"test script finished in {(toc-tic):.2f}s")
