@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
     description = "A program that shows the type of files";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     platforms = platforms.all;
   };
