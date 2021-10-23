@@ -64,8 +64,7 @@ stdenv.mkDerivation {
   pname = "qtbase";
   inherit qtCompatVersion src version;
   debug = debugSymbols;
-
-  #cmakeFlags = [ "--debug-output" ]; # noisy
+  # note: git repo: git://code.qt.io/qt/qtbase.git
 
   propagatedBuildInputs = [
     libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib
@@ -77,7 +76,7 @@ stdenv.mkDerivation {
     # Image formats
     libjpeg libpng
     pcre2
-    pcre
+    pcre # for glib-2.0
     libproxy libproxy.dev
     xlibs.libXdmcp.dev # xdmcp for xcb
     xlibs.libXtst # for atspi-2
@@ -168,6 +167,7 @@ stdenv.mkDerivation {
         --subst-var qtDocPrefix
     done
 
+    # TODO remove when upstream bug is fixed https://bugreports.qt.io/browse/QTBUG-97568
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace util/cmake/tests/data/quoted.pro --replace /bin/ls ${coreutils}/bin/ls
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
@@ -175,7 +175,7 @@ stdenv.mkDerivation {
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
     # find . -iname '*.cmake.in' -exec grep -Hn NO_DEFAULT_PATH '{}' ';'
-    # TODO
+    # TODO migrate to qt6?
     if false; then
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
@@ -226,6 +226,7 @@ stdenv.mkDerivation {
   ''
     sed -i 's,#### Tests,qt_find_package(OpenVG PROVIDED_TARGETS OpenVG::OpenVG MODULE_NAME gui QMAKE_LIB openvg MARK_OPTIONAL)\n\n&,' src/gui/configure.cmake
     sed -i 's,CONDITION libs.openvg OR FIXME,CONDITION QT_FEATURE_library AND QT_FEATURE_opengl AND OpenVG_FOUND,' src/gui/configure.cmake
+    cp ${../cmake/FindOpenVG.cmake} cmake/FindOpenVG.cmake
   '';
 
   postConfigure = ''
@@ -250,8 +251,10 @@ stdenv.mkDerivation {
     done
   '';
 
+  #ninjaFlags = [ "--verbose" ]; # too noisy
+
   preBuild = ''
-    echo 'note: the build is silent. please wait'
+    export TERM=dumb # disable ninja line-clearing
   '';
 
   NIX_CFLAGS_COMPILE = toString ([
@@ -350,6 +353,9 @@ stdenv.mkDerivation {
 
     "-make libs"
     "-make tools"
+    # TODO maybe remove examples + tests
+    "-make examples"
+    "-make tests"
     ''-${lib.optionalString (!buildExamples) "no"}make examples''
     ''-${lib.optionalString (!buildTests) "no"}make tests''
   ] ++ (
@@ -392,17 +398,57 @@ stdenv.mkDerivation {
   );
 
   # Move selected outputs.
+  # TODO dont install $out/mkspecs in the first place
+  preInstall = ''
+    echo preInstall 0
+    echo find plugins folder
+    find . -name plugins
+    echo find plugins folder done
+    echo find plugins files
+    find . -name '*plugin.so'
+    echo find plugins files done
+    # TODO move to qtbase-6.2.0-bin/lib/qt-6.2.0/plugins/generic/libqevdevkeyboardplugin.so ... etc
+
+    echo preInstall 1
+
+    # FIXME why is this both in pre and post install?
+    moveToOutput "mkspecs" "$dev" || {
+      echo FIXME preInstall moveToOutput failed
+    }
+
+    echo preInstall 2
+    if [ -d mkspecs ]; then
+      echo "ERROR: qtbase preInstall: dir mkspecs still exists after moveToOutput. forcing remove"
+
+      # FIXME why is this both in pre and post install?
+      rm -rf $out/mkspecs || {
+        echo FIXME preInstall remove failed
+      }
+
+    else
+      echo "SUCCESS: qtbase preInstall: dir mkspecs was removed by moveToOutput"
+    fi
+    echo preInstall done
+  '';
+
+  # Move selected outputs.
+  # TODO dont install $out/mkspecs in the first place
   postInstall = ''
-    set -o xtrace # debug
+    echo postInstall 1
 
-    # debug
-    echo "postInstall: pwd = $(pwd)"
-    echo "postInstall: find mkspecs"
-    find mkspecs
-    echo "postInstall: find build/mkspecs"
-    find build/mkspecs
+    # FIXME why is this both in pre and post install?
+    moveToOutput "mkspecs" "$dev" || {
+      echo FIXME preInstall remove failed
+    }
 
-    moveToOutput "build/mkspecs" "$dev"
+    echo postInstall 2
+
+    # FIXME why is this both in pre and post install?
+    rm -rf $out/mkspecs || {
+      echo FIXME preInstall remove failed
+    }
+
+    echo postInstall done
   '';
 
   devTools = [
@@ -417,24 +463,61 @@ stdenv.mkDerivation {
     "build/bin/uic"
   ];
 
+  # cwd is /build/qtbase*/build
   postFixup = ''
-    set -o xtrace # debug
+    #set -o xtrace # debug
 
+    echo postFixup 1
     # Don't retain build-time dependencies like gdb.
+
+    echo postFixup 2
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
+
+    echo postFixup 3
+    fixQtModulePaths "''${!outputDev}/mkspecs/modules" || {
+      echo FIXME fixQtModulePaths failed
+    }
+
+    echo postFixup 4
+    fixQtBuiltinPaths "''${!outputDev}" '*.pr?' || {
+      echo FIXME fixQtBuiltinPaths failed
+    }
+
+    echo "postFixup ls:"; ls; echo ":postFixup ls"
 
     # debug
-    echo "postFixup: pwd = $(pwd)"
     echo "postFixup: find bin"
-    find bin
-    echo "postFixup: find build/bin"
-    find build/bin
+    find bin || {
+      echo FIXME find bin failed
+    }
 
+    echo postFixup 5
     # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput build/bin "$dev"
+    moveQtDevTools || {
+      echo FIXME moveQtDevTools failed
+      echo "ls:"; ls; echo ":ls"
+    }
+
+    # debug
+    echo "postFixup: find bin 2"
+    find bin || {
+      echo FIXME find bin 2 failed
+    }
+
+    # fix: error: builder for 'qtbase-6.2.0.drv' failed to produce output path for output 'bin'
+    # TODO how is this working in qt5?
+    set -o xtrace
+    mkdir $bin
+    cp -r --verbose bin $bin
+    set +o xtrace
+
+    echo postFixup 6
+    moveToOutput bin "$dev" || {
+      echo FIXME postFixup command failed: moveToOutput bin "$dev"
+      echo "ls:"; ls; echo ":ls"
+    }
+
+    echo postFixup done
   '';
 
   dontStrip = debugSymbols;
