@@ -100,6 +100,12 @@ default-package-overrides:
   - hiedb == 0.4.0.*
   # 2021-10-13: weeder 2.3.0 require GHC == 9.0.*; remove pin when GHC version changes
   - weeder < 2.3.0
+  # 2021-10-10: taskwarrior 0.4 requires aeson > 2.0.1.0
+  - taskwarrior < 0.4.0.0
+  # 2021-10-19: autoapply 0.4.1.1 requires th-desugar 1.12
+  - autoapply < 0.4.1.1
+  # 2021-10-22: 1.8 breaks shake-bench
+  - SVGFonts < 1.8
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -150,6 +156,7 @@ package-maintainers:
     - spago
     - termonad
   dalpd:
+    - ghc-vis
     - svgcairo
   domenkozar:
     - cachix

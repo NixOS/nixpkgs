@@ -75,6 +75,8 @@ self: super: {
   weeder = self.weeder_2_3_0;
   generic-lens-core = self.generic-lens-core_2_2_0_0;
   generic-lens = self.generic-lens_2_2_0_0;
+  th-desugar = self.th-desugar_1_12;
+  autoapply = self.autoapply_0_4_1_1;
 
   # Doesn't allow Dhall 1.39.*
   weeder_2_3_0 = super.weeder_2_3_0.override {
