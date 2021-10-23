@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://signald.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ expipiplus1 sumnerevans ];
+    platforms = platforms.unix;
   };
 }
