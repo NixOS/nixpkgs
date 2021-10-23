@@ -9403,6 +9403,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-rails/";
   };
 
+  vim-reasonml = buildVimPluginFrom2Nix {
+    pname = "vim-reasonml";
+    version = "2020-07-16";
+    src = fetchFromGitHub {
+      owner = "jordwalke";
+      repo = "vim-reasonml";
+      rev = "50dafc42085b704acaa03576cd2ffcaacea58e14";
+      sha256 = "1yfll4rbanql0l27bazk4xk205mk73nk1l9cxyvc9p8qcixx34s4";
+    };
+    meta.homepage = "https://github.com/jordwalke/vim-reasonml/";
+  };
+
   vim-repeat = buildVimPluginFrom2Nix {
     pname = "vim-repeat";
     version = "2021-01-25";
