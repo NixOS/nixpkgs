@@ -13549,6 +13549,8 @@ with pkgs;
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
+  sc3-plugins = callPackage ../development/libraries/sc3-plugins { };
+
   taktuk = callPackage ../applications/networking/cluster/taktuk { };
 
   tcl = tcl-8_6;

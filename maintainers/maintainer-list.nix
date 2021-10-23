@@ -5230,6 +5230,12 @@
     githubId = 9425955;
     name = "Jean-François Labonté";
   };
+  jeffBrown = {
+    name = "Jeffrey Benjamin Brown";
+    email = "jeffbrown.the@gmail.com";
+    github = "JeffreyBenjaminBrown";
+    githubId = 8900687;
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
