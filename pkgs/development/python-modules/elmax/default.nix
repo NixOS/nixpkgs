@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "elmax";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -20,10 +20,12 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-elmax";
     rev = version;
-    sha256 = "sha256-OiVPjWqQw1u0OL6/uYlT+FP2XDh7l3OZyVtQfycHICI=";
+    sha256 = "sha256-y5lQLUEUUN8qmPJUfjFwkrX3i/rGoNCh5IUvCoqpDR0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     httpx
@@ -36,7 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "elmax" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'yarl = "^1.7"' 'yarl = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "elmax"
+  ];
 
   meta = with lib; {
     description = "Python API client for the Elmax Cloud services";
