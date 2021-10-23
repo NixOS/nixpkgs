@@ -9,13 +9,13 @@
 , srht-keys
 }:
 let
-  version = "0.72.47";
+  version = "0.73.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-jk2DFC/fDYN88nofntJrBtYfCWr39YaNv2azH/tdZtQ=";
+    sha256 = "sha256-MxmMneK5RKA9EQMHGGUjmjQUybHV3xaxFetzlaLAf+E=";
   };
 
   gitsrht-shell = buildGoModule {
@@ -41,7 +41,7 @@ let
     inherit src version;
     sourceRoot = "source/gitsrht-keys";
     pname = "gitsrht-keys";
-    vendorSha256 = "sha256-m6uIrYDWqGagi+jjfYo4C59SjLqaaXwDq9vO0b9EW6M=";
+    vendorSha256 = "sha256-SOI7wimFthY+BwsDtMuyqKS1hCaEa3R90Q0qaA9boyE=";
 
     # What follows is only to update go-redis,
     # and thus also using a patched srht-keys.
@@ -79,7 +79,7 @@ let
     inherit src version;
     sourceRoot = "source/gitsrht-update-hook";
     pname = "gitsrht-update-hook";
-    vendorSha256 = "sha256-UoHxGVYEgTDqFzVQ2Dv6BRT4jVt+/QpNqEH3G2UWFjs=";
+    vendorSha256 = "sha256-QWd4i9qnnKbgO4qdFwZI3wlcsSurCh2ydhLYEyEZyK8=";
 
     # What follows is only to update go-redis
     # and thus also using a patched srht-keys.
