@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb-sqlite/tree/NEWS";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

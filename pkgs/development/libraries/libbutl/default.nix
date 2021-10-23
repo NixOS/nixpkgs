@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/libbutl/log";
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }
