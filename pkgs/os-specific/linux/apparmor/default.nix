@@ -11,6 +11,7 @@
 , libnotify
 , buildPackages
 , coreutils
+, bash
 , gnugrep
 , gnused
 , kmod
@@ -122,9 +123,12 @@ let
     name = "apparmor-utils-${apparmor-version}";
     src = apparmor-sources;
 
-    nativeBuildInputs = [ makeWrapper which ];
+    strictDeps = true;
+
+    nativeBuildInputs = [ makeWrapper which python3 ];
 
     buildInputs = [
+      bash
       perl
       python3
       libapparmor
