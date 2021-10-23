@@ -131,6 +131,19 @@ let
     };
   };
 
+  promTypes.basic_auth = types.submodule {
+    options = {
+      username = mkOption {
+        type = types.str;
+        description = ''
+          HTTP username
+        '';
+      };
+      password = mkOpt types.str "HTTP password";
+      password_file = mkOpt types.str "HTTP password file";
+    };
+  };
+
   promTypes.remote_read = types.submodule {
     options = {
       url = mkOption {
@@ -156,18 +169,7 @@ let
         Whether reads should be made for queries for time ranges that
         the local storage should have complete data for.
       '';
-      basic_auth = mkOpt (types.submodule {
-        options = {
-          username = mkOption {
-            type = types.str;
-            description = ''
-              HTTP username
-            '';
-          };
-          password = mkOpt types.str "HTTP password";
-          password_file = mkOpt types.str "HTTP password file";
-        };
-      }) ''
+      basic_auth = mkOpt promTypes.basic_auth ''
         Sets the `Authorization` header on every remote read request with the
         configured username and password.
         password and password_file are mutually exclusive.
@@ -207,18 +209,7 @@ let
         The name will be used in metrics and logging in place of a generated value to help users distinguish between
         remote write configs.
       '';
-      basic_auth = mkOpt (types.submodule {
-        options = {
-          username = mkOption {
-            type = types.str;
-            description = ''
-              HTTP username
-            '';
-          };
-          password = mkOpt types.str "HTTP password";
-          password_file = mkOpt types.str "HTTP password file";
-        };
-      }) ''
+      basic_auth = mkOpt promTypes.basic_auth ''
         Sets the `Authorization` header on every remote write request with the
         configured username and password.
         password and password_file are mutually exclusive.
@@ -343,18 +334,7 @@ let
         Optional HTTP URL parameters.
       '';
 
-      basic_auth = mkOpt (types.submodule {
-        options = {
-          username = mkOption {
-            type = types.str;
-            description = ''
-              HTTP username
-            '';
-          };
-          password = mkOpt types.str "HTTP password";
-          password_file = mkOpt types.str "HTTP password file";
-        };
-      }) ''
+      basic_auth = mkOpt promTypes.basic_auth ''
         Sets the `Authorization` header on every scrape request with the
         configured username and password.
         password and password_file are mutually exclusive.
@@ -404,6 +384,10 @@ let
         relevant Prometheus configuration docs</link> for more detail.
       '';
 
+      http_sd_configs = mkOpt (types.listOf promTypes.http_sd_config) ''
+        List of HTTP service discovery configurations.
+      '';
+
       static_configs = mkOpt (types.listOf promTypes.static_config) ''
         List of labeled target groups for this job.
       '';
@@ -416,10 +400,43 @@ let
         List of metric relabel configurations.
       '';
 
+      body_size_limit = mkDefOpt types.str "0" ''
+        An uncompressed response body larger than this many bytes will cause the
+        scrape to fail. 0 means no limit. Example: 100MB.
+        This is an experimental feature, this behaviour could
+        change or be removed in the future.
+      '';
+
       sample_limit = mkDefOpt types.int "0" ''
         Per-scrape limit on number of scraped samples that will be accepted.
         If more than this number of samples are present after metric relabelling
         the entire scrape will be treated as failed. 0 means no limit.
+      '';
+
+      label_limit = mkDefOpt types.int "0" ''
+        Per-scrape limit on number of labels that will be accepted for a sample. If
+        more than this number of labels are present post metric-relabeling, the
+        entire scrape will be treated as failed. 0 means no limit.
+      '';
+
+      label_name_length_limit = mkDefOpt types.int "0" ''
+        Per-scrape limit on length of labels name that will be accepted for a sample.
+        If a label name is longer than this number post metric-relabeling, the entire
+        scrape will be treated as failed. 0 means no limit.
+      '';
+
+      label_value_length_limit = mkDefOpt types.int "0" ''
+        Per-scrape limit on length of labels value that will be accepted for a sample.
+        If a label value is longer than this number post metric-relabeling, the
+        entire scrape will be treated as failed. 0 means no limit.
+      '';
+
+      target_limit = mkDefOpt types.int "0" ''
+        Per-scrape config limit on number of unique targets that will be
+        accepted. If more than this number of targets are present after target
+        relabeling, Prometheus will mark the targets as failed without scraping them.
+        0 means no limit. This is an experimental feature, this behaviour could
+        change in the future.
       '';
     };
   };
@@ -635,6 +652,38 @@ let
         See the GCP documentation on network tags for more information: <link
         xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"
         />
+      '';
+    };
+  };
+
+  promTypes.http_sd_config = types.submodule {
+    options = {
+      url = mkOption {
+        type = types.str;
+        description = ''
+          URL from which the targets are fetched.
+        '';
+      };
+
+      refresh_interval = mkDefOpt types.str "60s" ''
+        Refresh interval to re-query the endpoint.
+      '';
+
+      basic_auth = mkOpt promTypes.basic_auth ''
+        Authentication information used to authenticate to the API server.
+        password and password_file are mutually exclusive.
+      '';
+
+      proxy_url = mkOpt types.str ''
+        Optional proxy URL.
+      '';
+
+      follow_redirects = mkDefOpt types.bool "true" ''
+        Configure whether HTTP requests follow HTTP 3xx redirects.
+      '';
+
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures the scrape request's TLS settings.
       '';
     };
   };
