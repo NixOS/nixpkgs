@@ -13979,7 +13979,21 @@ with pkgs;
 
   buck = callPackage ../development/tools/build-managers/buck { };
 
-  build2 = callPackage ../development/tools/build-managers/build2 { };
+  build2 = callPackage ../development/tools/build-managers/build2 {
+    # Break cycle by using self-contained toolchain for bootstrapping
+    build2 = buildPackages.callPackage ../development/tools/build-managers/build2/bootstrap.nix { };
+  };
+
+  # Dependency of build2, must also break cycle for this
+  libbutl = callPackage ../development/libraries/libbutl {
+    build2 = build2.bootstrap;
+  };
+
+  libbpkg = callPackage ../development/libraries/libbpkg { };
+  libodb = callPackage ../development/libraries/libodb { };
+  libodb-sqlite = callPackage ../development/libraries/libodb-sqlite { };
+  bdep = callPackage ../development/tools/build-managers/build2/bdep.nix { };
+  bpkg = callPackage ../development/tools/build-managers/build2/bpkg.nix { };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
@@ -14744,6 +14758,7 @@ with pkgs;
   msitools = callPackage ../development/tools/misc/msitools { };
 
   haskell-ci = haskell.lib.justStaticExecutables haskellPackages.haskell-ci;
+  haskell-ci-unstable = lowPrio (haskell.lib.justStaticExecutables haskellPackages.haskell-ci-unstable);
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
@@ -14849,6 +14864,7 @@ with pkgs;
     pkg-config = pkgconf-unwrapped;
     baseBinName = "pkgconf";
   };
+  libpkgconf = pkgconf-unwrapped;
 
   pkg-config-unwrapped = callPackage ../development/tools/misc/pkg-config { };
   pkg-config = callPackage ../build-support/pkg-config-wrapper {
