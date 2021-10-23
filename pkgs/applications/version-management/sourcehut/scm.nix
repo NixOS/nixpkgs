@@ -24,7 +24,7 @@ buildPythonPackage rec {
       inherit src version;
       sourceRoot = "source/srht-keys";
       pname = "srht-keys";
-      vendorSha256 = "sha256-lQk1dymMCefHMFJhO3yC/muBP/cxI//5Yz991D2YZY4=";
+      vendorSha256 = "sha256-7j6b9VOpdQ2YcoM1F4xf14IwHg3GFDN6VDbC4gt6wO0=";
 
       # What follows is only to update go-redis
       # go.{mod,sum} could be patched directly but that would be less resilient
