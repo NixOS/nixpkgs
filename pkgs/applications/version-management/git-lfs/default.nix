@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "git-lfs";
-  version = "2.13.3";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "sha256-T4s/xnu5nL6dkEIo7xGywaE+EPH2OnzsaCF9OCGu7WQ=";
+    sha256 = "0989wai2k1gzkmwk5x6f6llsf0nn5jr5dpwayw4f8bws09da6dm6";
   };
 
   goPackagePath = "github.com/git-lfs/git-lfs";
@@ -30,7 +30,7 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Git extension for versioning large files";
     homepage    = "https://git-lfs.github.com/";
-    changelog   = "https://github.com/git-lfs/git-lfs/blob/v${version}/CHANGELOG.md";
+    changelog   = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
     license     = [ licenses.mit ];
     maintainers = [ maintainers.twey maintainers.marsam ];
   };
