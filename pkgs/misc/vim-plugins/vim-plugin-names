@@ -223,7 +223,6 @@ hecal3/vim-leader-guide
 henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
-hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
 hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
@@ -527,6 +526,7 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-lualine/lualine.nvim
 nvim-neorg/neorg@main
 nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
@@ -551,7 +551,7 @@ ojroques/nvim-bufdel@main
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
-olimorris/onedark.nvim
+olimorris/onedarkpro.nvim@main
 onsails/diaglist.nvim
 onsails/lspkind-nvim
 OrangeT/vim-csharp

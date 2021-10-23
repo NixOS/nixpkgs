@@ -496,10 +496,6 @@ self: super: {
       });
   });
 
-  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
   });
@@ -724,7 +720,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
+          cargoSha256 = "sha256-DiCQpgyz0iNEm6gjaJU5IGdsQISHhPqlDQBzZafngjY=";
         };
       in
       ''

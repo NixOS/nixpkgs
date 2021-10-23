@@ -62,6 +62,7 @@ mapAliases ({
   prompt_toolkit = prompt-toolkit;
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
+  pysmart-smartx = pysmart; # added 2021-10-22
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
@@ -84,5 +85,5 @@ mapAliases ({
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
   websocket_client = websocket-client;
-  zc_buildout221 = zc_buildout; # added 2021-07-21
+  zc-buildout221 = zc-buildout; # added 2021-07-21
 })

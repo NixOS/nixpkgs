@@ -7,7 +7,6 @@
 , makeWrapper
 , ncurses
 , gnugrep
-, fetchpatch
 , copyDesktopItems
 , makeDesktopItem
 , enableX11 ? true
@@ -15,28 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "unison";
-  version = "2.51.3";
+  version = "2.51.4";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
+    sha256 = "sha256-jcfq4X+r98bQqbQ3gRqJyryLdt1Y/2CLawqqIiUaQOo=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optional enableX11 copyDesktopItems;
   buildInputs = [ ocamlPackages.ocaml ncurses ];
-
-  patches = [
-    # Patch to fix build with ocaml 4.12. Remove in 2.51.4
-    # https://github.com/bcpierce00/unison/pull/481
-    (fetchpatch {
-      name = "fix-compile-with-ocaml-4.12.patch";
-      url = "https://github.com/bcpierce00/unison/commit/14b885316e0a4b41cb80fe3daef7950f88be5c8f.patch?full_index=1";
-      sha256 = "0j1rma1cwdsfql19zvzhfj2ys5c4lbhjcp6jrnck04xnckxxiy3d";
-    })
-  ];
 
   preBuild = lib.optionalString enableX11 ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml

@@ -26,7 +26,6 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    atLeast27 = lib.versionAtLeast ver.majMin "2.7";
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     baseruby = self.override {
       useRailsExpress = false;
@@ -105,7 +104,7 @@ let
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
-          ++ op atLeast27 ./do-not-regenerate-revision.h.patch
+          ++ [ ./do-not-regenerate-revision.h.patch ]
           ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
           # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
           # the resulting error was swallowed. Newer rubygems no longer swallows
@@ -252,14 +251,6 @@ let
     ) args; in self;
 
 in {
-  ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "8" "";
-    sha256 = {
-      src = "0vfam28ifl6h2wxi6p70j0hm3f1pvsp432hf75m5j25wfy2vf1qq";
-      git = "0rc3n6sk8632r0libpv8jwslc7852hgk64rvbdrspc9razjwx21c";
-    };
-  };
-
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "4" "";
     sha256 = {

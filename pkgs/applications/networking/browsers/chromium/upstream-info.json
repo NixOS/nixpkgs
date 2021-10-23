@@ -31,15 +31,15 @@
     }
   },
   "dev": {
-    "version": "96.0.4664.18",
-    "sha256": "0z7hplfl9mlbn07svcavzcb2gqn1hchwhhlpz0qykf6kd441kxpf",
-    "sha256bin64": "0y09aginw5qg7apm9wvxny7y8nxhsq7gnxp1jmghfjhv5xq7pdn9",
+    "version": "97.0.4676.0",
+    "sha256": "1cf660h7n1d4ds63747zfc4wmwxm348grcv40zg614cpjm4q68b5",
+    "sha256bin64": "116a4d47s3sx1pq8hhqybdsjxcv8657xaldrlix2z7jh94ip2nwh",
     "deps": {
       "gn": {
-        "version": "2021-09-24",
+        "version": "2021-10-08",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0153d369bbccc908f4da4993b1ba82728055926a",
-        "sha256": "0y4414h8jqsbz5af6pn91c0vkfp4s281s85g992xfyl785c5zbsi"
+        "rev": "693f9fb87e4febdd4299db9f73d8d2c958e63148",
+        "sha256": "1qfjj2mdpflry4f9fkagvb76zwfibys4nqz9lddy1zh5nnbd9mff"
       }
     }
   },

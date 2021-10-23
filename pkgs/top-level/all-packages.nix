@@ -904,6 +904,8 @@ with pkgs;
 
   airspy = callPackage ../applications/radio/airspy { };
 
+  airspyhf = callPackage ../applications/radio/airspyhf { };
+
   airtame = callPackage ../applications/misc/airtame { };
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
@@ -970,6 +972,11 @@ with pkgs;
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
   vopono = callPackage ../tools/networking/vopono { };
+
+  winbox = callPackage ../tools/admin/winbox {
+    wine = wineWowPackages.staging;
+    use64 = true;
+  };
 
   xcd = callPackage ../tools/misc/xcd { };
 
@@ -1168,6 +1175,8 @@ with pkgs;
   android-tools = lowPrio (callPackage ../tools/misc/android-tools {
     stdenv = if stdenv.targetPlatform.isAarch64 then gcc10Stdenv else stdenv;
   });
+
+  anewer = callPackage ../tools/text/anewer { };
 
   angle-grinder = callPackage ../tools/text/angle-grinder {};
 
@@ -2257,6 +2266,12 @@ with pkgs;
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
   bs-platform = callPackage ../development/compilers/bs-platform {};
+
+  ciano = callPackage ../applications/graphics/ciano {
+    inherit (pantheon) granite;
+    python = python3;
+    gtk = gtk3;
+  };
 
   c3d = callPackage ../applications/graphics/c3d {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -6785,6 +6800,8 @@ with pkgs;
 
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
+  lpcnetfreedv = callPackage ../development/libraries/lpcnetfreedv { };
+
   lsd = callPackage ../tools/misc/lsd { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
@@ -7021,8 +7038,6 @@ with pkgs;
 
   kea = callPackage ../tools/networking/kea { };
 
-  keysmith = libsForQt5.callPackage ../tools/security/keysmith { };
-
   ispell = callPackage ../tools/text/ispell {};
 
   iodash = callPackage ../development/libraries/iodash { };
@@ -7172,9 +7187,21 @@ with pkgs;
 
   libnids = callPackage ../tools/networking/libnids { };
 
-  libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
+  rakshasa-rtorrent = recurseIntoAttrs
+    (callPackage ../tools/networking/p2p/rakshasa-rtorrent {
+      callPackage = newScope pkgs.rakshasa-rtorrent;
+    });
 
-  libtorrent-jesec = callPackage ../tools/networking/p2p/libtorrent-jesec { };
+  rtorrent = rakshasa-rtorrent.rtorrent;
+  libtorrent = rakshasa-rtorrent.libtorrent;
+
+  jesec-rtorrent = recurseIntoAttrs
+    (callPackage ../tools/networking/p2p/jesec-rtorrent {
+      callPackage = newScope pkgs.jesec-rtorrent;
+    });
+
+  rtorrent-jesec = jesec-rtorrent.rtorrent;
+  libtorrent-jesec = jesec-rtorrent.libtorrent;
 
   libmpack = callPackage ../development/libraries/libmpack { };
 
@@ -8424,6 +8451,8 @@ with pkgs;
 
   pinnwand = callPackage ../servers/pinnwand { };
 
+  piping-server-rust = callPackage ../servers/piping-server-rust { };
+
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
   pipr = callPackage ../applications/misc/pipr { };
@@ -9009,10 +9038,6 @@ with pkgs;
   };
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
-
-  rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
-
-  rtorrent-jesec = callPackage ../tools/networking/p2p/rtorrent-jesec { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
@@ -12769,9 +12794,6 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  rustracerd = callPackage ../development/tools/rust/racerd {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -13489,14 +13511,12 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
     bison = buildPackages.bison_3_5;
   })
-    ruby_2_6
     ruby_2_7
     ruby_3_0;
 
   ruby = ruby_2_7;
   rubyPackages = rubyPackages_2_7;
 
-  rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
 
@@ -15320,8 +15340,6 @@ with pkgs;
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
-    # currently broken
-    rustracerd = null;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -16988,6 +17006,8 @@ with pkgs;
   libacr38u = callPackage ../tools/security/libacr38u {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
+
+  libad9361 = callPackage ../development/libraries/libad9361 { };
 
   libadwaita = callPackage ../development/libraries/libadwaita { };
 
@@ -19236,6 +19256,8 @@ with pkgs;
   sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
+
+  sdrpp = callPackage ../applications/radio/sdrpp { };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
@@ -23639,8 +23661,6 @@ with pkgs;
     });
   android-studio = androidStudioPackages.stable;
 
-  angelfish = libsForQt5.callPackage ../applications/networking/browsers/angelfish { };
-
   animbar = callPackage ../applications/graphics/animbar { };
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
@@ -24976,6 +24996,8 @@ with pkgs;
       shiboken2;
   };
 
+  freedv = callPackage ../applications/radio/freedv { };
+
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -26195,6 +26217,8 @@ with pkgs;
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
 
   lscolors = callPackage ../applications/misc/lscolors { };
+
+  lucky-commit = callPackage ../applications/version-management/git-and-tools/lucky-commit { };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
