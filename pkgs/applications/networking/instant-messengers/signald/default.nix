@@ -3,13 +3,13 @@
 
 let
   pname = "signald";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "K/G5+w1GINLZwJIG5a7u0TxlGe+Cyp4wQm+pgm28qCA=";
+    sha256 = "sha256-ftK+oeqzJ+TxrlvqivFkAi5RCcyJ5Y0oQAJuo0YheBg=";
   };
 
   buildConfigJar = fetchurl {
@@ -43,8 +43,9 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "/gJFoT+vvdSWr33oI44XiZXlFfyUjtRVB1M6CMzSztM=";
-      aarch64-linux = "v71stMWBbNALasfGAHvsVTBaDOZfpKK3sQrjNJ6FG1A=";
+      # TODO
+      x86_64-linux = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      aarch64-linux = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
