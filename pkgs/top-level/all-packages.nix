@@ -1271,6 +1271,8 @@ with pkgs;
 
   artyFX = callPackage ../applications/audio/artyFX {};
 
+  oggvideotools = callPackage ../tools/misc/oggvideotools { };
+
   owl-lisp = callPackage ../development/compilers/owl-lisp {};
 
   ascii = callPackage ../tools/text/ascii { };
@@ -1625,6 +1627,8 @@ with pkgs;
   };
 
   enchive = callPackage ../tools/security/enchive { };
+
+  enjarify = callPackage ../tools/misc/enjarify { };
 
   enpass = callPackage ../tools/security/enpass { };
 
@@ -3418,6 +3422,8 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
+  procyon = callPackage ../tools/misc/procyon { };
+
   profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
@@ -3568,6 +3574,8 @@ with pkgs;
     hiredis = null;
     libmaxminddb = null;
   };
+
+  xmlbeans = callPackage ../tools/misc/xmlbeans { };
 
   xmlsort = perlPackages.XMLFilterSort;
 

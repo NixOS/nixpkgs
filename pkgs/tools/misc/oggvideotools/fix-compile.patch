@@ -1,0 +1,10 @@
+--- oggvideotools-0.9.1/src/base/test/decoderTest.cpp	2016-09-05 10:35:14.000000000 +0200
++++ oggvideotools-0.9.1/src/base/test/decoderTest.cpp	2021-10-22 22:42:48.980473419 +0200
+@@ -5,6 +5,7 @@
+ #include "oggDecoder.h"
+ #include <vector>
+ #include <iostream>
++#include <cstring>
+ 
+ int main(int argc, char* argv[])
+ {
