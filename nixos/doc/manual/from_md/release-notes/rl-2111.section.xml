@@ -146,6 +146,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
+          developed by Framasoft, is the free and decentralized
+          alternative to video platforms. Available at
+          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
