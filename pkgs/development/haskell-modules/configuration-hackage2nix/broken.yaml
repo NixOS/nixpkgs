@@ -1340,6 +1340,7 @@ broken-packages:
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
+  - factory
   - facts
   - fadno-braids
   - failable-list
@@ -1408,6 +1409,7 @@ broken-packages:
   - fingertree-tf
   - finitary-derive
   - firefly-example
+  - firestore
   - first-and-last
   - first-class-instances
   - fit
@@ -1715,6 +1717,20 @@ broken-packages:
   - gochan
   - godot-haskell
   - gofer-prelude
+  - gogol-admin-emailmigration
+  - gogol-affiliates
+  - gogol-autoscaler
+  - gogol-bigtableadmin
+  - gogol-cloudmonitoring
+  - gogol-freebasesearch
+  - gogol-latencytest
+  - gogol-maps-coordinate
+  - gogol-maps-engine
+  - gogol-photoslibrary
+  - gogol-resourceviews
+  - gogol-servicemanagement
+  - gogol-taskqueue
+  - gogol-useraccounts
   - gooey
   - google-cloud
   - GoogleCodeJam
@@ -4385,9 +4401,12 @@ broken-packages:
   - shorten-strings
   - short-vec
   - show-prettyprint
+  - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
+  - Shpadoinkle-template
+  - Shpadoinkle-widgets
   - shwifty
   - sifflet
   - sifflet-lib

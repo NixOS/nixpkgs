@@ -331,6 +331,7 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
+ - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
  - Shpadoinkle-router
@@ -1118,6 +1119,7 @@ dont-distribute-packages:
  - findhttp
  - finite-table
  - firstify
+ - fishfood
  - fix-parser-simple
  - fixed-point-vector
  - fixed-point-vector-space
@@ -2869,6 +2871,7 @@ dont-distribute-packages:
  - sql-simple-postgresql
  - sql-simple-sqlite
  - sqlite-simple-typed
+ - squeeze
  - sr-extra
  - sscgi
  - sshd-lint
