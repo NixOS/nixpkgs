@@ -24512,6 +24512,13 @@ let
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/X11-XCB-0.18.tar.gz";
       sha256 = "1cjpghw7cnackw20lbd7yzm222kz5bnrwz52f8ay24d1f4pwrnxf";
     };
+    patches = [
+      # Pull unstream fix for parallel build failure
+      (fetchpatch {
+        url = "https://github.com/stapelberg/X11-XCB/commit/813608dacdae1ae35c9eb0f171a958617e014520.patch";
+        sha256 = "017f5r4fyryhzgp99lw3csrl21r27hmqv483vp9fdz9xkvrmh743";
+      })
+    ];
     AUTOMATED_TESTING = false;
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
