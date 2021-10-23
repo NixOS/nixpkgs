@@ -27858,8 +27858,6 @@ with pkgs;
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
 
-  curaLulzbot = libsForQt5.callPackage ../applications/misc/cura/lulzbot/default.nix { };
-
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
 
   peru = callPackage ../applications/version-management/peru {};
