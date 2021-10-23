@@ -1,0 +1,21 @@
+diff --git a/cmd/flux/create_secret_git_test.go b/cmd/flux/create_secret_git_test.go
+index afa34ba..0d22cce 100644
+--- a/cmd/flux/create_secret_git_test.go
++++ b/cmd/flux/create_secret_git_test.go
+@@ -20,16 +20,6 @@ func TestCreateGitSecret(t *testing.T) {
+ 			args:   "create secret git podinfo-auth --url=https://github.com/stefanprodan/podinfo --username=my-username --password=my-password --namespace=my-namespace --export",
+ 			assert: assertGoldenFile("./testdata/create_secret/git/secret-git-basic.yaml"),
+ 		},
+-		{
+-			name:   "ssh key",
+-			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/rsa.private --namespace=my-namespace --export",
+-			assert: assertGoldenFile("testdata/create_secret/git/git-ssh-secret.yaml"),
+-		},
+-		{
+-			name:   "ssh key with password",
+-			args:   "create secret git podinfo-auth --url=ssh://git@github.com/stefanprodan/podinfo --private-key-file=./testdata/create_secret/git/rsa-password.private --password=password --namespace=my-namespace --export",
+-			assert: assertGoldenFile("testdata/create_secret/git/git-ssh-secret-password.yaml"),
+-		},
+ 	}
+ 
+ 	for _, tt := range tests {
