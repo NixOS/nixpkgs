@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config makeWrapper meson ninja installShellFiles
+    pkg-config makeWrapper meson ninja installShellFiles perl
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
   ];
 
