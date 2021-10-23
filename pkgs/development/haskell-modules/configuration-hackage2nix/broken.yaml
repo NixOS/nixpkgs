@@ -2467,7 +2467,6 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
-  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
