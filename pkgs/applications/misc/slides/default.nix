@@ -3,37 +3,31 @@
 , buildGoModule
 , fetchFromGitHub
 , go
-, python3
-, ruby
 }:
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "sha256-530OsO3Rg13nmFYOoouhWvy12Afd25O4We9RBHe1CmE=";
+    sha256 = "sha256-D2ex9/XN5JMKwn+g1cB77UMquYW9NdTzhCCvVtTOBfU=";
   };
 
   checkInputs = [
     bash
     go
-    python3
-    ruby
   ];
 
   vendorSha256 = "sha256-pI5/1LJVP/ZH64Dy2rUoOXM21oqJ8KA0/L8ClGRb5UY=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X=main.Version=${version}"
   ];
-
-  # https://github.com/maaslalani/slides/issues/113
-  doCheck = false;
 
   meta = with lib; {
     description = "Terminal based presentation tool";
