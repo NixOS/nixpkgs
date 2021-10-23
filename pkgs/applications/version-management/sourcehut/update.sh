@@ -33,14 +33,12 @@ get_latest_version() {
 
 update_version() {
   default_nix="$(default "$1")"
-  version_old="$(version "$1")"
+  oldVersion="$(version "$1")"
   version="$(get_latest_version "$1")"
 
   (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
 
   # Update vendorSha256 of Go modules
-  nixFile="${1%srht}".nix
-  nixFile="${nixFile/build/builds}"
   retry=true
   while "$retry"; do
     retry=false;
@@ -48,21 +46,27 @@ update_version() {
     while IFS=' :' read -r origin hash; do
       case "$origin" in
         (expected|specified) oldHash="$hash";;
-        (got) sed -i "s|$oldHash|$(nix hash to-sri --type sha256 "$hash")|" "$nixFile"; retry=true; break;;
+        (got) sed -i "s|$oldHash|$(nix hash to-sri --type sha256 "$hash")|" "$default_nix"; retry=true; break;;
         (*) printf >&2 "%s\n" "$origin${hash:+:$hash}"
       esac
     done
   done
 
   git add "$default_nix"
-  git commit -m "sourcehut.$1: $version_old -> $version"
+  git commit -m "sourcehut.$1: $oldVersion -> $version"
 }
 
 if [ $# -gt 0 ]; then
   services=("$@")
 else
-  services=( "srht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
-             "metasrht" "pagessrht" "pastesrht" "todosrht" "scmsrht" )
+  # Beware that some packages must be updated before others,
+  # eg. srht-keys must be update before gitsrht,
+  # otherwise this script would enter an infinite loop
+  # because the reported $oldHash to be changed
+  # may not actually be in $default_nix
+  # but in the file of one of its dependencies.
+  services=( "srht" "scmsrht" "srht-keys" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+             "metasrht" "pagessrht" "pastesrht" "todosrht" )
 fi
 
 for service in "${services[@]}"; do
