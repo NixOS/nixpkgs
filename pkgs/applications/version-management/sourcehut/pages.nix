@@ -2,21 +2,19 @@
 , fetchFromSourcehut
 , buildGoModule
 }:
-let
-  version = "0.4.10";
+
+buildGoModule rec {
+  pname = "pagessrht";
+  version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-Lq/xCCAywxxjX5nHbOvmCaQ4wtLgjcMo3Qc7xO1fdAs=";
+    sha256 = "sha256-SwKiNqsPbUgJyj8qSY1c7dwDiEMznEWmFun57YmDRKw=";
   };
 
-in
-buildGoModule {
-  inherit src version;
-  pname = "pagessrht";
-  vendorSha256 = "sha256-YFRBoflFy48ipTvXdZ4qPSEgTIYvm4752JRZSzRG++U=";
+  vendorSha256 = "sha256-udr+1y5ApQCSPhs3yQTTi9QfzRbz0A9COYuFMjQGa74=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
