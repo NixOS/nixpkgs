@@ -8,9 +8,9 @@ let
     contents = with pkgs; [ tini coreutils busybox ];
     config.Entrypoint = [ "/bin/tini" "--" "/bin/sleep" "inf" ];
   };
+  # Don't use the default service account because there's a race where it may
+  # not be created yet; make our own instead.
   testPodYaml = pkgs.writeText "test.yml" ''
-    # Don't use the default service account because there's a race where it may
-    # not be created yet; make our own instead.
     apiVersion: v1
     kind: ServiceAccount
     metadata:
@@ -38,7 +38,7 @@ in
   nodes = {
     k3s =
       { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.k3s pkgs.gzip ];
+        environment.systemPackages = with pkgs; [ k3s gzip ];
 
         # k3s uses enough resources the default vm fails.
         virtualisation.memorySize = pkgs.lib.mkDefault 1536;
@@ -74,5 +74,8 @@ in
 
     k3s.succeed("k3s kubectl apply -f ${testPodYaml}")
     k3s.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
+    k3s.succeed("k3s kubectl delete -f ${testPodYaml}")
+
+    k3s.shutdown()
   '';
 })
