@@ -6541,7 +6541,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
-  jrnl = python3Packages.callPackage ../applications/misc/jrnl { };
+  jrnl = callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
 
