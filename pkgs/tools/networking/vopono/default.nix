@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vopono";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0dsyav755mggnsybj7iwvdqbqzz0gfd3j9vh0hmg5b7pbffanzvy";
+    sha256 = "0kpkvnw12cvcswsx2p8xicyn57i5fd7p5d7n1dqq9x18q6am181p";
   };
 
-  cargoHash = "sha256:187mi36dgr2f1klqclci175zqgyrm0b6awrcnav63vira7hqz076";
+  cargoHash = "sha256:1y07iazb7rwgs0viwn81qmwbcnxza9n89w2jh0r4fq98rr337081";
 
   meta = with lib; {
     description = "Run applications through VPN connections in network namespaces";
