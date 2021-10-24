@@ -54,6 +54,11 @@ rec {
     else
       shell;
 
+  # Check if the shellName appears as pname of a shell set in users.users of the given config
+  usedAsShell = shellName: config:
+    any (s: shellName == (s.pname or null))
+      (mapAttrsToList (_: getAttr "shell") config.users.users);
+
   /* Recurse into a list or an attrset, searching for attrs named like
      the value of the "attr" parameter, and return an attrset where the
      names are the corresponding jq path where the attrs were found and
