@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mv ucm $out/bin
     mv ui $out/ui
-    wrapProgram $out/bin/ucm --prefix PATH ":" "${lib.makeBinPath [ less ]}" --set UCM_WEB_UI "$out/ui";
+    wrapProgram $out/bin/ucm \
+    	 --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
+    	 --set UCM_WEB_UI "$out/ui"
   '';
 
   meta = with lib; {
