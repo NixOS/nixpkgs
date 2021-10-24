@@ -151,7 +151,7 @@ buildEnv {
   inherit meta;
   passthru = { inherit unwrapped; };
   paths = [ unwrapped ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   pathsToLink = [
     "/"
     "/bin"
