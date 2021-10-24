@@ -248,6 +248,8 @@ in {
         description = ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
+          But be careful, Nix build can execute all emulated systems.
+          In case of cross compilation this option introduces impurity issues.
         '';
         type = types.listOf types.str;
       };
