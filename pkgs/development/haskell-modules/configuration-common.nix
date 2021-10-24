@@ -631,20 +631,7 @@ self: super: {
   #   removed when the next idris release (1.3.4 probably) comes
   #   around.
   idris = generateOptparseApplicativeCompletion "idris"
-    (doJailbreak (dontCheck
-      (appendPatches super.idris [
-        # compatibility with haskeline >= 0.8
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
-          sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
-        })
-        # compatibility with megaparsec >= 0.9
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/commit/6ea9bc913877d765048d7cdb7fc5aec60b196fac.patch";
-          sha256 = "0yms74d1xdxd1c08dnp45nb1ddzq54n6hqgzxx0r494wy614ir8q";
-        })
-      ])
-    ));
+    (doJailbreak (dontCheck super.idris));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
