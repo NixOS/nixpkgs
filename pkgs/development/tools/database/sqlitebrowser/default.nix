@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, cmake
-, qtbase, qttools, sqlite, wrapGAppsHook }:
+, qtbase, qttools, sqlcipher, wrapGAppsHook }:
 
 mkDerivation rec {
   pname = "sqlitebrowser";
@@ -16,9 +16,13 @@ mkDerivation rec {
   # but qscintilla is currently in a bit of a mess as some consumers expect a
   # -qt4 or -qt5 prefix while others do not.
   # We *really* should get that cleaned up.
-  buildInputs = [ qtbase sqlite ];
+  buildInputs = [ qtbase sqlcipher ];
 
   nativeBuildInputs = [ cmake qttools wrapGAppsHook ];
+
+  cmakeFlags = [
+    "-Dsqlcipher=1"
+  ];
 
   meta = with lib; {
     description = "DB Browser for SQLite";
