@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         ExporterTiny
         ListMoreUtils
         PDFAPI2
-        libintl_perl
+        libintl-perl
       ];
     in ''
     for cmd in pdfoutline pdf-extract-outline; do

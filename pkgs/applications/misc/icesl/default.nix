@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM, libXext, dialog, makeWrapper }:
+{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM
+, libXext, glibc, lua, luabind, glfw, libgccjit, dialog, makeWrapper
+}:
 let
-  lpath = lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
+  lpath = lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext  glibc lua glfw luabind libgccjit ];
 in
 stdenv.mkDerivation rec {
   pname = "iceSL";
-  version = "2.1.10";
+  version = "2.4.1";
 
   src =  if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {
-    url = "https://gforge.inria.fr/frs/download.php/file/37268/icesl${version}-amd64.zip";
-    sha256 = "0dv3mq6wy46xk9blzzmgbdxpsjdaxid3zadfrysxlhmgl7zb2cn2";
+    url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=amd64";
+    extension = "zip";
+    sha256 = "0rrnkqkhlsjclif5cjbf17qz64vs95ja49xarxjvq54wb4jhbs4l";
   } else if stdenv.hostPlatform.system == "i686-linux" then fetchzip {
-    url = "https://gforge.inria.fr/frs/download.php/file/37267/icesl${version}-i386.zip";
-    sha256 = "0sl54fsb2gz6dy0bwdscpdq1ab6ph5b7zald3bwzgkqsvna7p1jr";
+    url = "https://icesl.loria.fr/assets/other/download.php?build=${version}&os=i386";
+    extension = "zip";
+    sha256 = "0n2yyxzw0arkc70f0qli4n5chdlh9vc7aqizk4v7825mcglhwlyh";
   } else throw "Unsupported architecture";
 
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     cp -r ./ $out
+    rm $out/bin/*.so
     mkdir $out/oldbin
     mv $out/bin/IceSL-slicer $out/oldbin/IceSL-slicer
     runHook postInstall
@@ -31,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GPU-accelerated procedural modeler and slicer for 3D printing";
-    homepage = "http://shapeforge.loria.fr/icesl/index.html";
+    homepage = "https://icesl.loria.fr/";
     license = licenses.inria-icesl;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ mgttlinger ];
