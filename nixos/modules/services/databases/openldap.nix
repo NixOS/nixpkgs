@@ -111,7 +111,7 @@ in {
           olcDatabase = "{1}${database}";
           olcDbDirectory = lib.mkDefault (
             if versionAtLeast config.system.stateVersion "21.11"
-            then "/var/lib/openldap/slapd.d"
+            then "/var/lib/openldap/default"
             else "/var/db/openldap"
           );
         };
