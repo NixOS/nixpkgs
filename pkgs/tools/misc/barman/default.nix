@@ -2,7 +2,7 @@
 , lib
 , python39Packages
 }:
-let 
+let
   pythonPackages = python39Packages;
 in
 pythonPackages.buildPythonApplication rec {
@@ -16,9 +16,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "127cqndg0405rad9jzba1mfhpqmyfa3kx16w345kd4n822w17ak9";
   };
 
-  checkInputs = with pythonPackages; [ 
+  checkInputs = with pythonPackages; [
     mock
-    pytestCheckHook 
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = with pythonPackages; [
