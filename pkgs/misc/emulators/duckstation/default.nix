@@ -12,10 +12,10 @@
 , gtk3
 , libevdev
 , curl
-, libpulseaudio ? null
+, libpulseaudio
 , sndio
 , mesa
-, vulkan-loader ? null
+, vulkan-loader
 , wayland
 }:
 mkDerivation rec {
