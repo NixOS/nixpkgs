@@ -1627,6 +1627,16 @@ Superuser created successfully.
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>cawbird</literal> Twitter client now uses its own
+          API keys to count as different application than upstream
+          builds. This is done to evade application-level rate limiting.
+          While existing accounts continue to work, users may want to
+          remove and re-register their account in the client to enjoy a
+          better user experience and benefit from this change.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
