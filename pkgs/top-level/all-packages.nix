@@ -24505,6 +24505,10 @@ with pkgs;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
+  entangle = callPackage ../applications/video/entangle {
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  };
+
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
   epdfview = callPackage ../applications/misc/epdfview { };
