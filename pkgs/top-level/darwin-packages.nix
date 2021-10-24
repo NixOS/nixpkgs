@@ -199,4 +199,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
+  installApplication = callPackage ../os-specific/darwin/installApplication {};
+
 })
