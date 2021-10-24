@@ -3532,8 +3532,6 @@ with pkgs;
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
 
-  ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
-
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -33408,6 +33406,13 @@ with pkgs;
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
+
+  inherit (callPackage ../applications/networking/instant-messengers/jami {
+    # TODO: remove once `udev` is `systemdMinimal` everywhere.
+    udev = systemdMinimal;
+    jack = libjack2;
+  })
+    jami-daemon jami-libclient jami-client-gnome jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
     electron = electron_13;
