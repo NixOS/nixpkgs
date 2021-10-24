@@ -109,7 +109,11 @@ in {
           # objectClass is case-insensitive, so don't need to capitalize ${database}
           objectClass = [ "olcdatabaseconfig" "olc${database}config" ];
           olcDatabase = "{1}${database}";
-          olcDbDirectory = lib.mkDefault "/var/lib/openldap/slapd.d";
+          olcDbDirectory = lib.mkDefault (
+            if versionAtLeast config.system.stateVersion "21.11"
+            then "/var/lib/openldap/slapd.d"
+            else "/var/db/openldap"
+          );
         };
         "cn=schema".includes = lib.mkDefault (
           map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
