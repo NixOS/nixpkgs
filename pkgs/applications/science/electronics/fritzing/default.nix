@@ -14,32 +14,27 @@
 }:
 
 let
-  # build number corresponding to a release, has no further relation
-  # see https://github.com/fritzing/fritzing-app/releases/tag/CD-498
-  # fritzingBuild = "498";
-  # version 0.9.6 is properly tagged, hope it continues
-
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "6f04697be286768bc9e4d64f8707e8e40cbcafcb";
+  partsSha = "640fa25650211afccd369f960375ade8ec3e8653";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    sha256 = "1f4w0hz44n4iw1rc5vhcgzvlji54rf4yr8bvzkqv99hn2xf5pjgs";
+    sha256 = "sha256-4S65eX4LCnXCFQAOxmdvr8d0nAgTWcJooE2SpLYpcXI=";
   };
 in
 
 mkDerivation rec {
   pname = "fritzing";
-  version = "0.9.6";
+  version = "unstable-2021-09-22";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "fritzing-app";
-    rev = version;
-    sha256 = "083nz7vj7a334575smjry6257535h68gglh8a381xxa36dw96aqs";
+    rev = "f0af53a9077f7cdecef31d231b85d8307de415d4";
+    sha256 = "sha256-fF38DrBoeZ0aKwVMNyYMPWa5rFPbIVXRARZT+eRat5Q=";
   };
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 quazip ];
