@@ -33173,6 +33173,13 @@ with pkgs;
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
+  inherit (callPackage ../applications/networking/instant-messengers/jami {
+    # TODO: remove once `udev` is `systemdMinimal` everywhere.
+    udev = systemdMinimal;
+    jack = libjack2;
+  })
+    jami-daemon jami-libclient jami-client-gnome jami-client-qt;
+
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
     electron = electron_13;
   };
