@@ -88,7 +88,6 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - aeson-utils
-  - aeson-via
   - affection
   - affine-invariant-ensemble-mcmc
   - Agata
@@ -1050,7 +1049,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
   - diagrams-pdf
@@ -2469,7 +2467,6 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
-  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
