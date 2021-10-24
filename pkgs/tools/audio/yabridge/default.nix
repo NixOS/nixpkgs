@@ -47,25 +47,25 @@ let
 
   # Derived from vst3.wrap
   vst3 = rec {
-    version = "3.7.2_build_28-patched";
+    version = "3.7.3_build_20-patched";
     src = fetchFromGitHub {
       owner = "robbert-vdh";
       repo = "vst3sdk";
       rev = "v${version}";
       fetchSubmodules = true;
-      sha256 = "sha256-39pvfcg4fvf7DAbAPzEHA1ja1LFL6r88nEwNYwaDC8w=";
+      sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
     };
   };
 in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.5.2";
+  version = "3.6.0";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    hash = "sha256-SLiksc8lQo2A5sefKbcaJyhi8vPdp2p2Jbc7bvM0sDw=";
+    hash = "sha256-lgSkZ0i2DojP6HXJP3cC5FUtfv7R/nsSiHT60bPSyLc=";
   };
 
   # Unpack subproject sources
