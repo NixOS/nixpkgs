@@ -17,7 +17,20 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
   configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
+
+  # Older versions have some race:
+  #  cp: cannot stat 'boot/ocamlrun': No such file or directory
+  #  make[2]: *** [Makefile:199: backup] Error 1
+  enableParallelBuilding = lib.versionAtLeast version "4.06";
+
+  # Workaround lack of parallelism support among top-level targets:
+  # we place nixpkgs-specific targets to a separate file and set
+  # sequential order among them as a single rule.
+  makefile = ./Makefile.nixpkgs;
+  buildFlags = if useNativeCompilers
+    then ["nixpkgs_world_bootstrap_world_opt"]
+    else ["nixpkgs_world"];
+
   buildInputs = [ ncurses ] ++ optional useX11 xlibsWrapper;
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   preConfigure = ''
