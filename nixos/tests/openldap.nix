@@ -42,7 +42,7 @@ in {
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/current";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example
@@ -97,7 +97,6 @@ in {
         cn: config
         objectClass: olcGlobal
         olcLogLevel: stats
-        olcPidFile: /run/slapd/slapd.pid
 
         dn: cn=schema,cn=config
         cn: schema
