@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ wxGTK30 zlib zstd ];
 
   meta = with lib; {
-    description = "An easy to setup Open Source client/server backup system, that through a combination of image and file backups accomplishes both data safety and a fast restoration time";
+    description = "An easy to setup Open Source client/server backup system";
     homepage = "https://www.urbackup.org/index.html";
     license = licenses.agpl3;
     platforms = platforms.linux;
