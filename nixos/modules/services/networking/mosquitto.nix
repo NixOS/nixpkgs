@@ -264,6 +264,15 @@ let
         default = {};
       };
 
+      omitPasswordAuth = mkOption {
+        type = bool;
+        description = ''
+          Omits password checking, allowing anyone to log in with any user name unless
+          other mandatory authentication methods (eg TLS client certificates) are configured.
+        '';
+        default = false;
+      };
+
       acl = mkOption {
         type = listOf str;
         description = ''
@@ -294,9 +303,9 @@ let
   formatListener = idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "password_file ${cfg.dataDir}/passwd-${toString idx}"
       "acl_file ${makeACLFile idx listener.users listener.acl}"
     ]
+    ++ optional (! listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform {} listener.settings
     ++ concatMap formatAuthPlugin listener.authPlugins;
 

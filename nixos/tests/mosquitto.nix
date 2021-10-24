@@ -3,6 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   port = 1888;
   tlsPort = 1889;
+  anonPort = 1890;
   password = "VERY_secret";
   hashedPassword = "$7$101$/WJc4Mp+I+uYE9sR$o7z9rD1EYXHPwEP5GqQj6A7k4W1yVbePlb8TqNcuOLV9WNCiDgwHOB0JHC1WCtdkssqTBduBNUnUGd6kmZvDSw==";
   topic = "test/foo";
@@ -63,7 +64,7 @@ in {
     };
   in {
     server = { pkgs, ... }: {
-      networking.firewall.allowedTCPPorts = [ port tlsPort ];
+      networking.firewall.allowedTCPPorts = [ port tlsPort anonPort ];
       services.mosquitto = {
         enable = true;
         settings = {
@@ -110,6 +111,18 @@ in {
               keyfile = "${snakeOil}/server.key";
               require_certificate = true;
               use_identity_as_username = true;
+            };
+          }
+          {
+            port = anonPort;
+            omitPasswordAuth = true;
+            settings.allow_anonymous = true;
+            acl = [ "pattern read #" ];
+            users = {
+              anonWriter = {
+                password = "<ignored>" + password;
+                acl = [ "write ${topic}" ];
+              };
             };
           }
         ];
@@ -182,5 +195,14 @@ in {
                 topic="$SYS/#",
                 port=${toString tlsPort},
                 user="no_such_user"))
+
+    with subtest("check omitPasswordAuth"):
+        parallel(
+            lambda: client1.succeed(subscribe("-i fd56032c-d9cb-4813-a3b4-6be0e04c8fc3",
+                "anonReader", port=${toString anonPort})),
+            lambda: [
+                server.wait_for_console_text("fd56032c-d9cb-4813-a3b4-6be0e04c8fc3"),
+                client2.succeed(publish("-m test", "anonWriter", port=${toString anonPort}))
+            ])
   '';
 })
