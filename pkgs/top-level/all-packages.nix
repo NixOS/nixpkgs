@@ -6912,8 +6912,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    inherit pkgs;
+    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
   };
 
   memtester = callPackage ../tools/system/memtester { };
