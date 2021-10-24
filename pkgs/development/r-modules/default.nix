@@ -422,6 +422,7 @@ let
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
     hdf5r = [ pkgs.hdf5.dev ];
+    httpgd = with pkgs; [ cairo.dev ];
   };
 
   packagesWithBuildInputs = {
