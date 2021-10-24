@@ -35,47 +35,44 @@ in
     maintainers = [ euank ];
   };
 
-  nodes = {
-    k3s =
-      { pkgs, ... }: {
-        environment.systemPackages = with pkgs; [ k3s gzip ];
+  machine = { pkgs, ... }: {
+    environment.systemPackages = with pkgs; [ k3s gzip ];
 
-        # k3s uses enough resources the default vm fails.
-        virtualisation.memorySize = pkgs.lib.mkDefault 1536;
-        virtualisation.diskSize = pkgs.lib.mkDefault 4096;
+    # k3s uses enough resources the default vm fails.
+    virtualisation.memorySize = pkgs.lib.mkDefault 1536;
+    virtualisation.diskSize = pkgs.lib.mkDefault 4096;
 
-        services.k3s.enable = true;
-        services.k3s.role = "server";
-        services.k3s.package = pkgs.k3s;
-        # Slightly reduce resource usage
-        services.k3s.extraFlags = "--no-deploy coredns,servicelb,traefik,local-storage,metrics-server --pause-image test.local/pause:local";
+    services.k3s.enable = true;
+    services.k3s.role = "server";
+    services.k3s.package = pkgs.k3s;
+    # Slightly reduce resource usage
+    services.k3s.extraFlags = "--no-deploy coredns,servicelb,traefik,local-storage,metrics-server --pause-image test.local/pause:local";
 
-        users.users = {
-          noprivs = {
-            isNormalUser = true;
-            description = "Can't access k3s by default";
-            password = "*";
-          };
-        };
+    users.users = {
+      noprivs = {
+        isNormalUser = true;
+        description = "Can't access k3s by default";
+        password = "*";
       };
+    };
   };
 
   testScript = ''
     start_all()
 
-    k3s.wait_for_unit("k3s")
-    k3s.succeed("k3s kubectl cluster-info")
-    k3s.fail("sudo -u noprivs k3s kubectl cluster-info")
-    # k3s.succeed("k3s check-config") # fails with the current nixos kernel config, uncomment once this passes
+    machine.wait_for_unit("k3s")
+    machine.succeed("k3s kubectl cluster-info")
+    machine.fail("sudo -u noprivs k3s kubectl cluster-info")
+    # machine.succeed("k3s check-config") # fails with the current nixos kernel config, uncomment once this passes
 
-    k3s.succeed(
+    machine.succeed(
         "zcat ${pauseImage} | k3s ctr image import -"
     )
 
-    k3s.succeed("k3s kubectl apply -f ${testPodYaml}")
-    k3s.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
-    k3s.succeed("k3s kubectl delete -f ${testPodYaml}")
+    machine.succeed("k3s kubectl apply -f ${testPodYaml}")
+    machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
+    machine.succeed("k3s kubectl delete -f ${testPodYaml}")
 
-    k3s.shutdown()
+    machine.shutdown()
   '';
 })
