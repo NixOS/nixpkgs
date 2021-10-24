@@ -1,9 +1,9 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.18.3";
-  sha256 = "0nvvjc0ml1irn7vxyq4m43qimp128cx8hczk21y5m39i2rg4yzx4";
-  manifestsSha256 = "1qgw9ij0b85vvdx03wmbbwanhq1hf69wphy58lsqwf33rdq0bb1m";
+  version = "0.19.1";
+  sha256 = "184f5q3aa4p6gjdmr8x6a97rzaj64ws8bf3q8sz4xjyznznwcpp0";
+  manifestsSha256 = "1xxf572yvjmik7dvijz810lxzfj7irddznl4icidn7hrljzjrv95";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -23,21 +23,25 @@ buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "0vgi5cnvmc98xa2ibpgvvqlc90hf3gj3v17yqncid596ig3dnqsc";
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  subPackages = [ "cmd/flux" ];
-
-  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+  vendorSha256 = "sha256-1ZIeS42LoreZKkzDNZxmF17HeDWWVo49CaZDrIR2U9g=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
 
+  patches = [
+    ./patches/disable-tests-ssh_key.patch
+  ];
+
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  subPackages = [ "cmd/flux" ];
+
   # Required to workaround test error:
   #   panic: mkdir /homeless-shelter: permission denied
   HOME="$TMPDIR";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doInstallCheck = true;
   installCheckPhase = ''
