@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2021.7";
+  version = "2021.8";
 
   format = "other";
 
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "i2s4JXg+D9sYq1QwVcDRLIr9qnRmzHC+cBInHv4SXHI=";
+    sha256 = "Y1IdCH6bytxbKIj48IAw/3XUQhoqwPshvdj/d1hRS3o=";
   };
 
   nativeBuildInputs = [
