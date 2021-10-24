@@ -5966,6 +5966,8 @@ with pkgs;
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
+  gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
+
   grype = callPackage ../tools/security/grype { };
 
   gt5 = callPackage ../tools/system/gt5 { };

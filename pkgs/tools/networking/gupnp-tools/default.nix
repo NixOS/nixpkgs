@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , gupnp
@@ -16,12 +18,25 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13d1qr1avz9r76989nvgxhhclmqzr025xjk4rfnja94fpbspznj1";
+    sha256 = "TqltFnRis6VI78T8TqCJ/lGNfSm+NJ0czomCuf+1O0o=";
   };
+
+  patches = [
+    # Fix compilation with -Werror=format-security.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gupnp-tools/commit/d738baae3bffaf6a8dfc12f5fe1ea13168fe2e48.patch";
+      sha256 = "wrORH4y9Yb0YGAsjzoeN2MM07y9o+91kx078RH0G76w=";
+    })
+    # Fix missing variable reference caused by the previous patch.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gupnp-tools/commit/9b852d91175bc7607ad845459ba29d07a16fcbce.patch";
+      sha256 = "WjEBN/+snJSIg4SUP5iChdj2auIyzePI0TH3Ilks7fk=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
