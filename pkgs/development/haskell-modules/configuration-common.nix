@@ -281,7 +281,9 @@ self: super: {
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   matplotlib = dontCheck super.matplotlib;
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_64_2;
+  }));
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
