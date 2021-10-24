@@ -58,10 +58,14 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName = ".qmake.stash";
   debugSymbols = debug || developerBuild;
-in
 
-stdenv.mkDerivation {
-  pname = "qtbase";
+  cacheBuildPhaseResult = true; # save the result of buildPhase in a separate derivation
+  # make easier to debug postInstall, postFixup
+
+pnameBase = "qtbase";
+
+qtbaseDrv = stdenv.mkDerivation {
+  pname = if cacheBuildPhaseResult then "${pnameBase}-buildPhaseResult" else pnameBase;
   inherit qtCompatVersion src version;
   debug = debugSymbols;
   # note: git repo: git://code.qt.io/qt/qtbase.git
@@ -146,7 +150,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = if cacheBuildPhaseResult then [ "out" ] else [ "bin" "dev" "out" ];
 
   inherit patches;
 
@@ -397,9 +401,14 @@ stdenv.mkDerivation {
     ]
   );
 
+  cmakeFlags = if cacheBuildPhaseResult then [ "-DINSTALL_COMMAND=:" ] else [ ];
+
   # Move selected outputs.
   # TODO dont install $out/mkspecs in the first place
-  preInstall = ''
+  preInstall = if cacheBuildPhaseResult then ''
+    cd ..
+    cp -r . $out
+  '' else ''
     echo preInstall 0
     echo find plugins folder
     find . -name plugins
@@ -433,7 +442,7 @@ stdenv.mkDerivation {
 
   # Move selected outputs.
   # TODO dont install $out/mkspecs in the first place
-  postInstall = ''
+  postInstall = if cacheBuildPhaseResult then ":" else ''
     echo postInstall 1
 
     # FIXME why is this both in pre and post install?
@@ -464,7 +473,7 @@ stdenv.mkDerivation {
   ];
 
   # cwd is /build/qtbase*/build
-  postFixup = ''
+  postFixup = if cacheBuildPhaseResult then ":" else ''
     #set -o xtrace # debug
 
     echo postFixup 1
@@ -531,4 +540,19 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   };
+};
+
+in
+
+if !cacheBuildPhaseResult then qtbaseDrv
+else stdenv.mkDerivation {
+  # TODO install qtbaseDrv
+  buildInputs = [ qtbaseDrv ];
+  pname = pnameBase;
+  version = qtbaseDrv.version;
+  outputs = [ "bin" "dev" "out" ];
+  buildPhase = ''
+    echo TODO qtbaseDrv ${qtbaseDrv}
+    exit 1
+  '';
 }
