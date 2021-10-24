@@ -520,6 +520,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="options.html#opt-users.users._name_.shell">users.users.&lt;name&gt;.shell</link>
+          now implies the corresponding enable option of the shell, if
+          one exists. If this is undesired, you can override it by
+          manually setting the option to false.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.geoip-updater</literal> was broken and has
           been replaced by
           <link xlink:href="options.html#opt-services.geoipupdate.enable">services.geoipupdate</link>.
