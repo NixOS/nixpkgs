@@ -2,7 +2,7 @@
 , lib
 , python3Packages
 }:
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "barman";
   version = "2.15";
 
