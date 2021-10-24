@@ -63,17 +63,11 @@ with lib;
 with builtins;
 
 let majorVersion = "9";
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.4.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches =
-      # Fix ICE: Max. number of generated reload insns per insn is achieved (90)
-      #
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
-      #
-      # This patch can most likely be removed by a post 9.3.0-release.
-      [ ./avoid-cycling-subreg-reloads.patch ]
+    patches = []
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional targetPlatform.isNetBSD ../libstdc++-netbsd-ctypes.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -87,9 +81,7 @@ let majorVersion = "9";
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
-
-      ++ [ ../libsanitizer-no-cyclades-9.patch ];
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -106,7 +98,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1la2yy27ziasyf0jvzk58y1i5b5bq2h176qil550bxhifs39gqbi";
+    sha256 = "13l3p6g2krilaawbapmn9zmmrh3zdwc36mfr3msxfy038hps6pf9";
   };
 
   inherit patches;
