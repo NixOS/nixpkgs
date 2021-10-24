@@ -1271,6 +1271,8 @@ with pkgs;
 
   artyFX = callPackage ../applications/audio/artyFX {};
 
+  oggvideotools = callPackage ../tools/misc/oggvideotools { };
+
   owl-lisp = callPackage ../development/compilers/owl-lisp {};
 
   ascii = callPackage ../tools/text/ascii { };
@@ -1625,6 +1627,8 @@ with pkgs;
   };
 
   enchive = callPackage ../tools/security/enchive { };
+
+  enjarify = callPackage ../tools/misc/enjarify { };
 
   enpass = callPackage ../tools/security/enpass { };
 
@@ -3418,6 +3422,8 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
+  procyon = callPackage ../tools/misc/procyon { };
+
   profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
@@ -3568,6 +3574,8 @@ with pkgs;
     hiredis = null;
     libmaxminddb = null;
   };
+
+  xmlbeans = callPackage ../tools/misc/xmlbeans { };
 
   xmlsort = perlPackages.XMLFilterSort;
 
@@ -11297,6 +11305,7 @@ with pkgs;
     };
   };
 
+  clang_13 = llvmPackages_13.clang;
   clang_12 = llvmPackages_12.clang;
   clang_11 = llvmPackages_11.clang;
   clang_10 = llvmPackages_10.clang;
@@ -15508,6 +15517,8 @@ with pkgs;
   aws-c-mqtt = callPackage ../development/libraries/aws-c-mqtt { };
 
   aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
+
+  aws-c-sdkutils = callPackage ../development/libraries/aws-c-sdkutils { };
 
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
@@ -21856,6 +21867,10 @@ with pkgs;
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
+
+  libtracefs = callPackage ../os-specific/linux/libtracefs {};
+
   lieer = callPackage ../applications/networking/lieer {};
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
@@ -26794,6 +26809,10 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  rqbit = callPackage ../applications/networking/p2p/rqbit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
@@ -27856,8 +27875,6 @@ with pkgs;
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
-
-  curaLulzbot = libsForQt5.callPackage ../applications/misc/cura/lulzbot/default.nix { };
 
   curaByDagoma = callPackage ../applications/misc/curabydagoma { };
 

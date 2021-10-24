@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "ismartgate";
-  version = "4.0.3";
+  version = "4.0.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s9fHvjqPHDKuT/DMGu1ETuPNlFIkp0wlv15KeTb6fX8=";
+    sha256 = "sha256-yh7gPyy3VMdyINBCZo5K2wA0BY7yYgHrKGZRB/pm77U=";
   };
 
   propagatedBuildInputs = [

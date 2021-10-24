@@ -947,6 +947,15 @@
     "sha256": "1fs96qd2b4glk8hhn5m9r04ap679g0kf3nnhjx1a2idqwrv71gcl",
     "version": "3.3.0"
   },
+  "sentry": {
+    "owner": "jianyuan",
+    "provider-source-address": "registry.terraform.io/jianyuan/sentry",
+    "repo": "terraform-provider-sentry",
+    "rev": "v0.6.0",
+    "sha256": "0246hv52kslrzj43dkbk8r8gimwz3sgzxsbv7sxwmk3ll3sl2zrk",
+    "vendorSha256": "1d4c8cg4a81mndrzwrsi1k9ll553csnb0r4avlq9hyc03z60dwdc",
+    "version": "0.6.0"
+  },
   "shell": {
     "owner": "scottwinkler",
     "provider-source-address": "registry.terraform.io/scottwinkler/shell",
