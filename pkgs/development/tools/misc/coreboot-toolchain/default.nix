@@ -1,16 +1,24 @@
-{ callPackage, fetchgit, lib, stdenvNoCC
-, bison, curl, git, perl
-, flex, gnat11, zlib
+{ bison
+, callPackage
+, curl
+, fetchgit
+, flex
+, git
+, gnat11
+, lib
+, perl
+, stdenvNoCC
+, zlib
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "coreboot-toolchain";
-  version = "4.14";
+  version = "4.15";
 
   src = fetchgit {
     url = "https://review.coreboot.org/coreboot";
     rev = version;
-    sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
+    sha256 = "0y137dhfi0zf9nmyq49ksrad69yspbnsmzc4wjkw3hjwvzgi8j27";
     fetchSubmodules = false;
   };
 
