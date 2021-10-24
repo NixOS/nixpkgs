@@ -3477,8 +3477,6 @@ with pkgs;
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
 
-  ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
-
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
