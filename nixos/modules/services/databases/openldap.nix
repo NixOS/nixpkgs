@@ -9,10 +9,10 @@ let
   configDir = if cfg.configDir != null then cfg.configDir else "/var/lib/openldap/slapd.d";
 
   dbSettings = filterAttrs (name: value: hasPrefix "olcDatabase=" name) cfg.settings.children;
-  dataDirsMap = mapAttrs' (_: value: nameValuePair value.attrs.olcSuffix (removePrefix "/var/lib/openldap/" value.attrs.olcDbDirectory))
+  dataDirs = mapAttrs' (_: value: nameValuePair value.attrs.olcSuffix (removePrefix "/var/lib/openldap/" value.attrs.olcDbDirectory))
     (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory && hasPrefix "/var/lib/openldap/" value.attrs.olcDbDirectory) dbSettings);
   declarativeDNs = attrNames cfg.declarativeContents;
-  additionalStateDirectories = map (sfx: "openldap/" + sfx) (attrValues dataDirsMap);
+  additionalStateDirectories = map (sfx: "openldap/" + sfx) (attrValues dataDirs);
 
   ldapValueType = let
     # Can't do types.either with multiple non-overlapping submodules, so define our own
@@ -262,7 +262,7 @@ in {
       assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
       message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
     }) legacyOptions ++ map (dn: {
-      assertion = dataDirsMap ? "${dn}";
+      assertion = dataDirs ? "${dn}";
       message = ''
         declarative DB ${dn} does not exist in "servies.openldap.settings" or it exists but the "olcDbDirectory"
         is not prefixed by "/var/lib/openldap/"
@@ -290,7 +290,7 @@ in {
         settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
         dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
         mkLoadScript = dn: let
-          dataDir = lib.escapeShellArg ("/var/lib/openldap/" + getAttr dn dataDirsMap);
+          dataDir = lib.escapeShellArg ("/var/lib/openldap/" + getAttr dn dataDirs);
         in  ''
           rm -rf ${dataDir}/*
           ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${getAttr dn dataFiles}
