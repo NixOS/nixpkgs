@@ -88,7 +88,7 @@ in
       # TSM needs a HOME dir to store certificates.
       environment.HOME = "/var/lib/tsm-backup";
       # for exit status description see
-      # https://www.ibm.com/support/knowledgecenter/en/SSEQVQ_8.1.8/client/c_sched_rtncode.html
+      # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=clients-client-return-codes
       serviceConfig.SuccessExitStatus = "4 8";
       # The `-se` option must come after the command.
       # The `-optfile` option suppresses a `dsm.opt`-not-found warning.

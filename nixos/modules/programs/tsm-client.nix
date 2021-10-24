@@ -144,7 +144,7 @@ let
     };
     config.name = mkDefault name;
     # Client system-options file directives are explained here:
-    # https://www.ibm.com/support/knowledgecenter/SSEQVQ_8.1.8/client/c_opt_usingopts.html
+    # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=commands-processing-options
     config.extraConfig =
       mapAttrs (lib.trivial.const mkDefault) (
         {
