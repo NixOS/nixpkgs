@@ -6,8 +6,7 @@ let
   name = "${pname}-v${version}";
 
   src = fetchurl {
-    url =
-      "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
+    url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
     sha256 = "sha256-YuG7H+7FXYGbNNhM5vxps72dqltcj3bA325e7ZbW8aI=";
   };
 
