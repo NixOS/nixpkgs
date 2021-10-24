@@ -266,7 +266,13 @@ start_all()
       <listitem>
         <para>
           Execute a shell command, returning a list
-          <literal>(status, stdout)</literal>.
+          <literal>(status, stdout)</literal>. Takes an optional
+          parameter <literal>check_return</literal> that defaults to
+          <literal>True</literal>. Setting this parameter to
+          <literal>False</literal> will not check for the return code
+          and return -1 instead. This can be used for commands that shut
+          down the VM and would therefore break the pipe that would be
+          used for retrieving the return code.
         </para>
       </listitem>
     </varlistentry>
