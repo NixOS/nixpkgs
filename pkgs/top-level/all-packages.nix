@@ -31883,6 +31883,8 @@ with pkgs;
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 
+  dosbox-staging = callPackage ../misc/emulators/dosbox-staging { };
+
   emu2 = callPackage ../misc/emulators/emu2 { };
 
   apt = callPackage ../tools/package-management/apt { };
