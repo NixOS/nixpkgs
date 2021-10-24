@@ -1273,6 +1273,8 @@ with pkgs;
 
   artyFX = callPackage ../applications/audio/artyFX {};
 
+  oggvideotools = callPackage ../tools/misc/oggvideotools { };
+
   owl-lisp = callPackage ../development/compilers/owl-lisp {};
 
   ascii = callPackage ../tools/text/ascii { };
@@ -1627,6 +1629,8 @@ with pkgs;
   };
 
   enchive = callPackage ../tools/security/enchive { };
+
+  enjarify = callPackage ../tools/misc/enjarify { };
 
   enpass = callPackage ../tools/security/enpass { };
 
@@ -3420,6 +3424,8 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
+  procyon = callPackage ../tools/misc/procyon { };
+
   profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
@@ -3570,6 +3576,8 @@ with pkgs;
     hiredis = null;
     libmaxminddb = null;
   };
+
+  xmlbeans = callPackage ../tools/misc/xmlbeans { };
 
   xmlsort = perlPackages.XMLFilterSort;
 
@@ -15496,6 +15504,8 @@ with pkgs;
 
   aws-c-s3 = callPackage ../development/libraries/aws-c-s3 { };
 
+  aws-c-sdkutils = callPackage ../development/libraries/aws-c-sdkutils { };
+
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
   aws-crt-cpp = callPackage ../development/libraries/aws-crt-cpp { };
@@ -21841,6 +21851,10 @@ with pkgs;
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
+
+  libtracefs = callPackage ../os-specific/linux/libtracefs {};
+
   lieer = callPackage ../applications/networking/lieer {};
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
@@ -26782,6 +26796,10 @@ with pkgs;
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
   qemacs = callPackage ../applications/editors/qemacs { };
+
+  rqbit = callPackage ../applications/networking/p2p/rqbit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 

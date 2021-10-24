@@ -285,6 +285,7 @@ jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 joosepalviste/nvim-ts-context-commentstring@main
+jordwalke/vim-reasonml
 josa42/coc-lua
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim@main

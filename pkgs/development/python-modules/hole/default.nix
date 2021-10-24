@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "hole";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "065fxc0l16j8xkjd0y0qar9cmqmjyp8jcshakbakldkfscpx3s5m";
+    sha256 = "sha256-T6U6WVx+5+/UaSS2mMmjAjWu67ut+YGpq2ooP9YEazI=";
   };
 
   propagatedBuildInputs = [
