@@ -101,9 +101,6 @@ self: super:
   # still present here https://github.com/glguy/th-abstraction/issues/53
   th-abstraction = dontCheck super.th-abstraction;
 
-  # https://github.com/haskell/vector/issues/410
-  vector = appendPatch super.vector (../compilers/ghcjs/patches/vector-ghcjs-storable-set.patch) ;
-
   # Need hedgehog for tests, which fails to compile due to dep on concurrent-output
   zenc = dontCheck super.zenc;
 }
