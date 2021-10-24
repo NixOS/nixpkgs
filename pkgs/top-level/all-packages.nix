@@ -434,6 +434,8 @@ with pkgs;
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  fntsample = callPackage ../tools/misc/fntsample { };
+
   fetchutils = callPackage ../tools/misc/fetchutils { };
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
