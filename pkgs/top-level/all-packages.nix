@@ -164,6 +164,8 @@ with pkgs;
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
+  quickemu = callPackage ../development/quickemu { };
+
   aether = callPackage ../applications/networking/aether { };
 
   alda = callPackage ../development/interpreters/alda { };
@@ -1432,7 +1434,7 @@ with pkgs;
 
   automirror = callPackage ../tools/misc/automirror { };
 
-  barman = python3Packages.callPackage ../tools/misc/barman { };
+  barman = callPackage ../tools/misc/barman { };
 
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
 
@@ -5973,6 +5975,8 @@ with pkgs;
   gtest = callPackage ../development/libraries/gtest { };
 
   gbenchmark = callPackage ../development/libraries/gbenchmark {};
+
+  gkraken = callPackage ../tools/system/gkraken { };
 
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
@@ -12952,6 +12956,8 @@ with pkgs;
   urweb = callPackage ../development/compilers/urweb {
     icu = icu67;
   };
+
+  urbackup-client = callPackage ../applications/backup/urbackup-client { };
 
   vlang = callPackage ../development/compilers/vlang { };
 

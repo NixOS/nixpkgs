@@ -24,7 +24,7 @@ let
     IO
     IOStringy
     LWP
-    libintl_perl
+    libintl-perl
 
     MHonArc
     MIMECharset
