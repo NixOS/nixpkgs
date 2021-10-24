@@ -10773,6 +10773,8 @@ with pkgs;
 
   undmg = callPackage ../tools/archivers/undmg { };
 
+  unxar = callPackage ../tools/archivers/unxar { };
+
   uptimed = callPackage ../tools/system/uptimed { };
 
   upwork = callPackage ../applications/misc/upwork { };
