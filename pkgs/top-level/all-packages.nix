@@ -1444,6 +1444,8 @@ with pkgs;
 
   bic = callPackage ../development/interpreters/bic { };
 
+  binance = callPackage ../applications/misc/binance { };
+
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
