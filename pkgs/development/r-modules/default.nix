@@ -516,6 +516,33 @@ let
     DirichletMultinomial = with pkgs; [ gsl ];
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
+    GMMAT = with pkgs; [ zlib.dev bzip2.dev ];
+    HiCDCPlus = [ pkgs.zlib.dev ];
+    PopGenome = [ pkgs.zlib.dev ];
+    QuasR = [ pkgs.zlib.dev ];
+    Rbowtie2 = [ pkgs.zlib.dev ];
+    Rmmquant = [ pkgs.zlib.dev ];
+    SICtools = with pkgs; [ zlib.dev ncurses.dev ];
+    Signac = [ pkgs.zlib.dev ];
+    TransView = [ pkgs.zlib.dev ];
+    bigsnpr = [ pkgs.zlib.dev ];
+    divest = [ pkgs.zlib.dev ];
+    hipread = [ pkgs.zlib.dev ];
+    jackalope = with pkgs; [ zlib.dev xz.dev ];
+    largeList = [ pkgs.zlib.dev ];
+    mappoly = [ pkgs.zlib.dev ];
+    matchingMarkets = [ pkgs.zlib.dev ];
+    methylKit = [ pkgs.zlib.dev ];
+    ndjson = [ pkgs.zlib.dev ];
+    podkat = [ pkgs.zlib.dev ];
+    qrqc = [ pkgs.zlib.dev ];
+    rJPSGCS = [ pkgs.zlib.dev ];
+    rhdf5filters = [ pkgs.zlib.dev ];
+    rtk = [ pkgs.zlib.dev ];
+    scPipe = [ pkgs.zlib.dev ];
+    seqTools = [ pkgs.zlib.dev ];
+    seqbias = [ pkgs.zlib.dev ];
+    sparkwarc = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
@@ -1121,6 +1148,13 @@ let
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
     });
+
+    SICtools = old.SICtools.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+      '';
+    });
+
   };
 in
   self
