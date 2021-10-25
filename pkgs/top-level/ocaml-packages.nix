@@ -195,6 +195,8 @@ let
 
     conduit-mirage = callPackage ../development/ocaml-modules/conduit/mirage.nix { };
 
+    coin =  callPackage ../development/ocaml-modules/coin { };
+
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
     containers = callPackage ../development/ocaml-modules/containers { };
