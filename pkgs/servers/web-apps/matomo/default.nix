@@ -3,16 +3,16 @@
 let
   versions = {
     matomo = {
-      version = "4.4.1";
-      sha256 = "0y8ljdj97znvd3hkkr7s6s9k8m93agw3z9cfw1azzaxgc46akfcl";
+      version = "4.5.0";
+      sha256 = "sha256-OyjdzY+ENYxOTVjDLjj2unJbpaGODIH2I5Acmt45HDA=";
     };
 
     matomo-beta = {
-      version = "4.4.1";
+      version = "4.6.0";
       # `beta` examples: "b1", "rc1", null
-      # TOOD when updating: use null if stable version is >= latest beta or release candidate
-      beta = null;
-      sha256 = "0y8ljdj97znvd3hkkr7s6s9k8m93agw3z9cfw1azzaxgc46akfcl";
+      # when updating: use null if stable version is >= latest beta or release candidate
+      beta = "b2";
+      sha256 = "sha256-7p/ZPtr5a/tBjrM27ILF3rNfxDIWuzWKCXNom3HlyL8=";
     };
   };
   common = pname: { version, sha256, beta ? null }:
@@ -74,7 +74,6 @@ let
           "misc/composer/clean-xhprof.sh"
           "misc/cron/archive.sh"
           "plugins/Installation/FormDatabaseSetup.php"
-          "vendor/leafo/lessphp/package.sh"
           "vendor/pear/archive_tar/sync-php4"
           "vendor/szymach/c-pchart/coverage.sh"
           "vendor/matomo/matomo-php-tracker/run_tests.sh"
