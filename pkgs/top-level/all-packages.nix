@@ -38949,6 +38949,8 @@ with pkgs;
     guile = guile_2_0;
   };
 
+  gem5 = callPackage ../applications/science/computer-architecture/gem5 { };
+
   gerbv = callPackage ../applications/science/electronics/gerbv {
     cairo = cairo.override { x11Support = true; };
   };
