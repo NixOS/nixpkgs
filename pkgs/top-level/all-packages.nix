@@ -6918,8 +6918,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    inherit pkgs;
+    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -26843,6 +26842,8 @@ with pkgs;
 
   songrec = callPackage ../applications/audio/songrec {};
 
+  storrent = callPackage ../applications/networking/p2p/storrent { };
+
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
@@ -27188,6 +27189,10 @@ with pkgs;
   };
 
   peek = callPackage ../applications/video/peek { };
+
+  peertube = callPackage ../servers/peertube {
+    nodejs = nodejs-16_x;
+  };
 
   pflask = callPackage ../os-specific/linux/pflask {};
 
