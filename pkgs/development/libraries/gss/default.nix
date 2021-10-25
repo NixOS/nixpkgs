@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withShishi shishi;
 
   configureFlags = [
-    "--${if withShishi != null then "enable" else "disable"}-kereberos5"
+    "--${if withShishi != null then "enable" else "disable"}-kerberos5"
   ];
 
   doCheck = true;
