@@ -33118,6 +33118,8 @@ with pkgs;
 
   yapesdl = callPackage ../misc/emulators/yapesdl { };
 
+  your-editor = callPackage ../applications/editors/your-editor { };
+
   x16-emulator = callPackage ../misc/emulators/commanderx16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commanderx16/rom.nix { };
   x16-run = (callPackage ../misc/emulators/commanderx16/run.nix { }) {
