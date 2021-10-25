@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sveitser ];
+    maintainers = with maintainers; [ sveitser autophagy ];
   };
 }
