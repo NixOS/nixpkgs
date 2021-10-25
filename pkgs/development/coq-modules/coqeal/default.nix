@@ -1,7 +1,10 @@
 { coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
+  mathcomp-real-closed,
   lib, which, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib;
+
+(mkCoqDerivation {
 
   pname = "CoqEAL";
 
@@ -25,4 +28,7 @@ with lib; mkCoqDerivation {
     description = "CoqEAL - The Coq Effective Algebra Library";
     license = licenses.mit;
   };
-}
+}).overrideAttrs (o: {
+  propagatedBuildInputs = o.propagatedBuildInputs
+  ++ optional (versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
+})
