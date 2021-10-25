@@ -1,19 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages
-}:
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
 
-let
-  deps = import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  };
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
-in
-
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "nbxplorer";
   version = "2.2.11";
 
@@ -24,31 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZDqzkANGMdvv3e5gWCYcacUYKLJRquXRHLr8RAzT9hY=";
   };
 
-  nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];
+  projectFile = "NBXplorer/NBXplorer.csproj";
+  nugetDeps = ./deps.nix;
 
-  buildPhase = ''
-    export HOME=$TMP/home
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+  dotnet-sdk = dotnetCorePackages.sdk_3_1;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_3_1;
 
-    nuget sources Add -Name tmpsrc -Source $TMP/nuget
-    nuget init ${linkFarmFromDrvs "deps" deps} $TMP/nuget
-
-    dotnet restore --source $TMP/nuget NBXplorer/NBXplorer.csproj
-    dotnet publish --no-restore --output $out/share/$pname -c Release NBXplorer/NBXplorer.csproj
+  postInstall = ''
+    mv $out/bin/{NBXplorer,nbxplorer}
   '';
-
-  installPhase = ''
-    makeWrapper $out/share/$pname/NBXplorer $out/bin/$pname \
-      --set DOTNET_ROOT "${dotnetSdk}"
-  '';
-
-  dontStrip = true;
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
     maintainers = with maintainers; [ kcalvinalvin earvstedt ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

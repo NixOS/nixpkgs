@@ -165,6 +165,7 @@ in
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
+  hadoop.all = handleTestOn [ "x86_64-linux" ] ./hadoop/hadoop.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
@@ -416,6 +417,7 @@ in
   solr = handleTest ./solr.nix {};
   sonarr = handleTest ./sonarr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
+  spark = handleTestOn ["x86_64-linux"] ./spark {};
   spike = handleTest ./spike.nix {};
   sslh = handleTest ./sslh.nix {};
   sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};

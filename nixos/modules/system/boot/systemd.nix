@@ -26,6 +26,8 @@ let
       "nss-user-lookup.target"
       "time-sync.target"
       "cryptsetup.target"
+      "cryptsetup-pre.target"
+      "remote-cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
