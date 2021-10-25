@@ -1,29 +1,21 @@
-{ pkgs, stdenv, fetchFromGitHub, lib, ... }:
+{ lib, stdenv, fetchFromGitHub }:
 
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "your-editor";
   version = "1203";
 
-  rev = "608418f2037dc4ef5647e69fcef45302c50f138c";
   src = fetchFromGitHub {
     owner = "kammerdienerb";
     repo = "yed";
-    rev = "608418f";
+    rev = "608418f2037dc4ef5647e69fcef45302c50f138c";
     sha256 = "KqK2lcDTn91aCFJIDg+h+QsTrl7745So5aiKCxPkeh4=";
   };
 
-  buildInputs = [
-  ];
-
-  configurePhase = ''
-    '';
-
-  buildPhase = ''
-    '';
-
   installPhase = ''
-     patchShebangs install.sh
+    runHook preInstall
+    patchShebangs install.sh
     ./install.sh -p $out
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -31,6 +23,7 @@ pkgs.stdenv.mkDerivation rec {
     homepage = "https://your-editor.org/";
     license = with licenses; [ mit ];
     platforms = platforms.linux;
-    maintainers = [ uniquepointer ];
+    maintainers = with maintainers; [ uniquepointer ];
+    mainProgram = "yed";
   };
 }

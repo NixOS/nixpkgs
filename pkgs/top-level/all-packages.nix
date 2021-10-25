@@ -29220,6 +29220,8 @@ with pkgs;
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
+  your-editor = callPackage ../applications/editors/your-editor { };
+
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
@@ -33117,8 +33119,6 @@ with pkgs;
   };
 
   yapesdl = callPackage ../misc/emulators/yapesdl { };
-
-  your-editor = callPackage ../applications/editors/your-editor { };
 
   x16-emulator = callPackage ../misc/emulators/commanderx16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commanderx16/rom.nix { };
