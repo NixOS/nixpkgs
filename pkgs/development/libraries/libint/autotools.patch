@@ -1,0 +1,127 @@
+diff --git a/bin/ltmain.sh b/bin/ltmain.sh
+index 0f0a2da3..97e8b0f2 100644
+--- a/bin/ltmain.sh
++++ b/bin/ltmain.sh
+@@ -3627,7 +3627,7 @@ func_mode_help ()
+ Remove files from the build directory.
+ 
+ RM is the name of the program to use to delete files associated with each FILE
+-(typically '/bin/rm').  RM-OPTIONS are options (such as '-f') to be passed
++(typically 'rm').  RM-OPTIONS are options (such as '-f') to be passed
+ to RM.
+ 
+ If FILE is a libtool library, object or program, all the files associated
+@@ -3782,7 +3782,7 @@ is created, otherwise an executable program is created."
+ Remove libraries from an installation directory.
+ 
+ RM is the name of the program to use to delete files associated with each FILE
+-(typically '/bin/rm').  RM-OPTIONS are options (such as '-f') to be passed
++(typically 'rm').  RM-OPTIONS are options (such as '-f') to be passed
+ to RM.
+ 
+ If FILE is a libtool library, all the files associated with it are deleted.
+diff --git a/configure.ac b/configure.ac
+index 4364a75a..de3a81b3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1180,7 +1180,7 @@ dnl -- check how dependency information is built --
+ CXXDEPENDSUF=none
+ CXXDEPENDFLAGS=-M
+ 
+-/bin/rm -f depcheck.u depcheck.c depcheck.o
++rm -f depcheck.u depcheck.c depcheck.o
+ 
+ # Check for an IBM visual age C++ compiler
+ echo "#include <iostream>" > depcheck.cc
+@@ -1189,7 +1189,7 @@ if test -f depcheck.u; then
+   CXXDEPENDSUF=u
+   CXXDEPENDFLAGS="-M -E"
+ fi
+-/bin/rm -f depcheck.u depcheck.c depcheck.o
++rm -f depcheck.u depcheck.c depcheck.o
+ 
+ if test "X$CXXDEPEND" = X; then
+   CXXDEPEND=$CXX
+@@ -1439,7 +1439,7 @@ else
+   AC_MSG_WARN([[Compilers cxx and cxxgen produce incompatible code! You will not be able to test generated code.]])
+   CXX_COMPATIBLE_WITH_CXXGEN=no
+ fi
+-/bin/rm -f linkcheck1 linkcheck2 linkcheck3  linkcheck1.cc linkcheck2.cc linkcheck1.o linkcheck2.o
++rm -f linkcheck1 linkcheck2 linkcheck3  linkcheck1.cc linkcheck2.cc linkcheck1.o linkcheck2.o
+ fi
+ 
+ AC_SUBST(CXX_COMPATIBLE_WITH_CXXGEN)
+diff --git a/src/bin/libint/Makefile b/src/bin/libint/Makefile
+index 406306c6..bd8a6955 100644
+--- a/src/bin/libint/Makefile
++++ b/src/bin/libint/Makefile
+@@ -59,7 +59,7 @@ test: $(TESTCXXOBJ) $(LIBTARGET)
+ 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $^ $(SYSLIBS)
+ 
+ $(LIBTARGET): $(LIBOBJ)
+-	/bin/rm -f $@
++	rm -f $@
+ 	$(AR) $(ARFLAGS) $@ $(LIBOBJ)
+ 	$(RANLIB) $@
+ 
+@@ -102,7 +102,7 @@ ifneq ($(CXXDEPENDSUF),none)
+ %.d: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< > /dev/null
+ 	sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' < $(*F).$(CXXDEPENDSUF) > $(@F)
+-	/bin/rm -f $(*F).$(CXXDEPENDSUF)
++	rm -f $(*F).$(CXXDEPENDSUF)
+ else
+ %.d: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< | sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' > $(@F)
+diff --git a/src/lib/libint/Makefile.library b/src/lib/libint/Makefile.library
+index d2bffad5..88046ab4 100644
+--- a/src/lib/libint/Makefile.library
++++ b/src/lib/libint/Makefile.library
+@@ -16,7 +16,7 @@ default:: $(TOPDIR)/lib/$(TARGET) local_install_generated_headers
+ # this is how the static library is made
+ # NOTE: the library is made from scratch every time and the prerequisite variable is not used to avoid overflow
+ $(TOPDIR)/lib/$(NAME).a: $(LIBOBJ)
+-	/bin/rm -f $@
++	rm -f $@
+ 	find . -name '*.$(OBJSUF)' -print0 | sort -z | xargs -0 $(AR) $(ARFLAGS) $@
+ 	$(RANLIB) $@
+ 
+diff --git a/tests/eri/Makefile b/tests/eri/Makefile
+index 1edab5b0..5f6291b9 100644
+--- a/tests/eri/Makefile
++++ b/tests/eri/Makefile
+@@ -62,7 +62,7 @@ ifneq ($(CXXDEPENDSUF),none)
+ %.d: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< > /dev/null
+ 	sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' < $(*F).$(CXXDEPENDSUF) > $(@F)
+-	/bin/rm -f $(*F).$(CXXDEPENDSUF)
++	rm -f $(*F).$(CXXDEPENDSUF)
+ else
+ %.d: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< | sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' > $(@F)
+diff --git a/tests/hartree-fock/Makefile b/tests/hartree-fock/Makefile
+index 8ba094b5..ef168764 100644
+--- a/tests/hartree-fock/Makefile
++++ b/tests/hartree-fock/Makefile
+@@ -91,7 +91,7 @@ ifneq ($(CXXDEPENDSUF),none)
+ %.d:: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< > /dev/null
+ 	sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' < $(*F).$(CXXDEPENDSUF) > $(@F)
+-	/bin/rm -f $(*F).$(CXXDEPENDSUF)
++	rm -f $(*F).$(CXXDEPENDSUF)
+ else
+ %.d:: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXFLAGS) $< | sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' > $(@F)
+diff --git a/tests/unit/Makefile b/tests/unit/Makefile
+index c33b11b8..56f47f16 100644
+--- a/tests/unit/Makefile
++++ b/tests/unit/Makefile
+@@ -88,7 +88,7 @@ ifneq ($(CXXDEPENDSUF),none)
+ %.d:: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXGENFLAGS) $< > /dev/null
+ 	sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' < $(*F).$(CXXDEPENDSUF) > $(@F)
+-	/bin/rm -f $(*F).$(CXXDEPENDSUF)
++	rm -f $(*F).$(CXXDEPENDSUF)
+ else
+ %.d:: %.cc
+ 	$(CXXDEPEND) $(CXXDEPENDFLAGS) -c $(CPPFLAGS) $(CXXGENFLAGS) $< | sed 's/^$*.o/$*.$(OBJSUF) $*.d/g' > $(@F)
