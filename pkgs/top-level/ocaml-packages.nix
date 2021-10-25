@@ -1237,6 +1237,8 @@ let
 
     rope = callPackage ../development/ocaml-modules/rope { };
 
+    rosetta = callPackage ../development/ocaml-modules/rosetta { };
+
     routes = callPackage ../development/ocaml-modules/routes { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
