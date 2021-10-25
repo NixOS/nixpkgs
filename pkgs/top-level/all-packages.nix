@@ -3389,6 +3389,8 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
+  pocket-casts = callPackage ../applications/audio/pocket-casts { };
+
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
