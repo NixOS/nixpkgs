@@ -13,19 +13,23 @@
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
+, pythonOlder
 , srptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.2";
+  version = "0.9.5";
+
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rpf8qspk433jpj7qy3mv20vf3hbm6msx3mii5kq0dmsh5pqy6h4";
+    sha256 = "sha256-7aeXTR0ecrm5+KHRCdW3+HLjU3U7Ja/J6JTU5QscCto=";
   };
 
   postPatch = ''
@@ -55,7 +59,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "pyatv" ];
+  pythonImportsCheck = [
+    "pyatv"
+  ];
 
   meta = with lib; {
     description = "Python client library for the Apple TV";

@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "2.2.0";
+  version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
     rev = "v${version}";
-    sha256 = "sha256-2PKZtn+l93de4/gPPM2Wdt04Zw+ekDadwNgL6ZKTqhY=";
+    sha256 = "sha256-Or7A/Br6BgiCF6OHRtN5TAt++Tu1RLS9mYRgD7Aljts=";
   };
 
   propagatedBuildInputs = [
@@ -24,10 +25,12 @@ buildPythonPackage rec {
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pypoint" ];
+  pythonImportsCheck = [
+    "pypoint"
+  ];
 
   meta = with lib; {
-    description = "API for Minut Point";
+    description = "Python module for communicating with Minut Point";
     homepage = "https://github.com/fredrike/pypoint";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

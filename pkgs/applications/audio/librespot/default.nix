@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    sha256 = "0n7h690gplpp47gdj038g6ncgwr7wvwfkg00cbrbvxhv7kzqqa1f";
+    sha256 = "1fv2sk89rf1vraq823bxddlxj6b4gqhfpc36xr7ibz2405zickfv";
   };
 
-  cargoSha256 = "0qakvpxvn84ppgs3qlsfan4flqkmjcgs698w25jasx9ymiv8wc3s";
+  cargoSha256 = "1sal85gsbnrabxi39298w9njdc08csnwl40akd6k9fsc0fmpn1b0";
 
   cargoBuildFlags = with lib; [
     "--no-default-features"

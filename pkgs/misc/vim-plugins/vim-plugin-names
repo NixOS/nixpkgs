@@ -59,6 +59,7 @@ carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml@main
 chaoren/vim-wordmotion
+chentau/marks.nvim
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name
@@ -229,6 +230,7 @@ hrsh7th/cmp-calc@main
 hrsh7th/cmp-emoji@main
 hrsh7th/cmp-nvim-lsp@main
 hrsh7th/cmp-nvim-lua@main
+hrsh7th/cmp-omni@main
 hrsh7th/cmp-path@main
 hrsh7th/cmp-vsnip@main
 hrsh7th/nvim-cmp@main
@@ -265,6 +267,7 @@ jaredgorski/SpaceCamp
 jasonccox/vim-wayland-clipboard
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher
+jc-doyle/cmp-pandoc-references
 jceb/vim-hier
 jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
@@ -393,6 +396,7 @@ LucHermitte/lh-brackets
 LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
+lukas-reineke/cmp-under-comparator
 lukas-reineke/indent-blankline.nvim
 lukaszkorecki/workflowish
 lumiliet/vim-twig
@@ -457,7 +461,7 @@ michaeljsmith/vim-indent-object
 mileszs/ack.vim
 milkypostman/vim-togglelist
 mindriot101/vim-yapf
-mk12/vim-lean
+mk12/vim-lean@main
 mkasa/lushtags
 mlr-msft/vim-loves-dafny
 moll/vim-bbye
