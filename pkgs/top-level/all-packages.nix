@@ -13179,6 +13179,10 @@ with pkgs;
     mpi = mpich;
   };
 
+  graphql-client = callPackage ../development/tools/graphql-client {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   groovy = callPackage ../development/interpreters/groovy { };
 
   inherit (callPackages ../applications/networking/cluster/hadoop { })
