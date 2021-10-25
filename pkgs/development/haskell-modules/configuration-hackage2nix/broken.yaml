@@ -4806,7 +4806,6 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
-  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
