@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_78, gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
-, useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
+, useSystemd ? stdenv.isLinux, systemd, elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
     sha256 = "0p0zzmr0kh3mpmqya4q27y4h9b920zp5ya0i8909ahp9hvdrymy8";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
     # We use the version of the patch that Alpine uses successfully.
     (fetchpatch {
       name = "make-innetgr-optional.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/polkit/make-innetgr-optional.patch?id=391e7de6ced1a96c2dac812e0b12f1d7e0ea705e";
-      sha256 = "1p9qqqhnrfyjvvd50qh6vpl256kyfblm1qnhz5pm09klrl1bh1n4";
+      url = "https://git.alpinelinux.org/aports/plain/community/polkit/make-innetgr-optional.patch?id=424ecbb6e9e3a215c978b58c05e5c112d88dddfc";
+      sha256 = "0iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
     })
   ];
 
