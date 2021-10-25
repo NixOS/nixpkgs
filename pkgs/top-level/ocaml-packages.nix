@@ -1361,6 +1361,8 @@ let
 
     stdint = callPackage ../development/ocaml-modules/stdint { };
 
+    unstrctrd = callPackage ../development/ocaml-modules/unstrctrd { };
+
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
