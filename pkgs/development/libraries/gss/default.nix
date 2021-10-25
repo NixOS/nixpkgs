@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl
-, withShishi ? !stdenv.isDarwin, shishi ? null
+, withShishi ? !stdenv.isDarwin, shishi
 }:
-
-assert withShishi -> shishi != null;
 
 stdenv.mkDerivation rec {
   name = "gss-1.0.3";
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional withShishi shishi;
 
   configureFlags = [
-    "--${if withShishi != null then "enable" else "disable"}-kerberos5"
+    "--${if withShishi then "enable" else "disable"}-kerberos5"
   ];
 
   doCheck = true;
