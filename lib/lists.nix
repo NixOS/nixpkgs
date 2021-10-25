@@ -151,6 +151,17 @@ rec {
     # Element to remove from the list
     e: filter (x: x != e);
 
+
+  /* Remove all elements in 'es' from a list. Useful for buildInputs.
+
+     Type: removeAll :: [a] -> [a] -> [a]
+
+     Example:
+       removeAll [ 1 2 ] [ 1 2 3 2 1 ]
+       => [ 3 ]
+  */
+  removeAll = subtractLists;
+
   /* Find the sole element in the list matching the specified
      predicate, returns `default` if no such element exists, or
      `multiple` if there are multiple matching elements.
