@@ -4225,7 +4225,13 @@ with pkgs;
 
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
+  # coreutils 9 messes up some binary format on darwin
+  # https://github.com/NixOS/nixpkgs/pull/141684
+  # test by trying to build alacritty for example
+  coreutils = if !stdenv.isDarwin then
+    callPackage ../tools/misc/coreutils { }
+  else
+    callPackage ../tools/misc/coreutils/8.nix { };
   coreutils-full = coreutils.override { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
 
