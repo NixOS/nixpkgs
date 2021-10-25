@@ -1038,6 +1038,8 @@ let
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
+    piaf = callPackage ../development/ocaml-modules/piaf { };
+
     piqi = callPackage ../development/ocaml-modules/piqi { };
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
