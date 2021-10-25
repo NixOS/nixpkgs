@@ -3728,6 +3728,13 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  fedx-sudo = {
+    email = "fedx-sudo@pm.me";
+    github = "Fedx-sudo";
+    githubId = 66258975;
+    name = "Fedx sudo";
+    matrix = "fedx:matrix.org";
+  };
   fehnomenal = {
     email = "fehnomenal@fehn.systems";
     github = "fehnomenal";
@@ -6347,6 +6354,12 @@
     github = "lucc";
     githubId = 1104419;
     name = "Lucas Hoffmann";
+  };
+  lucasew = {
+    email = "lucas59356@gmail.com";
+    github = "lucasew";
+    githubId = 15693688;
+    name = "Lucas Eduardo Wendt";
   };
   lde = {
     email = "lilian.deloche@puck.fr";

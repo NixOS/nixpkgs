@@ -323,6 +323,7 @@ in
   ombi = handleTest ./ombi.nix {};
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
+  openresty-lua = handleTest ./openresty-lua.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};
   openssh = handleTest ./openssh.nix {};
