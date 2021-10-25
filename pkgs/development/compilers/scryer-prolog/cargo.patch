@@ -26,6 +26,18 @@ index ef25833..d9de212 100644
  dependencies = [
   "libc",
   "winapi 0.3.8",
+@@ -485,9 +487,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "lexical-core"
+-version = "0.4.6"
++version = "0.4.8"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2304bccb228c4b020f3a4835d247df0a02a7c4686098d4167762cfbbe4c5cb14"
++checksum = "34449d00c5d4066537f4dc72320b18e3aa421e8e92669250eecd664c618fefce"
+ dependencies = [
+  "arrayvec 0.4.12",
+  "cfg-if",
 @@ -766,15 +766,6 @@ version = "0.1.2"
  source = "registry+https://github.com/rust-lang/crates.io-index"
  checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
