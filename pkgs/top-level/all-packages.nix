@@ -32544,6 +32544,8 @@ with pkgs;
 
   ricty = callPackage ../data/fonts/ricty { };
 
+  rivalcfg = callPackage ../misc/rivalcfg { };
+
   rmfuse = callPackage ../tools/filesystems/rmfuse {};
 
   rmount = callPackage ../tools/filesystems/rmount {};
