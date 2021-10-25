@@ -278,7 +278,7 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
-    BayesXsrc = with pkgs; [ readline.dev ncurses ];
+    BayesXsrc = with pkgs; [ readline.dev ncurses gsl ];
     bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
@@ -873,10 +873,6 @@ let
 
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
-    });
-
-    BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesXsrc.patch ];
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
