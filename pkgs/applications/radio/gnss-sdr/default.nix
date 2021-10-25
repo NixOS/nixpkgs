@@ -22,6 +22,8 @@
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
+  # There's an issue with cpufeatures on 0.0.15, see:
+  # https://github.com/NixOS/nixpkgs/pull/142557#issuecomment-950217925
   version = "0.0.13";
 
   src = fetchFromGitHub {
