@@ -2,6 +2,8 @@
 with lib;
 let
   gce = pkgs.google-compute-engine;
+  agent = pkgs.google-compute-guest-agent;
+  guest-configs = pkgs.google-compute-configs;
 in
 {
   imports = [
@@ -9,6 +11,46 @@ in
     ../profiles/qemu-guest.nix
   ];
 
+  environment.etc."sysctl.d/11-gce-network-security.conf".source = "${gce}/sysctl.d/11-gce-network-security.conf";
+
+  environment.etc."default/instance_configs.cfg".text = ''
+    [Accounts]
+    deprovision_remove = false
+    gpasswd_add_cmd = gpasswd -a {user} {group}
+    gpasswd_remove_cmd = gpasswd -d {user} {group}
+    groupadd_cmd = groupadd {group}
+    useradd_cmd = useradd -m -s ${pkgs.bash}/bin/bash -p * {user}
+    userdel_cmd = userdel -r {user}
+
+    [Daemons]
+    accounts_daemon = false
+    clock_skew_daemon = true
+    network_daemon = true
+    oslogin_daemon = false
+
+    [InstanceSetup]
+    host_key_types = ecdsa,ed25519,rsa
+    network_enabled = true
+    optimize_local_ssd = false
+    set_boto_config = true
+    set_host_keys = false
+    set_multiqueue = true
+
+    [IpForwarding]
+    ethernet_proto_id = 66
+    ip_aliases = false
+    target_instance_ips = false
+
+    [MetadataScripts]
+    default_shell = ${pkgs.bash}/bin/bash
+    run_dir =
+    shutdown = true
+    startup = true
+
+    [NetworkInterfaces]
+    dhcp_command =
+    ip_forwarding = false
+    setup = false'';
 
   fileSystems."/" = {
     fsType = "ext4";
@@ -47,12 +89,6 @@ in
 
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
-
-  # Make sure GCE image does not replace host key that NixOps sets
-  environment.etc."default/instance_configs.cfg".text = lib.mkDefault ''
-    [InstanceSetup]
-    set_host_keys = false
-  '';
 
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;
@@ -94,80 +130,46 @@ in
     };
   };
 
-  systemd.services.google-instance-setup = {
-    description = "Google Compute Engine Instance Setup";
+  systemd.services.google-guest-agent = {
     after = [ "network-online.target" "network.target" "rsyslog.service" ];
+    wants = [ "network-online.target" ];
     before = [ "sshd.service" ];
-    path = with pkgs; [ coreutils ethtool openssh ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_instance_setup";
-      StandardOutput="journal+console";
-      Type = "oneshot";
-    };
     wantedBy = [ "sshd.service" "multi-user.target" ];
-  };
-
-  systemd.services.google-network-daemon = {
-    description = "Google Compute Engine Network Daemon";
-    after = [ "network-online.target" "network.target" "google-instance-setup.service" ];
-    path = with pkgs; [ iproute2 ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_network_daemon";
-      StandardOutput="journal+console";
-      Type="simple";
+      Type = "notify";
+      ExecStart = "${agent}/bin/google_guest_agent";
+      OOMScoreAdjust = "-999";
+      Restart = "always";
+      StandardOutput = "journal+console";
     };
-    wantedBy = [ "multi-user.target" ];
-  };
-
-  systemd.services.google-clock-skew-daemon = {
-    description = "Google Compute Engine Clock Skew Daemon";
-    after = [ "network.target" "google-instance-setup.service" "google-network-daemon.service" ];
-    serviceConfig = {
-      ExecStart = "${gce}/bin/google_clock_skew_daemon";
-      StandardOutput="journal+console";
-      Type = "simple";
-    };
-    wantedBy = ["multi-user.target"];
-  };
-
-
-  systemd.services.google-shutdown-scripts = {
-    description = "Google Compute Engine Shutdown Scripts";
-    after = [
-      "network-online.target"
-      "network.target"
-      "rsyslog.service"
-      "google-instance-setup.service"
-      "google-network-daemon.service"
-    ];
-    serviceConfig = {
-      ExecStart = "${pkgs.coreutils}/bin/true";
-      ExecStop = "${gce}/bin/google_metadata_script_runner --script-type shutdown";
-      RemainAfterExit = true;
-      StandardOutput="journal+console";
-      TimeoutStopSec = "0";
-      Type = "oneshot";
-    };
-    wantedBy = [ "multi-user.target" ];
   };
 
   systemd.services.google-startup-scripts = {
     description = "Google Compute Engine Startup Scripts";
-    after = [
-      "network-online.target"
-      "network.target"
-      "rsyslog.service"
-      "google-instance-setup.service"
-      "google-network-daemon.service"
-    ];
+    after = [ "network-online.target" "google-guest-agent.service" "rsyslog.service" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${gce}/bin/google_metadata_script_runner --script-type startup";
+      Type = "oneshot";
+      ExecStart = "${agent}/bin/google_metadata_script_runner startup";
       KillMode = "process";
       StandardOutput = "journal+console";
-      Type = "oneshot";
     };
-    wantedBy = [ "multi-user.target" ];
   };
 
-  environment.etc."sysctl.d/11-gce-network-security.conf".source = "${gce}/sysctl.d/11-gce-network-security.conf";
+  systemd.services.google-shutdown-scripts = {
+    description = "Google Compute Engine Shutdown Scripts";
+    after = [ "network-online.target" "google-guest-agent.service" "rsyslog.service" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.coreutils}/bin/true";
+      ExecStop = "${agent}/bin/google_metadata_script_runner shutdown";
+      TimoutStopSec = "0";
+      KillMode = "process";
+      StandardOutput = "journal+console";
+    };
+  };
+
 }
