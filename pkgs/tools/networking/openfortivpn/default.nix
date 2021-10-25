@@ -1,9 +1,11 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, openssl, ppp
+, openssl
+, ppp     ? null
 , systemd ? null }:
 
 let
   withSystemd = stdenv.isLinux && !(systemd == null);
+  withPpp     = stdenv.isLinux;
 
 in
 stdenv.mkDerivation rec {
@@ -26,15 +28,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    openssl ppp
+    openssl
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withPpp     ppp;
 
   configureFlags = [
     "--sysconfdir=/etc"
-    "--with-pppd=${ppp}/bin/pppd"
   ]
-  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
+  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ++ lib.optional withPpp     "--with-pppd=${ppp}/bin/pppd"
+  ;
 
   enableParallelBuilding = true;
 
