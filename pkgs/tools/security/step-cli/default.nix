@@ -33,5 +33,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ xfix ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "step";
   };
 }
