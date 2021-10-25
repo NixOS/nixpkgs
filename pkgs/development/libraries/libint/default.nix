@@ -26,8 +26,19 @@ let
       sha256 = "5nSeyT1DhFsA76Dt3dqYfhfBYD+iTl34O3lVeH6+OVw=";
     };
 
-    # Hardcoded /bin/rm instead of a simple rm
-    patches = [ ./autotools.patch ];
+    # Replace hardcoded "/bin/rm" with normal "rm"
+    postPatch = ''
+      for f in \
+        bin/ltmain.sh \
+        configure.ac \
+        src/bin/libint/Makefile \
+        src/lib/libint/Makefile.library \
+        tests/eri/Makefile \
+        tests/hartree-fock/Makefile \
+        tests/unit/Makefile; do
+          substituteInPlace $f --replace "/bin/rm" "rm"
+      done
+    '';
 
     nativeBuildInputs = [
       autoconf
