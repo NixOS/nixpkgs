@@ -23081,6 +23081,8 @@ with pkgs;
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
+  linux-manual = callPackage ../data/documentation/linux-manual { };
+
   lmmath = callPackage ../data/fonts/lmmath {};
 
   lmodern = callPackage ../data/fonts/lmodern { };
