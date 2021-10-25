@@ -57,6 +57,7 @@ mapAliases ({
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy;
+  powerlineMemSegment = powerline-mem-segment;
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit;
