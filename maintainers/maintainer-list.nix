@@ -490,6 +490,13 @@
     githubId = 19290901;
     name = "Andrew Brooks";
   };
+  aharris = {
+    name = "Austin Harris";
+    email = "mail@austin-harris.com";
+    matrix = "@aharris:austin-harris.com";
+    github = "austinharris";
+    githubId = 5342125;
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
