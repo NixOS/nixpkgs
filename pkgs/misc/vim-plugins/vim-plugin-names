@@ -59,6 +59,7 @@ carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml@main
 chaoren/vim-wordmotion
+chentau/marks.nvim
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name

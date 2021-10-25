@@ -3202,6 +3202,18 @@ final: prev:
     meta.homepage = "https://github.com/iamcco/markdown-preview.nvim/";
   };
 
+  marks-nvim = buildVimPluginFrom2Nix {
+    pname = "marks.nvim";
+    version = "2021-10-23";
+    src = fetchFromGitHub {
+      owner = "chentau";
+      repo = "marks.nvim";
+      rev = "15b6960d0ad9c578fd23b8caa5acfee0d09e4600";
+      sha256 = "0khw541h2x39q4a1cx96019gdfmy1m0xgkbbfqhagr02gkm8dzy4";
+    };
+    meta.homepage = "https://github.com/chentau/marks.nvim/";
+  };
+
   matchit-zip = buildVimPluginFrom2Nix {
     pname = "matchit.zip";
     version = "2010-10-18";
