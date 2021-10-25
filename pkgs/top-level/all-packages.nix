@@ -26848,6 +26848,8 @@ with pkgs;
 
   songrec = callPackage ../applications/audio/songrec {};
 
+  storrent = callPackage ../applications/networking/p2p/storrent { };
+
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
