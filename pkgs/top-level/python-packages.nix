@@ -6457,8 +6457,6 @@ in {
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
 
-  pyjet = callPackage ../development/python-modules/pyjet { };
-
   pyjks = callPackage ../development/python-modules/pyjks { };
 
   pyjson5 = callPackage ../development/python-modules/pyjson5 { };
