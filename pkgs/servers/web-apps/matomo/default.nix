@@ -77,7 +77,7 @@ let
           "vendor/leafo/lessphp/package.sh"
           "vendor/pear/archive_tar/sync-php4"
           "vendor/szymach/c-pchart/coverage.sh"
-          # drupal_test.sh does not exist in 3.12.0-b3; added for 3.13.0
+          "vendor/matomo/matomo-php-tracker/run_tests.sh"
           "vendor/twig/twig/drupal_test.sh"
         ];
 
@@ -92,6 +92,8 @@ let
               length="$(wc -c "$f" | cut -d' ' -f1)"
               hash="$(md5sum "$f" | cut -d' ' -f1)"
               sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
+            else
+              echo "INFO(files-to-fix): $f does not exist in this version"
             fi
           done
           popd > /dev/null
