@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gss-1.0.3";
+  pname = "gss";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnu/gss/${name}.tar.gz";
+    url = "mirror://gnu/gss/${pname}-${version}.tar.gz";
     sha256 = "1syyvh3k659xf1hdv9pilnnhbbhs6vfapayp4xgdcc8mfgf9v4gz";
   };
 
