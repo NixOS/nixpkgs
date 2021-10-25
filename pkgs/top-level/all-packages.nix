@@ -39194,6 +39194,8 @@ with pkgs;
 
   ricty = callPackage ../data/fonts/ricty { };
 
+  rivalcfg = callPackage ../misc/rivalcfg { };
+
   rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
