@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  patches = [ ./0001-TargetConditionals.patch ];
+  patches = lib.optional (version == "2.2.6") ./0001-TargetConditionals.patch;
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
