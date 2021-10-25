@@ -8,14 +8,40 @@
 , gcc11
 , gnome
 , gssdp
-, gupnp
 , lib
 , libgmpris
 , llvmPackages_10
 , rpmextract
 , wavpack
-}:
 
+, gupnp
+, gupnp-av
+, meson
+, ninja
+}:
+let
+  # hqplayerd relies on some package versions available for the fc34 release,
+  # which has out-of-date pkgs compared to nixpkgs. The following drvs
+  # can/should be removed when the fc35 hqplayer rpm is made available.
+  gupnp_1_2 = gupnp.overrideAttrs (old: rec {
+    pname = "gupnp";
+    version = "1.2.7";
+    src = fetchurl {
+      url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-hEEnbxr9AXbm9ZUCajpQfu0YCav6BAJrrT8hYis1I+w=";
+    };
+  });
+
+  gupnp-av_0_12 = gupnp-av.overrideAttrs (old: rec {
+    pname = "gupnp-av";
+    version = "0.12.11";
+    src = fetchurl {
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      sha256 = "sha256-aJ3PFJKriZHa6ikTZaMlSKd9GiKU2FszYitVzKnOb9w=";
+    };
+    nativeBuildInputs = lib.subtractLists [ meson ninja ] old.nativeBuildInputs;
+  });
+in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
   version = "4.26.2-69";
@@ -38,7 +64,8 @@ stdenv.mkDerivation rec {
     gcc11.cc.lib
     gnome.rygel
     gssdp
-    gupnp
+    gupnp_1_2
+    gupnp-av_0_12
     libgmpris
     llvmPackages_10.openmp
     wavpack
