@@ -228,6 +228,7 @@ in
 
       xdg.portal.extraPortals = with pkgs; [
         pantheon.elementary-files
+        pantheon.elementary-settings-daemon
         xdg-desktop-portal-pantheon
       ];
 
