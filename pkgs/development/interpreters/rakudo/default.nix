@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2021.07";
+  version = "2021.10";
 
   src = fetchurl {
     url    = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "0lmbgw24f8277b9kj725v3grwh1524p4iy5jbqajxwxjr16zx2hp";
+    sha256 = "sha256-sXTHU3Mo77Xj90JF55+nFZtwExuExZeRbPWmXCrKJKE=";
   };
 
   nativeBuildInputs = [ removeReferencesTo ];
