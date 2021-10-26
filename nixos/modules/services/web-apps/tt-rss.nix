@@ -126,7 +126,6 @@ let
       root = mkOption {
         type = types.path;
         default = "/var/lib/tt-rss";
-        example = "/var/lib/tt-rss";
         description = ''
           Root of the application.
         '';
@@ -135,7 +134,6 @@ let
       user = mkOption {
         type = types.str;
         default = "tt_rss";
-        example = "tt_rss";
         description = ''
           User account under which both the update daemon and the web-application run.
         '';

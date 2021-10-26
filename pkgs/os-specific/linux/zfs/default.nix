@@ -140,6 +140,13 @@ let
         "INSTALL_MOD_PATH=\${out}"
       ];
 
+      # Enabling BTF causes zfs to be build with debug symbols.
+      # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
+      # Hence we strip modules prior to compression.
+      postBuild = optionalString buildKernel ''
+         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES strip --strip-debug
+      '';
+
       postInstall = optionalString buildKernel ''
         # Add reference that cannot be detected due to compressed kernel module
         mkdir -p "$out/nix-support"

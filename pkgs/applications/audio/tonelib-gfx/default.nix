@@ -1,65 +1,58 @@
-{ stdenv
-, dpkg
-, lib
-, autoPatchelfHook
+{ lib
+, stdenv
 , fetchurl
-, gtk3
-, glib
-, desktop-file-utils
+, autoPatchelfHook
+, dpkg
 , alsa-lib
-, libjack2
-, harfbuzz
-, fribidi
-, pango
 , freetype
+, libglvnd
 , curl
+, libXcursor
+, libXinerama
+, libXrandr
+, libXrender
+, libjack2
 }:
 
 stdenv.mkDerivation rec {
   pname = "tonelib-gfx";
-  version = "4.6.6";
+  version = "4.7.0";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/0509/ToneLib-GFX-amd64.deb";
-    sha256 = "sha256-wdX3SQSr0IZHsTUl+1Y0iETme3gTyryexhZ/9XHkGeo=";
+    url = "https://www.tonelib.net/download/0930/ToneLib-GFX-amd64.deb";
+    hash = "sha256-BcbX0dz94B4mj6QeQsnuZmwXAaXH+yJjnrUPgEYVqkU=";
   };
 
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+
   buildInputs = [
-    dpkg
-    gtk3
-    glib
-    desktop-file-utils
+    stdenv.cc.cc.lib
     alsa-lib
-    libjack2
-    harfbuzz
-    fribidi
-    pango
     freetype
+    libglvnd
+  ] ++ runtimeDependencies;
+
+  runtimeDependencies = map lib.getLib [
+    curl
+    libXcursor
+    libXinerama
+    libXrandr
+    libXrender
+    libjack2
   ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
-
-  unpackPhase = ''
-    mkdir -p $TMP/ $out/
-    dpkg -x $src $TMP
-  '';
+  unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
-    cp -R $TMP/usr/* $out/
-    mv $out/bin/ToneLib-GFX $out/bin/tonelib-gfx
-  '';
-
-  runtimeDependencies = [
-    (lib.getLib curl)
-  ];
+    mv usr $out
+    substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
+ '';
 
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass.";
     homepage = "https://tonelib.net/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ dan4ik605743 orivej ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -39,7 +39,7 @@ in {
       extensionPackages = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.mopidy-spotify ]";
+        example = literalExpression "[ pkgs.mopidy-spotify ]";
         description = ''
           Mopidy extensions that should be loaded by the service.
         '';

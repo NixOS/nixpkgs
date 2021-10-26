@@ -13,7 +13,7 @@ let
   pythonEnv = python.withPackages (p: with p; [
     cffi
     cryptography
-    pyopenssl
+    openssl
     crcmod
   ] ++ lib.optional (with-gce) google-compute-engine);
 
@@ -21,33 +21,33 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1a17bbvimdqq4k25lprqk9cq3lpfchd65hzjf23ha4imndpbjgqr";
+      sha256 = "1gwi15rkgxmqcr1vi5bd123833zhln725bhs5k1ip6fvhdrx31mf";
     };
 
     aarch64-darwin = {
       url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "184k1kv10g4zzzxgmwpakvg5ffxhz01dd01kb5h32mf1j5fid1zh";
+      sha256 = "0pw2cwdx18cw77lqsq1bsd8d79mjxn7lwd27hm9j8d45r0fzj0ci";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0hhaq5hf5nvaah06h6v8q2hpn8hc815ihsi74dpwg6pmg9h266pr";
+      sha256 = "01v3v4408p1wwqlqqawbc9g8j6lipwnm1sr6wckq9q0a5zpsissg";
     };
 
     i686-linux = {
       url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "14z1nzwc0j3qhbw2ldrskd8zjsslwgsw7pxxq3v0ypc1rjibsql5";
+      sha256 = "125akqbbz1ahq0hhgbjrv1cfnv41h1pksnclz6mbdn3z2297r6dp";
     };
 
     aarch64-linux = {
       url = "${baseUrl}/${name}-linux-arm.tar.gz";
-      sha256 = "0f6xrij2wbx57s4897bi12l9fz3flj1wyibbk7jjg0l5332h4yhr";
+      sha256 = "13p0vjs330zljkyfb412n6l33m5sn6kakg1wch9nhgikrqig5avl";
     };
-  }.${system};
+  }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "351.0.0";
+  version = "361.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 

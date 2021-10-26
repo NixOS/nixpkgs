@@ -15,6 +15,7 @@
 , dbus
 , polkit
 , switchboard
+, wingpanel-indicator-power
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     libgee
     polkit
     switchboard
+    wingpanel-indicator-power # settings schema
   ];
 
   meta = with lib; {

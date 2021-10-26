@@ -18,13 +18,12 @@ let
   rtDepsBinSrcs = builtins.mapAttrs (k: v:
       let
         # E.g: "OmniSharp-x86_64-linux"
-        kSplit = builtins.split "(-)" k;
+        kSplit = builtins.split "(__)" k;
         name = builtins.elemAt kSplit 0;
-        arch = builtins.elemAt kSplit 2;
-        platform = builtins.elemAt kSplit 4;
+        system = builtins.elemAt kSplit 2;
       in
       {
-        inherit name arch platform;
+        inherit name system;
         installPath = v.installPath;
         binaries = v.binaries;
         bin-src = fetchurl {
@@ -35,11 +34,8 @@ let
     )
     rtDepsSrcsFromJson;
 
-  arch = "x86_64";
-  platform = "linux";
-
   rtDepBinSrcByName = bSrcName:
-    rtDepsBinSrcs."${bSrcName}-${arch}-${platform}";
+    rtDepsBinSrcs."${bSrcName}__${stdenv.targetPlatform.system}";
 
   omnisharp = rtDepBinSrcByName "OmniSharp";
   vsdbg = rtDepBinSrcByName "Debugger";
@@ -50,8 +46,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "1.23.2";
-    sha256 = "0ydaiy8jfd1bj50bqiaz5wbl7r6qwmbz9b29bydimq0rdjgapaar";
+    version = "1.23.15";
+    sha256 = "0b74jr45zl7lzirjgj8s2lbf3viy9pbwlgjh055rcwmy77wcml1x";
   };
 
   nativeBuildInputs = [

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.7.5";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "sha256-DcfWNp9fELRzLfNAU2qGXfLDkSbWGrsfW/Wy0t2ISXU=";
+    sha256 = "18sm7smp0r7rmbq6ajl905947l5vni7hb4dfd0hhnrqjxwlkynds";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoSha256 = "sha256-O2IPmb9LH0ct0O2kR581Hfxl1sdb8himfq5U733JwGk=";
+  cargoSha256 = "0km4bgdl03m5ri4wzy0fsvvwlifx99m9x2j599x58ryq6lx2kkyc";
 
   postInstall = ''
     installManPage man/*

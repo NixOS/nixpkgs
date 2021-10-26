@@ -4,13 +4,13 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pypi-mirror";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "montag451";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0slh8ahywcgbggfcmzyqpb8bmq9dkk6vvjfkbi0ashnm8c6x19vd";
+    sha256 = "0sjzjvq2jnsr5mfyvkww3rfk3k5xcl8wa07q614850m0sn907laz";
   };
 
   pythonImportsCheck = [ "pypi_mirror" ];

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "delve";
-  version = "1.7.1";
+  version = "1.7.2";
 
   goPackagePath = "github.com/go-delve/delve";
   excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-dnmV7LZjq86AwLWXfWBGm1pmFM0uipv1FwR6EhV8CZQ=";
+    sha256 = "sha256-Mye8Gh73yQ1fhjVpEOKBQGjdOzgMUqzdNiBjRRTteTg=";
   };
 
   subPackages = [ "cmd/dlv" ];
@@ -22,12 +22,16 @@ buildGoPackage rec {
     # fortify source breaks build since delve compiles with -O0
     wrapProgram $out/bin/dlv \
       --prefix disableHardening " " fortify
+
+    # add symlink for vscode golang extension
+    # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
+    ln $out/bin/dlv $out/bin/dlv-dap
   '';
 
   meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/derekparker/delve";
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };

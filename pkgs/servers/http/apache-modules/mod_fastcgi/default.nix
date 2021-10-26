@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.peti ];
     broken = true; # patch 'compile-against-apache24.diff' no longer works
   };
 }

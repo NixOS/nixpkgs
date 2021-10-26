@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.stream";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86c57fedffd4d5a4b18817f99ddf62ac8ed0a1bc31a1c41b9a88df9c6bb56e0b";
+    sha256 = "3af4b0441090ee65bd6dde930d29f93f50c4a2fe6048e2a9d288285f5e4dc441";
   };
 
   pythonNamespaces = [ "jaraco" ];

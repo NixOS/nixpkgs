@@ -5,7 +5,7 @@
 
 trivialBuild {
   pname = "bqn-mode";
-  version = "0.0.0+unstable=2021-09-27";
+  version = "0.pre+unstable=2021-09-27";
 
   src = fetchFromGitHub {
     owner = "AndersonTorres";

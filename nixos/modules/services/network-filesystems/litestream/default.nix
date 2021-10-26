@@ -13,7 +13,7 @@ in
     package = mkOption {
       description = "Package to use.";
       default = pkgs.litestream;
-      defaultText = "pkgs.litestream";
+      defaultText = literalExpression "pkgs.litestream";
       type = types.package;
     };
 

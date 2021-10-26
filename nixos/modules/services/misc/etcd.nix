@@ -123,7 +123,7 @@ in {
       '';
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "CORS" = "*";
           "NAME" = "default-name";

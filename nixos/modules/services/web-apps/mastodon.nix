@@ -399,7 +399,7 @@ in {
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.mastodon;
-        defaultText = "pkgs.mastodon";
+        defaultText = lib.literalExpression "pkgs.mastodon";
         description = "Mastodon package to use.";
       };
 

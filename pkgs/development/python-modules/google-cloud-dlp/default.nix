@@ -7,19 +7,20 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pytz
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.2.2";
+  version = "3.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZxGWTsqCIvpTSN+aThVgjPuMJE7hHMVn4zsidpXk7xk=";
+    sha256 = "sha256-5Z4/jUXyBlC1vpuwS7dPrTRFw1lqf+GGjm2fqFfIOjQ=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [ google-api-core libcst proto-plus pytz ];
 
   checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
 

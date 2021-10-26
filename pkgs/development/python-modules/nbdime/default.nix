@@ -18,6 +18,7 @@
 , tornado
 , requests
 , GitPython
+, jupyter-server-mathjax
 , notebook
 , jinja2
 }:
@@ -59,6 +60,7 @@ buildPythonPackage rec {
     py
     setuptools
     six
+    jupyter-server-mathjax
     nbformat
     colorama
     pygments

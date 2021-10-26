@@ -2,21 +2,19 @@
 , runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
 , zimg, libass, python3, libiconv
 , ApplicationServices
-, ocrSupport ? false, tesseract
-, imwriSupport ? true, imagemagick
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R55";
+  version = "R57";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "sha256-91lPknNX3NM3NraIcPAR478paPoYvgjgCOIcdgaR5nE=";
+    sha256 = "sha256-tPQ1SOIpFevOYzL9a8Lc5+dv2egVX1CY3km8yWVv+Sk=";
   };
 
   patches = [
@@ -27,14 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
-    ++ optional ocrSupport   tesseract
-    ++ optional imwriSupport imagemagick;
-
-  configureFlags = [
-    (optionalString (!ocrSupport)   "--disable-ocr")
-    (optionalString (!imwriSupport) "--disable-imwri")
-  ];
+  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -54,6 +45,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}
+
+    # VapourSynth does not include any plugins by default
+    # and emits a warning when the system plugin directory does not exist.
+    mkdir $out/lib/vapoursynth
   '';
 
   meta = with lib; {

@@ -43,7 +43,14 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [ "gvmtools" ];
+  disabledTests = [
+    # Don't test sending
+    "SendTargetTestCase"
+  ];
+
+  pythonImportsCheck = [
+    "gvmtools"
+  ];
 
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";

@@ -33,7 +33,7 @@ in
 
       package = mkOption {
         default = pkgs.mongodb;
-        defaultText = "pkgs.mongodb";
+        defaultText = literalExpression "pkgs.mongodb";
         type = types.package;
         description = "
           Which MongoDB derivation to use.

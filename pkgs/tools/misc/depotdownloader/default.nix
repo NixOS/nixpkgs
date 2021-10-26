@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "depotdownloader";
-  version = "2.4.1";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    sha256 = "1ldwda7wyvzqvqv1wshvqvqaimlm0rcdzhy9yn5hvxyswc0jxirr";
+    sha256 = "0i5qgjnliji1g408ks1034r69vqdmfnzanb0qm7jmyzwww7vwpnh";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget makeWrapper ];

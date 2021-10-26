@@ -15,7 +15,7 @@ in {
     flags = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = literalExample [ "--server-address=9.9.9.9:53" ];
+      example = [ "--server-address=9.9.9.9:53" ];
       description = ''
         A list of command-line flags to pass to doh-proxy. For details on the
         available options, see <link xlink:href="https://github.com/jedisct1/doh-server#usage"/>.

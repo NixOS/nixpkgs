@@ -113,14 +113,12 @@ in
       settings = mkOption {
         type = iniFmt.type;
         default = { };
-        example = ''
-          {
-            Autologin = {
-              User = "john";
-              Session = "plasma.desktop";
-            };
-          }
-        '';
+        example = {
+          Autologin = {
+            User = "john";
+            Session = "plasma.desktop";
+          };
+        };
         description = ''
           Extra settings merged in and overwritting defaults in sddm.conf.
         '';

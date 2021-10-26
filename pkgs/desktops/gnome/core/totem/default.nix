@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "j/rPfA6inO3qBndzCGHUh2qPesTaTGI0u3X3/TcFoQg=";
+    sha256 = "/OVi4rJsvPwMZ4U43MgfncFc5g1aie5DWJB79jQwTEA=";
   };
 
   nativeBuildInputs = [

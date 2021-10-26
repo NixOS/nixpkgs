@@ -29,7 +29,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
-    class-registry
     phx-class-registry
     setuptools
     docutils

@@ -1,14 +1,14 @@
-{ fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes, lib, stdenvNoCC }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, jdupes, hicolor-icon-theme }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2021-01-21";
+  version = "2021-10-08";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0gphy4aq2qjcg79k6rc0q5901mn3q76qhckn5vxvmypn9n3lb9ph";
+    sha256 = "sha256-4h6c7asjUC7pqi4GkxCN13LOpVVbjBdvjUMN7sXAlNE=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

@@ -252,6 +252,7 @@ stdenv.mkDerivation {
     # LLVM toolchain patches.
     patch -p1 -d llvm-project/clang -i ${./patches/0005-clang-toolchain-dir.patch}
     patch -p1 -d llvm-project/clang -i ${./patches/0006-clang-purity.patch}
+    patch -p1 -d llvm-project/compiler-rt -i ${../llvm/common/compiler-rt/libsanitizer-no-cyclades-11.patch}
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
       --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
       --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \

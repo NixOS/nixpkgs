@@ -14,7 +14,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.tp-auto-kbbl;
-        defaultText = literalExample "pkgs.tp-auto-kbbl";
+        defaultText = literalExpression "pkgs.tp-auto-kbbl";
         description = "Package providing <command>tp-auto-kbbl</command>.";
       };
 

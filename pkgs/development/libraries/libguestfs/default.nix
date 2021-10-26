@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook bison cdrkit cpio flex getopt gperf makeWrapper pkg-config qemu
-  ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
+  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
     ncurses jansson

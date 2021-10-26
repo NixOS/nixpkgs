@@ -156,23 +156,6 @@ buildStdenv.mkDerivation ({
       sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
     })
 
-  # These fix Firefox on sway and other non-Gnome wayland WMs. They should be
-  # removed whenever the following two patches make it onto a release:
-  # 1. https://hg.mozilla.org/mozilla-central/rev/51c13987d1b8
-  # 2. https://hg.mozilla.org/integration/autoland/rev/3b856ecc00e4
-  # This will probably happen in the next point release, but let's be careful
-  # and double check whether it's working on sway on the next v bump.
-  ++ lib.optionals (lib.versionAtLeast version "92") [
-      (fetchpatch {
-        url = "https://hg.mozilla.org/integration/autoland/raw-rev/3b856ecc00e4";
-        sha256 = "sha256-d8IRJD6ELC3ZgEs1ES/gy2kTNu/ivoUkUNGMEUoq8r8=";
-      })
-      (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/51c13987d1b8";
-        sha256 = "sha256-C2jcoWLuxW0Ic+Mbh3UpEzxTKZInljqVdcuA9WjspoA=";
-      })
-  ]
-
   ++ patches;
 
 
@@ -265,6 +248,7 @@ buildStdenv.mkDerivation ({
     # this will run autoconf213
     configureScript="$(realpath ./mach) configure"
     export MOZCONFIG=$(pwd)/mozconfig
+    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
     # Set C flags for Rust's bindgen program. Unlike ordinary C
     # compilation, bindgen does not invoke $CC directly. Instead it

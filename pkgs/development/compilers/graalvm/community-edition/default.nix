@@ -1,21 +1,18 @@
-{ callPackage, Foundation }:
+{ lib, callPackage, Foundation }:
 
 let
-  mkGraal = opts: callPackage (import ./repository.nix opts) {
+  mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
     inherit Foundation;
   };
-in {
+in
+{
   inherit mkGraal;
 
-  graalvm8-ce = mkGraal rec {
-    version = "21.2.0";
-    javaVersion = "8";
-    platforms = ["x86_64-linux"];
+  graalvm11-ce = mkGraal rec {
+    version = lib.fileContents ./version;
+    javaVersion = "11";
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 
-  graalvm11-ce = mkGraal rec {
-    version = "21.2.0";
-    javaVersion = "11";
-    platforms = ["x86_64-linux" "x86_64-darwin"];
-  };
+  # TODO: added graalvm17-ce
 }

@@ -5,15 +5,16 @@
 
 buildPythonPackage rec {
   pname = "pytmx";
-  version = "3.25";
+  version = "3.27";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "bitcraft";
     repo = "PyTMX";
-    rev = version;
-    sha256 = "0v07zhvzvl2qcqhjzgfzm8hgayq38gaqcxxkyhlq9n0hlk93nm97";
+    # Release was not tagged.
+    rev = "5bb094c45e648d1de6c9ba8d8c8f31f7b83478e1";
+    sha256 = "0kpd39sr2ggwzh7nd3f5801mgwm57rzrrkqcgbcypdm8l2ayga3b";
   };
 
   propagatedBuildInputs = [ pygame pyglet pysdl2 six ];

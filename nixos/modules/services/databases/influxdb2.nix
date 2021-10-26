@@ -11,7 +11,7 @@ in
       enable = mkEnableOption "the influxdb2 server";
       package = mkOption {
         default = pkgs.influxdb2;
-        defaultText = "pkgs.influxdb2";
+        defaultText = literalExpression "pkgs.influxdb2";
         description = "influxdb2 derivation to use.";
         type = types.package;
       };

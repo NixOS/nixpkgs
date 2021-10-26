@@ -16,6 +16,10 @@ let
       email = lib.mkOption {
         type = types.str;
       };
+      matrix = lib.mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
       github = lib.mkOption {
         type = types.nullOr types.str;
         default = null;

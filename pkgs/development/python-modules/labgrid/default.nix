@@ -65,11 +65,6 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
-  disabledTests = [
-    "docker"
-    "sshmanager"
-  ];
-
   meta = with lib; {
     description = "Embedded control & testing library";
     homepage = "https://labgrid.org";

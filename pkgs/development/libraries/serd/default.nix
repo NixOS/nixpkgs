@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-r/qA3ux4kh+GM15vw/GLgK7+z0JPaldV6fL6DrBxDt8=";
   };
 
+  dontAddWafCrossFlags = true;
+
   nativeBuildInputs = [ pkg-config python3 wafHook ];
 
   meta = with lib; {

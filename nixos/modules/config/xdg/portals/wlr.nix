@@ -37,7 +37,7 @@ in
       default = { };
 
       # Example taken from the manpage
-      example = literalExample ''
+      example = literalExpression ''
         {
           screencast = {
             output_name = "HDMI-A-1";

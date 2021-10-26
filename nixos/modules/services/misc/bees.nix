@@ -61,7 +61,7 @@ let
       description = ''
         Extra command-line options passed to the daemon. See upstream bees documentation.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         [ "--thread-count" "4" ]
       '';
     };
@@ -75,7 +75,7 @@ in
       type = with types; attrsOf (submodule fsOptions);
       description = "BTRFS filesystems to run block-level deduplication on.";
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           root = {
             spec = "LABEL=root";

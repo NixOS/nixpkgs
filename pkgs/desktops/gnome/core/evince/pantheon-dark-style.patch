@@ -1,0 +1,86 @@
+diff --git a/meson.build b/meson.build
+index bcb69cf7..4a18c08c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -162,6 +162,7 @@ gmodule_dep = dependency('gmodule-2.0')
+ gmodule_no_export_dep = dependency('gmodule-no-export-2.0', version: glib_req_version)
+ gtk_dep = dependency('gtk+-3.0', version: gtk_req_version)
+ gthread_dep = dependency('gthread-2.0', version: glib_req_version)
++granite_dep = dependency('granite')
+ # Keep the version here synchronised with subprojects/libhandy.wrap
+ hdy_dep = dependency('libhandy-1', version: hdy_req_version, fallback: ['libhandy', 'libhandy_dep'])
+ 
+diff --git a/shell/ev-application.c b/shell/ev-application.c
+index e704bda2..d705328c 100644
+--- a/shell/ev-application.c
++++ b/shell/ev-application.c
+@@ -30,6 +30,7 @@
+ #include <glib/gi18n.h>
+ #include <glib/gstdio.h>
+ #include <gtk/gtk.h>
++#include <granite.h>
+ #include <handy.h>
+ #ifdef GDK_WINDOWING_X11
+ #include <gdk/gdkx.h>
+@@ -176,7 +177,7 @@ ev_spawn (const char     *uri,
+ 
+ 	g_string_append_printf (cmd, " %s", path);
+ 	g_free (path);
+-	
++
+ 	/* Page label */
+ 	if (dest) {
+                 switch (ev_link_dest_get_dest_type (dest)) {
+@@ -940,6 +941,20 @@ ev_application_migrate_config_dir (EvApplication *application)
+         g_free (old_accels);
+ }
+ 
++static void
++ev_application_set_prefers_color_scheme ()
++{
++        GtkSettings* gtk_settings = gtk_settings_get_default ();
++        GraniteSettings* granite_settings = granite_settings_get_default ();
++
++        g_object_set (
++          gtk_settings,
++          "gtk-application-prefer-dark-theme",
++          granite_settings_get_prefers_color_scheme (granite_settings) == GRANITE_SETTINGS_COLOR_SCHEME_DARK,
++          NULL
++        );
++}
++
+ static void
+ ev_application_startup (GApplication *gapplication)
+ {
+@@ -992,6 +1007,7 @@ ev_application_startup (GApplication *gapplication)
+ 
+         EvApplication *application = EV_APPLICATION (gapplication);
+         const gchar **it;
++        GraniteSettings* granite_settings = granite_settings_get_default ();
+ 
+ 	g_application_set_resource_base_path (gapplication, "/org/gnome/evince");
+ 
+@@ -999,6 +1015,11 @@ ev_application_startup (GApplication *gapplication)
+ 
+         hdy_init ();
+ 
++        ev_application_set_prefers_color_scheme ();
++
++        g_signal_connect (granite_settings, "notify::prefers-color-scheme",
++          G_CALLBACK(ev_application_set_prefers_color_scheme), NULL);
++
+         for (it = action_accels; it[0]; it += g_strv_length ((gchar **)it) + 1)
+                 gtk_application_set_accels_for_action (GTK_APPLICATION (application), it[0], &it[1]);
+ }
+diff --git a/shell/meson.build b/shell/meson.build
+index 7cbc48f2..a3089b13 100644
+--- a/shell/meson.build
++++ b/shell/meson.build
+@@ -52,6 +52,7 @@ sources += gnome.compile_resources(
+ deps = [
+   gdk_pixbuf_dep,
+   gnome_desktop_dep,
++  granite_dep,
+   hdy_dep,
+   libevmisc_dep,
+   libevproperties_dep,

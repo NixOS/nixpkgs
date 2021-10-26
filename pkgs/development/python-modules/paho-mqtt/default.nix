@@ -1,30 +1,46 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, stdenv, pytest-runner, pytest, mock }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, pytestCheckHook
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "paho-mqtt";
-  version = "1.5.1";
+  version = "1.6.1";
 
-  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
     rev = "v${version}";
-    sha256 = "1y537i6zxkjkmi80w5rvd18npz1jm5246i2x8p3q7ycx94i8ixs0";
+    sha256 = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "pylama" ""
-    substituteInPlace setup.cfg --replace "--pylama" ""
+    substituteInPlace setup.py \
+      --replace "pylama" "" \
+      --replace "'pytest-runner'" ""
+    substituteInPlace setup.cfg \
+      --replace "--pylama" ""
   '';
 
-  checkInputs = [ pytest-runner pytest ] ++ lib.optional (!isPy3k) mock;
+  checkInputs = [
+    pytestCheckHook
+  ] ++ lib.optional (!isPy3k) [
+    mock
+  ];
 
   doCheck = !stdenv.isDarwin;
 
+  pythonImportsCheck = [
+    "paho.mqtt"
+  ];
+
   meta = with lib; {
-    homepage = "https://eclipse.org/paho";
     description = "MQTT version 3.1.1 client class";
+    homepage = "https://eclipse.org/paho";
     license = licenses.epl10;
     maintainers = with maintainers; [ mog dotlambda ];
   };

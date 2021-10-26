@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.4.00.13653";
+  version = "1.4.00.26453";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "1kx4j837fd344zy90nl0j3r8cdvihy6i6gf56wd5n56zngx1fhjv";
+    sha256 = "0ndqk893l17m42hf5fiiv6mka0v7v8r54kblvb67jsxajdvva5gf";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];

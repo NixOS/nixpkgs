@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonApplication
 , substituteAll
 , fetchFromGitHub
@@ -54,7 +55,7 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
   };
-  stem' = stem.overrideAttrs (_: rec {
+  stem' = stem.overridePythonAttrs (_: rec {
     version = "1.8.1";
 
     src = fetchFromGitHub {
@@ -111,6 +112,11 @@ rec {
       "test_firefox_like_behavior"
       "test_if_unmodified_since"
       "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
+    ] ++ lib.optionals stdenv.isDarwin [
+      # on darwin (and only on darwin) onionshare attempts to discover
+      # user's *real* homedir via /etc/passwd, making it more painful
+      # to fake
+      "test_receive_mode_webhook"
     ];
   };
 

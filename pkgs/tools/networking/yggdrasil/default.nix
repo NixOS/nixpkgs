@@ -13,14 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-QQN8ePOQ7DT9KeuY4ohFuPtocuinh3Y3us6QMnCQ4gc=";
 
-  doCheck = false;
-
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to
   # be granted write permission to /run.
   patches = [ ./change-runtime-dir.patch ];
 
-  subPackages = [ "cmd/yggdrasil" "cmd/yggdrasilctl" ];
+  subPackages = [ "cmd/genkeys" "cmd/yggdrasil" "cmd/yggdrasilctl" ];
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"

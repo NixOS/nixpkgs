@@ -23,17 +23,17 @@
 
 let
   ansible-collections = callPackage ./collections.nix {
-    version = "4.5.0";
-    sha256 = "1c8dspqy4in7sgz10y1pggwnh1hv79wap7p7xhai0f0s6nr54lyc";
+    version = "4.7.0";
+    sha256 = "0aab9id6dqfw2111r731c7y1p77dpzczynmgl4d989p3a7n54z0b";
   };
 in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.11.5";
+  version = "2.11.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fTzkcBQSKQdFRwQ2NIXkhRP4rQ8AE4uIhw622IlT0SE=";
+    sha256 = "sha256-k9UCg8fFtHbev4PcCJs/Z5uTmouae11ijSjar7s9MDo=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through

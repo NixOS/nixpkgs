@@ -1,15 +1,18 @@
 { lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage
-, fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit }:
+, fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
 
-stdenv.mkDerivation rec {
+let
+  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+
+in stdenv.mkDerivation rec {
   pname = "keytar";
-  version = "7.7.0";
+  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner = "atom";
     repo = "node-keytar";
     rev = "v${version}";
-    sha256 = "0ajvr4kjbyw2shb1y14c0dsghdlnq30f19hk2sbzj6n9y3xa3pmi";
+    sha256 = pinData.srcHash;
   };
 
   nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config ]
@@ -19,7 +22,10 @@ stdenv.mkDerivation rec {
 
   npm_config_nodedir = nodejs-14_x;
 
-  yarnOfflineCache = (callPackage ./yarn.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = ./yarn.lock;
+    sha256 = pinData.yarnHash;
+  };
 
   buildPhase = ''
     cp ${./yarn.lock} ./yarn.lock

@@ -11,13 +11,13 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sx45y1d1v6y66msjc1lw9jhjppgbxqj145kivmd7lr6ccw68kav";
+    sha256 = "sha256-drfMD9tQe1dc61MH3Cxu9oin137f4FsZJY3X2kDHdh4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,15 +33,14 @@ buildPythonApplication rec {
     installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
   '';
 
+  postInstallCheck = ''
+    git init
+    test "$($out/bin/git-machete version)" = "git-machete version ${version}"
+  '';
+
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
-    };
-
-    tests = {
-      version = testVersion {
-        package = git-machete;
-      };
     };
   };
 

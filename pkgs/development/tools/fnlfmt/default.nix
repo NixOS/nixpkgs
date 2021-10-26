@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JIqeQhI3fFGrej2wbj6/367IZqWAFegySc2R8IDmvGE=";
+    sha256 = "sha256-ZuSXeAhxfH0F/Y0nwqisxLMwh21Kub7viNcXD3FVYOc=";
   };
 
   nativeBuildInputs = [ fennel ];
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~technomancy/fnlfmt";
     license = licenses.lgpl3Plus;
     platforms = lua.meta.platforms;
-    maintainers = [ maintainers.gpanders ];
+    maintainers = with maintainers; [ gpanders chiroptical ];
   };
 }

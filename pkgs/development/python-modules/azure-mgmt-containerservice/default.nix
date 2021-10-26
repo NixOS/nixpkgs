@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "16.2.0";
+  version = "16.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ee40fa76d84b82e37e1d8a364649de25bb1e0c6c07f182f145a3ade44ec43711";
+    sha256 = "87f06525c6cc47de86d7886ed35f04140ddaf1b0c59482ba578fdb3f5d143b1c";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.containerservice" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Container Service Management Client Library";

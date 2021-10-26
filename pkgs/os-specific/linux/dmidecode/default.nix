@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/dmidecode/";

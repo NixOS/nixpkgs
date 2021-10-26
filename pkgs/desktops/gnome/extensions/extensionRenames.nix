@@ -38,6 +38,8 @@
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 
+  "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
+  "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
 
   # ############################################################################
   # These are conflicts for 3.38 extensions. They will very probably come back

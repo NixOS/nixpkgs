@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "A boxy 3D model editor powered by Electron";
     homepage = "https://blockbench.net/";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ronthecookie ];
+    maintainers = [ maintainers.ckie ];
     platforms = [ "x86_64-linux" ];
   };
 }

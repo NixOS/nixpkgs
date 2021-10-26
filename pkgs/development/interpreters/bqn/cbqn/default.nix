@@ -1,59 +1,51 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, genBytecode ? false
 , bqn-path ? null
+, mbqn-source ? null
 }:
 
 let
-  mlochbaum-bqn = fetchFromGitHub {
-    owner = "mlochbaum";
-    repo = "BQN";
-    rev = "97cbdc67fe6a9652c42daefadd658cc41c1e5ae3";
-    hash = "sha256-F2Bv3n3C7zAhqKCMB6hT2iIWTjEqFdLBMyX6/w7V1SY=";
+  cbqn-bytecode-files = fetchFromGitHub {
+    name = "cbqn-bytecode-files";
+    owner = "dzaima";
+    repo = "CBQN";
+    rev = "4d23479cdbd5ac6eb512c376ade58077b814b2b7";
+    hash = "sha256-MTvg4lOB26bqvJTqV71p4Y4qDjTYaOE40Jk4Sle/hsY=";
   };
 in
+assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
+
 stdenv.mkDerivation rec {
-  pname = "cbqn";
-  version = "0.0.0+unstable=2021-09-29";
+  pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
+  version = "0.pre+unstable=2021-10-09";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "1c83483d5395e097f60de299274ebe0df590217e";
-    hash = "sha256-C34DpXab08mBm2oCQuaeq4fJPtQ5rVa/HlpL/nB9XjQ=";
-  };
-
-  cbqn-bytecode = fetchFromGitHub {
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "fdf0b93409d68d5ffd86c5670db27c240e6039e0";
-    hash = "sha256-A0zvpg+G37WNgyfrJuc5rH6L7Wntdbrz8pYEPreqgKE=";
+    rev = "debc4e2afe313a3c54133df9f26969c2927dc8aa";
+    hash = "sha256-ixFDmtq6hd2enmPbBT0JCv1bmxt84zle4zPQzz+rMCI=";
   };
 
   dontConfigure = true;
-
-  patches = [
-    # self-explaining
-    ./001-remove-vendoring.diff
-  ];
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
   '';
 
-  preBuild =
-    if bqn-path == null
-    then ''
-      cp ${cbqn-bytecode}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
-    ''
-    else ''
-      ${bqn-path} genRuntime ${mlochbaum-bqn}
-    '';
-
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-    "single-o3"
   ];
+
+  preBuild = ''
+    # Purity: avoids git downloading bytecode files
+    touch src/gen/customRuntime
+  '' + (if genBytecode then ''
+    ${bqn-path} genRuntime ${mbqn-source}
+  '' else ''
+    cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
+  '');
 
   installPhase = ''
      runHook preInstall
@@ -70,9 +62,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
     platforms = platforms.all;
   };
 }
-# TODO: factor BQN
-# TODO: test suite (dependent on BQN from mlochbaum)
+# TODO: version cbqn-bytecode-files
+# TODO: test suite

@@ -104,7 +104,7 @@ in
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.jre8;
-        defaultText = "pkgs.jre8";
+        defaultText = literalExpression "pkgs.jre8";
         description = ''
           The JRE package to use. Check the release notes to ensure it is supported.
         '';
@@ -113,7 +113,7 @@ in
       unifiVideoPackage = mkOption {
         type = types.package;
         default = pkgs.unifi-video;
-        defaultText = "pkgs.unifi-video";
+        defaultText = literalExpression "pkgs.unifi-video";
         description = ''
           The unifi-video package to use.
         '';
@@ -122,7 +122,7 @@ in
       mongodbPackage = mkOption {
         type = types.package;
         default = pkgs.mongodb-4_0;
-        defaultText = "pkgs.mongodb";
+        defaultText = literalExpression "pkgs.mongodb";
         description = ''
           The mongodb package to use.
         '';

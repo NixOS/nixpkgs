@@ -69,6 +69,7 @@ let
       CAFile = mkOption {
         type = types.nullOr types.path;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = "Path to a file containing certificates to validate against.";
       };
 

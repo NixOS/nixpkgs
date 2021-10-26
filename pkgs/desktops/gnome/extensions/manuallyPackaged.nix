@@ -3,7 +3,6 @@
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "caffeine@patapon.info" = callPackage ./caffeine { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
-  "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
@@ -21,6 +20,5 @@
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
-  "unite@hardpixel.eu" = callPackage ./unite { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
 }

@@ -6,7 +6,7 @@
 
 trivialBuild rec {
   pname = "nano-theme";
-  version = "0.0.0+unstable=2021-06-29";
+  version = "0.pre+unstable=2021-06-29";
 
   src = fetchFromGitHub {
     owner = "rougier";

@@ -37,6 +37,11 @@
 
 let
 
+  inherit (lib)
+    escapeShellArgs
+    toList
+    ;
+
   mkDbExtraCommand = contents:
     let
       contentsList = if builtins.isList contents then contents else [ contents ];
@@ -402,7 +407,7 @@ rec {
 
       preMount = lib.optionalString (contents != null && contents != [ ]) ''
         echo "Adding contents..."
-        for item in ${toString contents}; do
+        for item in ${escapeShellArgs (map (c: "${c}") (toList contents))}; do
           echo "Adding $item..."
           rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
         done

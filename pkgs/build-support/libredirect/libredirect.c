@@ -279,3 +279,17 @@ int system(const char *command)
     rewriteSystemCall(command, newCommand);
     return _system(newCommand);
 }
+
+int mkdir(const char *path, mode_t mode)
+{
+    int (*mkdir_real) (const char *path, mode_t mode) = dlsym(RTLD_NEXT, "mkdir");
+    char buf[PATH_MAX];
+    return mkdir_real(rewrite(path, buf), mode);
+}
+
+int mkdirat(int dirfd, const char *path, mode_t mode)
+{
+    int (*mkdirat_real) (int dirfd, const char *path, mode_t mode) = dlsym(RTLD_NEXT, "mkdirat");
+    char buf[PATH_MAX];
+    return mkdirat_real(dirfd, rewrite(path, buf), mode);
+}

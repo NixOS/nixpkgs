@@ -455,7 +455,7 @@ in
           };
         });
       default = [];
-      example = lib.literalExample
+      example = lib.literalExpression
         ''
         [ # forward local port 2222 -> 22, to ssh into the VM
           { from = "host"; host.port = 2222; guest.port = 22; }
@@ -780,7 +780,7 @@ in
       in
       [
         "-net nic,netdev=user.0,model=virtio"
-        "-netdev user,id=user.0,${forwardingOptions}\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
+        "-netdev user,id=user.0,${forwardingOptions}\"$QEMU_NET_OPTS\""
       ];
 
     # FIXME: Consolidate this one day.

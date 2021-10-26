@@ -6,18 +6,18 @@
 
 let
   opengfx = fetchzip {
-    url = "https://cdn.openttd.org/opengfx-releases/0.6.1/opengfx-0.6.1-all.zip";
-    sha256 = "sha256-DeeIlLcmPeMZ0ju9DwXUInnQp2rWu60besDVto4+lDQ=";
+    url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
+    sha256 = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
   };
 
   opensfx = fetchzip {
-    url = "https://cdn.openttd.org/opensfx-releases/1.0.1/opensfx-1.0.1-all.zip";
-    sha256 = "sha256-U1PIKbMZHRJ0Z9Cp2RqqCMhD1xRyudoNHAYIZyotxVk=";
+    url = "https://cdn.openttd.org/opensfx-releases/1.0.2/opensfx-1.0.2-all.zip";
+    sha256 = "sha256-yRCb49/k8uUUAe9VzUG0LQaBDFP7n9QdrLSJDIthdbA=";
   };
 
   openmsx = fetchzip {
-    url = "https://cdn.openttd.org/openmsx-releases/0.4.0/openmsx-0.4.0-all.zip";
-    sha256 = "sha256-Ok6W+iqi4SP7cD4HUQERrAysvVibnN7Q4/tkugffDgQ=";
+    url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
+    sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
 
   playmidi = writeScriptBin "playmidi" ''
@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "1.11.2";
+  version = "12.0";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "sha256-D7qTWiqBX0/ozW3C4q4z9ydpU4cxIo+EimOzpulILm0=";
+    sha256 = "sha256-u6D9OADfA3AlnmQtJR82LHwAtHii41Mfa6f4TBwrMtw=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

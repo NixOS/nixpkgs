@@ -45,7 +45,7 @@ in {
             lineDateFormat = "MMM-D HH:mm:ss.SSS";
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             bridge = {
               bindAddress = "localhost";

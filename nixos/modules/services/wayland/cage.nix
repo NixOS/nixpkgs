@@ -18,7 +18,7 @@ in {
   options.services.cage.extraArguments = mkOption {
     type = types.listOf types.str;
     default = [];
-    defaultText = "[]";
+    defaultText = literalExpression "[]";
     description = "Additional command line arguments to pass to Cage.";
     example = ["-d"];
   };
@@ -26,6 +26,7 @@ in {
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
+    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
     description = ''
       Program to run in cage.
     '';

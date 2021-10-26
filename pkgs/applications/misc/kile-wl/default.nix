@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2021-09-02";
+  version = "unstable-2021-09-30";
 
   src = fetchFromGitLab {
     owner = "snakedye";
     repo = "kile";
-    rev = "acd61f7e59cc34091c976b0cdc3067dd35b53cae";
-    sha256 = "sha256-O5sdPw9tR3GFPmJmb/QDmdBc7yeSGui4k+yn4Xo016A=";
+    rev = "b543d435b92498b72609a05048bc368837a7b455";
+    sha256 = "sha256-+SjdhSRT6TGbwvgZti8t9wYJx8LEtY3pleDZx/AEkio=";
   };
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://gitlab.com/snakedye/kile.git";
   };
 
-  cargoSha256 = "sha256-2QCv5fk0AH4sv0QJ/16zniHfg3HZLoHB7dl6vSfkxpE=";
+  cargoSha256 = "sha256-W7rq42Pz+l4TSsR/h2teRTbl3A1zjOcIx6wqgnwyQNA=";
 
   nativeBuildInputs = [ scdoc ];
 

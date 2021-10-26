@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4";
+  version = "1.5";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "018c20d3983cccfdc9cfed64407d4ba861ef3d64fe324a486f7130431afdefa7";
+    sha256 = "04323e63cf57f7ed927fd9bcb1861ef5ecb0d4d7213f2755969d4a1ac3c2de6f";
   };
 
   LC_ALL="en_US.utf-8";

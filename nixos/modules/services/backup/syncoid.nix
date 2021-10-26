@@ -286,7 +286,7 @@ in
         };
       }));
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           "pool/test".target = "root@target:pool/test";
         }

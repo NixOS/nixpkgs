@@ -36,5 +36,6 @@ buildGoModule rec {
     homepage = "https://mikefarah.gitbook.io/yq/";
     license = [ licenses.mit ];
     maintainers = [ maintainers.lewo ];
+    mainProgram = "yq";
   };
 }

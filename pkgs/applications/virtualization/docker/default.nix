@@ -8,16 +8,16 @@ rec {
       , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? true
+      , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
       # package dependencies
       , stdenv, fetchFromGitHub, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx
+      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp
       , nixosTests
-      , clientOnly ? !stdenv.isLinux
+      , clientOnly ? !stdenv.isLinux, symlinkJoin
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -117,6 +117,10 @@ rec {
         ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
         ++ optional (libseccomp != null) "seccomp";
     });
+
+    plugins = optionals buildxSupport [ docker-buildx ]
+      ++ optionals composeSupport [ docker-compose_2 ];
+    pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
 
@@ -141,14 +145,14 @@ rec {
     ];
     buildInputs = optionals (!clientOnly) [
       sqlite lvm2 btrfs-progs systemd libseccomp
-    ] ++ optionals (buildxSupport) [ docker-buildx ];
+    ] ++ plugins;
 
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString buildxSupport ''
+    '' + optionalString (plugins != []) ''
       substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
+          "${pluginsRef}/libexec/docker/cli-plugins"
     '';
 
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
@@ -221,19 +225,19 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.8";
+    version = "20.10.9";
     rev = "v${version}";
-    sha256 = "sha256-betZIAH4mFpb/OywWyixCjVmy5EGTrg+WbxDXkVRrsI=";
+    sha256 = "1msqvzfccah6cggvf1pm7n35zy09zr4qg2aalgwpqigv0jmrbyd4";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "1pjjdwzad2z337zwby88w5zwl71ch4lcwbw0sy8slvyjv387jjlm";
+      sha256 = "04xx7m8s9vrkm67ba2k5i90053h5qqkjcvw5rc8w7m5a309xcp4n";
     };
-    runcRev = "v1.0.1"; # v1.0.1
-    runcSha256 = "1zfa1zr8i9n1915nyv7hyaj7q27cy7fiihk9rr1377ayaqg3mpn5";
-    containerdRev = "v1.4.9"; # v1.4.9
-    containerdSha256 = "1ykikks6ihgg899ibk9m9m0hqrbss0cx7l7z4yjb873b10bacj52";
+    runcRev = "v1.0.2"; # v1.0.2
+    runcSha256 = "1bpckghjah0rczciw1a1ab8z718lb2d3k4mjm4zb45lpm3njmrcp";
+    containerdRev = "v1.4.11"; # v1.4.11
+    containerdSha256 = "02slv4gc2blxnmv0p8pkm139vjn6ihjblmn8ps2k1afbbyps0ilr";
     tiniRev = "v0.19.0"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

@@ -165,8 +165,8 @@ let
       shell = mkOption {
         type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
         default = pkgs.shadow;
-        defaultText = "pkgs.shadow";
-        example = literalExample "pkgs.bashInteractive";
+        defaultText = literalExpression "pkgs.shadow";
+        example = literalExpression "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
           like <literal>pkgs.bashInteractive</literal>. Don’t
@@ -291,7 +291,7 @@ let
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,

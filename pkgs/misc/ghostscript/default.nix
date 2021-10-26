@@ -157,5 +157,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
+    mainProgram = "gs";
   };
 }

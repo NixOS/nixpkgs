@@ -51,6 +51,8 @@ in
     overrides = y: (x.overrides y) // {
       prePatch = ''
         sed 's|default \"libfixposix\"|default \"${pkgs.libfixposix}/lib/libfixposix\"|' -i src/syscalls/ffi-functions-unix.lisp
+        # Socket tests don't work because they try to access the internet
+        sed 's/(:file "sockets" :depends-on ("pkgdcl" "defsuites"))//' -i iolib.asd
       '';
     };
 
@@ -278,5 +280,29 @@ $out/lib/common-lisp/query-fs"
     (extraLispDeps (with quicklisp-to-nix-packages; [flexi-streams]));
   cl-gobject-introspection = addNativeLibs (with pkgs; [glib gobject-introspection]);
   generic-cl = x: { parasites = []; };
-  static-dispatch = x: { parasites = []; };
+  static-dispatch = x: {
+    overrides = y: (x.overrides y) // {
+      parasites = [];
+      # workaround for https://github.com/alex-gutev/static-dispatch/issues/12
+      postUnpack = ''
+        sed -e '/^(in-package / a (eval-when (:compile-toplevel :load-toplevel :execute)' \
+            -e '$a)' \
+            -i $sourceRoot/src/combin.lisp
+      '';
+    };
+  };
+  lla = addNativeLibs [ pkgs.openblas ];
+  uax-15 = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        patch -p1 < ${
+          pkgs.fetchurl {
+            # https://github.com/sabracrolleton/uax-15/pull/12
+            url = https://github.com/nuddyco/uax-15/commit/d553181669f488636df03d60ad7f5bec64d566bf.diff;
+            sha256 = "sha256:1608jzw7giy18vlw7pz4pl8prwlprgif8zcl9hwa0wf5gdxwd7gn";
+          }}
+      '';
+    };
+  };
+#  cl-opengl = addNativeLibs [ pkgs.libGL pkgs.glfw ];
 }

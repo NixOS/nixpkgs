@@ -10,11 +10,11 @@
 
 buildPythonApplication rec {
   pname = "gdown";
-  version = "3.14.0";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pxmdfmt3YQnyUWEYadDde6IC5Nm5faNugvn8omLMXSE=";
+    sha256 = "sha256-XSYc3mCsFW+x6aZFDNtUE9lHv9vPUvkdsqmbtFX7aQw=";
   };
 
   propagatedBuildInputs = [ filelock requests tqdm setuptools six ];

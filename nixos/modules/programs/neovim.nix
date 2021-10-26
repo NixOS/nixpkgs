@@ -47,18 +47,18 @@ in {
     configure = mkOption {
       type = types.attrs;
       default = {};
-      example = literalExample ''
-        configure = {
-            customRC = $''''
+      example = literalExpression ''
+        {
+          customRC = '''
             " here your custom configuration goes!
-            $'''';
-            packages.myVimPackage = with pkgs.vimPlugins; {
-              # loaded on launch
-              start = [ fugitive ];
-              # manually loadable by calling `:packadd $plugin-name`
-              opt = [ ];
-            };
+          ''';
+          packages.myVimPackage = with pkgs.vimPlugins; {
+            # loaded on launch
+            start = [ fugitive ];
+            # manually loadable by calling `:packadd $plugin-name`
+            opt = [ ];
           };
+        }
       '';
       description = ''
         Generate your init file from your list of plugins and custom commands.
@@ -69,7 +69,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.neovim-unwrapped;
-      defaultText = literalExample "pkgs.neovim-unwrapped";
+      defaultText = literalExpression "pkgs.neovim-unwrapped";
       description = "The package to use for the neovim binary.";
     };
 
@@ -82,8 +82,8 @@ in {
 
     runtime = mkOption {
       default = {};
-      example = literalExample ''
-        runtime."ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc";
+      example = literalExpression ''
+        { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
       description = ''
         Set of files that have to be linked in <filename>runtime</filename>.

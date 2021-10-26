@@ -328,7 +328,7 @@ in {
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 { echelon = {
                     hidden = true;
                     psk = "abcdefgh";
@@ -377,7 +377,7 @@ in {
           /etc/wpa_supplicant.conf as the configuration file.
         '';
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";           # (password will be written to /nix/store!)
             };

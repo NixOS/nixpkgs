@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "6.2.5";
+  version = "6.2.6";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "1bjismh8lrvsjkm1wf5ak0igak5rr9cc39i0brwb6x0vk9q7b6jb";
+    sha256 = "1ariw5x33hmmm3d5al0j3307l5kf3vhmn78wpyaz67hia1x8nasv";
   };
 
   # Cross-compiling fixes

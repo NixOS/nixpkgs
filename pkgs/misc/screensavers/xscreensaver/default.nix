@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, makeWrapper
 , pkg-config, intltool
 , perl, gettext, libX11, libXext, libXi, libXt
 , libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
 , gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
-, systemd
+, systemd, coreutils
 , forceInstallAllHacks ? false
 , withSystemd ? stdenv.isLinux
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config intltool
+    pkg-config intltool makeWrapper
   ];
 
   buildInputs = [
@@ -37,7 +37,13 @@ stdenv.mkDerivation rec {
     "--with-app-defaults=${placeholder "out"}/share/xscreensaver/app-defaults"
   ];
 
-  postInstall = lib.optionalString forceInstallAllHacks ''
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --prefix PATH : "$out/libexec/xscreensaver" \
+        --prefix PATH : "${lib.makeBinPath [ coreutils ]}"
+    done
+  '' + lib.optionalString forceInstallAllHacks ''
     make -j$NIX_BUILD_CORES -C hacks/glx dnalogo
     cat hacks/Makefile.in \
       | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks

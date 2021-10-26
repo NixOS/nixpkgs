@@ -1,5 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
-  <title>Release 21.11 (“?”, 2021.11/??)</title>
+  <title>Release 21.11 (“Porcupine”, 2021.11/??)</title>
   <para>
     In addition to numerous new and upgraded packages, this release has
     the following highlights:
@@ -57,6 +57,11 @@
       </listitem>
       <listitem>
         <para>
+          KDE Plasma now finally works on Wayland.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           bash now defaults to major version 5.
         </para>
       </listitem>
@@ -78,7 +83,15 @@
           which introduced some breaking changes to the experimental OCI
           manifest format. See
           <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
-          6</link> for more details.
+          6</link> for more details. <literal>helmfile</literal> also
+          defaults to 0.141.0, which is the minimum compatible version.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to 41. Please take a look at their
+          <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
+          Notes</link> for details.
         </para>
       </listitem>
     </itemizedlist>
@@ -119,6 +132,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/jitsi/jibri">Jibri</link>,
+          a service for recording or streaming a Jitsi Meet conference.
+          Available as
+          <link xlink:href="options.html#opt-services.jibri.enable">services.jibri</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
           <link xlink:href="options.html#opt-services.kea">services.kea</link>.
@@ -129,6 +150,14 @@
           <link xlink:href="https://owncast.online/">owncast</link>,
           self-hosted video live streaming solution. Available at
           <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
+          developed by Framasoft, is the free and decentralized
+          alternative to video platforms. Available at
+          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
         </para>
       </listitem>
       <listitem>
@@ -271,6 +300,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://wiki.servarr.com/prowlarr">prowlarr</link>,
+          an indexer manager/proxy built on the popular arr .net/reactjs
+          base stack
+          <link linkend="opt-services.prowlarr.enable">services.prowlarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht/~emersion/soju">soju</link>, a
           user-friendly IRC bouncer. Available as
           <link xlink:href="options.html#opt-services.soju.enable">services.soju</link>.
@@ -321,11 +358,33 @@
           <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/DanielOgorchock/joycond">joycond</link>,
+          a service that uses <literal>hid-nintendo</literal> to provide
+          nintendo joycond pairing and better nintendo switch pro
+          controller support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/opensvc/multipath-tools">multipath</link>,
+          the device mapper multipath (DM-MP) daemon. Available as
+          <link linkend="opt-services.multipath.enable">services.multipath</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>services.wakeonlan</literal> option was removed,
+          and replaced with
+          <literal>networking.interfaces.&lt;name&gt;.wakeOnLan</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>security.wrappers</literal> option now requires
@@ -1069,6 +1128,40 @@ Superuser created successfully.
           functionality.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.xserver.displayManager.defaultSession = &quot;plasma5&quot;</literal>
+          does not work anymore, instead use either
+          <literal>&quot;plasma&quot;</literal> for the Plasma X11
+          session or <literal>&quot;plasmawayland&quot;</literal> for
+          the Plasma Wayland sesison.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>boot.kernelParams</literal> now only accepts one
+          command line parameter per string. This change is aimed to
+          reduce common mistakes like <quote>param = 12</quote>, which
+          would be parsed as 3 parameters.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>coursier</literal> package’s binary was renamed
+          from <literal>coursier</literal> to <literal>cs</literal>.
+          Completions which haven’t worked for a while should now work
+          with the renamed binary. To keep using
+          <literal>coursier</literal>, you can create a shell alias.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.mosquitto</literal> module has been
+          rewritten to support multiple listeners and per-listener
+          configuration. Module configurations from previous releases
+          will no longer work and must be updated.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1467,6 +1560,83 @@ Superuser created successfully.
           <link linkend="opt-xdg.mime.enable">xdg.mime</link> module to
           allow the configuration of
           <literal>/etc/xdg/mimeapps.list</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Kopia was upgraded from 0.8.x to 0.9.x. Please read the
+          <link xlink:href="https://github.com/kopia/kopia/releases/tag/v0.9.0">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>systemd.network</literal> module has gained
+          support for the FooOverUDP link type.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking</literal> module has a new
+          <literal>networking.fooOverUDP</literal> option to configure
+          Foo-over-UDP encapsulations.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>networking.sits</literal> now supports Foo-over-UDP
+          encapsulation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Changing systemd <literal>.socket</literal> units now restarts
+          them and stops the service that is activated by them.
+          Additionally, services with
+          <literal>stopOnChange = false</literal> don’t break anymore
+          when they are socket-activated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>virtualisation.libvirtd</literal> module has been
+          refactored and updated with new options:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>virtualisation.libvirtd.qemu*</literal> options
+              (e.g.:
+              <literal>virtualisation.libvirtd.qemuRunAsRoot</literal>)
+              were moved to
+              <link xlink:href="options.html#opt-virtualisation.libvirtd.qemu"><literal>virtualisation.libvirtd.qemu</literal></link>
+              submodule,
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              software TPM1/TPM2 support (e.g.: Windows 11 guests)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.swtpm"><literal>virtualisation.libvirtd.qemu.swtpm</literal></link>),
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              custom OVMF package (e.g.:
+              <literal>pkgs.OVMFFull</literal> with HTTP, CSM and Secure
+              Boot support)
+              (<link xlink:href="options.html#opt-virtualisation.libvirtd.qemu.ovmf.package"><literal>virtualisation.libvirtd.qemu.ovmf.package</literal></link>).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>cawbird</literal> Twitter client now uses its own
+          API keys to count as different application than upstream
+          builds. This is done to evade application-level rate limiting.
+          While existing accounts continue to work, users may want to
+          remove and re-register their account in the client to enjoy a
+          better user experience and benefit from this change.
         </para>
       </listitem>
     </itemizedlist>

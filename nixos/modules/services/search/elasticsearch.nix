@@ -53,7 +53,7 @@ in
     package = mkOption {
       description = "Elasticsearch package to use.";
       default = pkgs.elasticsearch;
-      defaultText = "pkgs.elasticsearch";
+      defaultText = literalExpression "pkgs.elasticsearch";
       type = types.package;
     };
 
@@ -140,7 +140,7 @@ in
       description = "Extra elasticsearch plugins";
       default = [ ];
       type = types.listOf types.package;
-      example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
+      example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };
 
   };
