@@ -1723,6 +1723,8 @@ with pkgs;
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  gmid = callPackage ../servers/gemini/gmid { };
+
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
   gmnisrv = callPackage ../servers/gemini/gmnisrv { };
@@ -3401,6 +3403,8 @@ with pkgs;
   playerctl = callPackage ../tools/audio/playerctl { };
 
   pn = callPackage ../tools/text/pn { };
+
+  pocket-casts = callPackage ../applications/audio/pocket-casts { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
 

@@ -2143,6 +2143,12 @@
     githubId = 199180;
     name = "Claes Wallin";
   };
+  cleeyv = {
+    email = "cleeyv@riseup.net";
+    github = "cleeyv";
+    githubId = 71959829;
+    name = "Cleeyv";
+  };
   cleverca22 = {
     email = "cleverca22@gmail.com";
     matrix = "@cleverca22:matrix.org";
