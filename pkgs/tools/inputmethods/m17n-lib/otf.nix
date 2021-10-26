@@ -35,13 +35,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall =
-    ''
-      mkdir -p $dev/bin
-      mv $out/bin/libotf-config $dev/bin/
-      substituteInPlace $dev/bin/libotf-config \
-        --replace "pkg-config" "${pkg-config}/bin/pkg-config"
-    '';
+  postInstall = ''
+    mkdir -p $dev/bin
+    mv $out/bin/libotf-config $dev/bin/
+    substituteInPlace $dev/bin/libotf-config \
+      --replace "pkg-config" "${pkg-config}/bin/pkg-config"
+  '';
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
