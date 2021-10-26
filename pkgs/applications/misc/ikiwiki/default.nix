@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
       TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
       RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
       NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
-    ++ lib.optionals docutilsSupport [python docutils]
+    ++ lib.optionals docutilsSupport [
+         (python.withPackages (pp: with pp; [ pygments ]))
+         docutils
+       ]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
     ++ lib.optionals bazaarSupport [breezy]
