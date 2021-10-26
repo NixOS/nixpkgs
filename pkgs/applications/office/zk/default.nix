@@ -22,7 +22,7 @@ buildGoModule rec {
 
   preBuild = ''buildFlagsArray+=("-tags" "fts5 icu")'';
 
-  ldflags = [ "-X=main.Build=${version}" "-X=main.Build=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Build=${version}" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ pinpox ];
