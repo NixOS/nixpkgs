@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;
+    broken = versionOlder kernel.version "4.19"; # 4.14 breaks and 4.19 works
   };
 }
