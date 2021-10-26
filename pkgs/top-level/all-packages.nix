@@ -33482,7 +33482,9 @@ with pkgs;
 
   zesarux = callPackage ../misc/emulators/zesarux { };
 
-  zthrottle = callPackage ../tools/misc/zthrottle { };
+  zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zthrottle = callPackage ../tools/misc/zthrottle { };
 }
