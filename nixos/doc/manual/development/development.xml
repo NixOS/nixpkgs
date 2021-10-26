@@ -11,6 +11,7 @@
  </partintro>
  <xi:include href="../from_md/development/sources.chapter.xml" />
  <xi:include href="../from_md/development/writing-modules.chapter.xml" />
+ <xi:include href="../from_md/development/systemd.chapter.xml" />
  <xi:include href="../from_md/development/building-parts.chapter.xml" />
  <xi:include href="../from_md/development/writing-documentation.chapter.xml" />
  <xi:include href="../from_md/development/building-nixos.chapter.xml" />
