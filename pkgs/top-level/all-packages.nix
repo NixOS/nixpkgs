@@ -32852,7 +32852,7 @@ with pkgs;
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
-  vaultenv = haskellPackages.vaultenv;
+  vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
 
