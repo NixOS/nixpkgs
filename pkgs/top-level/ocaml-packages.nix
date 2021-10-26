@@ -419,6 +419,8 @@ let
 
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
+    gluten = callPackage ../development/ocaml-modules/gluten { };
+
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
