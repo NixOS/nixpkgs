@@ -9848,6 +9848,8 @@ with pkgs;
 
   thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
 
+  thiefmd = callPackage ../applications/editors/thiefmd { };
+
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
