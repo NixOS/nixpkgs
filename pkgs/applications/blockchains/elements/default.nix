@@ -17,7 +17,6 @@
 , qtbase ? null
 , qttools ? null
 , python3
-, openssl
 , withGui
 , withWallet ? true
 }:
@@ -25,11 +24,11 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "0.18.1.12";
+  version = "0.21.0";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/elements/archive/elements-${version}.tar.gz";
-    sha256 = "84a51013596b09c62913649ac90373622185f779446ee7e65b4b258a2876609f";
+    sha256 = "0d9mcb0nw9qqhv0jhpddi9i4iry3w7b5jifsl5kpcw82qrkvgfgj";
   };
 
   nativeBuildInputs =
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ hexdump ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ boost libevent miniupnpc zeromq zlib openssl ]
+  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ optionals withWallet [ db48 sqlite ]
     ++ optionals withGui [ qrencode qtbase qttools ];
 
@@ -79,8 +78,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ prusnak ];
     license = licenses.mit;
     platforms = platforms.unix;
-    # Qt GUI is currently broken in upstream
-    # No rule to make target 'qt/res/rendered_icons/about.png', needed by 'qt/qrc_bitcoin.cpp'.
-    broken = withGui;
   };
 }
