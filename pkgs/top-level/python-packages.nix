@@ -6507,6 +6507,8 @@ in {
 
   pylev = callPackage ../development/python-modules/pylev { };
 
+  pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
+
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
