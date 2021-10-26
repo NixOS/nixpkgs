@@ -1,0 +1,13 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-systemd-additional-resources">
+  <title>Additional resources</title>
+  <para>
+    <link xlink:href="https://systemd.io/">Systemd official
+    website</link>
+    <link xlink:href="https://en.wikipedia.org/wiki/Systemd">Wikipedia</link>
+    <link xlink:href="https://wiki.archlinux.org/title/Systemd">Archlinux
+    Wiki</link>
+    <link xlink:href="http://0pointer.de/blog/projects/systemd.html">Systemd
+    announcement from Lennart Poettering (one of the 2 original
+    developpers of systemd)</link>
+  </para>
+</section>

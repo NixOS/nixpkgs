@@ -11,7 +11,6 @@
   <xi:include href="using/configuration.chapter.xml" />
   <xi:include href="using/overlays.chapter.xml" />
   <xi:include href="using/overrides.chapter.xml" />
-  <xi:include href="using/systemd.chapter.xml" />
   <xi:include href="functions.xml" />
  </part>
  <part>

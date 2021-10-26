@@ -1,0 +1,54 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-systemd-state-management">
+  <title>State management</title>
+  <para>
+    State refers to files and directories for config or running a
+    service. A special section is dedicated at the end regarding
+    databases.
+  </para>
+  <para>
+    TODO: section on RuntimeDir, StateDir, WorkingDir
+  </para>
+  <section>
+    <title>Database management</title>
+    <para>
+      Most databases have 2 modes of connection, over TCP or over Unix
+      socket. Connecting over a unix socket can provide 2 advantages
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          30% performance improvement as packets don’t need to be
+          encoder over TCP
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default authentication mode postgres on unix sockets is
+          just with the user name. This will remove the need to manage
+          the password secret
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Therefore the default for database connection for services is
+      recommended to be with a unix socket. For postgres for example,
+      the <literal>host</literal> needs to start with a
+      <literal>/</literal>.
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L98">nixpkgs-example</link>
+    </para>
+  </section>
+  <section>
+    <title>Database initialisation</title>
+    <para>
+      To initialise a database that a service depends on, it’s customary
+      to create another systemd service that will be
+      <literal>partOf</literal> your main service. The initialisation
+      service should be run by the database superuser so as not to
+      require sudo. Typically it will involve creating the database and
+      the user. There will be a step to see if the database is already
+      created. That check is best implemented by going throug the
+      created tables and exiting if the table already exists.
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L220">nixpkgs-example</link>
+    </para>
+  </section>
+</section>

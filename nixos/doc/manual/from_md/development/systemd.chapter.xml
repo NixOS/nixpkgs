@@ -1,0 +1,114 @@
+<chapter xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-systemd">
+  <title>Systemd</title>
+  <para>
+    Systemd is a building block of most nixos modules.
+  </para>
+  <para>
+    From the <link xlink:href="https://systemd.io/">project’s
+    webpage</link>
+  </para>
+  <programlisting>
+systemd is a suite of basic building blocks for a Linux system. It provides a system and service manager that runs as PID 1 and starts the rest of the system.
+
+systemd provides aggressive parallelization capabilities, uses socket and D-Bus activation for starting services, offers on-demand starting of daemons, keeps track of processes using Linux control groups, maintains mount and automount points, and implements an elaborate transactional dependency-based service control logic. systemd supports SysV and LSB init scripts and works as a replacement for sysvinit.
+
+Other parts include a logging daemon, utilities to control basic system configuration like the hostname, date, locale, maintain a list of logged-in users and running containers and virtual machines, system accounts, runtime directories and settings, and daemons to manage simple network configuration, network time synchronization, log forwarding, and name resolution.
+</programlisting>
+  <para>
+    This chapter aims at describing the most commonly used features of
+    systemd in nixos.
+  </para>
+  <para>
+    Index
+  </para>
+  <itemizedlist spacing="compact">
+    <listitem>
+      <para>
+        usage in modules
+      </para>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Starting a service
+            <link xlink:href="https://man.archlinux.org/man/systemd.service.5.en">ref</link>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Handling dependencies Talk about <literal>requires</literal>
+            <literal>wants</literal> <literal>after</literal>
+            <literal>partOf</literal> and the likes
+            <link xlink:href="https://man.archlinux.org/man/systemd.unit.5#%5BUNIT%5D_SECTION_OPTIONS">ref</link>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Environment Talk about <literal>environment</literal> how to
+            use it and not passing secrets
+            <link xlink:href="https://man.archlinux.org/man/systemd.exec.5.en#ENVIRONMENT">ref</link>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Managing state Talk about StateDir RunDir WorkingDir and
+            when to use each
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Initialisation of state and dependents (e.g. database) Talk
+            about adding a systemd service to handle database
+            initialisation
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Database management Talk about connection via a unix socket
+            for more performance and reduced secret management
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Managing secrets Talk about LoadCredential and how to use it
+            <link xlink:href="https://man.archlinux.org/man/systemd.exec.5.en#CREDENTIALS">ref</link>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Security and principle of least privilege Talk about
+            <literal>DynamicUser</literal> and user management
+            <link xlink:href="https://man.archlinux.org/man/systemd.exec.5.en#USER/GROUP_IDENTITY">ref</link>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Template units Show an example and explain why you would use
+            them
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Advanced topics
+          </para>
+          <itemizedlist spacing="compact">
+            <listitem>
+              <para>
+                Capabilities
+                <link xlink:href="https://man.archlinux.org/man/systemd.exec.5.en#CAPABILITIES">ref</link>
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Socket activation for zero downtime deploys
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
+  <xi:include href="systemd-handling-dependencies.section.xml" />
+  <xi:include href="systemd-state-management.section.xml" />
+  <xi:include href="systemd-environment-and-secrets.section.xml" />
+  <xi:include href="systemd-additional-resources.section.xml" />
+</chapter>
