@@ -5335,6 +5335,8 @@ with pkgs;
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
+  uniscribe = callPackage ../tools/text/uniscribe { };
+
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };
