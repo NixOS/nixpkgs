@@ -1,6 +1,6 @@
 ## State management {#sec-systemd-state-management}
 
-State refers to files and directories for config or running a service. 
+State refers to files and directories for config or running a service.
 A special section is dedicated at the end regarding databases.
 
 TODO: section on RuntimeDir, StateDir, WorkingDir
