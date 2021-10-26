@@ -1,11 +1,14 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
   let
-    # A suitable k3s pause image, also used for the test pod
-    pauseImage = pkgs.dockerTools.buildImage {
+    imageEnv = pkgs.buildEnv {
+      name = "k3s-pause-image-env";
+      paths = with pkgs; [ tini (hiPrio coreutils) busybox ];
+    };
+    pauseImage = pkgs.dockerTools.streamLayeredImage {
       name = "test.local/pause";
       tag = "local";
-      contents = with pkgs; [ tini coreutils busybox ];
+      contents = imageEnv;
       config.Entrypoint = [ "/bin/tini" "--" "/bin/sleep" "inf" ];
     };
     # Don't use the default service account because there's a race where it may
@@ -39,8 +42,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
       environment.systemPackages = with pkgs; [ k3s gzip ];
 
       # k3s uses enough resources the default vm fails.
-      virtualisation.memorySize = pkgs.lib.mkDefault 1536;
-      virtualisation.diskSize = pkgs.lib.mkDefault 4096;
+      virtualisation.memorySize = 1536;
+      virtualisation.diskSize = 4096;
 
       services.k3s = {
         enable = true;
@@ -65,10 +68,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("k3s")
       machine.succeed("k3s kubectl cluster-info")
       machine.fail("sudo -u noprivs k3s kubectl cluster-info")
-      # machine.succeed("k3s check-config") # fails with the current nixos kernel config, uncomment once this passes
+      # FIXME: this fails with the current nixos kernel config; once it passes, we should uncomment it
+      # machine.succeed("k3s check-config")
 
       machine.succeed(
-          "zcat ${pauseImage} | docker load"
+          "${pauseImage} | docker load"
       )
 
       machine.succeed("k3s kubectl apply -f ${testPodYaml}")
