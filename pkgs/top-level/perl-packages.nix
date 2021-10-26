@@ -11779,7 +11779,7 @@ let
     patches = [
       (fetchpatch {
         name = "deterministic-libnet.cfg";
-        url = "https://patch-diff.githubusercontent.com/raw/steve-m-hay/perl-libnet/pull/44.patch";
+        url = "https://github.com/steve-m-hay/perl-libnet/commit/7d076c4352f67ee4ed64092cfad3963a2321bd53.patch";
         sha256 = "0pg9w2m08janqn5nrp4x9w5hbcsyxz87hfskd21zzfrzjk8z28qv";
       })
     ];
