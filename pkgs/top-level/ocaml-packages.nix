@@ -1178,6 +1178,8 @@ let
 
     ppx_yojson_conv_lib = callPackage ../development/ocaml-modules/ppx_yojson_conv_lib {};
 
+    prettym = callPackage ../development/ocaml-modules/prettym { };
+
     printbox = callPackage ../development/ocaml-modules/printbox { };
 
     process = callPackage ../development/ocaml-modules/process { };
