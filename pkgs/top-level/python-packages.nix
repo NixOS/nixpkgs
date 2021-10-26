@@ -3728,6 +3728,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  insegel = callPackage ../development/python-modules/insegel { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };
