@@ -5,7 +5,7 @@ A special section is dedicated at the end regarding databases.
 
 TODO: section on RuntimeDir, StateDir, WorkingDir
 
-### Database management
+### Database connection {#sec-systemd-state-management-database-connection}
 
 Most databases have 2 modes of connection, over TCP or over Unix socket. Connecting over a unix socket can provide 2 advantages
 - 30% performance improvement as packets don't need to be encoder over TCP
@@ -14,7 +14,7 @@ Most databases have 2 modes of connection, over TCP or over Unix socket. Connect
 Therefore the default for database connection for services is recommended to be with a unix socket. For postgres for example, the `host` needs to start with a `/`.
 [nixpkgs-example](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L98)
 
-### Database initialisation
+### Database initialisation {#sec-systemd-state-management-database-initialisation}
 
 To initialise a database that a service depends on, it's customary to create another systemd service that will be `partOf` your main service.
 The initialisation service should be run by the database superuser so as not to require sudo.

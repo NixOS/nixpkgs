@@ -8,8 +8,8 @@
   <para>
     TODO: section on RuntimeDir, StateDir, WorkingDir
   </para>
-  <section>
-    <title>Database management</title>
+  <section xml:id="sec-systemd-state-management-database-connection">
+    <title>Database connection</title>
     <para>
       Most databases have 2 modes of connection, over TCP or over Unix
       socket. Connecting over a unix socket can provide 2 advantages
@@ -37,7 +37,7 @@
       <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/lemmy.nix#L98">nixpkgs-example</link>
     </para>
   </section>
-  <section>
+  <section xml:id="sec-systemd-state-management-database-initialisation">
     <title>Database initialisation</title>
     <para>
       To initialise a database that a service depends on, it’s customary

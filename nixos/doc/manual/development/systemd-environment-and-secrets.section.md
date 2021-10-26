@@ -1,4 +1,4 @@
-## Environment and secret maangement {#sec-systemd-environment-and-secrets}
+## Environment and secret maangement {#sec-systemd-environment}
 
 The `environment` attribute is used to pass environment variables to the systemd service.
 ```
@@ -13,7 +13,7 @@ Environment variables should not contain secret data.
 The main reason being that environment variables are accessible to unpriviledged users.
 See [systemd doc](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Environment=) for a more detailed explanation.
 
-### Secret management
+### Secret management {#sec-systemd-secrets}
 
 To pass secret data to a systemd service, systemd has the `LoadCredential` mechanism.
 By passing a file path to systemd, it will make sure that the file is available to the process under a specific path.
