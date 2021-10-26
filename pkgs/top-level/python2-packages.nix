@@ -170,7 +170,7 @@ with self; with super; {
     pythonPackages = self;
   });
 
-  hg-git = callPackage ../development/python-modules/hg-git { };
+  hg-git = callPackage ../development/python-modules/hg-git/0.8.nix { };
 
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
