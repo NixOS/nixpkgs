@@ -1416,6 +1416,8 @@ let
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
+    yuscii = callPackage ../development/ocaml-modules/yuscii { };
+
     z3 = callPackage ../development/ocaml-modules/z3 {
       inherit (pkgs) z3;
     };
