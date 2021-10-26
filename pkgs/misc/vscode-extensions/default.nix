@@ -316,6 +316,8 @@ let
         };
       };
 
+      chenglou92.rescript-vscode = callPackage ./rescript { };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";

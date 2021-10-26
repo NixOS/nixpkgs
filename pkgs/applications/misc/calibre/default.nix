@@ -31,7 +31,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9ymHEpTHDUM3NAGoeSETzKRLKgJLRY4eEli6N5lbZug=";
+    sha256 = "058dqqxhc3pl4is1idlnc3pz80k4r681d5aj4a26v9acp8j7zy4f";
   };
 
   # https://sources.debian.org/patches/calibre/5.30.0+dfsg-1
