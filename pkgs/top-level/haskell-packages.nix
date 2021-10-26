@@ -19,13 +19,13 @@ let
     "ghcHEAD"
   ];
 
-  haskellLib = import ../development/haskell-modules/lib.nix {
+  haskellLibUncomposable = import ../development/haskell-modules/lib.nix {
     inherit (pkgs) lib;
     inherit pkgs;
   };
 
   callPackage = newScope {
-    inherit haskellLib;
+    haskellLib = haskellLibUncomposable.compose;
     overrides = pkgs.haskell.packageOverrides;
   };
 
@@ -44,7 +44,7 @@ let
   inherit (pkgs.haskell) compiler packages;
 
 in {
-  lib = haskellLib;
+  lib = haskellLibUncomposable;
 
   package-list = callPackage ../development/haskell-modules/package-list.nix {};
 

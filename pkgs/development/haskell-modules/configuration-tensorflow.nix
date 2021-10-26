@@ -17,7 +17,7 @@ let
   };
 
   setTensorflowSourceRoot = dir: drv:
-    (overrideCabal drv (drv: { src = tensorflow-haskell; }))
+    (overrideCabal (drv: { src = tensorflow-haskell; }) drv)
       .overrideAttrs (_oldAttrs: {sourceRoot = "source/${dir}";});
 in
 {

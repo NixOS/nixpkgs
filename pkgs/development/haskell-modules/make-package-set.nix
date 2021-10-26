@@ -49,23 +49,23 @@ let
     nodejs = buildPackages.nodejs-slim;
     inherit (self) buildHaskellPackages ghc ghcWithHoogle ghcWithPackages;
     inherit (self.buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal self.buildHaskellPackages.hscolour (drv: {
+    hscolour = overrideCabal (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
       postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-    });
-    cpphs = overrideCabal (self.cpphs.overrideScope (self: super: {
+    }) self.buildHaskellPackages.hscolour;
+    cpphs = overrideCabal (drv: {
+        isLibrary = false;
+        postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+    }) (self.cpphs.overrideScope (self: super: {
       mkDerivation = drv: super.mkDerivation (drv // {
         enableSharedExecutables = false;
         enableSharedLibraries = false;
         doHaddock = false;
         useCpphs = false;
       });
-    })) (drv: {
-        isLibrary = false;
-        postFixup = "rm -rf $out/lib $out/share $out/nix-support";
-    });
+    }));
   };
 
   mkDerivation = makeOverridable mkDerivationImpl;
@@ -294,7 +294,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     #
     #     # default.nix
     #     with import <nixpkgs> {};
-    #     haskellPackages.extend (haskell.lib.packageSourceOverrides {
+    #     haskellPackages.extend (haskell.lib.compose.packageSourceOverrides {
     #       frontend = ./frontend;
     #       backend = ./backend;
     #       common = ./common;

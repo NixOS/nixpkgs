@@ -30,7 +30,7 @@ rec {
          > haskellPackages.aeson.meta.homepage
          "https://github.com/bos/aeson"
 
-         > x = haskell.lib.composable.overrideCabal (old: { homepage = old.homepage + "#readme"; }) haskellPackages.aeson
+         > x = haskell.lib.compose.overrideCabal (old: { homepage = old.homepage + "#readme"; }) haskellPackages.aeson
          > x.meta.homepage
          "https://github.com/bos/aeson#readme"
 
@@ -133,7 +133,7 @@ rec {
 
      Example:
 
-         > haskell.lib.composable.appendConfigureFlag "--profiling-detail=all-functions" haskellPackages.servant
+         > haskell.lib.compose.appendConfigureFlag "--profiling-detail=all-functions" haskellPackages.servant
    */
   appendConfigureFlag = x: appendConfigureFlags [x];
   appendConfigureFlags = xs: overrideCabal (drv: { configureFlags = (drv.configureFlags or []) ++ xs; });
@@ -144,7 +144,7 @@ rec {
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
 
-         > haskell.lib.composable.removeConfigureFlag "--verbose" haskellPackages.servant
+         > haskell.lib.compose.removeConfigureFlag "--verbose" haskellPackages.servant
    */
   removeConfigureFlag = x: overrideCabal (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
 
