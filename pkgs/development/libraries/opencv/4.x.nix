@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -74,20 +73,20 @@
 }:
 
 let
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "sha256-pxi1VBF4txvRqspdqvCsAQ3XKzl633/o3wyOgD9wid4=";
+    sha256 = "sha256-eIESkc/yYiZZ5iY4t/rAPd+jfjuMYR3srCBC4fO3g70=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "sha256-iMenRTY+qeL7WRgnRuQbsHflYDakE7pWWSHeIjrg0Iw=";
+    sha256 = "sha256-RkCIGukZ8KJkmVZQAZTWdVcVKD2I3NcfGShcqzKhQD0=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -219,11 +218,6 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
-    # Fix usage of deprecated version of protobuf' SetTotalBytesLimit. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/opencv/opencv/commit/384875f4fcf1782b10699a379aa245a03cb27a04.patch";
-      sha256 = "1agwd0pm07m2dy8a62vmfl4n73dsmsdll2a73q6kara9wm3jlp41";
-    })
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
 
   # This prevents cmake from using libraries in impure paths (which
