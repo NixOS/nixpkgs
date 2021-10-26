@@ -1368,6 +1368,8 @@ let
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
 
+    uuuu = callPackage ../development/ocaml-modules/uuuu { };
+
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vchan = callPackage ../development/ocaml-modules/vchan { };
