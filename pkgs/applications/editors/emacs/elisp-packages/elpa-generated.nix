@@ -384,10 +384,10 @@
       elpaBuild {
         pname = "boxy-headings";
         ename = "boxy-headings";
-        version = "2.1.0";
+        version = "2.1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/boxy-headings-2.1.0.tar";
-          sha256 = "021w4ic028jsq7vxz1jgnfny9dymcz6v112b3b3nwyw3g3dnc62f";
+          url = "https://elpa.gnu.org/packages/boxy-headings-2.1.2.tar";
+          sha256 = "0jyfp41jw33kmi7832x5x0mgh5niqvb7dfc7q00kay5q9ixg83dq";
         };
         packageRequires = [ boxy emacs org ];
         meta = {
@@ -704,6 +704,21 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/corfu.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    coterm = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "coterm";
+        ename = "coterm";
+        version = "1.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/coterm-1.2.tar";
+          sha256 = "0jl48bi4a4fkk7p2nj2bx0b658wrjw0cvab5ds6rid44irc8b1mn";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/coterm.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -1146,10 +1161,10 @@
       elpaBuild {
         pname = "eev";
         ename = "eev";
-        version = "20211011";
+        version = "20211024";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/eev-20211011.tar";
-          sha256 = "1a71qam6z5s3zl7fvxpsnabbqxh8a7llm1524nxs2353pb6ksfra";
+          url = "https://elpa.gnu.org/packages/eev-20211024.tar";
+          sha256 = "165mscb1kpgd3db92vklglnaph60rvrr8wm3hpkhrbyac100ryji";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1484,10 +1499,10 @@
       elpaBuild {
         pname = "flymake-proselint";
         ename = "flymake-proselint";
-        version = "0.2.1";
+        version = "0.2.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/flymake-proselint-0.2.1.tar";
-          sha256 = "08hbz8k3idr1gb98q3ssmzsdya5afjxl25l9xzqp9q2w5krc8433";
+          url = "https://elpa.gnu.org/packages/flymake-proselint-0.2.2.tar";
+          sha256 = "0v43d2cszrq8lzshm17x6aiqbkzwz5kj8x5sznc3nip9gaqsrfv1";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3591,10 +3606,10 @@
       elpaBuild {
         pname = "shell-command-plus";
         ename = "shell-command+";
-        version = "2.3.1";
+        version = "2.3.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/shell-command+-2.3.1.tar";
-          sha256 = "0g8pcrkkh3bxcxxbasnz834gi3pvhlkpf011fvmlhwzswypcyqmy";
+          url = "https://elpa.gnu.org/packages/shell-command+-2.3.2.tar";
+          sha256 = "03hmk4gr9kjy3238n0ys9na00py035j9s0y8d87c45f5af6c6g2c";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3629,6 +3644,21 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/sisu-mode.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    sketch-mode = callPackage ({ elpaBuild, fetchurl, lib }:
+      elpaBuild {
+        pname = "sketch-mode";
+        ename = "sketch-mode";
+        version = "1.0.3";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/sketch-mode-1.0.3.tar";
+          sha256 = "17xa8754zp07izgd3b9hywlwd1jrbzyc5y1rrhin7w6r0pyvqs51";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/sketch-mode.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -4219,10 +4249,10 @@
       elpaBuild {
         pname = "vc-hgcmd";
         ename = "vc-hgcmd";
-        version = "1.14";
+        version = "1.14.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/vc-hgcmd-1.14.tar";
-          sha256 = "0pg6fg0znsmky3iwdpxn2sx5bbn72kw83s077000ilawi6zqwc2d";
+          url = "https://elpa.gnu.org/packages/vc-hgcmd-1.14.1.tar";
+          sha256 = "12izw5ln22xdgwh6mqm6axzdfpcnqq7qcj72nmykrbsgpagp5fy6";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4281,10 +4311,10 @@
       elpaBuild {
         pname = "verilog-mode";
         ename = "verilog-mode";
-        version = "2021.9.23.89128420";
+        version = "2021.10.14.127365406";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/verilog-mode-2021.9.23.89128420.tar";
-          sha256 = "1sgmkmif44npghz4nnag1w91qrrylq36175cjj87lcdp22s6isgk";
+          url = "https://elpa.gnu.org/packages/verilog-mode-2021.10.14.127365406.tar";
+          sha256 = "0d842dwg98srv73nkg69c7x24rw20mxgqmb4k1qcbl02bwxkfmsm";
         };
         packageRequires = [];
         meta = {
@@ -4604,10 +4634,10 @@
       elpaBuild {
         pname = "xref";
         ename = "xref";
-        version = "1.3.0";
+        version = "1.3.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xref-1.3.0.tar";
-          sha256 = "0bw2cbxmjavzhmpd9gyl41d4c201p535jrfz3b7jb5zw12jdnppl";
+          url = "https://elpa.gnu.org/packages/xref-1.3.2.tar";
+          sha256 = "13bsaxdxwn14plaam0hsrswngh3rm2k29v5ybjgjyjy4d5vwz78j";
         };
         packageRequires = [ emacs ];
         meta = {
