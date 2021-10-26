@@ -420,6 +420,7 @@ let
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
+    gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
