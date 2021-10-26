@@ -1,5 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-21.11">
-  <title>Release 21.11 (“?”, 2021.11/??)</title>
+  <title>Release 21.11 (“Porcupine”, 2021.11/??)</title>
   <para>
     In addition to numerous new and upgraded packages, this release has
     the following highlights:
@@ -142,6 +142,14 @@
           <link xlink:href="https://owncast.online/">owncast</link>,
           self-hosted video live streaming solution. Available at
           <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://joinpeertube.org/">PeerTube</link>,
+          developed by Framasoft, is the free and decentralized
+          alternative to video platforms. Available at
+          <link xlink:href="options.html#opt-services.peertube">services.peertube</link>.
         </para>
       </listitem>
       <listitem>

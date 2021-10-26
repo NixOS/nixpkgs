@@ -1080,6 +1080,12 @@
     githubId = 354741;
     name = "Austin Butler";
   };
+  autophagy = {
+    email = "mail@autophagy.io";
+    github = "autophagy";
+    githubId = 12958979;
+    name = "Mika Naylor";
+  };
   avaq = {
     email = "nixpkgs@account.avaq.it";
     github = "avaq";
@@ -10814,6 +10820,12 @@
     githubId = 1181362;
     name = "Stefan Junker";
   };
+  stevenroose = {
+    email = "github@stevenroose.org";
+    github = "stevenroose";
+    githubId = 853468;
+    name = "Steven Roose";
+  };
   stianlagstad = {
     email = "stianlagstad@gmail.com";
     github = "stianlagstad";
@@ -11693,6 +11705,13 @@
       longkeyid = "rsa4096/0xD276FF7467007335";
       fingerprint = "EE59 5E29 BB5B F2B3 5ED2  3F1C D276 FF74 6700 7335";
     }];
+  };
+  uniquepointer = {
+    email = "uniquepointer@mailbox.org";
+    matrix = "@uniquepointer:matrix.org";
+    github = "uniquepointer";
+    githubId = 71751817;
+    name = "uniquepointer";
   };
   unode = {
     email = "alves.rjc@gmail.com";

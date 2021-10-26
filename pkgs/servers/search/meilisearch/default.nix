@@ -1,51 +1,30 @@
-{ pkgs
+{ stdenv
 , lib
-, stdenv
-, buildRustCrate
-, defaultCrateOverrides
+, rustPlatform
 , fetchFromGitHub
 , Security
-, features ? [ ]
+, DiskArbitration
+, Foundation
 }:
 
-let
-  version = "0.21.1";
+let version = "0.23.1";
+in
+rustPlatform.buildRustPackage {
+  pname = "meilisearch";
+  inherit version;
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "MeiliSearch";
     rev = "v${version}";
-    sha256 = "sha256-wyyhTNhVw8EJhahstLK+QuEhufQC68rMpw/ngK8FL8Y=";
+    sha256 = "sha256-4F7noByC9ZgqYwPfkm8VE15QU2jbBvUAH4Idxa+J+Aw=";
   };
-  customBuildRustCrateForPkgs = pkgs: buildRustCrate.override {
-    defaultCrateOverrides = defaultCrateOverrides // {
-      meilisearch-http = attrs: {
-        src = "${src}/meilisearch-http";
-        buildInputs = lib.optionals stdenv.isDarwin [ Security ];
-      };
-      meilisearch-error = attrs: {
-        src = "${src}/meilisearch-error";
-      };
-    };
-  };
-  cargo_nix = import ./Cargo.nix {
-    inherit pkgs;
-    buildRustCrateForPkgs = customBuildRustCrateForPkgs;
-  };
-  meilisearch-http = cargo_nix.workspaceMembers."meilisearch-http".build.override {
-    inherit features;
-  };
-in
-stdenv.mkDerivation {
-  pname = "meilisearch";
-  inherit version src;
-  dontUnpack = true;
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${meilisearch-http}/bin/meilisearch $out/bin/meilisearch
-  '';
-  dontCheck = true;
-  dontFixup = true;
+  cargoPatches = [
+    # feature mini-dashboard tries to download a file from the internet
+    # feature analitycs should be opt-in
+    ./remove-default-feature.patch
+  ];
+  cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
+  buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = https://docs.meilisearch.com/;

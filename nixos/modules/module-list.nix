@@ -999,6 +999,7 @@
   ./services/web-apps/nexus.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/pict-rs.nix
+  ./services/web-apps/peertube.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
