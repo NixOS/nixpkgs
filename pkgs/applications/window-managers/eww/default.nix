@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = "ElKowars wacky widgets";
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda legendofmiracles ];
   };
 }
