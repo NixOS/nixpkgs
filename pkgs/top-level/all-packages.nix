@@ -32903,7 +32903,9 @@ with pkgs;
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
 
-  zthrottle = callPackage ../tools/misc/zthrottle { };
+  zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zthrottle = callPackage ../tools/misc/zthrottle { };
 }
