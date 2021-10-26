@@ -12,12 +12,12 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-Zr+5J6MCjfth+5fOSfHXpT/CAgD754ZpS1b1NqeGid8=";
+    sha256 = "sha256-asrhinANGlTsSBbtGToOxTRGGSCf+1c4VWnoE3ezoIA=";
   };
 
   postPatch = ''
@@ -39,11 +39,14 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_files_headers"
     "test_integration"
+    "test_get_account_info"
   ];
 
   postInstall = ''
