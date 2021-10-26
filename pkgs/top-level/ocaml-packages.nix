@@ -421,6 +421,7 @@ let
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
+    gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
