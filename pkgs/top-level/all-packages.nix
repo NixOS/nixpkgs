@@ -13187,6 +13187,10 @@ with pkgs;
     mpi = mpich;
   };
 
+  graphql-client = callPackage ../development/tools/graphql-client {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   groovy = callPackage ../development/interpreters/groovy { };
 
   inherit (callPackages ../applications/networking/cluster/hadoop { })
@@ -29209,6 +29213,8 @@ with pkgs;
   yokadi = python3Packages.callPackage ../applications/misc/yokadi {};
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
+
+  your-editor = callPackage ../applications/editors/your-editor { };
 
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 

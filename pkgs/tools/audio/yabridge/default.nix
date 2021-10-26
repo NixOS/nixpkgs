@@ -1,6 +1,7 @@
 { lib
 , multiStdenv
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -47,25 +48,25 @@ let
 
   # Derived from vst3.wrap
   vst3 = rec {
-    version = "3.7.2_build_28-patched";
+    version = "3.7.3_build_20-patched";
     src = fetchFromGitHub {
       owner = "robbert-vdh";
       repo = "vst3sdk";
       rev = "v${version}";
       fetchSubmodules = true;
-      sha256 = "sha256-39pvfcg4fvf7DAbAPzEHA1ja1LFL6r88nEwNYwaDC8w=";
+      sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
     };
   };
 in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.5.2";
+  version = "3.6.0";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    hash = "sha256-SLiksc8lQo2A5sefKbcaJyhi8vPdp2p2Jbc7bvM0sDw=";
+    hash = "sha256-lgSkZ0i2DojP6HXJP3cC5FUtfv7R/nsSiHT60bPSyLc=";
   };
 
   # Unpack subproject sources
@@ -84,6 +85,12 @@ in multiStdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-wine.patch;
       inherit wine;
+    })
+    # Remove with next yabridge update
+    (fetchpatch {
+      name = "fix-for-wine-6.20.patch";
+      url = "https://github.com/robbert-vdh/yabridge/commit/5be149cb525a638f7fc3adf84918c8239ee50ecf.patch";
+      sha256 = "sha256-x/gfn4mKZIGQ4M0o/0LlZF8i8wZDx/bkwf8wp0BGDBo=";
     })
   ];
 
@@ -121,8 +128,8 @@ in multiStdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    sed -i "214s|xcb.*|xcb_32bit_dep = winegcc.find_library('xcb', dirs: [ '${lib.getLib pkgsi686Linux.xorg.libxcb}/lib', ])|" meson.build
-    sed -i "192 i '${lib.getLib pkgsi686Linux.boost}/lib'," meson.build
+    sed -i "221s|xcb.*|xcb_32bit_dep = winegcc.find_library('xcb', dirs: [ '${lib.getLib pkgsi686Linux.xorg.libxcb}/lib', ])|" meson.build
+    sed -i "199 i '${lib.getLib pkgsi686Linux.boost}/lib'," meson.build
   '';
 
   installPhase = ''
