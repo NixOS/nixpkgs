@@ -22,10 +22,14 @@ bintoolsWrapper_addLDVars () {
         # Python and Haskell packages often only have directories like $out/lib/ghc-8.4.3/ or
         # $out/lib/python3.6/, so having them in LDFLAGS just makes the linker search unnecessary
         # directories and bloats the size of the environment variable space.
+        shopt -u failglob
+        shopt -s nullglob
         local -a glob=( $1/lib/lib* )
         if [ "${#glob[*]}" -gt 0 ]; then
             export NIX_LDFLAGS${role_post}+=" -L$1/lib"
         fi
+        shopt -u nullglob
+        shopt -s failglob
     fi
 }
 

@@ -80,7 +80,7 @@ stdenv.mkDerivation (rec {
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out
     # what causes this difference.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
+    for file in $out/lib/*.dylib* ; do
       ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
     done
   ''

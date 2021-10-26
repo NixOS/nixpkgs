@@ -273,8 +273,13 @@ postInstall() {
         done
     fi
 
+    # On darwin include-fixed/root doesn't exist
+    shopt -u failglob
+    shopt -s nullglob
     # Get rid of some "fixed" header files
     rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
+    shopt -u nullglob
+    shopt -s failglob
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

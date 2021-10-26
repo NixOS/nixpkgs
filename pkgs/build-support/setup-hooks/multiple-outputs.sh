@@ -97,6 +97,8 @@ moveToOutput() {
     for output in $outputs; do
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
+        shopt -u failglob
+        shopt -s nullglob
         for srcPath in "${!output}"/$patt; do
             # apply to existing files/dirs, *including* broken symlinks
             if [ ! -e "$srcPath" ] && [ ! -L "$srcPath" ]; then continue; fi
@@ -130,6 +132,8 @@ moveToOutput() {
                     2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done
+        shopt -u nullglob
+        shopt -s failglob
     done
 }
 
@@ -158,10 +162,14 @@ _multioutDevs() {
     moveToOutput share/aclocal "${!outputDev}"
     # don't move *.la, as libtool needs them in the directory of the library
 
+    shopt -u failglob
+    shopt -s nullglob
     for f in "${!outputDev}"/{lib,share}/pkgconfig/*.pc; do
         echo "Patching '$f' includedir to output ${!outputInclude}"
         sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
     done
+    shopt -u nullglob
+    shopt -s failglob
 }
 
 # Make the "dev" propagate other outputs needed for development.

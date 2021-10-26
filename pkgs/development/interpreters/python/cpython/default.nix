@@ -406,9 +406,13 @@ in with passthru; stdenv.mkDerivation {
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
     # Note that the .pyc file of _sysconfigdata.py should be regenerated!
+    shopt -u failglob
+    shopt -s nullglob
     for i in $out/lib/${libPrefix}/_sysconfigdata*.py $out/lib/${libPrefix}/config-${sourceVersion.major}${sourceVersion.minor}*/Makefile; do
        sed -i $i -e "s|$TMPDIR|/no-such-path|g"
     done
+    shopt -u nullglob
+    shopt -s failglob
 
     # Further get rid of references. https://github.com/NixOS/nixpkgs/issues/51668
     find $out/lib/python*/config-* -type f -print -exec nuke-refs ${keep-references} '{}' +
