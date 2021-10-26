@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "7.1.0";
+  version = "7.1.1";
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "pytradfri";
     rev = version;
-    sha256 = "sha256-r/qt06YPia8PYhwOeDXk0oK3YvEZ/1kN//+LXj34fmE=";
+    sha256 = "sha256-rLpqCpvHTXv6SyT3SOv6oUrWnSDhMG5r+BmznlnNKwg=";
   };
 
   propagatedBuildInputs = [

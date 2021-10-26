@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-ZDWkVCga/NsKOnj5HP0lnmnX6vqw+I0b3a1Wr1t1VN0=";
+    sha256 = "sha256-TzSBGjgaE0IWaqJcCIoO/u+gDh17NtAqhE8ldbbjNIE=";
   };
 
   postPatch = ''

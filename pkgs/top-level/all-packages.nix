@@ -3483,6 +3483,8 @@ with pkgs;
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
+  snowcat = callPackage ../tools/security/snowcat { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   soju = callPackage ../applications/networking/soju { };
@@ -27147,7 +27149,7 @@ with pkgs;
 
   packet-sd = callPackage ../development/tools/packet-sd { };
 
-  packet-cli = callPackage ../development/tools/packet-cli { };
+  metal-cli = callPackage ../development/tools/metal-cli { };
 
   pb_cli = callPackage ../tools/misc/pb_cli {};
 
