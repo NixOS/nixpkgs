@@ -14,13 +14,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "swaylock-fancy-unstable";
-  version = "2020-02-22";
+  version = "2021-10-11";
 
   src = fetchFromGitHub {
     owner = "Big-B";
     repo = "swaylock-fancy";
-    rev = "5cf977b12f372740aa7b7e5a607d583f93f1e028";
-    sha256 = "0laqwzi6069sgz91i69438ns0g2nq4zkqickavrf80h4g3gcs8vm";
+    rev = "265fbfb438392339bf676b0a9dbe294abe2a699e";
+    sha256 = "0cq650bc2n5xvqy32xb8qgwwas0iyq32l5yb7zsicp4q4lkmwg1n";
   };
 
   postPatch = ''
