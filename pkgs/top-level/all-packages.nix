@@ -1721,6 +1721,8 @@ with pkgs;
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  gmid = callPackage ../servers/gemini/gmid { };
+
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
   gmnisrv = callPackage ../servers/gemini/gmnisrv { };
