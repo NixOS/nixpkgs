@@ -3730,6 +3730,8 @@ in {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  insegel = callPackage ../development/python-modules/insegel { };
+
   intake = callPackage ../development/python-modules/intake { };
 
   intake-parquet = callPackage ../development/python-modules/intake-parquet { };
@@ -6506,6 +6508,8 @@ in {
   PyLD = callPackage ../development/python-modules/PyLD { };
 
   pylev = callPackage ../development/python-modules/pylev { };
+
+  pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
 
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 

@@ -452,7 +452,7 @@
     "lastfm" = ps: with ps; [ pylast ];
     "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
     "lcn" = ps: with ps; [ pypck ];
-    "lg_netcast" = ps: with ps; [ ]; # missing inputs: pylgnetcast
+    "lg_netcast" = ps: with ps; [ pylgnetcast ];
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
     "life360" = ps: with ps; [ ]; # missing inputs: life360
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
