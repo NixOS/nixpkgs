@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  configureFlags = [ "--enable-posix-api=yes" ];
 
   meta = with lib; {
     homepage = "https://github.com/kkos/oniguruma";
