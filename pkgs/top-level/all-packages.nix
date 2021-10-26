@@ -3481,6 +3481,8 @@ with pkgs;
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
+  snowcat = callPackage ../tools/security/snowcat { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   soju = callPackage ../applications/networking/soju { };
