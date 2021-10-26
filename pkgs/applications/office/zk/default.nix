@@ -20,9 +20,9 @@ buildGoModule rec {
 
   CGO_ENABLED = 1;
 
-  preBuild = ''buildFlagsArray+=("-tags" "fts5 icu")'';
-
   ldflags = [ "-s" "-w" "-X=main.Build=${version}" ];
+
+  tags = [ "fts5" "icu" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ pinpox ];
