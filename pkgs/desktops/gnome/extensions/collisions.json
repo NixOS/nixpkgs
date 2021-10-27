@@ -91,5 +91,15 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ]
+  },
+  "41": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "floating-dock": [
+      "floatingDock@sun.wxg@gmail.com",
+      "floating-dock@nandoferreira_prof@hotmail.com"
+    ]
   }
 }
