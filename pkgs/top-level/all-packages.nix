@@ -11979,9 +11979,11 @@ with pkgs;
     haxe_3_2
     ;
 
-  haxe = haxe_4_2;
-  haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
-  inherit (haxePackages) hxcpp;
+  haxe41Packages = recurseIntoAttrs (callPackage ./haxe-packages.nix { haxe = haxe_4_1; });
+  haxe42Packages = recurseIntoAttrs (callPackage ./haxe-packages.nix { haxe = haxe_4_2; });
+
+  haxePackages = haxe42Packages;
+  inherit (haxePackages) haxe hxcpp;
 
   hhvm = callPackage ../development/compilers/hhvm { };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
+{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, libuv, SDL2, zlib, libjpeg, libpng, libvorbis, libGL, libGLU, openal, mbedtls, mesa, sqlite }:
 
 let
   self = haxePackages;
@@ -24,16 +24,17 @@ let
       libname,
       version,
       sha256,
-      meta,
+      meta ? {},
       ...
     } @ attrs:
       stdenv.mkDerivation (attrs // {
-        name = "${libname}-${version}";
+        pname = libname;
+        inherit version;
 
         buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
         src = fetchzip rec {
           name = "${libname}-${version}";
-          url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
+          url = "https://lib.haxe.org/files/3.0/${withCommas name}.zip";
           inherit sha256;
           stripRoot = false;
         };
@@ -52,22 +53,27 @@ let
         '';
 
         meta = {
-          homepage = "http://lib.haxe.org/p/${libname}";
-          license = lib.licenses.bsd2;
+          homepage = "https://lib.haxe.org/p/${libname}";
           platforms = lib.platforms.all;
-          description = throw "please write meta.description";
-        } // attrs.meta;
+        } // attrs.meta or {};
       });
+
+    inherit haxe;
 
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
-      version = "4.1.15";
-      sha256 = "1ybxcvwi4655563fjjgy6xv5c78grjxzadmi3l1ghds48k1rh50p";
+      version = "4.2.1";
+      sha256 = "10ijb8wiflh46bg30gihg7fyxpcf26gibifmq5ylx0fam4r51lhp";
       postFixup = ''
-        for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
+        # <xlocale> is not available on both glibc and musl, but it looks that there is no __MUSL__ to detect it
+        substituteInPlace ${placeholder "out"}/lib/haxe/${withCommas libname}/${withCommas version}/src/hx/libs/std/Sys.cpp --replace \
+          '&& !defined(__GLIBC__)' \
+          '&& 0'
+
+        for f in ${placeholder "out"}/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
-          patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
-          patchelf --set-rpath ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
+          patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)  "$f" || true
+          patchelf --set-rpath       ${ lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
         done
       '';
       meta.description = "Runtime support library for the Haxe C++ backend";
@@ -75,45 +81,108 @@ let
 
     hxjava = buildHaxeLib {
       libname = "hxjava";
-      version = "3.2.0";
-      sha256 = "1vgd7qvsdxlscl3wmrrfi5ipldmr4xlsiwnj46jz7n6izff5261z";
+      version = "4.2.0";
+      sha256 = "0y3pbp0khyfm3fscn8amnya6pc7lv6fn0hsghjqg843vjj54xax2";
       meta.description = "Support library for the Java backend of the Haxe compiler";
-      propagatedBuildInputs = [ jdk ];
     };
 
     hxcs = buildHaxeLib {
       libname = "hxcs";
-      version = "3.4.0";
-      sha256 = "0f5vgp2kqnpsbbkn2wdxmjf7xkl0qhk9lgl9kb8d5wdy89nac6q6";
+      version = "4.2.0";
+      sha256 = "0sszajl00ll11h2ljvadmsj6cqrjrvylbncd49ma5g6y6fl4c6wf";
       meta.description = "Support library for the C# backend of the Haxe compiler";
-      propagatedBuildInputs = [ mono ];
     };
 
-    hxnodejs_4 = buildHaxeLib {
-      libname = "hxnodejs";
-      version = "4.0.9";
-      sha256 = "0b7ck48nsxs88sy4fhhr0x1bc8h2ja732zzgdaqzxnh3nir0bajm";
-      meta.description = "Extern definitions for node.js 4.x";
-    };
-
-    hxnodejs_6 = let
-      libname = "hxnodejs";
-      version = "6.9.0";
-    in stdenv.mkDerivation {
-      name = "${libname}-${version}";
+    hxnodejs_12 = stdenv.mkDerivation rec {
+      pname = "hxnodejs";
+      version = "12.1.0";
       src = fetchFromGitHub {
         owner = "HaxeFoundation";
         repo = "hxnodejs";
-        rev = "cf80c6a";
-        sha256 = "0mdiacr5b2m8jrlgyd2d3vp1fha69lcfb67x4ix7l7zfi8g460gs";
+        rev = version;
+        sha256 = "17jy2rdbgrvm0adwdl3szsfm23i2k8dfw902x1xsjq6hzrhn4mdf";
       };
-      installPhase = installLibHaxe { inherit libname version; };
+      installPhase = installLibHaxe { libname = pname; inherit version; };
       meta = {
-        homepage = "http://lib.haxe.org/p/${libname}";
-        license = lib.licenses.bsd2;
+        homepage = "https://lib.haxe.org/p/${pname}";
         platforms = lib.platforms.all;
-        description = "Extern definitions for node.js 6.9";
+        description = "Extern definitions for node.js ${version}";
       };
     };
+
+    heaps = self.buildHaxeLib {
+      libname = "heaps";
+      version = "1.9.1";
+      sha256 = "0lmnr3yxknwwawafgv2nwkijvgi0w4smrikv2224gwv1g8m0i4cb";
+    };
+
+    format = self.buildHaxeLib {
+      libname = "format";
+      version = "3.5.0";
+      sha256 = "1w6b77f0x0kswvpzhfqxiz9pkk3flgzmzyv6s2qy3qpvwdpppxp6";
+    };
+
+    hashlink = stdenv.mkDerivation rec {
+      pname = "hashlink";
+      version = "1.11";
+      src = fetchFromGitHub {
+        owner = "HaxeFoundation";
+        repo = pname;
+        rev = version;
+        sha256 = "1bgx8pr062xsy81ygbakm3v033d68dqqx0dgfs0dczdqy8q0039k";
+      };
+      nativeBuildInputs = [ haxe ];
+      buildInputs = [ libuv zlib libpng SDL2 libvorbis libjpeg libGL libGLU openal mbedtls mesa sqlite ];
+
+      buildPhase = ''
+        make LIBOPENGL=-lGL
+        ( cd other/haxelib; haxe --neko run.n Run.hx )
+        ( cd libs/mesa;     make mesa.hdll LLVM_LIBDIR=${mesa.llvmPackages.llvm.lib}/lib MESA_LIBS='-L${mesa.osmesa}/lib -L${mesa}/lib -lGL -lglapi -lOSMesa' )
+      '';
+
+      installPhase = ''
+        install  -Dm755 -t ${placeholder "out"}/bin hl
+        install  -Dm755 -t ${placeholder "out"}/lib libhl.so *.hdll
+
+        # install hashlink support lib
+        mkdir -p ${placeholder "out"}/lib/haxe/hashlink/${withCommas version}  ; cp -r other/haxelib/haxelib.json other/haxelib/run.n other/haxelib/Run.hx  ${placeholder "out"}/lib/haxe/hashlink/${withCommas version}  ; echo "${version}" > ${placeholder "out"}/lib/haxe/hashlink/.current
+        mkdir -p ${placeholder "out"}/lib/haxe/hlsdl/${withCommas version}     ; cp -r libs/sdl/haxelib.json      libs/sdl/sdl                              ${placeholder "out"}/lib/haxe/hlsdl/${withCommas version}     ; echo "${version}" > ${placeholder "out"}/lib/haxe/hlsdl/.current
+        mkdir -p ${placeholder "out"}/lib/haxe/hlopenal/${withCommas version}  ; cp -r libs/openal/haxelib.json   libs/openal/openal                        ${placeholder "out"}/lib/haxe/hlopenal/${withCommas version}  ; echo "${version}" > ${placeholder "out"}/lib/haxe/hlopenal/.current
+
+        # install files to include in generated C-code
+        cp -r "$src/src" ${placeholder "out"}/include
+      '';
+
+      doInstallCheck = true;
+      installCheckInputs = [ self.heaps self.format ];
+      installCheckPhase = ''
+        ( export HAXELIB_PATH="$HAXELIB_PATH:${placeholder "out"}/lib/haxe"
+          haxelib list
+
+          # Run bytecode
+          haxe -hl hello.hl -cp other/tests -main HelloWorld -D interp
+          ./hl hello.hl
+
+          # Generate C-code
+          haxe -hl src/_main.c -cp other/tests -main HelloWorld
+          make hlc
+          ./hlc
+
+          # Build mesa example
+          ( cd libs/mesa
+            substituteInPlace sample/Test.hx --replace h3d.scene.DirLight h3d.scene.fwd.DirLight  # fix for news `heaps`
+            haxe -cp sample -lib hlsdl -lib heaps -hl test.hl -main Test -D usegl -D usesys )
+
+          # it should fail with "Uncaught exception: Failed to create window"
+          ./hl libs/mesa/test.hl  || true
+        )
+      '';
+
+      meta = {
+        description = "Virtual machine for Haxe";
+        platforms = lib.platforms.linux;
+      };
+    };
+
   };
 in self
