@@ -134,7 +134,6 @@ let
 
   base = with actual; {
     pname = "factorio-${releaseType}";
-
     inherit version src;
 
     preferLocalBuild = true;
