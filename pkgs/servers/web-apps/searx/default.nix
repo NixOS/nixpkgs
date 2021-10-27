@@ -4,7 +4,7 @@ with python3Packages;
 
 toPythonModule (buildPythonApplication rec {
   pname = "searx";
-  version = "1.0.0";
+  version = "1.0.1";
 
   # pypi doesn't receive updates
   src = fetchFromGitHub {
@@ -59,6 +59,8 @@ toPythonModule (buildPythonApplication rec {
   pythonImportsCheck = [ "searx" ];
 
   postInstall = ''
+    # change default password (otherwise it wont run)
+    sed -i 's/ultrasecretkey/'$RANDOM'/g' $out/lib/python*/site-packages/searx/settings.yml
     # Create a symlink for easier access to static data
     mkdir -p $out/share
     ln -s ../${python3.sitePackages}/searx/static $out/share/
