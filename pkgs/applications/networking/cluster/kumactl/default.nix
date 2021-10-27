@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
-let
-in buildGoModule rec {
+buildGoModule rec {
   pname = "kumactl";
   version = "1.3.1";
+
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
