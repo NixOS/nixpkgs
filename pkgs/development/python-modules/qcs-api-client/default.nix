@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.8.0";
+  version = "0.13.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c0g3aa2pk4zd40banap2j797080qivd42q7imla2yvv6cvq24b8";
+    sha256 = "80fbd5df7c0ed043ecdfcb8751c5721fc2c854f17285f5f97b7e570453865976";
   };
 
   propagatedBuildInputs = [
