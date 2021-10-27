@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation rec {
-
   pname = "terranix";
   version = "2.4.0";
 
