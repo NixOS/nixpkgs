@@ -33413,4 +33413,6 @@ with pkgs;
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  hypnotix = callPackage ../applications/video/hypnotix {};
 }
