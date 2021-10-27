@@ -29,6 +29,7 @@ with vmTools;
     name = "deb-compile";
     src = patchelf.src;
     diskImage = diskImages.ubuntu1804i386;
+    diskImageFormat = "qcow2";
     memSize = 512;
     postHook = ''
       dpkg-query --list
