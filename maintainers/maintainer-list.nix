@@ -6788,6 +6788,12 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  loxley = {
+    name = "loxley";
+    email = "linuxsysop+nix@gmail.com";
+    github = "loxley";
+    githubId = 837283;
+  };
   lrewega = {
     email = "lrewega@c32.ca";
     github = "lrewega";
