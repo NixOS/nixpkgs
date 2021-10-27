@@ -12,7 +12,6 @@
 , dbus-glib
 , gdk-pixbuf
 , cairo
-, python2
 , python3
 , libsodium
 , postgresql
@@ -170,10 +169,6 @@ in
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
   };
 
-  sdl2-sys = attr: {
-    nativeBuildInputs = [ curl ];
-  };
-
   security-framework-sys = attr: {
     propagatedBuildInputs = [ Security ];
   };
@@ -215,10 +210,6 @@ in
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ freetype ];
-  };
-
-  skia-bindings = attrs: {
-    nativeBuildInputs = [ python2 ];
   };
 
   thrussh-libsodium = attrs: {
