@@ -507,13 +507,7 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    { assertions = let acfg = cfg.config; in [
-        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
-          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
-        }
-      ];
-
-      warnings = let
+    { warnings = let
         latest = 22;
         upgradeWarning = major: nixos:
           ''
