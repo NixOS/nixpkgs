@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orf";
-    repo = pname;
-    rev = "${pname}-v${version}";
+    repo = "gping";
+    rev = "gping-v${version}";
     sha256 = "sha256-Sxmwuf+iTBTlpfMFCEUp6JyEaoHgmLIKB/gws2KY/xc=";
   };
 
