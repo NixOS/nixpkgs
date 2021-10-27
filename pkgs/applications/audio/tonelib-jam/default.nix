@@ -1,59 +1,55 @@
-{ stdenv
-, dpkg
-, lib
-, autoPatchelfHook
+{ lib
+, stdenv
 , fetchurl
-, gtk3
-, glib
-, desktop-file-utils
+, autoPatchelfHook
+, dpkg
 , alsa-lib
-, libjack2
-, harfbuzz
-, fribidi
-, pango
 , freetype
+, libglvnd
 , curl
+, libXcursor
+, libXinerama
+, libXrandr
+, libXrender
+, libjack2
 }:
 
 stdenv.mkDerivation rec {
   pname = "tonelib-jam";
-  version = "4.6.6";
+  version = "4.7.0";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/0509/ToneLib-Jam-amd64.deb";
-    sha256 = "sha256-cizIQgO35CQSLme/LKQqP+WzB/jCTk+fS5Z+EtF7wnQ=";
+    url = "https://www.tonelib.net/download/0930/ToneLib-Jam-amd64.deb";
+    sha256 = "sha256-xyBDp3DQVC+nK2WGnvrfUfD+9GvwtbldXgExTMmCGw0=";
   };
-
-  buildInputs = [
-    dpkg
-    gtk3
-    glib
-    desktop-file-utils
-    alsa-lib
-    libjack2
-    harfbuzz
-    fribidi
-    pango
-    freetype
-  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
+    dpkg
   ];
 
-  unpackPhase = ''
-    mkdir -p $TMP/ $out/
-    dpkg -x $src $TMP
-  '';
+  buildInputs = [
+    stdenv.cc.cc.lib
+    alsa-lib
+    freetype
+    libglvnd
+  ] ++ runtimeDependencies;
+
+  runtimeDependencies = map lib.getLib [
+    curl
+    libXcursor
+    libXinerama
+    libXrandr
+    libXrender
+    libjack2
+  ];
+
+  unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
-    cp -R $TMP/usr/* $out/
-    mv $out/bin/ToneLib-Jam $out/bin/tonelib-jam
+    mv usr $out
+    substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace /usr/ $out/
   '';
-
-  runtimeDependencies = [
-    (lib.getLib curl)
-  ];
 
   meta = with lib; {
     description = "ToneLib Jam – the learning and practice software for guitar players";
