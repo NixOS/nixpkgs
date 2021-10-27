@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     makeWrapper ${jre}/bin/java $out/bin/imagej \
       ''${gappsWrapperArgs[@]} \
-      --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share" 
+      --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
 
     install -Dm644 ${icon} $out/share/icons/hicolor/128x128/apps/imagej.png
     substituteInPlace $out/share/applications/ImageJ.desktop \
