@@ -1,10 +1,9 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
 let
-  version = "1.3.1";
-in buildGoModule {
-  inherit version;
+in buildGoModule rec {
   pname = "kumactl";
+  version = "1.3.1";
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
