@@ -63,24 +63,33 @@ rec {
     };
   };
 
+  gradle_7_3 = gradleGen (gradleSpec {
+    version = "7.3-rc-2";
+    nativeVersion = "0.22-milestone-21";
+    sha256 = "0ydg26i376bjax5lval9n79v8afng467vkx3zdga0bzxl8dbi9z6";
+  });
+
   gradle_latest = gradle_7;
 
-  gradle_7 = gradleGen (gradleSpec {
+  # NOTE: 7.3 is a candidate.
+  gradle_7 = gradle_7_2;
+
+  gradle_7_2 = gradleGen (gradleSpec {
     version = "7.2";
     nativeVersion = "0.22-milestone-21";
     sha256 = "1pg6w5czysywsgdvmll5bwd2p6y99cn5sn3gw69cps9mkjd710gm";
   });
 
-  gradle_6_8 = gradleGen (gradleSpec {
-    version = "6.8.3";
-    nativeVersion = "0.22-milestone-9";
-    sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
+  gradle_6_9 = gradleGen (gradleSpec {
+    version = "6.9.1";
+    nativeVersion = "0.22-milestone-20";
+    sha256 = "1zmjfwlh34b65rdx9izgavw3qwqqwm39h5siyj2bf0m55111a4lc";
   });
 
   gradle_5_6 = gradleGen (gradleSpec {
     version = "5.6.4";
     nativeVersion = "0.18";
-    sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
+    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
   });
 
   gradle_4_10 = gradleGen (gradleSpec {
