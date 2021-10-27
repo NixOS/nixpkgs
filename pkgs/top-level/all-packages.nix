@@ -19566,10 +19566,7 @@ with pkgs;
 
   dqlite = callPackage ../development/libraries/dqlite { };
 
-  sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
-    readline = null;
-    ncurses = null;
-  });
+  sqlcipher = callPackage ../development/libraries/sqlcipher { };
 
   standardnotes = callPackage ../applications/editors/standardnotes { };
 
