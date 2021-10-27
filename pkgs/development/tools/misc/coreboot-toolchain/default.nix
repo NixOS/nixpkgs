@@ -3,6 +3,7 @@
 , curl
 , fetchgit
 , flex
+, getopt
 , git
 , gnat11
 , lib
@@ -18,8 +19,14 @@ stdenvNoCC.mkDerivation rec {
   src = fetchgit {
     url = "https://review.coreboot.org/coreboot";
     rev = version;
-    sha256 = "0y137dhfi0zf9nmyq49ksrad69yspbnsmzc4wjkw3hjwvzgi8j27";
+    sha256 = "1qsb2ca22h5f0iwc254qsfm7qcn8967ir8aybdxa1pakgmnfsyp9";
     fetchSubmodules = false;
+    leaveDotGit = true;
+    postFetch = ''
+      patchShebangs $out/util/crossgcc/buildgcc
+      PATH=${lib.makeBinPath [ getopt ]}:$PATH $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
+      rm -rf $out/.git
+    '';
   };
 
   nativeBuildInputs = [ bison curl git perl ];
@@ -37,10 +44,11 @@ stdenvNoCC.mkDerivation rec {
       ) (callPackage ./stable.nix { })
     }
 
-    patchShebangs util/genbuild_h/genbuild_h.sh util/crossgcc/buildgcc
+    patchShebangs util/genbuild_h/genbuild_h.sh
   '';
 
   buildPhase = ''
+    export CROSSGCC_VERSION=$(cat .crossgcc_version)
     make crossgcc-i386 CPUS=$NIX_BUILD_CORES DEST=$out
   '';
 
