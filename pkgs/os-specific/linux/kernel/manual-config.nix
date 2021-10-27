@@ -125,8 +125,6 @@ let
         # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
-
-        patchShebangs scripts
       '';
 
       postPatch = ''
@@ -140,6 +138,8 @@ let
             --replace NIXOS_RANDSTRUCT_SEED \
             $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
         fi
+
+        patchShebangs scripts
       '';
 
       configurePhase = ''
