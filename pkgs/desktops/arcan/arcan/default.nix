@@ -36,7 +36,7 @@
 , xcbutil
 , xcbutilwm
 , xz
-, buildManPages ? true, ruby
+, buildManpages ? true, ruby
 }:
 
 let
@@ -52,21 +52,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arcan";
-  version = "0.6.1pre1+unstable=2021-09-05";
+  version = "0.6.1pre1+unstable=2021-10-16";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = "525521177e4458199d7a57f8e6d37d41c04a988d";
-    hash = "sha256-RsvTHPIvF9TeOfjPGcArptIiF9g42BfZkVMCbjJcXnE=";
+    rev = "e0182b944152fbcb49f5c16932d38c05a9fb2680";
+    hash = "sha256-4FodFuO51ehvyjH4YaF/xBY9dwA6cP/e6/BvEsH4w7U=";
   };
 
   postUnpack = ''
-    (
-     cd $sourceRoot/external/git/
-     cp -a ${letoram-openal-src}/ openal/
-     chmod --recursive 744 openal/
-    )
+    pushd .
+    cd $sourceRoot/external/git/
+    cp -a ${letoram-openal-src}/ openal/
+    chmod --recursive 744 openal/
+    popd
   '';
 
   # TODO: work with upstream in order to get rid of these hardcoded paths
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     pkg-config
-  ] ++ lib.optionals buildManPages [
+  ] ++ lib.optionals buildManpages [
     ruby
   ];
 
@@ -123,8 +123,11 @@ stdenv.mkDerivation rec {
 
   # INFO: According to the source code, the manpages need to be generated before
   # the configure phase
-  preConfigure = lib.optionalString buildManPages ''
-    (cd doc; ruby docgen.rb mangen)
+  preConfigure = lib.optionalString buildManpages ''
+    pushd .
+    cd doc
+    ruby docgen.rb mangen
+    popd
   '';
 
   cmakeFlags = [
