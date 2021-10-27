@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
         url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/6c7e61578b1b449272dbb40dd8b98d03dad8a57a.patch";
         sha256 = "1g37ix0yf9zza8ri8bg438ygcjviniblfyb20y4gzc8lysy28m8b";
       })
+
+      # Fix parallel build failure, the patch is pending upstream inclusion:
+      #  https://gitlab.isc.org/isc-projects/dhcp/-/merge_requests/76
+      (fetchpatch {
+        name = "parallel-make.patch";
+        url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/46d101b97c5a3b19a3f63f7b60e5f88994a64e22.patch";
+        sha256 = "1y3nsmqjzcg4bhp1xmqp47v7rkl3bpcildkx6mlrg255yvxapmdp";
+      })
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];
@@ -78,6 +86,8 @@ stdenv.mkDerivation rec {
 
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
