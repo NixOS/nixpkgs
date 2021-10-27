@@ -1455,6 +1455,8 @@ let
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
+    xmlplaylist = callPackage ../development/ocaml-modules/xmlplaylist { };
+
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
     xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
