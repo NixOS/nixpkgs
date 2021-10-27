@@ -28,10 +28,9 @@ with vmTools;
   buildInDebian = runInLinuxImage (stdenv.mkDerivation {
     name = "deb-compile";
     src = patchelf.src;
-    diskImage = diskImages.ubuntu1204i386;
+    diskImage = diskImages.ubuntu1804i386;
     memSize = 512;
-    prePhases = [ sysInfoPhase ];
-    sysInfoPhase = ''
+    postHook = ''
       dpkg-query --list
     '';
   });
