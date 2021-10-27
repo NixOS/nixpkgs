@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-d06971005e4cf637cc90a694323c580791d1450a77b1700ae8deb453678d3243";
+    sha256 = "sha256-mVSToryo7+zW1mow8eJT8GrXYlGe/BeSheJtJDKAgzo=";
   };
 
   outputs = [ "out" "dev" ];
