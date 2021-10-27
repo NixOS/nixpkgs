@@ -97,6 +97,7 @@ in {
         cn: config
         objectClass: olcGlobal
         olcLogLevel: stats
+        olcPidFile: /run/openldap/slapd.pid
 
         dn: cn=schema,cn=config
         cn: schema

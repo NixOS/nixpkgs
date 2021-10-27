@@ -279,6 +279,7 @@ in {
       attrs = {
         objectClass = "olcGlobal";
         cn = "config";
+        olcPidFile = "/run/openldap/slapd.pid";
       };
       children."cn=schema".attrs = {
         cn = "schema";
@@ -311,8 +312,9 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        Type = "forking";
         ExecStart = lib.escapeShellArgs ([
-          "${openldap}/libexec/slapd" "-d" "0" "-F" configDir
+          "${openldap}/libexec/slapd" "-F" configDir
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         StateDirectory = [ "openldap/slapd.d" ] ++ additionalStateDirectories;
@@ -320,6 +322,7 @@ in {
         RuntimeDirectory = "openldap";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        PIDFile = cfg.settings.attrs.olcPidFile;
       };
     };
 
