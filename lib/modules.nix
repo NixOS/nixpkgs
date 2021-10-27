@@ -60,7 +60,8 @@ rec {
      it is to transparently move a set of modules to be a submodule of another
      config (as the proper arguments need to be replicated at each call to
      evalModules) and the less declarative the module set is. */
-  evalModules = { modules
+  evalModules = evalModulesArgs@
+                { modules
                 , prefix ? []
                 , # This should only be used for special arguments that need to be evaluated
                   # when resolving module structure (like in imports). For everything else,
@@ -183,10 +184,26 @@ rec {
             else throw baseMsg
         else null;
 
-      result = builtins.seq checkUnmatched {
-        inherit options;
-        config = removeAttrs config [ "_module" ];
-        inherit (config) _module;
+      checked = builtins.seq checkUnmatched;
+
+      result = {
+        options = checked options;
+        config = checked (removeAttrs config [ "_module" ]);
+        _module = checked (config._module);
+
+        extendModules = extendArgs@{
+          modules ? [],
+          specialArgs ? {},
+          prefix ? [],
+          }:
+            evalModules (evalModulesArgs // {
+              modules = evalModulesArgs.modules ++ modules;
+              specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
+              prefix = extendArgs.prefix or evalModulesArgs.prefix;
+            });
+        type = lib.types.submoduleWith {
+          inherit modules specialArgs;
+        };
       };
     in result;
 
