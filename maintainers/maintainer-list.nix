@@ -6588,6 +6588,12 @@
       fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
     }];
   };
+  loxley = {
+    name = "loxley";
+    email = "linuxsysop+nix@gmail.com";
+    github = "loxley";
+    githubId = 837283;
+  };
   luis = {
     email = "luis.nixos@gmail.com";
     github = "Luis-Hebendanz";
