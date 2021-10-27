@@ -25667,6 +25667,8 @@ with pkgs;
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
+  hypnotix = callPackage ../applications/video/hypnotix {};
+
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_08;
   };
