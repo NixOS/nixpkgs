@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, buildGoModule }:
+
 let
   version = "1.3.1";
-  pname = "kumactl";
-  home = "github.com/kumahq/kuma";
 in buildGoModule {
-  inherit pname version;
+  inherit version;
+  pname = "kumactl";
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
@@ -17,7 +17,7 @@ in buildGoModule {
   subPackages = [ "app/kumactl" ];
 
   ldflags = let
-    prefix = "${home}/pkg/version";
+    prefix = "github.com/kumahq/kuma/pkg/version";
   in [
     "-s" "-w"
     "-X ${prefix}.version=${version}"
