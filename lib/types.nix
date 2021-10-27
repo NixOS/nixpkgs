@@ -501,20 +501,30 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
+        evalTypeModules =
+          { modules ? [] # Extra modules
+          , specialArgs ? {} # Extra specialArgs
+          , prefix ? [] # Like lib.evalModules
+          }:
+          evalModules {
+            modules = attrs.modules or [] ++ modules;
+            specialArgs = attrs.specialArgs or {} // specialArgs;
+            inherit prefix;
+          };
+
         coerce = unify: value: if isFunction value
           then setFunctionArgs (args: unify (value args)) (functionArgs value)
           else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
 
-        allModules = defs: modules ++ imap1 (n: { value, file }:
+        allModules = defs: imap1 (n: { value, file }:
           if isAttrs value || isFunction value then
             # Annotate the value with the location of its definition for better error messages
             coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
           else value
         ) defs;
 
-        freeformType = (evalModules {
-          inherit modules specialArgs;
-          args.name = "‹name›";
+        freeformType = (evalTypeModules {
+          modules = [ { _module.args.name = "‹name›"; } ];
         })._module.freeformType;
 
       in
@@ -523,15 +533,13 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
-          (evalModules {
-            modules = allModules defs;
-            inherit specialArgs;
-            args.name = last loc;
+          (evalTypeModules {
+            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
-        getSubOptions = prefix: (evalModules
-          { inherit modules prefix specialArgs;
+        getSubOptions = prefix: (evalTypeModules
+          { inherit prefix specialArgs;
             # This is a work-around due to the fact that some sub-modules,
             # such as the one included in an attribute set, expects a "args"
             # attribute to be given to the sub-module. As the option
@@ -547,7 +555,7 @@ rec {
             # &gt; and &lt; wouldn't be encoded correctly so the encoded values
             # would be used, and use of `<` and `>` would break the XML document.
             # It shouldn't cause an issue since this is cosmetic for the manual.
-            args.name = "‹name›";
+            modules = [{ config._module.args.name = "‹name›"; }];
           }).options // optionalAttrs (freeformType != null) {
             # Expose the sub options of the freeform type. Note that the option
             # discovery doesn't care about the attribute name used here, so this
@@ -581,6 +589,8 @@ rec {
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
           };
         };
+      } // {
+        evalModules = evalTypeModules;
       };
 
     # A value from a set of allowed ones.

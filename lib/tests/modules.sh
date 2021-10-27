@@ -274,6 +274,17 @@ checkConfigError 'A definition for option .fun.\[function body\]. is not of type
 checkConfigOutput "b a" config.result ./functionTo/list-order.nix
 checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
 
+## types.submoduleWith.evalModules {}
+# This tests another entrypoint, so it doesn't use the normal test utilities.
+if nix-instantiate --expr 'import ./eval-via-type.nix {}' --eval-only --show-trace --json --strict -A config.foo.enable 2>/dev/null | grep --silent true
+then
+    pass=$((pass + 1))
+else
+    echo 2>&1 "eval-via-type failed"
+    fail=$((fail + 1))
+fi
+
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
