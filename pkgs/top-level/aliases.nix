@@ -620,6 +620,7 @@ mapAliases ({
   owncloudclient = owncloud-client;  # added 2016-08
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # added 2021-07-12
   p11_kit = p11-kit; # added 2018-02-25
+  packet-cli = metal-cli; # added 2021-10-25
   paperless = paperless-ng; # added 2021-06-06
   parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
@@ -775,6 +776,7 @@ mapAliases ({
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # added 2021-02-15
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
+  ring-daemon = jami-daemon; #added 2021-10-26
   radare2-cutter = cutter; # added 2021-03-30
   redkite = throw "redkite was archived by upstream"; # added 2021-04-12
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16

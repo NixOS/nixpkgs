@@ -132,6 +132,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/jitsi/jibri">Jibri</link>,
+          a service for recording or streaming a Jitsi Meet conference.
+          Available as
+          <link xlink:href="options.html#opt-services.jibri.enable">services.jibri</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.isc.org/kea/">Kea</link>, ISCs
           2nd generation DHCP and DDNS server suite. Available at
           <link xlink:href="options.html#opt-services.kea">services.kea</link>.
@@ -363,6 +371,14 @@
           <link xlink:href="https://github.com/opensvc/multipath-tools">multipath</link>,
           the device mapper multipath (DM-MP) daemon. Available as
           <link linkend="opt-services.multipath.enable">services.multipath</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.seafile.com/en/home/">seafile</link>,
+          an open source file syncing &amp; sharing software. Available
+          as
+          <link xlink:href="options.html#opt-services.seafile.enable">services.seafile</link>.
         </para>
       </listitem>
     </itemizedlist>

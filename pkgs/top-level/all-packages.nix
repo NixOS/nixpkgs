@@ -1453,6 +1453,8 @@ with pkgs;
 
   bic = callPackage ../development/interpreters/bic { };
 
+  binance = callPackage ../applications/misc/binance { };
+
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
@@ -1720,6 +1722,8 @@ with pkgs;
   glances = python3Packages.callPackage ../applications/system/glances { };
 
   glasgow = with python3Packages; toPythonApplication glasgow;
+
+  gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
 
@@ -3400,6 +3404,8 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
+  pocket-casts = callPackage ../applications/audio/pocket-casts { };
+
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
@@ -3476,6 +3482,8 @@ with pkgs;
   snipes = callPackage ../games/snipes { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
+
+  snowcat = callPackage ../tools/security/snowcat { };
 
   socklog = callPackage ../tools/system/socklog { };
 
@@ -5326,6 +5334,8 @@ with pkgs;
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
+
+  uniscribe = callPackage ../tools/text/uniscribe { };
 
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
@@ -8150,6 +8160,8 @@ with pkgs;
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
 
+  alttpr-opentracker = callPackage ../tools/games/opentracker { };
+
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
   inherit (callPackages ../tools/networking/openvpn {})
@@ -9851,6 +9863,8 @@ with pkgs;
   thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thicket = callPackage ../applications/version-management/git-and-tools/thicket { };
+
+  thiefmd = callPackage ../applications/editors/thiefmd { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
@@ -26364,6 +26378,10 @@ with pkgs;
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
 
+  mdzk = callPackage ../applications/misc/mdzk {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mediaelch = libsForQt5.callPackage ../applications/misc/mediaelch { };
 
   mediainfo = callPackage ../applications/misc/mediainfo { };
@@ -27150,7 +27168,7 @@ with pkgs;
 
   packet-sd = callPackage ../development/tools/packet-sd { };
 
-  packet-cli = callPackage ../development/tools/packet-cli { };
+  metal-cli = callPackage ../development/tools/metal-cli { };
 
   pb_cli = callPackage ../tools/misc/pb_cli {};
 
@@ -32664,6 +32682,8 @@ with pkgs;
     thrift = thrift-0_10;
   };
 
+  seafile-server = callPackage ../servers/seafile-server { };
+
   seafile-shared = callPackage ../misc/seafile-shared { };
 
   ser2net = callPackage ../servers/ser2net {};
@@ -32832,7 +32852,7 @@ with pkgs;
 
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
-  vaultenv = haskellPackages.vaultenv;
+  vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
 

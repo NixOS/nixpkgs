@@ -1,17 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.28.1";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-o2P14Nsu77AXO+UnMBXthhP3Q7kI7nd/lI6GFE2cs3M=";
+    sha256 = "sha256-lmmk6veBDI51UA/wnFB7Q3DTxZ9J/1qp0OoNgmBrR1Y=";
   };
-
-  vendorSha256 = "sha256-zzckZI/n00BBl166S7uonJFNQ4RJGLCkDyfLRoHZOtA=";
+  vendorSha256 = "sha256-NALyUjFL6OqgCke1QiUxbSNLAoaIMB2zeIWWEfcnCjs=";
 
   ldflags = [
     "-s"
@@ -19,10 +18,22 @@ buildGoModule rec {
     "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
   ];
 
-  HOME = "$TMPDIR";
+  nativeBuildInputs = [ installShellFiles ];
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd conftest \
+      --bash <($out/bin/conftest completion bash) \
+      --fish <($out/bin/conftest completion fish) \
+      --zsh <($out/bin/conftest completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
+    export HOME="$TMPDIR"
     $out/bin/conftest --version | grep ${version} > /dev/null
   '';
 

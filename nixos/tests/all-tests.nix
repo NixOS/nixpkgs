@@ -207,6 +207,7 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jibri = handleTest ./jibri.nix {};
   jirafeau = handleTest ./jirafeau.nix {};
   jitsi-meet = handleTest ./jitsi-meet.nix {};
   k3s = handleTest ./k3s.nix {};
