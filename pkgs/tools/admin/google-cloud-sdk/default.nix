@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -116,6 +116,10 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) google-cloud-sdk; };
+  };
 
   meta = with lib; {
     description = "Tools for the google cloud platform";
