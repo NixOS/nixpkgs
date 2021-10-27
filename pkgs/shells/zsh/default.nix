@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, pcre, buildPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, pcre, buildPackages }:
 
 let
   version = "5.8";
@@ -21,6 +21,13 @@ stdenv.mkDerivation {
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
+    # This commit will be released with the next version of zsh
+    (fetchpatch {
+      name = "fix-git-stash-drop-completions.patch";
+      url = "https://github.com/zsh-users/zsh/commit/754658aff38e1bdf487c58bec6174cbecd019d11.patch";
+      sha256 = "sha256-ud/rLD+SqvyTzT6vwOr+MWH+LY5o5KACrU1TpmL15Lo=";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   buildInputs = [ ncurses pcre ];
