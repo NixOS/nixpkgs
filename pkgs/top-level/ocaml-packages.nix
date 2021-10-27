@@ -321,6 +321,8 @@ let
       inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
     };
 
+    dune-site = callPackage ../development/ocaml-modules/dune-site { };
+
     duration =  callPackage ../development/ocaml-modules/duration { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
