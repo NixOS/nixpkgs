@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.2.1";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
-    rev = "v${version}";
-    sha256 = "sha256-lApm1JLXNjDKLj6zj25OaZDVp7lLW3qyrDsvJrudl8I=";
+    rev = "gping-v${version}";
+    sha256 = "sha256-Sxmwuf+iTBTlpfMFCEUp6JyEaoHgmLIKB/gws2KY/xc=";
   };
 
-  cargoSha256 = "sha256-d1NjPwT3YDp1U9JWeUejpWDbJonFlt5lYbUf7p3jVT0=";
+  cargoSha256 = "sha256-xEASs6r5zxYJXS+at6aX5n0whGp5qwuNwq6Jh0GM+/4=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
