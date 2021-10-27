@@ -173,6 +173,7 @@
 , "livedown"
 , "lodash"
 , {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
+, "lua-fmt"
 , "madoko"
 , "markdownlint-cli"
 , "markdown-link-check"
