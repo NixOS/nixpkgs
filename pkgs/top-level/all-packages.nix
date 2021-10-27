@@ -33497,4 +33497,6 @@ with pkgs;
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  jellyfish = callPackage ../applications/science/biology/jellyfish {};
 }
