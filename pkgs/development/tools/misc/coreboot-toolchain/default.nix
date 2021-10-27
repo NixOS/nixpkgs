@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
     url = "https://review.coreboot.org/coreboot";
     rev = version;
     sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
+    fetchSubmodules = false;
   };
 
   nativeBuildInputs = [ bison curl git perl ];
