@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "zk";
   version = "0.7.0";
 
-
   src = fetchFromGitHub {
     owner = "mickael-menu";
     repo = "zk";
