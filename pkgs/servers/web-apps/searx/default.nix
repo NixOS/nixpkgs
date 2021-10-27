@@ -59,7 +59,7 @@ toPythonModule (buildPythonApplication rec {
   pythonImportsCheck = [ "searx" ];
 
   postInstall = ''
-    # change default password (otherwise it wont run)
+    # change default secret key (otherwise it wont run)
     sed -i 's/ultrasecretkey/'$RANDOM'/g' $out/lib/python*/site-packages/searx/settings.yml
     # Create a symlink for easier access to static data
     mkdir -p $out/share
