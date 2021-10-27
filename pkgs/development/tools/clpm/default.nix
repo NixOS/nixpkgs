@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  patchPhase = ''
+  postPatch = ''
     # patch cl-plus-ssl to ensure that it finds libssl and libcrypto
     sed 's|libssl.so|${openssl.out}/lib/libssl.so|' -i ext/cl-plus-ssl/src/reload.lisp
     sed 's|libcrypto.so|${openssl.out}/lib/libcrypto.so|' -i ext/cl-plus-ssl/src/reload.lisp
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     cd build/release-staging/dynamic/clpm-${version}*/
-    INSTALL_ROOT=$out/ sh install.sh
+    INSTALL_ROOT=$out/ bash install.sh
 
     runHook postInstall
   '';
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.clpm.dev/";
     license = licenses.bsd2;
     maintainers = [ maintainers.petterstorvik ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
