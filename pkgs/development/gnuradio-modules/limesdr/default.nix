@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , gnuradio
+, thrift
 , cmake
 , pkg-config
 , doxygen
@@ -49,6 +50,9 @@ in mkDerivation {
     gmp
     icu
     limesuite
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
   ];
 
   meta = with lib; {
