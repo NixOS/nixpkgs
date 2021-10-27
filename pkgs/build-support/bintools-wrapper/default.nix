@@ -342,12 +342,7 @@ stdenv.mkDerivation {
     + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
-
     + ''
-      for flags in "$out/nix-support"/*flags*; do
-        substituteInPlace "$flags" --replace $'\n' ' '
-      done
-
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
