@@ -222,6 +222,9 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
     moveToOutput "share/gcc-*/python" "${!outputLib}"
 
+    # on musl *.la doesn't match anything
+    shopt -u failglob
+    shopt -s nullglob
     for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "${!outputLib}"
     done
@@ -235,6 +238,8 @@ postInstall() {
             substituteInPlace "$i" --replace "$out" "${!outputLib}"
         done
     fi
+    shopt -u nullglob
+    shopt -s failglob
 
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
