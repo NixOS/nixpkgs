@@ -130,7 +130,7 @@ let
     lib.optionalString (!static) ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
-      if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
+      if [ -n "$(echo $out/lib/*.${stdenv.hostPlatform.extensions.sharedLibrary})" ]; then
           rm "$out/lib/"*.a
       fi
     '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
