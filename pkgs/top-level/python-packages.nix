@@ -3442,6 +3442,8 @@ in {
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
+  hg-git = callPackage ../development/python-modules/hg-git { };
+
   hglib = callPackage ../development/python-modules/hglib { };
 
   hickle = callPackage ../development/python-modules/hickle { };
