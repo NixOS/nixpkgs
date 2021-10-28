@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit,
-  singlePrec ? true,
-  enableMpi ? false,
-  enableCuda ? false,
-  cpuAcceleration ? null
+{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
+, singlePrec ? true
+, enableMpi ? false
+, enableCuda ? false
+, cpuAcceleration ? null
 }:
 
 let
