@@ -4,7 +4,7 @@
 , pbr
 , appdirs
 , cliff
-, dogpile_cache
+, dogpile-cache
 , jsonschema
 , keystoneauth1
 , openstacksdk
@@ -31,7 +31,7 @@ buildPythonApplication rec {
     pbr
     appdirs
     cliff
-    dogpile_cache
+    dogpile-cache
     jsonschema
     keystoneauth1
     openstacksdk

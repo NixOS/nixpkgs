@@ -2257,9 +2257,9 @@ in {
 
   dodgy = callPackage ../development/python-modules/dodgy { };
 
-  dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
+  dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
 
-  dogpile_core = callPackage ../development/python-modules/dogpile.core { };
+  dogpile-core = callPackage ../development/python-modules/dogpile-core { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
 
@@ -3668,7 +3668,7 @@ in {
 
   imantics = callPackage ../development/python-modules/imantics { };
 
-  IMAPClient = callPackage ../development/python-modules/imapclient { };
+  imapclient = callPackage ../development/python-modules/imapclient { };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
@@ -8780,7 +8780,7 @@ in {
 
   sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
-  sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
+  sqlalchemy-migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 

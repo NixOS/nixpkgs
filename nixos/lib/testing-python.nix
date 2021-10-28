@@ -209,11 +209,30 @@ rec {
     let
       nodes = qemu_pkg:
         let
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { nodes = nodes qemu_pkg; }
+            else testScript;
+
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
               {
                 virtualisation.qemu.package = qemu_pkg;
+
+                # Make sure all derivations referenced by the test
+                # script are available on the nodes. When the store is
+                # accessed through 9p, this isn't important, since
+                # everything in the store is available to the guest,
+                # but when building a root image it is, as all paths
+                # that should be available to the guest has to be
+                # copied to the image.
+                virtualisation.additionalPaths =
+                  lib.optional
+                    (builtins.hasContext testScript')
+                    (pkgs.writeStringReferencesToFile testScript');
+
                 # Ensure we do not use aliases. Ideally this is only set
                 # when the test framework is used by Nixpkgs NixOS tests.
                 nixpkgs.config.allowAliases = false;

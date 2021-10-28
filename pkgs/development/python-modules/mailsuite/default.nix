@@ -7,7 +7,7 @@
 , dnspython
 , html2text
 , mail-parser
-, IMAPClient
+, imapclient
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     dnspython
     html2text
     mail-parser
-    IMAPClient
+    imapclient
   ];
 
   pythonImportsCheck = [ "mailsuite" ];
