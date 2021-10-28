@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2011-12-26";
+  version = "201206";
 in
 stdenv.mkDerivation {
   pname = "xburst-tools";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://projects.qi-hardware.com/xburst-tools.git";
     rev = "c71ce8e15db25fe49ce8702917cb17720882e341";
-    sha256 = "1hzdngs1l5ivvwnxjwzc246am6w1mj1aidcf0awh9yw0crzcjnjr";
+    sha256 = "sha256-WVrJfmaA+wS5Ao61qIKsgZuqDBHsc9kt3zsWGvSz7cM=";
   };
 
   preConfigure = ''
