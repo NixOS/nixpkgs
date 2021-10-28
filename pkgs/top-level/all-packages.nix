@@ -12250,115 +12250,30 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
+  inherit (javaPackages) openjfx11 openjfx15;
+  openjfx = openjfx15;
 
-  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
-
-  openjdk8-bootstrap =
-    if adoptopenjdk-hotspot-bin-8.meta.available then
-      adoptopenjdk-hotspot-bin-8
-    else
-      callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
-
-  /* legacy jdk for use as needed by older apps */
-  openjdk8 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin/8.nix { }
-    else
-      callPackage ../development/compilers/openjdk/8.nix {
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
-  openjdk8_headless =
-    if stdenv.isDarwin || stdenv.isAarch64 then
-      openjdk8
-    else
-      openjdk8.override { headless = true; };
-
+  openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
+  openjdk8 = javaPackages.compiler.openjdk8;
+  openjdk8_headless = javaPackages.compiler.openjdk8.headless;
   jdk8 = openjdk8;
   jdk8_headless = openjdk8_headless;
   jre8 = openjdk8.jre;
   jre8_headless = openjdk8_headless.jre;
 
-  openjdk11-bootstrap =
-    if adoptopenjdk-hotspot-bin-11.meta.available then
-      adoptopenjdk-hotspot-bin-11
-    else
-      callPackage ../development/compilers/openjdk/bootstrap.nix { version = "10"; };
-
-  openjdk11 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin/11.nix { }
-    else
-      callPackage ../development/compilers/openjdk/11.nix {
-        openjfx = openjfx11;
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
-  openjdk11_headless =
-    if stdenv.isDarwin then
-      openjdk11
-    else
-      openjdk11.override { headless = true; };
-
-  openjdk17-bootstrap =
-    if adoptopenjdk-hotspot-bin-16.meta.available then
-      adoptopenjdk-hotspot-bin-16
-    else
-      /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
-      callPackage ../development/compilers/openjdk/16.nix {
-        openjfx = openjfx11; /* need this despite next line :-( */
-        enableJavaFX = false;
-        headless = true;
-        inherit (gnome2) GConf gnome_vfs;
-        openjdk16-bootstrap = callPackage ../development/compilers/openjdk/15.nix {
-          openjfx = openjfx11; /* need this despite next line :-( */
-          enableJavaFX = false;
-          headless = true;
-          inherit (gnome2) GConf gnome_vfs;
-          openjdk15-bootstrap = callPackage ../development/compilers/openjdk/14.nix {
-            openjfx = openjfx11; /* need this despite next line :-( */
-            enableJavaFX = false;
-            headless = true;
-            inherit (gnome2) GConf gnome_vfs;
-            openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
-              openjfx = openjfx11; /* need this despite next line :-( */
-              enableJavaFX = false;
-              headless = true;
-              inherit (gnome2) GConf gnome_vfs;
-              openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
-                stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
-                openjfx = openjfx11; /* need this despite next line :-( */
-                enableJavaFX = false;
-                headless = true;
-                inherit (gnome2) GConf gnome_vfs;
-              };
-            };
-          };
-        };
-      };
-
+  openjdk11-bootstrap = javaPackages.compiler.openjdk11-bootstrap;
+  openjdk11 = javaPackages.compiler.openjdk11;
+  openjdk11_headless = javaPackages.compiler.openjdk11.headless;
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
 
-  /* Latest JDK */
-  openjdk17 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin { }
-    else
-      callPackage ../development/compilers/openjdk/17.nix {
-        openjfx = openjfx15;
-        inherit (gnome2) GConf gnome_vfs;
-      };
-
-  openjdk17_headless =
-    if stdenv.isDarwin then
-      openjdk17
-    else
-      openjdk17.override { headless = true; };
-
+  openjdk17-bootstrap = javaPackages.compiler.openjdk17-bootstrap;
+  openjdk17 = javaPackages.compiler.openjdk17;
+  openjdk17_headless = javaPackages.compiler.openjdk17.headless;
   jdk17 = openjdk17;
   jdk17_headless = openjdk17_headless;
+
+  openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
   /* default JDK */
   jdk = jdk17;
