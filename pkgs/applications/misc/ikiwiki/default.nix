@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     # State the gcc dependency, and make the cgi use our wrapper
     sed -i -e 's@$0@"'$out/bin/ikiwiki'"@' \
         -e "s@'cc'@'${stdenv.cc}/bin/gcc'@" IkiWiki/Wrapper.pm
+    # Without patched plugin shebangs, some tests like t/rst.t fail
+    # (with docutilsSupport enabled)
+    patchShebangs plugins/*
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";
