@@ -49,7 +49,7 @@ in {
       hash_ =
         if hash != "" then { outputHashAlgo = null; outputHash = hash; }
         else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
-        else throw "fetchYarnDeps requires a hash";
+        else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
     in stdenv.mkDerivation {
       inherit name;
 
