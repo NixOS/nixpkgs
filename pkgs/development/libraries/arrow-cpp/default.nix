@@ -117,7 +117,10 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
-  ARROW_XSIMD_URL = xsimd.src;
+  ARROW_XSIMD_URL = fetchurl {
+    url = "https://github.com/xtensor-stack/xsimd/archive/aeec9c872c8b475dedd7781336710f2dd2666cb2.tar.gz";
+    sha256 = "09kvl962c6b0wnb7pb2n9dhvkflzwalgq6gwwi8628fgi9n1x10a";
+  };
 
   doInstallCheck = true;
   ARROW_TEST_DATA =
