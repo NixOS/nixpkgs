@@ -39,15 +39,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-d7DGyAC8itBxTfuabDPN16W4S4d42s5UPp8AusZfy5k=";
   };
 
-  patches = [
-    # Try to remove other backends to make flatpak backend work.
-    # https://github.com/NixOS/nixpkgs/issues/70214
-    ./flatpak-only.patch
-    # The homepage banner does not show up on first run,
-    # has issues with app icon and mouse scrolling.
-    ./drop-homepage-banner.patch
-  ];
-
   passthru = {
     updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";

@@ -1,12 +1,7 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, hwloc
-, fftw
-, perl
+{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
 , singlePrec ? true
-, mpiEnabled ? false
-, mpi
+, enableMpi ? false
+, enableCuda ? false
 , cpuAcceleration ? null
 }:
 
@@ -24,20 +19,32 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2020.4";
+  version = "2021.3";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "1rplvgna60nqyb8nspaz3bfkwb044kv3zxdaa5whql5m441nj6am";
+    sha256 = "4QmFbsREdo373kHzBZ4xI6vbj+Vsozsag/Me1FdaHMY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fftw perl hwloc ]
-  ++ (lib.optionals mpiEnabled [ mpi ]);
+
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ] ++ lib.optional enableMpi mpi
+    ++ lib.optional enableCuda cudatoolkit
+  ;
+
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
     "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ (
     if singlePrec then [
       "-DGMX_DOUBLE=OFF"
@@ -46,13 +53,15 @@ in stdenv.mkDerivation rec {
       "-DGMX_DEFAULT_SUFFIX=OFF"
     ]
   ) ++ (
-    if mpiEnabled then [
-      "-DGMX_MPI:BOOL=TRUE"
-      "-DGMX_THREAD_MPI:BOOL=FALSE"
-    ] else [
-      "-DGMX_MPI:BOOL=FALSE"
-    ]
-  );
+    if enableMpi
+      then [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+     else [
+       "-DGMX_MPI:BOOL=FALSE"
+     ]
+  ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
   meta = with lib; {
     homepage = "http://www.gromacs.org";
@@ -78,5 +87,6 @@ in stdenv.mkDerivation rec {
       See: http://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
+    maintainers = with maintainers; [ sheepforce markuskowa ];
   };
 }

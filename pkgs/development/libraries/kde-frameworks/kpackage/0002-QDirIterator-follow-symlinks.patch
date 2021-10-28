@@ -21,6 +21,5 @@ index f03d882..d5aee56 100644
          const QStringList nameFilters = {QStringLiteral("metadata.json"), QStringLiteral("metadata.desktop")};
 
          QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
--- 
+--
 2.30.1
-

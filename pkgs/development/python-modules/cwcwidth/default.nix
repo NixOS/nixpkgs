@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sebastinas/cwcwidth";
     changelog = "https://github.com/sebastinas/cwcwidth/blob/main/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }
