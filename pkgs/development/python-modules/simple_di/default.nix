@@ -8,9 +8,9 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.2";
   pname = "simple_di";
-  disabled = pythonOlder "3.6.1";
+  version = "0.1.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +23,13 @@ buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.7") [
     dataclasses
   ];
+
+  pythonImportsCheck = [
+    "simple_di"
+  ];
+
+  # pypi distribution contains no tests
+  doCheck = false;
 
   meta = {
     description = "Simple dependency injection library";
