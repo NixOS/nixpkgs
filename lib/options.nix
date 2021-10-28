@@ -74,7 +74,7 @@ rec {
     apply ? null,
     # Whether the option is for NixOS developers only.
     internal ? null,
-    # Whether the option shows up in the manual.
+    # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
@@ -180,7 +180,10 @@ rec {
           description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
-          visible = opt.visible or true;
+          visible =
+            if (opt?visible && opt.visible == "shallow")
+            then true
+            else opt.visible or true;
           readOnly = opt.readOnly or false;
           type = opt.type.description or null;
         }
@@ -192,8 +195,9 @@ rec {
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
+        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
-        [ docOption ] ++ optionals docOption.visible subOptions) (collect isOption options);
+        [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
