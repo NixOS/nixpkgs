@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud20" "nextcloud21" "nextcloud22" ];
+      relatedPackages = [ "nextcloud21" "nextcloud22" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -507,13 +507,7 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
-    { assertions = let acfg = cfg.config; in [
-        { assertion = versionOlder cfg.package.version "21" -> cfg.config.defaultPhoneRegion == null;
-          message = "The `defaultPhoneRegion'-setting is only supported for Nextcloud >=21!";
-        }
-      ];
-
-      warnings = let
+    { warnings = let
         latest = 22;
         upgradeWarning = major: nixos:
           ''
@@ -547,7 +541,6 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"))
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
         ++ (optional isUnsupportedMariadb ''
@@ -574,7 +567,11 @@ in {
           # This versionOlder statement remains set to 21.03 for backwards compatibility.
           # See https://github.com/NixOS/nixpkgs/pull/108899 and
           # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-          else if versionOlder stateVersion "21.03" then nextcloud19
+          # FIXME(@Ma27) remove this else-if as soon as 21.05 is EOL! This is only here
+          # to ensure that users who are on Nextcloud 19 with a stateVersion <21.05 with
+          # no explicit services.nextcloud.package don't upgrade to v21 by accident (
+          # nextcloud20 throws an eval-error because it's dropped).
+          else if versionOlder stateVersion "21.03" then nextcloud20
           else if versionOlder stateVersion "21.11" then nextcloud21
           else nextcloud22
         );

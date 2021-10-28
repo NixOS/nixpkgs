@@ -229,7 +229,7 @@ let
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ AlienBuild ArchiveExtract CaptureTiny Filechdir PathTiny ShellConfigGenerate ShellGuess SortVersions URI ];
     meta = {
-      homepage = https://metacpan.org/pod/Alien::Base::ModuleBuild;
+      homepage = "https://metacpan.org/pod/Alien::Base::ModuleBuild";
       description = "A Module::Build subclass for building Alien:: modules and their libraries";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9987,7 +9987,7 @@ let
     };
     propagatedBuildInputs = [ IPCRun URI constant-defer ];
     meta = {
-      homepage = http://user42.tuxfamily.org/html-formatexternal/index.html;
+      homepage = "http://user42.tuxfamily.org/html-formatexternal/index.html";
       description = "HTML to text formatting using external programs";
       license = lib.licenses.gpl3Plus;
     };
@@ -15039,7 +15039,7 @@ let
     makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
 
     meta = {
-      homepage = https://github.com/TJC/Test-postgresql;
+      homepage = "https://github.com/TJC/Test-postgresql";
       description = "PostgreSQL runner for tests";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -17385,7 +17385,7 @@ let
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moo MooXTypeTiny TryTiny TypeTiny ];
     meta = {
-      homepage = https://github.com/karenetheridge/Path-Dispatcher;
+      homepage = "https://github.com/karenetheridge/Path-Dispatcher";
       description = "Flexible and extensible dispatch";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20100,7 +20100,7 @@ let
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ ShellGuess ];
     meta = {
-      homepage = https://metacpan.org/pod/Shell::Config::Generate;
+      homepage = "https://metacpan.org/pod/Shell::Config::Generate";
       description = "Portably generate config for any shell";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20114,7 +20114,7 @@ let
       sha256 = "4069fa2637e443118ed956d710231d166823d23b2a64eb87b8a46872e865a12b";
     };
     meta = {
-      homepage = https://metacpan.org/pod/Shell::Guess;
+      homepage = "https://metacpan.org/pod/Shell::Guess";
       description = "Make an educated guess about the shell in use";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -23373,7 +23373,7 @@ let
     };
     propagatedBuildInputs = [ AlgorithmDiff HTMLParser ];
     meta = {
-      homepage = https://metacpan.org/release/Text-WordDiff;
+      homepage = "https://metacpan.org/release/Text-WordDiff";
       description = "Track changes between documents";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -25135,7 +25135,7 @@ let
     buildInputs = [ NetHTTP TestFailWarnings TestFatal ];
     propagatedBuildInputs = [ HTTPHeadersActionPack HTTPMessage HashMultiValue IOHandleUtil ModuleRuntime Plack SubExporter TryTiny ];
     meta = {
-      homepage = http://metacpan.org/release/Web-Machine;
+      homepage = "http://metacpan.org/release/Web-Machine";
       description = "A Perl port of Webmachine";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };

@@ -33,34 +33,36 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
-  blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
+  blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   bt_proximity = bt-proximity; # added 2021-07-02
-  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
+  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # added 2019-11-27
   class-registry = phx-class-registry; # added 2021-10-05
   ConfigArgParse = configargparse; # added 2021-03-18
   dateutil = python-dateutil; # added 2021-07-03
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
-  dftfit = throw "it's dependency lammps-cython no longer builds";
+  dftfit = throw "it's dependency lammps-cython no longer builds"; # added 2021-07-04
   diff_cover = diff-cover; # added 2021-07-02
   discogs_client = discogs-client; # added 2021-07-02
-  djangorestframework-jwt = drf-jwt;
-  dns = dnspython; # Alias for compatibility, 2017-12-10
-  faulthandler = throw "faulthandler is built into ${python.executable}";
+  djangorestframework-jwt = drf-jwt; # added 2021-07-20
+  dns = dnspython; # added 2017-12-10
+  dogpile_cache = dogpile-cache; # added 2021-10-28
+  faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
+  IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   lammps-cython = throw "no longer builds and is unmaintained";
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   pam = python-pam; # added 2020-09-07.
-  PasteDeploy = pastedeploy;
-  powerlineMemSegment = powerline-mem-segment;
+  PasteDeploy = pastedeploy; # added 2021-10-07
+  powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   privacyidea = throw "renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
-  prompt_toolkit = prompt-toolkit;
+  prompt_toolkit = prompt-toolkit; # added 2021-07-22
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pysmart-smartx = pysmart; # added 2021-10-22
@@ -77,14 +79,15 @@ mapAliases ({
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   rotate-backups = throw "pythonPackages.rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01
   scikitlearn = scikit-learn; # added 2021-07-21
-  selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # Added 2021-06-10
+  selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
-  sphinxcontrib_plantuml = sphinxcontrib-plantuml;
-  topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
-  tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
-  WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
-  websocket_client = websocket-client;
+  sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
+  sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
+  topydo = throw "python3Packages.topydo was moved to topydo"; # added 2017-09-22
+  tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # added 2021-07-05
+  WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  websocket_client = websocket-client; # added 2021-06-15
   zc-buildout221 = zc-buildout; # added 2021-07-21
 })

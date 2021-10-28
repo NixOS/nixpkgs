@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.01";
+  version = "6.02";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CFSEZl2R9gtKHe2s2UvPm3Sw+wlrztyJ/xwkUWjlRzs=";
+    sha256 = "sha256-Xm1ssJAzrVYs/m1Gv5MS5EUfeUa+2KRnGqk0TfkZMYQ=";
   };
 
   nativeBuildInputs = [
