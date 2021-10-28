@@ -1817,6 +1817,39 @@ Superuser created successfully.
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.unifi.enable">services.unifi</link>
+          module has been reworked, solving a number of issues. This
+          leads to several user facing changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The <literal>services.unifi.dataDir</literal> option is
+              removed and the data is now always located under
+              <literal>/var/lib/unifi/data</literal>. This is done to
+              make better use of systemd state direcotiry and thus
+              making the service restart more reliable.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi logs can now be found under:
+              <literal>/var/log/unifi</literal> instead of
+              <literal>/var/lib/unifi/logs</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi run directory can now be found under:
+              <literal>/run/unifi</literal> instead of
+              <literal>/var/lib/unifi/run</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
