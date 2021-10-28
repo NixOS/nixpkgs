@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , dxflib
 , eigen
@@ -20,9 +19,7 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  # Released version doesn't work with packaged PCL
-  # because it's too new. Considering that a release
-  # is a year ago it's unreasonable to wait for it.
+  # Released version(v2.11.3) doesn't work with packaged PCL.
   version = "unstable-2021-10-14";
 
   src = fetchFromGitHub {

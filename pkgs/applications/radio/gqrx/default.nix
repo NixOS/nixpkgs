@@ -4,6 +4,7 @@
 , pkg-config
 , qt5
 , gnuradio3_8Minimal
+, thrift
 , log4cpp
 , mpir
 , fftwFloat
@@ -45,6 +46,9 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     gnuradio3_8Minimal.pkgs.osmosdr
     rtl-sdr
     hackrf
+  ] ++ lib.optionals (gnuradio3_8Minimal.hasFeature "gr-ctrlport") [
+    thrift
+    gnuradio3_8Minimal.unwrapped.python.pkgs.thrift
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''

@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpkg";
-  version = "0.13.0";
+  version = "0.14.0";
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbpkg-${version}.tar.gz";
-    sha256 = "732849cdd5d773c589dd0ac220002fa41424784df10617adc4dea729faafb22b";
+    sha256 = "sha256-K5KkhJa4qsh3AMDtCV4eA7bh3oU5DYEYMAacLmDoulU=";
   };
 
   nativeBuildInputs = [
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/libbpkg/log";
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }
