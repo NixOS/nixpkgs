@@ -31,8 +31,7 @@ callPackage ./generic.nix (args // {
     # From
     # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
     # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/microsoft/mimalloc/archive/v1.7.2.tar.gz";
+    url = "https://github.com/microsoft/mimalloc/archive/v1.7.2.tar.gz";
     hash = "sha256-sZEuNUVlpLaYQQ91g8D4OTSm27Ot5Uq33csVaTIJNr0=";
   };
 })

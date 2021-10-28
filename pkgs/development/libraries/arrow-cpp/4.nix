@@ -19,14 +19,12 @@ callPackage ./generic.nix (args // {
   };
 
   arrow-jemalloc = fetchurl {
-    url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
     hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
   };
 
   arrow-mimalloc = fetchurl {
-    url =
-      "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
+    url = "https://github.com/microsoft/mimalloc/archive/v1.6.4.tar.gz";
     hash = "sha256-+mFrGudrVY7DjEEcWa+lK1lj1+escFUZVeBgchLYCq0=";
   };
 })

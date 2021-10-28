@@ -34,12 +34,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit version;
   pname = "arrow-cpp";
+  inherit version;
 
   src = fetchurl {
-    url =
-      "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
+    url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
     hash = srcHash;
   };
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -57,6 +56,7 @@ stdenv.mkDerivation rec {
     autoconf # for vendored jemalloc
     flatbuffers
   ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
   buildInputs = [
     boost
     brotli
