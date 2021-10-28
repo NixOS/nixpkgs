@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "2.0.11";
+  version = "2.0.12";
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
-    sha256 = "1zfiqs5vqlb6drnqx9nsmhgy8qc6svzr8zyjkqvwkpbgrc6ifap9";
+    sha256 = "sha256-oJzehs7oLFTDn7GSm6bY/77tEfyEdlANn69EdCApdPA=";
   };
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";

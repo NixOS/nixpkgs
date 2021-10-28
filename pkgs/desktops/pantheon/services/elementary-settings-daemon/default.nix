@@ -15,12 +15,13 @@
 , gtk3
 , granite
 , libgee
+, systemd
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "1.0.0";
+  version = "1.1.0";
 
   repoName = "settings-daemon";
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1masvy1f9z2cp8w5ajnhy4k9bzvzgfziqlm59bf146pdd2567hiw";
+    sha256 = "sha256-1Xp1uJzDFuGZlhJhKj00cYtb4Q1syMAm+82fTOtk0VI=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     gtk3
     granite
     libgee
+    systemd
   ];
 
   postPatch = ''

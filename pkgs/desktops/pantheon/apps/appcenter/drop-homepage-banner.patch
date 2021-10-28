@@ -1,6 +1,6 @@
-From b1e09653d755ca6ffd03a1e3e67750e6bcc2bc6f Mon Sep 17 00:00:00 2001
+From c1916699cd388cc8d9968127e43ba955471623bf Mon Sep 17 00:00:00 2001
 From: Bobby Rong <rjl931189261@126.com>
-Date: Wed, 22 Sep 2021 11:54:48 +0800
+Date: Wed, 27 Oct 2021 09:33:15 +0800
 Subject: [PATCH 2/2] Drop homepage banner
 
 ---
@@ -8,7 +8,7 @@ Subject: [PATCH 2/2] Drop homepage banner
  1 file changed, 1 insertion(+), 180 deletions(-)
 
 diff --git a/src/Views/Homepage.vala b/src/Views/Homepage.vala
-index 576fc02c..80a1d221 100644
+index 52cb36cc..80a1d221 100644
 --- a/src/Views/Homepage.vala
 +++ b/src/Views/Homepage.vala
 @@ -31,67 +31,12 @@ public class AppCenter.Homepage : AbstractView {
@@ -193,7 +193,7 @@ index 576fc02c..80a1d221 100644
 -                }
 -            }
 -
--            if (!installed && !(package in packages_in_banner) && !package.is_explicit) {
+-            if (!installed && !(package in packages_in_banner)) {
 -                var package_row = new AppCenter.Widgets.ListPackageRowGrid (package);
 -                recently_updated_carousel.add (package_row);
 -            }
