@@ -257,7 +257,7 @@ let
 
       users = mkOption {
         type = attrsOf userOptions;
-        example = { john = { password = "123456"; acl = [ "topic readwrite john/#" ]; }; };
+        example = { john = { password = "123456"; acl = [ "readwrite john/#" ]; }; };
         description = ''
           A set of users and their passwords and ACLs.
         '';
@@ -278,6 +278,7 @@ let
         description = ''
           Additional ACL items to prepend to the generated ACL file.
         '';
+        example = [ "pattern read #" "topic readwrite anon/report/#" ];
         default = [];
       };
 
@@ -654,5 +655,10 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ pennae ];
+  meta = {
+    maintainers = with lib.maintainers; [ pennae ];
+    # Don't edit the docbook xml directly, edit the md and generate it:
+    # `pandoc mosquitto.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > mosquitto.xml`
+    doc = ./mosquitto.xml;
+  };
 }
