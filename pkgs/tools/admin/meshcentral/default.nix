@@ -28,6 +28,8 @@ yarn2nix-moretea.mkYarnPackage rec {
 
   publishBinsFor = [ ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Computer management web app";
     homepage = "https://meshcentral.com/info/";
