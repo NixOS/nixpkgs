@@ -10308,6 +10308,8 @@ with pkgs;
 
   ostree = callPackage ../tools/misc/ostree { };
 
+  otel-cli = callPackage ../tools/misc/otel-cli {};
+
   otfcc = callPackage ../tools/misc/otfcc { };
 
   otpclient = callPackage ../applications/misc/otpclient { };
