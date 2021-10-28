@@ -1,5 +1,5 @@
 import ./base.nix rec {
-  rev = "887cd2207e6858ff2c0fe6e461dd309a435c8d5a"; # use rev as tags have disappeared before
-  version = "2.47.3";
-  sha256 = "sha256-WUu3eAycG/oHTnT7HiZvf0B45I8miYolwRi9fHfA3uA=";
- }
+  rev = "3425dae078262591d04fec107ec71ab010651852"; # use rev as tags have disappeared before
+  version = "2.49.3";
+  sha256 = "1qvyjly7r1ihacdvxq0r59l4csr09sc05palpshzqsiz2wb1izk0";
+}
