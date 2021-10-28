@@ -1469,6 +1469,8 @@ with pkgs;
 
   inherit (nodePackages) bitwarden-cli;
 
+  inherit (nodePackages) concurrently;
+
   inherit (nodePackages) hyperspace-cli;
 
   bklk = callPackage ../applications/misc/bklk { };
