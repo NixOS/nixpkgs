@@ -29,8 +29,11 @@ stdenv.mkDerivation (rec {
     sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
   };
 
-  patches = [ ./fix-chmod-exit-code.patch ]
-    ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+  patches = [
+    ./fix-chmod-exit-code.patch
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
+    ./disable-seek-hole.patch
+  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
     # fix gnulib tests on 32-bit ARM. Included on coreutils master.
     # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
     ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;

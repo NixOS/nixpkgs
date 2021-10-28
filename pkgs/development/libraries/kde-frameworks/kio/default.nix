@@ -26,6 +26,5 @@ mkDerivation {
   outputs = [ "out" "dev" ];
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
-    ./0002-Debug-module-loader.patch
  ];
 }
