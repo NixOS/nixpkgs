@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
 , autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, re2, snappy, thrift, utf8proc, which, xsimd
+, perl, python3, rapidjson, re2, snappy, thrift, tzdata , utf8proc, which
 , zlib, zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -81,6 +81,8 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs build-support/
+    substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
+      --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   cmakeFlags = [
