@@ -2031,6 +2031,12 @@ Superuser created successfully.
           hydrus manual</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          More jdk and jre versions are now exposed via
+          <literal>java-packages.compiler</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
