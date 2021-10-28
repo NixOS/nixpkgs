@@ -85,6 +85,8 @@ const downloadPkg = (pkg, verbose) => {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('git+')) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
+	} else if (url.startsWith('file:')) {
+		console.warn(`ignoring unsupported file:path url "${url}"`)
 	} else {
 		throw new Error('don\'t know how to download "' + url + '"')
 	}
