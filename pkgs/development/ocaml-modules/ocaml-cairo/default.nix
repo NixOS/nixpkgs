@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
- preConfigure = ''
-   aclocal -I support
-   autoconf
-   export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE `pkg-config --cflags cairo gdk-pixbuf glib gtk+ pango`"
-   export LABLGTKDIR=${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2
-   cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/pango.ml ./src
-   cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/gaux.ml ./src
+  preConfigure = ''
+    aclocal -I support
+    autoconf
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE `pkg-config --cflags cairo gdk-pixbuf glib gtk+ pango`"
+    export LABLGTKDIR=${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2
+    cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/pango.ml ./src
+    cp ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2/gaux.ml ./src
   '';
 
   postInstall = ''

@@ -27,12 +27,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ocsigen.org/ocsigen-start";
     description = "Eliom application skeleton";
-    longDescription =''
-     An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
-      '';
+    longDescription = ''
+      An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
+    '';
     license = lib.licenses.lgpl21Only;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
-
 }

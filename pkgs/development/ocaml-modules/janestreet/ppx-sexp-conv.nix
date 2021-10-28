@@ -1,5 +1,5 @@
 {lib, buildOcamlJane,
- ppx_core, ppx_tools, ppx_type_conv, sexplib}:
+ppx_core, ppx_tools, ppx_type_conv, sexplib}:
 
 buildOcamlJane {
   name = "ppx_sexp_conv";

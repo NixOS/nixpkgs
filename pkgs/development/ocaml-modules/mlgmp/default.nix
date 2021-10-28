@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   propagatedbuildInputs = [gmp mpfr ncurses];
 
   postInstall  = ''
-     cp ${./META} $out/lib/ocaml/${ocaml.version}/site-lib/gmp/META
+    cp ${./META} $out/lib/ocaml/${ocaml.version}/site-lib/gmp/META
   '';
 
   meta = {

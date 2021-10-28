@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ integers libffi bigarray-compat ];
 
   buildPhase =  ''
-     make XEN=false libffi.config ctypes-base ctypes-stubs
-     make XEN=false ctypes-foreign
+    make XEN=false libffi.config ctypes-base ctypes-stubs
+    make XEN=false ctypes-foreign
   '';
 
   installPhase =  ''

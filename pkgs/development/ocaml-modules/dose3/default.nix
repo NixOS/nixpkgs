@@ -40,8 +40,8 @@ buildDunePackage rec {
     python39                  # Replaces: conf-python-3
     python39Packages.pyyaml   # Replaces: conf-python3-yaml
   ];
-  doCheck = false; # Tests are failing.
-                   # To enable tests use: lib.versionAtLeast ocaml.version "4.04";
+  doCheck = false;  # Tests are failing.
+                    # To enable tests use: lib.versionAtLeast ocaml.version "4.04";
 
   meta = with lib; {
     description = "Dose library (part of Mancoosi tools)";

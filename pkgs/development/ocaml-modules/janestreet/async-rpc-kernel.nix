@@ -1,6 +1,6 @@
 {lib, buildOcamlJane, async_kernel, bin_prot, core_kernel,
- fieldslib, ppx_assert, ppx_bench, ppx_driver, ppx_expect, ppx_inline_test,
- ppx_jane, sexplib, typerep, variantslib}:
+fieldslib, ppx_assert, ppx_bench, ppx_driver, ppx_expect, ppx_inline_test,
+ppx_jane, sexplib, typerep, variantslib}:
 
 buildOcamlJane {
   name = "async_rpc_kernel";

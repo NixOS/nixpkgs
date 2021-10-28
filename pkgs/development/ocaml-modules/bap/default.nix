@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   };
 
   sigs = fetchurl {
-     url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
-     sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
+    url = "https://github.com/BinaryAnalysisPlatform/bap/releases/download/v${version}/sigs.zip";
+    sha256 = "0d69jd28z4g64mglq94kj5imhmk5f6sgcsh9q2nij3b0arpcliwk";
   };
 
   createFindlibDestdir = true;

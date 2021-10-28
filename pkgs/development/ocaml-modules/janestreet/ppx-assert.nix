@@ -1,5 +1,5 @@
 {lib, buildOcamlJane,
- ppx_compare, ppx_core, ppx_driver, ppx_here, ppx_sexp_conv, ppx_tools, ppx_type_conv, sexplib}:
+ppx_compare, ppx_core, ppx_driver, ppx_here, ppx_sexp_conv, ppx_tools, ppx_type_conv, sexplib}:
 
 buildOcamlJane {
   name = "ppx_assert";

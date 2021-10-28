@@ -1,15 +1,15 @@
 { stdenv, lib, makeWrapper, fetchzip, ocaml, findlib, tcl, tk }:
 
 let
- params =
-  let mkNewParam = { version, sha256, rev ? version }: {
-    inherit version;
-    src = fetchzip {
-      url = "https://github.com/garrigue/labltk/archive/${rev}.tar.gz";
-      inherit sha256;
-    };
-  }; in
- rec {
+  params =
+    let mkNewParam = { version, sha256, rev ? version }: {
+      inherit version;
+      src = fetchzip {
+        url = "https://github.com/garrigue/labltk/archive/${rev}.tar.gz";
+        inherit sha256;
+      };
+    }; in
+rec {
   "4.06" = mkNewParam {
     version = "8.06.4";
     rev = "labltk-8.06.4";
@@ -42,9 +42,10 @@ let
     version = "8.06.11";
     sha256 = "1zjpg9jvs6i9jvbgn6zgispwqiv8rxvaszxcx9ha9fax3wzhv9qy";
   };
- };
- param = params . ${lib.versions.majorMinor ocaml.version}
-   or (throw "labltk is not available for OCaml ${ocaml.version}");
+};
+
+param = params . ${lib.versions.majorMinor ocaml.version}
+  or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
 stdenv.mkDerivation rec {

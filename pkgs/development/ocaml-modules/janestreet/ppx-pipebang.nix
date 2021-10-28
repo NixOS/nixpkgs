@@ -1,5 +1,5 @@
 {lib, buildOcamlJane,
- ppx_core, ppx_driver, ppx_tools}:
+ppx_core, ppx_driver, ppx_tools}:
 
 buildOcamlJane {
   name = "ppx_pipebang";

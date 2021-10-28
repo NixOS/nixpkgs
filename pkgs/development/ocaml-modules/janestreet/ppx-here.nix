@@ -1,5 +1,5 @@
 {lib, buildOcamlJane,
- ppx_core, ppx_driver}:
+ppx_core, ppx_driver}:
 
 buildOcamlJane {
   name = "ppx_here";
