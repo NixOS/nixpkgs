@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     rev = version;
-    owner = "ludios";
-    repo = "wpull";
+    owner = "ArchiveTeam";
+    repo = "ludios_wpull";
     sha256 = "0j4dir0dgg8pkf4d1znicz6wyyi1wzij50r21z838cycsdr54j4c";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Web crawler; fork of wpull used by grab-site";
-    homepage = "https://github.com/ludios/wpull";
+    homepage = "https://github.com/ArchiveTeam/ludios_wpull";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ivan ];
     broken = lib.versions.major tornado.version != "4";
