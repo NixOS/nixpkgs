@@ -10,7 +10,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with versions; switch mathcomp.character.version [
-    { case = pred.union (isGe "1.10.0") (isEq "dev"); out = "1.12.0"; }
+    { case = (range "1.10.0" "1.12.0"); out = "1.12.0"; }
   ] null;
 
   propagatedBuildInputs = [ mathcomp.character ];
