@@ -157,6 +157,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tobim veprbl ];
+    maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };
 }
