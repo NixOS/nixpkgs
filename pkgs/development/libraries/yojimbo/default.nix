@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "yojimbo";
-  version = "1.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "networkprotocol";
     repo = "yojimbo";
     rev = "e02219c102d9b440290539036992d77608eab3b0";
-    sha256 = "0jn25ddv73hwjals883a910m66kwj6glxxhnmn96bpzsvsaimnkr";
+    sha256 = "sha256-edoald7632WSrRb2Tp+RfBpTQUhqIKSpkhyOs1srwko=";
     fetchSubmodules = true;
   };
 
