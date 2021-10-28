@@ -83,6 +83,7 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   sphinxcontrib_plantuml = sphinxcontrib-plantuml;
+  sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
   tvnamer = throw "python3Packages.tvnamer was moved to tvnamer"; # 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # 2021-09-29
