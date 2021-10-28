@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vhba";
-  version = "20210418";
+  version = "20211023";
 
   src  = fetchurl {
     url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
-    sha256 = "119zgav6caialmf3hr096wkf72l9h76sqc9w5dhx26kj4yp85g8q";
+    sha256 = "sha256-YAh7qqkozvoG1WhHBv7z1IcSrP75LLMq/FB6sZrevxA=";
   };
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
