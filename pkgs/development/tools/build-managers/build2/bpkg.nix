@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
-  version = "0.13.0";
+  version = "0.14.0";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
-    sha256 = "fec41e171c8ea7967bfc44850568cd624def544fd866c383bd413c5b4349e282";
+    sha256 = "sha256-4WTFm0NYZOujxQ3PR9MyjXEJ4ql4qZ9OM5BePuHIK1M=";
   };
 
   strictDeps = true;
@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/bpkg/tree/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

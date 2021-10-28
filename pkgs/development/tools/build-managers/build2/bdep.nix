@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bdep";
-  version = "0.13.0";
+  version = "0.14.0";
 
   outputs = [ "out" "doc" "man" ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
-    sha256 = "8e11b469d875d05c4eb7a228416b78a61c68a49310e5e41db78ed6d048f6ba2a";
+    sha256 = "sha256-sizrGmSixkkJL9nocA4B1I5n9OySxyuZ2bNc1Z4zmPg=";
   };
 
   strictDeps = true;
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/bdep/tree/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

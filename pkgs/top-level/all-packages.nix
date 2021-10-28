@@ -26084,6 +26084,8 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
+  kumactl = callPackage ../applications/networking/cluster/kumactl { };
+
   kile-wl = callPackage ../applications/misc/kile-wl { };
 
   kiln = callPackage ../applications/misc/kiln { };
@@ -33502,7 +33504,9 @@ with pkgs;
 
   zesarux = callPackage ../misc/emulators/zesarux { };
 
-  zthrottle = callPackage ../tools/misc/zthrottle { };
+  zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zthrottle = callPackage ../tools/misc/zthrottle { };
 }
