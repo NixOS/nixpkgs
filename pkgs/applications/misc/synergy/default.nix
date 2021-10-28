@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.13.1.41";
+  version = "1.14.1.32";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
     fetchSubmodules = true;
-    sha256 = "1phg0szc9g018zxs5wbys4drzq1cdhyzajfg45l6a3fmi6qdi1kw";
+    sha256 = "1hb62znagdbgs2yf9fp6mb7ixqya6lc4hjk2fhrfi07qy18dh537";
   };
 
   patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
