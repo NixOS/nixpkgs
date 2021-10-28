@@ -232,7 +232,7 @@ done
 mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
-echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+echo @extraUtils@/bin/modprobe-kernel > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
     modprobe $i
