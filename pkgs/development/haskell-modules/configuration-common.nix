@@ -1121,8 +1121,8 @@ self: super: {
   });
 
   # Chart-tests needs and compiles some modules from Chart itself
-  Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
-    preCheck = old.postPatch or "" + ''
+  Chart-tests = overrideCabal (addExtraLibrary super.Chart-tests self.QuickCheck) (old: {
+    preCheck = old.preCheck or "" + ''
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
   });
