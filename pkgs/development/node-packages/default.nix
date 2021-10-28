@@ -170,6 +170,10 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    intelephense = super.intelephense.override {
+      meta.license = pkgs.lib.licenses.unfree;
+    };
+
     jsonplaceholder = super.jsonplaceholder.override (drv: {
       buildInputs = [ nodejs ];
       postInstall = ''
