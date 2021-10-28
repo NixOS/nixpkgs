@@ -3666,7 +3666,7 @@ in {
 
   imantics = callPackage ../development/python-modules/imantics { };
 
-  IMAPClient = callPackage ../development/python-modules/imapclient { };
+  imapclient = callPackage ../development/python-modules/imapclient { };
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
