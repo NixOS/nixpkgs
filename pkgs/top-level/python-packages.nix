@@ -2255,7 +2255,7 @@ in {
 
   dodgy = callPackage ../development/python-modules/dodgy { };
 
-  dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
+  dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
 
   dogpile_core = callPackage ../development/python-modules/dogpile.core { };
 

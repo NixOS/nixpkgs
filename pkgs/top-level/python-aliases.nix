@@ -45,6 +45,7 @@ mapAliases ({
   discogs_client = discogs-client; # added 2021-07-02
   djangorestframework-jwt = drf-jwt;
   dns = dnspython; # Alias for compatibility, 2017-12-10
+  dogpile_cache = dogpile-cache; # added 2021-10-28
   faulthandler = throw "faulthandler is built into ${python.executable}";
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
