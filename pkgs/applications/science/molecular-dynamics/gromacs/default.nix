@@ -34,12 +34,12 @@ in stdenv.mkDerivation rec {
     hwloc
     blas
     lapack
-  ] ++ lib.lists.optional enableMpi mpi
-    ++ lib.lists.optional enableCuda cudatoolkit
+  ] ++ lib.optional enableMpi mpi
+    ++ lib.optional enableCuda cudatoolkit
   ;
 
-  propagatedBuildInputs = lib.lists.optional enableMpi mpi;
-  propagatedUserEnvPkgs = lib.lists.optional enableMpi mpi;
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
      else [
        "-DGMX_MPI:BOOL=FALSE"
      ]
-  ) ++ lib.lists.optional enableCuda "-DGMX_GPU=CUDA";
+  ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
   meta = with lib; {
     homepage = "http://www.gromacs.org";
