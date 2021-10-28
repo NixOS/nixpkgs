@@ -3227,12 +3227,6 @@
     githubId = 119483;
     name = "Matthew Brown";
   };
-  eduardosm = {
-    email = "esm@eduardosm.net";
-    github = "eduardosm";
-    githubId = 761151;
-    name = "Eduardo Sánchez Muñoz";
-  };
   eduarrrd = {
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
