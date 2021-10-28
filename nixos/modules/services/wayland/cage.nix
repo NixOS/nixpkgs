@@ -5,33 +5,43 @@ with lib;
 let
   cfg = config.services.cage;
 in {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage = {
+    enable = mkEnableOption "cage kiosk service";
 
-  options.services.cage.user = mkOption {
-    type = types.str;
-    default = "demo";
-    description = ''
-      User to log-in as.
-    '';
+    user = mkOption {
+      type = types.str;
+      default = "demo";
+      description = ''
+        User to log-in as.
+      '';
+    };
+
+    extraArguments = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      defaultText = literalExpression "[]";
+      description = "Additional command line arguments to pass to Cage.";
+      example = ["-d"];
+    };
+
+    program = mkOption {
+      type = types.path;
+      default = "${pkgs.xterm}/bin/xterm";
+      defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+      description = ''
+        Program to run in cage.
+      '';
+    };
+
+    package = mkOption {
+        type = types.package;
+        default = pkgs.cage;
+        defaultText = "pkgs.cage";
+        description = ''
+          This option specifies the cage package.
+        '';
+      };
   };
-
-  options.services.cage.extraArguments = mkOption {
-    type = types.listOf types.str;
-    default = [];
-    defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
-    example = ["-d"];
-  };
-
-  options.services.cage.program = mkOption {
-    type = types.path;
-    default = "${pkgs.xterm}/bin/xterm";
-    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
-      Program to run in cage.
-    '';
-  };
-
   config = mkIf cfg.enable {
 
     # The service is partially based off of the one provided in the
@@ -55,7 +65,7 @@ in {
       unitConfig.ConditionPathExists = "/dev/tty1";
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.cage}/bin/cage \
+          ${cfg.package}/bin/cage \
             ${escapeShellArgs cfg.extraArguments} \
             -- ${cfg.program}
         '';
