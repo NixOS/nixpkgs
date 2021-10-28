@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "shutter";
-  version = "0.99";
+  version = "0.99.2";
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
     rev = "v${version}";
-    sha256 = "sha256-n5M+Ggk8ulJQMWjAW+/fC8fbqiBGzsx6IXlYxvf8utA=";
+    sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
