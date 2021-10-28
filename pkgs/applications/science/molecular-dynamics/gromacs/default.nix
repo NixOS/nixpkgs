@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack,
+{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit,
   singlePrec ? true,
-  mpi ? null,
-  cudatoolkit ? null,
+  enableMpi ? false,
+  enableCuda ? false,
   cpuAcceleration ? null
 }:
 
@@ -34,12 +34,12 @@ in stdenv.mkDerivation rec {
     hwloc
     blas
     lapack
-  ] ++ lib.lists.optional (mpi != null) mpi
-    ++ lib.lists.optional (cudatoolkit != null) cudatoolkit
+  ] ++ lib.lists.optional enableMpi mpi
+    ++ lib.lists.optional enableCuda cudatoolkit
   ;
 
-  propagatedBuildInputs = lib.lists.optional (mpi != null) mpi;
-  propagatedUserEnvPkgs = lib.lists.optional (mpi != null) mpi;
+  propagatedBuildInputs = lib.lists.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.lists.optional enableMpi mpi;
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
       "-DGMX_DEFAULT_SUFFIX=OFF"
     ]
   ) ++ (
-    if (mpi != null)
+    if enableMpi
       then [
         "-DGMX_MPI:BOOL=TRUE"
         "-DGMX_THREAD_MPI:BOOL=FALSE"
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
      else [
        "-DGMX_MPI:BOOL=FALSE"
      ]
-  ) ++ lib.lists.optional (cudatoolkit != null) "-DGMX_GPU=CUDA";
+  ) ++ lib.lists.optional enableCuda "-DGMX_GPU=CUDA";
 
   meta = with lib; {
     homepage = "http://www.gromacs.org";
