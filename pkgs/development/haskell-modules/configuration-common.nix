@@ -681,19 +681,17 @@ self: super: {
   # For 2.17 support: https://github.com/JonasDuregard/sized-functors/pull/10
   size-based = doJailbreak super.size-based;
 
-  # Remove as soon as we update to monoid-extras 0.6 and unpin these packages
-  dual-tree = doJailbreak super.dual-tree;
-  diagrams-core = doJailbreak super.diagrams-core;
+  # https://github.com/diagrams/diagrams-braille/issues/1
+  diagrams-braille = doJailbreak super.diagrams-braille;
 
-  # Apply patch from master to add compat with optparse-applicative >= 0.16.
-  # We unfortunately can't upgrade to 1.4.4 which includes this patch yet
-  # since it would require monoid-extras 0.6 which breaks other diagrams libs.
-  diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
-    (pkgs.fetchpatch {
-      url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
-      sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
-      includes = [ "*/CmdLine.hs" ];
-    }));
+  # https://github.com/timbod7/haskell-chart/pull/231#issuecomment-953745932
+  Chart-diagrams = doJailbreak super.Chart-diagrams;
+
+  # https://github.com/xu-hao/namespace/issues/1
+  namespace = doJailbreak super.namespace;
+
+  # https://github.com/cchalmers/plots/issues/46
+  plots = doJailbreak super.plots;
 
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
@@ -1122,6 +1120,8 @@ self: super: {
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (addExtraLibrary super.Chart-tests self.QuickCheck) (old: {
+    # https://github.com/timbod7/haskell-chart/issues/233
+    jailbreak = true;
     preCheck = old.preCheck or "" + ''
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
