@@ -1,4 +1,5 @@
 { lib, fetchFromGitHub, buildGoModule }:
+
 buildGoModule rec {
   pname = "terraform-provider-teleport";
   version = "7.3.0";
