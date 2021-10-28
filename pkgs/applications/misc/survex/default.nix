@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.2.44";
+  version = "1.2.45";
 
   nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.survex.com/survex";
     rev = version;
-    sha256 = "11gaqmabrf3av665jy3mr0m8hg76fmvnd0g3rghzmyh8d8v6xk34";
+    sha256 = "sha256-HwFVG94s75Wr89maaocfvuUkUZ4K4LeCuXffpGCz6ow=";
   };
 
   enableParallelBuilding = true;
