@@ -19315,7 +19315,9 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
 
-  sdrpp = callPackage ../applications/radio/sdrpp { };
+  sdrpp = callPackage ../applications/radio/sdrpp {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
