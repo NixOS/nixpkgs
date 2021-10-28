@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "smatch";
-  version = "20120924";
+  version = "20200608";
 
   src = fetchgit {
     url = "git://repo.or.cz/${pname}.git";
     rev = "23656e3e578b700cbf96d043f039e6341a3ba5b9";
-    sha256 = "0r43qi6vryqg450fj73yjwbb7gzcgx64rhrhb3r1m6a252srijiy";
+    sha256 = "sha256-PsqYtShCmRryWDDDTEx/7L+zFpd+HOlAIQ/7vE3Eg2Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
