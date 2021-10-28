@@ -79,6 +79,7 @@
 , "code-theme-converter"
 , "coffee-script"
 , "coinmon"
+, "concurrently"
 , "configurable-http-proxy"
 , "conventional-changelog-cli"
 , "cordova"
