@@ -1,4 +1,4 @@
-{ lib, kdeIntegration, ... }:
+{ lib, kdeIntegration, commonsLogging, ... }:
 attrs:
 {
   postConfigure = attrs.postConfigure + ''
@@ -6,6 +6,8 @@ attrs:
   '';
   configureFlags = attrs.configureFlags ++ [
     (lib.enableFeature kdeIntegration "kf5")
+    "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
+    "--without-system-qrcodegen"
   ];
-  patches = [ ../xdg-open-brief.patch ];
+  patches = [ ../xdg-open-brief.patch ]; # drop this when switching to 7.2
 }
