@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
-  version = "unstable-2021-03-21";
+  version = "unstable-20210402";
   src = fetchgit {
     url = "git://git.infradead.org/users/dwmw2/vpnc-scripts.git";
     rev = "8fff06090ed193c4a7285e9a10b42e6679e8ecf3";
-    sha256 = "14bzzpwz7kdmlbx825h6s4jjdml9q6ziyrq8311lp8caql68qdq1";
+    sha256 = "sha256-ATeMDMWKoUtDGAhnH7/BidYmJdEGFoH6orXN8/n9f5E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
