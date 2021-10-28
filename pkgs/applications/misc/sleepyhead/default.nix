@@ -2,14 +2,14 @@
 
 let
   name = "sleepyhead-${version}";
-  version = "1.0.0-beta-git";
+  version = "20160426";
 in mkDerivation {
   inherit name;
 
   src = fetchgit {
     url = "https://gitlab.com/sleepyhead/sleepyhead-code.git";
     rev = "9e2329d8bca45693231b5e3dae80063717c24578";
-    sha256 = "0448z8gyaxpgpnksg34lzmffj36jdpm0ir4xxa5gvzagkx0wk07h";
+    sha256 = "sha256-8IDJQZ9P/f2K6p3kCOpt0gzpXP2UjKenve925R/6iBA=";
   };
 
   buildInputs = [
