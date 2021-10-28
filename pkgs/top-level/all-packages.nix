@@ -31197,30 +31197,37 @@ with pkgs;
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
-    mpiEnabled = false;
+    mpi = null;
     fftw = fftwSinglePrec;
-    cmake = cmakeCurses;
+    cudatoolkit = null;
   };
 
   gromacsMpi = lowPrio (gromacs.override {
     singlePrec = true;
-    mpiEnabled = true;
+    mpi = mpi;
     fftw = fftwSinglePrec;
-    cmake = cmakeCurses;
+    cudatoolkit = null;
   });
 
   gromacsDouble = lowPrio (gromacs.override {
     singlePrec = false;
-    mpiEnabled = false;
+    mpi = null;
     fftw = fftw;
-    cmake = cmakeCurses;
+    cudatoolkit = null;
   });
 
   gromacsDoubleMpi = lowPrio (gromacs.override {
     singlePrec = false;
-    mpiEnabled = true;
+    mpi = mpi;
     fftw = fftw;
-    cmake = cmakeCurses;
+    cudatoolkit = null;
+  });
+
+  gromacsCudaMpi = lowPrio (gromacs.override {
+    singlePrec = true;
+    mpi = mpi;
+    fftw = fftwSinglePrec;
+    cudatoolkit = cudatoolkit;
   });
 
   zegrapher = libsForQt5.callPackage ../applications/science/math/zegrapher { };

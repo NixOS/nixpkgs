@@ -1,13 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, hwloc
-, fftw
-, perl
-, singlePrec ? true
-, mpiEnabled ? false
-, mpi
-, cpuAcceleration ? null
+{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack,
+  singlePrec ? true,
+  mpi ? null,
+  cudatoolkit ? null,
+  cpuAcceleration ? null
 }:
 
 let
@@ -24,20 +19,32 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2020.4";
+  version = "2021.3";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "1rplvgna60nqyb8nspaz3bfkwb044kv3zxdaa5whql5m441nj6am";
+    sha256 = "4QmFbsREdo373kHzBZ4xI6vbj+Vsozsag/Me1FdaHMY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fftw perl hwloc ]
-  ++ (lib.optionals mpiEnabled [ mpi ]);
+
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ] ++ lib.lists.optional (mpi != null) mpi
+    ++ lib.lists.optional (cudatoolkit != null) cudatoolkit
+  ;
+
+  propagatedBuildInputs = lib.lists.optional (mpi != null) mpi;
+  propagatedUserEnvPkgs = lib.lists.optional (mpi != null) mpi;
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
     "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
   ] ++ (
     if singlePrec then [
       "-DGMX_DOUBLE=OFF"
@@ -46,13 +53,15 @@ in stdenv.mkDerivation rec {
       "-DGMX_DEFAULT_SUFFIX=OFF"
     ]
   ) ++ (
-    if mpiEnabled then [
-      "-DGMX_MPI:BOOL=TRUE"
-      "-DGMX_THREAD_MPI:BOOL=FALSE"
-    ] else [
-      "-DGMX_MPI:BOOL=FALSE"
-    ]
-  );
+    if (mpi != null)
+      then [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+     else [
+       "-DGMX_MPI:BOOL=FALSE"
+     ]
+  ) ++ lib.lists.optional (cudatoolkit != null) "-DGMX_GPU=CUDA";
 
   meta = with lib; {
     homepage = "http://www.gromacs.org";
@@ -78,5 +87,6 @@ in stdenv.mkDerivation rec {
       See: http://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
+    maintainers = with maintainers; [ sheepforce markuskowa ];
   };
 }
