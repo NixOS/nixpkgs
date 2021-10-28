@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Disables unredirect fullscreen windows in gnome-shell to avoid tearing";
     license = licenses.gpl3Only;
     homepage = "https://github.com/kazysmaster/gnome-shell-extension-disable-unredirect";
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }
