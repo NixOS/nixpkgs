@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "CHOWTapeModel";
-  version = "unstable-2020-12-12";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
     rev = "a7cf10c3f790d306ce5743bb731e4bc2c1230d70";
-    sha256 = "09nq8x2dwabncbp039dqm1brzcz55zg9kpxd4p5348xlaz5m4661";
+    sha256 = "sha256-wRhSy1e0IzLKJa3fmd4v5bOfV6i4pQHuYnYp3kRH2CY=";
     fetchSubmodules = true;
   };
 
