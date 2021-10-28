@@ -9,15 +9,15 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "6d98243093c0b36442da94de7010f3eacc2a9909";
-    hash = "sha256-n57Fuz2k6sX1o3vYBmC41eRKGnyt9+YL5r3WTHHRRzw=";
+    rev = "a60b715263d9bbf7e744527fb0c084b693f58043";
+    hash = "sha256-Dz1dCV0m5Y24qzXdVaqrZ7hK3MRSb4GF0PXrjMAsjZU=";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "ddd898958803cb89b7156c6350584d1cda0fe8de";
-    hash = "sha256-gK04mj1Fuhkf82NDMrXplFa+cr/3Ij7I9VnYfinuJlg=";
+    rev = "d4d485956a643c693b5549e1a62d52ca61c170f1";
+    hash = "sha256-GmOAS8gGhzDI0WzORMkWHRRUl/XBwmNen2d3VefZxxc=";
   };
 
 in stdenv.mkDerivation rec {
