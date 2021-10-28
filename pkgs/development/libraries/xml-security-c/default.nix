@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xml-security-c";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://www.apache.org/dist/santuario/c-library/${pname}-${version}.tar.gz";
-    sha256 = "1prh5sxzipkqglpsh53iblbr7rxi54wbijxdjiahzjmrijqa40y3";
+    sha256 = "sha256-s8YwuyxL6IdGXm/BwsHRx5jFwgRLJNp9zvw74ZzzPmc=";
   };
 
   configureFlags = [
