@@ -59,11 +59,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "uwsgi";
-  version = "2.0.19.1";
+  version = "2.0.20";
 
   src = fetchurl {
     url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
+    sha256 = "sha256-iKuYZ9iXPYroRxnPIzt9r8VDJvyuyJaDw/n3fAAs3/k=";
   };
 
   patches = [
