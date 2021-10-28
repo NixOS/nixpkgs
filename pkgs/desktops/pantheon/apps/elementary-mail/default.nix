@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -42,12 +41,6 @@ stdenv.mkDerivation rec {
       attrPath = "pantheon.${pname}";
     };
   };
-
-  patches = [
-    # The app stuck when loading gravatar, temporarily reverts part
-    # of https://github.com/elementary/mail/pull/600 to fix this
-    ./revert-fix-warning.patch
-  ];
 
   nativeBuildInputs = [
     appstream
