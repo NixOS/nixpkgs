@@ -148,7 +148,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A  cross-language development platform for in-memory data";
+    description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
