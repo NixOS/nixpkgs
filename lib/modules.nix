@@ -121,7 +121,9 @@ rec {
         };
 
         config = {
-          _module.args = args;
+          _module.args = {
+            inherit extendModules;
+          } // args;
         };
       };
 
@@ -186,24 +188,26 @@ rec {
 
       checked = builtins.seq checkUnmatched;
 
+      extendModules = extendArgs@{
+        modules ? [],
+        specialArgs ? {},
+        prefix ? [],
+        }:
+          evalModules (evalModulesArgs // {
+            modules = evalModulesArgs.modules ++ modules;
+            specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
+            prefix = extendArgs.prefix or evalModulesArgs.prefix;
+          });
+
+      type = lib.types.submoduleWith {
+        inherit modules specialArgs;
+      };
+
       result = {
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
-
-        extendModules = extendArgs@{
-          modules ? [],
-          specialArgs ? {},
-          prefix ? [],
-          }:
-            evalModules (evalModulesArgs // {
-              modules = evalModulesArgs.modules ++ modules;
-              specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
-              prefix = extendArgs.prefix or evalModulesArgs.prefix;
-            });
-        type = lib.types.submoduleWith {
-          inherit modules specialArgs;
-        };
+        inherit extendModules type;
       };
     in result;
 
