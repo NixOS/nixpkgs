@@ -56,7 +56,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.rsync ]";
+        example = literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
 

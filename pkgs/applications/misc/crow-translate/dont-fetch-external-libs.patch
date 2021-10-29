@@ -1,25 +1,25 @@
 diff --git i/CMakeLists.txt w/CMakeLists.txt
-index 0cd2140..16e3190 100644
+index faa9417..059b899 100644
 --- i/CMakeLists.txt
 +++ w/CMakeLists.txt
-@@ -97,13 +97,11 @@ qt5_add_translation(QM_FILES
+@@ -101,13 +101,11 @@ qt5_add_translation(QM_FILES
  )
  
  configure_file(src/cmake.h.in cmake.h)
 -configure_file(data/icons/flags.qrc ${CircleFlags_SOURCE_DIR}/flags/flags.qrc COPYONLY)
--configure_file(data/icons/we10x.qrc ${We10X_SOURCE_DIR}/src/we10x.qrc COPYONLY)
+-configure_file(data/icons/fluent-icon-theme.qrc ${FluentIconTheme_SOURCE_DIR}/src/fluent-icon-theme.qrc COPYONLY)
  
  add_executable(${PROJECT_NAME}
 -    ${CircleFlags_SOURCE_DIR}/flags/flags.qrc
 +    data/icons/flags.qrc
      ${QM_FILES}
--    ${We10X_SOURCE_DIR}/src/we10x.qrc
-+    data/icons/we10x.qrc
+-    ${FluentIconTheme_SOURCE_DIR}/src/fluent-icon-theme.qrc
++    data/icons/fluent-icon-theme.qrc
      data/icons/engines/engines.qrc
      src/addlanguagedialog.cpp
      src/addlanguagedialog.ui
 diff --git i/cmake/ExternalLibraries.cmake w/cmake/ExternalLibraries.cmake
-index d738716..fb01f3d 100644
+index e2501e1..e15ce6c 100644
 --- i/cmake/ExternalLibraries.cmake
 +++ w/cmake/ExternalLibraries.cmake
 @@ -2,34 +2,28 @@ include(FetchContent)
@@ -46,20 +46,20 @@ index d738716..fb01f3d 100644
  
  FetchContent_Declare(QOnlineTranslator
 -    GIT_REPOSITORY https://github.com/crow-translate/QOnlineTranslator
--    GIT_TAG 1.4.4
+-    GIT_TAG df89083d2f680a8f856b1df00b8846f995cf1fae
 +    SOURCE_DIR @qonlinetranslator@
  )
  
  FetchContent_Declare(CircleFlags
 -    GIT_REPOSITORY https://github.com/HatScripts/circle-flags
--    GIT_TAG v2.1.0
+-    GIT_TAG v2.3.0
 +    SOURCE_DIR @circleflags@
  )
  
- FetchContent_Declare(We10X
--    GIT_REPOSITORY https://github.com/yeyushengfan258/We10X-icon-theme
--    GIT_TAG bd2c68482a06d38b2641503af1ca127b9e6540db
-+    SOURCE_DIR @we10x@
+ FetchContent_Declare(FluentIconTheme
+-    GIT_REPOSITORY https://github.com/vinceliuice/Fluent-icon-theme
+-    GIT_TAG 2021-08-15
++    SOURCE_DIR @fluent@
  )
  
- FetchContent_MakeAvailable(SingleApplication QTaskbarControl QHotkey QOnlineTranslator CircleFlags We10X)
+ FetchContent_MakeAvailable(SingleApplication QTaskbarControl QHotkey QOnlineTranslator CircleFlags FluentIconTheme)

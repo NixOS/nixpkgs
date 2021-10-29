@@ -1,35 +1,34 @@
 { lib
-, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , rustPlatform
+, stdenv
 , libiconv
-, pytestCheckHook
 , brotli
 , lz4
 , memory_profiler
 , numpy
 , pytest-benchmark
+, pytestCheckHook
 , python-snappy
 , zstd
 }:
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.3.2";
+  version = "2.4.0";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "577955f1510d99df0e4d61379c3f05568f594f91e12bc6a7e147d0abfa643a3b";
+  src = fetchFromGitHub {
+    owner = "milesgranger";
+    repo = "pyrus-cramjam";
+    rev = "v${version}";
+    sha256 = "sha256-00KvbiTf8PxYWljLKTRZmPIAbb+PnBleDM4p0AzZhHw=";
   };
 
-  postPatch = ''
-    cp ${./Cargo.lock} ./Cargo.lock
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sha256 = "sha256-4y/jeEZjVUbaXtBx5l3Hrbnj3iNYX089K4xexRP+5v0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -39,12 +38,12 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   checkInputs = [
-    pytestCheckHook
     brotli
     lz4
     memory_profiler
     numpy
     pytest-benchmark
+    pytestCheckHook
     python-snappy
     zstd
   ];
@@ -53,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Thin Python bindings to de/compression algorithms in Rust";
-    homepage = "https://crates.io/crates/cramjam";
+    homepage = "https://github.com/milesgranger/pyrus-cramjam";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ veprbl ];
   };

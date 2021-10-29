@@ -1,14 +1,14 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri, crowbar }:
+{ lib, fetchFromGitLab, buildDunePackage, uri, crowbar, alcotest }:
 
 buildDunePackage rec {
   pname = "json-data-encoding";
-  version = "0.8";
-
+  version = "0.10";
+  minimalOCamlVersion = "4.10";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "json-data-encoding";
-    rev = "v${version}";
-    sha256 = "1c6m2qvi9bm6qjxc38p6cia1f66r0rb9xf6b8svlj3jjymvqw889";
+    rev = "${version}";
+    sha256 = "0m0xx382wr44wz7gxf7mpfjx2w287pvqhg2lfvzmclfq3y5iy6mx";
   };
   useDune2 = true;
 
@@ -18,6 +18,7 @@ buildDunePackage rec {
 
   checkInputs = [
     crowbar
+    alcotest
   ];
 
   doCheck = true;

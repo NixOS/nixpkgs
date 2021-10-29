@@ -35,7 +35,7 @@ in
 
     image = mkOption {
       default = pkgs.anbox.image;
-      example = literalExample "pkgs.anbox.image";
+      defaultText = literalExpression "pkgs.anbox.image";
       type = types.package;
       description = ''
         Base android image for Anbox.

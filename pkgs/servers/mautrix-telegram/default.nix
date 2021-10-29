@@ -54,6 +54,7 @@ in python.pkgs.buildPythonPackage rec {
     pillow
     lxml
     setuptools
+    prometheus-client
   ] ++ lib.optionals withE2BE [
     asyncpg
     python-olm

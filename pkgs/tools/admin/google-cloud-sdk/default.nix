@@ -7,13 +7,13 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
     cffi
     cryptography
-    pyopenssl
+    openssl
     crcmod
   ] ++ lib.optional (with-gce) google-compute-engine);
 
@@ -21,33 +21,33 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1a17bbvimdqq4k25lprqk9cq3lpfchd65hzjf23ha4imndpbjgqr";
+      sha256 = "19s3nryngzv7zs7piwx92hii5p2y97fs7wngqrd9v8cxvgavp1dc";
     };
 
     aarch64-darwin = {
       url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "184k1kv10g4zzzxgmwpakvg5ffxhz01dd01kb5h32mf1j5fid1zh";
+      sha256 = "1iphpkxrrp0gdan7ikbjbhykdpazcs1fnlcwkfyv2m9baggkd53z";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0hhaq5hf5nvaah06h6v8q2hpn8hc815ihsi74dpwg6pmg9h266pr";
+      sha256 = "1z1ymvij9vi8jc05b004jhd08dqbk133wd03fdxnagd6nfr0bjqm";
     };
 
     i686-linux = {
       url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "14z1nzwc0j3qhbw2ldrskd8zjsslwgsw7pxxq3v0ypc1rjibsql5";
+      sha256 = "17i5pkwjmi38klgr12xqgza7iwkx459cbavlq0x33zaq2a4zanlc";
     };
 
     aarch64-linux = {
       url = "${baseUrl}/${name}-linux-arm.tar.gz";
-      sha256 = "0f6xrij2wbx57s4897bi12l9fz3flj1wyibbk7jjg0l5332h4yhr";
+      sha256 = "17zjnab4ai5w6p3cbxys9zsg4bdlp0lh6pvmkvdz9hszxxch4yms";
     };
-  }.${system};
+  }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "351.0.0";
+  version = "362.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -116,6 +116,10 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) google-cloud-sdk; };
+  };
 
   meta = with lib; {
     description = "Tools for the google cloud platform";

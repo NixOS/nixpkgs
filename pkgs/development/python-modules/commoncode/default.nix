@@ -1,24 +1,29 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, requests
 , attrs
-, intbitset
-, saneyaml
-, text-unidecode
 , beautifulsoup4
-, pytestCheckHook
+, buildPythonPackage
+, click
+, fetchPypi
+, intbitset
 , pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, requests
+, saneyaml
+, setuptools-scm
+, text-unidecode
+, typing
 }:
+
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "21.8.31";
+  version = "30.0.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e74c61226834393801e921ab125eae3b52361340278fb9a468c5c691d286c32";
+    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
   };
 
   dontConfigure = true;
@@ -28,13 +33,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    click
-    requests
     attrs
+    beautifulsoup4
+    click
     intbitset
+    requests
     saneyaml
     text-unidecode
-    beautifulsoup4
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing
   ];
 
   checkInputs = [

@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.0.2";
+  version = "6.0.3";
 
   repoName = "calendar";
 
@@ -36,13 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "16xp8gfgpyz9xpjsxm6jlk4skkknj65g0q4x0qvw9sg9f1p6a514";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-+RQUiJLuCIbmcbtsOCfF9HYFrxtldZMbg2vg/a/IOaY=";
   };
 
   nativeBuildInputs = [
@@ -78,11 +72,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Desktop calendar app designed for elementary OS";
     homepage = "https://github.com/elementary/calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.calendar";
   };
 }

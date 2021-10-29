@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
 
     platforms = platforms.unix;
-    maintainers = [ maintainers.peti ];
   };
 }

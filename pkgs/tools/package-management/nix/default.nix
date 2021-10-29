@@ -208,7 +208,7 @@ common =
     patches = (drv.patches or []) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       (fetchpatch {
-        url = https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff;
+        url = "https://github.com/hercules-ci/nix/raw/5c58d84a76d96f269e3ff1e72c9c9ba5f68576af/boehmgc-coroutine-sp-fallback.diff";
         sha256 = "sha256-JvnWVTlkltmQUs/0qApv/LPZ690UX1/2hEP+LYRwKbI=";
       })
     ];
@@ -220,10 +220,10 @@ in rec {
 
   nixStable = callPackage common (rec {
     pname = "nix";
-    version = "2.3.15";
+    version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-N+MxClX94eUOfUMh0puRgNHp16+cjSEdtqZn5u5OtBA=";
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
 
     boehmgc = boehmgc_nix;
@@ -231,16 +231,32 @@ in rec {
     inherit storeDir stateDir confDir;
   });
 
-  nixUnstable = lib.lowPrio (callPackage common rec {
+  nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4${suffix}";
-    suffix = "pre20210922_${lib.substring 0 7 src.rev}";
+    version = "2.4pre-rc1";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "bcd73ebf60bb9ba6cb09f8df4366d5474c16e4a4";
-      sha256 = "sha256-wRbz8c22tlRn2/va/yOoLJijdJn+JJqLRDPRlifaEEA=";
+      rev = version;
+      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+    };
+
+    boehmgc = boehmgc_nixUnstable;
+
+    inherit storeDir stateDir confDir;
+  });
+
+  nixUnstable = lib.lowPrio (callPackage common rec {
+    pname = "nix";
+    version = "2.5${suffix}";
+    suffix = "pre20211007_${lib.substring 0 7 src.rev}";
+
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "844dd901a7debe8b03ec93a7f717b6c4038dc572";
+      sha256 = "sha256-fe1B4lXkS6/UfpO0rJHwLC06zhOPrdSh4s9PmQ1JgPo=";
     };
 
     boehmgc = boehmgc_nixUnstable;

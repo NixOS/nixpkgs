@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/LukeMathWalker/bunyan";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ netcrns ];
+    mainProgram = "bunyan";
   };
 }

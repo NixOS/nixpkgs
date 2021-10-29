@@ -36,13 +36,15 @@ buildPythonPackage rec {
     rm -r telegram/vendor
 
     substituteInPlace requirements.txt \
-      --replace 'APScheduler==3.6.3' 'APScheduler'
+      --replace "APScheduler==3.6.3" "APScheduler" \
+      --replace "cachetools==4.2.2" "cachetools"
   '';
 
   setupPyGlobalFlags = "--with-upstream-urllib3";
 
   # tests not included with release
   doCheck = false;
+
   pythonImportsCheck = [ "telegram" ];
 
   meta = with lib; {

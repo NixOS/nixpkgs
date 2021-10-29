@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 6dddd6d372c75acadc183f6a4efdd44e453559b4
-  ref: refs/tags/6.1.7
+  revision: 341b0cd1cdf69fe22345aea6c84ae11ba45e0d98
+  ref: refs/tags/6.1.11
   specs:
-    metasploit-framework (6.1.7)
+    metasploit-framework (6.1.11)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,9 +31,9 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.54)
+      metasploit-payloads (= 2.0.58)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.10)
+      metasploit_payloads-mettle (= 1.0.15)
       mqtt
       msgpack
       nessus_rest
@@ -87,6 +87,7 @@ GIT
       tzinfo-data
       unix-crypt
       warden
+      win32api
       windows_error
       winrm
       xdr
@@ -127,23 +128,23 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.506.0)
-    aws-sdk-core (3.121.1)
+    aws-partitions (1.518.0)
+    aws-sdk-core (3.121.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.265.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-ec2 (1.271.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.61.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-iam (1.62.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.48.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-kms (1.50.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.103.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-s3 (1.104.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -219,7 +220,7 @@ GEM
     jmespath (1.4.0)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.5.1)
+    json (2.6.1)
     little-plugger (1.1.4)
     logging (2.3.0)
       little-plugger (~> 1.1)
@@ -232,7 +233,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-credential (5.0.4)
+    metasploit-credential (5.0.5)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 5.0.0)
@@ -246,7 +247,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.54)
+    metasploit-payloads (2.0.58)
     metasploit_data_models (5.0.4)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -257,7 +258,7 @@ GEM
       railties (~> 6.0)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.10)
+    metasploit_payloads-mettle (1.0.15)
     method_source (1.0.0)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
@@ -273,7 +274,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
+    nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     nori (2.6.0)
@@ -295,9 +296,9 @@ GEM
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.5.0)
+    puma (5.5.2)
       nio4r (~> 2.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -329,7 +330,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.17)
+    rex-core (0.1.18)
     rex-encoder (0.1.6)
       metasm
       rex-arch
@@ -348,7 +349,7 @@ GEM
       rex-arch
     rex-ole (0.1.7)
       rex-text
-    rex-powershell (0.1.93)
+    rex-powershell (0.1.94)
       rex-random_identifier
       rex-text
       ruby-rc4
@@ -404,7 +405,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2021.2)
+    tzinfo-data (1.2021.5)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -416,6 +417,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    win32api (0.1.0)
     windows_error (0.1.2)
     winrm (2.3.6)
       builder (>= 2.1.2)
@@ -431,7 +433,7 @@ GEM
       activesupport (>= 4.2, < 7.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby

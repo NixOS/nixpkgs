@@ -316,6 +316,8 @@ let
         };
       };
 
+      chenglou92.rescript-vscode = callPackage ./rescript { };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
@@ -852,8 +854,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.213";
-          sha256 = "0fj7vvaqdldhbzm9dqh2plqlhg34jv5khd690xd87h418sv8rk95";
+          version = "0.0.214";
+          sha256 = "0rwxjnrl44rnhx3183037k6435xs4772p58a37azl5cahsyav1hk";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1045,6 +1047,18 @@ let
         };
       };
 
+      llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-clangd";
+          publisher = "llvm-vs-code-extensions";
+          version = "0.1.13";
+          sha256 = "/MpwbM+obcD3uqk8hnDrnbEK9Jot4fMe4sNzLt6mVGI=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       lokalise.i18n-ally = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "i18n-ally";
@@ -1067,6 +1081,18 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
+      mhutchie.git-graph = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "git-graph";
+          publisher = "mhutchie";
+          version = "1.30.0";
+          sha256 = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
@@ -1164,17 +1190,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter";
-          publisher = "ms-toolsai";
-          version = "2021.5.745244803";
-          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
-        };
-        meta = {
-          license = lib.licenses.unfree;
-        };
-      };
+      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
 
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1469,6 +1485,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      takayama.vscode-qq = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "takayama";
+          name = "vscode-qq";
+          version = "1.4.0";
+          sha256 = "sha256-DYjNWSKOrDYvdiV7G24uKz6w4ggeYUMkQIiOGZAbMSI=";
+        };
+        meta = {
+          license = lib.licenses.mpl20;
         };
       };
 

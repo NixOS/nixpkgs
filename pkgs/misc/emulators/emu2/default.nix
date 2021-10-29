@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emu2";
-  version = "0.0.0+unstable=2021-09-22";
+  version = "0.pre+unstable=2021-09-22";
 
   src = fetchFromGitHub {
     owner = "dmsc";

@@ -32,9 +32,9 @@ in {
           dbuser = "nextcloud";
           dbhost = "127.0.0.1";
           dbport = 3306;
-          dbpass = "hunter2";
+          dbpassFile = "${pkgs.writeText "dbpass" "hunter2" }";
           # Don't inherit adminuser since "root" is supposed to be the default
-          inherit adminpass;
+          adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
       };
 

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "markets";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "bitstower";
     repo = "markets";
     rev = version;
-    sha256 = "0nk1bs7i6b7r90g5qwd3s2m462vk3kvza0drq7rzb5sdaiz9ccnz";
+    sha256 = "0sfdmz7cp8i2bymippp8jyxsidxjn69v9cqm40q77j81kfm84bfv";
   };
 
   nativeBuildInputs = [

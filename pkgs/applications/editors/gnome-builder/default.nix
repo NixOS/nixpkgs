@@ -1,17 +1,17 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , ctags
+, cmark
 , appstream-glib
 , desktop-file-utils
-, docbook_xsl
-, docbook_xml_dtd_43
 , fetchurl
 , flatpak
 , gnome
 , libgit2-glib
+, gi-docgen
 , gobject-introspection
 , glade
 , gspell
-, gtk-doc
 , gtk3
 , gtksourceview4
 , json-glib
@@ -39,20 +39,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.40.2";
+  version = "41.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16kikslvcfjqj4q3j857mq9i8cyd965b3lvfzcwijc91x3ylr15j";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XVXkqqKkdYpGJj0cf9AJyz20RV4O1/nkTDoWNIYfo4o=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    docbook_xsl
-    docbook_xml_dtd_43
+    gi-docgen
     gobject-introspection
-    gtk-doc
     meson
     ninja
     pkg-config
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
+    cmark
     flatpak
     gnome.devhelp
     glade
@@ -91,8 +92,6 @@ stdenv.mkDerivation rec {
     dbus
     xvfb-run
   ];
-
-  outputs = [ "out" "devdoc" ];
 
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
@@ -134,9 +133,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libide "$devdoc"
+  '';
+
   passthru.updateScript = gnome.updateScript {
     packageName = pname;
-    versionPolicy = "odd-unstable";
   };
 
   meta = with lib; {

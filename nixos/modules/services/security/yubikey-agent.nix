@@ -33,7 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.yubikey-agent;
-        defaultText = "pkgs.yubikey-agent";
+        defaultText = literalExpression "pkgs.yubikey-agent";
         description = ''
           The package used for the yubikey-agent daemon.
         '';

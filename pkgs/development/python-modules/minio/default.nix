@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.1.0";
+  version = "7.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
     rev = version;
-    sha256 = "sha256-0N9hPjGGYHFyGzEWWDnW7KsPQtv0y/j/lCBLNC9IlpA=";
+    sha256 = "sha256-dUNx6r7KppfeHefa1IeJPXSEMyElPk+RAGdn447ax1g=";
   };
 
   propagatedBuildInputs = [

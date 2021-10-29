@@ -1,7 +1,7 @@
 From 36ffbb7ad2c535180cae473b470a43f9db4fbdcd Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Mon, 16 Aug 2021 13:27:28 +0200
-Subject: [PATCH] setup: add homeserver as console script
+Subject: [PATCH 1/2] setup: add homeserver as console script
 
 With this change, it will be added to `$out/bin` in `nixpkgs` directly.
 This became necessary since our old workaround, calling it as script,

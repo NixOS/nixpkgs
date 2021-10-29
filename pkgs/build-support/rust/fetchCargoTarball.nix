@@ -22,15 +22,13 @@ in
 , srcs ? []
 , patches ? []
 , sourceRoot ? ""
-, hash ? ""
-, sha256 ? ""
 , cargoUpdateHook ? ""
 , ...
 } @ args:
 
 let hash_ =
-  if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-  else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+  if args ? hash then { outputHashAlgo = null; outputHash = args.hash; }
+  else if args ? sha256 then { outputHashAlgo = "sha256"; outputHash = args.sha256; }
   else throw "fetchCargoTarball requires a hash for ${name}";
 in stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";

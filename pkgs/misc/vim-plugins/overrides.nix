@@ -496,10 +496,6 @@ self: super: {
       });
   });
 
-  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
   });
@@ -559,6 +555,10 @@ self: super: {
         description = "synctex support between vim/neovim and evince";
       };
     });
+
+  telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs (old: {
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
+  });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
     dependencies = with self; [ sqlite-lua telescope-nvim ];
@@ -720,7 +720,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
+          cargoSha256 = "sha256-DiCQpgyz0iNEm6gjaJU5IGdsQISHhPqlDQBzZafngjY=";
         };
       in
       ''

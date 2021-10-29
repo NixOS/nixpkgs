@@ -1,7 +1,7 @@
 { fetchgit, fetchzip, lib }:
 
 # gitlab example
-{ owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null
+{ owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
 , fetchSubmodules ? false, leaveDotGit ? false, deepClone ? false
 , ... # For hash agility
 } @ args:
@@ -17,10 +17,10 @@ let
 
   fetcherArgs = (if useFetchGit then {
     inherit rev deepClone fetchSubmodules leaveDotGit;
-    url = "https://${domain}/${slug}.git";
+    url = "${protocol}://${domain}/${slug}.git";
   } else {
-    url = "https://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
+    url = "${protocol}://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
   }) // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = "https://${domain}/${slug}/"; inherit rev; }
+fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev; }

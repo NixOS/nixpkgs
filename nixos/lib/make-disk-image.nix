@@ -44,11 +44,14 @@
   #   most likely fails as GRUB will probably refuse to install.
   partitionTableType ? "legacy"
 
+, # Whether to invoke `switch-to-configuration boot` during image creation
+  installBootLoader ? true
+
 , # The root file system type.
   fsType ? "ext4"
 
 , # Filesystem label
-  label ? "nixos"
+  label ? if onlyNixStore then "nix-store" else "nixos"
 
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
@@ -57,10 +60,24 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Copy the contents of the Nix store to the root of the image and
+  # skip further setup. Incompatible with `contents`,
+  # `installBootLoader` and `configFile`.
+  onlyNixStore ? false
+
 , name ? "nixos-disk-image"
 
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
+
+, # Whether a nix channel based on the current source tree should be
+  # made available inside the image. Useful for interactive use of nix
+  # utils, but changes the hash of the image when the sources are
+  # updated.
+  copyChannel ? true
+
+, # Additional store paths to copy to the image's store.
+  additionalPaths ? []
 }:
 
 assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
@@ -71,6 +88,7 @@ assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
          contents;
+assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
 
 with lib;
 
@@ -163,7 +181,14 @@ let format' = format; in let
   users   = map (x: x.user  or "''") contents;
   groups  = map (x: x.group or "''") contents;
 
-  closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
+  basePaths = [ config.system.build.toplevel ]
+    ++ lib.optional copyChannel channelSources;
+
+  additionalPaths' = subtractLists basePaths additionalPaths;
+
+  closureInfo = pkgs.closureInfo {
+    rootPaths = basePaths ++ additionalPaths';
+  };
 
   blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
 
@@ -251,7 +276,13 @@ let format' = format; in let
     chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
-      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
+      --system ${config.system.build.toplevel} \
+      ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
+      --substituters ""
+
+    ${optionalString (additionalPaths' != []) ''
+      nix copy --to $root --no-check-sigs ${concatStringsSep " " additionalPaths'}
+    ''}
 
     diskImage=nixos.raw
 
@@ -320,25 +351,29 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* / ||
+    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+           -t ${fsType} \
+           -i $diskImage \
+           $root${optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
-in pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand name
-    { preVM = prepareImage;
+
+  moveOrConvertImage = ''
+    ${if format == "raw" then ''
+      mv $diskImage $out/${filename}
+    '' else ''
+      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+    ''}
+    diskImage=$out/${filename}
+  '';
+
+  buildImage = pkgs.vmTools.runInLinuxVM (
+    pkgs.runCommand name {
+      preVM = prepareImage;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = ''
-        ${if format == "raw" then ''
-          mv $diskImage $out/${filename}
-        '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
-        ''}
-        diskImage=$out/${filename}
-        ${postVM}
-      '';
+      postVM = moveOrConvertImage + postVM;
       memSize = 1024;
-    }
-    ''
+    } ''
       export PATH=${binPath}:$PATH
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
@@ -368,11 +403,13 @@ in pkgs.vmTools.runInLinuxVM (
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
-      # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      ${lib.optionalString installBootLoader ''
+        # Set up core system link, GRUB, etc.
+        NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
-      # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
-      rm -f $mountPoint/etc/machine-id
+        # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
+        rm -f $mountPoint/etc/machine-id
+      ''}
 
       # Set the ownerships of the contents. The modes are set in preVM.
       # No globbing on targets, so no need to set -f
@@ -398,4 +435,9 @@ in pkgs.vmTools.runInLinuxVM (
         tune2fs -T now -c 0 -i 0 $rootDisk
       ''}
     ''
-)
+  );
+in
+  if onlyNixStore then
+    pkgs.runCommand name {}
+      (prepareImage + moveOrConvertImage + postVM)
+  else buildImage

@@ -36,15 +36,15 @@ let
 
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
-        defaultText = "pkgs.haskellPackages";
-        example = literalExample "pkgs.haskell.packages.ghc784";
+        defaultText = literalExpression "pkgs.haskellPackages";
+        example = literalExpression "pkgs.haskell.packages.ghc784";
         description = "haskellPackages used to build gitit and plugins.";
       };
 
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
         default = self: [];
-        example = literalExample ''
+        example = literalExpression ''
           haskellPackages: [
             haskellPackages.wreq
           ]
@@ -665,9 +665,9 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ curl ]
              ++ optional cfg.pdfExport texlive.combined.scheme-basic
-	     ++ optional (cfg.repositoryType == "darcs") darcs
-	     ++ optional (cfg.repositoryType == "mercurial") mercurial
-	     ++ optional (cfg.repositoryType == "git") git;
+             ++ optional (cfg.repositoryType == "darcs") darcs
+             ++ optional (cfg.repositoryType == "mercurial") mercurial
+             ++ optional (cfg.repositoryType == "git") git;
 
       preStart = let
         gm = "gitit@${config.networking.hostName}";
@@ -684,35 +684,35 @@ in
           fi
         done
         cd ${repositoryPath}
-	${
-	  if repositoryType == "darcs" then
-	  ''
-	  if [ ! -d _darcs ]
-	  then
-	    ${pkgs.darcs}/bin/darcs initialize
-	    echo "${gm}" > _darcs/prefs/email
-	  ''
-	  else if repositoryType == "mercurial" then
-	  ''
-	  if [ ! -d .hg ]
-	  then
-	    ${pkgs.mercurial}/bin/hg init
-	    cat >> .hg/hgrc <<NAMED
+        ${
+          if repositoryType == "darcs" then
+          ''
+          if [ ! -d _darcs ]
+          then
+            ${pkgs.darcs}/bin/darcs initialize
+            echo "${gm}" > _darcs/prefs/email
+          ''
+          else if repositoryType == "mercurial" then
+          ''
+          if [ ! -d .hg ]
+          then
+            ${pkgs.mercurial}/bin/hg init
+            cat >> .hg/hgrc <<NAMED
 [ui]
 username = gitit ${gm}
 NAMED
-	  ''
-	  else
-	  ''
-	  if [ ! -d  .git ]
+          ''
+          else
+          ''
+          if [ ! -d  .git ]
           then
             ${pkgs.git}/bin/git init
             ${pkgs.git}/bin/git config user.email "${gm}"
             ${pkgs.git}/bin/git config user.name "gitit"
-	  ''}
+          ''}
           chown ${uid}:${gid} -R ${repositoryPath}
           fi
-	cd -
+        cd -
       '';
 
       serviceConfig = {

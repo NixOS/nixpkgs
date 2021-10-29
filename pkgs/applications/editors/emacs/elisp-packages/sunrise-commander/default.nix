@@ -6,7 +6,7 @@
 
 trivialBuild rec {
   pname = "sunrise-commander";
-  version = "0.0.0+unstable=2021-07-22";
+  version = "0.pre+unstable=2021-07-22";
 
   src = fetchFromGitHub {
     owner = pname;

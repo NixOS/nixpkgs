@@ -49,7 +49,7 @@ in
 
     storePaths = mkOption {
       type = with types; listOf package;
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
       '';
@@ -107,7 +107,7 @@ in
     };
 
     populateFirmwareCommands = mkOption {
-      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
       description = ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
@@ -116,7 +116,7 @@ in
     };
 
     populateRootCommands = mkOption {
-      example = literalExample "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
+      example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
@@ -126,7 +126,7 @@ in
     };
 
     postBuildCommands = mkOption {
-      example = literalExample "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+      example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
         Shell commands to run after the image is built.

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, libgcrypt, libgpgerror, libtasn1
+, libgcrypt, libgpg-error, libtasn1
 
 # Optional Dependencies
 , pam ? null, libidn ? null, gnutls ? null
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
+  buildInputs = [ libgcrypt libgpg-error libtasn1 optPam optLibidn optGnutls ];
 
   configureFlags = [
     (mkOther                      "sysconfdir"    "/etc")
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
   '' + ''
       -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
-      -e 's,\(-lgpg-error\),-L${libgpgerror.out}/lib \1,' \
+      -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 

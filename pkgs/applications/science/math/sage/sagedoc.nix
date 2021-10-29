@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     networkx
     ipykernel
     ipywidgets
-    jupyter_client
+    jupyter-client
   ]);
 
   unpackPhase = ''

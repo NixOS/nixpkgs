@@ -82,6 +82,9 @@ stdenv.mkDerivation ({
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
+
+    # llvm-5 does not support dwarf-5 style info, fails on gcc-11.
+    rm test/tools/llvm-symbolizer/print_context.c
   '' + optionalString stdenv.isAarch64 ''
     patch -p0 < ${../../aarch64.patch}
   '' + optionalString stdenv.hostPlatform.isMusl ''

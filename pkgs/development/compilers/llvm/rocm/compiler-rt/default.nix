@@ -1,4 +1,4 @@
-{ stdenv, lib, version, src, cmake, python3, llvm, libcxxabi }:
+{ stdenv, lib, version, src, cmake, python3, llvm, libcxxabi, fetchpatch }:
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version src;
@@ -31,7 +31,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-  ];
+    (fetchpatch {
+      name = "libsanitizer-no-cyclades-rocm.patch";
+      url = "https://gist.github.com/lovesegfault/b255dcf2fa4e202411a6a04b61e6cc04/raw";
+      sha256 = "sha256-PMMSLr2zHuNDn1OWqumqHwB74ktJSHxhJWkqEKB7Z64=";
+      stripLen = 1;
+     })
+    ];
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

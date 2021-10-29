@@ -57,7 +57,8 @@ mkYarnPackage {
 
   preInstall = ''
     mkdir $out
-    cp -R ./deps/lemmy-ui/dist/assets $out
+    cp -R ./deps/lemmy-ui/dist $out
+    cp -R ./node_modules $out
   '';
 
   distPhase = "true";

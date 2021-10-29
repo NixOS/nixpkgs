@@ -1,7 +1,7 @@
 { lib, fetchurl }:
 
 let
-  version = "2.2";
+  version = "2.3";
 in fetchurl rec {
   name = "scientifica-${version}";
 
@@ -11,7 +11,7 @@ in fetchurl rec {
 
   recursiveHash = true;
 
-  sha256 = "sha256-mkZnuW+CB20t6MEpEeQR1CWkIUtqgVwrKN4sezQRaB4=";
+  sha256 = "sha256-pVWkj/2lFpmWk0PPDrIMU4Gey7/m/9tzUsuD3ZDUAdc=";
 
   postFetch = ''
     tar xf $downloadedFile

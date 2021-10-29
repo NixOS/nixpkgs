@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.9.0";
+  version = "2.9.1";
 
   repoName = "applications-menu";
 
@@ -34,14 +34,15 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0mwjw2ghbdj336ax5srxbqnjprdhj1if7sm9k9idqkmifpzccs7i";
+    sha256 = "sha256-Q0ee8S8wWhK0Y16SWfE79Us6QD/oRE5Pxm3o//eb/po=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -76,17 +77,16 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      bc = "${bc}/bin/bc";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";

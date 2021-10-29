@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Domain name server";
     license = licenses.mpl20;
 
-    maintainers = with maintainers; [ peti globin ];
+    maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];

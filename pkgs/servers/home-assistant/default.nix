@@ -21,21 +21,21 @@
 
 let
   defaultOverrides = [
-    # Pinned due to API changes in async-upnp-client>=0.20.0, remove after
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
+
+    # Pinned due to API changes in aioesphomeapi>=10.0.0
     (self: super: {
-      async-upnp-client = super.async-upnp-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.0";
+      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
+        version = "9.1.5";
         src = fetchFromGitHub {
-          owner = "StevenLooman";
-          repo = "async_upnp_client";
+          owner = "esphome";
+          repo = "aioesphomeapi";
           rev = "v${version}";
-          sha256 = "sha256-jxYGOljV7tcsiAgpOhbXj7g7AwyP1kDDC83PiHG6ZFg=";
+          sha256 = "sha256-PPag65ZMz9KZEe9FmiB42/DgeM0vJw5L0haAG/jBjqg=";
         };
       });
     })
-
-    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
@@ -51,24 +51,6 @@ let
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
       });
     })
-
-    # Pinned due to API changes in pyjwt>=2.0
-    (self: super: {
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.7.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "15hflax5qkw1v6nssk1r0wkj83jgghskcmn875m3wgvpzdvajncd";
-        };
-        disabledTests = [
-          "test_ec_verify_should_return_false_if_signature_invalid"
-        ];
-      });
-    })
-
-    # Pinned due to API changes in pylast 4.2.1
-    (mkOverride "pylast" "4.2.0"
-      "0zd0dn2l738ndz62vpa751z0ldnm91dcz9zzbvxv53r08l0s9yf3")
 
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
@@ -98,6 +80,20 @@ let
 
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+
+    # Pinned due to missing simpliypy.errors.PendingAuthorizationError in simplisafe-python>12 which results in a failing import
+    (self: super: {
+      simplisafe-python = super.simplisafe-python.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.7";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "simplisafe-python";
+          rev = version;
+          sha256 = "02nrighkdcd5n9qgbizm9gyfnpgdm4iibw7y8nbyfaxpng069fzp";
+        };
+        checkInputs = oldAttrs.checkInputs ++ [ super.aioresponses ];
+      });
+    })
 
     # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
     (self: super: {
@@ -145,7 +141,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.9.7";
+  hassVersion = "2021.10.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -162,7 +158,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1vcdnxh671iqhlbf6811j537by2i03fhryp9r9x77477y2y0xd6k";
+    sha256 = "0275f327dzr4cggfw5n8x533b4h8zz8yli5d0js7cw1rmi3cmkbc";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -245,6 +241,7 @@ in with py.pkgs; buildPythonApplication rec {
     "air_quality"
     "airly"
     "airnow"
+    "airthings"
     "airvisual"
     "alarm_control_panel"
     "alarmdecoder"
@@ -337,7 +334,6 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
-    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
@@ -657,6 +653,7 @@ in with py.pkgs; buildPythonApplication rec {
     "switcher_kis"
     "syncthing"
     "syncthru"
+    "synology_dsm"
     "system_health"
     "system_log"
     "tado"
@@ -681,6 +678,7 @@ in with py.pkgs; buildPythonApplication rec {
     "trace"
     "tradfri"
     "transmission"
+    "transport_nsw"
     "trend"
     "tts"
     "tuya"
@@ -799,8 +797,6 @@ in with py.pkgs; buildPythonApplication rec {
     # wemo/test_sensor.py: KeyError for various power attributes
     "--deselect tests/components/wemo/test_sensor.py::TestInsightTodayEnergy::test_state_unavailable"
     "--deselect tests/components/wemo/test_sensor.py::TestInsightCurrentPower::test_state_unavailable"
-    # tado/test_climate.py: Tries to connect to my.tado.com
-    "--deselect tests/components/tado/test_climate.py::test_air_con["
     # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
     "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
     # tests are located in tests/
@@ -813,6 +809,10 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/components"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
     "tests/auth/mfa_modules/test_notify.py"
+    # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
+    "tests/components/emulated_hue/test_upnp.py"
+    # tado/test_climate.py: Tries to connect to my.tado.com
+    "tests/components/tado/test_climate.py"
   ];
 
   disabledTests = [

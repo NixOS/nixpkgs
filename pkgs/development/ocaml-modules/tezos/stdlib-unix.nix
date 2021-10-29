@@ -2,27 +2,30 @@
 , buildDunePackage
 , tezos-stdlib
 , tezos-event-logging
-, lwt
+, re
 , ptime
 , mtime
 , ipaddr
-, re
-, alcotest
-, alcotest-lwt
+, ezjsonm
+, fmt
 }:
 
 buildDunePackage {
   pname = "tezos-stdlib-unix";
-  inherit (tezos-stdlib) version src useDune2 preBuild doCheck;
+  inherit (tezos-stdlib) version useDune2;
+  src = "${tezos-stdlib.base_src}/src/lib_stdlib_unix";
 
   propagatedBuildInputs = [
     tezos-event-logging
-    lwt
+    re
     ptime
     mtime
     ipaddr
-    re
+    ezjsonm
+    fmt
   ];
+
+  doCheck = true;
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: yet-another local-extension of the OCaml standard library (unix-specific fragment)";

@@ -692,7 +692,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.prometheus;
-      defaultText = "pkgs.prometheus";
+      defaultText = literalExpression "pkgs.prometheus";
       description = ''
         The prometheus package that should be used.
       '';
@@ -833,7 +833,7 @@ in {
 
     alertmanagers = mkOption {
       type = types.listOf types.attrs;
-      example = literalExample ''
+      example = literalExpression ''
         [ {
           scheme = "https";
           path_prefix = "/alertmanager";

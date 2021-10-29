@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    sha256 = "sha256-GwwZLXf9CH024gKfWsYPnr/oqQcxR/lQIToFRh59B+E=";
+    sha256 = "1y77dg27dn6bajwp3w6qvw1ls5wfhd1j1788l3fjhxg7j4qjki4g";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    charset-normalizer
     defusedxml
     pygments
     requests
@@ -59,6 +60,8 @@ python3Packages.buildPythonApplication rec {
     "test_verbose_chunked"
     "test_multipart_chunked"
     "test_request_body_from_file_by_path_chunked"
+    # Part of doctest
+    "httpie.encoding.detect_encoding"
   ];
 
   pythonImportsCheck = [ "httpie" ];

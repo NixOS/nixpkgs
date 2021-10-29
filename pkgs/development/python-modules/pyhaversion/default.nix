@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "21.07.0";
+  version = "21.10.0";
 
   # Only 3.8.0 and beyond are supported
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LcuMLYekeK9HR+SR8+R+EvuxxaN3RCh7KV969RngZjw=";
+    sha256 = "sha256-EvVkewFgkfYL6BjmJ/IWeuCyR+0R0ZxI35i9sxKcqxo=";
   };
 
   propagatedBuildInputs = [

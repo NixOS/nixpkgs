@@ -114,7 +114,7 @@ in {
         default = {
           type = "normal";
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             type = "emperor";
             vassals = {
@@ -163,7 +163,7 @@ in {
         type = types.listOf types.str;
         apply = caps: caps ++ optionals isEmperor imperialPowers;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           [
             "CAP_NET_BIND_SERVICE" # bind on ports <1024
             "CAP_NET_RAW"          # open raw sockets

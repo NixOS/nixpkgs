@@ -1,40 +1,76 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, notebook
-, nbdime
 , git
-, pytest
+, jupyter_server
+, jupyter-packaging
+, jupyterlab
+, nbdime
+, nbformat
+, pexpect
+, pytest-asyncio
+, pytest-tornasync
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_git";
-  version = "0.32.2";
-  disabled = pythonOlder "3.5";
+  pname = "jupyterlab-git";
+  version = "0.33.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "4c5743a05150ed7736e028aac15787a66735f160e9ae198dacc5a4bd1a727ce2";
+    pname = "jupyterlab_git";
+    inherit version;
+    sha256 = "0rbl472k66asfq9n9xqd2zpw8z7yrk6ka411vhvlvvszzb7g6w13";
   };
 
-  propagatedBuildInputs = [ notebook nbdime git ];
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
 
-  # all Tests on darwin fail or are skipped due to sandbox
+  propagatedBuildInputs = [
+    jupyter_server
+    nbdime
+    git
+    nbformat
+    pexpect
+  ];
+
+  checkInputs = [
+    jupyterlab
+    pytest-asyncio
+    pytest-tornasync
+    pytestCheckHook
+  ];
+
+  # All Tests on darwin fail or are skipped due to sandbox
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [ pytest ];
+  disabledTestPaths = [
+    "jupyterlab_git/tests/test_handlers.py"
+    # PyPI doesn't ship all required files for the tests
+    "jupyterlab_git/tests/test_config.py"
+    "jupyterlab_git/tests/test_integrations.py"
+    "jupyterlab_git/tests/test_remote.py"
+    "jupyterlab_git/tests/test_settings.py"
+  ];
 
-  checkPhase = ''
-    pytest jupyterlab_git/ --ignore=jupyterlab_git/tests/test_handlers.py
-  '';
+  disabledTests = [
+    "test_Git_get_nbdiff_file"
+    "test_Git_get_nbdiff_dict"
+  ];
 
-  pythonImportsCheck = [ "jupyterlab_git" ];
+  pythonImportsCheck = [
+    "jupyterlab_git"
+  ];
 
   meta = with lib; {
-    description = "Jupyter lab extension for version control with Git.";
-    license = with licenses; [ bsd3 ];
+    description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ chiroptical ];
   };
 }

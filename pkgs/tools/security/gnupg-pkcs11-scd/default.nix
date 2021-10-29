@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libgpgerror, libassuan, libgcrypt, pkcs11helper,
+{ lib, stdenv, fetchurl, libgpg-error, libassuan, libgcrypt, pkcs11helper,
   pkg-config, openssl }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkcs11helper pkg-config openssl ];
 
   configureFlags = [
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
   ];

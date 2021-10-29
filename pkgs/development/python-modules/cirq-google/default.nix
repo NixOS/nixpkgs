@@ -27,5 +27,8 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 }

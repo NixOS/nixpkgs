@@ -2,6 +2,9 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
+, setuptools-scm
+, pydantic
+, typeguard
 , mock
 , pytest-asyncio
 , pytestCheckHook
@@ -9,17 +12,34 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.9.1";
+  version = "0.11.2";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v7x5598d6jg8ya0spqjma56y062rznwimsrp8nq6fkskqgfm0ds";
+    sha256 = "sha256-zgQ5m198HMyFFrASSYCzn0EDLLeVy2j4LD0rEyEgahQ=";
   };
 
-  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    pydantic
+    typeguard
+  ];
+
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  # Fixes hanging tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";

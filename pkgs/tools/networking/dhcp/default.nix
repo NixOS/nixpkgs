@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
+{ stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
 }:
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
       ./set-hostname.patch
+
+      (fetchpatch {
+        # upstream build fix against -fno-common compilers like >=gcc-10
+        url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/6c7e61578b1b449272dbb40dd8b98d03dad8a57a.patch";
+        sha256 = "1g37ix0yf9zza8ri8bg438ygcjviniblfyb20y4gzc8lysy28m8b";
+      })
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];

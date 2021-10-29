@@ -96,7 +96,7 @@ in
         description = "Kubernetes CNI configuration.";
         type = listOf attrs;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [{
             "cniVersion": "0.3.1",
             "name": "mynet",

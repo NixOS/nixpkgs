@@ -1,7 +1,7 @@
-{
-  lib,
-  ddcutil,
-  gjs,
+{ lib
+, ddcutil
+, gjs
+, xprop
 }:
 # A set of overrides for automatically packaged extensions that require some small fixes.
 # The input must be an attribute set with the extensions' UUIDs as keys and the extension
@@ -10,6 +10,10 @@
 # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
 # the upstream repository's sources.
 super: super // {
+
+  "dash-to-dock@micxgx.gmail.com" = super."dash-to-dock@micxgx.gmail.com".overrideAttrs (old: {
+    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
+  });
 
   "display-brightness-ddcutil@themightydeity.github.com" = super."display-brightness-ddcutil@themightydeity.github.com".overrideAttrs (old: {
     # Has a hard-coded path to a run-time dependency
@@ -27,6 +31,12 @@ super: super // {
         substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
       done
     '';
+  });
+
+  "unite@hardpixel.eu" = super."unite@hardpixel.eu".overrideAttrs (old: {
+    buildInputs = [ xprop ];
+
+    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   });
 
 }

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.7.0";
+  version = "1.7.1";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "kbr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1HzeNtSqzqr9zyxF1PVWi6QfRupw8huMYmdFI6rzIdY=";
+    sha256 = "sha256-yrkFtvGXkeHD5hp0Fzz3M1hsuSIt6bQriyUy4NagD0U=";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.18.0";
+  version = "3.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jitJF+puXaLv3qyJOjLFetzxRpnlbi4BKS0TzDmCRe8=";
+    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pyjwt
     pytestCheckHook
   ];
 

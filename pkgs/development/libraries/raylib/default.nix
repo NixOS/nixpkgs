@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = with maintainers; [ adamlwgriffiths ];
     platforms = platforms.linux;
+    changelog = "https://github.com/raysan5/raylib/blob/${version}/CHANGELOG";
   };
 }

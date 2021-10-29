@@ -80,7 +80,7 @@ in {
       extraTrustedKeys = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ /etc/nixos/fwupd/myfirmware.pem ]";
+        example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
         description = ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
         '';
@@ -98,6 +98,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.fwupd;
+        defaultText = literalExpression "pkgs.fwupd";
         description = ''
           Which fwupd package to use.
         '';

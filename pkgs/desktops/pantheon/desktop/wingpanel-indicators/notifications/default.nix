@@ -16,19 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1qrbg8l3ifz09jx6v5j7hmgw0hmirj6mh3z634yl1cadz45p8fc9";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-ZuOZlfxtRq8ZcrXGe9wlFGwn2isdvMoXQveKKnEPFdo=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +40,12 @@ stdenv.mkDerivation rec {
     libhandy
     wingpanel
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Notifications Indicator for Wingpanel";

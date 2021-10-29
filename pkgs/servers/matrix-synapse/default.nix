@@ -27,15 +27,16 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.43.0";
+  version = "1.45.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-t3ZXtEq/sHYymta4gYfmdBzpExyxepGQ4lzvZii2Q70=";
+    sha256 = "sha256-8ZcZdQbNxrRy91gxKSoasu8QmdV27T7HeWIRz0bStzY=";
   };
 
   patches = [
     ./0001-setup-add-homeserver-as-console-script.patch
+    ./0002-Expose-generic-worker-as-binary-under-NixOS.patch
   ];
 
   buildInputs = [ openssl ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, autoreconfHook, pkg-config, gtk-doc
+{ lib, stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkg-config, gtk-doc
 , docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
 , cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
 , libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
-  version = "2.25";
+  version = "2.26";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "sha256-eHUHTogKoNrnwwSo6JaI7NMxVt9JeMqfWyhR62bDMuQ=";
+    sha256 = "sha256-e7j5b1KbjgVN9JpJtK2o7RNEHZjKDoDyoY4f8GlIdyI=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -21,13 +21,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       sgdisk = "${gptfdisk}/bin/sgdisk";
-    })
-
-    # fix build with glib 2.68 (g_memdup is deprecated)
-    # https://github.com/storaged-project/libblockdev/pull/623
-    (fetchpatch {
-      url = "https://github.com/storaged-project/libblockdev/commit/5528baef6ccc835a06c45f9db34a2c9c3f2dd940.patch";
-      sha256 = "jxq4BLeyTMeNvBvY8k8QXIvYSJ2Gah0J75pq6FpG7PM=";
     })
   ];
 

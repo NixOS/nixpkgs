@@ -63,6 +63,5 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 })

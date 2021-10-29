@@ -2,11 +2,11 @@
 , lib
 , docbook-xsl-nons
 , fetchurl
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
 , libgudev
+, libpcap
 , meson
 , ninja
 , pkg-config
@@ -19,22 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.15.4";
+  version = "0.16.3";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "09k8jwvsphd97hcagf0zaf0hwzlzq2r8jfgbmvj55k7ylrg8hjxg";
+    sha256 = "TjHxqtz8mPhzpsMb5lXWdj8hx/whsadTfor4S2x4U2M=";
   };
-
-  patches = [
-    # Fix build with Vala 0.52
-    (fetchpatch {
-      url = "https://github.com/martinpitt/umockdev/commit/a236f0b55fbb6ff50a6429da9d404703d6637d94.patch";
-      sha256 = "sZs9Ove1r7te/a9vmWUmFetLVhyzhHmx7ijhkK/2S5o=";
-    })
-  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
@@ -50,6 +42,7 @@ stdenv.mkDerivation rec {
     glib
     systemd
     libgudev
+    libpcap
   ];
 
   checkInputs = [

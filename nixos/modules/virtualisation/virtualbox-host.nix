@@ -43,7 +43,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.virtualbox;
-      defaultText = "pkgs.virtualbox";
+      defaultText = literalExpression "pkgs.virtualbox";
       description = ''
         Which VirtualBox package to use.
       '';

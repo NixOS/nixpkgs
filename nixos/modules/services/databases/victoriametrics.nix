@@ -6,7 +6,7 @@ let cfg = config.services.victoriametrics; in
     package = mkOption {
       type = types.package;
       default = pkgs.victoriametrics;
-      defaultText = "pkgs.victoriametrics";
+      defaultText = literalExpression "pkgs.victoriametrics";
       description = ''
         The VictoriaMetrics distribution to use.
       '';

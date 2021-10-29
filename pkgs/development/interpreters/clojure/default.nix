@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.986";
+  version = "1.10.3.998";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1xhfp186mk9h3jdl9bpkigqrrrgdhgij7ba65j6783nh11llpa3x";
+    sha256 = "zvIgswjAGfvaTKRb29KGKETqggjmOToCBzb99/C7chA=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,29 @@ stdenv.mkDerivation rec {
     '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
+
+  passthru.updateScript = writeScript "update-clojure" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    # `jq -r '.[0].name'` results in `v0.0`
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/clojure/brew-install/tags" \
+      | jq -r '.[1].name')"
+
+    update-source-version clojure "$latest_version"
+  '';
+
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";

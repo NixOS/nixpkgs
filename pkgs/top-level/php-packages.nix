@@ -159,6 +159,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
   extensions = {
+    amqp = callPackage ../development/php-packages/amqp { };
+
     apcu = callPackage ../development/php-packages/apcu { };
 
     apcu_bc = callPackage ../development/php-packages/apcu_bc { };

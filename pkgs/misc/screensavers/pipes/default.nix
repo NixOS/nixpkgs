@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, coreutils, ncurses }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "pipes";
   version = "1.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/pipeseroni/pipes.sh/archive/v${version}.tar.gz";
-    sha256 = "09m4alb3clp3rhnqga5v6070p7n1gmnwp2ssqhq87nf2ipfpcaak";
+  src = fetchFromGitHub {
+    owner = "pipeseroni";
+    repo = "pipes.sh";
+    rev = "v${version}";
+    hash = "sha256-856OWlnNiGB20571TJg7Ayzcz4r6NqdW5DMDiim09mc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

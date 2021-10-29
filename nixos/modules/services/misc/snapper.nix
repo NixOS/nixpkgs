@@ -51,16 +51,18 @@ in
 
     configs = mkOption {
       default = { };
-      example = literalExample {
-        home = {
-          subvolume = "/home";
-          extraConfig = ''
-            ALLOW_USERS="alice"
-            TIMELINE_CREATE=yes
-            TIMELINE_CLEANUP=yes
-          '';
-        };
-      };
+      example = literalExpression ''
+        {
+          home = {
+            subvolume = "/home";
+            extraConfig = '''
+              ALLOW_USERS="alice"
+              TIMELINE_CREATE=yes
+              TIMELINE_CLEANUP=yes
+            ''';
+          };
+        }
+      '';
 
       description = ''
         Subvolume configuration

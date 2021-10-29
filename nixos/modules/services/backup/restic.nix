@@ -11,7 +11,7 @@ in
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ name, ... }: {
+    type = types.attrsOf (types.submodule ({ config, name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -19,6 +19,17 @@ in
             Read the repository password from a file.
           '';
           example = "/etc/nixos/restic-password";
+        };
+
+        environmentFile = mkOption {
+          type = with types; nullOr str;
+          # added on 2021-08-28, s3CredentialsFile should
+          # be removed in the future (+ remember the warning)
+          default = config.s3CredentialsFile;
+          description = ''
+            file containing the credentials to access the repository, in the
+            format of an EnvironmentFile as described by systemd.exec(5)
+          '';
         };
 
         s3CredentialsFile = mkOption {
@@ -212,6 +223,7 @@ in
   };
 
   config = {
+    warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
     systemd.services =
       mapAttrs' (name: backup:
         let
@@ -251,8 +263,8 @@ in
             RuntimeDirectory = "restic-backups-${name}";
             CacheDirectory = "restic-backups-${name}";
             CacheDirectoryMode = "0700";
-          } // optionalAttrs (backup.s3CredentialsFile != null) {
-            EnvironmentFile = backup.s3CredentialsFile;
+          } // optionalAttrs (backup.environmentFile != null) {
+            EnvironmentFile = backup.environmentFile;
           };
         } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null) {
           preStart = ''

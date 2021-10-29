@@ -18,6 +18,8 @@
 , gtk4
 , gst_all_1
 , libadwaita
+, appstream-glib
+, libsoup
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    appstream-glib
     desktop-file-utils # for update-desktop-database
     glib
     gobject-introspection
@@ -53,6 +56,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
     gtk4
     libadwaita
+    libsoup
     wayland
     wayland-protocols
   ];

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.11.9";
+  version = "0.11.10";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zqRjMCyFT7knI1/zH+RF1pA/OKaDhJZLLjWJhfmqopE=";
+    sha256 = "sha256-kt1qv4x48qXzlqvV2nfFXkYzgeC4m+rA7NA+coznNno=";
   };
 
-  cargoSha256 = "sha256-W/ZMDbHC1VsllTSxCt77n4eb8Xgfj9YNx5NG5u+D+qA=";
+  cargoSha256 = "sha256-itncLfIjNwwAO393gZ5xyRnig/N0JEovBQvOIAC4e9g=";
 
   nativeBuildInputs = [ installShellFiles ];
 

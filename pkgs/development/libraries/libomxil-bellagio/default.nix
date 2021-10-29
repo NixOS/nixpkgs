@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
   configureFlags =
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
 
-  patches = [ ./fedora-fixes.patch ];
+  patches = [
+    ./fedora-fixes.patch
+    ./fno-common.patch
+  ];
 
   doCheck = false; # fails
 

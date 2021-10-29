@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-httpd=${apacheHttpd.out}/bin/httpd"
-    "--with-modules-path=${apacheHttpd.dev}/modules"
+    "--with-modules-path=${apacheHttpd}/modules"
     "--with-cajadir=$(out)/lib/caja/extensions-2.0"
   ];
 

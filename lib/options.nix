@@ -54,7 +54,7 @@ rec {
 
      Example:
        mkOption { }  // => { _type = "option"; }
-       mkOption { defaultText = "foo"; } // => { _type = "option"; defaultText = "foo"; }
+       mkOption { default = "foo"; } // => { _type = "option"; default = "foo"; }
   */
   mkOption =
     {
@@ -212,11 +212,25 @@ rec {
     else x;
 
 
-  /* For use in the `example` option attribute. It causes the given
-     text to be included verbatim in documentation. This is necessary
-     for example values that are not simple values, e.g., functions.
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given string to be rendered verbatim in the documentation as Nix code. This
+     is necessary for complex values, e.g. functions, or values that depend on
+     other values or packages.
   */
-  literalExample = text: { _type = "literalExample"; inherit text; };
+  literalExpression = text:
+    if ! isString text then throw "literalExpression expects a string."
+    else { _type = "literalExpression"; inherit text; };
+
+  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalDocBook for a non-Nix description." literalExpression;
+
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given DocBook text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalDocBook = text:
+    if ! isString text then throw "literalDocBook expects a string."
+    else { _type = "literalDocBook"; inherit text; };
 
   # Helper functions.
 

@@ -16,6 +16,7 @@ buildGoModule rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus exporter for OpenVPN";
+    broken = true;
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz globin ];
   };

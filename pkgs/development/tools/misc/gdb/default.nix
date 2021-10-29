@@ -26,11 +26,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "10.2";
+  version = "11.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "0aag1c0fw875pvhjg1qp7x8pf6gf92bjv5gcic5716scacyj58da";
+    sha256 = "151z6d0265hv9cgx9zqqa4bd6vbp20hrljhd6bxl7lr0gd0crkyc";
   };
 
   postPatch = if stdenv.isDarwin then ''

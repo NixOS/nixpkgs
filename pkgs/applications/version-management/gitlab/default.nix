@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
 }:
 
 let
@@ -45,7 +45,10 @@ let
     ignoreCollisions = true;
   };
 
-  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = data.yarn_hash;
+  };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
@@ -80,11 +83,6 @@ let
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
 
-      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
-      # url, so we have to do it manually
-      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
-                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
-
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
@@ -97,6 +95,8 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
+      # hack: rake gettext:po_to_json breaks the node_modules folder. We repair it by patching the shebangs again.
+      patchShebangs node_modules/
       bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production

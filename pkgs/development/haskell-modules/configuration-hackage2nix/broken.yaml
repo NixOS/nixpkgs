@@ -742,7 +742,6 @@ broken-packages:
   - commodities
   - commonmark-cli
   - commsec
-  - compactable
   - Compactable
   - compact-list
   - compact-map
@@ -1284,6 +1283,7 @@ broken-packages:
   - escape-artist
   - escoger
   - espial
+  - esqueleto-pgcrypto
   - ess
   - estimators
   - EstProgress
@@ -1299,7 +1299,6 @@ broken-packages:
   - event-driven
   - eventful-dynamodb
   - eventful-sql-common
-  - eventlog2html
   - eventloop
   - eventstore
   - ewe
@@ -1341,6 +1340,7 @@ broken-packages:
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
+  - factory
   - facts
   - fadno-braids
   - failable-list
@@ -1409,6 +1409,7 @@ broken-packages:
   - fingertree-tf
   - finitary-derive
   - firefly-example
+  - firestore
   - first-and-last
   - first-class-instances
   - fit
@@ -1434,6 +1435,7 @@ broken-packages:
   - flamethrower
   - flamingra
   - flat-maybe
+  - flatparse
   - flay
   - flexible-time
   - flickr
@@ -1534,7 +1536,6 @@ broken-packages:
   - funcons-values
   - function-instances-algebra
   - functor
-  - functor-combinators
   - functor-friends
   - functor-infix
   - functorm
@@ -1655,7 +1656,6 @@ broken-packages:
   - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
-  - ghc-vis
   - gh-labeler
   - giak
   - Gifcurry
@@ -1676,6 +1676,7 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
+  - github
   - github-backup
   - github-data
   - github-tools
@@ -1716,7 +1717,20 @@ broken-packages:
   - gochan
   - godot-haskell
   - gofer-prelude
-  - gogol-core
+  - gogol-admin-emailmigration
+  - gogol-affiliates
+  - gogol-autoscaler
+  - gogol-bigtableadmin
+  - gogol-cloudmonitoring
+  - gogol-freebasesearch
+  - gogol-latencytest
+  - gogol-maps-coordinate
+  - gogol-maps-engine
+  - gogol-photoslibrary
+  - gogol-resourceviews
+  - gogol-servicemanagement
+  - gogol-taskqueue
+  - gogol-useraccounts
   - gooey
   - google-cloud
   - GoogleCodeJam
@@ -2403,6 +2417,7 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
+  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2845,6 +2860,7 @@ broken-packages:
   - linear-algebra-cblas
   - linear-base
   - linear-code
+  - linear-generics
   - linear-maps
   - linear-opengl
   - linearscan
@@ -3847,7 +3863,6 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
-  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -4384,10 +4399,14 @@ broken-packages:
   - shopify
   - shortcut-links
   - shorten-strings
+  - short-vec
   - show-prettyprint
+  - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
+  - Shpadoinkle-template
+  - Shpadoinkle-widgets
   - shwifty
   - sifflet
   - sifflet-lib
@@ -5288,6 +5307,7 @@ broken-packages:
   - warc
   - warp-dynamic
   - warp-grpc
+  - warp-quic
   - warp-static
   - warp-systemd
   - wasm

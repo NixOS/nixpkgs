@@ -11,7 +11,6 @@
 , yajl
 , nixosTests
 , criu
-, system
 }:
 
 let
@@ -38,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0UyxQ0eOsU3hIh7B56ClynjLFBIsBF+WTqOw4mSqulQ=";
+    sha256 = "sha256-7YDU7H4dVT6qI+Gt3bkm7vqHlU0Fr7ZhF4SWcA+RhYw=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap libseccomp systemd yajl ]
     # Criu currently only builds on x86_64-linux
-    ++ lib.optional (lib.elem system criu.meta.platforms) criu;
+    ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
 

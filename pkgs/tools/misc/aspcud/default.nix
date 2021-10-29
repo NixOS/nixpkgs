@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchzip
-, boost, clasp, cmake, gringo, re2c
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, clasp
+, cmake
+, gringo
+, re2c
 }:
 
 stdenv.mkDerivation rec {
   version = "1.9.5";
   pname = "aspcud";
 
-  src = fetchzip {
-    url = "https://github.com/potassco/aspcud/archive/v${version}.tar.gz";
-    sha256 = "sha256-d04GPMoz6PMGq6iiul0zT1C9Mljdl9uJJ2C8MIwcmaw=";
+  src = fetchFromGitHub {
+    owner = "potassco";
+    repo = "aspcud";
+    rev = "v${version}";
+    hash = "sha256-d04GPMoz6PMGq6iiul0zT1C9Mljdl9uJJ2C8MIwcmaw=";
   };
 
   nativeBuildInputs = [ cmake ];

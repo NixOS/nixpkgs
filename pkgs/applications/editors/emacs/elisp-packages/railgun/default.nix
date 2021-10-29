@@ -6,7 +6,7 @@
 
 trivialBuild {
   pname = "railgun";
-  version= "0.0.0+unstable=2012-10-17";
+  version= "0.pre+unstable=2012-10-17";
 
   src = fetchFromGitHub {
     owner = "mbriggs";
