@@ -32,11 +32,24 @@ let
         url = "https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab.patch";
         sha256 = "17ax4dyk0584yhs3lq8ija5bkainjf7psx9c9r50cr4jm9c0i37l";
       })
+
+      # xwayland: Allow to retrieve _NET_STARTUP_ID
+      (fetchpatch {
+        name = "allow-to-retrieve-net-startup-id.patch";
+        url = "https://github.com/swaywm/wlroots/commit/66593071bc90a1cccaeedc636eb6f33c973f5362.patch";
+        sha256 = "sha256-yKf/twdUzrII5IakH7AH6LGyPDo9Nl/gIB0pTThSTfY=";
+      })
+      # xwayland: Allow to retrieve startup-id via _NET_STARTUP_INFO
+      (fetchpatch {
+        name = "allow-to-retrieve-startup-id-via-net-startup-info.patch";
+        url = "https://github.com/swaywm/wlroots/commit/235bb6f2fcb8ee4174215ba74b5bc2f191c5960a.patch";
+        sha256 = "sha256-7AWBq12tF/781CmgvTaOvTIiiJMywxRn6eWp+jacdak=";
+      })
     ];
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -44,7 +57,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QAnJlpFjWJvwxGyenmN4IaI9VFn2jwdXpa8VqAmH7Xw=";
+    sha256 = "sha256-qd1ZETM2/AjU5nKQIqh0Q+SboLNr+NncvSHgLv2S3KI=";
   };
 
   nativeBuildInputs = [
