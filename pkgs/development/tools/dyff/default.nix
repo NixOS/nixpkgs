@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "dyff";
@@ -18,6 +18,27 @@ buildGoModule rec {
     "pkg/dyff"
     "internal/cmd"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # test fails with the injected version
+  postPatch = ''
+    substituteInPlace internal/cmd/cmds_test.go \
+      --replace "version (development)" ${version}
+  '';
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd dyff \
+      --bash <($out/bin/dyff completion bash) \
+      --fish <($out/bin/dyff completion fish) \
+      --zsh <($out/bin/dyff completion zsh)
+  '';
 
   meta = with lib; {
     description = "A diff tool for YAML files, and sometimes JSON";
