@@ -12,7 +12,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
-        uses: zeebe-io/backport-action@v0.0.6
+        uses: zeebe-io/backport-action@v0.0.7
         with:
           # Config README: https://github.com/zeebe-io/backport-action#backport-action
           github_token: ${{ secrets.GITHUB_TOKEN }}
