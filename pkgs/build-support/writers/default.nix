@@ -78,6 +78,10 @@ rec {
       ${compileScript}
       ${lib.optionalString strip
           "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
+      # Sometimes binaries produced for darwin (e. g. by GHC) won't be valid
+      # mach-o executables from the get-go, but need to be corrected somehow
+      # which is done by fixupPhase.
+      ${lib.optionalString pkgs.stdenvNoCC.hostPlatform.isDarwin "fixupPhase"}
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
