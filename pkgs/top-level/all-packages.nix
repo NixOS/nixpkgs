@@ -16805,10 +16805,6 @@ with pkgs;
 
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
-  hunter = callPackage ../applications/misc/hunter {
-    inherit (darwin.apple_sdk.frameworks) CoreServices IOKit Security;
-  };
-
   hwloc = callPackage ../development/libraries/hwloc {};
 
   inherit (callPackage ../development/tools/misc/hydra { })
