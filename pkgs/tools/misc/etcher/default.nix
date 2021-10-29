@@ -9,15 +9,19 @@
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   sha256 = {
     "x86_64-linux" = "sha256-n8i4ZqjugeUfXpTzVgIwVomfPk6HvPEbTZLe/jFgwFg=";
     "i686-linux" = "sha256-lLGfhW6el2ZOcaykH1kTjGldXo7/0q5O8QnslnDlWAQ=";
-  }."${stdenv.system}";
+  }."${system}" or throwSystem;
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
-  }."${stdenv.system}";
+  }."${system}" or throwSystem;
 
   electron = electron_12;
 
