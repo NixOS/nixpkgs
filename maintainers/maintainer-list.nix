@@ -13000,5 +13000,11 @@
     github = "mbprtpmnr";
     githubId = 88109321;
   };
+  almostnobody = {
+    name = "AlmostNobody";
+    email = "almost0nobody@gmail.com";
+    github = "almostnobody";
+    githubId = 1583339;
+  };
 
-}
+  }

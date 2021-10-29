@@ -68,6 +68,8 @@ let self = rec {
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
 
+  elementum = callPackage ../applications/video/kodi-packages/elementum { };
+
   jellyfin = callPackage ../applications/video/kodi-packages/jellyfin { };
 
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
