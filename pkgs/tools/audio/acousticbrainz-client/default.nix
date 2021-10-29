@@ -36,6 +36,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/MTG/acousticbrainz-client";
     # essentia-extractor is only available for those platforms
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }
