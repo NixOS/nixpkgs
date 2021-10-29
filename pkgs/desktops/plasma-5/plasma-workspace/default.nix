@@ -75,4 +75,9 @@ mkDerivation {
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''
     ''-DNIXPKGS_KDEINIT5_SHUTDOWN="${getBin kinit}/bin/kdeinit5_shutdown"''
   ];
+
+  postInstall=''
+    # Horrible hack until Plasma Wayland stabilize
+    substituteInPlace --replace $out/share/xsessions/plasma.desktop "(X11)" ""
+  '';
 }
