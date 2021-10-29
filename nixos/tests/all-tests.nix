@@ -32,7 +32,6 @@ in
   atop = handleTest ./atop.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
-  awscli = handleTest ./awscli.nix { };
   babeld = handleTest ./babeld.nix {};
   bat = handleTest ./bat.nix {};
   bazarr = handleTest ./bazarr.nix {};
