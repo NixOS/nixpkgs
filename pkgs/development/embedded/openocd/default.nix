@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi libftdi1 libusb1 ]
-    ++ lib.optionals stdenv.isLinux [ libgpiod ];
+    ++ lib.optional stdenv.isLinux libgpiod;
 
   configureFlags = [
     "--enable-jtag_vpi"
