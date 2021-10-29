@@ -23815,6 +23815,8 @@ with pkgs;
 
   arion = callPackage ../applications/virtualization/arion { };
 
+  arkade = callPackage ../applications/networking/cluster/arkade { };
+
   asuka = callPackage ../applications/networking/browsers/asuka {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
