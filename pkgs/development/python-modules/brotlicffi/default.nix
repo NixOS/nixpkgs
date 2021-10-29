@@ -4,12 +4,12 @@
 , pythonOlder
 , cffi
 , brotli
+, enum34
 }:
 
 buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.0.9.2";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-hyper";
@@ -24,6 +24,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    enum34
   ];
 
   preBuild = ''
