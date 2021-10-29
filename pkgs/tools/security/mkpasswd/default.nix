@@ -1,11 +1,11 @@
-{ lib, stdenv, whois, perl }:
+{ lib, stdenv, whois, perl, pkg-config }:
 
 stdenv.mkDerivation {
   name = "mkpasswd-${whois.version}";
 
   src = whois.src;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   preConfigure = whois.preConfigure;
   buildPhase = "make mkpasswd";
