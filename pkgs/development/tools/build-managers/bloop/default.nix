@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
       mkdir channel
       ln -s ${bloop-coursier-channel} channel/bloop.json
-      ${coursier}/bin/coursier install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
+      ${coursier}/bin/cs install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
 
       # Remove binary part of the coursier launcher script to make derivation output hash stable
       sed -i '5,$ d' $out/bloop
