@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "scsh";
-  version = "0.7pre";
+  version = "0.7";
 
   src = fetchgit {
     url = "git://github.com/scheme/scsh.git";
     rev = "f99b8c5293628cfeaeb792019072e3a96841104f";
     fetchSubmodules = true;
-    sha256 = "0ci2h9hhv8pl12sdyl2qwal3dhmd7zgm1pjnmd4kg8r1hnm6vidx";
+    sha256 = "sha256-vcVtqoUhozdJq1beUN8/rcI2qOJYUN+0CPSiDWGCIjI=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
