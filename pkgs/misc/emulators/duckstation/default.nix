@@ -20,13 +20,13 @@
 }:
 mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2021-10-19";
+  version = "unstable-2021-10-29";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "96f4fdf8d88ff3a120f3bc409a6a6487cdcbd55f";
-    sha256 = "sha256-WWsi7kmFEYES2BoNKIFF1+lKHJGP3hbTZ9o3eWp+EcE=";
+    rev = "287b1e1abc98ef3f01d8530e0b428b58d8e77e96";
+    sha256 = "sha256-1s7oBdOOkK6a3DKCZ70dAilFzlzrURwhx+MRTmOPWJE=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config extra-cmake-modules wrapQtAppsHook qttools ];
@@ -45,7 +45,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    #"-DUSE_DRMKMS=ON" # Broken in combination with Wayland, https://github.com/stenzek/duckstation/issues/2630
+    "-DUSE_DRMKMS=ON" # Broken in combination with Wayland, https://github.com/stenzek/duckstation/issues/2630
     "-DUSE_WAYLAND=ON"
   ];
 
