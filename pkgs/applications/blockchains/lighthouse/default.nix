@@ -28,13 +28,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "sigp";
     repo = "lighthouse";
-    rev = "v${version}";
-    sha256 = "01p24xcxf8z0d3krpx6k1q1gp25yvqh2pcq9q197fd09vw4bh0pl";
+    rev = "1790010260a7ce90a29af7267831d28ca3f7a576";
+    sha256 = "11k9dfinfjffwqvhz2jfpjbxhma0ac3r0w2cv5k64d1n5d1gilpk";
   };
 
   postPatch = ''
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features" "${lib.optionalString portable "portable,"}" ];
 
-  cargoSha256 = "1ihxrjrxv8ipjis9i20hcd1xaspblxw3rh5phpfzgbgbkhpaqn35";
+  cargoSha256 = "19n12cz9cnmhlqim4f92l8nhnylz7ha7jxl4w5yh6lqqva5lg8li";
 
   checkFlags = [
     # these want internet access, disable them
