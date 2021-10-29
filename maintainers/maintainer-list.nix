@@ -9613,6 +9613,12 @@
     githubId = 37246692;
     name = "Riley Inman";
   };
+  riotbib = {
+    email = "github-nix@lnrt.de";
+    github = "riotbib";
+    githubId = 43172581;
+    name = "Lennart Mühlenmeier";
+  };
   ris = {
     email = "code@humanleg.org.uk";
     github = "risicle";
