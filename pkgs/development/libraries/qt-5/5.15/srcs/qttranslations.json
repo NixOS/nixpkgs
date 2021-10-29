@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qttranslations.git",
+  "rev": "8fbbdf21f127197f97b58c7d80d2fa2a59135638",
+  "sha256": "06r2jb2fsdr5fvxs748war0lr4mm3l3d3b37xc4n73y294vwrmn7",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

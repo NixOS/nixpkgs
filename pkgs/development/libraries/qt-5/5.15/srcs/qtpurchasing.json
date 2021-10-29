@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtpurchasing.git",
+  "rev": "cbf444fb570ca4f4ca21d963d2ae4010f10d473e",
+  "sha256": "1cki7n62wqm3xxn36mka0y67ngn7jvjkrvr08vsassbjb7kfsmxp",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

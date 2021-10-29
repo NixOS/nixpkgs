@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",
+  "rev": "47be9a51b01d9fd9e7f6dca81e98d4eedcec6d38",
+  "sha256": "167rp43c86xr4grzxs4bl46y6sf1q9xa0641mgp4r94g2ipxyc1d",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

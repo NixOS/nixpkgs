@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtwinextras.git",
+  "rev": "3df03dab21f3e84d5a7274c64dd879854ca1bfe7",
+  "sha256": "12dkw982xcm7hxw3lxhg34wny4srbickxm9s3nz7bdyp9dmqnygx",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

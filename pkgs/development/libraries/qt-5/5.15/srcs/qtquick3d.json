@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtquick3d.git",
+  "rev": "3e3e53c834b25dc2959dd30f319d12d6f84ee1e3",
+  "sha256": "1b1khfg26zl3p28yvhwjfldqy3flh10pb5hm5z0av03rz7jy7l8s",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

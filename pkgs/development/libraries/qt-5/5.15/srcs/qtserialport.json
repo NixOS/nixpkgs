@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtserialport.git",
+  "rev": "941d1d8560d1f3e40077c251fbde6fd6a5b0f0d4",
+  "sha256": "0x7ly67gddmz0hqls9109bk4rgaa97ksyv24qk4brrhzkpr7q9cx",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

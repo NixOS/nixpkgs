@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtscript.git",
+  "rev": "5cec94b2c1503f106f4ef4778d016410ebb86211",
+  "sha256": "1xdri98cw7m78k9kfb53cgh8wyz98q3i623jhhcv01rvy1zsf8m1",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

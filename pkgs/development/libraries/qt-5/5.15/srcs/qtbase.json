@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtbase.git",
+  "rev": "c9fde86b0a2440133bc08f4811b6ca793be47f0a",
+  "sha256": "1fqhdkv3sp3nbzqi2a5wvxn5d4v0xcrq2bl609bdyj4nx367a8wp",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

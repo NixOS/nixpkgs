@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtxmlpatterns.git",
+  "rev": "189e28d0aff1f3d7960228ba318b83e3cadac98c",
+  "sha256": "0vs9j2i1dnlivcrzz175zz66ql1m8mrdqkglvyqjqv6cb7mpskrq",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

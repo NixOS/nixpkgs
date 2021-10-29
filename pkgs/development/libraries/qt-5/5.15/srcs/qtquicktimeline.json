@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtquicktimeline.git",
+  "rev": "67503cdadea43b95ddad0de1a04951aff0ce1a07",
+  "sha256": "0h4b3ibcf6rsmqmcfbwbk9pbvw3b9cac8nx2538aqvnpyyp1vhid",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

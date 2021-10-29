@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtspeech.git",
+  "rev": "a0efc38377e5bf7eed2d354d1cb4d7a0d5dc7e1b",
+  "sha256": "1ljf45f65pfp8x367qnzl0ssz7n17cxhk29qvqpz9z7rh65zqix5",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

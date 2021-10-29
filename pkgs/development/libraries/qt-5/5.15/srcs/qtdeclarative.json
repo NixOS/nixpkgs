@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtdeclarative.git",
+  "rev": "55324650f9e759a43dce927f823c9858574106c3",
+  "sha256": "0cxz4pqvb8l0wqpc4hr0xmc72csqf7dpbbzdqgil9nyyg21ihkz0",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

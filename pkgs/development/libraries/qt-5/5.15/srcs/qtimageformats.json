@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtimageformats.git",
+  "rev": "cb82c74310837fe4e832c8ab72176a5d63e4355f",
+  "sha256": "0j4cv5sa6mm3adcjw8cv6kbzrslmhjc1rgxqgc130l8vm3vmgbkr",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

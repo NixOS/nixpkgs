@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtscxml.git",
+  "rev": "7a15000f42c7a3171719727cd056f82a78244ed7",
+  "sha256": "1i2ajsj9pb1s4lk4djj1h1ay9mkz1z3m75a747cspyc1p1iymipq",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

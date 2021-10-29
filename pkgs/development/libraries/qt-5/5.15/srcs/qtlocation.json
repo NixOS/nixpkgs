@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtlocation.git",
+  "rev": "861e372b6ad81570d4f496e42fb25a6699b72f2f",
+  "sha256": "1g24pg9v6sv5zf80r48innp3h4g0hss69hnr7ygfzfvfnmmn6g52",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

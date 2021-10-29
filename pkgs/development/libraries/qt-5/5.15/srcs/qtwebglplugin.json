@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtwebglplugin.git",
+  "rev": "550a8cee241bbf8c11863dec9587d579dcb1108b",
+  "sha256": "0p1y0b8zsm7rrkhhylndp282ghgki2cjrgc4n5zhjn732ahxg515",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtdatavis3d.git",
+  "rev": "c085311c02dd216e5a041b90c164d55b3cf3ce92",
+  "sha256": "0xya1m2csb42yisl90s9822p9q92n7ags909nlbapfsb49qwsqnj",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

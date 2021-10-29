@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtactiveqt.git",
+  "rev": "f0d03da0e37a84029a4eae1733813521482ac1fb",
+  "sha256": "0llk76lf0mh4mzj7pwd8cs55wpmfq8v1bsdzvizb1sx0vfbjh8g6",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

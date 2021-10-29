@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtx11extras.git",
+  "rev": "3898f5484fd4864b047729bfeda9a1222f32364f",
+  "sha256": "04rp8arml19b03iybd7sa78dsdv7386m9ymmgqciwl13dhwjssra",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

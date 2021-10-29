@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtnetworkauth.git",
+  "rev": "53870ee9bb9117702cd1f11cb1c5d1cfc2d5394a",
+  "sha256": "0idaysqpwrghih7ijrm9hagj9jw3fy9nw539fr4d9rmcggnkkzn2",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtandroidextras.git",
+  "rev": "8cce1098c59534352aa0f343ea73861f603ac04a",
+  "sha256": "130a1yda2m7pa10as3rccz84m3617422n6s51pdn4kp8p8rk7cs6",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

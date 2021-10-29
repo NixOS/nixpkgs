@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtcharts.git",
+  "rev": "130463160b4923069eb98da49edaf7d93180f4f8",
+  "sha256": "19g35cddbfh307mk76wac1ps03warynlsj7xi8i596bxiaf7i4pw",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

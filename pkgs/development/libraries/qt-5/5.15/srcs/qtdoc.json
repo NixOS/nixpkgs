@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtdoc.git",
+  "rev": "897e90fe304d844beaf694b82a93a50237fa8b9e",
+  "sha256": "1c4m9vlgg6bfw7hwzanl5s4vslg0r7xiz50lanhqrlcrr9i36xs1",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

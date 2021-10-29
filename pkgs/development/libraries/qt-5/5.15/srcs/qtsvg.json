@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qtsvg.git",
+  "rev": "24128cdf8bef53eddf31a5709bbbc46293006b1c",
+  "sha256": "0vinjcbq4saxhlmvb5i93bzgg30qc3j8r2qfwrzaxc4vmfhfgi56",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://invent.kde.org/qt/qt/qttools.git",
+  "rev": "33693a928986006d79c1ee743733cde5966ac402",
+  "sha256": "02n0lppsp6g4s9bdvnfxpf7ndkbs9bzm0clcwvirwf2cd8q95a4n",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
