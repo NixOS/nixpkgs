@@ -90,6 +90,7 @@ in stdenv.mkDerivation rec {
     "-DARROW_BUILD_TESTS=ON"
     "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
+    "-DThrift_SOURCE=AUTO" # search for Thrift using pkg-config (ThriftConfig.cmake requires OpenSSL and libevent)
     "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
