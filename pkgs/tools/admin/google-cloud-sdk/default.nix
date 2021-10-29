@@ -117,7 +117,6 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-
   doInstallCheck = true;
   # Minor smoke test, used to be a NixOS test.
   installCheckPhase = ''
