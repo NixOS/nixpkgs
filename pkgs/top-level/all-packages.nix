@@ -20700,7 +20700,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
+  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
+    nodejs = nodejs-14_x;
+  };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
