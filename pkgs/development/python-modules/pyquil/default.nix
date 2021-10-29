@@ -15,13 +15,14 @@
 , pythonOlder
 , qcs-api-client
 , retry
+, respx
 , rpcq
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0070pslz6vvyavm5pm27q2bng2mfmkb41v5czzckz7m8db3b1r2x";
+    sha256 = "sha256-OU7/LjcpCxvqlcfdlm5ll4f0DYXf0yxNprM8Muu2wyg=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     ipython
+    respx
   ];
 
   postPatch = ''
@@ -80,6 +82,7 @@ buildPythonPackage rec {
   disabledTests = [
     "test_compile_with_quilt_calibrations"
     "test_sets_timeout_on_requests"
+    "test_get_engagement"
   ];
 
   pythonImportsCheck = [ "pyquil" ];
