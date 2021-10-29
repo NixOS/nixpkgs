@@ -8878,6 +8878,8 @@ in {
 
   stripe = callPackage ../development/python-modules/stripe { };
 
+  striprtf = callPackage ../development/python-modules/striprtf { };
+
   structlog = callPackage ../development/python-modules/structlog { };
 
   stumpy = callPackage ../development/python-modules/stumpy { };
