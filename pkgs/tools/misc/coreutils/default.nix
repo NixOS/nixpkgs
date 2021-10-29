@@ -33,7 +33,7 @@ stdenv.mkDerivation (rec {
     ./fix-chmod-exit-code.patch
     # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
     ./disable-seek-hole.patch
-  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
