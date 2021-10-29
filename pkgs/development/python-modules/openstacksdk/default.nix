@@ -4,7 +4,7 @@
 , fetchPypi
 , appdirs
 , cryptography
-, dogpile_cache
+, dogpile-cache
 , jmespath
 , jsonpatch
 , keystoneauth1
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     cryptography
-    dogpile_cache
+    dogpile-cache
     jmespath
     jsonpatch
     keystoneauth1

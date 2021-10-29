@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "6.0.0";
+  version = "6.0.1";
 
   repoName = "camera";
 
@@ -33,13 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1z5c6pkc7psglxwzby5idsdxvplpi28ckjxrwdngnr22knfdcgag";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-OdBinryF6XTcvtY4A1wdDVazjf/VritEGF97ts6d4RY=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +68,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Camera app designed for elementary OS";

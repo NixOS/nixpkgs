@@ -8,7 +8,7 @@
 , oslotest
 , pbr
 , sqlalchemy
-, sqlalchemy_migrate
+, sqlalchemy-migrate
 , stestr
 , testresources
 , testscenarios
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     oslo-context
     oslo-utils
     sqlalchemy
-    sqlalchemy_migrate
+    sqlalchemy-migrate
     testresources
     testscenarios
   ];

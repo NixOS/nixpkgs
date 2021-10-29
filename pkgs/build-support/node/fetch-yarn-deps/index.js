@@ -18,6 +18,20 @@ const exec = async (...args) => {
 	return res
 }
 
+// This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
+// so that fixup_yarn_lock produces the same paths
+const urlToName = url => {
+  const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
+
+  if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+    return path.basename(url)
+  } else {
+    return url
+      .replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
+      .replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
+  }
+}
+
 const downloadFileHttps = (fileName, url, expectedHash) => {
 	return new Promise((resolve, reject) => {
 		https.get(url, (res) => {
@@ -61,19 +75,18 @@ const downloadGit = async (fileName, url, rev) => {
 const downloadPkg = (pkg, verbose) => {
 	const [ url, hash ] = pkg.resolved.split('#')
 	if (verbose) console.log('downloading ' + url)
+	const fileName = urlToName(url)
 	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
-		const fileName = path.basename(url)
 		const s = url.split('/')
 		downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[6])
 	} else if (url.startsWith('https://')) {
-		const fileName = url
-			.replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
-			.replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
-
 		return downloadFileHttps(fileName, url, hash)
-	} else if (url.startsWith('git+')) {
-		const fileName = path.basename(url)
+	} else if (url.startsWith('git:')) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
+	} else if (url.startsWith('git+')) {
+		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
+	} else if (url.startsWith('file:')) {
+		console.warn(`ignoring unsupported file:path url "${url}"`)
 	} else {
 		throw new Error('don\'t know how to download "' + url + '"')
 	}
