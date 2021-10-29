@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch org.scalameta:metals_2.12:${version} \
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.12:${version} \
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
