@@ -8,16 +8,16 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.22.2";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-37+Gor3xyo0yb3I4rrleJoPnqTA7G3WmeMSTltthi2E=";
+    sha256 = "sha256-lbOsJsmZxdBNTbhsGJ1mcjWlJ6802GYM3waTiWYOErY=";
   };
 
-  cargoSha256 = "sha256-+zu5OfvXj8DMglf5Xv5ZcaUlbE03cwyD8TN7YftgWO0=";
+  cargoSha256 = "sha256-ViXpoPkBznB0o/dc/l1r3m0y+z2w58wqlU8/cg8u7tI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
