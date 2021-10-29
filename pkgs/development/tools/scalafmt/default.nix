@@ -7,7 +7,7 @@ let
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch org.scalameta:scalafmt-cli_2.13:${version} > deps
+      ${coursier}/bin/cs fetch org.scalameta:scalafmt-cli_2.13:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';

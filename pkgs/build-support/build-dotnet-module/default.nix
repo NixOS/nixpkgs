@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, dotnetCorePackages, dotnetPackages, cacert, linkFarmFromDrvs, fetchurl }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, cacert }:
 
 { name ? "${args.pname}-${args.version}"
 , enableParallelBuilding ? true
@@ -50,10 +50,35 @@ let
     };
   });
 
-  package = stdenv.mkDerivation (args // {
+  nuget-source = stdenvNoCC.mkDerivation rec {
+    name = "${args.pname}-nuget-source";
+    meta.description = "A Nuget source with the dependencies for ${args.pname}";
+
+    nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
+    buildCommand = ''
+      export HOME=$(mktemp -d)
+      mkdir -p $out/{lib,share}
+
+      nuget sources Add -Name nixos -Source "$out/lib"
+      nuget init "${_nugetDeps}" "$out/lib"
+
+      # Generates a list of all unique licenses' spdx ids.
+      find "$out/lib" -name "*.nuspec" -exec sh -c \
+        "xml2 < {} | grep "license=" | cut -d'=' -f2" \; | sort -u > $out/share/licenses
+    '';
+  } // { # This is done because we need data from `$out` for `meta`. We have to use overrides as to not hit infinite recursion.
+    meta.licence = let
+      depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
+      getLicence = spdx: lib.filter (license: license.spdxId or null == spdx) (builtins.attrValues lib.licenses);
+    in (lib.flatten (lib.forEach depLicenses (spdx:
+      if (getLicence spdx) != [] then (getLicence spdx) else [] ++ lib.optional (spdx != "") spdx
+    )));
+  };
+
+  package = stdenvNoCC.mkDerivation (args // {
     inherit buildType;
 
-    nativeBuildInputs = args.nativeBuildInputs or [] ++ [ dotnet-sdk dotnetPackages.Nuget cacert makeWrapper ];
+    nativeBuildInputs = args.nativeBuildInputs or [] ++ [ dotnet-sdk cacert makeWrapper ];
 
     # Stripping breaks the executable
     dontStrip = true;
@@ -66,18 +91,11 @@ let
 
       export HOME=$(mktemp -d)
 
-      nuget sources Add -Name nixos -Source "$PWD/nixos"
-      nuget init "${_nugetDeps}" "$PWD/nixos"
-
-      # This is required due to https://github.com/NuGet/Home/issues/4413.
-      mkdir -p $HOME/.nuget/NuGet
-      cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
-
       dotnet restore "$projectFile" \
         ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
-        --source "$PWD/nixos" \
+        --source "${nuget-source}/lib" \
         "''${dotnetRestoreFlags[@]}" \
         "''${dotnetFlags[@]}"
 

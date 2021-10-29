@@ -6,6 +6,6 @@ attrs:
   '';
   configureFlags = attrs.configureFlags ++ [
     (lib.enableFeature kdeIntegration "kf5")
+    "--without-system-zxing"
   ];
-  patches = [ ../xdg-open-brief.patch ]; # drop this when switching fresh to 7.2.0
 }

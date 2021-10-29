@@ -1,5 +1,4 @@
 { lib
-
 , bash
 , binutils-unwrapped
 , coreutils
@@ -27,7 +26,7 @@ rec {
     ];
   };
 
-  extract = { name, src }: pkgs.runCommand "${name}-extracted" {
+  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
       buildInputs = [ appimage-exec ];
     } ''
       appimage-exec.sh -x $out ${src}
@@ -38,7 +37,7 @@ rec {
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv
+  wrapAppImage = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs, ... }: buildFHSUserEnv
     (defaultFhsEnvArgs // {
       inherit name;
 
@@ -46,9 +45,9 @@ rec {
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
       runScript = "appimage-exec.sh -w ${src} --";
-    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
+    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
       inherit name extraPkgs;
       src = extract { inherit name src; };
