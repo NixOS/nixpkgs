@@ -33,43 +33,39 @@ stdenv.mkDerivation rec {
   pname = "jackett";
   version = "0.19.84";
 
-  src =
-    if stdenv.isAarch32 then
-      fetchurl
-        {
-          url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM32.tar.gz";
-          sha256 = "1iqv8k437rlik83mq019aq157p8bhk8sp2k28lp7mga66vs6wkhb";
-        }
-    else if stdenv.isAarch64 then
-      fetchurl
-        {
-          url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM64.tar.gz";
-          sha256 = "1sxp8s09m4gx1xv0cdyxdz5fqg5ihbzrnq9qy54wp34p5v3jknjh";
-        }
-    else if stdenv.isDarwin then
-      fetchurl
-        {
-          url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.macOS.tar.gz";
-          sha256 = "1489pgp1y77crpnnm5mfwvz81400hm3cnv0fq753wfpmgm9g4d4q";
-        }
-    else
-      fetchurl {
-        url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-        sha256 = "0dfxnkql7l6dpyqiwd9al8a0nr93s5avb7k7pj0mlq8q38lb8bfk";
-      };
+  src = rec {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
+      sha256 = "0dfxnkql7l6dpyqiwd9al8a0nr93s5avb7k7pj0mlq8q38lb8bfk";
+    };
+    armv7a-linux = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM32.tar.gz";
+      sha256 = "1iqv8k437rlik83mq019aq157p8bhk8sp2k28lp7mga66vs6wkhb";
+    };
+    armv7l-linux = armv7a-linux;
+    aarch64-linux = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM64.tar.gz";
+      sha256 = "1sxp8s09m4gx1xv0cdyxdz5fqg5ihbzrnq9qy54wp34p5v3jknjh";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.macOS.tar.gz";
+      sha256 = "1489pgp1y77crpnnm5mfwvz81400hm3cnv0fq753wfpmgm9g4d4q";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   buildInputs = [ stdenv.cc.cc.lib krb5 lttng-ust-2-10 zlib ];
-
-  libssl = openssl.out;
 
   installPhase = ''
     mkdir -p $out/{bin,share/jackett}
     cp -r * $out/share/jackett
     makeWrapper $out/share/jackett/jackett $out/bin/jackett \
       --set DOTNET_SYSTEM_GLOBALIZATION_INVARIANT 1 \
-      --set LD_LIBRARY_PATH LD_LIBRARY_PATH:$libssl/lib
+      --set LD_LIBRARY_PATH LD_LIBRARY_PATH:${openssl.out}/lib
+
+    # Legacy
+    ln -s $out/bin/jackett $out/bin/Jackett
   '';
 
   meta = with lib; {
