@@ -18,6 +18,7 @@
 , systemd
 , python3
 , wrapGAppsNoGuiHook
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -96,6 +97,12 @@ stdenv.mkDerivation rec {
     # Make Python libraries available
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
   '';
+
+  passthru = {
+    tests = {
+      nixos = nixosTests.power-profiles-daemon;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon";
