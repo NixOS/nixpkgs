@@ -342,6 +342,37 @@ $ dhall-to-nixpkgs directory ~/proj/dhall-semver
     }
 ```
 
+### Remote imports as fixed-output derivations {#ssec-dhall-remote-imports-as-fod}
+
+`dhall-to-nixpkgs` has the ability to fetch and build remote imports as
+fixed-output derivations by using their Dhall integrity check.  This is
+sometimes easier than manually packaging all remote imports.
+
+This can be used like the following:
+
+```bash
+$ dhall-to-nixpkgs directory --fixed-output-derivations ~/proj/dhall-semver
+{ buildDhallDirectoryPackage, buildDhallUrl }:
+  buildDhallDirectoryPackage {
+    name = "proj";
+    src = /Users/gabriel/proj/dhall-semver;
+    file = "package.dhall";
+    source = false;
+    document = false;
+    dependencies = [
+      (buildDhallUrl {
+        url = "https://prelude.dhall-lang.org/v17.0.0/package.dhall";
+        hash = "sha256-ENs8kZwl6QRoM9+Jeo/+JwHcOQ+giT2VjDQwUkvlpD4=";
+        dhall-hash = "sha256:10db3c919c25e9046833df897a8ffe2701dc390fa0893d958c3430524be5a43e";
+        })
+      ];
+    }
+```
+
+Here, `dhall-semver`'s `Prelude` dependency is fetched and built with the
+`buildDhallUrl` helper function, instead of being passed in as a function
+argument.
+
 ## Overriding dependency versions {#ssec-dhall-overriding-dependency-versions}
 
 Suppose that we change our `true.dhall` example expression to depend on an older
