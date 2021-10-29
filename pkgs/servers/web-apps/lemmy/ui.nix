@@ -5,6 +5,7 @@
 , python3
 , pkg-config
 , fetchFromGitHub
+, fetchYarnDeps
 }:
 
 let
@@ -21,8 +22,6 @@ let
 
   name = "lemmy-ui";
   version = "0.12.2";
-in
-mkYarnPackage {
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
@@ -31,12 +30,17 @@ mkYarnPackage {
     fetchSubmodules = true;
     sha256 = "sha256-iFLJqUnz4m9/JTSaJSUugzY5KkiKtH0sMYY4ALm2Ebk=";
   };
+in
+mkYarnPackage {
 
-  inherit pkgConfig name version;
+  inherit src pkgConfig name version;
 
   extraBuildInputs = [ libsass ];
 
-  yarnNix = ./yarn.nix;
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = "sha256-i12J+Qi7Nsjr5JipeRXdkFkh+I/ROsgRw4Vty2cMNyU=";
+  };
 
   # Fails mysteriously on source/package.json
   # Upstream package.json is missing a newline at the end
@@ -71,4 +75,3 @@ mkYarnPackage {
     platforms = platforms.linux;
   };
 }
-
