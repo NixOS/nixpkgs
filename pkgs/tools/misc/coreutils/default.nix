@@ -73,6 +73,9 @@ stdenv.mkDerivation (rec {
     ''
   ])) + (optionalString stdenv.isAarch64 ''
     sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
+
+    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
   '');
 
   outputs = [ "out" "info" ];
