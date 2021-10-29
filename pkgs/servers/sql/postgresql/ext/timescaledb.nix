@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "timescale";
     repo   = "timescaledb";
+    # some branches are named like tags which confuses git
     rev    = "refs/tags/${version}";
     sha256 = "0j8fbhf69q0074c02ilzdrhwc1ciyw6dq48217xxv274df2lcxzd";
   };
