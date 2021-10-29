@@ -280,7 +280,7 @@ in
             null;
         example = "gnome";
         description = ''
-          Graphical session to pre-select in the session chooser (only effective for GDM and LightDM).
+          Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
 
           On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
         '';
