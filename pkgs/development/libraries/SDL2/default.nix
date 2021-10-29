@@ -31,6 +31,10 @@
 , ibus
 , fcitxSupport ? false
 , fcitx
+, libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libdecor
+, pipewireSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, pipewire # NOTE: must be built with SDL2 without pipewire support
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
 , AudioUnit
@@ -75,6 +79,8 @@ stdenv.mkDerivation rec {
 
   dlopenBuildInputs = optionals alsaSupport [ alsa-lib audiofile ]
     ++ optional dbusSupport dbus
+    ++ optional libdecorSupport libdecor
+    ++ optional pipewireSupport pipewire
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
