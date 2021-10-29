@@ -1319,6 +1319,8 @@ with pkgs;
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  backscrub= callPackage ../applications/video/backscrub {};
+
   barman = python3Packages.callPackage ../tools/misc/barman { };
 
   base16-universal-manager = callPackage ../applications/misc/base16-universal-manager { };
