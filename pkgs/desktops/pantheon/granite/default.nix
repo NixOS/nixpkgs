@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "granite-demo";
   };
 }
