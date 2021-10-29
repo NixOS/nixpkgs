@@ -44,8 +44,7 @@ let
     };
   };
 
-  arionSettingsType =
-    (cfg.package.eval { modules = [ ]; }).type;
+  arionSettingsType = (cfg.package.eval { modules = [ ]; }).type;
 
 in
 {
@@ -55,7 +54,7 @@ in
       backend = mkOption {
         type = types.enum [ "podman-socket" "docker" ];
         description = ''
-          Which container implementation to use.
+          Which container engine to use.
         '';
       };
       package = mkOption {
@@ -90,9 +89,11 @@ in
       }
       (mkIf (cfg.backend == "podman-socket") {
         virtualisation.docker.enable = false;
-        virtualisation.podman.enable = true;
-        virtualisation.podman.dockerSocket.enable = true;
-        virtualisation.podman.defaultNetwork.dnsname.enable = true;
+        virtualisation.podman = {
+          enable = true;
+          dockerSocket.enable = true;
+          defaultNetwork.dnsname.enable = true;
+        };
 
         virtualisation.arion.docker.client.package = pkgs.docker-client;
       })
