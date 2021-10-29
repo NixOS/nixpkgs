@@ -1,4 +1,4 @@
-{ pkgs, lib, gawk, gnused, gixy }:
+{ pkgs, buildPackages, lib, gawk, gnused, gixy }:
 
 with lib;
 rec {
@@ -77,7 +77,7 @@ rec {
     }) ''
       ${compileScript}
       ${lib.optionalString strip
-         "${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded $out"}
+          "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
