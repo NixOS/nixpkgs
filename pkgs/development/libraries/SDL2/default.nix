@@ -25,31 +25,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.14";
+  version = "2.0.20";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "1g1jahknv5r4yhh1xq5sf0md20ybdw1zh1i15lry26sq39bmn8fq";
+    sha256 = "sha256-xWq6HXtbDn6Znkp2mMcLY6M5T/lwS19uHFfgwW8E3QY=";
   };
   dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
-
-  patches = [
-    ./find-headers.patch
-    # To fix the build with wayland 1.20.0:
-    ./Fix-build-against-wayland-1.20.patch
-  ];
-
-  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
-  postPatch = ''
-    substituteInPlace include/SDL_opengl_glext.h \
-      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
-      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
-
-    substituteInPlace configure \
-      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
-  '';
 
   depsBuildBuild = [ pkg-config ];
 
