@@ -1,12 +1,11 @@
 { config, stdenv, lib, fetchurl, fetchpatch
 , perl, pkg-config
 , libcap, libtool, libxml2, openssl, libuv
-, enablePython ? config.bind.enablePython or false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
+, enableGSSAPI ? true, libkrb5
+, enablePython ? false, python3
+, enableSeccomp ? false, libseccomp
+, buildPackages, nixosTests
 }:
-
-assert enableSeccomp -> libseccomp != null;
-assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
@@ -28,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtool libxml2 openssl libuv ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
+    ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     "--without-atf"
     "--without-dlopen"
     "--without-docbook-xsl"
-    "--without-gssapi"
     "--without-idn"
     "--without-idnlib"
     "--without-lmdb"
@@ -53,6 +52,7 @@ stdenv.mkDerivation rec {
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
     ++ lib.optional enableSeccomp "--enable-seccomp"
+    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}"
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
