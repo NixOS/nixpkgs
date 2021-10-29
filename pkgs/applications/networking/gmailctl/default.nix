@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -13,6 +14,17 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-1gOixuOvPHEjnnDNNda9sktnhffovOfeG4XDrLRRMlE=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd gmailctl \
+      --bash <($out/bin/gmailctl completion bash) \
+      --fish <($out/bin/gmailctl completion fish) \
+      --zsh <($out/bin/gmailctl completion zsh)
+  '';
 
   vendorSha256 = "sha256-Yv3OGHFOmenst/ujUgvCaSEjwwBf3W9n+55ztVhuWjo=";
 
