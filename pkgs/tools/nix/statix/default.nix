@@ -2,6 +2,8 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "statix";
+  # also update version of the vim plugin in pkgs/misc/vim-plugins/overrides.nix
+  # the version can be found in flake.nix of the source code
   version = "0.3.1";
 
   src = fetchFromGitHub {
