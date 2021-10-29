@@ -1,76 +1,76 @@
 { lib
 , stdenv
-, clang-tools
-, grpc
-, curl
-, cmake
-, pkg-config
 , fetchFromGitHub
-, doxygen
-, protobuf
+, abseil-cpp
+, c-ares
+, cmake
 , crc32c
-, fetchurl
-, openssl
-, libnsl
+, curl
+, grpc
+, gbenchmark
+, gtest
+, ninja
+, nlohmann_json
+, pkg-config
+, protobuf
+  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
+, apis ? [ "*" ]
 }:
 let
+  googleapisRev = "ed739492993c4a99629b6430affdd6c0fb59d435";
   googleapis = fetchFromGitHub {
     owner = "googleapis";
     repo = "googleapis";
-    rev = "9c9f778aedde02f9826d2ae5d0f9c96409ba0f25";
-    sha256 = "1gd3nwv8qf503wy6km0ad6akdvss9w5b1k3jqizy5gah1fkirkpi";
+    rev = googleapisRev;
+    hash = "sha256:1xrnh77vb8hxmf1ywqsifzd39kylhbdyah0b0b9bm7nw0mnahssl";
   };
-  googleapis-cpp-cmakefiles = stdenv.mkDerivation rec {
-    pname = "googleapis-cpp-cmakefiles";
-    version = "0.1.5";
-    src = fetchFromGitHub {
-      owner = "googleapis";
-      repo = "cpp-cmakefiles";
-      rev = "v${version}";
-      sha256 = "02zkcq2wl831ayd9qy009xvfx7q80pgycx7mzz9vknwd0nn6dd0n";
-    };
-
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ grpc openssl protobuf ];
-
-    postPatch = ''
-      sed -e 's,https://github.com/googleapis/googleapis/archive/9c9f778aedde02f9826d2ae5d0f9c96409ba0f25.tar.gz,file://${googleapis},' \
-      -i CMakeLists.txt
-    '';
-  };
-  _nlohmann_json = fetchurl {
-    url = "https://github.com/nlohmann/json/releases/download/v3.4.0/json.hpp";
-    sha256 = "0pw3jpi572irbp2dqclmyhgic6k9rxav5mpp9ygbp9xj48gnvnk3";
-  };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "0.14.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "15wci4m8h6py7fqfziq8mp5m6pxp2h1cbh5rp2k90mk5js4jb9pa";
+    sha256 = "0g720sni70nlncv4spm4rlfykdkpjnv81axfz2jd1arpdajm0mg9";
   };
 
-  buildInputs = [ curl crc32c googleapis-cpp-cmakefiles grpc protobuf libnsl ];
-  nativeBuildInputs = [ clang-tools cmake pkg-config doxygen ];
-
-  outputs = [ "out" "dev" ];
-
   postPatch = ''
-    sed -e 's,https://github.com/nlohmann/json/releases/download/v3.4.0/json.hpp,file://${_nlohmann_json},' \
-    -i cmake/DownloadNlohmannJson.cmake
+    substituteInPlace external/googleapis/CMakeLists.txt \
+      --replace "https://github.com/googleapis/googleapis/archive/${googleapisRev}.tar.gz" "file://${googleapis}"
   '';
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    abseil-cpp
+    c-ares
+    crc32c
+    curl
+    grpc
+    gbenchmark
+    gtest
+    nlohmann_json
+    protobuf
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"
+    "-DBUILD_TESTING:BOOL=ON"
+    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+  ] ++ lib.optionals (apis != [ "*" ]) [
+    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];
 
   meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }
