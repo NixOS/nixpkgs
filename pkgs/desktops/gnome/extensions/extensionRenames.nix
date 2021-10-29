@@ -12,14 +12,14 @@
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
   "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
 
+  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
+  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated
 
   # ####### GNOME 40 #######
-
-  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
-  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
