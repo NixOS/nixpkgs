@@ -10387,10 +10387,6 @@ with pkgs;
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
 
-  vtun = callPackage ../tools/networking/vtun {
-    openssl = openssl_1_0_2;
-  };
-
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
