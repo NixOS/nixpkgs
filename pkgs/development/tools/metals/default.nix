@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.10.7";
+  version = "0.10.8";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch org.scalameta:metals_2.12:${version} \
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.12:${version} \
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0sk4vwpy06smn0k7035bdz0g2y98l8hxmn4v3gijsqaxvnya36x9";
+    outputHash     = "sha256-xTJ+N/aYMEzAQnu1wwWQ/nGRMYiEMfNPiuUFHcFbU4c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
