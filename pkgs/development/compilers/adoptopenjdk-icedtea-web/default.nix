@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "adoptopenjdk-icedtea-web";
 
-  version = "1.8.7";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
     rev = "icedtea-web-${version}";
-    sha256 = "sha256-XY6S1IvDqPxkYgFs7kB9AR0zQ4n3COVbS2lUT5mhTVc=";
+    sha256 = "sha256-hpEVWG9ltNDL/0EFJjgQRRce+BLcCO4ZERULYZxyC1o=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config bc ];
