@@ -118,7 +118,6 @@ in stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  # Minor smoke test, used to be a NixOS test.
   installCheckPhase = ''
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
   '';
