@@ -159,6 +159,10 @@ let
       "systemd-tmpfiles-setup.service"
       "systemd-tmpfiles-setup-dev.service"
 
+      # userdb public Varlink API
+      "systemd-userdb.socket"
+      "systemd-userdbd.service"
+
       # Misc.
       "systemd-sysctl.service"
       "dbus-org.freedesktop.timedate1.service"
