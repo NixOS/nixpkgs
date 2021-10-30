@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.7.3";
+  version = "0.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = version;
-    sha256 = "sha256-WMw07mNvQdrqm5cf3+YWRZsZQ59vOqYSps26scPFpNI=";
+    sha256 = "sha256-PL9qP6SKE8gsBUdfrPf9Fs+vU/lkpOjmkvq3cWw3Uak=";
   };
 
   propagatedBuildInputs = [
