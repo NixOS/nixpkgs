@@ -746,6 +746,8 @@ let
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
+    mad = callPackage ../development/ocaml-modules/mad { };
+
     magic = callPackage ../development/ocaml-modules/magic { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
