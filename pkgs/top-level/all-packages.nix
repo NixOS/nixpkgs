@@ -14209,6 +14209,8 @@ with pkgs;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
+  cpprestsdk = callPackage ../development/libraries/cpprestsdk { };
+
   cpptest = callPackage ../development/libraries/cpptest { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
