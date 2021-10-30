@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, gettext }:
+{ lib, python3Packages, fetchFromGitHub, gettext, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0xpinilb8rnha35laxq076p6v7hdis6davr9ckm5xycs3m4aj7s8";
   };
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
     click
@@ -37,6 +37,10 @@ python3Packages.buildPythonApplication rec {
     "test_update"
     "test_download"
   ];
+
+  postInstall = ''
+    installManPage doc/ytcc.1
+  '';
 
   meta = {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";
