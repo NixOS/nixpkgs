@@ -878,6 +878,7 @@
   ./services/networking/tinydns.nix
   ./services/networking/tftpd.nix
   ./services/networking/trickster.nix
+  ./services/networking/tor-insecure.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
