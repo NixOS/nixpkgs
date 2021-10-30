@@ -24,7 +24,7 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
   * if `origin` is not `null`, it is used to set the final derivation `version`,
   * if `origin` is `null`, it is used exactly in the same way as `origin`, for backward compatibility reasons. This is discouraged and you will get a warning, unless the provided `version` matches exactly the computed one, which happens only when using a specific release,
   * if both `origin` and `version` are null, then `defaultVersion` is used.
-* `defaultVersion` (optional): Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` or `origin` is provided (or if `version = origin = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
+* `defaultVersion` (optional): Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when `version` or `origin` are not provided (or set to `null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
 * `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `sha256` attribute (you may put the empty string `""` in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
 * `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `sha256` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
@@ -45,7 +45,7 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
 
 It also takes other standard `mkDerivation` attributes, they are added as such, except for `meta` which extends an automatically computed `meta` (where the `platform` is the same as `coq` and the homepage is automatically computed).
 
-The builder `mkCoqDerivation` can also by applied to a function taking an attribute set and returning one. The main reason for using this feature is to get the version number as computed by `mkCoqDerivation`, as in:
+The builder `mkCoqDerivation` can also be applied to a function taking an attribute set and returning one. The main reason for using this feature is to get the version number as computed by `mkCoqDerivation`, as in:
 ```
 cat $(nix-build -E 'with import ./. {}; coqPackages.mkCoqDerivation (computed: {
   pname = "test"; src = mktemp; defaultVersion = "1.0";

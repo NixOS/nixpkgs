@@ -4,7 +4,6 @@ with lib;
 
 mkCoqDerivation {
   pname   = "autosubst";
-  owner   = "uds-psl";
   inherit version origin;
 
   release."1.7".rev    = "v1.7";
