@@ -20,8 +20,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
+
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
+
+  doCheck = false;
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ctest
+
+    runHook postInstallCheck
+  '';
+
   cmakeFlags = [
+    "-DCRC32C_INSTALL=1"
+    "-DCRC32C_BUILD_TESTS=1"
     "-DCRC32C_BUILD_BENCHMARKS=0"
     "-DCRC32C_USE_GLOG=0"
   ] ++ lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1" ];
