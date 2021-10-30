@@ -1209,6 +1209,10 @@ let
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
+    portaudio = callPackage ../development/ocaml-modules/portaudio {
+      inherit (pkgs) portaudio;
+    };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
