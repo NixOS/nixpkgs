@@ -5998,6 +5998,8 @@ in {
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
+  pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
+
   pur = callPackage ../development/python-modules/pur { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
