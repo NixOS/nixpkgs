@@ -11037,6 +11037,13 @@
     githubId = 26806;
     name = "Scott Olson";
   };
+  SomeoneSerge = {
+    email = "sergei.kozlukov@aalto.fi";
+    matrix = "@ss:someonex.net";
+    github = "SomeoneSerge";
+    githubId = 9720532;
+    name = "Sergei K";
+  };
   sondr3 = {
     email = "nilsen.sondre@gmail.com";
     github = "sondr3";
