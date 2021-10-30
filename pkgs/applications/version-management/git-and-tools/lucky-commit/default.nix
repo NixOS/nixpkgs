@@ -2,6 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , withOpenCL ? true
+, stdenv
+, OpenCL
 , ocl-icd
 }:
 
@@ -18,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-MvopLKhovwXaEmRgXnAzJeuhPgqnMjt0EtKUGSWFpaY=";
 
-  buildInputs = lib.optional withOpenCL [ ocl-icd ];
+  buildInputs = lib.optional withOpenCL (if stdenv.isDarwin then OpenCL else ocl-icd);
 
   cargoBuildFlags = lib.optional (!withOpenCL) "--no-default-features";
 
