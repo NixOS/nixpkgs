@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d7DGyAC8itBxTfuabDPN16W4S4d42s5UPp8AusZfy5k=";
+    sha256 = "sha256-NHKP1vzb8qu+EkUWDvLWLl4U4pW9ZxbE7YFI6Vwesfg=";
   };
 
   passthru = {
