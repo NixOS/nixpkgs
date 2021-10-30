@@ -1431,6 +1431,8 @@ let
 
     vlq = callPackage ../development/ocaml-modules/vlq { };
 
+    vorbis = callPackage ../development/ocaml-modules/vorbis { };
+
     visitors = callPackage ../development/ocaml-modules/visitors { };
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
