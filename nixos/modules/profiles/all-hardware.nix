@@ -106,6 +106,9 @@ in
       # USB drivers
       "xhci-pci-renesas"
 
+      # Reset controllers
+      "reset-raspberrypi" # Triggers USB chip firmware load.
+
       # Misc "weak" dependencies
       "analogix-dp"
       "analogix-anx6345" # For DP or eDP (e.g. integrated display)
