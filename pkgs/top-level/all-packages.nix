@@ -22003,6 +22003,8 @@ with pkgs;
 
   libreelec-dvb-firmware = callPackage ../os-specific/linux/firmware/libreelec-dvb-firmware { };
 
+  nixos-jobserver = callPackage ../os-specific/linux/nixos-jobserver { };
+
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   open-isns = callPackage ../os-specific/linux/open-isns { };

@@ -883,6 +883,30 @@ name="/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
 someVar=$(stripHash $name)
 ```
 
+### `runInJobServer` \<command\> \-\-\-\- \<defArgs\> \-\-\-\- \<args\> {#fun-runInJobServer}
+
+Helper function for running a command as a client of the global jobserver, if applicable.
+
+ - If a global jobserver is available, runs `<command> <args>` with a GNU Make compatible jobserver made
+   available in `MAKEFLAGS`. The client is automatically limited to `NIX_BUILD_CORES` tokens.
+ - If no global jobserver is available, runs `<command> <defArgs> <args>` instead.
+
+\<command\>, \<defArgs\> and \<args\> may be more than one shell word each, hence they are separated by
+`----`. \<command\> and \<defArgs\> may not contain `----`. Each set except \<command\> may be empty,
+but separators must always be given.
+
+**Note**:
+The global jobserver must be bound to `/jobserver` in the Nix sandbox to be found by this function.
+If the provided `/jobserver` is not a `nixos-jobserver` token file it will not be used.
+
+Example:
+
+```bash
+runInJobServer cargo build ---- \
+    -j $NIX_BUILD_CORES ---- \
+    ${cargoBuildFlags}
+```
+
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
 Convenience function for `makeWrapper` that automatically creates a sane wrapper file. It takes all the same arguments as `makeWrapper`, except for `--argv0`.
