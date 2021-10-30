@@ -584,6 +584,7 @@
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/sickbeard.nix
+  ./services/misc/signald.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
