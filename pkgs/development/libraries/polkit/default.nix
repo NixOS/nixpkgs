@@ -1,7 +1,24 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, expat, pam, perl, fetchpatch
-, intltool, spidermonkey_78, gobject-introspection, libxslt, docbook_xsl, dbus
-, docbook_xml_dtd_412, gtk-doc, coreutils
-, useSystemd ? stdenv.isLinux, systemd, elogind
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, expat
+, pam
+, perl
+, fetchpatch
+, intltool
+, spidermonkey_78
+, gobject-introspection
+, libxslt
+, docbook-xsl-nons
+, dbus
+, docbook_xml_dtd_412
+, gtk-doc
+, coreutils
+, useSystemd ? stdenv.isLinux
+, systemd
+, elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
@@ -12,15 +29,14 @@
 }:
 
 let
-
   system = "/run/current-system/sw";
   setuid = "/run/wrappers/bin";
-
 in
-
 stdenv.mkDerivation rec {
   pname = "polkit";
   version = "0.119";
+
+  outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
@@ -38,24 +54,64 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i -e "s/-Wl,--as-needed//" configure.ac
-  '';
+  nativeBuildInputs = [
+    glib
+    gtk-doc
+    pkg-config
+    intltool
+    perl
 
-  outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
+    # man pages
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ];
 
-  nativeBuildInputs =
-    [ glib gtk-doc pkg-config intltool perl ]
-    ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
-  buildInputs =
-    [ expat pam spidermonkey_78 ]
+  buildInputs = [
+    expat
+    pam
+    spidermonkey_78
+  ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    ++ lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
-    ++ lib.optional withIntrospection gobject-introspection;
+    (if useSystemd then systemd else elogind)
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
   ];
+
+  checkInputs = [
+    dbus
+  ];
+
+  configureFlags = [
+    "--datadir=${system}/share"
+    "--sysconfdir=/etc"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
+    "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
+    (if withIntrospection then "--enable-introspection" else "--disable-introspection")
+  ] ++ lib.optionals (!doCheck) [
+    "--disable-test"
+  ];
+
+  makeFlags = [
+    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
+  ];
+
+  installFlags = [
+    "datadir=${placeholder "out"}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
+
+  inherit doCheck;
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i -e "s/-Wl,--as-needed//" configure.ac
+  '';
 
   preConfigure = ''
     chmod +x test/mocklibc/bin/mocklibc{,-test}.in
@@ -74,27 +130,6 @@ stdenv.mkDerivation rec {
     sed '/libsystemd autoconfigured/s/.*/:/' -i configure
   '';
 
-  configureFlags = [
-    "--datadir=${system}/share"
-    "--sysconfdir=/etc"
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
-    "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
-    (if withIntrospection then "--enable-introspection" else "--disable-introspection")
-  ] ++ lib.optional (!doCheck) "--disable-test";
-
-  makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0"
-    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
-  ];
-
-  installFlags = [
-    "datadir=${placeholder "out"}/share"
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
-
-  inherit doCheck;
-  checkInputs = [ dbus ];
   checkPhase = ''
     runHook preCheck
 
