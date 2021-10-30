@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, appstream-glib, desktop-file-utils, gdk-pixbuf
 , gettext, gjs, glib, gobject-introspection, gsettings-desktop-schemas, gtk3
 , hicolor-icon-theme, meson, ninja, pkg-config, python3, webkitgtk, wrapGAppsHook
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
+    glib-networking
   ];
 
   dontWrapGApps = true;
