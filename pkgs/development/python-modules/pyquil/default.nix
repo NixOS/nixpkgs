@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , importlib-metadata
 , ipython
 , lark-parser
@@ -15,13 +16,14 @@
 , pythonOlder
 , qcs-api-client
 , retry
+, respx
 , rpcq
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,8 +32,16 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0070pslz6vvyavm5pm27q2bng2mfmkb41v5czzckz7m8db3b1r2x";
+    sha256 = "sha256-OU7/LjcpCxvqlcfdlm5ll4f0DYXf0yxNprM8Muu2wyg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pyquil-pr-1404-unpin-qcs-api-client-version-pyproject.patch";
+      url = "https://github.com/rigetti/pyquil/commit/2e35a4fdf65262fdf39c5091aeddfa3f3564925a.patch";
+      sha256 = "sha256-KGDNU2wpzsuifQSbbkoMwaFXspHW6zyIJ5GRZbw+lUY=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -55,6 +65,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytest-mock
     pytestCheckHook
+    respx
     ipython
   ];
 
@@ -67,6 +78,7 @@ buildPythonPackage rec {
     # Tests require network access
     "test/e2e/"
     "test/unit/test_api.py"
+    "test/unit/test_engagement_manager.py"
     "test/unit/test_operator_estimation.py"
     "test/unit/test_wavefunction_simulator.py"
     "test/unit/test_compatibility_v2_operator_estimation.py"

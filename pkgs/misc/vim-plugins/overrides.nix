@@ -30,6 +30,7 @@
 , nodePackages
 , skim
 , sqlite
+, statix
 , stylish-haskell
 , tabnine
 , vim
@@ -526,6 +527,21 @@ self: super: {
         --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
     '';
   });
+
+  statix = buildVimPluginFrom2Nix rec {
+    inherit (statix) pname src meta;
+    version = "0.1.0";
+    dependencies = with self; [ statix ];
+    postPatch = ''
+      # check that version is up to date
+      grep 'pname = "statix-vim"' -A 1 flake.nix \
+        | grep -F 'version = "${version}"' flake.nix
+
+      cd vim-plugin
+      substituteInPlace ftplugin/nix.vim --replace statix ${statix}/bin/statix
+      substituteInPlace plugin/statix.vim --replace statix ${statix}/bin/statix
+    '';
+  };
 
   sved =
     let
