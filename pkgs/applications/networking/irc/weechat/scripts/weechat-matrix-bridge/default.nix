@@ -1,7 +1,8 @@
 { lib, stdenv, curl, fetchFromGitHub, cjson, olm, luaffi }:
 
 stdenv.mkDerivation {
-  name = "weechat-matrix-bridge-2018-11-19";
+  pname = "weechat-matrix-bridge";
+  version = "unstable-2018-11-19";
   src = fetchFromGitHub {
     owner = "torhve";
     repo = "weechat-matrix-protocol-script";

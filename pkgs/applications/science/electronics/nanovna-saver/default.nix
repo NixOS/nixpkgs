@@ -1,12 +1,25 @@
-{ lib, mkDerivationWith, wrapQtAppsHook, python3Packages, fetchFromGitHub
-, qtbase }:
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+}:
 
 let
-  version = "0.3.8";
+  python = python3.override {
+    packageOverrides = self: super: {
+      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-
-in mkDerivationWith python3Packages.buildPythonApplication {
-  inherit pname version;
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
@@ -17,9 +30,9 @@ in mkDerivationWith python3Packages.buildPythonApplication {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     cython
-    scipy_1_4
+    scipy
     pyqt5
     pyserial
     numpy
@@ -30,10 +43,11 @@ in mkDerivationWith python3Packages.buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  postFixup = ''
-    wrapProgram $out/bin/NanoVNASaver \
-      "''${gappsWrapperArgs[@]}" \
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
+    )
   '';
 
   meta = with lib; {

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       i686-linux = "linux";
       x86_64-linux = "linux-64bit";
       aarch64-linux = "linux-64bit";
-    }.${stdenv.hostPlatform.system}}
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}")}
 
     runHook postConfigure
   '';

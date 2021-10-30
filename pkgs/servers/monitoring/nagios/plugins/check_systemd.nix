@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "check_systemd";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "Josef-Friedrich";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04r14dhqzrdndn235dvr6afy4s4g4asynsgvj99cmyq55nah4asn";
+    sha256 = "11sc0gycxzq1vfvin501jnwnky2ky6ns64yjiw8vq9vmkbf8nni6";
   };
 
   propagatedBuildInputs = with python3Packages; [ nagiosplugin ];
@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Nagios / Icinga monitoring plugin to check systemd for failed units";
     inherit (src.meta) homepage;
+    changelog = "https://github.com/Josef-Friedrich/check_systemd/releases";
     maintainers = with maintainers; [ symphorien ];
     license = licenses.lgpl2Only;
     platforms = platforms.linux;

@@ -1,17 +1,17 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, toml
+, setuptools-scm
 , more-itertools, backports_functools_lru_cache }:
 
 buildPythonPackage rec {
   pname = "jaraco.functools";
-  version = "3.0.1";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fedc4be3117512ca3e03e1b2ffa7a6a6ffa589bfb7d02bfb324e55d493b94f4";
+    sha256 = "bfcf7da71e2a0e980189b0744b59dba6c1dcf66dcd7a30f8a4413e478046b314";
   };
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
 

@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "six";
   namespace = "script.module.six";
-  version = "1.14.0+matrix.2";
+  version = "1.15.0+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1f9g43j4y5x7b1bgbwqqfj0p2bkqjpycj17dj7a9j271mcr5zhwb";
+    sha256 = "0c8vb0c4vhknkqqgvzj8l2ddgcm4iah0ca686slxbxbp800cydnf";
   };
 
   passthru.updateScript = addonUpdateScript {

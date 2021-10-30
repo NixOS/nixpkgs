@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyflunearyou";
-  version = "2.0.1";
+  version = "2.0.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -23,10 +23,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2a4OKPmy9tFLJqRg9bEXqrbr3RKVHmKPSYDrtAEqvdo=";
+    sha256 = "07n2dvnfpfglpdlnwzj4dy41x2zc07ia2krvxdarnv8wzap30y23";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -44,7 +46,8 @@ buildPythonPackage rec {
 
   # Ignore the examples directory as the files are prefixed with test_.
   # disabledTestFiles doesn't seem to work here
-  pytestFlagsArray = [ "--ignore examples/" ];
+  disabledTestPaths = [ "examples/" ];
+
   pythonImportsCheck = [ "pyflunearyou" ];
 
   meta = with lib; {

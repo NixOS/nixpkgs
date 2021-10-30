@@ -21,6 +21,8 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Remove if a version compatible with agda 2.6.2 is made
+    broken = true;
     description =
       "A library for doing generic programming in Agda";
     homepage = src.meta.homepage;

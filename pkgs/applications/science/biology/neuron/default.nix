@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
                         else ["--without-mpi"]);
 
 
-  postInstall = lib.optionals (python != null) [ ''
+  postInstall = lib.optionalString (python != null) ''
     ## standardise python neuron install dir if any
     if [[ -d $out/lib/python ]]; then
         mkdir -p ''${out}/${python.sitePackages}
         mv ''${out}/lib/python/*  ''${out}/${python.sitePackages}/
     fi
-  ''];
+  '';
 
   propagatedBuildInputs = [ readline ncurses which libtool ];
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest, pytestrunner }:
+{ lib, buildPythonPackage, fetchPypi, six, pytest, pytest-runner }:
 
 buildPythonPackage rec {
   pname = "srptools";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
     description = "Python-Tools to implement Secure Remote Password (SRP) authentication";

@@ -2,7 +2,7 @@
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
-  version = "1.0.0.69";
+  version = "1.0.0.72";
 
 in stdenv.mkDerivation {
   pname = "steam-original";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
-    sha256 = "sha256-b5g4AUprE/lTunJs59IDlGu5O/1dB0kBvCFq0Eqyx2c=";
+    sha256 = "0l54ljnlnx289i1ssnss78251vyga726dnzsrhgnxwn1p1125m45";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A digital distribution platform";
-    homepage = "http://store.steampowered.com/";
+    homepage = "https://store.steampowered.com/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga jonringer ];
   };

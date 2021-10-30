@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, pytestrunner
+, pytest-runner
 , future
 , requests
 , responses
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ future requests requests_oauthlib ];
   checkInputs = [ pytest responses hypothesis ];
 

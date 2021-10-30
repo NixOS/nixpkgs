@@ -6,6 +6,6 @@
 
 callPackage ./generic.nix {
   inherit buildGoPackage nvidia_x11 nvidiaGpuSupport;
-  version = "1.0.4";
-  sha256 = "0znaxz9mzbqb59p6rwa5h89m344m2ci39jsx8dfh1v5fc17r0fcq";
+  version = "1.0.12";
+  sha256 = "04fqliz7y4zzs4xraid54mqxwgrzh138nmfcs876vp534slvikpi";
 }

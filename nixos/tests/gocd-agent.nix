@@ -42,7 +42,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].uuid"
     )
     agent.succeed(
-        "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep -q Idle"
+        "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep Idle"
     )
   '';
 })

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "airspy";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "airspy";
     repo = "airspyone_host";
     rev = "v${version}";
-    sha256 = "04kx2p461sqd4q354n1a99zcabg9h29dwcnyhakykq8bpg3mgf1x";
+    sha256 = "1v7sfkkxc6f8ny1p9xrax1agkl6q583mjx8k0lrrwdz31rf9qgw9";
   };
 
   postPatch = ''

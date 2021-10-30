@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "1.8.5";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     install -D -t "$out/share/java/" build/*.jar
     runHook postInstall
   '';
+
+  patches = [
+    # https://github.com/jvm-profiling-tools/async-profiler/pull/428
+    ./0001-Fix-darwin-build.patch
+  ];
 
   fixupPhase = ''
     substituteInPlace $out/bin/async-profiler \

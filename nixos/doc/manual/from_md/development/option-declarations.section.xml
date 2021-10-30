@@ -1,0 +1,221 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-option-declarations">
+  <title>Option Declarations</title>
+  <para>
+    An option declaration specifies the name, type and description of a
+    NixOS configuration option. It is invalid to define an option that
+    hasn’t been declared in any module. An option declaration generally
+    looks like this:
+  </para>
+  <programlisting language="bash">
+options = {
+  name = mkOption {
+    type = type specification;
+    default = default value;
+    example = example value;
+    description = &quot;Description for use in the NixOS manual.&quot;;
+  };
+};
+</programlisting>
+  <para>
+    The attribute names within the <literal>name</literal> attribute
+    path must be camel cased in general but should, as an exception,
+    match the
+    <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-package-naming">
+    package attribute name</link> when referencing a Nixpkgs package.
+    For example, the option
+    <literal>services.nix-serve.bindAddress</literal> references the
+    <literal>nix-serve</literal> Nixpkgs package.
+  </para>
+  <para>
+    The function <literal>mkOption</literal> accepts the following
+    arguments.
+  </para>
+  <variablelist>
+    <varlistentry>
+      <term>
+        <literal>type</literal>
+      </term>
+      <listitem>
+        <para>
+          The type of the option (see
+          <xref linkend="sec-option-types" />). It may be omitted, but
+          that’s not advisable since it may lead to errors that are hard
+          to diagnose.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <literal>default</literal>
+      </term>
+      <listitem>
+        <para>
+          The default value used if no value is defined by any module. A
+          default is not required; but if a default is not given, then
+          users of the module will have to define the value of the
+          option, otherwise an error will be thrown.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <literal>defaultText</literal>
+      </term>
+      <listitem>
+        <para>
+          A textual representation of the default value to be rendered
+          verbatim in the manual. Useful if the default value is a
+          complex expression or depends on other values or packages. Use
+          <literal>lib.literalExpression</literal> for a Nix expression,
+          <literal>lib.literalDocBook</literal> for a plain English
+          description in DocBook format.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <literal>example</literal>
+      </term>
+      <listitem>
+        <para>
+          An example value that will be shown in the NixOS manual. You
+          can use <literal>lib.literalExpression</literal> and
+          <literal>lib.literalDocBook</literal> in the same way as in
+          <literal>defaultText</literal>.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <literal>description</literal>
+      </term>
+      <listitem>
+        <para>
+          A textual description of the option, in DocBook format, that
+          will be included in the NixOS manual.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <section xml:id="sec-option-declarations-eot">
+    <title>Extensible Option Types</title>
+    <para>
+      Extensible option types is a feature that allow to extend certain
+      types declaration through multiple module files. This feature only
+      work with a restricted set of types, namely
+      <literal>enum</literal> and <literal>submodules</literal> and any
+      composed forms of them.
+    </para>
+    <para>
+      Extensible option types can be used for <literal>enum</literal>
+      options that affects multiple modules, or as an alternative to
+      related <literal>enable</literal> options.
+    </para>
+    <para>
+      As an example, we will take the case of display managers. There is
+      a central display manager module for generic display manager
+      options and a module file per display manager backend (sddm, gdm
+      ...).
+    </para>
+    <para>
+      There are two approach to this module structure:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Managing the display managers independently by adding an
+          enable option to every display manager module backend. (NixOS)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Managing the display managers in the central module by adding
+          an option to select which display manager backend to use.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      Both approaches have problems.
+    </para>
+    <para>
+      Making backends independent can quickly become hard to manage. For
+      display managers, there can be only one enabled at a time, but the
+      type system can not enforce this restriction as there is no
+      relation between each backend <literal>enable</literal> option. As
+      a result, this restriction has to be done explicitely by adding
+      assertions in each display manager backend module.
+    </para>
+    <para>
+      On the other hand, managing the display managers backends in the
+      central module will require to change the central module option
+      every time a new backend is added or removed.
+    </para>
+    <para>
+      By using extensible option types, it is possible to create a
+      placeholder option in the central module
+      (<link linkend="ex-option-declaration-eot-service">Example:
+      Extensible type placeholder in the service module</link>), and to
+      extend it in each backend module
+      (<link linkend="ex-option-declaration-eot-backend-gdm">Example:
+      Extending
+      <literal>services.xserver.displayManager.enable</literal> in the
+      <literal>gdm</literal> module</link>,
+      <link linkend="ex-option-declaration-eot-backend-sddm">Example:
+      Extending
+      <literal>services.xserver.displayManager.enable</literal> in the
+      <literal>sddm</literal> module</link>).
+    </para>
+    <para>
+      As a result, <literal>displayManager.enable</literal> option
+      values can be added without changing the main service module file
+      and the type system automatically enforce that there can only be a
+      single display manager enabled.
+    </para>
+    <anchor xml:id="ex-option-declaration-eot-service" />
+    <para>
+      <emphasis role="strong">Example: Extensible type placeholder in
+      the service module</emphasis>
+    </para>
+    <programlisting language="bash">
+services.xserver.displayManager.enable = mkOption {
+  description = &quot;Display manager to use&quot;;
+  type = with types; nullOr (enum [ ]);
+};
+</programlisting>
+    <anchor xml:id="ex-option-declaration-eot-backend-gdm" />
+    <para>
+      <emphasis role="strong">Example: Extending
+      <literal>services.xserver.displayManager.enable</literal> in the
+      <literal>gdm</literal> module</emphasis>
+    </para>
+    <programlisting language="bash">
+services.xserver.displayManager.enable = mkOption {
+  type = with types; nullOr (enum [ &quot;gdm&quot; ]);
+};
+</programlisting>
+    <anchor xml:id="ex-option-declaration-eot-backend-sddm" />
+    <para>
+      <emphasis role="strong">Example: Extending
+      <literal>services.xserver.displayManager.enable</literal> in the
+      <literal>sddm</literal> module</emphasis>
+    </para>
+    <programlisting language="bash">
+services.xserver.displayManager.enable = mkOption {
+  type = with types; nullOr (enum [ &quot;sddm&quot; ]);
+};
+</programlisting>
+    <para>
+      The placeholder declaration is a standard
+      <literal>mkOption</literal> declaration, but it is important that
+      extensible option declarations only use the
+      <literal>type</literal> argument.
+    </para>
+    <para>
+      Extensible option types work with any of the composed variants of
+      <literal>enum</literal> such as
+      <literal>with types; nullOr (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>
+      or
+      <literal>with types; listOf (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>.
+    </para>
+  </section>
+</section>

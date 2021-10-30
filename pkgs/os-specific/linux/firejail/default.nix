@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.64.4";
+  version = "0.9.66";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "sha256-q/XL8cznHlUXdubUEptEAVma1jRUqFb5XcLAV0RVCzs=";
+    sha256 = "sha256-oKstTiGt0r4wePaZ9u1o78GZ1XWJ27aS0BdLxmfYk9Q=";
   };
 
   buildInputs = [ which ];
@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
     # By default fbuilder hardcodes the firejail binary to the install path.
     # On NixOS the firejail binary is a setuid wrapper available in $PATH.
     ./fbuilder-call-firejail-on-path.patch
+    # Disable symlink check on /etc/hosts, see
+    # https://github.com/netblue30/firejail/issues/2758#issuecomment-805174951
+    ./remove-link-check.patch
   ];
 
   prePatch = ''

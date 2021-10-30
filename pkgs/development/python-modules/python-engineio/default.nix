@@ -9,20 +9,20 @@
 , requests
 , six
 , tornado
-, websocket_client
+, websocket-client
 , websockets
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "00x9pmmnl1yd59wd96ivkiqh4n5nphl8cwk43hf4nqr0icgsyhar";
+    sha256 = "sha256-aAoTeQZCtxddVBPwlyv2j4aACMO9p0vQ/ESkkv4E3VE=";
   };
 
   checkInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mock
     requests
     tornado
-    websocket_client
+    websocket-client
     websockets
     pytestCheckHook
   ];

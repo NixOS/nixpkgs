@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libusb1, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, dtc, libusb1, zlib }:
 
-stdenv.mkDerivation {
-  name = "sunxi-tools-20181113";
+stdenv.mkDerivation rec {
+  pname = "sunxi-tools";
+  version = "unstable-2021-08-29";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";
     repo = "sunxi-tools";
-    rev = "6d598a0ed714201380e78130213500be6512942b";
-    sha256 = "1yhl6jfl2cws596ymkyhm8h9qkcvp67v8hlh081lsaqv1i8j9yig";
+    rev = "74273b671a3fc34048383c40c85c684423009fb9";
+    sha256 = "1gwamb64vr45iy2ry7jp1k3zc03q5sydmdflrbwr892f0ijh2wjl";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 zlib ];
+  buildInputs = [ dtc libusb1 zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

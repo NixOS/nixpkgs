@@ -6,7 +6,7 @@
 , biopython
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pandas
 , matplotlib
 , reportlab
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     biopython
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pandas
     matplotlib
     reportlab

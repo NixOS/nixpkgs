@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.4.6";
+  version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BCHLd1SbdHWrl7dcLD69t2K5Sa1WtGpMxTmMyDWl9u4=";
+    sha256 = "sha256-XO9KmsC3DXgVcGWr5ss3m2wB8rVboWyQUWBidynhkP8=";
   };
 
   propagatedBuildInputs = [

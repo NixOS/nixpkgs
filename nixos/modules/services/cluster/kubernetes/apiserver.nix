@@ -145,7 +145,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes apiserver extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     extraSANs = mkOption {
@@ -188,12 +188,6 @@ in
       description = "Key to use for connections to kubelet.";
       default = null;
       type = nullOr path;
-    };
-
-    kubeletHttps = mkOption {
-      description = "Whether to use https for connections to kubelet.";
-      default = true;
-      type = bool;
     };
 
     preferredAddressTypes = mkOption {
@@ -365,7 +359,6 @@ in
                 "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
               ${optionalString (cfg.basicAuthFile != null)
                 "--basic-auth-file=${cfg.basicAuthFile}"} \
-              --kubelet-https=${boolToString cfg.kubeletHttps} \
               ${optionalString (cfg.kubeletClientCaFile != null)
                 "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"} \
               ${optionalString (cfg.kubeletClientCertFile != null)
@@ -404,6 +397,10 @@ in
             AmbientCapabilities = "cap_net_bind_service";
             Restart = "on-failure";
             RestartSec = 5;
+          };
+
+          unitConfig = {
+            StartLimitIntervalSec = 0;
           };
         };
 

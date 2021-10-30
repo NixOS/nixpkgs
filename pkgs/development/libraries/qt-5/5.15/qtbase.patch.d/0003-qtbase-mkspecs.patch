@@ -1,6 +1,6 @@
-From 82771c437957b3684ce296997d795432756aa8b1 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
-Date: Sat, 4 Apr 2020 00:25:52 +0200
+From 03a5a7eab673d18d00c9b5eb8c7d5b790079e8ff Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Mon, 12 Apr 2021 20:20:46 +0200
 Subject: [PATCH 03/11] qtbase-mkspecs
 
 ---
@@ -12,10 +12,10 @@ Subject: [PATCH 03/11] qtbase-mkspecs
  mkspecs/features/qt_build_paths.prf           |  4 +-
  mkspecs/features/qt_docs.prf                  | 10 +--
  mkspecs/features/qt_example_installs.prf      |  2 +-
- mkspecs/features/qt_functions.prf             |  2 +-
+ mkspecs/features/qt_functions.prf             | 27 ++++---
  mkspecs/features/qt_installs.prf              | 22 ++---
  mkspecs/features/qt_plugin.prf                |  2 +-
- 11 files changed, 38 insertions(+), 141 deletions(-)
+ 11 files changed, 52 insertions(+), 152 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
 index 24ed125f12..f0666a1986 100644
@@ -105,7 +105,7 @@ index 24ed125f12..f0666a1986 100644
  # We are generating cmake files. Most developers of Qt are not aware of cmake,
  # so we require automatic tests to be available. The only module which should
 diff --git a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-index 309798a767..b6c3ab8609 100644
+index db18dbece6..8246f37931 100644
 --- a/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 +++ b/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -2,30 +2,6 @@ if (CMAKE_VERSION VERSION_LESS 3.1.0)
@@ -200,7 +200,7 @@ index 309798a767..b6c3ab8609 100644
  !!IF !isEmpty(CMAKE_ADD_SOURCE_INCLUDE_DIRS)
      include(\"${CMAKE_CURRENT_LIST_DIR}/ExtraSourceIncludes.cmake\" OPTIONAL)
  !!ENDIF
-@@ -499,25 +455,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -491,25 +447,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
  !!IF isEmpty(CMAKE_DEBUG_TYPE)
  !!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
@@ -226,7 +226,7 @@ index 309798a767..b6c3ab8609 100644
          _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_LIB_FILE_LOCATION_DEBUG}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" $${CMAKE_DEBUG_AND_RELEASE})
  !!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
      endif()
-@@ -536,25 +480,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -528,25 +472,13 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
  !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
  !!IF isEmpty(CMAKE_RELEASE_TYPE)
  !!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
@@ -252,7 +252,7 @@ index 309798a767..b6c3ab8609 100644
          _populate_$${CMAKE_MODULE_NAME}_target_properties(RELEASE \"$${CMAKE_LIB_FILE_LOCATION_RELEASE}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" $${CMAKE_DEBUG_AND_RELEASE})
  !!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
      endif()
-@@ -581,11 +513,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+@@ -573,11 +505,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
            IsDebugAndRelease)
          set_property(TARGET Qt5::${Plugin} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
  
@@ -265,7 +265,7 @@ index 309798a767..b6c3ab8609 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index c0b50416c9..cabe39b22e 100644
+index 3d6cd9b3db..ca8b0b2701 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
 @@ -51,7 +51,7 @@ builtin_resources {
@@ -369,18 +369,44 @@ index 15b373ba40..5c373fe1d5 100644
  
  check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 7777e615bd..abeb03a663 100644
+index 7777e615bd..b0c6880a74 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
-@@ -87,7 +87,7 @@ defineTest(qtHaveModule) {
+@@ -87,19 +87,22 @@ defineTest(qtHaveModule) {
  defineTest(qtPrepareTool) {
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("command -v $$2")
-         exists($${cmd}.pl) {
-             $${1}_EXE = $${cmd}.pl
-             cmd = perl -w $$system_path($${cmd}.pl)
+-        exists($${cmd}.pl) {
+-            $${1}_EXE = $${cmd}.pl
+-            cmd = perl -w $$system_path($${cmd}.pl)
+-        } else: contains(QMAKE_HOST.os, Windows) {
+-            $${1}_EXE = $${cmd}.exe
+-            cmd = $$system_path($${cmd}.exe)
+-        } else:contains(QMAKE_HOST.os, Darwin) {
+-            BUNDLENAME = $${cmd}.app/Contents/MacOS/$$2
+-            exists($$BUNDLENAME) {
+-                cmd = $$BUNDLENAME
++        cmd = $$system("command -v $${2}")
++        isEmpty(cmd) {
++            cmd = $$system("command -v $${2}.pl")
++            !isEmpty(cmd) {
++                $${1}_EXE = $$cmd
++                cmd = perl -w $$system_path($${cmd})
++            } else: contains(QMAKE_HOST.os, Windows) {
++                cmd = $$system("command -v $${2}.exe")
++                $${1}_EXE = $$cmd
++            } else: contains(QMAKE_HOST.os, Darwin) {
++                cmd = $$system("command -v $${2}.app")
++                !isEmpty(cmd) {
++                    cmd = $${cmd}/Contents/MacOS/$${2}
++                    $${1}_EXE = $$cmd
++                }
+             }
+-            $${1}_EXE = $$cmd
+         } else {
+             $${1}_EXE = $$cmd
+         }
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
 index 1ebca17366..a8f958eae8 100644
 --- a/mkspecs/features/qt_installs.prf
@@ -460,5 +486,5 @@ index 573d717eea..024c624cb6 100644
  
  qt_libinfix_plugins: TARGET = $$TARGET$$QT_LIBINFIX
 -- 
-2.25.4
+2.29.3
 

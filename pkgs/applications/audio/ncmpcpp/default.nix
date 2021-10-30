@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+qv2FXyMsbJKBZryduFi+p+aO5zTgQxDuRKIYMk4Ohs=";
   };
 
+  enableParallelBuilding = true;
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
     ++ optional outputsSupport "--enable-outputs"
     ++ optional visualizerSupport "--enable-visualizer --with-fftw"

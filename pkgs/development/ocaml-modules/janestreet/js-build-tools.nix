@@ -16,6 +16,8 @@ buildOcaml rec {
   buildInputs = [ ocaml_oasis opaline ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
   configurePhase = "./configure --prefix $prefix";
   installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR ${name}.install";
 

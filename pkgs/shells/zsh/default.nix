@@ -18,6 +18,11 @@ stdenv.mkDerivation {
     sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
   };
 
+  patches = [
+    # fix location of timezone data for TZ= completion
+    ./tz_completion.patch
+  ];
+
   buildInputs = [ ncurses pcre ];
 
   configureFlags = [

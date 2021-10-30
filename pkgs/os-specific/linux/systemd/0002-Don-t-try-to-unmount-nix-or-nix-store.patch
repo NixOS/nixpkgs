@@ -1,4 +1,4 @@
-From 4e96b2e074c4a4f4ce900409872ce2f86704ee5b Mon Sep 17 00:00:00 2001
+From 43465a392b47238a32f8719f603ed9e2c9bb0363 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
 Subject: [PATCH 02/19] Don't try to unmount /nix or /nix/store
@@ -12,7 +12,7 @@ https://github.com/NixOS/nixos/issues/126
  2 files changed, 4 insertions(+)
 
 diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
-index 292b97cd69..791b8e6b7e 100644
+index f683f05981..5a04c2c2a6 100644
 --- a/src/shared/fstab-util.c
 +++ b/src/shared/fstab-util.c
 @@ -40,6 +40,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
@@ -25,10 +25,10 @@ index 292b97cd69..791b8e6b7e 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 3a72a13e1a..541320dc9d 100644
+index c2a26242c0..9936398f32 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -500,6 +500,8 @@ static int delete_md(MountPoint *m) {
+@@ -496,6 +496,8 @@ static int delete_md(MountPoint *m) {
  
  static bool nonunmountable_path(const char *path) {
          return path_equal(path, "/")
@@ -38,5 +38,5 @@ index 3a72a13e1a..541320dc9d 100644
                  || path_equal(path, "/usr")
  #endif
 -- 
-2.30.1
+2.32.0
 

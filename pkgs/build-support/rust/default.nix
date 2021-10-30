@@ -1,29 +1,21 @@
-{ stdenv
-, lib
-, buildPackages
+{ lib
+, importCargoLock
+, fetchCargoTarball
+, rust
+, stdenv
+, callPackage
 , cacert
+, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
 , cargoSetupHook
-, fetchCargoTarball
-, runCommandNoCC
-, rustPlatform
-, callPackage
-, remarshal
-, git
-, rust
 , rustc
+, libiconv
 , windows
 }:
 
 { name ? "${args.pname}-${args.version}"
-
-  # SRI hash
-, cargoHash ? ""
-
-  # Legacy hash
-, cargoSha256 ? ""
 
   # Name for the vendored dependencies tarball
 , cargoDepsName ? name
@@ -41,6 +33,7 @@
 , cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
+, cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
@@ -55,24 +48,29 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null -> !(cargoSha256 == "" && cargoHash == "");
+assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
+  -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
 let
 
-  cargoDeps = if cargoVendorDir == null
-    then fetchCargoTarball ({
-        inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
-        name = cargoDepsName;
-        hash = cargoHash;
-        patches = cargoPatches;
-        sha256 = cargoSha256;
-      } // depsExtraArgs)
+  cargoDeps =
+    if cargoVendorDir == null
+    then if cargoLock != null then importCargoLock cargoLock
+    else fetchCargoTarball ({
+      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      name = cargoDepsName;
+      patches = cargoPatches;
+    } // lib.optionalAttrs (args ? cargoHash) {
+      hash = args.cargoHash;
+    } // lib.optionalAttrs (args ? cargoSha256) {
+      sha256 = args.cargoSha256;
+    } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
   # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = !(cargoHash == "" && cargoSha256 == "");
+  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
@@ -84,7 +82,7 @@ let
       (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
 
-  sysroot = (callPackage ./sysroot {}) {
+  sysroot = callPackage ./sysroot { } {
     inherit target shortTarget;
     RUSTFLAGS = args.RUSTFLAGS or "";
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
@@ -96,7 +94,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
@@ -117,7 +115,9 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
     rustc
   ];
 
-  buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+  buildInputs = buildInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
 

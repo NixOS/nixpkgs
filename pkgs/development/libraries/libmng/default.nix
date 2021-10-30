@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, zlib, libpng, libjpeg, lcms2 }:
 
 stdenv.mkDerivation rec {
-  name = "libmng-2.0.3";
+  pname = "libmng";
+  version = "2.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libmng/${name}.tar.xz";
+    url = "mirror://sourceforge/libmng/${pname}-${version}.tar.xz";
     sha256 = "1lvxnpds0vcf0lil6ia2036ghqlbl740c4d2sz0q5g6l93fjyija";
   };
 

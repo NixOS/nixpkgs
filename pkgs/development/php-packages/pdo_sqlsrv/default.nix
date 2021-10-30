@@ -10,5 +10,10 @@ buildPecl {
 
   buildInputs = [ unixODBC ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "Microsoft Drivers for PHP for SQL Server";
+    license = licenses.mit;
+    homepage = "https://github.com/Microsoft/msphpsql";
+    maintainers = teams.php.members;
+  };
 }

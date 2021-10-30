@@ -21,6 +21,8 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
+  mopidy-podcast = callPackage ./podcast.nix { };
+
   mopidy-scrobbler = callPackage ./scrobbler.nix { };
 
   mopidy-somafm = callPackage ./somafm.nix { };
@@ -34,6 +36,8 @@ lib.makeScope newScope (self: with self; {
   mopidy-tunein = callPackage ./tunein.nix { };
 
   mopidy-youtube = callPackage ./youtube.nix { };
+
+  mopidy-ytmusic = callPackage ./ytmusic.nix { };
 
   mopidy-subidy = callPackage ./subidy.nix { };
 })

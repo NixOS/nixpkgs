@@ -5,7 +5,7 @@
 , googleapis-common-protos
 , grpcio
 , protobuf
-, pytz
+, proto-plus
 , requests
 , mock
 , pytest
@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.26.3";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uRQ0XH6iOGEWJpOidwO6uASlVQT35umryv8XTYDfMqw=";
+    sha256 = "sha256-XsJ7lCs00EVZy/NnRDC7g/w9dOfTK4u9McRGbnF0C4M=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     google-auth
     grpcio
     protobuf
-    pytz
+    proto-plus
     requests
   ];
 
@@ -47,8 +47,7 @@ buildPythonPackage rec {
       helpers used by all Google API clients.
     '';
     homepage = "https://github.com/googleapis/python-api-core";
-    changelog =
-      "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

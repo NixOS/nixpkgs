@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.0";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "1y022qlcdgdx5a88lkc3sqavklz494afbfyh100lp7xfk3f2mjln";
+    sha256 = "1jic5kynfan5zirv9pm3pfjps12zf68cpnhl7i1vls2m79zdkfa3";
   };
 
   checkInputs = with python3.pkgs;
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ];
     platforms = platforms.linux;
   };

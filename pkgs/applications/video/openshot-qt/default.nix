@@ -5,20 +5,20 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0qc5i0ay6j2wab1whl41sjb71cj02pg6y79drf7asrprq8b2rmfq";
+    sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
   };
 
   nativeBuildInputs = [ doxygen wrapGAppsHook ];
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip httplib2 pyzmq ];
+  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip_4 httplib2 pyzmq ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;

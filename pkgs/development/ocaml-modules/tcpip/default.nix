@@ -13,18 +13,14 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "6.1.0";
+  version = "6.2.0";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "7b3ed2e1ca835c1cc65ac911bcb0de12ebc2b580dd195006bdea2cb387510474";
+    sha256 = "d0f6e643ce04da808d5f977c5ab2422cdb4f67e7abdc46dd6776ceada7151e1b";
   };
-
-  patches = [
-    ./makefile-no-opam.patch
-  ];
 
   nativeBuildInputs = [
     bisect_ppx

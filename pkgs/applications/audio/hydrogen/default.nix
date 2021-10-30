@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook
-, alsaLib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
+, alsa-lib, ladspa-sdk, lash, libarchive, libjack2, liblo, libpulseaudio, libsndfile, lrdf
 , qtbase, qttools, qtxmlpatterns
 }:
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
     rev = version;
-    sha256 = "sha256-t3f+T1QTNbuJnWmD+q0yPgQxXPXvl91lZN17pKUVFlo=";
+    sha256 = "sha256-G+7vTUxYiPNKJ0Qxf/E/t0d6vC/lDs9vNfSbvUXTQgI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
-    alsaLib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
+    alsa-lib ladspa-sdk lash libarchive libjack2 liblo libpulseaudio libsndfile lrdf
     qtbase qttools qtxmlpatterns
   ];
 

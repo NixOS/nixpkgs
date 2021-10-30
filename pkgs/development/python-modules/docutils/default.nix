@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "docutils";
-  version = "0.16";
+  version = "0.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc";
+    sha256 = "686577d2e4c32380bb50cbb22f575ed742d58168cee37e99117a854bcd88f125";
   };
 
   # Only Darwin needs LANG, but we could set it in general.

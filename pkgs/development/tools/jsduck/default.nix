@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ env ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsaLib, gcc-unwrapped, libXext }:
+{ lib, stdenv, fetchurl, libSM, libX11, libICE, SDL, alsa-lib, gcc-unwrapped, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "atari++";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "04fm2ic2qi4a52mi72wcaxyrpll4k8vvchx3qrik8rhg3jrxgm47";
   };
 
-  buildInputs = [ libSM libX11 SDL libICE alsaLib gcc-unwrapped libXext ];
+  buildInputs = [ libSM libX11 SDL libICE alsa-lib gcc-unwrapped libXext ];
 
   postFixup = ''
     patchelf --set-rpath ${lib.makeLibraryPath buildInputs} "$out/bin/atari++"

@@ -103,9 +103,10 @@ in
       ''
         NAME=NixOS
         ID=nixos
-        VERSION="${cfg.version} (${cfg.codeName})"
+        VERSION="${cfg.release} (${cfg.codeName})"
         VERSION_CODENAME=${toLower cfg.codeName}
-        VERSION_ID="${cfg.version}"
+        VERSION_ID="${cfg.release}"
+        BUILD_ID="${cfg.version}"
         PRETTY_NAME="NixOS ${cfg.release} (${cfg.codeName})"
         LOGO="nix-snowflake"
         HOME_URL="https://nixos.org/"

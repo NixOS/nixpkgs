@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tool for recording, playing, editing, viewing and labeling of audio";
-    homepage = "http://www.speech.kth.se/wavesurfer/";
+    homepage = "https://www.speech.kth.se/wavesurfer/";
     license = lib.licenses.bsd0;
   };
 }

@@ -2,12 +2,13 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , coreutils
 , db
 , dpkg
 , glib
 , gtk3
+, wrapGAppsHook
 , libkrb5
 , libsecret
 , nss
@@ -18,20 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "mfpwDYRpFULD9Th8tI5yqb5RYWZJHarbWYpfKS3Q6mE=";
+    sha256 = "sha256-o7w2XHd5FnPYt9j8IIGy6OgKtdeNb/qZ+EiXGEn0NUQ=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     db
     glib
     gtk3
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
     libsecret
     nss
     xorg.libxkbfile
+    xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
   ];

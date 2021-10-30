@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc-tools";
-  version = "1.10.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-node";
-    rev = "3a094f01711942f79abd8a536c45a91b574d626f"; # version 1.10.0 was not tagged
-    sha256 = "1a7l91kxc3g7mqfqvhc3nb7zy0n21ifs5ck0qqg09qh3f44q04xm";
+    rev = "grpc-tools@${version}";
+    sha256 = "00432y19pjcimwachjcqpzra21vzmlqchhhlqxnk98bfh25kxdcb";
     fetchSubmodules = true;
   };
 

@@ -6,14 +6,14 @@
 
 let
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
-  version = "2.11.5";
+  version = "2.11.6";
 
 in stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla-${version}.tar.gz";
-    sha256 = "k2Hib9f7e1gZp+uSxcGIChjem9PtndLrAI5XOIaWcWs=";
+    sha256 = "5zRgV9tH0vs4RGf6/M/LE6oHQTc8XVk7xytVsvDdIKc=";
   };
 
   sourceRoot = "QScintilla-${version}/Qt4Qt5";
@@ -34,7 +34,6 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
   '';
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postPatch = ''

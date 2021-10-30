@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestCheckHook, pytestrunner, pytestcov
+, pytestCheckHook, pytest-runner, pytest-cov
 , isPy3k
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5";
   };
 
-  checkInputs = [ pytestCheckHook pytestrunner pytestcov ];
+  checkInputs = [ pytestCheckHook pytest-runner pytest-cov ];
 
   disabled = !isPy3k;
 

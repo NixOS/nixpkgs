@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, bleach
 , bokeh
 , param
 , pyviz-comms
@@ -12,10 +13,11 @@
 }:
 
 let
-  node = callPackage ./node {};
-in buildPythonPackage rec {
+  node = callPackage ./node { };
+in
+buildPythonPackage rec {
   pname = "panel";
-  version = "0.11.1";
+  version = "0.12.1";
 
   # Don't forget to also update the node packages
   # 1. retrieve the package.json file
@@ -23,7 +25,7 @@ in buildPythonPackage rec {
   # 3. node2nix
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce531e5c0c8a8ae74d523762aeb1666650caebbe1867aba16129d29791e921f9";
+    sha256 = "e4898d60abdb82f8a429df7f59dbf8bcaf7e19b3e633555512ceb4ce06678458";
   };
 
   # Since 0.10.0 panel attempts to fetch from the web.
@@ -42,6 +44,7 @@ in buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    bleach
     bokeh
     param
     pyviz-comms

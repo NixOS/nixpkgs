@@ -1,140 +1,95 @@
+import ./make-test-python.nix ({ lib, pkgs, ... }:
+
 let
   user = "someuser";
   password = "some_password";
-  port = builtins.toString 5232;
+  port = "5232";
+  filesystem_folder = "/data/radicale";
 
-  common = { pkgs, ... }: {
+  cli = "${pkgs.calendar-cli}/bin/calendar-cli --caldav-user ${user} --caldav-pass ${password}";
+in {
+  name = "radicale3";
+  meta.maintainers = with lib.maintainers; [ dotlambda ];
+
+  machine = { pkgs, ... }: {
     services.radicale = {
       enable = true;
-      config = ''
-        [auth]
-        type = htpasswd
-        htpasswd_filename = /etc/radicale/htpasswd
-        htpasswd_encryption = bcrypt
-
-        [storage]
-        filesystem_folder = /tmp/collections
-      '';
+      settings = {
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = "/etc/radicale/users";
+          htpasswd_encryption = "bcrypt";
+        };
+        storage = {
+          inherit filesystem_folder;
+          hook = "git add -A && (git diff --cached --quiet || git commit -m 'Changes by '%(user)s)";
+        };
+        logging.level = "info";
+      };
+      rights = {
+        principal = {
+          user = ".+";
+          collection = "{user}";
+          permissions = "RW";
+        };
+        calendars = {
+          user = ".+";
+          collection = "{user}/[^/]+";
+          permissions = "rw";
+        };
+      };
     };
+    systemd.services.radicale.path = [ pkgs.git ];
+    environment.systemPackages = [ pkgs.git ];
+    systemd.tmpfiles.rules = [ "d ${filesystem_folder} 0750 radicale radicale -" ];
     # WARNING: DON'T DO THIS IN PRODUCTION!
     # This puts unhashed secrets directly into the Nix store for ease of testing.
-    environment.etc."radicale/htpasswd".source = pkgs.runCommand "htpasswd" {} ''
+    environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" {} ''
       ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
     '';
   };
+  testScript = ''
+    machine.wait_for_unit("radicale.service")
+    machine.wait_for_open_port(${port})
 
-in
+    machine.succeed("sudo -u radicale git -C ${filesystem_folder} init")
+    machine.succeed(
+        "sudo -u radicale git -C ${filesystem_folder} config --local user.email radicale@example.com"
+    )
+    machine.succeed(
+        "sudo -u radicale git -C ${filesystem_folder} config --local user.name radicale"
+    )
 
-  import ./make-test-python.nix ({ lib, ... }@args: {
-    name = "radicale";
-    meta.maintainers = with lib.maintainers; [ aneeshusa infinisil ];
+    with subtest("Test calendar and event creation"):
+        machine.succeed(
+            "${cli} --caldav-url http://localhost:${port}/${user} calendar create cal"
+        )
+        machine.succeed("test -d ${filesystem_folder}/collection-root/${user}/cal")
+        machine.succeed('test -z "$(ls ${filesystem_folder}/collection-root/${user}/cal)"')
+        machine.succeed(
+            "${cli} --caldav-url http://localhost:${port}/${user}/cal calendar add 2021-04-23 testevent"
+        )
+        machine.succeed('test -n "$(ls ${filesystem_folder}/collection-root/${user}/cal)"')
+        (status, stdout) = machine.execute(
+            "sudo -u radicale git -C ${filesystem_folder} log --format=oneline | wc -l"
+        )
+        assert status == 0, "git log failed"
+        assert stdout == "3\n", "there should be exactly 3 commits"
 
-    nodes = rec {
-      radicale = radicale1; # Make the test script read more nicely
-      radicale1 = lib.recursiveUpdate (common args) {
-        nixpkgs.overlays = [
-          (self: super: {
-            radicale1 = super.radicale1.overrideAttrs (oldAttrs: {
-              propagatedBuildInputs = with self.pythonPackages;
-                (oldAttrs.propagatedBuildInputs or []) ++ [ passlib ];
-            });
-          })
-        ];
-        system.stateVersion = "17.03";
-      };
-      radicale1_export = lib.recursiveUpdate radicale1 {
-        services.radicale.extraArgs = [
-          "--export-storage" "/tmp/collections-new"
-        ];
-        system.stateVersion = "17.03";
-      };
-      radicale2_verify = lib.recursiveUpdate radicale2 {
-        services.radicale.extraArgs = [ "--debug" "--verify-storage" ];
-        system.stateVersion = "17.09";
-      };
-      radicale2 = lib.recursiveUpdate (common args) {
-        system.stateVersion = "17.09";
-      };
-      radicale3 = lib.recursiveUpdate (common args) {
-        system.stateVersion = "20.09";
-      };
-    };
+    with subtest("Test rights file"):
+        machine.fail(
+            "${cli} --caldav-url http://localhost:${port}/${user} calendar create sub/cal"
+        )
+        machine.fail(
+            "${cli} --caldav-url http://localhost:${port}/otheruser calendar create cal"
+        )
 
-    # This tests whether the web interface is accessible to an authenticated user
-    testScript = { nodes }: let
-      switchToConfig = nodeName: let
-        newSystem = nodes.${nodeName}.config.system.build.toplevel;
-      in "${newSystem}/bin/switch-to-configuration test";
-    in ''
-      with subtest("Check Radicale 1 functionality"):
-          radicale.succeed(
-              "${switchToConfig "radicale1"} >&2"
-          )
-          radicale.wait_for_unit("radicale.service")
-          radicale.wait_for_open_port(${port})
-          radicale.succeed(
-              "curl --fail http://${user}:${password}@localhost:${port}/someuser/calendar.ics/"
-          )
+    with subtest("Test web interface"):
+        machine.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
 
-      with subtest("Export data in Radicale 2 format"):
-          radicale.succeed("systemctl stop radicale")
-          radicale.succeed("ls -al /tmp/collections")
-          radicale.fail("ls -al /tmp/collections-new")
-
-      with subtest("Radicale exits immediately after exporting storage"):
-          radicale.succeed(
-              "${switchToConfig "radicale1_export"} >&2"
-          )
-          radicale.wait_until_fails("systemctl status radicale")
-          radicale.succeed("ls -al /tmp/collections")
-          radicale.succeed("ls -al /tmp/collections-new")
-
-      with subtest("Verify data in Radicale 2 format"):
-          radicale.succeed("rm -r /tmp/collections/${user}")
-          radicale.succeed("mv /tmp/collections-new/collection-root /tmp/collections")
-          radicale.succeed(
-              "${switchToConfig "radicale2_verify"} >&2"
-          )
-          radicale.wait_until_fails("systemctl status radicale")
-
-          (retcode, logs) = radicale.execute("journalctl -u radicale -n 10")
-          assert (
-              retcode == 0 and "Verifying storage" in logs
-          ), "Radicale 2 didn't verify storage"
-          assert (
-              "failed" not in logs and "exception" not in logs
-          ), "storage verification failed"
-
-      with subtest("Check Radicale 2 functionality"):
-          radicale.succeed(
-              "${switchToConfig "radicale2"} >&2"
-          )
-          radicale.wait_for_unit("radicale.service")
-          radicale.wait_for_open_port(${port})
-
-          (retcode, output) = radicale.execute(
-              "curl --fail http://${user}:${password}@localhost:${port}/someuser/calendar.ics/"
-          )
-          assert (
-              retcode == 0 and "VCALENDAR" in output
-          ), "Could not read calendar from Radicale 2"
-
-          radicale.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
-
-      with subtest("Check Radicale 3 functionality"):
-          radicale.succeed(
-              "${switchToConfig "radicale3"} >&2"
-          )
-          radicale.wait_for_unit("radicale.service")
-          radicale.wait_for_open_port(${port})
-
-          (retcode, output) = radicale.execute(
-              "curl --fail http://${user}:${password}@localhost:${port}/someuser/calendar.ics/"
-          )
-          assert (
-              retcode == 0 and "VCALENDAR" in output
-          ), "Could not read calendar from Radicale 3"
-
-          radicale.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
-    '';
+    with subtest("Test security"):
+        output = machine.succeed("systemd-analyze security radicale.service")
+        machine.log(output)
+        assert output[-9:-1] == "SAFE :-}"
+  '';
 })

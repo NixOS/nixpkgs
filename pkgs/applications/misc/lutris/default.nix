@@ -1,6 +1,8 @@
-{ buildPythonApplication, lib, fetchFromGitHub
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
 
-# build inputs
+  # build inputs
 , atk
 , gdk-pixbuf
 , glib-networking
@@ -13,7 +15,12 @@
 , webkitgtk
 , wrapGAppsHook
 
-# python dependencies
+  # check inputs
+, xvfb-run
+, nose
+, flake8
+
+  # python dependencies
 , dbus-python
 , distro
 , evdev
@@ -25,7 +32,7 @@
 , keyring
 , python_magic
 
-# commands that lutris needs
+  # commands that lutris needs
 , xrandr
 , pciutils
 , psmisc
@@ -44,7 +51,7 @@
 
 let
   # See lutris/util/linux.py
-  binPath = lib.makeBinPath [
+  requiredTools = [
     xrandr
     pciutils
     psmisc
@@ -62,6 +69,8 @@ let
     xorg.xkbcomp
   ];
 
+  binPath = lib.makeBinPath requiredTools;
+
   gstDeps = with gst_all_1; [
     gst-libav
     gst-plugins-bad
@@ -71,15 +80,16 @@ let
     gstreamer
   ];
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.8.3";
+  version = "0.5.9.1";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "sha256-NnWIP9oEndk/hDo5Z33pkmZ61pxT/ScmZ4YpS2ajK/8=";
+    sha256 = "sha256-ykPJneCKbFKv0x/EDo9PkRb1LkMeFeYzTDmvE3ShNe0=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -108,6 +118,20 @@ in buildPythonApplication rec {
     python_magic
   ];
 
+  checkInputs = [ xvfb-run nose flake8 ] ++ requiredTools;
+  preCheck = "export HOME=$PWD";
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run -s '-screen 0 800x600x24' make test
+    runHook postCheck
+  '';
+
+  # unhardcodes xrandr and fixes nosetests
+  # upstream in progress: https://github.com/lutris/lutris/pull/3754
+  patches = [
+    ./fixes.patch
+  ];
+
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
@@ -117,8 +141,6 @@ in buildPythonApplication rec {
   # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
   # see https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
-
-  preCheck = "export HOME=$PWD";
 
   meta = with lib; {
     homepage = "https://lutris.net";

@@ -1,18 +1,29 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto,
-  pycryptodome }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
+, pycryptodome
+, eth-utils
+}:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xpiz0wrxxj11ki9yapvsibl25qnki90bl3d39nqascg14nw17a9";
+    sha256 = "3f40cecd5ead88184aa9550afc19d057f103728108c5102f592f8415949b5a76";
   };
 
   checkInputs = [ pytest ];
 
-  propagatedBuildInputs = [ pysha3 pycrypto pycryptodome ];
+  propagatedBuildInputs = [
+    pysha3
+    pycrypto
+    pycryptodome
+  ];
+
+  pipInstallFlags = [
+    # Circular dependency on eth-utils
+    "--no-dependencies"
+  ];
 
   # setuptools-markdown uses pypandoc which is broken at the moment
   preConfigure = ''

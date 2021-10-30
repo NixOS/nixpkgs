@@ -39,7 +39,7 @@ buildPythonPackage rec {
   checkInputs = [ docutils pytestCheckHook ];
 
   LLVM = llvm;
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
 
   pytestFlagsArray = let
     # ini file (not included in tarball) required to change python_files setting,

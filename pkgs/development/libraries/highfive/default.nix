@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
 
   meta = with lib; {
-    inherit version;
     description = "Header-only C++ HDF5 interface";
     license = licenses.boost;
     homepage = "https://bluebrain.github.io/HighFive/";

@@ -14,7 +14,7 @@ let
 in
 
 callPackage ./common.nix { inherit stdenv; } {
-    name = "glibc" + lib.optionalString withGd "-gd";
+    pname = "glibc" + lib.optionalString withGd "-gd";
 
     inherit withLinuxHeaders profilingLibraries withGd;
 

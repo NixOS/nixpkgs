@@ -1,7 +1,9 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run }:
+, xorgserver, xvfb-run
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3";
@@ -12,19 +14,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-im7hd2idzyKWTSC2CTAU7k+gQZNF0/1RXVUS2ZgLsnk=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper meson ninja installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config makeWrapper meson ninja installShellFiles
+    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dmans=true"
+  ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
-    xorgserver xvfb_run
+    xorgserver xvfb-run
   ];
 
   configureFlags = [ "--disable-builddir" ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs .

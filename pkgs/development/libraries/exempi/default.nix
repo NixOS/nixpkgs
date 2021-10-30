@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-boost=${boost.dev}"
+  ] ++ lib.optionals (!doCheck) [
+    "--enable-unittest=no"
   ];
 
   buildInputs = [ expat zlib boost ]
     ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.isLinux && stdenv.is64bit;
 
   meta = with lib; {
     description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";

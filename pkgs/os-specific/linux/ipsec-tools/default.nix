@@ -7,10 +7,11 @@
 # the time being.
 
 stdenv.mkDerivation rec {
-  name = "ipsec-tools-0.8.2";
+  pname = "ipsec-tools";
+  version = "0.8.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ipsec-tools/${name}.tar.bz2";
+    url = "mirror://sourceforge/ipsec-tools/ipsec-tools-${version}.tar.bz2";
     sha256 = "0b9gfbz78k2nj0k7jdlm5kajig628ja9qm0z5yksiwz22s3v7dlf";
   };
 

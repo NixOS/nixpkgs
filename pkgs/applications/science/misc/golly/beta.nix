@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Cellular automata simulation program";
     license = lib.licenses.gpl2;
     maintainers = [lib.maintainers.raskin];

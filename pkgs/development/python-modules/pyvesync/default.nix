@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "1.3.1";
+  version = "1.4.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02fpbyg46mlpc2c1j4zylw9a1h6bacxvigrl3cndsf6fxlhfx15z";
+    sha256 = "f8bc6ebbe2c2bf37009b50b16e34747b0cfe35dd249aed4525b68c3af061941f";
   };
 
   propagatedBuildInputs = [ requests ];

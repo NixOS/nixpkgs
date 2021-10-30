@@ -1,53 +1,90 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
-, wlroots, wayland-protocols, pixman, libxkbcommon
-, cairo , pango, fontconfig, pandoc, systemd
-, withXwayland ? true, xwayland
+{ lib
+, stdenv
+, fetchFromGitHub
+, cairo
+, fontconfig
+, libevdev
+, libinput
+, libxkbcommon
+, makeWrapper
+, mesa
+, meson
+, ninja
 , nixosTests
+, pango
+, pixman
+, pkg-config
+, scdoc
+, systemd
+, wayland
+, wayland-protocols
+, withXwayland ? true , xwayland
+, wlroots
 }:
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
-    repo = "cagebreak";
+    repo = pname;
     rev = version;
-    hash = "sha256-F7fqDVbJS6pVgmj6C1/l9PAaz5yzcYpaq6oc6a6v/Qk=";
+    hash = "sha256-tWfHJajAOYZJ73GckZWWTdVz75YmHA7t/qDhM7+tJgk=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland
+  ];
 
   buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon cairo
-    pango fontconfig pandoc systemd
+    cairo
+    fontconfig
+    libevdev
+    libinput
+    libxkbcommon
+    mesa # for libEGL headers
+    pango
+    pixman
+    systemd
+    wayland
+    wayland-protocols
+    wlroots
   ];
-
-  outputs = [ "out" "contrib" ];
 
   mesonFlags = [
-    "-Dxwayland=${lib.boolToString withXwayland}"
-    "-Dversion_override=${version}"
     "-Dman-pages=true"
+    "-Dversion_override=${version}"
+    "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
+  # TODO: investigate why is this happening
+  postPatch = ''
+    sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
+  '';
+
   postInstall = ''
-    mkdir -p $contrib/share/cagebreak
-    cp $src/examples/config $contrib/share/cagebreak/config
+    install -d $out/share/cagebreak/
+    install -m644 $src/examples/config $out/share/cagebreak/
   '';
 
   postFixup = lib.optionalString withXwayland ''
-    wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
+    wrapProgram $out/bin/cagebreak \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
-  passthru.tests.basic = nixosTests.cagebreak;
-
   meta = with lib; {
-    description = "A Wayland tiling compositor inspired by ratpoison";
     homepage = "https://github.com/project-repo/cagebreak";
+    description = "A Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ berbiche ];
+    platforms = platforms.linux;
   };
+
+  passthru.tests.basic = nixosTests.cagebreak;
 }

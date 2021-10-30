@@ -1,0 +1,51 @@
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, flake8
+, stestr
+, eventlet
+, ddt
+, testtools
+, testscenarios
+}:
+
+buildPythonPackage rec {
+  pname = "hacking";
+  version = "4.1.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0fg19rlcky3n1y1ri61xyjp7534yzf8r102z9dw3zqg93f4kj20m";
+  };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "flake8<3.9.0,>=3.8.0" "flake8"
+  '';
+
+  nativeBuildInputs = [ pbr ];
+
+  propagatedBuildInputs = [
+    flake8
+  ];
+
+  checkInputs = [
+    ddt
+    stestr
+    testscenarios
+  ];
+
+  checkPhase = ''
+    stestr run
+  '';
+
+  pythonImportsCheck = [ "hacking" ];
+
+  meta = with lib; {
+    description = "OpenStack Hacking Guideline Enforcement";
+    homepage = "https://github.com/openstack/hacking";
+    license = licenses.asl20;
+    maintainers = teams.openstack.members;
+  };
+}

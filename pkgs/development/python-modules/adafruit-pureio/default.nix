@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "Adafruit-PureIO";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchPypi {
     pname = "Adafruit_PureIO";
     inherit version;
-    sha256 = "1mfa6sfz7qwgajz3lqw0s69ivvwbwvblwkjzbrwdrxjbma4jaw66";
+    sha256 = "0yd8hw676s7plq75gac4z0ilfcfydjkk3wv76bc73xy70zxj5brc";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

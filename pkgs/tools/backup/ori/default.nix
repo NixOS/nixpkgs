@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     scons PREFIX=$out WITH_ORILOCAL=1 install
   '';
 
-  installPhase = ":";
+  dontInstall = true;
 
   meta = with lib; {
     description = "A secure distributed file system";

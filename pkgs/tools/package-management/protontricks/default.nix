@@ -1,23 +1,25 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, setuptools_scm
+, setuptools-scm
+, setuptools
 , vdf
+, bash
 , steam-run
 , winetricks
-, zenity
+, yad
 , pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.4.4";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "0i7p0jj7avmq3b2qlcpwcflipndrnwsvwvhc5aal7rm95aa7xhja";
+    sha256 = "sha256-2ZOVcPCF1o8mNfHOWRFTjAEu0dWzaMxlMTcctn/ScxY=";
   };
 
   patches = [
@@ -25,41 +27,39 @@ buildPythonApplication rec {
     ./steam-run.patch
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ vdf ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    setuptools # implicit dependency, used to find data/icon_placeholder.png
+    vdf
+  ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
+      bash
       steam-run
-      (winetricks.override {
-        # Remove default build of wine to reduce closure size.
-        # Falls back to wine in PATH when --no-runtime is passed.
-        wine = null;
-      })
-      zenity
+      winetricks
+      yad
     ]}"
   ];
 
   checkInputs = [ pytestCheckHook ];
-  disabledTests = [
-    # Steam runtime is hard-coded with steam-run.patch and can't be configured
-    "test_run_steam_runtime_not_found"
-    "test_unknown_steam_runtime_detected"
 
-    # Steam runtime 2 currently isn't supported
-    # See https://github.com/NixOS/nixpkgs/issues/100655
-    "test_run_winetricks_steam_runtime_v2"
-  ];
+  # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
+  # In most cases the script is unnecessary and should be removed as part of the packaging process.
+  postInstall = ''
+    rm "$out/bin/protontricks-desktop-install"
+  '';
+
+  pythonImportsCheck = [ "protontricks" ];
 
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ metadark ];
-    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

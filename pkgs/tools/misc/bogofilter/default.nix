@@ -1,9 +1,11 @@
 {fetchurl, lib, stdenv, flex, db}:
 
 stdenv.mkDerivation rec {
-  name = "bogofilter-1.2.4";
+  pname = "bogofilter";
+  version = "1.2.4";
+
   src = fetchurl {
-    url = "mirror://sourceforge/bogofilter/${name}.tar.bz2";
+    url = "mirror://sourceforge/bogofilter/bogofilter-${version}.tar.bz2";
     sha256 = "1d56n2m9inm8gnzm88aa27xl2a7sp7aff3484vmflpqkinjqf0p1";
   };
 

@@ -4,8 +4,8 @@
 
 READ THIS FIRST
 
-This module is for official packages in the KDE Applications Bundle. All
-available packages are listed in `./srcs.nix`, although some are not yet
+This module is for official packages in the KDE Gear. All available
+packages are listed in `./srcs.nix`, although some are not yet
 packaged in Nixpkgs (see below).
 
 IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
@@ -30,6 +30,9 @@ still shows most of the available features is in `./gwenview.nix`.
 }:
 
 let
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -45,10 +48,13 @@ let
 
         outputs = args.outputs or [ "out" ];
 
-        meta = {
-          platforms = lib.platforms.linux;
-          homepage = "http://www.kde.org";
-        } // (args.meta or {});
+        meta =
+          let meta = args.meta or {}; in
+          meta // {
+            homepage = meta.homepage or "http://www.kde.org";
+            platforms = meta.platforms or lib.platforms.linux;
+            broken = meta.broken or broken;
+          };
       });
 
   packages = self: with self;
@@ -62,6 +68,7 @@ let
     in {
       akonadi = callPackage ./akonadi {};
       akonadi-calendar = callPackage ./akonadi-calendar.nix {};
+      akonadi-calendar-tools = callPackage ./akonadi-calendar-tools.nix {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-import-wizard = callPackage ./akonadi-import-wizard.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
@@ -87,6 +94,7 @@ let
       incidenceeditor = callPackage ./incidenceeditor.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
+      kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
@@ -131,6 +139,7 @@ let
       kipi-plugins = callPackage ./kipi-plugins.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
+      kio-gdrive = callPackage ./kio-gdrive.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
       klettres = callPackage ./klettres.nix {};
@@ -165,6 +174,7 @@ let
       ksquares = callPackage ./ksquares.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpublictransport = callPackage ./kpublictransport.nix {};
       kreversi = callPackage ./kreversi.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};

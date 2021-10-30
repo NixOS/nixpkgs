@@ -7,12 +7,13 @@
 # directory, but we use luajit, zeromq, and rrdtool from nixpkgs
 
 stdenv.mkDerivation rec {
-  name = "ntopng-2.0";
+  pname = "ntopng";
+  version = "2.0";
 
   src = fetchurl {
     urls = [
-      "mirror://sourceforge/project/ntop/ntopng/old/${name}.tar.gz"
-      "mirror://sourceforge/project/ntop/ntopng/${name}.tar.gz"
+      "mirror://sourceforge/project/ntop/ntopng/old/ntopng-${version}.tar.gz"
+      "mirror://sourceforge/project/ntop/ntopng/ntopng-${version}.tar.gz"
     ];
     sha256 = "0l82ivh05cmmqcvs26r6y69z849d28njipphqzvnakf43ggddgrw";
   };

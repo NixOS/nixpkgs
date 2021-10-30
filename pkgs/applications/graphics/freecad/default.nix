@@ -15,6 +15,7 @@
 , libGLU
 , libXmu
 , libf2c
+, libredwg
 , libspnav
 , matplotlib
 , medfile
@@ -23,6 +24,7 @@
 , opencascade-occt
 , pivy
 , pkg-config
+, ply
 , pycollada
 , pyside2
 , pyside2-tools
@@ -46,13 +48,13 @@
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.19.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-itIrO+/mKXOPNs+2POKT8u4YZuqx/QAwVBWrHgKP1qQ=";
+    hash = "sha256-XZ+fRl3CPCIFu3nHeMTLibwwFBlG/cWpKJlI58hTAuU=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +62,7 @@ mkDerivation rec {
     ninja
     pkg-config
     pyside2-tools
+    gfortran
     wrapQtAppsHook
   ];
 
@@ -68,7 +71,6 @@ mkDerivation rec {
     boost
     coin3d
     eigen
-    gfortran
     gts
     hdf5
     libGLU
@@ -80,6 +82,7 @@ mkDerivation rec {
     ode
     opencascade-occt
     pivy
+    ply # for openSCAD file support
     pycollada
     pyside2
     pyside2-tools
@@ -102,6 +105,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
     "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
@@ -110,7 +114,7 @@ mkDerivation rec {
       + ";${pyside2}/include/PySide2/QtCore"
       + ";${pyside2}/include/PySide2/QtWidgets"
       + ";${pyside2}/include/PySide2/QtGui"
-      )
+    )
     "-DPYSIDE_LIBRARY=PySide2::pyside2"
   ];
 
@@ -128,6 +132,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+    "--prefix PATH : ${libredwg}/bin"
   ];
 
   postFixup = ''

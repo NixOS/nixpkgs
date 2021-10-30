@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch
+, libiconv, ijs, lcms2, fetchpatch, callPackage
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
 , x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
       sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
     })
+    (fetchpatch {
+      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=a9bd3dec9fde";
+      name = "CVE-2021-3781.patch";
+      sha256 = "FvbH7cb3ZDCbNRz9DF0kDmLdF7OWNYk90wv44pimU58=";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
   ];
@@ -85,7 +90,8 @@ stdenv.mkDerivation rec {
     "--with-cups-datadir=$(out)/share/cups"
   ];
 
-  doCheck = true;
+  # make check does nothing useful
+  doCheck = false;
 
   # don't build/install statically linked bin/gs
   buildFlags = [ "so" ];
@@ -115,9 +121,24 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    pushd examples
+    for f in *.{ps,eps,pdf}; do
+      echo "Rendering $f"
+      $out/bin/gs \
+        -dNOPAUSE \
+        -dBATCH \
+        -sDEVICE=bitcmyk \
+        -sOutputFile=/dev/null \
+        -r600 \
+        -dBufferSpace=100000 \
+        $f
+    done
+    popd # examples
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
 
   meta = {
     homepage = "https://www.ghostscript.com/";
@@ -136,5 +157,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
+    mainProgram = "gs";
   };
 }

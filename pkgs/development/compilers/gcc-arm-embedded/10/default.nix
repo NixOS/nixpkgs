@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , ncurses5
 , python27
@@ -6,21 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "10-2020-q4-major";
-  subdir = "10-2020q4";
+  version = "10.3.1";
+  release = "10.3-2021.07";
 
   suffix = {
     aarch64-linux = "aarch64-linux";
-    x86_64-darwin = "mac";
+    x86_64-darwin = "mac-10.14.6";
     x86_64-linux  = "x86_64-linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${release}/gcc-arm-none-eabi-${release}-${suffix}.tar.bz2";
     sha256 = {
-      aarch64-linux = "0spkbh7vnda1w0nvavk342nb24nqxn8kln3k9j85mzil560qqg9l";
-      x86_64-darwin = "1h5xn0npwkilqxg7ifrymsl7kjpafr9r9gjqgcpb0kjxavijvldy";
-      x86_64-linux  = "066nvhg5zdf3jvy9w23y439ghf1hvbicdyrrw9957gwb8ym4q4r1";
+      aarch64-linux = "0y4nyrff5bq90v44z2h90gqgl18bs861i9lygx4z89ym85jycx9s";
+      x86_64-darwin = "1r3yidmgx1xq1f19y2c5njf2g95vs9cssmmsxsb68qm192r58i8a";
+      x86_64-linux  = "1skcalz1sr0hhpjcl8qjsqd16n2w0zrbnlrbr8sx0g728kiqsnwc";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

@@ -1,5 +1,6 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform }:
+, fetchpatch
+, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
   libPath = lib.makeLibraryPath [ gmp ];
@@ -7,21 +8,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "0.11.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1sl69ygdwhf80sx6m76x5gp1kwsw0rr1lv814cgzm8hvyr6g0jqa";
+    sha256 = "0xmml81krr0i18b14dymfdq43szpzws7qj8k404qab51lkqxyxsb";
   };
 
-  cargoSha256 = "1f881maf8jizd5ip7pc1ncbiq7lpggp0byma13pvqk7gisnqyr4r";
+  cargoSha256 = "sha256-xjJ39hoSDn0VUH0YcL+mQBXbzFcIvZ38dPjBxV/yVNc=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   OPENSSL_NO_VENDOR = 1;
-  buildInputs = [ curl zlib openssl ];
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   cargoBuildFlags = [ "--features no-self-update" ];
 
@@ -39,12 +41,17 @@ rustPlatform.buildRustPackage rec {
        --subst-var dynamicLinker \
        --subst-var libPath
     '')
+    # fix build, will be included in 1.1.1
+    (fetchpatch {
+      url = "https://github.com/leanprover/elan/commit/8d1dec09d67b2ac1768b111d24f1a1cabdd563fa.patch";
+      sha256 = "sha256-yMdnXqycu4VF9EKavZ85EuspvAqvzDSIm5894SB+3+A=";
+    })
   ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc leanmake; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd
@@ -61,7 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

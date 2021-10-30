@@ -1,37 +1,56 @@
 #!/usr/bin/env bash
 # Bash 3 compatible for Darwin
 
+# For getting the latest version of plugins automatically
+API_URL="https://api.github.com/repos/pulumi"
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="2.24.1"
+VERSION="3.14.0"
 
-# Grab latest release ${VERSION} from
-# https://github.com/pulumi/pulumi-${NAME}/releases
-plugins=(
-    "auth0=1.10.0"
-    "aws=3.36.0"
-    "cloudflare=2.14.2"
-    "consul=2.9.1"
-    "datadog=2.17.1"
-    "digitalocean=3.7.0"
-    "docker=2.9.1"
-    "gcp=4.19.0"
-    "github=3.4.0"
-    "gitlab=3.8.1"
-    "hcloud=0.7.1"
-    "kubernetes=2.8.3"
-    "mailgun=2.5.1"
-    "mysql=2.5.1"
-    "openstack=2.17.1"
-    "packet=3.2.2"
-    "postgresql=2.9.0"
-    "random=3.1.1"
-    "vault=3.5.1"
-    "vsphere=2.13.1"
+# A hashmap containing a plugin's name and it's respective repository inside
+# Pulumi's Github organization
+
+declare -A pulumi_repos
+pulumi_repos=(
+    ["auth0"]="pulumi-auth0"
+    ["aws"]="pulumi-aws"
+    ["azure"]="pulumi-azure"
+    ["cloudflare"]="pulumi-cloudflare"
+    ["consul"]="pulumi-consul"
+    ["datadog"]="pulumi-datadog"
+    ["digitalocean"]="pulumi-digitalocean"
+    ["docker"]="pulumi-docker"
+    ["equinix-metal"]="pulumi-equinix-metal"
+    ["gcp"]="pulumi-gcp"
+    ["github"]="pulumi-github"
+    ["gitlab"]="pulumi-gitlab"
+    ["hcloud"]="pulumi-hcloud"
+    ["kubernetes"]="pulumi-kubernetes"
+    ["linode"]="pulumi-linode"
+    ["mailgun"]="pulumi-mailgun"
+    ["mysql"]="pulumi-mysql"
+    ["openstack"]="pulumi-openstack"
+    ["packet"]="pulumi-packet"
+    ["postgresql"]="pulumi-postgresql"
+    ["random"]="pulumi-random"
+    ["vault"]="pulumi-vault"
+    ["vsphere"]="pulumi-vsphere"
 )
 
+# Contains latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
+
+# Dynamically builds the plugin array, using the hashmap's key/values and the
+# API for getting the latest version.
+plugins=()
+for key in "${!pulumi_repos[@]}"; do
+    plugins+=("${key}=$(curl -s ${API_URL}/${pulumi_repos[${key}]}/releases/latest | jq -M -r .tag_name | sed 's/v//g')")
+    sleep 1
+done
+
 function genMainSrc() {
-    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
+    local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-${1}-${2}.tar.gz"
     local sha256
     sha256=$(nix-prefetch-url "$url")
     echo "      {"
@@ -46,13 +65,17 @@ function genSrcs() {
         local version=${plugVers#*=}
         # url as defined here
         # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
-        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
+        local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
         local sha256
         sha256=$(nix-prefetch-url "$url")
-        echo "      {"
-        echo "        url = \"${url}\";"
-        echo "        sha256 = \"$sha256\";"
-        echo "      }"
+        if [ "$sha256" ]; then  # file exists
+            echo "      {"
+            echo "        url = \"${url}\";"
+            echo "        sha256 = \"$sha256\";"
+            echo "      }"
+        else
+            echo "      # pulumi-resource-${plug} skipped (does not exist on remote)"
+        fi
     done
 }
 
@@ -63,16 +86,29 @@ function genSrcs() {
 {
   version = "${VERSION}";
   pulumiPkgs = {
-    x86_64-linux = [
 EOF
-  genMainSrc "linux"
-  genSrcs "linux"
-  echo "    ];"
-  echo "    x86_64-darwin = ["
 
-  genMainSrc "darwin"
-  genSrcs "darwin"
+  echo "    x86_64-linux = ["
+  genMainSrc "linux" "x64"
+  genSrcs "linux" "amd64"
   echo "    ];"
+
+  echo "    x86_64-darwin = ["
+  genMainSrc "darwin" "x64"
+  genSrcs "darwin" "amd64"
+  echo "    ];"
+
+  echo "    aarch64-linux = ["
+  genMainSrc "linux" "arm64"
+  genSrcs "linux" "arm64"
+  echo "    ];"
+
+  echo "    aarch64-darwin = ["
+  genMainSrc "darwin" "arm64"
+  genSrcs "darwin" "arm64"
+  echo "    ];"
+
   echo "  };"
   echo "}"
+
 } > data.nix

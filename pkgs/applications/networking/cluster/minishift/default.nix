@@ -34,12 +34,11 @@ in buildGoPackage rec {
       --replace '"runtime"' ""
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X ${goPackagePath}/pkg/version.minishiftVersion=${version}
-      -X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}
-      -X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/pkg/version.minishiftVersion=${version}"
+    "-X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}"
+    "-X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}"
+  ];
 
   preBuild = ''
     (cd go/src/github.com/minishift/minishift

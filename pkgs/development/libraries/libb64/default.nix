@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libb64";
-  version = "1.2";
+  version = "2.0.0.1";
 
-  src = fetchurl {
-    url = "http://download.draios.com/dependencies/libb64-1.2.src.zip";
-    sha256 = "1lxzi6v10qsl2r6633dx0zwqyvy0j19nmwclfd0d7qybqmhqsg9l";
+  src = fetchFromGitHub {
+    owner = "libb64";
+    repo = "libb64";
+    rev = "v${version}";
+    sha256 = "sha256-9loDftr769qnIi00MueO86kjha2EiG9pnCLogp0Iq3c=";
   };
-
-  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out $out/lib $out/bin $out/include
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "ANSI C routines for fast base64 encoding/decoding";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;

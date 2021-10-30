@@ -8,6 +8,18 @@ let
   username = config.users.users.mirakurun.name;
   groupname = config.users.users.mirakurun.group;
   settingsFmt = pkgs.formats.yaml {};
+
+  polkitRule = pkgs.writeTextDir "share/polkit-1/rules.d/10-mirakurun.rules" ''
+    polkit.addRule(function (action, subject) {
+      if (
+        (action.id == "org.debian.pcsc-lite.access_pcsc" ||
+          action.id == "org.debian.pcsc-lite.access_card") &&
+        subject.user == "${username}"
+      ) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 in
   {
     options = {
@@ -48,10 +60,19 @@ in
           '';
         };
 
+        allowSmartCardAccess = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Install polkit rules to allow Mirakurun to access smart card readers
+            which is commonly used along with tuner devices.
+          '';
+        };
+
         serverSettings = mkOption {
           type = settingsFmt.type;
           default = {};
-          example = literalExample ''
+          example = literalExpression ''
             {
               highWaterMark = 25165824;
               overflowTimeLimit = 30000;
@@ -68,7 +89,7 @@ in
         tunerSettings = mkOption {
           type = with types; nullOr settingsFmt.type;
           default = null;
-          example = literalExample ''
+          example = literalExpression ''
             [
               {
                 name = "tuner-name";
@@ -89,7 +110,7 @@ in
         channelSettings = mkOption {
           type = with types; nullOr settingsFmt.type;
           default = null;
-          example = literalExample ''
+          example = literalExpression ''
             [
               {
                 name = "channel";
@@ -110,7 +131,7 @@ in
     };
 
     config = mkIf cfg.enable {
-      environment.systemPackages = [ mirakurun ];
+      environment.systemPackages = [ mirakurun ] ++ optional cfg.allowSmartCardAccess polkitRule;
       environment.etc = {
         "mirakurun/server.yml".source = settingsFmt.generate "server.yml" cfg.serverSettings;
         "mirakurun/tuners.yml" = mkIf (cfg.tunerSettings != null) {
@@ -152,7 +173,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${mirakurun}/bin/mirakurun";
+          ExecStart = "${mirakurun}/bin/mirakurun-start";
           User = username;
           Group = groupname;
           RuntimeDirectory="mirakurun";

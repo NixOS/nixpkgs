@@ -6,6 +6,7 @@
 , cinnamon-desktop
 , cinnamon-menus
 , cinnamon-session
+, cinnamon-translations
 , cjs
 , fetchFromGitHub
 , gdk-pixbuf
@@ -19,6 +20,7 @@
 , libsoup
 , libstartup_notification
 , libXtst
+, libXdamage
 , muffin
 , networkmanager
 , pkg-config
@@ -27,7 +29,7 @@
 , wrapGAppsHook
 , libxml2
 , gtk-doc
-, gnome3
+, gnome
 , python3
 , keybinder3
 , cairo
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 pam pexpect distro ]))
+    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro ]))
     atk
     cacert
     cinnamon-control-center
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
     libsoup
     libstartup_notification
     libXtst
+    libXdamage
     muffin
     networkmanager
     pkg-config
@@ -89,7 +92,7 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    gnome3.caribou
+    gnome.caribou
     keybinder3
     upower
     xapps
@@ -113,7 +116,10 @@ stdenv.mkDerivation rec {
     gtk-doc
   ];
 
-  configureFlags = [ "--disable-static" "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" "--with-libxml=${libxml2.dev}/include/libxml2" "--enable-gtk-doc=no" ];
+  # use locales from cinnamon-translations (not using --localedir because datadir is used)
+  postInstall = ''
+    ln -s ${cinnamon-translations}/share/locale $out/share/locale
+  '';
 
   postPatch = ''
     find . -type f -exec sed -i \

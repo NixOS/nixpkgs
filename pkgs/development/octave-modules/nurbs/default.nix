@@ -5,21 +5,12 @@
 
 buildOctavePackage rec {
   pname = "nurbs";
-  version = "1.3.13";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0zkyldm63pc3pcal3yvj6af24cvpjvv9qfhf0ihhwcsh4w3yggyv";
+    sha256 = "16r05av75nvmkz1knf0nv0gj4fcjjf3jnyf94bdgxf84wahncim7";
   };
-
-  # Has been fixed in more recent commits, but has not been pushed out as a
-  # new version yet.
-  # The sed changes allow nurbs to compile.
-  patchPhase = ''
-    sed -i s/feval/octave::feval/g src/*.cc
-    sed -i s/is_real_type/isreal/g src/*.cc
-    sed -i s/is_cell/iscell/g src/*.cc
-  '';
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/nurbs/index.html";

@@ -4,7 +4,7 @@
 , asn1crypto
 , asysocks
 , minikerberos
-, prompt_toolkit
+, prompt-toolkit
 , tqdm
 , winacl
 , winsspi
@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.3.29";
+  version = "0.3.30";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0khwyhylh28qvz35pdckr5fdd82zsybv0xmzlzjbgcv99cyy1a94";
+    sha256 = "sha256-fX+W1Bq4F0/6DyxWeA6zvoswFQCdDpSk29g7nq1cYYE=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     asysocks
     minikerberos
-    prompt_toolkit
+    prompt-toolkit
     tqdm
     winacl
     winsspi

@@ -1,21 +1,21 @@
 { lib, stdenv, fetchurl, nasm
-, alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
+, alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
 , Cocoa, AudioToolbox, Carbon, CoreMIDI, AudioUnit, cctools
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
-    sha256 = "FGllflk72Ky8+sC4ObCG9kDr8SBjPpPxFsq2UrWyc4c=";
+    sha256 = "sha256:08ynw1cmld41p4bwrw84gb1nv229va70i91qiqsjr3c2jnqy8zml";
   };
 
   nativeBuildInputs = [ nasm ];
 
   buildInputs = lib.optionals stdenv.isLinux [
-    alsaLib
+    alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
   ] ++ [

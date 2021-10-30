@@ -7,9 +7,10 @@
 assert useOpenGL -> libGL != null && libGLU != null;
 
 stdenv.mkDerivation rec {
-  name = "prboom-2.5.0";
+  pname = "prboom";
+  version = "2.5.0";
   src = fetchurl {
-    url = "mirror://sourceforge/prboom/prboom-2.5.0.tar.gz";
+    url = "mirror://sourceforge/prboom/prboom-${version}.tar.gz";
     sha256 = "1bjb04q8dk232956k30qlpq6q0hxb904yh1nflr87jcc1x3iqv12";
   };
 

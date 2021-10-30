@@ -1,15 +1,12 @@
-{ lib, stdenv, fetchurl, unzip, jdk }:
+{ lib, stdenv, fetchurl, jdk }:
 
-stdenv.mkDerivation {
-  name = "jboss-as-7.1.1.Final";
+stdenv.mkDerivation rec {
+  pname = "jboss-as";
+  version = "7.1.1.Final";
   src = fetchurl {
-    url = "https://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz";
+    url = "https://download.jboss.org/jbossas/${lib.versions.majorMinor version}/jboss-as-${version}/jboss-as-${version}.tar.gz";
     sha256 = "1bdjw0ib9qr498vpfbg8klqw6rl11vbz7vwn6gp1r5gpqkd3zzc8";
   };
-
-  nativeBuildInputs = [ unzip ];
-
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
     mv $PWD $out

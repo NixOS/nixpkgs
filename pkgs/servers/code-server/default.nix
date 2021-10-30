@@ -1,26 +1,26 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, moreutils, jq, git, zip, rsync, pkg-config, yarn, python2
-, nodejs-12_x, libsecret, xorg, ripgrep
+, moreutils, jq, git, zip, rsync, pkg-config, yarn, python3
+, nodejs-14_x, libsecret, xorg, ripgrep
 , AppKit, Cocoa, Security, cctools }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs-12_x;
-  python = python2;
+  nodejs = nodejs-14_x;
+  python = python3;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "3.8.0";
-  commit = "c4610f7829701aadb045d450013b84491c30580d";
+  version = "3.9.0";
+  commit = "fc6d123da59a4e5a675ac8e080f66e032ba01a1b";
 
   src = fetchFromGitHub {
     owner = "cdr";
     repo = "code-server";
     rev = "v${version}";
-    sha256 = "1snc7dbqfz53337h6av2zhkrn54ypanxljs5by4jqczq96c2v6yk";
+    sha256 = "0jgmf8d7hki1iv6yy1z0s5qjyxchxnwj8kv53jrwkllim08swbi3";
   };
 
   cloudAgent = buildGoModule rec {
@@ -46,7 +46,6 @@ in stdenv.mkDerivation rec {
   yarnCache = stdenv.mkDerivation {
     name = "${pname}-${version}-${system}-yarn-cache";
     inherit src;
-    phases = ["unpackPhase" "buildPhase"];
     nativeBuildInputs = [ yarn' git ];
     buildPhase = ''
       export HOME=$PWD
@@ -62,9 +61,9 @@ in stdenv.mkDerivation rec {
 
     # to get hash values use nix-build -A code-server.prefetchYarnCache
     outputHash = {
-      x86_64-linux = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
-      aarch64-linux = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
-      x86_64-darwin = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
+      x86_64-linux = "01nkqcfvx2qw9g60h8k9x221ibv3j58vdkjzcjnj7ph54a33ifih";
+      aarch64-linux = "01nkqcfvx2qw9g60h8k9x221ibv3j58vdkjzcjnj7ph54a33ifih";
+      x86_64-darwin = "01nkqcfvx2qw9g60h8k9x221ibv3j58vdkjzcjnj7ph54a33ifih";
     }.${system} or (throw "Unsupported system ${system}");
   };
 
@@ -210,7 +209,7 @@ in stdenv.mkDerivation rec {
     ln -s "${cloudAgent}/bin/cloud-agent" $out/libexec/code-server/lib/coder-cloud-agent
 
     # create wrapper
-    makeWrapper "${nodejs-12_x}/bin/node" "$out/bin/code-server" \
+    makeWrapper "${nodejs-14_x}/bin/node" "$out/bin/code-server" \
       --add-flags "$out/libexec/code-server/out/node/entry.js"
   '';
 

@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1qv2mrz6vy2sl7zhrj9vw016pjd7hmjr2ls0w8bbv1hgrddicn9r";
+    sha256 = "sha256-KLVkyiXjpqskM67W9uPl9aPKc3pYMu0nAfwI0OpOniE=";
   };
 
   propagatedBuildInputs = with python3Packages; [

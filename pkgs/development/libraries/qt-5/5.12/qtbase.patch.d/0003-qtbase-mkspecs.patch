@@ -1,6 +1,6 @@
-From 8bdbddc2e5fef1553b1ba0297d3c03b38e9b947b Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Wed, 18 Sep 2019 05:39:39 -0500
+From 9ffbcc5e362d17aea3e3d67e43cd3cd993e987eb Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Mon, 12 Apr 2021 20:05:25 +0200
 Subject: [PATCH 03/12] qtbase-mkspecs
 
 ---
@@ -12,13 +12,13 @@ Subject: [PATCH 03/12] qtbase-mkspecs
  mkspecs/features/qt_build_paths.prf           |  4 +-
  mkspecs/features/qt_docs.prf                  | 10 +--
  mkspecs/features/qt_example_installs.prf      |  2 +-
- mkspecs/features/qt_functions.prf             |  2 +-
+ mkspecs/features/qt_functions.prf             | 27 ++++---
  mkspecs/features/qt_installs.prf              | 22 ++---
  mkspecs/features/qt_plugin.prf                |  2 +-
- 11 files changed, 39 insertions(+), 142 deletions(-)
+ 11 files changed, 53 insertions(+), 153 deletions(-)
 
 diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
-index 00da9bd33f..bd166fbfea 100644
+index 02e5775983..3782949d32 100644
 --- a/mkspecs/features/create_cmake.prf
 +++ b/mkspecs/features/create_cmake.prf
 @@ -21,7 +21,7 @@ load(cmake_functions)
@@ -96,7 +96,7 @@ index 00da9bd33f..bd166fbfea 100644
      INSTALLS += cmake_qt5_plugin_file
  
      return()
-@@ -333,7 +308,7 @@ exists($$cmake_macros_file.input) {
+@@ -334,7 +309,7 @@ exists($$cmake_macros_file.input) {
      cmake_qt5_module_files.files += $$cmake_macros_file.output
  }
  
@@ -370,18 +370,44 @@ index 43b58817fe..e635b8f67a 100644
  
  check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 1903e509c8..ae7b585989 100644
+index 1903e509c8..1dc117a388 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
-@@ -69,7 +69,7 @@ defineTest(qtHaveModule) {
+@@ -69,19 +69,22 @@ defineTest(qtHaveModule) {
  defineTest(qtPrepareTool) {
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("command -v $$2")
-         exists($${cmd}.pl) {
-             $${1}_EXE = $${cmd}.pl
-             cmd = perl -w $$system_path($${cmd}.pl)
+-        exists($${cmd}.pl) {
+-            $${1}_EXE = $${cmd}.pl
+-            cmd = perl -w $$system_path($${cmd}.pl)
+-        } else: contains(QMAKE_HOST.os, Windows) {
+-            $${1}_EXE = $${cmd}.exe
+-            cmd = $$system_path($${cmd}.exe)
+-        } else:contains(QMAKE_HOST.os, Darwin) {
+-            BUNDLENAME = $${cmd}.app/Contents/MacOS/$$2
+-            exists($$BUNDLENAME) {
+-                cmd = $$BUNDLENAME
++        cmd = $$system("command -v $${2}")
++        isEmpty(cmd) {
++            cmd = $$system("command -v $${2}.pl")
++            !isEmpty(cmd) {
++                $${1}_EXE = $$cmd
++                cmd = perl -w $$system_path($${cmd})
++            } else: contains(QMAKE_HOST.os, Windows) {
++                cmd = $$system("command -v $${2}.exe")
++                $${1}_EXE = $$cmd
++            } else: contains(QMAKE_HOST.os, Darwin) {
++                cmd = $$system("command -v $${2}.app")
++                !isEmpty(cmd) {
++                    cmd = $${cmd}/Contents/MacOS/$${2}
++                    $${1}_EXE = $$cmd
++                }
+             }
+-            $${1}_EXE = $$cmd
+         } else {
+             $${1}_EXE = $$cmd
+         }
 diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
 index 1ebca17366..b784441da0 100644
 --- a/mkspecs/features/qt_installs.prf
@@ -461,5 +487,5 @@ index 40528a65e2..903f795284 100644
  
  TARGET = $$qt5LibraryTarget($$TARGET)
 -- 
-2.23.GIT
+2.29.3
 

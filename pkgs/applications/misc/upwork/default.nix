@@ -1,19 +1,17 @@
 { lib, stdenv, fetchurl, dpkg, wrapGAppsHook, autoPatchelfHook
-, alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
-, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
+, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
+, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11, libxcb
+, libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
+, libXScrnSaver, libXtst, mesa, nspr, nss, pango, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.5.0.1";
+  version = "5.6.9.3";
 
   src = fetchurl {
-    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_5_0_1_291c031686ed44ff/${pname}_${version}_amd64.deb";
-    sha256 = "49192ecfb10929b5b51cf8899186059649c894109ec172695cd7cfaa50923f6a";
+    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_9_3_10c2eb9781db4d7f/${pname}_${version}_amd64.deb";
+    sha256 = "0b884aa6992d438cee09f58673780218a00a823e03c114b0c753947020c0a327";
   };
-
-  dontWrapGApps = true;
 
   nativeBuildInputs = [
     dpkg
@@ -23,13 +21,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libcxx systemd libpulseaudio
-    stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
+    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups
+    dbus expat fontconfig freetype gdk-pixbuf glib gtk3 libdrm libnotify
+    libuuid libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes
+    libXi libXrandr libXrender libXScrnSaver libXtst mesa nspr nss pango systemd
   ];
 
   libPath = lib.makeLibraryPath buildInputs;
+
+  dontWrapGApps = true;
+  dontBuild = true;
+  dontConfigure = true;
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
@@ -40,7 +42,6 @@ stdenv.mkDerivation rec {
     mv usr $out
     mv opt $out
     sed -e "s|/opt/Upwork|$out/bin|g" -i $out/share/applications/upwork.desktop
-
     makeWrapper $out/opt/Upwork/upwork \
       $out/bin/upwork \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \

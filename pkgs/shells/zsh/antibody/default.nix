@@ -15,12 +15,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest shell plugin manager";
     homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne worldofpeace ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

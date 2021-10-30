@@ -1,10 +1,11 @@
-{ pkgs ? import ../../../../. {} }:
+{ pkgs ? import ../../../../. { } }:
 
 with pkgs;
 
 mkShell {
-  buildInputs = [
+  packages = [
     common-updater-scripts
+    nuget-to-nix
     curl
     dotnetCorePackages.sdk_5_0
     jq

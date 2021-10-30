@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
-, dbus, readline ? null, pcsclite ? null
+, nixosTests
+, withDbus ? true, dbus
+, withReadline ? true, readline
+, withPcsclite ? true, pcsclite
+, readOnlyModeSSIDs ? false
 }:
 
 with lib;
@@ -43,6 +47,9 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/cgit/hostap/patch/?id=a0541334a6394f8237a4393b7372693cd7e96f15";
       sha256 = "1gbhlz41x1ar1hppnb76pqxj6vimiypy7c4kq6h658637s4am3xg";
     })
+  ] ++ lib.optionals readOnlyModeSSIDs [
+    # Allow read-only networks
+    ./0001-Implement-read-only-mode-for-ssids.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -82,16 +89,16 @@ stdenv.mkDerivation rec {
     CONFIG_TDLS=y
     CONFIG_BGSCAN_SIMPLE=y
     CONFIG_BGSCAN_LEARN=y
-  '' + optionalString (pcsclite != null) ''
+  '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString (dbus != null) ''
+  '' + optionalString withDbus ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
-  '' + (if readline != null then ''
+  '' + (if withReadline then ''
     CONFIG_READLINE=y
   '' else ''
     CONFIG_WPA_CLI_EDIT=y
@@ -108,10 +115,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
       -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
-      -I${lib.getDev pcsclite}/include/PCSC/"
+      ${optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
   '';
 
-  buildInputs = [ openssl libnl dbus readline pcsclite ];
+  buildInputs = [ openssl libnl ]
+    ++ optional withDbus dbus
+    ++ optional withReadline readline
+    ++ optional withPcsclite pcsclite;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -130,11 +140,15 @@ stdenv.mkDerivation rec {
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+  };
+
   meta = with lib; {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;
   };
 }

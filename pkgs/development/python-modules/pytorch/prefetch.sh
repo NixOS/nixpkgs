@@ -1,0 +1,36 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p nix-prefetch-scripts
+
+version=$1
+
+bucket="https://download.pytorch.org/whl/cu111"
+
+url_and_key_list=(
+"x86_64-linux-37 $bucket/torch-${version}%2Bcu111-cp37-cp37m-linux_x86_64.whl torch-${version}-cp37-cp37m-linux_x86_64.whl"
+"x86_64-linux-38 $bucket/torch-${version}%2Bcu111-cp38-cp38-linux_x86_64.whl torch-${version}-cp38-cp38-linux_x86_64.whl"
+"x86_64-linux-39 $bucket/torch-${version}%2Bcu111-cp39-cp39-linux_x86_64.whl torch-${version}-cp39-cp39-linux_x86_64.whl"
+)
+
+hashfile=binary-hashes-"$version".nix
+rm -f $hashfile
+echo "  \"$version\" = {" >> $hashfile
+
+for url_and_key in "${url_and_key_list[@]}"; do
+  key=$(echo "$url_and_key" | cut -d' ' -f1)
+  url=$(echo "$url_and_key" | cut -d' ' -f2)
+  name=$(echo "$url_and_key" | cut -d' ' -f3)
+
+  echo "prefetching ${url}..."
+  hash=$(nix hash to-sri --type sha256 `nix-prefetch-url "$url" --name "$name"`)
+
+  echo "    $key = {" >> $hashfile
+  echo "      name = \"$name\";" >> $hashfile
+  echo "      url = \"$url\";" >> $hashfile
+  echo "      hash = \"$hash\";" >> $hashfile
+  echo "    };" >> $hashfile
+
+  echo
+done
+
+echo "  };" >> $hashfile
+echo "done."

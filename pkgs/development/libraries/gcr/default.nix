@@ -11,32 +11,28 @@
 , libtasn1
 , gtk3
 , pango
+, libsecret
+, openssh
+, systemd
 , gobject-introspection
 , makeWrapper
 , libxslt
 , vala
-, gnome3
+, gnome
 , python3
 , shared-mime-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.38.1";
+  version = "3.41.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "F/yvnEqTpl+xxyuCZDuxAsEzRAhGh9WIbqZjE4aNnsk=";
+    sha256 = "CQn8SeqK1IMtJ1ZP8v0dxmZpbioHxzlBxIgp5gVy2gE=";
   };
-
-  postPatch = ''
-    patchShebangs build/ gcr/fixtures/
-
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -56,6 +52,9 @@ stdenv.mkDerivation rec {
     libgcrypt
     libtasn1
     pango
+    libsecret
+    openssh
+    systemd
   ];
 
   propagatedBuildInputs = [
@@ -70,11 +69,21 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=false"
+    # We are still using ssh-agent from gnome-keyring.
+    # https://github.com/NixOS/nixpkgs/issues/140824
+    "-Dssh_agent=false"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  enableParallelBuilding = true;
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+
+  postPatch = ''
+    patchShebangs build/ gcr/fixtures/
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   preFixup = ''
     wrapProgram "$out/bin/gcr-viewer" \
@@ -82,13 +91,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
   meta = with lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";

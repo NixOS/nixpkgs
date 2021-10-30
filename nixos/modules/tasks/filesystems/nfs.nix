@@ -35,7 +35,7 @@ in
           <link xlink:href="https://linux.die.net/man/5/idmapd.conf"/>
           for details.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             Translation = {
               GSS-Methods = "static,nsswitch";

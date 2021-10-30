@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib cppo ];
 
   createFindlibDestdir = true;
-  dontConfigure = true;
 
   makeFlags = lib.optional minimal "minimal=1";
 

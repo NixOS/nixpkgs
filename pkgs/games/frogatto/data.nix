@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "frogatto-data";
-  version = "unstable-2018-12-18";
+  version = "unstable-2021-05-24";
 
   src = fetchFromGitHub {
     owner = "frogatto";
     repo = "frogatto";
     # master branch as of 2020-12-17
-    rev = "c1d0813b3b755a4e232369b6791397ad058efc16";
-    sha256 = "1fhaidd35392zzavp93r6ihyansgkc3m1ilz71ia1zl4n3fbsxjg";
+    rev = "8b0f2bc8f9f172f6225b8e0d806552cb94f35e2a";
+    sha256 = "09nrna9l1zj2ma2bazdhdvphwy570kfz4br4xgpwq21rsjrvrqiy";
   };
 
   installPhase = ''

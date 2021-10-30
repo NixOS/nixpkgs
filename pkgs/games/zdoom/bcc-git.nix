@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "doom-bcc-git-0.8.0.2018.01.04";
+  pname = "doom-bcc";
+  version = "unstable-2018-01-04";
 
   src = fetchFromGitHub {
     owner = "wormt";

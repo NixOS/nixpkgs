@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, makeWrapper
-, python
+, python3
 , fuse
 , pkg-config
 , libpcap
@@ -10,19 +9,23 @@
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.115";
+  version = "3.0.116";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dap9dqwwx8adma6arxg015riqc86cmjv2m44hk0kz7s24h79ipq";
+    sha256 = "sha256-/+l4BURvL1R6te6tlXRJx7YBDyYuMrGnzzhMc9XeXKc=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs =
-    [ fuse libpcap zlib python ];
+    [ fuse libpcap zlib python3 ];
+
+  strictDeps = true;
 
   buildFlags = lib.optionals stdenv.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
 
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
       "/usr/local/lib/pkgconfig" "/nonexistent"
   '';
 
-  preBuild = lib.optional stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.h --replace \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"

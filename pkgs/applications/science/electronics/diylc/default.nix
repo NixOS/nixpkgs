@@ -2,11 +2,11 @@
 
 let
   pname = "diylc";
-  version = "4.17.0";
+  version = "4.18.0";
   files = {
     app = fetchurl {
       url = "https://github.com/bancika/diy-layout-creator/releases/download/v${version}/diylc-${version}.zip";
-      sha256 = "0cysqkrddhbs7rprm8xm21c286mz4apw66fxakhzlg50kjn0nwjv";
+      sha256 = "09fpp3dn086clgnjz5yj4fh5bnjvj6mvxkx9n3zamcwszjmxr40d";
     };
     icon16 = fetchurl {
       url = "https://raw.githubusercontent.com/bancika/diy-layout-creator/v${version}/diylc/diylc-core/src/org/diylc/core/images/icon_small.png";
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/share/diylc
-    ${unzip}/bin/unzip -UU ${files.app} -d $out/share/diylc
+    mkdir -p $out/share/diylc
+    unzip -UU ${files.app} -d $out/share/diylc
     rm $out/share/diylc/diylc.exe
     rm $out/share/diylc/run.sh
 
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     install -Dm644 ${files.icon32} $out/share/icons/hicolor/32x32/apps/diylc_icon.png
     install -Dm644 ${files.icon48} $out/share/icons/hicolor/48x48/apps/diylc_icon.png
 
-    install -d $out/share/applications
+    mkdir -p $out/share/applications
     ln -s ${launcher}/share/applications/* $out/share/applications/
 
-    install -d $out/bin
+    mkdir -p $out/bin
     cat <<EOF > $out/bin/diylc
     #!${bash}/bin/sh
     cd $out/share/diylc
@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bancika/diy-layout-creator/releases";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

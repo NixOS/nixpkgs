@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, dateutil
+, python-dateutil
 , fetchFromGitHub
 , fetchpatch
 , mock
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
-    dateutil
+    python-dateutil
     pytz
     six
     msgpack

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen
+, boost, python3, eigen, python3Packages
 , icestorm, trellis
 , llvmPackages
 
@@ -14,21 +14,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nextpnr";
-  version = "2021.01.02";
+  version = "2021.09.27";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr";
-      rev    = "9b9628047c01a970cfe20f83f2b7129ed109440d";
-      sha256 = "0pcv96d0n40h2ipywi909hpzlys5b6r4pamc320qk1xxhppmgkmm";
+      rev    = "9d8d3bdbc48133ff7758c9c5293e5904bc6e5ba7";
+      sha256 = "sha256-5Axo8qX2+ATqQ170QqfhRwYfCRQLCKBW1kc89x9XljE=";
       name   = "nextpnr";
     })
     (fetchFromGitHub {
       owner  = "YosysHQ";
       repo   = "nextpnr-tests";
-      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
-      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      rev    = "ccc61e5ec7cc04410462ec3196ad467354787afb";
+      sha256 = "sha256-VT0JfpRLgfo2WG+eoMdE0scPM5nKZZ/v1XlkeDNcQCU=";
       name   = "nextpnr-tests";
     })
   ];
@@ -39,17 +39,18 @@ stdenv.mkDerivation rec {
      = [ cmake ]
     ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs
-     = [ boostPython python3 eigen ]
+     = [ boostPython python3 eigen python3Packages.apycula ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5"
+      "-DARCH=generic;ice40;ecp5;gowin"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDBS=OFF"
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = with builtins; ''
     # use PyPy for icestorm if enabled
-    substituteInPlace ./ice40/family.cmake \
+    substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-generic
     wrapQtApp $out/bin/nextpnr-ice40
     wrapQtApp $out/bin/nextpnr-ecp5
+    wrapQtApp $out/bin/nextpnr-gowin
   '';
 
   meta = with lib; {

@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.9.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = version;
-    sha256 = "16p11fmyms4q93m3rna76nkp2la9m8lmfmaflbvga666vljwfw6v";
+    sha256 = "sha256-8u5KeWVaCOksag2CYE7GBl36crB4k9YdLZ5aHD9hlwU=";
   };
 
   propagatedBuildInputs = [ bluepy ];

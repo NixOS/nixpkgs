@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fasttext.cc/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

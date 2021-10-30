@@ -5,7 +5,7 @@
 , mock
 , pycrypto
 , requests
-, pytestrunner
+, pytest-runner
 , pytest
 , requests-mock
 , typing
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "70096690b24a7832cc5abdfda1954b49fddc1c09a348a1e6caa781ac867ed4c6";
   };
 
-  checkInputs = [ mock pytest pytestrunner requests-mock ];
+  checkInputs = [ mock pytest pytest-runner requests-mock ];
   propagatedBuildInputs = [ pycrypto requests ]
     ++ lib.optionals isPy27 [ typing backports_ssl_match_hostname ];
 

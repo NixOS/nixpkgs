@@ -15,8 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags=-X main.tag=v${version}"
+  ldflags = [
+    "-X main.tag=v${version}"
   ];
 
   meta = with lib; {

@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     license = with licenses; [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ tvorog ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14";
+    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "5.14";
     priority = -1;
   };
 }

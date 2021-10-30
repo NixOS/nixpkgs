@@ -3,11 +3,12 @@
 , enableNLS ? false, libnatspec
 }:
 
-stdenv.mkDerivation {
-  name = "unzip-6.0";
+stdenv.mkDerivation rec {
+  pname = "unzip";
+  version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/infozip/unzip60.tar.gz";
+    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings ["."] [""] version}.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 

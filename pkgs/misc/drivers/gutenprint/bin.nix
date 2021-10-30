@@ -34,7 +34,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ rpm cpio ];
 
-  phases = "buildPhase";
+  dontUnpack = true;
+  dontInstall = true;
+  dontFixup = true;
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc zlib ];
 

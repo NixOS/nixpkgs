@@ -19,6 +19,7 @@ buildPecl {
   meta = with lib; {
     description = "A PHP extension for Dlib";
     license = with licenses; [ mit ];
+    homepage = "https://github.com/goodspb/pdlib";
     maintainers = lib.teams.php.members;
   };
 }

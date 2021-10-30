@@ -1,14 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, unzip }:
 
-let
-  version = "1.4.21";
-in stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation rec {
   pname = "kotlin";
+  version = "1.5.31";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip";
-    sha256 = "1ixnwrvgs14f9160d9d69r7w2dfp5cdwiwpk1ky0ps8nly8hjwj6";
+    sha256 = "sha256-ZhERKG8+WsBqrzqUA9hp2alqF2tisUGBS+YmpHJJ/p4=";
   };
 
   propagatedBuildInputs = [ jre ] ;
@@ -39,8 +37,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://kotlinlang.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers;
-      [ ];
+    maintainers = with lib.maintainers; [ SubhrajyotiSen ];
     platforms = lib.platforms.all;
   };
 }

@@ -16,19 +16,6 @@ index f962330..b02b6dd 100755
              f.write(b"DEF ENABLE_DEVICE_CAPS=%i" % ENABLE_DEVICE_CAPS)
      cython_add(Extension("xpra.codecs.v4l2.pusher",
      
-diff --git a/xpra/x11/bindings/keyboard_bindings.pyx b/xpra/x11/bindings/keyboard_bindings.pyx
-index bd7023d..064c6b5 100644
---- a/xpra/x11/bindings/keyboard_bindings.pyx
-+++ b/xpra/x11/bindings/keyboard_bindings.pyx
-@@ -21,7 +21,7 @@ from libc.stdlib cimport free, malloc
-
- DEF PATH_MAX = 1024
- DEF DFLT_XKB_RULES_FILE = b"base"
--DEF DFLT_XKB_CONFIG_ROOT = b"/usr/share/X11/xkb"
-+DEF DFLT_XKB_CONFIG_ROOT = b"@xkeyboardconfig@/share/X11/xkb"
-
- ###################################
- # Headers, python magic
 diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
 index c867258..617af7c 100755
 --- a/xpra/x11/fakeXinerama.py

@@ -248,12 +248,12 @@ rec {
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
     # find current version at https://www.eclipse.org/cdt/downloads.php
-    version = "10.1.0";
+    version = "10.4.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.1/${name}/${name}.zip";
-      sha256 = "1hbswcar3a5cw20mwrj82w9pvpkvvj6jrvqqf1lincva0r5sl7h8";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
+      sha256 = "1l3v6dryaqifwrv2h4knwmpyf11qbyl04p7gcvgrx3hczc82a6p1";
     };
 
     meta = with lib; {
@@ -469,24 +469,6 @@ rec {
     meta = with lib; {
       description = "Adds support for JSON files to Eclipse";
       homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
-      license = licenses.epl10;
-      platforms = platforms.all;
-    };
-  };
-
-  jdt = buildEclipseUpdateSite rec {
-    name = "jdt-${version}";
-    version = "4.18";
-
-    src = fetchzip {
-      stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202012021800/org.eclipse.jdt-${version}.zip";
-      sha256 = "q0O6OE2u0bdz1+nOkzXDrrOOzoEbVaXnejx4lX7uZgk=";
-    };
-
-    meta = with lib; {
-      homepage = "https://www.eclipse.org/jdt/";
-      description = "Eclipse Java development tools";
       license = licenses.epl10;
       platforms = platforms.all;
     };

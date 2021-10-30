@@ -24,7 +24,7 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
       };
     };
 
-    virtualisation.memorySize = 2048;
+    virtualisation.memorySize = 2047;
   };
 
   testScript = ''

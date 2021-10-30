@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, python2, fetchFromGitHub }:
 
-buildPythonPackage rec {
+python2.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
 
@@ -19,6 +19,6 @@ buildPythonPackage rec {
       with the final purpose of reducing its ability to interact with the system.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

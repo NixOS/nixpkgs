@@ -1,5 +1,5 @@
 { stdenv, nix, perlPackages, buildEnv
-, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx
+, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx_6
 , top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
 , perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
@@ -26,6 +26,7 @@ let
         CatalystPluginAccessLog
         CatalystPluginAuthorizationRoles
         CatalystPluginCaptcha
+        CatalystPluginPrometheusTiny
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginSmartURI
@@ -37,6 +38,8 @@ let
         CatalystViewTT
         CatalystXScriptServerStarman
         CatalystXRoleApplicator
+        CryptPassphrase
+        CryptPassphraseArgon2
         CryptRandPasswd
         DBDPg
         DBDSQLite
@@ -57,10 +60,12 @@ let
         NetPrometheus
         NetStatsd
         PadWalker
+        PrometheusTinyShared
         Readonly
         SQLSplitStatement
         SetScalar
         Starman
+        StringCompareConstantTime
         SysHostnameLong
         TermSizeAny
         TextDiff
@@ -79,7 +84,7 @@ in stdenv.mkDerivation rec {
   inherit stdenv src version patches;
 
   buildInputs =
-    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
+    [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx_6
       top-git mercurial /*darcs*/ subversion breezy openssl bzip2 libxslt
       perlDeps perl nix
       postgresql # for running the tests

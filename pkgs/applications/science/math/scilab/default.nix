@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "1adk6jqlj7i3gjklvlf1j3il1nb22axnp4rvwl314an62siih0sc";
   };
 
-  buildInputs = [gfortran ncurses]
-  ++ lib.optionals withGtk [gtk2]
-  ++ lib.optionals withOCaml [ocaml]
-  ++ lib.optional withX xlibsWrapper
-  ;
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ ncurses ]
+    ++ lib.optionals withGtk [ gtk2 ]
+    ++ lib.optionals withOCaml [ ocaml ]
+    ++ lib.optional withX xlibsWrapper;
 
 
 /*

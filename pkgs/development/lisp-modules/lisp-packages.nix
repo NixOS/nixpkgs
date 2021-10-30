@@ -24,8 +24,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "https://beta.quicklisp.org/dist/quicklisp/2021-02-28/distinfo.txt";
-        sha256 = "sha256:1apc0s07fmm386rj866dbrhrkq3lrbgbd79kwcyp91ix7sza8z3z";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2021-10-21/distinfo.txt";
+        sha256 = "sha256:0ihi3p6fvagzfzkkyzs6b3jrz5yidj4f5dcgnh73qas19mk345ai";
       };
       buildPhase = "true; ";
       postInstall = ''
@@ -124,14 +124,21 @@ let lispPackages = rec {
   };
   nyxt = pkgs.lispPackages.buildLispPackage rec {
     baseName = "nyxt";
-    version = "2021-03-27";
-
+    version = "2.0.0";
 
     description = "Browser";
 
     overrides = x: {
       postInstall = ''
         echo "Building nyxt binary"
+        (
+          source "$out/lib/common-lisp-settings"/*-shell-config.sh
+          cd "$out/lib/common-lisp"/*/
+          makeFlags="''${makeFlags:-}"
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags all
+          make LISP=common-lisp.sh NYXT_INTERNAL_QUICKLISP=false PREFIX="$out" $makeFlags install
+          cp nyxt "$out/bin/nyxt"
+        )
         NIX_LISP_PRELAUNCH_HOOK='
           nix_lisp_build_system nyxt/gtk-application \
            "(asdf/system:component-entry-point (asdf:find-system :nyxt/gtk-application))" \
@@ -181,13 +188,13 @@ let lispPackages = rec {
             fset
             cl-cffi-gtk
             cl-webkit2
+            cl-gobject-introspection
     ];
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "8ef171fd1eb62d168defe4a2d7115393230314d1";
-      sha256 = "sha256:1dz55mdmj68kmllih7ab70nmp0mwzqp9lh3im7kcjfmc1r64irdv";
-      # date = 2021-03-27T09:10:00+00:00;
+      rev = "${version}";
+      sha256 = "sha256-eSRNfzkAzGTorLjdHo1LQEKLx4ASdv3RGXIFZ5WFIXk=";
     };
 
     packageName = "nyxt";
@@ -198,5 +205,48 @@ let lispPackages = rec {
       pkgs.sbcl
     ];
   };
+
+  mgl = buildLispPackage rec {
+    baseName = "mgl";
+    version = "2021-10-07";
+    description = "MGL is a machine learning library for backpropagation neural networks, boltzmann machines, gaussian processes and more";
+    deps = with pkgs.lispPackages; [
+      alexandria closer-mop array-operations lla cl-reexport mgl-mat mgl-pax
+      named-readtables pythonic-string-reader
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "melisgl";
+      repo = "mgl";
+      rev = "e697791a9bcad3b6e7b3845246a2aa55238cfef7";
+      sha256 = "sha256:09sf7nq7nmf9q7bh3a5ygl2i2n0nhrx5fk2kv5ili0ckv7g9x72s";
+      # date = 2021-10-18T14:15+02:00
+    };
+    buildSystems = [ "mgl" "mgl/test" ];
+    packageName = "mgl";
+    parasites = [ "mgl/test" ];
+    asdFilesToKeep = [ "mgl.asd" "mgl-example.asd" "gnuplot/mgl-gnuplot.asd" "visuals/mgl-visuals.asd" ];
+  };
+
+  mgl-mat = buildLispPackage rec {
+    baseName = "mgl-mat";
+    version = "2021-10-11";
+    description = "Multi-dimensional arrays with FFI/CUDA support";
+    deps = with pkgs.lispPackages; [
+      alexandria bordeaux-threads cffi cffi-grovel cl-cuda flexi-streams ieee-floats
+      lla mgl-pax static-vectors trivial-garbage
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "melisgl";
+      repo = "mgl-mat";
+      rev = "3710858bc876b1b86e50f1db2abe719e92d810e7";
+      sha256 = "sha256:1aa2382mi55rp8pd31dz4d94yhfzh30vkggcvmvdfrr4ngffj0dx";
+      # date = 2021-10-18T14:15+02:00
+    };
+    packageName = "mgl-mat";
+    buildSystems = [ "mgl-mat" "mgl-mat/test" ];
+    parasites = [ "mgl-mat/test" ];
+    asdFilesToKeep = [ "mgl-mat.asd" ];
+  };
+
 };
 in lispPackages

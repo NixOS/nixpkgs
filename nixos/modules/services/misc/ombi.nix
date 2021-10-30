@@ -70,6 +70,7 @@ in {
 
     users.users = mkIf (cfg.user == "ombi") {
       ombi = {
+        isSystemUser = true;
         group = cfg.group;
         home = cfg.dataDir;
       };

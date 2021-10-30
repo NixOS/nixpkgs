@@ -45,21 +45,44 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to enable the fail2ban service.";
+        description = ''
+          Whether to enable the fail2ban service.
+
+          See the documentation of <option>services.fail2ban.jails</option>
+          for what jails are enabled by default.
+        '';
       };
 
       package = mkOption {
         default = pkgs.fail2ban;
+        defaultText = literalExpression "pkgs.fail2ban";
         type = types.package;
-        example = "pkgs.fail2ban_0_11";
+        example = literalExpression "pkgs.fail2ban_0_11";
         description = "The fail2ban package to use for running the fail2ban service.";
       };
 
       packageFirewall = mkOption {
         default = pkgs.iptables;
+        defaultText = literalExpression "pkgs.iptables";
         type = types.package;
-        example = "pkgs.nftables";
+        example = literalExpression "pkgs.nftables";
         description = "The firewall package used by fail2ban service.";
+      };
+
+      extraPackages = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        example = lib.literalExpression "[ pkgs.ipset ]";
+        description = ''
+          Extra packages to be made available to the fail2ban service. The example contains
+          the packages needed by the `iptables-ipset-proto6` action.
+        '';
+      };
+
+      maxretry = mkOption {
+        default = 3;
+        type = types.ints.unsigned;
+        description = "Number of failures before a host gets banned.";
       };
 
       banaction = mkOption {
@@ -181,7 +204,7 @@ in
 
       jails = mkOption {
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { apache-nohome-iptables = '''
               # Block an IP address if it accesses a non-existent
               # home directory more than 5 times in 10 minutes,
@@ -205,6 +228,15 @@ in
           defined in <filename>/etc/fail2ban/action.d</filename>,
           while filters are defined in
           <filename>/etc/fail2ban/filter.d</filename>.
+
+          NixOS comes with a default <literal>sshd</literal> jail;
+          for it to work well,
+          <option>services.openssh.logLevel</option> should be set to
+          <literal>"VERBOSE"</literal> or higher so that fail2ban
+          can observe failed login attempts.
+          This module sets it to <literal>"VERBOSE"</literal> if
+          not set otherwise, so enabling fail2ban can make SSH logs
+          more verbose.
         '';
       };
 
@@ -241,9 +273,8 @@ in
       partOf = optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ fail2banConf jailConf pathsConf ];
-      reloadIfChanged = true;
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ];
+      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
 
       unitConfig.Documentation = "man:fail2ban(1)";
 
@@ -291,13 +322,16 @@ in
       ''}
       # Miscellaneous options
       ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
-      maxretry    = 3
+      maxretry    = ${toString cfg.maxretry}
       backend     = systemd
       # Actions
       banaction   = ${cfg.banaction}
       banaction_allports = ${cfg.banaction-allports}
     '';
     # Block SSH if there are too many failing connection attempts.
+    # Benefits from verbose sshd logging to observe failed login attempts,
+    # so we set that here unless the user overrode it.
+    services.openssh.logLevel = lib.mkDefault "VERBOSE";
     services.fail2ban.jails.sshd = mkDefault ''
       enabled = true
       port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}

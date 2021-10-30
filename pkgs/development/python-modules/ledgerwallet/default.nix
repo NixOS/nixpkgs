@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "A library to control Ledger devices";
     license = licenses.mit;
-    maintainers = with maintainers; [ xwvvvvwx ];
+    maintainers = with maintainers; [ d-xo ];
   };
 }

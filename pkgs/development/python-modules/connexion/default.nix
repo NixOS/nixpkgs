@@ -1,89 +1,70 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, glibcLocales
-, lib
-, pythonOlder
-
+{ lib
 , aiohttp
-, aiohttp-swagger
 , aiohttp-jinja2
+, aiohttp-remotes
+, aiohttp-swagger
+, buildPythonPackage
 , clickclick
 , decorator
-, flake8
+, fetchFromGitHub
+, fetchpatch
 , flask
-, gevent
 , inflection
 , jsonschema
-, mock
 , openapi-spec-validator
-, pathlib
-, pytest
 , pytest-aiohttp
-, pytestcov
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , requests
-, six
 , swagger-ui-bundle
 , testfixtures
-, typing
-, ujson
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.4.0";
+  version = "2.9.0";
+  disabled = pythonOlder "3.6";
 
-  # we're fetching from GitHub because tests weren't distributed on PyPi
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "1b9q027wrks0afl7l3a1wxymz3aick26b9fq2m07pc5wb9np0vvg";
+    sha256 = "13smcg2w24zr2sv1968g9p9m6f18nqx688c96qdlmldnszgzf5ik";
   };
 
-  checkInputs = [
-    decorator
-    mock
-    pytest
-    pytestcov
-    testfixtures
-    flask
-    swagger-ui-bundle
-  ]
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson pytest-aiohttp ]
-  ++ lib.optional (pythonOlder "3.7") glibcLocales
-  ;
   propagatedBuildInputs = [
+    aiohttp
+    aiohttp-jinja2
+    aiohttp-swagger
     clickclick
+    flask
+    inflection
     jsonschema
+    openapi-spec-validator
     pyyaml
     requests
-    six
-    inflection
-    openapi-spec-validator
     swagger-ui-bundle
-    flask
-  ]
-  ++ lib.optional (pythonOlder "3.4") pathlib
-  ++ lib.optional (pythonOlder "3.6") typing
-  ++ lib.optionals isPy3k [ aiohttp aiohttp-jinja2 aiohttp-swagger ujson ]
-  ;
+  ];
 
-  preConfigure = lib.optional (pythonOlder "3.7") ''
-    export LANG=en_US.UTF-8
-  '';
+  checkInputs = [
+    aiohttp-remotes
+    decorator
+    pytest-aiohttp
+    pytestCheckHook
+    testfixtures
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "'aiohttp>=2.3.10,<3.5.2'" "'aiohttp>=2.3.10'"
-  '';
+  patches = [
+    # No minor release for later versions, https://github.com/zalando/connexion/pull/1402
+    (fetchpatch {
+      name = "allow-later-flask-and-werkzeug-releases.patch";
+      url = "https://github.com/zalando/connexion/commit/4a225d554d915fca17829652b7cb8fe119e14b37.patch";
+      sha256 = "0dys6ymvicpqa3p8269m4yv6nfp58prq3fk1gcx1z61h9kv84g1k";
+    })
+  ];
 
-  checkPhase = if isPy3k then ''
-    pytest -k "not test_app_get_root_path and \
-               not test_verify_oauth_scopes_remote and \
-               not test_verify_oauth_scopes_local and \
-               not test_run_with_aiohttp_not_installed"''
-  else "pytest --ignore=tests/aiohttp";
+  pythonImportsCheck = [ "connexion" ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";

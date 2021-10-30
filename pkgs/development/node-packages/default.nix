@@ -1,6 +1,7 @@
-{ pkgs, nodejs, stdenv }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
+  inherit (pkgs) lib;
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
   before = (version: pkgs.lib.versionOlder nodejs.version version);
   super = import ./composition.nix {
@@ -12,6 +13,17 @@ let
       prePatch = ''
         export NG_CLI_ANALYTICS=false
       '';
+    };
+
+    autoprefixer = super.autoprefixer.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/autoprefixer" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/autoprefixer.nix { inherit (self) autoprefixer; };
+      };
     };
 
     aws-azure-login = super.aws-azure-login.override {
@@ -35,11 +47,67 @@ let
       '';
     };
 
-    coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
+    carbon-now-cli = super.carbon-now-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
+    deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
+      meta.broken = true; # use the top-level package instead
     };
 
-    "fast-cli-1.x" = super."fast-cli-1.x".override {
+    fast-cli = super.fast-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/fast \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
+    hyperspace-cli = super."@hyperspace/cli".override {
+      nativeBuildInputs = with pkgs; [
+        makeWrapper
+        libtool
+        autoconf
+        automake
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodejs
+      ];
+      postInstall = ''
+        wrapProgram "$out/bin/hyp" --prefix PATH : ${
+          pkgs.lib.makeBinPath [ pkgs.nodejs ]
+        }
+      '';
+    };
+
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
+    };
+
+    coc-imselect = super.coc-imselect.override {
       meta.broken = since "10";
     };
 
@@ -60,20 +128,14 @@ let
       };
     });
 
-    bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
       name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
     });
-
-    fast-cli = super."fast-cli-1.x".override {
-      preRebuild = ''
-        # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
-        sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
-      '';
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
@@ -105,6 +167,19 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    jsonplaceholder = super.jsonplaceholder.override (drv: {
+      buildInputs = [ nodejs ];
+      postInstall = ''
+        exe=$out/bin/jsonplaceholder
+        mkdir -p $out/bin
+        cat >$exe <<EOF
+        #!${pkgs.runtimeShell}
+        exec -a jsonplaceholder ${nodejs}/bin/node $out/lib/node_modules/jsonplaceholder/index.js
+        EOF
+        chmod a+x $exe
+      '';
+    });
+
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
@@ -117,33 +192,17 @@ let
       '';
     };
 
-    mirakurun = super.mirakurun.override rec {
-      nativeBuildInputs = with pkgs; [ makeWrapper ];
-      postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
-      in
-      ''
-        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
-          --replace "/usr/local" ""
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
+    };
 
-        # XXX: Files copied from the Nix store are non-writable, so they need
-        # to be given explicit write permissions
-        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
-          --replace 'fs.copyFileSync("config/server.yml", path);' \
-                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
-                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/channels.yml", path);' \
-                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
-
-        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-        # server.  However, we invoke the server directly and let systemd
-        # manage it to avoid complication. This is okay since no features
-        # unique to PM2 is currently being used.
-        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
-          --add-flags "start" \
-          --run "cd $out/lib/node_modules/mirakurun" \
-          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
+    node-gyp = super.node-gyp.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
+      # This is important when build nodejs packages in sandbox.
+      postInstall = ''
+        wrapProgram "$out/bin/node-gyp" \
+          --set npm_config_nodedir ${nodejs}
       '';
     };
 
@@ -154,6 +213,31 @@ let
 
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
+      # We need to apply a patch to the source, but buildNodePackage doesn't allow patches.
+      # So we pin the patched commit instead. The commit actually contains two other newer commits
+      # since the last (1.9.0) release, but actually this is a good thing since one of them is a
+      # Hydra-specific fix.
+      src = applyPatches {
+        src = fetchFromGitHub {
+          owner = "svanderburg";
+          repo = "node2nix";
+          rev = "node2nix-1.9.0";
+          sha256 = "0l4wp1131nhl9c14cn8bwawb8f77h1nfbnswgi5lp5m3kzkb27jn";
+        };
+
+        patches = [
+          # remove node_ name prefix
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/b54d45207427ff46e90f16f2f32771fdc8bff5a4.patch";
+            sha256 = "sha256-ubUdF0q3l4xxqZ7f9EiQEUQzyqxi9Q6zsRPETHlfzh8=";
+          })
+          # set meta platform
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/58736093161f2d237c17e75a96529b018cd0ac64.patch";
+            sha256 = "0sif7803c9g6gjmmdniw5qxrq5igiz9nqdmdrcf1hxfi5x43a32h";
+          })
+        ];
+      };
       postInstall = ''
         wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
@@ -193,6 +277,49 @@ let
         for prog in $out/bin/*; do
           wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
         done
+      '';
+    };
+
+    postcss-cli = super.postcss-cli.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/postcss" \
+          --prefix NODE_PATH : ${self.postcss}/lib/node_modules \
+          --prefix NODE_PATH : ${self.autoprefixer}/lib/node_modules
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/postcss-cli.nix {
+          inherit (self) postcss-cli;
+        };
+      };
+      meta.mainProgram = "postcss";
+    };
+
+    prisma = super.prisma.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      version = "3.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-3.2.0.tgz";
+        sha512 = "sha512-o8+DH0RD5DbP8QTZej2dsY64yvjOwOG3TWOlJyoCHQ+8DH9m4tzxo38j6IF/PqpN4PmAGPpHuNi/nssG1cvYlQ==";
+      };
+      dependencies = [
+        {
+          name = "_at_prisma_slash_engines";
+          packageName = "@prisma/engines";
+          version = "3.2.0-34.afdab2f10860244038c4e32458134112852d4dad";
+          src = fetchurl {
+            url = "https://registry.npmjs.org/@prisma/engines/-/engines-3.2.0-34.afdab2f10860244038c4e32458134112852d4dad.tgz";
+            sha512 = "sha512-MiZORXXsGORXTF9RqqKIlN/2ohkaxAWTsS7qxDJTy5ThTYLrXSmzxTSohM4qN/AI616B+o5WV7XTBhjlPKSufg==";
+          };
+        }
+      ];
+      postInstall = with pkgs; ''
+        wrapProgram "$out/bin/prisma" \
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
     };
 
@@ -242,7 +369,7 @@ let
     };
 
     teck-programmer = super.teck-programmer.override {
-      buildInputs = [ pkgs.libusb ];
+      buildInputs = [ pkgs.libusb1 ];
     };
 
     vega-cli = super.vega-cli.override {
@@ -257,18 +384,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
         postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+          cd node_modules
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+            if [[ ! -d $dep ]]; then
+              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+            fi
+          done
         '';
+        passthru.tests = {
+          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+            inherit (self) vega-lite;
+          };
+        };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {
@@ -285,6 +413,9 @@ let
         libsecret
         self.node-gyp-build
         self.node-pre-gyp
+      ] ++ lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.Security
       ];
     };
 
@@ -301,6 +432,17 @@ let
         wrapProgram "$out/bin/yaml-language-server" \
         --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
+    };
+
+    wavedrom-cli = super.wavedrom-cli.override {
+      nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
+      # These dependencies are required by
+      # https://github.com/Automattic/node-canvas.
+      buildInputs = with pkgs; [
+        pixman
+        cairo
+        pango
+      ];
     };
   };
 in self

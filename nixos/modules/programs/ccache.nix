@@ -17,7 +17,7 @@ in {
       type = types.listOf types.str;
       description = "Nix top-level packages to be compiled using CCache";
       default = [];
-      example = [ "wxGTK30" "qt48" "ffmpeg_3_3" "libav_all" ];
+      example = [ "wxGTK30" "ffmpeg" "libav_all" ];
     };
   };
 
@@ -28,7 +28,9 @@ in {
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
+        owner = "root";
         group = "nixbld";
+        setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
           #!${pkgs.perl}/bin/perl

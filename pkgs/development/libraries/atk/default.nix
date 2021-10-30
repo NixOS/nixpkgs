@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, glib
-, fixDarwinDylibNames, gobject-introspection, gnome3
+, fixDarwinDylibNames, gobject-introspection, gnome
 }:
 
 let
@@ -31,11 +31,16 @@ stdenv.mkDerivation rec {
     ./fix_pc.patch
   ];
 
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
+
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

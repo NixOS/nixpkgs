@@ -20,21 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "0.118";
+  version = "0.119";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
-    sha256 = "0swmg37jsxsxfsd2b3qm0l3zxr9ldvhpjw8lsgq3j8q7wy2fjm3d";
+    sha256 = "0p0zzmr0kh3mpmqya4q27y4h9b920zp5ya0i8909ahp9hvdrymy8";
   };
 
-  patches = [
-    # Don't use etc/dbus-1/system.d
-    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/11
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/commit/5dd4e22efd05d55833c4634b56e473812b5acbf2.patch";
-      sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
     # We use the version of the patch that Alpine uses successfully.
@@ -103,19 +96,23 @@ stdenv.mkDerivation rec {
   inherit doCheck;
   checkInputs = [ dbus ];
   checkPhase = ''
+    runHook preCheck
+
     # unfortunately this test needs python-dbusmock, but python-dbusmock needs polkit,
     # leading to a circular dependency
     substituteInPlace test/Makefile --replace polkitbackend ""
 
     # tests need access to the system bus
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/polkit";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
-    license = licenses.gpl2;
+    license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }

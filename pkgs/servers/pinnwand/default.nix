@@ -7,23 +7,23 @@
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.3";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p6agvp136q6km7gjfv8dpjn6x4ap770lqa40ifblyhw13bsrqlh";
+    sha256 = "046xk2y59wa0pdp7s3hp1gh8sqdw0yl4xab22r2x44iwwcyb0gy5";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/supakeen/pinnwand/issues/110
-      url = "https://github.com/supakeen/pinnwand/commit/b9e72abb7f25104f5e57248294ed9ae1dbc87240.patch";
-      sha256 = "098acif9ck165398bp7vwfr9g7sj9q3pcdc42z5y63m1nbf8naan";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'click = "^7.0"' 'click = "*"' \
+      --replace 'docutils = "^0.16"' 'docutils = "*"' \
+      --replace 'sqlalchemy = "^1.3"' 'sqlalchemy = "*"' \
+      --replace 'token-bucket = "^0.2.0"' 'token-bucket = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -35,11 +35,17 @@ with python3.pkgs; buildPythonApplication rec {
     pygments
     pygments-better-html
     sqlalchemy
+    token-bucket
     toml
     tornado
   ];
 
   checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # pygments renamed rst to restructuredText, hence a mismatch on this test
+    "test_guess_language"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

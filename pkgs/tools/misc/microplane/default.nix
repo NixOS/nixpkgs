@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "microplane";
-  version = "0.0.28";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "Clever";
     repo = "microplane";
     rev = "v${version}";
-    sha256 = "00ayci0a4lv67sg2bb4fw5wpdlps4pjqiiam595dar82lsjwj63j";
+    sha256 = "sha256-ZrBkVXRGZp8yGFIBo7sLGvJ8pMQq7Cq0xJiko57z164=";
   };
 
-  vendorSha256 = "0hn2gsm9bgmrm620fn2cx28l2gj1yfgvjix9ds50m7kwkx6q0dga";
+  vendorSha256 = "sha256-PqSjSFTVrIsQ065blIxZ9H/ARku6BEcnjboH+0K0G14=";
 
-  buildFlagsArray = ''
-    -ldflags="-s -w -X main.version=v${version}"
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
+  ];
 
   postInstall = ''
     ln -s $out/bin/microplane $out/bin/mp

@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "premailer";
-  version = "3.7.0";
+  version = "3.10.0";
   disabled = isPy27; # no longer compatible with urllib
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5eec9603e84cee583a390de69c75192e50d76e38ef0292b027bd64923766aca7";
+    sha256 = "d1875a8411f5dc92b53ef9f193db6c0f879dc378d618e0ad292723e388bfe4c2";
   };
 
   buildInputs = [ mock nose ];

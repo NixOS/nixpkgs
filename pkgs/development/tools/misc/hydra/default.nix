@@ -1,15 +1,15 @@
-{ fetchFromGitHub, nixStable, callPackage, nixFlakes, nixosTests }:
+{ fetchFromGitHub, nixStable, callPackage, nixUnstable, nixosTests }:
 
 {
   hydra-unstable = callPackage ./common.nix {
-    version = "2021-03-29";
+    version = "2021-08-11";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "hydra";
-      rev = "9bb04ed97af047968196bad1728f927f7a6d905f";
-      sha256 = "sha256-gN/zNI2hGDMnYUjeGnU7SAuXP4KCmNqG+AYOVfINaQE=";
+      rev = "9bce425c3304173548d8e822029644bb51d35263";
+      sha256 = "sha256-tGzwKNW/odtAYcazWA9bPVSmVXMGKfXsqCA1UYaaxmU=";
     };
-    nix = nixFlakes;
+    nix = nixUnstable;
 
     tests = {
       basic = nixosTests.hydra.hydra-unstable;

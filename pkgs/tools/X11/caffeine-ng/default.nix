@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook glib ];
   buildInputs = [
     gdk-pixbuf gobject-introspection libnotify gtk3
-    python3Packages.setuptools_scm
+    python3Packages.setuptools-scm
   ];
   pythonPath = with python3Packages; [
     dbus-python docopt ewmh pygobject3 pyxdg
@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    mainProgram = "caffeine";
     maintainers = with maintainers; [ marzipankaiser ];
     description = "Status bar application to temporarily inhibit screensaver and sleep mode";
     homepage = "https://github.com/caffeine-ng/caffeine-ng";

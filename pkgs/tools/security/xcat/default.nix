@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     cchardet
     click
     colorama
-    prompt_toolkit
+    prompt-toolkit
     xpath-expressions
   ];
 

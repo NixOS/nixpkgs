@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    gfortran
     blas
     lapack
     eigen
@@ -44,6 +43,10 @@ stdenv.mkDerivation rec {
   '' + ''
     # Prevent tests from using all cores
     export OMP_NUM_THREADS=2
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
   meta = {

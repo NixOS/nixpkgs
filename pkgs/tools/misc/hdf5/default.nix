@@ -1,10 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
-, cpp ? false
-, gfortran ? null
-, zlib ? null
-, szip ? null
+, cppSupport ? false
+, fortranSupport ? false
+, fortran
+, zlibSupport ? true
+, zlib
+, szipSupport ? false
+, szip
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -15,41 +19,48 @@
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
-assert !cpp || !mpiSupport;
+assert !cppSupport || !mpiSupport;
 
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.12.1";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0qazfslkqbmzg495jafpvqp0khws3jkxa0z7rph9qvhacil6544p";
+    sha256 = "sha256-qvn1MrPtqD09Otyfi0Cpt2MVIhj6RTScO8d1Asofjxw=";
   };
 
   passthru = {
-    inherit mpiSupport;
-    inherit mpi;
+    inherit
+      cppSupport
+      fortranSupport
+      fortran
+      zlibSupport
+      zlib
+      szipSupport
+      szip
+      mpiSupport
+      mpi
+      ;
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [ removeReferencesTo ]
+    ++ optional fortranSupport fortran;
 
-  buildInputs = []
-    ++ optional (gfortran != null) gfortran
-    ++ optional (szip != null) szip
+  buildInputs = optional fortranSupport fortran
+    ++ optional szipSupport szip
     ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = []
-    ++ optional (zlib != null) zlib
+  propagatedBuildInputs = optional zlibSupport zlib
     ++ optional mpiSupport mpi;
 
-  configureFlags = []
-    ++ optional cpp "--enable-cxx"
-    ++ optional (gfortran != null) "--enable-fortran"
-    ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+  configureFlags = optional cppSupport "--enable-cxx"
+    ++ optional fortranSupport "--enable-fortran"
+    ++ optional szipSupport "--with-szlib=${szip}"
+    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java"
     ++ optional usev110Api "--with-default-api-version=v110";

@@ -7,6 +7,7 @@
 , makeWrapper
 , rsync
 , installShellFiles
+, nixosTests
 
 , components ? [
     "cmd/kubelet"
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.20.5";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-RDaD7tlTtAucW8ido9FumKb5E9n6F9H8HwxQ9TPyOLk=";
+    sha256 = "sha256-O+FY9wJ0fztO7i5qJfw+cfhfBgaMWKX7IBBXJV4uuCk=";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     for p in $WHAT; do
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
@@ -66,8 +68,8 @@ stdenv.mkDerivation rec {
     install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
-    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
-    # or in /opt. We have to patch this for now.
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
+    # current working dir or in /opt. We have to patch this for now.
     substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
       --subst-var out
 
@@ -82,6 +84,7 @@ stdenv.mkDerivation rec {
         --bash <($out/bin/$tool completion bash) \
         --zsh <($out/bin/$tool completion zsh)
     done
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -95,4 +98,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ johanot offline saschagrunert ];
     platforms = platforms.unix;
   };
+
+  passthru.tests = nixosTests.kubernetes;
 }

@@ -1,46 +1,50 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, future, six, ecdsa, rsa
-, pycrypto, pytestcov, pytestrunner, cryptography
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ecdsa
+, rsa
+, pycrypto
+, pyasn1
+, pycryptodome
+, cryptography
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mpdavis";
-    repo = "python-jose";
+    repo = pname;
     rev = version;
-    sha256 = "cSPIZrps0xFd4pPcQ4w/jFWOk2XYgd3mtE/sDzlytvY=";
+    sha256 = "sha256-6VGC6M5oyGCOiXcYp6mpyhL+JlcYZKIqOQU9Sm/TkKM=";
   };
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    cryptography
+    ecdsa
+    pyasn1
     pycrypto
-    pytestCheckHook
-    pytestcov
-    pytestrunner
-    cryptography # optional dependency, but needed in tests
+    pycryptodome
+    rsa
   ];
 
-  # relax ecdsa deps
-  patchPhase = ''
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
     substituteInPlace setup.py \
-      --replace 'ecdsa<0.15' 'ecdsa' \
-      --replace 'ecdsa <0.15' 'ecdsa'
+      --replace '"pytest-runner",' ""
   '';
 
-  disabledTests = [
-    # https://github.com/mpdavis/python-jose/issues/176
-    "test_key_too_short"
-  ];
-
-  propagatedBuildInputs = [ future six ecdsa rsa ];
+  pythonImportsCheck = [ "jose" ];
 
   meta = with lib; {
     homepage = "https://github.com/mpdavis/python-jose";
     description = "A JOSE implementation in Python";
     license = licenses.mit;
-    maintainers = [ maintainers.jhhuh ];
+    maintainers = with maintainers; [ jhhuh ];
   };
 }

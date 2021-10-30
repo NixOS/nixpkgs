@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, postgresql }:
+{ lib, stdenv, fetchFromGitLab, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_ed25519";
   version = "0.2";
-
-  src = fetchurl {
-    url = "https://gitlab.com/dwagin/${pname}/-/archive/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0q46pvk1vq5w3al6i3inzlw6w7za3n7p1gd4wfbbxzvzh7qnynda";
+  src = fetchFromGitLab {
+    owner = "dwagin";
+    repo = "pg_ed25519";
+    rev = version;
+    sha256 = "16w3qx3wj81bzfhydl2pjhn8b1jak6h7ja9wq1kc626g0siggqi0";
   };
 
   buildInputs = [ postgresql ];

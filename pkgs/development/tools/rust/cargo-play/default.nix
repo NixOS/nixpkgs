@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-play";
@@ -11,10 +11,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "01r00akfmvpzp924yqqybd9s0pwiwxy8vklsg4m9ypzljc3nlv02";
   };
 
-  cargoSha256 = "0fvsdyivq5991ka6avh12aqdkjx0myk61kmzlr19p2vlfpg70q07";
+  cargoSha256 = "1xkscd9ci9vlkmbsaxvavrna1xpi16xcf9ri879lw8bdh7sa3nx8";
 
-  # some tests require internet access
-  doCheck = false;
+  # these tests require internet access
+  checkFlags = [
+    "--skip=dtoa_test"
+    "--skip=infer_override"
+  ];
 
   meta = with lib; {
     description = "Run your rust code without setting up cargo";

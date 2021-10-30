@@ -13,6 +13,11 @@ buildDunePackage rec {
     sha256 = "cc0e814fd54efe7a5b7a8c5eb1c04e2dece751b7d8dee2d95908a0768896e8af";
   };
 
+  # Make tests compatible with alcotest 1.4.0
+  postPatch = ''
+    substituteInPlace test/tests.ml --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
+  '';
+
   minimumOCamlVersion = "4.06";
 
   propagatedBuildInputs = [ io-page mirage-block ];

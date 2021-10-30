@@ -3,19 +3,22 @@
 , chardet
 , fetchFromGitHub
 , karton-core
-, python
+, pytestCheckHook
 , python_magic
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "karton-classifier";
-  version = "1.0.0";
+  version = "1.2.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05pxv0smrzgmljykc6yx0rx8b85ck7fa09xjkjw0dd7lb6bb19a6";
+    sha256 = "sha256-AG2CtNMgXYfbdlOqB1ZdjMT8H67fsSMXTgiFg6K41IQ=";
   };
 
   propagatedBuildInputs = [
@@ -27,15 +30,12 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "chardet==3.0.4" "chardet" \
-      --replace "karton-core==4.0.4" "karton-core" \
       --replace "python-magic==0.4.18" "python-magic"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "karton.classifier" ];
 

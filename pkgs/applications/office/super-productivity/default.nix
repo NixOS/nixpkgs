@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "6.5.2";
+  version = "7.6.0";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "1ivl7chsv9axgk6nqkf580pav651hchi3di0mrp0pylpsqgk6f1f";
+    sha256 = "f02a451a44f48a8e85a0c1269625d89fb1e0b8a75b7e217d96352064e6464ae5";
     name = "${pname}-${version}.AppImage";
   };
 

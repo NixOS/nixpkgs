@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtesthack";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15kzcr5pchf3id4ikdvlv752rc0j4d912n589l4rifp8qsj19l1x";
+    sha256 = "0711e5d04c291ac9ac6c9eff447ec2811b1d23ccdfe1417d16d4f96481efcbe6";
   };
 
   buildInputs = [ pytest ];

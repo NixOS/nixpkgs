@@ -19,13 +19,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -s -w
-    -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
-    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
-  '';
+  ldflags = [
+    "-s -w"
+    "-X github.com/jenkins-x/jx/pkg/version.Version=${version}"
+    "-X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}"
+    "-X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean"
+  ];
 
   postInstall = ''
     for shell in bash zsh; do

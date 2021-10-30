@@ -2,7 +2,8 @@
 }:
 
 with python2Packages; buildPythonApplication {
-  name = "escrotum-2019-06-10";
+  pname = "escrotum";
+  version = "unstable-2019-06-10";
 
   src = fetchFromGitHub {
     owner  = "Roger";

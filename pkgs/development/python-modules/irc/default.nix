@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools_scm, jaraco_collections, importlib-metadata, toml
+, setuptools-scm, jaraco_collections, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "irc" ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     six
     importlib-metadata
@@ -28,7 +28,6 @@ buildPythonPackage rec {
     pytz
     jaraco_itertools
     jaraco_collections
-    toml
   ];
 
   meta = with lib; {

@@ -2,21 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "afterburn";
     rev = "v${version}";
-    sha256 = "sha256-sdgAZuT8bIX4eWN7nLNNyclxazmCBr5kDFS6s6cRXVU=";
+    sha256 = "sha256-5dzgvoR6qGlVz0RJ1j9B4yna1aCbOczVLcU++GWNEL8=";
   };
 
-  cargoSha256 = "sha256-IzcaaQjge2z49XwyFcPHX/AMjvrbcOLw0J1qBzHw7Is=";
+  cargoSha256 = "sha256-cqipYIH/XHMe7ppsXPVnDfsUqXoIep7CHiOGEPbZK4M=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./systemd/afterburn-checkin.service --replace /usr/bin $out/bin
     substituteInPlace ./systemd/afterburn-firstboot-checkin.service --replace /usr/bin $out/bin
     substituteInPlace ./systemd/afterburn-sshkeys@.service.in --replace /usr/bin $out/bin

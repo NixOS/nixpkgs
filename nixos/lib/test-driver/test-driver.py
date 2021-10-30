@@ -1,13 +1,13 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
 from xml.sax.saxutils import XMLGenerator
+from colorama import Style
 import queue
 import io
-import _thread
+import threading
 import argparse
-import atexit
 import base64
 import codecs
 import os
@@ -22,7 +22,6 @@ import subprocess
 import sys
 import tempfile
 import time
-import traceback
 import unicodedata
 
 CHAR_TO_KEY = {
@@ -88,58 +87,6 @@ CHAR_TO_KEY = {
     ")": "shift-0x0B",
 }
 
-# Forward references
-log: "Logger"
-machines: "List[Machine]"
-
-
-def eprint(*args: object, **kwargs: Any) -> None:
-    print(*args, file=sys.stderr, **kwargs)
-
-
-def make_command(args: list) -> str:
-    return " ".join(map(shlex.quote, (map(str, args))))
-
-
-def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]:
-    global log
-    log.log("starting VDE switch for network {}".format(vlan_nr))
-    vde_socket = tempfile.mkdtemp(
-        prefix="nixos-test-vde-", suffix="-vde{}.ctl".format(vlan_nr)
-    )
-    pty_master, pty_slave = pty.openpty()
-    vde_process = subprocess.Popen(
-        ["vde_switch", "-s", vde_socket, "--dirmode", "0700"],
-        stdin=pty_slave,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=False,
-    )
-    fd = os.fdopen(pty_master, "w")
-    fd.write("version\n")
-    # TODO: perl version checks if this can be read from
-    # an if not, dies. we could hang here forever. Fix it.
-    assert vde_process.stdout is not None
-    vde_process.stdout.readline()
-    if not os.path.exists(os.path.join(vde_socket, "ctl")):
-        raise Exception("cannot start vde_switch")
-
-    return (vlan_nr, vde_socket, vde_process, fd)
-
-
-def retry(fn: Callable) -> None:
-    """Call the given function repeatedly, with 1 second intervals,
-    until it returns True or a timeout is reached.
-    """
-
-    for _ in range(900):
-        if fn(False):
-            return
-        time.sleep(1)
-
-    if not fn(True):
-        raise Exception("action timed out")
-
 
 class Logger:
     def __init__(self) -> None:
@@ -150,6 +97,12 @@ class Logger:
 
         self.xml.startDocument()
         self.xml.startElement("logfile", attrs={})
+
+        self._print_serial_logs = True
+
+    @staticmethod
+    def _eprint(*args: object, **kwargs: Any) -> None:
+        print(*args, file=sys.stderr, **kwargs)
 
     def close(self) -> None:
         self.xml.endElement("logfile")
@@ -169,26 +122,44 @@ class Logger:
         self.xml.characters(message)
         self.xml.endElement("line")
 
+    def info(self, *args, **kwargs) -> None:  # type: ignore
+        self.log(*args, **kwargs)
+
+    def warning(self, *args, **kwargs) -> None:  # type: ignore
+        self.log(*args, **kwargs)
+
+    def error(self, *args, **kwargs) -> None:  # type: ignore
+        self.log(*args, **kwargs)
+        sys.exit(1)
+
     def log(self, message: str, attributes: Dict[str, str] = {}) -> None:
-        eprint(self.maybe_prefix(message, attributes))
+        self._eprint(self.maybe_prefix(message, attributes))
         self.drain_log_queue()
         self.log_line(message, attributes)
 
-    def enqueue(self, message: Dict[str, str]) -> None:
-        self.queue.put(message)
+    def log_serial(self, message: str, machine: str) -> None:
+        self.enqueue({"msg": message, "machine": machine, "type": "serial"})
+        if self._print_serial_logs:
+            self._eprint(
+                Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL
+            )
+
+    def enqueue(self, item: Dict[str, str]) -> None:
+        self.queue.put(item)
 
     def drain_log_queue(self) -> None:
         try:
             while True:
                 item = self.queue.get_nowait()
-                attributes = {"machine": item["machine"], "type": "serial"}
-                self.log_line(self.sanitise(item["msg"]), attributes)
+                msg = self.sanitise(item["msg"])
+                del item["msg"]
+                self.log_line(msg, item)
         except Empty:
             pass
 
     @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
-        eprint(self.maybe_prefix(message, attributes))
+        self._eprint(self.maybe_prefix(message, attributes))
 
         self.xml.startElement("nest", attrs={})
         self.xml.startElement("head", attributes)
@@ -205,101 +176,318 @@ class Logger:
         self.xml.endElement("nest")
 
 
+rootlog = Logger()
+
+
+def make_command(args: list) -> str:
+    return " ".join(map(shlex.quote, (map(str, args))))
+
+
+def retry(fn: Callable, timeout: int = 900) -> None:
+    """Call the given function repeatedly, with 1 second intervals,
+    until it returns True or a timeout is reached.
+    """
+
+    for _ in range(timeout):
+        if fn(False):
+            return
+        time.sleep(1)
+
+    if not fn(True):
+        raise Exception(f"action timed out after {timeout} seconds")
+
+
+def _perform_ocr_on_screenshot(
+    screenshot_path: str, model_ids: Iterable[int]
+) -> List[str]:
+    if shutil.which("tesseract") is None:
+        raise Exception("OCR requested but enableOCR is false")
+
+    magick_args = (
+        "-filter Catrom -density 72 -resample 300 "
+        + "-contrast -normalize -despeckle -type grayscale "
+        + "-sharpen 1 -posterize 3 -negate -gamma 100 "
+        + "-blur 1x65535"
+    )
+
+    tess_args = f"-c debug_file=/dev/null --psm 11"
+
+    cmd = f"convert {magick_args} {screenshot_path} tiff:{screenshot_path}.tiff"
+    ret = subprocess.run(cmd, shell=True, capture_output=True)
+    if ret.returncode != 0:
+        raise Exception(f"TIFF conversion failed with exit code {ret.returncode}")
+
+    model_results = []
+    for model_id in model_ids:
+        cmd = f"tesseract {screenshot_path}.tiff - {tess_args} --oem {model_id}"
+        ret = subprocess.run(cmd, shell=True, capture_output=True)
+        if ret.returncode != 0:
+            raise Exception(f"OCR failed with exit code {ret.returncode}")
+        model_results.append(ret.stdout.decode("utf-8"))
+
+    return model_results
+
+
+class StartCommand:
+    """The Base Start Command knows how to append the necesary
+    runtime qemu options as determined by a particular test driver
+    run. Any such start command is expected to happily receive and
+    append additional qemu args.
+    """
+
+    _cmd: str
+
+    def cmd(
+        self,
+        monitor_socket_path: pathlib.Path,
+        shell_socket_path: pathlib.Path,
+        allow_reboot: bool = False,  # TODO: unused, legacy?
+    ) -> str:
+        display_opts = ""
+        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
+        if not display_available:
+            display_opts += " -nographic"
+
+        # qemu options
+        qemu_opts = ""
+        qemu_opts += (
+            ""
+            if allow_reboot
+            else " -no-reboot"
+            " -device virtio-serial"
+            " -device virtconsole,chardev=shell"
+            " -device virtio-rng-pci"
+            " -serial stdio"
+        )
+        # TODO: qemu script already catpures this env variable, legacy?
+        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
+
+        return (
+            f"{self._cmd}"
+            f" -monitor unix:{monitor_socket_path}"
+            f" -chardev socket,id=shell,path={shell_socket_path}"
+            f"{qemu_opts}"
+            f"{display_opts}"
+        )
+
+    @staticmethod
+    def build_environment(
+        state_dir: pathlib.Path,
+        shared_dir: pathlib.Path,
+    ) -> dict:
+        # We make a copy to not update the current environment
+        env = dict(os.environ)
+        env.update(
+            {
+                "TMPDIR": str(state_dir),
+                "SHARED_DIR": str(shared_dir),
+                "USE_TMPDIR": "1",
+            }
+        )
+        return env
+
+    def run(
+        self,
+        state_dir: pathlib.Path,
+        shared_dir: pathlib.Path,
+        monitor_socket_path: pathlib.Path,
+        shell_socket_path: pathlib.Path,
+    ) -> subprocess.Popen:
+        return subprocess.Popen(
+            self.cmd(monitor_socket_path, shell_socket_path),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            cwd=state_dir,
+            env=self.build_environment(state_dir, shared_dir),
+        )
+
+
+class NixStartScript(StartCommand):
+    """A start script from nixos/modules/virtualiation/qemu-vm.nix
+    that also satisfies the requirement of the BaseStartCommand.
+    These Nix commands have the particular charactersitic that the
+    machine name can be extracted out of them via a regex match.
+    (Admittedly a _very_ implicit contract, evtl. TODO fix)
+    """
+
+    def __init__(self, script: str):
+        self._cmd = script
+
+    @property
+    def machine_name(self) -> str:
+        match = re.search("run-(.+)-vm$", self._cmd)
+        name = "machine"
+        if match:
+            name = match.group(1)
+        return name
+
+
+class LegacyStartCommand(StartCommand):
+    """Used in some places to create an ad-hoc machine instead of
+    using nix test instrumentation + module system for that purpose.
+    Legacy.
+    """
+
+    def __init__(
+        self,
+        netBackendArgs: Optional[str] = None,
+        netFrontendArgs: Optional[str] = None,
+        hda: Optional[Tuple[pathlib.Path, str]] = None,
+        cdrom: Optional[str] = None,
+        usb: Optional[str] = None,
+        bios: Optional[str] = None,
+        qemuFlags: Optional[str] = None,
+    ):
+        self._cmd = "qemu-kvm -m 384"
+
+        # networking
+        net_backend = "-netdev user,id=net0"
+        net_frontend = "-device virtio-net-pci,netdev=net0"
+        if netBackendArgs is not None:
+            net_backend += "," + netBackendArgs
+        if netFrontendArgs is not None:
+            net_frontend += "," + netFrontendArgs
+        self._cmd += f" {net_backend} {net_frontend}"
+
+        # hda
+        hda_cmd = ""
+        if hda is not None:
+            hda_path = hda[0].resolve()
+            hda_interface = hda[1]
+            if hda_interface == "scsi":
+                hda_cmd += (
+                    f" -drive id=hda,file={hda_path},werror=report,if=none"
+                    " -device scsi-hd,drive=hda"
+                )
+            else:
+                hda_cmd += f" -drive file={hda_path},if={hda_interface},werror=report"
+        self._cmd += hda_cmd
+
+        # cdrom
+        if cdrom is not None:
+            self._cmd += f" -cdrom {cdrom}"
+
+        # usb
+        usb_cmd = ""
+        if usb is not None:
+            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
+            usb_cmd += (
+                " -device usb-ehci"
+                f" -drive id=usbdisk,file={usb},if=none,readonly"
+                " -device usb-storage,drive=usbdisk "
+            )
+        self._cmd += usb_cmd
+
+        # bios
+        if bios is not None:
+            self._cmd += f" -bios {bios}"
+
+        # qemu flags
+        if qemuFlags is not None:
+            self._cmd += f" {qemuFlags}"
+
+
 class Machine:
-    def __init__(self, args: Dict[str, Any]) -> None:
-        if "name" in args:
-            self.name = args["name"]
-        else:
-            self.name = "machine"
-            cmd = args.get("startCommand", None)
-            if cmd:
-                match = re.search("run-(.+)-vm$", cmd)
-                if match:
-                    self.name = match.group(1)
-        self.logger = args["log"]
-        self.script = args.get("startCommand", self.create_startcommand(args))
+    """A handle to the machine with this name, that also knows how to manage
+    the machine lifecycle with the help of a start script / command."""
 
-        tmp_dir = os.environ.get("TMPDIR", tempfile.gettempdir())
+    name: str
+    tmp_dir: pathlib.Path
+    shared_dir: pathlib.Path
+    state_dir: pathlib.Path
+    monitor_path: pathlib.Path
+    shell_path: pathlib.Path
 
-        def create_dir(name: str) -> str:
-            path = os.path.join(tmp_dir, name)
-            os.makedirs(path, mode=0o700, exist_ok=True)
-            return path
+    start_command: StartCommand
+    keep_vm_state: bool
+    allow_reboot: bool
 
-        self.state_dir = os.path.join(tmp_dir, f"vm-state-{self.name}")
-        if not args.get("keepVmState", False):
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
+
+    booted: bool
+    connected: bool
+    # Store last serial console lines for use
+    # of wait_for_console_text
+    last_lines: Queue = Queue()
+
+    def __repr__(self) -> str:
+        return f"<Machine '{self.name}'>"
+
+    def __init__(
+        self,
+        tmp_dir: pathlib.Path,
+        start_command: StartCommand,
+        name: str = "machine",
+        keep_vm_state: bool = False,
+        allow_reboot: bool = False,
+    ) -> None:
+        self.tmp_dir = tmp_dir
+        self.keep_vm_state = keep_vm_state
+        self.allow_reboot = allow_reboot
+        self.name = name
+        self.start_command = start_command
+
+        # set up directories
+        self.shared_dir = self.tmp_dir / "shared-xchg"
+        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
+        self.monitor_path = self.state_dir / "monitor"
+        self.shell_path = self.state_dir / "shell"
+        if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
-        os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
-        self.shared_dir = create_dir("shared-xchg")
+        self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
+        self.serial_thread = None
 
         self.booted = False
         self.connected = False
-        self.pid: Optional[int] = None
-        self.socket = None
-        self.monitor: Optional[socket.socket] = None
-        self.allow_reboot = args.get("allowReboot", False)
 
     @staticmethod
-    def create_startcommand(args: Dict[str, str]) -> str:
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-
-        if "netBackendArgs" in args:
-            net_backend += "," + args["netBackendArgs"]
-
-        if "netFrontendArgs" in args:
-            net_frontend += "," + args["netFrontendArgs"]
-
-        start_command = (
-            "qemu-kvm -m 384 " + net_backend + " " + net_frontend + " $QEMU_OPTS "
+    def create_startcommand(args: Dict[str, str]) -> StartCommand:
+        rootlog.warning(
+            "Using legacy create_startcommand(),"
+            "please use proper nix test vm instrumentation, instead"
+            "to generate the appropriate nixos test vm qemu startup script"
         )
-
-        if "hda" in args:
-            hda_path = os.path.abspath(args["hda"])
-            if args.get("hdaInterface", "") == "scsi":
-                start_command += (
-                    "-drive id=hda,file="
-                    + hda_path
-                    + ",werror=report,if=none "
-                    + "-device scsi-hd,drive=hda "
-                )
-            else:
-                start_command += (
-                    "-drive file="
-                    + hda_path
-                    + ",if="
-                    + args["hdaInterface"]
-                    + ",werror=report "
-                )
-
-        if "cdrom" in args:
-            start_command += "-cdrom " + args["cdrom"] + " "
-
-        if "usb" in args:
-            start_command += (
-                "-device piix3-usb-uhci -drive "
-                + "id=usbdisk,file="
-                + args["usb"]
-                + ",if=none,readonly "
-                + "-device usb-storage,drive=usbdisk "
-            )
-        if "bios" in args:
-            start_command += "-bios " + args["bios"] + " "
-
-        start_command += args.get("qemuFlags", "")
-
-        return start_command
+        hda = None
+        if args.get("hda"):
+            hda_arg: str = args.get("hda", "")
+            hda_arg_path: pathlib.Path = pathlib.Path(hda_arg)
+            hda = (hda_arg_path, args.get("hdaInterface", ""))
+        return LegacyStartCommand(
+            netBackendArgs=args.get("netBackendArgs"),
+            netFrontendArgs=args.get("netFrontendArgs"),
+            hda=hda,
+            cdrom=args.get("cdrom"),
+            usb=args.get("usb"),
+            bios=args.get("bios"),
+            qemuFlags=args.get("qemuFlags"),
+        )
 
     def is_up(self) -> bool:
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
-        self.logger.log(msg, {"machine": self.name})
+        rootlog.log(msg, {"machine": self.name})
+
+    def log_serial(self, msg: str) -> None:
+        rootlog.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
-        return self.logger.nested(msg, my_attrs)
+        return rootlog.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
@@ -396,7 +584,8 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
+        assert self.shell
         self.shell.send(out_command.encode())
 
         output = ""
@@ -410,6 +599,19 @@ class Machine:
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+
+        assert self.shell
+        subprocess.run(
+            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            pass_fds=[self.shell.fileno()],
+        )
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
@@ -438,7 +640,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
         """Wait until a command returns success and return its output.
         Throws an exception on timeout.
         """
@@ -450,7 +652,7 @@ class Machine:
             return status == 0
 
         with self.nested("waiting for success: {}".format(command)):
-            retry(check_success)
+            retry(check_success, timeout)
             return output
 
     def wait_until_fails(self, command: str) -> str:
@@ -474,6 +676,7 @@ class Machine:
 
         with self.nested("waiting for the VM to power off"):
             sys.stdout.flush()
+            assert self.process
             self.process.wait()
 
             self.pid = None
@@ -550,6 +753,8 @@ class Machine:
 
         with self.nested("waiting for the VM to finish booting"):
             self.start()
+
+            assert self.shell
 
             tic = time.time()
             self.shell.recv(1024)
@@ -637,43 +842,29 @@ class Machine:
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
 
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            screenshot_path = os.path.join(tmpdir, "ppm")
+            self.send_monitor_command(f"screendump {screenshot_path}")
+            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
+
+    def get_screen_text_variants(self) -> List[str]:
+        return self._get_screen_text_variants([0, 1, 2])
+
     def get_screen_text(self) -> str:
-        if shutil.which("tesseract") is None:
-            raise Exception("get_screen_text used but enableOCR is false")
-
-        magick_args = (
-            "-filter Catrom -density 72 -resample 300 "
-            + "-contrast -normalize -despeckle -type grayscale "
-            + "-sharpen 1 -posterize 3 -negate -gamma 100 "
-            + "-blur 1x65535"
-        )
-
-        tess_args = "-c debug_file=/dev/null --psm 11 --oem 2"
-
-        with self.nested("performing optical character recognition"):
-            with tempfile.NamedTemporaryFile() as tmpin:
-                self.send_monitor_command("screendump {}".format(tmpin.name))
-
-                cmd = "convert {} {} tiff:- | tesseract - - {}".format(
-                    magick_args, tmpin.name, tess_args
-                )
-                ret = subprocess.run(cmd, shell=True, capture_output=True)
-                if ret.returncode != 0:
-                    raise Exception(
-                        "OCR failed with exit code {}".format(ret.returncode)
-                    )
-
-                return ret.stdout.decode("utf-8")
+        return self._get_screen_text_variants([2])[0]
 
     def wait_for_text(self, regex: str) -> None:
         def screen_matches(last: bool) -> bool:
-            text = self.get_screen_text()
-            matches = re.search(regex, text) is not None
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
 
-            if last and not matches:
-                self.log("Last OCR attempt failed. Text was: {}".format(text))
+            if last:
+                self.log("Last OCR attempt failed. Text was: {}".format(variants))
 
-            return matches
+            return False
 
         with self.nested("waiting for {} to appear on screen".format(regex)):
             retry(screen_matches)
@@ -704,72 +895,43 @@ class Machine:
 
         self.log("starting vm")
 
-        def create_socket(path: str) -> socket.socket:
-            if os.path.exists(path):
-                os.unlink(path)
+        def clear(path: pathlib.Path) -> pathlib.Path:
+            if path.exists():
+                path.unlink()
+            return path
+
+        def create_socket(path: pathlib.Path) -> socket.socket:
             s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
-            s.bind(path)
+            s.bind(str(path))
             s.listen(1)
             return s
 
-        monitor_path = os.path.join(self.state_dir, "monitor")
-        self.monitor_socket = create_socket(monitor_path)
-
-        shell_path = os.path.join(self.state_dir, "shell")
-        self.shell_socket = create_socket(shell_path)
-
-        qemu_options = (
-            " ".join(
-                [
-                    "" if self.allow_reboot else "-no-reboot",
-                    "-monitor unix:{}".format(monitor_path),
-                    "-chardev socket,id=shell,path={}".format(shell_path),
-                    "-device virtio-serial",
-                    "-device virtconsole,chardev=shell",
-                    "-device virtio-rng-pci",
-                    "-serial stdio" if "DISPLAY" in os.environ else "-nographic",
-                ]
-            )
-            + " "
-            + os.environ.get("QEMU_OPTS", "")
+        monitor_socket = create_socket(clear(self.monitor_path))
+        shell_socket = create_socket(clear(self.shell_path))
+        self.process = self.start_command.run(
+            self.state_dir,
+            self.shared_dir,
+            self.monitor_path,
+            self.shell_path,
         )
-
-        environment = dict(os.environ)
-        environment.update(
-            {
-                "TMPDIR": self.state_dir,
-                "SHARED_DIR": self.shared_dir,
-                "USE_TMPDIR": "1",
-                "QEMU_OPTS": qemu_options,
-            }
-        )
-
-        self.process = subprocess.Popen(
-            self.script,
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            cwd=self.state_dir,
-            env=environment,
-        )
-        self.monitor, _ = self.monitor_socket.accept()
-        self.shell, _ = self.shell_socket.accept()
+        self.monitor, _ = monitor_socket.accept()
+        self.shell, _ = shell_socket.accept()
 
         # Store last serial console lines for use
         # of wait_for_console_text
         self.last_lines: Queue = Queue()
 
         def process_serial_output() -> None:
-            assert self.process.stdout is not None
+            assert self.process
+            assert self.process.stdout
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 self.last_lines.put(line)
-                eprint("{} # {}".format(self.name, line))
-                self.logger.enqueue({"msg": line, "machine": self.name})
+                self.log_serial(line)
 
-        _thread.start_new_thread(process_serial_output, ())
+        self.serial_thread = threading.Thread(target=process_serial_output)
+        self.serial_thread.start()
 
         self.wait_for_monitor_prompt()
 
@@ -779,15 +941,15 @@ class Machine:
         self.log("QEMU running (pid {})".format(self.pid))
 
     def cleanup_statedir(self) -> None:
-        if os.path.isdir(self.state_dir):
-            shutil.rmtree(self.state_dir)
-            self.logger.log(f"deleting VM state directory {self.state_dir}")
-            self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
+        shutil.rmtree(self.state_dir)
+        rootlog.log(f"deleting VM state directory {self.state_dir}")
+        rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         if not self.booted:
             return
 
+        assert self.shell
         self.shell.send("poweroff\n".encode())
         self.wait_for_shutdown()
 
@@ -862,105 +1024,297 @@ class Machine:
         """Make the machine reachable."""
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
+    def release(self) -> None:
+        if self.pid is None:
+            return
+        rootlog.info(f"kill machine (pid {self.pid})")
+        assert self.process
+        assert self.shell
+        assert self.monitor
+        assert self.serial_thread
 
-def create_machine(args: Dict[str, Any]) -> Machine:
-    global log
-    args["log"] = log
-    args["redirectSerial"] = os.environ.get("USE_SERIAL", "0") == "1"
-    return Machine(args)
-
-
-def start_all() -> None:
-    global machines
-    with log.nested("starting all VMs"):
-        for machine in machines:
-            machine.start()
-
-
-def join_all() -> None:
-    global machines
-    with log.nested("waiting for all VMs to finish"):
-        for machine in machines:
-            machine.wait_for_shutdown()
+        self.process.terminate()
+        self.shell.close()
+        self.monitor.close()
+        self.serial_thread.join()
 
 
-def test_script() -> None:
-    exec(os.environ["testScript"])
+class VLan:
+    """This class handles a VLAN that the run-vm scripts identify via its
+    number handles. The network's lifetime equals the object's lifetime.
+    """
+
+    nr: int
+    socket_dir: pathlib.Path
+
+    process: subprocess.Popen
+    pid: int
+    fd: io.TextIOBase
+
+    def __repr__(self) -> str:
+        return f"<Vlan Nr. {self.nr}>"
+
+    def __init__(self, nr: int, tmp_dir: pathlib.Path):
+        self.nr = nr
+        self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
+
+        # TODO: don't side-effect environment here
+        os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
+
+        rootlog.info("start vlan")
+        pty_master, pty_slave = pty.openpty()
+
+        self.process = subprocess.Popen(
+            ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700"],
+            stdin=pty_slave,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False,
+        )
+        self.pid = self.process.pid
+        self.fd = os.fdopen(pty_master, "w")
+        self.fd.write("version\n")
+
+        # TODO: perl version checks if this can be read from
+        # an if not, dies. we could hang here forever. Fix it.
+        assert self.process.stdout is not None
+        self.process.stdout.readline()
+        if not (self.socket_dir / "ctl").exists():
+            rootlog.error("cannot start vde_switch")
+
+        rootlog.info(f"running vlan (pid {self.pid})")
+
+    def __del__(self) -> None:
+        rootlog.info(f"kill vlan (pid {self.pid})")
+        self.fd.close()
+        self.process.terminate()
 
 
-def run_tests() -> None:
-    global machines
-    tests = os.environ.get("tests", None)
-    if tests is not None:
-        with log.nested("running the VM test script"):
+class Driver:
+    """A handle to the driver that sets up the environment
+    and runs the tests"""
+
+    tests: str
+    vlans: List[VLan]
+    machines: List[Machine]
+
+    def __init__(
+        self,
+        start_scripts: List[str],
+        vlans: List[int],
+        tests: str,
+        keep_vm_state: bool = False,
+    ):
+        self.tests = tests
+
+        tmp_dir = pathlib.Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir.mkdir(mode=0o700, exist_ok=True)
+
+        with rootlog.nested("start all VLans"):
+            self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
+
+        def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
+            for s in scripts:
+                yield NixStartScript(s)
+
+        self.machines = [
+            Machine(
+                start_command=cmd,
+                keep_vm_state=keep_vm_state,
+                name=cmd.machine_name,
+                tmp_dir=tmp_dir,
+            )
+            for cmd in cmd(start_scripts)
+        ]
+
+    def __enter__(self) -> "Driver":
+        return self
+
+    def __exit__(self, *_: Any) -> None:
+        with rootlog.nested("cleanup"):
+            for machine in self.machines:
+                machine.release()
+
+    def subtest(self, name: str) -> Iterator[None]:
+        """Group logs under a given test name"""
+        with rootlog.nested(name):
             try:
-                exec(tests, globals())
+                yield
+                return True
             except Exception as e:
-                eprint("error: ")
-                traceback.print_exc()
-                sys.exit(1)
-    else:
-        ptpython.repl.embed(locals(), globals())
+                rootlog.error(f'Test "{name}" failed with error: "{e}"')
+                raise e
 
-    # TODO: Collect coverage data
+    def test_symbols(self) -> Dict[str, Any]:
+        @contextmanager
+        def subtest(name: str) -> Iterator[None]:
+            return self.subtest(name)
 
-    for machine in machines:
-        if machine.is_up():
-            machine.execute("sync")
+        general_symbols = dict(
+            start_all=self.start_all,
+            test_script=self.test_script,
+            machines=self.machines,
+            vlans=self.vlans,
+            driver=self,
+            log=rootlog,
+            os=os,
+            create_machine=self.create_machine,
+            subtest=subtest,
+            run_tests=self.run_tests,
+            join_all=self.join_all,
+            retry=retry,
+            serial_stdout_off=self.serial_stdout_off,
+            serial_stdout_on=self.serial_stdout_on,
+            Machine=Machine,  # for typing
+        )
+        machine_symbols = {
+            m.name: self.machines[idx] for idx, m in enumerate(self.machines)
+        }
+        vlan_symbols = {
+            f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
+        }
+        print(
+            "additionally exposed symbols:\n    "
+            + ", ".join(map(lambda m: m.name, self.machines))
+            + ",\n    "
+            + ", ".join(map(lambda v: f"vlan{v.nr}", self.vlans))
+            + ",\n    "
+            + ", ".join(list(general_symbols.keys()))
+        )
+        return {**general_symbols, **machine_symbols, **vlan_symbols}
+
+    def test_script(self) -> None:
+        """Run the test script"""
+        with rootlog.nested("run the VM test script"):
+            symbols = self.test_symbols()  # call eagerly
+            exec(self.tests, symbols, None)
+
+    def run_tests(self) -> None:
+        """Run the test script (for non-interactive test runs)"""
+        self.test_script()
+        # TODO: Collect coverage data
+        for machine in self.machines:
+            if machine.is_up():
+                machine.execute("sync")
+
+    def start_all(self) -> None:
+        """Start all machines"""
+        with rootlog.nested("start all VMs"):
+            for machine in self.machines:
+                machine.start()
+
+    def join_all(self) -> None:
+        """Wait for all machines to shut down"""
+        with rootlog.nested("wait for all VMs to finish"):
+            for machine in self.machines:
+                machine.wait_for_shutdown()
+
+    def create_machine(self, args: Dict[str, Any]) -> Machine:
+        rootlog.warning(
+            "Using legacy create_machine(), please instantiate the"
+            "Machine class directly, instead"
+        )
+        tmp_dir = pathlib.Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir.mkdir(mode=0o700, exist_ok=True)
+
+        if args.get("startCommand"):
+            start_command: str = args.get("startCommand", "")
+            cmd = NixStartScript(start_command)
+            name = args.get("name", cmd.machine_name)
+        else:
+            cmd = Machine.create_startcommand(args)  # type: ignore
+            name = args.get("name", "machine")
+
+        return Machine(
+            tmp_dir=tmp_dir,
+            start_command=cmd,
+            name=name,
+            keep_vm_state=args.get("keep_vm_state", False),
+            allow_reboot=args.get("allow_reboot", False),
+        )
+
+    def serial_stdout_on(self) -> None:
+        rootlog._print_serial_logs = True
+
+    def serial_stdout_off(self) -> None:
+        rootlog._print_serial_logs = False
 
 
-@contextmanager
-def subtest(name: str) -> Iterator[None]:
-    with log.nested(name):
-        try:
-            yield
-            return True
-        except Exception as e:
-            log.log(f'Test "{name}" failed with error: "{e}"')
-            raise e
+class EnvDefault(argparse.Action):
+    """An argpars Action that takes values from the specified
+    environment variable as the flags default value.
+    """
 
-    return False
+    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+        if not default and envvar:
+            if envvar in os.environ:
+                if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
+                    default = os.environ[envvar].split()
+                else:
+                    default = os.environ[envvar]
+                kwargs["help"] = (
+                    kwargs["help"] + f" (default from environment: {default})"
+                )
+        if required and default:
+            required = False
+        super(EnvDefault, self).__init__(
+            default=default, required=required, nargs=nargs, **kwargs
+        )
+
+    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
+        setattr(namespace, self.dest, values)
 
 
 if __name__ == "__main__":
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
         "-K",
         "--keep-vm-state",
         help="re-use a VM state coming from a previous run",
         action="store_true",
     )
-    (cli_args, vm_scripts) = arg_parser.parse_known_args()
+    arg_parser.add_argument(
+        "-I",
+        "--interactive",
+        help="drop into a python repl and run the tests interactively",
+        action="store_true",
+    )
+    arg_parser.add_argument(
+        "--start-scripts",
+        metavar="START-SCRIPT",
+        action=EnvDefault,
+        envvar="startScripts",
+        nargs="*",
+        help="start scripts for participating virtual machines",
+    )
+    arg_parser.add_argument(
+        "--vlans",
+        metavar="VLAN",
+        action=EnvDefault,
+        envvar="vlans",
+        nargs="*",
+        help="vlans to span by the driver",
+    )
+    arg_parser.add_argument(
+        "testscript",
+        action=EnvDefault,
+        envvar="testScript",
+        help="the test script to run",
+        type=pathlib.Path,
+    )
 
-    log = Logger()
+    args = arg_parser.parse_args()
 
-    vlan_nrs = list(dict.fromkeys(os.environ.get("VLANS", "").split()))
-    vde_sockets = [create_vlan(v) for v in vlan_nrs]
-    for nr, vde_socket, _, _ in vde_sockets:
-        os.environ["QEMU_VDE_SOCKET_{}".format(nr)] = vde_socket
+    if not args.keep_vm_state:
+        rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
-    machines = [
-        create_machine({"startCommand": s, "keepVmState": cli_args.keep_vm_state})
-        for s in vm_scripts
-    ]
-    machine_eval = [
-        "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
-    ]
-    exec("\n".join(machine_eval))
-
-    @atexit.register
-    def clean_up() -> None:
-        with log.nested("cleaning up"):
-            for machine in machines:
-                if machine.pid is None:
-                    continue
-                log.log("killing {} (pid {})".format(machine.name, machine.pid))
-                machine.process.kill()
-            for _, _, process, _ in vde_sockets:
-                process.terminate()
-        log.close()
-
-    tic = time.time()
-    run_tests()
-    toc = time.time()
-    print("test script finished in {:.2f}s".format(toc - tic))
+    with Driver(
+        args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
+    ) as driver:
+        if args.interactive:
+            ptpython.repl.embed(driver.test_symbols(), {})
+        else:
+            tic = time.time()
+            driver.run_tests()
+            toc = time.time()
+            rootlog.info(f"test script finished in {(toc-tic):.2f}s")

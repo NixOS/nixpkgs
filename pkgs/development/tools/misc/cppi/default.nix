@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "cppi-1.18";
+  pname = "cppi";
+  version = "1.18";
 
   src = fetchurl {
-    url = "mirror://gnu/cppi/${name}.tar.xz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     sha256 = "1jk42cjaggk71rimjnx3qpmb6hivps0917vl3z7wbxk3i2whb98j";
   };
 

@@ -1,3 +1,4 @@
+#!@stdenv_shell@ -e
 shopt -s extglob
 
 [ -z "$DF_DIR" ] && export DF_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
@@ -7,25 +8,25 @@ exe="$env_dir/@exe@"
 update_path() {
   local path="$1"
 
-  mkdir -p "$DF_DIR/$(dirname "$path")"
+  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
   # If user has replaced these data directories, let them stay.
   if [ ! -e "$DF_DIR/$path" ] || [ -L "$DF_DIR/$path" ]; then
-    rm -f "$DF_DIR/$path"
-    ln -s "$env_dir/$path" "$DF_DIR/$path"
+    @rm@ -f "$DF_DIR/$path"
+    @ln@ -s "$env_dir/$path" "$DF_DIR/$path"
   fi
 }
 
 forcecopy_path() {
   local path="$1"
 
-  mkdir -p "$DF_DIR/$(dirname "$path")"
-  rm -rf "$DF_DIR/$path"
-  cp -rL --no-preserve=all "$env_dir/$path" "$DF_DIR/$path"
+  @mkdir@ -p "$DF_DIR/$(dirname "$path")"
+  @rm@ -rf "$DF_DIR/$path"
+  @cp@ -rL --no-preserve=all "$env_dir/$path" "$DF_DIR/$path"
 }
 
-mkdir -p "$DF_DIR"
+@mkdir@ -p "$DF_DIR"
 
-cat <<EOF >&2
+@cat@ <<EOF >&2
 Using $DF_DIR as Dwarf Fortress overlay directory.
 If you do any changes in it, don't forget to clean it when updating the game version!
 We try to detect changes based on data directories being symbolic links -- keep this in mind.

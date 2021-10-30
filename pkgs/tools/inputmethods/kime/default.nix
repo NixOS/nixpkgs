@@ -16,18 +16,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kime";
-  version = "2.5.2";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "Riey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10zd4yrqxzxf4nj3b5bsblcmlbqssxqq9pac0misa1g61jdbszj8";
+    sha256 = "sha256-u2CmehJipXSH1dey5oIyQf8CsRveeae5cSjpY8vWYRs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sha256 = "1bimi7020m7v287bh7via7zm9m7y13d13kqpd772xmpdbwrj8nrl";
+    sha256 = "sha256-ROzEEfIPeWoWDi5McNwub5E/UCAeJpOx5nZS9r/q4K4=";
   };
 
   # Replace autostart path
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   ];
 
   RUST_BACKTRACE = 1;
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/Riey/kime";

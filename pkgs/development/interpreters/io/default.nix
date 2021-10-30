@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Io programming language";
-    homepage = "http://iolanguage.org/";
+    homepage = "https://iolanguage.org/";
     license = licenses.bsd3;
 
     maintainers = with maintainers; [

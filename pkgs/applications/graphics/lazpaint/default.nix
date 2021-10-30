@@ -63,6 +63,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , colorama, regex
-, pytestrunner, pytestCheckHook, pytest-mypy
+, pytest-runner, pytestCheckHook, pytest-mypy
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
   checkInputs = [ pytestCheckHook pytest-mypy ];
 

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "5.1";
+  version = "6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1YUc178whzhKH87PqN3bj1UDDu39b98SciW3W8oPmd0=";
+    sha256 = "78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841";
   };
 
   propagatedBuildInputs = [

@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1
+, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
 , bison, flex, zlib, qmake, makeDesktopItem, makeWrapper
 }:
 
@@ -16,18 +16,18 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5";
+  version = "3.6-DEV2107";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
-    rev = "V${version}";
-    sha256 = "1lyd0b2s3s9c2ppj7l4hf3s4gfzscaaam2pbiaby714bi9nr0ka7";
+    rev = "v${version}";
+    sha256 = "1d54x3pv27w1ys2f5l7gnfhyijhgcgdjnq1c1mj7hvg35dmh054d";
   };
 
   buildInputs = [
     qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb-compat-0_1
+    qtconnectivity qtcharts libusb-compat-0_1 gsl blas
   ];
   nativeBuildInputs = [ flex makeWrapper qmake bison ];
 
@@ -40,9 +40,9 @@ in mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = "-lz";
+  NIX_LDFLAGS = "-lz -lgsl -lblas";
 
-  qtWrapperArgs = [ "--set LD_LIBRARY_PATH ${zlib.out}/lib" ];
+  qtWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" "${zlib.out}/lib" ];
 
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
@@ -52,10 +52,6 @@ in mkDerivation rec {
     echo 'LIBUSB_INCLUDE = ${libusb-compat-0_1.dev}/include' >> src/gcconfig.pri
     echo 'LIBUSB_LIBS = -L${libusb-compat-0_1}/lib -lusb' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
-
-    # Use qtwebengine instead of qtwebkit
-    substituteInPlace src/gcconfig.pri \
-      --replace "#DEFINES += NOWEBKIT" "DEFINES += NOWEBKIT"
   '';
 
   installPhase = ''
@@ -73,6 +69,6 @@ in mkDerivation rec {
     description = "Performance software for cyclists, runners and triathletes";
     platforms = platforms.linux;
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
   };
 }

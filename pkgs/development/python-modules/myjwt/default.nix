@@ -1,32 +1,30 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , click
 , colorama
 , cryptography
 , exrex
+, fetchFromGitHub
 , pyopenssl
 , pyperclip
+, pytest-mock
+, pytestCheckHook
 , questionary
 , requests
-, pytestCheckHook
-, pytest-mock
 , requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "myjwt";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
     rev = version;
-    sha256 = "1n3lvdrzp6wbbcygjwa7xar2jnhjnrz7a9khmn2phhkkngxm5rc4";
+    sha256 = "sha256-kZkqFeaQPd56BVaYmCWAbVu1xwbPAIlQC3u5/x3dh7A=";
   };
-
-  patches = [ ./pinning.patch ];
 
   propagatedBuildInputs = [
     click
@@ -40,15 +38,20 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
     requests-mock
   ];
+
+  postPatch = ''
+    # Remove all version pinning (E.g., tornado==5.1.1 -> tornado)
+    sed -i -e "s/==[0-9.]*//" requirements.txt
+  '';
 
   pythonImportsCheck = [ "myjwt" ];
 
   meta = with lib; {
-    description = "CLI tool for testing vulnerabilities on Json Web Token(JWT)";
+    description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation ];
 
-  buildFlags = [ "--tags" "release" ];
+  tags = [ "release" ];
 
   meta = {
     description = "Command line utility to live-reload your application";

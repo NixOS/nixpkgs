@@ -226,7 +226,7 @@ in
 
             hostSettings = mkOption {
               default = { };
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   host1 = {
                     addresses = [
@@ -282,7 +282,7 @@ in
             package = mkOption {
               type = types.package;
               default = pkgs.tinc_pre;
-              defaultText = "pkgs.tinc_pre";
+              defaultText = literalExpression "pkgs.tinc_pre";
               description = ''
                 The package to use for the tinc daemon's binary.
               '';
@@ -302,7 +302,7 @@ in
             settings = mkOption {
               default = { };
               type = types.submodule { freeformType = tincConfType; };
-              example = literalExample ''
+              example = literalExpression ''
                 {
                   Interface = "custom.interface";
                   DirectOnly = true;
@@ -351,7 +351,7 @@ in
 
   config = mkIf (cfg.networks != { }) {
 
-    environment.etc = fold (a: b: a // b) { }
+    environment.etc = foldr (a: b: a // b) { }
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
@@ -427,9 +427,12 @@ in
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";
         isSystemUser = true;
+        group = "tinc.${network}";
       })
     );
-
+    users.groups = flip mapAttrs' cfg.networks (network: _:
+      nameValuePair "tinc.${network}" {}
+    );
   };
 
   meta.maintainers = with maintainers; [ minijackson ];

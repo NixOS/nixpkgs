@@ -1,52 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
-, nose
-, scikitlearn
-, scipy
-, numba
-, llvmlite
 , joblib
+, llvmlite
+, numba
+, scikit-learn
+, scipy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.1";
+  version = "0.5.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74a05a54d13573a38878781d44812ac6df97d8762a56f9bb5dd87a99911820fe";
+    sha256 = "7a7df8412b19cfb3596060faf5a8c5d0bf5b3bd504f8efd900fc4e3918c6f882";
   };
 
-  patches = [
-    # fixes tests, included in 0.5.2
-    (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/ef5d8c3c3bfe976063b6621e3e0734c0c22d813b.patch";
-      sha256 = "sha256-49n3kevs3wpzd4FfZVKmNpF2o1V8pJs4KOx8zCAhR3s=";
-    })
+  propagatedBuildInputs = [
+    joblib
+    llvmlite
+    numba
+    scikit-learn
+    scipy
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
   ];
-
-  propagatedBuildInputs = [
-    scikitlearn
-    scipy
-    numba
-    llvmlite
-    joblib
-  ];
-
-  checkPhase = ''
-    nosetests
-  '';
 
   meta = with lib; {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
     license = licenses.bsd2;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

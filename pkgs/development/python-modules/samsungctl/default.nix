@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    websocket_client
+    websocket-client
   ];
 
   # no tests

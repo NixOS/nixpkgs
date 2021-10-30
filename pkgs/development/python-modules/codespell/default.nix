@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "codespell";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "187g26s3wzjmvdx9vjabbnajpbg0s9klixyv6baymmgz9lrcv4ln";
+    sha256 = "sha256-BhYVztSr2MalILEcOcvMl07CObYa73o3kW8S/idqAO8=";
   };
 
   checkInputs = [ aspell-python chardet pytestCheckHook pytest-cov pytest-dependency ];

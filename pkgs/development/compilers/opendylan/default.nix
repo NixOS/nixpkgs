@@ -2,7 +2,8 @@
 {lib, stdenv, fetchgit, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
 
 stdenv.mkDerivation {
-  name = "opendylan-2016.1pre";
+  pname = "opendylan";
+  version = "2016.1pre";
 
   src = fetchgit {
     url = "https://github.com/dylan-lang/opendylan";

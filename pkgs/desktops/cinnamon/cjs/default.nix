@@ -7,7 +7,7 @@
 , wrapGAppsHook
 , python3
 , cairo
-, gnome3
+, gnome
 , xapps
 , keybinder3
 , upower
@@ -20,7 +20,7 @@
 , meson
 , sysprof
 , dbus
-, xvfb_run
+, xvfb-run
 , ninja
 , makeWrapper
 , which
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    xvfb_run
+    xvfb-run
   ];
 
   propagatedBuildInputs = [
     glib
 
     # bindings
-    gnome3.caribou
+    gnome.caribou
     keybinder3
     upower
     xapps

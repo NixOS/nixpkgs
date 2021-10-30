@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1w9im1zz8xnkdwmv4v11kn1xcqm889268g1fw4y2s9f6shi41mxx";
+    sha256 = "0zpd331vy1kfi4hfiszv3m8wl4m0wdfr3zzza200kkaakw5hjxhs";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     jdk
     libGL
     libGLU
-    libX11
     libjpeg
     libpng
     libtiff
@@ -44,6 +43,7 @@ stdenv.mkDerivation rec {
     zlib
     python3
   ] ++ (with xorg; [
+    libX11
     libXcursor
     libXext
     libXfixes

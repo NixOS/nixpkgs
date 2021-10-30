@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchurl, sconsPackages, libX11, pkg-config
-, libusb1, boost, glib, dbus-glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, sconsPackages
+, libX11
+, pkg-config
+, libusb1
+, boost
+, glib
+, dbus-glib
+}:
 
-let
-  version = "0.8.8";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xboxdrv";
-  inherit version;
+  version = "0.8.8";
 
-  src = fetchurl {
-    url = "https://github.com/xboxdrv/xboxdrv/archive/v${version}.tar.gz";
-    sha256 = "0jx2wqmc7602dxyj19n3h8x0cpy929h7c0h39vcc5rf0q74fh3id";
+  src = fetchFromGitHub {
+    owner = "xboxdrv";
+    repo = "xboxdrv";
+    rev = "v${version}";
+    hash = "sha256-R0Bt4xfzQA1EmZbf7lcWLwSSUayf5Y711QhlAVhiLrY=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -18,11 +27,10 @@ in stdenv.mkDerivation {
   dontUseSconsInstall = true;
 
   meta = with lib; {
-    homepage = "https://pingus.seul.org/~grumbel/xboxdrv/";
+    homepage = "https://xboxdrv.gitlab.io/";
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.linux;
   };
-
 }

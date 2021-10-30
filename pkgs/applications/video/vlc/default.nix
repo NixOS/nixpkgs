@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook, fetchpatch
 , libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
+, zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
 , pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
+, libvorbis, libtheora, speex, lua5, libgcrypt, libgpg-error, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
+, ncurses, srt
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
@@ -24,26 +25,26 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.12";
+  version = "3.0.16";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "0ygqihw2c5vvzv8950dlf7rdwz1cpz1668jgyja604ljibrmix7g";
+    sha256 = "sha256-/641/GT2JcF1Vx0jRrxfYge+mXYlF/FUI+dPGDmUEPY=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
+    zlib a52dec libmad faad2 ffmpeg alsa-lib libdvdnav libdvdnav.libdvdread
+    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpg-error
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp taglib libarchive
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols
-  ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
+    fluidsynth wayland wayland-protocols ncurses srt
+  ] ++ optional (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
     ++ optional jackSupport libjack2
@@ -54,11 +55,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64) then live555 else null;
+  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) then live555 else null;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
+      sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
@@ -79,6 +87,7 @@ stdenv.mkDerivation rec {
   # "--enable-foo" flags here
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
+    "--enable-srt" # Explicit enable srt to ensure the patch is applied.
   ] ++ optional onlyLibVLC "--disable-vlc"
     ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [

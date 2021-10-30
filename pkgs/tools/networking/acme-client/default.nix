@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, apple_sdk ? null
 , libbsd
 , libressl
 , pkg-config
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libbsd libressl ] ++ optional stdenv.isDarwin apple_sdk.sdk;
+  buildInputs = [ libbsd libressl ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.39.0";
+  version = "0.40.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "71829df4bdbe5bd55c324a97008405a6b4c6113edb1a2a6a8b73a7059fe64a47";
+    sha256 = "sha256-Qrj0+4WXlW0UgG2xV/P8e0QgUG3VurY4HIAiiUF3LW8=";
   };
 
   makeWrapperArgs = [

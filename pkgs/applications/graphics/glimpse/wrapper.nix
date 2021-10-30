@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, glimpse, makeWrapper, glimpsePlugins, gnome3, plugins ? null }:
+{ lib, symlinkJoin, glimpse, makeWrapper, glimpsePlugins, gnome, plugins ? null }:
 
 let
   allPlugins = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues glimpsePlugins);
@@ -19,7 +19,7 @@ symlinkJoin {
       wrapProgram $out/bin/$each \
         --set GIMP2_PLUGINDIR "$out/lib/glimpse/2.0" \
         --set GIMP2_DATADIR "$out/share/glimpse/2.0" \
-        --prefix GTK_PATH : "${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
+        --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \
         ${toString extraArgs}
     done
 

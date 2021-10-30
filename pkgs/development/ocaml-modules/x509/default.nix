@@ -8,11 +8,11 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
 
   pname = "x509";
-  version = "0.12.0";
+  version = "0.14.1";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-v${version}.tbz";
-    sha256 = "04g59j8sn8am0z0a94h8cyvr6cqzd5gkn2lj6g51nb5dkwajj19h";
+    sha256 = "d91eb4f2790f9d098713c71cc4b5d12706aedb1795666b5e6d667fe5c262f9c3";
   };
 
   useDune2 = true;

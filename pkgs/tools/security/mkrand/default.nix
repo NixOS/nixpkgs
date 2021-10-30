@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "mkrand-0.1.0";
+stdenv.mkDerivation rec {
+  pname = "mkrand";
+  version = "0.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mknight-tag/MKRAND/releases/download/v0.1.0/mkrand-0.1.0.tar.gz";
+    url = "https://github.com/mknight-tag/MKRAND/releases/download/v${version}/mkrand-${version}.tar.gz";
     sha256 = "1irwyv2j5c3606k3qbq77yrd65y27rcq3jdlp295rz875q8iq9fs";
   };
 

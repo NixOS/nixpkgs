@@ -1,15 +1,17 @@
-{ mkDerivation, fetchurl, lib
+{ mkDerivation
+, fetchurl
+, lib
 , extra-cmake-modules
 , qtbase
 }:
 
 mkDerivation rec {
   pname = "plasma-wayland-protocols";
-  version = "1.1.1";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xUkzg9EVFxw0NeqaIbOWaGBjKoRFRP+sj1SJBDalHTg=";
+    url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-OLBDHZMagzk3cKu4KUIGk2tjuJzu4/DGPw8Ibz0rG6k=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

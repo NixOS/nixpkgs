@@ -96,7 +96,7 @@ in
         description = "Kubernetes CNI configuration.";
         type = listOf attrs;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [{
             "cniVersion": "0.3.1",
             "name": "mynet",
@@ -134,7 +134,7 @@ in
     containerRuntimeEndpoint = mkOption {
       description = "Endpoint at which to find the container runtime api interface/socket";
       type = str;
-      default = "unix:///var/run/containerd/containerd.sock";
+      default = "unix:///run/containerd/containerd.sock";
     };
 
     enable = mkEnableOption "Kubernetes kubelet.";
@@ -142,7 +142,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes kubelet extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
@@ -337,10 +337,13 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
+      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 

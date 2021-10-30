@@ -27,7 +27,7 @@ python.pkgs.buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}";
-    hash = "sha256-//TmozgWy9zrSpMKX92XdHj4fw/T1Elfgn4YhhR7ot0=";
+    hash = "sha256-u3L9nXHKILznyZTgxdvZyOCQZFZhuADrtI7zXYQzrbE=";
   };
 
   patches = [ ./Cargo.lock.patch ];
@@ -40,6 +40,6 @@ python.pkgs.buildPythonPackage rec {
     description = "PyO3 word count example";
     homepage = "https://github.com/PyO3/pyo3";
     license = licenses.asl20;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

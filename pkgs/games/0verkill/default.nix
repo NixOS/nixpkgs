@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, gccStdenv
 , fetchFromGitHub
 , autoreconfHook
 , xorgproto
@@ -7,7 +7,7 @@
 , libXpm
 }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "0verkill";
   version = "unstable-2011-01-13";
 

@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
+, atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver
+, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "7.36.1";
+  version = "9.1.1";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "sha256-6brThKTAQI3cu3SSqvEIT1nwlQ/jPTP+d/Q/m/Ez5nQ=";
+    sha256 = "QqlA/8fEOwucs+nU6ahDh3GB64PdhY8JFWPiyEBxGsE=";
     name = "${pname}.tar.gz";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     atk
     at-spi2-atk
     at-spi2-core
-    alsaLib
+    alsa-lib
     cairo
     cups
     dbus
@@ -43,10 +43,12 @@ stdenv.mkDerivation rec {
     gtk3
     freetype
     fontconfig
+    mesa
     nss
     nspr
     pango
     udev
+    libdrm
     libuuid
     libX11
     libxcb
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXScrnSaver
+    libxkbcommon
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -71,7 +74,7 @@ stdenv.mkDerivation rec {
     rm $out/share/postman/Postman
 
     mkdir -p $out/bin
-    ln -s $out/share/postman/_Postman $out/bin/postman
+    ln -s $out/share/postman/postman $out/bin/postman
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
@@ -85,8 +88,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     pushd $out/share/postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
-    for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
+    for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
@@ -98,6 +101,6 @@ stdenv.mkDerivation rec {
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ xurei evanjs ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs ];
   };
 }

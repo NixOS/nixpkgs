@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk
+, libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
 , writeTextFile
 }:
 
@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Additional kernel make flags
+  extraMakeFlags ? [],
   # The version of the kernel module directory
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
@@ -37,7 +39,6 @@ in {
   extraMeta ? {},
 
   # for module compatibility
-  isXen      ? features.xen_dom0 or false,
   isZen      ? false,
   isLibre    ? false,
   isHardened ? false,
@@ -54,6 +55,7 @@ let
 
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
+
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -87,6 +89,8 @@ let
 
       isModular = config.isYes "MODULES";
 
+      buildDTBs = kernelConf.DTB or false;
+
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
         (lib.versionOlder version "4.14");
@@ -94,7 +98,8 @@ let
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isXen isZen isHardened isLibre;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         kernelOlder = lib.versionOlder version;
         kernelAtLeast = lib.versionAtLeast version;
       };
@@ -119,9 +124,9 @@ let
         # This way kernels can be bit-by-bit reproducible depending on settings
         # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
         # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id|--build-id=none|'
+        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        patchShebangs scripts/ld-version.sh
+        patchShebangs scripts
       '';
 
       postPatch = ''
@@ -173,13 +178,16 @@ let
         "KBUILD_BUILD_VERSION=1-NixOS"
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ] ++ optional isModular "modules"
+        ++ optional buildDTBs "dtbs"
+      ++ extraMakeFlags;
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
+      ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
       preInstall = ''
         installFlagsArray+=("-j$NIX_BUILD_CORES")
@@ -195,9 +203,7 @@ let
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (kernelConf.DTB or false) then ''
-        make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
-      '' else "") + (if isModular then ''
+      '') + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
@@ -257,8 +263,7 @@ let
         find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod u-w Makefile
-        chmod u-w arch/$arch/Makefile*
+        chmod u-w Makefile arch/"$arch"/Makefile*
 
         # Keep whole scripts dir
         chmod u-w -R scripts
@@ -285,10 +290,10 @@ let
             " (with patches: "
             + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
-        license = lib.licenses.gpl2;
+        license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
         repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
-        maintainers = [
+        maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
@@ -307,12 +312,12 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (lib.versionAtLeast version "5.2")  cpio
+      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 
@@ -325,7 +330,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
 })

@@ -59,7 +59,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
-  ++ lib.optional alsaSupport            pkgs.alsaLib
+  ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
@@ -74,7 +74,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals openglSupport [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
@@ -106,7 +106,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   postInstall = let
     links = prefix: pkg: "ln -s ${pkg} $out/${prefix}/${pkg.name}";
-  in ''
+  in lib.optionalString supportFlags.embedInstallers ''
     mkdir -p $out/share/wine/gecko $out/share/wine/mono/
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
@@ -151,5 +151,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     license = with lib.licenses; [ lgpl21Plus ];
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     maintainers = with lib.maintainers; [ avnik raskin bendlas ];
+    mainProgram = "wine";
   };
 })

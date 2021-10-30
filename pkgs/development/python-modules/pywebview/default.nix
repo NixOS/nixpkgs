@@ -6,7 +6,7 @@
 , pytest
 , pythonOlder
 , qt5
-, xvfb_run
+, xvfb-run
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    xvfb_run
+    xvfb-run
   ];
 
   checkPhase = ''

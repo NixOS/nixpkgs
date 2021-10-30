@@ -11,7 +11,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.shiori;
-        defaultText = "pkgs.shiori";
+        defaultText = literalExpression "pkgs.shiori";
         description = "The Shiori package to use.";
       };
 
@@ -86,10 +86,7 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-
-          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock"
-          "~@module" "~@obsolete" "~@privileged" "~@raw-io"
-          "~@resources" "~@setuid"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
         ];
       };
     };

@@ -2,14 +2,14 @@
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
-, vala
+, vala_0_52
 , meson
 , ninja
 , pkg-config
 , python3
 , libgee
 , gsettings-desktop-schemas
-, gnome3
+, gnome
 , pantheon
 , wrapGAppsHook
 , gtk3
@@ -35,14 +35,16 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    vala
+    # Does not build with vala 0.54
+    # https://github.com/bleakgrey/tootle/issues/337
+    vala_0_52
     wrapGAppsHook
   ];
 
   buildInputs = [
     glib
     glib-networking
-    gnome3.libsoup
+    gnome.libsoup
     gsettings-desktop-schemas
     gtk3
     json-glib

@@ -18,8 +18,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.kodi;
-        defaultText = "pkgs.kodi";
-        example = "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
+        defaultText = literalExpression "pkgs.kodi";
+        example = literalExpression "pkgs.kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
         description = ''
           Package that should be used for Kodi.
         '';

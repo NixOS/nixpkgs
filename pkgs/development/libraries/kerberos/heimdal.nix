@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
     # asn1 compilers, move them to $dev
     mv $out/libexec/heimdal/heimdal/* $dev/bin
     rmdir $out/libexec/heimdal/heimdal
+
+    # compile_et is needed for cross-compiling this package and samba
+    mv lib/com_err/.libs/compile_et $dev/bin
   '';
 
   # Issues with hydra

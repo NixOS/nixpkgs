@@ -1,30 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-benchmark, wasmer }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, wasmer, wasmer-compiler-cranelift, pytestCheckHook, pytest-benchmark }:
 
 buildPythonPackage rec {
   pname = "fastdiff";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ai95vjchl4396zjl1b69xfqvn9kn1y7c40d9l0qxdss0pcx6fk2";
+    sha256 = "4dfa09c47832a8c040acda3f1f55fc0ab4d666f0e14e6951e6da78d59acd945a";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'pytest-runner' ""
+    substituteInPlace setup.cfg \
+      --replace "collect_ignore = ['setup.py']" ""
   '';
 
-  propagatedBuildInputs = [ wasmer ];
+  propagatedBuildInputs = [ wasmer wasmer-compiler-cranelift ];
 
   checkInputs = [ pytestCheckHook pytest-benchmark ];
 
   pythonImportsCheck = [ "fastdiff" ];
-  disabledTests = [ "test_native" ];
 
   meta = with lib; {
     description = "A fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # resulting compiled object panics at import
+    broken = stdenv.is32bit;
   };
 }

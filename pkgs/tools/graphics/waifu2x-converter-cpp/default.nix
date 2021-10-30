@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers
+{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers, OpenCL
 , cudaSupport ? false, cudatoolkit ? null
 }:
 
@@ -13,18 +13,20 @@ stdenv.mkDerivation rec {
     sha256 = "0rv8bnyxz89za6gwk9gmdbaf3j7c1j52mip7h81rir288j35m84x";
   };
 
-  patchPhase = ''
-    # https://github.com/DeadSix27/waifu2x-converter-cpp/issues/123
-    sed -i 's:{"PNG",  false},:{"PNG",  true},:' src/main.cpp
-  '';
+  patches = [
+    # Remove the hard-coded compiler on Darwin and use the one in stdenv.
+    ./waifu2x_darwin_build.diff
+  ];
 
   buildInputs = [
-    ocl-icd opencv3 opencl-headers
-  ] ++ lib.optional cudaSupport cudatoolkit;
+    opencv3
+  ] ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optional stdenv.isDarwin OpenCL
+    ++ lib.optionals stdenv.isLinux [ ocl-icd opencl-headers ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"
   '';
 
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DeadSix27/waifu2x-converter-cpp";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.xzfc ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

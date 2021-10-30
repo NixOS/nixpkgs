@@ -2,7 +2,8 @@
 , libavc1394, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation {
-  name = "dvgrab-2016-05-16";
+  pname = "dvgrab";
+  version = "2016-05-16";
 
   src = fetchFromGitHub {
     # mirror of original project with some build fixes

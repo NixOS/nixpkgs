@@ -1,4 +1,8 @@
-{ lib, pkgs, python3Packages, nixosTests }:
+{ lib
+, pkgs
+, python3Packages
+, nixosTests
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "steck";
@@ -8,6 +12,11 @@ python3Packages.buildPythonApplication rec {
     inherit pname version;
     sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'click>=7.0,<8.0' 'click'
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     pkgs.git

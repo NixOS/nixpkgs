@@ -4,7 +4,7 @@
 , webtest
 , zope_component
 , hupper
-, PasteDeploy
+, pastedeploy
 , plaster
 , plaster-pastedeploy
 , repoze_lru
@@ -18,20 +18,16 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.10.5";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe1bd1140e6b79fe07f0053981d49be2dc66656cc8b481dd7ffcaa872fc25467";
+    sha256 = "45431b387587ed0fac6213b54d6e9f0936f0cc85238a8f5af7852fc9484c5c77";
   };
 
   checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
-
-  # Failing tests
-  # https://github.com/Pylons/pyramid/issues/1899
-  doCheck = !isPy35;
+  propagatedBuildInputs = [ hupper pastedeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
   pythonImportsCheck = [ "pyramid" ];
 

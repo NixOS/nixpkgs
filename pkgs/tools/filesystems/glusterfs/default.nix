@@ -1,6 +1,6 @@
 {lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
- liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
+ liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
  rsync, glibc, rpcsvc-proto, libtirpc
 }:
@@ -17,6 +17,7 @@ let
     fuse bison flex_2_5_35 openssl ncurses readline
     autoconf automake libtool pkg-config zlib libaio libxml2
     acl sqlite liburcu attr makeWrapper util-linux libtirpc
+    liburing
     (python3.withPackages (pkgs: [
       pkgs.flask
       pkgs.prettytable
@@ -54,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "9.0";
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pjJQAFEb44yNqvNAOclZsiEDZBgcfIxliD3La1IsKPs=";
+    sha256 = "0ybs0dm7jskmfnmbg5fj8wi2aapbrwn4gbrx8ix6d8dzcl3pv78k";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -87,11 +88,11 @@ in stdenv.mkDerivation rec {
     echo "v${version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
-    '';
+  '';
 
   configureFlags = [
     "--localstatedir=/var"
-    ];
+  ];
 
   nativeBuildInputs = [ rpcsvc-proto ];
 
@@ -178,7 +179,7 @@ in stdenv.mkDerivation rec {
 
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
-    '';
+  '';
 
   meta = with lib; {
     description = "Distributed storage system";

@@ -1,12 +1,12 @@
-{ lib, fetchurl, pythonPackages }:
+{ lib, fetchurl, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "menumaker";
-  version = "0.99.12";
+  version = "0.99.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/menumaker/${pname}-${version}.tar.gz";
-    sha256 = "034v5204bsgkzzk6zfa5ia63q95gln47f7hwf96yvad5hrhmd8z3";
+    sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
   };
 
   format = "other";

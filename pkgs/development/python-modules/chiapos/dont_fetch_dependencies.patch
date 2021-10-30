@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9b4a2f5..86f849c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,22 +18,19 @@ include(FetchContent)
+ else() 
+ FetchContent_Declare(
+   pybind11-src
+-  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+-  GIT_TAG        v2.6.2
++  SOURCE_DIR @pybind11_src@
+ )
+ FetchContent_MakeAvailable(pybind11-src)
+ endif()
+ 
+ FetchContent_Declare(
+   cxxopts
+-  GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
+-  GIT_TAG        v2.2.1
++  SOURCE_DIR @cxxopts@
+ )
+ FetchContent_MakeAvailable(cxxopts)
+ 
+ FetchContent_Declare(
+   gulrak
+-  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
+-  GIT_TAG        v1.5.6
++  SOURCE_DIR @ghc_filesystem@
+ )
+ FetchContent_MakeAvailable(gulrak)
+ 
+

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tty-solitaire";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mpereira";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kix7wfy2bda8cw5kfm7bm5acd5fqmdl9g52ms9bza4kf2jnb754";
+    sha256 = "sha256-zMLNWJieHxHALFQoSkdAxGbUBGuZnznLX86lI3P21F0=";
   };
 
   buildInputs = [ ncurses ];

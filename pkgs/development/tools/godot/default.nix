@@ -1,28 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, libX11, libXcursor
-, libXinerama, libXrandr, libXrender, libpulseaudio ? null
-, libXi ? null, libXext, libXfixes, freetype, openssl
-, alsaLib, libGLU, zlib, yasm ? null }:
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
+, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
+, libXi, libXext, libXfixes, freetype, openssl
+, alsa-lib, libGLU, zlib, yasm
+, withUdev ? true
+}:
 
 let
   options = {
     touch = libXi != null;
     pulseaudio = false;
+    udev = withUdev;
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.2.3";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "19vrp5lhyvxbm6wjxzn28sn3i0s8j08ca7nani8l1nrhvlc8wi0v";
+    sha256 = "0bkng0iwsfawxk8bxlq01ib4n6kaxjkbwcif1bhpvw5ra19430rg";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons libX11 libXcursor libXinerama libXrandr libXrender
-    libXi libXext libXfixes freetype openssl alsaLib libpulseaudio
+    scons udev libX11 libXcursor libXinerama libXrandr libXrender
+    libXi libXext libXfixes freetype openssl alsa-lib libpulseaudio
     libGLU zlib yasm
   ];
 

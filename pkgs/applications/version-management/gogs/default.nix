@@ -29,9 +29,7 @@ buildGoModule rec {
 
   buildInputs = optional pamSupport pam;
 
-  buildFlags = [ "-tags" ];
-
-  buildFlagsArray =
+  tags =
     (  optional sqliteSupport "sqlite"
     ++ optional pamSupport "pam");
 

@@ -6,6 +6,7 @@
 , libXxf86vm, libICE
 , unzip
 , libXrender
+, SDL2
 , withNvidiaCg ? false, nvidia_cg_toolkit
 , withSamples ? false }:
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
      sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
   };
 
-  cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
+  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
            ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
     ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
      libX11 libXmu libSM
      libXxf86vm libICE
      libXrender
+     SDL2
    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
 
   meta = {

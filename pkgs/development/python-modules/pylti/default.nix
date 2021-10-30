@@ -11,7 +11,7 @@
 , pyflakes
 , pytest
 , pytestcache
-, pytestcov
+, pytest-cov
 , covCore
 , pytest-flakes
 , sphinx
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ httplib2 oauth oauth2 semantic-version ];
   checkInputs = [
-    flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
+    flask httpretty oauthlib pyflakes pytest pytestcache pytest-cov covCore
     pytest-flakes sphinx mock chalice
   ];
 

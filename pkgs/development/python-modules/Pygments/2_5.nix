@@ -3,7 +3,6 @@
 , fetchPypi
 , fetchpatch
 , docutils
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -26,7 +25,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils ];
 
-  checkInputs = [ pytestCheckHook ];
+  # Circular dependency with sphinx
+  doCheck = false;
 
   meta = {
     homepage = "https://pygments.org/";

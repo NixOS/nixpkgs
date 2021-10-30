@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/${pname}.thumbnailer
   '';
 
+  # Fixes an upstream issue where headers with templates were included in an extern-C scope
+  # which caused the build to fail
+  patches = [ ./move-extern-c.patch ];
+
   meta = with lib; {
     homepage = "https://nufraw.sourceforge.io/";
     description = "Utility to read and manipulate raw images from digital cameras";

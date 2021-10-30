@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.0.0b7";
+  version = "3.0.0b8";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
     rev = "v${version}";
-    sha256 = "sha256-bVCCLPnV5F8PqLMg3GwcpwpGldrxsU+WryL6gj6y338=";
+    sha256 = "sha256-Pgln369s4qXdKqLxhX+AkgpDQm+MfSZ/OVmB1AaawHI=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,12 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    # Expects different Exeception classes, but receives none of them
+    # https://github.com/graphql-python/graphene/issues/1346
+    "test_unexpected_error"
+  ];
 
   pythonImportsCheck = [ "graphene" ];
 

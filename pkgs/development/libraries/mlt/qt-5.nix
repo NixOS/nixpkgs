@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, cmake
 , SDL
 , ffmpeg
 , frei0r
@@ -23,16 +24,16 @@
 , mkDerivation
 , which
 }:
-let inherit (lib) getDev; in
+
 mkDerivation rec {
   pname = "mlt";
-  version = "6.24.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "1my43ica2qax2622307dv4gn3w8hkchy643i9pq8r9yh2hd4pvs9";
+    sha256 = "13c5miph9jjbz69dhy0zvbkk5zbb05dr3vraaci0d5fdbrlhyscf";
   };
 
   buildInputs = [
@@ -56,41 +57,14 @@ mkDerivation rec {
     ladspaPlugins
   ];
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ cmake which ];
 
   outputs = [ "out" "dev" ];
-
-  # Mostly taken from:
-  # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
-  configureFlags = [
-    "--avformat-swscale"
-    "--enable-gpl"
-    "--enable-gpl3"
-    "--enable-opengl"
-  ];
-
-  # mlt is unable to cope with our multi-prefix Qt build
-  # because it does not use CMake or qmake.
-  NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
-
-  CXXFLAGS = "-std=c++11";
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
-
-  postInstall = ''
-    # Remove an unnecessary reference to movit.dev.
-    s=${movit.dev}/include
-    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-    sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
-
-    # Remove an unnecessary reference to movit.dev.
-    s=${qtbase.dev}/include
-    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-    sed -i $out/lib/mlt/libmltqt.so -e "s|$s|$t|g"
-  '';
 
   passthru = {
     inherit ffmpeg;

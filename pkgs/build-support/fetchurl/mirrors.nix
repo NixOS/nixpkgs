@@ -19,9 +19,9 @@
   sourceforge = [
     "https://downloads.sourceforge.net/"
     "https://prdownloads.sourceforge.net/"
-    "https://heanet.dl.sourceforge.net/sourceforge/"
-    "https://surfnet.dl.sourceforge.net/sourceforge/"
-    "https://dfn.dl.sourceforge.net/sourceforge/"
+    "https://netcologne.dl.sourceforge.net/sourceforge/"
+    "https://versaweb.dl.sourceforge.net/sourceforge/"
+    "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
     "https://kent.dl.sourceforge.net/sourceforge/"
   ];
@@ -43,9 +43,9 @@
 
     "http://ftp.nluug.nl/pub/gnu/"
     "http://mirrors.kernel.org/gnu/"
-    "ftp://mirror.cict.fr/gnu/"
-    "ftp://ftp.cs.tu-berlin.de/pub/gnu/"
-    "ftp://ftp.chg.ru/pub/gnu/"
+    "http://mirror.ibcp.fr/pub/gnu/"
+    "http://mirror.dogado.de/gnu/"
+    "http://mirror.tochlab.net/pub/gnu/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/"
 
     # This one is the master repository, and thus it's always up-to-date.
@@ -66,7 +66,6 @@
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
     "http://www.ring.gr.jp/pub/net/"
-    "http://gd.tuwien.ac.at/privacy/"
     "http://mirrors.dotsrc.org/gcrypt/"
     "http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
     "http://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
@@ -75,14 +74,13 @@
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
     "http://cdn.kernel.org/pub/"
-    "http://www.all.kernel.org/pub/"
     "http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/"
     "http://linux-kernel.uio.no/pub/"
     "http://kernel.osuosl.org/pub/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/"
   ];
 
-  # Mirrors from https://download.kde.org/extra/download-mirrors.html
+  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
     "https://download.kde.org/download.php?url="
     "https://ftp.gwdg.de/pub/linux/kde/"
@@ -90,7 +88,6 @@
     "http://mirrors.mit.edu/kde/"
     "https://mirrors.ustc.edu.cn/kde/"
     "http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
-    "ftp://ftp.kde.org/pub/kde/"
   ];
 
   # Gentoo files.
@@ -113,15 +110,12 @@
     "http://ftp.cc.uoc.gr/mirrors/nongnu.org/"
     "http://nongnu.uib.no/"
     "http://mirrors.fe.up.pt/pub/nongnu/"
-    "http://mirror.lihnidos.org/GNU/savannah/"
-    "http://savannah.mirror.si/"
     "http://ftp.acc.umu.se/mirror/gnu.org/savannah/"
     "http://ftp.twaren.net/Unix/NonGNU/"
     "http://ftp.yzu.edu.tw/pub/nongnu/"
     "http://mirror.rackdc.com/savannah/"
     "http://savannah-nongnu-org.ip-connect.vn.ua/"
     "http://www.mirrorservice.org/sites/download.savannah.gnu.org/releases/"
-    "http://savannah.spinellicreations.com/"
     "http://gnu.mirrors.pair.com/savannah/savannah/"
     "ftp://mirror.easyname.at/nongnu/"
     "ftp://mirror2.klaus-uwe.me/nongnu/"
@@ -129,11 +123,9 @@
     "ftp://mirror.csclub.uwaterloo.ca/nongnu/"
     "ftp://mirror.cedia.org.ec/nongnu"
     "ftp://ftp.igh.cnrs.fr/pub/nongnu/"
-    "ftp://mirror6.layerjet.com/nongnu/"
     "ftp://mirror.netcologne.de/savannah/"
     "ftp://nongnu.uib.no/pub/nongnu/"
     "ftp://mirrors.fe.up.pt/pub/nongnu/"
-    "ftp://savannah.mirror.si/savannah/"
     "ftp://ftp.twaren.net/Unix/NonGNU/"
     "ftp://ftp.yzu.edu.tw/pub/nongnu/"
     "ftp://savannah-nongnu-org.ip-connect.vn.ua/mirror/savannah.nongnu.org/"
@@ -149,8 +141,6 @@
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html .
   bitlbee = [
     "http://get.bitlbee.org/"
-    "http://get.bitlbee.be/"
-    "http://get.us.bitlbee.org/"
     "http://ftp.snt.utwente.nl/pub/software/bitlbee/"
     "http://bitlbee.intergenia.de/"
   ];
@@ -165,8 +155,6 @@
     "ftp://ftp.imagemagick.org/pub/ImageMagick/"
     "http://ftp.fifi.org/ImageMagick/"
     "ftp://ftp.fifi.org/ImageMagick/"
-    "http://imagemagick.mirrorcatalogs.com/"
-    "ftp://imagemagick.mirrorcatalogs.com/imagemagick"
   ];
 
   # CPAN mirrors.
@@ -185,7 +173,6 @@
     "http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/"
     "http://mirrors.aliyun.com/centos-vault/"
     "https://mirror.chpc.utah.edu/pub/vault.centos.org/"
-    "https://mirror.its.sfu.ca/mirror/CentOS-vault/"
     "https://mirror.math.princeton.edu/pub/centos-vault/"
     "https://mirrors.tripadvisor.com/centos-vault/"
   ];
@@ -193,14 +180,10 @@
   # Debian.
   debian = [
     "http://httpredir.debian.org/debian/"
-    "ftp://ftp.au.debian.org/debian/"
     "ftp://ftp.de.debian.org/debian/"
-    "ftp://ftp.es.debian.org/debian/"
     "ftp://ftp.fr.debian.org/debian/"
-    "ftp://ftp.it.debian.org/debian/"
     "ftp://ftp.nl.debian.org/debian/"
     "ftp://ftp.ru.debian.org/debian/"
-    "ftp://ftp.debian.org/debian/"
     "http://ftp.debian.org/debian/"
     "http://archive.debian.org/debian-archive/debian/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/"
@@ -229,13 +212,6 @@
     "http://archives.fedoraproject.org/pub/archive/fedora/"
   ];
 
-  # Old SUSE distributions.  Unfortunately there is no master site,
-  # since SUSE actually delete their old distributions (see
-  # ftp://ftp.suse.com/pub/suse/discontinued/deleted-20070817/README.txt).
-  oldsuse = [
-    "ftp://ftp.gmd.de/ftp.suse.com-discontinued/"
-  ];
-
   # openSUSE.
   opensuse = [
     "http://opensuse.hro.nl/opensuse/distribution/"
@@ -257,10 +233,8 @@
     "http://ftp.unina.it/pub/linux/GNOME/"
     "http://fr2.rpmfind.net/linux/gnome.org/"
     "ftp://ftp.dit.upm.es/pub/GNOME/"
-    "ftp://ftp.no.gnome.org/pub/GNOME/"
     "http://ftp.acc.umu.se/pub/GNOME/"
     "http://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "http://ftp.df.lth.se/pub/gnome/"
     "http://linorg.usp.br/gnome/"
     "http://mirror.aarnet.edu.au/pub/GNOME/"
     "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
@@ -290,7 +264,7 @@
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
     "https://www-eu.apache.org/dist/"
-    "https://www-us.apache.org/dist/"
+    "https://ftp.wayne.edu/apache/"
     "http://www.eu.apache.org/dist/"
     "ftp://ftp.fu-berlin.de/unix/www/apache/"
     "http://ftp.tudelft.nl/apache/"
@@ -305,13 +279,11 @@
   postgresql = [
     "http://ftp.postgresql.org/pub/"
     "ftp://ftp.postgresql.org/pub/"
-    "ftp://ftp-archives.postgresql.org/pub/"
   ];
 
   metalab = [
-    "ftp://mirrors.kernel.org/metalab/"
     "ftp://ftp.gwdg.de/pub/linux/metalab/"
-    "ftp://ftp.xemacs.org/sites/metalab.unc.edu/"
+    "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
   # Bioconductor mirrors (from http://bioconductor.org/about/mirrors)
@@ -325,7 +297,6 @@
     # http://watson.nci.nih.gov/bioc_mirror/
     "http://bioconductor.jp/packages/"
     "http://bioconductor.statistik.tu-dortmund.de/packages/"
-    "http://mirrors.ebi.ac.uk/bioconductor/packages/"
     "http://mirrors.ustc.edu.cn/bioc/"
   ];
 
@@ -340,14 +311,12 @@
   # Roy marples mirrors
   roy = [
     "http://roy.marples.name/downloads/"
-    "http://roy.aydogan.net/"
     "http://cflags.cc/roy/"
   ];
 
   # Sage mirrors (http://www.sagemath.org/mirrors.html)
   sageupstream = [
     # Africa
-    "http://sagemath.polytechnic.edu.na/spkg/upstream/"
     "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/"
     "http://sagemath.mirror.ac.za/spkg/upstream/"
     "https://ftp.leg.uct.ac.za/pub/packages/sage/spkg/upstream/"
@@ -366,7 +335,6 @@
     "http://linorg.usp.br/sage/spkg/upstream"
 
     # Asia
-    "http://sage.asis.io/spkg/upstream/"
     "http://mirror.hust.edu.cn/sagemath/spkg/upstream/"
     "https://ftp.iitm.ac.in/sage/spkg/upstream/"
     "http://ftp.kaist.ac.kr/sage/spkg/upstream/"
@@ -378,11 +346,10 @@
     "https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/"
 
     # Australia
-    "http://echidna.maths.usyd.edu.au/sage/spkg/upstream/"
+    "http://mirror.aarnet.edu.au/pub/sage/spkg/upstream/"
 
     # Europe
     "http://sage.mirror.garr.it/mirrors/sage/spkg/upstream/"
-    "http://sunsite.rediris.es/mirror/sagemath/spkg/upstream/"
     "http://mirror.switch.ch/mirror/sagemath/spkg/upstream/"
     "http://mirrors.fe.up.pt/pub/sage/spkg/upstream/"
     "http://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/"
@@ -399,8 +366,6 @@
     "http://ftp.openbsd.org/pub/OpenBSD/"
     "ftp://ftp.nluug.nl/pub/OpenBSD/"
     "ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/"
-    "ftp://ftp.halifax.rwth-aachen.de/pub/OpenBSD/"
-    "ftp://mirror.switch.ch/pub/OpenBSD/"
   ];
 
   # Steam Runtime mirrors
@@ -415,6 +380,11 @@
     # pypi.io is a more semantic link, but atm it’s referencing
     # files.pythonhosted.org over two redirects
     "https://pypi.io/packages/source/"
+  ];
+
+  # Python Test-PyPI mirror
+  testpypi = [
+    "https://test.pypi.io/packages/source/"
   ];
 
   # Mozilla projects.
@@ -434,6 +404,5 @@
     "ftp://ftp.alsa-project.org/pub/"
     "http://alsa.cybermirror.org/"
     "http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/"
-    "http://alsa.mirror.fr/"
   ];
 }

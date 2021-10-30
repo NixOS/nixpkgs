@@ -1,0 +1,87 @@
+From 4954b99efae367da49412edd31a7bd832ec62c69 Mon Sep 17 00:00:00 2001
+From: Pontus Stenetorp <pontus@stenetorp.se>
+Date: Mon, 15 Mar 2021 05:55:18 +0000
+Subject: [PATCH 2/3] nix: Skip tests that require network access
+
+Necessary as the Nix build sandbox does not permit network access.
+---
+ stdlib/Sockets/test/runtests.jl | 40 ++++++++++++++++-----------------
+ test/file.jl                    |  4 ++--
+ 2 files changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/stdlib/Sockets/test/runtests.jl b/stdlib/Sockets/test/runtests.jl
+index 6145f87616..9cc7a001e5 100644
+--- a/stdlib/Sockets/test/runtests.jl
++++ b/stdlib/Sockets/test/runtests.jl
+@@ -151,33 +151,33 @@ defaultport = rand(2000:4000)
+ end
+ 
+ @testset "getnameinfo on some unroutable IP addresses (RFC 5737)" begin
+-    @test getnameinfo(ip"192.0.2.1") == "192.0.2.1"
+-    @test getnameinfo(ip"198.51.100.1") == "198.51.100.1"
+-    @test getnameinfo(ip"203.0.113.1") == "203.0.113.1"
+-    @test getnameinfo(ip"0.1.1.1") == "0.1.1.1"
+-    @test getnameinfo(ip"::ffff:0.1.1.1") == "::ffff:0.1.1.1"
+-    @test getnameinfo(ip"::ffff:192.0.2.1") == "::ffff:192.0.2.1"
+-    @test getnameinfo(ip"2001:db8::1") == "2001:db8::1"
++    @test_skip getnameinfo(ip"192.0.2.1") == "192.0.2.1"
++    @test_skip getnameinfo(ip"198.51.100.1") == "198.51.100.1"
++    @test_skip getnameinfo(ip"203.0.113.1") == "203.0.113.1"
++    @test_skip getnameinfo(ip"0.1.1.1") == "0.1.1.1"
++    @test_skip getnameinfo(ip"::ffff:0.1.1.1") == "::ffff:0.1.1.1"
++    @test_skip getnameinfo(ip"::ffff:192.0.2.1") == "::ffff:192.0.2.1"
++    @test_skip getnameinfo(ip"2001:db8::1") == "2001:db8::1"
+ end
+ 
+ @testset "getnameinfo on some valid IP addresses" begin
+     @test !isempty(getnameinfo(ip"::")::String)
+-    @test !isempty(getnameinfo(ip"0.0.0.0")::String)
+-    @test !isempty(getnameinfo(ip"10.1.0.0")::String)
+-    @test !isempty(getnameinfo(ip"10.1.0.255")::String)
+-    @test !isempty(getnameinfo(ip"10.1.255.1")::String)
+-    @test !isempty(getnameinfo(ip"255.255.255.255")::String)
+-    @test !isempty(getnameinfo(ip"255.255.255.0")::String)
+-    @test !isempty(getnameinfo(ip"192.168.0.1")::String)
+-    @test !isempty(getnameinfo(ip"::1")::String)
++    @test_skip !isempty(getnameinfo(ip"0.0.0.0")::String)
++    @test_skip !isempty(getnameinfo(ip"10.1.0.0")::String)
++    @test_skip !isempty(getnameinfo(ip"10.1.0.255")::String)
++    @test_skip !isempty(getnameinfo(ip"10.1.255.1")::String)
++    @test_skip !isempty(getnameinfo(ip"255.255.255.255")::String)
++    @test_skip !isempty(getnameinfo(ip"255.255.255.0")::String)
++    @test_skip !isempty(getnameinfo(ip"192.168.0.1")::String)
++    @test_skip !isempty(getnameinfo(ip"::1")::String)
+ end
+ 
+ @testset "getaddrinfo" begin
+-    let localhost = getnameinfo(ip"127.0.0.1")::String
+-        @test !isempty(localhost) && localhost != "127.0.0.1"
+-        @test !isempty(getalladdrinfo(localhost)::Vector{IPAddr})
+-        @test getaddrinfo(localhost, IPv4)::IPv4 != ip"0.0.0.0"
+-        @test try
++    let localhost = getnameinfo(ip"::")::String
++        @test_skip !isempty(localhost) && localhost != "127.0.0.1"
++        @test_skip !isempty(getalladdrinfo(localhost)::Vector{IPAddr})
++        @test_skip getaddrinfo(localhost, IPv4)::IPv4 != ip"0.0.0.0"
++        @test_skip try
+             getaddrinfo(localhost, IPv6)::IPv6 != ip"::"
+         catch ex
+             isa(ex, Sockets.DNSError) && ex.code == Base.UV_EAI_NONAME && ex.host == localhost
+diff --git a/test/file.jl b/test/file.jl
+index e86476f975..579276f82c 100644
+--- a/test/file.jl
++++ b/test/file.jl
+@@ -874,8 +874,8 @@ if !Sys.iswindows() || (Sys.windows_version() >= Sys.WINDOWS_VISTA_VER)
+ else
+     @test_throws ErrorException symlink(file, "ba\0d")
+ end
+-@test_throws ArgumentError download("good", "ba\0d")
+-@test_throws ArgumentError download("ba\0d", "good")
++@test_skip @test_throws ArgumentError download("good", "ba\0d")
++@test_skip @test_throws ArgumentError download("ba\0d", "good")
+ 
+ ###################
+ #     walkdir     #
+-- 
+2.29.3
+

@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-mpris";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "Mopidy-MPRIS";
-    sha256 = "0mmdaikw00f43gzjdbvlcvzff6yppm7v8mv012r79adzd992q9y0";
+    sha256 = "sha256-rHQgNIyludTEL7RDC8dIpyGTMOt1Tazn6i/orKlSP4U=";
   };
 
   propagatedBuildInputs = [

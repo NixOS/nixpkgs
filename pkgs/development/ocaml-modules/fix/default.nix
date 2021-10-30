@@ -1,25 +1,24 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitLab, buildDunePackage }:
 
-assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
+buildDunePackage rec {
+  pname = "fix";
+  version = "20201120";
 
-stdenv.mkDerivation {
-
-  name = "ocaml-fix-20130611";
-
-  src = fetchurl {
-    url = "http://gallium.inria.fr/~fpottier/fix/fix-20130611.tar.gz";
-    sha256 = "1phlqcs1nb93x9cf0w0hnq2ck4dmn71zm4mxf60w96vb9yb9qzp0";
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "fpottier";
+    repo = "fix";
+    rev = "${version}";
+    sha256 = "sha256-RO+JCG6R2i5uZfwTYEnQBCVq963fjv5lA2wA/8KrgMg=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-
-  createFindlibDestdir = true;
+  minimumOCamlVersion = "4.03";
+  useDune2 = true;
 
   meta = with lib; {
-    homepage = "http://gallium.inria.fr/~fpottier/fix/";
+    homepage = "https://gitlab.inria.fr/fpottier/fix/";
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;
-    maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    maintainers = with maintainers; [ vbgl ];
   };
 }

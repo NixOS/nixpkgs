@@ -11,12 +11,10 @@ buildGoModule rec {
     sha256 = "1a0xi31bd7n2zrx2z4srhvixlbj028h63dlrjzqxgmgn2w6akbz2";
   };
 
-  preBuild = ''
-    export buildFlagsArray+=(
-      "-ldflags=
-        -w -s
-        -X github.com/jlesquembre/kubeprompt/pkg/version.Version=${version}")
-  '';
+  ldflags = [
+    "-w" "-s"
+    "-X github.com/jlesquembre/kubeprompt/pkg/version.Version=${version}"
+  ];
 
   vendorSha256 = "089lfkvyf00f05kkmr935jbrddf2c0v7m2356whqnz7ad6a2whsi";
 

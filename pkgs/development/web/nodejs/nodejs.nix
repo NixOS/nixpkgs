@@ -139,9 +139,11 @@ in
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = "https://nodejs.org";
+      changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
+      mainProgram = "node";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

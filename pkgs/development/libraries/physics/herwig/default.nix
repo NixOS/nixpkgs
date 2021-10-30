@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "10y3fb33zsinr0z3hzap9rsbcqhy1yjqnv4b4vz21g7mdlw6pq2k";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool gfortran ];
 
-  buildInputs = [ boost fastjet gfortran gsl thepeg zlib ]
+  buildInputs = [ boost fastjet gsl thepeg zlib ]
     # There is a bug that requires for default PDF's to be present during the build
     ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
 

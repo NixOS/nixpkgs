@@ -4,23 +4,25 @@ with lib;
 
 let
   runDir = "/run/searx";
+
   cfg = config.services.searx;
+
+  settingsFile = pkgs.writeText "settings.yml"
+    (builtins.toJSON cfg.settings);
 
   generateConfig = ''
     cd ${runDir}
 
     # write NixOS settings as JSON
-    cat <<'EOF' > settings.yml
-      ${builtins.toJSON cfg.settings}
-    EOF
+    (
+      umask 077
+      cp --no-preserve=mode ${settingsFile} settings.yml
+    )
 
     # substitute environment variables
     env -0 | while IFS='=' read -r -d ''' n v; do
       sed "s#@$n@#$v#g" -i settings.yml
     done
-
-    # set strict permissions
-    chmod 400 settings.yml
   '';
 
   settingType = with types; (oneOf
@@ -66,7 +68,7 @@ in
       settings = mkOption {
         type = types.attrsOf settingType;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
             server.secret_key = "@SEARX_SECRET_KEY@";
@@ -114,7 +116,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.searx;
-        defaultText = "pkgs.searx";
+        defaultText = literalExpression "pkgs.searx";
         description = "searx package to use.";
       };
 
@@ -136,7 +138,7 @@ in
       uwsgiConfig = mkOption {
         type = options.services.uwsgi.instance.type;
         default = { http = ":8080"; };
-        example = literalExample ''
+        example = literalExpression ''
           {
             disable-logging = true;
             http = ":8080";                   # serve via HTTP...

@@ -3,7 +3,7 @@
 , lib
 , symlinkJoin
 , makeWrapper
-, youtube-dl
+, yt-dlp
 }:
 
 # the unwrapped mpv derivation - 1st argument to `wrapMpv`
@@ -25,7 +25,7 @@ let
     binPath = lib.makeBinPath ([
       mpv.luaEnv
     ] ++ lib.optionals youtubeSupport [
-      youtube-dl
+      yt-dlp
     ] ++ lib.optionals mpv.vapoursynthSupport [
       mpv.vapoursynth.python3
     ]);
@@ -61,7 +61,8 @@ let
     symlinkJoin {
       name = "mpv-with-scripts-${mpv.version}";
 
-      paths = [ mpv ];
+      # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
+      paths = [ mpv.all ];
 
       buildInputs = [ makeWrapper ];
 

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "5.0";
+  version = "5.2";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-4bkH/imHdigFLgithO68bD92RtKVBe1IYulhYqjJG6E=";
+    sha256 = "sha256-wLQC9qezRW6OskRSEeLUHEbH52ngX+TYkJ/2QRn3pjA=";
   };
 
   nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
       tpm2-tss
     ] ++ (lib.optional abrmdSupport tpm2-abrmd));
   in ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin \
-        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
-    done
+    wrapProgram $out/bin/tpm2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+    wrapProgram $out/bin/tss2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
   '';
 
 

@@ -26,10 +26,10 @@
 , sourceVersion
 , sha256
 , passthruFun
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 , stripBytecode ? reproducibleBuild
 , rebuildBytecode ? true
-, reproducibleBuild ? true
+, reproducibleBuild ? false
 , enableOptimizations ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 }:
@@ -48,6 +48,8 @@ assert lib.assertMsg (reproducibleBuild -> stripBytecode)
 assert lib.assertMsg (reproducibleBuild -> (!enableOptimizations))
   "Deterministic builds are not achieved when optimizations are enabled.";
 
+assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
+  "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
 with lib;
 
@@ -123,6 +125,8 @@ let
 
       ./CVE-2021-3177.patch
 
+      ./CVE-2021-23336.patch
+
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
       # * https://bugs.python.org/issue35523
@@ -183,8 +187,9 @@ let
 
   configureFlags = optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ [
+  ] ++ optionals (!static) [
     "--enable-shared"
+  ] ++ [
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
   ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
@@ -222,6 +227,7 @@ let
   ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no"
   ++ optional static "LDFLAGS=-static";
 
+  strictDeps = true;
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
@@ -256,7 +262,7 @@ in with passthru; stdenv.mkDerivation ({
     LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-    NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
+    NIX_CFLAGS_COMPILE = optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
       + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
@@ -294,8 +300,10 @@ in with passthru; stdenv.mkDerivation ({
         # First we delete all old bytecode.
         find $out -name "*.pyc" -delete
         '' + optionalString rebuildBytecode ''
-        # Then, we build for the two optimization levels.
-        # We do not build unoptimized bytecode, because its not entirely deterministic yet.
+        # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
+        # is not reproducible yet. https://bugs.python.org/issue29708
+        # Not creating bytecode will result in a large performance loss however, so we do build it.
+        find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
       '' + optionalString stdenv.hostPlatform.isCygwin ''

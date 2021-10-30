@@ -45,6 +45,7 @@ in
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [ "CAP_NET_RAW" ];
+      CapabilityBoundingSet = [ "CAP_NET_RAW" ];
       ExecStart = ''
         ${pkgs.prometheus-smokeping-prober}/bin/smokeping_prober \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

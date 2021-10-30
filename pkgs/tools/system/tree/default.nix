@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl }:
 
 let
-  version = "1.8.0";
-
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
@@ -23,9 +21,9 @@ let
     '' else
     ""; # use linux flags by default
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "tree";
-  inherit version;
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://mama.indstate.edu/users/ice/tree/src/tree-${version}.tgz";
@@ -54,6 +52,5 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = [lib.maintainers.peti];
   };
 }

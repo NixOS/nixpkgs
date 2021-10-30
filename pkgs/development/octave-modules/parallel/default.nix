@@ -8,11 +8,11 @@
 
 buildOctavePackage rec {
   pname = "parallel";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0wmpak01rsccrnb8is7fsjdlxw15157sqyf9s2fabr16yykfmvi8";
+    sha256 = "1h8vw2r42393px6dk10y3lhpxl168r9d197f9whz6lbk2rg571pa";
   };
 
   nativeBuildInputs = [

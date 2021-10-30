@@ -1,18 +1,18 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
+, cached-property, frozendict, pystache, pyyaml, pytest, pytest-runner
 }:
 
 buildPythonPackage rec {
   pname = "genanki";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ced1ddcaecc37289c65c26affb20027705e3821e692327e354e0d5b9b0fd8446";
+    sha256 = "f2be87e3c2850bba21627d26728238f9655b448e564f8c70ab47caef558b63ef";
   };
 
   propagatedBuildInputs = [
-    pytestrunner
+    pytest-runner
     cached-property
     frozendict
     pystache

@@ -3,7 +3,7 @@
 , fetchPypi
 , lxml
 , networkx
-, dateutil
+, python-dateutil
 , rdflib
 , pydot
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     lxml
     networkx
-    dateutil
+    python-dateutil
     rdflib
   ];
 

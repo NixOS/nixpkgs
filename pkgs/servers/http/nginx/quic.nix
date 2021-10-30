@@ -1,10 +1,13 @@
-{ callPackage, fetchhg, boringssl, ... } @ args:
+{ callPackage
+, fetchhg
+, ...
+} @ args:
 
 callPackage ./generic.nix args {
   src = fetchhg {
     url = "https://hg.nginx.org/nginx-quic";
-    rev = "47a43b011dec"; # branch=quic
-    sha256 = "1d4d1v4zbnf5qlfl79pi7sficn1h7zm6kk7llm24yyhlsvssz10x";
+    rev = "6d1488b62dc5"; # branch=quic
+    sha256 = "18xrkzzi4cxl4zi7clikwww9ad9l7vilrfs67hhzx7898jkws5fi";
   };
 
   preConfigure = ''

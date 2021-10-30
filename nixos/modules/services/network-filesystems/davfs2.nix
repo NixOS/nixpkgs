@@ -70,6 +70,24 @@ in
       };
     };
 
+    security.wrappers."mount.davfs" = {
+      program = "mount.davfs";
+      source = "${pkgs.davfs2}/bin/mount.davfs";
+      owner = "root";
+      group = cfg.davGroup;
+      setuid = true;
+      permissions = "u+rx,g+x";
+    };
+
+    security.wrappers."umount.davfs" = {
+      program = "umount.davfs";
+      source = "${pkgs.davfs2}/bin/umount.davfs";
+      owner = "root";
+      group = cfg.davGroup;
+      setuid = true;
+      permissions = "u+rx,g+x";
+    };
+
   };
 
 }

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, openssl }:
 
-stdenv.mkDerivation {
-  name = "proxytunnel-1.9.0";
+stdenv.mkDerivation rec {
+  pname = "proxytunnel";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/proxytunnel/proxytunnel-1.9.0.tgz";
+    url = "mirror://sourceforge/proxytunnel/proxytunnel-${version}.tgz";
     sha256 = "1fd644kldsg14czkqjybqh3wrzwsp3dcargqf4fjkpqxv3wbpx9f";
   };
 

@@ -1,11 +1,11 @@
-{ skawarePackages }:
+{ skawarePackages, pkgs }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "skalibs";
-  version = "2.10.0.2";
-  sha256 = "03qyi77wgcw3nzy7i932wd98d6j7nnzxc8ddl973vf5sa1v3vflb";
+  version = "2.11.0.0";
+  sha256 = "1n9l7mb54dlb0iijjaf446jba6nmq1ql9n39s095ngrk5ahcipwq";
 
   description = "A set of general-purpose C programming libraries";
 
@@ -29,5 +29,11 @@ buildPackage {
 
     mv doc $doc/share/doc/skalibs/html
   '';
+
+  passthru.tests = {
+    # fdtools is one of the few non-skalib packages that depends on skalibs
+    # and might break if skalibs gets an breaking update.
+    fdtools = pkgs.fdtools;
+  };
 
 }

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swappy";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jtheoof";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12z643c7vzffhjsxaz1lak99i4nwm688pha0hh4pg69jf5wz5xx3";
+    sha256 = "sha256-sINX7pJ0msis7diGFTCgD4Mamd3yGGJew1uD8de4VOg=";
   };
 
   nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook ];

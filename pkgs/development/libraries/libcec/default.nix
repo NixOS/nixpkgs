@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, cmake, pkg-config, udev, libcec_platform, libraspberrypi ? null }:
 
-let version = "6.0.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcec";
-  inherit version;
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";

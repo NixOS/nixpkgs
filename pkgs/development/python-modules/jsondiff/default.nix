@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "jsondiff";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00v3689175aqzdscrxpffm712ylp8jvcpqdg51ca22ni6721p51l";
+    sha256 = "5122bf4708a031b02db029366184a87c5d0ddd5a327a5884ee6cf0193e599d71";
   };
 
   postPatch = ''

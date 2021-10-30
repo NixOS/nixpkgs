@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, libarchive, python, file, which }:
+{ lib, stdenv, fetchurl, libarchive, python3, file, which }:
 
 stdenv.mkDerivation rec {
   pname = "remarkable-toolchain";
-  version = "1.8-23.9.2019";
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://remarkable.engineering/oecore-x86_64-cortexa9hf-neon-toolchain-zero-gravitas-${version}.sh";
-    sha256 = "1rk1r80m5d18sw6hrybj6f78s8pna0wrsa40ax6j8jzfwahgzmfb";
+    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa9hf-neon-rm10x-toolchain-${version}.sh";
+    sha256 = "sha256-ocODUUx2pgmqxMk8J+D+OvqlSHBSay6YzcqnxC9n59w=";
     executable = true;
   };
 
   nativeBuildInputs = [
     libarchive
-    python
+    python3
     file
     which
   ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A toolchain for cross-compiling to reMarkable tablets";
     homepage = "https://remarkable.engineering/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nickhu siraben ];
     platforms = [ "x86_64-linux" ];
   };

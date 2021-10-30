@@ -1,38 +1,50 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, aiozeroconf
+, audio-metadata
+, bitarray
 , cryptography
 , deepdiff
 , fetchFromGitHub
+, mediafile
+, miniaudio
 , netifaces
 , protobuf
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-runner
 , pytest-timeout
 , pytestCheckHook
+, pythonOlder
 , srptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.7.7";
+  version = "0.9.6";
+
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dPnh8XZN7ZVR2rYNnj7GSYXW5I2GNQwD/KRDTgs2AtI=";
+    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
   };
 
-  nativeBuildInputs = [ pytest-runner];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
 
   propagatedBuildInputs = [
     aiohttp
-    aiozeroconf
+    audio-metadata
+    bitarray
     cryptography
+    mediafile
+    miniaudio
     netifaces
     protobuf
     srptools
@@ -49,7 +61,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "pyatv" ];
+  pythonImportsCheck = [
+    "pyatv"
+  ];
 
   meta = with lib; {
     description = "Python client library for the Apple TV";

@@ -123,7 +123,7 @@ let
       group = mkOption {
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
-        default = "nogroup";
+        default = "";
         description = "The user's primary group.";
       };
 
@@ -165,8 +165,8 @@ let
       shell = mkOption {
         type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
         default = pkgs.shadow;
-        defaultText = "pkgs.shadow";
-        example = literalExample "pkgs.bashInteractive";
+        defaultText = literalExpression "pkgs.shadow";
+        example = literalExpression "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
           like <literal>pkgs.bashInteractive</literal>. Don’t
@@ -291,7 +291,7 @@ let
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,
@@ -324,7 +324,7 @@ let
 
   };
 
-  groupOpts = { name, ... }: {
+  groupOpts = { name, config, ... }: {
 
     options = {
 
@@ -358,6 +358,10 @@ let
 
     config = {
       name = mkDefault name;
+
+      members = mapAttrsToList (n: u: u.name) (
+        filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+      );
     };
 
   };
@@ -396,7 +400,7 @@ let
     };
   };
 
-  idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
+  idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
       exists = builtins.hasAttr id acc;
@@ -419,12 +423,7 @@ let
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
-    groups = mapAttrsToList (n: g:
-      { inherit (g) name gid;
-        members = g.members ++ (mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
-        ));
-      }) cfg.groups;
+    groups = attrValues cfg.groups;
   });
 
   systemShells =
@@ -562,14 +561,16 @@ in {
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = stringAfter [ "stdio" ]
-      ''
+    system.activationScripts.users = {
+      supportsDryActivation = true;
+      text = ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
+    };
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -637,6 +638,16 @@ in {
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+            '';
+          }
+          {
+            assertion = user.group != "";
+            message = ''
+              users.users.${user.name}.group is unset. This used to default to
+              nogroup, but this is unsafe. For example you can create a group
+              for this user with:
+              users.users.${user.name}.group = "${user.name}";
+              users.groups.${user.name} = {};
             '';
           }
         ]

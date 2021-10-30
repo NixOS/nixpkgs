@@ -1,4 +1,10 @@
-{ buildGoModule, lib, fetchFromGitHub, installShellFiles }:
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lib
+, makeWrapper
+, xdg-utils
+}:
 buildGoModule rec {
   pname = "aws-vault";
   version = "6.3.1";
@@ -12,9 +18,10 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-Lb5iiuT/Fd3RMt98AafIi9I0FHJaSpJ8pH7r4yZiiiw=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postInstall = ''
+    wrapProgram $out/bin/aws-vault --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
     installShellCompletion --cmd aws-vault \
       --bash $src/contrib/completions/bash/aws-vault.bash \
       --fish $src/contrib/completions/fish/aws-vault.fish \
@@ -27,9 +34,14 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   # set the version. see: aws-vault's Makefile
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=v${version}
+  ldflags = [
+    "-X main.Version=v${version}"
+  ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/aws-vault --version 2>&1 | grep ${version} > /dev/null
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, gettext, npth, libgpgerror, buildPackages }:
+{ fetchurl, lib, stdenv, gettext, npth, libgpg-error, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ npth gettext ];
 
   configureFlags = [
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
   ];
 
   doCheck = true;
 
   # Make sure includes are fixed for callers who don't use libassuan-config
   postInstall = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' $dev/include/assuan.h
+    sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
 
   meta = with lib; {

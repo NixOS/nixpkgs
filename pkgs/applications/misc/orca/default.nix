@@ -8,11 +8,10 @@
 , gettext
 , yelp-tools
 , itstool
-, libxmlxx3
 , python
 , pygobject3
 , gtk3
-, gnome3
+, gnome
 , substituteAll
 , at-spi2-atk
 , at-spi2-core
@@ -35,13 +34,13 @@
 
 buildPythonApplication rec {
   pname = "orca";
-  version = "3.38.2";
+  version = "41.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "UAX/LhHdH3E/WswZA6JwEZvFjDD9uMn4K8rHFJfGwjw=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "dpflFEXhn9d05osWCtr2aHuAgXLeBBdgLhaXZra21L0=";
   };
 
   patches = [
@@ -58,14 +57,13 @@ buildPythonApplication rec {
     autoreconfHook
     wrapGAppsHook
     pkg-config
-    libxmlxx3
     gettext
     yelp-tools
     itstool
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
+  pythonPath = [
     pygobject3
     pyatspi
     dbus-python
@@ -92,7 +90,7 @@ buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
@@ -108,7 +106,7 @@ buildPythonApplication rec {
       GTK toolkit, the Java platform's Swing toolkit, LibreOffice, Gecko, and
       WebKitGtk. AT-SPI support for the KDE Qt toolkit is being pursued.
 
-      Needs `services.gnome3.at-spi2-core.enable = true;` in `configuration.nix`.
+      Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
     maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
     license = licenses.lgpl21;

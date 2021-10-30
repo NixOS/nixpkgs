@@ -5,15 +5,17 @@
 , typing-extensions
 , requests
 , yarl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.2.2";
+  version = "3.3.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y5048109j6z4smzwysvdjfn6cj9698dsxfim9i4nqam4nmw2wi7";
+    sha256 = "ef3a931fc1f1db74edf8660e475b9295e0904ee922030ef0e45b0c73f4be65ae";
   };
 
   propagatedBuildInputs = [
@@ -25,11 +27,12 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
+
   pythonImportsCheck = [ "transmission_rpc" ];
 
   meta = with lib; {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
-    homepage = "https://pypi.python.org/project/transmission-rpc/";
+    homepage = "https://github.com/Trim21/transmission-rpc";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

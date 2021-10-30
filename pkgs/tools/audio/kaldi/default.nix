@@ -54,6 +54,9 @@ stdenv.mkDerivation {
       # fix up this call:
       # https://github.com/kaldi-asr/kaldi/blob/c9d8b9ad3fef89237ba5517617d977b7d70a7ed5/cmake/VersionHelper.cmake#L8
       echo 0
+    elif [[ "$1" == "rev-parse" ]]; then
+      echo ${openfst.rev}
+      echo 0
     fi
     true
     EOF

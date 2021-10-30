@@ -1,26 +1,59 @@
-{ lib, fetchFromGitHub, cmake, git, swig, boost, udev, pc-ble-driver, pythonOlder
-, buildPythonPackage, enum34, wrapt, future, setuptools, scikit-build, pythonAtLeast }:
+{ lib
+, boost
+, buildPythonPackage
+, cmake
+, cryptography
+, fetchFromGitHub
+, git
+, pc-ble-driver
+, pythonAtLeast
+, pythonOlder
+, scikit-build
+, setuptools
+, swig
+, udev
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
-  version = "0.14.2";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
+  version = "0.16.1";
+
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver-py";
     rev = "v${version}";
-    sha256 = "1zbi3v4jmgq1a3ml34dq48y1hinw2008vwqn30l09r5vqvdgnj8m";
+    sha256 = "0q2zag77drcjkjm0cbvy2sf6fq2a4yl5li1zv1xfwmy53ami9b5l";
   };
+
+  nativeBuildInputs = [
+    cmake
+    swig
+    git
+    setuptools
+    scikit-build
+  ];
+
+  buildInputs = [
+    boost
+    pc-ble-driver
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
+    wrapt
+  ];
+
+  dontUseCmakeConfigure = true;
 
   # doCheck tries to write to the global python directory to install things
   doCheck = false;
 
-  nativeBuildInputs = [ cmake swig git setuptools scikit-build ];
-  buildInputs = [ boost pc-ble-driver ];
-  propagatedBuildInputs = [ enum34 wrapt future ];
-
-  dontUseCmakeConfigure = true;
+  pythonImportsCheck = [
+    "pc_ble_driver_py"
+  ];
 
   meta = with lib; {
     description = "Bluetooth Low Energy nRF5 SoftDevice serialization";

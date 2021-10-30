@@ -1,11 +1,8 @@
 { lib, stdenv, fetchurl, libelf }:
 
-let
-  version = "20130503";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "prelink";
-  inherit version;
+  version = "20130503";
 
   buildInputs = [
     libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc)

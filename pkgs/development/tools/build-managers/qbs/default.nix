@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "qbs";
 
-  version = "1.18.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "qbs";
     repo = "qbs";
     rev = "v${version}";
-    sha256 = "sha256-W1ky3PWPzfKygY+diBld+BqTAxJvNw9mqw3owcQ6no4=";
+    sha256 = "sha256-tqpQ+TpcpD6o/7CtJOMfBQHGK0OX3pVhPHdpVHXplFs=";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "QBS_INSTALL_PREFIX=$(out)" "qbs.pro" ];
 
   buildInputs = [ qtbase qtscript ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A tool that helps simplify the build process for developing projects across multiple platforms";

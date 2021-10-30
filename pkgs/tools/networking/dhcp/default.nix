@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
+{ stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.2";
+  version = "4.4.2-P1";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "08a5003zdxgl41b29zjkxa92h2i40zyjgxg0npvnhpkfl5jcsz0s";
+    sha256 = "06jsr0cg5rsmyibshrpcb9za0qgwvqccashdma7mlm1rflrh8pmh";
   };
 
   patches =
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
       ./set-hostname.patch
+
+      (fetchpatch {
+        # upstream build fix against -fno-common compilers like >=gcc-10
+        url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/6c7e61578b1b449272dbb40dd8b98d03dad8a57a.patch";
+        sha256 = "1g37ix0yf9zza8ri8bg438ygcjviniblfyb20y4gzc8lysy28m8b";
+      })
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];
@@ -84,7 +90,7 @@ stdenv.mkDerivation rec {
    '';
 
     homepage = "https://www.isc.org/dhcp/";
-    license = licenses.isc;
+    license = licenses.mpl20;
     platforms = platforms.unix;
   };
 }

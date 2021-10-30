@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, flex, bison, libpcap, libdnet, libnfnetlink, libnetfilter_queue}:
 
 stdenv.mkDerivation rec {
-  name = "daq-2.2.2";
+  pname = "daq";
+  version = "2.2.2";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://snort.org/downloads/archive/snort/${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
     sha256 = "0yvzscy7vqj7s5rccza0f7p6awghfm3yaxihx1h57lqspg51in3w";
   };
 

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, pkg-config, autoreconfHook
+{ lib, stdenv, fetchpatch, fetchFromGitHub
+, pkg-config, autoreconfHook, perl, gperf, bison, flex
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
@@ -19,14 +19,16 @@ stdenv.mkDerivation rec {
   pname = "strongswan";
   version = "5.8.1"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  src = fetchurl {
-    url = "https://download.strongswan.org/${pname}-${version}.tar.bz2";
-    sha256 = "034rd6kr1bmnvj8rg2kcxdjb0cgj3dn9310mmm94j1awxan71byr";
+  src = fetchFromGitHub {
+    owner = "strongswan";
+    repo = "strongswan";
+    rev = version;
+    sha256 = "1a1hw2jsbwvkdhhxjmq87hz13ivbgvqwks1q3adz14mqgbc64snd";
   };
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
@@ -43,6 +45,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
       sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
+    })
+
+    # fix build with -fno-common tollchain
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://git.strongswan.org/?p=strongswan.git;a=patch;h=91c6387e69c09beaa9b9ca1e28471751a834fc24";
+      sha256 = "0jp9walxwffp5cl7q0hb80h3s2gdj1nn3n8bvnbmwgh2s6pi148f";
     })
   ];
 

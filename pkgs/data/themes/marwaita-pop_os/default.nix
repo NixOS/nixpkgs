@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -8,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-pop_os";
-  version = "1.1";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "1nwfyy3jnfsdlqgj7ig9gbawazdm76g02b0hrfsll17j5498d59y";
+    sha256 = "1j6d91kx6iw8sy35rhhjvwb3qz60bvf7a7g7q2i0sznzdicrwsq6";
   };
 
   buildInputs = [

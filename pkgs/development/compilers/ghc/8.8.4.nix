@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
@@ -18,7 +18,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.any (lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -38,12 +38,30 @@
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
     (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
+, #  Whether to build sphinx documentation.
+  enableDocs ? (
+    # Docs disabled for musl and cross because it's a large task to keep
+    # all `sphinx` dependencies building in those environments.
+    # `sphinx` pullls in among others:
+    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
+    (stdenv.targetPlatform == stdenv.hostPlatform)
+    && !stdenv.hostPlatform.isMusl
+  )
+
+, enableHaddockProgram ?
+    # Disabled for cross; see note [HADDOCK_DOCS].
+    (stdenv.targetPlatform == stdenv.hostPlatform)
+
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
 assert !enableIntegerSimple -> gmp != null;
+
+# Cross cannot currently build the `haddock` program for silly reasons,
+# see note [HADDOCK_DOCS].
+assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -60,6 +78,21 @@ let
     ifneq \"\$(BuildFlavour)\" \"\"
     include mk/flavours/\$(BuildFlavour).mk
     endif
+    BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
+    BUILD_SPHINX_PDF = NO
+  '' +
+  # Note [HADDOCK_DOCS]:
+  # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
+  # program is built (which we generally always want to have a complete GHC install)
+  # and whether it is run on the GHC sources to generate hyperlinked source code
+  # (which is impossible for cross-compilation); see:
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
+  # This implies that currently a cross-compiled GHC will never have a `haddock`
+  # program, so it can never generate haddocks for any packages.
+  # If this is solved in the future, we'd like to unconditionally
+  # build the haddock program (removing the `enableHaddockProgram` option).
+  ''
+    HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   ''
@@ -72,9 +105,6 @@ let
   + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if (targetPlatform.system == hostPlatform.system && !targetPlatform.isiOS) then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
-    HADDOCK_DOCS = NO
-    BUILD_SPHINX_HTML = NO
-    BUILD_SPHINX_PDF = NO
   '' + lib.optionalString dontStrip ''
     STRIP_CMD = :
   '' + lib.optionalString (!enableProfiledLibs) ''
@@ -84,6 +114,12 @@ let
     GhcRtsHcOpts += -fPIC
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
+  ''
+  # While split sections are now enabled by default in ghc 8.8 for windows,
+  # they seem to lead to `too many sections` errors when building base for
+  # profiling.
+  + lib.optionalString targetPlatform.isWindows ''
+    SplitSections = NO
   '';
 
   # Splicer will pull out correct variations
@@ -98,14 +134,31 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
+  # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
+  useLdGold = targetPlatform.linker == "gold" ||
+    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+
+  runtimeDeps = [
+    targetPackages.stdenv.cc.bintools
+    coreutils
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
+
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
 
 in
 stdenv.mkDerivation (rec {
   version = "8.8.4";
-  name = "${targetPrefix}ghc-${version}";
+  pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
@@ -124,16 +177,34 @@ stdenv.mkDerivation (rec {
     # upstream patch. Don't forget to check backport status of the upstream patch
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
+    # Fix documentation configuration which causes a syntax error with sphinx 4.*
+    # See also https://gitlab.haskell.org/ghc/ghc/-/issues/19962
+    ./sphinx-4-configuration.patch
+    # cabal passes incorrect --host= when cross-compiling
+    # https://github.com/haskell/cabal/issues/5887
+    (fetchpatch {
+            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
+    })
+
+    # error: 'VirtualAllocExNuma' redeclared as different kind of symbol
+    # name conflict between rts/win32/OSMem.c and winbase.h from the mingw-w64 runtime package
+    # Renamed to match ghc8.8:
+    # https://gitlab.haskell.org/ghc/ghc/-/commit/4b431f334018eaef2cf36de3316025c68c922915#20d64c0bdc272817149d1d5cf20a73a8b5fd637f
+    ./rename-numa-api-call.patch
   ];
 
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
-  preConfigure = lib.optionalString stdenv.isAarch64 ''
+  preConfigure =
     # Aarch64 allow backward bootstrapping since earlier versions are unstable.
-    find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
-      -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
-  '' + ''
+    # Same for musl, as earlier versions do not provide a musl bindist for bootstrapping.
+    lib.optionalString (stdenv.isAarch64 || stdenv.hostPlatform.isMusl) ''
+      find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
+        -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
+    ''
+  + ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
@@ -211,8 +282,10 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
+    perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+  ] ++ lib.optionals enableDocs [
+    sphinx
   ];
 
   # For building runtime libs
@@ -232,7 +305,16 @@ stdenv.mkDerivation (rec {
 
   checkTarget = "test";
 
-  hardeningDisable = [ "format" ] ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable =
+    [ "format" ]
+    # In nixpkgs, musl based builds currently enable `pie` hardening by default
+    # (see `defaultHardeningFlags` in `make-derivation.nix`).
+    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+    # See:
+    # * https://github.com/NixOS/nixpkgs/issues/129247
+    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     # Install the bash completion file.
@@ -242,7 +324,7 @@ stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
     done
   '';
 
@@ -259,9 +341,16 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with lib.maintainers; [ marcweber andres peti ];
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # integer-simple builds are broken with musl when bootstrapping using
+    # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
+    # GHC 8.8.4 with GHC 8.10.7.
+    # See https://github.com/NixOS/nixpkgs/pull/138523#issuecomment-927339953
+    broken = hostPlatform.isMusl && enableIntegerSimple;
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);

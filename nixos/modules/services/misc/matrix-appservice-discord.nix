@@ -31,7 +31,7 @@ in {
             botToken = "";
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             bridge = {
               domain = "public-domain.tld";

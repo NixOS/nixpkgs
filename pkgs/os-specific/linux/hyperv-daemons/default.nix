@@ -1,4 +1,4 @@
-{ stdenv, lib, python, kernel, makeWrapper, writeText
+{ stdenv, lib, python2, python3, kernel, makeWrapper, writeText
 , gawk, iproute2 }:
 
 let
@@ -9,6 +9,7 @@ let
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ (if lib.versionOlder version "4.19" then python2 else python3) ];
 
     # as of 4.9 compilation will fail due to -Werror=format-security
     hardeningDisable = [ "format" ];
@@ -32,10 +33,6 @@ let
       install -Dm755 lsvmbus             $out/bin/lsvmbus
       install -Dm755 hv_get_dhcp_info.sh $out/${libexec}/hv_get_dhcp_info
       install -Dm755 hv_get_dns_info.sh  $out/${libexec}/hv_get_dns_info
-
-      # I don't know why this isn't being handled automatically by fixupPhase
-      substituteInPlace $out/bin/lsvmbus \
-        --replace '/usr/bin/env python' ${python.interpreter}
 
       runHook postInstall
     '';
@@ -86,7 +83,7 @@ in stdenv.mkDerivation {
     Wants=hv-fcopy.service hv-kvp.service hv-vss.service
     EOF
 
-    for f in $lib/lib/systemd/system/* ; do
+    for f in $lib/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace @out@ ${daemons}/bin
     done
 

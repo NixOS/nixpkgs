@@ -2,27 +2,46 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
-, flake8
 , jinja2
-, pytestCheckHook
+, markupsafe
 , pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-swagger";
-  version = "1.0.5";
+  version = "1.0.15";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cr0hn";
     repo = pname;
-    rev = "5a59e86f8c5672d2cc97dd35dc730c2f809d95ce"; # corresponds to 1.0.5 on PyPi, no tag on GitHub
-    sha256 = "1vpfk5b3f7s9qzr2q48g776f39xzqppjwm57scfzqqmbldkk5nv7";
+    rev = version;
+    sha256 = "sha256-M43sNpbXWXFRTd549cZhvhO35nBB6OH+ki36BzSk87Q=";
   };
 
-  propagatedBuildInputs = [ aiohttp jinja2 pyyaml ];
+  propagatedBuildInputs = [
+    aiohttp
+    jinja2
+    markupsafe
+    pyyaml
+  ];
 
-  checkInputs = [ flake8 pytestCheckHook pytest-aiohttp ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-aiohttp
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "markupsafe~=1.1.1" "markupsafe>=1.1.1" \
+      --replace "jinja2~=2.11.2" "jinja2>=2.11.2"
+  '';
+
+  pythonImportsCheck = [ "aiohttp_swagger" ];
 
   meta = with lib; {
     description = "Swagger API Documentation builder for aiohttp";

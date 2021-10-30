@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types literalExample;
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption types literalExpression;
   cfg = config.services.engelsystem;
 in {
   options = {
@@ -24,9 +24,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.engelsystem";
         description = "Engelsystem package used for the service.";
         default = pkgs.engelsystem;
+        defaultText = literalExpression "pkgs.engelsystem";
       };
 
       createDatabase = mkOption {
@@ -89,7 +89,7 @@ in {
     # create database
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureUsers = [{
         name = "engelsystem";
         ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };

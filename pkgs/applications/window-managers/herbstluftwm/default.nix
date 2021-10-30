@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, freetype, asciidoc
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, freetype, asciidoc
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
 , nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "0avfhr68f6fjnafjdcyxcx7dkg38f2nadmhpj971qyqzfq2f6i38";
+    sha256 = "01f1bv9axjhw1l2gwhdwahljssj0h8q7a1bqwbpnwvln0ayv39qb";
   };
 
   outputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libXrandr
     libXft
+    libXrender
     freetype
   ];
 

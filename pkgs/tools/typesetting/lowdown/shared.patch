@@ -11,10 +11,11 @@ index 955f737..2c9532c 100644
  
  www: $(HTMLS) $(PDFS) $(THUMBS) lowdown.tar.gz lowdown.tar.gz.sha512
  
-@@ -101,6 +101,9 @@ lowdown-diff: lowdown
+@@ -101,6 +101,10 @@ lowdown-diff: lowdown
  liblowdown.a: $(OBJS) $(COMPAT_OBJS)
  	$(AR) rs $@ $(OBJS) $(COMPAT_OBJS)
  
++%.o: CFLAGS += -fPIC
 +liblowdown.so: $(OBJS) $(COMPAT_OBJS)
 +	$(CC) -shared -o $@ $(OBJS) $(COMPAT_OBJS) $(LDFLAGS)
 +

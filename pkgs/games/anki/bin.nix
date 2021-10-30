@@ -3,15 +3,23 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.43";
+  version = "2.1.48";
+
+  sources = {
+    linux = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
+      sha256 = "sha256-1ZvC8CPnYMzCxxrko1FfmTvKiJT+7BhOdk52zLTnLGE=";
+    };
+    darwin = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
+      sha256 = "sha256-HXYTpOxFxjQoqjs+04diy5d+GmS69dFNEfLI/E4NCXw=";
+    };
+  };
 
   unpacked = stdenv.mkDerivation {
     inherit pname version;
 
-    src = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "0kadv3fxi76h7xxmb4lckkgcwiv0b7cn630l62dxa2abxibans29";
-    };
+    src = sources.linux;
 
     installPhase = ''
       runHook preInstall
@@ -32,25 +40,30 @@ let
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
+
+  passthru = { inherit sources; };
 in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
 
   runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
     exec ${unpacked}/bin/anki
   '';
 
-  inherit meta;
-}) else stdenv.mkDerivation {
-  inherit pname version;
+  extraInstallCommands = ''
+    mkdir -p $out/share
+    cp -R ${unpacked}/share/applications \
+      ${unpacked}/share/man \
+      ${unpacked}/share/pixmaps \
+      $out/share/
+  '';
 
-  src = fetchurl {
-    url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "0vvgiybq1ygq7cly1r4ircgzg2cpprindr7nnlbnrmandjy2kw49";
-  };
+  inherit meta passthru;
+}) else stdenv.mkDerivation {
+  inherit pname version passthru;
+
+  src = sources.darwin;
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";

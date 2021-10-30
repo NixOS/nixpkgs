@@ -6,6 +6,8 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  useMysql = cfg.database.type == "mysql";
+  usePostgresql = cfg.database.type == "postgres";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
@@ -42,6 +44,9 @@ let
     AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
     AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
+    AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
+    AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
+    AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
 
     ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
 
@@ -91,7 +96,7 @@ let
         description = "Name of the datasource. Required.";
       };
       type = mkOption {
-        type = types.enum ["graphite" "prometheus" "cloudwatch" "elasticsearch" "influxdb" "opentsdb" "mysql" "mssql" "postgres" "loki"];
+        type = types.str;
         description = "Datasource type. Required.";
       };
       access = mkOption {
@@ -289,7 +294,7 @@ in {
     port = mkOption {
       description = "Listening port.";
       default = 3000;
-      type = types.int;
+      type = types.port;
     };
 
     socket = mkOption {
@@ -325,20 +330,26 @@ in {
     staticRootPath = mkOption {
       description = "Root path for static assets.";
       default = "${cfg.package}/share/grafana/public";
+      defaultText = literalExpression ''"''${package}/share/grafana/public"'';
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
-      defaultText = "pkgs.grafana";
+      defaultText = literalExpression "pkgs.grafana";
       type = types.package;
     };
+
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
       description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
-      example = literalExample "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      # Make sure each plugin is added only once; otherwise building
+      # the link farm fails, since the same path is added multiple
+      # times.
+      apply = x: if isList x then lib.unique x else x;
     };
 
     dataDir = mkOption {
@@ -528,23 +539,46 @@ in {
       };
     };
 
-    auth.anonymous = {
-      enable = mkOption {
-        description = "Whether to allow anonymous access.";
-        default = false;
-        type = types.bool;
+    auth = {
+      anonymous = {
+        enable = mkOption {
+          description = "Whether to allow anonymous access.";
+          default = false;
+          type = types.bool;
+        };
+        org_name = mkOption {
+          description = "Which organization to allow anonymous access to.";
+          default = "Main Org.";
+          type = types.str;
+        };
+        org_role = mkOption {
+          description = "Which role anonymous users have in the organization.";
+          default = "Viewer";
+          type = types.str;
+        };
       };
-      org_name = mkOption {
-        description = "Which organization to allow anonymous access to.";
-        default = "Main Org.";
-        type = types.str;
+      google = {
+        enable = mkOption {
+          description = "Whether to allow Google OAuth2.";
+          default = false;
+          type = types.bool;
+        };
+        allowSignUp = mkOption {
+          description = "Whether to allow sign up with Google OAuth2.";
+          default = false;
+          type = types.bool;
+        };
+        clientId = mkOption {
+          description = "Google OAuth2 client ID.";
+          default = "";
+          type = types.str;
+        };
+        clientSecretFile = mkOption {
+          description = "Google OAuth2 client secret.";
+          default = null;
+          type = types.nullOr types.path;
+        };
       };
-      org_role = mkOption {
-        description = "Which role anonymous users have in the organization.";
-        default = "Viewer";
-        type = types.str;
-      };
-
     };
 
     analytics.reporting = {
@@ -604,22 +638,33 @@ in {
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
-      after = ["networking.target"];
+      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       script = ''
+        set -o errexit -o pipefail -o nounset -o errtrace
+        shopt -s inherit_errexit
+
+        ${optionalString (cfg.auth.google.clientSecretFile != null) ''
+          GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
+          export GF_AUTH_GOOGLE_CLIENT_SECRET
+        ''}
         ${optionalString (cfg.database.passwordFile != null) ''
-          export GF_DATABASE_PASSWORD="$(cat ${escapeShellArg cfg.database.passwordFile})"
+          GF_DATABASE_PASSWORD="$(<${escapeShellArg cfg.database.passwordFile})"
+          export GF_DATABASE_PASSWORD
         ''}
         ${optionalString (cfg.security.adminPasswordFile != null) ''
-          export GF_SECURITY_ADMIN_PASSWORD="$(cat ${escapeShellArg cfg.security.adminPasswordFile})"
+          GF_SECURITY_ADMIN_PASSWORD="$(<${escapeShellArg cfg.security.adminPasswordFile})"
+          export GF_SECURITY_ADMIN_PASSWORD
         ''}
         ${optionalString (cfg.security.secretKeyFile != null) ''
-          export GF_SECURITY_SECRET_KEY="$(cat ${escapeShellArg cfg.security.secretKeyFile})"
+          GF_SECURITY_SECRET_KEY="$(<${escapeShellArg cfg.security.secretKeyFile})"
+          export GF_SECURITY_SECRET_KEY
         ''}
         ${optionalString (cfg.smtp.passwordFile != null) ''
-          export GF_SMTP_PASSWORD="$(cat ${escapeShellArg cfg.smtp.passwordFile})"
+          GF_SMTP_PASSWORD="$(<${escapeShellArg cfg.smtp.passwordFile})"
+          export GF_SMTP_PASSWORD
         ''}
         ${optionalString cfg.provision.enable ''
           export GF_PATHS_PROVISIONING=${provisionConfDir};
@@ -631,6 +676,33 @@ in {
         User = "grafana";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
+        # Hardening
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        # Upstream grafana is not setting SystemCallFilter for compatibility
+        # reasons, see https://github.com/grafana/grafana/pull/40176
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
       preStart = ''
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}

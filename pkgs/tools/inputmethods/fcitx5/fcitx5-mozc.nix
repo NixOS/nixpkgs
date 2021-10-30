@@ -1,5 +1,5 @@
 { lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, fetchgit
-, python3Packages, mesa, ninja, pkg-config, protobuf, zinnia, qt5, fcitx5
+, python3Packages, ninja, pkg-config, protobuf, zinnia, qt5, fcitx5
 , jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad }:
 let
   inherit (python3Packages) python gyp six;
@@ -31,7 +31,7 @@ in clangStdenv.mkDerivation rec {
     sha256 = "R+w0slVFpqtt7PIr1pyupJjRoQsABVZiMdZ9fKGKAqw=";
   };
 
-  nativeBuildInputs = [ gyp ninja mesa python pkg-config qt5.wrapQtAppsHook six which unzip ];
+  nativeBuildInputs = [ gyp ninja python pkg-config qt5.wrapQtAppsHook six which unzip ];
 
   buildInputs = [ protobuf zinnia qt5.qtbase fcitx5 abseil-cpp jsoncpp gtest gtk2 ];
 

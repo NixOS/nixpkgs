@@ -1,8 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, nim, pcre, tinycc }:
+{ lib, nimPackages, fetchFromGitHub, fetchpatch, makeWrapper, pcre, tinycc }:
 
-stdenv.mkDerivation {
+nimPackages.buildNimPackage {
   pname = "nrpl";
   version = "20150522";
+  nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner  = "wheineman";
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ nim pcre ];
+  buildInputs = [ pcre ];
 
   patches = [
     (fetchpatch {
@@ -24,16 +25,9 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lpcre";
 
-  buildPhase = ''
-    HOME=$TMPDIR
-    nim c -d:release nrpl.nim
-  '';
-
-  installPhase = "install -Dt $out/bin nrpl";
-
   postFixup = ''
     wrapProgram $out/bin/nrpl \
-      --prefix PATH : ${lib.makeBinPath [ nim tinycc ]}
+      --prefix PATH : ${lib.makeBinPath [ nimPackages.nim tinycc ]}
   '';
 
   meta = with lib; {

@@ -1,12 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let
-  version = "0.4.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nix-zsh-completions";
-  inherit version;
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "spwhitt";

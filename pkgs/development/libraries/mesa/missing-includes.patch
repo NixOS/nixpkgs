@@ -9,14 +9,14 @@
  #include "pipe/p_compiler.h"
  #include "pipe/p_state.h"
  
---- ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
-+++ ./src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
+--- a/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
++++ b/src/amd/vulkan/winsys/amdgpu/radv_amdgpu_winsys.h
 @@ -28,6 +28,8 @@
  #ifndef RADV_AMDGPU_WINSYS_H
  #define RADV_AMDGPU_WINSYS_H
- 
+
 +#include <sys/types.h>
 +
- #include "radv_radeon_winsys.h"
- #include "ac_gpu_info.h"
- #include "addrlib/addrinterface.h"<Paste>
+ #include <amdgpu.h>
+ #include <pthread.h>
+ #include "util/list.h"

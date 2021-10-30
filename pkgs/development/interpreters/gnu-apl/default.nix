@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"
     "-Wno-error=format-truncation"
+    # Needed with GCC 10
+    "-Wno-error=maybe-uninitialized"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
     platforms   = with platforms; linux ++ darwin;
-    inherit version;
+    mainProgram = "apl";
 
     longDescription = ''
       GNU APL is a free interpreter for the programming language APL, with an

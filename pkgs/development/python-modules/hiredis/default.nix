@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "996021ef33e0f50b97ff2d6b5f422a0fe5577de21a8873b58a779a5ddd1c3132";
+    sha256 = "81d6d8e39695f2c37954d1011c0480ef7cf444d4e3ae24bc5e89ee5de360139a";
   };
   propagatedBuildInputs = [ redis ];
 

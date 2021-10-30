@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, libusb-compat-0_1}:
 
 stdenv.mkDerivation rec {
-  name = "libftdi-0.20";
+  pname = "libftdi";
+  version = "0.20";
 
   src = fetchurl {
-    url = "https://www.intra2net.com/en/developer/libftdi/download/${name}.tar.gz";
+    url = "https://www.intra2net.com/en/developer/libftdi/download/${pname}-${version}.tar.gz";
     sha256 = "13l39f6k6gff30hsgh0wa2z422g9pyl91rh8a8zz6f34k2sxaxii";
   };
 

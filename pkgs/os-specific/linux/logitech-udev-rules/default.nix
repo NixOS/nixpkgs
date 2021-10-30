@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   inherit (solaar) version;
 
   buildCommand = ''
-    install -Dm644 -t $out/etc/udev/rules.d ${solaar.src}/rules.d/*.rules
+    install -Dm444 -t $out/etc/udev/rules.d ${solaar.src}/rules.d/*.rules
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, unzip }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "zpaq";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ unzip ];
+  nativeBuildInputs = [ perl /* for pod2man */ ];
 
   preBuild = let
     CPPFLAGS = with stdenv; ""
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

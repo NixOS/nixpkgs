@@ -35,8 +35,8 @@ in
 
     virtualisation.xen.package = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.xen-light";
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.xen-light";
       description = ''
         The package used for Xen binary.
       '';
@@ -45,8 +45,8 @@ in
 
     virtualisation.xen.package-qemu = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.qemu_xen-light";
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.qemu_xen-light";
       description = ''
         The package with qemu binaries for dom0 qemu and xendomains.
       '';
@@ -160,9 +160,6 @@ in
     virtualisation.xen.stored = mkDefault "${cfg.package}/bin/oxenstored";
 
     environment.systemPackages = [ cfg.package ];
-
-    # Make sure Domain 0 gets the required configuration
-    #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
 
     boot.kernelModules =
       [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"

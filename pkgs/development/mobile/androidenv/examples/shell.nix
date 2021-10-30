@@ -3,7 +3,7 @@
   # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
   /*nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
-    url = https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz;
+    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
   }),
   pkgs ? import nixpkgsSource {},
@@ -23,14 +23,14 @@ let
   android = {
     versions = {
       tools = "26.1.1";
-      platformTools = "30.0.5";
+      platformTools = "31.0.2";
       buildTools = "30.0.3";
-      ndk = "22.0.7026061";
-
-      # or the LTS NDK:
-      # ndk = "21.3.6528147";
-      cmake = "3.10.2";
-      emulator = "30.3.4";
+      ndk = [
+        "22.1.7171670"
+        "21.3.6528147" # LTS NDK
+      ];
+      cmake = "3.18.1";
+      emulator = "30.6.3";
     };
 
     platforms = ["23" "24" "25" "26" "27" "28" "29" "30"];
@@ -41,7 +41,7 @@ let
   # If you copy this example out of nixpkgs, something like this will work:
   /*androidEnvNixpkgs = fetchTarball {
     name = "androidenv";
-    url = https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz;
+    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
     sha256 = "<fill me in with nix-prefetch-url --unpack>";
   };
 
@@ -69,7 +69,7 @@ let
     emulatorVersion = android.versions.emulator;
 
     includeNDK = true;
-    ndkVersion = android.versions.ndk;
+    ndkVersions = android.versions.ndk;
     cmakeVersions = [android.versions.cmake];
 
     useGoogleAPIs = true;
@@ -115,7 +115,7 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-demo";
-  buildInputs = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -130,7 +130,7 @@ pkgs.mkShell rec {
 
   shellHook = ''
     # Add cmake to the path.
-    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}".*/)"
+    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
     export PATH="$cmake_root/bin:$PATH"
 
     # Write out local.properties for Android Studio.

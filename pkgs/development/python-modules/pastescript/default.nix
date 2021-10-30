@@ -4,28 +4,33 @@
 , nose
 , six
 , paste
-, PasteDeploy
-, cheetah
+, pastedeploy
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
-  pname = "PasteScript";
+  pname = "pastescript";
+  version = "3.2.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "9b0f5c0f1c6a510a353fa7c3dc4fdaab9071462d60d24573de76a001fbc172ac";
+    pname = "PasteScript";
+    inherit version;
+    sha256 = "f3ef819785e1b284e6fc108a131bce7e740b18255d96cd2e99ee3f00fd452468";
   };
 
-  buildInputs = [ nose ];
-  propagatedBuildInputs = [ six paste PasteDeploy cheetah ];
+  propagatedBuildInputs = [
+    paste
+    pastedeploy
+    six
+  ];
 
-  doCheck = false;
+  checkInputs = [ nose ];
+
+  pythonNamespaces = [ "paste" ];
 
   meta = with lib; {
     description = "A pluggable command-line frontend, including commands to setup package file layouts";
     homepage = "https://github.com/cdent/pastescript/";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

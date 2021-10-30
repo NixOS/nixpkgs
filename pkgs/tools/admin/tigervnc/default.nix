@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub
 , xorg, xkeyboard_config, zlib
 , libjpeg_turbo, pixman, fltk
-, fontDirectories
 , cmake, gettext, libtool
 , libGLU
 , gnutls, pam, nettle
 , xterm, openssh, perl
 , makeWrapper
+, nixosTests
 }:
 
 with lib;
@@ -22,17 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
   };
 
-  inherit fontDirectories;
 
   postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
-    for i in $fontDirectories; do
-      for j in $(find $i -name fonts.dir); do
-        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
-      done
-    done
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver/vncserver.in
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
   '';
@@ -97,6 +90,8 @@ stdenv.mkDerivation rec {
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
+
+  passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
 
   meta = {
     homepage = "https://tigervnc.org/";

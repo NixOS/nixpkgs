@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "coordgenlibs";
-  version = "2.0.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BcDqrOotqRPMnzvfjzbeCf8gT3yQzKihywKrpah1D7w=";
+    sha256 = "sha256-iy5VFp+50ldyoGJtPI1w3VfndIAGwBb1Xh6Qp18q/wU=";
   };
 
   nativeBuildInputs = [ cmake ];

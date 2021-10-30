@@ -14,6 +14,7 @@ pythonPackages.buildPythonApplication rec {
   postPatch = ''
     sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
     sed -i -e '/namespace_packages/d' setup.py
+    sed -i -e 's/mediafile~=0.6.0/mediafile>=0.6.0/' setup.py
   '';
 
   nativeBuildInputs = [ beets ];

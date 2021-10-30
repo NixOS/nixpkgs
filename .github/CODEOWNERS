@@ -11,7 +11,7 @@
 /.github/CODEOWNERS @edolstra
 
 # GitHub actions
-/.github/workflows @Mic92 @zowoq
+/.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
 
 # EditorConfig
@@ -19,7 +19,7 @@
 
 # Libraries
 /lib                        @edolstra @nbp @infinisil
-/lib/systems                @nbp @ericson2314 @matthewbauer
+/lib/systems                @alyssais @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
 /lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
@@ -42,6 +42,12 @@
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
+# Nixpkgs documentation
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+/doc/build-aux/pandoc-filters @jtojnar
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
@@ -59,6 +65,7 @@
 /nixos/doc/manual/development/writing-modules.xml     @nbp
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
+/nixos/modules/system                                 @dasJ
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -71,28 +78,32 @@
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh @jonringer
-/pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh @jonringer
-/doc/languages-frameworks/python.section.md     @FRidh
-/pkgs/development/tools/poetry2nix @adisbladis
+/maintainers/scripts/update-python-libraries	              @FRidh
+/pkgs/top-level/python-packages.nix                         @FRidh @jonringer
+/pkgs/development/interpreters/python                       @FRidh
+/pkgs/development/python-modules                            @FRidh @jonringer
+/doc/languages-frameworks/python.section.md                 @FRidh
+/pkgs/development/tools/poetry2nix                          @adisbladis
+/pkgs/development/interpreters/python/hooks                 @FRidh @jonringer @DavHau
+/pkgs/development/interpreters/python/conda                 @DavHau
 
 # Haskell
-/pkgs/development/compilers/ghc                       @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules		      @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/default.nix	      @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/generic-builder.nix @cdepillabout @sternenseemann
-/pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout @sternenseemann
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @expipiplus1
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
 
 # Perl
-/pkgs/development/interpreters/perl @volth @stigtsp
-/pkgs/top-level/perl-packages.nix   @volth @stigtsp
-/pkgs/development/perl-modules      @volth @stigtsp
+/pkgs/development/interpreters/perl @volth @stigtsp @zakame
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp @zakame
+/pkgs/development/perl-modules      @volth @stigtsp @zakame
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo @bcdarwin
+/pkgs/development/r-modules         @jbedo @bcdarwin
 
 # Ruby
 /pkgs/development/interpreters/ruby @marsam
@@ -100,7 +111,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @andir @danieldk @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
@@ -177,8 +188,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # Neovim
-/pkgs/applications/editors/neovim      @jonringer
-/pkgs/applications/editors/neovim      @teto
+/pkgs/applications/editors/neovim      @jonringer @teto
 
 # VimPlugins
 /pkgs/misc/vim-plugins         @jonringer @softinio
@@ -192,12 +202,12 @@
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md @NixOS/php
-/nixos/tests/php                         @NixOS/php
-/pkgs/build-support/build-pecl.nix       @NixOS/php
-/pkgs/development/interpreters/php       @NixOS/php
-/pkgs/development/php-packages           @NixOS/php
-/pkgs/top-level/php-packages.nix         @NixOS/php
+/doc/languages-frameworks/php.section.md          @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/build-support/build-pecl.nix                @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @NixOS/php @aanderse @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @NixOS/php @aanderse @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
@@ -222,3 +232,8 @@
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
+
+#nim
+/pkgs/development/compilers/nim  @ehmry
+/pkgs/development/nim-packages  @ehmry
+/pkgs/top-level/nim-packages.nix  @ehmry

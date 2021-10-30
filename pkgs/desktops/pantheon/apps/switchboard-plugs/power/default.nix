@@ -2,31 +2,31 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, substituteAll
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
-, elementary-dpms-helper
 , elementary-settings-daemon
+, gnome-settings-daemon
 , granite
 , gtk3
 , glib
 , dbus
 , polkit
 , switchboard
+, wingpanel-indicator-power
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "2.4.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-swcbkaHHe9BZxMWvjdRutvYfXXrSCUJWuld1btfYeH0=";
+    sha256 = "006h8mrhmdrbd83vhdyahgrfk9wh6j9kjincpp7dz7sl8fsyhmcr";
   };
 
   passthru = {
@@ -44,21 +44,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
-    elementary-dpms-helper
     elementary-settings-daemon
+    gnome-settings-daemon
     glib
     granite
     gtk3
     libgee
     polkit
     switchboard
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./dpms-helper-exec.patch;
-      elementary_dpms_helper = elementary-dpms-helper;
-    })
+    wingpanel-indicator-power # settings schema
   ];
 
   meta = with lib; {
@@ -66,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-power";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

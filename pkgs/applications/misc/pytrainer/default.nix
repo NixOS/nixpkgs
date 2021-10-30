@@ -2,7 +2,7 @@
 , python3
 , fetchFromGitHub
 , gdk-pixbuf
-, gnome3
+, gnome
 , gpsbabel
 , glib-networking
 , glibcLocales
@@ -13,7 +13,7 @@
 , tzdata
 , webkitgtk
 , wrapGAppsHook
-, xvfb_run
+, xvfb-run
 }:
 
 let
@@ -36,7 +36,7 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    sqlalchemy_migrate
+    sqlalchemy-migrate
     python-dateutil
     matplotlib
     lxml
@@ -55,7 +55,7 @@ in python.pkgs.buildPythonApplication rec {
     gtk3
     webkitgtk
     glib-networking
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gdk-pixbuf
   ];
 
@@ -66,7 +66,7 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = [
     glibcLocales
     perl
-    xvfb_run
+    xvfb-run
   ] ++ (with python.pkgs; [
     mysqlclient
     psycopg2

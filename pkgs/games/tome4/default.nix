@@ -1,8 +1,14 @@
 { lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, premake4, unzip
 , openal, libpng, libvorbis, libGLU, SDL2, SDL2_image, SDL2_ttf }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tome4";
+  version = "1.7.4";
+
+  src = fetchurl {
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    sha256 = "sha256-w1NPM/SMnPAnAl6z9E6Xsj3mEqZtXzFe1IMPmlKr8qQ=";
+  };
 
   desktop = makeDesktopItem {
     desktopName = pname;
@@ -14,15 +20,6 @@ let
     type = "Application";
     categories = "Game;RolePlaying;";
     genericName = pname;
-  };
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.6.7";
-
-  src = fetchurl {
-    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0283hvms5hr29zr0grd6gq059k0hg8hcz3fsmwjmysiih8790i68";
   };
 
   prePatch = ''

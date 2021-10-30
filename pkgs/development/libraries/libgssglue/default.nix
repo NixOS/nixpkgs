@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libgssglue-0.4";
+  pname = "libgssglue";
+  version = "0.4";
 
   src = fetchurl {
-    url = "http://www.citi.umich.edu/projects/nfsv4/linux/libgssglue/${name}.tar.gz";
+    url = "http://www.citi.umich.edu/projects/nfsv4/linux/libgssglue/${pname}-${version}.tar.gz";
     sha256 = "0fh475kxzlabwz30wz3bf7i8kfqiqzhfahayx3jj79rba1sily9z";
   };
 

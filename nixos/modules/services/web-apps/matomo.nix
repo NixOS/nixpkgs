@@ -48,7 +48,7 @@ in {
           as they don't get backported if they are not security-relevant.
         '';
         default = pkgs.matomo;
-        defaultText = "pkgs.matomo";
+        defaultText = literalExpression "pkgs.matomo";
       };
 
       webServerUser = mkOption {
@@ -77,6 +77,16 @@ in {
         '';
       };
 
+      periodicArchiveProcessingUrl = mkOption {
+        type = types.str;
+        default = "${user}.${fqdn}";
+        example = "matomo.yourdomain.org";
+        description = ''
+          URL of the host, without https prefix. By default, this is ${user}.${fqdn}, but you may want to change it if you
+          run Matomo on a different URL than matomo.yourdomain.
+        '';
+      };
+
       nginx = mkOption {
         type = types.nullOr (types.submodule (
           recursiveUpdate
@@ -90,13 +100,15 @@ in {
         )
         );
         default = null;
-        example = {
-          serverAliases = [
-            "matomo.\${config.networking.domain}"
-            "stats.\${config.networking.domain}"
-          ];
-          enableACME = false;
-        };
+        example = literalExpression ''
+          {
+            serverAliases = [
+              "matomo.''${config.networking.domain}"
+              "stats.''${config.networking.domain}"
+            ];
+            enableACME = false;
+          }
+        '';
         description = ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.
@@ -190,7 +202,7 @@ in {
         UMask = "0007";
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
-        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${user}.${fqdn}";
+        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.periodicArchiveProcessingUrl}";
       };
     };
 

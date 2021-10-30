@@ -1,28 +1,31 @@
 diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
-index 1afe9fc858..05dd7c3a90 100644
+index 3db4eab4ba..39bc0e77c9 100644
 --- a/Documentation/git-send-email.txt
 +++ b/Documentation/git-send-email.txt
-@@ -215,8 +215,7 @@ a password is obtained using 'git-credential'.
- 	specify a full pathname of a sendmail-like program instead;
- 	the program must support the `-i` option.  Default value can
- 	be specified by the `sendemail.smtpServer` configuration
--	option; the built-in default is to search for `sendmail` in
--	`/usr/sbin`, `/usr/lib` and $PATH if such program is
-+	option; the built-in default is to search in $PATH if such program is
- 	available, falling back to `localhost` otherwise.
- 
- --smtp-server-port=<port>::
+@@ -220,9 +220,9 @@ a password is obtained using 'git-credential'.
+ --smtp-server=<host>::
+ 	If set, specifies the outgoing SMTP server to use (e.g.
+ 	`smtp.example.com` or a raw IP address).  If unspecified, and if
+-	`--sendmail-cmd` is also unspecified, the default is to search
+-	for `sendmail` in `/usr/sbin`, `/usr/lib` and $PATH if such a
+-	program is available, falling back to `localhost` otherwise.
++	`--sendmail-cmd` is also unspecified, the default is to search for
++	`sendmail` in $PATH if such a program is available, falling back to
++	`localhost` otherwise.
+ +
+ For backward compatibility, this option can also specify a full pathname
+ of a sendmail-like program instead; the program must support the `-i`
 diff --git a/git-send-email.perl b/git-send-email.perl
-index 8eb63b5a2f..74a61d8213 100755
+index e65d969d0b..508d49483d 100755
 --- a/git-send-email.perl
 +++ b/git-send-email.perl
-@@ -956,8 +956,7 @@ sub expand_one_alias {
+@@ -1066,8 +1066,7 @@ sub expand_one_alias {
  }
  
- if (!defined $smtp_server) {
+ if (!defined $sendmail_cmd && !defined $smtp_server) {
 -	my @sendmail_paths = qw( /usr/sbin/sendmail /usr/lib/sendmail );
 -	push @sendmail_paths, map {"$_/sendmail"} split /:/, $ENV{PATH};
 +	my @sendmail_paths = map {"$_/sendmail"} split /:/, $ENV{PATH};
  	foreach (@sendmail_paths) {
  		if (-x $_) {
- 			$smtp_server = $_;
+ 			$sendmail_cmd = $_;

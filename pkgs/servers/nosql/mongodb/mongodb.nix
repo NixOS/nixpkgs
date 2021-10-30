@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, python38, curl, Security, CoreFoundation, cctools }:
+, sasl, openssl, libpcap, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -12,17 +12,16 @@ with lib;
 
 let
   variants = if versionAtLeast version "4.2"
-    then { python = python38.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+    then rec { python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
             scons = sconsPackages.scons_latest;
             mozjsVersion = "60";
             mozjsReplace = "defined(HAVE___SINCOS)";
           }
-    else { python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
             scons = sconsPackages.scons_3_1_2;
             mozjsVersion = "45";
             mozjsReplace = "defined(HAVE_SINCOS)";
           };
-  python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
   system-libraries = [
     "boost"
     "pcre"

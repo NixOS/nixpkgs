@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome3, gst_all_1, librsvg
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
@@ -26,6 +26,11 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/gtkd-developers/GtkD/commit/a9db09117ab27127ca4c3b8d2f308fae483a9199.patch";
       sha256 = "0ngyqifw1kandc1vk01kms3z65pcisfd75q7z09rml96glhfzjd6";
+    })
+    # Fix breakage with dmd ldc 1.26 and newer
+    (fetchpatch {
+      url = "https://github.com/gtkd-developers/GtkD/commit/323ff96c648882eaca2faee170bd9e90c6e1e9c3.patch";
+      sha256 = "1rhyi0isl6fl5i6fgsinvgq6v72xq7c6sajrxcsnmrzpvw91il3d";
     })
   ];
 

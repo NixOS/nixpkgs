@@ -55,7 +55,7 @@ in {
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
-    propagatedBuildInputs = with pythonPackages; [twisted dateutil];
+    propagatedBuildInputs = with pythonPackages; [twisted python-dateutil];
 
     meta = with lib; {
       description = "Some (mainly XMPP-related) additions to twisted";

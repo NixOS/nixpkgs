@@ -1,14 +1,14 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib, p7zip }:
 
 mkYarnPackage rec {
   pname = "vieb";
-  version = "3.4.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
-    owner = "jelmerro";
+    owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "0h5yzmvs9zhhpg9l7rrgwd4rqd9n00n2ifwqf05kpymzliy6xsnk";
+    sha256 = "sha256-MJJeHnwfXouBygRT/wFWFMRHxQVf/3k2c7vp/tkD5co=";
   };
 
   packageJSON = ./package.json;
@@ -34,6 +34,11 @@ mkYarnPackage rec {
   };
 
   postInstall = ''
+    unlink $out/libexec/vieb/deps/vieb/node_modules
+    ln -s $out/libexec/vieb/node_modules $out/libexec/vieb/deps/vieb/node_modules
+
+    find $out/libexec/vieb/node_modules/7zip-bin -name 7za -exec ln -s -f ${p7zip}/bin/7za {} ';'
+
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
     pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
@@ -50,9 +55,10 @@ mkYarnPackage rec {
 
   meta = with lib; {
     homepage = "https://vieb.dev/";
+    changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner fortuneteller2k ];
     platforms = platforms.unix;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

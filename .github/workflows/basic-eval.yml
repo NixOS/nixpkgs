@@ -1,0 +1,20 @@
+name: Basic evaluation checks
+
+on:
+  pull_request:
+    branches:
+     - master
+     - release-**
+  push:
+    branches:
+     - master
+     - release-**
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v14
+    # explicit list of supportedSystems is needed until aarch64-darwin becomes part of the trunk jobset
+    - run: nix-build pkgs/top-level/release.nix -A tarball.nixpkgs-basic-release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'

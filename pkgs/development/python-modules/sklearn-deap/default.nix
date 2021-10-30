@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, numpy, scipy, deap, scikitlearn, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, numpy, scipy, deap, scikit-learn, python }:
 
 buildPythonPackage rec {
   pname = "sklearn-deap";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy scipy deap scikitlearn ];
+  propagatedBuildInputs = [ numpy scipy deap scikit-learn ];
 
   checkPhase = ''
     ${python.interpreter} test.py

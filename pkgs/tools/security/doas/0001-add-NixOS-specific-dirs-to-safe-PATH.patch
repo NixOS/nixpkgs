@@ -15,7 +15,7 @@ index e253905..2fdb20f 100644
  main(int argc, char **argv)
  {
  	const char *safepath = "/bin:/sbin:/usr/bin:/usr/sbin:"
-+	    "/run/current-system/sw/bin:/run/current-system/sw/sbin:/run/wrappers/bin:"
++	    "/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:"
  	    "/usr/local/bin:/usr/local/sbin";
  	const char *confpath = NULL;
  	char *shargv[] = { NULL, NULL };

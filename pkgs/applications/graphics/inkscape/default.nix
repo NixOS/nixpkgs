@@ -1,23 +1,24 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , boehmgc
 , boost
 , cairo
 , cmake
-, double-conversion
 , fetchurl
+, fetchpatch
 , gettext
-, gdl
 , ghostscript
 , glib
 , glib-networking
 , glibmm
 , gsl
+, gspell
 , gtk-mac-integration
 , gtkmm3
-, gtkspell3
 , gdk-pixbuf
 , imagemagick
 , lcms
+, lib2geom
 , libcdr
 , libexif
 , libpng
@@ -46,16 +47,17 @@ let
     (ps: with ps; [
       numpy
       lxml
+      pillow
       scour
     ]);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.0.2";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2j4jBRGgjL8h6GcQ0WFFhZT+qHhn6RV7Z+0BoE6ieYo=";
+    sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -71,6 +73,15 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
+
+    # Fix parsing paths by Python extensions.
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/342
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
+      sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
+    })
   ];
 
   postPatch = ''
@@ -83,6 +94,10 @@ stdenv.mkDerivation rec {
       --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
+
+    # double-conversion is a dependency of 2geom
+    substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
+      --replace 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [
@@ -101,8 +116,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boehmgc
     boost
-    double-conversion
-    gdl
     gettext
     glib
     glib-networking
@@ -111,6 +124,7 @@ stdenv.mkDerivation rec {
     gtkmm3
     imagemagick
     lcms
+    lib2geom
     libcdr
     libexif
     libpng
@@ -130,7 +144,7 @@ stdenv.mkDerivation rec {
     python3Env
     zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    gtkspell3
+    gspell
   ] ++ lib.optionals stdenv.isDarwin [
     cairo
     gtk-mac-integration

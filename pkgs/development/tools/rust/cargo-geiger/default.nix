@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1z920p8i3gkjadyd6bqjk4i5yr5ds3m3sbcnf7plcqr69dsjr4b8";
   };
 
-  cargoSha256 = "1zh6fjfynkn4kgk1chigzd0sh4x1bagizyn7x6qyxgzc57a49bp7";
+  cargoSha256 = "1wf9758gyaxgyajjzy5phirg922n9wv0qmy67zjmxj56ayf0l9lm";
 
   checkPhase = ''
     ${cargo-insta}/bin/cargo-insta test

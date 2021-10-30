@@ -1,22 +1,46 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome3, libsysprof-capture
-, gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
-, libpsl, python3, brotli
+{ stdenv
+, lib
+, fetchurl
+, glib
+, libxml2
+, meson
+, ninja
+, pkg-config
+, gnome
+, libsysprof-capture
+, gnomeSupport ? true
+, sqlite
+, glib-networking
+, gobject-introspection
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, vala
+, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
+, libpsl
+, python3
+, brotli
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "2.72.0";
+  version = "2.74.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11skbyw2pw32178q3h8pi7xqa41b2x4k6q4k9f75zxmh8s23y30p";
+    sha256 = "sha256-M7HU4NY5RWxnXCJ4d+lKgHjXMSM+LVdonBGrzvfTxI4=";
   };
 
-  postPatch = ''
-    patchShebangs libsoup/
-  '';
-
-  outputs = [ "out" "dev" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withVala [
+    vala
+  ];
 
   buildInputs = [
     python3
@@ -27,27 +51,39 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala glib ];
-  propagatedBuildInputs = [ glib libxml2 ];
 
-  NIX_CFLAGS_COMPILE = [ "-lpthread" ];
+  propagatedBuildInputs = [
+    glib
+    libxml2
+  ];
 
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=enabled"
+    "-Dvapi=${if withVala then "enabled" else "disabled"}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dsysprof=disabled"
   ];
 
+  NIX_CFLAGS_COMPILE = "-lpthread";
+
   doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
 
+  postPatch = ''
+    patchShebangs libsoup/
+  '';
+
   passthru = {
-    propagatedUserEnvPackages = [ glib-networking.out ];
-    updateScript = gnome3.updateScript {
+    propagatedUserEnvPackages = [
+      glib-networking.out
+    ];
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

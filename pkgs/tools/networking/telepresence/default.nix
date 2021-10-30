@@ -3,32 +3,18 @@
 , iptables, bash }:
 
 let
-  sshuttle-telepresence =
-    let
-      sshuttleTelepresenceRev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
-    in
-      lib.overrideDerivation sshuttle (p: {
-        src = fetchFromGitHub {
-          owner = "datawire";
-          repo = "sshuttle";
-          rev = sshuttleTelepresenceRev;
-          sha256 = "1lp5b0h9v59igf8wybjn42w6ajw08blhiqmjwp4r7qnvmvmyaxhh";
-        };
-
-        SETUPTOOLS_SCM_PRETEND_VERSION="${sshuttleTelepresenceRev}";
-
-        postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
-        postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
-      });
+  sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
+    postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
+  });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.108";
+  version = "0.109";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = version;
-    sha256 = "6V0sM0Z+2xNDgL0wIzJOdaUp2Ol4ejNTk9K/pllVa7g=";
+    sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
   };
 
   nativeBuildInputs = [ makeWrapper ];

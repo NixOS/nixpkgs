@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "1x7xi6w7lb92x8202kbaxgqg1sly534wana4f38l3gpbzw9dwmcs";
+    sha256 = "sha256-xhagWmVlvlsayL0oWTihoxhq0ejejEACCsdQqFN1HUw=";
   };
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckTarget = "check";
+
+  # Workaround for https://gitlab.com/hepcedar/yoda/-/merge_requests/49
+  preInstallCheck = ''
+    cp tests/test{1,}.yoda
+    gzip -c tests/test.yoda > tests/test.yoda.gz
+  '';
 
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";

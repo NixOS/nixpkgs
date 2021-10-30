@@ -23,7 +23,7 @@ in
 
     boot.kernel.features = mkOption {
       default = {};
-      example = literalExample "{ debug = true; }";
+      example = literalExpression "{ debug = true; }";
       internal = true;
       description = ''
         This option allows to enable or disable certain kernel features.
@@ -38,16 +38,16 @@ in
       default = pkgs.linuxPackages;
       type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
-        kernel = super.kernel.override {
+        kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
-          kernelPatches = super.kernel.kernelPatches ++ kernelPatches;
+          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
-        };
+        });
       });
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
-      defaultText = "pkgs.linuxPackages";
-      example = literalExample "pkgs.linuxPackages_2_6_25";
+      defaultText = literalExpression "pkgs.linuxPackages";
+      example = literalExpression "pkgs.linuxKernel.packages.linux_5_10";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
@@ -65,7 +65,7 @@ in
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
       default = [];
-      example = literalExample "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
+      example = literalExpression "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
       description = "A list of additional patches to apply to the kernel.";
     };
 
@@ -83,7 +83,10 @@ in
     };
 
     boot.kernelParams = mkOption {
-      type = types.listOf types.str;
+      type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
+        name = "kernelParam";
+        description = "string, with spaces inside double quotes";
+      });
       default = [ ];
       description = "Parameters added to the kernel command line.";
     };
@@ -113,7 +116,7 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ config.boot.kernelPackages.nvidia_x11 ]";
+      example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
@@ -181,7 +184,7 @@ in
 
     system.requiredKernelConfig = mkOption {
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         with config.lib.kernelConfig; [
           (isYes "MODULES")
           (isEnabled "FB_CON_DECOR")

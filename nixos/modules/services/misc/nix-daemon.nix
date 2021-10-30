@@ -82,10 +82,19 @@ in
 
     nix = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Nix.
+          Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.nix;
-        defaultText = "pkgs.nix";
+        defaultText = literalExpression "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
@@ -180,7 +189,19 @@ in
         default = 0;
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 19 is the lowest.
+          0 is the default Unix process priority, 19 is the lowest. Note that nix
+          bypasses nix-daemon when running as root and this option does not have
+          any effect in such a case.
+
+          Please note that if used on a recent Linux kernel with group scheduling,
+          setting the nice level will only have an effect relative to other threads
+          in the same task group. Therefore this option is only useful if
+          autogrouping has been disabled (see the kernel.sched_autogroup_enabled
+          sysctl) and no systemd unit uses any of the per-service CPU accounting
+          features of systemd. Otherwise the Nix daemon process may be placed in a
+          separate task group and the nice level setting will have no effect.
+          Refer to the man pages sched(7) and systemd.resource-control(5) for
+          details.
         '';
       };
 
@@ -458,9 +479,9 @@ in
                 description = "The flake reference to which <option>from></option> is to be rewritten.";
               };
               flake = mkOption {
-                type = types.unspecified;
+                type = types.nullOr types.attrs;
                 default = null;
-                example = literalExample "nixpkgs";
+                example = literalExpression "nixpkgs";
                 description = ''
                   The flake input to which <option>from></option> is to be rewritten.
                 '';
@@ -499,7 +520,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
@@ -534,6 +555,22 @@ in
             + "\n"
           ) cfg.buildMachines;
       };
+    assertions =
+      let badMachine = m: m.system == null && m.systems == [];
+      in [
+        {
+          assertion = !(builtins.any badMachine cfg.buildMachines);
+          message = ''
+            At least one system type (via <varname>system</varname> or
+              <varname>systems</varname>) must be set for every build machine.
+              Invalid machine specifications:
+          '' + "      " +
+          (builtins.concatStringsSep "\n      "
+            (builtins.map (m: m.hostName)
+              (builtins.filter (badMachine) cfg.buildMachines)));
+        }
+      ];
+
 
     systemd.packages = [ nix ];
 

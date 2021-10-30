@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome3, plugins ? null}:
+{ lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome, plugins ? null}:
 
 let
 allPlugins = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues gimpPlugins);
@@ -18,7 +18,7 @@ in symlinkJoin {
       wrapProgram $out/bin/$each \
         --set GIMP2_PLUGINDIR "$out/lib/gimp/2.0" \
         --set GIMP2_DATADIR "$out/share/gimp/2.0" \
-        --prefix GTK_PATH : "${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
+        --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \
         ${toString extraArgs}
     done
     set +x

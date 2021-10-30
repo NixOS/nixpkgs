@@ -11,7 +11,11 @@
 
 mkDerivation {
   pname = "kbreakout";
-  meta.license = with lib.licenses; [ lgpl21 gpl3 ];
+  meta = {
+    homepage = "KBreakOut";
+    description = "Breakout-like game";
+    license = with lib.licenses; [ lgpl21 gpl3 ];
+  };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [
     cmake extra-cmake-modules

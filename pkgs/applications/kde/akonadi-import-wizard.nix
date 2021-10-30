@@ -2,7 +2,8 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, karchive, kcontacts, kcrash, kidentitymanagement, kio,
-  kmailtransport, kwallet, mailcommon, mailimporter, messagelib
+  kmailtransport, kwallet, mailcommon, mailimporter, messagelib,
+  qtkeychain, libsecret
 }:
 
 mkDerivation {
@@ -15,6 +16,7 @@ mkDerivation {
   buildInputs = [
     akonadi karchive kcontacts kcrash kidentitymanagement kio
     kmailtransport kwallet mailcommon mailimporter messagelib
+    qtkeychain libsecret
   ];
   outputs = [ "out" "dev" ];
 }

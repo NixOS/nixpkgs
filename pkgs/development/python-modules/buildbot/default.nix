@@ -1,14 +1,20 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
-  python, twisted, jinja2, zope_interface, sqlalchemy,
-  sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq,
-  txrequests, pypugjs, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
-  parameterized, git, openssh, glibcLocales, ldap3, nixosTests }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
+, python, twisted, jinja2, zope_interface, sqlalchemy
+, sqlalchemy-migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq
+, txrequests, pypugjs, boto3, moto, mock, lz4, setuptoolsTrial
+, isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins
+, parameterized, git, openssh, glibcLocales, ldap3, nixosTests
+}:
 
 let
   withPlugins = plugins: buildPythonPackage {
-    name = "${package.name}-with-plugins";
-    phases = [ "installPhase" "fixupPhase" ];
+    pname = "${package.pname}-with-plugins";
+    inherit (package) version;
+
+    dontUnpack = true;
+    dontBuild = true;
+    doCheck = false;
+
     nativeBuildInputs = [ makeWrapper ];
     propagatedBuildInputs = plugins ++ package.propagatedBuildInputs;
 
@@ -25,11 +31,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "3.1.0";
+    version = "3.3.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1b9m9l8bz2slkrq0l5z8zd8pd0js5w4k7dam8bdp00kv3aln4si9";
+      sha256 = "sha256-FST+mCIQpzxc/5iQdsSNBlKxY985v+z6Xeh8ZQRu2FE=";
     };
 
     propagatedBuildInputs = [
@@ -38,8 +44,8 @@ let
       jinja2
       zope_interface
       sqlalchemy
-      sqlalchemy_migrate
-      dateutil
+      sqlalchemy-migrate
+      python-dateutil
       txaio
       autobahn
       pyjwt
@@ -56,7 +62,7 @@ let
       boto3
       moto
       mock
-      python-lz4
+      lz4
       setuptoolsTrial
       isort
       pylint
@@ -96,12 +102,13 @@ let
     passthru = {
       inherit withPlugins;
       tests.buildbot = nixosTests.buildbot;
+      updateScript = ./update.sh;
     };
 
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
-      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+      maintainers = with maintainers; [ ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };

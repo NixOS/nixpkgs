@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "openring";
-  version = "unstable-2021-04-03";
+  version = "unstable-2021-06-28";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = pname;
-    rev = "f13edb5dfd882ce608d61cf6b6740650ce9d84a3";
-    sha256 = "sha256-Z65V77JZ9jCzBg7T2+d5Agxxd+MV2R7nYcLedYP5eOE=";
+    rev = "e566294050776355ca0d3bfd7a1f6f70767cd08b";
+    sha256 = "sha256-h9Tout3KGiv6jbq9Ui3crb5NdTOHcn7BIy+aPoWG5sM=";
   };
 
   vendorSha256 = "sha256-BbBTmkGyLrIWphXC+dBaHaVzHuXRZ+4N/Jt2k3nF7Z4=";

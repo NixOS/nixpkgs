@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , abseil-cpp
 , bzip2
@@ -17,24 +16,15 @@
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "8.1";
+  version = "9.0";
   disabled = python.pythonOlder "3.6";  # not supported upstream
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "1zqgvkaw5vf2d8pwsa34g9jysbpiwplzxc8jyy8kdbzmj8ax3gpg";
+    sha256 = "0yihrsg8wj4b82xwg1hbn97my8zqd7xhw7dk7wm2axsyvqd6m3b3";
   };
-
-  patches = [
-    # This patch (on master as of Feb 11, 2021) fixes or-tools failing to respect
-    # USE_SCIP=OFF and then failing to find scip/scip.h
-    (fetchpatch {
-      url = "https://github.com/google/or-tools/commit/17321869832b5adaccd9864e7e5576122730a5d5.patch";
-      sha256 = "0bi2z1hqlpdm1if3xa5dzc2zv0qlm5xi2x979brx10f8k779ghn0";
-    })
-  ];
 
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We

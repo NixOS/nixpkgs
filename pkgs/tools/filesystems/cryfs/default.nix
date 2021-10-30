@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTING:BOOL=${if doCheck then "TRUE" else "FALSE"}"
   ] ++ lib.optional doCheck "-DCMAKE_PREFIX_PATH=${gtest.dev}/lib/cmake";
 
-  doCheck = true;
+  # macFUSE needs to be installed for the test to succeed on Darwin
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     # Skip CMakeFiles directory and tests depending on fuse (does not work well with sandboxing)

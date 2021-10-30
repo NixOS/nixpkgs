@@ -5,39 +5,54 @@
 , buildPythonPackage
 , crccheck
 , fetchFromGitHub
-, pycrypto
 , pycryptodome
 , pytest-aiohttp
-, pytest-asyncio
+, pytest-timeout
 , pytestCheckHook
-, tox
-, voluptuous }:
+, pythonOlder
+, voluptuous
+}:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.33.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = version;
-    sha256 = "sha256-oEf4GnvbQ6LY4NaNFWRmnNz1TK2tMpIVUxskhU38g4w=";
+    sha256 = "sha256-cR63xzx62ZKCXJENoksJTwEU8vGL8HtdIN3+5OqIL1Y=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     aiosqlite
     crccheck
-    pycrypto
     pycryptodome
     voluptuous
   ];
 
   checkInputs = [
-    asynctest
     pytest-aiohttp
-    pytest-asyncio
+    pytest-timeout
     pytestCheckHook
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+  ];
+
+  disabledTests = [
+    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
+    #"test_remigrate_forcibly_downgraded_v4"
+    # RuntimeError: Event loop is closed
+    #"test_startup"
+  ];
+
+  pythonImportsCheck = [
+    "zigpy.application"
+    "zigpy.config"
+    "zigpy.exceptions"
+    "zigpy.types"
+    "zigpy.zcl"
   ];
 
   meta = with lib; {

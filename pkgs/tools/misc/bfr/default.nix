@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bfr-1.6";
+  pname = "bfr";
   version = "1.6";
 
   src = fetchurl {

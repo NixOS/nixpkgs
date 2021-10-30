@@ -1,8 +1,8 @@
 { lib, stdenv, fetchgit, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation {
-
-  name = "carddav-0.1-2014-02-26";
+  pname = "carddav";
+  version = "0.1-2014-02-26";
 
   src = fetchgit {
     url = "git://github.com/ljanyst/carddav-util";

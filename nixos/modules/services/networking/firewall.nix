@@ -325,8 +325,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.iptables;
-        defaultText = "pkgs.iptables";
-        example = literalExample "pkgs.iptables-nftables-compat";
+        defaultText = literalExpression "pkgs.iptables";
+        example = literalExpression "pkgs.iptables-nftables-compat";
         description =
           ''
             The iptables package to use for running the firewall service."
@@ -339,6 +339,8 @@ in
         description =
           ''
             Whether to log rejected or dropped incoming connections.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -350,6 +352,8 @@ in
             Whether to log all rejected or dropped incoming packets.
             This tends to give a lot of log messages, so it's mostly
             useful for debugging.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -496,7 +500,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.ipset ]";
+        example = literalExpression "[ pkgs.ipset ]";
         description =
           ''
             Additional packages to be included in the environment of the system

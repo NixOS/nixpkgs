@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , jack2
-, alsaLib
+, alsa-lib
 , rtmidi
 , pkg-config
 }:
@@ -22,7 +22,7 @@ buildOctavePackage rec {
 
   propagatedBuildInputs = [
     jack2
-    alsaLib
+    alsa-lib
     rtmidi
   ];
 
@@ -31,6 +31,6 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Audio and MIDI Toolbox for GNU Octave";
-    platforms = platforms.linux; # Because of run-time dependency on jack2 and alsaLib
+    platforms = platforms.linux; # Because of run-time dependency on jack2 and alsa-lib
   };
 }

@@ -2,12 +2,18 @@
 
 buildPythonPackage rec {
   pname = "lexid";
-  version = "2020.1005";
+  version = "2021.1006";
   disabled = pythonOlder "3.6";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52333a2b9ebd14aa0dfeb33de72bd159c2dc31adb9c59cddfc486e2b69bfdcd1";
+    sha256 = "509a3a4cc926d3dbf22b203b18a4c66c25e6473fb7c0e0d30374533ac28bafe5";
   };
+
+  prePatch = ''
+    # Disable lib3to6, since we're only building this on 3.6+ anyway.
+    substituteInPlace setup.py \
+      --replace 'if any(arg.startswith("bdist") for arg in sys.argv):' 'if False:'
+  '';
 
   propagatedBuildInputs = [ click ];
 

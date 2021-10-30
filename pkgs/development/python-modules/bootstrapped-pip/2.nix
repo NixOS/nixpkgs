@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];
 
-  buildPhase = ":";
+  dontBuild = true;
 
-  installPhase = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+  installPhase = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '' + ''
     # Give folders a known name

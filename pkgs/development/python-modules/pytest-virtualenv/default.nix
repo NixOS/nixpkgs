@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
+, pytest, pytest-cov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
 
 buildPythonPackage rec {
   pname = "pytest-virtualenv";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "03w2zz3crblj1p6i8nq17946hbn3zqp9z7cfnifw47hi4a4fww12";
   };
 
-  checkInputs = [ pytest pytestcov mock cmdline ];
+  checkInputs = [ pytest pytest-cov mock cmdline ];
   propagatedBuildInputs = [ pytest-fixture-config pytest-shutil virtualenv ];
   checkPhase = "py.test tests/unit ";
 

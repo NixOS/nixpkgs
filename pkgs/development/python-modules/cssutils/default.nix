@@ -5,19 +5,21 @@
 , setuptools-scm
 , toml
 , importlib-metadata
+, cssselect
+, lxml
 , mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.2.0";
+  version = "2.3.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bef59f6b59bdccbea8e36cb292d2be1b6be1b485fc4a9f5886616f19eb31aaf";
+    sha256 = "sha256-stOxYEfKroLlxZADaTW6+htiHPRcLziIWvS+SDjw/QA=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    cssselect
+    lxml
     mock
     pytestCheckHook
   ];
@@ -38,6 +42,12 @@ buildPythonPackage rec {
     # access network
     "test_parseUrl"
     "encutils"
+    "website.logging"
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    # AttributeError: module 'importlib.resources' has no attribute 'files'
+    "test_parseFile"
+    "test_parseString"
+    "test_combine"
   ];
 
   pythonImportsCheck = [ "cssutils" ];

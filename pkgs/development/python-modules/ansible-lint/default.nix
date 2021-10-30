@@ -1,69 +1,88 @@
 { lib
-, fetchPypi
 , buildPythonPackage
 , isPy27
-, ansible
-, pyyaml
-, ruamel-yaml
-, rich
-, pytestCheckHook
-, pytest-xdist
-, git
-, wcmatch
+, fetchPypi
+, setuptools-scm
+, ansible-base
 , enrich
-, python
+, flaky
+, pyyaml
+, rich
+, ruamel-yaml
+, tenacity
+, wcmatch
+, yamllint
+, pytest-xdist
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "5.0.2";
+  version = "5.2.1";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vgt/KqNozTPaON/I19SybBZuo7bbl3Duq5dTBTMlj44=";
+    sha256 = "sha256-1krKWcjYllQdN5uSBbISa4UQiKqwosLKsZ/3SxhM3xw=";
   };
 
-  postPatch = ''
-    substituteInPlace src/ansiblelint/file_utils.py \
-      --replace 'raise RuntimeError("Unable to determine file type for %s" % pathex)' 'return "playbook"'
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  buildInputs = [ python ];
+  propagatedBuildInputs = [
+    ansible-base
+    enrich
+    flaky
+    pyyaml
+    rich
+    ruamel-yaml
+    tenacity
+    wcmatch
+    yamllint
+  ];
 
-  propagatedBuildInputs = [ ansible enrich pyyaml rich ruamel-yaml wcmatch ];
+  checkInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist git ];
+  pytestFlagsArray = [
+    "--numprocesses" "auto"
+  ];
 
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible-base ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
     ln -rs src/ansiblelint/__main__.py src/ansiblelint/ansible-lint
     patchShebangs src/ansiblelint/__main__.py
+
+    # create symlink like in the git repo so test_included_tasks does not fail
+    ln -s ../roles examples/playbooks/roles
   '';
 
   disabledTests = [
     # requires network
+    "test_cli_auto_detect"
+    "test_install_collection"
     "test_prerun_reqs_v1"
     "test_prerun_reqs_v2"
-    # Assertion error with negative numbers; maybe requieres an ansible update?
-    "test_negative"
-    "test_example"
-    "test_playbook"
-    "test_included_tasks"
-    "test_long_line"
-
-    "test_get_yaml_files_umlaut"
+    "test_require_collection_wrong_version"
+    # re-execs ansible-lint which does not works correct
+    "test_custom_kinds"
     "test_run_inside_role_dir"
-    "test_role_handler_positive"
+    "test_run_multiple_role_path_no_trailing_slash"
+    "test_runner_exclude_globs"
+
+    "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-base ]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/ansible-community/ansible-lint";

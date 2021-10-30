@@ -39,7 +39,7 @@ let
             if c x then true
             else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    merge = args: foldr (def: mergeConfig def.value) {};
   };
 
   overlayType = mkOptionType {
@@ -67,13 +67,13 @@ in
   options.nixpkgs = {
 
     pkgs = mkOption {
-      defaultText = literalExample
-        ''import "''${nixos}/.." {
-            inherit (cfg) config overlays localSystem crossSystem;
-          }
-        '';
+      defaultText = literalExpression ''
+        import "''${nixos}/.." {
+          inherit (cfg) config overlays localSystem crossSystem;
+        }
+      '';
       type = pkgsType;
-      example = literalExample "import <nixpkgs> {}";
+      example = literalExpression "import <nixpkgs> {}";
       description = ''
         If set, the pkgs argument to all NixOS modules is the value of
         this option, extended with <code>nixpkgs.overlays</code>, if
@@ -109,7 +109,7 @@ in
 
     config = mkOption {
       default = {};
-      example = literalExample
+      example = literalExpression
         ''
           { allowBroken = true; allowUnfree = true; }
         '';
@@ -125,7 +125,7 @@ in
 
     overlays = mkOption {
       default = [];
-      example = literalExample
+      example = literalExpression
         ''
           [
             (self: super: {
@@ -158,7 +158,7 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = literalExample
+      defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform on which NixOS should be built. When

@@ -34,7 +34,7 @@ in {
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode} elevator=noop"
+        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
       ];
     };
 
@@ -55,6 +55,8 @@ in {
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
+
+      services.hv-vss.unitConfig.ConditionPathExists = [ "/dev/vmbus/hv_vss" ];
 
       targets.hyperv-daemons = {
         wantedBy = [ "multi-user.target" ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pass-tomb";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-tomb";
     rev = "v${version}";
-    sha256 = "0wxa673yyzasjlkpd5f3yl5zf7bhsw7h1jbhf6sdjz65bypr2596";
+    sha256 = "sha256-kbbMHmYmeyt7HM8YiNhknePm1vUaXWWXPWePKGpbU+o=";
   };
 
   buildInputs = [ tomb ];

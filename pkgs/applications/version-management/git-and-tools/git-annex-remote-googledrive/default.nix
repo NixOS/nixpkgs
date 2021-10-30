@@ -10,11 +10,11 @@
 
 buildPythonApplication rec {
   pname = "git-annex-remote-googledrive";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "118w0fyy6pck8hyj925ym6ak0xxqhkaq2vharnpl9b97nab4mqg8";
+    sha256 = "0rwjcdvfgzdlfgrn1rrqwwwiqqzyh114qddrbfwd46ld5spry6r1";
   };
 
   propagatedBuildInputs = [ annexremote drivelib GitPython tenacity humanfriendly ];

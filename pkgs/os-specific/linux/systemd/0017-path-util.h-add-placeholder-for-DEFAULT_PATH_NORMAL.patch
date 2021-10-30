@@ -1,4 +1,4 @@
-From c639f311bd27c2bff62a22c34bc92613aaf77587 Mon Sep 17 00:00:00 2001
+From 216018be7b422586b937dae8fd83f51989479a41 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sun, 8 Mar 2020 01:05:54 +0100
 Subject: [PATCH 17/19] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
@@ -10,7 +10,7 @@ systemd itself uses extensively.
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/src/basic/path-util.h b/src/basic/path-util.h
-index d613709f0b..5cced4c115 100644
+index 26e7362d1f..a8f8a863ec 100644
 --- a/src/basic/path-util.h
 +++ b/src/basic/path-util.h
 @@ -24,11 +24,11 @@
@@ -29,5 +29,5 @@ index d613709f0b..5cced4c115 100644
  #if HAVE_SPLIT_USR
  #  define DEFAULT_PATH DEFAULT_PATH_SPLIT_USR
 -- 
-2.30.1
+2.32.0
 

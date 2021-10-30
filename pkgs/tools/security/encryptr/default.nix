@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
 , pango , cairo, libX11 , libXi, libXcursor, libXext, libXfixes
-, libXrender, libXcomposite , alsaLib, libXdamage, libXtst, libXrandr
+, libXrender, libXcomposite , alsa-lib, libXdamage, libXtst, libXrandr
 , expat, libcap, systemd , dbus, gtk2 , gdk-pixbuf, libnotify
 }:
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
-    libXcursor libXext libXfixes libXrender libXcomposite alsaLib
+    libXcursor libXext libXfixes libXrender libXcomposite alsa-lib
     libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf
     libnotify stdenv.cc.cc
   ];

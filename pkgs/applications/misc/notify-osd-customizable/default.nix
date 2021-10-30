@@ -2,10 +2,10 @@
 , dbus-glib
 , fetchurl
 , glib
-, gnome3
+, gnome
 , libnotify
 , libtool
-, libwnck3
+, libwnck
 , makeWrapper
 , pkg-config
 , gsettings-desktop-schemas
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib libwnck3 libnotify dbus-glib makeWrapper
-    gsettings-desktop-schemas gnome3.gnome-common
+    glib libwnck libnotify dbus-glib makeWrapper
+    gsettings-desktop-schemas gnome.gnome-common
     libtool
   ];
 

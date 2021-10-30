@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libtool, lldClang, ninja
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -7,38 +7,29 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "20.11.4.13";
+  version = "21.8.8.29";
+
+  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
   src = fetchFromGitHub {
     owner  = "ClickHouse";
     repo   = "ClickHouse";
-    rev    = "v${version}-stable";
+    rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "0c87k0xqwj9sc3xy2f3ngfszgjiz4rzd787bdg6fxp94w1adjhny";
+    sha256 = "1hvsnh3fzbh1vl7cki0sbpd5ar6cxdc7k3mfqby0xxv3zfywmmr2";
   };
 
-  nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
+  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
   buildInputs = [
     boost brotli capnproto cctz clang-unwrapped double-conversion
-    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
+    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
     poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
-  ];
-
-  patches = [
-    # This patch is only required for 20.11.4.13 - it should be included in the
-    # next stable release from upstream by default
-    (fetchpatch {
-      url = "https://github.com/ClickHouse/ClickHouse/commit/e31753b4db7aa0a72a85757dc11fc403962e30db.patch";
-      sha256 = "12ax02dh9y9k8smkj6v50yfr46iprscbrvd4bb9vfbx8xqgw7grb";
-    })
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
 
   postPatch = ''
     patchShebangs src/
 
-    substituteInPlace contrib/openssl-cmake/CMakeLists.txt \
-      --replace '/usr/bin/env perl' perl
     substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-duplicate-includes.sh \
@@ -69,6 +60,9 @@ stdenv.mkDerivation rec {
   '';
 
   hardeningDisable = [ "format" ];
+
+  # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     homepage = "https://clickhouse.tech/";

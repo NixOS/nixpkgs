@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, flex, systemd, perl }:
 
 stdenv.mkDerivation rec {
-  name = "drbd-8.4.4";
+  pname = "drbd";
+  version = "8.4.4";
 
   src = fetchurl {
-    url = "http://oss.linbit.com/drbd/8.4/${name}.tar.gz";
+    url = "http://oss.linbit.com/drbd/8.4/drbd-${version}.tar.gz";
     sha256 = "1w4889h1ak7gy9w33kd4fgjlfpgmp6hzfya16p1pkc13bjf22mm0";
   };
 

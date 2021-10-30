@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "2x8vwLTSngqQqmVrVh/mM4peATgaRqOSwrfm5XCkg/g=";
   };
 
-  sourceRoot = "./src";
+  sourceRoot = "${src.name}/src";
 
   meta = with lib; {
     homepage = "http://michaelcmartin.github.io/Ophis/";

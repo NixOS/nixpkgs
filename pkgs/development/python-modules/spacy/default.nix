@@ -7,60 +7,67 @@
 , blis
 , catalogue
 , cymem
+, jinja2
 , jsonschema
 , murmurhash
 , numpy
 , pathlib
-, plac
 , preshed
 , requests
 , setuptools
 , srsly
+, spacy-legacy
 , thinc
+, typer
 , wasabi
+, packaging
+, pathy
+, pydantic
+, python
+, tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.3.5";
+  version = "3.1.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "315278ab60094643baecd866017c7d4cbd966efd2d517ad0e6c888edf7fa5aef";
+    sha256 = "sha256-WAhOZKJ5lxkupI8Yq7MOwUjFu+edBNF7pNL8JiEAwqI=";
   };
 
   propagatedBuildInputs = [
     blis
     catalogue
     cymem
+    jinja2
     jsonschema
     murmurhash
     numpy
-    plac
+    packaging
+    pathy
     preshed
+    pydantic
     requests
     setuptools
     srsly
+    spacy-legacy
     thinc
+    tqdm
+    typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   checkInputs = [
     pytest
   ];
 
   doCheck = false;
-  # checkPhase = ''
-  #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
-  # '';
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
-      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
-      --replace "srsly>=1.0.2,<1.1.0" "srsly>=1.0.2,<3.0" \
-      --replace "thinc>=7.4.1,<7.5.0" "thinc>=7.4.1,<8"
+  checkPhase = ''
+    ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
   pythonImportsCheck = [ "spacy" ];
@@ -71,6 +78,6 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ ];
   };
 }

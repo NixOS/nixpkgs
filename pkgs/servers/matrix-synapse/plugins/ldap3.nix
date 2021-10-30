@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01bms89sl16nyh9f141idsz4mnhxvjrc3gj721wxh1fhikps0djx";
+    sha256 = "9fdf8df7c8ec756642aa0fea53b31c0b2f1924f70d7f049a2090b523125456fe";
   };
 
   propagatedBuildInputs = [ service-identity ldap3 twisted ];

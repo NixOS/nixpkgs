@@ -6,6 +6,7 @@
 , sshSupport ? true, libssh2
 , mysqlSupport ? false, libmysqlclient
 , postgresqlSupport ? false, postgresql
+, ipmiSupport ? false, openipmi
 }:
 
 # ensure exactly one primary database type is selected
@@ -41,7 +42,8 @@ in
       ++ optional snmpSupport net-snmp
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql;
+      ++ optional postgresqlSupport postgresql
+      ++ optional ipmiSupport openipmi;
 
       configureFlags = [
         "--enable-server"
@@ -59,7 +61,8 @@ in
       ++ optional snmpSupport "--with-net-snmp"
       ++ optional sshSupport "--with-ssh2=${libssh2.dev}"
       ++ optional mysqlSupport "--with-mysql"
-      ++ optional postgresqlSupport "--with-postgresql";
+      ++ optional postgresqlSupport "--with-postgresql"
+      ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
 
       prePatch = ''
         find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +

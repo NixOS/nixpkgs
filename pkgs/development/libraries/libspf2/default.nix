@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/shevek/libspf2/commit/5852828582f556e73751076ad092f72acf7fc8b6.patch";
       sha256 = "1v6ashqzpr0xidxq0vpkjd8wd66cj8df01kyzj678ljzcrax35hk";
     })
+    (fetchurl {
+      name = "0002-CVE-2021-20314.patch";
+      url = "https://github.com/shevek/libspf2/commit/c37b7c13c30e225183899364b9f2efdfa85552ef.patch";
+      sha256 = "190nnh7mlz6328829ba6jajad16s3md8kraspn81qnvhwh0nkiak";
+    })
   ];
 
   postPatch = ''

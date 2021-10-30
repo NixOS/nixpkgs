@@ -1,40 +1,71 @@
-{ stdenv, lib ,fetchurl, scons, pkg-config, dbus, ncurses
-, libusb1, docbook_xml_dtd_412, docbook_xsl, bc
+{ stdenv
+, lib
+, fetchurl
+
+# nativeBuildInputs
+, scons
+, pkg-config
+
+# buildInputs
+, dbus
+, libusb1
+, ncurses
+, pps-tools
+, python3Packages
 
 # optional deps for GUI packages
 , guiSupport ? true
-, dbus-glib ? null, libX11 ? null, libXt ? null, libXpm ? null, libXaw ? null, libXext ? null
-, gobject-introspection ? null, pango ? null, gdk-pixbuf ? null, atk ? null, wrapGAppsHook ? null
+, dbus-glib
+, libX11
+, libXt
+, libXpm
+, libXaw
+, libXext
+, gobject-introspection
+, pango
+, gdk-pixbuf
+, atk
+, wrapGAppsHook
 
-, libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
-, pps-tools
-, python3Packages
+, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.22";
+  version = "3.23.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "18rplv1cd76ndb2wc91jarjmfm2nk508pykv1hir79bqbwmdygvq";
+    sha256 = "sha256-C5kc6aRlOMTqRQ96juQo/0T7T41mX93y/+QP4K6abAk=";
   };
 
+  # TODO: render & install HTML documentation using asciidoctor
   nativeBuildInputs = [
-    scons pkg-config docbook_xml_dtd_412 docbook_xsl xmlto bc
-    python3Packages.python
+    pkg-config
     python3Packages.wrapPython
-  ]
-  ++ lib.optionals guiSupport [ wrapGAppsHook gobject-introspection ];
+    scons
+  ] ++ lib.optionals guiSupport [
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    python3Packages.python dbus ncurses
-    libxslt libusb1 pps-tools
-  ]
-  ++ lib.optionals guiSupport [
-    dbus-glib libX11 libXt libXpm libXaw libXext
-    gobject-introspection pango gdk-pixbuf atk
+    dbus
+    libusb1
+    ncurses
+    pps-tools
+    python3Packages.python
+  ] ++ lib.optionals guiSupport [
+    atk
+    dbus-glib
+    gdk-pixbuf
+    gobject-introspection
+    libX11
+    libXaw
+    libXext
+    libXpm
+    libXt
+    pango
   ];
 
   pythonPath = lib.optionals guiSupport [
@@ -46,8 +77,6 @@ stdenv.mkDerivation rec {
     ./sconstruct-env-fixes.patch
   ];
 
-  # - leapfetch=no disables going online at build time to fetch leap-seconds
-  #   info. See <gpsd-src>/build.txt for more info.
   preBuild = ''
     patchShebangs .
     sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConscript
@@ -57,6 +86,8 @@ stdenv.mkDerivation rec {
     sconsFlags+=" python_libdir=$out/lib/${python3Packages.python.libPrefix}/site-packages"
   '';
 
+  # - leapfetch=no disables going online at build time to fetch leap-seconds
+  #   info. See <gpsd-src>/build.txt for more info.
   sconsFlags = [
     "leapfetch=no"
     "gpsd_user=${gpsdUser}"
@@ -73,6 +104,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
   '';
+
   installTargets = [ "install" "udev-install" ];
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
@@ -103,7 +135,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
-    license = licenses.bsd3;
+    license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];
   };

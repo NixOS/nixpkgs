@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.4.8";
+  version = "1.4.9";
 
   bloop-coursier-channel = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "1hfd5gc98bp4p4m85jva2mlkh10q10n9s5136z8620mmjq93rx70";
+    sha256 = "0yh9k98c0cq9ksi3g6rb1q1qblnhcznrc5z1y9ps8cvwv2lx8ly4";
   };
 
   bloop-bash = fetchurl {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
       mkdir channel
       ln -s ${bloop-coursier-channel} channel/bloop.json
-      ${coursier}/bin/coursier install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
+      ${coursier}/bin/cs install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
 
       # Remove binary part of the coursier launcher script to make derivation output hash stable
       sed -i '5,$ d' $out/bloop
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "1cs3ng6bj9s7xf6c4xaiqgg5qr34abnipfgc44sy2ljklr7x0jwa"
-      else if stdenv.isDarwin && stdenv.isx86_64 then "0l9vqvzcmxya1s04cps96skw4dslh3i3ks73dl53ing50zb0ga9r"
+    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "1hxyzf430g95l6qz1qlq8wvizvy6j3a7a9crb3lcxd67cpbg3x7i"
+      else if stdenv.isDarwin && stdenv.isx86_64 then "0x5yqf3i8y6s5h27yr0jkpvj6ch25ckx2802dmaxlgq6gz0fx6w2"
       else throw "unsupported platform";
   };
 

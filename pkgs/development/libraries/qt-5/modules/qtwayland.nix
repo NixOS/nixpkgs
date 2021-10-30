@@ -1,7 +1,7 @@
 { qtModule, qtbase, qtquickcontrols, wayland, pkg-config }:
 
 qtModule {
-  name = "qtwayland";
+  pname = "qtwayland";
   qtInputs = [ qtbase qtquickcontrols ];
   buildInputs = [ wayland ];
   nativeBuildInputs = [ pkg-config ];

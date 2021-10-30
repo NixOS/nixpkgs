@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchPypi
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 , hypothesis
 , glibcLocales
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
     hypothesis
     glibcLocales

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1, IOKit }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   doCheck = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcsclite libusb-compat-0_1 ];
+  buildInputs = [ pcsclite libusb-compat-0_1 ]
+    ++ lib.optional stdenv.isDarwin IOKit;
 
   preBuild = ''
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");

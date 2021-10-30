@@ -17,7 +17,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.monetdb;
-        defaultText = "pkgs.monetdb";
+        defaultText = literalExpression "pkgs.monetdb";
         description = "MonetDB package to use.";
       };
 

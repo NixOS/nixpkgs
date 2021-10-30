@@ -18,7 +18,8 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.jellyfin";
+        default = pkgs.jellyfin;
+        defaultText = literalExpression "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
         '';
@@ -91,17 +92,10 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-
-          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
-          "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
         ];
       };
     };
-
-    services.jellyfin.package = mkDefault (
-      if versionAtLeast config.system.stateVersion "20.09" then pkgs.jellyfin
-        else pkgs.jellyfin_10_5
-    );
 
     users.users = mkIf (cfg.user == "jellyfin") {
       jellyfin = {

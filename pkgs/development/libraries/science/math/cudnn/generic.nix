@@ -1,7 +1,10 @@
 { version
 , srcName
-, sha256
+, hash ? null
+, sha256 ? null
 }:
+
+assert (hash != null) || (sha256 != null);
 
 { stdenv
 , lib
@@ -22,11 +25,13 @@ stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
-  src = fetchurl {
+
+  src = let
+    hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
+  in fetchurl ({
     # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
     url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
-    inherit sha256;
-  };
+  } // hash_);
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, hamlib, rtaudio, alsaLib, libpulseaudio, libjack2, libusb1, soapysdr
+, hamlib, rtaudio, alsa-lib, libpulseaudio, libjack2, libusb1, soapysdr
 } :
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ hamlib rtaudio alsaLib libpulseaudio libjack2 libusb1 soapysdr ];
+  buildInputs = [ hamlib rtaudio alsa-lib libpulseaudio libjack2 libusb1 soapysdr ];
 
   cmakeFlags = [
     "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/"

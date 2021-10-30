@@ -45,8 +45,10 @@ in
     environment.systemPackages = [ pkgs.mame ];
 
     security.wrappers."${mame}" = {
-      source = "${pkgs.mame}/bin/${mame}";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_admin,cap_net_raw+eip";
+      source = "${pkgs.mame}/bin/${mame}";
     };
 
     systemd.services.mame = {
@@ -63,5 +65,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ gnidorah ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

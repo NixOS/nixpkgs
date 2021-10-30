@@ -50,7 +50,7 @@ in
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
       sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
-    }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
+    }; in pkgs.runCommand "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
@@ -321,13 +321,13 @@ in
     };
   };
 
-  rtmp ={
+  rtmp = {
     src = fetchFromGitHub {
       name = "rtmp";
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.2.1";
-      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
+      rev = "v1.2.2";
+      sha256 = "0y45bswk213yhkc2v1xca2rnsxrhx8v6azxz9pvi71vvxcggqv6h";
     };
   };
 
@@ -452,6 +452,16 @@ in
     };
   };
 
+  upload = {
+    src = fetchFromGitHub {
+      name = "upload";
+      owner = "fdintino";
+      repo = "nginx-upload-module";
+      rev = "2.3.0";
+      sha256 = "8veZP516oC7TESO368ZsZreetbDt+1eTcamk7P1kWjU=";
+    };
+  };
+
   upstream-check = {
     src = fetchFromGitHub {
       name = "upstream-check";
@@ -499,10 +509,10 @@ in
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "e46079f51282d5a378e6911714b5f3a533bb7700";
-      sha256 = "0pzzq4xcq7jg8mxwnz7srj1nczg9ajd1b8q58qlm03lny8nd2hr5";
+      rev = "1.29";
+      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = [ pkgs.ffmpeg_3 pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
+    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {

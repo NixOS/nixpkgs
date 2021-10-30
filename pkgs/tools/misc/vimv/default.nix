@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation {
     description = "Batch-rename files using Vim";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.kmein ];
+    maintainers = with maintainers; [ kmein ];
+    mainProgram = "vimv";
   };
 }

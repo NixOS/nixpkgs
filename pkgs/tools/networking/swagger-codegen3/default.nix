@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.25";
+  version = "3.0.29";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "1rdz45kmmg60fs7ddnla1xq30nah6s6rd18fqbjbjxng8r92brnd";
+    sha256 = "sha256-sEwqUmtWaoBV0QmdP8ibm3neqWHk7+tWLAuO2FaCUtQ=";
   };
 
   dontUnpack = true;

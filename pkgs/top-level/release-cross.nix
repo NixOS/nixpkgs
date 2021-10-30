@@ -166,6 +166,9 @@ in
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
 
+  # TODO: fix cross compilation of nix{,Unstable} to netbsd and switch to common
+  x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd embedded;
+
   # we test `embedded` instead of `linuxCommon` because very few packages
   # successfully cross-compile to Redox so far
   x86_64-redox = mapTestOnCross lib.systems.examples.x86_64-unknown-redox embedded;

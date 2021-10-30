@@ -170,7 +170,7 @@ in
   ({}: {
     __raw = true;
 
-    bootstrapTools = derivation {
+    bootstrapTools = derivation ({
       inherit system;
       inherit make bash coreutils findutils
         diffutils grep patch gawk cpio sed
@@ -182,7 +182,11 @@ in
       buildInputs = [ make ];
       mkdir = "/bin/mkdir";
       ln = "/bin/ln";
-    };
+    } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+      __contentAddressed = true;
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    });
   })
 
   ({ bootstrapTools, ... }: rec {

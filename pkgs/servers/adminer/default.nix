@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, php }:
+{ lib, stdenv, fetchurl, php, nix-update-script }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.0";
+  version = "4.8.1";
   pname = "adminer";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
     url = "https://github.com/vrana/adminer/releases/download/v${version}/adminer-${version}.tar.gz";
-    sha256 = "sha256-T2LEUoIbFrMta+wP7PNci0QkFYrJZmWP3RP/JzgqUoc=";
+    sha256 = "sha256-2rkNq79sc5RBFxWuiaSlpWr0rwrnEFlnW1WcoxjoP2M=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Database management in a single PHP file";

@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "0.8.1";
   pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
-    sha256 = "05ysaxvsgps9fxc421kdifsxmc1sn6n79cjaa0k0i3fs9qqrja2b";
+    sha256 = "sha256-ktqWPtMqub/xJjRu37lUnocdfDzsdT9KxQmODVPDg0E=";
   };
 
   buildInputs = [

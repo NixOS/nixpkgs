@@ -1,9 +1,11 @@
 { lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bonnie++-1.98";
+  pname = "bonnie++";
+  version = "1.98";
+
   src = fetchurl {
-    url = "https://www.coker.com.au/bonnie++/${name}.tgz";
+    url = "https://www.coker.com.au/bonnie++/bonnie++-${version}.tgz";
     sha256 = "010bmlmi0nrlp3aq7p624sfaj5a65lswnyyxk3cnz1bqig0cn2vf";
   };
 

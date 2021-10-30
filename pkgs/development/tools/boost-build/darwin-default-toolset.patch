@@ -1,0 +1,12 @@
+diff --git a/src/build-system.jam b/src/build-system.jam
+index 60425c54..c6842217 100644
+--- a/src/build-system.jam
++++ b/src/build-system.jam
+@@ -644,7 +644,7 @@ local rule should-clean-project ( project )
+             }
+             else if [ os.name ] = MACOSX
+             {
+-                default-toolset = darwin ;
++                default-toolset = clang-darwin ;
+             }
+         }

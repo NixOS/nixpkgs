@@ -132,6 +132,16 @@ runTests {
     expected = [ 1 1 0 ];
   };
 
+  testFunctionArgsFunctor = {
+    expr = functionArgs { __functor = self: { a, b }: null; };
+    expected = { a = false; b = false; };
+  };
+
+  testFunctionArgsSetFunctionArgs = {
+    expr = functionArgs (setFunctionArgs (args: args.x) { x = false; });
+    expected = { x = false; };
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
@@ -234,6 +244,11 @@ runTests {
         int = false;
       };
     };
+  };
+
+  testEscapeXML = {
+    expr = escapeXML ''"test" 'test' < & >'';
+    expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
   };
 
 # LISTS
@@ -518,6 +533,25 @@ runTests {
       drv = "<derivation ${deriv.drvPath}>";
     };
   };
+
+  testToPrettyLimit =
+    let
+      a.b = 1;
+      a.c = a;
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { throwOnDepthLimit = false; depthLimit = 2; } a);
+      expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
+    };
+
+  testToPrettyLimitThrow =
+    let
+      a.b = 1;
+      a.c = a;
+    in {
+      expr = (builtins.tryEval
+        (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
+      expected = false;
+    };
 
   testToPrettyMultiline = {
     expr = mapAttrs (const (generators.toPretty { })) rec {

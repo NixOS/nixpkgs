@@ -1,39 +1,28 @@
-{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
-, gitSupport ? false, git ? null
-, docutilsSupport ? false, python ? null, docutils ? null
-, monotoneSupport ? false, monotone ? null
-, bazaarSupport ? false, breezy ? null
-, cvsSupport ? false, cvs ? null, cvsps ? null
-, subversionSupport ? false, subversion ? null
-, mercurialSupport ? false, mercurial ? null
+{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, ImageMagick, which, highlight
+, gitSupport ? false, git
+, docutilsSupport ? false, python, docutils
+, monotoneSupport ? false, monotone
+, bazaarSupport ? false, breezy
+, cvsSupport ? false, cvs, cvsps
+, subversionSupport ? false, subversion
+, mercurialSupport ? false, mercurial
 , extraUtils ? []
 }:
 
-assert docutilsSupport -> (python != null && docutils != null);
-assert gitSupport -> (git != null);
-assert monotoneSupport -> (monotone != null);
-assert bazaarSupport -> (breezy != null);
-assert cvsSupport -> (cvs != null && cvsps != null && perlPackages.Filechdir != null);
-assert subversionSupport -> (subversion != null);
-assert mercurialSupport -> (mercurial != null);
-
-let
-  name = "ikiwiki";
+stdenv.mkDerivation rec {
+  pname = "ikiwiki";
   version = "3.20200202.3";
-in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/i/ikiwiki/ikiwiki_${version}.orig.tar.xz";
     sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
   buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
-          TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-          RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
-          NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
+      TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
+      RpcXML XMLSimple ImageMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
+      NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay ])
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
@@ -80,11 +69,10 @@ stdenv.mkDerivation {
   checkTarget = "test";
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.peti ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

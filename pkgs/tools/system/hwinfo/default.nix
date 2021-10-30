@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "hwinfo";
-  version = "21.72";
+  version = "21.76";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = version;
-    sha256 = "sha256-T/netiZqox+qa19wH+h8cbsGbiM+9VrSEIjccrPYqws=";
+    sha256 = "sha256-C0aYEgJC+ITxWcYBLPehNz9J1Y25gS1+UDVc3+7nIKQ=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # VERSION and changelog are usually generated using Git
     # unless HWINFO_VERSION is defined (see Makefile)
     export HWINFO_VERSION="${version}"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Hardware detection tool from openSUSE";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://github.com/openSUSE/hwinfo";
     maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;

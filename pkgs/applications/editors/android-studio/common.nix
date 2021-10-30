@@ -1,6 +1,6 @@
-{ channel, pname, version, build ? null, sha256Hash }:
+{ channel, pname, version, sha256Hash }:
 
-{ alsaLib
+{ alsa-lib
 , bash
 , buildFHSUserEnv
 , cacert
@@ -55,7 +55,7 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
-  filename = "android-studio-" + (if (build != null) then "ide-${build}" else version) + "-linux.tar.gz";
+  filename = "android-studio-${version}-linux.tar.gz";
 
   androidStudio = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
@@ -65,10 +65,14 @@ let
       sha256 = sha256Hash;
     };
 
-    nativeBuildInputs = [ unzip ];
-    buildInputs = [
+    nativeBuildInputs = [
+      unzip
       makeWrapper
     ];
+
+    # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+    dontPatchShebangs = true;
+
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
@@ -121,7 +125,7 @@ let
           libXrandr
 
           # For Android emulator
-          alsaLib
+          alsa-lib
           dbus
           expat
           libpulseaudio
@@ -145,15 +149,12 @@ let
         ]}"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
-      wrapProgram $out/bin/lldb/bin/LLDBFrontend --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ncurses5
         zlib
       ]}"
     '';
   };
-
-  # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
-  dontPatchShebangs = true;
 
   desktopItem = makeDesktopItem {
     name = drvName;
@@ -213,9 +214,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ meutraa ];
-        beta = [ meutraa ];
-        canary = [ meutraa ];
+        stable = [ meutraa fabianhjr ];
+        beta = [ meutraa fabianhjr ];
+        canary = [ meutraa fabianhjr ];
         dev = canary;
       }."${channel}";
     };

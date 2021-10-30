@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytesseract";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ecfc898d00a70fcc38d2bce729de1597c67e7bc5d2fa26094714c9f5b573645";
+    sha256 = "sha256-YUigHkN1dghi6PVupxjiK10TsoFFTfRuqNrJgHeT/Fo=";
   };
 
   patches = [

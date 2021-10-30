@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.814";
+  version = "1.10.3.998";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "sha256-+jpnhuKPvxKJA8xDo9GiRKpFJdPYRJTssmZtafadEn4=";
+    sha256 = "zvIgswjAGfvaTKRb29KGKETqggjmOToCBzb99/C7chA=";
   };
 
   nativeBuildInputs = [
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  # See https://github.com/clojure/brew-install/blob/1.10.1/src/main/resources/clojure/install/linux-install.sh
+  # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
       binPath = lib.makeBinPath [ rlwrap jdk ];
@@ -29,11 +29,13 @@ stdenv.mkDerivation rec {
       echo "Installing libs into $clojure_lib_dir"
       install -Dm644 deps.edn "$clojure_lib_dir/deps.edn"
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
+      install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
       install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
 
       echo "Installing clojure and clj into $bin_dir"
       substituteInPlace clojure --replace PREFIX $out
+      substituteInPlace clj --replace BINDIR $bin_dir
       install -Dm755 clojure "$bin_dir/clojure"
       install -Dm755 clj "$bin_dir/clj"
 
@@ -46,12 +48,29 @@ stdenv.mkDerivation rec {
     '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
-    CLJ_CONFIG=$out CLJ_CACHE=$out/libexec $out/bin/clojure \
+    CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
+
+  passthru.updateScript = writeScript "update-clojure" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    # `jq -r '.[0].name'` results in `v0.0`
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/clojure/brew-install/tags" \
+      | jq -r '.[1].name')"
+
+    update-source-version clojure "$latest_version"
+  '';
+
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";

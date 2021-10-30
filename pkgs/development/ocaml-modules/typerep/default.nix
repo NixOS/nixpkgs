@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv}:
+{ lib, buildOcaml, fetchFromGitHub, type_conv }:
 
 buildOcaml rec {
   name = "typerep";
@@ -6,9 +6,11 @@ buildOcaml rec {
 
   minimumSupportedOcamlVersion = "4.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/typerep/archive/${version}.tar.gz";
-    sha256 = "4f1ab611a00aaf774e9774b26b687233e0c70d91f684415a876f094a9969eada";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "typerep";
+    rev = version;
+    sha256 = "sha256-XCdUZp9Buwmo6qPYAoPD2P/gUgyWHTR7boyecBPKlho=";
   };
 
   propagatedBuildInputs = [ type_conv ];

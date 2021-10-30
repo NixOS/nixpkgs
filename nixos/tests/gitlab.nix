@@ -14,6 +14,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       imports = [ common/user-account.nix ];
 
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
+      virtualisation.cores = 4;
+      virtualisation.useNixStoreImage = true;
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
@@ -51,15 +53,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
             host = "localhost";
             port = 143;
           };
-          pages = {
-            enabled = true;
-            host = "localhost";
-          };
+          # https://github.com/NixOS/nixpkgs/issues/132295
+          # pages = {
+          #   enabled = true;
+          #   host = "localhost";
+          # };
         };
         secrets = {
-          secretFile = pkgs.writeText "secret" "r8X9keSKynU7p4aKlh4GO1Bo77g5a7vj";
-          otpFile = pkgs.writeText "otpsecret" "Zu5hGx3YvQx40DvI8WoZJQpX2paSDOlG";
-          dbFile = pkgs.writeText "dbsecret" "lsGltKWTejOf6JxCVa7nLDenzkO9wPLR";
+          secretFile = pkgs.writeText "secret" "Aig5zaic";
+          otpFile = pkgs.writeText "otpsecret" "Riew9mue";
+          dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
       };
@@ -90,7 +93,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       waitForServices = ''
         gitlab.wait_for_unit("gitaly.service")
         gitlab.wait_for_unit("gitlab-workhorse.service")
-        gitlab.wait_for_unit("gitlab-pages.service")
+        # https://github.com/NixOS/nixpkgs/issues/132295
+        # gitlab.wait_for_unit("gitlab-pages.service")
         gitlab.wait_for_unit("gitlab-mailroom.service")
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-sidekiq.service")
@@ -102,7 +106,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       # `doSetup` is is true.
       test = doSetup: ''
         gitlab.succeed(
-            "curl -isSf http://gitlab | grep -i location | grep -q http://gitlab/users/sign_in"
+            "curl -isSf http://gitlab | grep -i location | grep http://gitlab/users/sign_in"
         )
         gitlab.succeed(
             "${pkgs.sudo}/bin/sudo -u gitlab -H gitlab-rake gitlab:check 1>&2"
@@ -143,7 +147,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
       )
       gitlab.succeed("systemd-tmpfiles --create")
       gitlab.succeed("rm -rf ${nodes.gitlab.config.services.postgresql.dataDir}")
-      gitlab.systemctl("start gitlab-config.service gitlab-postgresql.service")
+      gitlab.systemctl("start gitlab-config.service gitaly.service gitlab-postgresql.service")
+      gitlab.wait_for_file("${nodes.gitlab.config.services.gitlab.statePath}/tmp/sockets/gitaly.socket")
       gitlab.succeed(
           "sudo -u gitlab -H gitlab-rake gitlab:backup:restore RAILS_ENV=production BACKUP=dump force=yes"
       )

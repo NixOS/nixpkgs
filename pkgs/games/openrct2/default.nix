@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "0.3.3";
+  version = "0.3.4.1";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "01nanpbz5ycdhkyd46fjfvj18sw729l4vk7xg12600f9rjngjk76";
+    sha256 = "0zjqn47pbgd2nrrbdl3lqk1mcdvwvvpjby2g0gfv6ssfw72fji7d";
   };
 
   objects-src = fetchFromGitHub {
@@ -29,8 +29,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  inherit version;
   pname = "openrct2";
+  inherit version;
 
   src = openrct2-src;
 
@@ -58,22 +58,22 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  postUnpack = ''
-    cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${title-sequences-src} $sourceRoot/data/sequence
-  '';
-
   cmakeFlags = [
     "-DDOWNLOAD_OBJECTS=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
+  postUnpack = ''
+    cp -r ${objects-src}         $sourceRoot/data/object
+    cp -r ${title-sequences-src} $sourceRoot/data/sequence
+  '';
+
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with lib; {
-    description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
+    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];
   };

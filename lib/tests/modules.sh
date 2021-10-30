@@ -175,6 +175,9 @@ checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshort
 ## submoduleWith should merge all modules in one swoop
 checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+# Should also be able to evaluate the type name (which evaluates freeformType,
+# which evaluates all the modules defined by the type)
+checkConfigOutput "submodule" options.submodule.type.description ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
@@ -251,8 +254,10 @@ checkConfigOutput / config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput null config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput 0.1 config.value.float ./types-anything/equal-atoms.nix
 # Functions can't be merged together
-checkConfigError "The option .* has conflicting definition values" config.value.multiple-lambdas ./types-anything/functions.nix
+checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
 checkConfigOutput '<LAMBDA>' config.value.single-lambda ./types-anything/functions.nix
+checkConfigOutput 'null' config.applied.merging-lambdas.x ./types-anything/functions.nix
+checkConfigOutput 'null' config.applied.merging-lambdas.y ./types-anything/functions.nix
 # Check that all mk* modifiers are applied
 checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix
 checkConfigOutput '{ }' config.value.mkiftrue ./types-anything/mk-mods.nix

@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
+, installShellFiles
 , pkg-config
 , python3
 , dbus
@@ -8,20 +9,21 @@
 , gpgme
 , gtk3
 , libxcb
+, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "prs";
-  version = "0.2.7";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
     rev = "v${version}";
-    sha256 = "sha256-1Jrgf5UW6k0x3q6kQIB6Q7moOhConEnUU9r+21W5Uu8=";
+    sha256 = "sha256-90Ed/mafACSJvH+DjCbdXs3eeyT+pGflRzDD9l3b0/s=";
   };
 
-  cargoSha256 = "sha256-N3pLW/OGeurrl+AlwdfbZ3T7WzEOAuyUMdIR164Xp7k=";
+  cargoSha256 = "sha256-5teiF8s11Ml8UtbVn6fXur2OQzE52JZnsgyDihbEFTQ=";
 
   postPatch = ''
     # The GPGME backend is recommended
@@ -31,9 +33,22 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  nativeBuildInputs = [ gpgme pkg-config python3 ];
+  nativeBuildInputs = [ gpgme installShellFiles pkg-config python3 ];
 
-  buildInputs = [ dbus glib gpgme gtk3 libxcb ];
+  buildInputs = [
+    dbus
+    glib
+    gpgme
+    gtk3
+    libxcb
+    libxkbcommon
+  ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd prs --$shell <($out/bin/prs internal completions $shell --stdout)
+    done
+  '';
 
   meta = with lib; {
     description = "Secure, fast & convenient password manager CLI using GPG and git to sync";

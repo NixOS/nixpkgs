@@ -1,5 +1,5 @@
 diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index c44f867746..c9eda34e26 100644
+index be9320210e..6eb50aae95 100644
 --- a/bin/internal/shared.sh
 +++ b/bin/internal/shared.sh
 @@ -218,8 +218,6 @@ function shared::execute() {
@@ -12,16 +12,23 @@ index c44f867746..c9eda34e26 100644
    case "$BIN_NAME" in
      flutter*)
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 3dc7929dd1..e65d70d55b 100644
+index 550a75bc65..c98a4591cc 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -246,11 +246,7 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -244,7 +244,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
            globals.flutterUsage.suppressAnalytics = true;
          }
  
 -        globals.flutterVersion.ensureVersionFile();
          final bool machineFlag = topLevelResults['machine'] as bool;
--        if (topLevelResults.command?.name != 'upgrade' && topLevelResults['version-check'] as bool && !machineFlag) {
+         final bool ci = await globals.botDetector.isRunningOnBot;
+         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
+@@ -253,10 +252,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults['version-check'] as bool;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed('version-check') && versionCheckFlag;
+ 
+-        if (topLevelResults.command?.name != 'upgrade' &&
+-            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
 -          await globals.flutterVersion.checkFlutterVersionFreshness();
 -        }
  

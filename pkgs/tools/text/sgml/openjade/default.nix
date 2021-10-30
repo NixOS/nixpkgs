@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, opensp, perl }:
 
 stdenv.mkDerivation rec {
-  name = "openjade-1.3.2";
+  pname = "openjade";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openjade/${name}.tar.gz";
+    url = "mirror://sourceforge/openjade/openjade-${version}.tar.gz";
     sha256 = "1l92sfvx1f0wmkbvzv1385y1gb3hh010xksi1iyviyclrjb7jb8x";
   };
 

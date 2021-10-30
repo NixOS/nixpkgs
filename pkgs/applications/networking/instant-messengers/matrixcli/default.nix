@@ -1,6 +1,6 @@
 { lib, fetchgit
   , buildPythonApplication, buildPythonPackage
-  , pygobject3, pytestrunner, requests, responses, pytest, python-olm
+  , pygobject3, pytest-runner, requests, responses, pytest, python-olm
   , canonicaljson, olm
 }:
 let
@@ -20,7 +20,7 @@ let
 
     propagatedBuildInputs = [
       requests responses olm python-olm canonicaljson
-      pytestrunner pytest
+      pytest-runner pytest
     ];
 
     doCheck = false;

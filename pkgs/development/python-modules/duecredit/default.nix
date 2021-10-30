@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.8.1";
+  version = "0.9.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43b3f01ab5fb2bf2ecc27d3fcf92b873c6b288f44becef3e2e87c96cb89d7b01";
+    sha256 = "f6192ce9315b35f6a67174761291e61d0831e496e8ff4acbc061731e7604faf8";
   };
 
   # bin/duecredit requires setuptools at runtime

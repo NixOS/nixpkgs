@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
     ./bash_completion_datadir.patch
   ];
   postPatch = ''
+    # Fix build with Xcode 12.5 toolchain/case-insensitive filesystems
+    # Backport of https://github.com/mobile-shell/mosh/commit/12199114fe4234f791ef4c306163901643b40538;
+    # remove on next upstream release.
+    patch -p0 < ${fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/70ca3f65e622c17582fd938602d800157ed951c3/net/mosh/files/patch-version-subdir.diff";
+      sha256 = "1yyh6d07y9zbdx4fb0r56zkq9nd9knwzj22v4dfi55k4k42qxapd";
+    }}
+
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"
     substituteInPlace scripts/mosh.pl \

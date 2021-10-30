@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, doxygen, darwin
-, zlib }:
+{ lib, stdenv, fetchurl, cmake, doxygen, zlib, Foundation, Carbon }:
 
 let
   generic = version: sha256:
@@ -15,7 +14,7 @@ let
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ zlib ]
-      ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
+      ++ lib.optionals stdenv.isDarwin [ Foundation Carbon ];
 
     patchPhase = ''
       sed s,-Werror,, -i CMakeLists.txt

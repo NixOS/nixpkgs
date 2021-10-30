@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "waitress";
-  version = "1.4.4";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bb436508a7487ac6cb097ae7a7fe5413aefca610550baf58f0940e51ecfb261";
+    sha256 = "69e1f242c7f80273490d3403c3976f3ac3b26e289856936d1f620ed48f321897";
   };
 
   doCheck = false;

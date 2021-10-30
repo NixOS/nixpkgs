@@ -1,7 +1,9 @@
 { lib
 , mkDerivation
+, makeDesktopItem
 , fetchurl
 , pkg-config
+, copyDesktopItems
 , cairo
 , freetype
 , ghostscript
@@ -26,7 +28,7 @@ mkDerivation rec {
 
   sourceRoot = "${pname}-${version}/src";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
 
   buildInputs = [
     cairo
@@ -42,19 +44,39 @@ mkDerivation rec {
     zlib
   ];
 
-  IPEPREFIX=placeholder "out";
-  URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
+  IPEPREFIX = placeholder "out";
+  URWFONTDIR = "${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 
-  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin"  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
 
   enableParallelBuilding = true;
 
-  # TODO: make .desktop entry
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Ipe";
+      genericName = "Drawing editor";
+      comment = "A drawing editor for creating figures in PDF format";
+      exec = "ipe";
+      icon = "ipe";
+      mimeType = "text/xml;application/pdf";
+      categories = "Graphics;Qt;";
+      extraDesktopEntries = {
+        StartupWMClass = "ipe";
+        StartupNotify = "true";
+      };
+    })
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    ln -s $out/share/ipe/${version}/icons/icon_128x128.png $out/share/icons/hicolor/128x128/apps/ipe.png
+  '';
 
   meta = with lib; {
     description = "An editor for drawing figures";
-    homepage = "http://ipe.otfried.org";  # https not available
+    homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.

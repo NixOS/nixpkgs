@@ -1,4 +1,4 @@
-{ lib, supportedGhcVersions ? [ "884" "8104" ], stdenv, haskellPackages
+{ lib, supportedGhcVersions ? [ "884" "8107" "901" ], stdenv, haskellPackages
 , haskell }:
 #
 # The recommended way to override this package is
@@ -10,8 +10,6 @@
 let
   inherit (lib) concatStringsSep concatMapStringsSep take splitString;
   getPackages = version: haskell.packages."ghc${version}";
-  getMajorVersion = packages:
-    concatStringsSep "." (take 2 (splitString "." packages.ghc.version));
   tunedHls = hsPkgs:
     haskell.lib.justStaticExecutables
     (haskell.lib.overrideCabal hsPkgs.haskell-language-server (old: {
@@ -27,7 +25,6 @@ let
     let packages = getPackages version;
     in [
       "haskell-language-server-${packages.ghc.version}"
-      "haskell-language-server-${getMajorVersion packages}"
     ];
   makeSymlinks = version:
     concatMapStringsSep "\n" (x:

@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, flex }:
 
 stdenv.mkDerivation rec {
-  name = "splint-3.1.2";
+  pname = "splint";
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "http://www.splint.org/downloads/${name}.src.tgz";
+    url = "https://www.splint.org/downloads/${pname}-${version}.src.tgz";
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 

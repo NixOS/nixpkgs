@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex, cmake, libpcap }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex, cmake, libpcap }:
 stdenv.mkDerivation rec {
   pname = "packetdrill";
   version = "unstable-2020-08-22";
@@ -9,6 +9,16 @@ stdenv.mkDerivation rec {
     rev = "68a34fa73cf221e5f52d6fa4f203bcd93062be1b";
     sha256 = "0djkwb6l2959f44d98vwb092rghf0qmii8391vrpxqb99j6pv4h6";
   };
+  patches = [
+    # Upstream fix for -fno-common toolchains
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/google/packetdrill/commit/c08292838de81a71ee477d5bf9d95b1130a1292b.patch";
+      sha256 = "1irbar1zkydmgqb12r3xd80dwj2jfxnxayxpb4nmbma8xm7knb10";
+      stripLen = 3;
+    })
+  ];
+
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';

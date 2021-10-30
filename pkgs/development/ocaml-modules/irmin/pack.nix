@@ -1,5 +1,5 @@
 { lib, buildDunePackage
-, alcotest-lwt, index, irmin, irmin-layers, irmin-test, ocaml_lwt, fpath
+, alcotest-lwt, index, irmin, irmin-layers, irmin-test, ocaml_lwt, fpath, optint
 }:
 
 buildDunePackage rec {
@@ -12,7 +12,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   buildInputs = [ fpath ];
-  propagatedBuildInputs = [ index irmin irmin-layers ocaml_lwt ];
+  propagatedBuildInputs = [ index irmin irmin-layers ocaml_lwt optint ];
 
   checkInputs = [ alcotest-lwt irmin-test ];
 

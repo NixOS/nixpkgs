@@ -15,16 +15,25 @@ buildPythonPackage rec {
     sha256 = "1immnj532bnnrh1qmk5q3lsw3san8qfk9kxy1cpmy0knmfcwp70c";
   };
 
-  # arch doesn't report frequency is the same way
-  # tests segfaults on darwin https://github.com/giampaolo/psutil/issues/1715
-  doCheck = !stdenv.isDarwin && stdenv.isx86_64;
+  # We have many test failures on various parts of the package:
+  #  - segfaults on darwin:
+  #    https://github.com/giampaolo/psutil/issues/1715
+  #  - swap (on linux) might cause test failures if it is fully used:
+  #    https://github.com/giampaolo/psutil/issues/1911
+  #  - some mount paths are required in the build sanbox to make the tests succeed:
+  #    https://github.com/giampaolo/psutil/issues/1912
+  doCheck = false;
   checkInputs = [ pytestCheckHook ]
-    ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
+  ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
+  # In addition to the issues listed above there are some that occure due to
+  # our sandboxing which we can work around by disabling some tests:
+  # - cpu_times was flaky on darwin
+  # - the other disabled tests are likely due to sanboxing (missing specific errors)
   pytestFlagsArray = [
     "$out/${python.sitePackages}/psutil/tests/test_system.py"
   ];
-  # disable tests which don't work in sandbox
-  # cpu_times is flakey on darwin
+
+  # Note: $out must be referenced as test import paths are relative
   disabledTests = [
     "user"
     "disk_io_counters"

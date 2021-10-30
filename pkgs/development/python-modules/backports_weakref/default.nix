@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 # , backports
 , python
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "bc4170a29915f8b22c9e7c4939701859650f2eb84184aee80da329ac0b9825c2";
   };
 
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
 #   checkInputs = [ backports ];
 
   # Requires backports package

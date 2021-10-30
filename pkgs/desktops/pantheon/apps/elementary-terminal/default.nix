@@ -12,6 +12,7 @@
 , gtk3
 , libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.2";
+  version = "6.0.0";
 
   repoName = "terminal";
 
@@ -31,8 +32,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-giVmL0zYEVYJ40ZBQ9dDb4hOx4HaYRt7tUTOu37lMYU=";
+    sha256 = "08akr4sv4jy9kd4s26kib6j7i8hc3vs0sp71fifv7ww4mi9cm6jc";
   };
+
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/terminal/pull/611
+    (fetchpatch {
+      url = "https://github.com/elementary/terminal/commit/4f6f2d9f58642ed904240c247cc0a0846baecb6b.patch";
+      sha256 = "04pbd72migxw8i949v3bmw8kfi5nr02rjcwfrx3b6xkiic9825sv";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -57,6 +67,7 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     libnotify
     pcre2
     vte
@@ -79,6 +90,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

@@ -1,10 +1,11 @@
 { lib, stdenv
 , fetchurl
-, gnome3
+, gnome
 , pkg-config
 , meson
 , ninja
 , exiv2
+, libheif
 , libjpeg
 , libtiff
 , gst_all_1
@@ -32,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.10.2";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "/erkKBg3j5s8qwBgTu61t8Cnpez+ad4IuZOGd0ZDXJM=";
+    sha256 = "sha256-Pe/8AwOE5ktXNhxDfHm0ga4Uie9EyHroVugbsQ2OOD8=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     exiv2
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     json-glib
     lcms2
     libchamplain
+    libheif
     libjpeg
     libraw
     librsvg
@@ -95,8 +97,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

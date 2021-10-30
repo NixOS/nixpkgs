@@ -30,9 +30,11 @@ OCTANT_VER=$(curl -Ls -w "%{url_effective}" -o /dev/null https://github.com/vmwa
 OCTANT_LINUX_X64_SHA256=$(fetch_arch "$OCTANT_VER" "Linux-64bit")
 OCTANT_LINUX_AARCH64_SHA256=$(fetch_arch "$OCTANT_VER" "Linux-arm64")
 OCTANT_DARWIN_X64_SHA256=$(fetch_arch "$OCTANT_VER" "macOS-64bit")
+OCTANT_DARWIN_AARCH64_SHA256=$(fetch_arch "$OCTANT_VER" "macOS-arm64")
 
 sed -i "s/version = \".*\"/version = \"$OCTANT_VER\"/" "$NIX_DRV"
 
 replace_sha "x86_64-linux" "$OCTANT_LINUX_X64_SHA256"
 replace_sha "aarch64-linux" "$OCTANT_LINUX_AARCH64_SHA256"
 replace_sha "x86_64-darwin" "$OCTANT_DARWIN_X64_SHA256"
+replace_sha "aarch64-darwin" "$OCTANT_DARWIN_AARCH64_SHA256"

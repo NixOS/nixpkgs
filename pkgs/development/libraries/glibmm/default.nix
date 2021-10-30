@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin, meson, ninja }:
+{ lib, stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome, darwin, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.64.5";
+  version = "2.66.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UI/IbiyRQRmKoWwiWxb9a5EZF8DTgXYCZShE0Jc+o4Y=";
+    sha256 = "sha256-sqTNe5rph3lMu1ob7MEM7LZRgrm7hBhoYl1ruxI+2x0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
   ]);
   propagatedBuildInputs = [ glib libsigcxx ];
 
-  enableParallelBuilding = true;
-
   doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

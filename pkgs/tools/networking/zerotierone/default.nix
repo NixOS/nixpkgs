@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
-  version = "1.6.4";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "06b6k1rzqkd7cdl7n0gz5ky48fs2nhn0q2qxx1rww38vbfc7lpmf";
+    sha256 = "sha256-nr5qvo/SLzQ16B/83lCzlQ5zduPGxOhfqWat/Grsf/Q=";
   };
 
   preConfigure = ''
-      patchShebangs ./doc/build.sh
-      substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+    patchShebangs ./doc/build.sh
+    substituteInPlace ./doc/build.sh \
+      --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
-      substituteInPlace ./make-linux.mk \
-        --replace 'armv5' 'armv6'
+    substituteInPlace ./make-linux.mk \
+      --replace 'armv5' 'armv6'
   '';
 
 

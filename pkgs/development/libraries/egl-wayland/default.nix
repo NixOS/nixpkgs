@@ -4,6 +4,7 @@
 , pkg-config
 , meson
 , ninja
+, wayland-scanner
 , libX11
 , mesa
 , libGL
@@ -40,7 +41,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.6";
+  version = "1.1.7";
 
   outputs = [ "out" "dev" ];
 
@@ -48,13 +49,18 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "1n9lg8hpjgxlf7dpddkjhbslsfd0symla2wk6jjmnl9n9jv2gmzk";
+    sha256 = "sha256-pqpJ6Uo50BouBU0wGaL21VH5rDiVHKAvJtfzL0YInXU=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

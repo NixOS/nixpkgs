@@ -27,6 +27,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "events>=0.3,<0.4" "events>=0.3,<0.5"
+  '';
+
   pythonImportsCheck = [ "eve" ];
 
   # tests call a running mongodb instance

@@ -1,14 +1,51 @@
-{ lib, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-with python3.pkgs;
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # Upstream is pinning releases incl. dependencies of their dependencies
+      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.31.0";
+        src = fetchFromGitHub {
+          owner = "jstasiak";
+          repo = "python-zeroconf";
+          rev = version;
+          sha256 = "158dqay74zvnz6kmpvip4ml0kw59nf2aaajwgaamx0zc8ci1p5pj";
+        };
+      });
+
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
+        };
+      });
+
+      PyChromecast = super.PyChromecast.overridePythonAttrs (oldAttrs: rec {
+        version = "9.2.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "02ig2wf2yyrnnl88r2n13s1naskwsifwgx3syifmcxygflsmjd3d";
+        };
+      });
+    };
+  };
+in
+with py.pkgs;
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.1";
+  version = "0.12.2";
+
+  disabled = python3.pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fef58bf7a8ebaba98399d1077cc4615f53d0196aab2a989df369a66f7111963b";
+    sha256 = "sha256-BOETKTkcbLOu5SubiejswU7D47qWS13QZ7rU9x3jf5Y=";
   };
 
   propagatedBuildInputs = [
@@ -20,13 +57,13 @@ buildPythonApplication rec {
   ];
 
   doCheck = false; # attempts to access various URLs
+
   pythonImportsCheck = [ "catt" ];
 
   meta = with lib; {
-    description = "Cast All The Things allows you to send videos from many, many online sources to your Chromecast";
+    description = "Tool to send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
-

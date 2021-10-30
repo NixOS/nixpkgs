@@ -2,25 +2,28 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "systembridge";
-  version = "1.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector-py";
     rev = "v${version}";
-    sha256 = "0vyfi7nyzkzsgg84n5wh4hzwvx6fybgqdzbabnsmvszb9sm1vlb2";
+    sha256 = "sha256-VR5juaZdZaEo7S0XXJkspcKmH1alitNIWmI0g/dFBbM=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    websockets
   ];
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "systembridge" ];
 
   meta = with lib; {

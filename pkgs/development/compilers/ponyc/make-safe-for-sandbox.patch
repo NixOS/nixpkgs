@@ -1,21 +1,21 @@
---- a/lib/CMakeLists.txt	2020-09-27 02:39:12.862940179 +0000
-+++ b/lib/CMakeLists.txt	2020-09-27 02:39:16.451957865 +0000
-@@ -10,12 +10,12 @@
+--- a/lib/CMakeLists.txt.orig	2021-07-07 13:40:20.209410160 -0400
++++ a/lib/CMakeLists.txt	2021-07-07 13:43:11.886969662 -0400
+@@ -15,12 +15,12 @@
  endif()
  
  ExternalProject_Add(gbenchmark
--    URL https://github.com/google/benchmark/archive/v1.5.0.tar.gz
-+    SOURCE_DIR gbenchmark-prefix/src/benchmark
+-    URL ${PONYC_GBENCHMARK_URL}
++	SOURCE_DIR gbenchmark-prefix/src/benchmark
      CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_CXX_FLAGS=-fpic --no-warn-unused-cli
  )
  
  ExternalProject_Add(googletest
 -    URL https://github.com/google/googletest/archive/release-1.8.1.tar.gz
-+    URL @googletest@
++	URL @googletest@
      CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_CXX_FLAGS=-fpic -Dgtest_force_shared_crt=ON --no-warn-unused-cli
  )
  
-@@ -28,75 +28,6 @@
+@@ -33,75 +33,6 @@
      COMPONENT library
  )
  
@@ -30,12 +30,12 @@
 -        option(GIT_SUBMODULE "Check submodules during build" ON)
 -        if(GIT_SUBMODULE)
 -            message(STATUS "Updating submodules...")
--            execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+-            execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --depth 1
 -                            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 -                            RESULT_VARIABLE git_submod_result)
 -            #message("git_submod_result ${git_submod_result}")
 -            if(NOT git_submod_result EQUAL "0")
--                message(FATAL_ERROR "git submodule update --init --recursive failed with ${git_submod_result}, please checkout submodules")
+-                message(FATAL_ERROR "git submodule update --init --recursive --depth 1 failed with ${git_submod_result}, please checkout submodules")
 -            endif()
 -
 -            # we check to make sure the submodule hash matches

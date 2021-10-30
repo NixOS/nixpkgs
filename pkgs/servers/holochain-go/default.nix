@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "holochain-go${version}";
+  pname = "holochain-go";
   version = "0.1.0-alpha";
   rev = "a17510b910a7a377441c152b8dccdbae1999f63f";
 

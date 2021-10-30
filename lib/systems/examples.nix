@@ -70,6 +70,15 @@ rec {
     useAndroidPrebuilt = true;
   };
 
+  aarch64-android = {
+    config = "aarch64-unknown-linux-android";
+    sdkVer = "30";
+    ndkVer = "21";
+    libc = "bionic";
+    useAndroidPrebuilt = false;
+    useLLVM = true;
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
 
   pogoplug4 = {
@@ -133,6 +142,18 @@ rec {
   or1k = {
     config = "or1k-elf";
     libc = "newlib";
+  };
+
+  m68k = {
+    config = "m68k-unknown-linux-gnu";
+  };
+
+  s390 = {
+    config = "s390-unknown-linux-gnu";
+  };
+
+  s390x = {
+    config = "s390x-unknown-linux-gnu";
   };
 
   arm-embedded = {
@@ -217,6 +238,7 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
   };
 
@@ -226,7 +248,14 @@ rec {
     sdkVer = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
+    darwinPlatform = "ios-simulator";
     useiOSPrebuilt = true;
+  };
+
+  aarch64-darwin = {
+    config = "aarch64-apple-darwin";
+    xcodePlatform = "MacOSX";
+    platform = {};
   };
 
   #

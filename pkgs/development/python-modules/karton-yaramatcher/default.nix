@@ -8,25 +8,19 @@
 
 buildPythonPackage rec {
   pname = "karton-yaramatcher";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "093h5hbx2ss4ly523gvf10a5ky3vvin6wipigvhx13y1rdxl6c9n";
+    sha256 = "0mv8v1gk6p21pw9kx6cxr76l6c5fxd3p6dk85cwfzz100h8mdvar";
   };
 
   propagatedBuildInputs = [
     karton-core
     yara-python
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "karton-core==4.0.5" "karton-core" \
-      --replace "yara-python==4.0.2" "yara-python" \
-  '';
 
   checkPhase = ''
     runHook preCheck

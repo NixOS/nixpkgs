@@ -132,7 +132,7 @@ in
       inherit lib nativePrefix;
       bintools = import ../../build-support/bintools-wrapper {
         name = "bintools";
-        inherit stdenvNoCC nativePrefix;
+        inherit lib stdenvNoCC nativePrefix;
         nativeTools = true;
         nativeLibc = true;
       };

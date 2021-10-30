@@ -3,7 +3,7 @@
 , libX11
 , libXi
 , libGL
-, alsaLib
+, alsa-lib
 , SDL2
 , autoPatchelfHook
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libX11
     libXi
     libGL
-    alsaLib
+    alsa-lib
     SDL2
   ];
 

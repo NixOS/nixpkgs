@@ -1,29 +1,29 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, openssl
-, pkg-config
-, installShellFiles
+, stdenv
 , enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellFiles
+, pkg-config
 , Security
 , libiconv
+, openssl
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.2.6";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fl3lingb4wdh6bz4calzbibixg44wnnwi1qh0js1ijp8b6ll560";
+    sha256 = "sha256-BmV4kekl0QDbX/ueSrWM5jRvqr6WQeZIs7hiXhiHBSI=";
   };
 
-  cargoSha256 = "10p8di71w7hn36b1994wgk33fnj641lsp80zmccinlg5fiwyzncx";
+  cargoSha256 = "sha256-lu5xVuAw9yTeQr3gpiW5g5bdm7Alf0YXmlbSkPaXhk0=";
 
-  nativeBuildInputs = [ ]
-    ++ lib.optionals (enableCompletions) [ installShellFiles ]
+  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   buildInputs =
@@ -34,9 +34,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ];
 
-  # The completions are correctly installed, and there is issue that himalaya
-  # generate empty completion files without mail configure.
-  # This supposed to be fixed in 0.2.7
   postInstall = lib.optionalString enableCompletions ''
     # Install shell function
     installShellCompletion --cmd himalaya \
@@ -48,6 +45,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI email client written in Rust";
     homepage = "https://github.com/soywod/himalaya";
+    changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yanganto ];
   };

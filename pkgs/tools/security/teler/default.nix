@@ -16,9 +16,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-TQjwPem+RMuoF5T02CL/CTvBS6W7Q786gTvYUFIvxjE=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X ktbs.dev/teler/common.Version=${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X ktbs.dev/teler/common.Version=${version}"
+  ];
 
   # test require internet access
   doCheck = false;

@@ -10,6 +10,11 @@
 , systemd
 , zlib
 , pcre
+, libb64
+, libutp
+, miniupnpc
+, dht
+, libnatpmp
   # Build options
 , enableGTK3 ? false
 , gtk3
@@ -17,10 +22,12 @@
 , wrapGAppsHook
 , enableQt ? false
 , qt5
+, nixosTests
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
 , installLib ? false
+, apparmorRulesFromClosure
 }:
 
 let
@@ -37,6 +44,8 @@ in stdenv.mkDerivation {
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
+
+  outputs = [ "out" "apparmor" ];
 
   cmakeFlags =
     let
@@ -65,6 +74,11 @@ in stdenv.mkDerivation {
     libevent
     zlib
     pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
@@ -73,6 +87,37 @@ in stdenv.mkDerivation {
   ;
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.transmission-daemon <<EOF
+    include <tunables/global>
+    $out/bin/transmission-daemon {
+      include <abstractions/base>
+      include <abstractions/nameservice>
+      include <abstractions/ssl_certs>
+      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
+      ] ++ lib.optionals enableSystemd [ systemd ]
+        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+      )}"
+      r @{PROC}/sys/kernel/random/uuid,
+      r @{PROC}/sys/vm/overcommit_memory,
+      r @{PROC}/@{pid}/environ,
+      r @{PROC}/@{pid}/mounts,
+      rwk /tmp/tr_session_id_*,
+
+      r $out/share/transmission/web/**,
+
+      include <local/bin.transmission-daemon>
+    }
+    EOF
+  '';
+
+  passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
+    smoke-test = nixosTests.bittorrent;
+  };
 
   meta = {
     description = "A fast, easy and free BitTorrent client";
@@ -88,7 +133,7 @@ in stdenv.mkDerivation {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "http://www.transmissionbt.com/";
-    license = lib.licenses.gpl2; # parts are under MIT
+    license = lib.licenses.gpl2Plus; # parts are under MIT
     maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
     platforms = lib.platforms.unix;
   };

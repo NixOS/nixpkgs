@@ -1,13 +1,13 @@
 { stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
   # build dependencies
-  alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
+  alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
   freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
   xorg, systemd
 }:
 let
 
   deps = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core

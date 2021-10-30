@@ -4,12 +4,14 @@
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg_3, libmusicbrainz3, normalize, sox, transcode, kinit
+, ffmpeg, libmusicbrainz3, normalize, sox, transcode, kinit
 }:
 
 mkDerivation {
   pname = "k3b";
   meta = with lib; {
+    homepage = "https://apps.kde.org/k3b/";
+    description = "Disk burning application";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;
@@ -25,7 +27,7 @@ mkDerivation {
     # cd/dvd
     cdparanoia libdvdcss libdvdread
     # others
-    ffmpeg_3 libmusicbrainz3 shared-mime-info
+    ffmpeg libmusicbrainz3 shared-mime-info
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =

@@ -1,25 +1,27 @@
-{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome3 }:
+{ lib, stdenv, fetchurl, atk, glibmm, pkg-config, gnome, meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "atkmm";
-  version = "2.28.0";
+  version = "2.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fnxrspxkhhbrjphqrpvl3zjm66n50s4cywrrrwkhbflgy8zqk2c";
+    sha256 = "sha256-oLtJdlzszCk6ssZzW6EAQxgH04T/oUwuvTDgeZP9L6Q=";
   };
 
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ atk glibmm ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson python3 ninja ];
 
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

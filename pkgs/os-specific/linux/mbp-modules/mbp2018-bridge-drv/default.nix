@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mbp2018-bridge-drv";
-  version = "0.01";
+  version = "2020-01-31";
 
   src = fetchFromGitHub {
     owner = "MCMrARM";
     repo = "mbp2018-bridge-drv";
-    rev = "${version}";
-    sha256 = "0ac2l51ybfrvg8m36x67rsvgjqs1vwp7c89ssvbjkrcq3y4qdb53";
+    rev = "b43fcc069da73e051072fde24af4014c9c487286";
+    sha256 = "sha256-o6yGiR+Y5SnX1johdi7fQWP5ts7HdDMqeju75UOhgik=";
   };
 
   buildPhase = ''
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ lib.maintainers.hlolli ];
+    broken = kernel.kernelOlder "5.4";
   };
 }

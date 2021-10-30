@@ -1,20 +1,20 @@
 { lib, fetchFromGitHub
 , meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify
+, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run-native
+, steam-run, xdg-utils, pciutils, cabextract, wineWowPackages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2.1.1";
+  version = "2021.7.28-treviso-2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "1hbjnd06h0h47gcwb1s1b9py5nwmia1m35da6zydbl70vs75imhn";
+    sha256 = "0kvwcajm9izvkwfg7ir7bks39bpc665idwa8mc8d536ajyjriysn";
   };
 
   postPatch = ''
@@ -39,17 +39,27 @@ python3Packages.buildPythonApplication rec {
     gsettings-desktop-schemas
     gspell
     gtk3
+    libhandy
     libnotify
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pyyaml
+    requests
     pycairo
     pygobject3
     lxml
     dbus-python
     gst-python
     liblarch
-  ] ++ [ steam-run-native ];
+    patool
+  ] ++ [
+    steam-run
+    xdg-utils
+    pciutils
+    cabextract
+    wineWowPackages.minimal
+  ];
 
   format = "other";
   strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
@@ -59,8 +69,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace build-aux/meson/postinstall.py \
       --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
     substituteInPlace src/runner.py \
-      --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
-      --replace " {dxvk_setup}" " ${steam-run-native}/bin/steam-run {dxvk_setup}"
+      --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
+      --replace " {dxvk_setup}" " ${steam-run}/bin/steam-run {dxvk_setup}"
+      substituteInPlace src/runner_utilities.py \
+        --replace " {runner}" " ${steam-run}/bin/steam-run {runner}" \
   '';
 
   preFixup = ''
@@ -69,9 +81,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
-    homepage = "https://github.com/bottlesdevs/Bottles";
+    homepage = "https://usebottles.com/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ bloomvdomino shamilton ];
     platforms = platforms.linux;
   };
 }

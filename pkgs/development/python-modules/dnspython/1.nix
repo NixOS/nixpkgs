@@ -1,4 +1,8 @@
-{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "dnspython";
@@ -12,11 +16,11 @@ buildPythonPackage rec {
 
   # needs networking for some tests
   doCheck = false;
+  pythonImportsCheck = [ "dns" ];
 
-  meta = {
-    description = "A DNS toolkit for Python 3.x";
+  meta = with lib; {
+    description = "A DNS toolkit for Python";
     homepage = "http://www.dnspython.org";
-    # BSD-like, check https://www.dnspython.org/LICENSE for details
-    license = lib.licenses.free;
+    license = with licenses; [ isc ];
   };
 }

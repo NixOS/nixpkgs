@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-12_x, pandoc }:
+{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-12_x, pandoc, CoreServices }:
 
 with lib;
 
@@ -24,6 +24,7 @@ let
   nodePkg = nodePackages.package.override {
     src = "${sourcePkg}/viewer";
     postInstall = "npm run build";
+    buildInputs = optionals stdenv.isDarwin [ CoreServices ];
   };
 
 in

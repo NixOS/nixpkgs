@@ -1,4 +1,4 @@
-{ lib, appleDerivation, fetchzip, bsdmake, perl, flex, bison
+{ lib, stdenv, buildPackages, appleDerivation, fetchzip, bsdmake, perl, flex, bison
 }:
 
 # this derivation sucks
@@ -16,6 +16,7 @@ let recentAdvCmds = fetchzip {
 };
 
 in appleDerivation {
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bsdmake perl bison flex ];
   buildInputs = [ flex ];
 
@@ -61,7 +62,7 @@ in appleDerivation {
 
     bsdmake -C usr-share-locale.tproj
 
-    clang ${recentAdvCmds}/ps/*.c -o ps
+    ${stdenv.cc.targetPrefix}clang ${recentAdvCmds}/ps/*.c -o ps
   '';
 
   installPhase = ''

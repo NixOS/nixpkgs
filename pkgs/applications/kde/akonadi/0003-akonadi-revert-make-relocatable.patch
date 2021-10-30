@@ -1,6 +1,6 @@
-From 82bfa975af60757374ffad787e56a981d6df0f98 Mon Sep 17 00:00:00 2001
+From 4b90a0bd4411a66bbe6ecf85ce89a60a58bee969 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Sun, 31 Jan 2021 11:01:24 -0600
+Date: Sun, 25 Apr 2021 08:01:21 -0500
 Subject: [PATCH 3/3] akonadi revert make relocatable
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 3/3] akonadi revert make relocatable
  2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4bb5fec..35720b4 100644
+index 4e8cc81..63161b7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -343,9 +343,6 @@ configure_package_config_file(
+@@ -368,9 +368,6 @@ configure_package_config_file(
      "${CMAKE_CURRENT_SOURCE_DIR}/KF5AkonadiConfig.cmake.in"
      "${CMAKE_CURRENT_BINARY_DIR}/KF5AkonadiConfig.cmake"
      INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
@@ -41,5 +41,5 @@ index bcf7320..1574319 100644
  # set the directories
  if(NOT AKONADI_INSTALL_DIR)
 -- 
-2.29.2
+2.31.1
 

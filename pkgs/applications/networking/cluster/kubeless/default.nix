@@ -17,9 +17,9 @@ buildGoPackage rec {
 
   subPackages = [ "cmd/kubeless" ];
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X github.com/kubeless/kubeless/pkg/version.Version=${version}
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/kubeless/kubeless/pkg/version.Version=${version}"
+  ];
 
   postInstall = ''
     for shell in bash; do

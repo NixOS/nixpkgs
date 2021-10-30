@@ -22,7 +22,7 @@
 <programlisting>
 <xref linkend="opt-services.pantheon.apps.enable"/> = false;
 </programlisting>
-   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>geary</package>).
+   You can also use <xref linkend="opt-environment.pantheon.excludePackages"/> to remove any other app (like <package>elementary-mail</package>).
   </para>
  </section>
  <section xml:id="sec-pantheon-wingpanel-switchboard">
@@ -105,8 +105,14 @@ switchboard-with-plugs.override {
     </term>
     <listitem>
      <para>
-      AppCenter has been available since 20.03, but it is of little use. This is because there is no functioning PackageKit backend for Nix 2.0. In the near future you will be able to install Flatpak applications from AppCenter on NixOS. See this <link xlink:href="https://github.com/NixOS/nixpkgs/issues/70214">issue</link>.
+      AppCenter has been available since 20.03, but it is of little use. This is because there is no functioning PackageKit backend for Nix 2.0. The Flatpak backend will not work before <link xlink:href="https://github.com/elementary/appcenter/issues/1076">flag for Flatpak-only</link> is provided. See this <link xlink:href="https://github.com/NixOS/nixpkgs/issues/70214">issue</link>.
      </para>
+     <para>
+      To use AppCenter on NixOS, add <literal>pantheon.appcenter</literal> to <xref linkend="opt-environment.systemPackages" />, <link linkend="module-services-flatpak">enable Flatpak support</link> and optionally add the <literal>appcenter</literal> Flatpak remote:
+     </para>
+<screen>
+<prompt>$ </prompt>flatpak remote-add --if-not-exists appcenter https://flatpak.elementary.io/repo.flatpakrepo
+</screen>
     </listitem>
    </varlistentry>
   </variablelist>

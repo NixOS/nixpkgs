@@ -76,10 +76,11 @@ let
           if targetMachine != null
           then
             (
-              x: x.platform == "manylinux1_${targetMachine}"
-                || x.platform == "manylinux2010_${targetMachine}"
-                || x.platform == "manylinux2014_${targetMachine}"
-                || x.platform == "any"
+              x: x.platform == "any" || lib.lists.any (e: hasInfix e x.platform) [
+                "manylinux1_${targetMachine}"
+                "manylinux2010_${targetMachine}"
+                "manylinux2014_${targetMachine}"
+              ]
             )
           else
             (x: x.platform == "any")

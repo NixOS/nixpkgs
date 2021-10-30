@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.6.0";
+  version = "6.8.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "sha256-R9ASHDIGuPRh4yf0FAlpjUZ6QAakYs35EFSqAPc02Q8=";
+    sha256 = "sha256-kJbpYLM+GpyAHEnO2mqULOYyxIpOrmGeSMd4wJccz/8=";
   };
 
   propagatedBuildInputs = [
@@ -45,5 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/sendgrid/sendgrid-python";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    # No support for new starkbank-ecdsa releases
+    broken = true;
   };
 }

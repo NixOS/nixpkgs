@@ -3,7 +3,7 @@
 , meson
 , ninja
 , sassc
-, gnome3
+, gnome
 , gtk-engine-murrine
 , gdk-pixbuf
 , librsvg
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome3.gnome-themes-extra
+    gnome.gnome-themes-extra
     gdk-pixbuf
     librsvg
   ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   mesonFlags = [
-    "-Dgnome_shell_version=${lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "-Dgnome_shell_version=${lib.versions.majorMinor gnome.gnome-shell.version}"
   ];
 
   postInstall = ''

@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "12.3";
+  version = "12.5";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    sha512 = "2fy696qrfbdkzmq4cwd6l7v6rsc0bf9akh61w3azc544bq3vxl3v6s31hvg3ba0nsh0jv3nbdrk6jp1l4hwgcg9zg7kf2012a1vv2nk";
+    sha512 = "3yagspb2clcvd87a9vnpwd64w3afm4kyprqyjccpckysh4php5vhf7dfza3zhs4yzmkikc2pfs7470w54mxz9rcmaixh23h3hlgd1ii";
   };
 
   buildCommand = ''

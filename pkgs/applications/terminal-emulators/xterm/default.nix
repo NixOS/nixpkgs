@@ -4,15 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "367";
+  version = "369";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "07y51l06n344pjyxdddq6sdvxw25nl10irl4avynkqjnqyqsiw97";
+    sha256 = "ce1qSNBkiT0hSXQaACeBqXNJb9JNUtrdNk9jQ5p2TiY=";
   };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
 
   buildInputs = [
     xorg.libXaw
@@ -24,11 +28,8 @@ stdenv.mkDerivation rec {
     xorg.libICE
     ncurses
     freetype
-    fontconfig
-    pkg-config
     xorg.libXft
     xorg.luit
-    makeWrapper
   ];
 
   patches = [ ./sixel-256.support.patch ]

@@ -1,0 +1,29 @@
+From 93413acd3ef3a637a0f31a1d133b103e1dc81fd6 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 23 Aug 2021 06:16:48 +0900
+Subject: [PATCH] path-util: make find_executable() work without /proc mounted
+
+Follow-up for 888f65ace6296ed61285d31db846babf1c11885e.
+
+Hopefully fixes #20514.
+---
+ src/basic/path-util.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/basic/path-util.c b/src/basic/path-util.c
+index d11f254a9f6a..a21981616b59 100644
+--- a/src/basic/path-util.c
++++ b/src/basic/path-util.c
+@@ -630,7 +630,11 @@ static int check_x_access(const char *path, int *ret_fd) {
+                 return r;
+ 
+         r = access_fd(fd, X_OK);
+-        if (r < 0)
++        if (r == -ENOSYS) {
++                /* /proc is not mounted. Fallback to access(). */
++                if (access(path, X_OK) < 0)
++                        return -errno;
++        } else if (r < 0)
+                 return r;
+ 
+         if (ret_fd)

@@ -1,17 +1,17 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , ctags
+, cmark
 , appstream-glib
 , desktop-file-utils
-, docbook_xsl
-, docbook_xml_dtd_43
 , fetchurl
 , flatpak
-, gnome3
+, gnome
 , libgit2-glib
+, gi-docgen
 , gobject-introspection
 , glade
 , gspell
-, gtk-doc
 , gtk3
 , gtksourceview4
 , json-glib
@@ -34,25 +34,25 @@
 , webkitgtk
 , wrapGAppsHook
 , dbus
-, xvfb_run
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.38.2";
+  version = "41.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jFNco64yoZC1TZbTIHGVf+wBYYQHo2JRiMZFHngzYTs=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XVXkqqKkdYpGJj0cf9AJyz20RV4O1/nkTDoWNIYfo4o=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    docbook_xsl
-    docbook_xml_dtd_43
+    gi-docgen
     gobject-introspection
-    gtk-doc
     meson
     ninja
     pkg-config
@@ -63,8 +63,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
+    cmark
     flatpak
-    gnome3.devhelp
+    gnome.devhelp
     glade
     libgit2-glib
     libpeas
@@ -89,17 +90,14 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
-
-  outputs = [ "out" "devdoc" ];
 
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
   '';
 
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
     "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
@@ -135,7 +133,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libide "$devdoc"
+  '';
+
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+  };
 
   meta = with lib; {
     description = "An IDE for writing GNOME-based software";

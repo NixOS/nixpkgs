@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl,   alsaLib, libjack2, fftwFloat, libclthreads, libclxclient, libX11,  libXft, zita-alsa-pcmi, }:
+{ lib, stdenv, fetchurl,   alsa-lib, libjack2, fftwFloat, libclthreads, libclxclient, libX11,  libXft, zita-alsa-pcmi, }:
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zmi4wg23hwsypg3h6y3qb72cbrihqcs19qrbzgs5a67d13q4897";
   };
 
-  buildInputs = [ alsaLib libjack2 fftwFloat libclthreads libclxclient libX11 libXft zita-alsa-pcmi ];
+  buildInputs = [ alsa-lib libjack2 fftwFloat libclthreads libclxclient libX11 libXft zita-alsa-pcmi ];
 
   preConfigure = ''
     cd ./source/

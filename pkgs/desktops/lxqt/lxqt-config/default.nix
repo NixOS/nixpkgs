@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, glib
 , lxqt-build-tools
 , qtbase
 , qtx11extras
@@ -34,6 +35,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    glib.bin
     qtbase
     qtx11extras
     qttools
@@ -52,7 +54,9 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
+    substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
+      --replace 'QStringLiteral("gsettings' \
+                'QStringLiteral("${glib.bin}/bin/gsettings'
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

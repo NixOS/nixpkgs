@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
+{ lib, fetchFromGitHub, fetchpatch, elk6Version, buildGoPackage, libpcap, nixosTests, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -15,6 +15,14 @@ let beat = package : extraArgs : buildGoPackage (rec {
 
       subPackages = [ package ];
 
+      patches = [
+        (fetchpatch {
+          # Build fix for aarch64, possibly other systems, merged in beats 7.x https://github.com/elastic/beats/pull/9493
+          url = "https://github.com/elastic/beats/commit/5d796571de1aa2a299393d2045dacc2efac41a04.diff";
+          sha256 = "sha256:0b79fljbi5xd3h8iiv1m38ad0zhmj09f187asc0m9rxlqrz2l9r2";
+        })
+      ];
+
       meta = with lib; {
         homepage = "https://www.elastic.co/products/beats";
         license = licenses.asl20;
@@ -22,10 +30,17 @@ let beat = package : extraArgs : buildGoPackage (rec {
         platforms = platforms.linux;
       };
     } // extraArgs);
-in {
+in rec {
   filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
   heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  metricbeat6 = beat "metricbeat" {
+    meta.description = "Lightweight shipper for metrics";
+    passthru.tests =
+      assert metricbeat6.drvPath == nixosTests.elk.ELK-6.elkPackages.metricbeat.drvPath;
+      {
+        elk = nixosTests.elk.ELK-6;
+      };
+  };
   packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.broken = true;

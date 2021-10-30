@@ -2,7 +2,7 @@
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools, zeroad-data
+, gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK
 }:
 
@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.24b";
+  version = "0.0.25b";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1a1py45hkh2cswi09vbf9chikgxdv9xplsmg6sv6xhdznv4j6p1j";
+    sha256 = "1p9fa8f7sjb9c5wl3mawzyfqvgr614kdkhrj2k4db9vkyisws3fp";
   };
 
   nativeBuildInputs = [ python2 perl pkg-config ];
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-I${fmt.dev}/include"
   ];
 
+  patches = [ ./rootdir_env.patch ];
+
   configurePhase = ''
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
@@ -62,7 +64,6 @@ stdenv.mkDerivation rec {
       ${lib.optionalString withEditor "--enable-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
-      --datadir="$out"/share/0ad/data \
       --without-tests \
       -j $NIX_BUILD_CORES
     popd
@@ -85,11 +86,6 @@ stdenv.mkDerivation rec {
     # Copy l10n data.
     install -Dm755 -t $out/share/0ad/data/l10n binaries/data/l10n/*
 
-    # Link in game data from package
-    ln -s ${zeroad-data}/share/0ad/data/config $out/share/0ad/data/config
-    ln -s ${zeroad-data}/share/0ad/data/mods $out/share/0ad/data/mods
-    ln -s ${zeroad-data}/share/0ad/data/tools $out/share/0ad/data/tools
-
     # Copy libraries.
     install -Dm644 -t $out/lib/0ad        binaries/system/*.so
 
@@ -105,6 +101,7 @@ stdenv.mkDerivation rec {
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
+    maintainers = with maintainers; [ chvp ];
     platforms = subtractLists platforms.i686 platforms.linux;
   };
 }

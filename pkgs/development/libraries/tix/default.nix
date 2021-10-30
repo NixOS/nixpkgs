@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl, tcl, tk, fetchpatch } :
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, tcl
+, tk
+}:
 
-stdenv.mkDerivation {
+tcl.mkTclDerivation {
   version = "8.4.3";
   pname = "tix";
   src = fetchurl {
@@ -13,6 +19,8 @@ stdenv.mkDerivation {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-tcltk/tix/files/tix-8.4.3-tcl8.5.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
     sha256 = "0wzqmcxxq0rqpnjgxz10spw92yhfygnlwv0h8pcx2ycnqiljz6vj";
     })
+    # Remove duplicated definition of XLowerWindow
+    ./duplicated-xlowerwindow.patch
   ] ++ lib.optional (tcl.release == "8.6")
   (fetchpatch {
     name = "tix-8.4.3-tcl8.6.patch";
@@ -20,7 +28,7 @@ stdenv.mkDerivation {
     sha256 = "1jaz0l22xj7x1k4rb9ia6i1psnbwk4pblgq4gfvya7gg7fbb7r36";
     })
   ;
-  buildInputs = [ tcl tk ];
+  buildInputs = [ tk ];
   # the configure script expects to find the location of the sources of
   # tcl and tk in {tcl,tk}Config.sh
   # In fact, it only needs some private headers. We copy them in
@@ -34,8 +42,8 @@ stdenv.mkDerivation {
       ln -s $i private_headers/generic;
     done;
     '';
+  addTclConfigureFlags = false;
   configureFlags = [
-    "--with-tclinclude=${tcl}/include"
     "--with-tclconfig=."
     "--with-tkinclude=${tk.dev}/include"
     "--with-tkconfig=."
@@ -52,4 +60,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

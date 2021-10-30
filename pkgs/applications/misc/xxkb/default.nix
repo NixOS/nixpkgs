@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
     "PIXMAPDIR=${placeholder "out"}/share/xxkb"
+    "LIBDIR=${placeholder "out"}/lib/X11"
     "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
     "MANDIR=${placeholder "man"}/share/man"
   ];

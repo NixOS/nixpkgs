@@ -2,8 +2,20 @@
   config ? {},
   pkgs ? import ../../.. { inherit system config; }
 }:
-{
-  basic = import ./basic.nix { inherit system pkgs; };
-  with-postgresql-and-redis = import ./with-postgresql-and-redis.nix { inherit system pkgs; };
-  with-mysql-and-memcached = import ./with-mysql-and-memcached.nix { inherit system pkgs; };
-}
+
+with pkgs.lib;
+
+foldl
+  (matrix: ver: matrix // {
+    "basic${toString ver}" = import ./basic.nix { inherit system pkgs; nextcloudVersion = ver; };
+    "with-postgresql-and-redis${toString ver}" = import ./with-postgresql-and-redis.nix {
+      inherit system pkgs;
+      nextcloudVersion = ver;
+    };
+    "with-mysql-and-memcached${toString ver}" = import ./with-mysql-and-memcached.nix {
+      inherit system pkgs;
+      nextcloudVersion = ver;
+    };
+  })
+  {}
+  [ 21 22 ]

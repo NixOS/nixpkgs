@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jipSipgD0avd7XODlpxnqjHK3s6nacaxbIQIddix7X8=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
+  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
+  buildInputs = with llvmPackages; [ libclang llvm rapidjson ];
 
   cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
 
@@ -21,17 +21,11 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
   '';
 
+  clang = llvmPackages.clang;
   shell = runtimeShell;
+
   postFixup = ''
-    # We need to tell ccls where to find the standard library headers.
-
-    standard_library_includes="\\\"-isystem\\\", \\\"${lib.getDev stdenv.cc.libc}/include\\\""
-    standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
-    export standard_library_includes
-
-    wrapped=".ccls-wrapped"
-    export wrapped
-
+    export wrapped=".ccls-wrapped"
     mv $out/bin/ccls $out/bin/$wrapped
     substituteAll ${./wrapper} $out/bin/ccls
     chmod --reference=$out/bin/$wrapped $out/bin/ccls

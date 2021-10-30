@@ -6,8 +6,9 @@ let
 in buildFHSUserEnv {
   name = "shticker_book_unwritten";
   targetPkgs = pkgs: with pkgs; [
-      alsaLib
+      alsa-lib
       xorg.libX11
+      xorg.libXcursor
       xorg.libXext
       libglvnd
       shticker-book-unwritten-unwrapped

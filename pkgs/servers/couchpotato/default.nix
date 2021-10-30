@@ -1,4 +1,4 @@
-{ fetchurl, python2Packages, lib }:
+{ fetchFromGitHub, python2Packages, lib }:
 
 with python2Packages;
 
@@ -7,9 +7,11 @@ buildPythonApplication rec {
   version = "3.0.1";
   disabled = isPy3k;
 
-  src = fetchurl {
-    url = "https://github.com/CouchPotato/CouchPotatoServer/archive/build/${version}.tar.gz";
-    sha256 = "1xwjis3ijh1rff32mpdsphmsclf0lkpd3phpgxkccrigq1m9r3zh";
+  src = fetchFromGitHub {
+    owner = "CouchPotato";
+    repo = "CouchPotatoServer";
+    rev = "build/${version}";
+    hash = "sha256-0k8MqLnqYjhHPE9/jncTFIj1T4F2aXU4mXdeEimDB7M=";
   };
 
   format = "other";

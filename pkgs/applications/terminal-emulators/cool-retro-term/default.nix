@@ -29,8 +29,6 @@ mkDerivation rec {
     ln -s $out/bin/cool-retro-term.app/Contents/MacOS/cool-retro-term $out/bin/cool-retro-term
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Terminal emulator which mimics the old cathode display";
     longDescription = ''

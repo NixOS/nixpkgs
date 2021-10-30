@@ -14,9 +14,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0jzm7pn38hlr96n0z8gqfsfdbw48y0nnbsgjdq7hpgwmcgvgqdam";
   };
 
-  cargoSha256 = "1mzmp1jcxgn2swp52r9y7k09fk0z67i1qafzkkzlfxxd10vfr70v";
+  # lexical-core is outdated and incompatible with newer versions of rust
+  # patches Cargo.lock to include a more up-to-date version of lexical-core
+  cargoPatches = [ ./cargo-lock-update-lexical-core.patch ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  cargoSha256 = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   nativeBuildInputs = [ clang pkg-config ];
   buildInputs = [ dbus fuse sqlite ];

@@ -9,14 +9,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.2.0";
+  version = "2.4.1";
   pname = "sphinxcontrib-bibtex";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dQCEPhVNdpg8I7ylynOAll4HJcRrj0hMEyLQtYps47I=";
+    sha256 = "282223309bbaf34cd20a8fe1ba346fe8642f403a8930607e77a8cb08ae81fc5f";
   };
 
   propagatedBuildInputs = [ oset pybtex pybtex-docutils sphinx ];

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, alsaLib, caps
+, alsa-lib, caps
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w3g9q5z3nrn3mwdhaq6zsg0jila8d102dgwgrhj9vfx58apsvli";
   };
 
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsa-lib ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

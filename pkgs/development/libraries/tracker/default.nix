@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -7,7 +9,6 @@
 , asciidoc
 , gobject-introspection
 , python3
-, gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
@@ -17,31 +18,39 @@
 , sqlite
 , libxslt
 , libstemmer
-, gnome3
+, gnome
 , icu
 , libuuid
 , libsoup
+, libsoup_3
 , json-glib
 , systemd
 , dbus
 , substituteAll
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.0.3";
+  version = "3.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-b1yEqzvh7aUgUBsq7XIhYWoM8VKRDFN3V7U4vAXv/KM=";
+    sha256 = "sha256-8RelKHXUpNCceqmT+Mio0GRo1dz7FT642qUesThEUTo=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
+    })
+  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    # Upstream: https://gitlab.gnome.org/GNOME/tracker/-/issues/332
+    (fetchpatch {
+      name = "i686-test.patch";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/af707181a2c492a794daec7ce3f3062d67ffd9dc.patch";
+      sha256 = "sha256-KOdkTy79w3oiQILrPG00UVrv+VBjAk4Y868I8jtifqk=";
     })
   ];
 
@@ -55,7 +64,6 @@ stdenv.mkDerivation (rec {
     libxslt
     wrapGAppsNoGuiHook
     gobject-introspection
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
@@ -69,27 +77,29 @@ stdenv.mkDerivation (rec {
     sqlite
     icu
     libsoup
+    libsoup_3
     libuuid
     json-glib
     libstemmer
   ];
 
-  checkInputs = [
-    python3.pkgs.pygobject3
+  checkInputs = with python3.pkgs; [
+    pygobject3
+    tappy
   ];
 
   mesonFlags = [
     "-Ddocs=true"
   ];
 
-  # https://gitlab.gnome.org/GNOME/tracker/-/issues/292#note_1075369
-  doCheck = !stdenv.isi686;
+  doCheck = true;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
     patchShebangs tests/functional-tests/test-runner.sh.in
     patchShebangs tests/functional-tests/*.py
+    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
@@ -120,7 +130,7 @@ stdenv.mkDerivation (rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
@@ -134,8 +144,3 @@ stdenv.mkDerivation (rec {
     platforms = platforms.linux;
   };
 }
-  // lib.optionalAttrs stdenv.isi686 {
-    # TMP: fatal error: libtracker-sparql/tracker-sparql-enum-types.h: No such file or directory
-    enableParallelBuilding = false;
-  }
-)

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi
-, dbus-python, setuptools_scm, entrypoints, secretstorage
+, dbus-python, setuptools-scm, entrypoints, secretstorage
 , pytest, pytest-flake8 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0f58jq58jhfzlhix7x2zz7c4ycdvcs1z3sgs4lkr4xxx680wrmk7";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [ pytest pytest-flake8 ];
 

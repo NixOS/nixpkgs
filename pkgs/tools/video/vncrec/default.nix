@@ -3,7 +3,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "vncrec-0.2"; # version taken from Arch AUR
+  pname = "vncrec";
+  version = "0.2"; # version taken from Arch AUR
 
   src = fetchurl {
     url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";

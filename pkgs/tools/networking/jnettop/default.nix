@@ -1,10 +1,11 @@
 { fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
 
-stdenv.mkDerivation {
-  name = "jnettop-0.13.0";
+stdenv.mkDerivation rec {
+  pname = "jnettop";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "http://jnettop.kubs.info/dist/jnettop-0.13.0.tar.gz";
+    url = "http://jnettop.kubs.info/dist/jnettop-${version}.tar.gz";
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 

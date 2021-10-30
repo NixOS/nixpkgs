@@ -2,7 +2,7 @@
 , brotli
 , buildPythonPackage
 , cryptography
-, dateutil
+, python-dateutil
 , fetchPypi
 , idna
 , isPy27
@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.4";
+  version = "1.26.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dw9w9bs3hmr5dp3r3h43jyzzb1g1046ag7lj8pqf58i4kvj3c77";
+    sha256 = "sha256-9XtMFsYvonYLfj2Xw1slVRL7a1miWXMPNroyzp+ONC8=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

@@ -1,10 +1,12 @@
-{ lib, stdenv
-, docbook_xsl
+{ stdenv
+, lib
+, docbook-xsl-nons
 , fetchurl
 , glib
 , gobject-introspection
 , gtk-doc
 , libgudev
+, libpcap
 , meson
 , ninja
 , pkg-config
@@ -17,23 +19,17 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.15.4";
+  version = "0.16.3";
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "09k8jwvsphd97hcagf0zaf0hwzlzq2r8jfgbmvj55k7ylrg8hjxg";
+    sha256 = "TjHxqtz8mPhzpsMb5lXWdj8hx/whsadTfor4S2x4U2M=";
   };
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ];
-
-  buildInputs = [ glib systemd libgudev ];
-
   nativeBuildInputs = [
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     meson
@@ -42,20 +38,28 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  checkInputs = [ python3 which usbutils ];
+  buildInputs = [
+    glib
+    systemd
+    libgudev
+    libpcap
+  ];
 
-  enableParallelBuilding = true;
+  checkInputs = [
+    python3
+    which
+    usbutils
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
 
   doCheck = true;
 
-  postInstall = ''
-    mkdir -p $doc/share/doc/umockdev/
-    mv docs/reference $doc/share/doc/umockdev/
-  '';
-
   meta = with lib; {
     description = "Mock hardware devices for creating unit tests";
-    license = licenses.lgpl2;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };

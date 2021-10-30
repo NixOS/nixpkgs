@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, coreutils }:
+{ lib, stdenv, fetchFromGitHub, coreutils, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "z3APA3A";
     repo = pname;
     rev = version;
-    sha256 = "9aopwyz0U2bYTvx5YWLJo9EE8Xfb51IOguHRJodjpm8=";
+    sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
   };
 
   makeFlags = [
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     "INSTALL=${coreutils}/bin/install"
     "DESTDIR=${placeholder "out"}"
   ];
+
+  passthru.tests = {
+    smoke-test = nixosTests._3proxy;
+  };
 
   meta = with lib; {
     description = "Tiny free proxy server";

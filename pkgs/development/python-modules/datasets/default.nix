@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.4.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = version;
-    hash = "sha256-is8TS84varARWyfeDTbQH0pcYFTk0PcEyK183emB4GE=";
+    sha256 = "0pm14cp7xaagpf4j96v0ybi5gn3r9p0if3pc197ckwx6sw3lx29p";
   };
 
   propagatedBuildInputs = [
@@ -39,12 +39,6 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"tqdm>=4.27,<4.50.0"' '"tqdm>=4.27"' \
-      --replace "huggingface_hub==0.0.2" "huggingface_hub>=0.0.2"
-  '';
-
   # Tests require pervasive internet access.
   doCheck = false;
 
@@ -59,6 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

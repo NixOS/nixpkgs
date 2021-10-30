@@ -1,28 +1,8 @@
-From 4ecc1475be94a384c122594b5f7d455beb64a2f0 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
-Date: Sat, 22 Feb 2020 06:42:14 +0000
-Subject: [PATCH] no files in etc and var
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
----
- collectors/Makefile.am                 | 2 +-
- collectors/charts.d.plugin/Makefile.am | 2 +-
- collectors/node.d.plugin/Makefile.am   | 2 +-
- collectors/python.d.plugin/Makefile.am | 2 +-
- collectors/statsd.plugin/Makefile.am   | 2 +-
- health/Makefile.am                     | 2 +-
- system/Makefile.am                     | 3 +--
- web/Makefile.am                        | 2 +-
- 8 files changed, 8 insertions(+), 9 deletions(-)
-
 diff --git a/collectors/Makefile.am b/collectors/Makefile.am
-index 9bb52958..c9799165 100644
+index 021e2ff23..115b88277 100644
 --- a/collectors/Makefile.am
 +++ b/collectors/Makefile.am
-@@ -32,7 +32,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
+@@ -33,7 +33,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
  usergoconfigdir=$(configdir)/go.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -32,7 +12,7 @@ index 9bb52958..c9799165 100644
  	$(INSTALL) -d $(DESTDIR)$(usergoconfigdir)
  
 diff --git a/collectors/charts.d.plugin/Makefile.am b/collectors/charts.d.plugin/Makefile.am
-index 03c7f0a9..01985db0 100644
+index 03c7f0a94..01985db01 100644
 --- a/collectors/charts.d.plugin/Makefile.am
 +++ b/collectors/charts.d.plugin/Makefile.am
 @@ -34,7 +34,7 @@ dist_userchartsconfig_DATA = \
@@ -44,8 +24,21 @@ index 03c7f0a9..01985db0 100644
  	$(INSTALL) -d $(DESTDIR)$(userchartsconfigdir)
  
  chartsconfigdir=$(libconfigdir)/charts.d
+diff --git a/collectors/ebpf.plugin/Makefile.am b/collectors/ebpf.plugin/Makefile.am
+index 18b1fc6c8..b4b0c7852 100644
+--- a/collectors/ebpf.plugin/Makefile.am
++++ b/collectors/ebpf.plugin/Makefile.am
+@@ -13,7 +13,7 @@ SUFFIXES = .in
+ userebpfconfigdir=$(configdir)/ebpf.d
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userebpfconfigdir)
+ 
+ dist_plugins_SCRIPTS = \
 diff --git a/collectors/node.d.plugin/Makefile.am b/collectors/node.d.plugin/Makefile.am
-index c3142d43..95e32445 100644
+index c3142d433..95e324455 100644
 --- a/collectors/node.d.plugin/Makefile.am
 +++ b/collectors/node.d.plugin/Makefile.am
 @@ -26,7 +26,7 @@ dist_usernodeconfig_DATA = \
@@ -58,7 +51,7 @@ index c3142d43..95e32445 100644
  
  nodeconfigdir=$(libconfigdir)/node.d
 diff --git a/collectors/python.d.plugin/Makefile.am b/collectors/python.d.plugin/Makefile.am
-index e678f86a..29a319da 100644
+index 38eb90f79..ce7079441 100644
 --- a/collectors/python.d.plugin/Makefile.am
 +++ b/collectors/python.d.plugin/Makefile.am
 @@ -32,7 +32,7 @@ dist_userpythonconfig_DATA = \
@@ -71,10 +64,10 @@ index e678f86a..29a319da 100644
  
  pythonconfigdir=$(libconfigdir)/python.d
 diff --git a/collectors/statsd.plugin/Makefile.am b/collectors/statsd.plugin/Makefile.am
-index b01302d1..f5b77da4 100644
+index 71f2d468d..2c9ced2bf 100644
 --- a/collectors/statsd.plugin/Makefile.am
 +++ b/collectors/statsd.plugin/Makefile.am
-@@ -17,5 +17,5 @@ dist_userstatsdconfig_DATA = \
+@@ -18,5 +18,5 @@ dist_userstatsdconfig_DATA = \
      $(NULL)
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -82,7 +75,7 @@ index b01302d1..f5b77da4 100644
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(userstatsdconfigdir)
 diff --git a/health/Makefile.am b/health/Makefile.am
-index 853ed0d7..210330a6 100644
+index b963ea0cd..6979e69bf 100644
 --- a/health/Makefile.am
 +++ b/health/Makefile.am
 @@ -19,7 +19,7 @@ dist_userhealthconfig_DATA = \
@@ -95,10 +88,10 @@ index 853ed0d7..210330a6 100644
  
  healthconfigdir=$(libconfigdir)/health.d
 diff --git a/system/Makefile.am b/system/Makefile.am
-index ad68c655..74f032f9 100644
+index 5323738c9..06e1b6a73 100644
 --- a/system/Makefile.am
 +++ b/system/Makefile.am
-@@ -17,11 +17,10 @@ include $(top_srcdir)/build/subst.inc
+@@ -20,11 +20,10 @@ include $(top_srcdir)/build/subst.inc
  SUFFIXES = .in
  
  dist_config_SCRIPTS = \
@@ -112,7 +105,7 @@ index ad68c655..74f032f9 100644
  
  nodist_noinst_DATA = \
 diff --git a/web/Makefile.am b/web/Makefile.am
-index ccaccd76..16a2977e 100644
+index ccaccd764..16a2977e5 100644
 --- a/web/Makefile.am
 +++ b/web/Makefile.am
 @@ -12,7 +12,7 @@ SUBDIRS = \
@@ -124,6 +117,3 @@ index ccaccd76..16a2977e 100644
  	$(INSTALL) -d $(DESTDIR)$(usersslconfigdir)
  
  dist_noinst_DATA = \
--- 
-2.25.0
-

@@ -6,7 +6,7 @@
   cudaArchList ? null,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which,
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
 
   # Build inputs
   numactl,
@@ -117,7 +117,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.8.1";
+  version = "1.9.0";
 
   disabled = !isPy3k;
 
@@ -132,7 +132,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-HERbvmrfhWwH164GFHU/M0KbhVAuhI5sBZSxCZy8mRk=";
+    sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -216,6 +216,7 @@ in buildPythonPackage rec {
     util-linux
     which
     ninja
+    pybind11
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
@@ -297,12 +298,22 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
+  # Builds in 2+h with 2 cores, and ~15m with a big-parallel builder.
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru = {
+    inherit cudaSupport;
+    cudaArchList = final_cudaArchList;
+    # At least for 1.9.0 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
+    blasProvider = blas.provider;
+  };
+
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
     license     = licenses.bsd3;
     platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     # error: use of undeclared identifier 'noU'; did you mean 'no'?
     broken = stdenv.isDarwin;
   };

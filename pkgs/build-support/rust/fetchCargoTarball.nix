@@ -22,23 +22,21 @@ in
 , srcs ? []
 , patches ? []
 , sourceRoot ? ""
-, hash ? ""
-, sha256 ? ""
 , cargoUpdateHook ? ""
 , ...
 } @ args:
 
 let hash_ =
-  if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-  else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+  if args ? hash then { outputHashAlgo = null; outputHash = args.hash; }
+  else if args ? sha256 then { outputHashAlgo = "sha256"; outputHash = args.sha256; }
   else throw "fetchCargoTarball requires a hash for ${name}";
 in stdenv.mkDerivation ({
   name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
 
-  phases = "unpackPhase patchPhase buildPhase installPhase";
-
   buildPhase = ''
+    runHook preBuild
+
     # Ensure deterministic Cargo vendor builds
     export SOURCE_DATE_EPOCH=1
 
@@ -69,6 +67,8 @@ in stdenv.mkDerivation ({
     # Packages with git dependencies generate non-default cargo configs, so
     # always install it rather than trying to write a standard default template.
     install -D $CARGO_CONFIG $name/.cargo/config;
+
+    runHook postBuild
   '';
 
   # Build a reproducible tar, per instructions at https://reproducible-builds.org/docs/archives/

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, cmake
-, alsaLib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
+, alsa-lib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    alsaLib boost glib lash libjack2 libarchive libsndfile lrdf qt4
+    alsa-lib boost glib lash libjack2 libarchive libsndfile lrdf qt4
   ];
 
   meta = with lib; {

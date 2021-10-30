@@ -4,7 +4,7 @@
 , fetchpatch
 , file
 , glib
-, gnome3
+, gnome
 , gtk3
 , intltool
 , libnma
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-sstp";
     };

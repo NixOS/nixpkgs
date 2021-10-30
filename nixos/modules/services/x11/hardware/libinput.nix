@@ -163,6 +163,15 @@ let cfg = config.services.xserver.libinput;
           '';
       };
 
+      transformationMatrix = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          A  string  of  9 space-separated floating point numbers.  Sets the transformation matrix to
+          the 3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
+        '';
+      };
+
       disableWhileTyping = mkOption {
         type = types.bool;
         default = false;
@@ -188,27 +197,28 @@ let cfg = config.services.xserver.libinput;
     };
 
     mkX11ConfigForDevice = deviceType: matchIs: ''
-        Identifier "libinput ${deviceType} configuration"
-        MatchDriver "libinput"
-        MatchIs${matchIs} "${xorgBool true}"
-        ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
-        Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
-        ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
-        ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
-        ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
-        ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
-        Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
-        Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
-        Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
-        ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
-        Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
-        Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
-        Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
-        Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
-        Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
-        Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
-        ${cfg.${deviceType}.additionalOptions}
-  '';
+      Identifier "libinput ${deviceType} configuration"
+      MatchDriver "libinput"
+      MatchIs${matchIs} "${xorgBool true}"
+      ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
+      Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
+      ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+      ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
+      ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
+      ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
+      ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
+      Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
+      Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
+      Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
+      ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
+      Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
+      Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
+      Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
+      Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
+      Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
+      Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
+      ${cfg.${deviceType}.additionalOptions}
+    '';
 in {
 
   imports =
@@ -227,6 +237,7 @@ in {
       "sendEventsMode"
       "tapping"
       "tappingDragLock"
+      "transformationMatrix"
       "disableWhileTyping"
       "additionalOptions"
     ]);

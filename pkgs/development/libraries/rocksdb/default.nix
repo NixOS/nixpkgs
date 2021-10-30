@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.17.3";
+  version = "6.25.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mfONfYMxZ3CT7Bk3OYSwg0UChmk4mQ1+cHN94gEDZcM=";
+    sha256 = "sha256-9Fs+znK7oEEBoPbRhNdVHuangBpuIVEvlxJNeNoEJZA=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableJemalloc jemalloc;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
+    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field";
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -60,7 +61,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
+    changelog = "https://github.com/facebook/rocksdb/raw/v${version}/HISTORY.md";
     license = licenses.asl20;
+    platforms = platforms.all;
     maintainers = with maintainers; [ adev magenbluten ];
   };
 }

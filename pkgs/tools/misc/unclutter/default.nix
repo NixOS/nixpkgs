@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, xlibsWrapper}:
 
-stdenv.mkDerivation {
-  name = "unclutter-8";
+stdenv.mkDerivation rec {
+  pname = "unclutter";
+  version = "8";
   src = fetchurl {
-    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-8.tar.gz";
+    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-${version}.tar.gz";
     sha256 = "33a78949a7dedf2e8669ae7b5b2c72067896497820292c96afaa60bb71d1f2a6";
   };
 

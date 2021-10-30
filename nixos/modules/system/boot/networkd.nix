@@ -250,6 +250,16 @@ let
         (assertRange "ERSPANIndex" 1 1048575)
       ];
 
+      sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
+        (assertOnlyFields [
+          "Port"
+          "Encapsulation"
+          "Protocol"
+        ])
+        (assertPort "Port")
+        (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+      ];
+
       sectionPeer = checkUnitConfig "Peer" [
         (assertOnlyFields [
           "Name"
@@ -384,6 +394,7 @@ let
           "AllMulticast"
           "Unmanaged"
           "RequiredForOnline"
+          "ActivationPolicy"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
@@ -401,6 +412,14 @@ let
           "degraded"
           "enslaved"
           "routable"
+        ]))
+        (assertValueOneOf "ActivationPolicy" ([
+          "up"
+          "always-up"
+          "manual"
+          "always-down"
+          "down"
+          "bound"
         ]))
       ];
 
@@ -659,6 +678,9 @@ let
           "SendOption"
           "UserClass"
           "VendorClass"
+          "DUIDType"
+          "DUIDRawData"
+          "IAID"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -668,6 +690,7 @@ let
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
         (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
+        (assertInt "IAID")
       ];
 
       sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
@@ -716,10 +739,17 @@ let
           "NTP"
           "EmitSIP"
           "SIP"
+          "EmitPOP3"
+          "POP3"
+          "EmitSMTP"
+          "SMTP"
+          "EmitLPR"
+          "LPR"
           "EmitRouter"
           "EmitTimezone"
           "Timezone"
           "SendOption"
+          "SendVendorOption"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -728,6 +758,9 @@ let
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitNTP" boolValues)
         (assertValueOneOf "EmitSIP" boolValues)
+        (assertValueOneOf "EmitPOP3" boolValues)
+        (assertValueOneOf "EmitSMTP" boolValues)
+        (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
       ];
@@ -825,7 +858,6 @@ let
     options = {
       wireguardPeerConfig = mkOption {
         default = {};
-        example = { };
         type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuardPeer;
         description = ''
           Each attribute in this set specifies an option in the
@@ -840,7 +872,6 @@ let
   netdevOptions = commonNetworkOptions // {
 
     netdevConfig = mkOption {
-      default = {};
       example = { Name = "mybridge"; Kind = "bridge"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionNetdev;
       description = ''
@@ -877,7 +908,6 @@ let
 
     vxlanConfig = mkOption {
       default = {};
-      example = { Id = "4"; };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
@@ -894,6 +924,18 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tunnel]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    fooOverUDPConfig = mkOption {
+      default = { };
+      example = { Port = 9001; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[FooOverUDP]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -940,7 +982,7 @@ let
       example = {
         PrivateKeyFile = "/etc/wireguard/secret.key";
         ListenPort = 51820;
-        FwMark = 42;
+        FirewallMark = 42;
       };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWireGuard;
       description = ''
@@ -1019,7 +1061,6 @@ let
   addressOptions = {
     options = {
       addressConfig = mkOption {
-        default = {};
         example = { Address = "192.168.0.100/24"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionAddress;
         description = ''
@@ -1036,7 +1077,7 @@ let
     options = {
       routingPolicyRuleConfig = mkOption {
         default = { };
-        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ;};
+        example = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionRoutingPolicyRule;
         description = ''
           Each attribute in this set specifies an option in the
@@ -1127,7 +1168,7 @@ let
 
     dhcpV6Config = mkOption {
       default = {};
-      example = { UseDNS = true; UseRoutes = true; };
+      example = { UseDNS = true; };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6;
       description = ''
         Each attribute in this set specifies an option in the
@@ -1194,7 +1235,7 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = { AddressAutoconfiguration = true; OnLink = true; };
+      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
@@ -1429,6 +1470,10 @@ let
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
           ${attrsToSection def.tunnelConfig}
+        ''
+        + optionalString (def.fooOverUDPConfig != { }) ''
+          [FooOverUDP]
+          ${attrsToSection def.fooOverUDPConfig}
         ''
         + optionalString (def.peerConfig != { }) ''
           [Peer]

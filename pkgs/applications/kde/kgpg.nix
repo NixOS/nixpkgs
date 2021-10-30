@@ -18,6 +18,8 @@ mkDerivation {
     wrapProgram "$out/bin/kgpg" --prefix PATH : "${lib.makeBinPath [ gnupg ]}"
   '';
   meta = {
+    homepage = "https://apps.kde.org/kgpg/";
+    description = "Encryption tool";
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };

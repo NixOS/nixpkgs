@@ -8,7 +8,7 @@
 , tk
 }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "tclreadline";
   version = "2.3.8";
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     readline
-    tcl
     tk
   ];
 
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-tclshrl"
     "--enable-wishrl"
-    "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-readline-includes=${readline.dev}/include/readline"
     "--with-libtool=${libtool}"

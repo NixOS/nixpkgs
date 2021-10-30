@@ -5,18 +5,18 @@
 
 buildDunePackage rec {
   pname = "conduit";
-  version = "2.2.2";
+  version = "4.0.1";
   useDune2 = true;
 
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-conduit/releases/download/v2.2.2/conduit-v2.2.2.tbz";
-    sha256 = "1zb83w2pq9c8xrappfxa6y5q93772f5dj22x78camsm77a2c2z55";
+    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-v${version}.tbz";
+    sha256 = "500d95bf2a524f4851e94373e32d26b6e99ee04e5134db69fe6e151c3aad9b1f";
   };
 
   buildInputs = [ ppx_sexp_conv ];
-  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri ];
+  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri logs ];
 
   meta = {
     description = "A network connection establishment library";

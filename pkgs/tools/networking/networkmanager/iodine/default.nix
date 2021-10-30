@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkg-config, networkmanager, libsecret, gtk3
-, withGnome ? true, gnome3, fetchpatch, libnma, glib }:
+, withGnome ? true, gnome, fetchpatch, libnma, glib }:
 
 let
   pname = "NetworkManager-iodine";
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "networkmanager-iodine";
     };

@@ -1,24 +1,53 @@
-{ lib, stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh, nixosTests }:
+{ lib
+, stdenv
+, acl
+, e2fsprogs
+, libb2
+, lz4
+, openssh
+, openssl
+, python3
+, zstd
+, nixosTests
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.16";
+  version = "1.1.17";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0l1dqfwrd9l34rg30cmzmq5bs6yha6kg4vy313jq611jsqj94mmw";
+    sha256 = "0x0ncy0b0bmf586hbdgrif3gjmkdw760vfnfxndr493v07y29fbs";
   };
+
+  postPatch = ''
+    # sandbox does not support setuid/setgid/sticky bits
+    substituteInPlace src/borg/testsuite/archiver.py \
+      --replace "0o4755" "0o0755"
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
     # For building documentation:
-    sphinx guzzle_sphinx_theme
+    sphinx
+    guzzle_sphinx_theme
   ];
+
   buildInputs = [
-    libb2 lz4 zstd openssl
-  ] ++ lib.optionals stdenv.isLinux [ acl ];
+    libb2
+    lz4
+    zstd
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
+    acl
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
-    cython llfuse
+    cython
+    llfuse
+    packaging
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    pyfuse3
   ];
 
   preConfigure = ''
@@ -52,15 +81,36 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkInputs = with python3.pkgs; [
-    pytest
+    e2fsprogs
+    pytest-benchmark
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test --pyargs borg.testsuite
-  '';
+  pytestFlagsArray = [
+    "--numprocesses" "auto"
+    "--benchmark-skip"
+    "--pyargs" "borg.testsuite"
+  ];
 
-  # 64 failures, needs pytest-benchmark
-  doCheck = false;
+  disabledTests = [
+    # fuse: device not found, try 'modprobe fuse' first
+    "test_fuse"
+    "test_fuse_allow_damaged_files"
+    "test_fuse_mount_hardlinks"
+    "test_fuse_mount_options"
+    "test_fuse_versions_view"
+    "test_readonly_mount"
+    # Error: Permission denied while trying to write to /var/{,tmp}
+    "test_get_cache_dir"
+    "test_get_keys_dir"
+    "test_get_security_dir"
+    "test_get_config_dir"
+  ];
+
+  preCheck = ''
+    export HOME=$TEMP
+  '';
 
   passthru.tests = {
     inherit (nixosTests) borgbackup;

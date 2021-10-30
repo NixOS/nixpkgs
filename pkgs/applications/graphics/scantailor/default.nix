@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ qt4 libjpeg libtiff boost ];
 
   meta = {
-    homepage = "http://scantailor.org/";
+    homepage = "https://scantailor.org/";
     description = "Interactive post-processing tool for scanned pages";
 
     license = lib.licenses.gpl3Plus;

@@ -3,22 +3,25 @@
 , fetchFromGitLab
 , cmake
 , extra-cmake-modules
-, kio
+, kconfig
+, kcoreaddons
+, ki18n
+, knotifications
 , qtbase
 , qtquickcontrols2
-, syntax-highlighting
+, qtx11extras
 }:
 
 mkDerivation rec {
   pname = "mauikit";
-  version = "1.2.1";
+  version = "2.0.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "maui";
     repo = "mauikit";
     rev = "v${version}";
-    sha256 = "1wimbpbn9yqqdcjd59x83z0mw2fycjz09py2rwimfi8ldmvi5lgy";
+    sha256 = "sha256-skukb9M6jhijCTb+tMIz/3vUCAvVJw+4zTFv9Z7HqWk=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +30,12 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    kio
+    kconfig
+    kcoreaddons
+    ki18n
+    knotifications
     qtquickcontrols2
-    syntax-highlighting
+    qtx11extras
   ];
 
   meta = with lib; {
@@ -37,6 +43,6 @@ mkDerivation rec {
     description = "Free and modular front-end framework for developing fast and compelling user experiences";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
-    broken = versionOlder qtbase.version "5.14.0";
+    broken = versionOlder qtbase.version "5.15.0";
   };
 }

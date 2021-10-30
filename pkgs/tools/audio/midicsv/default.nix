@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "midicsv-1.1";
+  pname = "midicsv";
+  version = "1.1";
 
   src = fetchurl {
-    url = "http://www.fourmilab.ch/webtools/midicsv/${name}.tar.gz";
+    url = "http://www.fourmilab.ch/webtools/midicsv/midicsv-${version}.tar.gz";
     sha256 = "1vvhk2nf9ilfw0wchmxy8l13hbw9cnpz079nsx5srsy4nnd78nkw";
   };
 

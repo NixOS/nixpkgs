@@ -1,60 +1,90 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, git
-, attrs
-, future
-, aiohttp
+, Logbook
 , aiofiles
+, aiohttp
+, aiohttp-socks
+, aioresponses
+, atomicwrites
+, attrs
+, cachetools
+, faker
+, future
+, git
 , h11
 , h2
-, Logbook
+, hypothesis
 , jsonschema
-, unpaddedbase64
-, pycryptodome
-, python-olm
 , peewee
-, cachetools
-, atomicwrites
+, poetry-core
+, pycryptodome
+, pytest-aiohttp
+, pytest-benchmark
+, pytestCheckHook
+, python-olm
+, unpaddedbase64
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.15.2";
+  version = "0.18.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "190xw3cvk4amr9pl8ip2i7k3xdjd0231kn2zl6chny5axx22p1dv";
+    hash = "sha256-eti9kvfv3y7m+mJzcxftyn8OyVSd2Ehqd3eU2ezMV5Q=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+  '';
 
   nativeBuildInputs = [
     git
+    poetry-core
+    pytestCheckHook
   ];
 
   propagatedBuildInputs = [
-    attrs
-    future
-    aiohttp
+    Logbook
     aiofiles
+    aiohttp
+    aiohttp-socks
+    atomicwrites
+    attrs
+    cachetools
+    future
     h11
     h2
-    Logbook
     jsonschema
-    unpaddedbase64
+    peewee
     pycryptodome
     python-olm
-    peewee
-    cachetools
-    atomicwrites
+    unpaddedbase64
   ];
 
-  doCheck = false;
+  checkInputs = [
+    aioresponses
+    faker
+    hypothesis
+    pytest-aiohttp
+    pytest-benchmark
+  ];
+
+  disabledTests = [
+    # touches network
+    "test_connect_wrapper"
+    # time dependent and flaky
+    "test_transfer_monitor_callbacks"
+  ];
 
   meta = with lib; {
-    description = "A Python Matrix client library, designed according to sans I/O principles";
     homepage = "https://github.com/poljar/matrix-nio";
+    description = "A Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
     maintainers = with maintainers; [ tilpner emily symphorien ];
   };

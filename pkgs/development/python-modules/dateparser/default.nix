@@ -2,12 +2,15 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
-, dateutil
+, fetchpatch
+, python-dateutil
 , pytz
 , regex
 , tzlocal
 , hijri-converter
 , convertdate
+, fasttext
+, langdetect
 , parameterized
 , pytestCheckHook
 , GitPython
@@ -16,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.0.0";
+  version = "1.1.0";
 
   disabled = !isPy3k;
 
@@ -24,14 +27,14 @@ buildPythonPackage rec {
     owner = "scrapinghub";
     repo = "dateparser";
     rev = "v${version}";
-    sha256 = "0i6ci14lqfsqrmaif57dyilrjbxzmbl98hps1b565gkiy1xqmjhl";
+    sha256 = "sha256-RpQWDsj7vGtfu6wf4yETdswfXDfoTkburTl6aOA03Ww=";
   };
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    python-dateutil pytz regex tzlocal
     # extra_requires
-    hijri-converter convertdate
+    hijri-converter convertdate fasttext langdetect
   ];
 
   checkInputs = [
@@ -41,8 +44,18 @@ buildPythonPackage rec {
     ruamel_yaml
   ];
 
+  preCheck = ''
+    export HOME="$TEMPDIR"
+  '';
+
   # Upstream only runs the tests in tests/ in CI, others use git clone
   pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # access network
+    "test_custom_language_detect_fast_text_0"
+    "test_custom_language_detect_fast_text_1"
+  ];
 
   pythonImportsCheck = [ "dateparser" ];
 

@@ -5,10 +5,11 @@ let
     "-e 's/CCLIENT_SSL_ENABLE.*= false/CCLIENT_SSL_ENABLE=true/'";
 in
 stdenv.mkDerivation rec {
-  name = "prayer-1.3.5";
+  pname = "prayer";
+  version = "1.3.5";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/email/prayer/${name}.tar.gz";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/email/prayer/${pname}-${version}.tar.gz";
     sha256 = "135fjbxjn385b6cjys6qhbwfw61mdcl2akkll4jfpdzfvhbxlyda";
   };
 

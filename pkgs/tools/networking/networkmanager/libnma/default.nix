@@ -7,7 +7,7 @@
 , pkg-config
 , vala
 , networkmanager
-, gnome3
+, gnome
 , isocodes
 , libxml2
 , docbook_xsl
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.30";
+  version = "1.8.32";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1d5gzn7ss5vi0bhc8s4i5gsrck1ajslajam5jxfqazg094mffcys";
+    sha256 = "Cle5Oi+tQ6zHY/Mg3Tp6k8QpsOMRjfpUnWeCTN3E6QU=";
   };
 
   patches = [
@@ -75,8 +75,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 

@@ -1,35 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, freetype, cairo, libintl
-, meson, ninja
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, glib
+, freetype
+, fontconfig
+, libintl
+, meson
+, ninja
 , gobject-introspection
-, icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
-, ApplicationServices, CoreText
+, icu
+, graphite2
+, harfbuzz # The icu variant uses and propagates the non-icu one.
+, ApplicationServices
+, CoreText
 , withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
 , python3
-, gtk-doc, docbook-xsl-nons, docbook_xml_dtd_43
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
 }:
 
 let
-  version = "2.8.0";
+  version = "2.8.2";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
+  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
-  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
+  pname = "harfbuzz${optionalString withIcu "-icu"}";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner  = "harfbuzz";
-    repo   = "harfbuzz";
-    rev    = version;
-    sha256 = "sha256-JnvOFGK2HWIpzuwgZtyt0IfKfnoXD1LMeVb3RzMmyY4=";
+    owner = "harfbuzz";
+    repo = "harfbuzz";
+    rev = version;
+    sha256 = "sha256-uqcwfe5Oa3S0tyZDzqhIQfRFEv/HaiVWzVvwjqpLo5g=";
   };
 
   postPatch = ''
-    patchShebangs src/*.py
-    patchShebangs test
+    patchShebangs src/*.py test
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
@@ -40,9 +54,17 @@ stdenv.mkDerivation {
   outputBin = "dev";
 
   mesonFlags = [
+    # upstream recommends cairo, but it is only used for development purposes
+    # and is not part of the library.
+    # Cairo causes transitive (build) dependencies on various X11 or other
+    # GUI-related libraries, so it shouldn't be re-added lightly.
+    (mesonFeatureFlag "cairo" false)
+    # chafa is only used in a development utility, not in the library
+    (mesonFeatureFlag "chafa" false)
+    (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "coretext" withCoreText)
+    (mesonFeatureFlag "introspection" isNativeCompilation)
   ];
 
   nativeBuildInputs = [
@@ -57,11 +79,11 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype cairo ] # recommended by upstream
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
+  buildInputs = [ glib freetype ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
+    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
 
-  propagatedBuildInputs = []
-    ++ optional withGraphite2 graphite2
+  propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
 
   doCheck = true;

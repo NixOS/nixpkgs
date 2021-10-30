@@ -4,7 +4,7 @@
 , future
 , pyjwt
 , requests
-, requests_toolbelt
+, requests-toolbelt
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     future
     pyjwt
     requests
-    requests_toolbelt
+    requests-toolbelt
   ];
 
   # Tests require a Webex Teams test domain

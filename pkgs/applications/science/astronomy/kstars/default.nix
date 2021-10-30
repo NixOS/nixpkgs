@@ -14,19 +14,12 @@
 
 mkDerivation rec {
   pname = "kstars";
-  version = "3.5.2";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-iX7rMQbctdK3AeH4ZvH+T4rv1ZHwn55urJh150KoXXU=";
+    sha256 = "sha256-cD31YFBnKvEPyBQils6qJxNKagDoIi8/Znfxj/Gsa0M=";
   };
-
-  patches = [
-    # Patches ksutils.cpp to use nix store prefixes to find program binaries of
-    # indilib and xplanet dependencies. Without the patch, Ekos is unable to spawn
-    # indi servers for local telescope/camera control.
-    ./fs-fixes.patch
-  ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
@@ -41,8 +34,8 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DINDI_NIX_ROOT=${indi-full}"
-    "-DXPLANET_NIX_ROOT=${xplanet}"
+    "-DINDI_PREFIX=${indi-full}"
+    "-DXPLANET_PREFIX=${xplanet}"
   ];
 
   meta = with lib; {

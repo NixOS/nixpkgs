@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitea
 , meson
 , ninja
 }:
@@ -9,18 +9,23 @@ stdenv.mkDerivation rec {
   pname = "tllist";
   version = "1.0.5";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/tllist.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "tllist";
     rev = version;
     sha256 = "wJEW7haQBtCR2rffKOFyqH3aq0eBr6H8T6gnBs2bNRg=";
   };
 
   nativeBuildInputs = [ meson ninja ];
 
+  mesonBuildType = "release";
+
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/tllist";
+    changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${version}";
     description = "C header file only implementation of a typed linked list";
     longDescription = ''
       Most C implementations of linked list are untyped. That is, their data

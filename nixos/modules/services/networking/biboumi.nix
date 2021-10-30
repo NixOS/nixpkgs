@@ -107,6 +107,7 @@ in
           options.policy_directory = mkOption {
             type = types.path;
             default = "${pkgs.biboumi}/etc/biboumi";
+            defaultText = literalExpression ''"''${pkgs.biboumi}/etc/biboumi"'';
             description = ''
               A directory that should contain the policy files,
               used to customize Botan’s behaviour

@@ -1,9 +1,10 @@
 {lib, stdenv, fetchurl, xlibsWrapper, libXp, libXau}:
 
 stdenv.mkDerivation rec {
-  name = "lesstif-0.95.2";
+  pname = "lesstif";
+  version = "0.95.2";
   src = fetchurl {
-    url = "mirror://sourceforge/lesstif/${name}.tar.bz2";
+    url = "mirror://sourceforge/lesstif/${pname}-${version}.tar.bz2";
     sha256 = "1qzpxjjf7ri1jzv71mvq5m9g8hfaj5yzwp30rwxlm6n2b24a6jpb";
   };
   buildInputs = [xlibsWrapper];

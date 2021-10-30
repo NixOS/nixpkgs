@@ -1,19 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "Cerberus";
-  version = "1.3.2";
+  version = "1.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "12cm547hpypqd7bwcl4wr4w6varibc1dagzicg5qbp86yaa6cbih";
+  src = fetchFromGitHub {
+    owner = "pyeve";
+    repo = "cerberus";
+    rev = version;
+    sha256 = "03kj15cf1pbd11mxsik96m5w1m6p0fbdc4ia5ihzmq8rz28razpq";
   };
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest -k 'not nested_oneofs'
+  preCheck = ''
+    export TESTDIR=$(mktemp -d)
+    cp -R ./cerberus/tests $TESTDIR
+    pushd $TESTDIR
   '';
+
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [
+    "cerberus"
+  ];
 
   meta = with lib; {
     homepage = "http://python-cerberus.org/";

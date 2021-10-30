@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "fitnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1xgi7x9b9kxm0q51bqnmwdm5lp8vwhx5yk4d1b23r37spz9dbhw5";
+    sha256 = "07x1j6jgkmrzdpv2lhpp4n16621mpmlylvwdwsggdjivhzvc3x9q";
   };
 
   propagatedBuildInputs = [

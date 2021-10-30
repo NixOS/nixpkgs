@@ -9,7 +9,7 @@ mkXfceDerivation {
   pname = "parole";
   version = "4.16.0";
 
-  sha256 = "07hcnbcd56lq7z3gq1cnk71ppy98hwdvlfp5z3zlc55cqrry26zm";
+  sha256 = "sha256-9Rvhc8asFEb/+OU6uhuHKPl7w5mWBfzGP5ia0tiyDB4=";
 
   postPatch = ''
     substituteInPlace src/plugins/mpris2/Makefile.am \

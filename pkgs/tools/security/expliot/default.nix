@@ -1,35 +1,34 @@
 { lib
-, aiocoap
-, awsiotpythonsdk
-, bluepy
-, buildPythonApplication
-, can
-, cmd2
-, cryptography
 , fetchFromGitLab
-, paho-mqtt
-, pyi2cflash
-, pymodbus
-, pynetdicom
-, pyparsing
-, pyserial
-, pyspiflash
-, pythonOlder
-, upnpy
-, xmltodict
-, zeroconf
+, python3
 }:
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      cmd2 = super.cmd2.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0qiax309my534drk81lihq9ghngr96qnm40kbmgc9ay4fncqq6kh";
+        };
+      });
+    };
+  };
+in
+with py.pkgs;
 
 buildPythonApplication rec {
   pname = "expliot";
-  version = "0.9.7";
-  disabled = pythonOlder "3.7";
+  version = "0.9.8";
+
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
     rev = version;
-    sha256 = "sha256-k43PvH9BXcvxe7O5iCGzLuxv/WkB9YelH/d/1S7BpU0=";
+    sha256 = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +52,7 @@ buildPythonApplication rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "expliot" ];
 
   meta = with lib; {

@@ -1,12 +1,8 @@
 { lib, stdenv, fetchurl, qt4, pkg-config, libnl, python }:
 
-let
-  version = "016";
-in
-
 stdenv.mkDerivation rec {
   pname = "ntrack";
-  inherit version;
+  version = "016";
 
   src = fetchurl {
     url = "https://launchpad.net/ntrack/main/${version}/+download/${pname}-${version}.tar.gz";

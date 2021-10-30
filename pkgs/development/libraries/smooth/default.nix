@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smooth";
-  version = "0.9.6";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "smooth";
     rev = "v${version}";
-    sha256 = "05j5gk6kz2089x8bcq2l0kjspfiiymxn69jcxl4dh9lw96blbadr";
+    sha256 = "sha256-4092Od/wCWe4br80Ry6mr8GpUIUeeF6sk3unELdfQJU=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,7 @@
 echo "Sourcing pytest-check-hook"
 
 declare -ar disabledTests
-declare -ar disabledTestPaths
+declare -a disabledTestPaths
 
 function _concatSep {
     local result
@@ -37,6 +37,11 @@ function pytestCheckPhase() {
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
       args+=" -k \""$disabledTestsString"\""
     fi
+
+    if [ -n "${disabledTestPaths-}" ]; then
+        eval "disabledTestPaths=($disabledTestPaths)"
+    fi
+
     for path in ${disabledTestPaths[@]}; do
       if [ ! -e "$path" ]; then
         echo "Disabled tests path \"$path\" does not exist. Aborting"

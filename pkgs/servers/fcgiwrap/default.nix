@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, systemd, fcgi, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcgiwrap";
   version = "1.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/gnosek/fcgiwrap/archive/${version}.tar.gz";
-    sha256 = "07y6s4mm86cv7p1ljz94sxnqa89y9amn3vzwsnbq5hrl4vdy0zac";
+  src = fetchFromGitHub {
+    owner = "gnosek";
+    repo = "fcgiwrap";
+    rev = version;
+    hash = "sha256-znAsZk+aB2XO2NK8Mjc+DLwykYKHolnVQPErlaAx3Oc=";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://nginx.localdomain.pl/wiki/FcgiWrap";
     description = "Simple server for running CGI applications over FastCGI";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
     license = licenses.mit;
   };

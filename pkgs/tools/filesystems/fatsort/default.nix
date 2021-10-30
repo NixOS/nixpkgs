@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ maintainers.kovirobi ];
     license = licenses.gpl2;
-    inherit version;
     platforms = platforms.linux;
   };
 }

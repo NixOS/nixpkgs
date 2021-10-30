@@ -30,12 +30,12 @@ in rec {
   cudnn_cudatoolkit_10 = cudnn_cudatoolkit_10_2;
 
   cudnn_cudatoolkit_11_0 = generic rec {
-    version = "8.1.0";
+    version = "8.1.1";
     cudatoolkit = cudatoolkit_11_0;
     # 8.1.0 is compatible with CUDA 11.0, 11.1, and 11.2:
     # https://docs.nvidia.com/deeplearning/cudnn/support-matrix/index.html#cudnn-cuda-hardware-versions
-    srcName = "cudnn-11.2-linux-x64-v8.1.0.77.tgz";
-    sha256 = "sha256-2+gvrwcdkbqbzwBIAUatM/RiSC3+5WyvRHnBuNq+Pss=";
+    srcName = "cudnn-11.2-linux-x64-v8.1.1.33.tgz";
+    hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
   };
 
   cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {

@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     cp fmax.ini "$out/share/fairymax"
   '';
   meta = {
-    inherit version;
     description = "A small chess engine supporting fairy pieces";
     longDescription = ''
        A version of micro-Max that reads the piece description

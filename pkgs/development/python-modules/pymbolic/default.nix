@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2020.1";
+  version = "2021.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca029399f9480f6d51fbac0349fddbb42d937620deb03befa0ba94ac08895e6b";
+    sha256 = "67d08ef95568408901e59f79591ba41fd3f2caaecb42b7497c38fc82fd60358c";
   };
 
   postConfigure = ''

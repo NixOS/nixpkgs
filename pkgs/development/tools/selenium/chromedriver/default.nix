@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, nspr, nss, pango, gconf
-, libxcb, libXi, libXrender, libXext
+, libxcb, libXi, libXrender, libXext, dbus
+, testVersion, chromedriver
 }:
 
 let
@@ -27,6 +28,7 @@ let
     gdk-pixbuf glib gtk2 gconf
     libX11 nspr nss pango libXrender
     gconf libxcb libXext libXi
+    dbus
   ];
 
 in stdenv.mkDerivation rec {
@@ -46,8 +48,10 @@ in stdenv.mkDerivation rec {
     install -m755 -D chromedriver $out/bin/chromedriver
   '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
-    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
+    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
   '';
+
+  passthru.tests.version = testVersion { package = chromedriver; };
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";

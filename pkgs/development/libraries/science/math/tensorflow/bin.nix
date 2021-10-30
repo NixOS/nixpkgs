@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , addOpenGLRunpath
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
+, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn
 }:
 
 with lib;
@@ -17,7 +17,7 @@ let
   platform =  "x86_64";
 
   rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib]
-                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn nvidia_x11 ]);
+                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn ]);
 
   packages = import ./binary-hashes.nix;
 

@@ -2,9 +2,11 @@
 , lib
 , desktop-file-utils
 , fetchurl
+, fetchpatch
 , gettext
 , glib
 , gtk3
+, json-glib
 , itstool
 , libdazzle
 , libxml2
@@ -15,19 +17,27 @@
 , shared-mime-info
 , systemd
 , wrapGAppsHook
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.38.1";
+  version = "3.42.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1z2i9187f2jx456l7h07wy8m9a0p7pj3xiv1aji3snq7rjb1lkj0";
+    sha256 = "PBbgPv3+XT5xxNI5xndBrTf3LOiXHi9/rxaNvV6T6IY=";
   };
+
+  patches = [
+    # Fix missing unistd.h include.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/b113c89af1de2f87589175795a197f6384852a78.patch";
+      sha256 = "3Q8d6IZYNJl/vbyzRgoRR2sdl4aRkbcKPeVjSSqxb98=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -39,17 +49,27 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     wrapGAppsHook
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
+
+  buildInputs = [
+    glib
+    gtk3
+    json-glib
+    pango
+    polkit
+    systemd
+    libdazzle
+  ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -65,6 +85,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

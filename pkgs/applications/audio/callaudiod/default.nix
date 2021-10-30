@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , glib
-, alsaLib
+, alsa-lib
 , libpulseaudio
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     libpulseaudio
     glib
   ];

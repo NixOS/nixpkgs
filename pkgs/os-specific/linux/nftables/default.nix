@@ -10,12 +10,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.9.8";
+  version = "1.0.0";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    sha256 = "1r4g22grhd4s1918wws9vggb8821sv4kkj8197ygxr6sar301z30";
+    sha256 = "1x25zs2czmn14mmq1nqi4zibsvh04vqjbx5lxj42nylnmxym9gsq";
   };
 
   nativeBuildInputs = [

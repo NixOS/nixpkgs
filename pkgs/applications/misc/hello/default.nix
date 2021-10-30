@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, testVersion
+, hello
+}:
 
 stdenv.mkDerivation rec {
   pname = "hello";
@@ -10,6 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  passthru.tests.version =
+    testVersion { package = hello; };
 
   meta = with lib; {
     description = "A program that produces a familiar, friendly greeting";

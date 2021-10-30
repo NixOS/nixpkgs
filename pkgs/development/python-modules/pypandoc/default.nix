@@ -4,22 +4,22 @@
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.5";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
-    owner = "bebraw";
+    owner = "NicklasTegner";
     repo = pname;
-    rev = version;
-    sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
+    rev = "v${version}";
+    sha256 = "0rssjig3nwdi4qvsjq7v7k8jyv6l9szfl5dp1a8s54c4j4dw37nh";
   };
 
   patches = [
     (substituteAll {
       src = ./static-pandoc-path.patch;
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
+      pandocVersion = pandoc.version;
     })
     ./skip-tests.patch
-    ./new-pandoc-headings.patch
   ];
 
   checkInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/bebraw/pypandoc";
+    homepage = "https://github.com/NicklasTegner/pypandoc";
     license = licenses.mit;
     maintainers = with maintainers; [ sternenseemann bennofs ];
   };

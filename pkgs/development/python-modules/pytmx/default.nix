@@ -5,19 +5,26 @@
 
 buildPythonPackage rec {
   pname = "pytmx";
-  version = "3.24.0";
+  version = "3.27";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
-    # The release was not git tagged.
     owner = "bitcraft";
     repo = "PyTMX";
-    rev = "eb96efea30d57b731654b2a167d86b8b553b147d";
-    sha256 = "1g1j4w75zw76p5f8m5v0hdigdlva2flf0ngyk8nvqcwzcl5vq5wc";
+    # Release was not tagged.
+    rev = "5bb094c45e648d1de6c9ba8d8c8f31f7b83478e1";
+    sha256 = "0kpd39sr2ggwzh7nd3f5801mgwm57rzrrkqcgbcypdm8l2ayga3b";
   };
 
   propagatedBuildInputs = [ pygame pyglet pysdl2 six ];
+
+  pythonImportsCheck = [
+    "pytmx.pytmx"
+    "pytmx.util_pygame"
+    "pytmx.util_pyglet"
+    "pytmx.util_pysdl2"
+  ];
 
   checkPhase = ''
     # Change into the test directory due to a relative resource path.
@@ -28,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ oxzi ];
   };
 }

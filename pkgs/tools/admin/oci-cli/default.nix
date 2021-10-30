@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    oci arrow certifi pinned_click configparser cryptography jmespath dateutil
+    oci arrow certifi pinned_click configparser cryptography jmespath python-dateutil
     pytz retrying six terminaltables pyopenssl pyyaml
   ];
 
@@ -46,7 +46,8 @@ python3Packages.buildPythonApplication rec {
       --replace "cryptography==3.2.1" "cryptography" \
       --replace "pyOpenSSL==19.1.0" "pyOpenSSL" \
       --replace "PyYAML==5.3.1" "PyYAML" \
-      --replace "six==1.14.0" "six"
+      --replace "six==1.14.0" "six" \
+      --replace "arrow==0.17.0" "arrow"
   '';
 
   meta = with lib; {

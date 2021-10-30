@@ -15,6 +15,8 @@
 
 , # size of the boot partition, is only used if partitionTableType is
   # either "efi" or "hybrid"
+  # This will be undersized slightly, as this is actually the offset of
+  # the end of the partition. Generally it will be 1MiB smaller.
   bootSize ? "256M"
 
 , # The files and directories to be placed in the target file system.
@@ -42,11 +44,14 @@
   #   most likely fails as GRUB will probably refuse to install.
   partitionTableType ? "legacy"
 
+, # Whether to invoke `switch-to-configuration boot` during image creation
+  installBootLoader ? true
+
 , # The root file system type.
   fsType ? "ext4"
 
 , # Filesystem label
-  label ? "nixos"
+  label ? if onlyNixStore then "nix-store" else "nixos"
 
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix.
@@ -55,10 +60,24 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, # Copy the contents of the Nix store to the root of the image and
+  # skip further setup. Incompatible with `contents`,
+  # `installBootLoader` and `configFile`.
+  onlyNixStore ? false
+
 , name ? "nixos-disk-image"
 
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
+
+, # Whether a nix channel based on the current source tree should be
+  # made available inside the image. Useful for interactive use of nix
+  # utils, but changes the hash of the image when the sources are
+  # updated.
+  copyChannel ? true
+
+, # Additional store paths to copy to the image's store.
+  additionalPaths ? []
 }:
 
 assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
@@ -69,6 +88,7 @@ assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
          contents;
+assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
 
 with lib;
 
@@ -161,7 +181,16 @@ let format' = format; in let
   users   = map (x: x.user  or "''") contents;
   groups  = map (x: x.group or "''") contents;
 
-  closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
+  basePaths = [ config.system.build.toplevel ]
+    ++ lib.optional copyChannel channelSources;
+
+  additionalPaths' = subtractLists basePaths additionalPaths;
+
+  closureInfo = pkgs.closureInfo {
+    rootPaths = basePaths ++ additionalPaths';
+  };
+
+  blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
 
   prepareImage = ''
     export PATH=${binPath}
@@ -173,6 +202,24 @@ let format' = format; in let
 
     sectorsToBytes() {
       echo $(( "$1" * 512  ))
+    }
+
+    # Given lines of numbers, adds them together
+    sum_lines() {
+      local acc=0
+      while read -r number; do
+        acc=$((acc+number))
+      done
+      echo "$acc"
+    }
+
+    mebibyte=$(( 1024 * 1024 ))
+
+    # Approximative percentage of reserved space in an ext4 fs over 512MiB.
+    # 0.05208587646484375
+    #  × 1000, integer part: 52
+    compute_fudge() {
+      echo $(( $1 * 52 / 1000 ))
     }
 
     mkdir $out
@@ -229,18 +276,65 @@ let format' = format; in let
     chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
-      --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""
+      --system ${config.system.build.toplevel} \
+      ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
+      --substituters ""
+
+    ${optionalString (additionalPaths' != []) ''
+      nix copy --to $root --no-check-sigs ${concatStringsSep " " additionalPaths'}
+    ''}
 
     diskImage=nixos.raw
 
     ${if diskSize == "auto" then ''
       ${if partitionTableType == "efi" || partitionTableType == "hybrid" then ''
-        additionalSpace=$(( ($(numfmt --from=iec '${additionalSpace}') + $(numfmt --from=iec '${bootSize}')) / 1000 ))
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # Normally we'd need to account for alignment and things, if bootSize
+        # represented the actual size of the boot partition. But it instead
+        # represents the offset at which it ends.
+        # So we know bootSize is the reserved space in front of the partition.
+        reservedSpace=$(( gptSpace + $(numfmt --from=iec '${bootSize}') ))
+      '' else if partitionTableType == "legacy+gpt" then ''
+        # Add the GPT at the end
+        gptSpace=$(( 512 * 34 * 1 ))
+        # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
+        reservedSpace=$(( gptSpace + 2 * mebibyte ))
+      '' else if partitionTableType == "legacy" then ''
+        # Add the 1MiB aligned reserved space (includes MBR)
+        reservedSpace=$(( mebibyte ))
       '' else ''
-        additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') / 1000 ))
+        reservedSpace=0
       ''}
-      diskSize=$(( $(set -- $(du -d0 $root); echo "$1") + $additionalSpace ))
-      truncate -s "$diskSize"K $diskImage
+      additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
+
+      # Compute required space in filesystem blocks
+      diskUsage=$(find . ! -type d -print0 | du --files0-from=- --apparent-size --block-size "${blockSize}" | cut -f1 | sum_lines)
+      # Each inode takes space!
+      numInodes=$(find . | wc -l)
+      # Convert to bytes, inodes take two blocks each!
+      diskUsage=$(( (diskUsage + 2 * numInodes) * ${blockSize} ))
+      # Then increase the required space to account for the reserved blocks.
+      fudge=$(compute_fudge $diskUsage)
+      requiredFilesystemSpace=$(( diskUsage + fudge ))
+
+      diskSize=$(( requiredFilesystemSpace  + additionalSpace ))
+
+      # Round up to the nearest mebibyte.
+      # This ensures whole 512 bytes sector sizes in the disk image
+      # and helps towards aligning partitions optimally.
+      if (( diskSize % mebibyte )); then
+        diskSize=$(( ( diskSize / mebibyte + 1) * mebibyte ))
+      fi
+
+      truncate -s "$diskSize" $diskImage
+
+      printf "Automatic disk size...\n"
+      printf "  Closure space use: %d bytes\n" $diskUsage
+      printf "  fudge: %d bytes\n" $fudge
+      printf "  Filesystem size needed: %d bytes\n" $requiredFilesystemSpace
+      printf "  Additional space: %d bytes\n" $additionalSpace
+      printf "  Disk image size: %d bytes\n" $diskSize
     '' else ''
       truncate -s ${toString diskSize}M $diskImage
     ''}
@@ -251,31 +345,35 @@ let format' = format; in let
       # Get start & length of the root partition in sectors to $START and $SECTORS.
       eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-      mkfs.${fsType} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
     '' else ''
-      mkfs.${fsType} -F -L ${label} $diskImage
+      mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* / ||
+    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+           -t ${fsType} \
+           -i $diskImage \
+           $root${optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
-in pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand name
-    { preVM = prepareImage;
+
+  moveOrConvertImage = ''
+    ${if format == "raw" then ''
+      mv $diskImage $out/${filename}
+    '' else ''
+      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+    ''}
+    diskImage=$out/${filename}
+  '';
+
+  buildImage = pkgs.vmTools.runInLinuxVM (
+    pkgs.runCommand name {
+      preVM = prepareImage;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = ''
-        ${if format == "raw" then ''
-          mv $diskImage $out/${filename}
-        '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
-        ''}
-        diskImage=$out/${filename}
-        ${postVM}
-      '';
+      postVM = moveOrConvertImage + postVM;
       memSize = 1024;
-    }
-    ''
+    } ''
       export PATH=${binPath}:$PATH
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
@@ -283,6 +381,9 @@ in pkgs.vmTools.runInLinuxVM (
       # Some tools assume these exist
       ln -s vda /dev/xvda
       ln -s vda /dev/sda
+      # make systemd-boot find ESP without udev
+      mkdir /dev/block
+      ln -s /dev/vda1 /dev/block/254:1
 
       mountPoint=/mnt
       mkdir $mountPoint
@@ -302,11 +403,13 @@ in pkgs.vmTools.runInLinuxVM (
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
-      # Set up core system link, GRUB, etc.
-      NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      ${lib.optionalString installBootLoader ''
+        # Set up core system link, GRUB, etc.
+        NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
-      # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
-      rm -f $mountPoint/etc/machine-id
+        # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
+        rm -f $mountPoint/etc/machine-id
+      ''}
 
       # Set the ownerships of the contents. The modes are set in preVM.
       # No globbing on targets, so no need to set -f
@@ -332,4 +435,9 @@ in pkgs.vmTools.runInLinuxVM (
         tune2fs -T now -c 0 -i 0 $rootDisk
       ''}
     ''
-)
+  );
+in
+  if onlyNixStore then
+    pkgs.runCommand name {}
+      (prepareImage + moveOrConvertImage + postVM)
+  else buildImage

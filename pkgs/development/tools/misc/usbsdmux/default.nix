@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ydDUSqBTY62iOtWdgrFh2qrO9LMi+OCYIw5reh6uoIA=";
+    sha256 = "sha256-gCxwR5jxzkH22B6nxBwAd0HpwWMIj/zp5VROJ0IWq7c=";
   };
 
   # usbsdmux is not meant to be used as an importable module and has no tests
