@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "6.1.3";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ALDNnKgnOjYladDRVothjm3/2Jv1eNxR2wSS+ZL/Fqk=";
+    sha256 = "1j91m5g4qxkf59m506aw6vfhv1db1z393924qq3zbyg3wqwq1rxx";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
