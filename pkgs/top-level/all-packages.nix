@@ -20012,6 +20012,8 @@ with pkgs;
 
   shhopt = callPackage ../development/libraries/shhopt { };
 
+  shine = callPackage ../development/libraries/shine { };
+
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
   s2n-tls = callPackage ../development/libraries/s2n-tls { };
