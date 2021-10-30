@@ -299,14 +299,6 @@ postInstall() {
     done
     shopt -u nullglob
     shopt -s failglob
-
-    # Two identical man pages are shipped (moving and compressing is done later)
-    for i in "$out"/share/man/man1/*g++.1; do
-        if test -e "$i"; then
-            man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
-            ln -sf "$man_prefix"gcc.1 "$i"
-        fi
-    done
 }
 
 genericBuild
