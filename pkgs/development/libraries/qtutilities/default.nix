@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Martchus/qtutilities";
-    description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
+    description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms   = platforms.linux;
