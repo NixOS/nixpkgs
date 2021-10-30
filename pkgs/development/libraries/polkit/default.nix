@@ -7,7 +7,7 @@
 , pam
 , perl
 , fetchpatch
-, intltool
+, gettext
 , spidermonkey_78
 , gobject-introspection
 , libxslt
@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "0.119";
+  version = "0.120";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.gz";
-    sha256 = "0p0zzmr0kh3mpmqya4q27y4h9b920zp5ya0i8909ahp9hvdrymy8";
+    sha256 = "7npZmoUxF78nNUhyVxn6kvq9LxNpFcekkGzumFZ67gM=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     glib
     gtk-doc
     pkg-config
-    intltool
+    gettext
     perl
 
     # man pages
