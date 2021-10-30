@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , pkgs
+, fetchFromGitHub
 , isPyPy
 , pycrypto
 , requests
@@ -14,9 +15,11 @@ buildPythonPackage rec {
   pname = "livestreamer";
   disabled = isPyPy;
 
-  src = pkgs.fetchurl {
-    url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-    sha256 = "1fp3d3z2grb1ls97smjkraazpxnvajda2d1g1378s6gzmda2jvjd";
+  src = fetchFromGitHub {
+    owner = "chrippa";
+    repo = "livestreamer";
+    rev = "v1.12.2";
+    sha256 = "sha256-PqqyBh+oMmu7Ynly3fqx/+6mQYX+6SpI0Okj2O+YLz0=";
   };
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
