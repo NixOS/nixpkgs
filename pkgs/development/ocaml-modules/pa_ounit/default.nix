@@ -1,4 +1,4 @@
-{ lib, buildOcaml, ocaml, fetchurl, ounit }:
+{ lib, buildOcaml, ocaml, fetchFromGitHub, ounit }:
 
 if lib.versionAtLeast ocaml.version "4.06"
 then throw "pa_ounit is not available for OCaml ${ocaml.version}"
@@ -8,9 +8,11 @@ buildOcaml rec {
   pname = "pa_ounit";
   version = "113.00.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/pa_ounit/archive/${version}.tar.gz";
-    sha256 = "0vi0p2hxcrdsl0319c9s8mh9hmk2i4ir6c6vrj8axkc37zkgc437";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "pa_ounit";
+    rev = version;
+    sha256 = "sha256-zzXN+mSJtlnQ3e1QoEukCiyfDEoe8cBdkAQ3U1dkvEk=";
   };
 
   propagatedBuildInputs = [ ounit ];
