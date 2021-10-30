@@ -397,6 +397,8 @@ else let
       inherit doCheck doInstallCheck;
 
       inherit outputs;
+    } // optionalAttrs (stdenv ? jscall) {
+      inherit (stdenv) jscall;
     } // optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
       # Provide default values for outputHashMode and outputHashAlgo because

@@ -37,7 +37,8 @@ cargoBuildHook() {
 
     (
     set -x
-    @setEnv@ cargo build -j $NIX_BUILD_CORES \
+    runInJobserver -F CARGO_MAKEFLAGS @setEnv@ \
+      cargo build ---- -j $NIX_BUILD_CORES ---- \
         --target @rustHostPlatformSpec@ \
         --offline \
         ${cargoBuildProfileFlag} \

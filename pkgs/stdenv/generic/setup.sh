@@ -1002,6 +1002,48 @@ stripHash() {
     if (( casematchOpt )); then shopt -s nocasematch; fi
 }
 
+# Takes a command line of the form
+#   runInJobserver command... ---- defArgs... ---- programArgs...
+# and runs
+#   command... programArgs... # if a jobserver is available
+#   command... defArgs... programArgs... # if no jobserver is available
+runInJobserver() {
+    local opts=() cmd=() defArgs=()
+    local kind="without"
+
+    while [[ "$1" == -* ]]; do
+        case "$1" in
+            --) break ;;
+            -F) opts+=("${@:1:2}"); shift 2 ;;
+            -F*) opts+=("$1"); shift ;;
+            *) echo "unexpected pre-command argument $1" >&2; return 1 ;;
+        esac
+    done
+
+    while [[ $# > 0 && "$1" != "----" ]]; do
+        cmd+=("$1")
+        shift
+    done
+    shift
+
+    while [[ $# > 0 && "$1" != "----" ]]; do
+        defArgs+=("$1")
+        shift
+    done
+    shift
+
+    if [[ -n "$jscall" && -e /jobserver ]]; then
+        cmd=("$jscall" "${opts[@]}" /jobserver $NIX_BUILD_CORES "${cmd[@]}"
+            ---- "${defArgs[@]}" ----)
+        kind='with'
+    else
+        cmd+=("${defArgs[@]}")
+    fi
+
+    echoCmd "running $kind jobserver" "${cmd[@]}" "$@"
+    "${cmd[@]}" "$@"
+}
+
 
 recordPropagatedDependencies() {
     # Propagate dependencies into the development output.
@@ -1317,13 +1359,19 @@ buildPhase() {
 
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
         )
         _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
         echoCmd 'build flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        if [[ -n "$enableParallelBuilding" ]]; then
+            runInJobserver \
+                make ---- \
+                -j${NIX_BUILD_CORES} ---- \
+                ${makefile:+-f $makefile} "${flagsArray[@]}"
+        else
+            make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        fi
         unset flagsArray
     fi
 
@@ -1355,7 +1403,6 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
         )
 
@@ -1369,7 +1416,14 @@ checkPhase() {
         flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        if [[ -n "$enableParallelChecking" ]]; then
+            runInJobserver \
+                make ---- \
+                -j${NIX_BUILD_CORES} ---- \
+                ${makefile:+-f $makefile} "${flagsArray[@]}"
+        else
+            make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        fi
 
         unset flagsArray
     fi
@@ -1407,7 +1461,14 @@ installPhase() {
     fi
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    if [[ -n "$enableParallelInstalling" ]]; then
+        runInJobserver \
+            make ---- \
+            -j${NIX_BUILD_CORES} ---- \
+            ${makefile:+-f $makefile} "${flagsArray[@]}"
+    else
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    fi
     unset flagsArray
 
     runHook postInstall
@@ -1483,7 +1544,6 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
         )
 
@@ -1492,7 +1552,14 @@ installCheckPhase() {
         flagsArray+=( ${installCheckTarget:-installcheck} )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        if [[ -n "$enableParallelChecking" ]]; then
+            runInJobserver \
+                make ---- \
+                -j${NIX_BUILD_CORES} ---- \
+                ${makefile:+-f $makefile} "${flagsArray[@]}"
+        else
+            make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        fi
         unset flagsArray
     fi
 
