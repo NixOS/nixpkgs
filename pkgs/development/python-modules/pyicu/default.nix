@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , six
-, icu68
+, icu
 }:
 
 buildPythonPackage rec {
@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "3d80de47045a8163db5aebc947c42b4d429eeea4f0c32af4f40b33981fa872b9";
   };
 
-  nativeBuildInputs = [ icu68 ]; # for icu-config, but should be replaced with pkg-config
-  buildInputs = [ icu68 ];
+  nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
+  buildInputs = [ icu ];
   checkInputs = [ pytestCheckHook six ];
 
   meta = with lib; {
