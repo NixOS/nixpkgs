@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
+{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, dcompiler, gdk-pixbuf, gnome, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ ldc pkg-config which ];
+  nativeBuildInputs = [ dcompiler pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte
@@ -133,6 +133,10 @@ in stdenv.mkDerivation rec {
         --replace "$out/include" "$dev/include"
     done
   '';
+
+  passthru = {
+    inherit dcompiler;
+  };
 
   meta = with lib; {
     description = "D binding and OO wrapper for GTK";
