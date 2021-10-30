@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crc32c";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "crc32c";
     rev = version;
-    sha256 = "1sazkis9rzbrklfrvk7jn1mqywnq4yghmzg94mxd153h8b1sb149";
+    sha256 = "0c383p7vkfq9rblww6mqxz8sygycyl27rr0j3bzb8l8ga71710ii";
     fetchSubmodules = true;
   };
 
