@@ -26231,6 +26231,8 @@ with pkgs;
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
+  lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr { };
+
   lighttable = callPackage ../applications/editors/lighttable {};
 
   libdsk = callPackage ../misc/emulators/libdsk { };
