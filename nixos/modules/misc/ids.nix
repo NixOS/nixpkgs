@@ -656,6 +656,7 @@ in
       hqplayer = 319;
       moonraker = 320;
       distcc = 321;
+      tor-insecure = 322;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
