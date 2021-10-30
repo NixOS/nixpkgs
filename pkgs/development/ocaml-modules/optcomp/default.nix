@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, ocamlbuild, camlp4 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-optcomp";
   version = "1.6";
 
-  src = fetchurl {
-    url = "https://github.com/diml/optcomp/archive/${version}.tar.gz";
-    sha256 = "0hhhb2gisah1h22zlg5iszbgqxdd7x85cwd57bd4mfkx9l7dh8jh";
+  src = fetchFromGitHub {
+    owner = "diml";
+    repo = "optcomp";
+    rev = version;
+    sha256 = "sha256-UCLYDk19ukraOqVxVlA/rXX81texPPqFgAEqHZ9YEEI=";
   };
 
   patches =
