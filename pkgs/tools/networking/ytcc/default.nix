@@ -11,6 +11,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0xpinilb8rnha35laxq076p6v7hdis6davr9ckm5xycs3m4aj7s8";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "youtube_dl" "yt_dlp"
+  '';
+
   nativeBuildInputs = [ gettext installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -18,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     feedparser
     lxml
     sqlalchemy
-    youtube-dl
+    yt-dlp
     wcwidth
   ];
 
