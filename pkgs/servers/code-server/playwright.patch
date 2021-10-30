@@ -1,10 +1,10 @@
---- ./lib/vscode/node_modules/playwright/install.js
-+++ ./lib/vscode/node_modules/playwright/install.js
+--- ./vendor/modules/code-oss-dev/node_modules/playwright/install.js
++++ ./vendor/modules/code-oss-dev/node_modules/playwright/install.js
 @@ -14,6 +14,4 @@
   * limitations under the License.
   */
  
 -const { installBrowsersWithProgressBar } = require('./lib/install/installer');
 -
--installBrowsersWithProgressBar(__dirname);
+-installBrowsersWithProgressBar();
 +process.stdout.write('Browser install disabled by Nix build script\n');
