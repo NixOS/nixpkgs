@@ -1135,6 +1135,10 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
+    pulseaudio = callPackage ../development/ocaml-modules/pulseaudio {
+      inherit (pkgs) pulseaudio;
+    };
+
     pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
