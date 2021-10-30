@@ -142,6 +142,16 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
   matrix = {
     members = [
       ma27
