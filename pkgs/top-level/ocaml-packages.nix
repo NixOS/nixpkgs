@@ -1091,6 +1091,10 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
+    speex = callPackage ../development/ocaml-modules/speex {
+      inherit (pkgs) speex;
+    };
+
     tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix { };
 
     tar = callPackage ../development/ocaml-modules/tar { };
