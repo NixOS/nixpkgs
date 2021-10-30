@@ -351,6 +351,7 @@ in
       hqplayer = 319;
       moonraker = 320;
       distcc = 321;
+      tor-insecure = 322;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
