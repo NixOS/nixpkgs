@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     boost165 openssl zlib
   ];
   nativeBuildInputs = [
-    cmake gcc9 
+    cmake gcc9
   ];
   src = fetchFromGitHub {
     owner = "microsoft";
