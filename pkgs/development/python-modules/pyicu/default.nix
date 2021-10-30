@@ -19,11 +19,12 @@ buildPythonPackage rec {
   buildInputs = [ icu ];
   checkInputs = [ pytestCheckHook six ];
 
-  meta = with lib; {
-    homepage = "https://github.com/ovalhub/pyicu/";
-    description = "Python extension wrapping the ICU C++ API";
-    license = licenses.mit;
-    platforms = platforms.unix;
-  };
+  pythonImportsCheck = [ "icu" ];
 
+  meta = with lib; {
+    homepage = "https://gitlab.pyicu.org/main/pyicu";
+    description = "Python extension wrapping the ICU C++ API";
+    changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
+    license = licenses.mit;
+  };
 }
