@@ -15,28 +15,45 @@
 , libdrm
 , libxkbcommon
 , wlroots
+, runCommand
+, patchutils
+, fetchurl
 }:
 
 let
-  phocWlroots = wlroots.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [
-      # Temporary fix. Upstream report: https://source.puri.sm/Librem5/phosh/-/issues/422
-      (fetchpatch {
-        name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/78fde4aaf1a74eb13a3f083cb6dfb29f578c3265/community/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        sha256 = "1zjn7mwdj21z0jsc2mz90cnrzk97yqkiq58qqgpjav4h4dgpfb38";
-      })
-      # To fix missing header `EGL/eglmesaext.h` dropped upstream
-      (fetchpatch {
-        name = "0002-stop-including-eglmesaext-h.patch";
-        url = "https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab.patch";
-        sha256 = "17ax4dyk0584yhs3lq8ija5bkainjf7psx9c9r50cr4jm9c0i37l";
-      })
-    ];
-  });
+  # Patchset for upstream MR that gets wlroots to 0.15
+  # https://gitlab.gnome.org/World/Phosh/phoc/-/merge_requests/284
+  # https://gitlab.gnome.org/World/Phosh/phoc/-/merge_requests/284/diffs?diff_id=255756
+  # Not using fetchpatch on purpose here, because we _WANT_ to split it into commits first.
+  upstream_wlroots_0_15_patch = fetchurl {
+    url = "https://gitlab.gnome.org/World/Phosh/phoc/-/merge_requests/284/diffs.patch?diff_id=255756";
+    sha256 = "19pjdrgnr2qpfqql45v8i0sggsvxbrjf1p527m53g0f56cpk4y9z";
+    name = "284.patch";
+  };
+  # Let's horribly maim it using patchitils, grep, and a bit of elbow grease:
+  wlroots_0_14_patch = runCommand "wlroots_0_14.patch" {
+    nativeBuildInputs = [ patchutils ];
+  } ''
+    # There might be a nicer way to include only the first 7 commits in this
+    # range, but this works.
+    csplit --elide-empty-files ${upstream_wlroots_0_15_patch} '/^-- $/' '{*}'
+    rm xx07
+    cat xx* > first_7.patch
+
+    # We want to use our own wlroots, so the vendored wlroots doesn't exist.
+    # Patch complains we claim it does.
+    filterdiff \
+     --exclude 'a/subprojects/wlroots' first_7.patch \
+     > without_vendoring.patch
+
+    # Allow for other wlroots versions.
+    sed -i 's@== 0.14.0@== ${wlroots.version}@' without_vendoring.patch
+
+    cat without_vendoring.patch > $out
+  '';
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -44,7 +61,7 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QAnJlpFjWJvwxGyenmN4IaI9VFn2jwdXpa8VqAmH7Xw=";
+    sha256 = "18nwjbyjxq11ppfdky3bnfh9pr23fjl2543jwva0iz1n6c8mkpd9";
   };
 
   nativeBuildInputs = [
@@ -65,10 +82,14 @@ in stdenv.mkDerivation rec {
     # For keybindings settings schemas
     gnome.mutter
     wayland
-    phocWlroots
+    wlroots
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];
+
+  patches = [
+    wlroots_0_14_patch
+  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
