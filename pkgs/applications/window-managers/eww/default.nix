@@ -5,6 +5,7 @@
 , gtk3
 , withWayland ? false
 , gtk-layer-shell
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +25,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk3 ] ++ lib.optional withWayland gtk-layer-shell;
 
-  cargoBuildFlags = [ "--bin" "eww" ] ++ lib.optionals withWayland [
-    "--no-default-features"
-    "--features=wayland"
-  ];
+  cargoBuildFlags = [ "--bin" "eww" ]
+    ++ lib.optional (stdenv.isDarwin || withWayland) "--no-default-features"
+    ++ lib.optional withWayland "--features=wayland";
 
   cargoTestFlags = cargoBuildFlags;
 
