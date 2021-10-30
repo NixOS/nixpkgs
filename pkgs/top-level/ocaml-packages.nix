@@ -1005,6 +1005,8 @@ let
 
     optint = callPackage ../development/ocaml-modules/optint { };
 
+    opus = callPackage ../development/ocaml-modules/opus { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otoml = callPackage ../development/ocaml-modules/otoml { };
