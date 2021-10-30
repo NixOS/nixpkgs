@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , numpy
 , scipy
 , matplotlib
@@ -17,13 +17,15 @@
 }:
 
 buildPythonPackage rec {
-  name = "sfepy";
+  pname = "sfepy";
   version = "2021.2";
   disabled = pythonOlder "3.8";
 
-  src = fetchurl {
-    url="https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
-    sha256 = "1vnynxzbspj900wjyy6020l71jdv2l1wkyax7nhi6w5wvav4kfwz";
+  src = fetchFromGitHub {
+    owner = "sfepy";
+    repo = "sfepy";
+    rev = "release_${version}";
+    sha256 = "sha256-zFtm4KrpqjYfxVHcMrTU4tMyHYnD9VPEvuId2lR1MHU=";
   };
 
   propagatedBuildInputs = [
