@@ -6670,7 +6670,7 @@ with pkgs;
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
   keyscope = callPackage ../tools/security/keyscope {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation IOKit Security;
   };
 
   keystore-explorer = callPackage ../applications/misc/keystore-explorer {
