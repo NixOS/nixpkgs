@@ -1393,6 +1393,10 @@ let
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
+    taglib = callPackage ../development/ocaml-modules/taglib {
+      inherit (pkgs) taglib;
+    };
+
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
 
     telegraml = callPackage ../development/ocaml-modules/telegraml { };
