@@ -1,6 +1,6 @@
 { lib, mkCoqDerivation, which, coq, coq-elpi, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib; let hb = mkCoqDerivation {
   pname = "hierarchy-builder";
   owner = "math-comp";
   inherit version;
@@ -21,8 +21,6 @@ with lib; mkCoqDerivation {
 
   mlPlugin = true;
 
-  buildPhase = "make build";
-
   installFlags = [ "DESTDIR=$(out)" "COQMF_COQLIB=lib/coq/${coq.coq-version}" ];
   extraInstallFlags = [ "VFILES=structures.v" ];
 
@@ -31,4 +29,8 @@ with lib; mkCoqDerivation {
     maintainers = with maintainers; [ cohencyril siraben ];
     license = licenses.mit;
   };
-}
+}; in
+hb.overrideAttrs (o:
+  optionalAttrs (versions.isGe "1.2.0" o.version || o.version == "dev")
+    { buildPhase = "make build"; }
+)
