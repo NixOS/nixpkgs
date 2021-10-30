@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , isPyPy
 , livestreamer
 }:
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "livestreamer-curses";
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "https://github.com/gapato/livestreamer-curses/archive/v${version}.tar.gz";
-    sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
+  src = fetchFromGitHub {
+    owner = "gapato";
+    repo = "livestreamer-curses";
+    rev = "v1.5.2";
+    sha256 = "sha256-Pi0PIOUhMMAWft9ackB04IgF6DyPrXppNqyVjozIjN4=";
   };
 
   propagatedBuildInputs = [ livestreamer ];

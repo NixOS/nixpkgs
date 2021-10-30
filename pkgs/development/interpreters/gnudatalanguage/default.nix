@@ -102,13 +102,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnudatalanguage";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "gdl";
     rev = "v${version}";
-    sha256 = "sha256-Y9LVRaWjQqpWqjNngxB406PE/rl/9S8rs0u0CK5ivUA=";
+    sha256 = "sha256-IrCLL8MQp0SkWj7sbfZlma5FrnMbgdl4E/1nPGy0Y60=";
   };
 
   buildInputs = [
