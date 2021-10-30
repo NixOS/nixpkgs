@@ -645,6 +645,8 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
+    lastfm = callPackage ../development/ocaml-modules/lastfm { };
+
     lens = callPackage ../development/ocaml-modules/lens { };
 
     letsencrypt = callPackage ../development/ocaml-modules/letsencrypt { };
