@@ -694,6 +694,8 @@ let
       libllvm = pkgs.llvmPackages_10.libllvm;
     };
 
+    lo = callPackage ../development/ocaml-modules/lo { };
+
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
