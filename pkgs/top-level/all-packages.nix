@@ -6401,6 +6401,11 @@ with pkgs;
 
   intermodal = callPackage ../tools/misc/intermodal { };
 
+  invidious = callPackage ../servers/invidious {
+    # needs a specific version of lsquic
+    lsquic = callPackage ../servers/invidious/lsquic.nix { };
+  };
+
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
   inxi = callPackage ../tools/system/inxi { };
