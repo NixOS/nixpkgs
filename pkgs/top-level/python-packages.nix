@@ -1396,6 +1396,8 @@ in {
 
   cachetools = callPackage ../development/python-modules/cachetools { };
 
+  cachey = callPackage ../development/python-modules/cachey { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
