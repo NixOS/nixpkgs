@@ -2,14 +2,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.1";
+  version = "1.4.3";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "14ln4la52x38pf8syr7i5v4vd65ya4zij8zj5kgihah03cih0qcd";
+    sha256 = "sha256-eSu6tkWbRHzJkWwPgljaScAuL0gRkp8PJUHWC8mUvOw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
 
     "-DBUILD_UNITY_PLUGIN=1"
   ];
+
+  # Upstream mistakenly installs to /nix/store/.../nix/store/.../*, work around that
+  postInstall = ''
+    mv $out/nix/store/*/* $out
+    rm -rf $out/nix
+  '';
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
