@@ -36,6 +36,15 @@ let
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
+        # the included yarn rake task attaches the yarn:install task
+        # to assets:precompile, which is both unnecessary (since we
+        # run `yarn install` ourselves) and undoes the shebang patches
+        # in node_modules
+        railties = x.railties // {
+          dontBuild = false;
+          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
+          patchFlags = "-p2";
+        };
       };
     groups = [
       "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
@@ -95,8 +104,6 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      # hack: rake gettext:po_to_json breaks the node_modules folder. We repair it by patching the shebangs again.
-      patchShebangs node_modules/
       bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production

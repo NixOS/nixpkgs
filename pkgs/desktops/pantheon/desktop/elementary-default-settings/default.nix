@@ -60,9 +60,8 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    # Install our override for plank dockitems as Appcenter and Tasks is not ready to be preinstalled.
-    # For Appcenter, see: https://github.com/NixOS/nixpkgs/issues/70214.
-    # For Tasks, see: https://github.com/elementary/tasks/issues/243#issuecomment-846259496
+    # Install our override for plank dockitems as Appcenter is not ready to be preinstalled.
+    # See: https://github.com/NixOS/nixpkgs/issues/70214.
     schema_dir=$out/share/glib-2.0/schemas
     install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
 

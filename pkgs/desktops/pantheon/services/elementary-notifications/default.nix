@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "io.elementary.notifications";
   };
 }

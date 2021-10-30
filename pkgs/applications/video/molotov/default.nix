@@ -3,17 +3,16 @@
 let
   pname = "molotov";
   version = "4.4.0";
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "http://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
     sha256 = "sha256-l4Il6i8uXSeJqH3ITC8ZUpKXPQb0qcW7SpKx1R46XDc=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D \
       ${appimageContents}/@molotovdesktop-wrapper.desktop \
       $out/share/applications/${pname}.desktop

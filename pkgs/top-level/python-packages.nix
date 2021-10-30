@@ -2699,6 +2699,8 @@ in {
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
+  flashtext = callPackage ../development/python-modules/flashtext { };
+
   flask-admin = callPackage ../development/python-modules/flask-admin { };
 
   flask-api = callPackage ../development/python-modules/flask-api { };
@@ -8877,6 +8879,8 @@ in {
   stringcase = callPackage ../development/python-modules/stringcase { };
 
   stripe = callPackage ../development/python-modules/stripe { };
+
+  striprtf = callPackage ../development/python-modules/striprtf { };
 
   structlog = callPackage ../development/python-modules/structlog { };
 

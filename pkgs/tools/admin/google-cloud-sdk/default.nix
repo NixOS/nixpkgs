@@ -117,9 +117,10 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    tests = { inherit (nixosTests) google-cloud-sdk; };
-  };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+  '';
 
   meta = with lib; {
     description = "Tools for the google cloud platform";

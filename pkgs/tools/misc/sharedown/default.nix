@@ -11,12 +11,7 @@
 , chromium
 }:
 
-let
-  binPath = lib.makeBinPath ([
-    ffmpeg
-    yt-dlp
-  ]);
-
+stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
   version = "2.0.0";
 
@@ -26,22 +21,6 @@ let
     rev = version;
     sha256 = "sha256-Z6OsZvVzk//qEkl4ciNz4cQRqC2GFg0qYgmliAyz6fo=";
   };
-
-  modules = yarn2nix-moretea.mkYarnModules {
-    name = "${pname}-modules-${version}";
-    inherit pname version;
-
-    yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
-      "--production"
-    ];
-
-    packageJSON = "${src}/package.json";
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarndeps.nix;
-  };
-in
-stdenvNoCC.mkDerivation rec {
-  inherit pname version src;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -61,25 +40,45 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      binPath = lib.makeBinPath ([
+        ffmpeg
+        yt-dlp
+      ]);
 
-    mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+      modules = yarn2nix-moretea.mkYarnModules {
+        name = "${pname}-modules-${version}";
+        inherit pname version;
 
-    # Electron app
-    cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
+        yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
+          "--production"
+        ];
 
-    # Desktop Launcher
-    cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
+        packageJSON = "${src}/package.json";
+        yarnLock = ./yarn.lock;
+        yarnNix = ./yarndeps.nix;
+      };
+    in
+    ''
+      runHook preInstall
 
-    # Install electron wrapper script
-    makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
-      --add-flags "$out/share/Sharedown" \
-      --prefix PATH : "${binPath}" \
-      --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
+      mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
 
-    runHook postInstall
-  '';
+      # Electron app
+      cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
+
+      # Desktop Launcher
+      cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
+
+      # Install electron wrapper script
+      makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
+        --add-flags "$out/share/Sharedown" \
+        --prefix PATH : "${binPath}" \
+        --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
+
+      runHook postInstall
+    '';
 
   passthru.updateScript = ./update.sh;
 

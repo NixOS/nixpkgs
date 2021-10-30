@@ -10387,10 +10387,6 @@ with pkgs;
 
   sentry-native = callPackage ../development/libraries/sentry-native { };
 
-  vtun = callPackage ../tools/networking/vtun {
-    openssl = openssl_1_0_2;
-  };
-
   waifu2x-converter-cpp = callPackage ../tools/graphics/waifu2x-converter-cpp {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
@@ -14979,6 +14975,8 @@ with pkgs;
 
   pycritty = with python3Packages; toPythonApplication pycritty;
 
+  pylint-exit = callPackage ../development/tools/pylint-exit { };
+
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
   };
@@ -19327,7 +19325,9 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay {};
 
-  sdrpp = callPackage ../applications/radio/sdrpp { };
+  sdrpp = callPackage ../applications/radio/sdrpp {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
@@ -27967,7 +27967,9 @@ with pkgs;
   snapper = callPackage ../tools/misc/snapper { };
   snapper-gui = callPackage ../applications/misc/snapper-gui { };
 
-  snd = callPackage ../applications/audio/snd { };
+  snd = callPackage ../applications/audio/snd {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreMIDI;
+  };
 
   shntool = callPackage ../applications/audio/shntool { };
 
