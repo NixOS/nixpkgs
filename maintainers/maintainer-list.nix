@@ -13001,4 +13001,10 @@
     githubId = 88109321;
   };
 
+  ursi =
+    { name = "Mason Mackaman";
+      email = "masondeanm@aol.com";
+      github = "ursi";
+      githubId = 17836748;
+    };
 }

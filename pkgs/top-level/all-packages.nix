@@ -33533,6 +33533,8 @@ with pkgs;
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
 
+  z = callPackage ../tools/misc/z {};
+
   zesarux = callPackage ../misc/emulators/zesarux { };
 
   zk = callPackage ../applications/office/zk {};
