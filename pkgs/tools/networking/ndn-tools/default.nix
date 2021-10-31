@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=build/ build/unit-tests
   '';
 
-  # outputs = [ "dev" "out" ];
-
   meta = with lib; {
     homepage = "http://named-data.net/";
     description = "Named Data Neworking (NDN) Essential Tools";
