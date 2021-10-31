@@ -5,7 +5,7 @@
 , doxygen
 , boost
 , sqlite
-, pkgconfig
+, pkg-config
 , python3
 , python3Packages
 , wafHook
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q2d0v8srqjbvigr570qw6ia0d9f88aj26ccyxkzjjwwqdx3y4fy";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook doxygen python3 python3Packages.sphinx ];
+  nativeBuildInputs = [ pkg-config wafHook doxygen python3 python3Packages.sphinx ];
   buildInputs = [ ndn-cxx boost libpcap openssl ];
 
   wafConfigureFlags = [
