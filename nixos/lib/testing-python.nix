@@ -218,6 +218,7 @@ rec {
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
+              { config, ... }:
               {
                 virtualisation.qemu.package = qemu_pkg;
 
@@ -230,7 +231,17 @@ rec {
                 # copied to the image.
                 virtualisation.additionalPaths =
                   lib.optional
-                    (builtins.hasContext testScript')
+                    # A testScript may evaluate nodes, which has caused
+                    # infinite recursions. The demand cycle involves:
+                    #   testScript -->
+                    #   nodes -->
+                    #   toplevel -->
+                    #   additionalPaths -->
+                    #   hasContext testScript' -->
+                    #   testScript (ad infinitum)
+                    # If we don't need to build an image, we can break this
+                    # cycle by short-circuiting when useNixStoreImage is false.
+                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
                     (pkgs.writeStringReferencesToFile testScript');
 
                 # Ensure we do not use aliases. Ideally this is only set

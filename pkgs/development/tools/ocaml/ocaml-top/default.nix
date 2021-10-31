@@ -9,7 +9,7 @@ with ocamlPackages; buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-top";
-    rev = "1.2.0-rc";
+    rev = version;
     sha256 = "sha256-ZXnPnPvJmHshkTwYWeBojrgJYAF/R6vUo0XkvVMFSeQ=";
   };
 

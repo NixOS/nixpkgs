@@ -586,7 +586,7 @@ in {
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         timerConfig.OnBootSec = "5m";
-        timerConfig.OnUnitActiveSec = "15m";
+        timerConfig.OnUnitActiveSec = "5m";
         timerConfig.Unit = "nextcloud-cron.service";
       };
 

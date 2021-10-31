@@ -39,6 +39,29 @@ in
     '';
   };
 
+  # Check that specialisations create corresponding boot entries.
+  specialisation = makeTest {
+    name = "systemd-boot-specialisation";
+    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ lukegb ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      specialisation.something.configuration = {};
+    };
+
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed(
+          "test -e /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+      )
+      machine.succeed(
+          "grep -q 'title NixOS (something)' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+      )
+    '';
+  };
+
   # Boot without having created an EFI entry--instead using default "/EFI/BOOT/BOOTX64.EFI"
   fallback = makeTest {
     name = "systemd-boot-fallback";
