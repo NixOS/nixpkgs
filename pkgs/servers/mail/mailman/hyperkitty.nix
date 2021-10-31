@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchFromGitLab
-, isPy3k
+, fetchPypi
+, pythonOlder
 
 # dependencies
 , defusedxml
@@ -32,18 +32,12 @@ buildPythonPackage rec {
   pname = "HyperKitty";
   # Note: Mailman core must be on the latest version before upgrading HyperKitty.
   # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
-  #
-  # Update to next stable version > 1.3.4 that has fixed tests, see
-  # https://gitlab.com/mailman/django-mailman3/-/issues/48
   version = "1.3.5";
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.com";
-    owner = "mailman";
-    repo = "hyperkitty";
-    rev = version;
-    sha256 = "0v70r0r6w0q56hk2hw1qp3ci0bwd9x8inf4gai6ybjqjfskqrxi4";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-gmkiK8pIHfubbbxNdm/D6L2o722FptxYgINYdIUOn4Y=";
   };
 
   postPatch = ''
