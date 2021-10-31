@@ -1405,6 +1405,8 @@ let
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
 
+    unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     uuidm = callPackage ../development/ocaml-modules/uuidm { };
