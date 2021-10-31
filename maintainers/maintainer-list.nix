@@ -3271,6 +3271,7 @@
   };
   ekleog = {
     email = "leo@gaspard.io";
+    matrix = "@leo:gaspard.ninja";
     github = "ekleog";
     githubId = 411447;
     name = "Leo Gaspard";
