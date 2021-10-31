@@ -137,6 +137,10 @@ import ./make-test-python.nix (
       with subtest("A podman non-member can not use the docker cli"):
           podman.fail(su_cmd("docker version", user="mallory"))
 
+      with subtest("Podman volumes are writable and persistent"):
+          podman.succeed("podman run --rm --name vol-write -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume:/data scratchimg /bin/sh -c 'echo volume-works >/data/file'")
+          podman.succeed("podman run --rm --name vol-read -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume:/data scratchimg /bin/cat /data/file | grep volume-works")
+
       # TODO: add docker-compose test
 
     '';
