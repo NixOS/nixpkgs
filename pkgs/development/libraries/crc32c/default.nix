@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     "-DCRC32C_BUILD_TESTS=1"
     "-DCRC32C_BUILD_BENCHMARKS=0"
     "-DCRC32C_USE_GLOG=0"
-  ] ++ lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1" ];
+    "-DBUILD_SHARED_LIBS=${if staticOnly then "0" else "1"}"
+  ];
 
   doCheck = false;
   doInstallCheck = true;
@@ -41,6 +42,25 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+  postInstallCheck = ''
+    # without removing these libraries, dependents will look for
+    # libgtest/libgmock etc here, which can result in link time errors
+    rm $out/lib/libg*
+  '';
+
+  postFixup = ''
+    # dependents shouldn't be able to find gtest libraries as dependencies of
+    # this package
+    rm -r $out/lib/pkgconfig
+
+    # remove GTest cmake config files
+    rm -r $out/lib/cmake/GTest
+
+    # fix bogus include paths
+    for f in $(find $out/lib/cmake -name '*.cmake'); do
+      substituteInPlace "$f" --replace "\''${_IMPORT_PREFIX}/$out/include" "\''${_IMPORT_PREFIX}/include"
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/google/crc32c";
