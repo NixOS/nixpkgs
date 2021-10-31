@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+TEMPFILE=`mktemp`.nix
+
+echo '
+let
+    flake-compat = builtins.fetchTarball {
+        url = "https://github.com/edolstra/flake-compat/archive/master.tar.gz";
+    };
+in
+' > $TEMPFILE
+
+function usage {
+    echo "
+$(tput bold)nix-option$(tput sgr0) [my flags] [option] [nixos-option flags]
+
+$(tput bold)my flags$(tput sgr0)
+    --flake: which flake with configuration to inspect
+        If this flag is omitted then nixos-option will have the default behavior
+        Example: .#nixosConfigurations.main
+    -h, --help: show this help message
+    --no-delete-tmpfile, -n: do not delete the generated nix file
+
+$(tput bold)option$(tput sgr0)
+    the option to be inspected in the same format as is in nixos-option
+
+$(tput bold)nixos-option flags$(tput sgr0)
+    Same as nixos-option (8)
+    "
+}
+
+if [ $# == 0 ]; then
+    usage
+    exit 0
+fi
+
+function cleanup {
+    if [ $DELETE_TMPFILE == 1 ]; then
+        rm "$TEMPFILE"
+    fi
+}
+trap cleanup EXIT
+
+DELETE_TMPFILE=1
+FLAKED=0
+
+while true; do
+    case "$1" in
+        --help | -h)
+            usage
+            exit 0
+        ;;
+        --no-delete-tmpfile | -n)
+            shift
+            DELETE_TMPFILE=0
+        ;;
+        --flake)
+            shift
+            IFS='#' read -a FLAKE_PARTS <<< "$1"
+            shift
+            echo "$FLAKE_PARTS"
+            if [[ "${FLAKE_PARTS[0]}" =~ ^[./] ]]; then
+                DIR=`cd "${FLAKE_PARTS[0]}"; pwd`
+                echo "(import flake-compat {src = \"$DIR\";}).defaultNix.${FLAKE_PARTS[1]}" >> $TEMPFILE
+            else
+                echo "(import flake-compat {src = \"${FLAKE_PARTS[0]}\";}).defaultNix.${FLAKE_PARTS[1]}" >> $TEMPFILE
+            fi
+            FLAKED=1
+        ;;
+        *)
+            break
+        ;;
+    esac
+done
+
+if [ $FLAKED == 1 ]; then
+    nixos-option --config_expr "(import $TEMPFILE).config" --options_expr "(import "$TEMPFILE").options" "$@"
+else
+    nixos-option "$@"
+fi
+

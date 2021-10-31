@@ -32359,6 +32359,8 @@ with pkgs;
     (import ../../nixos/lib/make-options-doc/default.nix)
     ({ inherit pkgs lib; } // attrs);
 
+  nix-option = callPackage ../tools/nix/nix-option {};
+
   nixos-install-tools = callPackage ../tools/nix/nixos-install-tools { };
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
