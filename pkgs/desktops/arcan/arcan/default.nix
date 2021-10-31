@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchgit
 , SDL2
 , cmake
 , espeak
@@ -23,6 +24,7 @@
 , libvncserver
 , libxcb
 , libxkbcommon
+, lua
 , luajit
 , makeWrapper
 , mesa
@@ -36,22 +38,16 @@
 , xcbutil
 , xcbutilwm
 , xz
-, buildManpages ? true, ruby
+, buildManPages ? true, ruby
+, useBuiltinLua ? true
+, useStaticFreetype ? false
+, useStaticLibuvc ? false
+, useStaticOpenAL ? true
+, useStaticSqlite ? false
 }:
 
-let
-  # TODO: investigate vendoring, especially OpenAL
-  # WARN: vendoring of OpenAL is required for running arcan_lwa
-  # INFO: maybe it needs leaveDotGit, but it is dangerous/impure
-  letoram-openal-src = fetchFromGitHub {
-    owner = "letoram";
-    repo = "openal";
-    rev = "1c7302c580964fee9ee9e1d89ff56d24f934bdef";
-    hash = "sha256-InqU59J0zvwJ20a7KU54xTM7d76VoOlFbtj7KbFlnTU=";
-  };
-in
 stdenv.mkDerivation rec {
-  pname = "arcan";
+  pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
   version = "0.6.1pre1+unstable=2021-10-16";
 
   src = fetchFromGitHub {
@@ -61,28 +57,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-4FodFuO51ehvyjH4YaF/xBY9dwA6cP/e6/BvEsH4w7U=";
   };
 
-  postUnpack = ''
-    pushd .
-    cd $sourceRoot/external/git/
-    cp -a ${letoram-openal-src}/ openal/
-    chmod --recursive 744 openal/
-    popd
-  '';
-
-  # TODO: work with upstream in order to get rid of these hardcoded paths
-  postPatch = ''
-    substituteInPlace ./src/platform/posix/paths.c \
-      --replace "/usr/bin" "$out/bin" \
-      --replace "/usr/share" "$out/share"
-
-    substituteInPlace ./src/CMakeLists.txt --replace "SETUID" "# SETUID"
-  '';
-
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkg-config
-  ] ++ lib.optionals buildManpages [
+  ] ++ lib.optionals buildManPages [
     ruby
   ];
 
@@ -108,6 +87,7 @@ stdenv.mkDerivation rec {
     libvncserver
     libxcb
     libxkbcommon
+    lua
     luajit
     mesa
     openal
@@ -121,11 +101,54 @@ stdenv.mkDerivation rec {
     xz
   ];
 
+  patches = [
+    # Nixpkgs-specific: redirect vendoring
+    ./000-openal.patch
+    ./001-luajit.patch
+    ./002-libuvc.patch
+    ./003-freetype.patch
+  ];
+
+  # Emulate external/git/clone.sh
+  postUnpack = let
+    inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
+      letoram-openal-src freetype-src libuvc-src luajit-src;
+  in
+    ''
+      pushd $sourceRoot/external/git/
+    ''
+    + (lib.optionalString useStaticOpenAL ''
+      cp -a ${letoram-openal-src}/ openal
+      chmod --recursive 744 openal
+    '')
+    + (lib.optionalString useStaticFreetype ''
+      cp -a ${freetype-src}/ freetype
+      chmod --recursive 744 freetype
+    '')
+    + (lib.optionalString useStaticLibuvc ''
+      cp -a ${libuvc-src}/ libuvc
+      chmod --recursive 744 libuvc
+    '')
+    + (lib.optionalString useBuiltinLua ''
+      cp -a ${luajit-src}/ luajit
+      chmod --recursive 744 luajit
+    '') +
+    ''
+      popd
+    '';
+
+  postPatch = ''
+    substituteInPlace ./src/platform/posix/paths.c \
+      --replace "/usr/bin" "$out/bin" \
+      --replace "/usr/share" "$out/share"
+
+    substituteInPlace ./src/CMakeLists.txt --replace "SETUID" "# SETUID"
+  '';
+
   # INFO: According to the source code, the manpages need to be generated before
   # the configure phase
-  preConfigure = lib.optionalString buildManpages ''
-    pushd .
-    cd doc
+  preConfigure = lib.optionalString buildManPages ''
+    pushd doc
     ruby docgen.rb mangen
     popd
   '';
@@ -136,7 +159,12 @@ stdenv.mkDerivation rec {
     "-DDISTR_TAG=Nixpkgs"
     "-DENGINE_BUILDTAG=${version}"
     "-DHYBRID_SDL=on"
-    "-DSTATIC_OPENAL=off"
+    "-DBUILTIN_LUA=${if useBuiltinLua then "on" else "off"}"
+    "-DDISABLE_JIT=${if useBuiltinLua then "on" else "off"}"
+    "-DSTATIC_FREETYPE=${if useStaticFreetype then "on" else "off"}"
+    "-DSTATIC_LIBUVC=${if useStaticLibuvc then "on" else "off"}"
+    "-DSTATIC_OPENAL=${if useStaticOpenAL then "on" else "off"}"
+    "-DSTATIC_SQLite3=${if useStaticSqlite then "on" else "off"}"
     "../src"
   ];
 

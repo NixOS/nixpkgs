@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchzip, ocamlPackages }:
+{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
 
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "ocsigen-i18n";
   version = "3.7.0";
 
@@ -14,8 +13,10 @@ stdenv.mkDerivation rec
     make bindir=$out/bin install
   '';
 
-  src = fetchzip {
-    url = "https://github.com/besport/${pname}/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "besport";
+    repo = "ocsigen-i18n";
+    rev = version;
     sha256 = "sha256-PmdDyn+MUcNFrZpP/KLGQzdXUFRr+dYRAZjTZxHSeaw=";
   };
 
