@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , pyperclip
 , urwid
 }:
@@ -9,9 +9,11 @@ buildPythonPackage rec {
   version = "0.1.4";
   pname = "upass";
 
-  src = fetchurl {
-    url = "https://github.com/Kwpolska/upass/archive/v${version}.tar.gz";
-    sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
+  src = fetchFromGitHub {
+    owner = "Kwpolska";
+    repo = "upass";
+    rev = "v${version}";
+    sha256 = "sha256-1y/OE8Gbc8bShEiLWg8w4J6icAcoldYQLI10WSQuO1Y=";
   };
 
   propagatedBuildInputs = [ pyperclip urwid ];

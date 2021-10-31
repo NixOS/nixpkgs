@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, fetchurl, pytest, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest, mock }:
 buildPythonPackage rec {
   pname = "pep257";
   version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
-    sha256 = "1ldpgil0kaf6wz5gvl9xdx35a62vc6bmgi3wbh9320dj5v2qk4wh";
+  src = fetchFromGitHub {
+    owner = "GreenSteam";
+    repo = "pep257";
+    rev = "0.7.0";
+    sha256 = "sha256-RkE9kkNkRTmZ8zJVwQzMsxU1hcjlxX6UA+ehnareynQ=";
   };
 
   checkInputs = [ pytest mock ];

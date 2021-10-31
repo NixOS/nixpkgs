@@ -39,7 +39,8 @@ buildPythonPackage rec {
       --replace "httpx~=0.15.5" "httpx" \
       --replace "idna~=2.10" "idna" \
       --replace "requests~=2.18" "requests" \
-      --replace "pyjwt~=1.7.1" "pyjwt"
+      --replace "pyjwt~=1.7.1" "pyjwt" \
+      --replace "qcs-api-client~=0.8.0" "qcs-api-client"
   '';
 
   propagatedBuildInputs = [
