@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 341b0cd1cdf69fe22345aea6c84ae11ba45e0d98
-  ref: refs/tags/6.1.11
+  revision: bde342fd8293e49a45ba837ca9a1fdea505bc919
+  ref: refs/tags/6.1.12
   specs:
-    metasploit-framework (6.1.11)
+    metasploit-framework (6.1.12)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -128,13 +128,13 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.518.0)
-    aws-sdk-core (3.121.3)
+    aws-partitions (1.521.0)
+    aws-sdk-core (3.121.5)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
+      aws-partitions (~> 1, >= 1.520.1)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.271.0)
+    aws-sdk-ec2 (1.275.0)
       aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.62.0)
@@ -360,9 +360,9 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.33)
+    rex-socket (0.1.34)
       rex-core
-    rex-sslscan (0.1.6)
+    rex-sslscan (0.1.7)
       rex-core
       rex-socket
       rex-text
