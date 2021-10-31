@@ -16859,8 +16859,13 @@ with pkgs;
   } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu70 = callPackage ../development/libraries/icu/70.nix ({
+    nativeBuildRoot = buildPackages.icu70.override { buildRootOnly = true; };
+  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
-  icu = icu69;
+  icu = icu70;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
