@@ -72,6 +72,7 @@ mapAliases ({
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
   python-lz4 = lz4; # added 2018-06-01
+  python_mimeparse = python-mimeparse; # added 2021-10-31
   python-subunit = subunit; # added 2021-09-10
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21

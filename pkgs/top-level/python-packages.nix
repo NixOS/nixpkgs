@@ -7509,7 +7509,7 @@ in {
 
   python-miio = callPackage ../development/python-modules/python-miio { };
 
-  python_mimeparse = callPackage ../development/python-modules/python_mimeparse { };
+  python-mimeparse = callPackage ../development/python-modules/python-mimeparse { };
 
   python-mnist = callPackage ../development/python-modules/python-mnist { };
 
