@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , isPy27
 , mock
 , pyparsing
@@ -24,14 +23,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-1zqs3YRVtm5DwewETLtRg5XhMJPJsMi0QLfeGirOURs=";
   };
-
-  patches = [
-    # fix test_inject_space
-    (fetchpatch {
-      url = "https://github.com/httplib2/httplib2/commit/08d6993b69256fbc6c0b1c615c24910803c4d610.patch";
-      sha256 = "0kbd1skn58m20kfkh4qzd66g9bvj31xlkbhsg435dkk4qz6l3yn3";
-    })
-  ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
