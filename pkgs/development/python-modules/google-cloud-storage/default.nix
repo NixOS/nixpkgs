@@ -54,7 +54,6 @@ buildPythonPackage rec {
     "tests/system/test_bucket.py"
     "tests/system/test_fileio.py"
     "tests/system/test_kms_integration.py"
-    "tests/conformance/test_conformance.py" # requires docker
   ];
 
   preCheck = ''
