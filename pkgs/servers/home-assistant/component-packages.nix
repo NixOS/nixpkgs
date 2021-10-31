@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.10.2";
+  version = "2021.10.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -19,7 +19,7 @@
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
-    "airthings" = ps: with ps; [ ]; # missing inputs: airthings_cloud
+    "airthings" = ps: with ps; [ airthings-cloud ];
     "airtouch4" = ps: with ps; [ ]; # missing inputs: airtouch4pyapi
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ aladdin-connect ];
@@ -42,7 +42,7 @@
     "anel_pwrctrl" = ps: with ps; [ ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [ ]; # missing inputs: anthemav
     "apache_kafka" = ps: with ps; [ aiokafka ];
-    "apcupsd" = ps: with ps; [ ]; # missing inputs: apcaccess
+    "apcupsd" = ps: with ps; [ apcaccess ];
     "api" = ps: with ps; [ aiohttp-cors ];
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
     "apple_tv" = ps: with ps; [ pyatv ];
@@ -62,7 +62,7 @@
     "asuswrt" = ps: with ps; [ aioasuswrt ];
     "atag" = ps: with ps; [ pyatag ];
     "aten_pe" = ps: with ps; [ atenpdu ];
-    "atome" = ps: with ps; [ ]; # missing inputs: pyatome
+    "atome" = ps: with ps; [ pyatome ];
     "august" = ps: with ps; [ yalexs ];
     "aurora" = ps: with ps; [ auroranoaa ];
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
@@ -151,7 +151,7 @@
     "cover" = ps: with ps; [ ];
     "cppm_tracker" = ps: with ps; [ ]; # missing inputs: clearpasspy
     "cpuspeed" = ps: with ps; [ py-cpuinfo ];
-    "crownstone" = ps: with ps; [ aiohttp-cors pyserial pyudev ]; # missing inputs: crownstone-cloud crownstone-sse crownstone-uart
+    "crownstone" = ps: with ps; [ aiohttp-cors crownstone-cloud crownstone-sse crownstone-uart pyserial pyudev ];
     "cups" = ps: with ps; [ pycups ];
     "currencylayer" = ps: with ps; [ ];
     "daikin" = ps: with ps; [ pydaikin ];
@@ -452,7 +452,7 @@
     "lastfm" = ps: with ps; [ pylast ];
     "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
     "lcn" = ps: with ps; [ pypck ];
-    "lg_netcast" = ps: with ps; [ ]; # missing inputs: pylgnetcast
+    "lg_netcast" = ps: with ps; [ pylgnetcast ];
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
     "life360" = ps: with ps; [ ]; # missing inputs: life360
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
@@ -845,7 +845,7 @@
     "syncthing" = ps: with ps; [ aiosyncthing ];
     "syncthru" = ps: with ps; [ pysyncthru url-normalize ];
     "synology_chat" = ps: with ps; [ ];
-    "synology_dsm" = ps: with ps; [ ]; # missing inputs: py-synologydsm-api
+    "synology_dsm" = ps: with ps; [ py-synologydsm-api ];
     "synology_srm" = ps: with ps; [ ]; # missing inputs: synology-srm
     "syslog" = ps: with ps; [ ];
     "system_bridge" = ps: with ps; [ aiohttp-cors ifaddr systembridge zeroconf ];
@@ -859,7 +859,7 @@
     "tankerkoenig" = ps: with ps; [ pytankerkoenig ];
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
-    "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
+    "tautulli" = ps: with ps; [ pytautulli ];
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];

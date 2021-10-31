@@ -68,9 +68,8 @@ rec {
                       prefixLength = 24;
                   } ];
                 });
-            in
-            { key = "ip-address";
-              config =
+
+              networkConfig =
                 { networking.hostName = mkDefault m.fst;
 
                   networking.interfaces = listToAttrs interfaces;
@@ -96,7 +95,15 @@ rec {
                     in flip concatMap interfacesNumbered
                       ({ fst, snd }: qemu-common.qemuNICFlags snd fst m.snd);
                 };
-            }
+
+              in
+                { key = "ip-address";
+                  config = networkConfig // {
+                    # Expose the networkConfig items for tests like nixops
+                    # that need to recreate the network config.
+                    system.build.networkConfig = networkConfig;
+                  };
+                }
           )
           (getAttr m.fst nodes)
         ] );

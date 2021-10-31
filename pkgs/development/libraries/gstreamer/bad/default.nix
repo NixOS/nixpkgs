@@ -233,6 +233,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
     "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"

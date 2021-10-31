@@ -1,22 +1,24 @@
 { lib
 , aiohttp
-, aioresponses
+, aresponses
 , asynctest
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , pytz
 , types-pytz
 , voluptuous
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "11.0.6";
+  version = "12.0.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XVn/GBcTTthvsRJOnCZ0yOF3nUwbBZ2dfMJZsJXnE6U=";
+    sha256 = "sha256-/KnDsnx+Jrirj6uBkdao6PI2jhtzKqDK6cmmQgsO5T4=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -35,12 +37,14 @@ buildPythonPackage rec {
     pytz
     types-pytz
     voluptuous
+    websockets
   ];
 
   checkInputs = [
-    aioresponses
+    aresponses
     asynctest
     pytest-aiohttp
+    pytest-asyncio
     pytestCheckHook
   ];
 

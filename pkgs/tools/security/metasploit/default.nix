@@ -14,13 +14,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.1.8";
+  version = "6.1.12";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-KDexgv5rsaOyAJhaiLiU1z0st7ncwIayoqn+fvJnSng=";
+    sha256 = "sha256-I7wk8DBN7i4zE4bEIMVGcZi4OMIsbh0Ay2RsAh0VRrw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ fab makefu ];
     mainProgram = "msfconsole";
   };
 }

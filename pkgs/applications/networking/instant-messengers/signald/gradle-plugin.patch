@@ -2,7 +2,7 @@ diff --git a/build.gradle b/build.gradle
 index 11d7a99..66805bb 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -3,9 +3,12 @@ import org.gradle.nativeplatform.platform.internal.OperatingSystemInternal
+@@ -18,9 +18,12 @@ import org.gradle.nativeplatform.platform.internal.OperatingSystemInternal
  import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
  import org.xml.sax.SAXParseException
  
@@ -17,10 +17,3 @@ index 11d7a99..66805bb 100644
  
  apply plugin: 'java'
  apply plugin: 'application'
-@@ -185,4 +188,4 @@ task integrationTest(type: Test) {
-     testClassesDirs = sourceSets.integrationTest.output.classesDirs
-     classpath = sourceSets.integrationTest.runtimeClasspath
-     outputs.upToDateWhen { false }
--}
-\ No newline at end of file
-+}

@@ -5,19 +5,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taskwarrior-tui";
-  version = "0.13.33";
+  version = "0.13.35";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${version}";
-    sha256 = "sha256-vKmVScXQLDjhNJEzlhqiyhRZjR26xjrT1LijxzZK8Cg=";
+    sha256 = "sha256-sXJto2YygPz2B5y7m8uUfOhuRCbKkZGoCmzHOhvH2MU=";
   };
 
   # Because there's a test that requires terminal access
   doCheck = false;
 
-  cargoSha256 = "sha256-0E4nk8WLprumHKQjpdn+U36z7mdgFb7g/i7egLk4Jcs=";
+  cargoSha256 = "sha256-mUlwpH2XhVDtjV7ChEqlEUXffOIbips4FzQyGejFvWk=";
 
   meta = with lib; {
     description = "A terminal user interface for taskwarrior ";

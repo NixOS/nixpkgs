@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: d50b53eafca062b7270a91894e4e9de7a526aa10
-  ref: refs/tags/6.1.8
+  revision: bde342fd8293e49a45ba837ca9a1fdea505bc919
+  ref: refs/tags/6.1.12
   specs:
-    metasploit-framework (6.1.8)
+    metasploit-framework (6.1.12)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -33,7 +33,7 @@ GIT
       metasploit-model
       metasploit-payloads (= 2.0.58)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.13)
+      metasploit_payloads-mettle (= 1.0.15)
       mqtt
       msgpack
       nessus_rest
@@ -87,6 +87,7 @@ GIT
       tzinfo-data
       unix-crypt
       warden
+      win32api
       windows_error
       winrm
       xdr
@@ -127,23 +128,23 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.510.0)
-    aws-sdk-core (3.121.1)
+    aws-partitions (1.521.0)
+    aws-sdk-core (3.121.5)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
+      aws-partitions (~> 1, >= 1.520.1)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.265.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-ec2 (1.275.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.61.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-iam (1.62.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.48.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-kms (1.50.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.103.0)
-      aws-sdk-core (~> 3, >= 3.120.0)
+    aws-sdk-s3 (1.104.0)
+      aws-sdk-core (~> 3, >= 3.121.2)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -219,7 +220,7 @@ GEM
     jmespath (1.4.0)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.5.1)
+    json (2.6.1)
     little-plugger (1.1.4)
     logging (2.3.0)
       little-plugger (~> 1.1)
@@ -257,7 +258,7 @@ GEM
       railties (~> 6.0)
       recog (~> 2.0)
       webrick
-    metasploit_payloads-mettle (1.0.13)
+    metasploit_payloads-mettle (1.0.15)
     method_source (1.0.0)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
@@ -295,9 +296,9 @@ GEM
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.5.0)
+    puma (5.5.2)
       nio4r (~> 2.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -348,7 +349,7 @@ GEM
       rex-arch
     rex-ole (0.1.7)
       rex-text
-    rex-powershell (0.1.93)
+    rex-powershell (0.1.94)
       rex-random_identifier
       rex-text
       ruby-rc4
@@ -359,9 +360,9 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.33)
+    rex-socket (0.1.34)
       rex-core
-    rex-sslscan (0.1.6)
+    rex-sslscan (0.1.7)
       rex-core
       rex-socket
       rex-text
@@ -404,7 +405,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2021.2)
+    tzinfo-data (1.2021.5)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -416,6 +417,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    win32api (0.1.0)
     windows_error (0.1.2)
     winrm (2.3.6)
       builder (>= 2.1.2)
@@ -431,7 +433,7 @@ GEM
       activesupport (>= 4.2, < 7.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby

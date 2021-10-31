@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45f0053ad601b03a36e2c283a5271403674245a66a0daf50e3deaab0ea4fa82f";
+    sha256 = "22d146dac59a8429115e9a93317975ea54b35e0278044a94d3fac5b4ad5f7e33";
   };
 
   nativeBuildInputs = [ pkg-config ];

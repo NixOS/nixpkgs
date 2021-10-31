@@ -272,7 +272,7 @@ in
     (mkIf cfg.ldap-proxy.enable {
 
       systemd.services.privacyidea-ldap-proxy = let
-        ldap-proxy-env = pkgs.python2.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
+        ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
       in {
         description = "privacyIDEA LDAP proxy";
         wantedBy = [ "multi-user.target" ];

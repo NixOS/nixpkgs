@@ -47,6 +47,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.areca-backup.org/";
     description = "An Open Source personal backup solution";
+    # Builds fine but fails to launch.
+    broken = true;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;

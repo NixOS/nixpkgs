@@ -1,23 +1,44 @@
-{ lib, buildGoModule, fetchFromGitHub}:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "0r1nfwglyw8b46n17bpmgscfmjhjsbk83lgkpm63ysy0h5r84dq8";
+    sha256 = "sha256-TaGtl5TBQMHjY4/HmDUghyhrsc5fjSMmY+oqO+rKGo4=";
   };
 
-  vendorSha256 = "12mirnw229x5jkzda0c45vnjnv7fjvzf0rm3fcy5f3wza6hkx6q7";
+  vendorSha256 = "sha256-3L3FtL/P+Jyvv0WESBvfSxJOl99v5QDyyzIqottB2EI=";
 
   subPackages = [
     "cmd/dyff"
     "pkg/dyff"
     "internal/cmd"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # test fails with the injected version
+  postPatch = ''
+    substituteInPlace internal/cmd/cmds_test.go \
+      --replace "version (development)" ${version}
+  '';
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd dyff \
+      --bash <($out/bin/dyff completion bash) \
+      --fish <($out/bin/dyff completion fish) \
+      --zsh <($out/bin/dyff completion zsh)
+  '';
 
   meta = with lib; {
     description = "A diff tool for YAML files, and sometimes JSON";

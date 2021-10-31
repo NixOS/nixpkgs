@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jacereda/fsatrace";
     description = "filesystem access tracer";
     license = licenses.isc;
-    maintainers = [ maintainers.peti ];
     platforms = platforms.linux;
   };
 }

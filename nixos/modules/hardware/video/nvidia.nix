@@ -213,7 +213,7 @@ in
       }
 
       {
-        assertion = cfg.powerManagement.enable -> offloadCfg.enable;
+        assertion = cfg.powerManagement.finegrained -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
       }
 

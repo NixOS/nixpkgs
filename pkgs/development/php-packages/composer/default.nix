@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, unzip, lib, php }:
 let
   pname = "composer";
-  version = "2.1.8";
+  version = "2.1.9";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://getcomposer.org/download/${version}/composer.phar";
-    sha256 = "141myfivdjnkx8myvkgl2sclhvx9z1c6a1my4xzscx0injhsrf3p";
+    sha256 = "1fj8sq21qdsdidj5zh8s3c12pmf9nkmj36igmmixc5vc2h7bf02d";
   };
 
   dontUnpack = true;

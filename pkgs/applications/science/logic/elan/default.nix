@@ -1,4 +1,5 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
+, fetchpatch
 , openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
@@ -7,16 +8,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-SFY9RbUHoaOXCaK+uIqhnKbzSkbtWiS6os/JvsggagI=";
+    sha256 = "0xmml81krr0i18b14dymfdq43szpzws7qj8k404qab51lkqxyxsb";
   };
 
-  cargoSha256 = "sha256-6TFionZw76V4htYQrz8eLX7ioW7Fbgd63rtz53s0TLU=";
+  cargoSha256 = "sha256-xjJ39hoSDn0VUH0YcL+mQBXbzFcIvZ38dPjBxV/yVNc=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -40,12 +41,17 @@ rustPlatform.buildRustPackage rec {
        --subst-var dynamicLinker \
        --subst-var libPath
     '')
+    # fix build, will be included in 1.1.1
+    (fetchpatch {
+      url = "https://github.com/leanprover/elan/commit/8d1dec09d67b2ac1768b111d24f1a1cabdd563fa.patch";
+      sha256 = "sha256-yMdnXqycu4VF9EKavZ85EuspvAqvzDSIm5894SB+3+A=";
+    })
   ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc leanmake; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd

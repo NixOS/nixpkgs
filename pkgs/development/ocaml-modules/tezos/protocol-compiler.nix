@@ -4,6 +4,7 @@
 , tezos-stdlib
 , tezos-protocol-environment
 , ocp-ocamlres
+, re
 , pprint
 }:
 
@@ -13,15 +14,19 @@ else
 
 buildDunePackage {
   pname = "tezos-protocol-compiler";
-  inherit (tezos-stdlib) version src useDune2 preBuild doCheck;
+  inherit (tezos-stdlib) version useDune2;
+  src = "${tezos-stdlib.base_src}/src/lib_protocol_compiler";
 
-  minimalOCamlVersion = "4.09";
+  minimalOCamlVersion = "4.10";
 
   propagatedBuildInputs = [
     tezos-protocol-environment
     ocp-ocamlres
+    re
     pprint
   ];
+
+  doCheck = true;
 
   meta = tezos-stdlib.meta // {
     description = "Tezos: economic-protocol compiler";

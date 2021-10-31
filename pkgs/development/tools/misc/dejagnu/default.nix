@@ -2,15 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "dejagnu";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0qfj2wd4qk1yn9yzam6g8nmyxfazcc0knjyyibycb2ainkhp21hd";
+    sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ expect ];
+
+  # dejagnu-1.6.3 can't successfully run tests in source tree:
+  #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
+  preConfigure = ''
+    mkdir build
+    cd build
+  '';
+  configureScript = "../configure";
 
   doCheck = true;
 

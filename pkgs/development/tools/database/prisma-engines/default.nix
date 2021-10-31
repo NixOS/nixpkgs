@@ -8,9 +8,7 @@
 , stdenv
 }:
 
-let
-  node-api-lib = (if stdenv.isDarwin then "libquery_engine.dylib" else "libquery_engine.so");
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
   version = "3.2.0";
 
@@ -47,7 +45,7 @@ in rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
 
   postInstall = ''
-    mv $out/lib/${node-api-lib} $out/lib/libquery_engine.node
+    mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
   '';
 
   # Tests are long to compile

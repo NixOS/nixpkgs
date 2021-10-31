@@ -8,31 +8,34 @@
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
-  version = "0.pre+unstable=2021-10-05";
+  version = "0.pre+date=2021-10-08";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN";
-    rev = "c31ceef52bbf380e747723f5ffd09c5f006b21c5";
-    sha256 = "1nzqgwpjawcky85mfrz5izs9lfb3aqlm96dc8syrxhgg20xrziwx";
+    rev = "0001109a1c5a420421b368c79d34b1e93bfe606e";
+    hash = "sha256-riHHclTLkrVbtzmcz9ungAIc7kaoFHS77+SNatsfNhc=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     jdk
+    makeWrapper
   ];
 
   dontConfigure = true;
 
+  postPatch = ''
+    patchShebangs --build ./build8
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    patchShebangs --build ./build8
     ./build8
   '' + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
-      -H:CLibraryPath=${lib.getLib jdk}/lib \
-      -J-Dfile.encoding=UTF-8 -jar BQN.jar dbqn
+      -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
+      -jar BQN.jar dbqn
   '' + ''
     runHook postBuild
   '';

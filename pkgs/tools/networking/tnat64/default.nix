@@ -2,19 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tnat64";
-  version = "0.05";
+  version = "0.06";
 
   src = fetchFromGitHub {
     owner = "andrewshadura";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "07lmzidbrd3aahk2jvv93cic9gf36pwmgfd63gmy6hjkxf9a6fw9";
+    sha256 = "191j1fpr3bw6fk48npl99z7iq6m1g33f15xk5cay1gnk5f46i2j6";
   };
-
-  postPatch = ''
-    # Fix usage of deprecated sys_errlist
-    substituteInPlace tnat64.c --replace 'sys_errlist[errno]' 'strerror(errno)'
-  '';
 
   configureFlags = [ "--libdir=$(out)/lib" ];
   nativeBuildInputs = [ autoreconfHook ];

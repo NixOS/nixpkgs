@@ -4,7 +4,6 @@
 , stdenv
 , zlib
 , xz
-, ncompress
 , gzip
 , bzip2
 , gnutar
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "sha256-lfHXutAp06Xr/TSBpDwBUBC/mWI9XuyImoKwA3inqgU=";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
+  propagatedBuildInputs = [ zlib xz gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
   ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]
   ++ lib.optionals (!stdenv.isDarwin) [ cramfsprogs cramfsswap sasquatch ];
 

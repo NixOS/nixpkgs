@@ -83,10 +83,13 @@ let
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
   # Customly sort option list for the man page.
+  # Always ensure that the sort order matches sortXML.py!
   optionsList = lib.sort optionLess optionsListDesc;
 
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
+  # This file is *not* sorted sorted to save on eval time, since the docbook XML
+  # and the manpage depend on it and thus we evaluate this on every system rebuild.
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsListDesc);
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
@@ -185,9 +188,10 @@ in {
       exit 1
     fi
 
+    ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
+      -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';

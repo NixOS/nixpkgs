@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, ocaml, findlib}:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
 let
   pname = "xml-light";
   version = "2.4";
@@ -6,9 +6,11 @@ in
 stdenv.mkDerivation {
   name = "ocaml-${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/ncannasse/${pname}/archive/${version}.tar.gz";
-    sha256 = "10b55qf6mvdp11ny3h0jv6k6wrs78jr9lhsiswl0xya7z8r8j0a2";
+  src = fetchFromGitHub {
+    owner = "ncannasse";
+    repo = "xml-light";
+    rev = version;
+    sha256 = "sha256-2txmkl/ZN5RGaLQJmr+orqwB4CbFk2RpLJd4gr7kPiE=";
   };
 
   buildInputs = [ ocaml findlib ];
@@ -38,6 +40,6 @@ stdenv.mkDerivation {
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

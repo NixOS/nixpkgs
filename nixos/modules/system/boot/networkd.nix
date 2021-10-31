@@ -250,6 +250,16 @@ let
         (assertRange "ERSPANIndex" 1 1048575)
       ];
 
+      sectionFooOverUDP = checkUnitConfig "FooOverUDP" [
+        (assertOnlyFields [
+          "Port"
+          "Encapsulation"
+          "Protocol"
+        ])
+        (assertPort "Port")
+        (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
+      ];
+
       sectionPeer = checkUnitConfig "Peer" [
         (assertOnlyFields [
           "Name"
@@ -919,6 +929,18 @@ let
       '';
     };
 
+    fooOverUDPConfig = mkOption {
+      default = { };
+      example = { Port = 9001; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionFooOverUDP;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[FooOverUDP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     peerConfig = mkOption {
       default = {};
       example = { Name = "veth2"; };
@@ -1448,6 +1470,10 @@ let
         + optionalString (def.tunnelConfig != { }) ''
           [Tunnel]
           ${attrsToSection def.tunnelConfig}
+        ''
+        + optionalString (def.fooOverUDPConfig != { }) ''
+          [FooOverUDP]
+          ${attrsToSection def.fooOverUDPConfig}
         ''
         + optionalString (def.peerConfig != { }) ''
           [Peer]

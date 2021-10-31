@@ -4,26 +4,26 @@
 , fetchFromGitHub
 , substituteAll
 , gdb
+, django
 , flask
+, gevent
 , psutil
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 , requests
-, isPy27
-, django
-, gevent
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ULxVoZuMNDL0Win/+55RnbkCPZ8OI8nhSKshvJOMFQ4=";
+    sha256 = "sha256-dPP4stLt5nl9B9afPmH6/hpGKXBsaTpvYZQSHxU6KaY=";
   };
 
   patches = [
@@ -65,29 +65,20 @@ buildPythonPackage rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
+  doCheck = isPy3k;
   checkInputs = [
+    django
     flask
+    gevent
     psutil
     pytest-timeout
     pytest-xdist
     pytestCheckHook
     requests
-  ] ++ lib.optionals (!isPy27) [
-    django
-    gevent
   ];
 
   # Override default arguments in pytest.ini
   pytestFlagsArray = [ "--timeout=0" "-n=$NIX_BUILD_CORES" ];
-
-  disabledTests = lib.optionals isPy27 [
-    # django 1.11 is the last version to support Python 2.7
-    # and is no longer built in nixpkgs
-    "django"
-
-    # gevent fails to import zope.interface with Python 2.7
-    "gevent"
-  ];
 
   pythonImportsCheck = [ "debugpy" ];
 

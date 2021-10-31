@@ -16,7 +16,8 @@ let
     overrides = packageOverrides;
   };
 
-plat = if stdenv.isLinux then "linux"
+plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+       else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
        else if stdenv.isDarwin then "macosx"
        else if stdenv.hostPlatform.isMinGW then "mingw"
        else if stdenv.isFreeBSD then "freebsd"

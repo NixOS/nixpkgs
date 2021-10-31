@@ -71,6 +71,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   epiphany = pkgs.epiphany.override { withPantheon = true; };
 
+  evince = pkgs.evince.override { withPantheon = true; };
+
+  file-roller = pkgs.gnome.file-roller.override { withPantheon = true; };
+
   sideload = callPackage ./apps/sideload { };
 
   #### DESKTOP

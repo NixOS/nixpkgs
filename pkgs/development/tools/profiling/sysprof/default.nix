@@ -2,6 +2,7 @@
 , lib
 , desktop-file-utils
 , fetchurl
+, fetchpatch
 , gettext
 , glib
 , gtk3
@@ -21,14 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.40.1";
+  version = "3.42.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0dvlzjwi3a4g37cpyhqpf41f5hypf0gim1jw9wqlv30flbb00l62";
+    sha256 = "PBbgPv3+XT5xxNI5xndBrTf3LOiXHi9/rxaNvV6T6IY=";
   };
+
+  patches = [
+    # Fix missing unistd.h include.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/b113c89af1de2f87589175795a197f6384852a78.patch";
+      sha256 = "3Q8d6IZYNJl/vbyzRgoRR2sdl4aRkbcKPeVjSSqxb98=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils

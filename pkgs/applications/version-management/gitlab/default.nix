@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
 }:
 
 let
@@ -36,6 +36,15 @@ let
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
+        # the included yarn rake task attaches the yarn:install task
+        # to assets:precompile, which is both unnecessary (since we
+        # run `yarn install` ourselves) and undoes the shebang patches
+        # in node_modules
+        railties = x.railties // {
+          dontBuild = false;
+          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
+          patchFlags = "-p2";
+        };
       };
     groups = [
       "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
@@ -45,7 +54,10 @@ let
     ignoreCollisions = true;
   };
 
-  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = data.yarn_hash;
+  };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
@@ -79,11 +91,6 @@ let
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
-
-      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
-      # url, so we have to do it manually
-      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
-                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 

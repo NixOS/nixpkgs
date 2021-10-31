@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BmBqFJ64Nolq+eGZ5D3LQU3Ek2Gs+HpH/bptCQScbIg=";
+    sha256 = "sha256-oa9J51Y6Q0nPxA9SdsEZy7F6EopS5xuh1yWyTD21mGI=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access to a test server
   doCheck = false;
 
-  cargoSha256 = "sha256-tAg3xwmh7SjJsm9r5TnhXHIDLpUQpz3YDS6gWxFgps4=";
+  cargoSha256 = "sha256-CwChbp6Un9tgJu1vtfhcFclpbvGANLLEX3lwtTQPuSg=";
 
   postInstall = ''
     python ci/gen_manpage.py docs/hurl.md > hurl.1

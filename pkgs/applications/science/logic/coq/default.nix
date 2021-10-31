@@ -44,6 +44,7 @@ let
    "8.13.0".sha256     = "0sjbqmz6qcvnz0hv87xha80qbhvmmyd675wyc5z4rgr34j2l1ymd";
    "8.13.1".sha256     = "0xx2ns84mlip9bg2mkahy3pmc5zfcgrjxsviq9yijbzy1r95wf0n";
    "8.13.2".sha256     = "1884vbmwmqwn9ngibax6dhnqh4cc02l0s2ajc6jb1xgr0i60whjk";
+   "8.14.0".sha256     = "04y2z0qyvag66zanfyc3f9agvmzbn4lsr0p1l7ck6yjhqx7vbm17";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -163,7 +164,7 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
+  buildFlags = [ "revision" "coq" "coqide" ] ++ optional (!versionAtLeast "8.14") "bin/votour";
   enableParallelBuilding = true;
 
   createFindlibDestdir = true;
@@ -177,9 +178,11 @@ self = stdenv.mkDerivation {
     categories = "Development;Science;Math;IDE;GTK";
   });
 
-  postInstall = ''
+  postInstall = let suffix = if versionAtLeast "8.14" then "-core" else ""; in ''
     cp bin/votour $out/bin/
-    ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
+    ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
+  '' + optionalString (versionAtLeast "8.14") ''
+    ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
   '' + optionalString buildIde ''
     mkdir -p "$out/share/pixmaps"
     ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"

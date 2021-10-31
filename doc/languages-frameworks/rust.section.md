@@ -237,22 +237,6 @@ where they are known to differ. But there are ways to customize the argument:
    --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
    ```
 
-Finally, as an ad-hoc escape hatch, a computed target (string or JSON file
-path) can be passed directly to `buildRustPackage`:
-
-```nix
-pkgs.rustPlatform.buildRustPackage {
-  /* ... */
-  target = "x86_64-fortanix-unknown-sgx";
-}
-```
-
-This is useful to avoid rebuilding Rust tools, since they are actually target
-agnostic and don't need to be rebuilt. But in the future, we should always
-build the Rust tools and standard library crates separately so there is no
-reason not to take the `stdenv.hostPlatform.rustc`-modifying approach, and the
-ad-hoc escape hatch to `buildRustPackage` can be removed.
-
 Note that currently custom targets aren't compiled with `std`, so `cargo test`
 will fail. This can be ignored by adding `doCheck = false;` to your derivation.
 

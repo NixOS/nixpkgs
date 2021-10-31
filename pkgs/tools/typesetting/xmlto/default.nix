@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl2Plus;
-    homepage = "https://fedorahosted.org/xmlto/";
+    homepage = "https://pagure.io/xmlto/";
     platforms = lib.platforms.unix;
   };
 }

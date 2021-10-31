@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "40.2";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "njcB/UoOWJgA0iUgN3BkTzHVI0ZV9UqDqF/wVW3X6jM=";
+    sha256 = "0gqrxcn7fcvlh5c9691lx5zgdgs71ah15h5psrbhkg8qcqy95b3k";
   };
 
   patches = [

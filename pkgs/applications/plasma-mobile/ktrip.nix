@@ -12,6 +12,7 @@
 , kirigami2
 , kitemmodels
 , kpublictransport
+, qqc2-desktop-style
 , qtquickcontrols2
 }:
 
@@ -32,6 +33,7 @@ mkDerivation rec {
     kirigami2
     kitemmodels
     kpublictransport
+    qqc2-desktop-style
     qtquickcontrols2
   ];
 

@@ -5,7 +5,7 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.6.7";
+  version = "1.6.8";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
 
@@ -13,7 +13,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-9rqdqpxUWcUV9RnZOTxg+zMW7wlTXZVkoKYHuv/lE7c=";
+    sha256 = "sha256-/2iyWJfNjvk5n7KwWIu2gc24/21KWibU6IAPN/tJ8Q4=";
   };
 
   lldb = callPackage ./lldb.nix {};
@@ -25,7 +25,7 @@ let
     # It will pollute the build environment of `buildRustPackage`.
     cargoPatches = [ ./reset-cargo-config.patch ];
 
-    cargoSha256 = "sha256-KeZpjMCBdOJTLj8pA5WWi3EMyhhWw/+aik4IJqIs/mk=";
+    cargoSha256 = "sha256-rG+Qw8ac9cCgCjfLFXLlohLk+zV5s1OaqzU0/nXiqgU=";
 
     nativeBuildInputs = [ makeWrapper ];
 

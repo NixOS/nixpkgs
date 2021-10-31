@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
       sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
     })
+
+    # fix build with -fno-common tollchain
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://git.strongswan.org/?p=strongswan.git;a=patch;h=91c6387e69c09beaa9b9ca1e28471751a834fc24";
+      sha256 = "0jp9walxwffp5cl7q0hb80h3s2gdj1nn3n8bvnbmwgh2s6pi148f";
+    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''

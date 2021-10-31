@@ -15,15 +15,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.7.1";
+  version = "alpha-0.7.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = version;
-    sha256 = "00iai2z5zydx9bw0ii0n6d7zwm5rrkj03b4ymic0ybwjahqzvyfq";
+    sha256 = "sha256-cbigEJhX6vL+gHa40cxplmPsDhsqujkzQxe0Dr6+SK0=";
   };
 
-  cargoSha256 = "1r54a51j91iv0ziasjygzw30vqqvqibcnwnkih5xv0ijbaly61n0";
+  cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 

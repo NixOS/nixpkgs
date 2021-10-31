@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "opengrm-ngram";
-  version = "1.3.11";
+  version = "1.3.13";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/GRM/NGramDownload/ngram-${version}.tar.gz";
-    sha256 = "0wwpcj8qncdr9f2pmi0vhlw277dyxr85ygdi8g57xp2ifysigm05";
+    sha256 = "sha256-5CXf6OXs7owny3yZQrWYA6yhIyN0dgA2B8TSDEUTF1Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

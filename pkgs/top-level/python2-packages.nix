@@ -170,7 +170,7 @@ with self; with super; {
     pythonPackages = self;
   });
 
-  hg-git = callPackage ../development/python-modules/hg-git { };
+  hg-git = callPackage ../development/python-modules/hg-git/0.8.nix { };
 
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
@@ -212,7 +212,7 @@ with self; with super; {
 
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client/5.nix { };
+  jupyter-client = callPackage ../development/python-modules/jupyter-client/5.nix { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
 
@@ -406,8 +406,6 @@ with self; with super; {
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
-
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
 

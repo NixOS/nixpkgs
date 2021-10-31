@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.1.137";
+  version = "3.1.149";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "v${version}";
-    sha256 = "15zl97laijn42rhh524rfb3h1rky461hwfnlny2maa3h61889xrv";
+    sha256 = "1yrb8cfrc6y7gpfgzn0q6ldx9vk06qp229wjs4q8rccp72p6d6gg";
   };
 
   postPatch = ''
@@ -32,38 +32,36 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
-    cherrypy
-    colorama
-    colorclass
     feedparser
-    flask-compress
-    flask-cors
-    flask_login
-    flask-restful
-    flask-restx
-    flask
-    greenlet
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
     more-itertools
-    progressbar
+    psutil
     pynzb
-    pyparsing
     PyRSS2Gen
     python-dateutil
     pyyaml
     rebulk
     requests
+    rich
     rpyc
-    sgmllib3k
     sqlalchemy
-    terminaltables
+
+    # WebUI requirements
+    cherrypy
+    flask-compress
+    flask-cors
+    flask_login
+    flask-restful
+    flask-restx
+    flask
+    pyparsing
     zxcvbn
-    psutil
-    # plugins
+
+    # Plugins requirements
     transmission-rpc
   ];
 

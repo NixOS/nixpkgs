@@ -19,13 +19,13 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+unstable=2021-10-05";
+  version = "0.pre+date=2021-10-20";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "e23dab20daff9c0dacc2561c616174af72029a3e";
-    hash = "sha256-amVKKD9hD5A+LbqglXHLKEsYqFSSztdXs1FCoNJyCJ4=";
+    rev = "f50b8ab503d05cccb6ff61df52f2625df3292a9e";
+    hash = "sha256-pxToXVIKYS9P2TnGMGmKfJmAP54GVPVls9bm9tmS21s=";
   };
 
   dontConfigure = true;
@@ -34,11 +34,12 @@ stdenv.mkDerivation rec {
     sed -i '/SHELL =.*/ d' makefile
   '';
 
-  preBuild = ''
-    # otherwise cbqn defaults to clang
-    makeFlagsArray+=("CC=$CC")
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
-    # inform make we are providing the runtime ourselves
+  preBuild = ''
+    # Purity: avoids git downloading bytecode files
     touch src/gen/customRuntime
   '' + (if genBytecode then ''
     ${bqn-path} genRuntime ${mbqn-source}

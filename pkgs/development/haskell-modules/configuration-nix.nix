@@ -978,4 +978,21 @@ self: super: builtins.intersectAttrs super {
     doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
       && buildPlatform.isx86;
   };
+
+  # procex relies on close_range which has been introduced in Linux 5.9,
+  # the test suite seems to force the use of this feature (or the fallback
+  # mechanism is broken), so we can't run the test suite on machines with a
+  # Kernel < 5.9. To check for this, we use uname -r to obtain the Kernel
+  # version and sort -V to compare against our minimum version. If the
+  # Kernel turns out to be older, we disable the test suite.
+  procex = overrideCabal super.procex (drv: {
+    postConfigure = ''
+      minimumKernel=5.9
+      higherVersion=`printf "%s\n%s\n" "$minimumKernel" "$(uname -r)" | sort -rV | head -n1`
+      if [[ "$higherVersion" = "$minimumKernel" ]]; then
+        echo "Used Kernel doesn't support close_range, disabling tests"
+        unset doCheck
+      fi
+    '' + (drv.postConfigure or "");
+  });
 }

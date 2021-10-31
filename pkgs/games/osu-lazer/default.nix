@@ -9,20 +9,20 @@ let
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-net = dotnetCorePackages.net_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
 
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "linux-x64";
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.1006.1";
+  version = "2021.1016.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "zQMXDqWfZ8g4HP3VQgeLogif51vVFLjb+a+7ma7OHIc=";
+    sha256 = "PaN/+t5qnHaOjh+DfM/Ylw1vESCM3Tejd3li9ml2Z+A=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
       --output $out/lib/osu
 
     makeWrapper $out/lib/osu/osu\! $out/bin/osu\! \
-      --set DOTNET_ROOT "${dotnet-net}" \
+      --set DOTNET_ROOT "${dotnet-runtime}" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png

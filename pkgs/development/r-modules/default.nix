@@ -158,6 +158,38 @@ let
     in
       builtins.listToAttrs nameValuePairs;
 
+  # Overrides package definition requiring a home directory to install or to
+  # run tests.
+  # For example,
+  #
+  # overrideRequireHome [
+  #   "foo"
+  # ] old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.overrideAttrs (oldAttrs:  {
+  #     preInstall = ''
+  #       ${oldAttrs.preInstall or ""}
+  #       export HOME=$(mktemp -d)
+  #     '';
+  #   });
+  # }
+  overrideRequireHome = packageNames: old:
+    let
+      nameValuePairs = map (name: {
+        inherit name;
+        value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
+          preInstall = ''
+            ${oldAttrs.preInstall or ""}
+            export HOME=$(mktemp -d)
+          '';
+        });
+      }) packageNames;
+    in
+      builtins.listToAttrs nameValuePairs;
+
   # Overrides package definition to skip check.
   # For example,
   #
@@ -211,13 +243,14 @@ let
   defaultOverrides = old: new:
     let old0 = old; in
     let
-      old1 = old0 // (overrideRequireX packagesRequireingX old0);
-      old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
-      old3 = old2 // (overrideRDepends packagesWithRDepends old2);
-      old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
-      old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
-      old6 = old5 // (overrideBroken brokenPackages old5);
-      old = old6;
+      old1 = old0 // (overrideRequireX packagesRequiringX old0);
+      old2 = old1 // (overrideRequireHome packagesRequiringHome old1);
+      old3 = old2 // (overrideSkipCheck packagesToSkipCheck old2);
+      old4 = old3 // (overrideRDepends packagesWithRDepends old3);
+      old5 = old4 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old4);
+      old6 = old5 // (overrideBuildInputs packagesWithBuildInputs old5);
+      old7 = old6 // (overrideBroken brokenPackages old6);
+      old = old7;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -243,14 +276,14 @@ let
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];
-    BayesSAE = [ pkgs.gsl_1 ];
-    BayesVarSel = [ pkgs.gsl_1 ];
+    BayesSAE = [ pkgs.gsl ];
+    BayesVarSel = [ pkgs.gsl ];
     BayesXsrc = with pkgs; [ readline.dev ncurses ];
     bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
-    bnpmr = [ pkgs.gsl_1 ];
+    bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev x11 fontconfig.lib ];
     Cardinal = [ pkgs.which ];
@@ -259,37 +292,39 @@ let
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev x11 ];
-    diversitree = with pkgs; [ gsl_1 fftw ];
+    diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
+    ggiraph = with pkgs; [ pkgs.libpng.dev ];
     git2r = with pkgs; [ zlib.dev openssl.dev libssh2.dev libgit2 pkg-config ];
-    GLAD = [ pkgs.gsl_1 ];
+    GLAD = [ pkgs.gsl ];
     glpkAPI = with pkgs; [ gmp glpk ];
     gmp = [ pkgs.gmp.dev ];
-    graphscan = [ pkgs.gsl_1 ];
-    gsl = [ pkgs.gsl_1 ];
+    graphscan = [ pkgs.gsl ];
+    gsl = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
-    HiCseg = [ pkgs.gsl_1 ];
+    HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.x11 ];
-    iBMQ = [ pkgs.gsl_1 ];
+    iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [ gmp libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
-    KFKSDS = [ pkgs.gsl_1 ];
+    KFKSDS = [ pkgs.gsl ];
     kza = [ pkgs.fftw.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
-    mvabund = [ pkgs.gsl_1 ];
+    mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
+    mzR = with pkgs; [ zlib boost159.dev netcdf ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
@@ -311,8 +346,8 @@ let
     readxl = [ pkgs.libiconv ];
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
-    RcppGSL = [ pkgs.gsl_1 ];
-    RcppZiggurat = [ pkgs.gsl_1 ];
+    RcppGSL = [ pkgs.gsl ];
+    RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
     rgdal = with pkgs; [ proj.dev gdal ];
     rgeos = [ pkgs.geos ];
@@ -324,7 +359,7 @@ let
     Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
     rjags = [ pkgs.jags ];
     rJava = with pkgs; [ zlib bzip2.dev icu xz.dev pcre.dev jdk libzip ];
-    Rlibeemd = [ pkgs.gsl_1 ];
+    Rlibeemd = [ pkgs.gsl ];
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = with pkgs; [ gmp mpfr.dev ];
     Rmpi = [ pkgs.mpi ];
@@ -352,12 +387,12 @@ let
     sf = with pkgs; [ gdal proj geos ];
     terra = with pkgs; [ gdal proj geos ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
-    simplexreg = [ pkgs.gsl_1 ];
+    simplexreg = [ pkgs.gsl ];
     spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
-    stsm = [ pkgs.gsl_1 ];
+    stsm = [ pkgs.gsl ];
     stringi = [ pkgs.icu.dev ];
-    survSNP = [ pkgs.gsl_1 ];
+    survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
     sysfonts = with pkgs; [ zlib libpng freetype.dev ];
     systemfonts = with pkgs; [ fontconfig.dev freetype.dev ];
@@ -365,7 +400,7 @@ let
     tesseract = with pkgs; [ tesseract leptonica ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [ xorg.libX11 tk.dev ];
-    topicmodels = [ pkgs.gsl_1 ];
+    topicmodels = [ pkgs.gsl ];
     udunits2 = with pkgs; [ udunits expat ];
     units = [ pkgs.udunits ];
     V8 = [ pkgs.v8 ];
@@ -444,7 +479,6 @@ let
     tikzDevice = with pkgs; [ which texlive.combined.scheme-medium ];
     gridGraphics = [ pkgs.which ];
     adimpro = with pkgs; [ which xorg.xdpyinfo ];
-    mzR = [ pkgs.netcdf ];
     cluster = [ pkgs.libiconv ];
     KernSmooth = [ pkgs.libiconv ];
     nlme = [ pkgs.libiconv ];
@@ -478,9 +512,12 @@ let
     Rbowtie = with pkgs; [ zlib.dev ];
     gaston = with pkgs; [ zlib.dev ];
     csaw = with pkgs; [ zlib.dev curl ];
+    DirichletMultinomial = with pkgs; [ gsl ];
+    DiffBind = with pkgs; [ zlib.dev ];
+    CNEr = with pkgs; [ zlib ];
   };
 
-  packagesRequireingX = [
+  packagesRequiringX = [
     "accrual"
     "ade4TkGUI"
     "analogue"
@@ -670,6 +707,27 @@ let
     "x12GUI"
   ];
 
+  packagesRequiringHome = [
+    "aroma_affymetrix"
+    "aroma_cn"
+    "aroma_core"
+    "csodata"
+    "DiceView"
+    "MSnID"
+    "OmnipathR"
+    "precommit"
+    "PSCBS"
+    "repmis"
+    "R_cache"
+    "R_filesets"
+    "RKorAPClient"
+    "R_rsp"
+    "scholar"
+    "stepR"
+    "styler"
+    "TreeTools"
+  ];
+
   packagesToSkipCheck = [
     "Rmpi"     # tries to run MPI processes
     "pbdMPI"   # tries to run MPI processes
@@ -678,6 +736,11 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "av"
+    "rgl"
+    "NetLogoR"
+    "proj4"
+    "x13binary"
   ];
 
   otherOverrides = old: new: {
@@ -819,10 +882,6 @@ let
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
-    });
-
-    EMCluster = old.EMCluster.overrideDerivation (attrs: {
-      patches = [ ./patches/EMCluster.patch ];
     });
 
     spMC = old.spMC.overrideDerivation (attrs: {
@@ -972,12 +1031,6 @@ let
       '';
     });
 
-    R_cache = old.R_cache.overrideDerivation (attrs: {
-      preConfigure = ''
-        export R_CACHE_ROOTPATH=$TMP
-      '';
-    });
-
     lpsymphony = old.lpsymphony.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
@@ -992,12 +1045,37 @@ let
       buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
     });
 
+    keyring = old.keyring.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     Rhtslib = old.Rhtslib.overrideDerivation (attrs: {
       preConfigure = ''
         substituteInPlace R/zzz.R --replace "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
     });
 
+    MatchIt = old.MatchIt.overrideDerivation (attrs: {
+      patches = [ (pkgs.fetchpatch {
+        url = "https://github.com/kosukeimai/MatchIt/commit/8c15a1afa16b74eb04a45e7e46f8aca64ed89bcb.patch";
+        sha256 = "sha256-3UI60n49xuX6LniHpTLOUSsHCEAQ7f1FMBVH0jNlW60=";
+      }) ];
+    });
+
+    h2o = old.h2o.overrideDerivation (attrs: {
+      preConfigure = ''
+        # prevent download of jar file during install and postpone to first use
+        sed -i '/downloadJar()/d' R/zzz.R
+
+        # during runtime the package directory is not writable as it's in the
+        # nix store, so store the jar in the user's cache directory instead
+        substituteInPlace R/connection.R --replace \
+          'dest_file <- file.path(dest_folder, "h2o.jar")' \
+          'dest_file <- file.path("~/.cache/", "h2o.jar")'
+      '';
+    });
   };
 in
   self

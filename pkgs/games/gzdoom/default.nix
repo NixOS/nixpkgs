@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
 , game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
 
@@ -28,13 +28,13 @@ let
 
   gzdoom = stdenv.mkDerivation rec {
     pname = "gzdoom";
-    version = "4.5.0";
+    version = "4.7.0";
 
     src = fetchFromGitHub {
       owner = "coelckers";
       repo = "gzdoom";
       rev = "g${version}";
-      sha256 = "0kmqnyhdi5psi7zwrx9j3pz0cplypsvhg4cr8w2jbawh6jb71sk9";
+      sha256 = "0xxxy7k2zr5g0vr1lnwv4n5amiwq1wln7r6hr37gmrjr72zkcjqn";
       fetchSubmodules = true;
     };
 
@@ -43,7 +43,7 @@ let
       SDL2
       libGL
       openal
-      fluidsynth_1
+      fluidsynth
       bzip2
       zlib
       libjpeg

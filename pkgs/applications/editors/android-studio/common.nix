@@ -214,9 +214,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ meutraa ];
-        beta = [ meutraa ];
-        canary = [ meutraa ];
+        stable = [ meutraa fabianhjr ];
+        beta = [ meutraa fabianhjr ];
+        canary = [ meutraa fabianhjr ];
         dev = canary;
       }."${channel}";
     };

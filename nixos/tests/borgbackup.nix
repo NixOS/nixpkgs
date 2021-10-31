@@ -81,6 +81,24 @@ in {
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
         };
 
+        commandSuccess = {
+          dumpCommand = pkgs.writeScript "commandSuccess" ''
+            echo -n test
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
+        commandFail = {
+          dumpCommand = "${pkgs.coreutils}/bin/false";
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
       };
     };
 
@@ -171,5 +189,20 @@ in {
         client.fail("{} list borg\@server:wrong".format(borg))
 
         # TODO: Make sure that data is not actually deleted
+
+    with subtest("commandSuccess"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandSuccess")
+        client.fail("systemctl is-failed borgbackup-job-commandSuccess")
+        id = client.succeed("borg-job-commandSuccess list | tail -n1 | cut -d' ' -f1").strip()
+        client.succeed(f"borg-job-commandSuccess extract ::{id} stdin")
+        assert "test" == client.succeed("cat stdin")
+
+    with subtest("commandFail"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandFail")
+        client.succeed("systemctl is-failed borgbackup-job-commandFail")
   '';
 })

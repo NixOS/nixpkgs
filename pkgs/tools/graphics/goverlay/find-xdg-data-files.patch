@@ -1,8 +1,8 @@
 diff --git a/overlayunit.pas b/overlayunit.pas
-index de8725f..005f171 100644
+index a56cea7..9a4f547 100644
 --- a/overlayunit.pas
 +++ b/overlayunit.pas
-@@ -5377,7 +5377,7 @@ begin
+@@ -4880,7 +4880,7 @@ begin
     //Determine Mangohud dependency status
  
            //locate MangoHud and store result in tmp folder
@@ -11,7 +11,7 @@ index de8725f..005f171 100644
  
            // Assign Text file dependency_mangohud to variable mangohudVAR
            AssignFile(mangohudVAR, '/tmp/goverlay/dependency_mangohud');
-@@ -5386,7 +5386,7 @@ begin
+@@ -4889,7 +4889,7 @@ begin
            CloseFile(mangohudVAR);
  
            // Read String and store value on mangohuddependencyVALUE based on result
@@ -20,7 +20,7 @@ index de8725f..005f171 100644
            mangohuddependencyVALUE := 1
            else
            mangohuddependencyVALUE := 0;
-@@ -5395,7 +5395,7 @@ begin
+@@ -4898,7 +4898,7 @@ begin
     //Determine vkBasalt dependency staus
  
             //locate vkBasalt and store result in tmp folder
@@ -29,7 +29,7 @@ index de8725f..005f171 100644
  
             // Assign Text file dependency_mangohud to variable mangohudVAR
             AssignFile(vkbasaltVAR, '/tmp/goverlay/dependency_vkbasalt');
-@@ -5404,7 +5404,7 @@ begin
+@@ -4907,7 +4907,7 @@ begin
             CloseFile(vkbasaltVAR);
  
             // Read String and store value on vkbasaltdependencyVALUE based on result

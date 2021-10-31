@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq
 
-set -eu -o pipefail
+set -x -eu -o pipefail
 
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
@@ -12,7 +12,9 @@ LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
 curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
     https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
-LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | grep -v -e rc -e engine | sed 's/["|,| ]//g' | sort -r | head -n1)
+LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
+    grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | head -n1)
+
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
 K3S_COMMIT=$(curl --silent ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
@@ -45,7 +47,7 @@ CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
 }
 
 setKV k3sVersion ${K3S_VERSION}

@@ -1,10 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib
 , rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
 , pkg-config
 , openssl
 , Security
-, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://dns.lookup.dog";
     license = licenses.eupl12;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "dog";
   };
 }

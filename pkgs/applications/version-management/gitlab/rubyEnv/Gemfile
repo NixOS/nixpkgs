@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.3.2'
+gem 'rails', '~> 6.1.4.1'
 
 gem 'bootsnap', '~> 1.4.6'
 
@@ -92,7 +92,7 @@ gem 'net-ldap', '~> 0.16.3'
 
 # API
 gem 'grape', '~> 1.5.2'
-gem 'grape-entity', '~> 0.9.0'
+gem 'grape-entity', '~> 0.10.0'
 gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
 
 # GraphQL API
@@ -129,7 +129,7 @@ gem 'fog-local', '~> 0.6'
 gem 'fog-openstack', '~> 1.0'
 gem 'fog-rackspace', '~> 0.1.1'
 gem 'fog-aliyun', '~> 0.3'
-gem 'gitlab-fog-azure-rm', '~> 1.1.1', require: false
+gem 'gitlab-fog-azure-rm', '~> 1.2.0', require: false
 
 # for Google storage
 gem 'google-api-client', '~> 0.33'
@@ -154,7 +154,7 @@ gem 'html-pipeline', '~> 2.13.2'
 gem 'deckar01-task_list', '2.3.1'
 gem 'gitlab-markup', '~> 1.7.1'
 gem 'github-markup', '~> 1.7.0', require: 'github/markup'
-gem 'commonmarker', '~> 0.21'
+gem 'commonmarker', '~> 0.23.2'
 gem 'kramdown', '~> 2.3.1'
 gem 'RedCloth', '~> 4.3.2'
 gem 'rdoc', '~> 6.3.2'
@@ -165,7 +165,7 @@ gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.3.1', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
 gem 'asciidoctor-kroki', '~> 0.5.0', require: false
-gem 'rouge', '~> 3.26.0'
+gem 'rouge', '~> 3.26.1'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
 gem 'nokogiri', '~> 1.11.4'
@@ -195,10 +195,10 @@ gem 'state_machines-activerecord', '~> 0.8.0'
 gem 'acts-as-taggable-on', '~> 7.0'
 
 # Background jobs
-gem 'sidekiq', '~> 5.2.7'
+gem 'sidekiq', '~> 6.2.2'
 gem 'sidekiq-cron', '~> 1.0'
 gem 'redis-namespace', '~> 1.8.1'
-gem 'gitlab-sidekiq-fetcher', '0.5.6', require: 'sidekiq-reliable-fetch'
+gem 'gitlab-sidekiq-fetcher', '0.8.0', require: 'sidekiq-reliable-fetch'
 
 # Cron Parser
 gem 'fugit', '~> 1.2.1'
@@ -229,7 +229,7 @@ gem 'js_regex', '~> 3.7'
 gem 'device_detector'
 
 # Redis
-gem 'redis', '~> 4.1.4'
+gem 'redis', '~> 4.4.0'
 gem 'connection_pool', '~> 2.0'
 
 # Redis session store
@@ -341,7 +341,7 @@ group :development do
   gem 'lefthook', '~> 0.7.0', require: false
   gem 'solargraph', '~> 0.43', require: false
 
-  gem 'letter_opener_web', '~> 1.4.0'
+  gem 'letter_opener_web', '~> 1.4.1'
 
   # Better errors handler
   gem 'better_errors', '~> 2.9.0'
@@ -355,7 +355,7 @@ group :development, :test do
   gem 'bullet', '~> 6.1.3'
   gem 'pry-byebug'
   gem 'pry-rails', '~> 0.3.9'
-  gem 'pry-shell', '~> 0.4.0'
+  gem 'pry-shell', '~> 0.5.0'
 
   gem 'awesome_print', require: false
 
@@ -424,7 +424,7 @@ group :test do
   gem 'webmock', '~> 3.9.1'
   gem 'rails-controller-testing'
   gem 'concurrent-ruby', '~> 1.1'
-  gem 'test-prof', '~> 0.12.0'
+  gem 'test-prof', '~> 1.0.7'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec'
 
@@ -474,7 +474,7 @@ end
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.3.0.pre.rc1'
+gem 'gitaly', '~> 14.3.0.pre.rc2'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'

@@ -59,8 +59,7 @@ stdenv.mkDerivation {
     # extra `/`.
     ./normalize-var.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
-  ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''

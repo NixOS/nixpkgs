@@ -21,6 +21,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    mainProgram = "drone";
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
     description = "Command line client for the Drone continuous integration server";

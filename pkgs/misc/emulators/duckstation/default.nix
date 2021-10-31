@@ -15,16 +15,18 @@
 , libpulseaudio
 , sndio
 , mesa
+, vulkan-loader
+, wayland
 }:
 mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2021-10-01";
+  version = "unstable-2021-10-19";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "a7096f033ecca48827fa55825fc0d0221265f1c2";
-    sha256 = "sha256-e/Y1TJBuY76q3/0MCAqu9AJzLxIoJ8FJUV5vc/AgcjA=";
+    rev = "96f4fdf8d88ff3a120f3bc409a6a6487cdcbd55f";
+    sha256 = "sha256-WWsi7kmFEYES2BoNKIFF1+lKHJGP3hbTZ9o3eWp+EcE=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config extra-cmake-modules wrapQtAppsHook qttools ];
@@ -38,11 +40,13 @@ mkDerivation rec {
     mesa
     curl
     libpulseaudio
+    wayland
+    vulkan-loader
   ];
 
   cmakeFlags = [
-    "-DUSE_DRMKMS=ON"
-    "-DUSE_EGL=ON"
+    #"-DUSE_DRMKMS=ON" # Broken in combination with Wayland, https://github.com/stenzek/duckstation/issues/2630
+    "-DUSE_WAYLAND=ON"
   ];
 
   postPatch = ''
@@ -76,9 +80,13 @@ mkDerivation rec {
     runHook postCheck
   '';
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+  ];
+
   # TODO:
-  # - vulkan graphics backend (OpenGL works).
-  # - default sound backend (cubeb) does not work, but SDL does.
+  # - default sound backend (cubeb) does not work, but SDL does. Strangely, switching to cubeb while a game is running makes it work.
+
   meta = with lib; {
     description = "PlayStation 1 emulator focusing on playability, speed and long-term maintainability";
     homepage = "https://github.com/stenzek/duckstation";
