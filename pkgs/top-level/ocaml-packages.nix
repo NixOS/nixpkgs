@@ -390,6 +390,29 @@ let
     ff-pbt = callPackage ../development/ocaml-modules/ff/pbt.nix { };
     ff-sig = callPackage ../development/ocaml-modules/ff/sig.nix { };
 
+    ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
+    ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
+      inherit (pkgs) ffmpeg;
+    };
+    ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
+      inherit (pkgs) ffmpeg;
+    };
+
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
