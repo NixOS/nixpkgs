@@ -461,6 +461,10 @@ in {
 
   angr = callPackage ../development/python-modules/angr { };
 
+  angrcli = callPackage ../development/python-modules/angrcli {
+    inherit (pkgs) coreutils;
+  };
+
   angrop = callPackage ../development/python-modules/angrop { };
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
