@@ -148,10 +148,9 @@ let
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     fifo_tmp_fido_pin = "/dev/temporary_fido_pin";
-    f2lopen = "fido2luks open ${dev.device} ${dev.name}"
-              + " ${dev.fido2.credential}"
-              + optionalString dev.fido2.requiresPin " --pin --pin-source ${fifo_tmp_fido_pin}"
-              + " --await-dev ${toString dev.fido2.gracePeriod}";
+    f2lopen = "fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential}"
+      + optionalString dev.fido2.requiresPin " --pin --pin-source ${fifo_tmp_fido_pin}"
+      + " --await-dev ${toString dev.fido2.gracePeriod}";
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -435,11 +434,9 @@ let
           echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
           echo "Please move your mouse to create needed randomness."
         ''}
-        ${if dev.fido2.requiresPin then ''
+        ${lib.optionalString dev.fido2.requiresPin ''
           mkfifo ${fifo_tmp_fido_pin}
           read -rsp "FIDO2 pin for ${dev.device}: " fido_pin
-        '' else ''
-          # Dont make a fifo queue or ask for pin since no pin entry is required
         ''}
           echo "Waiting for your FIDO2 device..."
           ${f2lopen} --salt string:$passphrase &
