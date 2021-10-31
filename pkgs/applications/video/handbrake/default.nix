@@ -10,6 +10,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, nixosTests
   # Main build tools
 , pkg-config
 , autoconf
@@ -63,20 +64,20 @@
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
 , useGtk ? !stdenv.isDarwin
-, wrapGAppsHook ? null
-, intltool ? null
-, glib ? null
-, gtk3 ? null
-, libappindicator-gtk3 ? null
-, libnotify ? null
-, gst_all_1 ? null
-, dbus-glib ? null
-, udev ? null
-, libgudev ? null
-, hicolor-icon-theme ? null
+, wrapGAppsHook
+, intltool
+, glib
+, gtk3
+, libappindicator-gtk3
+, libnotify
+, gst_all_1
+, dbus-glib
+, udev
+, libgudev
+, hicolor-icon-theme
   # FDK
 , useFdk ? false
-, fdk_aac ? null
+, fdk_aac
 }:
 
 let
@@ -90,7 +91,7 @@ let
   };
 
   versionFile = writeText "version.txt" ''
-    BRANCH=${lib.versions.majorMinor version}.x
+    BRANCH=${versions.majorMinor version}.x
     DATE=1970-01-01 00:00:01 +0000
     HASH=${src.rev}
     REV=${src.rev}
@@ -99,7 +100,7 @@ let
     URL=${src.meta.homepage}
   '';
 
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString versions;
 
 in
 stdenv.mkDerivation rec {
@@ -119,7 +120,7 @@ stdenv.mkDerivation rec {
     sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
         -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
         -i make/configure.py
-  '' + (optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.isDarwin ''
     # Use the Nix-provided libxml2 instead of the patched version available on
     # the Handbrake website.
     substituteInPlace libhb/module.defs \
@@ -129,11 +130,11 @@ stdenv.mkDerivation rec {
     # which it isn't in the Nix context. (The actual build goes fine without
     # xcodebuild.)
     sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
-  '') + (optionalString stdenv.isLinux ''
+  '' + optionalString stdenv.isLinux ''
     # Use the Nix-provided libxml2 instead of the system-provided one.
     substituteInPlace libhb/module.defs \
       --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
-  '');
+  '';
 
   nativeBuildInputs = [
     autoconf
@@ -207,7 +208,11 @@ stdenv.mkDerivation rec {
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];
 
-  preBuild = "cd build";
+  makeFlags = [ "--directory=build" ];
+
+  passthru.tests = {
+    basic-conversion = nixosTests.handbrake;
+  };
 
   meta = with lib; {
     homepage = "https://handbrake.fr/";
