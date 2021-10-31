@@ -359,6 +359,8 @@ in
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
+      # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
+      systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
