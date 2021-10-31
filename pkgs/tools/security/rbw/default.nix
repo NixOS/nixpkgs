@@ -22,6 +22,9 @@
   # pass-import
 , withPass ? false
 , pass
+
+  # git-credential-helper
+, withGitCredential ? false
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,6 +61,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs bin/pass-import
     substituteInPlace bin/pass-import \
         --replace pass ${pass}/bin/pass
+  '' + lib.optionalString withGitCredential ''
+    patchShebangs bin/git-credential-rbw
+    substituteInPlace bin/git-credential-rbw \
+        --replace rbw $out/bin/rbw
   '';
 
   preConfigure = ''
@@ -76,6 +83,8 @@ rustPlatform.buildRustPackage rec {
     cp bin/rbw-rofi $out/bin
   '' + lib.optionalString withPass ''
     cp bin/pass-import $out/bin
+  '' + lib.optionalString withGitCredential ''
+    cp bin/git-credential-rbw $out/bin
   '';
 
   meta = with lib; {
