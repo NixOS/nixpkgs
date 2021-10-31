@@ -21005,6 +21005,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  marble-marcher = callPackage ../games/marble-marcher {};
+
   mongodb = hiPrio mongodb-3_4;
 
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
