@@ -430,10 +430,16 @@ rec {
 
       # an attrset 'name' => list of unmatched definitions for 'name'
       unmatchedDefnsByName =
-        # Propagate all unmatched definitions from nested option sets
-        mapAttrs (n: v: v.unmatchedDefns) resultsByName
-        # Plus the definitions for the current prefix that don't have a matching option
-        // removeAttrs defnsByName' (attrNames matchedOptions);
+        if configs == []
+        then
+          # When no config values exist, there can be no unmatched config, so
+          # we short circuit and avoid evaluating more _options_ than necessary.
+          {}
+        else
+          # Propagate all unmatched definitions from nested option sets
+          mapAttrs (n: v: v.unmatchedDefns) resultsByName
+          # Plus the definitions for the current prefix that don't have a matching option
+          // removeAttrs defnsByName' (attrNames matchedOptions);
     in {
       inherit matchedOptions;
 
