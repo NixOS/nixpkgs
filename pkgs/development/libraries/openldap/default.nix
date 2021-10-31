@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     make $installFlags install -C contrib/slapd-modules/passwd/sha2
     make $installFlags install -C contrib/slapd-modules/passwd/pbkdf2
     make $installFlags install-lib -C contrib/slapd-modules/passwd/argon2
-    chmod +x "$out"/lib/*.${stdenv.hostPlatform.extensions.sharedLibrary}
+    chmod +x "$out"/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   meta = with lib; {
