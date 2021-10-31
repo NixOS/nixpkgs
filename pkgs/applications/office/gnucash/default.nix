@@ -1,7 +1,7 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
-, libdbiDrivers, guile, perl, perlPackages
+, libdbiDrivers, guile, perl, perlPackages, librsvg
 }:
 
 let
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
-    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi librsvg
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
