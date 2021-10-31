@@ -12,9 +12,11 @@
 , wrapQtAppsHook
 , qtx11extras
 }:
-stdenv.mkDerivation rec{
+
+stdenv.mkDerivation rec {
   pname = "kaffeine";
   version = "2.0.18";
+
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = pname;
@@ -22,11 +24,13 @@ stdenv.mkDerivation rec{
     rev = "v${version}";
     hash = "sha256-FOaS9gkzkHglbsNBNMwjzbHCNQg3Mbf+9so/Vfbaquc=";
   };
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     wrapQtAppsHook
   ];
+
   buildInputs = [
     libvlc
     libX11
@@ -35,6 +39,7 @@ stdenv.mkDerivation rec{
     kdelibs4support
     libXScrnSaver
   ];
+
   meta = with lib; {
     description = "KDE media player";
     homepage = "http://kaffeine.kde.org/";
