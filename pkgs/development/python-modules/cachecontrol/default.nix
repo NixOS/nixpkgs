@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.12.6";
+  version = "0.12.8";
   pname = "CacheControl";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be9aa45477a134aee56c8fac518627e1154df063e85f67d4f83ce0ccc23688e8";
+    sha256 = "sha256-JUBDwbq3SMicCaiQ+RKKD7LGVOlGvPRzwS0p/fnLbFs=";
   };
 
   checkInputs = [ pytest ];
