@@ -3501,10 +3501,10 @@ let
 
   CompressRawBzip2 = buildPerlPackage {
     pname = "Compress-Raw-Bzip2";
-    version = "2.096";
+    version = "2.101";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.096.tar.gz";
-      sha256 = "1glcjnbqksaviwyrprh9i4dybsb12kzfy0bx932l0xya9riyfr55";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.101.tar.gz";
+      sha256 = "1n5q01akpsw1skn59c3nivwjfqcn00wzdj8gx4q0wac8sd7i76qc";
     };
 
     # Don't build a private copy of bzip2.
