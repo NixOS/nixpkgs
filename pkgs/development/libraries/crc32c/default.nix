@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
 
+  cmakeFlags = [
+    "-DCRC32C_INSTALL=1"
+    "-DCRC32C_BUILD_TESTS=1"
+    "-DCRC32C_BUILD_BENCHMARKS=0"
+    "-DCRC32C_USE_GLOG=0"
+  ] ++ lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1" ];
+
   doCheck = false;
   doInstallCheck = true;
 
@@ -34,12 +41,6 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  cmakeFlags = [
-    "-DCRC32C_INSTALL=1"
-    "-DCRC32C_BUILD_TESTS=1"
-    "-DCRC32C_BUILD_BENCHMARKS=0"
-    "-DCRC32C_USE_GLOG=0"
-  ] ++ lib.optionals (!staticOnly) [ "-DBUILD_SHARED_LIBS=1" ];
 
   meta = with lib; {
     homepage = "https://github.com/google/crc32c";
