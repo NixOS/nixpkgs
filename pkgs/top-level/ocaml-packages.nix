@@ -1129,6 +1129,8 @@ let
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
+    posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
+
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
