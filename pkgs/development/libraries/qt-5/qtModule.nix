@@ -45,7 +45,7 @@ mkDerivation (args // {
       exit 1
     fi
 
-    if [[ -z "$dontSyncQt" ]] && [[ -f sync.profile ]]; then
+    if [[ -z "$dontSyncQt" && -f sync.profile ]]; then
       syncqt.pl -version "''${version%%-*}"
     fi
   '';
