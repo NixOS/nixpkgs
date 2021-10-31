@@ -12,12 +12,9 @@
 , libpcap
 , fetchFromGitHub
 }:
-let
+stdenv.mkDerivation rec {
   pname = "ndn-tools";
   version = "0.7.1";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "named-data";
