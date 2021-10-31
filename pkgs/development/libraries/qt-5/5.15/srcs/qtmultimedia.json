@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtmultimedia.git",
-  "rev": "bd29c87027637a013f2c5e3b549fcda84e4d7545",
-  "sha256": "11pz9zzrhsr3n78ga7l3kp3gi20rpxsa4iz3wclhcbcm2xr3nd94",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

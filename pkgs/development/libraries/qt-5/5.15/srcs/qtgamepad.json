@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtgamepad.git",
-  "rev": "64afa18a0a1e9588060e2e6d917bb01ccdd48a81",
-  "sha256": "1h9yb0asprynnb2qyjbmyglrkk9f9v19g6zzpk0gmixrp0h8gk46",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

@@ -27,14 +27,7 @@ let
 
   mirror = "https://download.qt.io";
   srcs =
-    lib.mapAttrs
-      (name: attrs:
-        {
-          inherit (attrs) version;
-          src = fetchgit (lib.importJSON attrs.json);
-        }
-      )
-      (import ./srcs)
+    import ./srcs.nix { inherit lib fetchgit; }
     // {
       # qtwebkit does not have an official release tarball on the qt mirror and is
       # mostly maintained by the community.

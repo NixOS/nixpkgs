@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtvirtualkeyboard.git",
-  "rev": "353b75b2e34bdae901625bbddf5c5e3f3e6c0de5",
-  "sha256": "12nv773zc05yrbai1z6i481yinih0kxcjzgm9pa0580qz69gd9a5",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

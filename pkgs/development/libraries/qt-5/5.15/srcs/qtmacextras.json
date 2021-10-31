@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtmacextras.git",
-  "rev": "e72896968697e2a8af16a312e1560948e4c40f30",
-  "sha256": "1hndpbr1nnybn7frg76q99bk1c8fhvra6wjm0q78p4a8pinrvcms",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtconnectivity.git",
-  "rev": "69a87a9b831e36a578594a0a13130c384ad03121",
-  "sha256": "0ph07rdf9qfxnw3z2nqbmh6na65z0p2snmlzdw80amd7s0g255kw",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

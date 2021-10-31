@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtquickcontrols.git",
-  "rev": "cf3f6d7fec824cdf01f9b329ab3b92b1c0e0a420",
-  "sha256": "1vxp0kwigwhqyyfm0xg8llyd1l1f4l18hmk6xqkm57xpi15x55bc",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

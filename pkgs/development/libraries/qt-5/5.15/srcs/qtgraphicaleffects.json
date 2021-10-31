@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtgraphicaleffects.git",
-  "rev": "c36998dc1581167b12cc3de8e4ac68c2a5d9f76e",
-  "sha256": "0x11n2fym765z3gyb4xnfl7v6zrip1wjkkl6nx1bxaya173fvdw8",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

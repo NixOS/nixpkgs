@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtremoteobjects.git",
-  "rev": "4d6d1e35fb8e0cb900b5e5e9266edea51dc4f735",
-  "sha256": "1zbxl5jk7x8qklrnbbaikymyviigqdq7vf0wc8gzls4126vcx146",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

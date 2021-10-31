@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtsensors.git",
-  "rev": "921a31375f29e429e95352b08b2b9dbfea663cb1",
-  "sha256": "1ijayk6lf34nwv7s3ib3cfqx9sjrmr1c6jnziwmxa1l6fy3ik4g8",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

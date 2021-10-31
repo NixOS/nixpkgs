@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtlottie.git",
-  "rev": "fa8c8bfc6742ab98b61d1351e054e0e73e9a42f4",
-  "sha256": "1xgykaw8qjnaip6h9jx0nfadc9amb6aclk758vm5pp43dvs5j96r",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

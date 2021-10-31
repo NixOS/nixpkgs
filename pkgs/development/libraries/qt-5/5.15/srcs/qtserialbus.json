@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtserialbus.git",
-  "rev": "8884c5e43df846deac5a0c7c290eeb633d6bfe32",
-  "sha256": "1ydb5x21j26pl58mr6klnwixkqx8h119nvnzvyawz83gji3ay3a5",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

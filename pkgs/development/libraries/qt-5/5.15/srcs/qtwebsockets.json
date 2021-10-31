@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtwebsockets.git",
-  "rev": "e7883bc64440b1ff4666272ac6eb710ee4bc221b",
-  "sha256": "1rj99y1f0wn6g1m2k53xkni5v79zgq25yv8b9wx2bz0n2r9iasca",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

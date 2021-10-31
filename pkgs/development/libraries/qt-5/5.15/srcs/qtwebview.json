@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtwebview.git",
-  "rev": "920de5f1cd9f9001cfef1bfd2c19e6720793362f",
-  "sha256": "04hnqalabhypkd2hgl45jxf9p1p6dgjwlc5b7gs4f6588lafgd3f",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}

@@ -1,9 +1,0 @@
-{
-  "url": "https://invent.kde.org/qt/qt/qtwayland.git",
-  "rev": "992833ca741efe8f533c61abfaf129a1d8bfcfee",
-  "sha256": "1w8mq38k6s0fncqv113bw1pc7g10ysfmsbyg23hxh9fr5q4ia4q7",
-  "fetchLFS": false,
-  "fetchSubmodules": false,
-  "deepClone": false,
-  "leaveDotGit": false
-}
