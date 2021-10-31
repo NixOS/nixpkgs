@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -17,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "6.0.1";
+  version = "6.0.2";
 
   repoName = "default-settings";
 
@@ -25,17 +24,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0gqnrm968j4v699yhhiyw5fqjy4zbvvrjci2v1jrlycn09c2yrwf";
+    sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };
-
-  patches = [
-    # Update gtk-theme-name and gtk-font-name for Pantheon 6
-    # https://github.com/elementary/default-settings/pull/252
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/be24c151492bb9115c75bd1a7abc88714240294a.patch";
-      sha256 = "sha256-EglFiN4CLbL8osfNGLvjD220Al35uBXuRNC9Ud3QYBI=";
-    })
-  ];
 
   nativeBuildInputs = [
     accountsservice

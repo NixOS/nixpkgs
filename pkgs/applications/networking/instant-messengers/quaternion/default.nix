@@ -3,7 +3,6 @@
 , lib
 , fetchFromGitHub
 , cmake
-, qtbase
 , qtquickcontrols
 , qtquickcontrols2
 , qtkeychain
@@ -15,19 +14,17 @@
 
 mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.95";
+  version = "0.0.95.1";
 
   src = fetchFromGitHub {
     owner = "QMatrixClient";
     repo = "Quaternion";
     rev = version;
-    sha256 = "sha256-WqhHqo4ySxufulC+TxS2ko2R5hUiORgdNAkp5Awdcw8=";
+    sha256 = "sha256-6FLj/hVY13WO7sMgHCHV57eMJu39cwQHXQX7m0lmv4I=";
   };
 
   buildInputs = [
-    qtbase
     qtmultimedia
-    qtquickcontrols
     qtquickcontrols2
     qtkeychain
     libquotient
@@ -47,11 +44,10 @@ mkDerivation rec {
     '';
 
   meta = with lib; {
-    description =
-      "Cross-platform desktop IM client for the Matrix protocol";
+    description = "Cross-platform desktop IM client for the Matrix protocol";
     homepage = "https://matrix.org/docs/projects/client/quaternion.html";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
+    inherit (qtquickcontrols2.meta) platforms;
   };
 }
