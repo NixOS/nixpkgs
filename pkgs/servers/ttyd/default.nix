@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/tsl0922/ttyd";
     license     = lib.licenses.mit;
     maintainers = [ lib.maintainers.thoughtpolice ];
-    platforms   = lib.platforms.linux;
+    platforms   = lib.platforms.all;
   };
 }
