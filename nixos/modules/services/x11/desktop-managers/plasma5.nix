@@ -358,6 +358,7 @@ in
       programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
+      services.accounts-daemon.enable = true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
