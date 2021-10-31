@@ -34,7 +34,9 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
+    broken = stdenv.isAarch64; # cpuid.h: no such file or directory
   };
 
   passthru.tests = { inherit (nixosTests) ucg; };
 }
+# TODO: report upstream
