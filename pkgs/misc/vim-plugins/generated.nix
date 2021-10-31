@@ -2444,6 +2444,18 @@ final: prev:
     };
     meta.homepage = "https://github.com/edwinb/idris2-vim/";
   };
+  
+  lingua-franca = pkgs.vimUtils.buildVimPluginFrom2Nix {
+    pname = "lingua-franca";
+    version = "2021-9-5";
+    src = fetchFromGitHub {
+      owner = "lf-lang";
+      repo = "lingua-franca.vim";
+      rev = "439b92a13744ee21cb3cd9c399e179efbcaa2967";
+      sha256 = "sha256-Bf2MabUe3fy0meL6zIYgal/yFxtLKsg3b/BUI/AVlrM=";
+    };
+    meta.homepage = "https://github.com/lf-lang/lingua-franca.vim";
+  };
 
   Improved-AnsiEsc = buildVimPluginFrom2Nix {
     pname = "Improved-AnsiEsc";
