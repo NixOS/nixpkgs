@@ -15725,6 +15725,8 @@ with pkgs;
 
   ndn-tools = callPackage ../tools/networking/ndn-tools { };
 
+  nfd = callPackage ../servers/nfd { };
+
   cddlib = callPackage ../development/libraries/cddlib {};
 
   cdk = callPackage ../development/libraries/cdk {};
