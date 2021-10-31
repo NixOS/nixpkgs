@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dalfox";
-  version = "2.5.2";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/tS9/VxH5r4CSmxZ7uZOgAMLRtmPs+bgPtvljOhLALc=";
+    sha256 = "sha256-zwDdOj6/YcZQZW5WWMZztTVl5QsYMCcqtaAFsM+1bn0=";
   };
 
   vendorSha256 = "sha256-AZbzcGqje2u9waH2NGWITXpax2GCFqbIEd4uNiDmcIY=";
