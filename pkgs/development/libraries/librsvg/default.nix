@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Foundation
   ];
 
   buildInputs = [
@@ -61,6 +58,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+    Foundation
     libobjc
   ];
 
