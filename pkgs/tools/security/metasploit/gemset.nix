@@ -104,30 +104,30 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18jjc7sxpdip10iyg0sn89ywvi2iqnhi225df7j6gs0fm25azkfw";
+      sha256 = "0zfwynw6d4lbq63lwk94insrjmgxwfp1lic4913a9ik00wnf90wd";
       type = "gem";
     };
-    version = "1.518.0";
+    version = "1.521.0";
   };
   aws-sdk-core = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "15x3qcmh81hf92x0gcj0h0h7yhnlzdqs6wdml56i3cq0nz9kxhs4";
+      sha256 = "0akv0jyr4crs4r5vdzc18j5drqgpcckm0gnpgi0bzpqyyk6m16hq";
       type = "gem";
     };
-    version = "3.121.3";
+    version = "3.121.5";
   };
   aws-sdk-ec2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0k85khm2c53y2sq29c9rg5kmjm1fnw2glgpjsl6hbh8cq3ciaain";
+      sha256 = "13kbrl8r9cm7i9cb6w5ayji1vqaca6h0inxpyx8bhbrwkscrbh2s";
       type = "gem";
     };
-    version = "1.271.0";
+    version = "1.275.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
@@ -664,12 +664,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "341b0cd1cdf69fe22345aea6c84ae11ba45e0d98";
-      sha256 = "0b452ay3qg2x2pg9ma9p52mb914vsfljj4baddhpc72n2nppfbyh";
+      rev = "bde342fd8293e49a45ba837ca9a1fdea505bc919";
+      sha256 = "1g262lfh4v34rc01svicq8wbi63i8v2j1i462crjxvjd63q29g13";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.1.11";
+    version = "6.1.12";
   };
   metasploit-model = {
     groups = ["default"];
@@ -1237,20 +1237,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1kl221lsf1dk62vsf6fsgcx54crav0wgqsb9rwjxl7gfd7kmyz04";
+      sha256 = "1rsgssbnnl5frxgnq17xq0n6rpxns6xdmxpya9852c2n72nm5ac0";
       type = "gem";
     };
-    version = "0.1.33";
+    version = "0.1.34";
   };
   rex-sslscan = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r58n1ifbay1gq3kln9yg5iqjwp69l0pmb9sqakhqwhjlhzqx2kr";
+      sha256 = "128y9xrb2nv8ccs85lav8wcydp8239y04ad7mjkc43r59hhkx74p";
       type = "gem";
     };
-    version = "0.1.6";
+    version = "0.1.7";
   };
   rex-struct2 = {
     groups = ["default"];
