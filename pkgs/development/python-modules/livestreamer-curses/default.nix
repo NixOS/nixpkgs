@@ -6,14 +6,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.2";
   pname = "livestreamer-curses";
+  version = "1.5.2";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "gapato";
     repo = "livestreamer-curses";
-    rev = "v1.5.2";
+    rev = "v${version}";
     sha256 = "sha256-Pi0PIOUhMMAWft9ackB04IgF6DyPrXppNqyVjozIjN4=";
   };
 
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gapato/livestreamer-curses";
     description = "Curses frontend for livestreamer";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

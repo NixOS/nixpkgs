@@ -23,14 +23,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.26";
+  version = "6.1.28";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "0212602eea878d6c9fd7f4a3e0182da3e4505f31d25f5539fb8f7b1fbe366195";
+    sha256 = "8d34993d8e9c0cf35e7bd44dd26c8c757f17a3b7d5a64052f945d00fd798ebfe";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -94,9 +94,6 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
-    # Temporary workaround for broken build
-    # https://www.virtualbox.org/pipermail/vbox-dev/2021-July/015670.html
-    ./fix-configure-pkgconfig-qt.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
   ];
@@ -200,11 +197,6 @@ in stdenv.mkDerivation {
         mkdir -p $out/share/icons/hicolor/$size/apps
         ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
       done
-    ''}
-
-    # https://github.com/NixOS/nixpkgs/issues/137104
-    ${optionalString (enableHardening || headless) ''
-      rm $libexec/components/VBoxREM.so
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"

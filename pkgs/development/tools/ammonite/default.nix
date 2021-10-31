@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts
+{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts
 , git, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
 with lib;
@@ -28,7 +28,6 @@ let
       '';
 
       passthru = {
-        tests = { inherit (nixosTests) ammonite; };
 
         updateScript = writeScript "update.sh" ''
           #!${stdenv.shell}
@@ -57,6 +56,15 @@ let
           fi
         '';
       };
+
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        $out/bin/amm -c 'val foo = 21; println(foo * 2)' | grep 42
+
+        runHook postInstallCheck
+      '';
 
       meta = {
         description = "Improved Scala REPL";

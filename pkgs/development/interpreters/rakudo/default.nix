@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ stdenv.cc.cc ];
   postFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar.so)"
+    remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
   '';
 
   meta = with lib; {
