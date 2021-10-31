@@ -3518,6 +3518,26 @@ let
     };
   };
 
+  CompressRawLzma = buildPerlPackage {
+    pname = "Compress-Raw-Lzma";
+    version = "2.101";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.101.tar.gz";
+      sha256 = "bb267fd31981eda11f444038f8a0fca4b94a51ae61b2db71246abf6a4d322a36";
+    };
+    preConfigure = ''
+      cat > config.in <<EOF
+        INCLUDE      = ${pkgs.xz.dev}/include
+        LIB          = ${pkgs.xz.out}/lib
+      EOF
+    '';
+    meta = {
+      homepage = "https://github.com/pmqs/Compress-Raw-Lzma";
+      description = "Low-Level Interface to lzma compression library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
     version = "2.096";
