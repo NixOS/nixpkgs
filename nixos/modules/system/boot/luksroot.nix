@@ -147,6 +147,11 @@ let
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
+    fifo_tmp_fido_pin = "/dev/temporary_fido_pin";
+    f2lopen = "fido2luks open ${dev.device} ${dev.name}"
+              + " ${dev.fido2.credential}"
+              + optionalString dev.fido2.requiresPin " --pin --pin-source ${fifo_tmp_fido_pin}"
+              + " --await-dev ${toString dev.fido2.gracePeriod}";
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -420,7 +425,6 @@ let
 
     open_with_hardware() {
       local passsphrase
-
         ${if dev.fido2.passwordLess then ''
           export passphrase=""
         '' else ''
@@ -431,8 +435,21 @@ let
           echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
           echo "Please move your mouse to create needed randomness."
         ''}
+        ${if dev.fido2.requiresPin then ''
+          mkfifo ${fifo_tmp_fido_pin}
+          read -rsp "FIDO2 pin for ${dev.device}: " fido_pin
+        '' else ''
+          # Dont make a fifo queue or ask for pin since no pin entry is required
+        ''}
           echo "Waiting for your FIDO2 device..."
-          fido2luks open ${dev.device} ${dev.name} ${dev.fido2.credential} --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
+          ${f2lopen} --salt string:$passphrase &
+          f2lopen_pid=$!
+          echo -n $fido_pin > ${fifo_tmp_fido_pin}
+          # Clean up after ourselves
+          unset fido_pin
+          rm ${fifo_tmp_fido_pin}
+          # Wait for the key to open the disk
+          wait $f2lopen_pid
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
           open_normally
@@ -682,6 +699,12 @@ in
               example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
               type = types.nullOr types.str;
               description = "The FIDO2 credential ID.";
+            };
+
+            requiresPin = mkOption {
+              default = false;
+              type = types.bool;
+              description = "If the device requires a pin number (Yubikey, Trezor), set this to true.";
             };
 
             gracePeriod = mkOption {
