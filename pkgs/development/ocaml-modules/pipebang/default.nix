@@ -1,7 +1,7 @@
 {lib, buildOcaml, fetchurl}:
 
 buildOcaml rec {
-  name = "pipebang";
+  pname = "pipebang";
   version = "113.00.00";
 
   minimumSupportedOcamlVersion = "4.00";

@@ -5,7 +5,7 @@ then throw "estring is not available for OCaml ${ocaml.version}"
 else
 
 buildOcaml rec {
-  name = "estring";
+  pname = "estring";
   version = "1.3";
 
   src = fetchurl {

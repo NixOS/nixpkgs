@@ -1,7 +1,7 @@
 { lib, buildOcaml, fetchFromGitHub, type_conv }:
 
 buildOcaml rec {
-  name = "typerep";
+  pname = "typerep";
   version = "112.24.00";
 
   minimumSupportedOcamlVersion = "4.00";

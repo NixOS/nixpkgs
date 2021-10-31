@@ -5,7 +5,7 @@ then throw "pa_ounit is not available for OCaml ${ocaml.version}"
 else
 
 buildOcaml rec {
-  name = "pa_ounit";
+  pname = "pa_ounit";
   version = "113.00.00";
 
   src = fetchurl {

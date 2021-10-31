@@ -3,7 +3,7 @@
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";
 
-  name = "type_conv";
+  pname = "type_conv";
   version = "113.00.02";
 
   src = fetchurl {
