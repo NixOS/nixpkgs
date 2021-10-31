@@ -1,0 +1,26 @@
+From 401cb05d7181e69ae8edd347644f2518904e9acb Mon Sep 17 00:00:00 2001
+From: Jeremy Paul Wootten <jeremywootten@gmail.com>
+Date: Sat, 30 Oct 2021 17:44:12 +0100
+Subject: [PATCH] Reset position and relative position after rebuilding
+ carousel
+
+---
+ src/Widgets/calendar/CalendarView.vala | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/Widgets/calendar/CalendarView.vala b/src/Widgets/calendar/CalendarView.vala
+index a41b37a4..f946b91c 100644
+--- a/src/Widgets/calendar/CalendarView.vala
++++ b/src/Widgets/calendar/CalendarView.vala
+@@ -216,7 +216,11 @@ public class DateTime.Widgets.CalendarView : Gtk.Grid {
+             carousel.add (right_grid);
+             carousel.scroll_to (start_month_grid);
+             label.label = calmodel.month_start.format (_("%OB, %Y"));
++
++            position = 1;
++            rel_postion = 0;
+         }
++
+         carousel.no_show_all = false;
+     }
+ 
