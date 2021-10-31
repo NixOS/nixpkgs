@@ -353,6 +353,7 @@ in
   php80 = handleTest ./php { php = pkgs.php80; };
   pinnwand = handleTest ./pinnwand.nix {};
   plasma5 = handleTest ./plasma5.nix {};
+  plasma5-systemd-start = handleTest ./plasma5-systemd-start.nix {};
   plausible = handleTest ./plausible.nix {};
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix {};
   plikd = handleTest ./plikd.nix {};
