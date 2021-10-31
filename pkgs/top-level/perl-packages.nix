@@ -3525,7 +3525,6 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.101.tar.gz";
       sha256 = "bb267fd31981eda11f444038f8a0fca4b94a51ae61b2db71246abf6a4d322a36";
     };
-    buildInputs = [ pkgs.xz ];
     preConfigure = ''
       cat > config.in <<EOF
         INCLUDE      = ${pkgs.xz.dev}/include
