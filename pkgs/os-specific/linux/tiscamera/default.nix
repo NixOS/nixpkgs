@@ -17,6 +17,7 @@
 , python3Packages
 , libuuid
 , wrapGAppsHook
+, catch2
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     rev = "v-${pname}-${version}";
     sha256 = "0hpy9yhc4mn6w8gvzwif703smmcys0j2jqbz2xfghqxcyb0ykplj";
   };
+
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp external/catch/catch.hpp
+  '';
 
   nativeBuildInputs = [
     cmake
