@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "0.19.3";
+  version = "0.19.4";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfd0271f7177173cea9c255730151a10a2fe4a32f9accd2fe31e7645936c90c5";
+    sha256 = "0001947daf757fd6aab8f2d066cf644036d95eb06bc6348115d588af10790ff2";
   };
 
   propagatedBuildInputs = [
