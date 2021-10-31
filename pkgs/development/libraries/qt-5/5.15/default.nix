@@ -121,6 +121,14 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
+    qtwayland = [
+      # Fix KDE behavior when re-plugging the only primary display under wayland.
+      (fetchpatch {
+        name = "qtwayland-announce-an-output-after-receiving-more-complete-state.patch";
+        url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/d5186701e27ad6f09f3944809cec2a25c5328026.patch";
+        sha256 = "sha256-kixkhIf8c1e9vvzK2TXvpmWjftgeEa0HmNSEvswO/Oo=";
+      })
+    ];
     qtwebengine = [
       # Fix invisible fonts with glibc 2.33: https://github.com/NixOS/nixpkgs/issues/131074
       (fetchpatch {
