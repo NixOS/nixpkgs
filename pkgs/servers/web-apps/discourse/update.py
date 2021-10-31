@@ -201,16 +201,24 @@ def update_plugins():
 
     """
     plugins = [
+        {'name': 'discourse-assign'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
+        {'name': 'discourse-chat-integration'},
         {'name': 'discourse-checklist'},
         {'name': 'discourse-data-explorer'},
+        {'name': 'discourse-docs'},
         {'name': 'discourse-github'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
         {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
+        # We can't update this automatically at the moment because the plugin.rb
+        # tries to load a version number which breaks bundler called by this script.
+        # {'name': 'discourse-prometheus'},
+        {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
+        {'name': 'discourse-voting'},
         {'name': 'discourse-yearly-review'},
     ]
 
