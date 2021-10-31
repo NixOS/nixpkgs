@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-prefetch-scripts jq
 
-set -x -e -o pipefail
+set -eox pipefail
 
 here="$(dirname "${BASH_SOURCE[0]}")"
 modules="${here}/modules"
