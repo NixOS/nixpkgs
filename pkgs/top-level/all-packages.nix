@@ -9901,6 +9901,8 @@ with pkgs;
 
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
 
+  threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
+
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
