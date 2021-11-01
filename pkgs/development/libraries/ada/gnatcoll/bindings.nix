@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    python3 ${component}/setup.py build --prefix $out $buildFlags
+    ${python3.interpreter} ${component}/setup.py build --prefix $out $buildFlags
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    python3 ${component}/setup.py install --prefix $out
+    ${python3.interpreter} ${component}/setup.py install --prefix $out
     runHook postInstall
   '';
 
