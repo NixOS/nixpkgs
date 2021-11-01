@@ -8202,8 +8202,7 @@ in {
 
   rtslib = callPackage ../development/python-modules/rtslib { };
 
-  ruamel-base = self.ruamel_base;
-  ruamel_base = callPackage ../development/python-modules/ruamel_base { };
+  ruamel-base = callPackage ../development/python-modules/ruamel-base { };
 
   ruamel-yaml = self.ruamel_yaml;
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };

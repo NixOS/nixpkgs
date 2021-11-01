@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ruamel_base
+, ruamel-base
 , ruamel_ordereddict
 , ruamel_yaml_clib ? null
 , isPy27
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests use relative paths
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel_base ]
+  propagatedBuildInputs = [ ruamel-base ]
     ++ lib.optional isPy27 ruamel_ordereddict
     ++ lib.optional (!isPyPy) ruamel_yaml_clib;
 
