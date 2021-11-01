@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.14";
+  version = "4.15";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
@@ -16,8 +16,8 @@ let
 
     src = fetchgit {
       url = "https://review.coreboot.org/coreboot";
-      rev = version;
-      sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
+      rev = "18b34f98ba55f10cb7a0d9e8cbbe2b0e3387d843";
+      sha256 = "05vbxnkqnqk77kr1p1xyfs98m34p9jw5v2mvikif7yvnc0cs89sg";
     };
 
     enableParallelBuilding = true;
