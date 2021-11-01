@@ -380,6 +380,7 @@ ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lewis6991/gitsigns.nvim@main
+lf-lang/lingua-franca.vim
 lfe-support/vim-lfe
 lfilho/cosco.vim
 lifepillar/vim-gruvbox8
