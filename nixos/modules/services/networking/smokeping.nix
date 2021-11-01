@@ -174,7 +174,7 @@ in
       };
       host = mkOption {
         type = types.nullOr types.str;
-        default = null;
+        default = "localhost";
         example = "192.0.2.1"; # rfc5737 example IP for documentation
         description = ''
           Host/IP to bind to for the web server.
