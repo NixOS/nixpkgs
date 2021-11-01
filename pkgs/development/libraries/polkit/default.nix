@@ -51,7 +51,14 @@ stdenv.mkDerivation rec {
     sha256 = "oEaRf1g13zKMD+cP1iwIA6jaCDwvNfGy2i8xY8vuVSo=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # Allow changing base for paths in pkg-config file as before.
+    # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
+      sha256 = "1iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
     # We use the version of the patch that Alpine uses successfully.
