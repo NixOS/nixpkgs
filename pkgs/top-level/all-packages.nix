@@ -11278,6 +11278,10 @@ with pkgs;
 
   as31 = callPackage ../development/compilers/as31 { };
 
+  asl = callPackage ../development/compilers/asl {
+    tex = texlive.combined.scheme-medium;
+  };
+
   asn1c = callPackage ../development/compilers/asn1c { };
 
   aspectj = callPackage ../development/compilers/aspectj { };
