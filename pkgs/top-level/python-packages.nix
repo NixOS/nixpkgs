@@ -2958,6 +2958,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  generic = callPackage ../development/python-modules/generic { };
+
   genome-collector = callPackage ../development/python-modules/genome-collector { };
 
   genpy = callPackage ../development/python-modules/genpy { };
