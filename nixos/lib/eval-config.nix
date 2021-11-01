@@ -51,28 +51,23 @@ let
     };
   };
 
-  noUserModules = lib.evalModules {
-    inherit prefix check;
-    modules = baseModules ++ extraModules ++ [ pkgsModule ];
-    args = extraArgs;
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
-  };
-
-  # These are the extra arguments passed to every module.  In
-  # particular, Nixpkgs is passed through the "pkgs" argument.
-  extraArgs = extraArgs_ // {
-    inherit noUserModules baseModules extraModules modules;
-  };
-
 in rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  inherit (noUserModules.extendModules { inherit modules; })
-    config options _module type;
+  inherit (lib.evalModules {
+    inherit prefix check;
+    modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
+    args = extraArgs;
+    specialArgs =
+      { modulesPath = builtins.toString ../modules; } // specialArgs;
+  }) config options _module type;
 
-  inherit extraArgs;
+  # These are the extra arguments passed to every module.  In
+  # particular, Nixpkgs is passed through the "pkgs" argument.
+  extraArgs = extraArgs_ // {
+    inherit baseModules extraModules modules;
+  };
 
   inherit (_module.args) pkgs;
 }
