@@ -1,10 +1,10 @@
 {
   stdenv,
   clangStdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libuuid,
-  python3,
+, fetchFromGitHub
+, fetchpatch
+, libuuid
+, python3
   bc,
   clang_9,
   llvmPackages_9,
