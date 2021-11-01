@@ -26403,6 +26403,10 @@ with pkgs;
 
   markets = callPackage ../applications/misc/markets { };
 
+  markmind = callPackage ../applications/misc/markmind {
+    electron = electron_9;
+  };
+
   marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
