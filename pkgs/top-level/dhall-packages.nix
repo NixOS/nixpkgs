@@ -20,6 +20,9 @@ let
       buildDhallUrl =
         callPackage ../development/interpreters/dhall/build-dhall-url.nix { };
 
+      generateDhallDirectoryPackage =
+        callPackage ../development/interpreters/dhall/generate-dhall-directory-package.nix { };
+
     in
       { inherit
           callPackage
@@ -27,6 +30,7 @@ let
           buildDhallGitHubPackage
           buildDhallDirectoryPackage
           buildDhallUrl
+          generateDhallDirectoryPackage
         ;
 
         lib = import ../development/dhall-modules/lib.nix { inherit lib; };
