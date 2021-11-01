@@ -23,4 +23,8 @@ let
   }) // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev; }
+fetcher fetcherArgs // rec {
+  meta.homepage = "${protocol}://${domain}/${slug}";
+  meta.changelog = "${meta.homepage}/-/releases/${rev}/";
+  inherit rev;
+}
