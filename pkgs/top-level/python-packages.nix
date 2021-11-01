@@ -2434,6 +2434,8 @@ in {
     routerFeatures = true;
   };
 
+  entry-points-txt = callPackage ../development/python-modules/entry-points-txt { };
+
   entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
