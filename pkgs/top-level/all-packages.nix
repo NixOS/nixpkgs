@@ -23841,6 +23841,8 @@ with pkgs;
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
+  auto-multiple-choice = callPackage ../applications/misc/auto-multiple-choice { };
+
   autokey = callPackage ../applications/office/autokey { };
 
   autotalent = callPackage ../applications/audio/autotalent { };
