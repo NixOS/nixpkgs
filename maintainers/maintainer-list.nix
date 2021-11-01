@@ -12050,6 +12050,16 @@
       fingerprint = "9270 66BD 8125 A45B 4AC4 0326 6180 7181 F60E FCB2";
     }];
   };
+  yuu = {
+    email = "yuuyin@protonmail.com";
+    github = "yuuyins";
+    githubId = 86538850;
+    name = "Yuu Yin";
+    keys = [{
+      longkeyid = "rsa4096/0x416F303B43C20AC3";
+      fingerprint = "9F19 3AE8 AA25 647F FC31  46B5 416F 303B 43C2 0AC3";
+    }];
+  };
   yvesf = {
     email = "yvesf+nix@xapek.org";
     github = "yvesf";
