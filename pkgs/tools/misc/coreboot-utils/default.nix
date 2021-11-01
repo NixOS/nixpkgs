@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchgit, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
   version = "4.14";
@@ -14,9 +14,10 @@ let
   generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
     inherit pname version;
 
-    src = fetchurl {
-      url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
+    src = fetchgit {
+      url = "https://review.coreboot.org/coreboot";
+      rev = version;
+      sha256 = "00xr74yc0kj9rrqa1a8b7bih865qlp9i4zs67ysavkfrjrwwssxm";
     };
 
     enableParallelBuilding = true;
