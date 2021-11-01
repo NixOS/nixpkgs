@@ -21,6 +21,19 @@
 
 let
   defaultOverrides = [
+    # aiounify 29 breaks integration tests
+    (self: super: {
+      aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
+        version = "28";
+        src = fetchFromGitHub {
+          owner = "Kane610";
+          repo = "aiounifi";
+          rev = "v${version}";
+          sha256 = "1r86pk80sa1la2s7c6v9svh5cpkci6jcw1xziz0h09jdvv5j5iff";
+        };
+      });
+    })
+
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
@@ -49,6 +62,19 @@ let
           sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
+      });
+    })
+
+    # Pinned due to API changes in influxdb-client>1.21.0
+    (self: super: {
+      influxdb-client = super.influxdb-client.overridePythonAttrs (oldAttrs: rec {
+        version = "1.21.0";
+        src = fetchFromGitHub {
+          owner = "influxdata";
+          repo = "influxdb-client-python";
+          rev = "v${version}";
+          sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+        };
       });
     })
 

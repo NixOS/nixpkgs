@@ -3412,7 +3412,9 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts { };
+  pocket-casts = callPackage ../applications/audio/pocket-casts {
+    electron = electron_12;
+  };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
 

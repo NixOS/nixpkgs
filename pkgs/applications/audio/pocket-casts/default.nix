@@ -1,11 +1,7 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron_12,
-alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
+, alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
 
-let
-  # Using Electron 12 to solve errors regarding threading
-  electron = electron_12;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pocket-casts";
   version = "0.5.0";
 
@@ -41,8 +37,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/share/applications/pocket-casts.desktop --replace '"/opt/Pocket Casts/pocket-casts"' $out/bin/pocket-casts
-    substituteInPlace $out/share/applications/pocket-casts.desktop --replace '/usr/share/icons/hicolor/0x0/apps/pocket-casts.png' "pocket-casts"
+    substituteInPlace $out/share/applications/pocket-casts.desktop \
+      --replace '"/opt/Pocket Casts/pocket-casts"' $out/bin/pocket-casts \
+      --replace '/usr/share/icons/hicolor/0x0/apps/pocket-casts.png' "pocket-casts"
     makeWrapper ${electron}/bin/electron \
       $out/bin/pocket-casts \
       --add-flags $out/opt/pocket-casts/resources/app.asar

@@ -535,7 +535,7 @@ self: super: {
     postPatch = ''
       # check that version is up to date
       grep 'pname = "statix-vim"' -A 1 flake.nix \
-        | grep -F 'version = "${version}"' flake.nix
+        | grep -F 'version = "${version}"'
 
       cd vim-plugin
       substituteInPlace ftplugin/nix.vim --replace statix ${statix}/bin/statix
