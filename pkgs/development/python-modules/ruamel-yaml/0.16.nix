@@ -3,7 +3,7 @@
 , fetchPypi
 , ruamel-base
 , ruamel-ordereddict
-, ruamel_yaml_clib ? null
+, ruamel-yaml-clib ? null
 , isPy27
 , isPyPy
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ruamel-base ]
     ++ lib.optional isPy27 ruamel-ordereddict
-    ++ lib.optional (!isPyPy) ruamel_yaml_clib;
+    ++ lib.optional (!isPyPy) ruamel-yaml-clib;
 
   # causes namespace clash on py27
   dontUsePythonImportsCheck = isPy27;

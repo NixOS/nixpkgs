@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ruamel.yaml.clib";
+  pname = "ruamel-yaml-clib";
   version = "0.2.4";
 
   src = fetchhg {
