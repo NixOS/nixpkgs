@@ -1370,7 +1370,11 @@ with pkgs;
     name = "use-old-cxx-abi-hook";
   } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
-  iconConvTools = callPackage ../build-support/icon-conv-tools { };
+  ical2org = callPackage ../tools/misc/ical2org {};
+
+  iceportal = callPackage ../tools/misc/iceportal {};
+
+  iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
   validatePkgConfig = makeSetupHook
     { name = "validate-pkg-config"; propagatedBuildInputs = [ findutils pkg-config ]; }
