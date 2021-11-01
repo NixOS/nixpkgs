@@ -6182,6 +6182,8 @@ in {
 
   pyclimacell = callPackage ../development/python-modules/pyclimacell { };
 
+  pyclip = callPackage ../development/python-modules/pyclip { };
+
   pyclipper = callPackage ../development/python-modules/pyclipper { };
 
   pycm = callPackage ../development/python-modules/pycm { };
