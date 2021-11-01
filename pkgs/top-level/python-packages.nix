@@ -8713,6 +8713,8 @@ in {
 
   starline = callPackage ../development/python-modules/starline { };
 
+  stashy = callPackage ../development/python-modules/stashy { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statistics = callPackage ../development/python-modules/statistics { };
