@@ -43,6 +43,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/20594
+  tf-random = overrideCabal super.tf-random {
+    doHaddock = !pkgs.stdenv.isAarch64;
+  };
+
   aeson = appendPatch (doJailbreak super.aeson) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
     sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
