@@ -79,11 +79,9 @@ in
   runCommand name { } (''
     set -eu
 
-    mkdir -p ${cacheDhall}
+    mkdir -p ${cacheDhall} $out/${cacheDhall}
 
     export XDG_CACHE_HOME=$PWD/${cache}
-
-    mkdir -p $out/${cacheDhall}
 
     SHA_HASH="${dhall-hash}"
 

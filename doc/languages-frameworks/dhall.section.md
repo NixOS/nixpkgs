@@ -345,7 +345,7 @@ $ dhall-to-nixpkgs directory ~/proj/dhall-semver
 ### Remote imports as fixed-output derivations {#ssec-dhall-remote-imports-as-fod}
 
 `dhall-to-nixpkgs` has the ability to fetch and build remote imports as
-fixed-output derivations by using their Dhall integrity check.  This is
+fixed-output derivations by using their Dhall integrity check. This is
 sometimes easier than manually packaging all remote imports.
 
 This can be used like the following:
