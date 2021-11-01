@@ -726,5 +726,4 @@ rec {
       platforms = platforms.all;
     };
   };
-
 }
