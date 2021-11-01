@@ -12,7 +12,7 @@ let
   # The build fetches this dynamically from https://graphql.api.apollographql.com/api/schema
   apolloSchema = builtins.readFile ./schema.graphql;
   # The build fetches this from the headers of https://graphql.api.apollographql.com/api/schema
-  etagId = builtins.readFile ./etag.id;
+  etagId = "a7252784c3d195f1ffec315fb8b1481cfba06c7943fe9020ab8df2aafd4d479e";
 in
 rustPlatform.buildRustPackage rec {
   pname = "rover";
@@ -29,14 +29,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Put schema in place that would otherwise be dynamically fetched during the build
-  preBuildPhase = [
-    ''
-      mkdir -p crates/rover-client/.schema
-      cat $apolloSchemaPath > crates/rover-client/.schema/schema.graphql
-      echo ${etagId} > crates/rover-client/.schema/etag.id
-    ''
-  ];
-  preBuildPhases = [ "preBuildPhase" ];
+  preBuild = ''
+    mkdir -p crates/rover-client/.schema
+    cp $apolloSchemaPath crates/rover-client/.schema/schema.graphql
+    echo ${etagId} > crates/rover-client/.schema/etag.id
+  '';
   inherit apolloSchema;
   passAsFile = [ "apolloSchema" ];
   patches = [ ./patches/disable-dynamic-schema-fetching.patch ];
@@ -57,6 +54,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/apollographql/rover/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ farlion edude03 ];
-    platforms = platforms.all;
   };
 }
