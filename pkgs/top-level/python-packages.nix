@@ -9793,6 +9793,8 @@ in {
 
   wheel = callPackage ../development/python-modules/wheel { };
 
+  wheel-filename = callPackage ../development/python-modules/wheel-filename { };
+
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
   whirlpool-sixth-sense = callPackage ../development/python-modules/whirlpool-sixth-sense { };
