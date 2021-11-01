@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash, libbpf
+, systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.20.0";
+  version = "0.22.0";
 
   disabled = !stdenv.isLinux;
 
@@ -14,7 +14,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "1xnpz2zv445dp5h0160drv6xlvrnwfj23ngc4dp3clcd59jh1baq";
+    sha256 = "sha256-7FQz02APzjCjxCaw+e3H2GWz+UKsH0Dzgk9LoDgwDpU=";
+    fetchSubmodules = true;
   };
   format = "other";
 
@@ -22,7 +23,6 @@ python.pkgs.buildPythonApplication rec {
     llvm llvm.dev libclang kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
-    libbpf
   ];
 
   patches = [
@@ -41,7 +41,6 @@ python.pkgs.buildPythonApplication rec {
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
-    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''
