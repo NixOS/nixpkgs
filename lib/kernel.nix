@@ -25,7 +25,7 @@ with lib;
 
   # Normalize kernel versions as appropriate for modDirVersion
   versionToModDir = version:
-    let parts = splitVersion version;
+    let parts = splitString "." version;
     in
       if length parts >= 3
       then version
@@ -37,6 +37,6 @@ with lib;
           postfix = builtins.concatStringsSep "-" (builtins.tail rem);
         in builtins.concatStringsSep "." [ maj min "0" ]
           + (if postfix != "" then "-${postfix}" else "")
-      else throw "versionToModDir: ${version} invalid";
+      else throw "versionToModDir: don't know how to normalize version: ${version}";
 
 }
