@@ -2866,6 +2866,18 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
   };
 
+  lean-nvim = buildVimPluginFrom2Nix {
+    pname = "lean.nvim";
+    version = "2021-10-30";
+    src = fetchFromGitHub {
+      owner = "Julian";
+      repo = "lean.nvim";
+      rev = "e586b463cb0ac841556e53f5b71e3ef109007378";
+      sha256 = "0caq2vab9hn2i39f5848zk1d3fl1zfpcadnqnm4gwnzga3cnfpbz";
+    };
+    meta.homepage = "https://github.com/Julian/lean.nvim/";
+  };
+
   lean-vim = buildVimPluginFrom2Nix {
     pname = "lean.vim";
     version = "2021-09-29";

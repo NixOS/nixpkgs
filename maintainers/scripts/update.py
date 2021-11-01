@@ -114,7 +114,7 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
             changes[0]['newVersion'] = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
 
         if 'files' not in changes[0]:
-            changed_files_process = await check_subprocess('git', 'diff', '--name-only', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files_process = await check_subprocess('git', 'diff', '--name-only', 'HEAD', stdout=asyncio.subprocess.PIPE, cwd=worktree)
             changed_files = (await changed_files_process.stdout.read()).splitlines()
             changes[0]['files'] = changed_files
 
