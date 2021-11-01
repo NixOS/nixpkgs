@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
+{ lib, stdenv, fetchurl, fetchpatch, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libcdio-2.1.0";
@@ -7,6 +7,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libcdio/${name}.tar.bz2";
     sha256 = "0avi6apv5ydjy6b9c3z9a46rvp5i57qyr09vr7x4nndxkmcfjl45";
   };
+
+  patches = [
+    # pull pending upstream patch to fix build on ncurses-6.3:
+    #  https://savannah.gnu.org/patch/index.php?10130
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://savannah.gnu.org/patch/download.php?file_id=52179";
+      sha256 = "1v15gxhpi4bgcr12pb3d9c3hiwj0drvc832vic7sham34lhjmcbb";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
