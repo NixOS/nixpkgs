@@ -14,10 +14,6 @@ let
 
   ini = pkgs.formats.ini { };
 
-  pulseaudio = config.hardware.pulseaudio;
-  pactl = "${getBin pulseaudio.package}/bin/pactl";
-  sed = "${getBin pkgs.gnused}/bin/sed";
-
   gtkrc2 = writeText "gtkrc-2.0" ''
     # Default GTK+ 2 config for NixOS Plasma 5
     include "/run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc"
@@ -80,7 +76,7 @@ let
     # Qt from doing this wackiness in the first place.
     trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
-        ${sed} -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+      ${getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
     fi
 
     # Remove the kbuildsyscoca5 cache. It will be regenerated
@@ -101,43 +97,36 @@ let
     XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
-  startplasma =
-    ''
-      ${set_XDG_CONFIG_HOME}
-      mkdir -p "''${XDG_CONFIG_HOME}"
+  startplasma = ''
+    ${set_XDG_CONFIG_HOME}
+    mkdir -p "''${XDG_CONFIG_HOME}"
+  '' + optionalString config.hardware.pulseaudio.enable ''
+    # Load PulseAudio module for routing support.
+    # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+      ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+  '' + ''
+    ${activationScript}
 
-    ''
-    + optionalString pulseaudio.enable ''
-      # Load PulseAudio module for routing support.
-      # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-        ${pactl} load-module module-device-manager "do_routing=1"
-
-    ''
-    + ''
-      ${activationScript}
-
-      # Create default configurations if Plasma has never been started.
-      kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
-      if ! [ -f "$kdeglobals" ]
-      then
-          kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
-          if ! [ -f "$kcminputrc" ]; then
-              cat ${kcminputrc} >"$kcminputrc"
-          fi
-
-          gtkrc2="$HOME/.gtkrc-2.0"
-          if ! [ -f "$gtkrc2" ]; then
-              cat ${gtkrc2} >"$gtkrc2"
-          fi
-
-          gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
-          if ! [ -f "$gtk3_settings" ]; then
-              mkdir -p "$(dirname "$gtk3_settings")"
-              cat ${gtk3_settings} >"$gtk3_settings"
-          fi
+    # Create default configurations if Plasma has never been started.
+    kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
+    if ! [ -f "$kdeglobals" ]; then
+      kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
+      if ! [ -f "$kcminputrc" ]; then
+          cat ${kcminputrc} >"$kcminputrc"
       fi
 
-    '';
+      gtkrc2="$HOME/.gtkrc-2.0"
+      if ! [ -f "$gtkrc2" ]; then
+          cat ${gtkrc2} >"$gtkrc2"
+      fi
+
+      gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
+      if ! [ -f "$gtk3_settings" ]; then
+          mkdir -p "$(dirname "$gtk3_settings")"
+          cat ${gtk3_settings} >"$gtk3_settings"
+      fi
+    fi
+  '';
 
 in
 
@@ -202,27 +191,24 @@ in
       services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
 
       security.wrappers = {
-        kcheckpass =
-          {
-            setuid = true;
-            owner = "root";
-            group = "root";
-            source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
-          };
-        start_kdeinit =
-          {
-            setuid = true;
-            owner = "root";
-            group = "root";
-            source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
-          };
-        kwin_wayland =
-          {
-            owner = "root";
-            group = "root";
-            capabilities = "cap_sys_nice+ep";
-            source = "${getBin plasma5.kwin}/bin/kwin_wayland";
-          };
+        kcheckpass = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+        };
+        start_kdeinit = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+        };
+        kwin_wayland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = "${getBin plasma5.kwin}/bin/kwin_wayland";
+        };
       };
 
       # DDC support
@@ -372,9 +358,12 @@ in
       programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
+      services.accounts-daemon.enable = true;
+      # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
+      systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
@@ -427,5 +416,4 @@ in
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
     })
   ];
-
 }
