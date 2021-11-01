@@ -21,6 +21,19 @@
 
 let
   defaultOverrides = [
+    # aiounify 29 breaks integration tests
+    (self: super: {
+      aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
+        version = "28";
+        src = fetchFromGitHub {
+          owner = "Kane610";
+          repo = "aiounifi";
+          rev = "v${version}";
+          sha256 = "1r86pk80sa1la2s7c6v9svh5cpkci6jcw1xziz0h09jdvv5j5iff";
+        };
+      });
+    })
+
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
