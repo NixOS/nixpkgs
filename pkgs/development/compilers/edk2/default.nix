@@ -40,7 +40,6 @@ edk2 = buildStdenv.mkDerivation {
 
   # submodules
   src = fetchFromGitHub {
-    url = "https://github.com/tianocore/edk2";
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
