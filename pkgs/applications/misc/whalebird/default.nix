@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/whalebird.desktop \
       --replace '/opt/Whalebird' $out/bin
-    makeWrapper ${electron}/bin/electron \
-      $out/bin/whalebird \
+    makeWrapper ${electron}/bin/electron $out/bin/whalebird \
       --add-flags $out/opt/Whalebird/resources/app.asar
 
     runHook postInstall
