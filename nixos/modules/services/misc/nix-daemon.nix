@@ -529,7 +529,9 @@ in
       [ nix
         pkgs.nix-info
       ]
-      ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
+      ++ optional
+        (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre")
+        (mkAfter pkgs.nix-bash-completions);
 
     environment.etc."nix/nix.conf".source = nixConf;
 
