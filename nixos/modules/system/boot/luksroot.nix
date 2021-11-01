@@ -442,7 +442,6 @@ let
           ${f2lopen} --salt string:$passphrase &
           f2lopen_pid=$!
           echo -n $fido_pin > ${fifo_tmp_fido_pin}
-          # Clean up after ourselves
           unset fido_pin
           rm ${fifo_tmp_fido_pin}
           # Wait for the key to open the disk
