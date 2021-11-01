@@ -3434,6 +3434,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  headerparser = callPackage ../development/python-modules/headerparser { };
+
   heapdict = callPackage ../development/python-modules/heapdict { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
