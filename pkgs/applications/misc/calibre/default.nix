@@ -27,19 +27,20 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.29.0";
+  version = "5.30.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9ymHEpTHDUM3NAGoeSETzKRLKgJLRY4eEli6N5lbZug=";
+    sha256 = "058dqqxhc3pl4is1idlnc3pz80k4r681d5aj4a26v9acp8j7zy4f";
   };
 
-  # https://sources.debian.org/patches/calibre/5.29.0+dfsg-1
+  # https://sources.debian.org/patches/calibre/5.30.0+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001_only_plugin_update.patch";
-      url = "https://sources.debian.org/data/main/c/calibre/5.29.0%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      url =
+        "https://sources.debian.org/data/main/c/calibre/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
       sha256 = "sha256-aGT8rJ/eQKAkmyHBWdY0ouZuWvDwtLVJU5xY6d3hY3k=";
     })
   ]

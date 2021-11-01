@@ -4,7 +4,7 @@
 , pythonOlder
 , GitPython
 , jupyter-packaging
-, jupyter_client
+, jupyter-client
 , jupyterlab
 , markdown-it-py
 , mdit-py-plugins
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     GitPython
-    jupyter_client
+    jupyter-client
     notebook
   ];
   # Tests that use a Jupyter notebook require $HOME to be writable.

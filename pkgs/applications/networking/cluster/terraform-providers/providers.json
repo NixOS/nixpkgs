@@ -563,10 +563,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.5.0",
-    "sha256": "1hp3bwhlfiwf1a4l6xfldwdxmyjs4nq3n8g343grjya7ibbhh4sg",
+    "rev": "v2.6.1",
+    "sha256": "164x0ddgqk3bj0za4h9kz69npgr4cw7w5hnl0pmxsgvsb04vwc0g",
     "vendorSha256": null,
-    "version": "2.5.0"
+    "version": "2.6.1"
   },
   "launchdarkly": {
     "owner": "terraform-providers",
@@ -727,10 +727,10 @@
     "owner": "terraform-providers",
     "provider-source-address": "registry.terraform.io/hashicorp/oci",
     "repo": "terraform-provider-oci",
-    "rev": "v4.35.0",
-    "sha256": "12acy39cr6pxq8gk483b6i78x463ml9pk10qp9jpz0dr05zcyhqw",
+    "rev": "v4.49.0",
+    "sha256": "1s1gfnj3pi3q11jrdc2qxz9ccdk549nki0qkcnd0s7lxac8xzyfh",
     "vendorSha256": null,
-    "version": "4.35.0"
+    "version": "4.49.0"
   },
   "okta": {
     "owner": "terraform-providers",
@@ -946,6 +946,15 @@
     "rev": "v3.3.0",
     "sha256": "1fs96qd2b4glk8hhn5m9r04ap679g0kf3nnhjx1a2idqwrv71gcl",
     "version": "3.3.0"
+  },
+  "sentry": {
+    "owner": "jianyuan",
+    "provider-source-address": "registry.terraform.io/jianyuan/sentry",
+    "repo": "terraform-provider-sentry",
+    "rev": "v0.6.0",
+    "sha256": "0246hv52kslrzj43dkbk8r8gimwz3sgzxsbv7sxwmk3ll3sl2zrk",
+    "vendorSha256": "1d4c8cg4a81mndrzwrsi1k9ll553csnb0r4avlq9hyc03z60dwdc",
+    "version": "0.6.0"
   },
   "shell": {
     "owner": "scottwinkler",

@@ -246,6 +246,8 @@ let
       FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
+      # On 5.14 this conflicts with FB_SIMPLE.
+      DRM_SIMPLEDRM = whenAtLeast "5.14" no;
     };
 
     video = {
@@ -410,7 +412,7 @@ let
       CIFS_POSIX        = option yes;
       CIFS_FSCACHE      = yes;
       CIFS_STATS        = whenOlder "4.19" yes;
-      CIFS_WEAK_PW_HASH = yes;
+      CIFS_WEAK_PW_HASH = whenOlder "5.15" yes;
       CIFS_UPCALL       = yes;
       CIFS_ACL          = whenOlder "5.3" yes;
       CIFS_DFS_UPCALL   = yes;

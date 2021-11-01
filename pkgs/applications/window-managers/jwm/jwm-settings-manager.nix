@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "jwm-settings-manager";
-  version = "2018-10-19";
+  version = "2019-01-27";
 
-  src = fetchFromGitHub {
-    owner = "Israel-D";
-    repo = "jwm-settings-manager";
-    rev = "cb32a70563cf1f3927339093481542b85ec3c8c8";
-    sha256 = "0d5bqf74p8zg8azns44g46q973blhmp715k8kcd73x88g7sfir8s";
+  src = fetchbzr {
+    url = "lp:${pname}";
+    rev = "292";
+    sha256 = "1yqc1ac2pbkc88z7p1qags1jygdlr5y1rhc5mx6gapcf54bk0lmi";
   };
 
   nativeBuildInputs = [
@@ -32,6 +31,11 @@ stdenv.mkDerivation {
       --replace 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
     substituteInPlace data/CMakeLists.txt \
       --replace 'DESTINATION usr/share' "DESTINATION share"
+  '';
+
+  postConfigure = ''
+    substituteInPlace cmake_install.cmake \
+      --replace "/var/empty" "/usr"
   '';
 
   meta = with lib; {

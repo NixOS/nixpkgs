@@ -38,11 +38,27 @@ nixosTest {
       DIRECT_REFS = invokeSamples ./test/invoke-writeDirectReferencesToFile.nix;
     };
   };
-  testScript = ''
-    machine.succeed("""
-      ${./test.sh} 2>/dev/console
-    """)
-  '';
+  testScript =
+    let
+      sample = import ./test/sample.nix { inherit pkgs; };
+      samplePaths = lib.unique (lib.attrValues sample);
+      sampleText = pkgs.writeText "sample-text" (lib.concatStringsSep "\n" samplePaths);
+      stringReferencesText =
+        pkgs.writeStringReferencesToFile
+          ((lib.concatMapStringsSep "fillertext"
+            (d: "${d}")
+            (lib.attrValues sample)) + ''
+              STORE=${builtins.storeDir};\nsystemctl start bar-foo.service
+            '');
+    in ''
+      machine.succeed("""
+        ${./test.sh} 2>/dev/console
+      """)
+      machine.succeed("""
+        echo >&2 Testing string references...
+        diff -U3 <(sort ${stringReferencesText}) <(sort ${sampleText})
+      """)
+    '';
   meta = {
     license = lib.licenses.mit; # nixpkgs license
     maintainers = with lib.maintainers; [

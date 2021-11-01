@@ -1,15 +1,18 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
+  inherit (lib)
+    getBin optionalString
+    mkRemovedOptionModule mkRenamedOptionModule
+    mkDefault mkIf mkMerge mkOption types;
+
+  ini = pkgs.formats.ini { };
 
   pulseaudio = config.hardware.pulseaudio;
   pactl = "${getBin pulseaudio.package}/bin/pactl";
@@ -33,23 +36,25 @@ let
     gtk-button-images=1
   '';
 
-  gtk3_settings = writeText "settings.ini" ''
-    [Settings]
-    gtk-font-name=Sans Serif Regular 10
-    gtk-theme-name=Breeze
-    gtk-icon-theme-name=breeze
-    gtk-fallback-icon-theme=hicolor
-    gtk-cursor-theme-name=breeze_cursors
-    gtk-toolbar-style=GTK_TOOLBAR_ICONS
-    gtk-menu-images=1
-    gtk-button-images=1
-  '';
+  gtk3_settings = ini.generate "settings.ini" {
+    Settings = {
+      gtk-font-name = "Sans Serif Regular 10";
+      gtk-theme-name = "Breeze";
+      gtk-icon-theme-name = "breeze";
+      gtk-fallback-icon-theme = "hicolor";
+      gtk-cursor-theme-name = "breeze_cursors";
+      gtk-toolbar-style = "GTK_TOOLBAR_ICONS";
+      gtk-menu-images = 1;
+      gtk-button-images = 1;
+    };
+  };
 
-  kcminputrc = writeText "kcminputrc" ''
-    [Mouse]
-    cursorTheme=breeze_cursors
-    cursorSize=0
-  '';
+  kcminputrc = ini.generate "kcminputrc" {
+    Mouse = {
+      cursorTheme = "breeze_cursors";
+      cursorSize = 0;
+    };
+  };
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -87,13 +92,13 @@ let
   '';
 
   set_XDG_CONFIG_HOME = ''
-      # Set the default XDG_CONFIG_HOME if it is unset.
-      # Per the XDG Base Directory Specification:
-      # https://specifications.freedesktop.org/basedir-spec/latest
-      # 1. Never export this variable! If it is unset, then child processes are
-      # expected to set the default themselves.
-      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+    # Set the default XDG_CONFIG_HOME if it is unset.
+    # Per the XDG Base Directory Specification:
+    # https://specifications.freedesktop.org/basedir-spec/latest
+    # 1. Never export this variable! If it is unset, then child processes are
+    # expected to set the default themselves.
+    # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
   startplasma =
@@ -116,20 +121,17 @@ let
       if ! [ -f "$kdeglobals" ]
       then
           kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
-          if ! [ -f "$kcminputrc" ]
-          then
+          if ! [ -f "$kcminputrc" ]; then
               cat ${kcminputrc} >"$kcminputrc"
           fi
 
           gtkrc2="$HOME/.gtkrc-2.0"
-          if ! [ -f "$gtkrc2" ]
-          then
+          if ! [ -f "$gtkrc2" ]; then
               cat ${gtkrc2} >"$gtkrc2"
           fi
 
           gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
-          if ! [ -f "$gtk3_settings" ]
-          then
+          if ! [ -f "$gtk3_settings" ]; then
               mkdir -p "$(dirname "$gtk3_settings")"
               cat ${gtk3_settings} >"$gtk3_settings"
           fi
@@ -140,42 +142,44 @@ let
 in
 
 {
-  options = {
-
-    services.xserver.desktopManager.plasma5 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
-      };
-
-      phononBackend = mkOption {
-        type = types.enum [ "gstreamer" "vlc" ];
-        default = "gstreamer";
-        example = "vlc";
-        description = "Phonon audio backend to install.";
-      };
-
-      supportDDC = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Support setting monitor brightness via DDC.
-          </para>
-          <para>
-          This is not needed for controlling brightness of the internal monitor
-          of a laptop and as it is considered experimental by upstream, it is
-          disabled by default.
-        '';
-      };
-
-      useQtScaling = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable HiDPI scaling in Qt.";
-      };
+  options.services.xserver.desktopManager.plasma5 = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the Plasma 5 (KDE 5) desktop environment.";
     };
 
+    phononBackend = mkOption {
+      type = types.enum [ "gstreamer" "vlc" ];
+      default = "gstreamer";
+      example = "vlc";
+      description = "Phonon audio backend to install.";
+    };
+
+    supportDDC = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Support setting monitor brightness via DDC.
+        </para>
+        <para>
+        This is not needed for controlling brightness of the internal monitor
+        of a laptop and as it is considered experimental by upstream, it is
+        disabled by default.
+      '';
+    };
+
+    useQtScaling = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable HiDPI scaling in Qt.";
+    };
+
+    runUsingSystemd = mkOption {
+      description = "Use systemd to manage the Plasma session";
+      type = types.bool;
+      default = false;
+    };
   };
 
   imports = [
@@ -187,32 +191,37 @@ in
     (mkIf cfg.enable {
 
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the Plasma 5 Desktop Environment.
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.plasma5.enable = true;
-      ''];
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the Plasma 5 Desktop Environment.
+          services.xserver.displayManager.sddm.enable = true;
+          services.xserver.desktopManager.plasma5.enable = true;
+        ''
+      ];
 
       services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
 
       security.wrappers = {
         kcheckpass =
-          { setuid = true;
+          {
+            setuid = true;
             owner = "root";
             group = "root";
-            source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+            source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
           };
         start_kdeinit =
-          { setuid = true;
+          {
+            setuid = true;
             owner = "root";
             group = "root";
-            source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+            source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
           };
         kwin_wayland =
-          { owner = "root";
+          {
+            owner = "root";
             group = "root";
             capabilities = "cap_sys_nice+ep";
-            source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+            source = "${getBin plasma5.kwin}/bin/kwin_wayland";
           };
       };
 
@@ -247,7 +256,7 @@ in
           kidletime
           kimageformats
           kinit
-          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
+          kirigami2 # In system profile for SDDM theme. TODO: wrapper.
           kio
           kjobwidgets
           knewstuff
@@ -314,7 +323,8 @@ in
           breeze-icons
           pkgs.hicolor-icon-theme
 
-          kde-gtk-config breeze-gtk
+          kde-gtk-config
+          breeze-gtk
 
           qtvirtualkeyboard
 
@@ -336,6 +346,7 @@ in
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
+        ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
@@ -384,6 +395,27 @@ in
       security.pam.services.kdm.enableKwallet = true;
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
+
+      systemd.user.services = {
+        plasma-early-setup = mkIf cfg.runUsingSystemd {
+          description = "Early Plasma setup";
+          wantedBy = [ "graphical-session-pre.target" ];
+          serviceConfig.Type = "oneshot";
+          script = activationScript;
+        };
+
+        plasma-run-with-systemd = {
+          description = "Run KDE Plasma via systemd";
+          wantedBy = [ "basic.target" ];
+          serviceConfig.Type = "oneshot";
+          script = ''
+            ${set_XDG_CONFIG_HOME}
+
+            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
+              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
+          '';
+        };
+      };
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];

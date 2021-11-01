@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, coreutils, nix-prefetch-git, fetchurl, nodejs-slim, prefetch-yarn-deps, cacert, callPackage }:
+{ stdenv, lib, makeWrapper, coreutils, nix-prefetch-git, fetchurl, nodejs-slim, prefetch-yarn-deps, cacert, callPackage, nix }:
 
 let
   yarnpkg-lockfile-tar = fetchurl {
@@ -13,7 +13,7 @@ in {
     dontUnpack = true;
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ coreutils nix-prefetch-git nodejs-slim ];
+    buildInputs = [ coreutils nix-prefetch-git nodejs-slim nix ];
 
     buildPhase = ''
       runHook preBuild
@@ -33,7 +33,7 @@ in {
       mkdir -p $out/bin
       cp -r libexec $out
       makeWrapper $out/libexec/index.js $out/bin/prefetch-yarn-deps \
-        --prefix PATH : ${lib.makeBinPath [ coreutils nix-prefetch-git ]}
+        --prefix PATH : ${lib.makeBinPath [ coreutils nix-prefetch-git nix ]}
 
       runHook postInstall
     '';
@@ -49,7 +49,7 @@ in {
       hash_ =
         if hash != "" then { outputHashAlgo = null; outputHash = hash; }
         else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
-        else throw "fetchYarnDeps requires a hash";
+        else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
     in stdenv.mkDerivation {
       inherit name;
 

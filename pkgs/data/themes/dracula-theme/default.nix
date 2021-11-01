@@ -22,7 +22,14 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes/${themeName}
-    cp -a {assets,cinnamon,gnome-shell,gtk-2.0,gtk-3.0,gtk-3.20,index.theme,kde,metacity-1,unity,xfwm4} $out/share/themes/${themeName}
+    cp -a {assets,cinnamon,gnome-shell,gtk-2.0,gtk-3.0,gtk-3.20,index.theme,metacity-1,unity,xfwm4} $out/share/themes/${themeName}
+
+    cp -a kde/{color-schemes,plasma} $out/share/
+    cp -a kde/kvantum $out/share/Kvantum
+    mkdir -p $out/share/aurorae/themes
+    cp -a kde/aurorae/* $out/share/aurorae/themes/
+    mkdir -p $out/share/sddm/themes
+    cp -a kde/sddm/* $out/share/sddm/themes/
     runHook postInstall
   '';
 
@@ -31,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dracula/gtk";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice vonfry ];
+    maintainers = with maintainers; [ alexarice ];
   };
 }

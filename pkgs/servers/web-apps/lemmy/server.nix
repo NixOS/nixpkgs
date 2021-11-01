@@ -7,19 +7,22 @@
 , libiconv
 , Security
 }:
-
+let
+  pinData = lib.importJSON ./pin.json;
+  version = pinData.version;
+in
 rustPlatform.buildRustPackage rec {
+  inherit version;
   pname = "lemmy-server";
-  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
-    sha256 = "sha256-jhUpQ2f+b0BEXVfQOIujxam2PQA44wluUraJVJxL6LU=";
+    sha256 = pinData.serverSha256;
   };
 
-  cargoSha256 = "sha256-2i8zCwd33LtUKxOChx/SLP9sWMRmxGkKK8xzaJImMHM=";
+  cargoSha256 = pinData.serverCargoSha256;
 
   buildInputs = [ postgresql ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
@@ -30,6 +33,8 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
   OPENSSL_LIB_DIR = "${openssl.out}/lib";
   OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "🐀 Building a federated alternative to reddit in rust";

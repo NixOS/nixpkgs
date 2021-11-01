@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
-    rev = "v${version}";
-    sha256 = "QflLh3fj+jOq/8etr9aG8LGrvtIlB/htVkWbdO+GIbM=";
+    rev = "0fdc14d5175979919b7c741f6bb97bfaaacbbfbe";
+    sha256 = "1cr1hvpp96s5arnzh1r5sazapcghhvbazbf7zym37yp3fy3lpya1";
   };
 
   nativeBuildInputs = [
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-server"
-    "--disable-console"
     "--with-python3"
   ];
 
   pythonPath = with python3.pkgs; [
-    libsearpc
+    future
+    pysearpc
   ];
 
   postFixup = ''
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/haiwen/seafile";
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ greizgh schmittlauch ];
   };
 }

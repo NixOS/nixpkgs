@@ -22,21 +22,20 @@
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2021-10-01";
+  version = "unstable-2021-07-08";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "37850436dd7dfbe67738749c4d4a2506ffff1ec3";
-    sha256 = "040vgxrimahmfs9rhlggfwg0bzl7h9j2ksx3563rh63asjwlhnhi";
+    rev = "050d5f7bcf08bd02f5077a1c5559f352fa449e1e";
+    sha256 = "15bl9ni0ckmvs5d7hi6v26z690rrmkb7dx00skn6gwq87ffz3imw";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "pytest-3" "pytest --verbose" \
       --replace "INITRAMFS_DIR=/etc/initramfs-tools" \
-                "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools" \
-      --replace "doc/macro2rst.py" "python3 doc/macro2rst.py"
+                "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
   nativeBuildInputs = [ pkg-config docutils ];

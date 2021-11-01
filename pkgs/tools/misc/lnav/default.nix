@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-hAFyMypGC065aRgX2L4LdyFGpZ/LnX5SjA2iQv5Iuas=";
+    sha256 = "sha256-1b4mVKIUotMSK/ADHnpiM42G98JF0abL8sXXGFyS3sw=";
   };
 
   patches = [ ./0001-Forcefully-disable-docs-build.patch ];

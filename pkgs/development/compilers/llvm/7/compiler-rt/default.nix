@@ -59,7 +59,6 @@ stdenv.mkDerivation {
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
   ] ++ lib.optional (useLLVM) ./crtbegin-and-end.patch
-    ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

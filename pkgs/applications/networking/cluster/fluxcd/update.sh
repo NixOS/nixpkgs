@@ -24,7 +24,7 @@ setKV vendorSha256 "0000000000000000000000000000000000000000000000000000" # The 
 
 cd ../../../../../
 set +e
-VENDOR_SHA256=$(nix-build --no-out-link -A fluxcd 2>&1 | grep "got:" | cut -d':' -f3)
+VENDOR_SHA256=$(nix-build --no-out-link -A fluxcd 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
 
 cd - > /dev/null

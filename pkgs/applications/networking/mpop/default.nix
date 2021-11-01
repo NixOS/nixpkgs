@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mpop";
-  version = "1.4.15";
+  version = "1.4.16";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P1KytdS8WO2TzwsRRs7k903oHCwHol7gMu+mWUZaAnA=";
+    sha256 = "sha256-hw61cerm0j+5KtDITXnenDjF9iTjYUk31XS/5Jumh/k=";
   };
 
   nativeBuildInputs = [

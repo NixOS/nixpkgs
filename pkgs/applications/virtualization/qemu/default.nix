@@ -92,6 +92,11 @@ stdenv.mkDerivation rec {
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
+    (fetchpatch {
+      name = "CVE-2021-3713.patch"; # remove with next release
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
+      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

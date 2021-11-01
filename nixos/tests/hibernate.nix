@@ -68,7 +68,7 @@ in makeTest {
   testScript =
     ''
       def create_named_machine(name):
-          return create_machine(
+          machine = create_machine(
               {
                   "qemuFlags": "-cpu max ${
                     if system == "x86_64-linux" then "-m 1024"
@@ -78,6 +78,8 @@ in makeTest {
                   "name": name,
               }
           )
+          driver.machines.append(machine)
+          return machine
 
 
       # Install NixOS

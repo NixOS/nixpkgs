@@ -12,7 +12,7 @@
 , ipython_genutils
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , send2trash
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ipython_genutils
     traitlets
     jupyter_core
-    jupyter_client
+    jupyter-client
     nbformat
     nbconvert
     send2trash

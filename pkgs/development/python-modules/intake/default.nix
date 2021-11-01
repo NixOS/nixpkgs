@@ -1,67 +1,71 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , appdirs
+, bokeh
+, buildPythonPackage
 , dask
+, entrypoints
+, fetchFromGitHub
+, fsspec
 , holoviews
 , hvplot
-, fsspec
+, intake-parquet
 , jinja2
 , msgpack
 , msgpack-numpy
 , numpy
 , pandas
 , panel
-, intake-parquet
 , pyarrow
 , pytestCheckHook
-, pythonOlder
 , python-snappy
+, pythonOlder
+, pyyaml
 , requests
-, ruamel_yaml
-, six
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.3";
+  version = "0.6.4";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f64543353f30d9440b953984f78b7a0954e5756d70c64243609d307ba488014f";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "194cdd6lx92zcpkn3wgm490kxvw0c58ziix8hcihsr5ayfr1wdsl";
   };
 
   propagatedBuildInputs = [
     appdirs
+    bokeh
     dask
+    entrypoints
+    fsspec
     holoviews
     hvplot
     jinja2
-    msgpack-numpy
     msgpack
+    msgpack-numpy
     numpy
     pandas
     panel
+    pyarrow
     python-snappy
+    pyyaml
     requests
-    ruamel_yaml
-    six
     tornado
   ];
 
   checkInputs = [
-    fsspec
     intake-parquet
-    pyarrow
     pytestCheckHook
   ];
 
   postPatch = ''
-    # Is in setup_requires but not used in setup.py...
-    substituteInPlace setup.py --replace "'pytest-runner'" ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
   '';
 
   # test_discover requires driver_with_entrypoints-0.1.dist-info, which is not included in tarball
@@ -72,7 +76,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # disable tests which touch network and are broken
+    # Disable tests which touch network and are broken
     "test_discover"
     "test_filtered_compressed_cache"
     "test_get_dir"
@@ -80,6 +84,10 @@ buildPythonPackage rec {
     "http"
     "test_read_pattern"
     "test_remote_arr"
+  ];
+
+  pythonImportsCheck = [
+    "intake"
   ];
 
   meta = with lib; {

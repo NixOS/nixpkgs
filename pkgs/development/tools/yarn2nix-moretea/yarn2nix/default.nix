@@ -405,6 +405,8 @@ in rec {
 
     yarnFlags = defaultYarnFlags ++ ["--production=true"];
 
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
     buildPhase = ''
       source ${./nix/expectShFunctions.sh}
 
@@ -416,6 +418,10 @@ in rec {
       # check devDependencies are not installed
       expectFileOrDirAbsent ./node_modules/.bin/eslint
       expectFileOrDirAbsent ./node_modules/eslint/package.json
+    '';
+
+    postInstall = ''
+      wrapProgram $out/bin/yarn2nix --prefix PATH : "${pkgs.nix-prefetch-git}/bin"
     '';
   };
 

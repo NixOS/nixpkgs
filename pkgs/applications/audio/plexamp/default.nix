@@ -3,7 +3,6 @@
 let
   pname = "plexamp";
   version = "3.7.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
@@ -12,16 +11,16 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   multiPkgs = null; # no 32bit needed
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''
-    ln -s $out/bin/${name} $out/bin/${pname}
+    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
     install -m 444 -D ${appimageContents}/plexamp.png \
       $out/share/icons/hicolor/512x512/apps/plexamp.png

@@ -5,7 +5,7 @@
 , fetchPypi
 , debugpy
 , ipython
-, jupyter_client
+, jupyter-client
 , tornado
 , traitlets
 , pythonOlder
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     debugpy
     ipython
-    jupyter_client
+    jupyter-client
     tornado
     traitlets
   ];

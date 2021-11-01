@@ -1,21 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, urllib3
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "1.0.2";
+  version = "1.0.5";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "synologydsm-api";
-    inherit version;
-    sha256 = "42ea453ef5734dd5b8163e3d18ef309658f0298411720e6b834bededd28c5d53";
+  src = fetchFromGitHub {
+    owner = "mib1185";
+    repo = "synologydsm-api";
+    rev = "v${version}";
+    sha256 = "sha256-mm5N2RKn2KP2dV7+dw0sNWlCDT5X/fRmH8POQqJIoZY=";
   };
 
-  propagatedBuildInputs = [ urllib3 requests ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    requests
+    urllib3
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "synology_dsm"

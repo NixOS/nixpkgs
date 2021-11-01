@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.0.10159";
+  version = "9.0.10339";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gVYriEt0/DPB0lDK9hGSnipGLCZtSOf27gtF8KwCMDA=";
+    sha256 = "sha256-YZ5pvn8ndtWnHd4QSpuyg8uenFm4K5dt6IgicSL/Ouw=";
   };
 
   propagatedBuildInputs = [

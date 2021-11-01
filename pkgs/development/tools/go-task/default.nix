@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.7.3";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "v${version}";
-    sha256 = "sha256-/NeOMLfYU37Ra7RG/vofq+45Thky6kfGDcgnQxVLVGo=";
+    sha256 = "sha256-BOOtzI45Vbce2XmcleyDOg/+6YDASCIOBvBytZDK7ZA=";
   };
 
-  vendorSha256 = "sha256-NU0Mgt8TJE/uE9/f2pFLRT0x6ZgCDbRcomlMFkA+juA=";
+  vendorSha256 = "sha256-N23jdHR+Alo3dYkfZ4ygr5UU2NEO/cgrgN52glU2hd8=";
 
   doCheck = false;
 
