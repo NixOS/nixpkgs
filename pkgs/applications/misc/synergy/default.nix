@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = "synergy-core";
     rev = "${version}-stable";
     fetchSubmodules = true;
-    sha256 = "1hb62znagdbgs2yf9fp6mb7ixqya6lc4hjk2fhrfi07qy18dh537";
+    sha256 = "123p75rm22vb3prw1igh0yii2y4bvv7r18iykfvmnr41hh4w7z2";
   };
 
   patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
