@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lf";
-  version = "25";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "sha256-5/OfEWgtB9R3XRJ16ponf+bBVGAXkqPq8IlB8+zyjAQ=";
+    sha256 = "0a2kybaajpmhlq708fsdyyab388lkmz17gfn0qcv352i2d4lli0s";
   };
 
   vendorSha256 = "sha256-ujQh4aE++K/fn3PJqkAbTtwRyJPSI9TJQ1DvwLF9etU=";
@@ -20,7 +20,7 @@ buildGoModule rec {
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
     installManPage lf.1
-    installShellCompletion etc/lf.{zsh,fish}
+    installShellCompletion etc/lf.{bash,zsh,fish}
   '';
 
   meta = with lib; {

@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.15.0.post0";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "572c3ac6818a9d0944fc4b8176eb948051654de857e28419ecc5060bcc6fbf37";
+    sha256 = "d3573eb1df9d516c75994a8a82108b6c7a5ca7ea8a9af60b38f3f65c3e227fa7";
   };
 
   nativeBuildInputs = [
