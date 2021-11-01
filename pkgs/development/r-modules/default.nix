@@ -774,6 +774,9 @@ let
     "shinyobjects"
     "wppi"
     "pins"
+    "CoTiMA"
+    "TBRDist"
+    "Rogue"
   ];
 
   packagesToSkipCheck = [
