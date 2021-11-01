@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -24,6 +25,7 @@
 , vulkan-loader
 , webrtc-audio-processing
 , ncurses
+, readline81 # meson can't find <7 as those versions don't have a .pc file
 , makeFontsConf
 , callPackage
 , nixosTests
@@ -58,7 +60,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.36";
+    version = "0.3.39";
 
     outputs = [
       "out"
@@ -68,7 +70,6 @@ let
       "dev"
       "doc"
       "man"
-      "mediaSession"
       "installedTests"
     ];
 
@@ -77,7 +78,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-kwoffB0Hi84T4Q0NaxLxsCyPV4R0LayX9kHmXU/vRPA=";
+      sha256 = "sha256-peTS1+NuQxZg1rrv8DrnJW5BR9yReleqooIwhZWHLjM=";
     };
 
     patches = [
@@ -85,14 +86,20 @@ let
       ./0040-alsa-profiles-use-libdir.patch
       # Change the path of the pipewire-pulse binary in the service definition.
       ./0050-pipewire-pulse-path.patch
-      # Change the path of the pipewire-media-session binary in the service definition.
-      ./0055-pipewire-media-session-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
       # Add option for changing the config install directory
       ./0080-pipewire-config-dir.patch
       # Remove output paths from the comments in the config templates to break dependency cycles
       ./0090-pipewire-config-template-paths.patch
+      # Place SPA data files in lib output to avoid dependency cycles
+      ./0095-spa-data-dir.patch
+      # Fix compilation on some architectures
+      # XXX: REMOVE ON NEXT RELEASE
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/651f0decea5f83730c271e9bed03cdd0048fcd49.diff";
+        sha256 = "1bmpi5qn750mcspaw7m57ww0503sl9781jswqby4gr0f7c5wmqvj";
+      })
     ];
 
     nativeBuildInputs = [
@@ -113,6 +120,7 @@ let
       libusb1
       libsndfile
       ncurses
+      readline81
       udev
       vulkan-headers
       vulkan-loader
@@ -128,12 +136,10 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
-      "-Dexamples=${mesonEnable withMediaSession}" # only needed for `pipewire-media-session`
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
-      "-Dmedia-session-prefix=${placeholder "mediaSession"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibcamera=disabled"
       "-Droc=disabled"
@@ -148,7 +154,8 @@ let
       "-Dbluez5-backend-hsphfpd=${mesonEnable hsphfpdSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
-      "-Dsession-managers=${mesonList (lib.optional withMediaSession "media-session")}"
+      "-Dsession-managers="
+      "-Dvulkan=enabled"
     ];
 
     FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
@@ -157,28 +164,19 @@ let
 
     postUnpack = ''
       patchShebangs source/doc/strip-static.sh
+      patchShebangs source/doc/input-filter.sh
+      patchShebangs source/doc/input-filter-h.sh
       patchShebangs source/spa/tests/gen-cpp-test.py
     '';
 
     postInstall = ''
-      pushd $lib/share
-      mkdir -p $out/nix-support/etc/pipewire
-      for f in pipewire/*.conf; do
+      mkdir $out/nix-support
+      pushd $lib/share/pipewire
+      for f in *.conf; do
         echo "Generating JSON from $f"
-        $out/bin/spa-json-dump "$f" > "$out/nix-support/etc/$f.json"
-      done
-
-      mkdir -p $mediaSession/nix-support/etc/pipewire/media-session.d
-      for f in pipewire/media-session.d/*.conf; do
-        echo "Generating JSON from $f"
-        $out/bin/spa-json-dump "$f" > "$mediaSession/nix-support/etc/$f.json"
+        $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
       done
       popd
-
-      moveToOutput "share/pipewire/media-session.d/*.conf" "$mediaSession"
-      moveToOutput "share/systemd/user/pipewire-media-session.*" "$mediaSession"
-      moveToOutput "lib/systemd/user/pipewire-media-session.*" "$mediaSession"
-      moveToOutput "bin/pipewire-media-session" "$mediaSession"
 
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
@@ -191,21 +189,14 @@ let
         installedTests = nixosTests.installed-tests.pipewire;
 
         # This ensures that all the paths used by the NixOS module are found.
-        test-paths = callPackage ./test-paths.nix {
+        test-paths = callPackage ./test-paths.nix { package = self; } {
           paths-out = [
             "share/alsa/alsa.conf.d/50-pipewire.conf"
-            "nix-support/etc/pipewire/client-rt.conf.json"
-            "nix-support/etc/pipewire/client.conf.json"
-            "nix-support/etc/pipewire/jack.conf.json"
-            "nix-support/etc/pipewire/pipewire.conf.json"
-            "nix-support/etc/pipewire/pipewire-pulse.conf.json"
-          ];
-          paths-out-media-session = [
-            "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
-            "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
-            "nix-support/etc/pipewire/media-session.d/bluez-hardware.conf.json"
-            "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
-            "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
+            "nix-support/client-rt.conf.json"
+            "nix-support/client.conf.json"
+            "nix-support/jack.conf.json"
+            "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-pulse.conf.json"
           ];
           paths-lib = [
             "lib/alsa-lib/libasound_module_pcm_pipewire.so"
