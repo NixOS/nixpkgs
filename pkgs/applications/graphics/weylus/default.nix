@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "weylus";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchzip {
     url = "https://github.com/H-M-H/Weylus/releases/download/v${version}/linux.zip";
-    sha256 = "sha256-1nEdn3KKCMWIzYv4ryqTxtQvR9eln9IX1Z4Y6/vuo7o=";
+    sha256 = "sha256-EW3TdI4F4d4X/BeSqI05QtS77ym1U5jdswFfNtSFyFk=";
     stripRoot = false;
   };
 

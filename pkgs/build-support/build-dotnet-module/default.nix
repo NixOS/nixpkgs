@@ -2,6 +2,7 @@
 
 { name ? "${args.pname}-${args.version}"
 , enableParallelBuilding ? true
+, doCheck ? false
 # Flags to pass to `makeWrapper`. This is done to avoid double wrapping.
 , makeWrapperArgs ? []
 
@@ -9,6 +10,8 @@
 , dotnetRestoreFlags ? []
 # Flags to pass to `dotnet build`.
 , dotnetBuildFlags ? []
+# Flags to pass to `dotnet test`, if running tests is enabled.
+, dotnetTestFlags ? []
 # Flags to pass to `dotnet install`.
 , dotnetInstallFlags ? []
 # Flags to pass to dotnet in all phases.
@@ -27,12 +30,20 @@
 # These get wrapped into `LD_LIBRARY_PATH`.
 , runtimeDeps ? []
 
+# Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
+# See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
+, disabledTests ? []
+# The project file to run unit tests against. This is usually the regular project file, but sometimes it needs to be manually set.
+, testProjectFile ? projectFile
+
 # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
 # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_5_0
 # The dotnet runtime to use.
 , dotnet-runtime ? dotnetCorePackages.runtime_5_0
+# The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
+, dotnet-test-sdk ? dotnet-sdk
 , ... } @ args:
 
 assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
@@ -117,6 +128,23 @@ let
         "''${dotnetFlags[@]}"
 
       runHook postBuild
+    '';
+
+    checkPhase = args.checkPhase or ''
+      runHook preCheck
+
+      ${lib.getBin dotnet-test-sdk}/bin/dotnet test "$testProjectFile" \
+        -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
+        -p:ContinuousIntegrationBuild=true \
+        -p:Deterministic=true \
+        --configuration "$buildType" \
+        --no-build \
+        --logger "console;verbosity=normal" \
+        ${lib.optionalString (disabledTests != []) "--filter \"FullyQualifiedName!=${lib.concatStringsSep "|FullyQualifiedName!=" disabledTests}\""} \
+        "''${dotnetTestFlags[@]}"  \
+        "''${dotnetFlags[@]}"
+
+      runHook postCheck
     '';
 
     installPhase = args.installPhase or ''

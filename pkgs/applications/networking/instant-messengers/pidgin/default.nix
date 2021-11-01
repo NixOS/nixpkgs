@@ -10,6 +10,7 @@
 , gnutls ? null
 , libgcrypt ? null
 , plugins, symlinkJoin
+, cacert
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
@@ -59,6 +60,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--with-nss-includes=${nss.dev}/include/nss"
     "--with-nss-libs=${nss.out}/lib"
     "--with-ncurses-headers=${ncurses.dev}/include"
+    "--with-system-ssl-certs=${cacert}/etc/ssl/certs"
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"
