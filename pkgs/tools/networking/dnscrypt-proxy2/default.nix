@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "dnscrypt-proxy2";
-  version = "2.1.0";
+  version = "2.1.1";
 
   vendorSha256 = null;
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = version;
-    sha256 = "sha256-HU5iy1dJbCp/PHnJjLi6MM+axz5Nrlcad5GEkD2p874=";
+    sha256 = "sha256-BtH/h2HejXDWSoqWRTjZXMLYDRoMe8lSUDX6Gay1gA8=";
   };
 
   meta = with lib; {

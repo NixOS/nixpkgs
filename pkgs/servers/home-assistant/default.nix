@@ -52,6 +52,19 @@ let
       });
     })
 
+    # Pinned due to API changes in influxdb-client>1.21.0
+    (self: super: {
+      influxdb-client = super.influxdb-client.overridePythonAttrs (oldAttrs: rec {
+        version = "1.21.0";
+        src = fetchFromGitHub {
+          owner = "influxdata";
+          repo = "influxdb-client-python";
+          rev = "v${version}";
+          sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+        };
+      });
+    })
+
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {

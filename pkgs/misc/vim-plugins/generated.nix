@@ -2866,6 +2866,18 @@ final: prev:
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
   };
 
+  lean-nvim = buildVimPluginFrom2Nix {
+    pname = "lean.nvim";
+    version = "2021-10-30";
+    src = fetchFromGitHub {
+      owner = "Julian";
+      repo = "lean.nvim";
+      rev = "e586b463cb0ac841556e53f5b71e3ef109007378";
+      sha256 = "0caq2vab9hn2i39f5848zk1d3fl1zfpcadnqnm4gwnzga3cnfpbz";
+    };
+    meta.homepage = "https://github.com/Julian/lean.nvim/";
+  };
+
   lean-vim = buildVimPluginFrom2Nix {
     pname = "lean.vim";
     version = "2021-09-29";
@@ -2912,6 +2924,18 @@ final: prev:
       sha256 = "1az40rjfyvwg9zkk822abrf0v0ccm29rp5290capirnfna5w71d6";
     };
     meta.homepage = "https://github.com/cohama/lexima.vim/";
+  };
+
+  lingua-franca-vim = buildVimPluginFrom2Nix {
+    pname = "lingua-franca";
+    version = "2021-9-5";
+    src = fetchFromGitHub {
+      owner = "lf-lang";
+      repo = "lingua-franca.vim";
+      rev = "439b92a13744ee21cb3cd9c399e179efbcaa2967";
+      sha256 = "sha256-Bf2MabUe3fy0meL6zIYgal/yFxtLKsg3b/BUI/AVlrM=";
+    };
+    meta.homepage = "https://github.com/lf-lang/lingua-franca.vim";
   };
 
   lf-vim = buildVimPluginFrom2Nix {

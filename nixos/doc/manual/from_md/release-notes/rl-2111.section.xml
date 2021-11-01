@@ -558,6 +558,17 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          <literal>ihatemoney</literal> has been updated to version
+          5.1.1
+          (<link xlink:href="https://github.com/spiral-project/ihatemoney/blob/5.1.1/CHANGELOG.rst">release
+          notes</link>). If you serve ihatemoney by HTTP rather than
+          HTTPS, you must set
+          <link xlink:href="options.html#opt-services.ihatemoney.secureCookie">services.ihatemoney.secureCookie</link>
+          to <literal>false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.3 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 21.11 release.
         </para>

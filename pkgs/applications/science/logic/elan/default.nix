@@ -1,5 +1,4 @@
 { stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, fetchpatch
 , openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 let
@@ -8,16 +7,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0xmml81krr0i18b14dymfdq43szpzws7qj8k404qab51lkqxyxsb";
+    sha256 = "0gql015zb3y95v68kmv2dscz7fnh89x1shrqxxqk5a0jhd2z93n1";
   };
 
-  cargoSha256 = "sha256-xjJ39hoSDn0VUH0YcL+mQBXbzFcIvZ38dPjBxV/yVNc=";
+  cargoSha256 = "sha256-rL++3RstCSBMYFj9BeOo6gepfId/sje4ES3Wm+Mb4cQ=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -41,11 +40,6 @@ rustPlatform.buildRustPackage rec {
        --subst-var dynamicLinker \
        --subst-var libPath
     '')
-    # fix build, will be included in 1.1.1
-    (fetchpatch {
-      url = "https://github.com/leanprover/elan/commit/8d1dec09d67b2ac1768b111d24f1a1cabdd563fa.patch";
-      sha256 = "sha256-yMdnXqycu4VF9EKavZ85EuspvAqvzDSIm5894SB+3+A=";
-    })
   ];
 
   postInstall = ''
