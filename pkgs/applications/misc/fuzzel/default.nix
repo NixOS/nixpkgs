@@ -13,13 +13,15 @@
 , tllist
 , fcft
 , enableCairo ? true
-, withPNGBackend ? "libpng"
-, withSVGBackend ? "librsvg"
-  # Optional dependencies
+, svgSupport ? true
+, pngSupport ? true
+# Optional dependencies
 , cairo
 , librsvg
 , libpng
 }:
+
+assert svgSupport -> enableCairo;
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
@@ -49,15 +51,15 @@ stdenv.mkDerivation rec {
     tllist
     fcft
   ] ++ lib.optional enableCairo cairo
-  ++ lib.optional (withPNGBackend == "libpng") libpng
-  ++ lib.optional (withSVGBackend == "librsvg") librsvg;
+    ++ lib.optional pngSupport libpng
+    ++ lib.optional svgSupport librsvg;
 
   mesonBuildType = "release";
 
   mesonFlags = [
     "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
-    "-Dpng-backend=${withPNGBackend}"
-    "-Dsvg-backend=${withSVGBackend}"
+    "-Dpng-backend=${if pngSupport then "libpng" else "none"}"
+    "-Dsvg-backend=${if svgSupport then "librsvg" else "none"}"
   ];
 
   CFLAGS = "-Wno-error=comment"; # https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
