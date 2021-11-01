@@ -61,7 +61,7 @@ in rec {
     args = extraArgs;
     specialArgs =
       { modulesPath = builtins.toString ../modules; } // specialArgs;
-  }) config options _module;
+  }) config options _module type;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
