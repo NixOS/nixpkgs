@@ -3,7 +3,7 @@
 , fetchurl
 , dpkg
 , undmg
-, makeWrapper
+, substituteAll
 , nodePackages
 , alsa-lib
 , at-spi2-atk
@@ -142,7 +142,7 @@ let
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
-    nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
+    nativeBuildInputs = [ dpkg nodePackages.asar ];
 
     dontUnpack = true;
     dontBuild = true;
@@ -168,9 +168,12 @@ let
 
       # Replace the broken bin/slack symlink with a startup wrapper
       rm $out/bin/slack
-      makeWrapper $out/lib/slack/slack $out/bin/slack \
-        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
+      NIX_DEBUG=1 substitute ${./wrapper.sh} $out/bin/slack \
+        --subst-var shell \
+        --subst-var GSETTINGS_SCHEMAS_PATH \
+        --subst-var out \
+        --subst-var-by xdg_utils ${lib.makeBinPath [xdg-utils]}
+      chmod +x $out/bin/slack
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
