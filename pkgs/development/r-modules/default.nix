@@ -543,6 +543,7 @@ let
     seqTools = [ pkgs.zlib.dev ];
     seqbias = [ pkgs.zlib.dev ];
     sparkwarc = [ pkgs.zlib.dev ];
+    RoBMA = [ pkgs.jags ];
   };
 
   packagesRequiringX = [
