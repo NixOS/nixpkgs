@@ -141,6 +141,10 @@ import ./make-test-python.nix (
           podman.succeed("podman run --rm --name vol-write -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume:/data scratchimg /bin/sh -c 'echo volume-works >/data/file'")
           podman.succeed("podman run --rm --name vol-read -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume:/data scratchimg /bin/cat /data/file | grep volume-works")
 
+      with subtest("Podman volumes are writable and persistent, when created via docker socket"):
+          podman.succeed("docker run --rm --name vol-write -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume-2:/data scratchimg /bin/sh -c 'echo volume-works >/data/file'")
+          podman.succeed("docker run --rm --name vol-read -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -v test-volume-2:/data scratchimg /bin/cat /data/file | grep volume-works")
+
       # TODO: add docker-compose test
 
     '';
