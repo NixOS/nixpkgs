@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland-scanner
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, wayland-scanner
 , libGL, wayland, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
 , libpng, ffmpeg, xcbutilrenderutil, seatd
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
   pname = "wlroots";
   version = "0.14.1";
 
-  src = fetchFromGitHub {
-    owner = "swaywm";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "wlroots";
     repo = "wlroots";
     rev = version;
     sha256 = "1sshp3lvlkl1i670kxhwsb4xzxl8raz6769kqvgmxzcb63ns9ay1";
@@ -54,8 +55,7 @@ stdenv.mkDerivation rec {
       Pluggable, composable, unopinionated modules for building a Wayland
       compositor; or about 50,000 lines of code you were going to write anyway.
     '';
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
+    inherit (src.meta) homepage changelog;
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ];
