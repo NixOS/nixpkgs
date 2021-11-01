@@ -40,6 +40,9 @@ let
     # removing ./configure pre-config.
     preConfigure = ''
       rm configure
+      substituteInPlace CMakeLists.txt \
+        --replace 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
+        --replace 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
     '';
 
     inherit patches;
@@ -81,17 +84,11 @@ let
 
 in {
   libressl_3_2 = generic {
-    version = "3.2.5";
-    sha256 = "1zkwrs3b19s1ybz4q9hrb7pqsbsi8vxcs44qanfy11fkc7ynb2kr";
-    patches = [
-      ./CVE-2021-41581.patch
-    ];
+    version = "3.2.7";
+    sha256 = "112bjfrwwqlk0lak7fmfhcls18ydf62cp7gxghf4gklpfl1zyckw";
   };
   libressl_3_4 = generic {
-    version = "3.4.0";
-    sha256 = "1lhn76nd59p1dfd27b4636zj6wh3f5xsi8b3sxqnl820imsswbp5";
-    patches = [
-      ./CVE-2021-41581.patch
-    ];
+    version = "3.4.1";
+    sha256 = "0766yxb599lx7qmlmsddiw9wgminz9mc311mav5q23l0rbkflz0h";
   };
 }
