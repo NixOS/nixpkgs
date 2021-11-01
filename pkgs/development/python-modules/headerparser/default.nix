@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jwodder/headerparser";
     description = "argparse for mail-style headers";
     license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ayazhafiz ];
   };
 }

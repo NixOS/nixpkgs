@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jwodder/wheel-filename";
     description = "Parse wheel filenames";
     license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ayazhafiz ];
   };
 }

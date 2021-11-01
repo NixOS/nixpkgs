@@ -30,7 +30,7 @@ let readme_renderer_24 = buildPythonPackage rec {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ ayazhafiz ];
   };
 };
 
@@ -60,5 +60,6 @@ in buildPythonPackage rec {
     homepage = "https://github.com/jwodder/wheel-inspect";
     description = "Extract information from wheels";
     license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ayazhafiz ];
   };
 }
