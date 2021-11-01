@@ -39,6 +39,7 @@ mkYarnPackage {
 
   extraBuildInputs = [ libsass ];
 
+  packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     sha256 = pinData.uiYarnDepsSha256;

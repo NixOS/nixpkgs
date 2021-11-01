@@ -16,6 +16,11 @@ if ($latest_version === $current_version) {
   echo "lemmy is already up-to-date"
   return 0
 } else {
+  # for some strange reason, hydra fails on reading upstream package.json directly
+  var source = "https://raw.githubusercontent.com/$owner/$ui_repo/$latest_version"
+  var package_json = "$(curl -qf $source/package.json)"
+  echo $package_json > $directory/package.json
+
   var server_tarball_meta = $(nix-prefetch-github $owner $server_repo --rev "$latest_rev")
   var server_tarball_hash = "sha256-$(echo $server_tarball_meta | jq -r '.sha256')"
   var ui_tarball_meta = $(nix-prefetch-github $owner $ui_repo --rev "$latest_rev")
