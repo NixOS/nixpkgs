@@ -23,22 +23,14 @@ let
         assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
       '';
   }) args);
-  kernels = {
-    inherit (pkgs)
-      linuxPackages_4_4
-      linuxPackages_4_9
-      linuxPackages_4_14
-      linuxPackages_4_19
-      linuxPackages_5_4
-      linuxPackages_5_10
-      linuxPackages_5_14
+  kernels = pkgs.linuxKernel.vanillaPackages // {
+    inherit (pkgs.linuxKernel.packages)
+      linux_4_14_hardened
+      linux_4_19_hardened
+      linux_5_4_hardened
+      linux_5_10_hardened
 
-      linuxPackages_4_14_hardened
-      linuxPackages_4_19_hardened
-      linuxPackages_5_4_hardened
-      linuxPackages_5_10_hardened
-
-      linuxPackages_testing;
+      linux_testing;
   };
 
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
