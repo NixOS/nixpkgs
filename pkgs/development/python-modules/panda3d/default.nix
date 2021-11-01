@@ -60,6 +60,6 @@ in buildPythonPackage rec {
     changelog = "https://github.com/panda3d/panda3d/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ breakds ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
