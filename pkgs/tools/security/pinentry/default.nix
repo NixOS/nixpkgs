@@ -43,11 +43,11 @@ in
 
 pinentryMkDerivation rec {
   pname = "pinentry";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${pname}-${version}.tar.bz2";
-    sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
+    sha256 = "sha256-EAcgRaPgQ9BYH5HNVnb8rH/+6VehZjat7apPWDphZHA=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
