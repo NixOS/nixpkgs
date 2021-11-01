@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
-      sha256 = "1iyiksqk29sizwaa4623bv683px1fny67639qpb1him89hza00wy";
+      sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
