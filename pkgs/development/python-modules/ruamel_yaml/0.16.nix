@@ -2,9 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , ruamel_base
-, ruamel_ordereddict ? null
+, ruamel_ordereddict
 , ruamel_yaml_clib ? null
-, isPy3k
+, isPy27
 , isPyPy
 }:
 
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ ruamel_base ]
-    ++ lib.optional (!isPy3k) ruamel_ordereddict
+    ++ lib.optional isPy27 ruamel_ordereddict
     ++ lib.optional (!isPyPy) ruamel_yaml_clib;
 
   # causes namespace clash on py27
-  dontUsePythonImportsCheck = !isPy3k;
+  dontUsePythonImportsCheck = isPy27;
   pythonImportsCheck = [
     "ruamel.yaml"
     "ruamel.base"
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }
