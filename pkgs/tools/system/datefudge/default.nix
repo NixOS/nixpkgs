@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils ? null }:
+{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     rev = "debian/${version}";
     sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
   };
-  nativeBuildInputs = lib.optional (coreutils != null) makeWrapper;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ coreutils ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -23,7 +25,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     chmod +x $out/lib/datefudge/datefudge.so
-  '' + lib.optionalString (coreutils != null) ''
     wrapProgram $out/bin/datefudge --prefix PATH : ${coreutils}/bin
   '';
 
