@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, gnat, zlib, llvm, lib
+{ stdenv, fetchFromGitHub, fetchpatch, callPackage, gnat, zlib, llvm, lib
 , backend ? "mcode" }:
 
 assert backend == "mcode" || backend == "llvm";
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "1gyh0xckwbzgslbpw9yrpj4gqs9fm1a2qpbzl0sh143fk1kwjlly";
   };
+
+  patches = [
+    # Allow compilation with GNAT 11, picked from master
+    (fetchpatch {
+      name = "fix-gnat-11-compilation.patch";
+      url = "https://github.com/ghdl/ghdl/commit/8356ea3bb4e8d0e5ad8638c3d50914b64fc360ec.patch";
+      sha256 = "04pzn8g7xha8000wbjjmry6h1grfqyn3bjvj47hi4qwgl21wfjra";
+    })
+  ];
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
