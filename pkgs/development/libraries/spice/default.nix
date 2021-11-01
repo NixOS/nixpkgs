@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
-    spice-protocol
     python3
     python3.pkgs.six
     python3.pkgs.pyparsing
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     orc
     pixman
     python3.pkgs.pyparsing
+    spice-protocol
     zlib
   ];
 
