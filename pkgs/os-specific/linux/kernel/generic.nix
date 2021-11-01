@@ -28,7 +28,8 @@
  structuredExtraConfig ? {}
 
 , # The version number used for the module directory
-  modDirVersion ? version
+  # needs to be x.y.z, will automatically add .0 if needed
+  modDirVersion ? lib.kernel.versionToModDir version
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -181,7 +182,10 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) {
-    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags configfile;
+
+    # branchVersion needs to be x.y
+    extraMeta = { branch = lib.versions.majorMinor version; } // extraMeta;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };

@@ -23,4 +23,20 @@ with lib;
     whenBetween = verLow: verHigh: mkIf (versionAtLeast version verLow && versionOlder version verHigh);
   };
 
+  # Normalize kernel versions as appropriate for modDirVersion
+  versionToModDir = version:
+    let parts = splitString "." version;
+    in
+      if length parts >= 3
+      then version
+      else if length parts == 2
+      then let
+          maj = builtins.elemAt parts 0;
+          rem = splitString "-" (builtins.elemAt parts 1);
+          min = builtins.head rem;
+          postfix = builtins.concatStringsSep "-" (builtins.tail rem);
+        in builtins.concatStringsSep "." [ maj min "0" ]
+          + (if postfix != "" then "-${postfix}" else "")
+      else throw "versionToModDir: don't know how to normalize version: ${version}";
+
 }
