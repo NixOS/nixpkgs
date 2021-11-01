@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     mv $out/share/applications/threema.desktop $out/share/applications/threema-desktop.desktop
-    makeWrapper ${electron}/bin/electron \
-      $out/bin/threema \
+    makeWrapper ${electron}/bin/electron $out/bin/threema \
       --add-flags $out/lib/threema/resources/app.asar
   '';
 
