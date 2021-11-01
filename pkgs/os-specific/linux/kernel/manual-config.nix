@@ -19,6 +19,8 @@ in {
   stdenv,
   # The kernel version
   version,
+  # Position of the Linux build expression
+  pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
   # The version of the kernel module directory
@@ -333,4 +335,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   ] ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
-})
+} // (optionalAttrs (pos != null) { inherit pos; }))
