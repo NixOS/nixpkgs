@@ -14,7 +14,7 @@
 , parameterized
 , pytestCheckHook
 , GitPython
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     parameterized
     pytestCheckHook
     GitPython
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   preCheck = ''

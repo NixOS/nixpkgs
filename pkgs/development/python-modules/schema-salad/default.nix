@@ -6,7 +6,7 @@
 , mistune
 , rdflib
 , rdflib-jsonld
-, ruamel_yaml
+, ruamel-yaml
 , pytestCheckHook
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     mistune
     rdflib
     rdflib-jsonld
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   checkInputs = [ pytestCheckHook ];

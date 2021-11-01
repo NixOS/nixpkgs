@@ -530,8 +530,7 @@ with self; with super; {
 
   ruamel-ordereddict = callPackage ../development/python-modules/ruamel-ordereddict { };
 
-  ruamel_yaml = self.ruamel-yaml;
-  ruamel-yaml = callPackage ../development/python-modules/ruamel_yaml/0.16.nix { };
+  ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
 
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 

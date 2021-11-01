@@ -8,7 +8,7 @@
 , pandas
 , pydantic
 , pymongo
-, ruamel_yaml
+, ruamel-yaml
 , tqdm
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     tqdm
     msgpack
   ];

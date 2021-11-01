@@ -10,7 +10,7 @@
 , plotly
 , pydispatcher
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , scipy
 , six
 , spglib
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     plotly
     pydispatcher
     requests
-    ruamel_yaml
+    ruamel-yaml
     scipy
     six
     spglib

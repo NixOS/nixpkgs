@@ -9,11 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ruamel.yaml";
+  pname = "ruamel-yaml";
   version = "0.16.13";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ruamel.yaml";
+    inherit version;
     sha256 = "0hm9yg785f46bkrgqknd6fdvmkby9dpzjnm0b63qf0i748acaj5v";
   };
 
@@ -26,10 +27,7 @@ buildPythonPackage rec {
 
   # causes namespace clash on py27
   dontUsePythonImportsCheck = isPy27;
-  pythonImportsCheck = [
-    "ruamel.yaml"
-    "ruamel.base"
-  ];
+  pythonImportsCheck = [ "ruamel.yaml" ];
 
   meta = with lib; {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";

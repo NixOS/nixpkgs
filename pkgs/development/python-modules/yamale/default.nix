@@ -4,7 +4,7 @@
 , pythonOlder
 , pytestCheckHook
 , pyyaml
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyyaml
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   checkInputs = [
