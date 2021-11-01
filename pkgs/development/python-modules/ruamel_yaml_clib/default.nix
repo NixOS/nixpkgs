@@ -1,28 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchhg
-, ruamel_base
-, ruamel_ordereddict ? null
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "ruamel.yaml.clib";
-  version = "0.2.0";
+  version = "0.2.4";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml-clib/code";
     rev = version;
-    sha256 = "0kq6zi96qlm72lzj90fc2rfk6nm5kqhk6qxdl8wl9s3a42b0v6wl";
+    sha256 = "sha256-HQZY1opUvVQdXUHmsZmcYX2vfgjKsl6xATmVIXjnBlc=";
   };
 
-  # outputs match wheel
+  # no tests
   doCheck = false;
+
+  # circular depedency with ruamel-yaml
+  # pythonImportsCheck = [ "_ruamel_yaml" ];
 
   meta = with lib; {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml-clib/";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }
