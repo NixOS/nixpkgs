@@ -1,15 +1,14 @@
-{
-  stdenv,
-  clangStdenv,
+{ stdenv
+, clangStdenv
 , fetchFromGitHub
 , fetchpatch
 , libuuid
 , python3
-  bc,
-  clang_9,
-  llvmPackages_9,
-  overrideCC,
-  lib,
+, bc
+, clang_9
+, llvmPackages_9
+, overrideCC
+, lib
 }:
 
 let
