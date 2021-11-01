@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   passAsFile = [ "apolloSchema" ];
   patches = [ ./patches/disable-dynamic-schema-fetching.patch ];
 
-  # Disable tests for now
+  # Tests currently contain some impurities fetched over the network and I'm too lazy to fix that
   doCheck = false;
 
   # Turn off features that depend on v8 which tries to download a bunch of stuff
