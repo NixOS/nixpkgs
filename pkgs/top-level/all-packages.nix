@@ -2121,6 +2121,8 @@ with pkgs;
 
   butane = callPackage ../development/tools/butane { };
 
+  buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
+
   charles = charles4;
   inherit (callPackage ../applications/networking/charles {})
     charles3
