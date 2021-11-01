@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     rev = "debian/${version}";
     sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
   };
+
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ coreutils ];
