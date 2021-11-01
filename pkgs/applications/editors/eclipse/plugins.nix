@@ -658,6 +658,7 @@ rec {
       description = "A plugin which integrates Apache Ivy's dependency management";
       license = licenses.asl20;
       platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
     };
   };
 
@@ -677,9 +678,14 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A graph viewer of the resolved dependencies. It is an optional dependency of Apache IvyDE since it requires additional plugins to be installed (Zest).";
+      description = "A graph viewer of the resolved dependencies.";
+      longDescription = ''
+        Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
+        it requires additional plugins to be installed (Zest).
+      '';
       license = licenses.asl20;
       platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
     };
   };
 
@@ -702,6 +708,7 @@ rec {
       description = "A popular dependency manager focusing on flexibility and simplicity";
       license = licenses.asl20;
       platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
     };
   };
 
@@ -724,6 +731,7 @@ rec {
       description = "Ant Tasks integrated into Eclipse's Ant runtime";
       license = licenses.asl20;
       platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
     };
   };
 }
