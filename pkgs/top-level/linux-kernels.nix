@@ -174,6 +174,13 @@ in {
       ];
     };
 
+    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -467,6 +474,7 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_14 = recurseIntoAttrs (packagesFor kernels.linux_5_14);
+    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
   };
 
   rtPackages = {
