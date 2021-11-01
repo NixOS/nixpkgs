@@ -320,6 +320,7 @@ in {
 
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
+    nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
     nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;

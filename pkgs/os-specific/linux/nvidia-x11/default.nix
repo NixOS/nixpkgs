@@ -45,6 +45,14 @@ rec {
     url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
+  # Last one supporting Kepler architecture
+  legacy_470 = generic {
+      version = "470.82.00";
+      sha256_64bit = "sha256:0i35frgil917ig1s2qsgqww58h66gabnxz3q39vcl3rlwb0pmgfh";
+      settingsSha256 = "sha256:1kacgifzqqi2zjq62m404w99iv168j5a4xg7xbfnll62vzx7yr5j";
+      persistencedSha256 = "sha256:06qsjp0n872b37wvhnwaddn1nrwn668zskmkcmpx33bv1940apsk";
+  };
+
   # Last one supporting x86
   legacy_390 = generic {
     version = "390.143";
