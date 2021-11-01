@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
+{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, pkg-config, gdk-pixbuf, libnotify, qttools
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optional withGUI wrapQtAppsHook;
 
   dontWrapQtApps = true;
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat gdk-pixbuf libnotify
   ];
 
   installPhase = ''
