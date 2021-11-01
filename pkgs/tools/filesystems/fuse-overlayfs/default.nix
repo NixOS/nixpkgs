@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ma9e ] ++ teams.podman.members;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Transparent encryption filesystem";
     longDescription = ''
       Securefs is a filesystem in userspace (FUSE) that transparently encrypts

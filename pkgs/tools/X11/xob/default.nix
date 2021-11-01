@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       (e.g. muted audio). There is also support for overflows (when the value
       exceeds the maximum).
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

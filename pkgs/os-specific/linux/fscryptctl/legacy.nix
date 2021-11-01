@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       As fscryptctl is intended for advanced users, you should read the kernel
       documentation for filesystem encryption before using fscryptctl.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

@@ -23,6 +23,6 @@ buildDunePackage rec {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

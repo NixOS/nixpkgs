@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "PFS (PlayStation File System) shell for POSIX-based systems";
     platforms = platforms.unix;
     license = with licenses; [

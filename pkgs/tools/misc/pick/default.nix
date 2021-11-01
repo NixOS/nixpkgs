@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   PREFIX = placeholder "out";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Fuzzy text selection utility";
     license = licenses.mit;
     maintainers = [ maintainers.womfoo ];

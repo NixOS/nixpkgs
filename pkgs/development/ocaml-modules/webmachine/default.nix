@@ -24,7 +24,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.bsd3;
     description = "A REST toolkit for OCaml";
     maintainers = [ lib.maintainers.vbgl ];

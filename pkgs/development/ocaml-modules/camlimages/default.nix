@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     branch = "5.0";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "OCaml image processing library";
     license = licenses.lgpl2;
     maintainers = [ maintainers.vbgl maintainers.mt-caret ];

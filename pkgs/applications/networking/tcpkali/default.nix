@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
     license = lib.licenses.bsd2;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ethercrow ];
   };

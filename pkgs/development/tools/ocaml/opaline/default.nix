@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "OPAm Light INstaller Engine";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (ocamlPackages.ocaml.meta) platforms;
   };
 }

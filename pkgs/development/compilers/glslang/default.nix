@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Khronos reference front-end for GLSL and ESSL";
     license = licenses.asl20;
     platforms = platforms.unix;

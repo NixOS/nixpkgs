@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Easy to use and user-friendly topological sort";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

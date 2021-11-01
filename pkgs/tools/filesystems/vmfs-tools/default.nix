@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.gpl2;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

@@ -18,7 +18,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postgres; };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A Prometheus exporter for PostgreSQL";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz globin willibutz ma27 ];

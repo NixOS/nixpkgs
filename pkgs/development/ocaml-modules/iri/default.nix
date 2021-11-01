@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "IRI (RFC3987) native OCaml implementation";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (ocaml.meta) platforms;
   };
 }

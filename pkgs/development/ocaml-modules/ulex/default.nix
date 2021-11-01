@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "all" "all.opt" ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A lexer generator for Unicode and OCaml";
     license = lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

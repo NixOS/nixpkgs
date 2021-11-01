@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
     license = with licenses; [ mit ];

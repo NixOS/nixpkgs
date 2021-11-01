@@ -38,6 +38,6 @@ buildDunePackage rec {
     description = "A viewer for OCaml spacetime profiles";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.symphorien ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

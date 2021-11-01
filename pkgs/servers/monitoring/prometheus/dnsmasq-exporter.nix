@@ -18,7 +18,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) dnsmasq; };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A dnsmasq exporter for Prometheus";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz globin ma27 ];

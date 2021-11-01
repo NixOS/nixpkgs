@@ -27,7 +27,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "CUI for fixing git conflicts";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

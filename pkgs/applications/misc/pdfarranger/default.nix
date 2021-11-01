@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages using an interactive and intuitive graphical interface";
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];

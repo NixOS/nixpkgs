@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bridge IOU to UDP, TAP and Ethernet";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

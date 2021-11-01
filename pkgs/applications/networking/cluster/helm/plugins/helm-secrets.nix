@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Helm plugin that helps manage secrets";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.apsl20;
     maintainers = with maintainers; [ yurrriq ];
     platforms = platforms.all;

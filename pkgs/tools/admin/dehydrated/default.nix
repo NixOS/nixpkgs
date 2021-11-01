@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Letsencrypt/acme client implemented as a shell-script";
     license = licenses.mit;
     platforms = platforms.all;

@@ -24,7 +24,7 @@ buildDunePackage rec {
 
     To support efficient text edition capabilities, Zed provides macro recording and cursor management facilities.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.gal_bolle

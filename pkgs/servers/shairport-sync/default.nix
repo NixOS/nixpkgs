@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;
     maintainers =  with maintainers; [ lnl7 ];

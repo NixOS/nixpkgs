@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       Important note: If you don't use the Sway module (programs.sway.enable)
       you need to set "security.pam.services.swaylock = {};" manually.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

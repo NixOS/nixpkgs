@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

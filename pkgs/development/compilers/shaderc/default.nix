@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A collection of tools, libraries and tests for shader compilation";
     license = [ licenses.asl20 ];
   };

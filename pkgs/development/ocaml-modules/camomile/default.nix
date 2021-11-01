@@ -22,7 +22,7 @@ buildDunePackage rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.lgpl21;
     description = "A Unicode library for OCaml";

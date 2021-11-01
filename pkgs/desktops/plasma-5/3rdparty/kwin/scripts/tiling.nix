@@ -38,7 +38,7 @@ mkDerivation rec {
     description = "Tiling script for kwin";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (kwindowsystem.meta) platforms;
   };
 }

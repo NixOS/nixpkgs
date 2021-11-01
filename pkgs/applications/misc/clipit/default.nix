@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight GTK Clipboard Manager";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license     = licenses.gpl3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ kamilchm ];

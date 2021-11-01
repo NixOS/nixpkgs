@@ -18,7 +18,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A high performance HTTP server that implements restic's REST backend API";
     platforms = platforms.unix;
     license = licenses.bsd2;

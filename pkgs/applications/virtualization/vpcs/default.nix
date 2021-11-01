@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       ping/traceroute them, or ping/traceroute the other hosts/routers from the
       VPCS when you study the Cisco routers in the dynamips.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

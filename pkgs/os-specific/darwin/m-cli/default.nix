@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Swiss Army Knife for macOS";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     repositories.git = "git://github.com/rgcr/m-cli.git";
 
     license = licenses.mit;

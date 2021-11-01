@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (ocaml.meta) platforms;
     description = "C Parsing Library";
     license = licenses.lgpl21;

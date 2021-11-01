@@ -43,7 +43,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

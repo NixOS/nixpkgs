@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Bindings for Linux’s filesystem monitoring interface, inotify";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     platforms = lib.platforms.linux;
   };
 }

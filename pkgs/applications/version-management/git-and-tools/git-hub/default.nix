@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Git command line interface to GitHub";
     longDescription = ''
       A simple command line interface to GitHub, enabling most useful GitHub

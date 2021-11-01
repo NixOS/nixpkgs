@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free exFAT file system implementation";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.unix;

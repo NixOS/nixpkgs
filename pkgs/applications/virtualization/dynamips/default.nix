@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       Dynamips is an emulator computer program that was written to emulate Cisco
       routers.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

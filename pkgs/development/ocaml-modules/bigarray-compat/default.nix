@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Compatibility library to use Stdlib.Bigarray when possible";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };

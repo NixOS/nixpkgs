@@ -24,7 +24,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Simple Core-inspired wrapper for standard library Stream module";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl21;

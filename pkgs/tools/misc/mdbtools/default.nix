@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 lgpl2 ];
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

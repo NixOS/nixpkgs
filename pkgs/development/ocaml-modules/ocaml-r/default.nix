@@ -34,7 +34,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml bindings for the R interpreter";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

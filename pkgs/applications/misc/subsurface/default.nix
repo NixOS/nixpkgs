@@ -65,7 +65,7 @@ let
     '';
 
     meta = with lib; {
-      inherit (src.meta) homepage;
+      inherit (src.meta) homepage changelog;
       description = "QtLocation plugin for Google maps tile API";
       maintainers = with maintainers; [ orivej ];
       license = licenses.mit;

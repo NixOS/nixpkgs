@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Small configuration file parser library for C";
     longDescription = ''
       libConfuse (previously libcfg) is a configuration file parser library

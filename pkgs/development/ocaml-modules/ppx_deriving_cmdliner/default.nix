@@ -34,7 +34,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.asl20;
     maintainers = [ maintainers.romildo ];
   };

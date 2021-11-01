@@ -20,7 +20,7 @@ buildDunePackage rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;

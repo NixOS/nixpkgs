@@ -23,7 +23,7 @@ buildDunePackage rec {
   meta = {
     description = "OCaml bindings for the libsrt library";
     license = lib.licenses.gpl2Only;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = [ lib.maintainers.vbgl ];
   };
 

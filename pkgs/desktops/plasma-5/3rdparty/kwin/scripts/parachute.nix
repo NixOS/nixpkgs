@@ -31,7 +31,7 @@ mkDerivation rec {
     description = "Look at your windows and desktops from above.";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mjlbach ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (kwindowsystem.meta) platforms;
   };
 }

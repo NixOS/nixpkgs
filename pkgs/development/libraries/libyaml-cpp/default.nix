@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DYAML_CPP_BUILD_TESTS=OFF" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A YAML parser and emitter for C++";
     license = licenses.mit;
     platforms = platforms.unix;

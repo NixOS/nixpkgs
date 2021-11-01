@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
   buildInputs = with ocamlPackages; [ curses camlp5 num gsl ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A Curses-based RPN calculator";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ obadz ];

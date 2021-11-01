@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   meta = {
     description = "An OCaml library providing some simple operations for handling OCaml “spacetime” profiles";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

@@ -19,6 +19,6 @@ buildDunePackage rec {
      description = "Convert OCaml parsetrees between different major versions";
      license = lib.licenses.lgpl21;
      maintainers = [ lib.maintainers.vbgl ];
-     inherit (src.meta) homepage;
+     inherit (src.meta) homepage changelog;
    };
 }

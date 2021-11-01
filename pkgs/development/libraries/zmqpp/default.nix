@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zeromq ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "C++ wrapper for czmq. Aims to be minimal, simple and consistent";
     license = licenses.lgpl3;
     platforms = platforms.linux ++ platforms.darwin;

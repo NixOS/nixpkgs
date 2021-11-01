@@ -20,7 +20,7 @@ buildDunePackage rec {
   buildInputs = [ ocaml_extlib ocamlfuse gapi_ocaml ocaml_sqlite3 ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A FUSE-based file system backed by Google Drive, written in OCaml";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

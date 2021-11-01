@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''
       This small utility is the automation-oriented DJ's best friend. By making

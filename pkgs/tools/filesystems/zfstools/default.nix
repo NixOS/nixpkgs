@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit version;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";
     longDescription = ''
       zfstools is an OpenSolaris-like and compatible auto snapshotting script

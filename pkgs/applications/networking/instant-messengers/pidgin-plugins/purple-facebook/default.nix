@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pidgin glib json-glib ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Facebook protocol plugin for libpurple";
     license = licenses.gpl2;
     platforms = platforms.linux;

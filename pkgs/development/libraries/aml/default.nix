@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Another main loop";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

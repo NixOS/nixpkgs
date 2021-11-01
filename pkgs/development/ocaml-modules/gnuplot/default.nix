@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ gnuplot iso8601 ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Ocaml bindings to Gnuplot";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl21;

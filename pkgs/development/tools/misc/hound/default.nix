@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Lightning fast code searching made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc SuperSandro2000 ];

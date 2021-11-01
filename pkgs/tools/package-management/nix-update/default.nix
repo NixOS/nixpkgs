@@ -28,7 +28,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Swiss-knife for updating nix packages";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 zowoq ];
     platforms = platforms.all;
