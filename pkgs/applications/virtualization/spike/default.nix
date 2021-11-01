@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, dtc, fetchpatch, which }:
+{ lib, stdenv, fetchgit, dtc, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
