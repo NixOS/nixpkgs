@@ -29,6 +29,7 @@
 , webkitgtk
 , jemalloc
 , rnnoise
+, abseil-cpp
   # Transitive dependencies:
 , util-linuxMinimal
 , pcre
@@ -57,7 +58,11 @@
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix { };
+  tg_owt = callPackage ./tg_owt.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "17";
+    };
+  };
 in
 mkDerivation rec {
   pname = "telegram-desktop";
