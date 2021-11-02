@@ -230,22 +230,8 @@ in
   ];
 
   config = mkMerge [
-    (mkIf cfg.enable {
-
-      # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [
-        ''
-          # Enable the Plasma 5 Desktop Environment.
-          services.xserver.displayManager.sddm.enable = true;
-          services.xserver.desktopManager.plasma5.enable = true;
-        ''
-      ];
-
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
-      # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
-      # many tiny bugs.
-      # See: https://github.com/NixOS/nixpkgs/issues/143272
-      services.xserver.displayManager.defaultSession = mkDefault "plasma";
+    # Common Plasma dependencies
+    (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
         kcheckpass = {
@@ -331,37 +317,24 @@ in
           kdeplasma-addons
           kgamma5
           khotkeys
-          kinfocenter
-          kmenuedit
           kscreen
           kscreenlocker
-          ksystemstats
           kwayland
           kwin
           kwrited
           libkscreen
           libksysguard
           milou
-          plasma-systemmonitor
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
-          spectacle
-          systemsettings
 
           plasma-desktop
           plasma-workspace
           plasma-workspace-wallpapers
 
-          dolphin
-          dolphin-plugins
-          ffmpegthumbs
-          kdegraphics-thumbnailers
-          khelpcenter
-          kio-extras
           konsole
           oxygen
-          print-manager
 
           breeze-icons
           pkgs.hicolor-icon-theme
@@ -372,10 +345,6 @@ in
           qtvirtualkeyboard
 
           pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-
-          elisa
-          gwenview
-          okular
         ]
 
         # Phonon audio backend
@@ -449,18 +418,6 @@ in
           serviceConfig.Type = "oneshot";
           script = activationScript;
         };
-
-        plasma-run-with-systemd = {
-          description = "Run KDE Plasma via systemd";
-          wantedBy = [ "basic.target" ];
-          serviceConfig.Type = "oneshot";
-          script = ''
-            ${set_XDG_CONFIG_HOME}
-
-            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
-              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
-          '';
-        };
       };
 
       xdg.portal.enable = true;
@@ -477,6 +434,66 @@ in
         "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
       };
     })
+
+    # Plasma Desktop
+    (mkIf cfg.enable {
+
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the Plasma 5 Desktop Environment.
+          services.xserver.displayManager.sddm.enable = true;
+          services.xserver.desktopManager.plasma5.enable = true;
+        ''
+      ];
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
+      # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
+      # many tiny bugs.
+      # See: https://github.com/NixOS/nixpkgs/issues/143272
+      services.xserver.displayManager.defaultSession = mkDefault "plasma";
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
+        [
+          ksystemstats
+          kinfocenter
+          kmenuedit
+          plasma-systemmonitor
+          spectacle
+          systemsettings
+
+          dolphin
+          dolphin-plugins
+          ffmpegthumbs
+          kdegraphics-thumbnailers
+          khelpcenter
+          kio-extras
+          print-manager
+
+          elisa
+          gwenview
+          okular
+        ]
+      ;
+
+      systemd.user.services = {
+        plasma-run-with-systemd = {
+          description = "Run KDE Plasma via systemd";
+          wantedBy = [ "basic.target" ];
+          serviceConfig.Type = "oneshot";
+          script = ''
+            ${set_XDG_CONFIG_HOME}
+
+            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
+              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
+          '';
+        };
+      };
+    })
+
+    # Plasma Mobile
     (mkIf cfg.mobile.enable {
       assertions = [
         {
