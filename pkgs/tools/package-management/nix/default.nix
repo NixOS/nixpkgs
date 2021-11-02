@@ -233,13 +233,13 @@ in rec {
 
   nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4pre-rc1";
+    version = "2.4";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
       rev = version;
-      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+      sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
     };
 
     boehmgc = boehmgc_nixUnstable;
