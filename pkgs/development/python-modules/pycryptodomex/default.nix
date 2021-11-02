@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
-  version = "3.10.1";
+  version = "3.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VBzT4+JS+xmntI9CC3mLU0gzArf+TZlUyUdgXQomPWI=";
+    sha256 = "0398366656bb55ebdb1d1d493a7175fc48ade449283086db254ac44c7d318d6d";
   };
 
   pythonImportsCheck = [ "Cryptodome" ];

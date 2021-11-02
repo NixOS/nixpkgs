@@ -22,15 +22,18 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils";
-  version = "8.32";
+  version = "9.0";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
+    sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
   };
 
-  patches = [ ./sys-getdents-undeclared.patch ]
-    ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+  patches = [
+    ./fix-chmod-exit-code.patch
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
+    ./disable-seek-hole.patch
+  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
     # fix gnulib tests on 32-bit ARM. Included on coreutils master.
     # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
     ++ optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
@@ -74,23 +77,26 @@ stdenv.mkDerivation (rec {
     sed '2i print "Skipping id zero test"; exit 77' -i ./tests/id/zero.sh
     sed '2i print "Skipping misc help-versiob test"; exit 77' -i ./tests/misc/help-version.sh
     sed '2i print "Skipping chown separator test"; exit 77' -i ./tests/chown/separator.sh
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+  '' + (optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
     ''
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
-  ]);
+  ])) + (optionalString stdenv.isAarch64 ''
+    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
+  '');
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
+  nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
+    ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
+    ++ optional stdenv.isDarwin "--disable-nls" # the shipped configure script doesn't enable nls, but using autoreconfHook does so which breaks the build
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
@@ -152,7 +158,7 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     priority = 10;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ maintainers.eelco maintainers.das_j ];
   };
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.

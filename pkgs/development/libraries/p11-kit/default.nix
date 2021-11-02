@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
+    "--with-trust-paths=/etc/ssl/trust-source:/etc/ssl/certs/ca-certificates.crt"
   ];
 
   enableParallelBuilding = true;

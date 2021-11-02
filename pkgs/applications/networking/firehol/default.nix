@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, pkgs
-, autoconf, automake, curl, iprange, iproute2, ipset, iptables, iputils
+, autoconf, automake, curl, iprange, iproute2, iptables, iputils
 , kmod, nettools, procps, tcpdump, traceroute, util-linux, whois
 
 # If true, just install FireQOS without FireHOL
@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    curl iprange iproute2 ipset iptables iputils kmod
+    curl iprange iproute2 iptables iputils kmod
     nettools procps tcpdump traceroute util-linux whois
   ];
 
   preConfigure = "./autogen.sh";
   configureFlags = [ "--localstatedir=/var"
-                     "--disable-doc" "--disable-man" ] ++
+                     "--disable-doc" "--disable-man"
+                     "--disable-update-ipsets" ] ++
                    lib.optional onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {

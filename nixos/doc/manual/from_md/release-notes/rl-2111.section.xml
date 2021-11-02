@@ -17,6 +17,12 @@
     <itemizedlist>
       <listitem>
         <para>
+          <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
@@ -408,6 +414,14 @@
           that before NixOS 21.11, specifying either setuid or setgid
           but not owner/group resulted in wrappers owned by
           nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Since <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend and
+          <literal>ipset</literal> doesn’t support it, some applications
+          (ferm, shorewall, firehol) may have limited functionality.
         </para>
       </listitem>
       <listitem>
@@ -1700,6 +1714,29 @@ Superuser created successfully.
           remove and re-register their account in the client to enjoy a
           better user experience and benefit from this change.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Dokuwiki now supports caddy! However
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              the nginx option has been removed, in the new
+              configuration, please use the
+              <literal>dokuwiki.webserver = &quot;nginx&quot;</literal>
+              instead.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <quote>${hostname}</quote> option has been deprecated,
+              please use
+              <literal>dokuwiki.sites = [ &quot;${hostname}&quot; ]</literal>
+              instead
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>

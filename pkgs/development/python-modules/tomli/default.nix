@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "1.1.0";
+  version = "1.2.1";
   format = "pyproject";
 
   outputs = [
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "1cj6iil9sii1zl0l4pw7h4alcnhwdbxinpph2f0rm5rghrp6prjm";
+    sha256 = "sha256-30AQ9MQmclcjl1d83mIoxFXzaJn1OFKQlVxayqC5NxY=";
   };
 
   nativeBuildInputs = [ flit-core ];

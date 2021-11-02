@@ -167,7 +167,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.10.6";
+  hassVersion = "2021.10.7";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -184,7 +184,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0275f327dzr4cggfw5n8x533b4h8zz8yli5d0js7cw1rmi3cmkbc";
+    sha256 = "1kibny2hd91c011bv7g46sn5q9fg6wmrbwzwckwa737d6gj27c1y";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -194,13 +194,10 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
-      --replace "cryptography==3.3.2" "cryptography" \
+      --replace "jinja2==3.0.1" "jinja2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "requests==2.25.1" "requests>=2.25.1" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml" \
-      --replace "voluptuous==0.12.1" "voluptuous==0.12.2"
+      --replace "yarl==1.6.3" "yarl==1.7.0"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 

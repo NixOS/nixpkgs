@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.10.1";
+  version = "0.11.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e9e0912c206c53cd6ee996265aa99d5c99c9334e37d025ce6114bc0416ffc14";
+    sha256 = "efcb24a366d3b033d343298c2a60eae418b06803c85373450f10306815c7c632";
   };
 
   nativeBuildInputs = [
