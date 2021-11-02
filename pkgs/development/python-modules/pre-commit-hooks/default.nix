@@ -4,7 +4,7 @@
 , git
 , pythonOlder
 , pytestCheckHook
-, ruamel_yaml
+, ruamel-yaml
 , toml
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     toml
   ];
 
