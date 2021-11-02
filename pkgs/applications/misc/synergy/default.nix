@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, qttools
+{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, openssl, pkg-config, gdk-pixbuf, libnotify, qttools
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
 , xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.13.1.41";
+  version = "1.14.1.32";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = "${version}-stable";
     fetchSubmodules = true;
-    sha256 = "1phg0szc9g018zxs5wbys4drzq1cdhyzajfg45l6a3fmi6qdi1kw";
+    sha256 = "123p75rm22vb3prw1igh0yii2y4bvv7r18iykfvmnr41hh4w7z2p";
   };
 
   patches = lib.optional stdenv.isDarwin ./macos_build_fix.patch;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optional withGUI wrapQtAppsHook;
 
   dontWrapQtApps = true;
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
   ] ++ lib.optionals stdenv.isLinux [
-    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat gdk-pixbuf libnotify
   ];
 
   installPhase = ''
