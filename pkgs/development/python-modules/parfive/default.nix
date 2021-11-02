@@ -3,7 +3,7 @@
 , fetchPypi
 , tqdm
 , aiohttp
-, pytest
+, pytestCheckHook
 , setuptools-scm
 , pytest-localserver
 , pytest-socket
@@ -31,16 +31,17 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-localserver
     pytest-socket
     pytest-asyncio
   ];
 
-  checkPhase = ''
-    # these two tests require network connection
-    pytest parfive -k "not test_ftp and not test_ftp_http"
-  '';
+  disabledTests = [
+    # no network access
+    "test_ftp"
+    "aiofiles"
+  ];
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";
