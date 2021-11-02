@@ -55,41 +55,41 @@ import ../make-test-python.nix ({pkgs, ...}: {
     nn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.namenode.enabled = true;
-        hdfs.zkfc.enabled = true;
+        hdfs.namenode.enable = true;
+        hdfs.zkfc.enable = true;
       };
     };
     nn2 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.namenode.enabled = true;
-        hdfs.zkfc.enabled = true;
+        hdfs.namenode.enable = true;
+        hdfs.zkfc.enable = true;
       };
     };
 
     jn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enabled = true;
+        hdfs.journalnode.enable = true;
       };
     };
     jn2 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enabled = true;
+        hdfs.journalnode.enable = true;
       };
     };
     jn3 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.journalnode.enabled = true;
+        hdfs.journalnode.enable = true;
       };
     };
 
     dn1 = {pkgs, options, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
-        hdfs.datanode.enabled = true;
+        hdfs.datanode.enable = true;
       };
     };
 
@@ -99,7 +99,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.resourcemanager.enabled = true;
+        yarn.resourcemanager.enable = true;
       };
     };
     rm2 = {pkgs, options, ...}: {
@@ -107,7 +107,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.resourcemanager.enabled = true;
+        yarn.resourcemanager.enable = true;
       };
     };
     nm1 = {pkgs, options, ...}: {
@@ -115,7 +115,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
       services.hadoop = {
         inherit package coreSite hdfsSite;
         yarnSite = options.services.hadoop.yarnSite.default // yarnSiteHA;
-        yarn.nodemanager.enabled = true;
+        yarn.nodemanager.enable = true;
       };
     };
   };

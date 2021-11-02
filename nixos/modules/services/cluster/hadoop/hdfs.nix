@@ -17,7 +17,7 @@ in
 {
   options.services.hadoop.hdfs = {
     namenode = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -43,7 +43,7 @@ in
       };
     };
     datanode = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -60,7 +60,7 @@ in
       };
     };
     journalnode = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -77,7 +77,7 @@ in
       };
     };
     zkfc = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -87,7 +87,7 @@ in
       inherit restartIfChanged;
     };
     httpfs = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -106,7 +106,7 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.hdfs.namenode.enabled {
+    (mkIf cfg.hdfs.namenode.enable {
       systemd.services.hdfs-namenode = {
         description = "Hadoop HDFS NameNode";
         wantedBy = [ "multi-user.target" ];
@@ -130,7 +130,7 @@ in
         8022 # namenode. servicerpc-address
       ]);
     })
-    (mkIf cfg.hdfs.datanode.enabled {
+    (mkIf cfg.hdfs.datanode.enable {
       systemd.services.hdfs-datanode = {
         description = "Hadoop HDFS DataNode";
         wantedBy = [ "multi-user.target" ];
@@ -150,7 +150,7 @@ in
         9867 # datanode.ipc.address
       ]);
     })
-    (mkIf cfg.hdfs.journalnode.enabled {
+    (mkIf cfg.hdfs.journalnode.enable {
       systemd.services.hdfs-journalnode = {
         description = "Hadoop HDFS JournalNode";
         wantedBy = [ "multi-user.target" ];
@@ -169,7 +169,7 @@ in
         8485 # dfs.journalnode.rpc-address
       ]);
     })
-    (mkIf cfg.hdfs.zkfc.enabled {
+    (mkIf cfg.hdfs.zkfc.enable {
       systemd.services.hdfs-zkfc = {
         description = "Hadoop HDFS ZooKeeper failover controller";
         wantedBy = [ "multi-user.target" ];
@@ -183,7 +183,7 @@ in
         };
       };
     })
-    (mkIf cfg.hdfs.httpfs.enabled {
+    (mkIf cfg.hdfs.httpfs.enable {
       systemd.services.hdfs-httpfs = {
         description = "Hadoop httpfs";
         wantedBy = [ "multi-user.target" ];
@@ -209,7 +209,7 @@ in
       ]);
     })
     (mkIf (
-        cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled || cfg.hdfs.journalnode.enabled || cfg.hdfs.zkfc.enabled
+        cfg.hdfs.namenode.enable || cfg.hdfs.datanode.enable || cfg.hdfs.journalnode.enable || cfg.hdfs.zkfc.enable
     ) {
       users.users.hdfs = {
         description = "Hadoop HDFS user";
@@ -217,7 +217,7 @@ in
         uid = config.ids.uids.hdfs;
       };
     })
-    (mkIf cfg.hdfs.httpfs.enabled {
+    (mkIf cfg.hdfs.httpfs.enable {
       users.users.httpfs = {
         description = "Hadoop HTTPFS user";
         group = "hadoop";

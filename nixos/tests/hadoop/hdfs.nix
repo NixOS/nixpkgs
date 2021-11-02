@@ -7,10 +7,10 @@ import ../make-test-python.nix ({...}: {
         package = pkgs.hadoop;
         hdfs = {
           namenode = {
-            enabled = true;
+            enable = true;
             formatOnInit = true;
           };
-          httpfs.enabled = true;
+          httpfs.enable = true;
         };
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
@@ -22,7 +22,7 @@ import ../make-test-python.nix ({...}: {
     datanode = {pkgs, ...}: {
       services.hadoop = {
         package = pkgs.hadoop;
-        hdfs.datanode.enabled = true;
+        hdfs.datanode.enable = true;
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
           "hadoop.proxyuser.httpfs.groups" = "*";

@@ -17,7 +17,7 @@ in
 {
   options.services.hadoop.yarn = {
     resourcemanager = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -34,7 +34,7 @@ in
       };
     };
     nodemanager = {
-      enabled = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -62,7 +62,7 @@ in
 
   config = mkMerge [
     (mkIf (
-        cfg.yarn.resourcemanager.enabled || cfg.yarn.nodemanager.enabled
+        cfg.yarn.resourcemanager.enable || cfg.yarn.nodemanager.enable
     ) {
 
       users.users.yarn = {
@@ -72,7 +72,7 @@ in
       };
     })
 
-    (mkIf cfg.yarn.resourcemanager.enabled {
+    (mkIf cfg.yarn.resourcemanager.enable {
       systemd.services.yarn-resourcemanager = {
         description = "Hadoop YARN ResourceManager";
         wantedBy = [ "multi-user.target" ];
@@ -95,7 +95,7 @@ in
       ]);
     })
 
-    (mkIf cfg.yarn.nodemanager.enabled {
+    (mkIf cfg.yarn.nodemanager.enable {
       # Needed because yarn hardcodes /bin/bash in container start scripts
       # These scripts can't be patched, they are generated at runtime
       systemd.tmpfiles.rules = [
