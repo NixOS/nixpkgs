@@ -176,7 +176,7 @@ findDependency() {
 
     if [ $depCacheInitialised -eq 0 ]; then
         for lib in "${autoPatchelfLibs[@]}"; do
-            find "$lib" -not -type -d '(' -name '*.so' -or -name '*.so.*' ')' | while read so; do addToDepCache "$so"; done
+            find "$lib" -not -type d '(' -name '*.so' -or -name '*.so.*' ')' | while read so; do addToDepCache "$so"; done
         done
         depCacheInitialised=1
     fi
