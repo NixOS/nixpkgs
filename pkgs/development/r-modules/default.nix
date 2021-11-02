@@ -278,7 +278,7 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
-    BayesXsrc = with pkgs; [ readline.dev ncurses ];
+    BayesXsrc = with pkgs; [ readline.dev ncurses gsl ];
     bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
@@ -422,6 +422,33 @@ let
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
     hdf5r = [ pkgs.hdf5.dev ];
+    httpgd = with pkgs; [ cairo.dev ];
+    SymTS = [ pkgs.gsl ];
+    VBLPCM = [ pkgs.gsl ];
+    dynr = [ pkgs.gsl ];
+    mixlink = [ pkgs.gsl ];
+    ridge = [ pkgs.gsl ];
+    smam = [ pkgs.gsl ];
+    rnetcarto = [ pkgs.gsl ];
+    rGEDI = [ pkgs.gsl ];
+    mmpca = [ pkgs.gsl ];
+    monoreg = [ pkgs.gsl ];
+    mvst = [ pkgs.gsl ];
+    mixture = [ pkgs.gsl ];
+    jSDM = [ pkgs.gsl ];
+    immunoClust = [ pkgs.gsl ];
+    hSDM = [ pkgs.gsl ];
+    flowPeaks = [ pkgs.gsl ];
+    fRLR = [ pkgs.gsl ];
+    eaf = [ pkgs.gsl ];
+    diseq = [ pkgs.gsl ];
+    cit = [ pkgs.gsl ];
+    abn = [ pkgs.gsl ];
+    SimInf = [ pkgs.gsl ];
+    RJMCMCNucleosomes = [ pkgs.gsl ];
+    RDieHarder = [ pkgs.gsl ];
+    QF = [ pkgs.gsl ];
+    PICS = [ pkgs.gsl ];
   };
 
   packagesWithBuildInputs = {
@@ -515,6 +542,35 @@ let
     DirichletMultinomial = with pkgs; [ gsl ];
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
+    GMMAT = with pkgs; [ zlib.dev bzip2.dev ];
+    HiCDCPlus = [ pkgs.zlib.dev ];
+    PopGenome = [ pkgs.zlib.dev ];
+    QuasR = [ pkgs.zlib.dev ];
+    Rbowtie2 = [ pkgs.zlib.dev ];
+    Rmmquant = [ pkgs.zlib.dev ];
+    SICtools = with pkgs; [ zlib.dev ncurses.dev ];
+    Signac = [ pkgs.zlib.dev ];
+    TransView = [ pkgs.zlib.dev ];
+    bigsnpr = [ pkgs.zlib.dev ];
+    divest = [ pkgs.zlib.dev ];
+    hipread = [ pkgs.zlib.dev ];
+    jackalope = with pkgs; [ zlib.dev xz.dev ];
+    largeList = [ pkgs.zlib.dev ];
+    mappoly = [ pkgs.zlib.dev ];
+    matchingMarkets = [ pkgs.zlib.dev ];
+    methylKit = [ pkgs.zlib.dev ];
+    ndjson = [ pkgs.zlib.dev ];
+    podkat = [ pkgs.zlib.dev ];
+    qrqc = [ pkgs.zlib.dev ];
+    rJPSGCS = [ pkgs.zlib.dev ];
+    rhdf5filters = [ pkgs.zlib.dev ];
+    rtk = [ pkgs.zlib.dev ];
+    scPipe = [ pkgs.zlib.dev ];
+    seqTools = [ pkgs.zlib.dev ];
+    seqbias = [ pkgs.zlib.dev ];
+    sparkwarc = [ pkgs.zlib.dev ];
+    RoBMA = [ pkgs.jags ];
+    rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
   };
 
   packagesRequiringX = [
@@ -726,6 +782,28 @@ let
     "stepR"
     "styler"
     "TreeTools"
+    "ACNE"
+    "APAlyzer"
+    "EstMix"
+    "PECA"
+    "Quartet"
+    "ShinyQuickStarter"
+    "TIN"
+    "TotalCopheneticIndex"
+    "TreeDist"
+    "biocthis"
+    "calmate"
+    "fgga"
+    "fulltext"
+    "immuneSIM"
+    "mastif"
+    "shinymeta"
+    "shinyobjects"
+    "wppi"
+    "pins"
+    "CoTiMA"
+    "TBRDist"
+    "Rogue"
   ];
 
   packagesToSkipCheck = [
@@ -741,6 +819,31 @@ let
     "NetLogoR"
     "proj4"
     "x13binary"
+
+    # Impure network access during build
+    "waddR"
+
+    # ExperimentHub dependents, require net access during build
+    "DuoClustering2018"
+    "FieldEffectCrc"
+    "GenomicDistributionsData"
+    "HDCytoData"
+    "HMP16SData"
+    "PANTHER_db"
+    "RNAmodR_Data"
+    "SCATEData"
+    "SingleMoleculeFootprintingData"
+    "TabulaMurisData"
+    "benchmarkfdrData2019"
+    "bodymapRat"
+    "clustifyrdatahub"
+    "depmap"
+    "emtdata"
+    "metaboliteIDmapping"
+    "msigdb"
+    "muscData"
+    "org_Mxanthus_db"
+    "scpdata"
   ];
 
   otherOverrides = old: new: {
@@ -801,10 +904,6 @@ let
 
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
-    });
-
-    BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesXsrc.patch ];
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
@@ -1076,6 +1175,13 @@ let
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
       '';
     });
+
+    SICtools = old.SICtools.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+      '';
+    });
+
   };
 in
   self

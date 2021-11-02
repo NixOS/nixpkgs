@@ -1,6 +1,6 @@
-{ buildPackages, callPackage }:
+{ buildPackages, callPackage, stdenv }@prev:
 
-{ rustc, cargo, ... }:
+{ rustc, cargo, stdenv ? prev.stdenv, ... }:
 
 rec {
   rust = {
@@ -14,22 +14,22 @@ rec {
 
   buildRustPackage = callPackage ../../../build-support/rust {
     git = buildPackages.gitMinimal;
-    inherit cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
+    inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
       fetchCargoTarball importCargoLock rustc;
   };
 
   importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {};
 
   rustcSrc = callPackage ./rust-src.nix {
-    inherit rustc;
+    inherit stdenv rustc;
   };
 
   rustLibSrc = callPackage ./rust-lib-src.nix {
-    inherit rustc;
+    inherit stdenv rustc;
   };
 
   # Hooks
   inherit (callPackage ../../../build-support/rust/hooks {
-    inherit cargo rustc;
+    inherit stdenv cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook;
 }

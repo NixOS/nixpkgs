@@ -2123,6 +2123,8 @@ with pkgs;
 
   butane = callPackage ../development/tools/butane { };
 
+  buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
+
   charles = charles4;
   inherit (callPackage ../applications/networking/charles {})
     charles3
@@ -5050,7 +5052,11 @@ with pkgs;
 
   fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
-  fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix { };
+  fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "17";
+    };
+  };
 
   fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
 
@@ -9900,6 +9906,8 @@ with pkgs;
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
+
+  threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
 
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
@@ -23385,6 +23393,8 @@ with pkgs;
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
+  sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 
   skeu = callPackage ../data/themes/skeu { };
@@ -23824,6 +23834,8 @@ with pkgs;
   audacity = audacity-gtk2;
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
+
+  auto-multiple-choice = callPackage ../applications/misc/auto-multiple-choice { };
 
   autokey = callPackage ../applications/office/autokey { };
 
@@ -26392,6 +26404,10 @@ with pkgs;
 
   markets = callPackage ../applications/misc/markets { };
 
+  markmind = callPackage ../applications/misc/markmind {
+    electron = electron_9;
+  };
+
   marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
@@ -28821,6 +28837,10 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
+  whalebird = callPackage ../applications/misc/whalebird {
+    electron = electron_12;
+  };
+
   wio = callPackage ../applications/window-managers/wio { };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
@@ -31174,7 +31194,12 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     python = python3;
-    abseil-cpp = abseil-cpp.override { static = true; };
+    # or-tools builds with -std=c++17, so abseil-cpp must
+    # also be built that way
+    abseil-cpp = abseil-cpp.override {
+      static = true;
+      cxxStandard = "17";
+    };
   };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
