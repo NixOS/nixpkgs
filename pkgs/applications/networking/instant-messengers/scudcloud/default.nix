@@ -1,12 +1,14 @@
-{ lib, fetchurl, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-let version = "1.63";
-in python3Packages.buildPythonPackage {
-  name = "scudcloud-${version}";
+python3Packages.buildPythonPackage rec {
+  pname = "scudcloud";
+  version = "1.63";
 
-  src = fetchurl {
-    url = "https://github.com/raelgc/scudcloud/archive/v${version}.tar.gz";
-    sha256 = "e0d1cb72115d0fda17db92d28be51558ad8fe250972683fac3086dbe8d350d22";
+  src = fetchFromGitHub {
+    owner = "raelgc";
+    repo = "scudcloud";
+    rev = "v${version}";
+    sha256 = "sha256-b8+MVjYKbSpnfM2ow2MNVY6MiT+urpNYDkFR/yUC7ik=";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyqt5_with_qtwebkit dbus-python jsmin ];
