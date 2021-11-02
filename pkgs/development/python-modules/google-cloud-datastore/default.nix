@@ -41,7 +41,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
-    "tests/system/test_system.py"
+    "tests/system/test_allocate_reserve_ids.py"
+    "tests/system/test_query.py"
+    "tests/system/test_put.py"
+    "tests/system/test_transaction.py"
   ];
 
   pythonImportsCheck = [
