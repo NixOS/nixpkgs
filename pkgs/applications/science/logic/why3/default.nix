@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # S-expression output for why3pp
     ppx_deriving ppx_sexp_conv
     # Coq Support
-    coqPackages.coq coqPackages.flocq ocamlPackages.camlp5
+    coqPackages.coq coqPackages.flocq
   ];
 
   propagatedBuildInputs = with ocamlPackages; [ camlzip num re sexplib ];

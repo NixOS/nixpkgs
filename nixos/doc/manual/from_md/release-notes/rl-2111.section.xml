@@ -1504,6 +1504,23 @@ Superuser created successfully.
       <listitem>
         <para>
           The
+          <link xlink:href="options.html#opt-services.smokeping.host">services.smokeping.host</link>
+          option was added and defaulted to
+          <literal>localhost</literal>. Before,
+          <literal>smokeping</literal> listened to all interfaces by
+          default. NixOS defaults generally aim to provide
+          non-Internet-exposed defaults for databases and internal
+          monitoring tools, see e.g.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/100192">#100192</link>.
+          Further, the systemd service for <literal>smokeping</literal>
+          got reworked defaults for increased operational stability, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/144127">PR
+          #144127</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
           <link xlink:href="options.html#opt-services.syncoid.enable">services.syncoid.enable</link>
           module now properly drops ZFS permissions after usage. Before
           it delegated permissions to whole pools instead of datasets

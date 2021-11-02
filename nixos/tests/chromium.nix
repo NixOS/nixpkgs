@@ -80,6 +80,10 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
             binary = pname
         # Add optional CLI options:
         options = []
+        major_version = "${versions.major (getVersion chromiumPkg.name)}"
+        if major_version > "95" and not pname.startswith("google-chrome"):
+            # Workaround to avoid a GPU crash:
+            options.append("--use-gl=swiftshader")
         # Launch the process:
         options.append("file://${startupHTML}")
         machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} & disown'))

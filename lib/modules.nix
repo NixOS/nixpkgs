@@ -52,15 +52,39 @@ in
 
 rec {
 
-  /* Evaluate a set of modules.  The result is a set of two
-     attributes: ‘options’: the nested set of all option declarations,
-     and ‘config’: the nested set of all option values.
+  /*
+    Evaluate a set of modules.  The result is a set with the attributes:
+
+      ‘options’: The nested set of all option declarations,
+
+      ‘config’: The nested set of all option values.
+
+      ‘type’: A module system type representing the module set as a submodule,
+            to be extended by configuration from the containing module set.
+
+      ‘extendModules’: A function similar to ‘evalModules’ but building on top
+            of the module set. Its arguments, ‘modules’ and ‘specialArgs’ are
+            added to the existing values.
+
+            Using ‘extendModules’ a few times has no performance impact as long
+            as you only reference the final ‘options’ and ‘config’.
+            If you do reference multiple ‘config’ (or ‘options’) from before and
+            after ‘extendModules’, performance is the same as with multiple
+            ‘evalModules’ invocations, because the new modules' ability to
+            override existing configuration fundamentally requires a new
+            fixpoint to be constructed.
+
+      ‘_module’: A portion of the configuration tree which is elided from
+            ‘config’. It contains some values that are mostly internal to the
+            module system implementation.
+
      !!! Please think twice before adding to this argument list! The more
      that is specified here instead of in the modules themselves the harder
      it is to transparently move a set of modules to be a submodule of another
      config (as the proper arguments need to be replicated at each call to
      evalModules) and the less declarative the module set is. */
-  evalModules = { modules
+  evalModules = evalModulesArgs@
+                { modules
                 , prefix ? []
                 , # This should only be used for special arguments that need to be evaluated
                   # when resolving module structure (like in imports). For everything else,
@@ -120,7 +144,9 @@ rec {
         };
 
         config = {
-          _module.args = args;
+          _module.args = {
+            inherit extendModules;
+          } // args;
         };
       };
 
@@ -183,10 +209,28 @@ rec {
             else throw baseMsg
         else null;
 
-      result = builtins.seq checkUnmatched {
-        inherit options;
-        config = removeAttrs config [ "_module" ];
-        inherit (config) _module;
+      checked = builtins.seq checkUnmatched;
+
+      extendModules = extendArgs@{
+        modules ? [],
+        specialArgs ? {},
+        prefix ? [],
+        }:
+          evalModules (evalModulesArgs // {
+            modules = evalModulesArgs.modules ++ modules;
+            specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
+            prefix = extendArgs.prefix or evalModulesArgs.prefix;
+          });
+
+      type = lib.types.submoduleWith {
+        inherit modules specialArgs;
+      };
+
+      result = {
+        options = checked options;
+        config = checked (removeAttrs config [ "_module" ]);
+        _module = checked (config._module);
+        inherit extendModules type;
       };
     in result;
 

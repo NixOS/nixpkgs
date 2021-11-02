@@ -139,7 +139,7 @@ in {
     environment.systemPackages = [
       cfg.finalPackage
     ];
-    environment.variables = { EDITOR = mkOverride 900 "nvim"; };
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
       inherit (cfg) viAlias vimAlias;

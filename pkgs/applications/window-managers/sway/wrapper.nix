@@ -52,7 +52,10 @@ in symlinkJoin {
       ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
   '';
 
-  passthru.providedSessions = [ "sway" ];
+  passthru = {
+    inherit (sway.passthru) tests;
+    providedSessions = [ "sway" ];
+  };
 
   inherit (sway) meta;
 }

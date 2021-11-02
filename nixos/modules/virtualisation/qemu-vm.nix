@@ -560,7 +560,7 @@ in
       package =
         mkOption {
           type = types.package;
-          default = pkgs.qemu;
+          default = pkgs.qemu_kvm;
           example = "pkgs.qemu_test";
           description = "QEMU package to use.";
         };
