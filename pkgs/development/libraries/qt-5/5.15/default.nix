@@ -2,15 +2,8 @@
 
 # Updates
 
-Before a major version update, make a copy of this directory. (We like to
-keep the old version around for a short time after major updates.) Add a
-top-level attribute to `top-level/all-packages.nix`.
-
-1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
-2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
-3. Check that the new packages build correctly.
-4. Commit the changes and open a pull request.
+Run `./fetch.sh` to update package sources from Git.
+Check for any minor version changes.
 
 */
 
@@ -28,57 +21,11 @@ top-level attribute to `top-level/all-packages.nix`.
 
 let
 
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
+
   qtCompatVersion = srcs.qtbase.version;
 
   stdenvActual = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
-
-  mirror = "https://download.qt.io";
-  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
-    # qtwebkit does not have an official release tarball on the qt mirror and is
-    # mostly maintained by the community.
-    qtwebkit = rec {
-      src = fetchFromGitHub {
-        owner = "qt";
-        repo = "qtwebkit";
-        rev = "v${version}";
-        sha256 = "0x8rng96h19xirn7qkz3lydal6v4vn00bcl0s3brz36dfs0z8wpg";
-      };
-      version = "5.212.0-alpha4";
-    };
-    qtwebengine =
-      let
-        branchName = "5.15.6";
-        rev = "v${branchName}-lts";
-      in
-      {
-        version = "${branchName}-${lib.substring 0 7 rev}";
-
-        src = fetchgit {
-          url = "https://github.com/qt/qtwebengine.git";
-          sha256 = "17bw9yf04zmr9ck5jkrd435c8b03zpf937vn2nwgsr8p78wkg3kr";
-          inherit rev branchName;
-          fetchSubmodules = true;
-          leaveDotGit = true;
-          name = "qtwebengine-${lib.substring 0 7 rev}.tar.gz";
-          postFetch = ''
-            # remove submodule .git directory
-            rm -rf "$out/src/3rdparty/.git"
-
-            # compress to not exceed the 2GB output limit
-            # try to make a deterministic tarball
-            tar -I 'gzip -n' \
-              --sort=name \
-              --mtime=1970-01-01 \
-              --owner=root --group=root \
-              --numeric-owner --mode=go=rX,u+rw,a-s \
-              --transform='s@^@source/@' \
-              -cf temp  -C "$out" .
-            rm -r "$out"
-            mv temp "$out"
-          '';
-        };
-      };
-  };
 
   patches = {
     qtbase = lib.optionals stdenv.isDarwin [
@@ -107,16 +54,6 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
-      (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/339323 is included in an release.
-        name = "0014-gcc11-compat.patch";
-        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
-        sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
-      })
-      (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/363880/3 is included in an release.
-        name = "qtbase-mysql-version-vs-functionality-check.patch";
-        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=211369133cf40b2f522caaff259c19069ed23ca4";
-        sha256 = "19kq9h10qm344fpdqa9basrbzh1y5kr48c6jzz3nvk61pk4ja1k4";
-      })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
