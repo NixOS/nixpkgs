@@ -66,6 +66,8 @@ let
   siteOpts = { config, lib, name, ... }:
     {
       options = {
+        enable = mkEnableOption "DokuWiki web application.";
+
         package = mkOption {
           type = types.package;
           default = pkgs.dokuwiki;

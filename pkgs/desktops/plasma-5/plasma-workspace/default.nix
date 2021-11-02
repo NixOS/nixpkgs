@@ -52,6 +52,7 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
+    ./0003-startkde-unit-detection.patch
     # Included in 5.23.2
     (fetchpatch {
       name = "ignore-placeholder-screens";
