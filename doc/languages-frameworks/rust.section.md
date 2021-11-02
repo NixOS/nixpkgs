@@ -912,6 +912,48 @@ You can try this out by:
 
 As of writing, this prints out `rustc 1.56.0 (09c42c458 2021-10-18)`.
 
+### How to use an overlay toolchain in a derivation  {#how-to-use-an-overlay-toolchain-in-a-derivation}
+
+You can also use an overlay's Rust toolchain with `buildRustPackage`.
+The below snippet demonstrates invoking `buildRustPackage` with an oxalica overlay selected Rust toolchain:
+```nix
+with import <nixpkgs>
+{
+  overlays = [
+    (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
+  ];
+};
+
+rustPlatform.buildRustPackage rec {
+  pname = "ripgrep";
+  version = "12.1.1";
+  nativeBuildInputs = [
+    rust-bin.stable.latest.minimal
+  ];
+
+  src = fetchFromGitHub {
+    owner = "BurntSushi";
+    repo = pname;
+    rev = version;
+    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+  };
+
+  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
+
+  meta = with lib; {
+    description = "A fast line-oriented regex search tool, similar to ag and ack";
+    homepage = "https://github.com/BurntSushi/ripgrep";
+    license = licenses.unlicense;
+    maintainers = [ maintainers.tailhook ];
+  };
+}
+```
+
+Follow the below steps to try that snippet.
+1. create a new directory
+1. save the above snippet as `default.nix` in that directory
+1. cd into that directory and run `nix-build`
+
 ### Rust overlay installation {#rust-overlay-installation}
 
 You can use this overlay by either changing your local nixpkgs configuration,
