@@ -63,35 +63,23 @@ rec {
     };
   };
 
-  gradle_7_3 = gradleGen (gradleSpec {
-    version = "7.3-rc-2";
-    nativeVersion = "0.22-milestone-21";
-    sha256 = "0ydg26i376bjax5lval9n79v8afng467vkx3zdga0bzxl8dbi9z6";
-  });
-
   gradle_latest = gradle_7;
 
   # NOTE: 7.3 is a candidate.
   gradle_7 = gradle_7_2;
 
-  gradle_7_2 = gradleGen (gradleSpec {
-    version = "7.2";
-    nativeVersion = "0.22-milestone-21";
-    sha256 = "1pg6w5czysywsgdvmll5bwd2p6y99cn5sn3gw69cps9mkjd710gm";
-  });
+  gradle_7_3 = gradleGen (gradleSpec (import ./gradle-7.3-rc-3-spec.nix));
+  gradle_7_2 = gradleGen (gradleSpec (import ./gradle-7.2-spec.nix));
+  gradle_6_9 = gradleGen (gradleSpec (import ./gradle-6.9.1-spec.nix));
 
-  gradle_6_9 = gradleGen (gradleSpec {
-    version = "6.9.1";
-    nativeVersion = "0.22-milestone-20";
-    sha256 = "1zmjfwlh34b65rdx9izgavw3qwqqwm39h5siyj2bf0m55111a4lc";
-  });
-
+  # NOTE: No GitHub Release for this release, so update.sh does not work.
   gradle_5_6 = gradleGen (gradleSpec {
     version = "5.6.4";
     nativeVersion = "0.18";
     sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
   });
 
+  # NOTE: No GitHub Release for this release, so update.sh does not work.
   gradle_4_10 = gradleGen (gradleSpec {
     version = "4.10.3";
     nativeVersion = "0.14";
