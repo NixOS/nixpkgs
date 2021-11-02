@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }@inputs:
 
 { pname
 , version
@@ -15,6 +15,8 @@
   # each dependency needs to have a setup hook to add the lib path to $ERL_LIBS
   # this is how mix will find dependencies
 , mixNixDeps ? { }
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
 , ...
 }@attrs:
 let
