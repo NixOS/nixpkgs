@@ -30,6 +30,7 @@
   tree-sitter-norg = (builtins.fromJSON (builtins.readFile ./tree-sitter-norg.json));
   tree-sitter-ocaml = (builtins.fromJSON (builtins.readFile ./tree-sitter-ocaml.json));
   tree-sitter-php = (builtins.fromJSON (builtins.readFile ./tree-sitter-php.json));
+  tree-sitter-prolog = (builtins.fromJSON (builtins.readFile ./tree-sitter-prolog.json));
   tree-sitter-python = (builtins.fromJSON (builtins.readFile ./tree-sitter-python.json));
   tree-sitter-ql = (builtins.fromJSON (builtins.readFile ./tree-sitter-ql.json));
   tree-sitter-regex = (builtins.fromJSON (builtins.readFile ./tree-sitter-regex.json));

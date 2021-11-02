@@ -110,6 +110,10 @@ let
       orga = "ikatyang";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-prolog" = {
+      orga = "Rukiza";
+      repo = "tree-sitter-prolog";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";

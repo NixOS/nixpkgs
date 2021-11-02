@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/Rukiza/tree-sitter-prolog",
+  "rev": "db66ca3f5b80e27a3328a8dcec828df93d7250a6",
+  "date": "2021-06-05T12:57:22+12:00",
+  "path": "/nix/store/namaxw9jb8qkdikcii4l8chwylvbnmxb-tree-sitter-prolog",
+  "sha256": "0dfly0faprcf2cfgi4xqv65fmyn5x7b68ip9bzcfv941y6r88yd8",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
