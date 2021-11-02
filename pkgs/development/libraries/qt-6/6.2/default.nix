@@ -16,7 +16,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups, harfbuzz, libGL, perl
+, bison, cups, harfbuzz, libGL, perl, cmake
 , gstreamer, gst-plugins-base, gtk3, dconf
 , llvmPackages_5, darwin
 
@@ -153,7 +153,7 @@ let
   qtModule =
     import ../qtModule.nix
     {
-      inherit perl lib;
+      inherit perl lib cmake;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =

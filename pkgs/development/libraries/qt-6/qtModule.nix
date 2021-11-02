@@ -1,4 +1,4 @@
-{ lib, mkDerivation, perl }:
+{ lib, mkDerivation, perl, cmake }:
 
 let inherit (lib) licenses maintainers platforms; in
 
@@ -16,11 +16,14 @@ mkDerivation (args // {
   inherit pname version src;
   patches = args.patches or patches.${pname} or [];
 
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl cmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
+
+  # set attributes for qt-6/hooks/qmake-hook.sh
+  inherit (self.qtbase) qtDocPrefix qtQmlPrefix qtPluginPrefix;
 
   preHook = ''
     . ${./hooks/move-qt-dev-tools.sh}
