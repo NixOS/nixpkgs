@@ -23704,7 +23704,7 @@ in
   firefox-esr-wayland = wrapFirefox firefox-esr-91-unwrapped { forceWayland = true; };
   firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr-91 = wrapFirefox firefox-esr-91-unwrapped { };
-  firefox-esr = firefox-esr-78;
+  firefox-esr = firefox-esr-91;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
