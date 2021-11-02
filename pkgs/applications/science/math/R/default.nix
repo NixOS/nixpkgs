@@ -14,11 +14,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "R";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "0r6kpnxjbvb7gdfg4m1z8zc6xd225vw81wrnf05ps9ajawk06pji";
+    sha256 = "sha256-IDYiXp9yB9TOCX5Ulyrs2qi0DX2ZEc0mSR+sWg+rOK8=";
   };
 
   dontUseImakeConfigure = true;
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
-    ./skip-check-for-aarch64.patch
   ];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
