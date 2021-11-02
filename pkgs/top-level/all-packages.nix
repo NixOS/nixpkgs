@@ -14033,7 +14033,7 @@ with pkgs;
 
   bloaty = callPackage ../development/tools/bloaty { };
 
-  bloomrpc = callPackage ../development/web/bloorpc { };
+  bloomrpc = callPackage ../development/web/bloomrpc { };
 
   bloop = callPackage ../development/tools/build-managers/bloop { };
 

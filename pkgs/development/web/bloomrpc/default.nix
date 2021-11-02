@@ -1,92 +1,40 @@
-{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsaLib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, gtk2
-, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
-, libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
+{ lib, fetchurl, appimageTools, pkgs }:
 
 let
-  runtimeLibs = lib.makeLibraryPath [
-    curl
-    glibc
-    libudev0-shim
-    nghttp2
-    openssl
-    stdenv.cc.cc
-  ];
-in stdenv.mkDerivation rec {
   pname = "bloomrpc";
-  version = "1.5.2";
+  version = "1.5.3";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url =
-      "https://github.com/uw-labs/bloomrpc/releases/download/${version}/bloomrpc_${version}_amd64.deb";
-    sha256 = "9da17bcd3ec579309661658849652e2bf8e0db6961716e94af299ee41f0fd778";
+    url = "https://github.com/uw-labs/${pname}/releases/download/${version}/BloomRPC-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
+    sha512 = "PebdYDpcplPN5y3mRu1mG6CXenYfYvBXNLgIGEr7ZgKnR5pIaOfJNORSNYSdagdGDb/B1sxuKfX4+4f2cqgb6Q==";
   };
 
-  nativeBuildInputs =
-    [ autoPatchelfHook dpkg makeWrapper gobject-introspection wrapGAppsHook ];
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
+  };
+in appimageTools.wrapType2 {
+  inherit name src;
 
-  buildInputs = [
-    alsaLib
-    at-spi2-atk
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    pango
-    gtk2
-    gtk3
-    gsettings-desktop-schemas
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libxcb
-    nspr
-    nss
-    stdenv.cc.cc
-  ];
+  multiPkgs = null; # no 32bit needed
+  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
-  dontBuild = true;
-  dontConfigure = true;
-
-  unpackPhase = "dpkg-deb -x $src .";
-
-  installPhase = ''
-    mkdir -p $out/share/bloomrpc $out/lib $out/bin
-
-    mv usr/share/* $out/share/
-    mv opt/BloomRPC/* $out/share/bloomrpc/
-    mv $out/share/bloomrpc/*.so $out/lib/
-
-    ln -s $out/share/bloomrpc/bloomrpc $out/bin/bloomrpc
-    sed -i 's|\/opt\/BloomRPC|'$out'/bin|g' $out/share/applications/bloomrpc.desktop
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/bloomrpc" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+  extraInstallCommands = ''
+    ln -s $out/bin/${name} $out/bin/${pname}
+    install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
+    install -m 444 -D ${appimageContents}/${pname}.png \
+      $out/share/icons/hicolor/512x512/apps/${pname}.png
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {
+    description = "Inspired by Postman and GraphQL Playground
+BloomRPC aims to provide the simplest and most efficient developer experience for exploring and querying your GRPC services.";
     homepage = "https://github.com/uw-labs/bloomrpc";
-    description = "GUI Client for GRPC Services";
-    license = licenses.lgpl3Only;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ matdsoupe ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Mdsp9070 ];
   };
-
 }
