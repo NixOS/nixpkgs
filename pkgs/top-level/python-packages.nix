@@ -2367,6 +2367,8 @@ in {
 
   easywatch = callPackage ../development/python-modules/easywatch { };
 
+  ebaysdk = callPackage ../development/python-modules/ebaysdk { };
+
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
   eccodes = toPythonModule (pkgs.eccodes.override {
