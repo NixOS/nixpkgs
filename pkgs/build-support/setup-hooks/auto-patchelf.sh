@@ -89,6 +89,7 @@ populateCacheForDep() {
 
             local soname="${found%.so*}"
             local foundso=
+            # TODO make this recursive?
             for foundso in "$rpathElem/$soname".so*; do
                 addToDepCache "$foundso"
             done
@@ -175,7 +176,7 @@ findDependency() {
 
     if [ $depCacheInitialised -eq 0 ]; then
         for lib in "${autoPatchelfLibs[@]}"; do
-            for so in "$lib/"*.so*; do addToDepCache "$so"; done
+            find "$lib" -not -type -d '(' -name '*.so' -or -name '*.so.*' ')' | while read so; do addToDepCache "$so"; done
         done
         depCacheInitialised=1
     fi
