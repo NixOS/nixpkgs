@@ -218,7 +218,9 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = callPackage common (rec {
+  nixStable = nix_2_3;
+
+  nix_2_3 = callPackage common (rec {
     pname = "nix";
     version = "2.3.16";
     src = fetchurl {
