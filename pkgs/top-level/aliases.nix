@@ -590,7 +590,7 @@ mapAliases ({
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
   nix-review = nixpkgs-review; # added 2019-12-22
-  nixFlakes = nix_2_4; # added 2021-05-21
+  nixFlakes = nixStable; # added 2021-05-21
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
