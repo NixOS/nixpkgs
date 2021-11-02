@@ -1,4 +1,4 @@
-{ lib, jdk, buildPythonPackage, fetchPypi, six, py4j }:
+{ lib, jdk8, buildPythonPackage, fetchPypi, six, py4j }:
 
 buildPythonPackage rec {
   pname = "databricks-connect";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   sourceRoot = ".";
 
-  propagatedBuildInputs = [ py4j six jdk ];
+  propagatedBuildInputs = [ py4j six jdk8 ];
 
   # requires network access
   doCheck = false;

@@ -1,20 +1,19 @@
-{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost
+, wrapQtAppsHook }:
 
 mkDerivation {
   pname = "citra";
-  version = "2020-12-07";
+  version = "2021-11-01";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "3f13e1cc2419fac837952c44d7be9db78b054a2f";
-    sha256 = "1bbg8cwrgncmcavqpj3yp4dbfkip1i491krp6dcpgvsd5yfr7f0v";
+    rev = "5a7d80172dd115ad9bc6e8e85cee6ed9511c48d0";
+    sha256 = "sha256-vy2JMizBsnRK9NBEZ1dxT7fP/HFhOZSsC+5P+Dzi27s=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [ SDL2 qtbase qtmultimedia boost ];
-
-  dontWrapQtApps = true;
 
   preConfigure = ''
     # Trick configure system.
