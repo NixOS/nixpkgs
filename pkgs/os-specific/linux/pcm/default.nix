@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "202110";
   pname = "pcm";
+  version = "202110";
 
   src = fetchFromGitHub {
     owner = "opcm";
