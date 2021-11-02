@@ -935,7 +935,7 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend super.rel8 pkgs.postgresql;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nix_2_3; });
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
