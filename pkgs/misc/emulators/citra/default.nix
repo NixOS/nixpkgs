@@ -1,4 +1,5 @@
-{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost
+, wrapQtAppsHook }:
 
 mkDerivation {
   pname = "citra";
@@ -11,10 +12,8 @@ mkDerivation {
     sha256 = "1bbg8cwrgncmcavqpj3yp4dbfkip1i491krp6dcpgvsd5yfr7f0v";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [ SDL2 qtbase qtmultimedia boost ];
-
-  dontWrapQtApps = true;
 
   preConfigure = ''
     # Trick configure system.
