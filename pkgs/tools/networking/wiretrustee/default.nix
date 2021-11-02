@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "wiretrustee";
-  version = "0.2.0-beta.4";
+  version = "0.2.2-beta.1";
 
   src = fetchFromGitHub {
     owner = "wiretrustee";
     repo = "wiretrustee";
     rev = "v${version}";
-    sha256 = "0p53y1dwa9ppifiv1wg29vqkln44cqv1mg758a356shl742q9f5n";
+    sha256 = "1n2hy91f7y32nw7m32vbm9sxh3c0qg4f3pzfd2w7dzk7vl6zrvk7";
   };
 
   vendorSha256 = "1sz5lbw0cvzspg19n45x8kx5xhs26hf2a726ls1byc6r5cg52hcw";
