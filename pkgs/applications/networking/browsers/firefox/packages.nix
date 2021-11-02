@@ -73,6 +73,9 @@ rec {
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      knownVulnerabilities = [
+        "Firefox ESR 78 has reached its end of life. Migrate to Firefox ESR 91 (`firefox-esr` or `firefox-esr-91`)."
+      ];
       license = lib.licenses.mpl20;
     };
     tests = [ nixosTests.firefox-esr-78 ];
