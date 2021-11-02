@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
-  version = "3.60.14";
+  version = "3.64.16";
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
-    rev = "8a86aa31444f6afa97e4ab4cc2c651b1243b8349";
-    sha256 = "sha256-2+zG0O5ZW3rA4c83HXWsQ/V72KwHgrynDH0i3rLBWwU=";
+    rev = "a5bc65e094bbfb86e6142ac1da59017ddccff69e";
+    sha256 = "sha256-3+5LWn+UBgLAX683MPHRHQMpW+gC5hGIwTtRVJHRWeE=";
   };
 
   nativeBuildInputs = [
