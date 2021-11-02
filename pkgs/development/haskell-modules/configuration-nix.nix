@@ -937,9 +937,9 @@ self: super: builtins.intersectAttrs super {
 
   cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nix_2_3; });
 
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nix_2_3; };
-
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nix_2_3; };
   hercules-ci-cnix-expr = super.hercules-ci-cnix-expr.override { nix = pkgs.nix_2_3; };
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nix_2_3; };
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
