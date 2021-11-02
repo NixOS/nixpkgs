@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YcTsC1ceCXKALroyZtgRYpqK3ysJhgzRJ8fBiCx7CCM=";
   };
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     mkdir -p $out/bin
     cp pcm*.x $out/bin
