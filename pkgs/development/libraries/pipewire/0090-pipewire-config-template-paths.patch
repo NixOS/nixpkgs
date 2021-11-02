@@ -1,5 +1,5 @@
 diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
-index 95632c250..a88aac6e2 100644
+index 648e13069..50f767f0c 100644
 --- a/src/daemon/pipewire.conf.in
 +++ b/src/daemon/pipewire.conf.in
 @@ -131,7 +131,7 @@ context.modules = [
@@ -15,8 +15,8 @@ index 95632c250..a88aac6e2 100644
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
      #
--    @sm_comment@{ path = "@session_manager_path@"  args = "@session_manager_args@" }
-+    @sm_comment@{ path = "<session_manager_path>"  args = "@session_manager_args@" }
+-    @sm_comment@{ path = "@session_manager_path@" args = "@session_manager_args@" }
++    @sm_comment@{ path = "<session_manager_path>" args = "@session_manager_args@" }
      #
      # You can optionally start the pulseaudio-server here as well
      # but it is better to start it as a systemd service.
