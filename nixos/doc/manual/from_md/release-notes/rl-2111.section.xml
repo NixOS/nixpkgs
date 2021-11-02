@@ -17,6 +17,15 @@
     <itemizedlist>
       <listitem>
         <para>
+          Nix has been updated to version 2.4, reference its
+          <link xlink:href="https://discourse.nixos.org/t/nix-2-4-released/15822">release
+          notes</link> for more information on what has changed. The
+          previous version of Nix, 2.3.16, remains available for the
+          time being in the <literal>nix_2_3</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>iptables</literal> now uses
           <literal>nf_tables</literal> backend.
         </para>
