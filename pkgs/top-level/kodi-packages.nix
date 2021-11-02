@@ -1,6 +1,10 @@
-{ lib, newScope, kodi }:
+{ lib, newScope, kodi, libretro }:
 
 with lib;
+
+let
+  inherit (libretro) snes9x;
+in
 
 let self = rec {
 
@@ -67,6 +71,10 @@ let self = rec {
 
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
+
+  libretro = callPackage ../applications/video/kodi-packages/libretro { };
+
+  libretro-snes9x = callPackage ../applications/video/kodi-packages/libretro-snes9x { inherit snes9x; };
 
   jellyfin = callPackage ../applications/video/kodi-packages/jellyfin { };
 
