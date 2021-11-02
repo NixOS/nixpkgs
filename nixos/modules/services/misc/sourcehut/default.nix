@@ -994,7 +994,7 @@ in
       webhooks = true;
       extraTimers.gitsrht-periodic = {
         service = baseService;
-        timerConfig.OnCalendar = ["20min"];
+        timerConfig.OnCalendar = ["*:0/20"];
       };
       extraConfig = mkMerge [
         {
@@ -1080,7 +1080,7 @@ in
       webhooks = true;
       extraTimers.hgsrht-periodic = {
         service = baseService;
-        timerConfig.OnCalendar = ["20min"];
+        timerConfig.OnCalendar = ["*:0/20"];
       };
       extraTimers.hgsrht-clonebundles = mkIf cfg.hg.cloneBundles {
         service = baseService;
