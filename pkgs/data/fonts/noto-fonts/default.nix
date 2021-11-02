@@ -110,12 +110,12 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2.028";
+    version = "2.034";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    version = builtins.replaceStrings [ "_" ] [ "." ] version;
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "googlefonts";
@@ -166,7 +166,7 @@ in
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
     };
   };
 
