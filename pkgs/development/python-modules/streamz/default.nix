@@ -14,6 +14,7 @@
 , toolz
 , tornado
 , zict
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,16 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-0wZ1ldLFRAIL9R+gLfwsFbL+gvdORAkYWNjnDmeafm8=";
   };
+
+  patches = [
+    # remove with next bump
+    (fetchpatch {
+      name = "fix-tests-against-distributed-2021.10.0.patch";
+      url = "https://github.com/python-streamz/streamz/commit/5bd3bc4d305ff40c740bc2550c8491be9162778a.patch";
+      sha256 = "1xzxcbf7yninkyizrwm3ahqk6ij2fmh0454iqjx2n7mmzx3sazx7";
+      includes = ["streamz/tests/test_dask.py"];
+    })
+  ];
 
   propagatedBuildInputs = [
     networkx
@@ -46,20 +57,21 @@ buildPythonPackage rec {
     requests
   ];
 
-  disabledTests = [
-    # Disable test_tcp_async because fails on sandbox build
-    "test_partition_timeout"
-    "test_tcp_async"
-    "test_tcp"
-  ];
-
-  disabledTestPaths = [
-    # Disable kafka tests
-    "streamz/tests/test_kafka.py"
-  ];
-
   pythonImportsCheck = [
     "streamz"
+  ];
+
+  disabledTests = [
+    # test_tcp_async fails on sandbox build
+    "test_tcp_async"
+    "test_tcp"
+    "test_partition_timeout"
+    # flaky
+    "test_from_iterable_backpressure"
+  ];
+  disabledTestPaths = [
+    # disable kafka tests
+    "streamz/tests/test_kafka.py"
   ];
 
   meta = with lib; {
