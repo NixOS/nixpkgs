@@ -99,7 +99,7 @@ let
   llvmPackages0 =
     if stdenv.isDarwin
       then buildPackages.llvmPackages
-    else buildPackages.llvmPackages_12;
+    else rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
