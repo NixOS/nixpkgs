@@ -91,6 +91,7 @@ in
         8030 # resourcemanager.scheduler.address
         8031 # resourcemanager.resource-tracker.address
         8032 # resourcemanager.address
+        8033 # resourcemanager.admin.address
       ]);
     })
 

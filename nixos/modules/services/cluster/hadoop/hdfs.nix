@@ -24,6 +24,15 @@ in
           Whether to run the HDFS NameNode
         '';
       };
+      formatOnInit = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Format HDFS namenode on first start. This is useful for quickly spinning up ephemeral HDFS clusters with a single namenode.
+          For HA clusters, initialization involves multiple steps across multiple nodes. Follow [this guide](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html)
+          to initialize an HA cluster manually.
+        '';
+      };
       inherit restartIfChanged;
       openFirewall = mkOption {
         type = types.bool;
@@ -50,6 +59,33 @@ in
         '';
       };
     };
+    journalnode = {
+      enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to run the HDFS JournalNode
+        '';
+      };
+      inherit restartIfChanged;
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Open firewall ports for journalnode
+        '';
+      };
+    };
+    zkfc = {
+      enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to run the HDFS ZooKeeper failover controller
+        '';
+      };
+      inherit restartIfChanged;
+    };
   };
 
   config = mkMerge [
@@ -59,9 +95,9 @@ in
         wantedBy = [ "multi-user.target" ];
         inherit (cfg.hdfs.namenode) restartIfChanged;
 
-        preStart = ''
+        preStart = (mkIf cfg.hdfs.namenode.formatOnInit ''
           ${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true
-        '';
+        '');
 
         serviceConfig = {
           User = "hdfs";
@@ -74,6 +110,7 @@ in
       networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.namenode.openFirewall [
         9870 # namenode.http-address
         8020 # namenode.rpc-address
+        8022 # namenode. servicerpc-address
       ]);
     })
     (mkIf cfg.hdfs.datanode.enabled {
@@ -96,8 +133,41 @@ in
         9867 # datanode.ipc.address
       ]);
     })
+    (mkIf cfg.hdfs.journalnode.enabled {
+      systemd.services.hdfs-journalnode = {
+        description = "Hadoop HDFS JournalNode";
+        wantedBy = [ "multi-user.target" ];
+        inherit (cfg.hdfs.journalnode) restartIfChanged;
+
+        serviceConfig = {
+          User = "hdfs";
+          SyslogIdentifier = "hdfs-journalnode";
+          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} journalnode";
+          Restart = "always";
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.datanode.openFirewall [
+        8480 # dfs.journalnode.http-address
+        8485 # dfs.journalnode.rpc-address
+      ]);
+    })
+    (mkIf cfg.hdfs.zkfc.enabled {
+      systemd.services.hdfs-zkfc = {
+        description = "Hadoop HDFS ZooKeeper failover controller";
+        wantedBy = [ "multi-user.target" ];
+        inherit (cfg.hdfs.zkfc) restartIfChanged;
+
+        serviceConfig = {
+          User = "hdfs";
+          SyslogIdentifier = "hdfs-zkfc";
+          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} zkfc";
+          Restart = "always";
+        };
+      };
+    })
     (mkIf (
-        cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled
+        cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled || cfg.hdfs.journalnode.enabled || cfg.hdfs.zkfc.enabled
     ) {
       users.users.hdfs = {
         description = "Hadoop HDFS user";

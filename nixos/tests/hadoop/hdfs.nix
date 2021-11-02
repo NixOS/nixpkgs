@@ -1,9 +1,13 @@
+# Test a minimal HDFS cluster with no HA
 import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
       services.hadoop = {
         package = pkgs.hadoop;
-        hdfs.namenode.enabled = true;
+        hdfs.namenode = {
+          enabled = true;
+          formatOnInit = true;
+        };
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
         };
@@ -13,10 +17,6 @@ import ../make-test-python.nix ({...}: {
           "dfs.namenode.http-bind-host" = "0.0.0.0";
         };
       };
-      networking.firewall.allowedTCPPorts = [
-        9870 # namenode.http-address
-        8020 # namenode.rpc-address
-      ];
     };
     datanode = {pkgs, ...}: {
       services.hadoop = {
@@ -26,11 +26,6 @@ import ../make-test-python.nix ({...}: {
           "fs.defaultFS" = "hdfs://namenode:8020";
         };
       };
-      networking.firewall.allowedTCPPorts = [
-        9864 # datanode.http.address
-        9866 # datanode.address
-        9867 # datanode.ipc.address
-      ];
     };
   };
 
@@ -50,5 +45,9 @@ import ../make-test-python.nix ({...}: {
 
     namenode.succeed("curl -f http://namenode:9870")
     datanode.succeed("curl -f http://datanode:9864")
+
+    datanode.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
+    datanode.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
+    assert "testfilecontents" in datanode.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
   '';
 })
