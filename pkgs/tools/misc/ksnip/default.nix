@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , kcolorpicker
 , kimageannotator
+, wrapQtAppsHook
 , qtsvg
 , qttranslations
 , qtx11extras
@@ -21,11 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "1izsk586n9fbm0di0hj6pxs7r0a6w554gpad1ghf247icr0pfc1l";
   };
 
-  dontWrapQtApps = true;
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
