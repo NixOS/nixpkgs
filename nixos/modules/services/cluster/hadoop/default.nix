@@ -70,6 +70,17 @@ with lib;
       description = "Hadoop yarn-site.xml definition";
     };
 
+    httpfsSite = mkOption {
+      default = { };
+      type = types.attrsOf types.anything;
+      example = literalExpression ''
+        {
+          "hadoop.http.max.threads" = 500;
+        }
+      '';
+      description = "Hadoop httpfs-site.xml definition";
+    };
+
     log4jProperties = mkOption {
       default = "${cfg.package}/lib/${cfg.package.untarDir}/etc/hadoop/log4j.properties";
       type = types.path;
@@ -118,7 +129,8 @@ with lib;
 
   config = mkMerge [
     (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users) {
+           builtins.hasAttr "hdfs" config.users.users ||
+           builtins.hasAttr "httpfs" config.users.users) {
       users.groups.hadoop = {
         gid = config.ids.gids.hadoop;
       };

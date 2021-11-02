@@ -86,6 +86,23 @@ in
       };
       inherit restartIfChanged;
     };
+    httpfs = {
+      enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to run the HDFS httpfs failover controller
+        '';
+      };
+      tempPath = mkOption {
+        type = types.path;
+        default = "/tmp/hadoop/httpfs";
+        description = ''
+          HTTPFS_TEMP path used by HTTPFS
+        '';
+      };
+      inherit restartIfChanged;
+    };
   };
 
   config = mkMerge [
@@ -166,6 +183,31 @@ in
         };
       };
     })
+    (mkIf cfg.hdfs.httpfs.enabled {
+      systemd.services.hdfs-httpfs = {
+        description = "Hadoop httpfs";
+        wantedBy = [ "multi-user.target" ];
+        inherit (cfg.hdfs.httpfs) restartIfChanged;
+
+        environment = {
+          HTTPFS_TEMP = cfg.hdfs.httpfs.tempPath;
+        };
+
+        preStart = ''
+          mkdir -p $HTTPFS_TEMP
+        '';
+
+        serviceConfig = {
+          User = "httpfs";
+          SyslogIdentifier = "hdfs-httpfs";
+          ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} httpfs";
+          Restart = "always";
+        };
+      };
+      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.datanode.openFirewall [
+        14000 # httpfs.http.port
+      ]);
+    })
     (mkIf (
         cfg.hdfs.namenode.enabled || cfg.hdfs.datanode.enabled || cfg.hdfs.journalnode.enabled || cfg.hdfs.zkfc.enabled
     ) {
@@ -175,6 +217,12 @@ in
         uid = config.ids.uids.hdfs;
       };
     })
-
+    (mkIf cfg.hdfs.httpfs.enabled {
+      users.users.httpfs = {
+        description = "Hadoop HTTPFS user";
+        group = "hadoop";
+        isSystemUser = true;
+      };
+    })
   ];
 }

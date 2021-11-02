@@ -2,19 +2,20 @@
 import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
+      virtualisation.memorySize = 1024;
       services.hadoop = {
         package = pkgs.hadoop;
-        hdfs.namenode = {
-          enabled = true;
-          formatOnInit = true;
+        hdfs = {
+          namenode = {
+            enabled = true;
+            formatOnInit = true;
+          };
+          httpfs.enabled = true;
         };
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
-        };
-        hdfsSite = {
-          "dfs.replication" = 1;
-          "dfs.namenode.rpc-bind-host" = "0.0.0.0";
-          "dfs.namenode.http-bind-host" = "0.0.0.0";
+          "hadoop.proxyuser.httpfs.groups" = "*";
+          "hadoop.proxyuser.httpfs.hosts" = "*";
         };
       };
     };
@@ -24,6 +25,8 @@ import ../make-test-python.nix ({...}: {
         hdfs.datanode.enabled = true;
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
+          "hadoop.proxyuser.httpfs.groups" = "*";
+          "hadoop.proxyuser.httpfs.hosts" = "*";
         };
       };
     };
@@ -49,5 +52,9 @@ import ../make-test-python.nix ({...}: {
     datanode.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
     datanode.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
     assert "testfilecontents" in datanode.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
+
+    namenode.wait_for_unit("hdfs-httpfs")
+    namenode.wait_for_open_port(14000)
+    assert "testfilecontents" in datanode.succeed("curl -f \"http://namenode:14000/webhdfs/v1/testfile?user.name=hdfs&op=OPEN\" 2>&1")
   '';
 })
