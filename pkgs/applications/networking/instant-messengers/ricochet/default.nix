@@ -1,15 +1,27 @@
-{ mkDerivation, lib, fetchurl, pkg-config, makeDesktopItem
-, qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
-, openssl, protobuf, qmake
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, pkg-config
+, makeDesktopItem
+, qtbase
+, qttools
+, qtmultimedia
+, qtquick1
+, qtquickcontrols
+, openssl
+, protobuf
+, qmake
 }:
 
 mkDerivation rec {
   pname = "ricochet";
   version = "1.1.4";
 
-  src = fetchurl {
-    url = "https://github.com/ricochet-im/ricochet/archive/v${version}.tar.gz";
-    sha256 = "1kfj42ksvj7axc809lb8siqzj5hck2pib427b63a3ipnqc5h1faf";
+  src = fetchFromGitHub {
+    owner = "ricochet-im";
+    repo = "ricochet";
+    rev = "v${version}";
+    sha256 = "sha256-CGVTHa0Hqj90WvB6ZbA156DVgzv/R7blsU550y2Ai9c=";
   };
 
   desktopItem = makeDesktopItem {
@@ -23,8 +35,13 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qttools qtmultimedia qtquick1 qtquickcontrols
-    openssl protobuf
+    qtbase
+    qttools
+    qtmultimedia
+    qtquick1
+    qtquickcontrols
+    openssl
+    protobuf
   ];
 
   nativeBuildInputs = [ pkg-config qmake ];
