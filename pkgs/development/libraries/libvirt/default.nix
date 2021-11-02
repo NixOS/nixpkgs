@@ -70,14 +70,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.8.0";
+  version = "7.9.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-pyfNCke/ok+n3ih00j86n58Czra0m6FSiPbZoJixmSE=";
+          sha256 = "sha256-gpzytfV0J5xA8ERuEWiBXT82uJcQVgJjyiznAlb3Low=";
         }
     else
       fetchFromGitLab
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
           owner = pname;
           repo = pname;
           rev = "v${version}";
-          sha256 = "sha256-/tSMJFgLPAiQXcZ2qZLM4XZqf96NtW3+zwKyrwGho2s=";
+          sha256 = "sha256-Ua6+EKLES3385fqhH2+qwnwE+X/nmWqIBxCXXE3SVhs=";
           fetchSubmodules = true;
         };
 
