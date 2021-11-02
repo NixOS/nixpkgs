@@ -5,15 +5,15 @@
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53
+, freetype, fontconfig, file, nspr, nss
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
 , icu69, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
+, autoconf213, which, gnused, rustPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
-, gtk2, gtk3, wrapGAppsHook
+, gtk3, wrapGAppsHook
 , debugBuild ? false
 
 ### optionals
@@ -91,20 +91,16 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast version "82" then rustPackages else rustPackages_1_45)
-    rustc cargo;
+  inherit (rustPackages) rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
   llvmPackages0 =
-    /**/ if stdenv.isDarwin
+    if stdenv.isDarwin
       then buildPackages.llvmPackages
-    else if lib.versionAtLeast rustc.llvm.version "11"
-      then buildPackages.llvmPackages_11
-    else buildPackages.llvmPackages_10;
+    else rustc.llvmPackages;
+
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
     bootBintoolsNoLibc = null;
@@ -116,8 +112,6 @@ let
   buildStdenv = if ltoSupport
                 then overrideCC stdenv llvmPackages.clangUseLLVM
                 else stdenv;
-
-  nss_pkg = if lib.versionOlder version "83" then nss_3_53 else nss;
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
   # RAM and the 32-bit memory space cannot handle that linking
@@ -135,27 +129,9 @@ buildStdenv.mkDerivation ({
 
   patches = [
   ] ++
-  lib.optional (lib.versionOlder version "86") ./env_var_for_system_dir-ff85.patch ++
   lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
-  lib.optional (lib.versionOlder version "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast version "90") ./no-buildconfig-ffx90.patch ++
-  lib.optional (ltoSupport && lib.versionOlder version "84") ./lto-dependentlibs-generation-ffx83.patch ++
-  lib.optional (ltoSupport && lib.versionAtLeast version "84" && lib.versionOlder version "86")
-    (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/fdff20c37be3";
-      sha256 = "135n9brliqy42lj3nqgb9d9if7x6x9nvvn0z4anbyf89bikixw48";
-    })
-
-  # This patch adds pipewire support for the ESR release
-  ++ lib.optional (pipewireSupport && lib.versionOlder version "83")
-    (fetchpatch {
-      # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
-      url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
-      sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
-    })
-
-  ++ patches;
-
+  patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
@@ -163,7 +139,7 @@ buildStdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gtk3 perl zip libjpeg zlib bzip2
+    gnum4 gtk3 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     xorg.pixman yasm libGLU libGL
@@ -177,7 +153,7 @@ buildStdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss_pkg
+    nspr nss
   ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -185,11 +161,9 @@ buildStdenv.mkDerivation ({
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  pipewireSupport pipewire
   ++ lib.optional  jemallocSupport jemalloc
-  ++ lib.optional  (lib.versionAtLeast version "82") gnum4
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
-                                          Foundation libobjc AddressBook cups ]
-  ++ lib.optional  (lib.versionOlder version "90") gtk2;
+                                          Foundation libobjc AddressBook cups ];
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
     -rpath ${llvmPackages.libunwind.out}/lib
@@ -201,22 +175,7 @@ buildStdenv.mkDerivation ({
     rm -rf obj-x86_64-pc-linux-gnu
     substituteInPlace toolkit/xre/glxtest.cpp \
       --replace 'dlopen("libpci.so' 'dlopen("${pciutils}/lib/libpci.so'
-  '' + lib.optionalString (pipewireSupport && lib.versionOlder version "83") ''
-    # substitute the /usr/include/ lines for the libraries that pipewire provides.
-    # The patch we pick from fedora only contains the generated moz.build files
-    # which hardcode the dependency paths instead of running pkg_config.
-    substituteInPlace \
-      media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
-      --replace /usr/include ${pipewire.dev}/include
-  '' + lib.optionalString (lib.versionAtLeast version "80" && lib.versionOlder version "81") ''
-    substituteInPlace dom/system/IOUtils.h \
-      --replace '#include "nspr/prio.h"'          '#include "prio.h"'
-
-    substituteInPlace dom/system/IOUtils.cpp \
-      --replace '#include "nspr/prio.h"'          '#include "prio.h"' \
-      --replace '#include "nspr/private/pprio.h"' '#include "private/pprio.h"' \
-      --replace '#include "nspr/prtypes.h"'       '#include "prtypes.h"'
-  '';
+ '';
 
   nativeBuildInputs =
     [
