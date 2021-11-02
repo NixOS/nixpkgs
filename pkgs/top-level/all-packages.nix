@@ -22801,6 +22801,8 @@ with pkgs;
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
 
+  kde-rounded-corners = libsForQt5.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
+
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
