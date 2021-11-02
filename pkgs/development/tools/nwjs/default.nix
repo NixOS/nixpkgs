@@ -79,6 +79,9 @@ in stdenv.mkDerivation rec {
 
       mkdir -p $out/bin
       ln -s $out/share/nwjs/nw $out/bin
+
+      mkdir $out/lib
+      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
   '';
 
   nativeBuildInputs = [ makeWrapper ];
