@@ -3,12 +3,13 @@
 , fetchPypi
 , hypothesis
 , pytest
+, pytest-arraydiff
 , pytest-astropy-header
 , pytest-doctestplus
 , pytest-filter-subpackage
-, pytest-remotedata
+, pytest-mock
 , pytest-openfiles
-, pytest-arraydiff
+, pytest-remotedata
 , setuptools-scm
 , pythonOlder
 }:
@@ -33,12 +34,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     hypothesis
+    pytest-arraydiff
     pytest-astropy-header
     pytest-doctestplus
     pytest-filter-subpackage
-    pytest-remotedata
+    pytest-mock
     pytest-openfiles
-    pytest-arraydiff
+    pytest-remotedata
   ];
 
   # pytest-astropy is a meta package and has no tests
