@@ -159,6 +159,11 @@ The following methods are available on machine objects:
 `execute`
 
 :   Execute a shell command, returning a list `(status, stdout)`.
+    Takes an optional parameter `check_return` that defaults to `True`.
+    Setting this parameter to `False` will not check for the return code
+    and return -1 instead. This can be used for commands that shut down
+    the VM and would therefore break the pipe that would be used for
+    retrieving the return code.
 
 `succeed`
 
