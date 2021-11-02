@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
+    rm bin/kotlinc
     mv * $out
 
     runHook postInstall
