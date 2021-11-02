@@ -14,9 +14,14 @@ let
   minor = lib.versions.minor linux.modDirVersion;
   patch = lib.versions.patch linux.modDirVersion;
 
+  # See http://linux-libre.fsfla.org/pub/linux-libre/releases
+  versionPrefix = if linux.kernelOlder "5.14" then
+    "gnu1"
+  else
+    "gnu";
 in linux.override {
   argsOverride = {
-    modDirVersion = "${linux.modDirVersion}-gnu1";
+    modDirVersion = "${linux.modDirVersion}-${versionPrefix}";
     isLibre = true;
 
     src = stdenv.mkDerivation {
@@ -37,6 +42,6 @@ in linux.override {
 
     passthru.updateScript = ./update-libre.sh;
 
-    maintainers = [ lib.maintainers.qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ivar ];
   };
 }

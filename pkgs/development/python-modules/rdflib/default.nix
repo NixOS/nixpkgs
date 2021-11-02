@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ce4d757eb26f4dd43205ec340d8c097f29e5adfe45d6ea20238c731dc679879";
+    sha256 = "f071caff0b68634e4a7bd1d66ea3416ac98f1cc3b915938147ea899c32608728";
   };
 
   propagatedBuildInputs = [isodate html5lib SPARQLWrapper ];

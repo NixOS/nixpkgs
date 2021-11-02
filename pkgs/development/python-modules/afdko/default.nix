@@ -58,7 +58,13 @@ buildPythonPackage rec {
   # https://github.com/adobe-type-tools/afdko/issues/1216
   doCheck = stdenv.isx86_64;
   checkInputs = [ pytestCheckHook ];
-  preCheck = "export PATH=$PATH:$out/bin";
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+
+    # Update tests to match ufinormalizer-0.6.1 expectations:
+    #   https://github.com/adobe-type-tools/afdko/issues/1418
+    find tests -name layerinfo.plist -delete
+  '';
   disabledTests = [
     # Disable slow tests, reduces test time ~25 %
     "test_report"

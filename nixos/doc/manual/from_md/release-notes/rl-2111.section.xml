@@ -17,6 +17,12 @@
     <itemizedlist>
       <listitem>
         <para>
+          <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
@@ -408,6 +414,14 @@
           that before NixOS 21.11, specifying either setuid or setgid
           but not owner/group resulted in wrappers owned by
           nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Since <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend and
+          <literal>ipset</literal> doesn’t support it, some applications
+          (ferm, shorewall, firehol) may have limited functionality.
         </para>
       </listitem>
       <listitem>

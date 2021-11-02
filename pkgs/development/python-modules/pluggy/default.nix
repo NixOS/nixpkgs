@@ -2,6 +2,7 @@
 , lib
 , fetchPypi
 , setuptools-scm
+, pythonOlder
 , importlib-metadata
 }:
 
@@ -23,12 +24,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ importlib-metadata ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://github.com/pytest-dev/pluggy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

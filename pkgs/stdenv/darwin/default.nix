@@ -458,7 +458,7 @@ rec {
           libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
           openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
           findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-          libssh2 nghttp2 libkrb5 ninja brotli;
+          libssh2 nghttp2 libkrb5 ninja brotli libiconv;
 
         "${finalLlvmPackages}" = super."${finalLlvmPackages}" // (
           let

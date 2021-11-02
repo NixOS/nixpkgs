@@ -44,6 +44,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  # test server needs to be available
+  preCheck = ''
+    export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
+  '';
+
   pytestFlagsArray = [ "tests/" ];
   # disable tests which touch network
   disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];

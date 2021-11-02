@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, mock, pytest, pytest-runner
-, configparser, enum34, mccabe, pycodestyle, pyflakes, functools32, typing ? null, importlib-metadata
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, configparser
+, enum34
+, mccabe
+, pycodestyle
+, pyflakes
+, functools32
+, typing
+, importlib-metadata
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,24 +23,37 @@ buildPythonPackage rec {
     sha256 = "07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b";
   };
 
-  checkInputs = [ pytest mock pytest-runner ];
-  propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
-    ++ lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
-    ++ lib.optionals (pythonOlder "3.4") [ enum34 ]
-    ++ lib.optionals (pythonOlder "3.5") [ typing ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pyflakes >= 2.3.0, < 2.4.0" "pyflakes >= 2.3.0, < 2.5.0"
+  '';
+
+  propagatedBuildInputs = [
+    pyflakes
+    pycodestyle
+    mccabe
+  ] ++ lib.optionals (pythonOlder "3.2") [
+    configparser
+    functools32
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    enum34
+  ] ++ lib.optionals (pythonOlder "3.5") [
+    typing
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   # Tests fail on Python 3.7 due to importlib using a deprecated interface
   doCheck = !(pythonOlder "3.8");
 
-  # fixtures fail to initialize correctly
-  checkPhase = ''
-    py.test tests --ignore=tests/integration/test_checker.py
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    description = "Code checking using pep8 and pyflakes";
-    homepage = "https://pypi.python.org/pypi/flake8";
+    description = "Flake8 is a wrapper around pyflakes, pycodestyle and mccabe.";
+    homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

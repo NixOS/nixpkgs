@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , zlib
 , xz
@@ -21,14 +22,27 @@
 
 buildPythonPackage rec {
   pname = "binwalk";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "ReFirmLabs";
     repo = "binwalk";
     rev = "v${version}";
-    sha256 = "sha256-lfHXutAp06Xr/TSBpDwBUBC/mWI9XuyImoKwA3inqgU=";
+    sha256 = "0phqyqv34vhh80dgipiggs4n3iq2vfjk9ywx2c5d8g61vzgbd2g8";
   };
+
+  patches = [
+    # test_firmware_zip fails with 2.3.3 upgrade
+    # https://github.com/ReFirmLabs/binwalk/issues/566
+    (fetchpatch {
+      url = "https://github.com/ReFirmLabs/binwalk/commit/dd4f2efd275c9dd1001130e82e0f985110cd2754.patch";
+      sha256 = "1707n4nf1d1ay1yn4i8qlrvj2c1120g88hjwyklpsc2s2dcnqj9r";
+      includes = [
+        "testing/tests/test_firmware_zip.py"
+      ];
+      revert = true;
+    })
+  ];
 
   propagatedBuildInputs = [ zlib xz gzip bzip2 gnutar p7zip cabextract squashfsTools xz pycrypto ]
   ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ]

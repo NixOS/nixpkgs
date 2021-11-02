@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, audio-metadata
 , bitarray
 , cryptography
 , deepdiff
@@ -40,7 +39,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    audio-metadata
     bitarray
     cryptography
     mediafile
