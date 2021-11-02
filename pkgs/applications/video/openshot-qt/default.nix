@@ -42,6 +42,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
+  passthru = {
+    inherit libopenshot;
+    inherit (libopenshot) libopenshot-audio;
+  };
+
   meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
