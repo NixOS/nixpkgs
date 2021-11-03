@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     atomicwrites
     configobj
     vobject
-    ruamel_yaml
+    ruamel-yaml
     ruamel_base
     unidecode
   ];

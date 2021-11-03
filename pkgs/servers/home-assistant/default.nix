@@ -220,7 +220,7 @@ in with py.pkgs; buildPythonApplication rec {
     pytz
     pyyaml
     requests
-    ruamel_yaml
+    ruamel-yaml
     voluptuous
     voluptuous-serialize
     yarl
