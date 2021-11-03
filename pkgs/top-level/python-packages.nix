@@ -2719,6 +2719,8 @@ in {
 
   flake8 = callPackage ../development/python-modules/flake8 { };
 
+  flake8-length = callPackage ../development/python-modules/flake8-length { };
+
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
