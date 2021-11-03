@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-bundle";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hdvdjm467w37clkhbifn54hbdmnxlbk66cj88lwaz26j4s2ik5g";
+    sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

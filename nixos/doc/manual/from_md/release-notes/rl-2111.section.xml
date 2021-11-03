@@ -1215,6 +1215,13 @@ Superuser created successfully.
           <link xlink:href="options.html#opt-virtualisation.additionalPaths"><literal>virtualisation.additionalPaths</literal></link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.ddclient.password</literal> option was
+          removed, and replaced with
+          <literal>services.ddclient.passwordFile</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
