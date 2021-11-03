@@ -3430,6 +3430,8 @@ in {
 
   hdate = callPackage ../development/python-modules/hdate { };
 
+  ha-av = callPackage ../development/python-modules/ha-av { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
