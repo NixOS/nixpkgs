@@ -7,16 +7,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0gql015zb3y95v68kmv2dscz7fnh89x1shrqxxqk5a0jhd2z93n1";
+    sha256 = "sha256-QNVzpnT77+9PXhq4Yz0q3o+GiQTVy7dOrg2yBTscoek=";
   };
 
-  cargoSha256 = "sha256-rL++3RstCSBMYFj9BeOo6gepfId/sje4ES3Wm+Mb4cQ=";
+  cargoSha256 = "sha256-G70QopoMqFrkOnuui3+3cEHYvmnf0meX1Ecv4q8FCpM=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
