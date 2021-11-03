@@ -20866,7 +20866,7 @@ in
   linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { });
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { });
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_14 { });
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
   # Hardkernel (Odroid) kernels.
