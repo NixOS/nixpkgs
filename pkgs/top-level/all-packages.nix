@@ -12574,12 +12574,12 @@ with pkgs;
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
-  gccgo = gccgo6;
-  gccgo6 = wrapCC (gcc6.cc.override {
-    name = "gccgo6";
+  gccgo = wrapCC (gcc.cc.override {
+    name = "gccgo";
     langCC = true; #required for go.
     langC = true;
     langGo = true;
+    langJit = true;
     profiledCompiler = false;
   });
 
