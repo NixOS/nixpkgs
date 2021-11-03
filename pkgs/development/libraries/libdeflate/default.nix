@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/ebiggers/libdeflate";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej kaction ];
   };
 }
