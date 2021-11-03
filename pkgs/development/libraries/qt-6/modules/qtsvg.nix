@@ -1,20 +1,17 @@
-{ pkg-config
-, qtModule
+{ qtModule
 , qtbase
+, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
 , libwebp
-# FIXME not found by cmake: libwebp-1.1.0/lib/libwebp.so.7.1.0
 , jasper
 , libmng
 , zlib
-, libglvnd
-, libxkbcommon
-, vulkan-headers
+, pkg-config # find libwebp
 }:
 
 qtModule {
   pname = "qtsvg";
-  qtInputs = [ qtbase libwebp jasper libmng zlib pkg-config
-    libglvnd libxkbcommon # TODO these should be inherited from qtbase
-  ];
-  outputs = [ "out" "dev" ];
+  qtInputs = [ qtbase ];
+  buildInputs = [ libwebp jasper libmng zlib libglvnd libxkbcommon vulkan-headers ];
+  nativeBuildInputs = [ pkg-config ];
+  hasPlugins = true;
 }
