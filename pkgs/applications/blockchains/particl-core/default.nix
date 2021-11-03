@@ -17,11 +17,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "particl-core";
-  version = "0.19.2.14";
+  version = "0.19.2.16";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "sha256-UMU3384r4RGVl0/7OPwdDva09vhQr+9Lqb1oD/PTva8=";
+    sha256 = "sha256-q/+bU2eAoIy7d61/56nTJSzXtOb0ny4FimBjJxfk5Gs=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
