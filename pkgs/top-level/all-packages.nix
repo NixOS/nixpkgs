@@ -28862,6 +28862,7 @@ with pkgs;
   picom = callPackage ../applications/window-managers/picom {};
 
   picom-next = picom.overrideAttrs (oldAttrs: rec {
+  pname = "picom-next";
     version = "vNext";
       src = fetchFromGitHub {
       owner = "yshui";
