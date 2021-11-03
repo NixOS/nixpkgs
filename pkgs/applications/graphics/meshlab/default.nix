@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "meshlab";
-  version = "2020.12";
+  version = "2021.10";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
     rev = "Meshlab-${version}";
-    sha256 = "QrnqXEVqI1ADUYWalZ0h/0+xS+gDZTinm0weT39onw0=";
+    sha256 = "sha256-ZFIi4TmRgLwfbeSZHCto3Dr2Uw62Cm58QjMklzFqOZM=";
     fetchSubmodules = true; # for vcglib
   };
 
