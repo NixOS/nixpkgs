@@ -947,7 +947,7 @@ rec {
 
   /* Use this function to import a JSON file as NixOS configuration.
 
-     importJSON -> path -> attrs
+     modules.importJSON :: path -> attrs
   */
   importJSON = file: {
     _file = file;
@@ -956,7 +956,7 @@ rec {
 
   /* Use this function to import a TOML file as NixOS configuration.
 
-     importTOML -> path -> attrs
+     modules.importTOML :: path -> attrs
   */
   importTOML = file: {
     _file = file;
