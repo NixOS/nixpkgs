@@ -24163,8 +24163,6 @@ with pkgs;
 
   clipit = callPackage ../applications/misc/clipit { };
 
-  cloud-print-connector = callPackage ../servers/cloud-print-connector { };
-
   cloud-hypervisor = callPackage ../applications/virtualization/cloud-hypervisor { };
 
   clp = callPackage ../applications/science/math/clp { };
