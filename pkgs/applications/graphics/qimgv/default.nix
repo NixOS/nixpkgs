@@ -11,6 +11,7 @@
 , opencv4
 , qtbase
 , libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
+, qtwayland
 , qt5compat
 , qtimageformats
 , qtsvg
@@ -39,6 +40,7 @@ mkDerivation rec {
     opencv4
     qtbase
     libglvnd libxkbcommon vulkan-headers
+    qtwayland
     qt5compat
     qtimageformats
     qtsvg
