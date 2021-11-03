@@ -77,17 +77,12 @@ common =
 
       propagatedBuildInputs = [ boehmgc ];
 
-      # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS =
-        # need to list libraries individually until
+      NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-        # is in a release
-          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
-
-        # need to detect it here until
+        (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
         # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-        # is in a release
-        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+        (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
+      ];
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
