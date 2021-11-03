@@ -572,6 +572,9 @@ let
     RoBMA = [ pkgs.jags ];
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
     rawrr = [ pkgs.mono ];
+    HDF5Array = [ pkgs.zlib.dev ];
+    FLAMES = [ pkgs.zlib.dev ];
+    ncdfFlow = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
