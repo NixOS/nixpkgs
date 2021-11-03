@@ -37,9 +37,9 @@ let
       # Those paths are mounted using BindPaths= or BindReadOnlyPaths=
       # for services needing access to them.
       "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht/logs";
-      "git.sr.ht".post-update-script = "/var/lib/sourcehut/gitsrht/bin/post-update-script";
+      "git.sr.ht".post-update-script = "/usr/bin/gitsrht-update-hook";
       "git.sr.ht".repos = "/var/lib/sourcehut/gitsrht/repos";
-      "hg.sr.ht".changegroup-script = "/var/lib/sourcehut/hgsrht/bin/changegroup-script";
+      "hg.sr.ht".changegroup-script = "/usr/bin/hgsrht-hook-changegroup";
       "hg.sr.ht".repos = "/var/lib/sourcehut/hgsrht/repos";
       # Making this a per service option despite being in a global section,
       # so that it uses the redis-server used by the service.
@@ -379,14 +379,6 @@ in
             type = types.path;
             default = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook";
             defaultText = "\${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook";
-            # Git hooks are run relative to their repository's directory,
-            # but gitsrht-update-hook looks up ../config.ini
-            apply = p: pkgs.writeShellScript "update-hook-wrapper" ''
-              set -e
-              test -e "''${PWD%/*}"/config.ini ||
-              ln -s /run/sourcehut/gitsrht/config.ini "''${PWD%/*}"/config.ini
-              exec -a "$0" '${p}' "$@"
-            '';
           };
           repos = mkOption {
             description = ''
@@ -425,14 +417,6 @@ in
             type = types.str;
             default = "${cfg.python}/bin/hgsrht-hook-changegroup";
             defaultText = "\${cfg.python}/bin/hgsrht-hook-changegroup";
-            # Mercurial's changegroup hooks are run relative to their repository's directory,
-            # but hgsrht-hook-changegroup looks up ./config.ini
-            apply = p: pkgs.writeShellScript "hook-changegroup-wrapper" ''
-              set -e
-              test -e "''$PWD"/config.ini ||
-              ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
-              exec -a "$0" '${p}' "$@"
-            '';
           };
           repos = mkOption {
             description = ''
@@ -830,8 +814,9 @@ in
             # Using this has the side effect of creating empty files in /usr/bin/
             optionals cfg.builds.enable [
               "${pkgs.writeShellScript "buildsrht-keys-wrapper" ''
-                set -ex
+                set -e
                 cd /run/sourcehut/buildsrht/subdir
+                set -x
                 exec -a "$0" ${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys "$@"
               ''}:/usr/bin/buildsrht-keys"
               "${pkgs.sourcehut.buildsrht}/bin/master-shell:/usr/bin/master-shell"
@@ -841,30 +826,61 @@ in
               # /path/to/gitsrht-keys calls /path/to/gitsrht-shell,
               # or [git.sr.ht] shell= if set.
               "${pkgs.writeShellScript "gitsrht-keys-wrapper" ''
-                set -ex
+                set -e
                 cd /run/sourcehut/gitsrht/subdir
+                set -x
                 exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-keys "$@"
               ''}:/usr/bin/gitsrht-keys"
               "${pkgs.writeShellScript "gitsrht-shell-wrapper" ''
                 set -e
                 cd /run/sourcehut/gitsrht/subdir
+                set -x
                 exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-shell "$@"
               ''}:/usr/bin/gitsrht-shell"
+              "${pkgs.writeShellScript "gitsrht-update-hook" ''
+                set -e
+                test -e "''${PWD%/*}"/config.ini ||
+                # Git hooks are run relative to their repository's directory,
+                # but gitsrht-update-hook looks up ../config.ini
+                ln -s /run/sourcehut/gitsrht/config.ini "''${PWD%/*}"/config.ini
+                # hooks/post-update calls /usr/bin/gitsrht-update-hook as hooks/stage-3
+                # but this wrapper being a bash script, it overrides $0 with /usr/bin/gitsrht-update-hook
+                # hence this hack to put hooks/stage-3 back into gitsrht-update-hook's $0
+                if test "''${STAGE3:+set}"
+                then
+                  set -x
+                  exec -a hooks/stage-3 ${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook "$@"
+                else
+                  export STAGE3=set
+                  set -x
+                  exec -a "$0" ${pkgs.sourcehut.gitsrht}/bin/gitsrht-update-hook "$@"
+                fi
+              ''}:/usr/bin/gitsrht-update-hook"
             ] ++
             optionals cfg.hg.enable [
               # /path/to/hgsrht-keys calls /path/to/hgsrht-shell,
               # or [hg.sr.ht] shell= if set.
               "${pkgs.writeShellScript "hgsrht-keys-wrapper" ''
-                set -ex
+                set -e
                 cd /run/sourcehut/hgsrht/subdir
+                set -x
                 exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-keys "$@"
               ''}:/usr/bin/hgsrht-keys"
-              ":/usr/bin/hgsrht-shell"
               "${pkgs.writeShellScript "hgsrht-shell-wrapper" ''
                 set -e
                 cd /run/sourcehut/hgsrht/subdir
+                set -x
                 exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-shell "$@"
               ''}:/usr/bin/hgsrht-shell"
+              # Mercurial's changegroup hooks are run relative to their repository's directory,
+              # but hgsrht-hook-changegroup looks up ./config.ini
+              "${pkgs.writeShellScript "hgsrht-hook-changegroup" ''
+                set -e
+                test -e "''$PWD"/config.ini ||
+                ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
+                set -x
+                exec -a "$0" ${cfg.python}/bin/hgsrht-hook-changegroup "$@"
+              ''}:/usr/bin/hgsrht-hook-changegroup"
             ];
         };
       };
@@ -983,7 +999,6 @@ in
       baseService = {
         path = [ cfg.git.package ];
         serviceConfig.BindPaths = [ "${cfg.settings."git.sr.ht".repos}:/var/lib/sourcehut/gitsrht/repos" ];
-        serviceConfig.BindReadOnlyPaths = [ "${cfg.settings."git.sr.ht".post-update-script}:/var/lib/sourcehut/gitsrht/bin/post-update-script" ];
       };
       in {
       inherit configIniOfService;
@@ -1069,7 +1084,6 @@ in
       baseService = {
         path = [ cfg.hg.package ];
         serviceConfig.BindPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/sourcehut/hgsrht/repos" ];
-        serviceConfig.BindReadOnlyPaths = [ "${cfg.settings."ht.sr.ht".changegroup-script}:/var/lib/sourcehut/hgsrht/bin/changegroup-script" ];
       };
       in {
       inherit configIniOfService;
