@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.cassidyjames.ideogram";
   };
 
 }
