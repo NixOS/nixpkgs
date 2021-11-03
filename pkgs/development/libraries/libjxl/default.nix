@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "0grljgmy6cfhm8zni9d1mdn01qzc49k1pl75vhr7qcd3sp4r8lxm";
+    sha256 = "sha256-fTK5hyU9PZ6nigMsfzVugwviihgAXfEcLF+l+n5h+54=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
