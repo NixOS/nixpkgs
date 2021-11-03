@@ -337,7 +337,6 @@ let
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
-    proj4 = [ pkgs.proj ];
     protolite = [ pkgs.protobuf ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
@@ -575,6 +574,7 @@ let
     HDF5Array = [ pkgs.zlib.dev ];
     FLAMES = [ pkgs.zlib.dev ];
     ncdfFlow = [ pkgs.zlib.dev ];
+    proj4 = [ pkgs.proj.dev ];
   };
 
   packagesRequiringX = [
@@ -823,7 +823,6 @@ let
     "av"
     "rgl"
     "NetLogoR"
-    "proj4"
     "x13binary"
 
     # Impure network access during build
@@ -1191,6 +1190,13 @@ let
     arrow = old.arrow.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    proj4 = old.proj4.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
       '';
     });
   };
