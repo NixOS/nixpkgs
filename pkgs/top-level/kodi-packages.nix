@@ -72,6 +72,8 @@ let self = rec {
 
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
 
+  keymap = callPackage ../applications/video/kodi-packages/keymap { };
+
   netflix = callPackage ../applications/video/kodi-packages/netflix { };
 
   svtplay = callPackage ../applications/video/kodi-packages/svtplay { };
