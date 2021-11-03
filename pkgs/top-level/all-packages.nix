@@ -31236,6 +31236,8 @@ with pkgs;
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
+  pop-desktop-widget = callPackage ../desktops/gnome/core/pop-desktop-widget { };
+
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   gnome-themes-extra = gnome.gnome-themes-extra;
