@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "kitsas";
-  version = "3.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    sha256 = "sha256-UH2bFJZd83APRjlv6JR+Uy+ng4DWnnLmavAgjgSOiRo=";
+    sha256 = "sha256-nmlGLrVsTQawYHNgaax9EiutL4xgFdOD34Q4/rnB/D0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
