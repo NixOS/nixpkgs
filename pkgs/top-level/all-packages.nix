@@ -31238,6 +31238,8 @@ with pkgs;
 
   pop-desktop-widget = callPackage ../desktops/gnome/core/pop-desktop-widget { };
 
+  pop-control-center = callPackage ../desktops/gnome/core/pop-control-center { };
+
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   gnome-themes-extra = gnome.gnome-themes-extra;
