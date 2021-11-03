@@ -177,6 +177,7 @@
 , {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "lua-fmt"
 , "madoko"
+, "manta"
 , "markdownlint-cli"
 , "markdownlint-cli2"
 , "markdown-link-check"
