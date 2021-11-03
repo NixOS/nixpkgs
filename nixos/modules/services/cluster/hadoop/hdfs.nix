@@ -17,13 +17,7 @@ in
 {
   options.services.hadoop.hdfs = {
     namenode = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run the HDFS NameNode
-        '';
-      };
+      enable = mkEnableOption "Whether to run the HDFS NameNode";
       formatOnInit = mkOption {
         type = types.bool;
         default = false;
@@ -43,13 +37,7 @@ in
       };
     };
     datanode = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run the HDFS DataNode
-        '';
-      };
+      enable = mkEnableOption "Whether to run the HDFS DataNode";
       inherit restartIfChanged;
       openFirewall = mkOption {
         type = types.bool;
@@ -60,13 +48,7 @@ in
       };
     };
     journalnode = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run the HDFS JournalNode
-        '';
-      };
+      enable = mkEnableOption "Whether to run the HDFS JournalNode";
       inherit restartIfChanged;
       openFirewall = mkOption {
         type = types.bool;
@@ -77,23 +59,11 @@ in
       };
     };
     zkfc = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run the HDFS ZooKeeper failover controller
-        '';
-      };
+      enable = mkEnableOption "Whether to run the HDFS ZooKeeper failover controller";
       inherit restartIfChanged;
     };
     httpfs = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run the HDFS httpfs failover controller
-        '';
-      };
+      enable = mkEnableOption "Whether to run the HDFS HTTPfs server";
       tempPath = mkOption {
         type = types.path;
         default = "/tmp/hadoop/httpfs";
