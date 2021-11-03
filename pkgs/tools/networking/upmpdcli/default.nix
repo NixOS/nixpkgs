@@ -11,12 +11,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "upmpdcli";
-  version = "1.4.7";
+  version = "1.5.11";
 
   src = fetchgit {
     url = "https://framagit.org/medoc92/upmpdcli.git";
     rev = "upmpdcli-v${version}";
-    sha256 = "sha256-T7qbXSYkrB0iHnclKqpSLk+xOj02sBZrnok7ZJUYRwA=";
+    sha256 = "sha256-H12QgB4jCUHR2kTdU2uch8IJz1dF7K5vKNoVb583Olo=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config libupnpp libnpupnp curl expat mpd_clientlib libmicrohttpd jsoncpp
