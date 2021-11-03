@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mysqltuner";
-  version = "1.7.21";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "major";
     repo = "MySQLTuner-perl";
     rev = version;
-    sha256 = "sha256-Yv1XjD8sZcmGr2SVD6TEElUH7vspJ61WwQwfXLOrao0=";
+    sha256 = "sha256-ezF0zjQB/KWD5rUcbXx2uwiNLsIJ7ZKMoqkclP7oc98=";
   };
 
   postPatch = ''
