@@ -1,8 +1,5 @@
 { lib
 , stdenv
-#, bundlerApp
-#, bundlerUpdateScript
-#, ruby
 , bundlerEnv
 , fetchFromGitHub
 , rubyPackages_3_0
@@ -14,6 +11,8 @@
 , fixup_yarn_lock
 , git
 , cacert
+, which
+, strace
 }:
 
 with rubyPackages_3_0;
@@ -72,16 +71,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  /* yarnOfflineCache = fetchYarnDeps {
+  yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = lib.fakeSha256;
+    sha256 = "19ihzd5zkml5ii660cbqprd7iyjrhczxb01pz5swx6ign9zsd18x";
   };
 
   assets = stdenv.mkDerivation {
     pname = "chatwoot-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs-16_x yarn git cacert ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs-16_x yarn git cacert which strace ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.
@@ -98,8 +97,7 @@ stdenv.mkDerivation rec {
       # rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      # mv config/database.yml.env config/database.yml
-      # mv config/gitlab.yml.example config/gitlab.yml
+      cp .env.example .env
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
@@ -109,8 +107,11 @@ stdenv.mkDerivation rec {
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      cat yarn.lock | grep is-plain-object
 
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+      # TODO: it "can't find git" which appears to be PWD being missing https://fantashit.com/error-couldn-t-find-the-binary-git/
+      # yarn install --verbose --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+      npm i --verbose
 
       patchShebangs node_modules/
 
@@ -132,7 +133,7 @@ stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
-  }; */
+  };
 
   src = fetchFromGitHub {
     owner = "mkg20001";
@@ -192,7 +193,7 @@ stdenv.mkDerivation rec {
       ln -s "$TARGET" "$LOCAL"
     }
     cp -r . $out
-    # ln -sf ''${assets} $out/public/assets
+    ln -sf ${assets} $out/public/assets
     # rm -rf $out/log
     lnk log /var/log/chatwoot
     lnk tmp /tmp

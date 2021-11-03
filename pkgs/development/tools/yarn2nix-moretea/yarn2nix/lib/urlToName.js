@@ -9,6 +9,14 @@ const path = require('path')
 // - git+https://1234user:1234pass@git.graphile.com/git/users/1234user/postgraphile-supporter.git
 // - https://codeload.github.com/Gargron/emoji-mart/tar.gz/934f314fd8322276765066e8a2a6be5bac61b1cf
 
+const yarnExotics = [
+  'codeload.github.com',
+  'github.com',
+  'bitbucket.org',
+  'gist.github.com',
+  'gitlab.com'
+]
+
 function urlToName(url) {
 
   // Yarn generates `codeload.github.com` tarball URLs, where the final
@@ -17,7 +25,7 @@ function urlToName(url) {
   let isCodeloadGitTarballUrl =
     url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
 
-  if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
+  if (url.startsWith('git+') /*|| yarnExotics.indexOf(new URL(url).hostname)*/ !== -1 || isCodeloadGitTarballUrl) {
     return path.basename(url)
   }
 
