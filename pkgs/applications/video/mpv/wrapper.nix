@@ -1,8 +1,8 @@
 # Arguments that this derivation gets when it is created with `callPackage`
 { stdenv
 , lib
-, symlinkJoin
 , makeWrapper
+, symlinkJoin
 , yt-dlp
 }:
 
@@ -10,7 +10,7 @@
 mpv:
 
 let
-  # arguments to the function (called `wrapMpv` in all-packages.nix)
+  # arguments to the function (exposed as `wrapMpv` in all-packages.nix)
   wrapper = {
     extraMakeWrapperArgs ? [],
     youtubeSupport ? true,
