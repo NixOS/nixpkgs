@@ -1,18 +1,24 @@
-{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, curl, expat, libmicrohttpd }:
+{ fetchgit, stdenv, lib, autoreconfHook, pkg-config, curl, expat, libmicrohttpd, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "libnpupnp";
-  version = "2.1.2";
+  version = "4.1.5";
 
   src = fetchgit {
     url = "https://framagit.org/medoc92/npupnp.git";
     rev = "libnpupnp-v${version}";
-    sha256 = "sha256-EEUCMxVCcgJNxWrHMqJ9R4ap/hlBL3tzAPXR7OrqBRw=";
+    sha256 = "sha256-eMQ5auMLdZwk6UorXQaWE9JKBHytTApnetAB4gn76RQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config curl expat libmicrohttpd ];
 
   #hardeningDisable = [ "fortify" ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = {
     description = "A C++ base UPnP library, derived from Portable UPnP, a.k.a libupnp";
