@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "8.1.1";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-Z2nruyowC3NG4Wb8AFBL0PME/zp9D7SwQdMSl6VjH/w=";
+    sha256 = "sha256-YXZ3txBWW5vUcdYLISJPxdFGCQpKi1vvJlX8rntujg8=";
   };
 
   patches = [
