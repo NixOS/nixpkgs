@@ -369,7 +369,7 @@ rec {
 
      Example:
        escapeXML ''"test" 'test' < & >''
-       => "\\[\\^a-z]\\*"
+       => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
   */
   escapeXML = builtins.replaceStrings
     ["\"" "'" "<" ">" "&"]

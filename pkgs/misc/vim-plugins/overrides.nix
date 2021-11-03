@@ -373,6 +373,10 @@ self: super: {
       '';
     };
 
+  lean-nvim = super.lean-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
+
   lens-vim = super.lens-vim.overrideAttrs (old: {
     # remove duplicate g:lens#animate in doc/lens.txt
     # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
