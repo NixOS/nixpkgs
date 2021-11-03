@@ -8528,7 +8528,7 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
-  simple_di = callPackage ../development/python-modules/simple_di { };
+  simple-di = callPackage ../development/python-modules/simple_di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
