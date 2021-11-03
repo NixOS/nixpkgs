@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.donadigo.appeditor";
   };
 }

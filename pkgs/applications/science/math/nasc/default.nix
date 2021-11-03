@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.parnold_x.nasc";
   };
 }
