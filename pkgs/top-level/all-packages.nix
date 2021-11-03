@@ -2186,6 +2186,8 @@ with pkgs;
 
   bmake = callPackage ../development/tools/build-managers/bmake { };
 
+  go-mk = callPackage ../development/tools/build-managers/go-mk { };
+
   boca = callPackage ../development/libraries/boca { };
 
   bochs = callPackage ../applications/virtualization/bochs {
