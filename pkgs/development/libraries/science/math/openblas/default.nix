@@ -129,7 +129,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.17";
+  version = "0.3.18";
 
   outputs = [ "out" "dev" ];
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "11j103s851mml6kns781kha0asxjz6b6s1vbv80aq3b6g7p05pms";
+    sha256 = "sha256-b5i52rjsH65qAIlYGXQrzVxChi8/fwbD4eJTrxVq7Z8=";
   };
 
   inherit blas64;
