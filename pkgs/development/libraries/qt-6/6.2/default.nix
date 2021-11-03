@@ -187,6 +187,7 @@ let
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
+      qt5compat = callPackage ../modules/qt5compat.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
