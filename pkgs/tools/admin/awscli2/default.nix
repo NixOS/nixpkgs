@@ -82,7 +82,7 @@ with py.pkgs; buildPythonApplication rec {
     prompt-toolkit
     pyyaml
     rsa
-    ruamel_yaml
+    ruamel-yaml
     s3transfer
     six
     wcwidth

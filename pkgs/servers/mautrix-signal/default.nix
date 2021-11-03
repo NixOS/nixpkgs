@@ -24,7 +24,7 @@ python3.pkgs.buildPythonPackage rec {
     python-olm
     python_magic
     qrcode
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
   ];

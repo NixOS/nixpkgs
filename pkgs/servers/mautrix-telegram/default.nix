@@ -47,7 +47,7 @@ in python.pkgs.buildPythonPackage rec {
     mautrix
     sqlalchemy
     CommonMark
-    ruamel_yaml
+    ruamel-yaml
     python_magic
     telethon
     telethon-session-sqlalchemy
