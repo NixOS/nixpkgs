@@ -1705,6 +1705,8 @@ in {
 
   confuse = callPackage ../development/python-modules/confuse { };
 
+  confight = callPackage ../development/python-modules/confight { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   consonance = callPackage ../development/python-modules/consonance { };
@@ -3769,6 +3771,8 @@ in {
   injector = callPackage ../development/python-modules/injector { };
 
   inkex = callPackage ../development/python-modules/inkex { };
+
+  inotify = callPackage ../development/python-modules/inotify { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 

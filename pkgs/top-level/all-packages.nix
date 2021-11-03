@@ -7352,6 +7352,8 @@ with pkgs;
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };
 
+  lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
+
   lzfse = callPackage ../tools/compression/lzfse { };
 
   lzham = callPackage ../tools/compression/lzham { };
