@@ -430,26 +430,27 @@ rec {
 
       # an attrset 'name' => list of unmatched definitions for 'name'
       unmatchedDefnsByName =
-        if configs == []
-        then
-          # When no config values exist, there can be no unmatched config, so
-          # we short circuit and avoid evaluating more _options_ than necessary.
-          {}
-        else
-          # Propagate all unmatched definitions from nested option sets
-          mapAttrs (n: v: v.unmatchedDefns) resultsByName
-          # Plus the definitions for the current prefix that don't have a matching option
-          // removeAttrs defnsByName' (attrNames matchedOptions);
+        # Propagate all unmatched definitions from nested option sets
+        mapAttrs (n: v: v.unmatchedDefns) resultsByName
+        # Plus the definitions for the current prefix that don't have a matching option
+        // removeAttrs defnsByName' (attrNames matchedOptions);
     in {
       inherit matchedOptions;
 
       # Transforms unmatchedDefnsByName into a list of definitions
-      unmatchedDefns = concatLists (mapAttrsToList (name: defs:
-        map (def: def // {
-          # Set this so we know when the definition first left unmatched territory
-          prefix = [name] ++ (def.prefix or []);
-        }) defs
-      ) unmatchedDefnsByName);
+      unmatchedDefns =
+        if configs == []
+        then
+          # When no config values exist, there can be no unmatched config, so
+          # we short circuit and avoid evaluating more _options_ than necessary.
+          []
+        else
+          concatLists (mapAttrsToList (name: defs:
+            map (def: def // {
+              # Set this so we know when the definition first left unmatched territory
+              prefix = [name] ++ (def.prefix or []);
+            }) defs
+          ) unmatchedDefnsByName);
     };
 
   /* Merge multiple option declarations into a single declaration.  In
