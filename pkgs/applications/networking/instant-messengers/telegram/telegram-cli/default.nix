@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "Command-line interface for Telegram, that uses readline interface, it's a client implementation of TGL library";
     downloadPage = "https://github.com/kenorb-contrib/tg";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

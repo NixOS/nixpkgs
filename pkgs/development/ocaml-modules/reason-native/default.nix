@@ -23,7 +23,7 @@ let
             downloadPage = "https://github.com/reasonml/reason-native";
             homepage = "https://reason-native.com/";
             license = licenses.mit;
-            maintainers = with maintainers; [ superherointj ];
+            maintainers = with maintainers; [ ];
           } // (prepkg.meta or {});
         } // prepkg)
   );

@@ -10,6 +10,7 @@
 , llvmSharedForBuild
 , llvmSharedForHost
 , llvmSharedForTarget
+, llvmPackagesForBuild # Exposed through rustc for LTO in Firefox
 }:
 { stdenv, lib
 , buildPackages
@@ -85,7 +86,7 @@
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackagesForBuild;
 
         patches = rustcPatches;
 
