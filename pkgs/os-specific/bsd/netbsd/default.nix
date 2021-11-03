@@ -192,6 +192,12 @@ in lib.makeScopeWithSplicing
     configurePlatforms = [ "build" "host" ];
     configureFlags = [
       "--cache-file=config.cache"
+    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # We include this header in our musl package only for legacy
+      # compatibility, and compat works fine without it (and having it
+      # know about sys/cdefs.h breaks packages like glib when built
+      # statically).
+      "ac_cv_header_sys_cdefs_h=no"
     ];
 
     nativeBuildInputs = with buildPackages.netbsd; commonDeps ++ [
