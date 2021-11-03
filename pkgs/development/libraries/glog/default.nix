@@ -2,29 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "glog";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "1xd3maiipfbxmhc9rrblc5x52nxvkwxp14npg31y5njqvkvzax9b";
+    sha256 = "17014q25c99qyis6l3fwxidw6222bb269fdlr74gn7pzmzg4lvg3";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    # TODO: Remove at next release that includes this commit.
+  patches = [
+    # Fix duplicate-concatenated nix store path in cmake file, see:
+    # https://github.com/NixOS/nixpkgs/pull/144561#issuecomment-960296043
+    # TODO: Remove when https://github.com/google/glog/pull/733 is merged and available.
     (fetchpatch {
-      name = "glog-Fix-symbolize_unittest-for-musl-builds.patch";
-      url = "https://github.com/google/glog/commit/834dd780bf1fe0704b8ed0350ca355a55f711a9f.patch";
-      sha256 = "0k4lanxg85anyvjsj3mh93bcgds8gizpiamcy2zvs3yyfjl40awn";
+      name = "glog-cmake-Fix-incorrect-relative-path-concatenation.patch";
+      url = "https://github.com/google/glog/pull/733/commits/57c636c02784f909e4b5d3c2f0ecbdbb47097266.patch";
+      sha256 = "1py93gkzmcyi2ypcwyj3nri210z8fmlaif51yflzmrrv507zd7bi";
     })
   ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # A path clash on case-insensitive file systems blocks creation of the build directory.
-    # The file in question is specific to bazel and does not influence the build result.
-    rm BUILD
-  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -32,8 +28,18 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
+  # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
+  doCheck = !stdenv.isDarwin;
   checkInputs = [ perl ];
-  doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
+
+  # Add `build/` directory (`$PWD`) to LD_LIBRARY_PATH so that the built library
+  # can be loaded for the tests.
+  # Adding to LD_LIBRARY_PATH correctly is nontrivial:
+  #   https://jdhao.github.io/2021/07/03/ld_library_path_empty_item/
+  #   https://unix.stackexchange.com/questions/162891/append-to-path-like-variable-without-creating-leading-colon-if-unset
+  preCheck = ''
+    export LD_LIBRARY_PATH=''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}''$PWD
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";
