@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jwBDa/TfXrD+f0q4nyQkpi52Jwl1XWZrMd3fPowNzgA=";
+    sha256 = "sha256-Aop0mNxdea4/Z49HCusKDyGheXzZQhqboz0pv5ElGa0=";
   };
 
-  vendorSha256 = "sha256-/K1kBuxGEDUCBC7PiSpQRv1NEvTKwN+vNg2rz7pg838=";
+  vendorSha256 = "sha256-sAcDyGNOSm+BnsYyrR2x1vkGo6ZEykhkF7L9lzPrD+o=";
 
   meta = with lib; {
     description = "Proxy checker and IP rotator";
