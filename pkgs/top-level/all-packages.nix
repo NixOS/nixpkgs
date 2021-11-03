@@ -28859,9 +28859,18 @@ with pkgs;
 
   inherit (xorg) xcompmgr;
 
-  picom-tryone = callPackage ../applications/window-managers/picom-tryone {};
-
   picom = callPackage ../applications/window-managers/picom {};
+
+  picom-next = picom.overrideAttrs (oldAttrs: rec {
+    version="vNext";
+      src = fetchFromGitHub {
+      owner = "yshui";
+      repo = "picom";
+      rev = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
+      sha256 = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
+  };
+    maintainers = with maintainers; [ GKasparov ];
+  });
 
   xd = callPackage ../applications/networking/p2p/xd {};
 
