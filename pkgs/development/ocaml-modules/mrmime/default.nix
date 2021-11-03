@@ -72,6 +72,6 @@ buildDunePackage rec {
     description = "Parser and generator of mail in OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/mrmime";
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

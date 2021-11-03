@@ -13,7 +13,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "A library for embedding location information inside executable and libraries";
     inherit (dune_2.meta) homepage;
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = with lib.maintainers; [ ];
     license = licenses.mit;
   };
 }

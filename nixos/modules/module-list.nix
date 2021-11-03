@@ -49,6 +49,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/gkraken.nix
+  ./hardware/flirc.nix
   ./hardware/i2c.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
@@ -390,6 +391,7 @@
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/finance/odoo.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix

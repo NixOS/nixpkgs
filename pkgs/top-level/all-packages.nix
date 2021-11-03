@@ -1669,6 +1669,8 @@ with pkgs;
 
   flavours = callPackage ../applications/misc/flavours { };
 
+  flirc = libsForQt5.callPackage ../applications/video/flirc { };
+
   flood = nodePackages.flood;
 
   font-config-info = callPackage ../tools/misc/font-config-info { };
@@ -3376,7 +3378,11 @@ with pkgs;
 
   optar = callPackage ../tools/graphics/optar {};
 
+  oni2 = callPackage ../applications/editors/oni2 { };
+
   obinskit = callPackage ../applications/misc/obinskit {};
+
+  odoo = callPackage ../applications/finance/odoo {};
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
@@ -17835,6 +17841,8 @@ with pkgs;
 
   libkml = callPackage ../development/libraries/libkml { };
 
+  libks = callPackage ../development/libraries/libks { };
+
   libksba = callPackage ../development/libraries/libksba { };
 
   libksi = callPackage ../development/libraries/libksi { };
@@ -23533,7 +23541,7 @@ with pkgs;
   tenderness = callPackage ../data/fonts/tenderness { };
 
   terminus_font = callPackage ../data/fonts/terminus-font
-    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
+    { inherit (buildPackages.xorg) mkfontscale; };
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
@@ -24160,8 +24168,6 @@ with pkgs;
   clipmenu = callPackage ../applications/misc/clipmenu { };
 
   clipit = callPackage ../applications/misc/clipit { };
-
-  cloud-print-connector = callPackage ../servers/cloud-print-connector { };
 
   cloud-hypervisor = callPackage ../applications/virtualization/cloud-hypervisor { };
 
