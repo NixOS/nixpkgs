@@ -804,6 +804,8 @@ let
     "CoTiMA"
     "TBRDist"
     "Rogue"
+    "fixest"
+    "paxtoolsr"
   ];
 
   packagesToSkipCheck = [
