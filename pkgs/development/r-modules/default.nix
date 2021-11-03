@@ -571,6 +571,7 @@ let
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
+    rawrr = [ pkgs.mono ];
   };
 
   packagesRequiringX = [
