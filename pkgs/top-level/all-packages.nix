@@ -28862,14 +28862,14 @@ with pkgs;
   picom = callPackage ../applications/window-managers/picom {};
 
   picom-next = picom.overrideAttrs (oldAttrs: rec {
-    version="vNext";
+    version = "vNext";
       src = fetchFromGitHub {
       owner = "yshui";
       repo = "picom";
-      rev = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
+      rev = "fade045eadf171d2c732820d6ebde7d1943a1397";
       sha256 = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
   };
-    maintainers = with maintainers; [ GKasparov ];
+    maintainers = with maintainers; oldAttrs.maintainers ++ [ GKasparov ];
   });
 
   xd = callPackage ../applications/networking/p2p/xd {};
