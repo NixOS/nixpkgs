@@ -1,10 +1,7 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron_12,
-alsa-lib, gtk3, libxshmfence, mesa, nss, popt }:
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
+, alsa-lib, gtk3, libxshmfence, mesa, nss, popt }:
 
-let
-  electron = electron_12;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "binance";
   version = "1.26.0";
 
