@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
+    rm bin/kotlinc
     mv * $out
 
     runHook postInstall
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       standard library.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ fabianhjr ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
 }
