@@ -3380,6 +3380,8 @@ with pkgs;
 
   obinskit = callPackage ../applications/misc/obinskit {};
 
+  odoo = callPackage ../applications/finance/odoo {};
+
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
   ossutil = callPackage ../tools/admin/ossutil {};
