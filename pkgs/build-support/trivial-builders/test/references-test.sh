@@ -8,11 +8,11 @@
 #
 #  This file can be run independently (quick):
 #
-#      $ pkgs/build-support/trivial-builders/test.sh
+#      $ pkgs/build-support/trivial-builders/references-test.sh
 #
 #  or in the build sandbox with a ~20s VM overhead
 #
-#      $ nix-build -A tests.trivial-builders
+#      $ nix-build -A tests.trivial-builders.references
 #
 # -------------------------------------------------------------------------- #
 
@@ -26,9 +26,15 @@ set -euo pipefail
 cd "$(dirname ${BASH_SOURCE[0]})"  # nixpkgs root
 
 if [[ -z ${SAMPLE:-} ]]; then
-  sample=( `nix-build test/sample.nix` )
-  directRefs=( `nix-build test/invoke-writeDirectReferencesToFile.nix` )
-  references=( `nix-build test/invoke-writeReferencesToFile.nix` )
+  echo "Running the script directly is currently not supported."
+  echo "If you need to iterate, remove the raw path, which is not returned by nix-build."
+  exit 1
+#   sample=( `nix-build --no-out-link sample.nix` )
+#   directRefs=( `nix-build --no-out-link invoke-writeDirectReferencesToFile.nix` )
+#   references=( `nix-build --no-out-link invoke-writeReferencesToFile.nix` )
+#   echo "sample: ${#sample[@]}"
+#   echo "direct: ${#directRefs[@]}"
+#   echo "indirect: ${#references[@]}"
 else
   # Injected by Nix (to avoid evaluating in a derivation)
   # turn them into arrays
