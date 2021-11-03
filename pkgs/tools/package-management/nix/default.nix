@@ -147,7 +147,7 @@ common =
         export TMPDIR=$NIX_BUILD_TOP
       '';
 
-      separateDebugInfo = stdenv.isLinux;
+      separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
 
       enableParallelBuilding = true;
 
