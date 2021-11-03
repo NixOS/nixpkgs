@@ -220,7 +220,7 @@ let
     '';
   }) { inherit pkgs system; };
 in {
-  ELK-6 = mkElkTest {
+  ELK-6 = mkElkTest "elk-6-oss" {
     name = "elk-6-oss";
     elasticsearch = pkgs.elasticsearch6-oss;
     logstash      = pkgs.logstash6-oss;
@@ -230,7 +230,7 @@ in {
   };
   # We currently only package upstream binaries.
   # Feel free to package an SSPL licensed source-based package!
-  # ELK-7 = mkElkTest {
+  # ELK-7 = mkElkTest "elk-7-oss" {
   #   name = "elk-7";
   #   elasticsearch = pkgs.elasticsearch7-oss;
   #   logstash      = pkgs.logstash7-oss;
