@@ -13,7 +13,6 @@ let
     elem
     filter
     findFirst
-    flip
     foldl
     foldl'
     getAttrFromPath
@@ -403,7 +402,7 @@ rec {
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
-      resultsByName = flip mapAttrs declsByName (name: decls:
+      resultsByName = mapAttrs (name: decls:
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
@@ -424,7 +423,7 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
-            mergeModules' loc decls defns);
+            mergeModules' loc decls defns) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
 
