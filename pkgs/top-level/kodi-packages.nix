@@ -80,6 +80,8 @@ let self = rec {
 
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
 
+  keymap = callPackage ../applications/video/kodi-packages/keymap { };
+
   netflix = callPackage ../applications/video/kodi-packages/netflix { };
 
   svtplay = callPackage ../applications/video/kodi-packages/svtplay { };
@@ -113,6 +115,8 @@ let self = rec {
   chardet = callPackage ../applications/video/kodi-packages/chardet { };
 
   dateutil = callPackage ../applications/video/kodi-packages/dateutil { };
+
+  defusedxml = callPackage ../applications/video/kodi-packages/defusedxml { };
 
   idna = callPackage ../applications/video/kodi-packages/idna { };
 

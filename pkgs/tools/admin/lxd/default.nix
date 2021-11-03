@@ -26,6 +26,11 @@ buildGoPackage rec {
       url = "https://github.com/lxc/lxd/commit/ba6be1043714458b29c4b37687d4f624ee421943.patch";
       sha256 = "0716129n70c6i695fyi1j8q6cls7g62vkdpcrlfrr9i324y3w1dx";
     })
+    # feat: add support for nixOS path
+    (fetchpatch {
+      url = "https://github.com/lxc/lxd/commit/eeace06b2e3151786e94811ada8c658cce479f6d.patch";
+      sha256 = "sha256-knXlvcSvMPDeR0KqHFgh6YQZc+CSJ8yEqGE/vQMciEk=";
+    })
   ];
 
   postPatch = ''

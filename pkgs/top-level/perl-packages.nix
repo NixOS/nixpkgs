@@ -9708,10 +9708,10 @@ let
 
   Gtk3ImageView = buildPerlPackage rec {
     pname = "Gtk3-ImageView";
-    version = "9";
+    version = "10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-${version}.tar.gz";
-      sha256 = "sha256-0dxe0p1UQglq+xok7g4l2clJ9WqOHxCeAzWD65E0H9w=";
+      sha256 = "sha256-vHfnBgaeZPK7hBgZcP1KjepG+IvsDE3XwrH9U4xoN+Y=";
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
