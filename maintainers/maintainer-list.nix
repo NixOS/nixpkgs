@@ -4104,6 +4104,12 @@
     githubId = 20208;
     name = "Rok Garbas";
   };
+  gardspirito = {
+    name = "gardspirito";
+    email = "nyxoroso@gmail.com";
+    github = "gardspirito";
+    githubId = 29687558;
+  };
   garrison = {
     email = "jim@garrison.cc";
     github = "garrison";
