@@ -1,23 +1,32 @@
-{ lib, stdenv, fetchurl, mono, makeWrapper, curl, icu60, openssl, zlib }:
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, openssl
+}:
 
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "jackett";
-  version = "0.18.925";
+  version = "0.19.138";
 
-  src = fetchurl {
-    url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.Mono.tar.gz";
-    sha256 = "1md0iy6sx0agsnvrj9m7bq1lvp5z34x7zv3pvwy4zw8b46w97mnz";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0qaaccc95csahylzv65ndx990kcr075jffawbjpsjfkxzflfjq9n";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  projectFile = "src/Jackett.Server/Jackett.Server.csproj";
+  nugetDeps = ./deps.nix;
 
-  installPhase = ''
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}
+  dotnetInstallFlags = [ "-p:TargetFramework=net5.0" ];
+  dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
 
-    makeWrapper "${mono}/bin/mono" $out/bin/Jackett \
-      --add-flags "$out/share/${pname}-${version}/JackettConsole.exe" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl icu60 openssl zlib ]}
+  runtimeDeps = [ openssl ];
+
+  postFixup = ''
+    # Legacy
+    ln -s $out/bin/jackett $out/bin/Jackett
   '';
 
   meta = with lib; {
@@ -27,4 +36,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
     platforms = platforms.all;
   };
+  passthru.updateScript = ./updater.sh;
 }
