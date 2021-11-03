@@ -4,9 +4,11 @@ let inherit (lib) licenses maintainers platforms; in
 
 { self, srcs, patches }:
 
-args:
+argsRaw:
 
 let
+  # TODO? disable setting args.outputs manually, allow only args.hasPlugins
+  args = { hasPlugins = false; } // argsRaw;
   inherit (args) pname;
   version = args.version or srcs.${pname}.version;
   src = args.src or srcs.${pname}.src;
@@ -19,7 +21,7 @@ mkDerivation (args // {
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl cmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 
-  outputs = args.outputs or [ "out" "dev" ];
+  outputs = args.outputs or [ "out" "dev" ] ++ lib.optional args.hasPlugins "bin";
   setOutputFlags = args.setOutputFlags or false;
 
   # FIXME only needed for qt6
@@ -41,6 +43,7 @@ mkDerivation (args // {
   dontWrapQtApps = args.dontWrapQtApps or true;
 
   # TODO verify for qt6: patching of pkgconfig files
+  # TODO test before buildPhase if the module will produce plugins
   postFixup = ''
     if [ -d "''${!outputDev}/lib/pkgconfig" ]; then
         find "''${!outputDev}/lib/pkgconfig" -name '*.pc' | while read pc; do
@@ -89,6 +92,29 @@ mkDerivation (args // {
     )
 
     moveQtDevTools
+
+    if [ -d $out/plugins ]; then
+      if [ -z "$bin" ]; then
+        echo 'fatal error: qt module has plugins but no "bin" output'
+        echo 'listing plugins ...'
+        find $out/plugins
+        echo 'listing plugins done'
+        echo 'todo: in qtModule for ${pname}-${version}, set:'
+        echo '  hasPlugins = true;'
+        echo 'or set:'
+        echo '  outputs = [ "out" "dev" "bin" ];'
+        exit 1
+      fi
+      echo "moving plugins to $bin/lib/qt-${self.qtbase.version}/plugins"
+      mkdir -p $bin/lib/qt-${self.qtbase.version}
+      mv $out/plugins $bin/lib/qt-${self.qtbase.version}
+    elif [ -n "$bin" ]; then
+      echo 'fatal error: qt module has no plugins but "bin" output'
+      echo 'todo: in qtModule for ${pname}-${version}, remove:'
+      echo '  hasPlugins = true;'
+      echo 'or remove:'
+      echo '  outputs = [ "out" "dev" "bin" ];'
+    fi
 
     ${args.postFixup or ""}
   '';
