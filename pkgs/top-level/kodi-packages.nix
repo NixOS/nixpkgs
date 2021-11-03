@@ -106,6 +106,8 @@ let self = rec {
 
   dateutil = callPackage ../applications/video/kodi-packages/dateutil { };
 
+  defusedxml = callPackage ../applications/video/kodi-packages/defusedxml { };
+
   idna = callPackage ../applications/video/kodi-packages/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
