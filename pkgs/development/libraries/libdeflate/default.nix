@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fixDarwinDylibNames }:
+{ stdenv, lib, fetchFromGitHub, fixDarwinDylibNames, pkgsStatic }:
 
 stdenv.mkDerivation rec {
   pname = "libdeflate";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests.static = pkgsStatic.libdeflate;
   meta = with lib; {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
     license = licenses.mit;
