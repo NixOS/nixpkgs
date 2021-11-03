@@ -168,6 +168,7 @@ stdenv.mkDerivation rec {
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
     ./go-1.9-skip-flaky-20072.patch
+    ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
