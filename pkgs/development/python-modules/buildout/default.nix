@@ -32,6 +32,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/buildout/buildout";
     homepage = "https://www.buildout.org";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

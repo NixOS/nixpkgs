@@ -49,6 +49,6 @@ buildDunePackage rec {
     description = "An HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro superherointj ];
+    maintainers = with lib.maintainers; [ anmonteiro ];
   };
 }
