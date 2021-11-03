@@ -114,9 +114,6 @@ GEM
       faraday_middleware (~> 1.0.0.rc1)
       net-http-persistent (~> 4.0)
       nokogiri (~> 1.11.0.rc2)
-    barnes (0.0.9)
-      multi_json (~> 1)
-      statsd-ruby (~> 1.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.9.1)
@@ -256,7 +253,7 @@ GEM
       mini_mime (~> 1.0)
     google-protobuf (3.18.1)
     google-protobuf (3.18.1-universal-darwin)
-    google-protobuf (3.18.1-x86_64-linux)
+    google-protobuf (3.18.1)
     googleapis-common-protos (1.3.12)
       google-protobuf (~> 3.14)
       googleapis-common-protos-types (~> 1.2)
@@ -278,7 +275,7 @@ GEM
     grpc (1.41.0-universal-darwin)
       google-protobuf (~> 3.17)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.41.0-x86_64-linux)
+    grpc (1.41.0)
       google-protobuf (~> 3.17)
       googleapis-common-protos-types (~> 1.0)
     haikunator (1.1.1)
@@ -379,7 +376,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.11.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.11.7-x86_64-linux)
+    nokogiri (1.11.7)
       racc (~> 1.4)
     oauth (0.5.6)
     orm_adapter (0.5.0)
@@ -651,7 +648,6 @@ DEPENDENCIES
   attr_extras
   aws-sdk-s3
   azure-storage-blob
-  barnes
   bootsnap
   brakeman
   browser

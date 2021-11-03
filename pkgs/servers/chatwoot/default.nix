@@ -18,6 +18,16 @@
 
 with rubyPackages_3_0;
 
+/*
+
+Note when updating:
+We are affected by https://github.com/nix-community/bundix/issues/88 so things need to be manually edited
+$ sed "s|-x86_64-linux||g" -i Gemfile.lock
+
+Barnes needs to be removed in gemfile & lockfile
+
+*/
+
 let
   ruby = ruby_3_0;
 
@@ -125,15 +135,25 @@ stdenv.mkDerivation rec {
   }; */
 
   src = fetchFromGitHub {
-    # owner = "chatwoot";
-    # repo = "chatwoot";
     owner = "mkg20001";
     repo = "chatwoot";
-    rev = "a0656b89c1085dbc06522afdd45e2850770ed2f5";
-    sha256 = "GyuGOumIk1U4RM9or2fKa6wfA2drIChlBiwDPN9Mj/M=";
+    rev = "3a0a9a4637c07180af3ef7d7eed1dd4e20c95443";
+    sha256 = "LztircMoTNTZiGHK5y0xQpEv+0LqpXPxE9ZqVbpaB48=";
     fetchSubmodules = true;
+
+    /* owner = "chatwoot";
+    repo = "chatwoot";
+    rev = "03b1a3d045bbfc221bcf07c8155eccd2d0d88905";
+    sha256 = "dJ3uG8wpuDGzPOZEgRCv1FHyU3pHch+sgsFRlaWxNjY=";
+    fetchSubmodules = true; */
     # rev = "v${version}";
   };
+
+  postPatch = ''
+    cp ${./Gemfile} Gemfile
+    cp ${./Gemfile.lock} Gemfile.lock
+    # sed "s|enable_extension 'pgcrypto'||g" -i ./db/migrate/20200404092329_add_conversation_uuid.rb
+  '';
 
   buildInputs = extraPath;
 

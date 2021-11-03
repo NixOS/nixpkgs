@@ -291,17 +291,6 @@
     };
     version = "2.0.2";
   };
-  barnes = {
-    dependencies = ["multi_json" "statsd-ruby"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "16v48b6fkp95m3h6vnwync1fh3wrrkj00nyqn30fxwm5a0zqq562";
-      type = "gem";
-    };
-    version = "0.0.9";
-  };
   bcrypt = {
     groups = ["default"];
     platforms = [];
@@ -1584,7 +1573,7 @@
     version = "2.5.8";
   };
   nokogiri = {
-    dependencies = ["mini_portile2" "racc"];
+    dependencies = ["racc"];
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
