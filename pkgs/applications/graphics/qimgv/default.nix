@@ -10,6 +10,8 @@
 , mpv
 , opencv4
 , qtbase
+, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
+, qt5compat
 , qtimageformats
 , qtsvg
 }:
@@ -19,6 +21,7 @@ mkDerivation rec {
   version = "1.0.2";
 
   src = fetchFromGitHub {
+    name = "${pname}-${version}-source";
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
@@ -35,9 +38,16 @@ mkDerivation rec {
     mpv
     opencv4
     qtbase
+    libglvnd libxkbcommon vulkan-headers
+    qt5compat
     qtimageformats
     qtsvg
   ];
+
+  # FIXME only needed for qt6
+  # set attributes for qt-6/hooks/qmake-hook.sh
+  # TODO better. we do not want to set this for every libsForQt6.callPackage target
+  inherit (qtbase) qtDocPrefix qtQmlPrefix qtPluginPrefix;
 
   postPatch = ''
     sed -i "s@/usr/bin/mpv@${mpv}/bin/mpv@" \
@@ -50,8 +60,16 @@ mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
+  # FIXME qt6: set this automatically when adding buildInputs = [ qtsvg qt5compat ]
+  preConfigure = ''
+    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH="${qtsvg.dev}:${qt5compat.dev}"
+  '';
+
+  # FIXME qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
+  # "" should be the QT_PLUGIN_PATH, which is set in the wrapper for qimgv
+
   meta = with lib; {
-    description = "A Qt5 image viewer with optional video support";
+    description = "A Qt image viewer with optional video support";
     homepage = "https://github.com/easymodo/qimgv";
     license = licenses.gpl3;
     platforms = platforms.linux;
