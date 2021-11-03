@@ -8659,6 +8659,12 @@
       fingerprint = "4BFF 0614 03A2 47F0 AA0B 4BC4 916D 8B67 2418 92AE";
     }];
   };
+  nbr = {
+    email = "nbr@users.noreply.github.com";
+    github = "nbr";
+    githubId = 3819225;
+    name = "Nick Braga";
+  };
   nbren12 = {
     email = "nbren12@gmail.com";
     github = "nbren12";
