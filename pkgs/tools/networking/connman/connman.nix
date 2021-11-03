@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , file
 , glib
@@ -60,6 +61,14 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
     sha256 = "sha256-GleufOI0qjoXRKrDvlwhIdmNzpmUQO+KucxO39XtyxI=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # Fix Musl build by avoiding a Glibc-only API.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
+      sha256 = "1kg2nml7pdxc82h5hgsa3npvzdxy4d2jpz2f93pa97if868i8d43";
+    })
+  ];
 
   buildInputs = [
     glib
