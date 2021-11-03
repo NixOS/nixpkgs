@@ -276,7 +276,8 @@ in buildPythonPackage rec {
       --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
     mkdir $lib
-    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
+    mv $out/${python.sitePackages}/torch/lib     $lib/lib
+    ln -s $lib/lib $out/${python.sitePackages}/torch/lib
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
