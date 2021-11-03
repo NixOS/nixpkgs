@@ -236,6 +236,7 @@ in
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
   lxd = handleTest ./lxd.nix {};
+  lxd-image = handleTest ./lxd-image.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
