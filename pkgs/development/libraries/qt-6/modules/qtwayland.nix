@@ -1,16 +1,14 @@
-{ pkg-config
-, qtModule
+{ qtModule
 , qtbase
+, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
 , wayland
-, libglvnd
-, libxkbcommon
-, vulkan-headers
 }:
+
+# TODO? enable more Qt Wayland Drivers
 
 qtModule {
   pname = "qtwayland";
   qtInputs = [ qtbase ];
   buildInputs = [ wayland libglvnd libxkbcommon vulkan-headers ];
-  nativeBuildInputs = [ pkg-config ];
-  outputs = [ "out" "dev" ];
+  hasPlugins = true;
 }
