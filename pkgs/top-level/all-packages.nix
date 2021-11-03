@@ -1577,6 +1577,8 @@ with pkgs;
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
+  msr = callPackage ../os-specific/linux/msr { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
