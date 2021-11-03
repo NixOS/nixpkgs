@@ -1184,6 +1184,11 @@ let
       '';
     });
 
+    arrow = old.arrow.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
   };
 in
   self
