@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 let
-  srcInfo = builtins.fromJSON (builtins.readFile ./src.json);
+  srcInfo = lib.importJSON ./src.json;
 in
 
 buildGoModule rec {
