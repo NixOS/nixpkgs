@@ -25835,6 +25835,8 @@ with pkgs;
 
   kube-score = callPackage ../applications/networking/cluster/kube-score { };
 
+  kubectl-evict-pod = callPackage ../applications/networking/cluster/kubectl-evict-pod { };
+
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
