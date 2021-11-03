@@ -274,7 +274,7 @@ let
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
+              [ ((optionalString config.preStartElevated "+") + (makeJobScript "${name}-pre-start" config.preStart)) ];
           })
         (mkIf (config.script != "")
           { serviceConfig.ExecStart =
@@ -282,7 +282,7 @@ let
           })
         (mkIf (config.postStart != "")
           { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
+              [ ((optionalString config.postStartElevated "+") + (makeJobScript "${name}-post-start" config.postStart)) ];
           })
         (mkIf (config.reload != "")
           { serviceConfig.ExecReload =

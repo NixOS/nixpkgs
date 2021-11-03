@@ -286,12 +286,30 @@ in rec {
       '';
     };
 
+    preStartElevated = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not the preStart script should be executed with elevated privileges.
+        Equivalent to adding + to ExecPreStart.
+      '';
+    };
+
     postStart = mkOption {
       type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the service's main process
         is started.
+      '';
+    };
+
+    postStartElevated = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not the postStart script should be executed with elevated privileges.
+        Equivalent to adding + to ExecPostStart.
       '';
     };
 
