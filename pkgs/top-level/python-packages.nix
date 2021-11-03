@@ -7262,6 +7262,8 @@ in {
 
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 
+  pytest-dotenv = callPackage ../development/python-modules/pytest-dotenv { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
   pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
