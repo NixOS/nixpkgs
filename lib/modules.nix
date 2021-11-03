@@ -13,7 +13,6 @@ let
     elem
     filter
     findFirst
-    foldl
     foldl'
     getAttrFromPath
     head
@@ -863,7 +862,7 @@ rec {
   mkMergedOptionModule = from: to: mergeFn:
     { config, options, ... }:
     {
-      options = foldl recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
+      options = foldl' recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
         visible = false;
         # To use the value in mergeFn without triggering errors
         default = "_mkMergedOptionModule";
