@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nosqli";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "Charlie-belmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "006z76v4a3pxzgnkj5nl0mrlsqmfgvg51w20dl118k2xa70zz63j";
+    sha256 = "sha256-CgD9b5eHDK/8QhQmrqT09Jf9snn9WItNMtTNbJFT2sI=";
   };
 
-  vendorSha256 = "01spdh2gbzp6yg2jbiwfnyhqb5s605hyfxhs0f9h4ps4qbi1h9cv";
+  vendorSha256 = "sha256-QnrzEei4Pt4C0vCJu4YN28lWWAqEikmNLrqshd3knx4=";
 
   meta = with lib; {
     description = "NoSql Injection tool for finding vulnerable websites using MongoDB";
