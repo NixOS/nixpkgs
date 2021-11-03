@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     rm -r $sourceRoot/{trunk,branches,tags}
   '';
 
-  patches = [ ./makefile.patch ./no_default_route_when_netmask.patch ];
+  patches = [ ./no_default_route_when_netmask.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
@@ -22,6 +22,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [libgcrypt perl openssl ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ETCDIR=$(out)/etc/vpnc"
+    "SCRIPT_PATH=$(out)/etc/vpnc/vpnc-script"
+  ];
+
+  postPatch = ''
+    patchShebangs makeman.pl
+  '';
 
   preConfigure = ''
     sed -i 's|^#OPENSSL|OPENSSL|g' Makefile
