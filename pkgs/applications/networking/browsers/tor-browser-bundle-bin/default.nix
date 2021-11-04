@@ -43,12 +43,11 @@
 
 # Hardening
 , graphene-hardened-malloc
-# crashes with intel driver
-, useHardenedMalloc ? false
+# Whether to use graphene-hardened-malloc
+, useHardenedMalloc ? true
 
-# Whether to disable multiprocess support to work around crashing tabs
-# TODO: fix the underlying problem instead of this terrible work-around
-, disableContentSandbox ? true
+# Whether to disable multiprocess support
+, disableContentSandbox ? false
 
 # Extra preferences
 , extraPrefs ? ""
