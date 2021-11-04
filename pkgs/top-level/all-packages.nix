@@ -1577,6 +1577,8 @@ with pkgs;
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
+  msr = callPackage ../os-specific/linux/msr { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
@@ -2185,6 +2187,8 @@ with pkgs;
   bmon = callPackage ../tools/misc/bmon { };
 
   bmake = callPackage ../development/tools/build-managers/bmake { };
+
+  go-mk = callPackage ../development/tools/build-managers/go-mk { };
 
   boca = callPackage ../development/libraries/boca { };
 
@@ -14801,8 +14805,6 @@ with pkgs;
 
   minizinc = callPackage ../development/tools/minizinc { };
   minizincide = qt514.callPackage ../development/tools/minizinc/ide.nix { };
-
-  mk = callPackage ../development/tools/build-managers/mk { };
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
 
