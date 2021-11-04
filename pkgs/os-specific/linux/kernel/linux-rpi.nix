@@ -3,7 +3,8 @@
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
   modDirVersion = "5.10.52";
-  tag = "1.20210805";
+  tag = "1.20211029"; # commit seems to be wrong, same as 1.20211007 and doesn't match firmware
+  rev = "84dc624be6ae704fdb3c413b7d86315cf49fbb0b";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = tag;
+    inherit rev;
     sha256 = "1j71xblflslfi4c3zx2srw6fahnhp3bjx4yjfqrp39kzaa41ij0b";
   };
 

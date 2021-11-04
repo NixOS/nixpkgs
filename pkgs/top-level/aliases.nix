@@ -455,6 +455,8 @@ mapAliases ({
   links = links2; # added 2016-01-31
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
+  linux_rpi02w = linuxKernel.kernels.linux_rpi3;
+  linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
   linuxPackages_rt_5_11 = linuxKernel.packages.linux_rt_5_11;
