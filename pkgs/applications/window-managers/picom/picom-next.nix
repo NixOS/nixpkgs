@@ -1,3 +1,5 @@
+{ fetchFromGitHub, picom }:
+
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-next";
     version = "unstable-2021-11-01";
@@ -9,4 +11,3 @@ picom.overrideAttrs (oldAttrs: rec {
       };
     meta.maintainers = with maintainers; oldAttrs.maintainers ++ [ GKasparov ];
   })
-
