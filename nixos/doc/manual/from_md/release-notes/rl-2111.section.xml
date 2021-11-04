@@ -1748,6 +1748,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          A new option
+          <literal>services.prometheus.enableReload</literal> has been
+          added which can be enabled to reload the prometheus service
+          when its config file changes instead of restarting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Dokuwiki now supports caddy! However
         </para>
         <itemizedlist spacing="compact">
