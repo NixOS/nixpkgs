@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config libevent ];
 
   buildInputs = [
     curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
@@ -25,9 +25,14 @@ stdenv.mkDerivation rec {
 
   patches = extraPatches;
 
+  preBuild = ''
+    export LD_LIBRARY_PATH=$(pwd)/library_output_directory
+  '';
+
   cmakeFlags = [
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DBUILD_CONFIG=xtrabackup_release"
+    "-DGCRYPT_LIB_PATH=${libgcrypt}/lib:${libgpg-error}/lib"
     "-DINSTALL_MYSQLTESTDIR=OFF"
     "-DWITH_BOOST=system"
     "-DWITH_CURL=system"
@@ -40,10 +45,13 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
+    "-DLIBEVENT_INCLUDE_PATH=${libevent.dev}/include"
+    "-DLIBEVENT_LIB_PATHS=${libevent.out}/lib"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''
+    chmod g-w $out
     wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
     rm -r "$out"/lib/plugin/debug
   '' + extraPostInstall;

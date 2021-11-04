@@ -1,8 +1,10 @@
-{ callPackage, ... } @ args:
+{ callPackage, boost173, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  version = "8.0.13";
-  sha256 = "0cj0fnjimv22ykfl0yk6w29wcjvqp8y8j2g1c6gcml65qazrswyr";
+  version = "8.0.26-18";
+  sha256 = "sha256-wluNdX++SP07BPei2rxWS6ATIxc+W4TZLY4TkXtg57c=";
+
+  boost = boost173;
 
   extraPatches = [
     ./../../../servers/sql/mysql/abi-check.patch
