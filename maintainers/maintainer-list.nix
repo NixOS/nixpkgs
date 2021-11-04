@@ -1634,6 +1634,12 @@
     githubId = 7716744;
     name = "Berno Strik";
   };
+  bree = {
+    email = "nixos@bree.dev";
+    github = "brecert";
+    githubId = 11599528;
+    name = "Bree";
+  };
   breakds = {
     email = "breakds@gmail.com";
     github = "breakds";
