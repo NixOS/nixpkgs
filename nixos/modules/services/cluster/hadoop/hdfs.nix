@@ -134,7 +134,7 @@ in
         };
       };
 
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.datanode.openFirewall [
+      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.journalnode.openFirewall [
         8480 # dfs.journalnode.http-address
         8485 # dfs.journalnode.rpc-address
       ]);
@@ -174,7 +174,7 @@ in
           Restart = "always";
         };
       };
-      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.datanode.openFirewall [
+      networking.firewall.allowedTCPPorts = (mkIf cfg.hdfs.httpfs.openFirewall [
         14000 # httpfs.http.port
       ]);
     })
