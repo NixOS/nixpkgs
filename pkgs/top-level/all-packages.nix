@@ -9883,6 +9883,8 @@ with pkgs;
 
   textadept11 = callPackage ../applications/editors/textadept/11 { };
 
+  textpieces = callPackage ../applications/misc/textpieces { };
+
   texworks = libsForQt5.callPackage ../applications/editors/texworks { };
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
