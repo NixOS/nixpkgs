@@ -837,6 +837,7 @@ let
     "rgl"
     "NetLogoR"
     "x13binary"
+    "valse"
 
     # Impure network access during build
     "waddR"
