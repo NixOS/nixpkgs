@@ -851,9 +851,13 @@ let
     "NetLogoR"
     "x13binary"
     "valse"
+    "HierO"
 
     # Impure network access during build
     "waddR"
+    "tiledb"
+    "x13binary"
+    "switchr"
 
     # ExperimentHub dependents, require net access during build
     "DuoClustering2018"
