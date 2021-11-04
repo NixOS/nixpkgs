@@ -39,6 +39,6 @@ buildRustPackage rec {
     homepage = "https://github.com/tox-rs/tox-node";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ suhr ];
+    maintainers = with maintainers; [ suhr kurnevsky ];
   };
 }
