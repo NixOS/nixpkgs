@@ -597,6 +597,7 @@ let
     multibridge = [ pkgs.mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
     RmecabKo = [ pkgs.mecab ];
+    PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
   };
 
