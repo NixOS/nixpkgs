@@ -596,6 +596,7 @@ let
     scModels = [ pkgs.mpfr.dev ];
     multibridge = [ pkgs.mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    RmecabKo = [ pkgs.mecab ];
     rrd = [ pkgs.rrdtool ];
   };
 
