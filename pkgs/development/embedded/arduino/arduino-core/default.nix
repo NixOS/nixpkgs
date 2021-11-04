@@ -90,14 +90,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6d+y0Lgr+h0qYpCsa/ihvSMNuAdRMNQRuxZFpkWLDvg=";
   };
 
-  teensyduino_version = "153";
+  teensyduino_version = "155";
   teensyduino_src = fetchurl {
     url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
     sha256 = {
-      linux64 = "02qgsj4h4zrjxkcclx7clsqbqd699kg0dq1xxa9hbj3vfnddjv1f";
-      linux32 = "14xaff8xj176ih8ifdvxsly5xgjjm82dqbn7lqq81a43i0svjjyn";
-      linuxarm = "0xpg9axa6dqyhccm9cpvsv2al7rgwy4gv2l8b2kffvn974dl5759";
-      linuxaarch64 = "1lyn4zy4l5mml3c19fw6i2pk1ypnq6mgjmxmzk9d54wpf6n3j5dk";
+      linux64 = "sha256-DypCbCm4RKYgnFJRwoHyPht6dFG48YvWM4RzEDdJE6U=";
+      linux32 = "sha256-MJ4xsTAZPO8BhO/VWSjBAjBVLrKM+3PNi1fiF8dsuVQ=";
+      linuxarm = "sha256-x5JdYflLThohos9RTAWt4XrzvksB7VWfXTKqgXZ1d6Q=";
+      linuxaarch64 = "sha256-N18nvavEMhvt2jOrdI+tsXtbWIdsj1n4aMVeaaBlcT4=";
     }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
   # Used because teensyduino requires jars be a specific size
