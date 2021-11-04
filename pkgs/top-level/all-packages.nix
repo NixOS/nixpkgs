@@ -16325,6 +16325,8 @@ with pkgs;
     stdenv = gccStdenv; # doesn't compile without gcc
   };
 
+  mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
+
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
   elf-header =
     if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf"
