@@ -26,20 +26,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gflags ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    # Mak CMake place RPATHs such that tests will find the built libraries.
+    # See https://github.com/NixOS/nixpkgs/pull/144561#discussion_r742468811 and https://github.com/NixOS/nixpkgs/pull/108496
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ];
 
   # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
   doCheck = !stdenv.isDarwin;
   checkInputs = [ perl ];
-
-  # Add `build/` directory (`$PWD`) to LD_LIBRARY_PATH so that the built library
-  # can be loaded for the tests.
-  # Adding to LD_LIBRARY_PATH correctly is nontrivial:
-  #   https://jdhao.github.io/2021/07/03/ld_library_path_empty_item/
-  #   https://unix.stackexchange.com/questions/162891/append-to-path-like-variable-without-creating-leading-colon-if-unset
-  preCheck = ''
-    export LD_LIBRARY_PATH=''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}''$PWD
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";
