@@ -4159,6 +4159,12 @@
     githubId = 1713676;
     name = "Luis G. Torres";
   };
+  GKasparov = {
+    email = "mizozahr@gmail.com";
+    github = "GKasparov";
+    githubId = 60962839;
+    name = "Mazen Zahr";
+  };
   gleber = {
     email = "gleber.p@gmail.com";
     github = "gleber";
