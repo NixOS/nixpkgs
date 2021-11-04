@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c389c1d06bf7904078ca03399a4816f974a1d590090fecea0c63ec26ebaf1cef";
+    sha256 = "0zxyrg8029lzjhima6l5nk6y0z6lm5wfp9qchz3s33j3xx3mipgd";
   };
 
   dontUseSetuptoolsCheck = true;
