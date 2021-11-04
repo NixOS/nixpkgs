@@ -72,6 +72,13 @@ in
         '';
       };
       inherit restartIfChanged;
+      openFirewall = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Open firewall ports for HTTPFS
+        '';
+      };
     };
   };
 
@@ -159,9 +166,7 @@ in
         wantedBy = [ "multi-user.target" ];
         inherit (cfg.hdfs.httpfs) restartIfChanged;
 
-        environment = {
-          HTTPFS_TEMP = cfg.hdfs.httpfs.tempPath;
-        };
+        environment.HTTPFS_TEMP = cfg.hdfs.httpfs.tempPath;
 
         preStart = ''
           mkdir -p $HTTPFS_TEMP
