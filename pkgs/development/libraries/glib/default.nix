@@ -34,12 +34,16 @@ let
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
   flattenInclude = ''
+    shopt -u failglob
+    shopt -s nullglob
     for dir in "''${!outputInclude}"/include/*; do
       cp -r "$dir"/* "''${!outputInclude}/include/"
       rm -r "$dir"
       ln -s . "$dir"
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
+    shopt -u nullglob
+    shopt -s failglob
   '';
 in
 
