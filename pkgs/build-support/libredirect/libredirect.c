@@ -308,7 +308,20 @@ static char * replace_string(char * buf, char * from, char * to) {
 }
 
 static void rewriteSystemCall(const char * command, char * buf) {
-    strcpy(buf, command);
+    char * p = buf;
+
+    #ifdef __APPLE__
+    // The dyld environment variable is not inherited by the subprocess spawned
+    // by system(), so this hack redefines it.
+    Dl_info info;
+    dladdr(&rewriteSystemCall, &info);
+    p = stpcpy(p, "export DYLD_INSERT_LIBRARIES=");
+    p = stpcpy(p, info.dli_fname);
+    p = stpcpy(p, ";");
+    #endif
+
+    stpcpy(p, command);
+
     for (int n = 0; n < nrRedirects; ++n) {
        replace_string(buf, from[n], to[n]);
     }
