@@ -449,6 +449,7 @@ let
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     RcppCWB = [ pkgs.pkg-config ];
+    rrd = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -592,6 +593,7 @@ let
     scModels = [ pkgs.mpfr.dev ];
     multibridge = [ pkgs.mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    rrd = [ pkgs.rrdtool ];
   };
 
   packagesRequiringX = [
@@ -1216,6 +1218,12 @@ let
       preConfigure = ''
         substituteInPlace configure \
           --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
+      '';
+    });
+
+    rrd = old.rrd.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
       '';
     });
   };
