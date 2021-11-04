@@ -685,7 +685,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
 in
 
 if !splitBuildInstall then qtbaseDrv
-else (qtbaseDrv // stdenv.mkDerivation {
+else (qtbaseDrv // stdenv.mkDerivation rec {
   buildInputs = [ qtbaseDrv ];
   nativeBuildInputs = qtbaseDrv.nativeBuildInputs;
   inherit (qtbaseDrv) preHook fix_qt_builtin_paths fix_qt_module_paths; # fixQtModulePaths fixQtBuiltinPaths moveQtDevTools
@@ -912,10 +912,13 @@ else (qtbaseDrv // stdenv.mkDerivation {
 
     echo postFixup done
 
-    echo "debug: manually copying plugins to bin output $bin"
-    echo "FIXME better? are the plugins discoverable in this location?"
-    mkdir -v -p $bin/lib/qt-${version}
-    cp -r plugins $bin/lib/qt-${version}
+    d="$bin/lib/qt-${version}"
+    echo "moving plugins to $d"
+    mkdir -p $d
+    mv $out/plugins $d/
+
+    echo "moving mkspecs to $dev"
+    mv $out/mkspecs $dev/
 
     echo "pwd = $(pwd)"
     echo "ls:"; ls; echo ":ls"
@@ -925,16 +928,8 @@ else (qtbaseDrv // stdenv.mkDerivation {
     # FIXME No tests were found!!!
     echo "running tests done"
 
-    echo "copying $out/libexec to $dev/libexec"
-    # ... as required by other qt modules
-    # CMake Error at /nix/store/q2v1i8hryv43fw9rb4cvd1aqli9idkwz-qtbase-6.2.0-dev/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake:148 (message):
-    # The imported target "Qt6::moc" references the file
-    # "/nix/store/q2v1i8hryv43fw9rb4cvd1aqli9idkwz-qtbase-6.2.0-dev/./libexec/moc"
-    # but this file does not exist.
-    #
-    # qt5: no moc
-    # find /nix/store/*-qt*-5.14.2/ -name moc
-    cp -r $out/libexec $dev/
+    ln -v -s $out/libexec $dev/
+
     # cmake files require libexec/moc from both $out and $dev ...
     # TODO ideally patch the cmake files to use only $dev, assuming that these are development tools
 
@@ -951,30 +946,60 @@ else (qtbaseDrv // stdenv.mkDerivation {
     #
     # -> Qt6::Core should be searched in $out, not in $dev
 
-    echo "patching qtbase output paths in cmake files ..."
+
+
+
+    # TODO refactor. same code in qtbase.nix and qtModule.nix
+    echo "patching output paths in cmake files ..."
     (
     cd $dev/lib/cmake
+    moduleNAME="${lib.toUpper pname}"
     outEscaped=$(echo $out | sed 's,/,\\/,g')
     devEscaped=$(echo $dev | sed 's,/,\\/,g')
-    binEscaped=$(echo $bin | sed 's,/,\\/,g')
+    if [ -n "$bin" ]; then
+    binEscaped=$(echo $bin | sed 's,/,\\/,g') # optional plugins
+    else binEscaped=""; fi
 
-    perlRegex='s/^# Compute the installation prefix relative to this file\..*?set\(_IMPORT_PREFIX ""\)\nendif\(\)/# NixOS was here\nset(_QTBASE_NIX_OUT "'"$outEscaped"'")\nset(_QTBASE_NIX_DEV "'"$devEscaped"'")\nset(_QTBASE_NIX_BIN "'"$binEscaped"'")/s;'
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?include/\''${_QTBASE_NIX_DEV}\/include/g;'
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\''${_QTBASE_NIX_DEV}\/libexec/g;' # both in $dev and $out, should be only in $dev, maybe
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?lib/\''${_QTBASE_NIX_OUT}\/lib/g;' # must come after libexec
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\''${_QTBASE_NIX_BIN}\/lib\/qt-${version}\/plugins/g;'
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?bin/\''${_QTBASE_NIX_DEV}\/bin/g;'
-    perlRegex+='s/\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\''${_QTBASE_NIX_OUT}\/mkspecs/g;' # should be in $dev, maybe
-    perlRegex+='s/set\(_IMPORT_PREFIX\)/set(_QTBASE_NIX_OUT)\nset(_QTBASE_NIX_DEV)\nset(_QTBASE_NIX_BIN)/g;'
+    # TODO build the perlRegex string with nix? avoid the bash escape hell
+    # or use: read -d "" perlRegex <<EOF ... EOF
+    s=""
+    s+="s/^# Compute the installation prefix relative to this file\."
+    s+="\n.*?set\(_IMPORT_PREFIX \"\"\)\nendif\(\)"
+    s+="/# NixOS was here"
+    s+="\nset(_''${moduleNAME}_NIX_OUT \"$outEscaped\")"
+    s+="\nset(_''${moduleNAME}_NIX_DEV \"$devEscaped\")"
+    s+="\nset(_''${moduleNAME}_NIX_BIN \"$binEscaped\")/s;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?include/\\\''${_''${moduleNAME}_NIX_DEV}\/include/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_OUT}\/libexec/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
+    s+="s/set\(_IMPORT_PREFIX\)"
+    s+="/set(_''${moduleNAME}_NIX_OUT)"
+    s+="\nset(_''${moduleNAME}_NIX_DEV)"
+    s+="\nset(_''${moduleNAME}_NIX_BIN)/g;"
+    s+="s/\\\''${QtBase_SOURCE_DIR}\/libexec/\\\''${QtBase_BINARY_DIR}\/libexec/g;" # QtBase_SOURCE_DIR = qtbase/$dev
 
-    # TODO restore? find "_IMPORT_PREFIX" we must replace:
-    #perlRegex+='s/\''${_IMPORT_PREFIX}/\''${_QTBASE_NIX_OUT}/g;'
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBEXECDIR}/$outEscaped\/libexec/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_BINDIR}/$devEscaped\/bin/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_DOCDIR}/$outEscaped\/share\/doc/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBDIR}/$outEscaped\/lib/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_MKSPECSDIR}/$devEscaped\/mkspecs/g;"
+
+    # lib/cmake/Qt6/QtBuild.cmake
+    s+="s/\\\''${CMAKE_CURRENT_LIST_DIR}\/\.\.\/mkspecs/$devEscaped\/mkspecs/g;"
+    # lib/cmake/Qt6/QtPriHelpers.cmake
+    s+="s/\\\''${CMAKE_CURRENT_BINARY_DIR}\/mkspecs/$devEscaped\/mkspecs/g;"
+
+    #s+="s/\\\''${QtBase_SOURCE_DIR}\/lib/\\\''${QtBase_BINARY_DIR}\/lib/g;" # TODO?
+    perlRegex="$s"
 
     echo "debug: perlRegex = $perlRegex"
     find . -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
     echo "rc of find = $?" # zero when perl returns nonzero?
-    # FIXME catch errors from perl
-    echo "patching qtbase output paths in cmake files done"
+    # FIXME catch errors from perl: find -> xargs
+    echo "patching output paths in cmake files done"
 
     echo "verify that all _IMPORT_PREFIX are replaced ..."
     matches="$(find . -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"

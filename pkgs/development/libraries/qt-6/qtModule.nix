@@ -54,7 +54,7 @@ mkDerivation (args // {
         done
     fi
 
-    # TODO refactor. same code in qtbase.nix
+    # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
     (
     cd $dev/lib/cmake
@@ -65,15 +65,40 @@ mkDerivation (args // {
     binEscaped=$(echo $bin | sed 's,/,\\/,g') # optional plugins
     else binEscaped=""; fi
 
-    # TODO build the perlRegex string with nix?
-    perlRegex="s/^# Compute the installation prefix relative to this file\..*?set\(_IMPORT_PREFIX \"\"\)\nendif\(\)/# NixOS was here\nset(_''${moduleNAME}_NIX_OUT \"$outEscaped\")\nset(_''${moduleNAME}_NIX_DEV \"$devEscaped\")\nset(_''${moduleNAME}_NIX_BIN \"$binEscaped\")/s;"
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?include/\\\''${_''${moduleNAME}_NIX_DEV}\/include/g;"
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_DEV}\/libexec/g;" # both in $dev and $out, should be only in $dev, maybe
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;"
-    perlRegex+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_OUT}\/mkspecs/g;" # should be in $dev, maybe
-    perlRegex+="s/set\(_IMPORT_PREFIX\)/set(_''${moduleNAME}_NIX_OUT)\nset(_''${moduleNAME}_NIX_DEV)\nset(_''${moduleNAME}_NIX_BIN)/g;"
+    # TODO build the perlRegex string with nix? avoid the bash escape hell
+    # or use: read -d "" perlRegex <<EOF ... EOF
+    s=""
+    s+="s/^# Compute the installation prefix relative to this file\."
+    s+="\n.*?set\(_IMPORT_PREFIX \"\"\)\nendif\(\)"
+    s+="/# NixOS was here"
+    s+="\nset(_''${moduleNAME}_NIX_OUT \"$outEscaped\")"
+    s+="\nset(_''${moduleNAME}_NIX_DEV \"$devEscaped\")"
+    s+="\nset(_''${moduleNAME}_NIX_BIN \"$binEscaped\")/s;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?include/\\\''${_''${moduleNAME}_NIX_DEV}\/include/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?libexec/\\\''${_''${moduleNAME}_NIX_OUT}\/libexec/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?lib/\\\''${_''${moduleNAME}_NIX_OUT}\/lib/g;" # must come after libexec
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
+    s+="s/set\(_IMPORT_PREFIX\)"
+    s+="/set(_''${moduleNAME}_NIX_OUT)"
+    s+="\nset(_''${moduleNAME}_NIX_DEV)"
+    s+="\nset(_''${moduleNAME}_NIX_BIN)/g;"
+    s+="s/\\\''${QtBase_SOURCE_DIR}\/libexec/\\\''${QtBase_BINARY_DIR}\/libexec/g;" # QtBase_SOURCE_DIR = qtbase/$dev
+
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBEXECDIR}/$outEscaped\/libexec/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_BINDIR}/$devEscaped\/bin/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_DOCDIR}/$outEscaped\/share\/doc/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_LIBDIR}/$outEscaped\/lib/g;"
+    s+="s/\\\''${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}\/\\\''${INSTALL_MKSPECSDIR}/$devEscaped\/mkspecs/g;"
+
+    # lib/cmake/Qt6/QtBuild.cmake
+    s+="s/\\\''${CMAKE_CURRENT_LIST_DIR}\/\.\.\/mkspecs/$devEscaped\/mkspecs/g;"
+    # lib/cmake/Qt6/QtPriHelpers.cmake
+    s+="s/\\\''${CMAKE_CURRENT_BINARY_DIR}\/mkspecs/$devEscaped\/mkspecs/g;"
+
+    #s+="s/\\\''${QtBase_SOURCE_DIR}\/lib/\\\''${QtBase_BINARY_DIR}\/lib/g;" # TODO?
+    perlRegex="$s"
 
     echo "debug: perlRegex = $perlRegex"
     find . -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
