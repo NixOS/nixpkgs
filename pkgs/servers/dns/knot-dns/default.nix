@@ -7,11 +7,11 @@ let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d21bab18820c509bdc3b04d141b111dabccf9da7e9c53cd0f0670f9cc1478fe6";
+    sha256 = "b20d43a74d9c3d0dd0c411d003b75bde1bf192a0e9ead2b668ef0ff146888c30";
   };
 
   outputs = [ "bin" "out" "dev" ];
