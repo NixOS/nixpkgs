@@ -110,19 +110,24 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2.028";
+    version = "2.034";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    version = builtins.replaceStrings [ "_" ] [ "." ] version;
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0dy7px7wfl6bqkfzz82jm4gvbjp338ddsx0mwfl6m7z48l7ng4v6";
+      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
+
+    makeFlags = [
+      # TODO(@sternenseemann): remove if afdko is new enough to know about Unicode 14.0
+      "BYPASS_SEQUENCE_CHECK=True"
+    ];
 
     nativeBuildInputs = [
       cairo
@@ -166,7 +171,7 @@ in
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
     };
   };
 
