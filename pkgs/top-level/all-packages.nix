@@ -21042,6 +21042,7 @@ with pkgs;
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
   percona-server57 = callPackage ../servers/sql/percona/5.7.x.nix { };
+  percona-server80 = callPackage ../servers/sql/percona/8.0.x.nix { };
   percona-server = percona-server56;
 
   riak = callPackage ../servers/nosql/riak/2.2.0.nix {
