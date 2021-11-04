@@ -1,6 +1,6 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config, git
-, qtbase, qtquickcontrols, openal, glew, vulkan-headers, vulkan-loader, libpng
-, ffmpeg, libevdev, libusb1, zlib, curl, python3
+{ gcc11Stdenv, lib, fetchFromGitHub, wrapQtAppsHook, cmake, pkg-config, git
+, qtbase, qtquickcontrols, qtmultimedia, openal, glew, vulkan-headers, vulkan-loader, libpng
+, ffmpeg, libevdev, libusb1, zlib, curl, wolfssl, python3, pugixml, faudio, flatbuffers
 , sdl2Support ? true, SDL2
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
@@ -8,20 +8,22 @@
 }:
 
 let
-  majorVersion = "0.0.16";
-  gitVersion = "12235-a4f4b81e6"; # echo $(git rev-list HEAD --count)-$(git rev-parse --short HEAD)
+  majorVersion = "0.0.19";
+  gitVersion = "12975-37383f421";
 in
-mkDerivation {
+gcc11Stdenv.mkDerivation {
   pname = "rpcs3";
   version = "${majorVersion}-${gitVersion}";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = "a4f4b81e6b0c00f4c30f9f5f182e5fe56f9fb03c";
+    rev = "37383f4217e1c510a543e100d0ca495800b3361a";
     fetchSubmodules = true;
-    sha256 = "1d70nljl1kmpbk50jpjki7dglw1bbxd7x4qzg6nz5np2sdsbpckd";
+    sha256 = "1pm1r4j4cdcmr8xmslyv2n6iwcjldnr396by4r6lgf4mdlnwahhm";
   };
+
+  passthru.updateScript = ./update.sh;
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
@@ -38,16 +40,18 @@ mkDerivation {
     "-DUSE_SYSTEM_LIBPNG=ON"
     "-DUSE_SYSTEM_FFMPEG=ON"
     "-DUSE_SYSTEM_CURL=ON"
-    # NB: Can't use this yet, our CMake doesn't include FindWolfSSL.cmake
-    #"-DUSE_SYSTEM_WOLFSSL=ON"
+    "-DUSE_SYSTEM_WOLFSSL=ON"
+    "-DUSE_SYSTEM_FAUDIO=ON"
+    "-DUSE_SYSTEM_PUGIXML=ON"
+    "-DUSE_SYSTEM_FLATBUFFERS=ON"
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config git ];
+  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtquickcontrols openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl python3
+    qtbase qtquickcontrols qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
+    libevdev zlib libusb1 curl wolfssl python3 pugixml faudio flatbuffers
   ] ++ lib.optional sdl2Support SDL2
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsa-lib
@@ -56,7 +60,7 @@ mkDerivation {
   meta = with lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [ abbradar neonfuz ilian ];
+    maintainers = with maintainers; [ abbradar neonfuz ilian zane ];
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
   };
