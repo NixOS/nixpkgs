@@ -917,8 +917,7 @@ As of writing, this prints out `rustc 1.56.0 (09c42c458 2021-10-18)`.
 You can also use an overlay's Rust toolchain with `buildRustPackage`.
 The below snippet demonstrates invoking `buildRustPackage` with an oxalica overlay selected Rust toolchain:
 ```nix
-with import <nixpkgs>
-{
+with import <nixpkgs> {
   overlays = [
     (import (fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz"))
   ];
@@ -933,7 +932,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = pname;
+    repo = "ripgrep";
     rev = version;
     sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
   };
