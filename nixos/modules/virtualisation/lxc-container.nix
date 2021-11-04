@@ -140,6 +140,10 @@ in
           source = config.system.build.toplevel + "/init";
           target = "/sbin/init";
         }
+        {
+          source = pkgs.emptyFile;
+          target = "/etc/NIXOS";
+        }
       ];
 
       extraCommands = "mkdir -p proc sys dev";
