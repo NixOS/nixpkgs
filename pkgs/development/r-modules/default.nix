@@ -448,6 +448,7 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
+    RcppCWB = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -590,6 +591,7 @@ let
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
     multibridge = [ pkgs.mpfr.dev ];
+    RcppCWB = with pkgs; [ pcre.dev glib.dev ];
   };
 
   packagesRequiringX = [
