@@ -9,4 +9,3 @@ picom.overrideAttrs (oldAttrs: rec {
       };
     meta.maintainers = with maintainers; oldAttrs.maintainers ++ [ GKasparov ];
   })
-
