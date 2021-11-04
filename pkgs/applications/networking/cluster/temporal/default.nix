@@ -38,6 +38,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/temporalio/temporal";
     homepage = "https://temporal.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

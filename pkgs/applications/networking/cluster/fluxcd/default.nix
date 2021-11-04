@@ -66,6 +66,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre superherointj ];
+    maintainers = with maintainers; [ jlesquembre ];
   };
 }

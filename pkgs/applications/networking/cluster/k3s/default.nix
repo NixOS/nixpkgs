@@ -59,7 +59,7 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank superherointj ];
+    maintainers = with maintainers; [ euank ];
     platforms = platforms.linux;
   };
 

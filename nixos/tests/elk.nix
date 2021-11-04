@@ -1,12 +1,15 @@
+# To run the test on the unfree ELK use the folllowing command:
+# cd path/to/nixpkgs
+# NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-6
+
 { system ? builtins.currentSystem,
   config ? {},
   pkgs ? import ../.. { inherit system config; },
-  enableUnfree ? false
-  # To run the test on the unfree ELK use the folllowing command:
-  # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true
 }:
 
 let
+  inherit (pkgs) lib;
+
   esUrl = "http://localhost:9200";
 
   mkElkTest = name : elk :
@@ -215,38 +218,40 @@ let
               '! curl --silent --show-error "${esUrl}/_cat/indices" | grep logstash | grep ^'
           )
     '';
-  }) {};
-in pkgs.lib.mapAttrs mkElkTest {
-  ELK-6 =
-    if enableUnfree
-    then {
+  }) { inherit pkgs system; };
+in {
+  ELK-6 = mkElkTest "elk-6-oss" {
+    name = "elk-6-oss";
+    elasticsearch = pkgs.elasticsearch6-oss;
+    logstash      = pkgs.logstash6-oss;
+    kibana        = pkgs.kibana6-oss;
+    journalbeat   = pkgs.journalbeat6;
+    metricbeat    = pkgs.metricbeat6;
+  };
+  # We currently only package upstream binaries.
+  # Feel free to package an SSPL licensed source-based package!
+  # ELK-7 = mkElkTest "elk-7-oss" {
+  #   name = "elk-7";
+  #   elasticsearch = pkgs.elasticsearch7-oss;
+  #   logstash      = pkgs.logstash7-oss;
+  #   kibana        = pkgs.kibana7-oss;
+  #   journalbeat   = pkgs.journalbeat7;
+  #   metricbeat    = pkgs.metricbeat7;
+  # };
+  unfree = lib.dontRecurseIntoAttrs {
+    ELK-6 = mkElkTest "elk-6" {
       elasticsearch = pkgs.elasticsearch6;
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
       journalbeat   = pkgs.journalbeat6;
       metricbeat    = pkgs.metricbeat6;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch6-oss;
-      logstash      = pkgs.logstash6-oss;
-      kibana        = pkgs.kibana6-oss;
-      journalbeat   = pkgs.journalbeat6;
-      metricbeat    = pkgs.metricbeat6;
     };
-  ELK-7 =
-    if enableUnfree
-    then {
+    ELK-7 = mkElkTest "elk-7" {
       elasticsearch = pkgs.elasticsearch7;
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
       journalbeat   = pkgs.journalbeat7;
       metricbeat    = pkgs.metricbeat7;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch7-oss;
-      logstash      = pkgs.logstash7-oss;
-      kibana        = pkgs.kibana7-oss;
-      journalbeat   = pkgs.journalbeat7;
-      metricbeat    = pkgs.metricbeat7;
     };
+  };
 }

@@ -22,19 +22,22 @@
   # pass-import
 , withPass ? false
 , pass
+
+  # git-credential-helper
+, withGitCredential ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "sha256-6O33rn/MTo7Dymwh57xQJ5v7n4yNSoICyR9gRwF4AH4=";
+    sha256 = "sha256-RNdxAp3Q/xNrK1XcKZPMfuqxWzDtdhwT+nqG25SjJhI=";
   };
 
-  cargoSha256 = "sha256-BrjKUovVV6BDZXtILVC0qaAF5xzE3715u9w9OYIJFbk=";
+  cargoSha256 = "sha256-I0KwHCmfYxgSF5IMHiPooaf2bypd6eYCOPSB+qnEBJY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,6 +61,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs bin/pass-import
     substituteInPlace bin/pass-import \
         --replace pass ${pass}/bin/pass
+  '' + lib.optionalString withGitCredential ''
+    patchShebangs bin/git-credential-rbw
+    substituteInPlace bin/git-credential-rbw \
+        --replace rbw $out/bin/rbw
   '';
 
   preConfigure = ''
@@ -76,6 +83,8 @@ rustPlatform.buildRustPackage rec {
     cp bin/rbw-rofi $out/bin
   '' + lib.optionalString withPass ''
     cp bin/pass-import $out/bin
+  '' + lib.optionalString withGitCredential ''
+    cp bin/git-credential-rbw $out/bin
   '';
 
   meta = with lib; {

@@ -1705,6 +1705,8 @@ in {
 
   confuse = callPackage ../development/python-modules/confuse { };
 
+  confight = callPackage ../development/python-modules/confight { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   consonance = callPackage ../development/python-modules/consonance { };
@@ -2367,6 +2369,8 @@ in {
 
   easywatch = callPackage ../development/python-modules/easywatch { };
 
+  ebaysdk = callPackage ../development/python-modules/ebaysdk { };
+
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
   eccodes = toPythonModule (pkgs.eccodes.override {
@@ -2714,6 +2718,8 @@ in {
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
+
+  flake8-length = callPackage ../development/python-modules/flake8-length { };
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
@@ -3424,6 +3430,8 @@ in {
 
   hdate = callPackage ../development/python-modules/hdate { };
 
+  ha-av = callPackage ../development/python-modules/ha-av { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
@@ -3767,6 +3775,8 @@ in {
   injector = callPackage ../development/python-modules/injector { };
 
   inkex = callPackage ../development/python-modules/inkex { };
+
+  inotify = callPackage ../development/python-modules/inotify { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
@@ -7256,6 +7266,8 @@ in {
 
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 
+  pytest-dotenv = callPackage ../development/python-modules/pytest-dotenv { };
+
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
   pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
@@ -8518,7 +8530,7 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
-  simple_di = callPackage ../development/python-modules/simple_di { };
+  simple-di = callPackage ../development/python-modules/simple_di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
@@ -8879,6 +8891,8 @@ in {
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
   starline = callPackage ../development/python-modules/starline { };
+
+  stashy = callPackage ../development/python-modules/stashy { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
@@ -9814,6 +9828,8 @@ in {
   webthing = callPackage ../development/python-modules/webthing { };
 
   werkzeug = callPackage ../development/python-modules/werkzeug { };
+
+  werkzeug1 = callPackage ../development/python-modules/werkzeug/1.nix { };
 
   west = callPackage ../development/python-modules/west { };
 
