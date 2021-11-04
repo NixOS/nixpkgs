@@ -4878,6 +4878,8 @@ in {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
+  mrkd = callPackage ../development/python-modules/mrkd { };
+
   ms-cv = callPackage ../development/python-modules/ms-cv { };
 
   msal = callPackage ../development/python-modules/msal { };
