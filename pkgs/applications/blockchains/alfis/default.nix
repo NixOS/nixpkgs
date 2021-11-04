@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config
-, withGui ? true, webkitgtk, Cocoa, WebKit
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, withGui ? true
+, webkitgtk, Cocoa, WebKit, dialog, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
@@ -27,9 +26,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = lib.optional (withGui && stdenv.isLinux) webkitgtk
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+
+  postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
+    cp $out/bin/alfis{,_unwrapped}
+    makeWrapper $out/bin/alfis{_unwrapped,} \
+      --prefix PATH : ${lib.makeBinPath [ dialog ]}
+  '';
 
   meta = with lib; {
     description = "Alternative Free Identity System";
