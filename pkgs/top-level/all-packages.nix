@@ -1022,10 +1022,6 @@ with pkgs;
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
-  coreterminal = libsForQt5.callPackage ../applications/terminal-emulators/coreterminal {
-    inherit (lxqt) qtermwidget;
-  };
-
   ctx = callPackage ../applications/terminal-emulators/ctx { };
 
   darktile = callPackage ../applications/terminal-emulators/darktile { };
@@ -1536,8 +1532,6 @@ with pkgs;
   cloudsmith-cli = callPackage ../development/tools/cloudsmith-cli { };
 
   codeql = callPackage ../development/tools/analysis/codeql { };
-
-  corearchiver = libsForQt5.callPackage ../tools/archivers/corearchiver { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
@@ -4169,15 +4163,7 @@ with pkgs;
                                                                         qtbase = qt5.qtbase;
                                                                       };
 
-  coregarage = libsForQt5.callPackage ../applications/misc/coregarage { };
-
-  coreshot = libsForQt5.callPackage ../tools/misc/coreshot { };
-
   c14 = callPackage ../applications/networking/c14 { };
-
-  corehunt = libsForQt5.callPackage ../applications/misc/corehunt { };
-
-  coretoppings = libsForQt5.callPackage ../applications/misc/coretoppings { };
 
   certstrap = callPackage ../tools/security/certstrap { };
 
@@ -6795,10 +6781,6 @@ with pkgs;
   libcsptr = callPackage ../development/libraries/libcsptr { };
 
   libscrypt = callPackage ../development/libraries/libscrypt { };
-
-  libcsys = libsForQt5.callPackage ../development/libraries/libcsys { };
-
-  libcprime = libsForQt5.callPackage ../development/libraries/libcprime { };
 
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
@@ -13317,6 +13299,13 @@ with pkgs;
   };
 
   ### END OF LUA
+
+  ### CuboCore
+  CuboCore = recurseIntoAttrs (import ./cubocore-packages.nix {
+    inherit newScope lxqt lib libsForQt5;
+  });
+
+  ### End of CuboCore
 
   lush2 = callPackage ../development/interpreters/lush {};
 
@@ -23851,8 +23840,6 @@ with pkgs;
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
-  corefm = libsForQt5.callPackage ../applications/misc/corefm { };
-
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
@@ -24195,8 +24182,6 @@ with pkgs;
 
   copyq = libsForQt5.callPackage ../applications/misc/copyq { };
 
-  coreaction = libsForQt5.callPackage ../applications/misc/coreaction { };
-
   corectrl = libsForQt5.callPackage ../applications/misc/corectrl { };
 
   coriander = callPackage ../applications/video/coriander {
@@ -24206,8 +24191,6 @@ with pkgs;
   corrscope = libsForQt5.callPackage ../applications/video/corrscope {
     ffmpeg = ffmpeg-full;
   };
-
-  coreimage = libsForQt5.callPackage ../applications/graphics/coreimage { };
 
   csa = callPackage ../applications/audio/csa { };
 
