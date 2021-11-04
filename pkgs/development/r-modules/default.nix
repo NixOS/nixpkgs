@@ -575,6 +575,19 @@ let
     FLAMES = [ pkgs.zlib.dev ];
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
+    rtmpt = [ pkgs.gsl ];
+    mixcat = [ pkgs.gsl ];
+    libstableR = [ pkgs.gsl ];
+    landsepi = [ pkgs.gsl ];
+    flan = [ pkgs.gsl ];
+    econetwork = [ pkgs.gsl ];
+    crandep = [ pkgs.gsl ];
+    catSurv = [ pkgs.gsl ];
+    ccfindR = [ pkgs.gsl ];
+    SPARSEMODr = [ pkgs.gsl ];
+    RKHSMetaMod = [ pkgs.gsl ];
+    LCMCR = [ pkgs.gsl ];
+    BNSP = [ pkgs.gsl ];
   };
 
   packagesRequiringX = [
