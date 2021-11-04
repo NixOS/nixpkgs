@@ -21041,6 +21041,7 @@ with pkgs;
   nginx-sso = callPackage ../servers/nginx-sso { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
+  percona-server57 = callPackage ../servers/sql/percona/5.7.x.nix { };
   percona-server = percona-server56;
 
   riak = callPackage ../servers/nosql/riak/2.2.0.nix {
