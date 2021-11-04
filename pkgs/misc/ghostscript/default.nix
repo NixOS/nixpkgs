@@ -1,12 +1,9 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
-, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
+, x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
 }:
-
-assert x11Support -> xlibsWrapper != null;
-assert cupsSupport -> cups != null;
 
 let
   fonts = stdenv.mkDerivation {
@@ -65,14 +62,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf zlib ]
     ++ lib.optional cupsSupport cups;
 
-  buildInputs =
-    [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs lcms2 bash
-    ]
-    ++ lib.optional x11Support xlibsWrapper
-    ++ lib.optional cupsSupport cups
-    ;
+  buildInputs = [
+    zlib expat openssl
+    libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
+    libiconv ijs lcms2 bash
+  ]
+  ++ lib.optional x11Support xlibsWrapper
+  ++ lib.optional cupsSupport cups
+  ;
 
   preConfigure = ''
     # https://ghostscript.com/doc/current/Make.htm
@@ -150,7 +147,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";
-
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
       interpreter for the PostScript language and the PDF file format,
@@ -159,9 +155,7 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-
     license = lib.licenses.agpl3;
-
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
     mainProgram = "gs";
