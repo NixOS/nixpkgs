@@ -9,5 +9,5 @@ picom.overrideAttrs (oldAttrs: rec {
       rev = "fade045eadf171d2c732820d6ebde7d1943a1397";
       sha256 = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
       };
-    meta.maintainers = with maintainers; oldAttrs.maintainers ++ [ GKasparov ];
+    meta.maintainers = with maintainers; oldAttrs.meta.maintainers ++ [ GKasparov ];
   })
