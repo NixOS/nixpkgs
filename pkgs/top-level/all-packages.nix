@@ -28863,7 +28863,7 @@ with pkgs;
 
   picom-next = picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-next";
-    version = "vNext";
+    version = "unstable-2021-11-01";
       src = fetchFromGitHub {
       owner = "yshui";
       repo = "picom";
