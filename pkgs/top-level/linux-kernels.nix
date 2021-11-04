@@ -496,7 +496,10 @@ in {
     linux_mptcp_95 = packagesFor kernels.linux_mptcp_95;
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
-    linux_testing = packagesFor kernels.linux_testing;
+    linux_testing =
+      if packageAliases.linux_latest.kernel.kernelAtLeast (lib.head (lib.splitString "-rc" kernels.linux_testing.version))
+        then packageAliases.linux_latest
+        else packagesFor kernels.linux_testing;
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
