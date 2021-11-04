@@ -20237,10 +20237,10 @@ with pkgs;
   # across different go versions and/or platforms:
   # https://github.com/NixOS/nixpkgs/issues/144667
   #
-  # do not uncomment this without approval from the go CODEOWNERS
-  #buildGo117Package = callPackage ../development/go-packages/generic {
-  #  go = buildPackages.go_1_17;
-  #};
+  # That's why `buildGoPackage != buildGo117Package`.
+  buildGo117Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_17;
+  };
 
   buildGoPackage = buildGo116Package;
 
@@ -20254,10 +20254,10 @@ with pkgs;
   # across different go versions and/or platforms:
   # https://github.com/NixOS/nixpkgs/issues/144667
   #
-  # do not uncomment this without approval from the go CODEOWNERS
-  #buildGo117Module = callPackage ../development/go-modules/generic {
-  #  go = buildPackages.go_1_17;
-  #};
+  # That's why `buildGoModule != buildGo117Module`.
+  buildGo117Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_17;
+  };
 
   buildGoModule = buildGo116Module;
 
