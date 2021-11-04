@@ -588,6 +588,8 @@ let
     RKHSMetaMod = [ pkgs.gsl ];
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
+    scModels = [ pkgs.mpfr.dev ];
+    multibridge = [ pkgs.mpfr.dev ];
   };
 
   packagesRequiringX = [
