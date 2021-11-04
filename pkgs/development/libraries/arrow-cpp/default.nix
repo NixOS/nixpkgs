@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fixDarwinDylibNames
 , autoconf
+, aws-sdk-cpp
 , boost
 , brotli
 , c-ares
@@ -16,6 +17,7 @@
 , jemalloc
 , libnsl
 , lz4
+, minio
 , openssl
 , perl
 , protobuf
@@ -31,6 +33,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
+, enableS3 ? true
 }:
 
 let
@@ -112,7 +115,7 @@ stdenv.mkDerivation rec {
     libnsl
     openssl
     protobuf
-  ];
+  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ];
 
   preConfigure = ''
     patchShebangs build-support/
@@ -148,12 +151,14 @@ stdenv.mkDerivation rec {
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
+  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
+  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h";
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
@@ -165,10 +170,16 @@ stdenv.mkDerivation rec {
         "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
         "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
         "TestCompareKernel.PrimitiveRandomTests"
+      ] ++ lib.optionals enableS3 [
+        "S3RegionResolutionTest.PublicBucket"
+        "S3RegionResolutionTest.RestrictedBucket"
+        "S3RegionResolutionTest.NonExistentBucket"
+        "S3OptionsTest.FromUri"
+        "TestMinioServer.Connect"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
-  installCheckInputs = [ perl which ];
+  installCheckInputs = [ perl which ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
       excludedTests = lib.optionals stdenv.isDarwin [
