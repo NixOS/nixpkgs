@@ -2,7 +2,7 @@
 
 with lib;
 
-let versions = builtins.fromJSON (builtins.readFile ./versions.json);
+let versions = lib.importJSON ./versions.json;
     arch = if stdenv.isi686 then "386"
            else if stdenv.isx86_64 then "amd64"
            else if stdenv.isAarch32 then "arm"

@@ -269,11 +269,11 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ]
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
+    ++ lib.optionals enableCuda [ cudatoolkit nvidia-optical-flow-sdk ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
