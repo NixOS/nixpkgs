@@ -22,9 +22,6 @@
   # pass-import
 , withPass ? false
 , pass
-
-  # git-credential-helper
-, withGitCredential ? false
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +44,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  postPatch = lib.optionalString withFzf ''
+  postPatch = ''
+    patchShebangs bin/git-credential-rbw
+    substituteInPlace bin/git-credential-rbw \
+        --replace rbw $out/bin/rbw
+  '' + lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
         --replace fzf ${fzf}/bin/fzf \
@@ -61,10 +62,6 @@ rustPlatform.buildRustPackage rec {
     patchShebangs bin/pass-import
     substituteInPlace bin/pass-import \
         --replace pass ${pass}/bin/pass
-  '' + lib.optionalString withGitCredential ''
-    patchShebangs bin/git-credential-rbw
-    substituteInPlace bin/git-credential-rbw \
-        --replace rbw $out/bin/rbw
   '';
 
   preConfigure = ''
@@ -77,14 +74,14 @@ rustPlatform.buildRustPackage rec {
       $out/bin/rbw gen-completions $shell > rbw.$shell
       installShellCompletion rbw.$shell
     done
+  '' + ''
+    cp bin/git-credential-rbw $out/bin
   '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin
   '' + lib.optionalString withRofi ''
     cp bin/rbw-rofi $out/bin
   '' + lib.optionalString withPass ''
     cp bin/pass-import $out/bin
-  '' + lib.optionalString withGitCredential ''
-    cp bin/git-credential-rbw $out/bin
   '';
 
   meta = with lib; {
