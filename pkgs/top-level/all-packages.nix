@@ -841,6 +841,8 @@ in
 
   tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
 
+  tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
+
   ajour = callPackage ../tools/games/ajour {
     inherit (gnome) zenity;
     inherit (plasma5Packages) kdialog;
