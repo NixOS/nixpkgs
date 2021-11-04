@@ -7085,13 +7085,9 @@ with pkgs;
   nodejs_latest = nodejs-16_x;
   nodejs-slim_latest = nodejs-slim-16_x;
 
-  nodePackages_latest = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
-    nodejs = nodejs_latest;
-  });
+  nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = dontRecurseIntoAttrs (callPackage ../development/node-packages/default.nix {
-    inherit nodejs;
-  });
+  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
 
   np2kai = callPackage ../misc/emulators/np2kai { };
 
