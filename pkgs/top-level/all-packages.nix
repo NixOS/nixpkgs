@@ -19541,6 +19541,8 @@ with pkgs;
 
   stb = callPackage ../development/libraries/stb { };
 
+  StormLib = callPackage ../development/libraries/StormLib { };
+
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
