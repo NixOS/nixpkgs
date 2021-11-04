@@ -121,8 +121,13 @@ in
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0dy7px7wfl6bqkfzz82jm4gvbjp338ddsx0mwfl6m7z48l7ng4v6";
+      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
+
+    makeFlags = [
+      # TODO(@sternenseemann): remove if afdko is new enough to know about Unicode 14.0
+      "BYPASS_SEQUENCE_CHECK=True"
+    ];
 
     nativeBuildInputs = [
       cairo
