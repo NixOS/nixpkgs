@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2021.10.5";
+  version = "2021.11.0";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "sha256-vz7S6Qzr10Idy83ogMIHEHrjxGxxjtFnzNsuhbZqUnA=";
+    sha256 = "sha256-amwzMSPMaXbIj95RhSVnl0kwHnEluKj4L7q4Zu2HPgE=";
   };
 
   vendorSha256 = null;
@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage    = "https://www.cloudflare.com/products/argo-tunnel";
     license     = licenses.unfree;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.thoughtpolice maintainers.enorris ];
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
   };
 }
