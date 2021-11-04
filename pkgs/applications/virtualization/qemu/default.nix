@@ -107,6 +107,31 @@ stdenv.mkDerivation rec {
       sha256 = "1qakkb7i4gx3x4rrp7500yxqrcnvc2h6a8g916csynscbprlvl97";
     })
     (fetchpatch {
+      name = "CVE-2021-3544-patch1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/86dd8fac2acc366930a5dc08d3fb1b1e816f4e1e.patch";
+      sha256 = "0kl0jfs7681fymz2b46a8anyzbmp9lv6k43bkscq7nsh8972b7s1";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b9f79858a614d95f5de875d0ca31096eaab72c3b.patch";
+      sha256 = "1wxd4q5q24lr8yhjxjayxli6kpkq4cd3q953kk4sw793wywivsb3";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch3.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/b7afebcf9e6ecf3cf9b5a9b9b731ed04bca6aa3e.patch";
+      sha256 = "05yg9a4khan7hmxv2ssv4l6rvvw4vxf9l225g0kc7a947giwmqjy";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch4.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/f6091d86ba9ea05f4e111b9b42ee0005c37a6779.patch";
+      sha256 = "1xxjd1fz21p88x0fp1bk4pd15w873cxm13av45i2xv7j9v510vsj";
+    })
+    (fetchpatch {
+      name = "CVE-2021-3544-patch5.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/63736af5a6571d9def93769431e0d7e38c6677bf.patch";
+      sha256 = "1h4hij602fsplgmppvgv51rghhkchq14akd8x7jb3w4hv241rsz1";
+    })
+    (fetchpatch {
       name = "CVE-2021-3682.patch";
       url = "https://gitlab.com/qemu-project/qemu/-/commit/5e796671e6b8d5de4b0b423dce1b3eba144a92c9.patch";
       sha256 = "0g87arqvjff1vzgzb87h67ws51y033slhzlqx1yy4fw9dzkszj9k";
