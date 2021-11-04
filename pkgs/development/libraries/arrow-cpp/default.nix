@@ -3,21 +3,26 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
+, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
 , brotli
 , c-ares
 , cmake
+, crc32c
+, curl
 , flatbuffers
 , gflags
 , glog
+, google-cloud-cpp
 , grpc
 , gtest
 , jemalloc
 , libnsl
 , lz4
 , minio
+, nlohmann_json
 , openssl
 , perl
 , protobuf
@@ -34,6 +39,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
 , enableS3 ? true
+, enableGcs ? true
 }:
 
 let
@@ -115,7 +121,14 @@ stdenv.mkDerivation rec {
     libnsl
     openssl
     protobuf
-  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ];
+  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
+  ++ lib.optionals enableGcs [
+    abseil-cpp
+    crc32c
+    curl
+    google-cloud-cpp
+    nlohmann_json
+  ];
 
   preConfigure = ''
     patchShebangs build-support/
@@ -152,6 +165,7 @@ stdenv.mkDerivation rec {
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
+    "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -183,6 +197,9 @@ stdenv.mkDerivation rec {
         "TestS3FS.OpenOutputStreamMetadata"
         "TestS3FS.OpenOutputStreamSyncWrites"
         "TestS3FSGeneric.*"
+      ] ++ lib.optionals enableGcs [
+        "GcsIntegrationTest.*"
+        "GcsFileSystem.FileSystemCompare"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
