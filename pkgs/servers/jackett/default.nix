@@ -31,25 +31,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.19.84";
+  version = "0.19.147";
 
   src = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-      sha256 = "0dfxnkql7l6dpyqiwd9al8a0nr93s5avb7k7pj0mlq8q38lb8bfk";
+      sha256 = "1nwsxq3nnm587iirhbsvyj3a5rb6jbd0njca8p557wq4ly99lmgb";
     };
     armv7a-linux = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM32.tar.gz";
-      sha256 = "1iqv8k437rlik83mq019aq157p8bhk8sp2k28lp7mga66vs6wkhb";
+      sha256 = "113gmz4hx4narcangq397cgr2s61rgl9kyjf1zx0vcdl8yml0qzr";
     };
     armv7l-linux = armv7a-linux;
     aarch64-linux = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM64.tar.gz";
-      sha256 = "1sxp8s09m4gx1xv0cdyxdz5fqg5ihbzrnq9qy54wp34p5v3jknjh";
+      sha256 = "1jb4nd6c058r83ljaq7y8h9a60sbr8kxyi5x1g22sb5m0x1fxv1l";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.macOS.tar.gz";
-      sha256 = "1489pgp1y77crpnnm5mfwvz81400hm3cnv0fq753wfpmgm9g4d4q";
+      sha256 = "1dr3hzhjqc9ygizqvrjzk6dxgp5j8kdv4967l2327vn2jy8nlqvg";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
