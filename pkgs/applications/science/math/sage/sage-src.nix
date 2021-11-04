@@ -110,6 +110,14 @@ stdenv.mkDerivation rec {
       rev = "9808325853ba9eb035115e5b056305a1c9d362a0";
       sha256 = "sha256-gJSqycCtbAVr5qnVEbHFUvIuTOvaxFIeffpzd6nH4DE=";
     })
+
+    # https://trac.sagemath.org/ticket/32420
+    (fetchSageDiff {
+      base = "9.5.beta2";
+      name = "sympy-1.9-update.patch";
+      rev = "beed4e16aff32e47d0c3b1c58cb1e2f4c38590f8";
+      sha256 = "sha256-3eJPfWfCrCAQ5filIn7FbzjRQeO9QyTIVl/HyRuqFtE=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
