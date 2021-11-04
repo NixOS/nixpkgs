@@ -838,7 +838,9 @@ in
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   tonelib-jam = callPackage ../applications/audio/tonelib-jam { };
- 
+
+  tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
+
   ajour = callPackage ../tools/games/ajour {
     inherit (gnome) zenity;
     inherit (plasma5Packages) kdialog;
