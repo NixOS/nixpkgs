@@ -2,7 +2,7 @@
 
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-next";
-  version = "unstable-2021-11-01";
+  version = "unstable-2021-10-31";
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
