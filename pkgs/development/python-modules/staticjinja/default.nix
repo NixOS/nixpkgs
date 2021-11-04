@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "4.1.0";
+  version = "4.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4IL+7ncJPd1e7k5oFRjQ6yvDjozcBAAZPf88biNTiLU=";
+    sha256 = "sha256-Bpgff3VaTylnYpkWoaWEiRWu4sYSP6dLbHDOjAhj7BM=";
   };
 
   nativeBuildInputs = [
