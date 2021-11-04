@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
-, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
-, perl, python3, rapidjson, re2, snappy, thrift, tzdata , utf8proc, which
+, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, jemalloc
+, lz4, perl, python3, rapidjson, re2, snappy, thrift, tzdata , utf8proc, which
 , zlib, zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -31,22 +31,23 @@ in stdenv.mkDerivation rec {
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ARROW_JEMALLOC_URL = fetchurl {
+  ARROW_JEMALLOC_URL = jemalloc.src;
+
+  ARROW_MIMALLOC_URL = fetchFromGitHub {
     # From
     # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
     # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
-    hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
+    owner = "microsoft";
+    repo = "mimalloc";
+    rev = "v1.7.2";
+    hash = "sha256-yHupYFgC8mJuLUSpuEAfwF7l6Ue4EiuO1Q4qN4T6wWc=";
   };
 
-  ARROW_MIMALLOC_URL = fetchurl {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
-    url =
-      "https://github.com/microsoft/mimalloc/archive/v1.7.2.tar.gz";
-    hash = "sha256-sZEuNUVlpLaYQQ91g8D4OTSm27Ot5Uq33csVaTIJNr0=";
+  ARROW_XSIMD_URL = fetchFromGitHub {
+    owner = "xtensor-stack";
+    repo = "xsimd";
+    rev = "aeec9c872c8b475dedd7781336710f2dd2666cb2";
+    hash = "sha256-vWKdJkieKhaxyAJhijXUmD7NmNvMWd79PskQojulA1w=";
   };
 
   patches = [
@@ -118,11 +119,6 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
-
-  ARROW_XSIMD_URL = fetchurl {
-    url = "https://github.com/xtensor-stack/xsimd/archive/aeec9c872c8b475dedd7781336710f2dd2666cb2.tar.gz";
-    sha256 = "09kvl962c6b0wnb7pb2n9dhvkflzwalgq6gwwi8628fgi9n1x10a";
-  };
 
   doInstallCheck = true;
   ARROW_TEST_DATA =
