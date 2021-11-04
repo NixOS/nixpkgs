@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ tomahna ];
+    maintainers = with maintainers; [ kubukoz tomahna ];
   };
 }
