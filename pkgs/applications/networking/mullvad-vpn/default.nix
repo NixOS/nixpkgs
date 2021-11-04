@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     mv usr/bin/* $out/bin
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
-    sed -i 's|\/opt\/Mullvad.*VPN|env MULLVAD_DISABLE_UPDATE_NOTIFICATION=1 '$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
+    sed -i 's|"\/opt\/Mullvad.*VPN|env MULLVAD_DISABLE_UPDATE_NOTIFICATION=1 "'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
 
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
