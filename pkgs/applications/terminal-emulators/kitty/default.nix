@@ -65,6 +65,8 @@ buildPythonApplication rec {
     libicns  # For the png2icns tool.
   ];
 
+  CFLAGS = lib.optionalString stdenv.isDarwin "-Wno-deprecated";
+
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
