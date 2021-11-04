@@ -80,14 +80,14 @@ let
              + lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.8.13";
+  version = "1.8.16";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = version;
-    sha256 = "0qg3qyj1b7wbaw2rsfly7nf3115h26nskl4ggrn6plhx272ni84p";
+    sha256 = "sha256-6d+y0Lgr+h0qYpCsa/ihvSMNuAdRMNQRuxZFpkWLDvg=";
   };
 
   teensyduino_version = "153";
@@ -105,13 +105,12 @@ stdenv.mkDerivation rec {
     url = "https://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
       {
-        linux64 = "1bdlk51dqiyg5pw23hs8rfv8nrjqy0jqfl89h1466ahahpnd080v";
-        linux32 = "0mgsw9wpwv1pgs2jslzflh7zf4ggqjgcd55hmdzrj0dvgkyw4cr2";
-        linuxarm = "08n4lpak3i7yfyi0085j4nq14gb2n7zx85wl9drp8gaavxnfbp5f";
-        linuxaarch64 = "0m4nhykzknm2hdpz1fhr2hbpncry53kvzs9y5lgj7rx3sy6ygbh7";
+        linux64 = "sha256-VK+Skl2xjqPWYEEKt1CCLwBZRxoyRfYQ3/60Byen9po=";
+        linux32 = "sha256-fjqV4avddmWAdFqMuUNUcDguxv3SI45m5QHFiWP8EKE=";
+        linuxarm = "sha256-Br8vUN7njI7VCH+ZvUh44l8LcgW+61+Q0x2AiXxIhTM=";
+        linuxaarch64 = "sha256-bOizBUUuyINg0/EqEatBq9lECT97JXxKbesCGyCA3YQ=";
       }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
-
 
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
   # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
