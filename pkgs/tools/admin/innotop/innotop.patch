@@ -1,0 +1,13 @@
+diff --git a/innotop.spec b/innotop.spec
+index 61155bc..8bcdf4c 100644
+--- a/innotop.spec
++++ b/innotop.spec
+@@ -99,7 +99,7 @@ find %{buildroot}%{_prefix}             \
+         $d = $_;
+         /\Q$d\E/ && return for reverse sort @INC;
+         $d =~ /\Q$_\E/ && return
+-            for qw|/etc %_prefix/man %_prefix/bin %_prefix/share|;
++            for qw|/etc %_prefix/man1 %_prefix/bin %_prefix/share|;
+
+         $dirs[@dirs] = $_;
+         }

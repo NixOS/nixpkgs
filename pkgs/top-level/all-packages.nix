@@ -21857,6 +21857,8 @@ with pkgs;
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
+  innotop = callPackage ../tools/admin/innotop { };
+
   iotop = callPackage ../os-specific/linux/iotop { };
   iotop-c = callPackage ../os-specific/linux/iotop-c { };
 
