@@ -599,6 +599,7 @@ let
     RmecabKo = [ pkgs.mecab ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
+    flowWorkspace = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
