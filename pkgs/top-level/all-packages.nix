@@ -11161,8 +11161,8 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  adoptopenjdk-bin-16-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix;
-  adoptopenjdk-bin-16-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix;
+  adoptopenjdk-bin-16-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix { inherit lib; };
+  adoptopenjdk-bin-16-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-16 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-16-packages-linux.jdk-hotspot {}
@@ -11179,8 +11179,8 @@ with pkgs;
     then callPackage adoptopenjdk-bin-16-packages-linux.jre-openj9 {}
     else callPackage adoptopenjdk-bin-16-packages-darwin.jre-openj9 {};
 
-  adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix;
-  adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix;
+  adoptopenjdk-bin-15-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk15-linux.nix { inherit lib; };
+  adoptopenjdk-bin-15-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk15-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-15 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-15-packages-linux.jdk-hotspot {}
@@ -11197,8 +11197,8 @@ with pkgs;
     then callPackage adoptopenjdk-bin-15-packages-linux.jre-openj9 {}
     else callPackage adoptopenjdk-bin-15-packages-darwin.jre-openj9 {};
 
-  adoptopenjdk-bin-14-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk14-linux.nix;
-  adoptopenjdk-bin-14-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk14-darwin.nix;
+  adoptopenjdk-bin-14-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk14-linux.nix { inherit lib; };
+  adoptopenjdk-bin-14-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk14-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-14 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-14-packages-linux.jdk-hotspot {}
@@ -11215,8 +11215,8 @@ with pkgs;
     then callPackage adoptopenjdk-bin-14-packages-linux.jre-openj9 {}
     else callPackage adoptopenjdk-bin-14-packages-darwin.jre-openj9 {};
 
-  adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix;
-  adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix;
+  adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix { inherit lib; };
+  adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-13 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-13-packages-linux.jdk-hotspot {}
@@ -11233,8 +11233,8 @@ with pkgs;
     then callPackage adoptopenjdk-bin-13-packages-linux.jre-openj9 {}
     else callPackage adoptopenjdk-bin-13-packages-darwin.jre-openj9 {};
 
-  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix;
-  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix;
+  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix { inherit lib; };
+  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-11 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-11-packages-linux.jdk-hotspot {}
@@ -11251,8 +11251,8 @@ with pkgs;
     then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
     else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
 
-  adoptopenjdk-bin-8-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix;
-  adoptopenjdk-bin-8-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix;
+  adoptopenjdk-bin-8-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix { inherit lib; };
+  adoptopenjdk-bin-8-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix { inherit lib; };
 
   adoptopenjdk-hotspot-bin-8 = if stdenv.isLinux
     then callPackage adoptopenjdk-bin-8-packages-linux.jdk-hotspot {}
