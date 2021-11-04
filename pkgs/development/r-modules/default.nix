@@ -450,6 +450,9 @@ let
     PICS = [ pkgs.gsl ];
     RcppCWB = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
+    trackViewer = [ pkgs.zlib.dev ];
+    themetagenomics = [ pkgs.zlib.dev ];
+    NanoMethViz = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
