@@ -1,4 +1,4 @@
-{ picom }:
+{ picom, lib, fetchFromGithub }:
 
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-next";
