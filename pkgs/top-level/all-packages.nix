@@ -28861,17 +28861,7 @@ with pkgs;
 
   picom = callPackage ../applications/window-managers/picom {};
 
-  picom-next = picom.overrideAttrs (oldAttrs: rec {
-  pname = "picom-next";
-    version = "unstable-2021-11-01";
-      src = fetchFromGitHub {
-      owner = "yshui";
-      repo = "picom";
-      rev = "fade045eadf171d2c732820d6ebde7d1943a1397";
-      sha256 = "fPiLZ63+Bw5VCxVNqj9i5had2YLa+jFMMf85MYdqvHU=";
-  };
-    meta.maintainers = with maintainers; oldAttrs.maintainers ++ [ GKasparov ];
-  });
+  picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
 
   xd = callPackage ../applications/networking/p2p/xd {};
 
