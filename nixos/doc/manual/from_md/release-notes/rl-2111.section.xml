@@ -413,6 +413,11 @@
           <link linkend="opt-hardware.rasdaemon.enable">hardware.rasdaemon</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>code-server</literal>-module now available
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
