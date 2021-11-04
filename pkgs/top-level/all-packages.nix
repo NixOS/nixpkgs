@@ -1569,6 +1569,8 @@ with pkgs;
 
   cozy = callPackage ../applications/audio/cozy { };
 
+  cpptoml = callPackage ../development/libraries/cpptoml { };
+
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
   msr = callPackage ../os-specific/linux/msr { };

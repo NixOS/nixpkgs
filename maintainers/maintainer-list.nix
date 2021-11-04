@@ -8910,6 +8910,12 @@
     githubId = 421510;
     name = "Noé Rubinstein";
   };
+  photex = {
+    email = "photex@gmail.com";
+    github = "photex";
+    githubId = 301903;
+    name = "Chip Collier";
+  };
   phreedom = {
     email = "phreedom@yandex.ru";
     github = "phreedom";
