@@ -835,6 +835,7 @@ let
     "Rogue"
     "fixest"
     "paxtoolsr"
+    "systemPipeShiny"
   ];
 
   packagesToSkipCheck = [
