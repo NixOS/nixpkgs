@@ -1,27 +1,28 @@
-{ lib, stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
+{ lib, stdenv, fetchurl, cmake, boost, bison, ncurses, openssl, readline, zlib, perl }:
+
+# Note: zlib is not required; MySQL can use an internal zlib.
 
 stdenv.mkDerivation rec {
   pname = "percona-server";
-  version = "5.6.49-89.0";
+  version = "5.6.51-91.0";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-${version}/source/tarball/percona-server-${version}.tar.gz";
-    sha256 = "09qqk02iny7jvngyk6k2j0kk2sspc6gw8sm3i6nn97njbkihi697";
+    sha256 = "0byxjzpksqpngm1dd95slic5yddb2x4bb36gchf5dfgb4k8w30j4";
   };
 
-  nativeBuildInputs = [ cmake bison perl ];
-  buildInputs = [ ncurses openssl zlib libaio ];
+  buildInputs = [
+    cmake bison ncurses openssl readline zlib boost.out boost.dev
+  ] ++ lib.optional stdenv.isDarwin perl;
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DFEATURE_SET=community"
-    "-DBUILD_CONFIG=mysql_release"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DWITH_SSL=yes"
-    "-DWITH_READLINE=no"
     "-DWITH_EMBEDDED_SERVER=no"
-    "-DWITH_EDITLINE=bundled"
     "-DWITH_ZLIB=yes"
-    "-DHAVE_IPV6=no"
+    "-DWITH_EDITLINE=bundled"
+    "-DHAVE_IPV6=yes"
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DMYSQL_DATADIR=/var/lib/mysql"
     "-DINSTALL_SYSCONFDIR=etc/mysql"
@@ -38,11 +39,17 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake
   '';
+
+  preConfigure = lib.optional stdenv.isDarwin ''
+    ln -s /bin/ps $TMPDIR/ps
+    export PATH=$PATH:$TMPDIR
+  '';
+
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
     rm -r $out/mysql-test $out/sql-bench $out/data "$out"/lib/*.a
