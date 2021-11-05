@@ -842,13 +842,35 @@ with pkgs;
         openssl = buildPackages.openssl.override {
           fetchurl = stdenv.fetchurlBoot;
           buildPackages = {
-            coreutils = buildPackages.coreutils.override {
+            coreutils = buildPackages.coreutils.override rec {
               fetchurl = stdenv.fetchurlBoot;
               inherit perl;
               xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
               gmp = null;
               aclSupport = false;
               attrSupport = false;
+              autoreconfHook = buildPackages.autoreconfHook.override rec {
+                autoconf = buildPackages.autoconf.override {
+                  fetchurl = stdenv.fetchurlBoot;
+                  m4 = buildPackages.gnum4.override { fetchurl = stdenv.fetchurlBoot; };
+                  inherit perl;
+                };
+                automake = buildPackages.automake.override {
+                  fetchurl = stdenv.fetchurlBoot;
+                  inherit autoconf perl;
+                };
+                libtool = buildPackages.libtool_1_5.override {
+                  fetchurl = stdenv.fetchurlBoot;
+                  inherit perl;
+                  m4 = buildPackages.m4.override { fetchurl = stdenv.fetchurlBoot; };
+                };
+                gettext = buildPackages.gettext.override {
+                  fetchurl = stdenv.fetchurlBoot;
+                  xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
+                  libiconv = null;
+                };
+              };
+              texinfo = null;
             };
             inherit perl;
           };
