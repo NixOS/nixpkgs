@@ -1,28 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, coverage
-, ddt
-, nose
+, pythonOlder
+, aiofiles
+, cbor2
+, httpx
+, msgpack
+, pecan
+, pytest-asyncio
+, pytestCheckHook
 , pyyaml
 , requests
 , testtools
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "2.0.0";
+  version = "3.0.1";
+  format = "pyproject";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc";
+    sha256 = "sha256-xB2E2zJYgahw6LcSnV7P2XL6QyPPd7cRmh0qIZZu5oE=";
   };
 
-  checkInputs = [coverage ddt nose pyyaml requests testtools];
+  checkInputs = [
+    aiofiles
+    cbor2
+    httpx
+    msgpack
+    pecan
+    pytest-asyncio
+    pytestCheckHook
+    pyyaml
+    requests
+    testtools
+    websockets
+  ];
 
-  # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
-  # OSError: [Errno 98] Address already in use
-  doCheck = false;
+  disabledTestPaths = [
+    # missing optional nuts package
+    "falcon/bench/nuts/nuts/tests/test_functional.py"
+    # missing optional mujson package
+    "tests/test_media_handlers.py"
+    # tries to run uvicorn binary and doesn't find it
+    "tests/asgi/test_asgi_servers.py"
+  ];
 
   meta = with lib; {
     description = "An unladen web framework for building APIs and app backends";

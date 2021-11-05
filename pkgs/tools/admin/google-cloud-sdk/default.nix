@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -21,33 +21,33 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0cjy6znhpv90mj7463lghmzhivwhaxa7q9da37wdpwh53h7kf05r";
+      sha256 = "19s3nryngzv7zs7piwx92hii5p2y97fs7wngqrd9v8cxvgavp1dc";
     };
 
     aarch64-darwin = {
       url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "0phby3s9375zyphjwk1hrpr8fiybik1ag3yfnpmi7msq54lf4h3x";
+      sha256 = "1iphpkxrrp0gdan7ikbjbhykdpazcs1fnlcwkfyv2m9baggkd53z";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0j1n8mzck3sizjslm12x4lgxklw1xvbxp2186xnxm4pmj4kwp4k1";
+      sha256 = "1z1ymvij9vi8jc05b004jhd08dqbk133wd03fdxnagd6nfr0bjqm";
     };
 
     i686-linux = {
       url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "1sll47bhd4x5r0z65325ak0wbbky07qbzqkf7w97nilv7wz5dgxa";
+      sha256 = "17i5pkwjmi38klgr12xqgza7iwkx459cbavlq0x33zaq2a4zanlc";
     };
 
     aarch64-linux = {
       url = "${baseUrl}/${name}-linux-arm.tar.gz";
-      sha256 = "1jk17fn3q1i625q1cdyxlvv58rw9ma7lwvngc04jqrccczsl1jqr";
+      sha256 = "17zjnab4ai5w6p3cbxys9zsg4bdlp0lh6pvmkvdz9hszxxch4yms";
     };
   }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "360.0.0";
+  version = "362.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -115,6 +115,11 @@ in stdenv.mkDerivation rec {
     done
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
   '';
 
   meta = with lib; {

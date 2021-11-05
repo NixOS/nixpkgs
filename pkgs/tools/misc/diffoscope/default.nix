@@ -1,19 +1,19 @@
 { lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
 , abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, openssl, pdftk, pgpdump, poppler_utils, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, odt2txt, unzip, wabt, xxd, xz, zip, zstd
+, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
+, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
+, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "187";
+  version = "188";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-oXWdXJhf8OOxBcLumjeWW0Xev0LjcTScAw9baDOs6ls=";
+    sha256 = "sha256-kB3EnmnQYqal4cdzwArH+QdHe5wnUOnbjbQAz52g1Us=";
   };
 
   outputs = [ "out" "man" ];
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt dumpimage dumppdf dumpxsb enjarify lipo ocamlobjinfo oggDump otool procyon
+  # Still missing these tools: docx2txt lipo otool r2pipe
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
@@ -53,9 +53,9 @@ python3Packages.buildPythonApplication rec {
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
-      abootimg apksigner apktool cbfstool colord ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono odt2txt openssh pdftk poppler_utils qemu R tcpdump wabt radare2
-    ] ++ (with python3Packages; [ binwalk guestfs h5py ]));
+      abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
+      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 

@@ -5,7 +5,7 @@
 , setuptools-scm
 , libdeltachat
 , cffi
-, IMAPClient
+, imapclient
 , pluggy
 , requests
 , setuptools
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    IMAPClient
+    imapclient
     pluggy
     requests
     setuptools

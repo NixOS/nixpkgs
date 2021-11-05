@@ -36,7 +36,7 @@ let
       '';
 
       doCheck = true;
-      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
+      preCheck = "export LD_LIBRARY_PATH=$(pwd)\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH";
 
       meta = with lib; {
         description    = "Very fast, header only, C++ logging library";

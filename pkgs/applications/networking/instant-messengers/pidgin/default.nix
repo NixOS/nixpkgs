@@ -10,6 +10,7 @@
 , gnutls ? null
 , libgcrypt ? null
 , plugins, symlinkJoin
+, cacert
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
@@ -17,11 +18,11 @@
 let unwrapped = stdenv.mkDerivation rec {
   pname = "pidgin";
   majorVersion = "2";
-  version = "${majorVersion}.14.6";
+  version = "${majorVersion}.14.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.bz2";
-    sha256 = "bb45f7c032f9efd6922a5dbf2840995775e5584771b23992d04f6eff7dff5336";
+    sha256 = "1jjc15pfyw3012q5ffv7q4r88wv07ndqh0wakyxa2k0w4708b01z";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -59,6 +60,7 @@ let unwrapped = stdenv.mkDerivation rec {
     "--with-nss-includes=${nss.dev}/include/nss"
     "--with-nss-libs=${nss.out}/lib"
     "--with-ncurses-headers=${ncurses.dev}/include"
+    "--with-system-ssl-certs=${cacert}/etc/ssl/certs"
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"

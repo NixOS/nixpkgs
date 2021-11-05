@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UKroV1p7jYuNzCAFMsuUsYC/C9AZ1D4rhwpwuER39vc=";
   };
 
+  # This patch should be obsolete and should stop applying the in next release.
+  patches = [ ./fix-compilation-with-olm-3.2.5.patch ];
+
   cmakeFlags = [
     # Network requiring tests can't be disabled individually:
     # https://github.com/Nheko-Reborn/mtxclient/issues/22

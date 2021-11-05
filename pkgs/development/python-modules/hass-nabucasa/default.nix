@@ -24,6 +24,13 @@ buildPythonPackage rec {
     sha256 = "sha256-0E8eiHzqbxHbtAd97MbvFMRDWTu25E9x/44oNGC4mUM=";
   };
 
+  postPatch = ''
+    sed -i 's/"acme.*"/"acme"/' setup.py
+    substituteInPlace setup.py \
+      --replace "cryptography>=2.8,<4.0" "cryptography" \
+      --replace "snitun==" "snitun>="
+  '';
+
   propagatedBuildInputs = [
     acme
     aiohttp
@@ -39,12 +46,6 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i 's/"acme.*"/"acme"/' setup.py
-    substituteInPlace setup.py \
-      --replace "snitun==" "snitun>="
-  '';
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 

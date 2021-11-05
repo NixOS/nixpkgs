@@ -3,7 +3,7 @@
 , fetchPypi
 , coverage
 , ipykernel
-, jupyter_client
+, jupyter-client
 , nbformat
 , pytestCheckHook
 , pytest
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     coverage
     ipykernel
-    jupyter_client
+    jupyter-client
     nbformat
     pytest
     six

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
-, vala
+, vala_0_52
 , meson
 , ninja
 , pkg-config
@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    vala
+    # Does not build with vala 0.54
+    # https://github.com/bleakgrey/tootle/issues/337
+    vala_0_52
     wrapGAppsHook
   ];
 

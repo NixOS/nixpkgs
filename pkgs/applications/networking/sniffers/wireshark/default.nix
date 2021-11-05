@@ -66,8 +66,6 @@ in stdenv.mkDerivation {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-
-    wrapQtApp $out/Applications/Wireshark.app/Contents/MacOS/Wireshark
   '' else optionalString withQt ''
     install -Dm644 -t $out/share/applications ../wireshark.desktop
 

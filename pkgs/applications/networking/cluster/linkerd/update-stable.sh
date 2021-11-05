@@ -5,13 +5,11 @@ set -x -eu -o pipefail
 
 cd $(dirname "$0")
 
-TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} \
-    --silent https://api.github.com/repos/linkerd/linkerd2/releases/latest | \
-    jq -r '.tag_name')
+VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} \
+    --silent https://api.github.com/repos/linkerd/linkerd2/releases | \
+    jq 'map(.tag_name)' | grep stable | sed 's/["|,| ]//g' | sed 's/stable-//' | sort -V -r | head -n1)
 
-VERSION=$(echo ${TAG} | sed 's/^stable-//')
-
-SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/linkerd/linkerd2/archive/refs/tags/${TAG}.tar.gz)
+SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/linkerd/linkerd2/archive/refs/tags/stable-${VERSION}.tar.gz)
 
 setKV () {
   sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
@@ -19,11 +17,11 @@ setKV () {
 
 setKV version ${VERSION}
 setKV sha256 ${SHA256}
-setKV vendorSha256 "" # Necessary to force clean build.
+setKV vendorSha256 "0000000000000000000000000000000000000000000000000000" # Necessary to force clean build.
 
 cd ../../../../../
 set +e
-VENDOR_SHA256=$(nix-build --no-out-link -A linkerd 2>&1 | grep "got:" | cut -d':' -f2 | sed 's| ||g')
+VENDOR_SHA256=$(nix-build --no-out-link -A linkerd 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
 cd - > /dev/null
 

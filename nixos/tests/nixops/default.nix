@@ -27,7 +27,7 @@ let
         users.users.person.isNormalUser = true;
         virtualisation.writableStore = true;
         virtualisation.memorySize = 1024 /*MiB*/;
-        virtualisation.pathsInNixDB = [
+        virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet
 

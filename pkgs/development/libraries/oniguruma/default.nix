@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "onig";
-  version = "6.9.6";
+  version = "6.9.7.1";
 
   src = fetchFromGitHub {
     owner = "kkos";
     repo = "oniguruma";
     rev = "v${version}";
-    sha256 = "0y0dv6axvjjzi9367xc4q2nvvx58919iyzy25d5022lpz9z569kj";
+    sha256 = "sha256-IBWxmzmVdKTkHbfy7V8ejpeIdfOU/adGwpUTCMdLU3w=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  configureFlags = [ "--enable-posix-api=yes" ];
 
   meta = with lib; {
     homepage = "https://github.com/kkos/oniguruma";

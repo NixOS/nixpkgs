@@ -7,6 +7,7 @@
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, enableDebuginfod ? false, elfutils
 , guile ? null
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
@@ -48,7 +49,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
-    ++ lib.optional doCheck dejagnu;
+    ++ lib.optional doCheck dejagnu
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -89,7 +91,8 @@ stdenv.mkDerivation rec {
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

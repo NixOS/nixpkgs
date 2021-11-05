@@ -9,24 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04dqbn2nfzllxfcn3v9vkfy2hn2syihijr575621r1pj65pcgf8y";
+    hash = "sha256-dYKSc5fU66fu+GdTeWQBrIOJAiBGdYAOS7MCto98Xss=";
   };
 
-  cargoSha256 = "0hl8q62lankrab8gq9vxmkn68drs0hw5pk0q6aiq8fxsb63dzsw0";
+  cargoHash = "sha256-M4H5tUbo1f18kk8S53saebSnZhZFr8udw41BUNJbQVI==";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ llvmPackages.clang ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
+  # temporarily disable dynamic linking, which broke with rocksdb update 6.23.3 -> 6.25.3
+  # https://github.com/NixOS/nixpkgs/pull/143524#issuecomment-955053331
+  #
   # link rocksdb dynamically
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  # ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+  # ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

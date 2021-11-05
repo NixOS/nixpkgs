@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "seafile-client";
-  version = "8.0.3";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "cG3OSqRhYnxlzfauQia6pM/1gu+iE5mtHTGk3kGMFH0=";
+    sha256 = "sha256-HIgIcw4Y/NXidCBwRMrdKojlqO8CJO+6N7s7PdBx4YQ=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -29,6 +29,6 @@ mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ schmittlauch ];
   };
 }

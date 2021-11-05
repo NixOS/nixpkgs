@@ -19,13 +19,13 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+unstable=2021-10-09";
+  version = "0.pre+date=2021-10-20";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "debc4e2afe313a3c54133df9f26969c2927dc8aa";
-    hash = "sha256-ixFDmtq6hd2enmPbBT0JCv1bmxt84zle4zPQzz+rMCI=";
+    rev = "f50b8ab503d05cccb6ff61df52f2625df3292a9e";
+    hash = "sha256-pxToXVIKYS9P2TnGMGmKfJmAP54GVPVls9bm9tmS21s=";
   };
 
   dontConfigure = true;

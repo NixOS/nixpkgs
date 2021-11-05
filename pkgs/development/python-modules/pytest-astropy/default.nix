@@ -3,24 +3,25 @@
 , fetchPypi
 , hypothesis
 , pytest
+, pytest-arraydiff
 , pytest-astropy-header
 , pytest-doctestplus
 , pytest-filter-subpackage
-, pytest-remotedata
+, pytest-mock
 , pytest-openfiles
-, pytest-arraydiff
+, pytest-remotedata
 , setuptools-scm
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.8.0";
+  version = "0.9.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "619800eb2cbf64548fbea25268efe7c6f6ae206cb4825f34abd36f27bcf946a2";
+    sha256 = "7cdac1b2a5460f37477a329712c3a5d4af4ddf876b064731995663621be4308b";
   };
 
   nativeBuildInputs = [
@@ -33,12 +34,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     hypothesis
+    pytest-arraydiff
     pytest-astropy-header
     pytest-doctestplus
     pytest-filter-subpackage
-    pytest-remotedata
+    pytest-mock
     pytest-openfiles
-    pytest-arraydiff
+    pytest-remotedata
   ];
 
   # pytest-astropy is a meta package and has no tests

@@ -37,10 +37,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out"/bin/beamerpresenter.app/Contents/MacOS/beamerpresenter
-  '';
-
   meta = with lib; {
     description = "Modular multi screen pdf presentation software respecting your window manager";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";

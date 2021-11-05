@@ -52,15 +52,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/Alecaddd/taxi";
     description = "The FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-  };
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+    mainProgram = "com.github.alecaddd.taxi";
   };
 }

@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
 
-    makeWrapper "${dotnetCorePackages.netcore_3_1}/bin/dotnet" $out/bin/Prowlarr \
+    makeWrapper "${dotnetCorePackages.runtime_3_1}/bin/dotnet" $out/bin/Prowlarr \
       --add-flags "$out/share/${pname}-${version}/Prowlarr.dll" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         curl sqlite libmediainfo mono openssl icu ]}

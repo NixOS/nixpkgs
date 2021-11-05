@@ -1,7 +1,6 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , dxflib
 , eigen
@@ -10,6 +9,7 @@
 , LASzip
 , libLAS
 , pdal
+, pcl
 , qtbase
 , qtsvg
 , qttools
@@ -19,29 +19,20 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.11.2"; # Remove below patch with the next version bump.
+  # Released version(v2.11.3) doesn't work with packaged PCL.
+  version = "unstable-2021-10-14";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    rev = "v${version}";
-    sha256 = "0sb2h08iaf6zrf54sg6ql6wm63q5vq0kpd3gffdm26z8w6j6wv3s";
+    rev = "1f65ba63756e23291ae91ff52d04da468ade8249";
+    sha256 = "x1bDjFjXIl3r+yo1soWvRB+4KGP50/WBoGlrH013JQo=";
     # As of writing includes (https://github.com/CloudCompare/CloudCompare/blob/a1c589c006fc325e8b560c77340809b9c7e7247a/.gitmodules):
     # * libE57Format
     # * PoissonRecon
-    # In a future version it will also contain
     # * CCCoreLib
     fetchSubmodules = true;
   };
-
-  patches = [
-    # TODO: Remove with next CloudCompare release (see https://github.com/CloudCompare/CloudCompare/pull/1478)
-    (fetchpatch {
-      name = "CloudCompare-fix-for-PDAL-2.3.0.patch";
-      url = "https://github.com/CloudCompare/CloudCompare/commit/f3038dcdeb0491c4a653c2ee6fb017326eb676a3.patch";
-      sha256 = "0ca5ry987mcgsdawz5yd4xhbsdb5k44qws30srxymzx2djvamwli";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +46,7 @@ mkDerivation rec {
     LASzip
     libLAS
     pdal
+    pcl
     qtbase
     qtsvg
     qttools
@@ -63,15 +55,14 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    # TODO: This will become -DCCCORELIB_USE_TBB=ON in a future version, see
-    #       https://github.com/CloudCompare/CloudCompare/commit/f5a0c9fd788da26450f3fa488b2cf0e4a08d255f
-    "-DCOMPILE_CC_CORE_LIB_WITH_TBB=ON"
+    "-DCCCORELIB_USE_TBB=ON"
     "-DOPTION_USE_DXF_LIB=ON"
     "-DOPTION_USE_GDAL=ON"
     "-DOPTION_USE_SHAPE_LIB=ON"
 
     "-DPLUGIN_GL_QEDL=ON"
     "-DPLUGIN_GL_QSSAO=ON"
+
     "-DPLUGIN_IO_QADDITIONAL=ON"
     "-DPLUGIN_IO_QCORE=ON"
     "-DPLUGIN_IO_QCSV_MATRIX=ON"
@@ -80,6 +71,8 @@ mkDerivation rec {
     "-DPLUGIN_IO_QPDAL=ON" # required for .las/.laz support
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
+
+    "-DPLUGIN_STANDARD_QPCL=ON" # Adds PCD import and export support
   ];
 
   meta = with lib; {

@@ -332,6 +332,7 @@ let
 
         if [ $? == 0 ]; then
             echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
+            sync /crypt-storage${dev.yubikey.storage.path}
         else
             echo "Warning: Could not update LUKS key, current challenge persists!"
         fi

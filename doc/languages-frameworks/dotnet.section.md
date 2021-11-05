@@ -28,8 +28,7 @@ mkShell {
   packages = [
     (with dotnetCorePackages; combinePackages [
       sdk_3_1
-      sdk_3_0
-      sdk_2_1
+      sdk_5_0
     ])
   ];
 }
@@ -64,9 +63,9 @@ $ dotnet --info
 
 The `dotnetCorePackages.sdk_X_Y` is preferred over the old dotnet-sdk as both major and minor version are very important for a dotnet environment. If a given minor version isn't present (or was changed), then this will likely break your ability to build a project.
 
-## dotnetCorePackages.sdk vs dotnetCorePackages.net vs dotnetCorePackages.netcore vs dotnetCorePackages.aspnetcore {#dotnetcorepackages.sdk-vs-dotnetcorepackages.net-vs-dotnetcorepackages.netcore-vs-dotnetcorepackages.aspnetcore}
+## dotnetCorePackages.sdk vs dotnetCorePackages.runtime vs dotnetCorePackages.aspnetcore {#dotnetcorepackages.sdk-vs-dotnetcorepackages.runtime-vs-dotnetcorepackages.aspnetcore}
 
-The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given version. The `net`, `netcore` and `aspnetcore` packages are meant to serve as minimal runtimes to deploy alongside already built applications. For runtime versions >= .NET 5 `net` is used while `netcore` is used for older .NET Core runtime version.
+The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given version. The `runtime` and `aspnetcore` packages are meant to serve as minimal runtimes to deploy alongside already built applications.
 
 ## Packaging a Dotnet Application {#packaging-a-dotnet-application}
 
@@ -78,9 +77,13 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used.
-* `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used.
+* `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
+* `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
+* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. By default, this is set to the `projectFile` attribute.
+* `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
 * `dotnetBuildFlags` can be used to pass flags to `dotnet build`.
+* `dotnetTestFlags` can be used to pass flags to `dotnet test`.
 * `dotnetInstallFlags` can be used to pass flags to `dotnet install`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 

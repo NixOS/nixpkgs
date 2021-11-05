@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchpatch,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
 
   epoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
@@ -12,7 +12,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   krunner, kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons,
-  kwindowsystem, kxmlgui, plasma-framework,
+  kwindowsystem, kxmlgui, plasma-framework, libqaccessibilityclient,
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -31,7 +31,7 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage krunner kscreenlocker
     kservice kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui
-    plasma-framework
+    plasma-framework libqaccessibilityclient
 
   ];
   outputs = [ "dev" "out" ];
@@ -40,18 +40,6 @@ mkDerivation {
     ./0002-xwayland.patch
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
-    # Fix build against libglvnd 1.3.4+
-    # Remove with release 5.22.90
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/839710201c389b7f4ed248cb3818e755a37ce977.patch";
-      sha256 = "09rldhy0sbmqdfpyjzwm20cwnmrmj0w2751vyi5xlr414g0rzyc1";
-    })
-    # Fixup previous patch for i686
-    # Remove with release 5.22.90
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/38e24ecd6416a975db0989c21b70d6a4cc242f35.patch";
-      sha256 = "0zsjmzswcnvfd2jm1c8i9aijpbap1141mjv6y4j282bplyqlp966";
-    })
   ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''

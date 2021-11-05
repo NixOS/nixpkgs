@@ -100,6 +100,9 @@ buildPythonApplication rec {
         else "linux-package/bin";
     in
     ''
+      # Fontconfig error: Cannot load default config file: No such file: (null)
+      export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+
       env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
     '';
 

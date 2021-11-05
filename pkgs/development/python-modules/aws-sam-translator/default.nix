@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.38.0";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "v${version}";
-    sha256 = "0nn9jfqz13kzmxm0r9vy24p8sqxv3mrm5d3lx7ah6rc581q8nv1k";
+    sha256 = "1a9m7zyqc414adw1i0sr2n9nlnmry0gi1ah1qna3yv9dx4ql9v9c";
   };
 
   propagatedBuildInputs = [

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "--enable-all"
     "--enable-base64encode"
     "--enable-pkcs11"
+    "--enable-writedup"
     "--enable-reproducible-build"
     "--enable-tls13"
   ];

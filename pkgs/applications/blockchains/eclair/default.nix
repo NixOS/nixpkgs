@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "eclair";
-  version = "0.6.1";
-  revision = "d3ae323";
+  version = "0.6.2";
+  revision = "6817d6f";
 
   src = fetchzip {
     url = "https://github.com/ACINQ/eclair/releases/download/v${version}/eclair-node-${version}-${revision}-bin.zip";
-    sha256 = "0hmdssj6pxhvadrgr1svb2lh7hfbd2axr5wsl7glizv1a21g0l2c";
+    sha256 = "038r9mblm2r8mkxnv65k29r7xj22dff5gmvzv9xiy5zf9i45mmk8";
   };
 
   propagatedBuildInputs = [ jq openjdk11 ];
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ACINQ/eclair";
     license = licenses.asl20;
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }

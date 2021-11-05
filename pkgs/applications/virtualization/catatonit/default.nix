@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catatonit";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hokG6o7toZxU984EvIlne33Aa2EZVZ3qu1jTZMm5nt4=";
+    sha256 = "sha256-jX4fYC/rpfd3ro2UZ6OEu4kU5wpusOwmEVPWEjxwlW4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

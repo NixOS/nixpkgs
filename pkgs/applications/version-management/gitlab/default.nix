@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
 }:
 
 let
-  data = (builtins.fromJSON (builtins.readFile ./data.json));
+  data = lib.importJSON ./data.json;
 
   version = data.version;
   src = fetchFromGitLab {
@@ -36,6 +36,15 @@ let
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
+        # the included yarn rake task attaches the yarn:install task
+        # to assets:precompile, which is both unnecessary (since we
+        # run `yarn install` ourselves) and undoes the shebang patches
+        # in node_modules
+        railties = x.railties // {
+          dontBuild = false;
+          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
+          patchFlags = "-p2";
+        };
       };
     groups = [
       "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
@@ -45,7 +54,10 @@ let
     ignoreCollisions = true;
   };
 
-  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = data.yarn_hash;
+  };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";

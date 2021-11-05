@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.systemd;
-  lndir = "${pkgs.xorg.lndir}/bin/lndir";
+  lndir = "${pkgs.buildPackages.xorg.lndir}/bin/lndir";
 in rec {
 
   shellEscape = s: (replaceChars [ "\\" ] [ "\\\\" ] s);

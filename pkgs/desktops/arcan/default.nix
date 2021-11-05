@@ -9,25 +9,26 @@ rec {
 
   # Arcan
 
-  arcan = callPackage ./arcan.nix { };
+  arcan = callPackage ./arcan { };
   arcan-wrapped = callPackage ./wrapper.nix { };
-  xarcan = callPackage ./xarcan.nix { };
+  xarcan = callPackage ./xarcan { };
 
   # Appls
 
-  durden = callPackage ./durden.nix { };
+  durden = callPackage ./durden { };
   durden-wrapped = callPackage ./wrapper.nix {
     name = "durden-wrapped";
     appls = [ durden ];
   };
 
-  pipeworld = callPackage ./pipeworld.nix { };
+  pipeworld = callPackage ./pipeworld { };
   pipeworld-wrapped = callPackage ./wrapper.nix {
     name = "pipeworld-wrapped";
     appls = [ pipeworld ];
   };
 
-  prio = callPackage ./prio.nix { };
+  # Warning: prio is deprecated; however it works and is useful for testing
+  prio = callPackage ./prio { };
   prio-wrapped = callPackage ./wrapper.nix {
     name = "prio-wrapped";
     appls = [ prio ];

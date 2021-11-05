@@ -1,13 +1,16 @@
 { coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
+  mathcomp-real-closed,
   lib, which, version ? null }:
 
-with lib; mkCoqDerivation {
+with lib;
+
+(mkCoqDerivation {
 
   pname = "CoqEAL";
-  owner = "CoqEAL";
+
   inherit version;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (isGe "8.10") "1.12.0" ]; out = "1.0.6"; }
+      { cases = [ (isGe "8.10") (isGe "1.12.0") ]; out = "1.0.6"; }
       { cases = [ (isGe "8.10") (range "1.11.0" "1.12.0") ]; out = "1.0.5"; }
       { cases = [ (isGe "8.7") "1.11.0" ]; out = "1.0.4"; }
       { cases = [ (isGe "8.7") "1.10.0" ]; out = "1.0.3"; }
@@ -25,4 +28,7 @@ with lib; mkCoqDerivation {
     description = "CoqEAL - The Coq Effective Algebra Library";
     license = licenses.mit;
   };
-}
+}).overrideAttrs (o: {
+  propagatedBuildInputs = o.propagatedBuildInputs
+  ++ optional (versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
+})

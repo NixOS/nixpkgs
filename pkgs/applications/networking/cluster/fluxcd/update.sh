@@ -20,11 +20,11 @@ setKV () {
 setKV version ${VERSION}
 setKV sha256 ${SHA256}
 setKV manifestsSha256 ${SPEC_SHA256}
-setKV vendorSha256 ""
+setKV vendorSha256 "0000000000000000000000000000000000000000000000000000" # The same as lib.fakeSha256
 
 cd ../../../../../
 set +e
-VENDOR_SHA256=$(nix-build --no-out-link -A fluxcd 2>&1 | grep "got:" | cut -d':' -f2 | sed 's| ||g')
+VENDOR_SHA256=$(nix-build --no-out-link -A fluxcd 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
 set -e
 
 cd - > /dev/null

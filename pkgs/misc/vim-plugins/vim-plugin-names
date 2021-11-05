@@ -59,6 +59,7 @@ carlitux/deoplete-ternjs
 ccarpita/rtorrent-syntax-file
 cespare/vim-toml@main
 chaoren/vim-wordmotion
+chentau/marks.nvim
 chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chkno/vim-haskell-module-name
@@ -223,13 +224,13 @@ hecal3/vim-leader-guide
 henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
-hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
 hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
 hrsh7th/cmp-emoji@main
 hrsh7th/cmp-nvim-lsp@main
 hrsh7th/cmp-nvim-lua@main
+hrsh7th/cmp-omni@main
 hrsh7th/cmp-path@main
 hrsh7th/cmp-vsnip@main
 hrsh7th/nvim-cmp@main
@@ -266,6 +267,7 @@ jaredgorski/SpaceCamp
 jasonccox/vim-wayland-clipboard
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher
+jc-doyle/cmp-pandoc-references
 jceb/vim-hier
 jceb/vim-orgmode
 jeetsukumaran/vim-buffergator
@@ -286,6 +288,7 @@ jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 joosepalviste/nvim-ts-context-commentstring@main
+jordwalke/vim-reasonml
 josa42/coc-lua
 josa42/vim-lightline-coc
 jose-elias-alvarez/minsnip.nvim@main
@@ -299,6 +302,7 @@ jreybert/vimagit
 jsfaint/gen_tags.vim
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
+Julian/lean.nvim@main
 Julian/vim-textobj-variable-segment
 juliosueiras/vim-terraform-completion
 junegunn/fzf.vim
@@ -376,6 +380,7 @@ ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lewis6991/gitsigns.nvim@main
+lf-lang/lingua-franca.vim
 lfe-support/vim-lfe
 lfilho/cosco.vim
 lifepillar/vim-gruvbox8
@@ -393,6 +398,7 @@ LucHermitte/lh-brackets
 LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
+lukas-reineke/cmp-under-comparator
 lukas-reineke/indent-blankline.nvim
 lukaszkorecki/workflowish
 lumiliet/vim-twig
@@ -457,7 +463,7 @@ michaeljsmith/vim-indent-object
 mileszs/ack.vim
 milkypostman/vim-togglelist
 mindriot101/vim-yapf
-mk12/vim-lean
+mk12/vim-lean@main
 mkasa/lushtags
 mlr-msft/vim-loves-dafny
 moll/vim-bbye
@@ -527,6 +533,7 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-lualine/lualine.nvim
 nvim-neorg/neorg@main
 nvim-telescope/telescope-cheat.nvim
 nvim-telescope/telescope-dap.nvim
@@ -551,7 +558,7 @@ ojroques/nvim-bufdel@main
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
-olimorris/onedark.nvim
+olimorris/onedarkpro.nvim@main
 onsails/diaglist.nvim
 onsails/lspkind-nvim
 OrangeT/vim-csharp
@@ -563,6 +570,7 @@ osyo-manga/vim-watchdogs
 overcache/NeoSolarized
 p00f/nvim-ts-rainbow
 pangloss/vim-javascript
+pantharshit00/vim-prisma
 parsonsmatt/intero-neovim
 PaterJason/cmp-conjure
 pearofducks/ansible-vim

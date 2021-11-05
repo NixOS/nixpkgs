@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "27";
+  version = "29";
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09bxyfrwhqwlfxwgbbnkyd7md9wz05y3fjvc9f0rrj70z7qcicnv";
+    sha256 = "sha256-A2+jLxKpha7HV1m3uzy00o8tsjwx0Uuwn5x3DO9daTI=";
   };
 
   propagatedBuildInputs = [

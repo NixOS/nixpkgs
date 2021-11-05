@@ -6,7 +6,7 @@ rec {
 
   description = "The CFFI toolchain";
 
-  deps = [ args."alexandria" args."babel" args."cffi" args."trivial-features" ];
+  deps = [ args."alexandria" args."asdf" args."babel" args."cffi" args."trivial-features" ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
@@ -23,10 +23,10 @@ rec {
     http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz MD5
     c3df5c460e00e5af8b8bd2cd03a4b5cc NAME cffi-toolchain FILENAME
     cffi-toolchain DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
-     (NAME cffi FILENAME cffi)
+    ((NAME alexandria FILENAME alexandria) (NAME asdf FILENAME asdf)
+     (NAME babel FILENAME babel) (NAME cffi FILENAME cffi)
      (NAME trivial-features FILENAME trivial-features))
-    DEPENDENCIES (alexandria babel cffi trivial-features) VERSION cffi_0.24.1
-    SIBLINGS
+    DEPENDENCIES (alexandria asdf babel cffi trivial-features) VERSION
+    cffi_0.24.1 SIBLINGS
     (cffi-examples cffi-grovel cffi-libffi cffi-tests cffi-uffi-compat cffi)
     PARASITES NIL) */

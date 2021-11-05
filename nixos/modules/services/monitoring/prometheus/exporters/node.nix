@@ -35,10 +35,15 @@ in
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
       '';
-      # The systemd collector needs AF_UNIX
-      RestrictAddressFamilies = lib.optional (lib.any (x: x == "systemd") cfg.enabledCollectors) "AF_UNIX";
+      RestrictAddressFamilies = optionals (any (collector: (collector == "logind" || collector == "systemd")) cfg.enabledCollectors) [
+        # needs access to dbus via unix sockets (logind/systemd)
+        "AF_UNIX"
+      ] ++ optionals (any (collector: (collector == "network_route" || collector == "wifi")) cfg.enabledCollectors) [
+        # needs netlink sockets for wireless collector
+        "AF_NETLINK"
+      ];
       # The timex collector needs to access clock APIs
-      ProtectClock = lib.any (x: x == "timex") cfg.disabledCollectors;
+      ProtectClock = any (collector: collector == "timex") cfg.disabledCollectors;
     };
   };
 }

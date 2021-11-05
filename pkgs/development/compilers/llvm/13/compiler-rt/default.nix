@@ -60,8 +60,7 @@ stdenv.mkDerivation {
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-  ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    # Prevent a compilation error on darwin
+  ] # Prevent a compilation error on darwin
     ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-h/Dp70+ChXirBq8w5NeUQEO/Ts0/S3vRy+N+IXPN6Uo=";
+    sha256 = "806dd4791298e19daff2cdfe7be3ae6d931d0d03097973f802b3ea55066f62dd";
   };
 
   checkInputs = [

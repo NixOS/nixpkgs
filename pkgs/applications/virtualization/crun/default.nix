@@ -11,7 +11,6 @@
 , yajl
 , nixosTests
 , criu
-, system
 }:
 
 let
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap libseccomp systemd yajl ]
     # Criu currently only builds on x86_64-linux
-    ++ lib.optional (lib.elem system criu.meta.platforms) criu;
+    ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
 

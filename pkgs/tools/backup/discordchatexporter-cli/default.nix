@@ -18,7 +18,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
-  dotnet-runtime = dotnetCorePackages.netcore_3_1;
+  dotnet-runtime = dotnetCorePackages.runtime_3_1;
   nugetDeps = ./deps.nix;
 
   nativeBuildInputs = [ autoPatchelfHook ];

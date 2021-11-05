@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "21.9b0";
+  version = "21.10b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-feTPx+trcQ3jJXEtQBJWiRAdIdJSg+7X6ZmHIs8Q65E=";
+    sha256 = "sha256-qZUiKQkuMl/l89rlbYH2ObI/cTHrhAeBlH5LKIYDDzM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sveitser ];
+    maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

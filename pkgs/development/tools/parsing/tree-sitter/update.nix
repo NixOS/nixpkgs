@@ -261,7 +261,7 @@ let
       ${foreachSh allGrammars
         ({name, ...}: ''
            # indentation hack
-             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${name}" "${name}"'')}
+             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
       echo "}" ) \
       > "$outputDir/default.nix"
   '';

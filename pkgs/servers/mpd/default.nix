@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -11,7 +11,7 @@
 # Filters
 , libsamplerate
 # Outputs
-, alsa-lib, libjack2, libpulseaudio, libshout
+, alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
 , icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
 # Services
@@ -65,6 +65,7 @@ let
     # Output plugins
     alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
+    pipewire      = [ pipewire ];
     pulse         = [ libpulseaudio ];
     shout         = [ libshout ];
     # Commercial services
@@ -116,18 +117,19 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.11";
+      version = "0.23.2";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-X+FnZ5W1p9GuOSIxTSp1Yok+kKsLjNPOKZkJSCYk8kM=";
+        sha256 = "sha256-gn06t8S0hh5xe5V1vnXVHSb0FwxY40onUV+Bt7oL9ic=";
       };
 
       buildInputs = [
         glib
         boost
+        fmt
         # According to the configurePhase of meson, gtest is considered a
         # runtime dependency. Quoting:
         #

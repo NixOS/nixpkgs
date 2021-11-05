@@ -19,7 +19,9 @@ let
 
       makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
-      postInstall = ''chmod +x "$out"/lib/libminiupnpc.so'';
+      postInstall = ''
+        chmod +x "$out"/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
+      '';
 
       meta = with lib; {
         homepage = "http://miniupnp.free.fr/";

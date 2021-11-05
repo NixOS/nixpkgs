@@ -3,13 +3,15 @@
 , fetchurl
 , mono6
 , msbuild
-, dotnet-sdk
+, dotnetCorePackages
 , makeWrapper
 , unzip
 , writeText
 }:
 
 let
+
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   deps = map (package: stdenv.mkDerivation (with package; {
     pname = name;

@@ -5,6 +5,7 @@
 mixRelease rec {
   pname = "elixir-ls";
   version = "0.8.1";
+  inherit elixir;
 
   src = fetchFromGitHub {
     owner = "elixir-lsp";
@@ -16,7 +17,7 @@ mixRelease rec {
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
-    inherit src version;
+    inherit src version elixir;
     sha256 = "sha256-OzjToAg+q/ybCyqzNFk28OBsItjFTbdPi416EPh2qX0=";
   };
 

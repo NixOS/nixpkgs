@@ -33,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.2.3";
+  version = "21.2.5";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,7 +47,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0x3ivd34j938js2iffzlvnlj4hwywxrscd8q1rvq894x2m52hibj";
+    sha256 = "1fxcdf4qs4vmyjcns7jv62w4jy3gr383ar5b7mr77nb0nxgmhjcf";
   };
 
   # TODO:
@@ -92,6 +92,10 @@ self = stdenv.mkDerivation {
     ++ lib.optional enableOSMesa "osmesa"
     ++ lib.optional stdenv.isLinux "driversdev"
     ++ lib.optional enableOpenCL "opencl";
+
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [

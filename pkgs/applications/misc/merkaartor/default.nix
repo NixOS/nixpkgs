@@ -50,7 +50,6 @@ mkDerivation rec {
     mkdir -p $out/Applications
     mv binaries/bin/merkaartor.app $out/Applications
     mv binaries/bin/plugins $out/Applications/merkaartor.app/Contents
-    wrapQtApp $out/Applications/merkaartor.app/Contents/MacOS/merkaartor
   '';
 
   meta = with lib; {

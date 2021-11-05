@@ -2,12 +2,14 @@
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
-, dotnet-sdk
+, dotnetCorePackages
 , mono
 , Nuget
 }:
 
 let
+
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
   deps = import ./deps.nix { inherit fetchurl; };
 

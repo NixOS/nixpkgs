@@ -1,8 +1,8 @@
 diff --git a/meson_options.txt b/meson_options.txt
-index 66791f3a..93b5e2a9 100644
+index 71c2e35e9..a0f380c04 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -172,6 +172,9 @@ option('udev',
+@@ -176,6 +176,9 @@ option('udev',
  option('udevrulesdir',
         type : 'string',
         description : 'Directory for udev rules (defaults to /lib/udev/rules.d)')
@@ -13,7 +13,7 @@ index 66791f3a..93b5e2a9 100644
         type : 'string',
         description : 'Directory for user systemd units (defaults to /usr/lib/systemd/user)')
 diff --git a/src/daemon/systemd/user/meson.build b/src/daemon/systemd/user/meson.build
-index aa30a86f..1edebb2d 100644
+index 5bd134537..5a3ca9ed5 100644
 --- a/src/daemon/systemd/user/meson.build
 +++ b/src/daemon/systemd/user/meson.build
 @@ -9,7 +9,7 @@ install_data(
@@ -22,6 +22,6 @@ index aa30a86f..1edebb2d 100644
  systemd_config.set('PW_BINARY', pipewire_bindir / 'pipewire')
 -systemd_config.set('PW_PULSE_BINARY', pipewire_bindir / 'pipewire-pulse')
 +systemd_config.set('PW_PULSE_BINARY', get_option('pipewire_pulse_prefix') / 'bin/pipewire-pulse')
- systemd_config.set('PW_MEDIA_SESSION_BINARY', pipewire_bindir / 'pipewire-media-session')
  
  configure_file(input : 'pipewire.service.in',
+                output : 'pipewire.service',

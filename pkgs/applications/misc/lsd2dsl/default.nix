@@ -30,9 +30,6 @@ mkDerivation rec {
 
   installPhase = ''
     install -Dm755 console/lsd2dsl gui/lsd2dsl-qtgui -t $out/bin
-  '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/bin/lsd2dsl
-    wrapQtApp $out/bin/lsd2dsl-qtgui
   '';
 
   meta = with lib; {

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "khronos";
-  version = "3.6.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AETyVCBUuBzHwDgTkGRIokFYwcmXrb/F85J5GEIu4dE=";
+    sha256 = "sha256-+gZy8cdekM26J1ujqFmfBXTctXc9E//EY42ZoLq9rBs=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
-    # https://github.com/lainsce/khronos/pull/75
-    substituteInPlace build-aux/post_install.py \
-      --replace 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
   '';
 
   passthru = {
@@ -65,5 +62,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "io.github.lainsce.Khronos";
   };
 }

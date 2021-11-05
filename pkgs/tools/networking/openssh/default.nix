@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
+{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in
@@ -6,14 +6,15 @@ in
 
   openssh = common rec {
     pname = "openssh";
-    version = "8.7p1";
+    version = "8.8p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "090yxpi03pxxzb4ppx8g8hdpw7c4nf8p0avr6c7ybsaana5lp8vw";
+      sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
   openssh_hpn = common rec {

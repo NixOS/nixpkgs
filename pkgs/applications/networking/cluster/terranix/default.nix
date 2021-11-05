@@ -1,15 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ... }:
 
 stdenv.mkDerivation rec {
-
   pname = "terranix";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
     rev = version;
-    sha256 = "030067h3gjc02llaa7rx5iml0ikvw6szadm0nrss2sqzshsfimm4";
+    sha256 = "sha256-3N4a5VhZqIgJW11w8oJKJ9T8mhfwEM33kEwV/zZkCs8=";
   };
 
   installPhase = ''

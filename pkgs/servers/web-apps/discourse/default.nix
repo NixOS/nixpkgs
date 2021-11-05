@@ -10,13 +10,13 @@
 }@args:
 
 let
-  version = "2.7.8";
+  version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-p4eViEvzIU6W89FZRtMBXsT7bvf2H12bTPZ/h3iD8rA=";
+    sha256 = "sha256-SOERjFbG4l/tUfOl51XEW0nVbza3L4adjiPhz4Hj0YU=";
   };
 
   runtimeDeps = [
@@ -266,6 +266,11 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
+
+      # Change the path to the public directory reported by Discourse
+      # to its real path instead of the symlink in the store, since
+      # the store path won't be matched by any nginx rules
+      ./public_dir_path.patch
     ];
 
     postPatch = ''
