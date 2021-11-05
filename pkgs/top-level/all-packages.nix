@@ -5831,6 +5831,8 @@ with pkgs;
 
   google-compute-guest-agent = callPackage ../tools/virtualization/google-compute-guest-agent { };
 
+  google-compute-guest-configs = callPackage ../tools/virtualization/google-compute-guest-configs { };
+
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
   google-clasp = callPackage ../development/misc/google-clasp { };
