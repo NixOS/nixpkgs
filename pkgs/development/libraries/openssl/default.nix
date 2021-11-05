@@ -198,11 +198,33 @@ in {
       ./1.1/nix-ssl-cert-file.patch
 
       (if stdenv.hostPlatform.isDarwin
-       then ./1.1/use-etc-ssl-certs-darwin.patch
-       else ./1.1/use-etc-ssl-certs.patch)
+       then ./use-etc-ssl-certs-darwin.patch
+       else ./use-etc-ssl-certs.patch)
     ] ++ lib.optionals (stdenv.isDarwin) [
       ./1.1/macos-yosemite-compat.patch
     ];
     withDocs = true;
+  };
+
+  openssl_3_0 = common {
+    version = "3.0.0";
+    sha256 = "sha256-We7fy0bCUhTJvTftYHgpe03wHQEiZ/6enu4x9hvHBTY=";
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./use-etc-ssl-certs-darwin.patch
+       else ./use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
   };
 }

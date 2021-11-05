@@ -1,8 +1,11 @@
-{ stdenv
-, lib
+{ lib
 , rustPlatform
 , fetchFromGitHub
-, perl, pkg-config, openssl, Security, libiconv, curl
+, pkg-config
+, openssl
+, stdenv
+, curl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +23,20 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl  ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ curl Security ];
+
+  cargoBuildFlags = [ "--no-default-features" ];
+
+  cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }
-

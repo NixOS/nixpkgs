@@ -4201,6 +4201,12 @@
     githubId = 1713676;
     name = "Luis G. Torres";
   };
+  GKasparov = {
+    email = "mizozahr@gmail.com";
+    github = "GKasparov";
+    githubId = 60962839;
+    name = "Mazen Zahr";
+  };
   gleber = {
     email = "gleber.p@gmail.com";
     github = "gleber";
@@ -9383,6 +9389,12 @@
     github = "r-burns";
     githubId = 52847440;
     name = "Ryan Burns";
+  };
+  r3dl3g = {
+    email = "redleg@rothfuss-web.de";
+    github = "r3dl3g";
+    githubId = 35229674;
+    name = "Armin Rothfuss";
   };
   raboof = {
     email = "arnout@bzzt.net";
