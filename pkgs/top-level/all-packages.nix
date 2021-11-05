@@ -10243,6 +10243,8 @@ with pkgs;
 
   v2ray = callPackage ../tools/networking/v2ray { };
 
+  v2ray-domain-list-community = callPackage ../data/misc/v2ray-domain-list-community { };
+
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
   vampire = callPackage ../applications/science/logic/vampire {};
