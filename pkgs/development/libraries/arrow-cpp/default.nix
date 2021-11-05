@@ -156,12 +156,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
-  ARROW_TEST_DATA =
-    if doInstallCheck then "${arrow-testing}/data" else null;
-  PARQUET_TEST_DATA =
-    if doInstallCheck then "${parquet-testing}/data" else null;
+  ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
+  PARQUET_TEST_DATA = lib.optionalString doInstallCheck "${parquet-testing}/data";
   GTEST_FILTER =
-    if doInstallCheck then
       let
         # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
         filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
@@ -170,7 +167,7 @@ stdenv.mkDerivation rec {
           "TestCompareKernel.PrimitiveRandomTests"
         ];
       in
-      "-${builtins.concatStringsSep ":" filteredTests}" else null;
+      lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   installCheckInputs = [ perl which ];
   installCheckPhase =
     let
