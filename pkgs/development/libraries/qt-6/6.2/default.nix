@@ -131,6 +131,7 @@ let
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtshadertools = callPackage ../modules/qtshadertools.nix {};
+      qtquick3d = callPackage ../modules/qtquick3d.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
