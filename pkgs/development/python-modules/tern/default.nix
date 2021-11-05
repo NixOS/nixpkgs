@@ -12,6 +12,7 @@
 , GitPython
 , prettytable
 , idna
+, packageurl-python
 }:
 
 buildPythonPackage rec {
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     GitPython
     prettytable
     idna
+    packageurl-python
   ];
 
   # No tests
