@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    # TEST
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
   '';
 

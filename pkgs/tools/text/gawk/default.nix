@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   inherit doCheck;
 
   postInstall = ''
+    # TEST
     rm "$out"/bin/gawk-*
     ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
   '';
