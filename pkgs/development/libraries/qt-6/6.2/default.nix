@@ -132,6 +132,7 @@ let
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtshadertools = callPackage ../modules/qtshadertools.nix {};
       qtquick3d = callPackage ../modules/qtquick3d.nix {};
+      qtquicktimeline = callPackage ../modules/qtquicktimeline.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
