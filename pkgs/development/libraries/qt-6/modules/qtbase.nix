@@ -445,6 +445,10 @@ qtbaseDrv = stdenv.mkDerivation rec {
     echo debug installPhase: copy /build to $out
     cp -r /build $out
 
+    cat >$out/set-sourceRoot.sh <<EOF
+    sourceRoot=$sourceRoot
+    EOF
+
     ${if !buildWithNinja then "" else ''
       # debug
       cat >$out/get-mtime-millisec-of-all-files-recursive.sh <<'EOF'
@@ -479,7 +483,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
       echo "debug: get file hashes ..."
       # TODO should be same as in .ninja_log
       (
-        cd $out/qtbase-everywhere-src-6.2.0/build
+        cd $out/$sourceRoot/build
         find . -exec $out/murmurhash-cli.py '{}' \; >$out/murmurhash.txt
       )
       echo "debug: get file hashes done $out/murmurhash.txt"
@@ -487,7 +491,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
       echo "debug: get file times ..."
       # TODO should be same as in .ninja_log
       (
-        cd $out/qtbase-everywhere-src-6.2.0/build
+        cd $out/$sourceRoot/build
         $out/get-mtime-millisec-of-all-files-recursive.sh >$out/filetimes.txt
       )
       echo "debug: get file times done $out/filetimes.txt"
@@ -609,7 +613,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
     runHook postFixup
   '';
 
-  # cwd is /build/qtbase-everywhere-src-6.2.0/build
+  # cwd is /build/$sourceRoot/build
   # TODO refactor for splitBuildInstall: move everything after buildPhase to "let ... in",
   # so we can modify installPhase, fixupPhase, ... without rebuilding the build derivation
   postFixup = if splitBuildInstall then "echo debug: skip postFixup" else postFixupYes;
@@ -694,16 +698,17 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
   # pname must have same length in both qtbaseDrv and qtbase, so binary patching is less risky
   src = qtbaseDrv.out;
 
-  # TODO replace qtbase-everywhere-src-6.2.0 with sourceRoot from qtbaseDrv
   unpackPhase = ''
     echo "installing from cached build ${qtbaseDrv}"
+
+    . ${qtbaseDrv}/set-sourceRoot.sh
 
     # this takes about 30 seconds for qtbase. we must copy to get write access
     # TODO microoptimization: manual copy-on-write:
     # hardlink most files, only copy those files that we must modify
     echo "copying cached build files ..."
     t1=$(date +%s)
-    cp -rap ${qtbaseDrv}/qtbase-everywhere-src-6.2.0 /build/
+    cp -r ${qtbaseDrv}/$sourceRoot /build/
     echo "copying cached build files done in $(($(date +%s) - $t1)) seconds"
 
     chmod -R +w /build
@@ -753,16 +758,16 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     find /build -type f -not -path /build/env-vars \
       -exec grep -HnEa ".{50}($outHash|$binHash|$devHash).{50}" '{}' \;
     echo ":this should be empty"
-    diff -u0 ${qtbaseDrv}/qtbase-everywhere-src-6.2.0/build/cmake_install.cmake /build/qtbase-everywhere-src-6.2.0/build/cmake_install.cmake || true
+    diff -u0 ${qtbaseDrv}/$sourceRoot/build/cmake_install.cmake /build/$sourceRoot/build/cmake_install.cmake || true
     fi
 
     ${if !buildWithNinja then "" else /* much more complex than cmake ... */ ''
-      cd /build/qtbase-everywhere-src-6.2.0/build
+      cd /build/$sourceRoot/build
 
       echo "debug: restoring timestamps in /build to prevent rerun_cmake"
       if [ "$(head -n 1 .ninja_log)" != "# ninja log v5" ]
       then
-        echo "fatal error: unexpected format of ${qtbaseDrv}/qtbase-everywhere-src-6.2.0/build/.ninja_log:"
+        echo "fatal error: unexpected format of ${qtbaseDrv}/$sourceRoot/build/.ninja_log:"
         head -n 1 .ninja_log
         exit 1
       fi
@@ -799,10 +804,10 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     # debug: show some file times, compare with .ninja_log
     stat -c $'wxyz %.W %.X %.Y %.Z %n' build.ninja CMakeFiles/3.21.2/CMakeCCompiler.cmake
     #ninja install
-    cd /build/qtbase-everywhere-src-6.2.0/build
+    cd /build/$sourceRoot/build
     ninja -d explain install # debug
   '' else ''
-    cd /build/qtbase-everywhere-src-6.2.0/build
+    cd /build/$sourceRoot/build
     cmake -P cmake_install.cmake
     # -Wdev --debug-output --trace # debug cmake
   '';
@@ -923,7 +928,7 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     echo "pwd = $(pwd)"
     echo "ls:"; ls; echo ":ls"
     echo "running tests ..."
-    cd /build/qtbase-everywhere-src-6.2.0/build
+    cd /build/$sourceRoot/build
     echo "running tests: make test"; make test
     # FIXME No tests were found!!!
     echo "running tests done"
