@@ -24,6 +24,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
+
+    # compatibility with click 8.x (see https://github.com/simonw/sqlite-utils/pull/337)
+    substituteInPlace sqlite_utils/cli.py --replace 'multiple=True,' 'multiple=True,default=(),'
   '';
 
   propagatedBuildInputs = [
