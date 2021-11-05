@@ -2008,13 +2008,6 @@ EOT
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # https://github.com/hadolint/language-docker/issues/72
-  language-docker_10_2_0 = overrideCabal super.language-docker_10_2_0 (drv: {
-    testFlags = (drv.testFlags or []) ++ [
-      "--skip=/Language.Docker.Integration/parse"
-    ];
-  });
-
   # 2021-09-06: hadolint depends on language-docker >= 10.1
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_10_2_0;
