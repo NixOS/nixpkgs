@@ -1,0 +1,12 @@
+diff --git a/src/ansiblelint/testing/__init__.py b/src/ansiblelint/testing/__init__.py
+index aa1ae1d..8c944e9 100644
+--- a/src/ansiblelint/testing/__init__.py
++++ b/src/ansiblelint/testing/__init__.py
+@@ -87,6 +87,7 @@ def run_ansible_lint(
+     # pollute the env, causing weird behaviors, so we pass only a safe list of
+     # vars.
+     safe_list = [
++        'HOME',
+         'LANG',
+         'LC_ALL',
+         'LC_CTYPE',

@@ -27,6 +27,8 @@ buildPythonPackage rec {
     sha256 = "sha256-1krKWcjYllQdN5uSBbISa4UQiKqwosLKsZ/3SxhM3xw=";
   };
 
+  patches = [ ./safe-env-vars.patch ];
+
   nativeBuildInputs = [
     setuptools-scm
   ];
