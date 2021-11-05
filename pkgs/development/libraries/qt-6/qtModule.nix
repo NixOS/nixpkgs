@@ -128,7 +128,7 @@ mkDerivation (args // {
       mkdir -p $bin/lib/qt-${self.qtbase.version}
       mv $out/plugins $bin/lib/qt-${self.qtbase.version}
     elif [ -n "$bin" ]; then
-      echo 'fatal error: qt module has no plugins but "bin" output'
+      echo 'FIXME warning: qt module has no plugins but "bin" output'
       echo 'todo: in qtModule for ${pname}-${version}, remove:'
       echo '  outputs = [ "out" "dev" "bin" ];'
     fi
