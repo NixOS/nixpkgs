@@ -1,6 +1,9 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, withAws ? false
 }:
+
+# dependencies of these two plugins conflict
+assert !(withLibvirt && withAws);
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
@@ -25,7 +28,8 @@ let
         };
         inherit version;
       };
-    } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+    } // (lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix))
+      // (lib.optionalAttrs withAws (import ./gemset_aws.nix)));
 
     # This replaces the gem symlinks with directories, resolving this
     # error when running vagrant (I have no idea why):
@@ -88,7 +92,14 @@ in buildRubyGem rec {
     cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
   '' +
   lib.optionalString withLibvirt ''
-    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+    substitute ${./vagrant-plugin.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+      --subst-var-by pname libvirt \
+      --subst-var-by ruby_version ${ruby.version} \
+      --subst-var-by vagrant_version ${version}
+  '' +
+  lib.optionalString withAws ''
+    substitute ${./vagrant-plugin.json.in} $out/vagrant-plugins/plugins.d/vagrant-aws.json \
+      --subst-var-by pname aws \
       --subst-var-by ruby_version ${ruby.version} \
       --subst-var-by vagrant_version ${version}
   '';
