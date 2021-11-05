@@ -55,15 +55,6 @@ self: super: {
     excludes = ["*.cabal"];
   });
 
-  attoparsec = appendPatch (doJailbreak super.attoparsec_0_14_1) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/attoparsec-0.14.1.patch";
-    sha256 = "0nprywmi3i9ih8mcc8afyimrfjr8pbcjxr2ywz9gwdlwdplk21da";
-  });
-
-  # 0.12.0 introduces support for 9.2
-  base-compat = self.base-compat_0_12_0;
-  base-compat-batteries = self.base-compat-batteries_0_12_0;
-
   basement = overrideCabal (appendPatch super.basement (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/basement-0.0.12.patch";
     sha256 = "0c8n2krz827cv87p3vb1vpl3v0k255aysjx9lq44gz3z1dhxd64z";
@@ -77,12 +68,6 @@ self: super: {
     sha256 = "19ajai9y04981zfpcdj1nlz44b12gjj4m1ncciijv43mnz82plji";
   });
 
-  # Duplicate Show instances in tests and library cause compiling tests to fail
-  blaze-builder = appendPatch (dontCheck super.blaze-builder) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/blaze-builder-0.4.2.1.patch";
-    sha256 = "1h5ny3mlng69vwaabl3af8hlv4qi24wfw8s14lw2ksw1yjbgi0j8";
-  });
-
   cereal = appendPatch (doJailbreak super.cereal) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cereal-0.5.8.1.patch";
     sha256 = "03v4nxwz9y6viaa8anxcmp4zdf2clczv4pf9fqq6lnpplpz5i128";
@@ -90,11 +75,6 @@ self: super: {
 
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
-
-  constraints = appendPatch (doJailbreak super.constraints) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/constraints-0.13.patch";
-    sha256 = "0cr4qzw0fbwy97f3wx0v3mv8yc642ahpfa80kaqrq191232fzzf3";
-  });
 
   cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
@@ -111,19 +91,20 @@ self: super: {
     sha256 = "030kdsk0fg08cgdcjpyv6z8ym1vkkrbd34aacs91y5hqzc9g79y1";
   });
 
-  entropy = appendPatch super.entropy (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/entropy-0.4.1.6.patch";
-    sha256 = "0pbbl6m8b3snf9cz6rs0ljmacpsavayfn0s3p67hdcmndy3ndawi";
-  });
-
   # Tests fail in GHC 9.2
   extra = dontCheck super.extra;
 
   # Jailbreaks & Version Updates
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
+  attoparsec = super.attoparsec_0_14_2;
   base64-bytestring = doJailbreak super.base64-bytestring;
+  base-compat = self.base-compat_0_12_1;
+  base-compat-batteries = self.base-compat-batteries_0_12_1;
+  binary-instances = doJailbreak super.binary-instances;
+  binary-orphans = super.binary-orphans_1_0_2;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
+  constraints = doJailbreak super.constraints;
   cpphs = overrideCabal super.cpphs (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";});
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
@@ -132,6 +113,7 @@ self: super: {
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
   hackage-security = doJailbreak super.hackage-security;
+  hashable = super.hashable_1_4_0_0;
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; });
@@ -139,9 +121,11 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   network = super.network_3_1_2_5;
+  OneTuple = super.OneTuple_0_3_1;
   parallel = doJailbreak super.parallel;
   polyparse = overrideCabal (doJailbreak super.polyparse) (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; });
   primitive = doJailbreak super.primitive;
+  quickcheck-instances = super.quickcheck-instances_0_3_26_1;
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
@@ -153,6 +137,7 @@ self: super: {
   these = doJailbreak super.these;
   time-compat = doJailbreak super.time-compat;
   type-equality = doJailbreak super.type-equality;
+  unordered-containers = doJailbreak super.unordered-containers;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
   zlib = doJailbreak super.zlib;
@@ -209,8 +194,6 @@ self: super: {
     sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
   });
 
-  hashable = super.hashable_1_3_4_1;
-
   haskell-src-meta = appendPatch (doJailbreak super.haskell-src-meta) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/haskell-src-meta-0.8.7.patch";
     sha256 = "013k8hpxac226j47cdzgdf9a1j91kmm0cvv7n8zwlajbj3y9bzjp";
@@ -233,13 +216,6 @@ self: super: {
   # https://github.com/snoyberg/mono-traversable/issues/192
   mono-traversable = dontCheck super.mono-traversable;
 
-  quickcheck-instances = appendPatch (doJailbreak super.quickcheck-instances) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/quickcheck-instances-0.3.25.2.patch";
-    sha256 = "0ndnb6wbnhxxwy69jjdpmd7gmmv6asmx1jczwz1hsn921mn1ilnp";
-    # `.cabal` revision information has been included in the patch
-    excludes = ["*.cabal"];
-  });
-
   # Disable tests pending resolution of
   # https://github.com/Soostone/retry/issues/71
   retry = dontCheck super.retry;
@@ -248,6 +224,9 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/streaming-commons-0.2.2.1.patch";
     sha256 = "04wi1jskr3j8ayh88kkx4irvhhgz0i7aj6fblzijy0fygikvidpy";
   });
+
+  # Tests have a circular dependency on quickcheck-instances
+  text-short = dontCheck super.text-short_0_1_4;
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
   hlint = super.hlint_3_3_4.overrideScope (self: super: {
