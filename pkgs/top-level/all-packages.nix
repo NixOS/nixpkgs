@@ -16202,6 +16202,8 @@ with pkgs;
       inherit suidHelper serviceDirectories apparmor;
     };
 
+  dcpomatic = callPackage ../applications/video/dcpomatic { };
+
   dee = callPackage ../development/libraries/dee {
     autoreconfHook = buildPackages.autoreconfHook269;
   };

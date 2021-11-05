@@ -1,0 +1,26 @@
+diff -r -u dcpomatic-2.15.171-orig/src/lib/cross_linux.cc dcpomatic-2.15.171/src/lib/cross_linux.cc
+--- dcpomatic-2.15.171-orig/src/lib/cross_linux.cc	2021-11-01 16:22:26.429450459 +0000
++++ dcpomatic-2.15.171/src/lib/cross_linux.cc	2021-11-01 16:23:49.198259057 +0000
+@@ -112,20 +112,14 @@
+ boost::filesystem::path
+ xsd_path ()
+ {
+-	if (auto appdir = getenv("APPDIR")) {
+-		return boost::filesystem::path(appdir) / "usr" / "share" / "libdcp" / "xsd";
+-	}
+-	return boost::filesystem::canonical(LINUX_SHARE_PREFIX) / "libdcp" / "xsd";
++	return boost::filesystem::path("@LIBDCP@") / "share" / "libdcp" / "xsd";
+ }
+ 
+ 
+ boost::filesystem::path
+ tags_path ()
+ {
+-	if (auto appdir = getenv("APPDIR")) {
+-		return boost::filesystem::path(appdir) / "usr" / "share" / "libdcp" / "tags";
+-	}
+-	return boost::filesystem::canonical(LINUX_SHARE_PREFIX) / "libdcp" / "tags";
++	return boost::filesystem::path("@LIBDCP@") / "share" / "libdcp" / "tags";
+ }
+ 
+ 
