@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-o aslr" ""
+  '';
+
   meta = with lib; {
     description = "Scriptable music files tags tool and editor";
     homepage = "https://github.com/kaworu/tagutil";
