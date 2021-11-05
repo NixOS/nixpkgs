@@ -94,6 +94,10 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  # TODO: Replace this with some magic of makeWrapperAuto
+  wrapPrograms = [
+    "$dev/bin/*"
+  ];
   postInstall = ''
     for prog in "$dev/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
@@ -104,6 +108,14 @@ stdenv.mkDerivation rec {
   preFixup = ''
     moveToOutput "share/bash-completion" "$dev"
   '';
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   setupHook = ./setup-hook.sh;
 
