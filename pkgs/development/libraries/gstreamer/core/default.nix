@@ -17,6 +17,7 @@
 , bash-completion
 , lib
 , CoreServices
+, makeWrapperAuto
 }:
 
 stdenv.mkDerivation rec {
