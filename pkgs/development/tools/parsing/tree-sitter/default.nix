@@ -62,7 +62,7 @@ let
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
         };
-      grammars' = (import ./grammars);
+      grammars' = (import ./grammars { inherit lib; });
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //

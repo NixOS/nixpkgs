@@ -106,8 +106,16 @@ installPhase() {
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
             sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
+
+            if [[ -f "15_nvidia_gbm.json" ]]; then
+              sed -E "s#(libnvidia-egl-gbm)#$i/lib/\\1#" 15_nvidia_gbm.json > 15_nvidia_gbm.json.fixed
+              install -Dm644 15_nvidia_gbm.json.fixed $i/share/egl/egl_external_platform.d/15_nvidia_gbm.json
+
+              mkdir -p $i/lib/gbm
+              ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
+            fi
         fi
 
     done

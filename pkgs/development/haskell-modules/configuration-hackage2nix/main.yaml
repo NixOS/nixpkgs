@@ -72,18 +72,6 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # 2021-05-11: not all diagrams libraries have adjusted to
-  # monoid-extras 0.6 yet, keep them pinned to lower versions
-  # until we can do a full migration, see
-  # https://github.com/diagrams/diagrams-core/issues/115
-  # We can keep this pin at most until base 4.15
-  # Since the monoid-extras adjustment was combined with
-  # a major release in some cases, we need to wait for
-  # diagrams 1.5 to be released.
-  - monoid-extras < 0.6
-  - dual-tree < 0.2.3.0
-  - diagrams-core < 1.5.0
-  - diagrams-lib < 1.4.4
   # streamly-* packages which are not in stackage and to be constrained
   # as long as we have streamly < 0.8.0
   - streamly-archive < 0.1.0
