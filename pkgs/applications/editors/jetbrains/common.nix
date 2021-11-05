@@ -17,7 +17,7 @@ let loName = toLower product;
                + ".vmoptions";
 in
 
-with stdenv; lib.makeOverridable mkDerivation rec {
+with stdenv; lib.makeOverridable mkDerivation (rec {
   inherit name src;
   meta = args.meta // { inherit mainProgram; };
 
@@ -94,4 +94,4 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
-}
+})
