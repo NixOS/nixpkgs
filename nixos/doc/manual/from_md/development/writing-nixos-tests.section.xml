@@ -266,7 +266,12 @@ start_all()
       <listitem>
         <para>
           Execute a shell command, returning a list
-          <literal>(status, stdout)</literal>. Takes an optional
+          <literal>(status, stdout)</literal>. If the command detaches,
+          it must close stdout, as <literal>execute</literal> will wait
+          for this to consume all output reliably. This can be achieved
+          by redirecting stdout to stderr <literal>&gt;&amp;2</literal>,
+          to <literal>/dev/console</literal>,
+          <literal>/dev/null</literal> or a file. Takes an optional
           parameter <literal>check_return</literal> that defaults to
           <literal>True</literal>. Setting this parameter to
           <literal>False</literal> will not check for the return code
@@ -304,6 +309,12 @@ start_all()
           <listitem>
             <para>
               Dereferencing unset variables fail the command.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              It will wait for stdout to be closed. See
+              <literal>execute</literal>.
             </para>
           </listitem>
         </itemizedlist>
