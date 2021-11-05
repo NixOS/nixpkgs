@@ -18081,6 +18081,8 @@ with pkgs;
 
   libspnav = callPackage ../development/libraries/libspnav { };
 
+  libsub = callPackage ../development/libraries/libsub { };
+
   libgsf = callPackage ../development/libraries/libgsf { };
 
   # GNU libc provides libiconv so systems with glibc don't need to build
