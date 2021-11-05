@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, nix-update-script }:
+{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, nix-update-script, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-aCfYb5UvlWbBvBlwNjVIbOJlEV2b3+FD0qKO+9h5Nos=";
   };
 
-  buildInputs = [ ncurses openssl ];
+  buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
