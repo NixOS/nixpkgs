@@ -51,7 +51,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("plank")
 
     with subtest("Open elementary terminal"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")
         machine.wait_for_window("io.elementary.terminal")
         machine.sleep(20)
         machine.screenshot("screen")
