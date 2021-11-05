@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.5.0";
+  version = "0.5.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JIzyF9opNfzdW5p6RE3W3iMqt5KL1A9k3lg5+mInPU8=";
+    sha256 = "sha256-Cwazage26FkFOf0NObwhdfb35scT3SaX3UJFaoH733g=";
   };
 
   propagatedBuildInputs = [
