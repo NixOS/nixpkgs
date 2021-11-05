@@ -2219,6 +2219,12 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  dan4ik605743 = {
+    email = "6057430gu@gmail.com";
+    github = "dan4ik605743";
+    githubId = 86075850;
+    name = "Danil Danevich";
+  };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
     github = "das-g";
