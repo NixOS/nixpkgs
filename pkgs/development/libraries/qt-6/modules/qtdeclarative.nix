@@ -1,9 +1,15 @@
-{ qtModule, lib, python3, qtbase, qtsvg }:
+{ qtModule
+, qtbase
+, libglvnd, libxkbcommon, vulkan-headers # TODO should be inherited from qtbase
+, qtshadertools
+, openssl
+, python3
+}:
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtsvg ];
-  nativeBuildInputs = [ python3 ];
+  qtInputs = [ qtbase qtshadertools ];
+  buildInputs = [ openssl openssl.dev python3 libglvnd libxkbcommon vulkan-headers ];
   outputs = [ "out" "dev" "bin" ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QML2_IMPORT_PREFIX=\"$qtQmlPrefix\""
