@@ -13,5 +13,5 @@ qtModule {
   qtInputs = [ qtbase ];
   buildInputs = [ libwebp jasper libmng zlib libglvnd libxkbcommon vulkan-headers ];
   nativeBuildInputs = [ pkg-config ];
-  hasPlugins = true;
+  outputs = [ "out" "dev" "bin" ];
 }
