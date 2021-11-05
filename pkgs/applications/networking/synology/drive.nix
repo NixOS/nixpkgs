@@ -4,7 +4,8 @@ let
   pname = "synology-drive-client";
   buildNumber = "12682";
   version = "3.0.2";
-  baseUrl = "https://global.download.synology.com/download/Utility/SynologyDriveClient";
+  baseUrl =
+    "https://global.download.synology.com/download/Utility/SynologyDriveClient";
   dmgImage =
     "${baseUrl}/${version}-${buildNumber}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
   debImage =
@@ -22,9 +23,9 @@ let
     inherit pname version;
 
     src = fetchurl {
-        url = debImage;
-        sha256 = "19fd2r39lb7bb6vkxfxyq0gp3l7pk5wy9fl0r7qwhym2jpi8yv6l";
-      };
+      url = debImage;
+      sha256 = "19fd2r39lb7bb6vkxfxyq0gp3l7pk5wy9fl0r7qwhym2jpi8yv6l";
+    };
 
     nativeBuildInputs = [ autoPatchelfHook dpkg ];
 
@@ -54,12 +55,13 @@ let
       cp -r $out/usr/bin $out/bin
       runHook postInstall
     '';
-    
+
     postInstall = ''
       substituteInPlace $out/bin/synology-drive \
-        --replace /opt/Synology/SynologyDrive $out/opt/Synology/SynologyDrive
+        --replace /opt/Synology/SynologyDrive $out/opt/Synology/SynologyDrive \
+        --replace /opt/apps/com.synology.drive/files/Synology/SynologyDrive $out/opt/Synology/SynologyDrive
     '';
-    
+
     dontWrapQtApps = true;
 
   };
