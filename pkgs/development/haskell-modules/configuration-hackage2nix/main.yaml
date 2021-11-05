@@ -123,6 +123,9 @@ extra-packages:
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - cabal-install-parsers == 0.4.2      # 2021-09-04: needed haskell-ci by until it upgrades to Cabal >= 3.6
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
+  - ghc-lib == 9.0.1.*                  # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
 
 package-maintainers:
   abbradar:
