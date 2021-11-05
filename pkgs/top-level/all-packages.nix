@@ -19200,6 +19200,8 @@ with pkgs;
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  recastnavigation = callPackage ../development/libraries/recastnavigation { };
+
   rinutils = callPackage ../development/libraries/rinutils { };
 
   kissfft = callPackage ../development/libraries/kissfft { };
