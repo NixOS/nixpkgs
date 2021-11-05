@@ -86,7 +86,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
             options.append("--use-gl=swiftshader")
         # Launch the process:
         options.append("file://${startupHTML}")
-        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} & disown'))
+        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} >&2 & disown'))
         if binary.startswith("google-chrome"):
             # Need to click away the first window:
             machine.wait_for_text("Make Google Chrome the default browser")
