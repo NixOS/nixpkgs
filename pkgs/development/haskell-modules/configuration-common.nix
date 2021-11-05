@@ -1948,17 +1948,10 @@ EOT
   hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
 
   # 2021-10-02: Doesn't compile with optics < 0.4
-  ghcup = overrideCabal (super.ghcup.override {
+  ghcup = super.ghcup.override {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-  }) (drv: {
-    # golden files are not shipped with the hackage tarball and hspec-golden-aeson
-    # needs some encouraging to create the missing files after version 0.8.0.0.
-    # See: https://gitlab.haskell.org/haskell/ghcup-hs/-/issues/255
-    preCheck = assert drv.version == "0.1.17.2"; ''
-      export CREATE_MISSING_GOLDEN=yes
-    '' + (drv.preCheck or "");
-  });
+  };
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
