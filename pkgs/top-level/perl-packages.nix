@@ -5804,6 +5804,20 @@ let
     };
   };
 
+  DateTimeFormatRFC3339 = buildPerlPackage rec {
+    pname = "DateTime-Format-RFC3339";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IK/IKEGAMI/DateTime-Format-RFC3339-v${version}.tar.gz";
+      sha256 = "1xqdbbiksy6kapc3mv3ayjahmxxlzmb5x7rad4by1iii9hif2vhk";
+    };
+    propagatedBuildInputs = [ DateTime ];
+    meta = {
+      description = "Parse and format RFC3339 datetime strings";
+      license = lib.licenses.cc0;
+    };
+  };
+
   DateTimeSet = buildPerlModule {
     pname = "DateTime-Set";
     version = "0.3900";
