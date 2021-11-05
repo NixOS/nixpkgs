@@ -159,15 +159,15 @@ stdenv.mkDerivation rec {
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
   PARQUET_TEST_DATA = lib.optionalString doInstallCheck "${parquet-testing}/data";
   GTEST_FILTER =
-      let
-        # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-        filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-          "TestCompareKernel.PrimitiveRandomTests"
-        ];
-      in
-      lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
+    let
+      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+      filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+        "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+        "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+        "TestCompareKernel.PrimitiveRandomTests"
+      ];
+    in
+    lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   installCheckInputs = [ perl which ];
   installCheckPhase =
     let
