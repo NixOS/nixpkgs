@@ -1,11 +1,16 @@
 { lib, stdenv, ocaml, findlib, dune_1, dune_2 }:
 
-{ pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, ... }@args:
+{ pname
+, version
+, nativeBuildInputs ? [ ]
+, enableParallelBuilding ? true
+, minimumOCamlVersion ? null
+, ...
+}@args:
 
 let Dune = if args.useDune2 or false then dune_2 else dune_1; in
 
-if (args ? minimumOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion) ||
-   (args ? minimalOCamlVersion && ! lib.versionAtLeast ocaml.version args.minimalOCamlVersion)
+if args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
@@ -13,7 +18,7 @@ stdenv.mkDerivation ({
 
   inherit enableParallelBuilding;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   buildPhase = ''
     runHook preBuild
@@ -37,6 +42,6 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ ocaml Dune findlib ] ++ nativeBuildInputs;
 
-  meta = (args.meta or {}) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
+  meta = (args.meta or { }) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
 
 })

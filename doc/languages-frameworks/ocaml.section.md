@@ -6,7 +6,7 @@ Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes 
 
 Here is a simple package example.
 
-- It defines an (optional) attribute `minimalOCamlVersion` that will be used to
+- It defines an (optional) attribute `minimumOcamlVersion` that will be used to
   throw a descriptive evaluation error if building with an older OCaml is
   attempted.
 
@@ -43,7 +43,7 @@ buildDunePackage rec {
   version = "0.15.0";
   useDune2 = true;
 
-  minimalOCamlVersion = "4.04";
+  minimumOcamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner  = "inhabitedtype";
@@ -76,7 +76,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimalOCamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";

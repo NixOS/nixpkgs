@@ -1,20 +1,25 @@
 { lib, stdenv, writeText, ocaml, findlib, ocamlbuild, camlp4 }:
 
-{ name, version, nativeBuildInputs ? [],
-  createFindlibDestdir ?  true,
-  dontStrip ? true,
-  minimumSupportedOcamlVersion ? null,
-  hasSharedObjects ? false,
-  setupHook ? null,
-  meta ? {}, ...
+{ name
+, version
+, nativeBuildInputs ? [ ]
+, createFindlibDestdir ? true
+, dontStrip ? true
+, minimumOCamlVersion ? null
+, hasSharedObjects ? false
+, setupHook ? null
+, meta ? { }
+, ...
 }@args:
 let
   defaultMeta = {
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 in
-  assert minimumSupportedOcamlVersion != null ->
-          lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
+
+if args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion
+then throw "${name}-${version} is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation (args // {
   name = "ocaml-${name}-${version}";
