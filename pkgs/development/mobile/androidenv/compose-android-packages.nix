@@ -64,9 +64,9 @@ let
                addons = repoXmls.addons or [];
              };
            in
-           builtins.fromJSON (builtins.readFile "${mkRepoJson repoXmlSpec}")
+           lib.importJSON "${mkRepoJson repoXmlSpec}"
          else
-           builtins.fromJSON (builtins.readFile repoJson);
+           lib.importJSON repoJson;
 
   # Converts all 'archives' keys in a repo spec to fetchurl calls.
   fetchArchives = attrSet:

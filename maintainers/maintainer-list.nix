@@ -6252,6 +6252,12 @@
     githubId = 278013;
     name = "Tomasz Kontusz";
   };
+  kubukoz = {
+    email = "kubukoz@gmail.com";
+    github = "kubukoz";
+    githubId = 894884;
+    name = "Jakub Kozłowski";
+  };
   kurnevsky = {
     email = "kurnevsky@gmail.com";
     github = "kurnevsky";
@@ -8904,6 +8910,12 @@
     githubId = 421510;
     name = "Noé Rubinstein";
   };
+  photex = {
+    email = "photex@gmail.com";
+    github = "photex";
+    githubId = 301903;
+    name = "Chip Collier";
+  };
   phreedom = {
     email = "phreedom@yandex.ru";
     github = "phreedom";
@@ -10783,6 +10795,12 @@
     email = "moveq@riseup.net";
     github = "staccato";
     githubId = 86573128;
+  };
+  stackshadow = {
+    email = "stackshadow@evilbrain.de";
+    github = "stackshadow";
+    githubId = 7512804;
+    name = "Martin Langlotz";
   };
   steell = {
     email = "steve@steellworks.com";

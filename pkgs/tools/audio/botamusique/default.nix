@@ -9,6 +9,7 @@
 
 # For the update script
 , coreutils
+, curl
 , nix-prefetch-git
 , jq
 , nodePackages
@@ -41,7 +42,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "botamusique";
-  version = "unstable-${lib.substring 0 10 srcJson.date}";
+  version = srcJson.version;
 
   inherit src;
 
@@ -67,21 +68,21 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    python3Packages.wrapPython
-    nodejs
     makeWrapper
+    nodejs
+    python3Packages.wrapPython
   ];
 
   pythonPath = with python3Packages; [
-    pymumble
-    packaging
-    magic
-    requests
-    youtube-dl
     flask
+    magic
     mutagen
+    packaging
     pillow
+    pymumble
     pyradios
+    requests
+    yt-dlp
   ];
 
   buildPhase = ''
@@ -118,9 +119,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = pkgs.writeShellScript "botamusique-updater" ''
-    export PATH=${lib.makeBinPath [ coreutils nix-prefetch-git jq nodePackages.node2nix ]}
+    export PATH=${lib.makeBinPath [ coreutils curl nix-prefetch-git jq nodePackages.node2nix ]}
+    set -ex
 
-    nix-prefetch-git https://github.com/azlux/botamusique > ${toString ./src.json}
+    OWNER=azlux
+    REPO=botamusique
+    VERSION=$(curl https://api.github.com/repos/$OWNER/$REPO/releases/latest | jq -r '.tag_name')
+
+    nix-prefetch-git --rev "$VERSION" --url https://github.com/$OWNER/$REPO | \
+      jq > ${toString ./src.json } \
+        --arg version "$VERSION" \
+        '.version |= $version'
     path=$(jq '.path' -r < ${toString ./src.json})
 
     tmp=$(mktemp -d)
@@ -129,7 +138,7 @@ stdenv.mkDerivation rec {
     # botamusique doesn't have a version in its package.json
     # But that's needed for node2nix
     jq < "$path"/web/package.json > "$tmp/package.json" \
-      --arg version "0.0.0" \
+      --arg version "$VERSION" \
       '.version |= $version'
 
     node2nix \

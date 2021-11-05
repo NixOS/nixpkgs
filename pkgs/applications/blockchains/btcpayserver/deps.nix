@@ -31,8 +31,8 @@
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.All";
-    version = "1.2.13";
-    sha256 = "16nhahb6bnjwhw3wh044zfkqpb5k40kyhdazs2h6y4phjhm5hq2r";
+    version = "1.2.14";
+    sha256 = "0avb0jlisx1nv0ary2nc82aamn95qmrrqshwbk8szzjqgvxzv4k2";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Charge";
@@ -46,11 +46,6 @@
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Common";
-    version = "1.2.6";
-    sha256 = "09p2ks1qgy6jnpcfwgdnxvldyyadwnh3mwmq9z89vvzmmgs19xkk";
-  })
-  (fetchNuGet {
-    name = "BTCPayServer.Lightning.Common";
     version = "1.2.7";
     sha256 = "1hz4bn3aw537r253ipdpa6sydwhb6dh3r82xp1jizn9a6mnw54x6";
   })
@@ -61,8 +56,8 @@
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.LND";
-    version = "1.2.9";
-    sha256 = "1zyr58kwdyb02dfgxza73fqvzcjlf59msllmf06anl9im4pqcjx6";
+    version = "1.2.10";
+    sha256 = "10m8kw7598l9ap6y17znvm43cz5ca6qxbrh105knyb6hfzpsyqwp";
   })
   (fetchNuGet {
     name = "BTCPayServer.Lightning.Ptarmigan";

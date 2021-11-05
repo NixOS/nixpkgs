@@ -51,7 +51,7 @@ let
       mkdir $out
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars))));
+      (import ./grammars { inherit lib; }))));
 
   builtGrammars =
     let

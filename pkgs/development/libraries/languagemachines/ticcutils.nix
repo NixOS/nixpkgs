@@ -3,7 +3,7 @@
 , libxml2, zlib, bzip2, libtar }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-ticcutils.json);
+  release = lib.importJSON ./release-info/LanguageMachines-ticcutils.json;
 in
 
 stdenv.mkDerivation {

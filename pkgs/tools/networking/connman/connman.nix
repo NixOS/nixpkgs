@@ -67,17 +67,17 @@ stdenv.mkDerivation rec {
     libmnl
     gnutls
     readline
-  ] ++ optionals (enableOpenconnect) [ openconnect ];
+  ] ++ optionals (enableOpenconnect) [ openconnect ]
+    ++ optionals (firewallType == "iptables") [ iptables ]
+    ++ optionals (firewallType == "nftables") [ libnftnl ]
+    ++ optionals (enablePolkit) [ polkit ]
+    ++ optionals (enablePptp) [ pptp ppp ]
+  ;
 
   nativeBuildInputs = [
     pkg-config
     file
-  ]
-    ++ optionals (enablePolkit) [ polkit ]
-    ++ optionals (enablePptp) [ pptp ppp ]
-    ++ optionals (firewallType == "iptables") [ iptables ]
-    ++ optionals (firewallType == "nftables") [ libnftnl ]
-  ;
+  ];
 
   # fix invalid path to 'file'
   postPatch = ''
