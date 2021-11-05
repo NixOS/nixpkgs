@@ -26800,7 +26800,7 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = thunderbird-78;
+  thunderbird = thunderbird-91;
 
   thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
     # Using older Rust for workaround:
