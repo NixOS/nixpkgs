@@ -411,7 +411,7 @@ you of the correct hash.
 
 `rustPlatform` provides the following hooks to automate Cargo builds:
 
-* `cargoSetupHook`: configure Cargo to use depenencies vendored
+* `cargoSetupHook`: configure Cargo to use dependencies vendored
   through `fetchCargoTarball`. This hook uses the `cargoDeps`
   environment variable to find the vendored dependencies. If a project
   already vendors its dependencies, the variable `cargoVendorDir` can
@@ -672,7 +672,7 @@ Some crates require external libraries. For crates from
 `defaultCrateOverrides` package in nixpkgs itself.
 
 Starting from that file, one can add more overrides, to add features
-or build inputs by overriding the hello crate in a seperate file.
+or build inputs by overriding the hello crate in a separate file.
 
 ```nix
 with import <nixpkgs> {};

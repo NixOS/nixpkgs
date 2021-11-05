@@ -42,7 +42,7 @@ in {
       environment.ROON_DATAROOT = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-server}/start.sh";
+        ExecStart = "${pkgs.roon-server}/bin/RoonServer";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;
