@@ -1,7 +1,7 @@
 {lib, buildOcamlJane, type_conv}:
 
 buildOcamlJane {
-  minimumSupportedOcamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
   name = "sexplib";
   version = "113.33.03";
 

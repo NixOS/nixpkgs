@@ -4,7 +4,7 @@ buildOcaml rec {
   name = "js-build-tools";
   version = "113.33.06";
 
-  minimumSupportedOcamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/janestreet/${name}/archive/${version}.tar.gz";

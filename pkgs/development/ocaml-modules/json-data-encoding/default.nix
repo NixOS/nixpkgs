@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "json-data-encoding";
   version = "0.10";
-  minimalOCamlVersion = "4.10";
+  minimumOcamlVersion = "4.10";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "json-data-encoding";

@@ -4,7 +4,7 @@ buildOcaml rec {
   name = "pa_bench";
   version = "113.00.00";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/pa_bench/archive/${version}.tar.gz";

@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "hacl-star";
 
-  inherit (hacl-star-raw) version src meta doCheck minimalOCamlVersion;
+  inherit (hacl-star-raw) version src meta doCheck minimumOcamlVersion;
 
   useDune2 = true;
 

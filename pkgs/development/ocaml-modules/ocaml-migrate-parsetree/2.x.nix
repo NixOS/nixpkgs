@@ -6,7 +6,7 @@ buildDunePackage rec {
 
    useDune2 = true;
 
-   minimalOCamlVersion = "4.02";
+   minimumOcamlVersion = "4.02";
 
    src = fetchurl {
      url = "https://github.com/ocaml-ppx/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";

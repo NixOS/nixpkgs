@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
   };
 
-  minimalOCamlVersion = "4.10";
+  minimumOcamlVersion = "4.10";
   buildInputs = [ ppx_deriving ppxlib ];
 
   doCheck = true;

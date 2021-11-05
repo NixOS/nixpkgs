@@ -5,7 +5,7 @@ buildDunePackage rec {
   version = "0.9.1";
 
   useDune2 = true;
-  minimalOCamlVersion = "4.05";
+  minimumOcamlVersion = "4.05";
 
   src = fetchurl {
     url = "https://github.com/anuragsoni/routes/releases/download/${version}/routes-${version}.tbz";

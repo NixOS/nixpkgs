@@ -8,9 +8,9 @@
 }:
 
 let
-  minimumSupportedOcamlVersion = "4.02.0";
+  minimumOcamlVersion = "4.02.0";
 in
-assert lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
+assert lib.versionOlder minimumOcamlVersion ocaml.version;
 
 stdenv.mkDerivation rec {
   pname = "hmap";

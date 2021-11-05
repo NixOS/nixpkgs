@@ -8,7 +8,7 @@ buildDunePackage {
   inherit (tezos-stdlib) version useDune2;
   src = "${tezos-stdlib.base_src}/src/lib_protocol_environment";
 
-  minimalOCamlVersion = "4.03";
+  minimumOcamlVersion = "4.03";
 
   doCheck = true;
 

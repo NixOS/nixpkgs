@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "./source/raw";
 
-  minimalOCamlVersion = "4.05";
+  minimumOcamlVersion = "4.05";
 
   postPatch = ''
     patchShebangs ./

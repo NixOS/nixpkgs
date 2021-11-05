@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimalOCamlVersion = "4.07";
+  minimumOcamlVersion = "4.07";
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.1.196.12.tgz";

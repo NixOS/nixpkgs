@@ -26,7 +26,7 @@ buildDunePackage rec {
 
   src = "${base_src}/src/lib_stdlib";
 
-  minimalOCamlVersion = "4.10.0";
+  minimumOcamlVersion = "4.10.0";
 
   useDune2 = true;
 

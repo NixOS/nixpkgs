@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimalOCamlVersion = "4.08";
+  minimumOcamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mmottl/pcre-ocaml/releases/download/${version}/pcre-${version}.tbz";

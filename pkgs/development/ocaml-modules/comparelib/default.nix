@@ -4,7 +4,7 @@ buildOcaml rec {
   name = "comparelib";
   version = "113.00.00";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/comparelib/archive/${version}.tar.gz";

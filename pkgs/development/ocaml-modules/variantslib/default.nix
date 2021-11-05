@@ -8,7 +8,7 @@ buildOcaml rec {
   name = "variantslib";
   version = "109.15.03";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   src = fetchFromGitHub {
     owner = "janestreet";

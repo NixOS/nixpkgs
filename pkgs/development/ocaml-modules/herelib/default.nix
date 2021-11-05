@@ -4,7 +4,7 @@ buildOcaml rec {
   version = "112.35.00";
   name = "herelib";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/herelib/archive/${version}.tar.gz";

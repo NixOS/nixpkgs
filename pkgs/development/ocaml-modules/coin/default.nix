@@ -10,7 +10,7 @@
 buildDunePackage rec {
   pname = "coin";
   version = "0.1.3";
-  minimalOCamlVersion = "4.03";
+  minimumOcamlVersion = "4.03";
 
   src = fetchzip {
     url = "https://github.com/mirage/coin/releases/download/v${version}/coin-v${version}.tbz";

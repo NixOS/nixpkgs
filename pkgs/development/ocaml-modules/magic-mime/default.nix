@@ -9,7 +9,7 @@ buildDunePackage rec {
     sha256 = "1xqjs8bba567yzrzgnr88j5ck97d36zw68zr9v29liya37k6rcvz";
   };
 
-  minimalOCamlVersion = "4.03";
+  minimumOcamlVersion = "4.03";
   useDune2 = true;
 
   meta = with lib; {

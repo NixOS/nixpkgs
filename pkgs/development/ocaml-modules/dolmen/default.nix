@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimalOCamlVersion = "4.08";
+  minimumOcamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/Gbury/dolmen/releases/download/v${version}/dolmen-v${version}.tbz";

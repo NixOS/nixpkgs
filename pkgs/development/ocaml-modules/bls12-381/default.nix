@@ -5,7 +5,7 @@ buildDunePackage rec {
 
   inherit (bls12-381-gen) version src useDune2 doCheck;
 
-  minimalOCamlVersion = "4.08";
+  minimumOcamlVersion = "4.08";
   propagatedBuildInputs = [
     ff-sig
     zarith

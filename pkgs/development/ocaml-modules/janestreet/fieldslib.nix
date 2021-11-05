@@ -4,7 +4,7 @@ buildOcamlJane {
   name = "fieldslib";
   version = "113.33.03";
 
-  minimumSupportedOcamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   hash = "0mkbix32f8sq32q81hb10z2q31bw5f431jxv0jafbdrif0vr6xqd";
 

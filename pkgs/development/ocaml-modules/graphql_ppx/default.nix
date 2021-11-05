@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "graphql_ppx";
   version = "1.2.0";
 
-  minimalOCamlVersion = "4.08";
+  minimumOcamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "reasonml-community";

@@ -2,11 +2,11 @@
 
 { name, version ? "113.33.03", buildInputs ? [],
   hash ? "",
-  minimumSupportedOcamlVersion ? "4.02", ...
+  minimumOcamlVersion ? "4.02", ...
 }@args:
 
 buildOcaml (args // {
-  inherit name version minimumSupportedOcamlVersion;
+  inherit name version minimumOcamlVersion;
   src = fetchurl {
     url = "https://github.com/janestreet/${name}/archive/${version}.tar.gz";
     sha256 = hash;

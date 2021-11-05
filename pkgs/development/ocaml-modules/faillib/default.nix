@@ -5,9 +5,10 @@ then throw "faillib-111.17.00 is not available for OCaml ${ocaml.version}"
 else
 
 buildOcaml rec {
-  minimumSupportedOcamlVersion = "4.00";
   name = "faillib";
   version = "111.17.00";
+
+  minimumOcamlVersion = "4.00";
 
   src = fetchurl {
     url = "https://github.com/janestreet/faillib/archive/${version}.tar.gz";

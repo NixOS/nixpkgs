@@ -3,7 +3,7 @@
 {
   pname = "pastel";
 
-  minimalOCamlVersion = "4.05";
+  minimumOcamlVersion = "4.05";
 
   buildInputs = [
     reason

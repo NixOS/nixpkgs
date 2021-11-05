@@ -4,7 +4,7 @@ buildOcamlJane {
   name = "typerep";
   version = "113.33.03";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   hash = "1ss34nq20vfgx8hwi5sswpmn3my9lvrpdy5dkng746xchwi33ar7";
 

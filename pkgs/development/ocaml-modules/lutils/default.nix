@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimalOCamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lutils.1.51.2.tgz";

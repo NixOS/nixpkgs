@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "lambdasoup";
   version = "0.7.3";
 
-  minimalOCamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   useDune2 = true;
 

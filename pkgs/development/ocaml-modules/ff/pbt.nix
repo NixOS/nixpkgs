@@ -4,7 +4,7 @@ buildDunePackage {
   pname = "ff-pbt";
   inherit (ff-sig) version src doCheck useDune2;
 
-  minimalOCamlVersion = "4.08";
+  minimumOcamlVersion = "4.08";
 
   checkInputs = [
     alcotest

@@ -4,7 +4,7 @@ buildOcaml rec {
   name = "typerep";
   version = "112.24.00";
 
-  minimumSupportedOcamlVersion = "4.00";
+  minimumOcamlVersion = "4.00";
 
   src = fetchFromGitHub {
     owner = "janestreet";

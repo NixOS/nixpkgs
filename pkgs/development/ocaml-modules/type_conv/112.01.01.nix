@@ -1,7 +1,7 @@
 { lib, fetchurl, buildOcaml}:
 
 buildOcaml rec {
-  minimumSupportedOcamlVersion = "4.02";
+  minimumOcamlVersion = "4.02";
 
   name = "type_conv";
   version = "113.00.02";
