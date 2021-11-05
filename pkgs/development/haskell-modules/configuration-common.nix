@@ -174,7 +174,7 @@ self: super: {
     (overrideCabal (super.hnix.override {
       # needs newer version of relude and semialign than stackage has
       relude = self.relude_1_0_0_1;
-      semialign = self.semialign_1_2;
+      semialign = self.semialign_1_2_0_1;
     }) (drv: {
       # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
       doCheck = false;
