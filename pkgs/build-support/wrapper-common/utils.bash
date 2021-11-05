@@ -27,7 +27,7 @@ mangleVarListGeneric() {
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+$sep}${!inputVar}"
+            export "${outputVar}+=${!outputVar:+$sep}${!inputVar}"
         fi
     done
 }
@@ -42,7 +42,7 @@ mangleVarBool() {
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gxi ${outputVar}+=0
+    declare -gxi "${outputVar}+=0"
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
