@@ -351,5 +351,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     license = licenses.mpl20;
+    knownVulnerabilities = ["EOL.  Firefox 78.15 fixes some vulnerabilities: https://www.mozilla.org/en-US/security/advisories/mfsa2021-44/"];
   };
 }
