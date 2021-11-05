@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiofiles
 , beautifulsoup4
 , buildPythonPackage
@@ -83,8 +84,13 @@ buildPythonPackage rec {
     "test_create_server_main_convenience"
     "test_debug"
     "test_auto_reload"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/sanic-org/sanic/issues/2298
+    "test_no_exceptions_when_cancel_pending_request"
   ];
 
+  # avoid usage of nixpkgs-review in darwin since tests will compete usage
+  # for the same local port
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "sanic" ];
