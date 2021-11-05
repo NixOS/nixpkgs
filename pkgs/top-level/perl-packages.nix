@@ -24686,7 +24686,8 @@ let
       sha256 = "068nhmld1031grgi4qm7k5niwxlbn6qd08zf6g1gj4c7qfas62q1";
     };
     SKIP_SAX_INSTALL = 1;
-    buildInputs = [ AlienBuild AlienLibxml2 ];
+    buildInputs = [ AlienBuild AlienLibxml2 ]
+      ++ lib.optional stdenv.isDarwin pkgs.libiconv;
     propagatedBuildInputs = [ XMLSAX ];
   };
 
