@@ -1824,7 +1824,7 @@ self: super: {
       sha256 = "1zhv1cg047lfyxfs3mvc73vv96pn240zaj7f2yl4lw5yj6y5rfk9";
     };
   }).overrideScope (self: super: {
-    attoparsec = self.attoparsec_0_14_1;
+    attoparsec = self.attoparsec_0_14_2;
     Cabal = self.Cabal_3_6_2_0;
   });
 
