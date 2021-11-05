@@ -1,7 +1,7 @@
-From 18b45c20499747bcc66714ee87edf34d4f6e3dca Mon Sep 17 00:00:00 2001
+From da4f855044b2babe052ce303cca1de736cf952cd Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
-Subject: [PATCH 05/19] Add some NixOS-specific unit directories
+Subject: [PATCH 05/21] Add some NixOS-specific unit directories
 
 Look in `/nix/var/nix/profiles/default/lib/systemd/{system,user}` for
 units provided by packages installed into the default profile via

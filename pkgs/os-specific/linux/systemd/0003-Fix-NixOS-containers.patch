@@ -1,7 +1,7 @@
-From 16f441b6495ff4c4d1d0b71a7f1650505147173d Mon Sep 17 00:00:00 2001
+From 37c9471f59bd57223014a4a645b5f96a71d78787 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Wed, 16 Apr 2014 10:59:28 +0200
-Subject: [PATCH 03/19] Fix NixOS containers
+Subject: [PATCH 03/21] Fix NixOS containers
 
 In NixOS containers, the init script is bind-mounted into the
 container, so checking early whether it exists will fail.
