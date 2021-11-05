@@ -1,7 +1,5 @@
 { lib, mkDerivation, perl, cmake }:
 
-let inherit (lib) licenses maintainers platforms; in
-
 { self, srcs, patches }:
 
 args:
@@ -138,7 +136,7 @@ mkDerivation (args // {
     ${args.postFixup or ""}
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
