@@ -15797,6 +15797,8 @@ with pkgs;
 
   arsenal = callPackage ../tools/security/arsenal { };
 
+  asdcplib-carl = callPackage ../development/libraries/asdcplib-carl { };
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
