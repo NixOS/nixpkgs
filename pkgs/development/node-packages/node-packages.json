@@ -257,6 +257,7 @@
 , "svelte-language-server"
 , "svgo"
 , "swagger"
+, "syncthing-hooks"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"
