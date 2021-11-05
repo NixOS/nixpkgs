@@ -17372,6 +17372,8 @@ with pkgs;
 
   lensfun = callPackage ../development/libraries/lensfun {};
 
+  leqm-nrt = callPackage ../development/libraries/leqm-nrt { };
+
   lesstif = callPackage ../development/libraries/lesstif { };
 
   leveldb = callPackage ../development/libraries/leveldb { };
