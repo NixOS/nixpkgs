@@ -1,8 +1,36 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames
-, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, jemalloc
-, lz4, perl, python3, rapidjson, re2, snappy, thrift, tzdata , utf8proc, which
-, zlib, zstd
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, fixDarwinDylibNames
+, autoconf
+, boost
+, brotli
+, c-ares
+, cmake
+, flatbuffers
+, gflags
+, glog
+, grpc
+, gtest
+, jemalloc
+, libnsl
+, lz4
+, openssl
+, perl
+, protobuf
+, python3
+, rapidjson
+, re2
+, snappy
+, thrift
+, tzdata
+, utf8proc
+, which
+, zlib
+, zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
+, enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
 }:
 
 let
@@ -20,7 +48,8 @@ let
     hash = "sha256-GmOAS8gGhzDI0WzORMkWHRRUl/XBwmNen2d3VefZxxc=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "arrow-cpp";
   version = "6.0.0";
 
@@ -78,6 +107,11 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals enableShared [
     python3.pkgs.python
     python3.pkgs.numpy
+  ] ++ lib.optionals enableFlight [
+    grpc
+    libnsl
+    openssl
+    protobuf
   ];
 
   preConfigure = ''
@@ -113,6 +147,7 @@ in stdenv.mkDerivation rec {
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
+    "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -121,32 +156,36 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
-  ARROW_TEST_DATA =
-    if doInstallCheck then "${arrow-testing}/data" else null;
-  PARQUET_TEST_DATA =
-    if doInstallCheck then "${parquet-testing}/data" else null;
+  ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
+  PARQUET_TEST_DATA = lib.optionalString doInstallCheck "${parquet-testing}/data";
   GTEST_FILTER =
-    if doInstallCheck then let
+    let
       # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
       filteredTests = lib.optionals stdenv.hostPlatform.isAarch64 [
         "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
         "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
         "TestCompareKernel.PrimitiveRandomTests"
       ];
-    in "-${builtins.concatStringsSep ":" filteredTests}" else null;
+    in
+    lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   installCheckInputs = [ perl which ];
   installCheckPhase =
-  let
-    excludedTests = lib.optionals stdenv.isDarwin [
-      # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-      # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-      "plasma-external-store-tests"
-      "plasma-client-tests"
-    ];
-  in ''
-    ctest -L unittest -V \
-      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
-  '';
+    let
+      excludedTests = lib.optionals stdenv.isDarwin [
+        # Some plasma tests need to be patched to use a shorter AF_UNIX socket
+        # path on Darwin. See https://github.com/NixOS/nix/pull/1085
+        "plasma-external-store-tests"
+        "plasma-client-tests"
+      ];
+    in
+    ''
+      runHook preInstallCheck
+
+      ctest -L unittest -V \
+        --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+
+      runHook postInstallCheck
+    '';
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
