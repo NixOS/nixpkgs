@@ -21,7 +21,7 @@ mangleVarListGeneric() {
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gx ${outputVar}+=''
+    declare -gx "$outputVar"+=''
     # For each role we serve, we accumulate the input parameters into our own
     # cc-wrapper-derivation-specific environment variables.
     for suffix in "${role_suffixes[@]}"; do
