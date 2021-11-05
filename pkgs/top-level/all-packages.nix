@@ -17607,6 +17607,8 @@ with pkgs;
 
   libcutl = callPackage ../development/libraries/libcutl { };
 
+  libcxml = callPackage ../development/libraries/libcxml { };
+
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
   libdap = callPackage ../development/libraries/libdap { };
