@@ -44,7 +44,7 @@ in
     )
 
     # Start MuseScore window
-    machine.execute("DISPLAY=:0.0 mscore &")
+    machine.execute("DISPLAY=:0.0 mscore >&2 &")
 
     # Wait until MuseScore has launched
     machine.wait_for_window("MuseScore")
