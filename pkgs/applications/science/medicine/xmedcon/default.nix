@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xmedcon.sourceforge.io/Main/HomePage";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ arianvp flokli ];
-    platforms = with platforms; [ darwin linux ];
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }
