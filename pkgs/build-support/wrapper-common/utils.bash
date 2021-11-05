@@ -146,7 +146,7 @@ checkLinkType() {
 # When building static-pie executables we cannot have rpath
 # set. At least glibc requires rpath to be empty
 filterRpathFlags() {
-    local linkType=$1 ret="" i
+    local linkType=$1 ret i
     shift
 
     if [[ "$linkType" == "static-pie" ]]; then
@@ -156,11 +156,11 @@ filterRpathFlags() {
                 # also skip its argument
                 shift
             else
-                ret+="$i "
+                ret+=("$i")
             fi
         done
     else
-        ret=$@
+        ret=("$@")
     fi
-    echo $ret
+    echo "${ret[@]}"
 }
