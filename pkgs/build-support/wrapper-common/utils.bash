@@ -131,7 +131,7 @@ expandResponseParams() {
 }
 
 checkLinkType() {
-    local arg mode
+    local arg
     type="dynamic"
     for arg in "$@"; do
         if [[ "$arg" = -static ]]; then
