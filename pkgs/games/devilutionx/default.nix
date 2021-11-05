@@ -1,18 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , fetchzip
 , cmake
+, pkg-config
 , gettext
 , SDL2
+, SDL2_image
 , fmt
 , libpng
 , smpq
 }:
 
 let
-  # TODO: submit a PR upstream to allow system copies of these libraries
+  # TODO: submit a PR upstream to allow system copies of these libraries where possible
   asio = fetchurl {
     url = "https://github.com/diasurgical/asio/archive/ebeff99f539da23d27c2e8d4bdbc1ee011968644.tar.gz";
     sha256 = "0vhb4cig40mm0a98i74grpmfkcmby8zxg6vqa38dpryxpgvp5fw8";
@@ -21,11 +24,6 @@ let
   SDL_audiolib = fetchurl {
     url = "https://github.com/realnc/SDL_audiolib/archive/aa79660eba4467a44f9dcaecf26b0f0a000abfd7.tar.gz";
     sha256 = "0z4rizncp6gqsy72b3709zc9fr915wgcwnlx1fhhy7mrczsly630";
-  };
-
-  SDL_image = fetchurl {
-    url = "https://github.com/libsdl-org/SDL_image/archive/refs/tags/release-2.0.5.tar.gz";
-    sha256 = "1zw3k40kbmwc2w9l8fkzrk8maidapmciw3lgcml86pqs9izzddvn";
   };
 
   simpleini = fetchzip {
@@ -45,13 +43,22 @@ stdenv.mkDerivation rec {
     sha256 = "0acrkqi0pr3cbr5i1a1vfrnxv1n3xmql5d86bm2gywvpdb94xads";
   };
 
+  patches = [
+    # allow building with system SDL2_image instead of vendored version
+    # this patch can be removed on the next release of devilutionx
+    # see https://github.com/diasurgical/devilutionX/pull/3386
+    (fetchpatch {
+      url = "https://github.com/diasurgical/devilutionX/commit/41ff03e94c02477bffb2d62764e8624c0e06854d.patch";
+      sha256 = "1lrnb9d0dcdyd78rix5rl4p8kkwbnl91llr9fgb86ysm3q58qkvj";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Source/init.cpp --replace "/usr/share/diasurgical/devilutionx/" "${placeholder "out"}/share/diasurgical/devilutionx/"
 
     # download dependencies ahead of time
     substituteInPlace 3rdParty/asio/CMakeLists.txt --replace "https://github.com/diasurgical/asio/archive/ebeff99f539da23d27c2e8d4bdbc1ee011968644.tar.gz" "${asio}"
     substituteInPlace 3rdParty/SDL_audiolib/CMakeLists.txt --replace "https://github.com/realnc/SDL_audiolib/archive/aa79660eba4467a44f9dcaecf26b0f0a000abfd7.tar.gz" "${SDL_audiolib}"
-    substituteInPlace 3rdParty/SDL_image/CMakeLists.txt --replace "https://github.com/libsdl-org/SDL_image/archive/refs/tags/release-2.0.5.tar.gz" "${SDL_image}"
     substituteInPlace 3rdParty/simpleini/CMakeLists.txt --replace "https://github.com/brofield/simpleini/archive/7bca74f6535a37846162383e52071f380c99a43a.zip" "${simpleini}"
   '';
 
@@ -64,6 +71,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     gettext
     smpq # used to build devilutionx.mpq
   ];
@@ -72,6 +80,7 @@ stdenv.mkDerivation rec {
     fmt
     libpng
     (SDL2.override { withStatic = true; })
+    SDL2_image
   ];
 
   installPhase = ''
