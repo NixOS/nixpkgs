@@ -97,8 +97,10 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "prefix=\${out}"
-    "SHELL_PATH=${stdenv.shell}"
   ]
+  # Git does not allow setting a shell separately for building and run-time.
+  # Therefore lets leave it at the default /bin/sh when cross-compiling
+  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
   ++ lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
@@ -114,6 +116,10 @@ stdenv.mkDerivation {
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
+
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    stdenv.shellPackage
+  ];
 
 
   postBuild = ''
