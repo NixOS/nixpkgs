@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, tqdm
-, aiohttp
-, pytest
 , setuptools-scm
+, aioftp
+, aiohttp
+, tqdm
+, aiofiles
+, pytestCheckHook
 , pytest-localserver
 , pytest-socket
 , pytest-asyncio
-, aioftp
 }:
 
 buildPythonPackage rec {
@@ -30,17 +31,23 @@ buildPythonPackage rec {
     aioftp
   ];
 
-  checkInputs = [
-    pytest
-    pytest-localserver
-    pytest-socket
-    pytest-asyncio
+  pythonImportsCheck = [
+    "parfive"
   ];
 
-  checkPhase = ''
-    # these two tests require network connection
-    pytest parfive -k "not test_ftp and not test_ftp_http"
-  '';
+  checkInputs = [
+    aiofiles
+    pytest-asyncio
+    pytest-localserver
+    pytest-socket
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_ftp"
+    "test_ftp_pasv_command"
+    "test_ftp_http"
+  ];
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";

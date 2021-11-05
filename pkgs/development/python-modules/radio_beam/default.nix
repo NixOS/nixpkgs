@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, setuptools-scm
 , astropy
 , pytestCheckHook
 , pytest-doctestplus
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     pname = "radio-beam";
     sha256 = "e34902d91713ccab9f450b9d3e82317e292cf46a30bd42f9ad3c9a0519fcddcd";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [ astropy ];
 
