@@ -7,6 +7,8 @@
   <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
+![Alt](https://repobeats.axiom.co/api/embed/f917a77cbbdeee19b87fa1f2f932895d1df18b55.svg "Repobeats analytics")
+
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
 80,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
