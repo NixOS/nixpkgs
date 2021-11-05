@@ -35,8 +35,14 @@ stdenv.mkDerivation rec {
     echo -e '\ninclude /etc/sway/config.d/*' >> config.in
   '';
 
+  strictDeps = true;
+
+  # Pkg-config binary for machine MachineChoice.BUILD not found. Giving up.
+  # has to be in both depsBuildBuild and nativeBuildInputs
+  depsBuildBuild = [ pkg-config scdoc ];
+
   nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner scdoc
+    meson ninja pkg-config wayland-scanner
   ];
 
   buildInputs = [

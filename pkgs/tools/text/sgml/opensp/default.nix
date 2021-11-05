@@ -32,10 +32,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
 
-  # need autoconf, automake, gettext, and libtool for reconfigure
-  nativeBuildInputs = lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
+  strictDeps = true;
 
-  buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl gettext libiconv ];
+  nativeBuildInputs = [
+    xmlto
+    docbook_xml_dtd_412
+    docbook_xsl
+  ] ++ lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
 
   doCheck = false; # fails
 

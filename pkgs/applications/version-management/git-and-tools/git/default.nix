@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, buildPackages
 , curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, openssh, pcre2
+, openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [curl openssl zlib expat cpio libiconv]
+  buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
@@ -84,11 +84,12 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
               + lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = [
+    "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
-    "ac_cv_prog_CURL_CONFIG=${curl.dev}/bin/curl-config"
   ];
 
   preBuild = ''

@@ -1,6 +1,6 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch, callPackage
+, libiconv, ijs, lcms2, fetchpatch, callPackage, bash, buildPackages
 , cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
 , x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
@@ -58,17 +58,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoconf ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = [ pkg-config autoconf zlib ]
+    ++ lib.optional cupsSupport cups;
+
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs lcms2
+      libiconv ijs lcms2 bash
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
 
   preConfigure = ''
+    # https://ghostscript.com/doc/current/Make.htm
+    export CCAUX=$CC_FOR_BUILD
+    ${lib.optionalString cupsSupport ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
+
     # requires in-tree (heavily patched) openjpeg
     rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
 
@@ -85,9 +95,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional x11Support "--with-x"
   ++ lib.optionals cupsSupport [
     "--enable-cups"
-    "--with-cups-serverbin=$(out)/lib/cups"
-    "--with-cups-serverroot=$(out)/etc/cups"
-    "--with-cups-datadir=$(out)/share/cups"
   ];
 
   # make check does nothing useful

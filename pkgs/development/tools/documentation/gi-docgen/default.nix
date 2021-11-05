@@ -29,6 +29,10 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+  depsBuildBuild = [
+    python3
+  ];
+
   nativeBuildInputs = [
     meson
     ninja

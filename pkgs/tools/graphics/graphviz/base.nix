@@ -1,7 +1,7 @@
 { rev, sha256, version }:
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
-, fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
+, fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango, bash
 , bison, fetchpatch, xorg, ApplicationServices, python3 }:
 
 let
@@ -41,11 +41,16 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    python3
+    bison
+    flex
+  ];
 
   buildInputs = [
-    libpng libjpeg expat bison libtool fontconfig gd gts libdevil flex pango
-    gettext
+    libpng libjpeg expat fontconfig gd gts libdevil pango bash
   ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
     ++ optionals (stdenv.isDarwin) [ ApplicationServices ];
 

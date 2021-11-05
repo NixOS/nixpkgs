@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
+      "--with-libxml2=${libxml2.dev}"
+      "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
       # Make sure to use a static value for the timeout. If we do not set a value
       # here autogen will select one based on the execution time of the configure
       # phase which is not really reproducible.
@@ -64,8 +66,6 @@ stdenv.mkDerivation rec {
       "--enable-timeout=78"
     ]
     ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--with-libxml2=${libxml2.dev}"
-      "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
       # the configure check for regcomp wants to run a host program
       "libopts_cv_with_libregex=yes"
       #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
