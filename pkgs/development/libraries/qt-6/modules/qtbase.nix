@@ -1,5 +1,5 @@
 { stdenv, lib
-, src, patches, version, qtCompatVersion
+, src, patches ? [], version, qtCompatVersion
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , python3Packages # debug: split ninja build
@@ -953,7 +953,6 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
 
 
 
-
     # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
     (
@@ -1022,40 +1021,4 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     echo "bin = $bin"
     echo "dev = $dev"
   '';
-
-/*
-
-latest output paths
-cached build: qtbaseDrv = /nix/store/6kzvlblkjj8dii3yivdnsl21rrqxwj2c-qtbase-6.2.0
-#out = /nix/store/al1dbwbprm5mrmpa9z8fbfkx9nshiah5-qtbase-6.2.0
- out = /nix/store/12h9m18mvzhvcsh57h58ysjayikis3yw-qtbase-6.2.0
- bin = /nix/store/v5l20vmiikp18asfs45bjxqnzaif0ygd-qtbase-6.2.0-bin
- dev = /nix/store/klkjkrq1livbw8yzfyy7blv4zcyfqrv0-qtbase-6.2.0-dev
-
-
-nix-locate lib/libQt5Core.so.5.14.2
-libsForQt514.qt5.qtbase.out                   5,877,576 x /nix/store/r9dhw881gg1ql16m90w8lad57wyvbqbw-qtbase-5.14.2/lib/libQt5Core.so.5.14.2
-libsForQt514.full.out                                 0 s /nix/store/jxhqm8c8gbmn5rkx377vdvajq8xjg271-qt-full-5.14.2/lib/libQt5Core.so.5.14.2
-
-nix-locate Qt5CoreConfig.cmake
-libsForQt514.qt5.qtbase.dev                       8,126 r /nix/store/qhd5yxq9ll8nc92yfplgpnm1yqpj3pzn-qtbase-5.14.2-dev/lib/cmake/Qt5Core/Qt5CoreConfig.cmake
-
-FIXME set _IMPORT_PREFIX in qtbase-6.2.0-dev/lib/cmake/Qt6Core/Qt6CoreTargets-release.cmake
-old: $dev = /nix/store/g4pqvwxjq8yicd6irz9zg8d2fb3s1lrf-qtbase-6.2.0-dev
-new: $out = /nix/store/12h9m18mvzhvcsh57h58ysjayikis3yw-qtbase-6.2.0
-
-*/
-
-
-/*
-qt6 in gentoo https://github.com/gentoo/qt/pull/224
-
-tests go to share/qt6/tests
-
-	QT6_DATADIR=${QT6_PREFIX}/share/qt6
-	QT6_DOCDIR=${QT6_PREFIX}/share/qt6-doc
-	QT6_TRANSLATIONDIR=${QT6_DATADIR}/translations
-	QT6_EXAMPLESDIR=${QT6_DATADIR}/examples
-	QT6_TESTSDIR=${QT6_DATADIR}/tests
-*/
 })
