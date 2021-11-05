@@ -201,6 +201,7 @@ let
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
+      qtshadertools = callPackage ../modules/qtshadertools.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
       qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
