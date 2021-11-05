@@ -1836,6 +1836,7 @@ broken-packages:
   - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
+  - hadolint
   - hadoop-formats
   - hadoop-rpc
   - hafar
