@@ -52,6 +52,29 @@
       </listitem>
       <listitem>
         <para>
+          Improvements have been made to the Hadoop module and package:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              HDFS and YARN now support production-ready highly
+              available deployments with automatic failover.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Hadoop now defaults to Hadoop 3, updated from 2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              JournalNode, ZKFS and HTTPFS services have been added.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           Activation scripts can now opt int to be run when running
           <literal>nixos-rebuild dry-activate</literal> and detect the
           dry activation by reading <literal>$NIXOS_ACTION</literal>.
