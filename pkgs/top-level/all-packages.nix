@@ -4045,6 +4045,8 @@ with pkgs;
 
   usbsdmux = callPackage ../development/tools/misc/usbsdmux { };
 
+  uhk-agent = callPackage ../tools/misc/uhk-agent { };
+
   usbview = callPackage ../tools/misc/usbview { };
 
   uwuify = callPackage ../tools/misc/uwuify { };
