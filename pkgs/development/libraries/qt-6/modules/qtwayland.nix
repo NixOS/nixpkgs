@@ -14,5 +14,5 @@ qtModule {
   qtInputs = [ qtbase ];
   buildInputs = [ wayland pkg-config xlibs.libxcb xlibs.libxcb.dev
     libglvnd libxkbcommon vulkan-headers libX11 libXcomposite ];
-  hasPlugins = true;
+  outputs = [ "out" "dev" "bin" ];
 }
