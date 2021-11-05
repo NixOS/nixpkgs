@@ -1,6 +1,6 @@
 { lib, mkDerivation, perl, cmake }:
 
-{ self, srcs, patches }:
+{ self, srcs, patches ? [] }:
 
 args:
 
