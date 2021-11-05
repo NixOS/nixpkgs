@@ -2,7 +2,8 @@
 
 { lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango, bash
-, bison, fetchpatch, xorg, ApplicationServices, python3 }:
+, bison, fetchpatch, xorg, ApplicationServices, python3, withXorg ? true
+}:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -12,7 +13,7 @@ let
       name = "CVE-2018-10196.patch";
       url = "https://gitlab.com/graphviz/graphviz/uploads/30f8f0b00e357c112ac35fb20241604a/p.diff";
       sha256 = "074qx6ch9blrnlilmz7p96fkiz2va84x2fbqdza5k4808rngirc7";
-      excludes = ["tests/*"]; # we don't run them and they don't apply
+      excludes = [ "tests/*" ]; # we don't run them and they don't apply
     };
   # the patch needs a small adaption for older versions
   patchToUse = if lib.versionAtLeast version "2.37" then raw_patch else
@@ -51,12 +52,12 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libpng libjpeg expat fontconfig gd gts libdevil pango bash
-  ] ++ optionals (xorg != null) (with xorg; [ libXrender libXaw libXpm ])
-    ++ optionals (stdenv.isDarwin) [ ApplicationServices ];
+  ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
+    ++ optionals stdenv.isDarwin [ ApplicationServices ];
 
   hardeningDisable = [ "fortify" ];
 
-  CPPFLAGS = lib.optionalString (xorg != null && stdenv.isDarwin)
+  CPPFLAGS = lib.optionalString (withXorg && stdenv.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
   configureFlags = [
@@ -81,7 +82,7 @@ stdenv.mkDerivation {
 
   preAutoreconf = "./autogen.sh";
 
-  postFixup = optionalString (xorg != null) ''
+  postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
       --replace /usr/bin/vi '$(command -v vi)' \
