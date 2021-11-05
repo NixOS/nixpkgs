@@ -309,6 +309,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    HDF5Array = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl ];
