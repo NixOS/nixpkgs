@@ -4,11 +4,9 @@ let inherit (lib) licenses maintainers platforms; in
 
 { self, srcs, patches }:
 
-argsRaw:
+args:
 
 let
-  # TODO? disable setting args.outputs manually, allow only args.hasPlugins
-  args = { hasPlugins = false; } // argsRaw;
   inherit (args) pname;
   version = args.version or srcs.${pname}.version;
   src = args.src or srcs.${pname}.src;
@@ -21,7 +19,7 @@ mkDerivation (args // {
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl cmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
 
-  outputs = args.outputs or [ "out" "dev" ] ++ lib.optional args.hasPlugins "bin";
+  outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
 
   # FIXME only needed for qt6
@@ -125,8 +123,6 @@ mkDerivation (args // {
         find $out/plugins
         echo 'listing plugins done'
         echo 'todo: in qtModule for ${pname}-${version}, set:'
-        echo '  hasPlugins = true;'
-        echo 'or set:'
         echo '  outputs = [ "out" "dev" "bin" ];'
         exit 1
       fi
@@ -136,8 +132,6 @@ mkDerivation (args // {
     elif [ -n "$bin" ]; then
       echo 'fatal error: qt module has no plugins but "bin" output'
       echo 'todo: in qtModule for ${pname}-${version}, remove:'
-      echo '  hasPlugins = true;'
-      echo 'or remove:'
       echo '  outputs = [ "out" "dev" "bin" ];'
     fi
 
