@@ -6,6 +6,7 @@
 , pkg-config
 , openssl
 , boost
+, dcpomatic
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
   ];
+
+  passthru.tests = {
+    # Changes to asdcplib should basically always ensure dcpomatic continues to build.
+    inherit dcpomatic;
+  };
 
   meta = with lib; {
     description = "Open-source implementation of SMPTE and MXF Interop format";

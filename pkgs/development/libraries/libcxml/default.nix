@@ -8,6 +8,7 @@
 , boost
 , libxmlxx
 , glibmm
+, dcpomatic
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,11 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
   ];
+
+  passthru.tests = {
+    # Changes to libcxml should basically always ensure dcpomatic continues to build.
+    inherit dcpomatic;
+  };
 
   meta = with lib; {
     description = "A slightly tidier C++ API for parsing XML.";

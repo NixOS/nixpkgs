@@ -19,6 +19,7 @@
 , libtool
 , libsigcxx
 , llvmPackages
+, dcpomatic
 }:
 
 let
@@ -82,6 +83,11 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
   ];
+
+  passthru.tests = {
+    # Changes to libdcp should basically always ensure dcpomatic continues to build.
+    inherit dcpomatic;
+  };
 
   meta = with lib; {
     description = "Library to read and write Digital Cinema Packages using JPEG2000 and PCM data, including KDMs";

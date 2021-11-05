@@ -9,6 +9,7 @@
 , libdcp
 , libcxml
 , libtool
+, dcpomatic
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,11 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
   ];
+
+  passthru.tests = {
+    # Changes to libsub should basically always ensure dcpomatic continues to build.
+    inherit dcpomatic;
+  };
 
   meta = with lib; {
     description = "Library to read and write subtitles in STL/SubRip/DCP/SSA format";

@@ -4,6 +4,7 @@
 , wafHook
 , python3
 , pkg-config
+, dcpomatic
 , ffmpeg
 , libsndfile
 }:
@@ -35,6 +36,11 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
   ];
+
+  passthru.tests = {
+    # Changes to leqm-nrt should basically always ensure dcpomatic continues to build.
+    inherit dcpomatic;
+  };
 
   meta = with lib; {
     description = "Implementation of Leq(M) measurement";
