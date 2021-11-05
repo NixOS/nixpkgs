@@ -142,23 +142,13 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "9.2.0.20210821";
+  version = "9.2.1";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/9.2.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "1q2pppxv2avhykyxvyq72r5p97rkkiqp19b77yhp85ralbcp4ivw";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "f444012f97a136d9940f77cdff03fda48f9475e2ed0fec966c4d35c4df55f746";
   };
-
-  patches = [
-    # picked from release branch, remove with the next release candidate,
-    # see https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
-    (fetchpatch {
-      name = "fix-darwin-link-failure.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/77456387025ca74299ecc70621cbdb62b1b6ffc9.patch";
-      sha256 = "1g8smrn7hj8cbp9fhrylvmrb15s0xd8lhdgxqnx0asnd4az82gj8";
-    })
-  ];
 
   enableParallelBuilding = true;
 
@@ -255,7 +245,7 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals enableDocs [
     sphinx
   ] ++ lib.optionals stdenv.isDarwin [
-    # TODO(@sternenseemann): use XATTR env var after backport of
+    # TODO(@sternenseemann): backport addition of XATTR env var like
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
     xattr
   ];

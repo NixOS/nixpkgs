@@ -88,7 +88,6 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - aeson-utils
-  - aeson-via
   - affection
   - affine-invariant-ensemble-mcmc
   - Agata
@@ -128,6 +127,7 @@ broken-packages:
   - alure
   - amazon-emailer
   - amazonka-contrib-rds-utils
+  - amazonka-mediaconvert
   - amazonka-s3-streaming
   - amazon-products
   - amby
@@ -499,7 +499,6 @@ broken-packages:
   - bytestring-show
   - bytestring-substring
   - bytestring-time
-  - bytestring-trie
   - bytestring-typenats
   - c0parser
   - c10k
@@ -841,6 +840,7 @@ broken-packages:
   - CoreErlang
   - core-haskell
   - corenlp-parser
+  - core-telemetry
   - Coroutine
   - coroutine-object
   - CouchDB
@@ -1051,7 +1051,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
   - diagrams-pdf
@@ -1330,6 +1329,7 @@ broken-packages:
   - expresso
   - extcore
   - extended-categories
+  - extensible
   - extensible-effects-concurrent
   - extensible-skeleton
   - external-sort
@@ -1921,6 +1921,7 @@ broken-packages:
   - hashable-orphans
   - hashabler
   - hashed-storage
+  - hashes
   - hashring
   - hashtables-plus
   - hasim
@@ -2339,6 +2340,8 @@ broken-packages:
   - hslogger-reader
   - hslogger-template
   - hs-logo
+  - hslua-examples
+  - hslua-module-version
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
@@ -2470,7 +2473,6 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
-  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
@@ -2845,6 +2847,7 @@ broken-packages:
   - libtagc
   - libxls
   - libxslt
+  - libyaml-streamly
   - lie
   - life-sync
   - lifted-protolude
@@ -3656,6 +3659,7 @@ broken-packages:
   - persistent-mongoDB
   - persistent-mysql-haskell
   - persistent-odbc
+  - persistent-postgresql-streaming
   - persistent-protobuf
   - persistent-ratelimit
   - persistent-redis
@@ -3757,6 +3761,7 @@ broken-packages:
   - pointful
   - pointless-haskell
   - pokemon-go-protobuf-types
+  - poker-base
   - poker-eval
   - pokitdok
   - polar-configfile
@@ -4123,6 +4128,7 @@ broken-packages:
   - resource-effect
   - resource-embed
   - restartable
+  - rest-rewrite
   - restyle
   - resumable-exceptions
   - rethinkdb
@@ -4810,7 +4816,6 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
-  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
@@ -4827,6 +4832,7 @@ broken-packages:
   - tds
   - teams
   - teeth
+  - telega
   - telegram
   - telegram-api
   - telegram-bot-simple

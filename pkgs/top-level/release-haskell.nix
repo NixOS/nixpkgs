@@ -182,7 +182,7 @@ let
         hledger-web
         hlint
         hpack
-        hyper-haskell
+        # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
         hyper-haskell-server-with-packages
         icepeak
         idris

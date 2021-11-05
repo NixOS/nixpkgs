@@ -221,9 +221,6 @@ dont-distribute-packages:
  - IORefCAS
  - IndexedList
  - InfixApplicative
- - JSON-Combinator
- - JSON-Combinator-Examples
- - JSONb
  - Javasf
  - JsContracts
  - JsonGrammar
@@ -234,7 +231,6 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
- - LambdaDesigner
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -408,7 +404,6 @@ dont-distribute-packages:
  - agda-snippets-hakyll
  - agentx
  - aip
- - airship
  - aivika-distributed
  - algebra-checkers
  - algebra-driven-design
@@ -1003,7 +998,6 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
- - dprox
  - dropbox-sdk
  - dropsolve
  - dsh-sql
@@ -1045,6 +1039,7 @@ dont-distribute-packages:
  - enumeration
  - enumerator-fd
  - enumerator-tf
+ - envy-extensible
  - ephemeral
  - erf-native
  - eros-client
@@ -1053,6 +1048,7 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+ - esqueleto-streaming
  - estreps
  - eternity
  - eternity-timestamped
@@ -1724,8 +1720,6 @@ dont-distribute-packages:
  - iException
  - ice40-prim
  - ide-backend
- - ide-backend-common
- - ide-backend-server
  - ideas-math
  - ideas-math-types
  - ideas-statistics
@@ -1832,7 +1826,6 @@ dont-distribute-packages:
  - json-tokens
  - json2-hdbc
  - jsons-to-schema
- - jspath
  - jvm
  - jvm-batching
  - jvm-streaming
@@ -1904,10 +1897,6 @@ dont-distribute-packages:
  - lambdacube
  - lambdacube-bullet
  - lambdacube-compiler
- - lambdacube-core
- - lambdacube-edsl
- - lambdacube-engine
- - lambdacube-examples
  - lambdacube-gl
  - lambdacube-samples
  - lambdaya-bus
@@ -2871,6 +2860,8 @@ dont-distribute-packages:
  - sql-simple-postgresql
  - sql-simple-sqlite
  - sqlite-simple-typed
+ - squeal-postgresql-ltree
+ - squeal-postgresql-uuid-ossp
  - squeeze
  - sr-extra
  - sscgi
@@ -2995,7 +2986,6 @@ dont-distribute-packages:
  - testbench
  - text-json-qq
  - text-plus
- - text-trie
  - text-xml-generic
  - textmatetags
  - th-alpha
@@ -3097,7 +3087,6 @@ dont-distribute-packages:
  - typson-esqueleto
  - typson-selda
  - u2f
- - uber
  - ucam-webauth
  - uhc-light
  - uhc-util
@@ -3205,7 +3194,6 @@ dont-distribute-packages:
  - web-routes-regular
  - web-routing
  - web3
- - webapi
  - webcrank-wai
  - webdriver-w3c
  - webserver
@@ -3284,6 +3272,7 @@ dont-distribute-packages:
  - yam-web
  - yaml-rpc-scotty
  - yaml-rpc-snap
+ - yaml-streamly
  - yaml-unscrambler
  - yarr-image-io
  - yavie
