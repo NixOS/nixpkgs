@@ -15818,6 +15818,8 @@ with pkgs;
 
   cointop = callPackage ../applications/misc/cointop { };
 
+  collada-dom = callPackage ../development/libraries/collada-dom { };
+
   cog = callPackage ../development/web/cog { };
 
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
