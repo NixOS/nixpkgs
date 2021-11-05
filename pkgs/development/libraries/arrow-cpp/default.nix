@@ -179,8 +179,12 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
+      runHook preInstallCheck
+
       ctest -L unittest -V \
         --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+
+      runHook postInstallCheck
     '';
 
   meta = with lib; {
