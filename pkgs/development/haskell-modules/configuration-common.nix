@@ -2008,11 +2008,6 @@ EOT
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2021-09-06: hadolint depends on language-docker >= 10.1
-  hadolint = super.hadolint.override {
-    language-docker = self.language-docker_10_2_0;
-  };
-
   # 2021-09-13: hls 1.3 needs a newer lsp than stackage-lts. (lsp >= 1.2.0.1)
   # (hls is nearly the only consumer, but consists of 18 packages, so we bump lsp globally.)
   lsp = doDistribute self.lsp_1_2_0_1;
@@ -2059,6 +2054,17 @@ EOT
     url = "https://github.com/hslua/hslua/pull/103/commits/814bf1bb284151e827b1c11a7277819ed2779dd2.patch";
     sha256 = "1kj0g51lkjyf6jv2ikayb3cfh0dcr669swmxl9a2mcrizxcbkrhy";
     stripLen = 1;
+  });
+
+  # 2021-11-05: patch to permit our language-docker version
+  # This is based on c931c0a9689cd6dff4d2083fa002414c1f08a586 from
+  # language-docker upstream
+  hadolint = appendPatch (super.hadolint.override {
+    language-docker = self.language-docker_10_3_0;
+  }) (pkgs.fetchpatch {
+    url = "https://github.com/hadolint/hadolint/commit/c931c0a9689cd6dff4d2083fa002414c1f08a586.patch";
+    sha256 = "1kv06hfn7lgrcrg56q8lq0pvdffqvmjbshazg3prlhl3kjs541f8";
+    excludes = [ "stack.yaml" "package.yaml" "hadolint.cabal" ];
   });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
