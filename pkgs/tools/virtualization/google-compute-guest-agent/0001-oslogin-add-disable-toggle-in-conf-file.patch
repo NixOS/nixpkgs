@@ -1,0 +1,40 @@
+From f318f525149b06365e9f0c7f642f09f401c3e1c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?F=C3=A9lix=20Baylac-Jacqu=C3=A9?= <felix@alternativebit.fr>
+Date: Fri, 5 Nov 2021 15:40:13 +0100
+Subject: [PATCH] oslogin: add disable toggle in conf file
+
+The guest agent is trying to imperatively alter the sshd authorized
+key config, inject some new NSS configuration, and update the PAM
+config. This won't work on NixOS. We already have a "legacy" support
+for the os-login feature that is more declarative, let's keep on using
+that.
+
+Sadly, the guest agent does not provide any way to disable the oslogin
+feature from its configuration file. The only way to prevent the
+daemon from trying to burn our ideal declarative world to the ground
+is to disable oslogin from the GCE metadata. This is obviously not a
+solution for us.
+
+Adding a new oslogin_daemon toggle to the conf file Daemons section
+allowing us to shut down the agent oslogin features.
+---
+ google_guest_agent/oslogin.go | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/google_guest_agent/oslogin.go b/google_guest_agent/oslogin.go
+index d05f733..d8a5151 100644
+--- a/google_guest_agent/oslogin.go
++++ b/google_guest_agent/oslogin.go
+@@ -76,7 +76,8 @@ func (o *osloginMgr) timeout() bool {
+ }
+ 
+ func (o *osloginMgr) disabled(os string) bool {
+-	return os == "windows"
++	return os == "windows" ||
++		!config.Section("Daemons").Key("oslogin_daemon").MustBool(true)
+ }
+ 
+ func (o *osloginMgr) set() error {
+-- 
+2.33.0
+

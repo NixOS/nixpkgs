@@ -5829,6 +5829,8 @@ with pkgs;
     with-gce = true;
   };
 
+  google-compute-guest-agent = callPackage ../tools/virtualization/google-compute-guest-agent { };
+
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
   google-clasp = callPackage ../development/misc/google-clasp { };
