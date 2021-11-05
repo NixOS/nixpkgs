@@ -88,7 +88,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.screenshot("wizard12")
 
     with subtest("Run Terminology"):
-        machine.succeed("terminology &")
+        machine.succeed("terminology >&2 &")
         machine.sleep(5)
         machine.send_chars("ls --color -alF\n")
         machine.sleep(2)

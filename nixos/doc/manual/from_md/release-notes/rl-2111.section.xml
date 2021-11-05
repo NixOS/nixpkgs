@@ -425,6 +425,23 @@
     <itemizedlist>
       <listitem>
         <para>
+          The NixOS VM test framework,
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
+          now requires non-terminating commands such as
+          <literal>succeed(&quot;foo &amp;&quot;)</literal> to close
+          stdout. This can be done with a redirect such as
+          <literal>succeed(&quot;foo &gt;&amp;2 &amp;&quot;)</literal>.
+          This breaking change was necessitated by a race condition
+          causing tests to fail or hang. It applies to all methods that
+          invoke commands on the nodes, including
+          <literal>execute</literal>, <literal>succeed</literal>,
+          <literal>fail</literal>,
+          <literal>wait_until_succeeds</literal>,
+          <literal>wait_until_fails</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.wakeonlan</literal> option was removed,
           and replaced with
           <literal>networking.interfaces.&lt;name&gt;.wakeOnLan</literal>.

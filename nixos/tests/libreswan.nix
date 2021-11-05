@@ -89,7 +89,7 @@ in
           """
           Sends a message as Alice to Bob
           """
-          bob.execute("nc -lu ::0 1234 >/tmp/msg &")
+          bob.execute("nc -lu ::0 1234 >/tmp/msg >&2 &")
           alice.sleep(1)
           alice.succeed(f"echo '{msg}' | nc -uw 0 bob 1234")
           bob.succeed(f"grep '{msg}' /tmp/msg")
@@ -100,7 +100,7 @@ in
           Starts eavesdropping on Alice and Bob
           """
           match = "src host alice and dst host bob"
-          eve.execute(f"tcpdump -i br0 -c 1 -Avv {match} >/tmp/log &")
+          eve.execute(f"tcpdump -i br0 -c 1 -Avv {match} >/tmp/log >&2 &")
 
 
       start_all()
@@ -120,7 +120,7 @@ in
           alice.succeed("ipsec verify 1>&2")
 
       with subtest("Alice and Bob can start the tunnel"):
-          alice.execute("ipsec auto --start tunnel &")
+          alice.execute("ipsec auto --start tunnel >&2 &")
           bob.succeed("ipsec auto --start tunnel")
           # apparently this is needed to "wake" the tunnel
           bob.execute("ping -c1 alice")
