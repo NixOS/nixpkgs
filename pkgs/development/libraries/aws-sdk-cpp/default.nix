@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    # Flaky on Hydra
+    rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
     rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -66,7 +68,6 @@ stdenv.mkDerivation rec {
   # fix build with gcc9, can be removed after bumping to current version
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  # aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
   # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
   # seem to have a datarace
   enableParallelChecking = false;
