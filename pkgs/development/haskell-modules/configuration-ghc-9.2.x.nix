@@ -43,6 +43,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Workaround for https://gitlab.haskell.org/ghc/ghc/-/issues/20594
+  tf-random = overrideCabal super.tf-random {
+    doHaddock = !pkgs.stdenv.isAarch64;
+  };
+
   aeson = appendPatch (doJailbreak super.aeson) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/aeson-1.5.6.0.patch";
     sha256 = "07rk7f0lhgilxvbg2grpl1p5x25wjf9m7a0wqmi2jr0q61p9a0nl";
@@ -239,12 +244,10 @@ self: super: {
   # https://github.com/Soostone/retry/issues/71
   retry = dontCheck super.retry;
 
-  # Disable tests pending resolution of
-  # https://github.com/haskell/text/issues/380 or https://github.com/fpco/streaming-commons/issues/60
-  streaming-commons = dontCheck (appendPatch super.streaming-commons (pkgs.fetchpatch {
+  streaming-commons = appendPatch super.streaming-commons (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/streaming-commons-0.2.2.1.patch";
     sha256 = "04wi1jskr3j8ayh88kkx4irvhhgz0i7aj6fblzijy0fygikvidpy";
-  }));
+  });
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
   hlint = super.hlint_3_3_4.overrideScope (self: super: {

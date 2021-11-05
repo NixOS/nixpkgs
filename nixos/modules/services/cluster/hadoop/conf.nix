@@ -35,6 +35,7 @@ pkgs.runCommand "hadoop-conf" {} ''
   cp ${siteXml "hdfs-site.xml" cfg.hdfsSite}/* $out/
   cp ${siteXml "mapred-site.xml" cfg.mapredSite}/* $out/
   cp ${siteXml "yarn-site.xml" cfg.yarnSite}/* $out/
+  cp ${siteXml "httpfs-site.xml" cfg.httpfsSite}/* $out/
   cp ${cfgFile "container-executor.cfg" cfg.containerExecutorCfg}/* $out/
   cp ${pkgs.writeTextDir "hadoop-user-functions.sh" userFunctions}/* $out/
   cp ${pkgs.writeTextDir "hadoop-env.sh" hadoopEnv}/* $out/
