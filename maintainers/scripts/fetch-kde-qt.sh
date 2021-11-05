@@ -64,6 +64,8 @@ done
 
 echo "}" >>"$SRCS"
 
+echo "done $SRCS"
+
 popd >/dev/null
 rm -fr $tmp >/dev/null
 
