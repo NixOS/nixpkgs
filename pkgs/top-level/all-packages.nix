@@ -33563,5 +33563,9 @@ with pkgs;
 
   zktree = callPackage ../applications/misc/zktree {};
 
+  zrythm = callPackage ../applications/audio/zrythm {
+    inherit (plasma5Packages) breeze-icons;
+  };
+
   zthrottle = callPackage ../tools/misc/zthrottle { };
 }
