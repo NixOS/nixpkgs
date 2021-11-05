@@ -986,7 +986,18 @@ patchPhase() {
 
 
 fixLibtool() {
-    sed -i -e 's^eval sys_lib_.*search_path=.*^^' "$1"
+    local search_path
+    for flag in $NIX_LDFLAGS; do
+        case $flag in
+            -L*)
+                search_path+=" ${flag#-L}"
+                ;;
+        esac
+    done
+
+    sed -i "$1" \
+        -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
+        -e 's^eval sys_lib_.+search_path=.*^^'
 }
 
 
