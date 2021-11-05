@@ -1948,10 +1948,17 @@ EOT
   hspec-golden-aeson_0_9_0_0 = dontCheck super.hspec-golden-aeson_0_9_0_0;
 
   # 2021-10-02: Doesn't compile with optics < 0.4
-  ghcup = super.ghcup.override {
+  # 2021-11-05: streamly-0.8.0 is required for libyaml-streamly and
+  #             yaml-streamly, as these aren't leaf packages it's not really
+  #             appropriate to override them themselves (although ghcup is
+  #             currently the only consumer)
+  # 2021-11-05: jailBreak the too tight upper bound on haskus-utils-variant
+  ghcup = doJailbreak (super.ghcup.overrideScope (self: super: {
     hspec-golden-aeson = self.hspec-golden-aeson_0_9_0_0;
     optics = self.optics_0_4;
-  };
+    streamly = self.streamly_0_8_0;
+    Cabal = self.Cabal_3_6_2_0;
+  }));
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
