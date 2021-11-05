@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
-, libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
+, libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool
+}:
 
 stdenv.mkDerivation rec {
   pname = "opensp";
@@ -30,7 +31,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
     '';
 
-  preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
+  preConfigure = lib.optionalString stdenv.isCygwin ''
+    autoreconf -fi
+  '';
 
   strictDeps = true;
 
@@ -42,10 +45,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = {
+  meta = with lib; {
     description = "A suite of SGML/XML processing tools";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     homepage = "http://openjade.sourceforge.net/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }
