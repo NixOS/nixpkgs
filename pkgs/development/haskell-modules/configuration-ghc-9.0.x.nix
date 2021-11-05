@@ -127,7 +127,7 @@ self: super: {
   ghc-lib = self.ghc-lib_9_0_1_20210324;
 
   # 2021-09-18: Need semialign >= 1.2 for correct bounds
-  semialign = super.semialign_1_2;
+  semialign = super.semialign_1_2_0_1;
 
   # Will probably be needed for brittany support
   # https://github.com/lspitzner/czipwith/pull/2
