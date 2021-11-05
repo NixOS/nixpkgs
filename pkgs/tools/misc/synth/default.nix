@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , stdenv
+, AppKit
 , Security
 }:
 
@@ -22,7 +23,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Security
+  ];
 
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
