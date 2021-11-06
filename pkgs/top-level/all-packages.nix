@@ -4512,6 +4512,8 @@ with pkgs;
     tk = tk-8_5;
   };
 
+  picoscope = callPackage ../applications/science/electronics/picoscope { };
+
   picotts = callPackage ../tools/audio/picotts { };
 
   wgetpaste = callPackage ../tools/text/wgetpaste { };
