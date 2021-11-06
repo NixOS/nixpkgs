@@ -56,6 +56,14 @@ stdenv.mkDerivation rec {
     CoreFoundation
     DiskArbitration
   ];
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing

@@ -305,6 +305,14 @@ stdenv.mkDerivation rec {
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
   '';
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   # This package has some `_("string literal")` string formats
   # that trip up clang with format security enabled.

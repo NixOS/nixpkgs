@@ -116,6 +116,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableJack [
     libjack2
   ];
+  preConfigure = makeWrapperAuto.combineWrappersInfo {
+    inherit buildInputs propagatedBuildInputs;
+    envInfo = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [
+        "@out@/lib/gstreamer-1.0"
+      ];
+    };
+  };
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users

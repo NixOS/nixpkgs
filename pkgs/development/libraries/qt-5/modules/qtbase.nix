@@ -1,5 +1,6 @@
 { stdenv, lib
 , src, patches, version, qtCompatVersion
+, makeWrapperAuto
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
