@@ -58,6 +58,7 @@ buildPythonPackage rec {
     # https://github.com/snowflakedb/snowflake-connector-python/issues/705
     substituteInPlace setup.py \
       --replace "idna>=2.5,<3" "idna" \
+      --replace "certifi<2021.0.0" "certifi" \
       --replace "chardet>=3.0.2,<4" "chardet"
   '';
 
