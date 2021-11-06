@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ luc65r ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isDarwin;
   };
 }
