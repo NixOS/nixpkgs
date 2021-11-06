@@ -254,7 +254,7 @@ in
           "allow ${e}")
         cfg.allowedBridges;
       systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
-      etc.ethertypes.source = "${pkgs.ebtables}/etc/ethertypes";
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];
