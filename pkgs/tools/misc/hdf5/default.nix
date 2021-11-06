@@ -67,6 +67,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./bin-mv.patch
+
+    # Avoid non-determinism in autoconf build system:
+    # - build time
+    # - build user
+    # - uname -a (kernel version)
+    # Can be dropped once/if we switch to cmake.
+    ./hdf5-more-determinism.patch
   ];
 
   postInstall = ''
