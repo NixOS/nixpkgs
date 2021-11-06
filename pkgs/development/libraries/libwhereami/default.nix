@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost curl leatherman ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];

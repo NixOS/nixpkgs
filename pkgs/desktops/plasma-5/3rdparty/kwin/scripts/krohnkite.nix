@@ -33,7 +33,7 @@ mkDerivation rec {
     description = "A dynamic tiling extension for KWin";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (kwindowsystem.meta) platforms;
   };
 }

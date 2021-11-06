@@ -23,7 +23,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "WakaTime command line interface";
     longDescription = ''
       Command line interface to WakaTime used by all WakaTime text editor

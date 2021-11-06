@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ocamlnet cpu ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Generalized map/reduce for multicore computing";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl2;

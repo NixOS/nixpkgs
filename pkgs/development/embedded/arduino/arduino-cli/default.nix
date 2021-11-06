@@ -24,7 +24,7 @@ let
     ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
     meta = with lib; {
-      inherit (src.meta) homepage;
+      inherit (src.meta) homepage changelog;
       description = "Arduino from the command line";
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ ryantm ];

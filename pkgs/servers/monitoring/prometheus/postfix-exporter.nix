@@ -50,7 +50,7 @@ buildGoPackage rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A Prometheus exporter for Postfix";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz globin ];

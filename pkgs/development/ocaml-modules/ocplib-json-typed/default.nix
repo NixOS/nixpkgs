@@ -17,6 +17,6 @@ buildDunePackage rec {
     description = "A collection of type-aware JSON utilities for OCaml";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

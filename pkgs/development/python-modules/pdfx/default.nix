@@ -21,7 +21,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];

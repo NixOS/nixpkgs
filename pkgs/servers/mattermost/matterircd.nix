@@ -14,7 +14,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/42wim/matterircd";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Minimal IRC server bridge to Mattermost";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];

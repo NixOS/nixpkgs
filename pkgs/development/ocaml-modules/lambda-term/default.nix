@@ -31,7 +31,7 @@ buildDunePackage rec {
     console applications.
     '';
 
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.gal_bolle

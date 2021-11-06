@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A fast K Nearest Neighbor library for low-dimensional spaces";
     license = licenses.bsd3;
     platforms   = platforms.linux;

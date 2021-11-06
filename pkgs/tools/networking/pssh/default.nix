@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
       PSSH provides parallel versions of OpenSSH and related tools,
       including pssh, pscp, prsync, pnuke and pslurp.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];

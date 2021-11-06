@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "GameNetworkingSockets is a basic transport layer for games";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = [ maintainers.sternenseemann ];
   };
 }

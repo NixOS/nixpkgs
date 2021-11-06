@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clipboard management using dmenu";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.publicDomain;
   };

@@ -14,7 +14,7 @@ mkDerivation rec {
   buildInputs = [ standard-library ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A new Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;

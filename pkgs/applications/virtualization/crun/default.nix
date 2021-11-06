@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

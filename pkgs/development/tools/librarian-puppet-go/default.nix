@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "librarian-puppet implementation in go";
     license = licenses.mit;
     maintainers = with maintainers; [ womfoo ];

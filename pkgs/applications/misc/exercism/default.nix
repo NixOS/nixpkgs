@@ -18,7 +18,7 @@ buildGoModule rec {
   subPackages = [ "./exercism" ];
 
   meta = with lib; {
-   inherit (src.meta) homepage;
+   inherit (src.meta) homepage changelog;
    description = "A Go based command line tool for exercism.io";
    license     = licenses.mit;
    maintainers = [ maintainers.rbasso maintainers.nobbz ];

@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     description = "Strict impure trie tree";
     maintainers = [ lib.maintainers.vbgl ];

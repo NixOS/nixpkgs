@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "1jgw0nnibydhcd83kp6jqkf41mhwldp8wdhqk0yjw18v9m0p7g5s";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Prometheus exporter for OpenVPN";
     broken = true;
     license = licenses.asl20;

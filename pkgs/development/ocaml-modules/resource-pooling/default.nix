@@ -20,7 +20,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A library for pooling resources like connections, threads, or similar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

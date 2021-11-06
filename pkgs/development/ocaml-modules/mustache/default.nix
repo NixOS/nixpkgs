@@ -21,6 +21,6 @@ buildDunePackage rec {
     description = "Mustache logic-less templates in OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

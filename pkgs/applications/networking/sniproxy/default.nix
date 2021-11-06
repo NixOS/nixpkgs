@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext libev pcre udns ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Transparent TLS and HTTP layer 4 proxy with SNI support";
     license = licenses.bsd2;
     maintainers = [ maintainers.womfoo ];

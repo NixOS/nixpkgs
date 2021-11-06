@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "OCaml wrapper for the Expat XML parsing library";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (ocaml.meta) platforms;
   };
 }

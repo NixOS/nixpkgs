@@ -39,7 +39,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.12";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Build and execute typed scientific workflows";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.gpl2;

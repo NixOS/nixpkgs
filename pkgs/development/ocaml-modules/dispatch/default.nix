@@ -20,7 +20,7 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.bsd3;
     description = "Path-based dispatching for client- and server-side applications";
     maintainers = [ lib.maintainers.vbgl ];

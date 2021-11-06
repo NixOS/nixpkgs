@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Cracks passwords of LUKS encrypted volumes";
     longDescription = ''
       The program tries to decrypt at least one of the key slots by trying

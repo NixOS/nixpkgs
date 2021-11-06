@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Very good, but slow, deflate or zlib compression";
     longDescription = ''
       Zopfli Compression Algorithm is a compression library programmed

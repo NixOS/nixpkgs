@@ -45,7 +45,7 @@ buildDunePackage rec {
   meta = {
     description = "The set of ppx rewriters for BAP";
     license = lib.licenses.mit;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = [ lib.maintainers.vbgl ];
   };
 }

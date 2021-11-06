@@ -22,6 +22,6 @@ buildDunePackage rec {
     description = "ZeroMQ bindings for OCaml";
     license     = lib.licenses.mit;
     maintainers = with lib.maintainers; [ akavel ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

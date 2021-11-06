@@ -23,7 +23,7 @@ buildDunePackage rec {
   hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Core pinning library";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.lgpl2;

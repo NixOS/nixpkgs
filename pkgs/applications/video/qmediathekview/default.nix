@@ -33,7 +33,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "An alternative Qt-based front-end for the database maintained by the MediathekView project";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];

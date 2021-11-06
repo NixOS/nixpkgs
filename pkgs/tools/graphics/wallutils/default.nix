@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;

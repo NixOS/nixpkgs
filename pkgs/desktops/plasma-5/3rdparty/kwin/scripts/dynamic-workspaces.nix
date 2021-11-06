@@ -33,7 +33,7 @@ mkDerivation rec {
     description = "KWin script that automatically adds/removes virtual desktops";
     license = licenses.bsd3;
     maintainers = with maintainers; [ samuelgrf ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     inherit (kwindowsystem.meta) platforms;
   };
 }

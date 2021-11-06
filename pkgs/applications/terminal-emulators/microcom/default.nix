@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A minimalistic terminal program for communicating
     with devices over a serial connection";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;

@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ seq ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Fuzzy string searching, using Levenshtein automaton";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];

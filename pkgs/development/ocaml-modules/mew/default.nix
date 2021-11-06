@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ result trie ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     description = "Modal Editing Witch";
     maintainers = [ lib.maintainers.vbgl ];

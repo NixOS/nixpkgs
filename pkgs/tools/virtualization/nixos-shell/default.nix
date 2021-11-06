@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Spawns lightweight nixos vms in a shell";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.unix;

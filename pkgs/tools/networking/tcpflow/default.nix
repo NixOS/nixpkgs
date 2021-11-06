@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       connections (flows), and stores the data in a way that is convenient for
       protocol analysis and debugging.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license     = licenses.gpl3;
     maintainers = with maintainers; [ raskin obadz ];
     platforms   = platforms.linux;

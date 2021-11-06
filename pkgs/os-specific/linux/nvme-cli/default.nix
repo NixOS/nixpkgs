@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-spec" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage; # https://nvmexpress.org/
+    inherit (src.meta) homepage changelog; # https://nvmexpress.org/
     description = "NVM-Express user space tooling for Linux";
     longDescription = ''
       NVM-Express is a fast, scalable host controller interface designed to

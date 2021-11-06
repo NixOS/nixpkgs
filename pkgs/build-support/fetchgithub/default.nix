@@ -36,4 +36,8 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; }
+fetcher fetcherArgs // {
+  meta.homepage = baseUrl;
+  meta.changelog = "${baseUrl}/releases/tag/${rev}";
+  inherit rev;
+}

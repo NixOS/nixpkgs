@@ -27,6 +27,6 @@ buildDunePackage rec {
     description = "A TOML parsing and manipulation library for OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "A slide show presentation tool";
 
     platforms = platforms.unix;

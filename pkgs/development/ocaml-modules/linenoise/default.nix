@@ -21,6 +21,6 @@ buildDunePackage rec {
     description = "OCaml bindings to linenoise";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

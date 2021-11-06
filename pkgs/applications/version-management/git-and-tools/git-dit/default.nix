@@ -46,7 +46,7 @@ buildRustPackage rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Decentralized Issue Tracking for git";
     # This has not had a release in years and its cargo vendored dependencies
     # fail to compile. It also depends on an unsupported openssl:

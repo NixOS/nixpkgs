@@ -92,7 +92,7 @@ let
     # nixpkgs.nodePackages
     passthru.updateScript = import ./update.nix {
       inherit lib;
-      inherit (src.meta) homepage;
+      inherit (src.meta) homepage changelog;
       inherit
         pname
         version

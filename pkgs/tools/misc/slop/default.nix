@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Queries a selection from the user and prints to stdout";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;

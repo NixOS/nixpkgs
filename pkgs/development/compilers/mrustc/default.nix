@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       Capable of building a fully-working copy of rustc,
       but not yet suitable for everyday use.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     maintainers = with maintainers; [ progval r-burns ];
     platforms = [ "x86_64-linux" ];

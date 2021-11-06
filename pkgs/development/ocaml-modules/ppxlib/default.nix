@@ -76,6 +76,6 @@ buildDunePackage rec {
     description = "Comprehensive ppx tool set";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

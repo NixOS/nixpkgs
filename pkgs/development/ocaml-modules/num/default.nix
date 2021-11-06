@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

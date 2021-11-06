@@ -22,7 +22,7 @@ buildDunePackage rec {
       movements on ANSI terminals. It also works on the windows shell (but
       this part is currently work in progress).
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.lgpl3;
     maintainers = [ maintainers.jirkamarsik ];
   };

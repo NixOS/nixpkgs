@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       Sway's idle management daemon. It is compatible with any Wayland
       compositor which implements the KDE idle protocol.
     '';
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

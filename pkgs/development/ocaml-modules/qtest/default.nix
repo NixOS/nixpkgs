@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Inline (Unit) Tests for OCaml";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     maintainers = with lib.maintainers; [ vbgl ];
     license = lib.licenses.gpl3;
   };

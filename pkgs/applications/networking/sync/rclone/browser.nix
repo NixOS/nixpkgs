@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Graphical Frontend to Rclone written in Qt";
     license = licenses.unlicense;
     platforms = platforms.linux;

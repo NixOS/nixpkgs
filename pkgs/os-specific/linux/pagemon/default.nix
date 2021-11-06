@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Interactive memory/page monitor for Linux";
     longDescription = ''
       pagemon is an ncurses based interactive memory/page monitoring tool

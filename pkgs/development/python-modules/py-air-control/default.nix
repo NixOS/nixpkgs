@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyairctrl" ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Command Line App for Controlling Philips Air Purifiers.";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];

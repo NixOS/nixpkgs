@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml binding for the fdk-aac library";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.vbgl ];
   };

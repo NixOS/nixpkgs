@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Guess PC-type hard disk partitions";
     longDescription = ''
       Gpart is a tool which tries to guess the primary partition table of a

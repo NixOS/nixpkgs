@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   meta = {
     description = "An experimental OCaml library to work with DWARF format";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

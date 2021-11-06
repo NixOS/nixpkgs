@@ -24,7 +24,7 @@ buildDunePackage rec {
 
   meta = {
     description = "A Yojson codec generator for OCaml >= 4.04";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

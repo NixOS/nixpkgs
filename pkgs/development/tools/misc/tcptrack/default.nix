@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "libpcap based program for live TCP connection monitoring";
     license = licenses.lgpl21;
     platforms = platforms.linux;

@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Crossword generator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

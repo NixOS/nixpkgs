@@ -29,6 +29,6 @@ buildGoModule rec {
     description = "Create and view interactive cheatsheets on the command-line";
     maintainers = with maintainers; [ mic92 ];
     license = with licenses; [ gpl3 mit ];
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
   };
 }

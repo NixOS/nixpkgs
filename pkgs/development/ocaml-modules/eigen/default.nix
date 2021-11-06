@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ctypes ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
     platforms = platforms.x86_64;
     maintainers = [ maintainers.bcdarwin ];

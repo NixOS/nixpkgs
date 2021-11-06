@@ -16,7 +16,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Icecream GUI Monitor";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux ++ darwin;

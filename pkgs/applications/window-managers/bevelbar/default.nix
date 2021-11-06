@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An X11 status bar with fancy schmancy 1985-ish beveled borders";
-    inherit (src.meta) homepage;
+    inherit (src.meta) homepage changelog;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.neeasade ];
