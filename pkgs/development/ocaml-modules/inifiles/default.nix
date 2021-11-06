@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-inifiles-1.2";
 
   src = fetchurl {
-    url = "http://archive.ubuntu.com/ubuntu/pool/universe/o/ocaml-inifiles/ocaml-inifiles_1.2.orig.tar.gz";
+    url = "mirror://ubuntu/pool/universe/o/ocaml-inifiles/ocaml-inifiles_1.2.orig.tar.gz";
     sha256 = "0jhzgiypmh6hwsv1zpiq77fi0cvcmwbiy5x0yg7mz6p3dh1dmkns";
   };
 
