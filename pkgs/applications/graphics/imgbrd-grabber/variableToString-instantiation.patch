@@ -1,0 +1,14 @@
+diff --git a/src/lib/src/filename/filename-execution-visitor.cpp b/src/lib/src/filename/filename-execution-visitor.cpp
+index c0c666c1..6b2d338c 100644
+--- a/lib/src/filename/filename-execution-visitor.cpp
++++ b/lib/src/filename/filename-execution-visitor.cpp
+@@ -213,6 +213,9 @@ QString FilenameExecutionVisitor::variableToString(const QString &name, T val, c
+ 		: QString::number(val);
+ }
+ 
++template
++QString FilenameExecutionVisitor::variableToString<int>(const QString &name, int val, const QMap<QString, QString> &options);
++
+ QString FilenameExecutionVisitor::variableToString(const QString &name, QStringList val, const QMap<QString, QString> &options)
+ {
+ 	// Count
