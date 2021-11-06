@@ -28,6 +28,16 @@ let
   '';
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
 
+  preStart = ''
+    install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    ${lib.optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
+      password=$(head -n 1 ${cfg.passwordFile})
+      sed -i "s/^password=$/password=$password/" /run/${RuntimeDirectory}/ddclient.conf
+    '' else ''
+      sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
+    '')}
+  '';
+
 in
 
 with lib;
@@ -195,20 +205,13 @@ with lib;
 
       serviceConfig = {
         DynamicUser = true;
+        RuntimeDirectoryMode = "0700";
         inherit RuntimeDirectory;
         inherit StateDirectory;
         Type = "oneshot";
+        ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
         ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
-      preStart = ''
-        install -m 600 ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-        ${optionalString (cfg.configFile == null) (if (cfg.passwordFile != null) then ''
-          password=$(head -n 1 ${cfg.passwordFile})
-          sed -i "s/^password=$/password=$password/" /run/${RuntimeDirectory}/ddclient.conf
-        '' else ''
-          sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
-        '')}
-      '';
     };
 
     systemd.timers.ddclient = {
