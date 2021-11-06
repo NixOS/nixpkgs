@@ -139,7 +139,8 @@ with lib;
         });
       in
       ''
-        ${vma}/bin/vma create "vzdump-qemu-${cfg.filenameSuffix}.vma" -c ${cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)}/qemu-server.conf drive-virtio0=$diskImage
+        ${vma}/bin/vma create "vzdump-qemu-${cfg.filenameSuffix}.vma" \
+          -c ${cfgFile "qemu-server.conf" (cfg.qemuConf // cfg.qemuExtraConf)}/qemu-server.conf drive-virtio0=$diskImage
         rm $diskImage
         ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
