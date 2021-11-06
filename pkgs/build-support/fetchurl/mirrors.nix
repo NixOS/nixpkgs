@@ -46,10 +46,11 @@
     "https://mirror.ibcp.fr/pub/gnu/"
     "https://mirror.dogado.de/gnu/"
     "https://mirror.tochlab.net/pub/gnu/"
-    "ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/"
 
     # This one is the master repository, and thus it's always up-to-date.
     "https://ftp.gnu.org/pub/gnu/"
+
+    "ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/"
   ];
 
   # GCC.
@@ -65,10 +66,10 @@
   # GnuPG.
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
-    "http://www.ring.gr.jp/pub/net/"
     "https://mirrors.dotsrc.org/gcrypt/"
     "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
     "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
+    "http://www.ring.gr.jp/pub/net/"
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree.
@@ -98,7 +99,6 @@
   savannah = [
     # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
     "https://mirror.easyname.at/nongnu/"
-    "http://mirror2.klaus-uwe.me/nongnu/"
     "https://savannah.c3sl.ufpr.br/"
     "https://mirror.csclub.uwaterloo.ca/nongnu/"
     "https://mirror.cedia.org.ec/nongnu/"
@@ -107,8 +107,9 @@
     "https://mirror.netcologne.de/savannah/"
     "https://ftp.cc.uoc.gr/mirrors/nongnu.org/"
     "https://nongnu.uib.no/"
-    "http://mirrors.fe.up.pt/pub/nongnu/"
     "https://ftp.acc.umu.se/mirror/gnu.org/savannah/"
+    "http://mirror2.klaus-uwe.me/nongnu/"
+    "http://mirrors.fe.up.pt/pub/nongnu/"
     "http://ftp.twaren.net/Unix/NonGNU/"
     "http://savannah-nongnu-org.ip-connect.vn.ua/"
     "http://www.mirrorservice.org/sites/download.savannah.gnu.org/releases/"
@@ -142,8 +143,8 @@
     "https://www.imagemagick.org/download/"
     "https://mirror.checkdomain.de/imagemagick/"
     "https://ftp.nluug.nl/ImageMagick/"
-    "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
     "https://ftp.sunet.se/mirror/imagemagick.org/ftp/"
+    "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
   # CPAN mirrors.
@@ -155,7 +156,6 @@
 
   # CentOS.
   centos = [
-    "http://mirror.centos.org/centos/"
     # For old releases
     "https://vault.centos.org/"
     "https://archive.kernel.org/centos-vault/"
@@ -164,16 +164,17 @@
     "https://mirror.chpc.utah.edu/pub/vault.centos.org/"
     "https://mirror.math.princeton.edu/pub/centos-vault/"
     "https://mirrors.tripadvisor.com/centos-vault/"
+    "http://mirror.centos.org/centos/"
   ];
 
   # Debian.
   debian = [
     "https://httpredir.debian.org/debian/"
+    "https://ftp.debian.org/debian/"
     "ftp://ftp.de.debian.org/debian/"
     "ftp://ftp.fr.debian.org/debian/"
     "ftp://ftp.nl.debian.org/debian/"
     "ftp://ftp.ru.debian.org/debian/"
-    "https://ftp.debian.org/debian/"
     "http://archive.debian.org/debian-archive/debian/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/"
   ];
@@ -181,9 +182,9 @@
   # Ubuntu.
   ubuntu = [
     "https://nl.archive.ubuntu.com/ubuntu/"
+    "https://old-releases.ubuntu.com/ubuntu/"
     "http://de.archive.ubuntu.com/ubuntu/"
     "http://archive.ubuntu.com/ubuntu/"
-    "https://old-releases.ubuntu.com/ubuntu/"
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
@@ -191,12 +192,12 @@
   fedora = [
     "https://archives.fedoraproject.org/pub/fedora/"
     "https://fedora.osuosl.org/"
-    "http://ftp.nluug.nl/pub/os/Linux/distr/fedora/"
     "https://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/"
-    "http://mirror.csclub.uwaterloo.ca/fedora/"
     "https://ftp.linux.cz/pub/linux/fedora/"
-    "http://mirror.1000mbps.com/fedora/"
     "https://archives.fedoraproject.org/pub/archive/fedora/"
+    "http://ftp.nluug.nl/pub/os/Linux/distr/fedora/"
+    "http://mirror.csclub.uwaterloo.ca/fedora/"
+    "http://mirror.1000mbps.com/fedora/"
   ];
 
   # openSUSE.
@@ -222,12 +223,12 @@
   xfce = [
     "https://archive.xfce.org/"
     "https://mirror.netcologne.de/xfce/"
-    "http://archive.se.xfce.org/xfce/"
     "https://archive.be.xfce.org/xfce/"
+    "https://archive.al-us.xfce.org/"
+    "http://archive.se.xfce.org/xfce/"
     "http://mirror.perldude.de/archive.xfce.org/"
     "http://archive.be2.xfce.org/"
     "http://ftp.udc.es/xfce/"
-    "https://archive.al-us.xfce.org/"
   ];
 
   # X.org.
@@ -239,12 +240,12 @@
   apache = [
     "https://www-eu.apache.org/dist/"
     "https://ftp.wayne.edu/apache/"
-    "http://ftp.tudelft.nl/apache/"
     "https://www.apache.org/dist/"
     "https://archive.apache.org/dist/" # fallback for old releases
-    "ftp://ftp.funet.fi/pub/mirrors/apache.org/"
     "https://apache.cs.uu.nl/"
     "https://apache.cs.utah.edu/"
+    "http://ftp.tudelft.nl/apache/"
+    "ftp://ftp.funet.fi/pub/mirrors/apache.org/"
   ];
 
   postgresql = [
@@ -265,9 +266,9 @@
     # http://bioconductor.fmrp.usp.br/
     # http://mirror.aarnet.edu.au/pub/bioconductor/
     # http://watson.nci.nih.gov/bioc_mirror/
-    "http://bioconductor.jp/packages/"
     "https://bioconductor.statistik.tu-dortmund.de/packages/"
     "https://mirrors.ustc.edu.cn/bioc/"
+    "http://bioconductor.jp/packages/"
   ];
 
   # Hackage mirrors
@@ -283,36 +284,44 @@
 
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
-    # Africa
-    "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/"
+    # Africa (HTTPS)
     "https://sagemath.mirror.ac.za/spkg/upstream/"
     "https://mirror.ufs.ac.za/sagemath/spkg/upstream/"
 
-    # America, North
+    # America, North (HTTPS)
     "https://mirrors.mit.edu/sage/spkg/upstream/"
-    "http://www.cecm.sfu.ca/sage/spkg/upstream/"
     "https://mirrors.xmission.com/sage/spkg/upstream/"
 
-    # America, South
-    "http://sagemath.c3sl.ufpr.br/spkg/upstream/"
-    "http://linorg.usp.br/sage/spkg/upstream"
-
-    # Asia
-    "http://ftp.kaist.ac.kr/sage/spkg/upstream/"
-    "http://ftp.riken.jp/sagemath/spkg/upstream/"
+    # Asia (HTTPS)
     "https://mirrors.tuna.tsinghua.edu.cn/sagemath/spkg/upstream/"
     "https://mirrors.ustc.edu.cn/sagemath/spkg/upstream/"
     "http://ftp.tsukuba.wide.ad.jp/software/sage/spkg/upstream/"
     "https://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/"
     "https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/"
 
-    # Australia
+    # Australia (HTTPS)
     "https://mirror.aarnet.edu.au/pub/sage/spkg/upstream/"
 
-    # Europe
+    # Europe (HTTPS)
     "https://sage.mirror.garr.it/mirrors/sage/spkg/upstream/"
-    "http://mirrors.fe.up.pt/pub/sage/spkg/upstream/"
     "https://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/"
+
+    # Africa (non-HTTPS)
+    "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/"
+
+    # America, North (non-HTTPS)
+    "http://www.cecm.sfu.ca/sage/spkg/upstream/"
+
+    # America, South (non-HTTPS)
+    "http://sagemath.c3sl.ufpr.br/spkg/upstream/"
+    "http://linorg.usp.br/sage/spkg/upstream"
+
+    # Asia (non-HTTPS)
+    "http://ftp.kaist.ac.kr/sage/spkg/upstream/"
+    "http://ftp.riken.jp/sagemath/spkg/upstream/"
+
+    # Europe (non-HTTPS)
+    "http://mirrors.fe.up.pt/pub/sage/spkg/upstream/"
     "http://ftp.ntua.gr/pub/sagemath/spkg/upstream/"
   ];
 
