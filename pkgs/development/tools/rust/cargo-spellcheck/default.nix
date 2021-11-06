@@ -2,6 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , libclang
+, stdenv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1p4iirblk6idvfhn8954v8lbxlzj0gbd8fv4wq03hfrdqisjqcsn";
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
 

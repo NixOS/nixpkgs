@@ -56,6 +56,7 @@ in stdenv.mkDerivation rec {
     longDescription = macfuse-stubs.warning;
     homepage = "https://github.com/libfuse/sshfs";
     license = licenses.gpl2Plus;
+    mainProgram = "sshfs";
     maintainers = with maintainers; [ primeos ];
   };
 }

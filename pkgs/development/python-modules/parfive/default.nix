@@ -1,19 +1,24 @@
 { lib
+, aiofiles
+, aioftp
+, aiohttp
 , buildPythonPackage
 , fetchPypi
-, tqdm
-, aiohttp
-, pytest
-, setuptools-scm
+, pytest-asyncio
 , pytest-localserver
 , pytest-socket
-, pytest-asyncio
-, aioftp
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "parfive";
   version = "1.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,27 +30,34 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    tqdm
-    aiohttp
     aioftp
+    aiohttp
+    tqdm
   ];
 
   checkInputs = [
-    pytest
+    aiofiles
+    pytest-asyncio
     pytest-localserver
     pytest-socket
-    pytest-asyncio
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    # these two tests require network connection
-    pytest parfive -k "not test_ftp and not test_ftp_http"
-  '';
+  disabledTests = [
+    # Requires network access
+    "test_ftp"
+    "test_ftp_pasv_command"
+    "test_ftp_http"
+  ];
+
+  pythonImportsCheck = [
+    "parfive"
+  ];
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
