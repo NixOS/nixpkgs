@@ -7,7 +7,7 @@
 , gtk3
 , libopenshot
 , python3Packages
-, qtsvg 
+, qtsvg
 , wrapGAppsHook
 }:
 
@@ -22,16 +22,16 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     doxygen
     wrapGAppsHook
   ];
 
-  buildInputs = [ 
+  buildInputs = [
     gtk3
   ];
 
-  propagatedBuildInputs = with python3Packages; [ 
+  propagatedBuildInputs = with python3Packages; [
     httplib2
     libopenshot
     pyqt5_with_qtwebkit
