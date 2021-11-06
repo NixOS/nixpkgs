@@ -1,19 +1,25 @@
-{ lib, rustPlatform, fetchCrate, ncurses, openssl, pkg-config }:
+{ lib, rustPlatform, fetchFromGitHub, ncurses, openssl, pkg-config, stdenv, nix-update-script, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.3.4";
+  version = "0.4.1";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-H+C1AbZ2zUhw6TNlSPaNaNuY5iNf39JW4q2g6uolevM=";
+  src = fetchFromGitHub {
+    owner = "Builditluc";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-aCfYb5UvlWbBvBlwNjVIbOJlEV2b3+FD0qKO+9h5Nos=";
   };
 
-  buildInputs = [ ncurses openssl ];
+  buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-PIt592nGtNEREQMukqRl/6KSJ/P32fWucHEMyOOc7BA=";
+  cargoSha256 = "sha256-dD8iC/b6KwElmq0RNdnHHC/jMWh7Q0/kMM+/zityHqQ=";
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";
