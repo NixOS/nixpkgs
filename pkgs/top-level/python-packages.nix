@@ -4631,7 +4631,7 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
-  mathlibtools = callPackage ../development/python-modules/mathlibtools { };
+  mathlibtools = callPackage ../development/python-modules/mathlibtools { tqdm = callPackage ../development/python-modules/tqdm { usePandas = false; }; };
 
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;

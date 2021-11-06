@@ -10,6 +10,9 @@
 , pandas
 , rich
 , tkinter
+# tqdm integrates with pandas dataframes, but not all consumers of tqdm care about
+# this large dependency
+, usePandas ? true
 }:
 
 buildPythonPackage rec {
@@ -35,7 +38,7 @@ buildPythonPackage rec {
     tkinter
   ] ++
     # pandas is not supported on i686 or risc-v
-    lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
+    lib.optional (usePandas && !stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
 
   # Remove performance testing.
   # Too sensitive for on Hydra.
