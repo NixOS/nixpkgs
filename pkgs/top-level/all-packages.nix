@@ -9036,6 +9036,8 @@ with pkgs;
 
   reuse = callPackage ../tools/package-management/reuse { };
 
+  inherit (nodePackages) reveal-md;
+
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
   rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
