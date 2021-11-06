@@ -42,7 +42,7 @@ in
   # Check that specialisations create corresponding boot entries.
   specialisation = makeTest {
     name = "systemd-boot-specialisation";
-    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ lukegb ];
+    meta.maintainers = with pkgs.lib.maintainers; [ lukegb ];
 
     machine = { pkgs, lib, ... }: {
       imports = [ common ];

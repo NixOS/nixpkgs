@@ -171,11 +171,18 @@ stdenv.mkDerivation rec {
         "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
         "TestCompareKernel.PrimitiveRandomTests"
       ] ++ lib.optionals enableS3 [
+        "S3OptionsTest.FromUri"
+        "S3RegionResolutionTest.NonExistentBucket"
         "S3RegionResolutionTest.PublicBucket"
         "S3RegionResolutionTest.RestrictedBucket"
-        "S3RegionResolutionTest.NonExistentBucket"
-        "S3OptionsTest.FromUri"
         "TestMinioServer.Connect"
+        "TestS3FS.OpenOutputStreamBackgroundWrites"
+        "TestS3FS.OpenOutputStreamDestructorBackgroundWrites"
+        "TestS3FS.OpenOutputStreamDestructorSyncWrite"
+        "TestS3FS.OpenOutputStreamDestructorSyncWrites"
+        "TestS3FS.OpenOutputStreamMetadata"
+        "TestS3FS.OpenOutputStreamSyncWrites"
+        "TestS3FSGeneric.*"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
