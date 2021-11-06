@@ -150,8 +150,8 @@
     "https://www.imagemagick.org/download/"
     "https://mirror.checkdomain.de/imagemagick/"
     "https://ftp.nluug.nl/ImageMagick/"
-    "ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/" # also contains older versions removed from most mirrors
-    "http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/"
+    "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
+    "https://ftp.sunet.se/mirror/imagemagick.org/ftp/"
     "ftp://ftp.imagemagick.org/pub/ImageMagick/"
     "http://ftp.fifi.org/ImageMagick/"
     "ftp://ftp.fifi.org/ImageMagick/"
