@@ -4,17 +4,13 @@
 , jq
 }:
 
-{
-  # TODO: Will this work? How can I make the act of adding `makeWrapperAuto` to
-  # `nativeBuildInputs` add `./hook.sh`?
-  __functor = makeSetupHook {
-    deps = [ dieHook ];
-    substitutions = {
-      jq = "${lib.getBin jq}/bin/jq";
-    };
-  } ./hook.sh;
-
-  combineWrappersInfo = { envInfo
+(makeSetupHook {
+  deps = [ dieHook ];
+  substitutions = {
+    jq = "${lib.getBin jq}/bin/jq";
+  };
+} ./hook.sh).overrideAttrs(old: {
+  passthru.combineWrappersInfo = { envInfo
     , symlink ? {}
     , buildInputs ? []
     , propagatedBuildInputs ? []
@@ -42,4 +38,4 @@
     ${jq}/bin/jq "." ${envInfoFile} $inputs_wrap_info | sed "s#@out@#$out#g" > $dev/nix-support/wrappers.json
     ${jq}/bin/jq . $dev/nix-support/wrappers.json
   '';
-}
+})
