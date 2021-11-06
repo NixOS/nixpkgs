@@ -8035,6 +8035,8 @@ with pkgs;
 
   ocserv = callPackage ../tools/networking/ocserv { };
 
+  octofetch = callPackage ../tools/misc/octofetch { };
+
   oha = callPackage ../tools/networking/oha {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -23760,7 +23762,9 @@ with pkgs;
 
   antiword = callPackage ../applications/office/antiword {};
 
-  anup = callPackage ../applications/misc/anup {};
+  anup = callPackage ../applications/misc/anup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   anytype = callPackage ../applications/misc/anytype { };
 

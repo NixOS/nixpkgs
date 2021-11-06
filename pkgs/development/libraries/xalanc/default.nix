@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   version = "1.11";
 
   src = fetchurl {
-    url = "http://www.eu.apache.org/dist/xalan/xalan-c/sources/xalan_c-${version}-src.tar.gz";
+    url = "mirror://apache/xalan/xalan-c/sources/xalan_c-${version}-src.tar.gz";
     sha256 = "0a3a2b15vpacnqgpp6fiy1pwyc8q6ywzvyb5445f6wixfdspypjg";
   };
 
