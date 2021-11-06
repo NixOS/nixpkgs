@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, jdk11, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
 let
-  gradle = (gradleGen.override (old: { java = jdk11; })).gradle_6_8;
+  gradle = (gradleGen.override (old: { java = jdk11; })).gradle_6_9;
 
   pname = "scenebuilder";
   version = "15.0.1";
