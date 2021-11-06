@@ -1,11 +1,13 @@
 { lib, stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkg-config, tinyxml, zlib }:
-stdenv.mkDerivation {
-  name = "garmin-plugin-0.3.26";
+stdenv.mkDerivation rec {
+  pname = "garmin-plugin";
+  version = "0.3.26";
+
   src = fetchurl {
-    url = "https://github.com/adiesner/GarminPlugin/archive/V0.3.26.tar.gz";
+    url = "https://github.com/adiesner/GarminPlugin/archive/V${version}.tar.gz";
     sha256 = "15gads1fj4sj970m5960dgnhys41ksi4cm53ldkf67wn8dc9i4k0";
   };
-  sourceRoot = "GarminPlugin-0.3.26/src";
+  sourceRoot = "GarminPlugin-${version}/src";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ garmintools libusb-compat-0_1 libgcrypt tinyxml zlib ];
   configureFlags = [
