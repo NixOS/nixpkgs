@@ -6284,6 +6284,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydeck = callPackage ../development/python-modules/pydeck { };
+
   pydeconz = callPackage ../development/python-modules/pydeconz { };
 
   pydelijn = callPackage ../development/python-modules/pydelijn { };
