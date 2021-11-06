@@ -9776,6 +9776,8 @@ in {
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
+  watermark = callPackage ../development/python-modules/watermark { };
+
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
