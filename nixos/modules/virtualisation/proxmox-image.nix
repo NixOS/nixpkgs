@@ -74,7 +74,8 @@ with lib;
         default = "socket";
         example = "/dev/ttyS0";
         description = ''
-          Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0), or create a unix socket on the host side (use qm terminal to open a terminal connection).
+          Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0), 
+          or create a unix socket on the host side (use qm terminal to open a terminal connection).
         '';
       };
       agent = mkOption {
