@@ -1,7 +1,6 @@
 {
   "repository": {},
   "license": "MIT",
-  "version": "1.4.0",
   "scripts": {
     "deploy": "$(npm bin)/webpack --mode production",
     "watch": "$(npm bin)/webpack --mode development --watch",
@@ -64,5 +63,6 @@
     "stylelint-config-standard": "^20.0.0",
     "webpack-bundle-analyzer": "^4.4.2"
   },
-  "name": "assets"
+  "name": "plausible",
+  "version": "v1.4.0"
 }
