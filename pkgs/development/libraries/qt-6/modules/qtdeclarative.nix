@@ -27,4 +27,13 @@ qtModule {
     "bin/qmlscene"
     "bin/qmltestrunner"
   ];
+
+  # debug: install is failing
+  splitBuildInstall = {
+    # needed to disable rebuild
+    # TODO simpler way? cmake hooks trigger rebuild?
+    installPhase = ''
+      cmake -P cmake_install.cmake
+    '';
+  };
 }
