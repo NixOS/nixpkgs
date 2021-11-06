@@ -17,7 +17,7 @@
   }: let
     inputsWrapInfo = lib.concatStringsSep " " (
       builtins.map (input: "${lib.getDev input}/nix-support/wrappers.json") (
-        buildInputs ++ propagatedBuildInputs
+        builtins.filter (x: !builtins.isNull x) (buildInputs ++ propagatedBuildInputs)
       )
     );
     envInfoFile = builtins.toFile "env-info.json" (builtins.toJSON envInfo);
