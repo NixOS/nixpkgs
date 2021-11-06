@@ -112,6 +112,8 @@ let self = rec {
 
   # addon packages (dependencies)
 
+  archive_tool = callPackage ../applications/video/kodi-packages/archive_tool { };
+
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
 
   chardet = callPackage ../applications/video/kodi-packages/chardet { };
