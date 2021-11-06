@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   pname = "openvg-headers";
   version = "1.1";
@@ -10,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "5GTrTvQshyRB0w0sEuKDJjiDnWHswudNMb4XPGBVS6E=";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/include/VG
-    cp ${src}/api/1.1/* $out/include/VG
+    cp ${src}/api/${version}/* $out/include/VG
   '';
 
   meta = with lib; {
