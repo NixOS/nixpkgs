@@ -67,6 +67,15 @@ with lib;
         '';
       };
 
+      package = mkOption {
+        type = package;
+        default = pkgs.ddclient;
+        defaultText = "pkgs.ddclient";
+        description = ''
+          The ddclient executable package run by the service.
+        '';
+      };
+
       domains = mkOption {
         default = [ "" ];
         type = listOf str;
@@ -210,7 +219,7 @@ with lib;
         inherit StateDirectory;
         Type = "oneshot";
         ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
-        ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
 
