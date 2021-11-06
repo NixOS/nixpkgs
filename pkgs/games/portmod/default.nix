@@ -3,13 +3,13 @@
   jre, makeWrapper, tr-patcher, tes3cmd, fetchpatch }:
 
 let
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    sha256 = "sha256-vMdyaI1Ps7bFoRvwdVNVG9vPFEiGb7CPvKEWfxiM128=";
+    sha256 = "0ca2jc0mrycz534fzmbb795sg42d7q38gjf6a36w7g38j410vwbg";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
