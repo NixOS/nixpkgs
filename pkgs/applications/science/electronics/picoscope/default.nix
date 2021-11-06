@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper , mono, gtk-sharp-2_0
-, glib, libusb1 , zlib, gtk2-x11, gnome2, callPackage
+{ stdenv, lib, fetchurl, dpkg, makeWrapper , mono, gtk-sharp-3_0
+, glib, libusb1 , zlib, gtk3-x11, callPackage
 , scopes ? [
-  "pl1000"
+  "picocv"
   "ps2000"
   "ps2000a"
   "ps3000"
@@ -12,7 +12,6 @@
   "ps5000a"
   "ps6000"
   "ps6000a"
-  "usbdrdaq"
 ] }:
 
 let
@@ -20,7 +19,7 @@ let
     with lib; {
       homepage = "https://www.picotech.com/downloads/linux";
       maintainers = with maintainers; [ expipiplus1 yorickvp wirew0rm ];
-      platforms = [ "x86_64-linux" "armv7l-linux" ];
+      platforms = [ "x86_64-linux" ];
       license = licenses.unfree;
     };
 
@@ -45,8 +44,12 @@ let
           description = "library for picotech oscilloscope software";
         };
     }) { };
+
+  # If we don't have a platform available, put a dummy version here, so at
+  # least evaluation succeeds.
   sources =
-    (builtins.fromJSON (builtins.readFile ./sources.json)).${stdenv.system};
+    (lib.importJSON ./sources.json).${stdenv.system} or { picoscope.version = "unknown"; };
+
   scopePkg = name:
     { url, version, sha256 }:
     stdenv.mkDerivation rec {
@@ -78,21 +81,19 @@ in stdenv.mkDerivation rec {
   src = fetchurl { inherit (sources.picoscope) url sha256; };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
-  buildInputs = [ gtk-sharp-2_0 mono glib libusb1 zlib ];
+  buildInputs = [ gtk-sharp-3_0 mono glib libusb1 zlib ];
 
   unpackCmd = "dpkg-deb -x $src .";
   sourceRoot = ".";
   scopeLibs = lib.attrVals (map (x: "lib${x}") scopes) scopePkgs;
-  MONO_PATH = "${gtk-sharp-2_0}/lib/mono/gtk-sharp-2.0:" + (lib.makeLibraryPath
+  MONO_PATH = "${gtk-sharp-3_0}/lib/mono/gtk-sharp-3.0:" + (lib.makeLibraryPath
     ([
       glib
-      gtk2-x11
-      gnome2.libglade
-      gtk-sharp-2_0
-      libpicoipp
+      gtk3-x11
+      gtk-sharp-3_0
       libusb1
       zlib
-      stdenv.cc.cc.lib
+      libpicoipp
     ] ++ scopeLibs));
 
   installPhase = ''
