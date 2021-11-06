@@ -72,6 +72,8 @@ let self = rec {
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
 
+  iagl = callPackage ../applications/video/kodi-packages/iagl { };
+
   libretro = callPackage ../applications/video/kodi-packages/libretro { };
 
   libretro-genplus = callPackage ../applications/video/kodi-packages/libretro-genplus { inherit genesis-plus-gx; };
