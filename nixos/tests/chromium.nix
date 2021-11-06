@@ -215,7 +215,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
         clipboard = machine.succeed(
             ru(
-                "echo void | ${pkgs.xclip}/bin/xclip -i"
+                "echo void | ${pkgs.xclip}/bin/xclip -i >&2"
             )
         )
         machine.succeed(
