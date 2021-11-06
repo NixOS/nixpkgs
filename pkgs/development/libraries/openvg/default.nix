@@ -1,3 +1,5 @@
+# TODO add amanithvg
+
 { lib
 , stdenv
 , fetchFromGitHub
@@ -16,36 +18,37 @@
 }:
 
 rec {
-  shivavg = stdenv.mkDerivation rec {
+  shivavg =
+  let
+    owner = "vpxyz";
+    repo = "ShivaVG";
+    rev = "35e58010f3662b21b6632bbe55988dc18070534c";
+    sha256 = "1TGKdXUKZ35tft0fA+IvKP4668rZM/PvYDmcgcb33RQ=";
+  in
+  stdenv.mkDerivation rec {
     pname = "shivavg";
-    version = "0.2.1-e0da003";
+    version = "0.2.1-${builtins.substring 0 7 rev}";
 
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [
       libGLU
       freeglut
-      libglvnd # GL/glx.h
+      libglvnd
       glew
       libjpeg
-      xlibs.libX11 # X11/Xlib.h for GL/glx.h
+      xlibs.libX11
     ];
 
     src = fetchFromGitHub {
-      /*
-      owner = "vpxyz";
-      repo = "ShivaVG";
-      rev = "e0da00336ae731ad76d93312a8542a079a39cd9d";
-      sha256 = "IrzIMggjwoEppJ0pL+vrPbRpo3anvxt/784AZYD5eXo=";
-      */
-      # https://github.com/vpxyz/ShivaVG/pull/4
-      owner = "milahu";
-      repo = "ShivaVG";
-      rev = "a30c5bce2c6ca0d17f230b6c65687e452536f90a";
-      sha256 = "stMJ8e02q+shZAsfCD9rC7CVnoVcs9gGH7Ym92PJHB0=";
+      inherit owner repo rev sha256;
     };
 
-    cmakeFlags = [ "-DBUILD_ALL_EXAMPLES=no" ]; # 20 seconds vs 320 seconds
+    cmakeFlags = [
+      "-DSHARED_LIBRARY_NAME=ShivaVG"
+      "-DSTATIC_LIBRARY_NAME=ShivaVG"
+      # default is OpenVG
+    ];
 
     meta = with lib; {
       description = "OpenVG implementation, based on OpenGL";
@@ -73,8 +76,7 @@ rec {
 
     nativeBuildInputs = [ autoconf automake libtool ];
     buildInputs = [
-      # TODO libGL -> libglvnd?
-      libGL
+      libglvnd
       libGLU
       glew
     ];
