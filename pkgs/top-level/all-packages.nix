@@ -25930,6 +25930,8 @@ with pkgs;
 
   dupd = callPackage ../tools/misc/dupd { };
 
+  jconvolver = callPackage ../applications/audio/jconvolver { };
+
   jdupes = callPackage ../tools/misc/jdupes { };
 
   jed = callPackage ../applications/editors/jed { };
