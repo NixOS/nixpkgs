@@ -2,7 +2,7 @@
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
-    "http://tarballs.nixos.org"
+    "https://tarballs.nixos.org"
   ];
 
   # Mirrors for mirror://site/filename URIs, where "site" is
@@ -11,7 +11,7 @@
   luarocks = [
     "https://luarocks.org/"
     "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
-    "http://luafr.org/moonrocks/"
+    "https://luafr.org/moonrocks/"
     "http://luarocks.logiceditor.com/rocks/"
   ];
 
@@ -41,21 +41,21 @@
     # mirror.
     "https://ftpmirror.gnu.org/"
 
-    "http://ftp.nluug.nl/pub/gnu/"
-    "http://mirrors.kernel.org/gnu/"
-    "http://mirror.ibcp.fr/pub/gnu/"
-    "http://mirror.dogado.de/gnu/"
-    "http://mirror.tochlab.net/pub/gnu/"
+    "https://ftp.nluug.nl/pub/gnu/"
+    "https://mirrors.kernel.org/gnu/"
+    "https://mirror.ibcp.fr/pub/gnu/"
+    "https://mirror.dogado.de/gnu/"
+    "https://mirror.tochlab.net/pub/gnu/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/"
 
     # This one is the master repository, and thus it's always up-to-date.
-    "http://ftp.gnu.org/pub/gnu/"
+    "https://ftp.gnu.org/pub/gnu/"
   ];
 
   # GCC.
   gcc = [
     "https://bigsearcher.com/mirrors/gcc/"
-    "http://mirror.koddos.net/gcc/"
+    "https://mirror.koddos.net/gcc/"
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
@@ -66,14 +66,14 @@
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
     "http://www.ring.gr.jp/pub/net/"
-    "http://mirrors.dotsrc.org/gcrypt/"
-    "http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
-    "http://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
+    "https://mirrors.dotsrc.org/gcrypt/"
+    "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
+    "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
-    "http://cdn.kernel.org/pub/"
+    "https://cdn.kernel.org/pub/"
     "http://linux-kernel.uio.no/pub/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/"
   ];
@@ -83,32 +83,32 @@
     "https://download.kde.org/download.php?url="
     "https://ftp.gwdg.de/pub/linux/kde/"
     "https://mirrors.ocf.berkeley.edu/kde/"
-    "http://mirrors.mit.edu/kde/"
+    "https://mirrors.mit.edu/kde/"
     "https://mirrors.ustc.edu.cn/kde/"
-    "http://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
+    "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
   # Gentoo files.
   gentoo = [
-    "http://ftp.snt.utwente.nl/pub/os/linux/gentoo/"
-    "http://distfiles.gentoo.org/"
-    "ftp://mirrors.kernel.org/gentoo/"
+    "https://ftp.snt.utwente.nl/pub/os/linux/gentoo/"
+    "https://distfiles.gentoo.org/"
+    "https://mirrors.kernel.org/gentoo/"
   ];
 
   savannah = [
     # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
-    "http://mirror.easyname.at/nongnu/"
+    "https://mirror.easyname.at/nongnu/"
     "http://mirror2.klaus-uwe.me/nongnu/"
-    "http://savannah.c3sl.ufpr.br/"
-    "http://mirror.csclub.uwaterloo.ca/nongnu/"
-    "http://mirror.cedia.org.ec/nongnu/"
-    "http://ftp.igh.cnrs.fr/pub/nongnu/"
-    "http://mirror6.layerjet.com/nongnu"
-    "http://mirror.netcologne.de/savannah/"
-    "http://ftp.cc.uoc.gr/mirrors/nongnu.org/"
-    "http://nongnu.uib.no/"
+    "https://savannah.c3sl.ufpr.br/"
+    "https://mirror.csclub.uwaterloo.ca/nongnu/"
+    "https://mirror.cedia.org.ec/nongnu/"
+    "https://ftp.igh.cnrs.fr/pub/nongnu/"
+    "https://mirror6.layerjet.com/nongnu"
+    "https://mirror.netcologne.de/savannah/"
+    "https://ftp.cc.uoc.gr/mirrors/nongnu.org/"
+    "https://nongnu.uib.no/"
     "http://mirrors.fe.up.pt/pub/nongnu/"
-    "http://ftp.acc.umu.se/mirror/gnu.org/savannah/"
+    "https://ftp.acc.umu.se/mirror/gnu.org/savannah/"
     "http://ftp.twaren.net/Unix/NonGNU/"
     "http://savannah-nongnu-org.ip-connect.vn.ua/"
     "http://www.mirrorservice.org/sites/download.savannah.gnu.org/releases/"
@@ -132,8 +132,8 @@
 
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html .
   bitlbee = [
-    "http://get.bitlbee.org/"
-    "http://ftp.snt.utwente.nl/pub/software/bitlbee/"
+    "https://get.bitlbee.org/"
+    "https://ftp.snt.utwente.nl/pub/software/bitlbee/"
     "http://bitlbee.intergenia.de/"
   ];
 
@@ -150,17 +150,17 @@
   cpan = [
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
-    "http://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/"  # for old releases
   ];
 
   # CentOS.
   centos = [
     "http://mirror.centos.org/centos/"
     # For old releases
-    "http://vault.centos.org/"
+    "https://vault.centos.org/"
     "https://archive.kernel.org/centos-vault/"
-    "http://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/"
-    "http://mirrors.aliyun.com/centos-vault/"
+    "https://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/"
+    "https://mirrors.aliyun.com/centos-vault/"
     "https://mirror.chpc.utah.edu/pub/vault.centos.org/"
     "https://mirror.math.princeton.edu/pub/centos-vault/"
     "https://mirrors.tripadvisor.com/centos-vault/"
@@ -168,66 +168,66 @@
 
   # Debian.
   debian = [
-    "http://httpredir.debian.org/debian/"
+    "https://httpredir.debian.org/debian/"
     "ftp://ftp.de.debian.org/debian/"
     "ftp://ftp.fr.debian.org/debian/"
     "ftp://ftp.nl.debian.org/debian/"
     "ftp://ftp.ru.debian.org/debian/"
-    "http://ftp.debian.org/debian/"
+    "https://ftp.debian.org/debian/"
     "http://archive.debian.org/debian-archive/debian/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/"
   ];
 
   # Ubuntu.
   ubuntu = [
-    "http://nl.archive.ubuntu.com/ubuntu/"
+    "https://nl.archive.ubuntu.com/ubuntu/"
     "http://de.archive.ubuntu.com/ubuntu/"
     "http://archive.ubuntu.com/ubuntu/"
-    "http://old-releases.ubuntu.com/ubuntu/"
+    "https://old-releases.ubuntu.com/ubuntu/"
   ];
 
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
   # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content).
   fedora = [
-    "http://archives.fedoraproject.org/pub/fedora/"
-    "http://fedora.osuosl.org/"
+    "https://archives.fedoraproject.org/pub/fedora/"
+    "https://fedora.osuosl.org/"
     "http://ftp.nluug.nl/pub/os/Linux/distr/fedora/"
-    "http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/"
+    "https://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/"
     "http://mirror.csclub.uwaterloo.ca/fedora/"
-    "http://ftp.linux.cz/pub/linux/fedora/"
+    "https://ftp.linux.cz/pub/linux/fedora/"
     "http://mirror.1000mbps.com/fedora/"
-    "http://archives.fedoraproject.org/pub/archive/fedora/"
+    "https://archives.fedoraproject.org/pub/archive/fedora/"
   ];
 
   # openSUSE.
   opensuse = [
-    "http://opensuse.hro.nl/opensuse/distribution/"
-    "http://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/"
-    "http://ftp.opensuse.org/pub/opensuse/distribution/"
-    "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/"
+    "https://opensuse.hro.nl/opensuse/distribution/"
+    "https://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/"
+    "https://ftp.opensuse.org/pub/opensuse/distribution/"
+    "https://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/"
     "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/"
   ];
 
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need.
-    "http://download.gnome.org/"
+    "https://download.gnome.org/"
 
-    "http://fr2.rpmfind.net/linux/gnome.org/"
-    "http://ftp.acc.umu.se/pub/GNOME/"
-    "http://ftp.belnet.be/mirror/ftp.gnome.org/"
+    "https://fr2.rpmfind.net/linux/gnome.org/"
+    "https://ftp.acc.umu.se/pub/GNOME/"
+    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
     "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
     "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   xfce = [
-    "http://archive.xfce.org/"
-    "http://mirror.netcologne.de/xfce/"
+    "https://archive.xfce.org/"
+    "https://mirror.netcologne.de/xfce/"
     "http://archive.se.xfce.org/xfce/"
-    "http://archive.be.xfce.org/xfce/"
+    "https://archive.be.xfce.org/xfce/"
     "http://mirror.perldude.de/archive.xfce.org/"
     "http://archive.be2.xfce.org/"
     "http://ftp.udc.es/xfce/"
-    "http://archive.al-us.xfce.org/"
+    "https://archive.al-us.xfce.org/"
   ];
 
   # X.org.
@@ -243,12 +243,12 @@
     "https://www.apache.org/dist/"
     "https://archive.apache.org/dist/" # fallback for old releases
     "ftp://ftp.funet.fi/pub/mirrors/apache.org/"
-    "http://apache.cs.uu.nl/"
-    "http://apache.cs.utah.edu/"
+    "https://apache.cs.uu.nl/"
+    "https://apache.cs.utah.edu/"
   ];
 
   postgresql = [
-    "http://ftp.postgresql.org/pub/"
+    "https://ftp.postgresql.org/pub/"
   ];
 
   metalab = [
@@ -256,7 +256,7 @@
     "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
-  # Bioconductor mirrors (from http://bioconductor.org/about/mirrors)
+  # Bioconductor mirrors (from https://bioconductor.org/about/mirrors/)
   # The commented-out ones don't seem to allow direct package downloads;
   # they serve error messages that result in hash mismatches instead.
   bioc = [
@@ -266,30 +266,30 @@
     # http://mirror.aarnet.edu.au/pub/bioconductor/
     # http://watson.nci.nih.gov/bioc_mirror/
     "http://bioconductor.jp/packages/"
-    "http://bioconductor.statistik.tu-dortmund.de/packages/"
-    "http://mirrors.ustc.edu.cn/bioc/"
+    "https://bioconductor.statistik.tu-dortmund.de/packages/"
+    "https://mirrors.ustc.edu.cn/bioc/"
   ];
 
   # Hackage mirrors
   hackage = [
-    "http://hackage.haskell.org/package/"
+    "https://hackage.haskell.org/package/"
   ];
 
   # Roy marples mirrors
   roy = [
-    "http://roy.marples.name/downloads/"
-    "http://cflags.cc/roy/"
+    "https://roy.marples.name/downloads/"
+    "https://cflags.cc/roy/"
   ];
 
-  # Sage mirrors (http://www.sagemath.org/mirrors.html)
+  # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
     # Africa
     "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/"
-    "http://sagemath.mirror.ac.za/spkg/upstream/"
-    "http://mirror.ufs.ac.za/sagemath/spkg/upstream/"
+    "https://sagemath.mirror.ac.za/spkg/upstream/"
+    "https://mirror.ufs.ac.za/sagemath/spkg/upstream/"
 
     # America, North
-    "http://mirrors.mit.edu/sage/spkg/upstream/"
+    "https://mirrors.mit.edu/sage/spkg/upstream/"
     "http://www.cecm.sfu.ca/sage/spkg/upstream/"
     "https://mirrors.xmission.com/sage/spkg/upstream/"
 
@@ -303,34 +303,34 @@
     "https://mirrors.tuna.tsinghua.edu.cn/sagemath/spkg/upstream/"
     "https://mirrors.ustc.edu.cn/sagemath/spkg/upstream/"
     "http://ftp.tsukuba.wide.ad.jp/software/sage/spkg/upstream/"
-    "http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/"
+    "https://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/"
     "https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/"
 
     # Australia
-    "http://mirror.aarnet.edu.au/pub/sage/spkg/upstream/"
+    "https://mirror.aarnet.edu.au/pub/sage/spkg/upstream/"
 
     # Europe
-    "http://sage.mirror.garr.it/mirrors/sage/spkg/upstream/"
+    "https://sage.mirror.garr.it/mirrors/sage/spkg/upstream/"
     "http://mirrors.fe.up.pt/pub/sage/spkg/upstream/"
-    "http://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/"
+    "https://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/"
     "http://ftp.ntua.gr/pub/sagemath/spkg/upstream/"
   ];
 
   # MySQL mirrors
   mysql = [
-    "http://cdn.mysql.com/Downloads/"
+    "https://cdn.mysql.com/Downloads/"
   ];
 
   # OpenBSD mirrors
   openbsd = [
-    "http://ftp.openbsd.org/pub/OpenBSD/"
+    "https://ftp.openbsd.org/pub/OpenBSD/"
     "ftp://ftp.nluug.nl/pub/OpenBSD/"
     "ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/"
   ];
 
   # Steam Runtime mirrors
   steamrt = [
-    "http://repo.steampowered.com/steamrt/"
+    "https://repo.steampowered.com/steamrt/"
     "https://public.abbradar.moe/steamrt/"
   ];
 
@@ -349,7 +349,7 @@
 
   # Mozilla projects.
   mozilla = [
-    "http://download.cdn.mozilla.net/pub/mozilla.org/"
+    "https://download.cdn.mozilla.net/pub/mozilla.org/"
     "https://archive.mozilla.org/pub/"
   ];
 
