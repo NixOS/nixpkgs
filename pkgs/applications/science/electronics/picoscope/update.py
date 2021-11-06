@@ -23,15 +23,15 @@ def generate_sources(packages):
     sources_spec = {}
     for pkg in pkgs:
         sources_spec[pkg['Package']] = {
-            "url": "https://labs.picotech.com/debian/" + pkg["Filename"],
+            "url": "https://labs.picotech.com/rc/picoscope7/debian/" + pkg["Filename"],
             "sha256": pkg["SHA256"],
             "version": pkg["Version"]
         }
     return sources_spec
 
 out = {}
-for nix_system, release in {"x86_64-linux": "amd64", "armv7l-linux": "armhf"}.items():
-    resp = requests.get("https://labs.picotech.com/debian/dists/picoscope/main/binary-"+release+"/Packages")
+for nix_system, release in {"x86_64-linux": "amd64"}.items():
+    resp = requests.get("https://labs.picotech.com/rc/picoscope7/debian//dists/picoscope/main/binary-"+release+"/Packages")
     if resp.status_code != 200:
         print("error: could not fetch data for release {} (code {})".format(release, resp.code), file=sys.stderr)
         sys.exit(1)
