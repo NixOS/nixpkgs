@@ -198,8 +198,8 @@ stdenv.mkDerivation rec {
         "TestS3FS.OpenOutputStreamSyncWrites"
         "TestS3FSGeneric.*"
       ] ++ lib.optionals enableGcs [
-        "GcsIntegrationTest.*"
         "GcsFileSystem.FileSystemCompare"
+        "GcsIntegrationTest.*"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
