@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest -V \
+      ctest -L unittest \
         --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
 
       runHook postInstallCheck
