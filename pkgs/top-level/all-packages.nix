@@ -26139,6 +26139,8 @@ with pkgs;
 
   chart-testing = callPackage ../applications/networking/cluster/helm/chart-testing { };
 
+  helm-docs = callPackage ../applications/networking/cluster/helm-docs { };
+
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
   kupfer = callPackage ../applications/misc/kupfer { };
