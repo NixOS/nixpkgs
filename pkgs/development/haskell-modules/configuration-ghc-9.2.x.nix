@@ -110,6 +110,9 @@ self: super: {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
+  ghc-lib = self.ghc-lib_9_2_1_20211101;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_0;
   hashable-time = doJailbreak super.hashable-time;
