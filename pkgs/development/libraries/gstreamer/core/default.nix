@@ -94,10 +94,9 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  # TODO: Replace this with some magic of makeWrapperAuto
-  wrapPrograms = [
-    "$dev/bin/*"
-  ];
+  # This can't be replaced with makeWrapperAuto, since wrapping needs to
+  # include paths in $NIX_PROFILES and that isn't yet supported in
+  # makeWrapperAuto.
   postInstall = ''
     for prog in "$dev/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
