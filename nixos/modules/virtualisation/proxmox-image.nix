@@ -19,7 +19,8 @@ with lib;
         default = "virtio-scsi-pci";
         example = "lsi";
         description = ''
-          SCSI controller type. Must be one of the supported values given in <link xlink:href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines"/>
+          SCSI controller type. Must be one of the supported values given in
+          <link xlink:href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines"/>
         '';
       };
       virtio0 = mkOption {
