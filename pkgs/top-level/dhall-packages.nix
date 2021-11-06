@@ -27,6 +27,9 @@ let
 
         lib = import ../development/dhall-modules/lib.nix { inherit lib; };
 
+        dhall-grafana =
+          callPackage ../development/dhall-modules/dhall-grafana.nix { };
+
         dhall-kubernetes =
           callPackage ../development/dhall-modules/dhall-kubernetes.nix { };
 
