@@ -2,15 +2,37 @@
 
 { self, srcs, patches ? [] }:
 
-args:
+argsRaw:
 
 let
+  # TODO maybe rename: splitBuildInstall -> splitInstall
+  # the splitInstall attrset holds all attributes
+  # for "drv2" = the "install from cached build" derivation
+  argsFull = { splitBuildInstall = null; } // argsRaw;
+  args = builtins.removeAttrs argsFull [ "splitBuildInstall" ];
+  splitBuildInstallEnabled = argsFull.splitBuildInstall != null;
   inherit (args) pname;
   version = args.version or srcs.${pname}.version;
   src = args.src or srcs.${pname}.src;
 in
 
-mkDerivation (args // {
+let
+drv1 = mkDerivation (args // {
+
+  # when splitting, disable all phases after buildPhase
+  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/setup.sh#L1305
+  dontCheck = splitBuildInstallEnabled;
+  dontInstall = splitBuildInstallEnabled;
+  dontFixup = splitBuildInstallEnabled;
+  dontInstallCheck = splitBuildInstallEnabled;
+  dontDist = splitBuildInstallEnabled;
+  postPhases = if splitBuildInstallEnabled then "splitBuildInstallLoad splitBuildInstallExport" else "";
+
+  # TODO better? how to load "hooks" for mkDerivation?
+  splitBuildInstallLoad = ''
+    . ${./split-build-install.export.sh}
+  '';
+
   inherit pname version src;
   patches = args.patches or patches.${pname} or [];
 
@@ -143,4 +165,32 @@ mkDerivation (args // {
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   } // (args.meta or {});
-})
+});
+in
+
+if (!splitBuildInstallEnabled) then drv1
+else mkDerivation (drv1.drvAttrs // {
+  src = drv1.out;
+  prePhases = "splitBuildInstallLoad splitBuildInstallImport";
+  postPhases = "";
+
+  # TODO better? how to load "hooks" for mkDerivation?
+  # separate script for import, to avoid rebuilds
+  splitBuildInstallLoad = ''
+    . ${./split-build-install.import.sh}
+  '';
+
+  # when splitting, disable all phases before buildPhase
+  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/setup.sh#L1305
+  dontUnpack = true;
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  # enable all install phases
+  dontCheck = false;
+  dontInstall = false;
+  dontFixup = false;
+  dontInstallCheck = false;
+  dontDist = false;
+} // argsFull.splitBuildInstall)
