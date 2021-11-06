@@ -30,12 +30,17 @@
     for wrapInfo in ${inputsWrapInfo}; do
       if [[ -f "$wrapInfo" ]]; then
         inputs_wrap_info+=($wrapInfo)
-      else
-        echo did not find file $wrapInfo
       fi
     done
     # TODO: Is this the best way to substitute @out@ with $out?
-    ${jq}/bin/jq "." ${envInfoFile} $inputs_wrap_info | sed "s#@out@#$out#g" > $dev/nix-support/wrappers.json
+    # TODO: How to merge json files according to keys? See:
+    # https://stackoverflow.com/q/69862320/4935114
+    ${jq}/bin/jq "." ${envInfoFile} $inputs_wrap_info | sed \
+      -e "s,@out@,$out,g" \
+      -e "s,@bin@,$bin,g" \
+      -e "s,@lib@,$lib,g" \
+      > $dev/nix-support/wrappers.json
+    # Display the file
     ${jq}/bin/jq . $dev/nix-support/wrappers.json
   '';
 })
