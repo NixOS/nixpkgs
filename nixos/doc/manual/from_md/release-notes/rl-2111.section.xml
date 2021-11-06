@@ -52,6 +52,29 @@
       </listitem>
       <listitem>
         <para>
+          Improvements have been made to the Hadoop module and package:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              HDFS and YARN now support production-ready highly
+              available deployments with automatic failover.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Hadoop now defaults to Hadoop 3, updated from 2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              JournalNode, ZKFS and HTTPFS services have been added.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           Activation scripts can now opt int to be run when running
           <literal>nixos-rebuild dry-activate</literal> and detect the
           dry activation by reading <literal>$NIXOS_ACTION</literal>.
@@ -423,6 +446,23 @@
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The NixOS VM test framework,
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
+          now requires non-terminating commands such as
+          <literal>succeed(&quot;foo &amp;&quot;)</literal> to close
+          stdout. This can be done with a redirect such as
+          <literal>succeed(&quot;foo &gt;&amp;2 &amp;&quot;)</literal>.
+          This breaking change was necessitated by a race condition
+          causing tests to fail or hang. It applies to all methods that
+          invoke commands on the nodes, including
+          <literal>execute</literal>, <literal>succeed</literal>,
+          <literal>fail</literal>,
+          <literal>wait_until_succeeds</literal>,
+          <literal>wait_until_fails</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>services.wakeonlan</literal> option was removed,
@@ -1773,6 +1813,39 @@ Superuser created successfully.
               please use
               <literal>dokuwiki.sites = [ &quot;${hostname}&quot; ]</literal>
               instead
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.unifi.enable">services.unifi</link>
+          module has been reworked, solving a number of issues. This
+          leads to several user facing changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The <literal>services.unifi.dataDir</literal> option is
+              removed and the data is now always located under
+              <literal>/var/lib/unifi/data</literal>. This is done to
+              make better use of systemd state direcotiry and thus
+              making the service restart more reliable.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi logs can now be found under:
+              <literal>/var/log/unifi</literal> instead of
+              <literal>/var/lib/unifi/logs</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi run directory can now be found under:
+              <literal>/run/unifi</literal> instead of
+              <literal>/var/lib/unifi/run</literal>.
             </para>
           </listitem>
         </itemizedlist>

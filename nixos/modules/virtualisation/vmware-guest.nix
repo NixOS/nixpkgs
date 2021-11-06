@@ -38,7 +38,7 @@ in
       };
 
     # Mount the vmblock for drag-and-drop and copy-and-paste.
-    systemd.mounts = [
+    systemd.mounts = mkIf (!cfg.headless) [
       {
         description = "VMware vmblock fuse mount";
         documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
@@ -52,8 +52,8 @@ in
       }
     ];
 
-    security.wrappers.vmware-user-suid-wrapper =
-      { setuid = true;
+    security.wrappers.vmware-user-suid-wrapper = mkIf (!cfg.headless) {
+        setuid = true;
         owner = "root";
         group = "root";
         source = "${open-vm-tools}/bin/vmware-user-suid-wrapper";

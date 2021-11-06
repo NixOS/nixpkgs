@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, PyGithub, GitPython, toml, click, tqdm,
-  paramiko, networkx, pydot, pyyaml }:
+  networkx, pydot, pyyaml, atomicwrites }:
 
 buildPythonPackage rec {
   pname = "mathlibtools";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    PyGithub GitPython toml click tqdm paramiko networkx pydot pyyaml
+    PyGithub GitPython toml click tqdm networkx pydot pyyaml atomicwrites
   ];
 
   # requires internet access

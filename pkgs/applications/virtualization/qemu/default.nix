@@ -97,6 +97,19 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
       sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
     })
+    # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
+    # on some systems. Remove with next release.
+    (fetchpatch {
+      name = "fix-crash-in-v9fs_walk.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
+      sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
+    })
+    # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
+    (fetchpatch {
+      name = "fix-aio-discard-return-value.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
+      sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

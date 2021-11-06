@@ -76,7 +76,7 @@ import ./make-test-python.nix {
 
     server.wait_for_unit("nginx.service")
     client.wait_for_unit("multi-user.target")
-    client.execute("test-runner &")
+    client.execute("test-runner >&2 &")
     client.wait_for_file("/tmp/passed_stage1")
 
     server.succeed(

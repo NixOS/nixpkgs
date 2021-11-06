@@ -47,6 +47,9 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
+    # This fixes the test-suite on macOS
+    # See https://github.com/ocaml/merlin/pull/1399
+    ./test.patch
   ];
 
   useDune2 = true;

@@ -39,6 +39,10 @@ stdenv.mkDerivation {
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    # Users that set CLUTTER_BACKEND=wayland in their default environment will
+    # encounter a segfault due to:
+    # https://git.jami.net/savoirfairelinux/jami-client-gnome/-/issues/1100 .
+    qtWrapperArgs+=("--unset" "CLUTTER_BACKEND")
   '';
 
   buildInputs = [
