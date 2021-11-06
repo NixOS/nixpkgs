@@ -1,11 +1,11 @@
 { lib
 , fetchFromGitHub
-, rustPlatform
+, rustPackages_1_45
 , bubblewrap
 , makeWrapper
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPackages_1_45.rustPlatform.buildRustPackage rec {
   pname = "pipr";
   version = "0.0.15";
 
