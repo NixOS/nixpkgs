@@ -113,6 +113,7 @@ self: super: {
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_0;
   hashable-time = doJailbreak super.hashable-time;
+  hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (doJailbreak super.HTTP) (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; });
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; });
   indexed-traversable = doJailbreak super.indexed-traversable;
@@ -134,6 +135,9 @@ self: super: {
   split = doJailbreak super.split;
   splitmix = doJailbreak super.splitmix;
   tar = doJailbreak super.tar;
+  tasty-hedgehog = doJailbreak super.tasty-hedgehog;
+  tasty-hspec = doJailbreak super.tasty-hspec;
+  th-desugar = self.th-desugar_1_13;
   these = doJailbreak super.these;
   time-compat = doJailbreak super.time-compat;
   type-equality = doJailbreak super.type-equality;
@@ -218,9 +222,7 @@ self: super: {
 
   # hlint 3.3 needs a ghc-lib-parser newer than the one from stackage
   hlint = super.hlint_3_3_4.overrideScope (self: super: {
-    ghc-lib-parser = overrideCabal self.ghc-lib-parser_9_0_1_20210324 {
-      doHaddock = false;
-    };
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_0_0_4;
+    ghc-lib-parser = self.ghc-lib-parser_9_2_1_20211101;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   });
 }
