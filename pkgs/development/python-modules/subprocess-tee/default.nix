@@ -24,6 +24,11 @@ buildPythonPackage rec {
     enrich
   ];
 
+  disabledTests = [
+    # cyclic dependency on `molecule` (see https://github.com/pycontribs/subprocess-tee/issues/50)
+    "test_molecule"
+  ];
+
   pythonImportsCheck = [
     "subprocess_tee"
   ];

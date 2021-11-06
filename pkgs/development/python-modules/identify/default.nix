@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.3.1";
+  version = "2.3.3";
 
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6sErta+YnaXe7lHR3kR7UAoWuaw8He7e3gCML9vWYj8=";
+    sha256 = "sha256-mGTSl/aOPQpqFq5dqVDia/7NofO9Tz0N8nYXU2Pyi0c=";
   };
 
   checkInputs = [
