@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
 , alsa-lib
 , cmake
 , cppzmq
@@ -28,8 +30,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aF8wrPxFIjCy5gw72e/WyL/Wcx9tUGDkrqHS+ZDVK0U=";
   };
 
-  patches = [ ];
-
   postPatch = ''
     sed -i 's/{UNITTEST++_INCLUDE_DIR}/ENV{UNITTEST++_INCLUDE_DIR}/g' tests/CMakeLists.txt
     sed -i 's/{_REL_PYTHON_MODULE_PATH}/ENV{_REL_PYTHON_MODULE_PATH}/g' bindings/python/CMakeLists.txt
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     zeromq
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     llvmPackages.openmp
   ];
 
@@ -64,9 +64,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_RUBY=OFF" ];
 
-  passthru = { inherit libopenshot-audio; };
-
-  meta = {
+  meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor library";
     longDescription = ''
@@ -74,8 +72,10 @@ stdenv.mkDerivation rec {
       delivering high quality video editing, animation, and playback solutions
       to the world. API currently supports C++, Python, and Ruby.
     '';
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
+
+  passthru = { inherit libopenshot-audio; };
 }
