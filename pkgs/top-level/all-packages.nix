@@ -3544,7 +3544,7 @@ with pkgs;
   sydbox = callPackage ../os-specific/linux/sydbox { };
 
   synth = callPackage ../tools/misc/synth {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
