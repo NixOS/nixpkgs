@@ -8,7 +8,7 @@
     version = "10.01.0000";
 
     src = fetchurl {
-      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${pname}-${version}.tar.gz";
+      url = "mirror://postgresql/odbc/versions/src/${pname}-${version}.tar.gz";
       sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
