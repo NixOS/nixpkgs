@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
+, fetchpatch
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -12,6 +13,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-JXWl63KVP+CDNWIXYtz+EKqWLJbPKl3ifhr8dKAp/w8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "clang-7-compat.patch";
+      url = "https://github.com/google/snappy/pull/142/commits/658cb2fcf67b626fff2122a3dbf7a3560c58f7ee.patch";
+      sha256 = "1kg3lxjwmhc7gjx36nylilnf444ddbnr3px1wpvyc6l1nh6zh4al";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
