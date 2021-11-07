@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ 
-    meson ninja pkg-config 
-    gettext appstream-glib 
+    meson ninja pkg-config
+    gettext appstream-glib
     makeWrapper wrapGAppsHook
-    python3Packages.sphinx   
+    python3Packages.sphinx
   ];
 
   buildInputs = [
