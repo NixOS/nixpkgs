@@ -3,21 +3,26 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
+, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
 , brotli
 , c-ares
 , cmake
+, crc32c
+, curl
 , flatbuffers
 , gflags
 , glog
+, google-cloud-cpp
 , grpc
 , gtest
 , jemalloc
 , libnsl
 , lz4
 , minio
+, nlohmann_json
 , openssl
 , perl
 , protobuf
@@ -33,8 +38,16 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
-, enableS3 ? true
+  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
+  # non-existent in older versions
+  # see https://github.com/boostorg/process/issues/55
+, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
+, enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
 }:
+
+assert lib.asserts.assertMsg
+  ((enableS3 && stdenv.isDarwin) -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70"))
+  "S3 on Darwin requires Boost != 1.69";
 
 let
   arrow-testing = fetchFromGitHub {
@@ -115,7 +128,14 @@ stdenv.mkDerivation rec {
     libnsl
     openssl
     protobuf
-  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ];
+  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
+  ++ lib.optionals enableGcs [
+    abseil-cpp
+    crc32c
+    curl
+    google-cloud-cpp
+    nlohmann_json
+  ];
 
   preConfigure = ''
     patchShebangs build-support/
@@ -152,6 +172,7 @@ stdenv.mkDerivation rec {
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
+    "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -183,6 +204,9 @@ stdenv.mkDerivation rec {
         "TestS3FS.OpenOutputStreamMetadata"
         "TestS3FS.OpenOutputStreamSyncWrites"
         "TestS3FSGeneric.*"
+      ] ++ lib.optionals enableGcs [
+        "GcsFileSystem.FileSystemCompare"
+        "GcsIntegrationTest.*"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
@@ -199,7 +223,7 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest -V \
+      ctest -L unittest \
         --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
 
       runHook postInstallCheck
