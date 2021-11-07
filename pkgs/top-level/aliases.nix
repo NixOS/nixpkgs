@@ -267,6 +267,7 @@ mapAliases ({
     and has only been used for old fontconfig caches.
   '';
   foomatic_filters = foomatic-filters;  # 2016-08
+  fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl."; # 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
