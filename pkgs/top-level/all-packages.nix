@@ -862,6 +862,8 @@ with pkgs;
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
+  aether-lv2 = callPackage ../applications/audio/aether-lv2 { };
+
   acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
 
   adriconf = callPackage ../tools/graphics/adriconf { };
