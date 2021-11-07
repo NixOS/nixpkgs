@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
+, replace, file, cacert, fetchYarnDeps, yarnSetupHook,
 }:
 
 let
@@ -54,16 +54,11 @@ let
     ignoreCollisions = true;
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
-  };
-
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler git cacert yarnSetupHook ];
 
     # Since version 12.6.0, the rake tasks need the location of git,
     # so we have to apply the location patches here too.
@@ -73,31 +68,21 @@ let
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
 
-    configurePhase = ''
-      runHook preConfigure
+    offlineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
+    postPatch = ''
       # Some rake tasks try to run yarn automatically, which won't work
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
       mv config/database.yml.env config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
-
-      # Yarn and bundler wants a real home directory to write cache, config, etc to
-      export HOME=$NIX_BUILD_TOP/fake_home
-
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
-
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-
-      patchShebangs node_modules/
-
-      runHook postConfigure
     '';
+
+    yarnFlags = yarnSetupHook.defaultYarnFlags;
 
     buildPhase = ''
       runHook preBuild
