@@ -1554,6 +1554,8 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
+    (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
+      "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
   ];
 
   options.services.prometheus = {

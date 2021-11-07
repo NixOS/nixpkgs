@@ -1809,7 +1809,9 @@ Superuser created successfully.
           <literal>services.prometheus.environmentFile</literal> has
           been removed since it was causing
           <link xlink:href="https://github.com/NixOS/nixpkgs/issues/126083">issues</link>
-          and Prometheus now has native support for secret files.
+          and Prometheus now has native support for secret files, i.e.
+          <literal>basic_auth.password_file</literal> and
+          <literal>authorization.credentials_file</literal>.
         </para>
       </listitem>
       <listitem>
