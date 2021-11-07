@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.9.13";
+  version = "0.9.14";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "sha256-aqXtja+h3vD7/0l27jxHSqgyBvPexAK2HBkFQRwhLcw=";
+    sha256 = "sha256-Vcck+zGcv39DXyhZF2DLUrXq3gDwkgL0NtPT5rVOpHs=";
   };
 
   patches = [
