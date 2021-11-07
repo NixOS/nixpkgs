@@ -27242,9 +27242,7 @@ with pkgs;
 
   pcloud = callPackage ../applications/networking/pcloud { };
 
-  pcsxr = callPackage ../misc/emulators/pcsxr {
-    ffmpeg = ffmpeg_2;
-  };
+  pcsxr = callPackage ../misc/emulators/pcsxr { };
 
   pcsx2 = callPackage ../misc/emulators/pcsx2 {
     wxGTK = wxGTK30-gtk3;
