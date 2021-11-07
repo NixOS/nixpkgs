@@ -1,6 +1,8 @@
 { lib, stdenv, fetchgit, mlton }:
 stdenv.mkDerivation {
-  name = "redprl-2017-03-28";
+  pname = "redprl";
+  version = "unstable-2017-03-28";
+
   src = fetchgit {
     url = "https://github.com/RedPRL/sml-redprl.git";
     rev = "bdf027de732e4a8d10f9f954389dfff0c822f18b";
@@ -18,11 +20,11 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     mv ./bin/redprl $out/bin
   '';
-  meta = {
+  meta = with lib; {
     description = "A proof assistant for Nominal Computational Type Theory";
     homepage = "http://www.redprl.org/";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.acowley ];
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ acowley ];
+    platforms = platforms.unix;
   };
 }

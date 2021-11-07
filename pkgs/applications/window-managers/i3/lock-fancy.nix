@@ -1,10 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, scrot, imagemagick, gawk
-, i3lock-color, getopt, fontconfig
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, scrot
+, imagemagick
+, gawk
+, i3lock-color
+, getopt
+, fontconfig
 }:
 
 stdenv.mkDerivation rec {
   rev = "7accfb2aa2f918d1a3ab975b860df1693d20a81a";
-  name = "i3lock-fancy-unstable-2018-11-25_rev${builtins.substring 0 7 rev}";
+  pname = "i3lock-fancy";
+  version = "unstable-2018-11-25_rev${builtins.substring 0 7 rev}";
   src = fetchFromGitHub {
     owner = "meskarune";
     repo = "i3lock-fancy";
