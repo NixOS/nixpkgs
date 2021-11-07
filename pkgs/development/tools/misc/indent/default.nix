@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./darwin.patch ];
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
+  strictDeps = true;
   nativeBuildInputs = [ texinfo ];
   pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
