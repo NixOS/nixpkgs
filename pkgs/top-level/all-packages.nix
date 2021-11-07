@@ -487,6 +487,8 @@ with pkgs;
     prefetch-yarn-deps
     fetchYarnDeps;
 
+  yarnSetupHook = callPackage ../build-support/node/yarn-setup-hook { };
+
   find-cursor = callPackage ../tools/X11/find-cursor { };
 
   flare-floss = callPackage ../tools/security/flare-floss { };
