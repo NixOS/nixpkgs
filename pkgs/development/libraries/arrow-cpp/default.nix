@@ -38,7 +38,9 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
-, enableS3 ? true
+  # boost/process is broken in 1.69 on darwin, but fixed in 1.70
+  # see https://github.com/boostorg/process/issues/55
+, enableS3 ? (!stdenv.isDarwin) || lib.versionAtLeast boost.version "1.70"
 , enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
 }:
 
