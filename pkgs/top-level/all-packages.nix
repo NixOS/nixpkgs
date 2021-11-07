@@ -16051,9 +16051,6 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
-  ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
   ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
@@ -16062,7 +16059,6 @@ with pkgs;
   };
 
   # Aliases
-  ffmpeg_2 = ffmpeg_2_8;
   ffmpeg_3 = ffmpeg_3_4;
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
