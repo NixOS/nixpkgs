@@ -42,7 +42,9 @@ in {
   fetchYarnDeps = let
     f = {
       name ? "offline",
-      yarnLock,
+      src ? null,
+      patches ? [],
+      yarnLock ? "yarn.lock",
       hash ? "",
       sha256 ? "",
     }: let
@@ -50,10 +52,14 @@ in {
         if hash != "" then { outputHashAlgo = null; outputHash = hash; }
         else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
         else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
+      yarnLock_ =
+        if src != null then "$NIX_BUILD_TOP/$sourceRoot/${yarnLock}"
+        else if lib.hasPrefix "/" yarnLock then yarnLock
+        else throw "fetchYarnDeps needs either src or yarnLock";
     in stdenv.mkDerivation {
-      inherit name;
+      inherit name src patches;
 
-      dontUnpack = true;
+      dontUnpack = src == null;
       dontInstall = true;
 
       nativeBuildInputs = [ prefetch-yarn-deps ];
@@ -61,7 +67,7 @@ in {
 
       buildPhase = ''
         mkdir -p $out
-        (cd $out; prefetch-yarn-deps --verbose --builder ${yarnLock})
+        (cd $out; prefetch-yarn-deps --verbose --builder "${yarnLock_}")
       '';
 
       outputHashMode = "recursive";
