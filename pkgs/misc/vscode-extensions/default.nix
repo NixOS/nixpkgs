@@ -1,6 +1,7 @@
 { config
 , lib
 , buildEnv
+, fetchurl
 , callPackage
 , vscode-utils
 , asciidoctor
@@ -1596,6 +1597,34 @@ let
       };
 
       vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
+
+      valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
+        mktplcRef = {
+          name = "vscode-ltex";
+          publisher = "valentjn";
+          version = "13.0.0";
+        };
+
+        buildInputs = [ jdk ];
+
+        vsix = fetchurl {
+           name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+           url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
+           sha256 = "6db4846dee4e394f7bcfb7e29520d45d6bc1534482ba73cf40cd5edf3f6ec266";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
+        '';
+
+        meta = with lib; {
+          license = licenses.mpl20;
+          maintainers = [ maintainers._0xbe7a ];
+        };
+      };
 
       viktorqvarfordt.vscode-pitch-black-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
