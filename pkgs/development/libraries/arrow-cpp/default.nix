@@ -38,11 +38,16 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
-  # boost/process is broken in 1.69 on darwin, but fixed in 1.70
+  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
+  # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
-, enableS3 ? (!stdenv.isDarwin) || lib.versionAtLeast boost.version "1.70"
+, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
 , enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
 }:
+
+assert lib.asserts.assertMsg
+  ((enableS3 && stdenv.isDarwin) -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70"))
+  "S3 on Darwin requires Boost != 1.69";
 
 let
   arrow-testing = fetchFromGitHub {
