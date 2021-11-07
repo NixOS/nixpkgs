@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   doCheck = true;
+  enableParallelChecking = false;
   checkInputs = optional (!stdenv.isDarwin) hostname;
   preCheck = ''
     # construct a dummy HOME
