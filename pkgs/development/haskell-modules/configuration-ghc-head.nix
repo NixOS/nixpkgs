@@ -75,6 +75,6 @@ self: super: {
   stack = doJailbreak super.stack;
 
   # Fix build with ghc 8.6.x.
-  git-annex = appendPatch super.git-annex ./patches/git-annex-fix-ghc-8.6.x-build.patch;
+  git-annex = appendPatch ./patches/git-annex-fix-ghc-8.6.x-build.patch super.git-annex;
 
 }
