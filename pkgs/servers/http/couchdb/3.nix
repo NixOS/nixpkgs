@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_78
-, coreutils, bash, makeWrapper, python3 }:
+, coreutils, bash, makeWrapper, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.2.0";
+  version = "3.2.1";
 
 
   # when updating this, please consider bumping the erlang/OTP version
   # in all-packages.nix
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    sha256 = "035hy76399yy32rxl536gv7nh8ijihqxhhh5cxn95c3bm97mgslb";
+    sha256 = "1y5cfic88drlr9qiwyj2p8xc9m9hcbvw77j5lwbp0cav78f2vphi";
   };
 
   buildInputs = [ erlang icu openssl spidermonkey_78 (python3.withPackages(ps: with ps; [ requests ]))];
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r rel/couchdb/* $out
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) couchdb;
+  };
 
   meta = with lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
