@@ -82,6 +82,10 @@ stdenv.mkDerivation rec {
     cd builddir
   '';
 
+  # Fails to build in parallel due to missing gnulib header dependency used in charstrg.d:
+  #   ../src/charstrg.d:319:10: fatal error: uniwidth.h: No such file or directory
+  enableParallelBuilding = false;
+
   postInstall =
     lib.optionalString (withModules != [])
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
