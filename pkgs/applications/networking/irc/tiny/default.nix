@@ -10,21 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "gKyHR3FZHDybaP38rqB8/gvr8T+mDO4QQxoTtWS+TlE=";
+    sha256 = "177d1x4z0mh0p7c5ldq70cn1j3pac50d8cil2ni50hl49c3x6yy1";
   };
 
-  cargoSha256 = "0ChfW8vaqC2kCp4lpS0HOvhuihPw9G5TOmgwKzVDfws=";
-
-  # Fix Cargo.lock version. Remove with the next release.
-  cargoPatches = [
-    ./fix-Cargo.lock.patch
-  ];
+  cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
 
   cargoBuildFlags = lib.optionals stdenv.isLinux [ "--features=desktop-notifications" ];
 
@@ -34,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A console IRC client";
     homepage = "https://github.com/osa1/tiny";
-    changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/osa1/tiny/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne vyp ];
   };
