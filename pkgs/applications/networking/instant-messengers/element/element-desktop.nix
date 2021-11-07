@@ -62,7 +62,7 @@ mkYarnPackage rec {
     ln -s '${element-web}' "$out/share/element/webapp"
     cp -r './deps/element-desktop' "$out/share/element/electron"
     cp -r './deps/element-desktop/res/img' "$out/share/element"
-    rm "$out/share/element/electron/node_modules"
+    rm -rf "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
     cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
     ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
