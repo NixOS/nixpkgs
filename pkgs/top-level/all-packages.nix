@@ -16051,9 +16051,6 @@ with pkgs;
 
   linbox = callPackage ../development/libraries/linbox { };
 
-  ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
   ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
@@ -16062,7 +16059,6 @@ with pkgs;
   };
 
   # Aliases
-  ffmpeg_2 = ffmpeg_2_8;
   ffmpeg_3 = ffmpeg_3_4;
   # Please make sure this is updated to the latest version on the next major
   # update to ffmpeg
@@ -27242,9 +27238,7 @@ with pkgs;
 
   pcloud = callPackage ../applications/networking/pcloud { };
 
-  pcsxr = callPackage ../misc/emulators/pcsxr {
-    ffmpeg = ffmpeg_2;
-  };
+  pcsxr = callPackage ../misc/emulators/pcsxr { };
 
   pcsx2 = callPackage ../misc/emulators/pcsx2 {
     wxGTK = wxGTK30-gtk3;
@@ -30468,9 +30462,7 @@ with pkgs;
 
   sdlpop = callPackage ../games/sdlpop { };
 
-  stepmania = callPackage ../games/stepmania {
-    ffmpeg = ffmpeg_2;
-  };
+  stepmania = callPackage ../games/stepmania { };
 
   streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
 
