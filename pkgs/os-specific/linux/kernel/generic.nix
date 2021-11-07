@@ -203,8 +203,6 @@ let
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre modDirVersion;
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
-    kernelOlder = lib.versionOlder version;
-    kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
     tests = let
       overridableKernel = finalKernel // {
