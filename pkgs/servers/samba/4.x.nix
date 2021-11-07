@@ -35,7 +35,7 @@
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
 , enableRegedit ? true, ncurses
-, enableCephFS ? false, libceph
+, enableCephFS ? false, ceph
 , enableGlusterFS ? false, glusterfs, libuuid
 , enableAcl ? (!stdenv.isDarwin), acl
 , enablePam ? (!stdenv.isDarwin), pam
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) libceph
+    ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
