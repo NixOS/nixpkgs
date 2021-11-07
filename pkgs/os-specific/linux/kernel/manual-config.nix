@@ -97,13 +97,14 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
         (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
-      passthru = {
+      passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
         inherit isZen isHardened isLibre;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
-        kernelOlder = lib.versionOlder version;
-        kernelAtLeast = lib.versionAtLeast version;
+        baseVersion = lib.head (lib.splitString "-rc" version);
+        kernelOlder = lib.versionOlder baseVersion;
+        kernelAtLeast = lib.versionAtLeast baseVersion;
       };
 
       inherit src;
