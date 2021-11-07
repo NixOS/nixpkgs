@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, autoreconfHook, pkg-config, fftw, rtl-sdr, libusb1 }:
 
 stdenv.mkDerivation {
-  name = "kalibrate-rtl-20131214";
+  pname = "kalibrate-rtl";
+  version = "2013-12-14";
 
   # There are no tags/releases, so use the latest commit from git master.
   # Currently, the latest commit is from 2013-12-14.

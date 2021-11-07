@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchurl
-, raspberrypifw, pcre, boost, freetype, zlib
+{ lib
+, stdenv
+, fetchurl
+, raspberrypifw
+, pcre
+, boost
+, freetype
+, zlib
 }:
 
 let
   ffmpeg = stdenv.mkDerivation rec {
-    name = "ffmpeg-1.1.3";
+    pname = "ffmpeg";
+    version = "1.1.3";
 
     src = fetchurl {
-      url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
+      url = "http://www.ffmpeg.org/releases/ffmpeg-${version}.tar.bz2";
       sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
     };
 
-    configurePlatforms = [];
+    configurePlatforms = [ ];
     configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
@@ -61,10 +68,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "omxplayer-20130328-fbee325dc2";
+  pname = "omxplayer";
+  version = "20130328-fbee325dc2";
   src = fetchurl {
     url = "https://github.com/huceke/omxplayer/tarball/fbee325dc2";
-    name = "${name}.tar.gz";
+    name = "omxplayer-${version}.tar.gz";
     sha256 = "0fkvv8il7ffqxki2gp8cxa5shh6sz9jsy5vv3f4025g4gss6afkg";
   };
   patchPhase = ''
