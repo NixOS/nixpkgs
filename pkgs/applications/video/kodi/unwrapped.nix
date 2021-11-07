@@ -16,7 +16,7 @@
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
-, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
@@ -125,7 +125,7 @@ in stdenv.mkDerivation {
       libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
-      ffmpeg flatbuffers fmt fstrcmp rapidjson
+      ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]
