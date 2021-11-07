@@ -39,7 +39,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
 , enableS3 ? true
-, enableGcs ? true
+, enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
 }:
 
 let
