@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "14s0h5wgvlkdylnjis2fa7m835142jzw0d0yqjnir1wqnwmq1rld";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     meson ninja pkg-config
     gettext appstream-glib
     makeWrapper wrapGAppsHook
