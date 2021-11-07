@@ -1,20 +1,38 @@
-{ lib, stdenv, fetchurl, cmake
-, alsa-lib, fftwSinglePrec, libjack2, libpulseaudio, libvorbis, soundtouch
-, qtbase, qtdeclarative, qtquickcontrols2
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, alsa-lib
+, fftwSinglePrec
+, libjack2
+, libpulseaudio
+, libvorbis
+, soundtouch
+, qtbase
+, qtdeclarative
+, qtquickcontrols2
 }:
 
 stdenv.mkDerivation rec {
-  name = "nootka-1.7.0-beta1";
+  pname = "nootka";
+  version = "1.7.0-beta1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nootka/${name}-source.tar.bz2";
+    url = "mirror://sourceforge/nootka/nootka-${version}-source.tar.bz2";
     sha256 = "13b50vnpr1zx2mrgkc8fmhsyfa19rqq1rksvn31145dy6fk1f3gc";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    alsa-lib fftwSinglePrec libjack2 libpulseaudio libvorbis soundtouch
-    qtbase qtdeclarative qtquickcontrols2
+    alsa-lib
+    fftwSinglePrec
+    libjack2
+    libpulseaudio
+    libvorbis
+    soundtouch
+    qtbase
+    qtdeclarative
+    qtquickcontrols2
   ];
 
   dontWrapQtApps = true;

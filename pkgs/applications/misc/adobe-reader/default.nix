@@ -1,17 +1,31 @@
-{ lib, stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
-, gdk-pixbuf, gdk-pixbuf-xlib }:
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, cups
+, zlib
+, libxml2
+, pango
+, atk
+, gtk2
+, glib
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+}:
 
 assert stdenv.hostPlatform.system == "i686-linux";
 
-let version = "9.5.5"; in
-
-stdenv.mkDerivation {
-  name = "adobe-reader-${version}-1";
+let
+  baseVersion = "9.5.5";
+in
+stdenv.mkDerivation rec {
+  pname = "adobe-reader";
+  version = "${baseVersion}-1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/${version}/enu/AdbeRdr${version}-1_i486linux_enu.tar.bz2";
+    url = "http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/${baseVersion}/enu/AdbeRdr${version}_i486linux_enu.tar.bz2";
     sha256 = "0h35misxrqkl5zlmmvray1bqf4ywczkm89n9qw7d9arqbg3aj3pf";
   };
 

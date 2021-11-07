@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, curses }:
 
 stdenv.mkDerivation {
-  name = "stag-1.0";
+  pname = "stag";
+  version = "1.0";
 
   src = fetchgit {
     url = "https://github.com/seenaburns/stag.git";

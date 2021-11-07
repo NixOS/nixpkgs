@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkg-config, libpng
+{ lib
+, stdenv
+, fetchurl
+, sane-backends
+, sane-frontends
+, libX11
+, gtk2
+, pkg-config
+, libpng
 , libusb-compat-0_1 ? null
-, gimpSupport ? false, gimp ? null
+, gimpSupport ? false
+, gimp ? null
 }:
 
 assert gimpSupport -> gimp != null;
 
 stdenv.mkDerivation rec {
-  name = "xsane-0.999";
+  pname = "xsane";
+  version = "0.999";
 
   src = fetchurl {
-    url = "http://www.xsane.org/download/${name}.tar.gz";
+    url = "http://www.xsane.org/download/xsane-${version}.tar.gz";
     sha256 = "0jrb918sfb9jw3vmrz0z7np4q55hgsqqffpixs0ir5nwcwzd50jp";
   };
 
@@ -19,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 ]
-    ++ (if libusb-compat-0_1 != null then [libusb-compat-0_1] else [])
+  buildInputs = [ libpng sane-backends sane-frontends libX11 gtk2 ]
+    ++ (if libusb-compat-0_1 != null then [ libusb-compat-0_1 ] else [ ])
     ++ lib.optional gimpSupport gimp;
 
   meta = {
