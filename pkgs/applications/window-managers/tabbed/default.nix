@@ -1,9 +1,10 @@
-{lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [] }:
+{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
 
 with lib;
 
 stdenv.mkDerivation {
-  name = "tabbed-20180310";
+  name = "tabbed";
+  version = "unstable-20180310";
 
   src = fetchgit {
     url = "https://git.suckless.org/tabbed";
