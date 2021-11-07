@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.1.8";
+  version = "6.1.9";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    sha256 = "sha256-VSJ6AoVBvlCdKSirSDqsemixF+kAnvPgBQlyJxjoPcs=";
+    sha256 = "0kpabxpy779ppkaqaigq0x34ymz1jcwpsa78rm6nr55mdap2xxv6";
   };
 
   cmakeFlags= [
