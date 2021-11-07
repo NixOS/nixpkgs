@@ -2067,4 +2067,9 @@ EOT
     excludes = [ "stack.yaml" "package.yaml" "hadolint.cabal" ];
   });
 
+  # These should be updated in lockstep
+  hledger_1_23 = super.hledger_1_23.override {
+    hledger-lib = self.hledger-lib_1_23;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
