@@ -9,8 +9,8 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
   postFixup = "wrapPythonPrograms";
   doInstallCheck = true;
   installCheckPhase = ''
-    # check that ./fetchcargo-default-config.toml is a fix point
-    reference=${./fetchcargo-default-config.toml}
+    # check that ../fetchcargo-default-config.toml is a fix point
+    reference=${../fetchcargo-default-config.toml}
     < $reference $out/bin/cargo-vendor-normalise > test;
     cmp test $reference
   '';
