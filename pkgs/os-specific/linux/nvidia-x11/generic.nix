@@ -40,8 +40,11 @@ let
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391" && !disable32Bit;
 
-  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
-    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc pkgs.wayland ];
+  libPathFor = pkgs: pkgs.lib.makeLibraryPath ([
+    pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
+    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc
+    pkgs.wayland pkgs.mesa pkgs.libGL
+  ]);
 
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
