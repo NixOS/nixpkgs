@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, docutils, help2man, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
 , abootimg, acl, apksigner, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
 , e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
@@ -25,13 +25,6 @@ python3Packages.buildPythonApplication rec {
     # the version detection of LLVM is broken and the comparison result is compared against
     # the expected result from LLVM 10 (rather than 7 which is our default).
     ./fix-tests.patch
-
-    # Upstream uimage test fix for file-5.41 update.
-    (fetchpatch {
-      name = "fix-uimage-on-file-5.41.patch";
-      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/74a59a8fb3327a320f45a7626e8e0d59b01896a2.patch";
-      sha256 = "sha256-7hmxSKmgaqJg4/gpaZYcNVo4dEMO658VSkSbxPq7WWo=";
-    })
   ];
 
   postPatch = ''

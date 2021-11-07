@@ -3452,8 +3452,6 @@ in {
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
-  hbmqtt = callPackage ../development/python-modules/hbmqtt { };
-
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
