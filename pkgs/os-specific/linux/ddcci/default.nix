@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.1";
+    broken = kernel.kernelOlder "5.1" || kernel.kernelAtLeast "5.15";
   };
 }
