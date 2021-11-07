@@ -33,9 +33,6 @@ stdenv.mkDerivation {
 
     substituteInPlace "config.c" \
       --replace "/etc/vpnc/vpnc-script" "$out/etc/vpnc/vpnc-script"
-
-    substituteInPlace "pcf2vpnc" \
-      --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
   postInstall = ''

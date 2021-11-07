@@ -3872,7 +3872,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
-  cemu = qt5.callPackage ../applications/science/math/cemu { };
+  cemu = qt5.callPackage ../applications/science/math/cemu {
+    stdenv = gcc9Stdenv;
+  };
 
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
@@ -4511,6 +4513,8 @@ with pkgs;
     tcl = tcl-8_5;
     tk = tk-8_5;
   };
+
+  picoscope = callPackage ../applications/science/electronics/picoscope { };
 
   picotts = callPackage ../tools/audio/picotts { };
 
@@ -8034,6 +8038,8 @@ with pkgs;
   ocproxy = callPackage ../tools/networking/ocproxy { };
 
   ocserv = callPackage ../tools/networking/ocserv { };
+
+  octofetch = callPackage ../tools/misc/octofetch { };
 
   oha = callPackage ../tools/networking/oha {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14559,7 +14565,7 @@ with pkgs;
   gradle_4_10 = res.gradleGen.gradle_4_10;
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
-  gradle_6 = res.gradleGen.gradle_6_8;
+  gradle_6 = res.gradleGen.gradle_6_9;
   gradle_7 = res.gradleGen.gradle_7;
 
   gperf = callPackage ../development/tools/misc/gperf { };
@@ -20228,9 +20234,8 @@ with pkgs;
     go = buildPackages.go_1_16;
   };
   # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms,
-  # it also requires >=10.13 stdenv on darwin which
-  # is not currently available for x86_64-darwin
+  # across different go versions and/or platforms:
+  # https://github.com/NixOS/nixpkgs/issues/144667
   #
   # do not uncomment this without approval from the go CODEOWNERS
   #buildGo117Package = callPackage ../development/go-packages/generic {
@@ -20246,9 +20251,8 @@ with pkgs;
     go = buildPackages.go_1_16;
   };
   # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms,
-  # it also requires >=10.13 stdenv on darwin which
-  # is not currently available for x86_64-darwin
+  # across different go versions and/or platforms:
+  # https://github.com/NixOS/nixpkgs/issues/144667
   #
   # do not uncomment this without approval from the go CODEOWNERS
   #buildGo117Module = callPackage ../development/go-modules/generic {
@@ -23759,7 +23763,9 @@ with pkgs;
 
   antiword = callPackage ../applications/office/antiword {};
 
-  anup = callPackage ../applications/misc/anup {};
+  anup = callPackage ../applications/misc/anup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   anytype = callPackage ../applications/misc/anytype { };
 
@@ -25923,6 +25929,8 @@ with pkgs;
   japa = callPackage ../applications/audio/japa { };
 
   dupd = callPackage ../tools/misc/dupd { };
+
+  jconvolver = callPackage ../applications/audio/jconvolver { };
 
   jdupes = callPackage ../tools/misc/jdupes { };
 
@@ -30182,7 +30190,7 @@ with pkgs;
   openarena = callPackage ../games/openarena { };
 
   opendungeons = callPackage ../games/opendungeons {
-    ogre = ogre1_9;
+    ogre = ogre1_10;
   };
 
   openlierox = callPackage ../games/openlierox { };
@@ -33016,7 +33024,9 @@ with pkgs;
 
   wiki-js = callPackage ../servers/web-apps/wiki-js { };
 
-  wiki-tui = callPackage ../misc/wiki-tui { };
+  wiki-tui = callPackage ../misc/wiki-tui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
@@ -33024,7 +33034,7 @@ with pkgs;
     inherit wineBuild;
 
     inherit (callPackage ./wine-packages.nix {})
-      minimal base full stable unstable staging fonts;
+      minimal base full stable stableFull unstable unstableFull staging stagingFull fonts;
   });
 
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));

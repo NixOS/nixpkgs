@@ -5676,10 +5676,7 @@ in {
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
-  pip-tools = callPackage ../development/python-modules/pip-tools {
-    git = pkgs.gitMinimal;
-    inherit (pkgs) glibcLocales;
-  };
+  pip-tools = callPackage ../development/python-modules/pip-tools { };
 
   pipx = callPackage ../development/python-modules/pipx { };
 
@@ -9778,6 +9775,8 @@ in {
   watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
+
+  watermark = callPackage ../development/python-modules/watermark { };
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 

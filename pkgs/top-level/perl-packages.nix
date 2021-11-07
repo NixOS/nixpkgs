@@ -20624,12 +20624,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "7.8.0";
+    version = "7.9.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v7.8.0";
-      sha256 = "sha256-D/sVIKMWy3WnDM97+ofG3ClgGhJJuK2a6NJLC03S4LI=";
+      rev = "v7.9.0";
+      sha256 = "sha256-QxY6TRVQWrN689CD76CQZeyXsDVWxk24N1v67DCvmDo=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

@@ -441,6 +441,14 @@
           <literal>code-server</literal>-module now available
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xmrig/xmrig">xmrig</link>,
+          a high performance, open source, cross platform RandomX,
+          KawPow, CryptoNight and AstroBWT unified CPU/GPU miner and
+          RandomX benchmark.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -450,9 +458,10 @@
         <para>
           The NixOS VM test framework,
           <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
-          now requires non-terminating commands such as
-          <literal>succeed(&quot;foo &amp;&quot;)</literal> to close
-          stdout. This can be done with a redirect such as
+          now requires detaching commands such as
+          <literal>succeed(&quot;foo &amp;&quot;)</literal> and
+          <literal>succeed(&quot;foo | xclip -i&quot;)</literal> to
+          close stdout. This can be done with a redirect such as
           <literal>succeed(&quot;foo &gt;&amp;2 &amp;&quot;)</literal>.
           This breaking change was necessitated by a race condition
           causing tests to fail or hang. It applies to all methods that
@@ -1849,6 +1858,14 @@ Superuser created successfully.
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.pam.services.&lt;name&gt;.makeHomeDir</literal>
+          now uses <literal>umask=0077</literal> instead of
+          <literal>umask=0022</literal> when creating the home
+          directory.
+        </para>
       </listitem>
     </itemizedlist>
   </section>

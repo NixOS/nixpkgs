@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FRu1h6DT43rPaa9dcgz83w9K+xtzJgB4l/eTu+Fbb+c=";
+    sha256 = "sha256-uyLY2yH/6J0rtra0brBATadPqrNyyuCcaGfOrng9h4Y=";
   };
 
-  vendorSha256 = "sha256-QFACe1/5MVbXKTknEyqjWclEQgJSZAJ/QljhLq/tWe4=";
+  vendorSha256 = "sha256-r7xzvntTIJocdYMQpFXunI2XV65eRG+piEEzS5N2xsY=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
@@ -35,7 +35,9 @@ buildGoModule rec {
       --prefix CNI_PATH : "${cni-plugins}/bin"
 
     installShellCompletion --cmd nerdctl \
-      --bash <($out/bin/nerdctl completion bash)
+      --bash <($out/bin/nerdctl completion bash) \
+      --fish <($out/bin/nerdctl completion fish) \
+      --zsh <($out/bin/nerdctl completion zsh)
   '';
 
   doInstallCheck = true;
