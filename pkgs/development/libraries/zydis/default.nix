@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zydis";
-    rev = "bfee99f49274a0eec3ffea16ede3a5bda9cda88f";
-    sha256 = "sha256-y+zPeQyHBLQpJv5pHSAvpIy3mafi9pbj/6BZPwa7VHQ=";
+    rev = "v${version}";
     fetchSubmodules = true;
+    sha256 = "sha256-1XGELwMuFlIt6Z3+kfD6VAgDZOwhhCSG42dkYh7WLf8=";
   };
 
   nativeBuildInputs = [ cmake ];
