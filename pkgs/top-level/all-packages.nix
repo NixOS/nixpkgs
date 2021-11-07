@@ -29814,7 +29814,11 @@ with pkgs;
 
   ddnet = callPackage ../games/ddnet { };
 
-  devilutionx = callPackage ../games/devilutionx {};
+  devilutionx = callPackage ../games/devilutionx {
+    SDL2 = SDL2.override {
+      withStatic = true;
+    };
+  };
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
