@@ -5569,6 +5569,18 @@ final: prev:
     meta.homepage = "https://github.com/chr4/sslsecure.vim/";
   };
 
+  stabilize-nvim = buildVimPluginFrom2Nix {
+    pname = "stabilize.nvim";
+    version = "2021-11-07";
+    src = fetchFromGitHub {
+      owner = "luukvbaal";
+      repo = "stabilize.nvim";
+      rev = "14c809b63c2a6fb87493dcab22ceba64ed5a1428";
+      sha256 = "1xr2vy264fv0dk0rbs3q0cma4whrsdwxw8iqvfr2xa1mc1w5agpy";
+    };
+    meta.homepage = "https://github.com/luukvbaal/stabilize.nvim/";
+  };
+
   stan-vim = buildVimPluginFrom2Nix {
     pname = "stan-vim";
     version = "2021-05-28";
