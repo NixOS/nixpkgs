@@ -5,17 +5,19 @@
 
 buildGoModule rec {
   pname = "wiretrustee";
-  version = "0.2.2-beta.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "wiretrustee";
     repo = "wiretrustee";
     rev = "v${version}";
-    sha256 = "1n2hy91f7y32nw7m32vbm9sxh3c0qg4f3pzfd2w7dzk7vl6zrvk7";
+    sha256 = "051c234rvjjkadjhwxs7x3lph40pidvkx7si1cvsrlcnyjrcddcy";
   };
 
   vendorSha256 = "1sz5lbw0cvzspg19n45x8kx5xhs26hf2a726ls1byc6r5cg52hcw";
 
+  # Fails with:
+  # - Failed to write to log, can't make directories for new logfile: mkdir /var: permission denied
   doCheck = false;
 
   meta = with lib; {
