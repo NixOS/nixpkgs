@@ -87,6 +87,7 @@
 , "create-cycle-app"
 , "create-react-app"
 , "create-react-native-app"
+, "cspell"
 , "csslint"
 , "dat"
 , "degit"
