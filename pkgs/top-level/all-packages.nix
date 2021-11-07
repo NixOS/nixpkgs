@@ -22773,6 +22773,8 @@ with pkgs;
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
 
+  ayu-theme-gtk = callPackage ../data/themes/ayu-theme-gtk { };
+
   b612  = callPackage ../data/fonts/b612 { };
 
   babelstone-han = callPackage ../data/fonts/babelstone-han { };
