@@ -2665,6 +2665,12 @@
     githubId = 2439413;
     name = "Derek Gonyeo";
   };
+  dguenther = {
+    email = "dguenther9@gmail.com";
+    github = "dguenther";
+    githubId = 767083;
+    name = "Derek Guenther";
+  };
   dhkl = {
     email = "david@davidslab.com";
     github = "dhl";
