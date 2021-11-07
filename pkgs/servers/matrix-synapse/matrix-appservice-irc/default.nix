@@ -5,7 +5,7 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./REVISION);
+  version = (lib.importJSON ./package.json).version;
 in
 ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
