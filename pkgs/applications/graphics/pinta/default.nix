@@ -41,10 +41,10 @@ buildDotnetPackage rec {
       "Mono\\.Addins\\.Setup"
     ];
 
-    stripVersion = version: file:
+    stripVersion = name: file:
       let
-        match = ''<Reference Include="pinta-${version}([ ,][^"]*)?"'';
-        replace = ''<Reference Include="pinta-${version}"'';
+        match = ''<Reference Include="${name}([ ,][^"]*)?"'';
+        replace = ''<Reference Include="${name}"'';
       in
       "sed -i -re 's/${match}/${replace}/g' ${file}\n";
 
