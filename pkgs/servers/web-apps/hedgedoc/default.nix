@@ -46,25 +46,17 @@ mkYarnPackage rec {
   extraBuildInputs = [ python2 esbuild-hedgedoc ];
 
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
+    inherit src patches;
     sha256 = pinData.yarnHash;
   };
 
-  # FIXME(@Ma27) on the bump to 1.9.0 I had to patch this file manually:
-  # I replaced `midi "https://github.com/paulrosen/MIDI.js.git#abcjs"` with
-  # `midi "git+https://github.com/paulrosen/MIDI.js.git#abcjs"` on all occurrences.
-  #
-  # Without this change `yarn` attempted to download the code directly from GitHub, with
-  # the `git+`-prefix it actually uses the `midi.js` version from the offline cache
-  # created by `yarn2nix`. On future bumps this may be necessary as well!
-  yarnLock = ./yarn.lock;
+  patches = [
+    # Running `yarn --ignore-scripts` in a fresh checkout of hedgedoc 1.9.0 will change the lockfile,
+    # since the checked-in lockfile is not consistent. This particular case should not be necessary with
+    # the next major release of hedgedoc, since the MIDI.js dependency has been removed on master.
+    ./lockfile-fix.diff
+  ];
   packageJSON = ./package.json;
-
-  postConfigure = ''
-    rm deps/HedgeDoc/node_modules
-    cp -R "$node_modules" deps/HedgeDoc
-    chmod -R u+w deps/HedgeDoc
-  '';
 
   buildPhase = ''
     runHook preBuild

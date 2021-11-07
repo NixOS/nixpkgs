@@ -18,10 +18,11 @@ fi
 src="https://raw.githubusercontent.com/hedgedoc/hedgedoc/$version"
 wget "$src/package.json" -O package.json
 wget "$src/yarn.lock" -O yarn.lock
-sed 's;midi "https://github\.com/paulrosen/MIDI\.js\.git;midi "git+https://github.com/paulrosen/MIDI.js.git;g' -i yarn.lock
 
 src_hash=$(nix-prefetch-github hedgedoc hedgedoc --rev ${version} | jq -r .sha256)
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
+
+rm -f yarn.lock
 
 cat > pin.json << EOF
 {

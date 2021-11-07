@@ -1,0 +1,16 @@
+diff --git a/yarn.lock b/yarn.lock
+index ae72c429..039b90d2 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -6741,9 +6741,9 @@ micromatch@^4.0.4:
+     braces "^3.0.1"
+     picomatch "^2.2.3"
+ 
+-"midi@git+https://github.com/paulrosen/MIDI.js.git#abcjs":
++"midi@https://github.com/paulrosen/MIDI.js.git#abcjs":
+   version "0.4.2"
+-  resolved "git+https://github.com/paulrosen/MIDI.js.git#e593ffef81a0350f99448e3ab8111957145ff6b2"
++  resolved "https://github.com/paulrosen/MIDI.js.git#e593ffef81a0350f99448e3ab8111957145ff6b2"
+ 
+ miller-rabin@^4.0.0:
+   version "4.0.1"
