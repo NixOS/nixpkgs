@@ -2048,14 +2048,6 @@ EOT
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch super.gogol-core ./patches/gogol-core-144.patch;
 
-  # cabal tries to install files we're supplying from the system
-  # https://github.com/hslua/hslua/pull/103
-  lua = appendPatch super.lua (pkgs.fetchpatch {
-    url = "https://github.com/hslua/hslua/pull/103/commits/814bf1bb284151e827b1c11a7277819ed2779dd2.patch";
-    sha256 = "1kj0g51lkjyf6jv2ikayb3cfh0dcr669swmxl9a2mcrizxcbkrhy";
-    stripLen = 1;
-  });
-
   # 2021-11-05: patch to permit our language-docker version
   # This is based on c931c0a9689cd6dff4d2083fa002414c1f08a586 from
   # language-docker upstream
