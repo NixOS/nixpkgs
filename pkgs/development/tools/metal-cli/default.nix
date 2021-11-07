@@ -13,10 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-ifSfeJjrZI1Hrsq64zAGBiLVc8GKvq+Ddg26gQooyTs=";
 
-  postInstall = ''
-    ln -s $out/bin/metal-cli $out/bin/metal
-  '';
-
   doCheck = false;
 
   meta = with lib; {

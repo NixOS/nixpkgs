@@ -35,6 +35,7 @@
 , udev
 , util-linux
 , xorg
+, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     pcre
     udev
     util-linux
+    zstd
   ] ++ (with xorg; [
     libXdmcp
     libXtst

@@ -3544,7 +3544,7 @@ with pkgs;
   sydbox = callPackage ../os-specific/linux/sydbox { };
 
   synth = callPackage ../tools/misc/synth {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
@@ -3872,7 +3872,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
-  cemu = qt5.callPackage ../applications/science/math/cemu { };
+  cemu = qt5.callPackage ../applications/science/math/cemu {
+    stdenv = gcc9Stdenv;
+  };
 
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
@@ -20228,9 +20230,8 @@ with pkgs;
     go = buildPackages.go_1_16;
   };
   # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms,
-  # it also requires >=10.13 stdenv on darwin which
-  # is not currently available for x86_64-darwin
+  # across different go versions and/or platforms:
+  # https://github.com/NixOS/nixpkgs/issues/144667
   #
   # do not uncomment this without approval from the go CODEOWNERS
   #buildGo117Package = callPackage ../development/go-packages/generic {
@@ -20246,9 +20247,8 @@ with pkgs;
     go = buildPackages.go_1_16;
   };
   # go_1_17 has go module changes which may not be portable
-  # across different go versions and/or platforms,
-  # it also requires >=10.13 stdenv on darwin which
-  # is not currently available for x86_64-darwin
+  # across different go versions and/or platforms:
+  # https://github.com/NixOS/nixpkgs/issues/144667
   #
   # do not uncomment this without approval from the go CODEOWNERS
   #buildGo117Module = callPackage ../development/go-modules/generic {
@@ -25930,6 +25930,8 @@ with pkgs;
 
   dupd = callPackage ../tools/misc/dupd { };
 
+  jconvolver = callPackage ../applications/audio/jconvolver { };
+
   jdupes = callPackage ../tools/misc/jdupes { };
 
   jed = callPackage ../applications/editors/jed { };
@@ -30188,7 +30190,7 @@ with pkgs;
   openarena = callPackage ../games/openarena { };
 
   opendungeons = callPackage ../games/opendungeons {
-    ogre = ogre1_9;
+    ogre = ogre1_10;
   };
 
   openlierox = callPackage ../games/openlierox { };

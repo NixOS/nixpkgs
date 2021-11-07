@@ -4,8 +4,8 @@ buildDhallGitHubPackage {
   name = "grafana";
   owner = "weeezes";
   repo = "dhall-grafana";
-  # 2021-11-05
-  rev = "bf2f8c8ab44682c8cef4fdce2d2f7fbeb0cfe162";
-  sha256 = "0h1l39kj49yvadpbw6jw3mc7qzsmhxlqqpx3cgnr9f063nh73f96";
+  # 2021-11-06
+  rev = "9ee0bb643f01db6d9935cf7df1914c32a92730b4";
+  sha256 = "0a123r5a33p8kaqs68rx2ycjr72xvxcpcmvpqxgb2jb05mnjj540";
   dependencies = [ dhallPackages.Prelude ];
 }

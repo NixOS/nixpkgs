@@ -441,6 +441,14 @@
           <literal>code-server</literal>-module now available
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xmrig/xmrig">xmrig</link>,
+          a high performance, open source, cross platform RandomX,
+          KawPow, CryptoNight and AstroBWT unified CPU/GPU miner and
+          RandomX benchmark.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
