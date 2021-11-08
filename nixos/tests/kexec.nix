@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
   testScript =
     ''
       machine.wait_for_unit("multi-user.target")
-      machine.execute("systemctl kexec &")
+      machine.execute("systemctl kexec >&2 &", check_return=False)
       machine.connected = False
       machine.wait_for_unit("multi-user.target")
     '';

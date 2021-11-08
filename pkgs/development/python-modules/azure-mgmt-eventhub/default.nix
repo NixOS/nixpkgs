@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-eventhub";
-  version = "9.1.0";
+  version = "10.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0ba9f10e1e8d03247a316e777d6f27fabf268d596dda2af56ac079fcdf5e7afe";
+    sha256 = "0856574ef4b73bbbc62834051061e2081400aba7e3715e10ef5181d639e86a0b";
   };
 
   propagatedBuildInputs = [

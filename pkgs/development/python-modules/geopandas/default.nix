@@ -1,31 +1,18 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pandas, shapely, fiona, pyproj
 , pytestCheckHook, Rtree }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.9.0";
+  version = "0.10.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     rev = "v${version}";
-    sha256 = "sha256-58X562OkRzZ4UTNMTwXW4U5czoa5tbSMBCcE90DqbaE=";
+    sha256 = "14azl3gppqn90k8h4hpjilsivj92k6p1jh7mdr6p4grbww1b7sdq";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "skip-pandas-master-fillna-test.patch";
-      url = "https://github.com/geopandas/geopandas/pull/1878.patch";
-      sha256 = "1yw3i4dbhaq7f02n329b9y2cqxbwlz9db81mhgrfc7af3whwysdb";
-    })
-    (fetchpatch {
-      name = "fix-proj4strings-test.patch";
-      url = "https://github.com/geopandas/geopandas/pull/1958.patch";
-      sha256 = "0kzmpq5ry87yvhqr6gnh9p2606b06d3ynzjvw0hpp9fncczpc2yn";
-    })
-  ];
 
   propagatedBuildInputs = [
     pandas
@@ -35,6 +22,10 @@ buildPythonPackage rec {
   ];
 
   doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    # Wants to write test files into $HOME.
+    export HOME="$TMPDIR"
+  '';
   checkInputs = [ pytestCheckHook Rtree ];
   disabledTests = [
     # requires network access

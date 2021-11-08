@@ -13,7 +13,6 @@
 , sqlite
 , curl
 , libuchardet
-, fmt
 , spdlog
 }:
 
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     sqlite
     curl
     libuchardet
-    fmt
     spdlog
   ];
 

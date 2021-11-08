@@ -34,7 +34,6 @@ mkDerivation rec {
 
     mkdir -p $out/Applications
     cp -r tensor.app $out/Applications/tensor.app
-    wrapQtApp $out/Applications/tensor.app/Contents/MacOS/tensor
 
     runHook postInstall
   '' else ''

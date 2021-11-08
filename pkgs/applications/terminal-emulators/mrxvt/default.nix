@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchurl, libX11, libXft, libXi, xorgproto, libSM, libICE
-, freetype, pkg-config, which }:
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, libXft
+, libXi
+, xorgproto
+, libSM
+, libICE
+, freetype
+, pkg-config
+, which
+}:
 
-stdenv.mkDerivation {
-  name = "mrxvt-0.5.4";
+stdenv.mkDerivation rec {
+  pname = "mrxvt";
+  version = "0.5.4";
 
   buildInputs =
     [ libX11 libXft libXi xorgproto libSM libICE freetype pkg-config which ];
@@ -23,7 +35,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "mirror://sourceforge/materm/mrxvt-0.5.4.tar.gz";
+    url = "mirror://sourceforge/materm/mrxvt-${version}.tar.gz";
     sha256 = "1mqhmnlz32lvld9rc6c1hyz7gjw4anwf39yhbsjkikcgj1das0zl";
   };
 

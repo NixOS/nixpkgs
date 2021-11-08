@@ -5,7 +5,7 @@
 }:
 
 let
-  data = (builtins.fromJSON (builtins.readFile ./data.json));
+  data = lib.importJSON ./data.json;
 
   version = data.version;
   src = fetchFromGitLab {

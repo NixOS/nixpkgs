@@ -392,7 +392,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.succeed("touch /testpath")
         machine.wait_until_succeeds("test -f /testpath-modified")
 
-        machine.succeed("rm /testpath /testpath-modified")
+        machine.succeed("rm /testpath")
+        machine.succeed("rm /testpath-modified")
         switch_to_specialisation("with-path-modified")
 
         machine.succeed("touch /testpath")

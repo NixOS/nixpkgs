@@ -95,7 +95,7 @@ in makeTest {
           "mkswap /dev/vda1 -L swap",
           # Install onto /mnt
           "nix-store --load-db < ${pkgs.closureInfo {rootPaths = [installedSystem];}}/registration",
-          "nixos-install --root /mnt --system ${installedSystem} --no-root-passwd",
+          "nixos-install --root /mnt --system ${installedSystem} --no-root-passwd --no-channel-copy >&2",
       )
       machine.shutdown()
 
@@ -110,7 +110,7 @@ in makeTest {
       )
 
       # Hibernate machine
-      hibernate.succeed("systemctl hibernate &")
+      hibernate.execute("systemctl hibernate >&2 &", check_return=False)
       hibernate.wait_for_shutdown()
 
       # Restore machine from hibernation, validate our ramfs file is there.

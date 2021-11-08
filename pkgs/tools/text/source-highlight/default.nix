@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "source-highlight";
   version = "3.1.9";
 
+  outputs = [ "out" "doc" "dev" ];
+
   src = fetchurl {
     url = "mirror://gnu/src-highlite/${pname}-${version}.tar.gz";
     sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
@@ -28,7 +30,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ boost ];
 
-  configureFlags = [ "--with-boost=${boost.out}" ];
+  configureFlags = [
+    "--with-boost=${boost.out}"
+    "--with-bash-completion=${placeholder "out"}/share/bash_completion.d"
+  ];
 
   doCheck = !stdenv.cc.isClang;
 
@@ -36,8 +41,6 @@ stdenv.mkDerivation rec {
   # Upstream uses the same intermediate files in multiple tests, running
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
-
-  outputs = [ "out" "doc" "dev" ];
 
   meta = with lib; {
     description = "Source code renderer with syntax highlighting";

@@ -1,7 +1,8 @@
 { lib, stdenv, pkg-config, gtk2, keybinder, fetchFromGitLab }:
 
 stdenv.mkDerivation {
-  name = "fehlstart-9f4342d7";
+  pname = "fehlstart";
+  version = "unstable-2016-05-23";
 
   src = fetchFromGitLab {
     owner = "fehlstart";

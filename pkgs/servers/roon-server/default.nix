@@ -5,14 +5,16 @@
 , fetchurl
 , ffmpeg
 , freetype
+, icu66
+, krb5
 , lib
 , makeWrapper
 , stdenv
-, zlib
+, openssl
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-831";
+  version = "1.8-846";
 
   src =
     let
@@ -20,47 +22,67 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-SeMSC7K6DV7rVr1w/SqMnLvipoWbypS/gJnSZmpfXZk=";
+      sha256 = "sha256-BoHvODaAcK5b4/syOm3vpOTpq9ETovpWKUqG+UGr2e0=";
     };
 
   buildInputs = [
     alsa-lib
-    alsa-utils
-    cifs-utils
-    ffmpeg
     freetype
-    zlib
+    krb5
+    stdenv.cc.cc.lib
   ];
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    mv * $out
-    runHook postInstall
-  '';
+  propagatedBuildInputs = [ alsa-utils cifs-utils ffmpeg ];
 
-  postFixup =
+  installPhase =
     let
-      linkFix = bin: ''
-        sed -i '/ulimit/d' ${bin}
-        sed -i '/ln -sf/d' ${bin}
-        ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
-      '';
-      wrapFix = bin: ''
-        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}
+      # NB: While this might seem like odd behavior, it's what Roon expects. The
+      # tarball distribution provides scripts that do a bunch of nonsense on top
+      # of what wrapBin is doing here, so consider it the lesser of two evils.
+      # I didn't bother checking whether the symlinks are really necessary, but
+      # I wouldn't put it past Roon to have custom code based on the binary
+      # name, so we're playing it safe.
+      wrapBin = binPath: ''
+        (
+          binDir="$(dirname "${binPath}")"
+          binName="$(basename "${binPath}")"
+          dotnetDir="$out/RoonDotnet"
+
+          ln -sf "$dotnetDir/dotnet" "$dotnetDir/$binName"
+          rm "${binPath}"
+          makeWrapper "$dotnetDir/$binName" "${binPath}" \
+            --add-flags "$binDir/$binName.dll" \
+            --argv0 "$binName" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ icu66 openssl ]}" \
+            --prefix PATH : "$dotnetDir" \
+            --run "cd $binDir" \
+            --set DOTNET_ROOT "$dotnetDir"
+        )
       '';
     in
     ''
-      ${linkFix "$out/Appliance/RAATServer"}
-      ${linkFix "$out/Appliance/RoonAppliance"}
-      ${linkFix "$out/Server/RoonServer"}
+      runHook preInstall
+      mkdir -p $out
+      mv * $out
 
-      sed -i '/which avconv/c\    WHICH_AVCONV=1' $out/check.sh
-      sed -i '/^check_ulimit/d' $out/check.sh
-      ${wrapFix "$out/check.sh"}
-      ${wrapFix "$out/start.sh"}
+      rm $out/check.sh
+      rm $out/start.sh
+      rm $out/VERSION
+
+      ${wrapBin "$out/Appliance/RAATServer"}
+      ${wrapBin "$out/Appliance/RoonAppliance"}
+      ${wrapBin "$out/Server/RoonServer"}
+
+      mkdir -p $out/bin
+      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --run "cd $out"
+
+      # This is unused and depends on an ancient version of lttng-ust, so we
+      # just patch it out
+      patchelf --remove-needed liblttng-ust.so.0 $out/RoonDotnet/shared/Microsoft.NETCore.App/5.0.0/libcoreclrtraceptprovider.so
+
+      runHook postInstall
     '';
 
   meta = with lib; {

@@ -128,7 +128,6 @@ in
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
-  firefox-esr-78 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-78; };
   firefox-esr-91 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-91; };
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
@@ -173,6 +172,7 @@ in
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   oci-containers = handleTestOn ["x86_64-linux"] ./oci-containers.nix {};
+  odoo = handleTest ./odoo.nix {};
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -236,7 +236,9 @@ in
   login = handleTest ./login.nix {};
   loki = handleTest ./loki.nix {};
   lxd = handleTest ./lxd.nix {};
+  lxd-image = handleTest ./lxd-image.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
+  lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
@@ -351,6 +353,7 @@ in
   php80 = handleTest ./php { php = pkgs.php80; };
   pinnwand = handleTest ./pinnwand.nix {};
   plasma5 = handleTest ./plasma5.nix {};
+  plasma5-systemd-start = handleTest ./plasma5-systemd-start.nix {};
   plausible = handleTest ./plausible.nix {};
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix {};
   plikd = handleTest ./plikd.nix {};
@@ -418,7 +421,6 @@ in
   sonarr = handleTest ./sonarr.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spark = handleTestOn ["x86_64-linux"] ./spark {};
-  spike = handleTest ./spike.nix {};
   sslh = handleTest ./sslh.nix {};
   sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
@@ -435,6 +437,7 @@ in
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};

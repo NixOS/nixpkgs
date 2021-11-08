@@ -282,10 +282,10 @@
       elpaBuild {
         pname = "flymake-kondor";
         ename = "flymake-kondor";
-        version = "0.1.2";
+        version = "0.1.3";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/flymake-kondor-0.1.2.tar";
-          sha256 = "17mmn9mj4zl5f7byairkgxz6s2mrq73q3219s73c0b2g0g846krn";
+          url = "https://elpa.nongnu.org/nongnu/flymake-kondor-0.1.3.tar";
+          sha256 = "07k8b3wayp1h4hir98zs5srjjsnh6w0h9pzn4vnq9s2jr355509n";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -387,10 +387,10 @@
       elpaBuild {
         pname = "geiser-guile";
         ename = "geiser-guile";
-        version = "0.17";
+        version = "0.18";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/geiser-guile-0.17.tar";
-          sha256 = "0g4982rfxjp08qi6nxz73lsbdwf388fx511394yw4s7ml6v1m4kd";
+          url = "https://elpa.nongnu.org/nongnu/geiser-guile-0.18.tar";
+          sha256 = "1jnqra7gysscn0gb1ap56rbjlrnhsmma7q4yfiy3zxsz8m69xhqf";
         };
         packageRequires = [ emacs geiser ];
         meta = {
@@ -975,10 +975,10 @@
       elpaBuild {
         pname = "rust-mode";
         ename = "rust-mode";
-        version = "1.0.0";
+        version = "1.0.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.0.tar";
-          sha256 = "0ch3hf954iy5hh5zyjjg68szdk5icppmi8nbap27wfwgvhvyfa67";
+          url = "https://elpa.nongnu.org/nongnu/rust-mode-1.0.1.tar";
+          sha256 = "1rybjnaycvjgqp8g8lkjzgvnwd4565cbx88qlnxfrlqd5161r1k3";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1099,10 +1099,10 @@
       elpaBuild {
         pname = "swift-mode";
         ename = "swift-mode";
-        version = "8.4.1";
+        version = "8.4.2";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/swift-mode-8.4.1.tar";
-          sha256 = "0f87bjgva0iv818bh2dqvc1svrwh5zm134jpxcmvmzr1yqazx4qp";
+          url = "https://elpa.nongnu.org/nongnu/swift-mode-8.4.2.tar";
+          sha256 = "0rkri1414f2w2bw76dwnmylcdca6x9bkdvlq1aznz76ac259klji";
         };
         packageRequires = [ emacs seq ];
         meta = {

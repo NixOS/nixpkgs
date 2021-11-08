@@ -266,7 +266,23 @@ start_all()
       <listitem>
         <para>
           Execute a shell command, returning a list
-          <literal>(status, stdout)</literal>.
+          <literal>(status, stdout)</literal>. If the command detaches,
+          it must close stdout, as <literal>execute</literal> will wait
+          for this to consume all output reliably. This can be achieved
+          by redirecting stdout to stderr <literal>&gt;&amp;2</literal>,
+          to <literal>/dev/console</literal>,
+          <literal>/dev/null</literal> or a file. Examples of detaching
+          commands are <literal>sleep 365d &amp;</literal>, where the
+          shell forks a new process that can write to stdout and
+          <literal>xclip -i</literal>, where the
+          <literal>xclip</literal> command itself forks without closing
+          stdout. Takes an optional parameter
+          <literal>check_return</literal> that defaults to
+          <literal>True</literal>. Setting this parameter to
+          <literal>False</literal> will not check for the return code
+          and return -1 instead. This can be used for commands that shut
+          down the VM and would therefore break the pipe that would be
+          used for retrieving the return code.
         </para>
       </listitem>
     </varlistentry>
@@ -298,6 +314,12 @@ start_all()
           <listitem>
             <para>
               Dereferencing unset variables fail the command.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              It will wait for stdout to be closed. See
+              <literal>execute</literal> for the implications.
             </para>
           </listitem>
         </itemizedlist>

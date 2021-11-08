@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.10.6";
+  version = "2021.11.0";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -243,7 +243,6 @@
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [ construct ]; # missing inputs: python-eq3bt
     "esphome" = ps: with ps; [ aioesphomeapi aiohttp-cors ifaddr zeroconf ];
-    "essent" = ps: with ps; [ ]; # missing inputs: PyEssent
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
     "everlights" = ps: with ps; [ pyeverlights ];
@@ -379,7 +378,6 @@
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "huawei_lte" = ps: with ps; [ huawei-lte-api stringcase url-normalize ];
-    "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
     "huisbaasje" = ps: with ps; [ huisbaasje-client ];
     "humidifier" = ps: with ps; [ ];
@@ -477,6 +475,7 @@
     "logi_circle" = ps: with ps; [ aiohttp-cors ha-ffmpeg ]; # missing inputs: logi_circle
     "london_air" = ps: with ps; [ ];
     "london_underground" = ps: with ps; [ ]; # missing inputs: london-tube-status
+    "lookin" = ps: with ps; [ aiolookin ];
     "loopenergy" = ps: with ps; [ ]; # missing inputs: pyloopenergy
     "lovelace" = ps: with ps; [ ];
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
@@ -485,7 +484,6 @@
     "lutron" = ps: with ps; [ pylutron ];
     "lutron_caseta" = ps: with ps; [ aiolip pylutron-caseta ];
     "lw12wifi" = ps: with ps; [ ]; # missing inputs: lw12
-    "lyft" = ps: with ps; [ ]; # missing inputs: lyft_rides
     "lyric" = ps: with ps; [ aiohttp-cors aiolyric ];
     "magicseaweed" = ps: with ps; [ ]; # missing inputs: magicseaweed
     "mailbox" = ps: with ps; [ aiohttp-cors ];
@@ -535,7 +533,7 @@
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
     "moon" = ps: with ps; [ ];
-    "motion_blinds" = ps: with ps; [ ]; # missing inputs: motionblinds
+    "motion_blinds" = ps: with ps; [ aiohttp-cors ifaddr ]; # missing inputs: motionblinds
     "motioneye" = ps: with ps; [ aiohttp-cors motioneye-client ];
     "mpchc" = ps: with ps; [ ];
     "mpd" = ps: with ps; [ mpd2 ];
@@ -561,7 +559,6 @@
     "nanoleaf" = ps: with ps; [ aionanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
-    "nello" = ps: with ps; [ pynello ];
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
@@ -599,7 +596,7 @@
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
     "obihai" = ps: with ps; [ pyobihai ];
-    "octoprint" = ps: with ps; [ aiohttp-cors ifaddr netdisco zeroconf ];
+    "octoprint" = ps: with ps; [ ]; # missing inputs: pyoctoprintapi
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ pyombi ];
@@ -826,7 +823,7 @@
     "steam_online" = ps: with ps; [ ]; # missing inputs: steamodd
     "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
-    "stream" = ps: with ps; [ aiohttp-cors av ];
+    "stream" = ps: with ps; [ aiohttp-cors ha-av ];
     "streamlabswater" = ps: with ps; [ streamlabswater ];
     "stt" = ps: with ps; [ aiohttp-cors ];
     "subaru" = ps: with ps; [ subarulink ];
@@ -904,7 +901,7 @@
     "travisci" = ps: with ps; [ ]; # missing inputs: TravisPy
     "trend" = ps: with ps; [ numpy ];
     "tts" = ps: with ps; [ aiohttp-cors mutagen ];
-    "tuya" = ps: with ps; [ tuya-iot-py-sdk ];
+    "tuya" = ps: with ps; [ ha-ffmpeg tuya-iot-py-sdk ];
     "twentemilieu" = ps: with ps; [ twentemilieu ];
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
@@ -948,7 +945,7 @@
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
-    "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
+    "vlc_telnet" = ps: with ps; [ ]; # missing inputs: aiovlc
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];
@@ -973,7 +970,6 @@
     "whois" = ps: with ps; [ python-whois ];
     "wiffi" = ps: with ps; [ wiffi ];
     "wilight" = ps: with ps; [ pywilight ];
-    "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler python-wink ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
     "wled" = ps: with ps; [ wled ];

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash
 , xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick
-, libuchardet, spdlog, xercesc, fmt, openssl, libssh, samba, neon, libnfs, libarchive }:
+, libuchardet, spdlog, xercesc, openssl, libssh, samba, neon, libnfs, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "far2l";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc fmt ] # base requirements of the build
+  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc ] # base requirements of the build
     ++ [ openssl libssh samba neon libnfs libarchive ]; # optional feature packages, like protocol support for Network panel, or archive formats
     #++ lib.optional stdenv.isDarwin Cocoa # Mac support -- disabled, see "meta.broken" below
 

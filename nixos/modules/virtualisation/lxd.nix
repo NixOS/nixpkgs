@@ -34,7 +34,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.lxd.override { nftablesSupport = config.networking.nftables.enable; };
+        default = pkgs.lxd;
         defaultText = literalExpression "pkgs.lxd";
         description = ''
           The LXD package to use.

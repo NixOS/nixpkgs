@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
+, fetchpatch
 , setuptools-scm
 , substituteAll
 , cmake
@@ -39,6 +40,12 @@ buildPythonPackage rec {
         sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
         fetchSubmodules = true;
       };
+    })
+
+    # avoid dynamic linking error at import time
+    (fetchpatch {
+      url = "https://github.com/Chia-Network/bls-signatures/pull/287/commits/797241e9dae1c164c862cbdb38c865d4b124a601.patch";
+      sha256 = "sha256-tlc4aA75gUxt5OaSNZqIlO//PXjmddVgVLYuVEFNmkE=";
     })
   ];
 

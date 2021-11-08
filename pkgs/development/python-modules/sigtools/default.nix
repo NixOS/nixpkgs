@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "sigtools";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b890f22ece64bc47d3d4e84c950581e83917794a6cf1548698145590e221aff";
+    sha256 = "e7789628ec0d02e421bca76532b0d5da149f96f09e7ed4a5cbf318624b75e949";
   };
 
   buildInputs = [ repeated_test sphinx mock coverage unittest2 ];

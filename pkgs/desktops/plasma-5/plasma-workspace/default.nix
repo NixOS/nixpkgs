@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchpatch,
+  mkDerivation, lib,
 
   extra-cmake-modules, kdoctools,
 
@@ -52,12 +52,7 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
-    # Included in 5.23.2
-    (fetchpatch {
-      name = "ignore-placeholder-screens";
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/1125.patch";
-      sha256 = "sha256-lvcAxb301lQbfEKPcxMlfap9g7TjHOk50ZYX91RC7gY=";
-    })
+    ./0003-startkde-unit-detection.patch
   ];
 
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools

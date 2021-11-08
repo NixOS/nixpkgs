@@ -136,6 +136,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   libqtav = callPackage ../development/libraries/libqtav { };
 
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
   kpmcore = callPackage ../development/libraries/kpmcore { };
 
   mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };

@@ -1,31 +1,49 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
-, certvalidator, pyasn1, pyasn1-modules
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, asn1crypto
+, certvalidator
+, oscrypto
+, pyasn1
+, pyasn1-modules
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.3.0";
-  disabled = pythonOlder "3.5";
+  version = "0.4.0";
+  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JxQECpwHhPm8TCVW/bCnEpu5I/WETyZVBx29SQE4NmE=";
+    sha256 = "sha256-YJc9RIqkEL7dd1ahE4IbxyyZgsZWBDqbXZAvI/nK24M=";
   };
-  patches = [
-    # Upstream patch is available here:
-    #  https://github.com/ralphje/signify/commit/8c345be954e898a317825bb450bed5ba0304b2b5.patch
-    # But update a couple other things and dont apply cleanly. This is an extract of the part
-    # we care about and breaks the tests after 2021-03-01
-    ./certificate-expiration-date.patch
+
+  propagatedBuildInputs = [
+    asn1crypto
+    certvalidator
+    oscrypto
+    pyasn1
+    pyasn1-modules
   ];
 
-  propagatedBuildInputs = [ certvalidator pyasn1 pyasn1-modules ];
+  pythonImportsCheck = [
+    "signify"
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "-v" ];
-  pythonImportsCheck = [ "signify" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # chain doesn't validate because end-entitys certificate expired
+    # https://github.com/ralphje/signify/issues/27
+    "test_revoked_certificate"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ralphje/signify";

@@ -33,7 +33,7 @@ let
     fi
   '';
 
-  streamingConfig = builtins.fromJSON (builtins.readFile ./streaming.json);
+  streamingConfig = lib.importJSON ./streaming.json;
   logConfig = {
     appenders.stdout.type = "stdout";
     categories = {

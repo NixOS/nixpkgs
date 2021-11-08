@@ -112,6 +112,11 @@ let
         url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
         sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
       })
+      (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/363880/3 is included in an release.
+        name = "qtbase-mysql-version-vs-functionality-check.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=211369133cf40b2f522caaff259c19069ed23ca4";
+        sha256 = "19kq9h10qm344fpdqa9basrbzh1y5kr48c6jzz3nvk61pk4ja1k4";
+      })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];

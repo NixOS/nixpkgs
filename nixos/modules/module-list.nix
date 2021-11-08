@@ -49,6 +49,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/gkraken.nix
+  ./hardware/flirc.nix
   ./hardware/i2c.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
@@ -390,6 +391,7 @@
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
+  ./services/finance/odoo.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
@@ -770,6 +772,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
+  ./services/networking/lxd-image-server.nix
   ./services/networking/mailpile.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
@@ -971,6 +974,7 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dex.nix
@@ -1185,6 +1189,7 @@
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
+  ./virtualisation/waydroid.nix
   ./virtualisation/xen-dom0.nix
   ./virtualisation/xe-guest-utilities.nix
 ]

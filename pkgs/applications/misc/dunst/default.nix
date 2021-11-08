@@ -1,28 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, fetchpatch
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , pkg-config, which, perl, libXrandr
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
+, testVersion, dunst
 }:
 
 stdenv.mkDerivation rec {
   pname = "dunst";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "sha256-BWbvGetXXCXbfPRY+u6gEfzBmX8PLSnI6a5vfCByiC0=";
+    sha256 = "0v15fhwzcg7zfn092sry0f4qb6dccz9bb312y9dadg745wf3n9qw";
   };
-
-  patches = [
-    (fetchpatch {
-      # fixes double free (https://github.com/dunst-project/dunst/issues/957)
-      url = "https://github.com/dunst-project/dunst/commit/dc8efbbaff0e9ba881fa187a01bfe5c033fbdcf9.patch";
-      sha256 = "sha256-xuODOFDP9Eqr3g8OtNnaMmTihhurfj2NLeZPr0TF4vY=";
-    })
-  ];
 
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
 
@@ -46,6 +39,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
+
+  passthru.tests.version = testVersion { package = dunst; };
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";

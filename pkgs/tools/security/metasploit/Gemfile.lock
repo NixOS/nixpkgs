@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: bde342fd8293e49a45ba837ca9a1fdea505bc919
-  ref: refs/tags/6.1.12
+  revision: 643afb56f7f86a858e3da144fd367575a2f0b2c6
+  ref: refs/tags/6.1.13
   specs:
-    metasploit-framework (6.1.12)
+    metasploit-framework (6.1.13)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,7 +31,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.58)
+      metasploit-payloads (= 2.0.60)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.15)
       mqtt
@@ -128,23 +128,23 @@ GEM
     arel-helpers (2.12.1)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.2.0)
-    aws-partitions (1.521.0)
-    aws-sdk-core (3.121.5)
+    aws-partitions (1.525.0)
+    aws-sdk-core (3.122.0)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.520.1)
+      aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.275.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-ec2 (1.277.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.62.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-iam (1.63.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.50.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-kms (1.51.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.104.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-s3 (1.105.1)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -212,7 +212,7 @@ GEM
       domain_name (~> 0.5)
     http_parser.rb (0.8.0)
     httpclient (2.8.3)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     io-console (0.5.9)
     irb (1.3.6)
@@ -247,7 +247,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.58)
+    metasploit-payloads (2.0.60)
     metasploit_data_models (5.0.4)
       activerecord (~> 6.0)
       activesupport (~> 6.0)

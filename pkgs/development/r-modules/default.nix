@@ -278,7 +278,7 @@ let
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
-    BayesXsrc = with pkgs; [ readline.dev ncurses ];
+    BayesXsrc = with pkgs; [ readline.dev ncurses gsl ];
     bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
@@ -309,6 +309,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    HDF5Array = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl ];
@@ -337,7 +338,6 @@ let
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
-    proj4 = [ pkgs.proj ];
     protolite = [ pkgs.protobuf ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
@@ -422,6 +422,38 @@ let
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
     hdf5r = [ pkgs.hdf5.dev ];
+    httpgd = with pkgs; [ cairo.dev ];
+    SymTS = [ pkgs.gsl ];
+    VBLPCM = [ pkgs.gsl ];
+    dynr = [ pkgs.gsl ];
+    mixlink = [ pkgs.gsl ];
+    ridge = [ pkgs.gsl ];
+    smam = [ pkgs.gsl ];
+    rnetcarto = [ pkgs.gsl ];
+    rGEDI = [ pkgs.gsl ];
+    mmpca = [ pkgs.gsl ];
+    monoreg = [ pkgs.gsl ];
+    mvst = [ pkgs.gsl ];
+    mixture = [ pkgs.gsl ];
+    jSDM = [ pkgs.gsl ];
+    immunoClust = [ pkgs.gsl ];
+    hSDM = [ pkgs.gsl ];
+    flowPeaks = [ pkgs.gsl ];
+    fRLR = [ pkgs.gsl ];
+    eaf = [ pkgs.gsl ];
+    diseq = [ pkgs.gsl ];
+    cit = [ pkgs.gsl ];
+    abn = [ pkgs.gsl ];
+    SimInf = [ pkgs.gsl ];
+    RJMCMCNucleosomes = [ pkgs.gsl ];
+    RDieHarder = [ pkgs.gsl ];
+    QF = [ pkgs.gsl ];
+    PICS = [ pkgs.gsl ];
+    RcppCWB = [ pkgs.pkg-config ];
+    rrd = [ pkgs.pkg-config ];
+    trackViewer = [ pkgs.zlib.dev ];
+    themetagenomics = [ pkgs.zlib.dev ];
+    NanoMethViz = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -515,6 +547,60 @@ let
     DirichletMultinomial = with pkgs; [ gsl ];
     DiffBind = with pkgs; [ zlib.dev ];
     CNEr = with pkgs; [ zlib ];
+    GMMAT = with pkgs; [ zlib.dev bzip2.dev ];
+    HiCDCPlus = [ pkgs.zlib.dev ];
+    PopGenome = [ pkgs.zlib.dev ];
+    QuasR = [ pkgs.zlib.dev ];
+    Rbowtie2 = [ pkgs.zlib.dev ];
+    Rmmquant = [ pkgs.zlib.dev ];
+    SICtools = with pkgs; [ zlib.dev ncurses.dev ];
+    Signac = [ pkgs.zlib.dev ];
+    TransView = [ pkgs.zlib.dev ];
+    bigsnpr = [ pkgs.zlib.dev ];
+    divest = [ pkgs.zlib.dev ];
+    hipread = [ pkgs.zlib.dev ];
+    jackalope = with pkgs; [ zlib.dev xz.dev ];
+    largeList = [ pkgs.zlib.dev ];
+    mappoly = [ pkgs.zlib.dev ];
+    matchingMarkets = [ pkgs.zlib.dev ];
+    methylKit = [ pkgs.zlib.dev ];
+    ndjson = [ pkgs.zlib.dev ];
+    podkat = [ pkgs.zlib.dev ];
+    qrqc = [ pkgs.zlib.dev ];
+    rJPSGCS = [ pkgs.zlib.dev ];
+    rhdf5filters = [ pkgs.zlib.dev ];
+    rtk = [ pkgs.zlib.dev ];
+    scPipe = [ pkgs.zlib.dev ];
+    seqTools = [ pkgs.zlib.dev ];
+    seqbias = [ pkgs.zlib.dev ];
+    sparkwarc = [ pkgs.zlib.dev ];
+    RoBMA = [ pkgs.jags ];
+    rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
+    rawrr = [ pkgs.mono ];
+    HDF5Array = [ pkgs.zlib.dev ];
+    FLAMES = [ pkgs.zlib.dev ];
+    ncdfFlow = [ pkgs.zlib.dev ];
+    proj4 = [ pkgs.proj.dev ];
+    rtmpt = [ pkgs.gsl ];
+    mixcat = [ pkgs.gsl ];
+    libstableR = [ pkgs.gsl ];
+    landsepi = [ pkgs.gsl ];
+    flan = [ pkgs.gsl ];
+    econetwork = [ pkgs.gsl ];
+    crandep = [ pkgs.gsl ];
+    catSurv = [ pkgs.gsl ];
+    ccfindR = [ pkgs.gsl ];
+    SPARSEMODr = [ pkgs.gsl ];
+    RKHSMetaMod = [ pkgs.gsl ];
+    LCMCR = [ pkgs.gsl ];
+    BNSP = [ pkgs.gsl ];
+    scModels = [ pkgs.mpfr.dev ];
+    multibridge = [ pkgs.mpfr.dev ];
+    RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    RmecabKo = [ pkgs.mecab ];
+    PoissonBinomial = [ pkgs.fftw.dev ];
+    rrd = [ pkgs.rrdtool ];
+    flowWorkspace = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
@@ -726,6 +812,31 @@ let
     "stepR"
     "styler"
     "TreeTools"
+    "ACNE"
+    "APAlyzer"
+    "EstMix"
+    "PECA"
+    "Quartet"
+    "ShinyQuickStarter"
+    "TIN"
+    "TotalCopheneticIndex"
+    "TreeDist"
+    "biocthis"
+    "calmate"
+    "fgga"
+    "fulltext"
+    "immuneSIM"
+    "mastif"
+    "shinymeta"
+    "shinyobjects"
+    "wppi"
+    "pins"
+    "CoTiMA"
+    "TBRDist"
+    "Rogue"
+    "fixest"
+    "paxtoolsr"
+    "systemPipeShiny"
   ];
 
   packagesToSkipCheck = [
@@ -739,8 +850,38 @@ let
     "av"
     "rgl"
     "NetLogoR"
-    "proj4"
     "x13binary"
+    "valse"
+    "HierO"
+
+    # Impure network access during build
+    "waddR"
+    "tiledb"
+    "x13binary"
+    "switchr"
+
+    # ExperimentHub dependents, require net access during build
+    "DuoClustering2018"
+    "FieldEffectCrc"
+    "GenomicDistributionsData"
+    "HDCytoData"
+    "HMP16SData"
+    "PANTHER_db"
+    "RNAmodR_Data"
+    "SCATEData"
+    "SingleMoleculeFootprintingData"
+    "TabulaMurisData"
+    "benchmarkfdrData2019"
+    "bodymapRat"
+    "clustifyrdatahub"
+    "depmap"
+    "emtdata"
+    "metaboliteIDmapping"
+    "msigdb"
+    "muscData"
+    "org_Mxanthus_db"
+    "scpdata"
+    "nullrangesData"
   ];
 
   otherOverrides = old: new: {
@@ -801,10 +942,6 @@ let
 
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
-    });
-
-    BayesXsrc = old.BayesXsrc.overrideDerivation (attrs: {
-      patches = [ ./patches/BayesXsrc.patch ];
     });
 
     Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
@@ -1074,6 +1211,31 @@ let
         substituteInPlace R/connection.R --replace \
           'dest_file <- file.path(dest_folder, "h2o.jar")' \
           'dest_file <- file.path("~/.cache/", "h2o.jar")'
+      '';
+    });
+
+    SICtools = old.SICtools.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
+      '';
+    });
+
+    arrow = old.arrow.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    proj4 = old.proj4.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
+      '';
+    });
+
+    rrd = old.rrd.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
       '';
     });
   };

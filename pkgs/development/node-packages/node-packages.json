@@ -79,6 +79,7 @@
 , "code-theme-converter"
 , "coffee-script"
 , "coinmon"
+, "concurrently"
 , "configurable-http-proxy"
 , "conventional-changelog-cli"
 , "cordova"
@@ -86,6 +87,7 @@
 , "create-cycle-app"
 , "create-react-app"
 , "create-react-native-app"
+, "cspell"
 , "csslint"
 , "dat"
 , "degit"
@@ -120,6 +122,7 @@
 , "git-run"
 , "git-ssb"
 , "git-standup"
+, "@gitbeaker/cli"
 , "gitmoji-cli"
 , "glob"
 , "graphql-cli"
@@ -144,6 +147,7 @@
 , "imapnotify"
 , "indium"
 , "insect"
+, "intelephense"
 , "ionic"
 , {"iosevka": "https://github.com/be5invis/Iosevka/archive/v10.3.1.tar.gz"}
 , "jake"
@@ -175,7 +179,9 @@
 , {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "lua-fmt"
 , "madoko"
+, "manta"
 , "markdownlint-cli"
+, "markdownlint-cli2"
 , "markdown-link-check"
 , {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
 , "mastodon-bot"
@@ -232,6 +238,7 @@
 , "rimraf"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
+, "rtlcss"
 , "s3http"
 , "sass"
 , "semver"

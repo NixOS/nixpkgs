@@ -17,6 +17,12 @@
     <itemizedlist>
       <listitem>
         <para>
+          <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
@@ -43,6 +49,29 @@
           <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
           guide</link> is available.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Improvements have been made to the Hadoop module and package:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              HDFS and YARN now support production-ready highly
+              available deployments with automatic failover.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Hadoop now defaults to Hadoop 3, updated from 2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              JournalNode, ZKFS and HTTPFS services have been added.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -93,6 +122,25 @@
           <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
           Notes</link> for details.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          LXD support was greatly improved:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              building LXD images from configurations is now directly
+              possible with just nixpkgs
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              hydra is now building nixOS LXD images that can be used
+              standalone with full nixos-rebuild support
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>
@@ -388,11 +436,42 @@
           <link linkend="opt-hardware.rasdaemon.enable">hardware.rasdaemon</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>code-server</literal>-module now available
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xmrig/xmrig">xmrig</link>,
+          a high performance, open source, cross platform RandomX,
+          KawPow, CryptoNight and AstroBWT unified CPU/GPU miner and
+          RandomX benchmark.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The NixOS VM test framework,
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
+          now requires detaching commands such as
+          <literal>succeed(&quot;foo &amp;&quot;)</literal> and
+          <literal>succeed(&quot;foo | xclip -i&quot;)</literal> to
+          close stdout. This can be done with a redirect such as
+          <literal>succeed(&quot;foo &gt;&amp;2 &amp;&quot;)</literal>.
+          This breaking change was necessitated by a race condition
+          causing tests to fail or hang. It applies to all methods that
+          invoke commands on the nodes, including
+          <literal>execute</literal>, <literal>succeed</literal>,
+          <literal>fail</literal>,
+          <literal>wait_until_succeeds</literal>,
+          <literal>wait_until_fails</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>services.wakeonlan</literal> option was removed,
@@ -408,6 +487,14 @@
           that before NixOS 21.11, specifying either setuid or setgid
           but not owner/group resulted in wrappers owned by
           nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Since <literal>iptables</literal> now uses
+          <literal>nf_tables</literal> backend and
+          <literal>ipset</literal> doesn’t support it, some applications
+          (ferm, shorewall, firehol) may have limited functionality.
         </para>
       </listitem>
       <listitem>
@@ -1201,6 +1288,13 @@ Superuser created successfully.
           <link xlink:href="options.html#opt-virtualisation.additionalPaths"><literal>virtualisation.additionalPaths</literal></link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>services.ddclient.password</literal> option was
+          removed, and replaced with
+          <literal>services.ddclient.passwordFile</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1504,6 +1598,23 @@ Superuser created successfully.
       <listitem>
         <para>
           The
+          <link xlink:href="options.html#opt-services.smokeping.host">services.smokeping.host</link>
+          option was added and defaulted to
+          <literal>localhost</literal>. Before,
+          <literal>smokeping</literal> listened to all interfaces by
+          default. NixOS defaults generally aim to provide
+          non-Internet-exposed defaults for databases and internal
+          monitoring tools, see e.g.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/100192">#100192</link>.
+          Further, the systemd service for <literal>smokeping</literal>
+          got reworked defaults for increased operational stability, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/144127">PR
+          #144127</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
           <link xlink:href="options.html#opt-services.syncoid.enable">services.syncoid.enable</link>
           module now properly drops ZFS permissions after usage. Before
           it delegated permissions to whole pools instead of datasets
@@ -1682,6 +1793,98 @@ Superuser created successfully.
           While existing accounts continue to work, users may want to
           remove and re-register their account in the client to enjoy a
           better user experience and benefit from this change.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new option
+          <literal>services.prometheus.enableReload</literal> has been
+          added which can be enabled to reload the prometheus service
+          when its config file changes instead of restarting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.prometheus.environmentFile</literal> has
+          been removed since it was causing
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/126083">issues</link>
+          and Prometheus now has native support for secret files, i.e.
+          <literal>basic_auth.password_file</literal> and
+          <literal>authorization.credentials_file</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Dokuwiki now supports caddy! However
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              the nginx option has been removed, in the new
+              configuration, please use the
+              <literal>dokuwiki.webserver = &quot;nginx&quot;</literal>
+              instead.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The <quote>${hostname}</quote> option has been deprecated,
+              please use
+              <literal>dokuwiki.sites = [ &quot;${hostname}&quot; ]</literal>
+              instead
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.unifi.enable">services.unifi</link>
+          module has been reworked, solving a number of issues. This
+          leads to several user facing changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The <literal>services.unifi.dataDir</literal> option is
+              removed and the data is now always located under
+              <literal>/var/lib/unifi/data</literal>. This is done to
+              make better use of systemd state direcotiry and thus
+              making the service restart more reliable.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi logs can now be found under:
+              <literal>/var/log/unifi</literal> instead of
+              <literal>/var/lib/unifi/logs</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi run directory can now be found under:
+              <literal>/run/unifi</literal> instead of
+              <literal>/var/lib/unifi/run</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.pam.services.&lt;name&gt;.makeHomeDir</literal>
+          now uses <literal>umask=0077</literal> instead of
+          <literal>umask=0022</literal> when creating the home
+          directory.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Loki has had another release. Some default values have been
+          changed for the configuration and some configuration options
+          have been renamed. For more details, please check
+          <link xlink:href="https://grafana.com/docs/loki/latest/upgrading/#240">the
+          upgrade guide</link>.
         </para>
       </listitem>
     </itemizedlist>

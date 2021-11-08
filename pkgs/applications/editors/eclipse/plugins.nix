@@ -639,4 +639,99 @@ rec {
     };
   };
 
+  ivyde = buildEclipsePlugin rec {
+    name = "ivyde-${version}";
+    version = "2.2.0.final-201311091524-RELEASE";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.feature_${version}.jar";
+      sha1 = "c8fb6c4aab32db13db0bd81c1a148032667fff31";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse_${version}.jar";
+      sha1 = "0c80c2e228a07f18efab1c56ea026448eda70c06";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "A plugin which integrates Apache Ivy's dependency management";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivyderv = buildEclipsePlugin rec {
+    name = "ivyderv-${version}";
+    version = "2.2.0.final-201311091524-RELEASE";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/features/org.apache.ivyde.eclipse.resolvevisualizer.feature_${version}.jar";
+      sha1 = "fb1941eaa2c0de54259de01b0da6d5a6b4a2cab1";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivyde-${version}/plugins/org.apache.ivyde.eclipse.resolvevisualizer_${version}.jar";
+      sha1 = "225e0c8ccb010d622c159560638578c2fc51a67e";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "A graph viewer of the resolved dependencies.";
+      longDescription = ''
+        Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
+        it requires additional plugins to be installed (Zest).
+      '';
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivy = buildEclipsePlugin rec {
+    name = "ivy-${version}";
+    version = "2.5.0.final_20191020104435";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
+      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
+      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/index.html";
+      description = "A popular dependency manager focusing on flexibility and simplicity";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
+
+  ivyant = buildEclipsePlugin rec {
+    name = "ivyant-${version}";
+    version = "2.5.0.final_20191020104435";
+
+    srcFeature = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/features/org.apache.ivy.eclipse.ant.feature_${version}.jar";
+      sha256 = "de6134171a0edf569bb9b4c3a91639d469f196e86804d218adfdd60a5d7fa133";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://downloads.apache.org/ant/ivyde/updatesite/ivy-${version}/plugins/org.apache.ivy.eclipse.ant_${version}.jar";
+      sha256 = "9e8ea20480cf73d0f0f3fb032d263c7536b24fd2eef71beb7d62af4e065f9ab5";
+    };
+
+    meta = with lib; {
+      homepage = "https://ant.apache.org/ivy/ivyde/index.html";
+      description = "Ant Tasks integrated into Eclipse's Ant runtime";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.r3dl3g ];
+    };
+  };
 }

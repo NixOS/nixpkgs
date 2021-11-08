@@ -4,7 +4,8 @@ let
   python = py.python;
 in
 py.buildPythonApplication {
-  name = "loxodo-0.20150124";
+  pname = "loxodo";
+  version = "0.20150124";
 
   src = fetchgit {
     url = "https://github.com/sommer/loxodo.git";

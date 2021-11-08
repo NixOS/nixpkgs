@@ -2,7 +2,9 @@
 
 stdenv.mkDerivation rec {
   rev = "cfcbcc3dd5a5b09a3fec0f6a1fea95f4a36a48c4";
-  name = "urxvt-theme-switch-2014-12-21_rev${builtins.substring 0 1 rev}";
+  pname = "urxvt-theme-switch";
+  version = "unstable-2014-12-21_rev${builtins.substring 0 1 rev}";
+
   dontPatchShebangs = true;
 
   src = fetchFromGitHub {

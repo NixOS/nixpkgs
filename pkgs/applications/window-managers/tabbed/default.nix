@@ -1,9 +1,8 @@
-{lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [] }:
-
-with lib;
+{ lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
 
 stdenv.mkDerivation {
-  name = "tabbed-20180310";
+  pname = "tabbed";
+  version = "unstable-2018-03-10";
 
   src = fetchgit {
     url = "https://git.suckless.org/tabbed";
@@ -23,7 +22,7 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://tools.suckless.org/tabbed";
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = licenses.mit;

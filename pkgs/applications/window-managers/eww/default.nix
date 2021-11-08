@@ -5,6 +5,7 @@
 , gtk3
 , withWayland ? false
 , gtk-layer-shell
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda legendofmiracles ];
+    broken = stdenv.isDarwin;
   };
 }

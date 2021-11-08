@@ -3,7 +3,7 @@
  }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-uctodata.json);
+  release = lib.importJSON ./release-info/LanguageMachines-uctodata.json;
 in
 
 stdenv.mkDerivation {

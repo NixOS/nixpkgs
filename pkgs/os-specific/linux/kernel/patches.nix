@@ -53,7 +53,7 @@
       extra = src.extra;
       inherit version sha256;
     };
-    patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
+    patches = lib.importJSON ./hardened/patches.json;
   in lib.mapAttrs mkPatch patches;
 
   # https://bugzilla.kernel.org/show_bug.cgi?id=197591#c6

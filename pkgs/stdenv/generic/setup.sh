@@ -1,5 +1,6 @@
 set -eu
 set -o pipefail
+shopt -s inherit_errexit
 
 if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
@@ -409,15 +410,14 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
-    local -i mapOffsetResult
     function mapOffset() {
         local -r inputOffset="$1"
+        local -n outputOffset="$2"
         if (( inputOffset <= 0 )); then
-            local -r outputOffset=$((inputOffset + hostOffset))
+            outputOffset=$((inputOffset + hostOffset))
         else
-            local -r outputOffset=$((inputOffset - 1 + targetOffset))
+            outputOffset=$((inputOffset - 1 + targetOffset))
         fi
-        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
@@ -429,16 +429,16 @@ findInputs() {
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        mapOffset relHostOffset
-        local -i hostOffsetNext="$mapOffsetResult"
+        local hostOffsetNext
+        mapOffset "$relHostOffset" hostOffsetNext
 
         # Ensure we're in bounds relative to the package currently
         # being built.
-        [[ "${allPlatOffsets[*]}" = *"$hostOffsetNext"*  ]] || continue
+        (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
         # Target offset relative to the *host* offset of the package
         # whose immediate dependencies we are currently exploring.
-        local -i relTargetOffset
+        local relTargetOffset
         for relTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$relHostOffset" <= "$relTargetOffset" )) || continue
 
@@ -448,12 +448,12 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            mapOffset relTargetOffset
-            local -i targetOffsetNext="$mapOffsetResult"
+            local targetOffsetNext
+            mapOffset "$relTargetOffset" targetOffsetNext
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
-            [[ "${allPlatOffsets[*]}" = *"$targetOffsetNext"* ]] || continue
+            (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
             [[ -f "$pkg/nix-support/$file" ]] || continue
 

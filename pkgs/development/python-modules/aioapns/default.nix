@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "An efficient APNs Client Library for Python/asyncio";
     homepage = "https://github.com/Fatal1ty/aioapns";
     license = licenses.asl20;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

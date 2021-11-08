@@ -4,7 +4,7 @@
 , languageMachines }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-libfolia.json);
+  release = lib.importJSON ./release-info/LanguageMachines-libfolia.json;
 in
 
 stdenv.mkDerivation {

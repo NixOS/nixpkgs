@@ -70,14 +70,14 @@ let
 in
 buildPythonPackage rec {
   pname = "nassl";
-  version = "4.0.0";
+  version = "4.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    hash = "sha256-6lk2YfI9km10YbJAn38fvo9qa4iXcByL+udCsDe+kvU=";
+    hash = "sha256-QzO7ABh2weBO6NVFIj7kZpS8ashbDGompuvdKteJeUc=";
   };
 
   postPatch = let

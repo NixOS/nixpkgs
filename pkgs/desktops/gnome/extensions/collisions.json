@@ -97,6 +97,10 @@
       "apps-menu@gnome-shell-extensions.gcampax.github.com",
       "Applications_Menu@rmy.pobox.com"
     ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"

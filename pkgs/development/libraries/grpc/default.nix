@@ -57,14 +57,13 @@ stdenv.mkDerivation rec {
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
     # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
     # only an issue with the useLLVM stdenv, not the darwin stdenv…
     # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    (if (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0"
-     then "-DCMAKE_CXX_STANDARD=11"
-     else "-DCMAKE_CXX_STANDARD=17")
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-DCMAKE_CXX_STANDARD=11"
   ];
 
   # CMake creates a build directory by default, this conflicts with the

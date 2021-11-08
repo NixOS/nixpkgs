@@ -50,6 +50,6 @@ buildPythonApplication rec {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

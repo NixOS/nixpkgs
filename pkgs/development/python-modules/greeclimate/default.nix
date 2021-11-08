@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "greeclimate";
-  version = "0.12.1";
+  version = "0.12.3";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = "greeclimate";
     rev = version;
-    sha256 = "sha256-HO+JBlyRFkwijR3g75P7yOabK3LhNFFYevSn/aFStUE=";
+    sha256 = "sha256-7O21/eL/CcQmENJTGKfZCHjZcRN3pwuWZrmMMX3YPAg=";
   };
 
   propagatedBuildInputs = [

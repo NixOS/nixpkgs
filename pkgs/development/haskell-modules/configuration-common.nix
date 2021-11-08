@@ -281,7 +281,9 @@ self: super: {
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   matplotlib = dontCheck super.matplotlib;
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak super.matterhorn; # this is needed until the end of time :')
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_64_2;
+  }));
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -631,20 +633,7 @@ self: super: {
   #   removed when the next idris release (1.3.4 probably) comes
   #   around.
   idris = generateOptparseApplicativeCompletion "idris"
-    (doJailbreak (dontCheck
-      (appendPatches super.idris [
-        # compatibility with haskeline >= 0.8
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/commit/89a87cf666eb8b27190c779e72d0d76eadc1bc14.patch";
-          sha256 = "0fv493zlpgjsf57w0sncd4vqfkabfczp3xazjjmqw54m9rsfix35";
-        })
-        # compatibility with megaparsec >= 0.9
-        (pkgs.fetchpatch {
-          url = "https://github.com/idris-lang/Idris-dev/commit/6ea9bc913877d765048d7cdb7fc5aec60b196fac.patch";
-          sha256 = "0yms74d1xdxd1c08dnp45nb1ddzq54n6hqgzxx0r494wy614ir8q";
-        })
-      ])
-    ));
+    (doJailbreak (dontCheck super.idris));
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -692,19 +681,17 @@ self: super: {
   # For 2.17 support: https://github.com/JonasDuregard/sized-functors/pull/10
   size-based = doJailbreak super.size-based;
 
-  # Remove as soon as we update to monoid-extras 0.6 and unpin these packages
-  dual-tree = doJailbreak super.dual-tree;
-  diagrams-core = doJailbreak super.diagrams-core;
+  # https://github.com/diagrams/diagrams-braille/issues/1
+  diagrams-braille = doJailbreak super.diagrams-braille;
 
-  # Apply patch from master to add compat with optparse-applicative >= 0.16.
-  # We unfortunately can't upgrade to 1.4.4 which includes this patch yet
-  # since it would require monoid-extras 0.6 which breaks other diagrams libs.
-  diagrams-lib = doJailbreak (appendPatch super.diagrams-lib
-    (pkgs.fetchpatch {
-      url = "https://github.com/diagrams/diagrams-lib/commit/4b9842c3e3d653be69af19778970337775e2404d.patch";
-      sha256 = "0xqvzh3ip9i0nv8xnh41afxki64r259pxq8ir1a4v99ggnldpjaa";
-      includes = [ "*/CmdLine.hs" ];
-    }));
+  # https://github.com/timbod7/haskell-chart/pull/231#issuecomment-953745932
+  Chart-diagrams = doJailbreak super.Chart-diagrams;
+
+  # https://github.com/xu-hao/namespace/issues/1
+  namespace = doJailbreak super.namespace;
+
+  # https://github.com/cchalmers/plots/issues/46
+  plots = doJailbreak super.plots;
 
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
@@ -1132,8 +1119,10 @@ self: super: {
   });
 
   # Chart-tests needs and compiles some modules from Chart itself
-  Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
-    preCheck = old.postPatch or "" + ''
+  Chart-tests = overrideCabal (addExtraLibrary super.Chart-tests self.QuickCheck) (old: {
+    # https://github.com/timbod7/haskell-chart/issues/233
+    jailbreak = true;
+    preCheck = old.preCheck or "" + ''
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
   });
@@ -2070,5 +2059,13 @@ EOT
   # Can't use fetchpatch as it required tweaking the line endings as the .cabal
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch super.gogol-core ./patches/gogol-core-144.patch;
+
+  # cabal tries to install files we're supplying from the system
+  # https://github.com/hslua/hslua/pull/103
+  lua = appendPatch super.lua (pkgs.fetchpatch {
+    url = "https://github.com/hslua/hslua/pull/103/commits/814bf1bb284151e827b1c11a7277819ed2779dd2.patch";
+    sha256 = "1kj0g51lkjyf6jv2ikayb3cfh0dcr669swmxl9a2mcrizxcbkrhy";
+    stripLen = 1;
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

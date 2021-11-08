@@ -284,6 +284,10 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
+    # 'nvidia_x11' installs it's files to /run/opengl-driver/...
+    environment.etc."egl/egl_external_platform.d".source =
+      "/run/opengl-driver/share/egl/egl_external_platform.d/";
+
     hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
     hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;

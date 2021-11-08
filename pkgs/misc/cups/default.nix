@@ -28,16 +28,15 @@ stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.3.3";
+  version = if stdenv.isDarwin then "2.2.6" else "2.3.3op2";
 
-  passthru = { inherit version; };
-
-  src = fetchurl {
+  src = fetchurl (if stdenv.isDarwin then {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = if version == "2.2.6"
-             then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "1vpk0b2vq830f8fvf9z8qjsm5k141i7pi8djbinpnr78pi4dj7r6";
-  };
+    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+  } else {
+    url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    sha256 = "1pwndz4gwkm7311wkhhzlw2diy7wbck7yy026jbaxh3rprdmgcyy";
+  });
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -49,10 +48,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
     ++ optional enableSystemd systemd
-    # Separate from above only to not modify order, to avoid mass rebuilds; merge this with the above at next big change.
-    ++ optionals stdenv.isLinux [ acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
@@ -129,18 +126,8 @@ stdenv.mkDerivation rec {
       sed -e "/^cups_serverbin=/s|$lib|$out|" \
           -i "$dev/bin/cups-config"
 
-      # Rename systemd files provided by CUPS
       for f in "$out"/lib/systemd/system/*; do
-        substituteInPlace "$f" \
-          --replace "$lib/$libexec" "$out/$libexec" \
-          --replace "org.cups.cupsd" "cups" \
-          --replace "org.cups." ""
-
-        if [[ "$f" =~ .*cupsd\..* ]]; then
-          mv "$f" "''${f/org\.cups\.cupsd/cups}"
-        else
-          mv "$f" "''${f/org\.cups\./}"
-        fi
+        substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
       done
     '' + optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
@@ -149,9 +136,9 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = "https://cups.org/";
+    homepage = "https://openprinting.github.io/cups/";
     description = "A standards-based printing system for UNIX";
-    license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
+    license = licenses.asl20;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
   };

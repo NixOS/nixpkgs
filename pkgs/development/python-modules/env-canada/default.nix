@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.14";
+  version = "0.5.15";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "v${version}";
-    sha256 = "06v9ifpgdfx5v8k8jwqd4y985p27s1wxl7908v3aqxv7203acn7w";
+    sha256 = "1mgh4sbibgwzrgnlfz4ia2djlyniq7b6f9bd9f2yd1wkai32dm2a";
   };
 
   propagatedBuildInputs = [

@@ -403,6 +403,7 @@ lukas-reineke/indent-blankline.nvim
 lukaszkorecki/workflowish
 lumiliet/vim-twig
 luochen1990/rainbow
+luukvbaal/stabilize.nvim
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
 machakann/vim-sandwich

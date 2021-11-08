@@ -6,7 +6,7 @@
 }:
 
 let
-  all_data = builtins.fromJSON (builtins.readFile ./data.json);
+  all_data = lib.importJSON ./data.json;
   system_map = {
     # i686-linux = "i386"; Uncomment if enpass 6 becomes available on i386
     x86_64-linux = "amd64";

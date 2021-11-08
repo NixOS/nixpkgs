@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.philip-scott.spice-up";
   };
 }

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZKZzZqJxXmNriGlMxgdcwC2ykvAQmLjjhTl8iU05U3g=";
+    sha256 = "8de39a69730442dc835e4d33f9d2e33043ff91151c8d18086959ee556febb9f8";
   };
 
   checkInputs = [ six pyyaml mock pytestCheckHook ];

@@ -42,7 +42,7 @@
 
 let
   version = "2.33";
-  patchSuffix = "-50";
+  patchSuffix = "-55";
   sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
 in
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
-          glibc-2.33-50-gc6cadbf83a
+          glibc-2.33-55-g4b95183785
           $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
          To compare the archive contents zdiff can be used.
@@ -198,7 +198,7 @@ stdenv.mkDerivation ({
   BASH_SHELL = "/bin/sh";
 
   # Used by libgcc, elf-header, and others to determine ABI
-  passthru = { inherit version; };
+  passthru = { inherit version; minorRelease = version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
@@ -286,9 +286,4 @@ stdenv.mkDerivation ({
 
 // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
-
-  # To avoid a dependency on the build system 'bash'.
-  preFixup = ''
-    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-  '';
 })

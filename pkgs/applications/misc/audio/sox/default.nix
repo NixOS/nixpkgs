@@ -1,26 +1,46 @@
-{ config, lib, stdenv, fetchurl, pkg-config, CoreAudio
-, enableAlsa ? true, alsa-lib ? null
-, enableLibao ? true, libao ? null
-, enableLame ? config.sox.enableLame or false, lame ? null
-, enableLibmad ? true, libmad ? null
-, enableLibogg ? true, libogg ? null, libvorbis ? null
-, enableOpusfile ? true, opusfile ? null
-, enableFLAC ? true, flac ? null
-, enablePNG ? true, libpng ? null
-, enableLibsndfile ? true, libsndfile ? null
-, enableWavpack ? true, wavpack ? null
-# amrnb and amrwb are unfree, disabled by default
-, enableAMR ? false, amrnb ? null, amrwb ? null
-, enableLibpulseaudio ? true, libpulseaudio ? null
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, CoreAudio
+, enableAlsa ? true
+, alsa-lib ? null
+, enableLibao ? true
+, libao ? null
+, enableLame ? config.sox.enableLame or false
+, lame ? null
+, enableLibmad ? true
+, libmad ? null
+, enableLibogg ? true
+, libogg ? null
+, libvorbis ? null
+, enableOpusfile ? true
+, opusfile ? null
+, enableFLAC ? true
+, flac ? null
+, enablePNG ? true
+, libpng ? null
+, enableLibsndfile ? true
+, libsndfile ? null
+, enableWavpack ? true
+, wavpack ? null
+  # amrnb and amrwb are unfree, disabled by default
+, enableAMR ? false
+, amrnb ? null
+, amrwb ? null
+, enableLibpulseaudio ? true
+, libpulseaudio ? null
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "sox-14.4.2";
+  pname = "sox";
+  version = "14.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sox/${name}.tar.gz";
+    url = "mirror://sourceforge/sox/sox-${version}.tar.gz";
     sha256 = "0v2znlxkxxcd3f48hf3dx9pq7i6fdhb62kgj7wv8xggz8f35jpxl";
   };
 

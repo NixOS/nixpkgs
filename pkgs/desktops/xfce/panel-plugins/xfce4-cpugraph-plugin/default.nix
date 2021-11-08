@@ -20,11 +20,11 @@ let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+wzM2aZ4E2JW7dDwT5ReYRqwqpEoN/V0E+87sPUVYIw=";
+    sha256 = "sha256-wvbb1/g8ebY7g8mCMsedBQ4YZA6CRkueyNNkOpLDobA=";
   };
 
   nativeBuildInputs = [

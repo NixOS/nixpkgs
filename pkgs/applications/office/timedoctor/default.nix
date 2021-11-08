@@ -119,5 +119,7 @@ appimageTools.wrapType2 {
     license = licenses.unfree;
     maintainers = with maintainers; [ kamadorueda ];
     platforms = [ "x86_64-linux" ];
+    # gpgme for i686-linux failed to build.
+    broken = true;
   };
 }

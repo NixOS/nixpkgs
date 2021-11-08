@@ -6,7 +6,6 @@
 , aws-c-http
 , aws-c-io
 , cmake
-, ninja
 , s2n-tls
 }:
 
@@ -23,7 +22,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    ninja
   ];
 
   buildInputs = [

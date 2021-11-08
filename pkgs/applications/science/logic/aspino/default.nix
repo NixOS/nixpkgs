@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "aspino-unstable-2017-03-09";
+  pname = "aspino";
+  version = "unstable-2017-03-09";
 
   src = fetchFromGitHub {
     owner = "alviano";

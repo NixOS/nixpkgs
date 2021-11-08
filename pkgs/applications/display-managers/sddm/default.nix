@@ -19,6 +19,7 @@ in mkDerivation {
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    ./sddm-default-session.patch
     # Load `/etc/profile` for `environment.variables` with zsh default shell.
     # See: https://github.com/sddm/sddm/pull/1382
     (fetchpatch {

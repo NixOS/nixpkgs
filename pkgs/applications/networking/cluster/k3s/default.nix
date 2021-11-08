@@ -13,7 +13,6 @@
 , pkg-config
 , ethtool
 , util-linux
-, ipset
 , fetchFromGitHub
 , fetchurl
 , fetchzip
@@ -60,7 +59,7 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank superherointj ];
+    maintainers = with maintainers; [ euank ];
     platforms = platforms.linux;
   };
 
@@ -257,7 +256,6 @@ stdenv.mkDerivation rec {
     bridge-utils
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
-    ipset
     conntrack-tools
   ];
 

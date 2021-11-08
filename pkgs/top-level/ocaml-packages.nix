@@ -419,6 +419,10 @@ let
 
     getopt = callPackage ../development/ocaml-modules/getopt { };
 
+    gluten = callPackage ../development/ocaml-modules/gluten { };
+    gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
+    gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
+
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
@@ -1033,6 +1037,8 @@ let
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
+
+    piaf = callPackage ../development/ocaml-modules/piaf { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
 

@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     };
   in {
     name = "seafile";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ kampfschlaefer schmittlauch ];
     };
 

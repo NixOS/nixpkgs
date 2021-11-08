@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "com.github.jeremyvaartjes.ping";
   };
 }

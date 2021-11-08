@@ -581,24 +581,40 @@ class Machine:
                     + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
-    def execute(self, command: str) -> Tuple[int, str]:
+    def _next_newline_closed_block_from_shell(self) -> str:
+        assert self.shell
+        output_buffer = []
+        while True:
+            # This receives up to 4096 bytes from the socket
+            chunk = self.shell.recv(4096)
+            if not chunk:
+                # Probably a broken pipe, return the output we have
+                break
+
+            decoded = chunk.decode()
+            output_buffer += [decoded]
+            if decoded[-1] == "\n":
+                break
+        return "".join(output_buffer)
+
+    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
         assert self.shell
         self.shell.send(out_command.encode())
 
-        output = ""
-        status_code_pattern = re.compile(r"(.*)\|\!=EOF\s+(\d+)")
+        # Get the output
+        output = base64.b64decode(self._next_newline_closed_block_from_shell())
 
-        while True:
-            chunk = self.shell.recv(4096).decode(errors="ignore")
-            match = status_code_pattern.match(chunk)
-            if match:
-                output += match[1]
-                status_code = int(match[2])
-                return (status_code, output)
-            output += chunk
+        if not check_return:
+            return (-1, output.decode())
+
+        # Get the return code
+        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
+        rc = int(self._next_newline_closed_block_from_shell().strip())
+
+        return (rc, output.decode())
 
     def shell_interact(self) -> None:
         """Allows you to interact with the guest shell
