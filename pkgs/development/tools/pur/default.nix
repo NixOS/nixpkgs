@@ -10,10 +10,10 @@ let
       click = self.callPackage ../../../development/python-modules/click/7.nix { };
     };
   };
-  inherit (py.pkgs) buildPythonPackage click pytestCheckHook;
+  inherit (py.pkgs) buildPythonApplication click pytestCheckHook;
 in
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "pur";
   version = "5.4.2";
 
