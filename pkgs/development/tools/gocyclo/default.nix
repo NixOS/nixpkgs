@@ -1,26 +1,24 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "gocyclo-unstable";
-  version = "2015-02-08";
-  rev = "aa8f8b160214d8dfccfe3e17e578dd0fcc6fede7";
+  pname = "gocyclo";
+  version = "0.3.1";
+  rev = "v${version}";
 
-  goPackagePath = "github.com/alecthomas/gocyclo";
+  goPackagePath = "github.com/fzipp/gocyclo";
 
   src = fetchFromGitHub {
     inherit rev;
 
-    owner = "alecthomas";
+    owner = "fzipp";
     repo = "gocyclo";
-    sha256 = "094rj97q38j53lmn2scshrg8kws8c542yq5apih1ahm9wdkv8pxr";
+    sha256 = "1rimdrhmy6nkzh7ydpx6139hh9ml6rdqg5gvkpy2l1x9mhanvan0";
   };
 
   meta = with lib; {
-    description = "Calculate cyclomatic complexities of functions in Go source code";
-    homepage = "https://github.com/alecthomas/gocyclo";
+    description =
+      "Calculate cyclomatic complexities of functions in Go source code";
+    homepage = "https://github.com/fzipp/gocyclo";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;
