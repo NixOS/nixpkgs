@@ -1,7 +1,6 @@
 { lib, stdenv
 , runCommand
 , fetchurl
-, fetchpatch
 , perl
 , python3
 , ruby
@@ -83,26 +82,6 @@ stdenv.mkDerivation rec {
       inherit (addOpenGLRunpath) driverLink;
     })
     ./libglvnd-headers.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    # https://bugs.webkit.org/show_bug.cgi?id=225856
-    (fetchpatch {
-      url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
-      sha256 = "sha256-ffo5p2EyyjXe3DxdrvAcDKqxwnoqHtYBtWod+1fOjMU=";
-      excludes = [ "Source/WebCore/ChangeLog" ];
-    })
-
-    # https://bugs.webkit.org/show_bug.cgi?id=225850
-    ./428774.patch # https://bug-225850-attachments.webkit.org/attachment.cgi?id=428774
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428776";
-      sha256 = "sha256-ryNRYMsk72SL0lNdh6eaAdDV3OT8KEqVq1H0j581jmQ=";
-      excludes = [ "Source/WTF/ChangeLog" ];
-    })
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428778";
-      sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -231,5 +210,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
+    broken = stdenv.isDarwin;
   };
 }
