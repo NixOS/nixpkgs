@@ -1976,10 +1976,6 @@ EOT
     assert pkgs.lib.versionOlder self.hspec.version "2.8.2";
     doJailbreak super.graphql;
 
-  # Test suite doesn't build with base16-bytestring >= 1.0.0.0
-  # https://github.com/emilypi/Base16/issues/9
-  base16 = dontCheck super.base16;
-
   # gtk2hsC2hs fails to build on certain architectures (aarch64, ppc64(le), ...)
   # with a linker error. As a workaround, we build gtk2hs-buildtools with -O0
   # as suggested in the GHC thread below. An alternative to this could be to use
