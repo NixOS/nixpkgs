@@ -996,4 +996,15 @@ self: super: builtins.intersectAttrs super {
       fi
     '' + (drv.postConfigure or "");
   }) super.procex;
+
+  # Apply a patch which hardcodes the store path of graphviz instead of using
+  # whatever graphviz is in PATH.
+  graphviz = overrideCabal (drv: {
+    patches = [
+      (pkgs.substituteAll {
+        src = ./patches/graphviz-hardcode-graphviz-store-path.patch;
+        inherit (pkgs) graphviz;
+      })
+    ] ++ (drv.patches or []);
+  }) super.graphviz;
 }
