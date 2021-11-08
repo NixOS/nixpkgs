@@ -256,6 +256,10 @@ rec {
    * Automatically includes sane set of shellopts (errexit, nounset, pipefail)
    * and handles creation of PATH based on runtimeInputs
    *
+   * Note that the checkPhase uses stdenv.shell for the test run of the script,
+   * while the generated shebang uses runtimeShell. If, for whatever reason,
+   * those were to mismatch you might lose fidelity in the default checks.
+   *
    * Example:
    * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
    * writeShellApplication {
