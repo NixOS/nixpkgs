@@ -47,6 +47,15 @@ let
         '';
       };
 
+      allowDiscards = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to allow TRIM requests to the underlying device. This option
+          has security implications; please read the LUKS documentation before
+          activating it.
+        '';
+      };
     };
 
   };
@@ -224,7 +233,8 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${optionalString (sw.discardPolicy != null) "--allow-discards"} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
+                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

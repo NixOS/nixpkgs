@@ -47,6 +47,9 @@ let
       psutil
       pyxdg
       pygobject3
+      pywayland
+      pywlroots
+      xkbcommon
     ];
 
     doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.

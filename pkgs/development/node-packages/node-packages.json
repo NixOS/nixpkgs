@@ -122,6 +122,7 @@
 , "git-run"
 , "git-ssb"
 , "git-standup"
+, "@gitbeaker/cli"
 , "gitmoji-cli"
 , "glob"
 , "graphql-cli"

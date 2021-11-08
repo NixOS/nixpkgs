@@ -9,13 +9,6 @@ let
 
   prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
-  writeConfig = pkgs.writeShellScriptBin "write-prometheus-config" ''
-    PATH="${makeBinPath (with pkgs; [ coreutils envsubst ])}"
-    touch '${prometheusYmlOut}'
-    chmod 600 '${prometheusYmlOut}'
-    envsubst -o '${prometheusYmlOut}' -i '${prometheusYml}'
-  '';
-
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
     PATH="${makeBinPath (with pkgs; [ systemd ])}"
     if systemctl -q is-active prometheus.service; then
@@ -76,8 +69,8 @@ let
     "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${
       if cfg.enableReload
-      then prometheusYmlOut
-      else "/run/prometheus/prometheus-substituted.yaml"
+      then "/etc/prometheus/prometheus.yaml"
+      else prometheusYml
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
@@ -1561,6 +1554,8 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
+    (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
+      "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
   ];
 
   options.services.prometheus = {
@@ -1625,51 +1620,6 @@ in
         (<literal>switch-to-configuration</literal>) that changes the prometheus
         configuration only finishes successully when prometheus has finished
         loading the new configuration.
-
-        Note that prometheus will also get reloaded when the location of the
-        <option>environmentFile</option> changes but not when its contents
-        changes. So when you change it contents make sure to reload prometheus
-        manually or include the hash of <option>environmentFile</option> in its
-        name.
-      '';
-    };
-
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      example = "/root/prometheus.env";
-      description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
-
-        Secrets may be passed to the service without adding them to the
-        world-readable Nix store, by specifying placeholder variables as
-        the option value in Nix and setting these variables accordingly in the
-        environment file.
-
-        Environment variables from this file will be interpolated into the
-        config file using envsubst with this syntax:
-        <literal>$ENVIRONMENT ''${VARIABLE}</literal>
-
-        <programlisting>
-          # Example scrape config entry handling an OAuth bearer token
-          {
-            job_name = "home_assistant";
-            metrics_path = "/api/prometheus";
-            scheme = "https";
-            bearer_token = "\''${HOME_ASSISTANT_BEARER_TOKEN}";
-            [...]
-          }
-        </programlisting>
-
-        <programlisting>
-          # Content of the environment file
-          HOME_ASSISTANT_BEARER_TOKEN=someoauthbearertoken
-        </programlisting>
-
-        Note that this file needs to be available on the host on which
-        <literal>Prometheus</literal> is running.
       '';
     };
 
@@ -1830,13 +1780,12 @@ in
       uid = config.ids.uids.prometheus;
       group = "prometheus";
     };
+    environment.etc."prometheus/prometheus.yaml" = mkIf cfg.enableReload {
+      source = prometheusYml;
+    };
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = mkIf (!cfg.enableReload) ''
-        ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/run/prometheus/prometheus-substituted.yaml" \
-                                                 -i "${prometheusYml}"
-      '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
@@ -1844,24 +1793,11 @@ in
         ExecReload = mkIf cfg.enableReload "+${reload}/bin/reload-prometheus";
         User = "prometheus";
         Restart = "always";
-        EnvironmentFile = mkIf (cfg.environmentFile != null && !cfg.enableReload) [ cfg.environmentFile ];
         RuntimeDirectory = "prometheus";
         RuntimeDirectoryMode = "0700";
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
-      };
-    };
-    systemd.services.prometheus-config-write = mkIf cfg.enableReload {
-      wantedBy = [ "prometheus.service" ];
-      before = [ "prometheus.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "prometheus";
-        StateDirectory = cfg.stateDir;
-        StateDirectoryMode = "0700";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
-        ExecStart = "${writeConfig}/bin/write-prometheus-config";
       };
     };
     # prometheus-config-reload will activate after prometheus. However, what we
@@ -1873,26 +1809,19 @@ in
     # harmless message and then stay active (RemainAfterExit).
     #
     # Then, when the config file has changed, switch-to-configuration notices
-    # that this service has changed and needs to be reloaded
-    # (reloadIfChanged). The reload command then actually writes the new config
-    # and reloads prometheus.
+    # that this service has changed (restartTriggers) and needs to be reloaded
+    # (reloadIfChanged). The reload command then reloads prometheus.
     systemd.services.prometheus-config-reload = mkIf cfg.enableReload {
       wantedBy = [ "prometheus.service" ];
       after = [ "prometheus.service" ];
       reloadIfChanged = true;
+      restartTriggers = [ prometheusYml ];
       serviceConfig = {
         Type = "oneshot";
-        User = "prometheus";
-        StateDirectory = cfg.stateDir;
-        StateDirectoryMode = "0700";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         RemainAfterExit = true;
         TimeoutSec = 60;
         ExecStart = "${pkgs.logger}/bin/logger 'prometheus-config-reload will only reload prometheus when reloaded itself.'";
-        ExecReload = [
-          "${writeConfig}/bin/write-prometheus-config"
-          "+${triggerReload}/bin/trigger-reload-prometheus"
-        ];
+        ExecReload = [ "${triggerReload}/bin/trigger-reload-prometheus" ];
       };
     };
   };

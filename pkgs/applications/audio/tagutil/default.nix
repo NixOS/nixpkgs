@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "-o aslr" ""
   '';
