@@ -15,12 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vUhP71vZ5XFG7MDkPFpAcCUL4kIdzHJ1hAkwqIi6ksQ=";
   };
 
-  # We have no LTO on i686 since commit 22284b0
-  postPatch = lib.optionalString stdenv.isi686 ''
-    substituteInPlace chelper/__init__.py \
-      --replace "-flto -fwhole-program " ""
-  '';
-
   sourceRoot = "source/klippy";
 
   # there is currently an attempt at moving it to Python 3, but it will remain
