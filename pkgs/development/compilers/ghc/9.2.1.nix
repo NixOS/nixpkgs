@@ -2,7 +2,8 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx, xattr
+, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
+, xattr, autoSignDarwinBinariesHook
 , bash
 
 , libiconv ? null, ncurses
@@ -43,7 +44,7 @@
   enableDocs ? (
     # Docs disabled for musl and cross because it's a large task to keep
     # all `sphinx` dependencies building in those environments.
-    # `sphinx` pullls in among others:
+    # `sphinx` pulls in among others:
     # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
     (stdenv.targetPlatform == stdenv.hostPlatform)
     && !stdenv.hostPlatform.isMusl
@@ -242,6 +243,8 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
   ] ++ lib.optionals stdenv.isDarwin [

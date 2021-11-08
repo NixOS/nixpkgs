@@ -122,7 +122,7 @@ in {
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
