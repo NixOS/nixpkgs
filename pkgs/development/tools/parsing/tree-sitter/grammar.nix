@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # Auto strip cannot detect files missing extension.
-  fixupPhase = ''
+  # Strip failed on darwin: strip: error: symbols referenced by indirect symbol table entries that can't be stripped
+  fixupPhase = lib.optionalString stdenv.isLinux ''
     runHook preFixup
-    strip -s $out/parser
+    $STRIP $out/parser
     runHook postFixup
   '';
 }
