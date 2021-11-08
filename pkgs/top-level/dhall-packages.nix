@@ -17,12 +17,16 @@ let
       buildDhallDirectoryPackage =
         callPackage ../development/interpreters/dhall/build-dhall-directory-package.nix { };
 
+      buildDhallUrl =
+        callPackage ../development/interpreters/dhall/build-dhall-url.nix { };
+
     in
       { inherit
           callPackage
           buildDhallPackage
           buildDhallGitHubPackage
           buildDhallDirectoryPackage
+          buildDhallUrl
         ;
 
         lib = import ../development/dhall-modules/lib.nix { inherit lib; };
