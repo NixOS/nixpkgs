@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "4.8.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "1w9gs9cq2yhj5s3diz3x1l15pgrc1pbm00jccizvcjyibmwyyf2h";
+    sha256 = "sha256-rv9D+P42RMH1O4YLQbZIEkD6KQfs8KgYjhnHeA9vQqE=";
   };
 
   # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
