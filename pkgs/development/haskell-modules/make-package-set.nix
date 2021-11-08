@@ -159,7 +159,7 @@ let
   # (requiring it to be frequently rebuilt), which can be an
   # annoyance.
   callPackageKeepDeriver = src: args:
-    overrideCabal (self.callPackage src args) (orig: {
+    overrideCabal (orig: {
       preConfigure = ''
         # Generated from ${src}
         ${orig.preConfigure or ""}
@@ -171,7 +171,7 @@ let
         # cabal2nixDeriver field.
         cabal2nixDeriver = src;
       };
-    });
+    }) (self.callPackage src args);
 
 in package-set { inherit pkgs lib callPackage; } self // {
 
@@ -213,9 +213,9 @@ in package-set { inherit pkgs lib callPackage; } self // {
                   then pkgs.lib.cleanSourceWith { inherit src filter; }
                 else src;
         };
-      in overrideCabal (callPackageKeepDeriver expr args) (orig: {
+      in overrideCabal (orig: {
            inherit src;
-         });
+         }) (callPackageKeepDeriver expr args);
 
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
