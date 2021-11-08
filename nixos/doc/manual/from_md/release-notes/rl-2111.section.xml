@@ -1295,6 +1295,13 @@ Superuser created successfully.
           <literal>services.ddclient.passwordFile</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>gocyclo</literal> package is now based on the
+          upstream version <literal>v0.3.1</literal> from
+          https://github.com/fzipp/gocyclo
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
