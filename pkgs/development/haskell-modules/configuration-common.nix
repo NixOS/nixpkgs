@@ -1957,6 +1957,7 @@ EOT
     optics = self.optics_0_4;
     streamly = self.streamly_0_8_0;
     Cabal = self.Cabal_3_6_2_0;
+    libyaml-streamly = markUnbroken super.libyaml-streamly;
   }));
 
   # Break out of "Cabal < 3.2" constraint.
