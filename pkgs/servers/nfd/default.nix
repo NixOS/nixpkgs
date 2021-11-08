@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     repo = lib.toUpper pname;
     rev = "${lib.toUpper pname}-${version}";
     sha256 = "1l9bchj8c68r6qw4vr1kc96jgxl0vpqa2vjkvy1xmhz92sivr6gi";
+    fetchSubmodules = withWebSocket; # uses websocket++ 0.8.1-hotfix, nixpkgs contains old version 0.8.1
   };
 
   nativeBuildInputs = [ wafHook doxygen pkg-config (python3.withPackages pythonPackages) ];
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "http://named-data.net/";
     description = "Named Data Neworking (NDN) Forwarding Daemon";
     license = licenses.gpl3;
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bertof ];
   };
 }
