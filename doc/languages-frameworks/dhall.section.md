@@ -334,7 +334,7 @@ $ dhall-to-nixpkgs directory ~/proj/dhall-semver
 { buildDhallDirectoryPackage, Prelude }:
   buildDhallDirectoryPackage {
     name = "proj";
-    src = /Users/gabriel/proj/dhall-semver;
+    src = ~/proj/dhall-semver;
     file = "package.dhall";
     source = false;
     document = false;
@@ -355,7 +355,7 @@ $ dhall-to-nixpkgs directory --fixed-output-derivations ~/proj/dhall-semver
 { buildDhallDirectoryPackage, buildDhallUrl }:
   buildDhallDirectoryPackage {
     name = "proj";
-    src = /Users/gabriel/proj/dhall-semver;
+    src = ~/proj/dhall-semver;
     file = "package.dhall";
     source = false;
     document = false;
