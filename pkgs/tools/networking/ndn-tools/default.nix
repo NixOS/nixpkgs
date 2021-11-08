@@ -1,17 +1,15 @@
 { lib
 , stdenv
+, boost
+, fetchFromGitHub
+, libpcap
 , ndn-cxx
 , openssl
-, doxygen
-, boost
-, sqlite
 , pkg-config
-, python3
-, python3Packages
+, sphinx
 , wafHook
-, libpcap
-, fetchFromGitHub
 }:
+
 stdenv.mkDerivation rec {
   pname = "ndn-tools";
   version = "0.7.1";
@@ -19,23 +17,22 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = pname;
-    rev = "${pname}-${version}";
+    rev = "ndn-tools-${version}";
     sha256 = "1q2d0v8srqjbvigr570qw6ia0d9f88aj26ccyxkzjjwwqdx3y4fy";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook doxygen python3 python3Packages.sphinx ];
-  buildInputs = [ ndn-cxx boost libpcap openssl ];
+  nativeBuildInputs = [ pkg-config sphinx wafHook ];
+  buildInputs = [ libpcap ndn-cxx openssl ];
 
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
-    # "--with-tests"
+    "--with-tests"
   ];
 
-  # Upstream's tests don't all pass!
-  doCheck = false;
+  doCheck = true;
   checkPhase = ''
-    LD_LIBRARY_PATH=build/ build/unit-tests
+    build/unit-tests
   '';
 
   meta = with lib; {
