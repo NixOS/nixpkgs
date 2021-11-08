@@ -50,13 +50,13 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.0.1";
+    version = "1.7.1";
   };
 
   vsix = fetchurl {
     name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
     url = "https://github.com/microsoft/vscode-cpptools/releases/download/${mktplcRef.version}/cpptools-linux.vsix";
-    sha256 = "1lb5pza2ny1ydan19596amabs1np10nq08yqsfbvvfw7zbg4gnyc";
+    sha256 = "sha256-LqndG/vv8LgVPEX6dGkikDB6M6ISneo2UJ78izXVFbk=";
   };
 
   buildInputs = [
@@ -77,8 +77,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     touch "./install.lock"
 
     # Mono runtimes from nix package (used by generated `OpenDebugAD7`).
-    mv ./debugAdapters/OpenDebugAD7 ./debugAdapters/OpenDebugAD7_orig
-    cp -p "${openDebugAD7Script}" "./debugAdapters/OpenDebugAD7"
+    mv ./debugAdapters/bin/OpenDebugAD7 ./debugAdapters/bin/OpenDebugAD7_orig
+    cp -p "${openDebugAD7Script}" "./debugAdapters/bin/OpenDebugAD7"
 
     # Clang-format from nix package.
     mv  ./LLVM/ ./LLVM_orig
