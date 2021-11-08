@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, fetchpatch
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , pkg-config, which, perl, libXrandr
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
