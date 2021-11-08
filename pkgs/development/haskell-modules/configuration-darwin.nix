@@ -242,8 +242,6 @@ self: super: ({
   # should create issues for them.
   # https://github.com/typeclasses/aws-cloudfront-signed-cookies/issues/2
   aws-cloudfront-signed-cookies = dontCheck super.aws-cloudfront-signed-cookies;
-  # https://github.com/typeclasses/dsv/issues/1
-  dsv = dontCheck super.dsv;
 
   # https://github.com/acid-state/acid-state/issues/133
   acid-state = dontCheck super.acid-state;
