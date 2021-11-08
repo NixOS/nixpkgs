@@ -15,10 +15,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "grip-4.2.2";
+  pname = "grip";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/grip/${name}.tar.gz";
+    url = "mirror://sourceforge/grip/grip-${version}.tar.gz";
     sha256 = "sha256-nXtGgJeNYM8lyllNi9UdmsnVcHOCXfryWmKGZ9QFTHE=";
   };
 

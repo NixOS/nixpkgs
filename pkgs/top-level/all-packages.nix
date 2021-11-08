@@ -21739,7 +21739,6 @@ with pkgs;
   fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
-  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl/legacy.nix { };
 
   fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
 
@@ -22774,6 +22773,8 @@ with pkgs;
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
+
+  ayu-theme-gtk = callPackage ../data/themes/ayu-theme-gtk { };
 
   b612  = callPackage ../data/fonts/b612 { };
 

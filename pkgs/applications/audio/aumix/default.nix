@@ -1,19 +1,26 @@
-{lib, stdenv, fetchurl, gettext, ncurses
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, ncurses
 , gtkGUI ? false
 , pkg-config ? null
-, gtk2 ? null}:
+, gtk2 ? null
+}:
 
 assert gtkGUI -> pkg-config != null && gtk2 != null;
 
 stdenv.mkDerivation rec {
-  name = "aumix-2.9.1";
+  pname = "aumix";
+  version = "2.9.1";
+
   src = fetchurl {
-    url = "http://www.jpj.net/~trevor/aumix/releases/${name}.tar.bz2";
+    url = "http://www.jpj.net/~trevor/aumix/releases/aumix-${version}.tar.bz2";
     sha256 = "0a8fwyxnc5qdxff8sl2sfsbnvgh6pkij4yafiln0fxgg6bal7knj";
   };
 
   buildInputs = [ gettext ncurses ]
-    ++ (if gtkGUI then [pkg-config gtk2] else []);
+    ++ lib.optionals gtkGUI [ pkg-config gtk2 ];
 
   meta = {
     description = "Audio mixer for X and the console";

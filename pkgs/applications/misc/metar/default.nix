@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, curl }:
 
 stdenv.mkDerivation {
-  name = "metar-20161013.1";
+  pname = "metar";
+  version = "20161013.1";
 
   src = fetchgit {
     url = "https://github.com/keesL/metar.git";

@@ -2,7 +2,9 @@
 
 stdenv.mkDerivation rec {
   rev = "168efd2608fdb88b1aff3e0244bda8402169f207";
-  name = "rofi-menugen-2015-12-28-${builtins.substring 0 7 rev}";
+  pname = "rofi-menugen";
+  version = "unstable-2015-12-28-${builtins.substring 0 7 rev}";
+
   src = fetchFromGitHub {
     owner = "octotep";
     repo = "menugen";

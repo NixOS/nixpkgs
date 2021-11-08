@@ -4,7 +4,6 @@
 , cmake
 , pkg-config
   # required
-, fmt
 , libiconv
 , libupnp
 , libuuid
@@ -88,7 +87,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    fmt
     libiconv
     libupnp'
     libuuid

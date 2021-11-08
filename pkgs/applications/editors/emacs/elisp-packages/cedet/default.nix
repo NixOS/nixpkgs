@@ -1,10 +1,11 @@
 { lib, fetchurl, stdenv, emacs, python }:
 
 stdenv.mkDerivation rec {
-  name = "cedet-1.1";
+  pname = "cedet";
+  version = "1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cedet/${name}.tar.gz";
+    url = "mirror://sourceforge/cedet/cedet-${version}.tar.gz";
     sha256 = "0p2bwlpwwa019axvgj09xkxbr53j0pq23d46s4la9jfhl47nbh22";
   };
 
