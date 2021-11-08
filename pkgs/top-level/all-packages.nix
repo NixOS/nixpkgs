@@ -9555,6 +9555,8 @@ with pkgs;
 
   syntex = callPackage ../tools/graphics/syntex {};
 
+  synapse-admin = callPackage ../tools/admin/synapse-admin {};
+
   sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
   socat = callPackage ../tools/networking/socat { };
