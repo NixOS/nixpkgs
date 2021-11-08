@@ -13160,6 +13160,8 @@ with pkgs;
 
   clips = callPackage ../development/interpreters/clips { };
 
+  cliscord = callPackage ../misc/cliscord/default.nix { };
+
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
