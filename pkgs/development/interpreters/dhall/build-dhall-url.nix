@@ -22,7 +22,7 @@
 
   # Dhall hash of the input Dhall file.
   # example: "sha256:6534a24145e93db3df3ef4bc39e2ba743404ea3e8d6cfdbb868d5c83d61f10d2"
-, dhall-hash
+, dhallHash
 
   # Name for this derivation.
 , name ? (baseNameOf url + "-cache")
@@ -61,7 +61,7 @@ let
         nativeBuildInputs = [ cacert ];
       }
       ''
-        echo "${url} ${dhall-hash}" > in-dhall-file
+        echo "${url} ${dhallHash}" > in-dhall-file
         ${dhall}/bin/dhall --alpha --plain --file in-dhall-file | ${dhallNoHTTP}/bin/dhall encode > $out
       '';
 
@@ -83,7 +83,7 @@ in
 
     export XDG_CACHE_HOME=$PWD/${cache}
 
-    SHA_HASH="${dhall-hash}"
+    SHA_HASH="${dhallHash}"
 
     HASH_FILE="''${SHA_HASH/sha256:/1220}"
 

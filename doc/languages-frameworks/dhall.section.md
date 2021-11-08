@@ -363,7 +363,7 @@ $ dhall-to-nixpkgs directory --fixed-output-derivations ~/proj/dhall-semver
       (buildDhallUrl {
         url = "https://prelude.dhall-lang.org/v17.0.0/package.dhall";
         hash = "sha256-ENs8kZwl6QRoM9+Jeo/+JwHcOQ+giT2VjDQwUkvlpD4=";
-        dhall-hash = "sha256:10db3c919c25e9046833df897a8ffe2701dc390fa0893d958c3430524be5a43e";
+        dhallHash = "sha256:10db3c919c25e9046833df897a8ffe2701dc390fa0893d958c3430524be5a43e";
         })
       ];
     }
