@@ -9,7 +9,7 @@
 , hunspell, libevent, libstartup_notification
 , libvpx_1_8
 , icu69, libpng, jemalloc, glib, pciutils
-, autoconf213, which, gnused, rustPackages, rustPackages_1_45
+, autoconf213, which, gnused, rustPackages_1_45, rustPackages_1_55
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk2, gtk3, wrapGAppsHook
@@ -99,18 +99,18 @@ let
   rust-cbindgen_pkg = if lib.versionAtLeast ffversion "89" then rust-cbindgen_latest else rust-cbindgen;
 
   # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+  inherit (if lib.versionAtLeast ffversion "91" then rustPackages_1_55 else rustPackages_1_45)
     rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
   # Target the LLVM version that rustc -Vv reports it is built with for LTO.
-  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
+  # rustPackages_1_45 -> LLVM 10, rustPackages_1_55 -> LLVM 12
   llvmPackages0 =
     /**/ if stdenv.isDarwin
       then buildPackages.llvmPackages
-    else if lib.versionAtLeast rustc.llvm.version "11"
-      then buildPackages.llvmPackages_11
+    else if lib.versionAtLeast rustc.llvm.version "12"
+      then buildPackages.llvmPackages_12
     else buildPackages.llvmPackages_10;
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
