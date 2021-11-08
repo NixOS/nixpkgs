@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ lib, ...} : {
     # it fails on the 10th iteration.
     nameserver.succeed(
         """
-          for i in {1..15}; do
+          for i in {1..100}; do
             host bla.foo.bar 192.168.1.1 | grep '1\.2\.3\.4'
           done
         """
