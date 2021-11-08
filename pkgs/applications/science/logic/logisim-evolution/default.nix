@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "logisim-evolution";
-  version = "3.5.0";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${version}/logisim-evolution-${version}-all.jar";
-    sha256 = "1r6im4gmjbnckx8jig6bxi5lxv06lwdnpxkyfalsfmw4nybd5arw";
+    sha256 = "04q9bzhnzpi8cgv3ly4ii88qvmlw9n09c4p1qmg8dhxqkskdqj6h";
   };
 
   dontUnpack = true;
@@ -30,8 +30,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/logisim-evolution --add-flags "-jar $src"
 
-    unzip $src resources/logisim/img/logisim-icon.svg
-    install -D resources/logisim/img/logisim-icon.svg $out/share/pixmaps/logisim-evolution.svg
+    # Create icons
+    unzip $src "resources/logisim/img/*"
+    for size in 16 32 48 128 256; do
+      install -D "./resources/logisim/img/logisim-icon-$size.png" "$out/share/icons/hicolor/''${size}x''${size}/apps/logisim-evolution.png"
+    done
 
     runHook postInstall
   '';
