@@ -5,19 +5,6 @@ with lib;
 let
   cfg = config.services.plausible;
 
-  # FIXME consider using LoadCredential as soon as it actually works.
-  envSecrets = ''
-    ADMIN_USER_PWD="$(<${cfg.adminUser.passwordFile})"
-    export ADMIN_USER_PWD # separate export to make `set -e` work
-
-    SECRET_KEY_BASE="$(<${cfg.server.secretKeybaseFile})"
-    export SECRET_KEY_BASE # separate export to make `set -e` work
-
-    ${optionalString (cfg.mail.smtp.passwordFile != null) ''
-      SMTP_USER_PWD="$(<${cfg.mail.smtp.passwordFile})"
-      export SMTP_USER_PWD # separate export to make `set -e` work
-    ''}
-  '';
 in {
   options.services.plausible = {
     enable = mkEnableOption "plausible";
@@ -184,13 +171,15 @@ in {
       enable = true;
     };
 
+    services.epmd.enable = true;
+
     systemd.services = mkMerge [
       {
         plausible = {
           inherit (pkgs.plausible.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optional cfg.database.postgres.setup "plausible-postgres.service";
+          after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
           requires = optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"
@@ -200,7 +189,7 @@ in {
           environment = {
             # NixOS specific option to avoid that it's trying to write into its store-path.
             # See also https://github.com/lau/tzdata#data-directory-and-releases
-            TZDATA_DIR = "/var/lib/plausible/elixir_tzdata";
+            STORAGE_DIR = "/var/lib/plausible/elixir_tzdata";
 
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration
@@ -231,28 +220,29 @@ in {
 
           path = [ pkgs.plausible ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
+          script = ''
+            export CONFIG_DIR=$CREDENTIALS_DIRECTORY
+
+            # setup
+            ${pkgs.plausible}/createdb.sh
+            ${pkgs.plausible}/migrate.sh
+            ${optionalString cfg.adminUser.activate ''
+              if ! ${pkgs.plausible}/init-admin.sh | grep 'already exists'; then
+                psql -d plausible <<< "UPDATE users SET email_verified=true;"
+              fi
+            ''}
+            plausible start
+          '';
 
           serviceConfig = {
             DynamicUser = true;
             PrivateTmp = true;
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
-            ExecStartPre = "@${pkgs.writeShellScript "plausible-setup" ''
-              set -eu -o pipefail
-              ${envSecrets}
-              ${pkgs.plausible}/createdb.sh
-              ${pkgs.plausible}/migrate.sh
-              ${optionalString cfg.adminUser.activate ''
-                if ! ${pkgs.plausible}/init-admin.sh | grep 'already exists'; then
-                  psql -d plausible <<< "UPDATE users SET email_verified=true;"
-                fi
-              ''}
-            ''} plausible-setup";
-            ExecStart = "@${pkgs.writeShellScript "plausible" ''
-              set -eu -o pipefail
-              ${envSecrets}
-              plausible start
-            ''} plausible";
+            LoadCredential = [
+              "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
+              "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
+            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
           };
         };
       }
@@ -260,20 +250,22 @@ in {
         # `plausible' requires the `citext'-extension.
         plausible-postgres = {
           after = [ "postgresql.service" ];
-          bindsTo = [ "postgresql.service" ];
-          requiredBy = [ "plausible.service" ];
           partOf = [ "plausible.service" ];
-          serviceConfig.Type = "oneshot";
-          unitConfig.ConditionPathExists = "!/var/lib/plausible/.db-setup";
-          script = ''
-            mkdir -p /var/lib/plausible/
+          serviceConfig = {
+            Type = "oneshot";
+            User = config.services.postgresql.superUser;
+            RemainAfterExit = true;
+          };
+          script = with cfg.database.postgres; ''
             PSQL() {
-              /run/wrappers/bin/sudo -Hu postgres ${config.services.postgresql.package}/bin/psql --port=5432 "$@"
+              ${config.services.postgresql.package}/bin/psql --port=5432 "$@"
             }
-            PSQL -tAc "CREATE ROLE plausible WITH LOGIN;"
-            PSQL -tAc "CREATE DATABASE plausible WITH OWNER plausible;"
-            PSQL -d plausible -tAc "CREATE EXTENSION IF NOT EXISTS citext;"
-            touch /var/lib/plausible/.db-setup
+            # check if the database already exists
+            if ! PSQL -lqt | ${pkgs.coreutils}/bin/cut -d \| -f 1 | ${pkgs.gnugrep}/bin/grep -qw ${dbname} ; then
+              PSQL -tAc "CREATE ROLE plausible WITH LOGIN;"
+              PSQL -tAc "CREATE DATABASE ${dbname} WITH OWNER plausible;"
+              PSQL -d ${dbname} -tAc "CREATE EXTENSION IF NOT EXISTS citext;"
+            fi
           '';
         };
       })
