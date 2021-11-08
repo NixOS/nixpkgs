@@ -45,6 +45,10 @@ rec {
     url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
+  # Update note:
+  # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
+  # adding to the `nvidia_x11_legacy*` entries.
+
   # Last one supporting Kepler architecture
   legacy_470 = generic {
       version = "470.82.00";
