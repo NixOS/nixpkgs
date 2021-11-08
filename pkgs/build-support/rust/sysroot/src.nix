@@ -5,7 +5,11 @@
 stdenv.mkDerivation {
   name = "cargo-src";
   preferLocalBuild = true;
-  phases = [ "installPhase" ];
+
+  unpackPhase = "true";
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
     export RUSTC_SRC=${rustPlatform.rustLibSrc.override { }}
   ''
