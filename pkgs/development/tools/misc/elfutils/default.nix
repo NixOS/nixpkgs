@@ -7,16 +7,15 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.185";
+  version = "0.186";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-3I0+dKsglGXn9Wjhs7uaWhQvhlbitX0QBJpz2irmtaY=";
+    sha256 = "sha256-f2+5FJsWc9ONkXig0+D7ih7E9TqfTC/4lGlgmHlkEXc=";
   };
 
   patches = [
     ./debug-info-from-env.patch
-    ./musl-cdefs_h.patch
     (fetchpatch {
       name = "fix-aarch64_fregs.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
