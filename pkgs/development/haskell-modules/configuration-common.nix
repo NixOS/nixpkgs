@@ -690,9 +690,6 @@ self: super: {
   # https://github.com/xu-hao/namespace/issues/1
   namespace = doJailbreak super.namespace;
 
-  # https://github.com/cchalmers/plots/issues/46
-  plots = doJailbreak super.plots;
-
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
 
