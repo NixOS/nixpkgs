@@ -4666,6 +4666,18 @@ final: prev:
     meta.homepage = "https://github.com/kristijanhusak/orgmode.nvim/";
   };
 
+  package-info-nvim = buildVimPluginFrom2Nix {
+    pname = "package-info.nvim";
+    version = "2021-10-30";
+    src = fetchFromGitHub {
+      owner = "vuki656";
+      repo = "package-info.nvim";
+      rev = "0572250a6b69f01416399f2f581aa87c17e03810";
+      sha256 = "0z26i2h42vjsc5fkikfi6w7d7fnf6m3j5m7a73hi9rdbw389b2ay";
+    };
+    meta.homepage = "https://github.com/vuki656/package-info.nvim/";
+  };
+
   packer-nvim = buildVimPluginFrom2Nix {
     pname = "packer.nvim";
     version = "2021-11-03";
@@ -5205,6 +5217,18 @@ final: prev:
       sha256 = "0r79bpl98xcsmkw6dg83cf1ghn89rzsr011zirk3v1wfxclri2c4";
     };
     meta.homepage = "https://github.com/saltstack/salt-vim/";
+  };
+
+  SchemaStore-nvim = buildVimPluginFrom2Nix {
+    pname = "SchemaStore.nvim";
+    version = "2021-11-08";
+    src = fetchFromGitHub {
+      owner = "b0o";
+      repo = "SchemaStore.nvim";
+      rev = "29116d254c8fa4138cdbeac2beb9dedac6b52dcd";
+      sha256 = "0jdzkbj6p8d84w6hfpwcdc0qzdrwzp7gqdqxgwl6nwkwm10ahwgm";
+    };
+    meta.homepage = "https://github.com/b0o/SchemaStore.nvim/";
   };
 
   scrollbar-nvim = buildVimPluginFrom2Nix {
