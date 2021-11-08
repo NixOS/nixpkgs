@@ -18990,6 +18990,8 @@ with pkgs;
 
   presage = callPackage ../development/libraries/presage { };
 
+  present = callPackage ../misc/present { };
+
   prime-server = callPackage ../development/libraries/prime-server { };
 
   primesieve = callPackage ../development/libraries/science/math/primesieve { };
