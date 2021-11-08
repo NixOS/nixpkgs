@@ -4550,6 +4550,13 @@
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
   };
+  henkkalkwater = {
+    email = "chris+nixpkgs@netsoj.nl";
+    github = "HenkKalkwater";
+    githubId = 4262067;
+    matrix = "@chris:netsoj.nl";
+    name = "Chris Josten";
+  };
   henrikolsson = {
     email = "henrik@fixme.se";
     github = "henrikolsson";
