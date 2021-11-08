@@ -437,6 +437,7 @@ mattn/webapi-vim
 matze/vim-move
 max397574/better-escape.nvim
 maximbaz/lightline-ale
+maxjacobson/vim-fzf-coauthorship
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
 mboughaba/i3config.vim

@@ -7720,6 +7720,18 @@ final: prev:
     meta.homepage = "https://github.com/tpope/vim-fugitive/";
   };
 
+  vim-fzf-coauthorship = buildVimPluginFrom2Nix {
+    pname = "vim-fzf-coauthorship";
+    version = "2021-07-14";
+    src = fetchFromGitHub {
+      owner = "maxjacobson";
+      repo = "vim-fzf-coauthorship";
+      rev = "c5df55743a274a2c2d6370008f199176dabae0bd";
+      sha256 = "0v52w9jiyg0q6fmsh0dq8gd6m48vhhj2fy95v7lvqyr7pnr1wqaa";
+    };
+    meta.homepage = "https://github.com/maxjacobson/vim-fzf-coauthorship/";
+  };
+
   vim-gh-line = buildVimPluginFrom2Nix {
     pname = "vim-gh-line";
     version = "2021-03-25";
