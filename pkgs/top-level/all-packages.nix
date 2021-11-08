@@ -25646,6 +25646,8 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
+  srain = callPackage ../applications/networking/irc/srain { };
+
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   wlroots = callPackage ../development/libraries/wlroots {
