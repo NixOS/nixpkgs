@@ -28,9 +28,9 @@ DEPS_HEADER="
 { fetchurl }:
 let
   nugetUrlBase = \"$URLBASE\";
-  fetchNuGet = { name, version, sha256 }: fetchurl {
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
     inherit sha256;
-    url = \"\${nugetUrlBase}/\${name}/\${version}\";
+    url = \"\${nugetUrlBase}/\${pname}/\${version}\";
   };
 in ["
 
@@ -38,7 +38,7 @@ DEPS_FOOTER="]"
 
 DEPS_TEMPLATE="
 (fetchNuGet {
-  name = \"%s\";
+  pname = \"%s\";
   version = \"%s\";
   sha256 = \"%s\";
 })"
