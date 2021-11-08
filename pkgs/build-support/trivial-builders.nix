@@ -292,8 +292,10 @@ rec {
       '';
 
       checkPhase = if checkPhase == null then ''
+        runHook preCheck
         ${stdenv.shell} -n $out/bin/${name}
         ${shellcheck}/bin/shellcheck $out/bin/${name}
+        runHook postCheck
       ''
       else checkPhase;
     };
