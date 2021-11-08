@@ -1805,6 +1805,17 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The option
+          <literal>services.prometheus.environmentFile</literal> has
+          been removed since it was causing
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/126083">issues</link>
+          and Prometheus now has native support for secret files, i.e.
+          <literal>basic_auth.password_file</literal> and
+          <literal>authorization.credentials_file</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Dokuwiki now supports caddy! However
         </para>
         <itemizedlist spacing="compact">
