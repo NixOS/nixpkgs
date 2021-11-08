@@ -108,6 +108,7 @@ in {
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.darwin) autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
