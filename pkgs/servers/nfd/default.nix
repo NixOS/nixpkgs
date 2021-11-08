@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = lib.toUpper pname;
-    rev = "$NFD-${version}";
+    rev = "NFD-${version}";
     sha256 = "1l9bchj8c68r6qw4vr1kc96jgxl0vpqa2vjkvy1xmhz92sivr6gi";
   };
 
