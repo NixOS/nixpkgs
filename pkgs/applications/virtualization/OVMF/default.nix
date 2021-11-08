@@ -30,10 +30,6 @@ edk2.mkDerivation projectDscPath {
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
-  # Fails on i686 with:
-  # 'cc1: error: LTO support has not been enabled in this configuration'
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isi686 [ "-fno-lto" ];
-
   buildFlags =
     lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
