@@ -12,9 +12,10 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyRMVtransport";
+  pname = "pyrmvtransport";
   version = "0.3.2";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -34,12 +35,14 @@ buildPythonPackage rec {
     lxml
   ];
 
-  pythonImportsCheck = [ "RMVtransport" ];
-
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-httpx
+  ];
+
+  pythonImportsCheck = [
+    "RMVtransport"
   ];
 
   meta = with lib; {
