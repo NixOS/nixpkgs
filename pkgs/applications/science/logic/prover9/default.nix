@@ -1,7 +1,8 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "prover9-2009-11a";
+  pname = "prover9";
+  version = "2009-11a";
 
   src = fetchurl {
     url = "https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz";
@@ -40,6 +41,6 @@ stdenv.mkDerivation {
       the Otter Prover. This is the LADR command-line version.
     '';
     platforms = lib.platforms.linux;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

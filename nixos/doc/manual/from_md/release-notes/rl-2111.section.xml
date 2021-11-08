@@ -1867,6 +1867,15 @@ Superuser created successfully.
           directory.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Loki has had another release. Some default values have been
+          changed for the configuration and some configuration options
+          have been renamed. For more details, please check
+          <link xlink:href="https://grafana.com/docs/loki/latest/upgrading/#240">the
+          upgrade guide</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

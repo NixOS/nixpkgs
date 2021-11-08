@@ -12,8 +12,8 @@ let
   };
 in
 
-stdenv.mkDerivation  {
-  name = "gplpv-0.11.0.373";
+stdenv.mkDerivation {
+  pname = "gplpv";
   version = "0.11.0.373";
 
   dontUnpack = true;
@@ -23,13 +23,13 @@ stdenv.mkDerivation  {
     (cd x86; ${p7zip}/bin/7z e ${src_x86})
     mkdir -p amd64
     (cd amd64; ${p7zip}/bin/7z e ${src_amd64})
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/x86 $out/amd64
     cp x86/* $out/x86/.
     cp amd64/* $out/amd64/.
-    '';
+  '';
 
   meta = with lib; {
     description = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation  {
       Windows to be para-virtualized.
       The drivers are signed by Univention with a Software Publishers
       Certificate obtained from the VeriSign CA.
-      '';
+    '';
     homepage = "http://wiki.univention.de/index.php?title=Installing-signed-GPLPV-drivers";
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

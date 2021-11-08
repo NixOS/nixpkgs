@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "procmail-3.22";
+stdenv.mkDerivation rec {
+  pname = "procmail";
+  version = "3.22";
 
   patches = [
     ./CVE-2014-3618.patch
@@ -15,17 +16,17 @@ stdenv.mkDerivation {
   # getline is defined differently in glibc now. So rename it.
   # Without the .PHONY target "make install" won't install anything on Darwin.
   postPatch = ''
-    sed -e "s%^RM.*$%#%" -i Makefile
-    sed -e "s%^BASENAME.*%\BASENAME=$out%" -i Makefile
-    sed -e "s%^LIBS=.*%LIBS=-lm%" -i Makefile
-    sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
-    sed -e "3i\
-.PHONY: install
-" -i Makefile
+        sed -e "s%^RM.*$%#%" -i Makefile
+        sed -e "s%^BASENAME.*%\BASENAME=$out%" -i Makefile
+        sed -e "s%^LIBS=.*%LIBS=-lm%" -i Makefile
+        sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
+        sed -e "3i\
+    .PHONY: install
+    " -i Makefile
   '';
 
   src = fetchurl {
-    url = "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-3.22.tar.gz";
+    url = "ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-${version}.tar.gz";
     sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
   };
 
