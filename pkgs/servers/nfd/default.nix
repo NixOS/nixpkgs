@@ -23,15 +23,11 @@ stdenv.mkDerivation rec {
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
     sha256 = "1l9bchj8c68r6qw4vr1kc96jgxl0vpqa2vjkvy1xmhz92sivr6gi";
+    fetchSubmodules = withWebSocket;
   };
 
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl ] ++ lib.optional withSystemd systemd;
-
-  preConfigurePhase =
-    if withWebSocket then ''
-      ln -s ${websocketpp} websocketpp
-    '' else "";
+  buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
