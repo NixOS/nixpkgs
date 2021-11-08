@@ -28669,7 +28669,7 @@ with pkgs;
 
   alfis = callPackage ../applications/blockchains/alfis {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
-    dialog = gnome.zenity;
+    inherit (gnome) zenity;
   };
   alfis-nogui = alfis.override {
     withGui = false;

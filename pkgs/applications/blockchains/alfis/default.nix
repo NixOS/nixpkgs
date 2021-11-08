@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, withGui ? true
-, webkitgtk, Cocoa, WebKit, dialog, makeWrapper }:
+, webkitgtk, Cocoa, WebKit, zenity, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
@@ -31,9 +31,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
 
   postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
-    cp $out/bin/alfis{,_unwrapped}
-    makeWrapper $out/bin/alfis{_unwrapped,} \
-      --prefix PATH : ${lib.makeBinPath [ dialog ]}
+    wrapProgram $out/bin/alfis \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
 
   meta = with lib; {
