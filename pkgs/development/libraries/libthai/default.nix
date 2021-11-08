@@ -17,10 +17,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdatrie ];
 
-  postInstall = ''
-    installManPage man/man3/*.3
-  '';
-
   meta = with lib; {
     homepage = "https://linux.thai.net/projects/libthai/";
     description = "Set of Thai language support routines";
