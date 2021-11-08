@@ -9560,6 +9560,12 @@
     githubId = 165283;
     name = "Alexey Kutepov";
   };
+  rewine = {
+    email = "lhongxu@outlook.com";
+    github = "wineee";
+    githubId = 22803888;
+    name = "Lu Hongxu";
+  };
   rgrunbla = {
     email = "remy@grunblatt.org";
     github = "rgrunbla";
