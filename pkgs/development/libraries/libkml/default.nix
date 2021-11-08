@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libkml";
-  version = "1.3.0";
+  version = "unstable-2017-01-15";
 
   src = fetchFromGitHub {
     owner = "libkml";
     repo = pname;
-    rev = version;
-    sha256 = "0gl4cqfps9mzx6hzf3dc10hy5y8smpyf1s31sqm7w343hgsllv0z";
+    rev = "916a801ed3143ab82c07ec108bad271aa441da16";
+    sha256 = "0kgpmmc6dxnpqj90yplg3018d9cyykp6xd2cws49iv91w5k2c11v";
   };
 
   nativeBuildInputs = [
