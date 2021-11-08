@@ -36,8 +36,8 @@ in
     mktplcRef = {
       name = "remote-ssh";
       publisher = "ms-vscode-remote";
-      version = "0.65.7";
-      sha256 = "ae86c4be79fc5af747bb1f1aa5841221af80ee7476cc2f1c9ac277fa2fa1d683";
+      version = "0.66.0";
+      sha256 = "04jgn88b1j10qas4n6icg1zfvqqbxxmnjpvvkxdjgp845530k708";
     };
 
     postPatch = ''
