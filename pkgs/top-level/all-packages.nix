@@ -301,6 +301,8 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
+  dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
+
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
   deadcode = callPackage ../development/tools/deadcode { };
