@@ -9857,7 +9857,7 @@ with pkgs;
   telescope = callPackage ../applications/networking/browsers/telescope { };
 
   termscp = callPackage ../tools/networking/termscp {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
   };
 
   termius = callPackage ../applications/networking/termius { };
