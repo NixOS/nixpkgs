@@ -3,6 +3,7 @@
   gzip, bzip2, xz}:
 
 # unrar is unfree, as well as 7z with unrar support, not including it (patool doesn't support unar)
+# it will still use unrar if present in the path
 
 let
   compression-utilities = [
@@ -34,9 +35,9 @@ buildPythonPackage rec {
     sha256 = "0v4r77sm3yzh7y1whfwxmp01cchd82jbhvbg9zsyd2yb944imzjy";
   };
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace patoolib/util.py \
-      --replace "path = None" 'path = append_to_path(os.environ["PATH"], "${lib.makeBinPath compression-utilities}")'
+      --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
   '';
 
   checkInputs = [ pytestCheckHook ] ++ compression-utilities;
