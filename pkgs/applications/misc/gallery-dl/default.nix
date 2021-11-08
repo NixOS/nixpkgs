@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.19.1";
+  version = "1.19.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea1a7bf908507a87edffde6d6be93b8859ab0832ca788b61690a13aa5dd52216";
+    sha256 = "7fec9ac69582dbd9922666e6ece3142ae52dc9679a2c4a613f6ee94ad09e5f68";
   };
 
   propagatedBuildInputs = [ requests ];
