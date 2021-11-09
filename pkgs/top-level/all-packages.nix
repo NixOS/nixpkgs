@@ -31450,6 +31450,8 @@ with pkgs;
 
   key = callPackage ../applications/science/logic/key { };
 
+  keymapviz = callPackage ../tools/misc/keymapviz { };
+
   lean = callPackage ../applications/science/logic/lean {};
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
