@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
+  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal yarnSetupHook;
 
   compose = f: g: x: f (g x);
   id = x: x;
@@ -53,110 +53,6 @@ in rec {
       pkg = callPackage yarnNix { };
     in
       pkg.offline_cache;
-
-  defaultYarnFlags = [
-    "--offline"
-    "--frozen-lockfile"
-    "--ignore-engines"
-    "--ignore-scripts"
-  ];
-
-  mkYarnModules = {
-    name ? "${pname}-${version}", # safe name and version, e.g. testcompany-one-modules-1.0.0
-    pname, # original name, e.g @testcompany/one
-    version,
-    packageJSON,
-    yarnLock,
-    yarnNix ? mkYarnNix { inherit yarnLock; },
-    offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
-    pkgConfig ? {},
-    preBuild ? "",
-    postBuild ? "",
-    workspaceDependencies ? [], # List of yarn packages
-  }:
-    let
-      extraBuildInputs = (lib.flatten (builtins.map (key:
-        pkgConfig.${key}.buildInputs or []
-      ) (builtins.attrNames pkgConfig)));
-
-      postInstall = (builtins.map (key:
-        if (pkgConfig.${key} ? postInstall) then
-          ''
-            for f in $(find -L -path '*/node_modules/${key}' -type d); do
-              (cd "$f" && (${pkgConfig.${key}.postInstall}))
-            done
-          ''
-        else
-          ""
-      ) (builtins.attrNames pkgConfig));
-
-      workspaceJSON = pkgs.writeText
-        "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; }); # scoped packages need second splat
-
-      workspaceDependencyLinks = lib.concatMapStringsSep "\n"
-        (dep: ''
-          mkdir -p "deps/${dep.pname}"
-          ln -sf ${dep.packageJSON} "deps/${dep.pname}/package.json"
-        '')
-        workspaceDependencies;
-
-    in stdenv.mkDerivation {
-      inherit preBuild postBuild name;
-      dontUnpack = true;
-      dontInstall = true;
-      buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
-
-      configurePhase = lib.optionalString (offlineCache ? outputHash) ''
-        if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then
-          echo "yarn.lock changed, you need to update the fetchYarnDeps hash"
-          exit 1
-        fi
-      '' + ''
-        # Yarn writes cache directories etc to $HOME.
-        export HOME=$PWD/yarn_home
-      '';
-
-      buildPhase = ''
-        runHook preBuild
-
-        mkdir -p "deps/${pname}"
-        cp ${packageJSON} "deps/${pname}/package.json"
-        cp ${workspaceJSON} ./package.json
-        cp ${yarnLock} ./yarn.lock
-        chmod +w ./yarn.lock
-
-        yarn config --offline set yarn-offline-mirror ${offlineCache}
-
-        # Do not look up in the registry, but in the offline cache.
-        ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
-
-        ${workspaceDependencyLinks}
-
-        yarn install ${lib.escapeShellArgs yarnFlags}
-
-        ${lib.concatStringsSep "\n" postInstall}
-
-        mkdir $out
-        mv node_modules $out/
-        mv deps $out/
-        patchShebangs $out
-
-        runHook postBuild
-      '';
-    };
-
-  # This can be used as a shellHook in mkYarnPackage. It brings the built node_modules into
-  # the shell-hook environment.
-  linkNodeModulesHook = ''
-    if [[ -d node_modules || -L node_modules ]]; then
-      echo "./node_modules is present. Replacing."
-      rm -rf node_modules
-    fi
-
-    ln -s "$node_modules" node_modules
-  '';
 
   mkYarnWorkspace = {
     src,
@@ -232,11 +128,10 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
-    yarnPreBuild ? "",
-    yarnPostBuild ? "",
-    pkgConfig ? {},
-    extraBuildInputs ? [],
+    yarnFlags ? yarnSetupHook.defaultYarnFlags,
+    nativeBuildInputs ? [],
+    buildInputs ? [],
+    extraBuildInputs ? [], # for compatibility
     publishBinsFor ? null,
     workspaceDependencies ? [], # List of yarnPackages
     ...
@@ -252,14 +147,6 @@ in rec {
         (lib.flatten (builtins.map (dep: dep.workspaceDependencies) workspaceDependencies))
         ++ workspaceDependencies
       );
-
-      deps = mkYarnModules {
-        name = "${safeName}-modules-${version}";
-        preBuild = yarnPreBuild;
-        postBuild = yarnPostBuild;
-        workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
-      };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
 
@@ -287,24 +174,29 @@ in rec {
           mkdir -p "deps/${dep.pname}"
           tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.pname}" --strip-components=1
           if [ ! -e "deps/${dep.pname}/node_modules" ]; then
-            ln -s "${deps}/deps/${dep.pname}/node_modules" "deps/${dep.pname}/node_modules"
+            ln -s "$PWD/node_modules" "deps/${dep.pname}/node_modules"
           fi
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
-      inherit src pname;
+    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "workspaceDependencies"] // {
+      inherit src pname offlineCache yarnFlags;
 
       name = baseName;
 
-      buildInputs = [ yarn nodejs rsync ] ++ extraBuildInputs;
+      nativeBuildInputs = [ yarn nodejs rsync yarnSetupHook ] ++ nativeBuildInputs;
+      buildInputs = buildInputs ++ extraBuildInputs;
 
-      node_modules = deps + "/node_modules";
+      prePatch = (attrs.prePatch or "") + ''
+        cp ${yarnLock} ./yarn.lock
+        cp ${packageJSON} ./package.json
+        chmod u+w ./yarn.lock
+      '';
 
       configurePhase = attrs.configurePhase or ''
         runHook preConfigure
 
-        for localDir in npm-packages-offline-cache node_modules; do
+        for localDir in npm-packages-offline-cache; do
           if [[ -d $localDir || -L $localDir ]]; then
             echo "$localDir dir present. Removing."
             rm -rf $localDir
@@ -314,19 +206,21 @@ in rec {
         # move convent of . to ./deps/${pname}
         mv $PWD $NIX_BUILD_TOP/temp
         mkdir -p "$PWD/deps/${pname}"
+        mv $NIX_BUILD_TOP/temp/node_modules $PWD/node_modules
         rm -fd "$PWD/deps/${pname}"
         mv $NIX_BUILD_TOP/temp "$PWD/deps/${pname}"
         cd $PWD
 
-        ln -s ${deps}/deps/${pname}/node_modules "deps/${pname}/node_modules"
-
-        cp -r $node_modules node_modules
-        chmod -R +w node_modules
+        pushd "deps/${pname}"
+        ln -s "../../node_modules" "./node_modules"
+        popd
 
         ${linkDirFunction}
 
         linkDirToDirLinks "$(dirname node_modules/${pname})"
-        ln -s "deps/${pname}" "node_modules/${pname}"
+        pushd node_modules
+        ln -s "../deps/${pname}" "${pname}"
+        popd
 
         ${workspaceDependencyCopy}
 
@@ -360,7 +254,7 @@ in rec {
       '';
 
       passthru = {
-        inherit pname package packageJSON deps;
+        inherit pname package packageJSON;
         workspaceDependencies = workspaceDependenciesTransitive;
       } // (attrs.passthru or {});
 
@@ -403,7 +297,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = yarnSetupHook.defaultYarnFlags ++ ["--production=true"];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 

@@ -10915,7 +10915,6 @@ with pkgs;
   inherit (yarn2nix-moretea)
     yarn2nix
     mkYarnPackage
-    mkYarnModules
     fixup_yarn_lock;
 
   yascreen = callPackage ../development/libraries/yascreen { };
