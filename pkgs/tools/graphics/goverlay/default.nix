@@ -17,6 +17,7 @@
 , polkit
 , procps
 , systemd
+, util-linux
 , vulkan-tools
 , which
 }:
@@ -35,13 +36,13 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "goverlay";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = pname;
     rev = version;
-    hash = "sha256-ZksQse0xWAtH+U6EjcGWT2BOG5dfSnm6XvZLLE5ynHs=";
+    sha256 = "sha256-xuv7u2lLQAB0Zmu7UHGXP/sJwcb8vHDf9hFL+pF+818=";
   };
 
   outputs = [ "out" "man" ];
@@ -91,6 +92,7 @@ in stdenv.mkDerivation rec {
       polkit
       procps
       systemd
+      util-linux.bin
       vulkan-tools
       which
     ]}"
