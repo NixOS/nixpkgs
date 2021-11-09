@@ -11,17 +11,6 @@
 let
   pinData = lib.importJSON ./pin.json;
 
-  pkgConfig = {
-    node-sass = {
-      nativeBuildInputs = [ ];
-      buildInputs = [ libsass pkg-config python3 ];
-      postInstall = ''
-        LIBSASS_EXT=auto yarn --offline run build
-        rm build/config.gypi
-      '';
-    };
-  };
-
   name = "lemmy-ui";
   version = pinData.version;
 
@@ -35,9 +24,9 @@ let
 in
 mkYarnPackage {
 
-  inherit src pkgConfig name version;
+  inherit src name version;
 
-  extraBuildInputs = [ libsass ];
+  nativeBuildInputs = [ libsass pkg-config python3 ];
 
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
@@ -45,23 +34,24 @@ mkYarnPackage {
     sha256 = pinData.uiYarnDepsSha256;
   };
 
-  yarnPreBuild = ''
-    export npm_config_nodedir=${nodejs}
-  '';
+  npm_config_nodedir = nodejs;
 
   buildPhase = ''
+    pushd node_modules/node-sass
+    LIBSASS_EXT=auto npm run build
+    rm build/config.gypi
+    popd
+
     # Yarn writes cache directories etc to $HOME.
     export HOME=$PWD/yarn_home
-
-    ln -sf $PWD/node_modules $PWD/deps/lemmy-ui/
 
     yarn --offline build:prod
   '';
 
-  preInstall = ''
+  installPhase = ''
     mkdir $out
     cp -R ./deps/lemmy-ui/dist $out
-    cp -R ./node_modules $out
+    cp -R deps/${name}/node_modules $out
   '';
 
   distPhase = "true";
