@@ -178,6 +178,10 @@ self: super: {
     '';
   });
 
+  crates-nvim = super.crates-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
     buildInputs = [ python ];
     buildPhase = ''
