@@ -23638,6 +23638,8 @@ with pkgs;
     inherit (gnome) gnome-shell;
   };
 
+  vimix-icon-theme = callPackage ../data/icons/vimix-icon-theme { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
