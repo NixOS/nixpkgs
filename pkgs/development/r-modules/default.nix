@@ -22,7 +22,8 @@ let
         doCheck ? true,
         requireX ? false,
         broken ? false,
-        hydraPlatforms ? R.meta.platforms
+        hydraPlatforms ? R.meta.platforms,
+        maintainers ? []
       }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
@@ -36,6 +37,7 @@ let
     meta.platforms = R.meta.platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
+    meta.maintainers = maintainers;
   });
 
   # Templates for generating Bioconductor and CRAN packages
@@ -109,6 +111,26 @@ let
         buildInputs = attrs.buildInputs ++ value;
       })
     ) overrides;
+
+  # Overrides package definitions with maintainers.
+  # For example,
+  #
+  # overrideMaintainers {
+  #   foo = [ lib.maintainers.jsmith ]
+  # } old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.override {
+  #     maintainers = [ lib.maintainers.jsmith ];
+  #   };
+  # }
+  overrideMaintainers = overrides: old:
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).override {
+        maintainers = value;
+      }) overrides;
 
   # Overrides package definitions with new R dependencies.
   # For example,
@@ -250,7 +272,8 @@ let
       old5 = old4 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old4);
       old6 = old5 // (overrideBuildInputs packagesWithBuildInputs old5);
       old7 = old6 // (overrideBroken brokenPackages old6);
-      old = old7;
+      old8 = old7 // (overrideMaintainers packagesWithMaintainers old7);
+      old = old8;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -265,6 +288,15 @@ let
           import ./cran-packages.nix { inherit self; derive = deriveCran; };
 
   # tweaks for the individual packages and "in self" follow
+
+  packagesWithMaintainers = with lib.maintainers; {
+    data_table = [ jbedo ];
+    BiocManager = [ jbedo ];
+    ggplot2 = [ jbedo ];
+    svaNUMT = [ jbedo ];
+    svaRetro = [ jbedo ];
+    StructuralVariantAnnotation = [ jbedo ];
+  };
 
   packagesWithRDepends = {
     FactoMineR = [ self.car ];
