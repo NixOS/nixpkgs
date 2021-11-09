@@ -34,10 +34,9 @@ splitBuildInstallImport() {
   regexList=()
   isFirst=true
   for o in $outputs; do
-    k=${o}Hash
-    h=${!k}
-    if $isFirst; then isFirst=false; else regex+='|'; fi
-    regex="s,$outHash$suffixEscaped,$outHashNew$suffix,g"
+    a=${o}Hash
+    b=${o}HashNew
+    regex="s,${!a}$suffixEscaped,${!b}$suffix,g"
     echo "  $o: $regex"
     regexList+=("$regex")
   done
@@ -63,9 +62,7 @@ splitBuildInstallImport() {
     done
   )
 
-  # this is working
-  #if false; then
-  if true; then
+  if false; then
     # debug: verify patched output paths (slow)
     regex=".{50}("
     isFirst=true
@@ -82,9 +79,9 @@ splitBuildInstallImport() {
 
     grepResult="$(find /build -type f -not -path /build/env-vars -exec grep -HnEa "$regex" '{}' \;)"
     if [ -n "$grepResult" ]; then
-      echo "splitBuildInstallImport: fatal error: some hashes were not replaced:"
-      echo "$grepResult"
-      exit 1
+    echo "splitBuildInstallImport: fatal error: some hashes were not replaced:"
+    echo "$grepResult"
+    exit 1
     fi
 
     echo "splitBuildInstallImport: debug: diff cmake_install.cmake:"
@@ -92,6 +89,4 @@ splitBuildInstallImport() {
   fi
 
   cd /build/$sourceRoot/build
-
-  set -o xtrace
 }
