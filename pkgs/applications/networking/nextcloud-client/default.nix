@@ -21,18 +21,19 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.3.5";
+  version = "3.3.6";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-kqNN9P0G/Obi/8PStmLxImQdqkhLnJoFZ7dLpqe11TI=";
+    sha256 = "sha256-HhFm8rIsDaV4QmvHplbj49gf1vYCZyBl8WH5bvRHT7I=";
   };
 
   patches = [
     # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
+    ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
   nativeBuildInputs = [
@@ -59,6 +60,8 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    # See also: https://bugreports.qt.io/browse/QTBUG-85967
+    "--set QML_DISABLE_DISK_CACHE 1"
   ];
 
   cmakeFlags = [
