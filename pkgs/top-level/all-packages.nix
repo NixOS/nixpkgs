@@ -15720,6 +15720,8 @@ with pkgs;
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
+  ndn-tools = callPackage ../tools/networking/ndn-tools { };
+
   cddlib = callPackage ../development/libraries/cddlib {};
 
   cdk = callPackage ../development/libraries/cdk {};
