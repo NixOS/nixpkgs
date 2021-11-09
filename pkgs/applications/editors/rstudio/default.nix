@@ -28,7 +28,8 @@
 , soci
 , postgresql
 , nodejs
-, mkYarnModules
+, yarnSetupHook
+, yarn2nix-moretea
 , qmake
 }:
 
@@ -58,13 +59,6 @@ let
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
   };
 
-  panmirrorModules = mkYarnModules {
-    inherit pname version;
-    packageJSON = ./package.json;
-    yarnLock =  ./yarn.lock;
-    yarnNix = ./yarndeps.nix;
-  };
-
 in
 mkDerivation rec {
   inherit pname version src RSTUDIO_VERSION_MAJOR RSTUDIO_VERSION_MINOR RSTUDIO_VERSION_PATCH;
@@ -76,8 +70,8 @@ mkDerivation rec {
     jdk
     makeWrapper
     pandoc
-    nodejs
     copyDesktopItems
+    yarnSetupHook
   ];
 
   buildInputs = [
@@ -148,6 +142,10 @@ mkDerivation rec {
     hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
 
+  offlineCache = yarn2nix-moretea.importOfflineCache ./yarndeps.nix;
+  yarnFlags = yarnSetupHook.defaultYarnFlags;
+  yarnRoot = "src/gwt/panmirror/src/editor";
+
   preConfigure = ''
     mkdir dependencies/dictionaries
     for dict in ${builtins.concatStringsSep " " dictionaries}; do
@@ -163,8 +161,6 @@ mkDerivation rec {
 
     cp -r ${rsconnectSrc} dependencies/rsconnect
     ( cd dependencies && ${R}/bin/R CMD build -d --no-build-vignettes rsconnect )
-
-    cp -r "${panmirrorModules}" src/gwt/panmirror/src/editor/node_modules
   '';
 
   postInstall = ''
