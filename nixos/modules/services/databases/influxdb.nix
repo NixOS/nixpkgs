@@ -166,6 +166,7 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''${cfg.package}/bin/influxd -config "${configFile}"'';
+        Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;
       };
