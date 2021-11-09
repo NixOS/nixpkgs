@@ -527,9 +527,13 @@ stdenv.mkDerivation ({
     ''}
 
     ${optionalString enableSeparateDocOutput ''
+    shopt -u failglob
+    shopt -s nullglob
     for x in ${docdir "$doc"}"/html/src/"*.html; do
       remove-references-to -t $out $x
     done
+    shopt -u nullglob
+    shopt -s failglob
     mkdir -p $doc
     ''}
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
