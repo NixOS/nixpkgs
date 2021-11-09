@@ -31240,6 +31240,8 @@ with pkgs;
 
   pop-control-center = callPackage ../desktops/gnome/core/pop-control-center { };
 
+  pop-launcher = callPackage ../desktops/gnome/core/pop-launcher { };
+
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
   gnome-themes-extra = gnome.gnome-themes-extra;

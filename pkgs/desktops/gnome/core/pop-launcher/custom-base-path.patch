@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 433728e..065d328 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ TARGET = debug
+ DEBUG ?= 0
+ 
+ ifeq ($(DESTDIR),)
+-BASE_PATH = $(HOME)/.local
++BASE_PATH ?= $(HOME)/.local
+ LIB_PATH = $(BASE_PATH)/share
+ else
+ BASE_PATH = $(DESTDIR)/usr
