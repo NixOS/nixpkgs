@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ocaml, findlib, ncurses, python, ocaml_make}:
+{ lib, stdenv, fetchurl, ocaml, findlib, ncurses, python, ocaml_make }:
 
 # This is the original pycaml version with patches from debian.
 
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/chemoelectric/pycaml";
     description = "Bindings for python and ocaml";
     license = "LGPL";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild which camlp4 ];
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/bolt/bolt.1.4/files/opam.patch";
       sha256 = "08cl39r98w312sw23cskd5wian6zg20isn9ki41hnbcgkazhi7pb";
     })
@@ -43,7 +44,7 @@ EOF
   # option. Installation is handled by ocamlfind.
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   createFindlibDestdir = true;
 
@@ -60,7 +61,7 @@ EOF
       modeled after the famous log4j logging framework for Java.
     '';
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

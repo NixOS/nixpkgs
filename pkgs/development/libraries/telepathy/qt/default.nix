@@ -1,9 +1,20 @@
-{ lib, stdenv, fetchurl, cmake, qtbase, pkg-config, python3Packages, dbus-glib, dbus
-, telepathy-farstream, telepathy-glib }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, qtbase
+, pkg-config
+, python3Packages
+, dbus-glib
+, dbus
+, telepathy-farstream
+, telepathy-glib
+}:
 
 let
   inherit (python3Packages) python dbus-python;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "telepathy-qt";
   version = "0.9.8";
 

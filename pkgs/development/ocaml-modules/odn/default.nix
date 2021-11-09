@@ -18,16 +18,17 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   configurePhase = "ocaml setup.ml -configure";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  buildPhase = "ocaml setup.ml -build";
+  installPhase = "ocaml setup.ml -install";
 
   meta = with lib; {
     description = "Store data using OCaml notation";
     homepage = "https://forge.ocamlcore.org/projects/odn/";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with maintainers; [
-      vbgl maggesi
+      vbgl
+      maggesi
     ];
   };
 }

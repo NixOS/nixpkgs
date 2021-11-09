@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl
-, imake, gccmakedep, bison, flex, pkg-config
-, xlibsWrapper, libXmu, libXpm, libXp }:
+{ lib
+, stdenv
+, fetchurl
+, imake
+, gccmakedep
+, bison
+, flex
+, pkg-config
+, xlibsWrapper
+, libXmu
+, libXpm
+, libXp
+}:
 
 stdenv.mkDerivation rec {
   pname = "Xaw3d";
