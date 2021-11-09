@@ -1,4 +1,4 @@
-{ lib, mkYarnPackage, fetchFromGitHub, electron, makeWrapper }:
+{ lib, mkYarnPackage, fetchFromGitHub, electron, makeWrapper, writeShellScriptBin, yarnSetupHook }:
 
 mkYarnPackage rec {
   pname = "uivonim";
@@ -18,22 +18,14 @@ mkYarnPackage rec {
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
 
-  yarnPreBuild = ''
-    # workaround for missing opencollective-postinstall
-    mkdir -p $TMPDIR/bin
-    touch $TMPDIR/bin/opencollective-postinstall
-    chmod +x $TMPDIR/bin/opencollective-postinstall
-    export PATH=$PATH:$TMPDIR/bin
-
-    export ELECTRON_SKIP_BINARY_DOWNLOAD=1
-  '';
+  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   # We build (= webpack) uivonim in a separate package,
   # because this requires devDependencies that we do not
   # wish to bundle (because they add 250M to the closure size).
   build = mkYarnPackage {
     name = "uivonim-build-${version}";
-    inherit version src packageJSON yarnLock yarnNix yarnPreBuild distPhase;
+    inherit version src packageJSON yarnLock yarnNix distPhase nativeBuildInputs ELECTRON_SKIP_BINARY_DOWNLOAD;
 
     yarnFlags = [ "--offline" ];
 
@@ -49,7 +41,10 @@ mkYarnPackage rec {
   # The --production flag disables the devDependencies.
   yarnFlags = [ "--offline" "--production" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    (writeShellScriptBin "opencollective-postinstall" "exit 0")
+  ];
 
   postInstall = ''
     dir=$out/libexec/uivonim/node_modules/uivonim/
