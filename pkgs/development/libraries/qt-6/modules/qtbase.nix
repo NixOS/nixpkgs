@@ -1,3 +1,12 @@
+/*
+
+TODO?
+copy config.summary to $out
+
+nix-shell -p cmake pkg-config dbus glib udev fontconfig freetype    libxkbcommon   libGL libdrm     libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib harfbuzz icu libjpeg libpng pcre2 xlibsWrapper double-conversion util-linux
+
+*/
+
 { stdenv, lib
 , src, patches ? [], version, qtCompatVersion
 
@@ -10,10 +19,11 @@
 , ccache
 , xmlstarlet
 , libproxy
-, xlibs
+, xlibsWrapper
 , zstd
-, double_conversion
-, utillinux
+, double-conversion
+, util-linux
+# FIXME checking Nixpkgs on aarch64-darwin: called without required argument 'utillinux'
 #, journalctl, systemd
 , libb2
 , md4c
@@ -22,7 +32,7 @@
 , libselinux
 , libsepol
 , vulkan-headers
-, openvg, openvg-headers
+#, openvg, openvg-headers
 , libthai
 , libdrm
 , libdatrie
@@ -49,6 +59,7 @@
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
+# TODO libGL or libglvnd? libglvnd is "better"?
 , buildExamples ? false
 , buildTests ? false
 , debug ? false
@@ -87,11 +98,10 @@ qtbaseDrv = stdenv.mkDerivation rec {
     pcre2
     pcre # for glib-2.0
     libproxy libproxy.dev
-    xlibs.libXdmcp.dev # xdmcp for xcb
-    xlibs.libXtst # for atspi-2
+    xlibsWrapper
     zstd
-    double_conversion
-    utillinux.dev # mount for gio-2.0
+    double-conversion
+    util-linux # mount for gio-2.0
     #journalctl systemd # journald logging backend
     libb2
     md4c
@@ -102,6 +112,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
 
     # TODO enable vulkan/openvg only when openGL is available
     vulkan-headers
+    /*
     openvg-headers
 
     # testing qt openvg: https://bugreports.qt.io/browse/QTBUG-25720
@@ -109,6 +120,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
     openvg.shivavg
     #openvg.monkvg
     #openvg.amanithvg
+    */
 
     libthai # for pango
     libdrm
@@ -227,9 +239,10 @@ qtbaseDrv = stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   # out-of-tree build in $PWD/build
+  # TODO try building without openvg in library path
+#    export LD_LIBRARY_PATH="${openvg.shivavg}/lib:$LD_LIBRARY_PATH"
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    export LD_LIBRARY_PATH="${openvg.shivavg}/lib:$LD_LIBRARY_PATH"
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '' +
     # enable openvg. experimental. maybe not implemented
@@ -315,9 +328,10 @@ qtbaseDrv = stdenv.mkDerivation rec {
     "-pkg-config"
     "-ccache" # FIXME Using ccache: no
 
-    "-openvg" # FIXME remove? no effect?
+    #"-openvg" # FIXME remove? no effect?
     # qtbase/src/gui/qt_cmdline.cmake:26:qt_commandline_option(openvg TYPE boolean)
     # qtbase/src/gui/configure.cmake:1208:qt_configure_add_summary_entry(ARGS "openvg")
+    # openvg is broken in qt 6.2.1 https://bugreports.qt.io/browse/QTBUG-98040
 
     "-journald"
     "-sctp"
@@ -367,7 +381,11 @@ qtbaseDrv = stdenv.mkDerivation rec {
     "-openssl-linked"
     "-L" "${openssl.out}/lib"
     "-I" "${openssl.dev}/include"
+    /*
     "-system-sqlite"
+    */
+    "-sqlite" "system"
+    # FIXME Using system provided SQLite: no
     ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
@@ -436,7 +454,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
   '';
 
   #outputs = [ "bin" "dev" "out" ];
-  # we must escape 
+  # we must escape
   installPhase = if splitBuildInstall then ''
     # do not run install hooks
     #runHook preInstall
@@ -681,7 +699,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr milahu ];
     platforms = platforms.unix;
   };
 };
