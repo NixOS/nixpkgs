@@ -53,7 +53,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "mobilesdk-8.3.2.GA";
+  pname = "mobilesdk";
+  version = "8.3.2.GA";
+
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
     url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-linux.zip";
     sha256 = "04pfw21jrx9w259lphynwykqjk4c9hm0zix4d40s7mf8mmh3xdx9";

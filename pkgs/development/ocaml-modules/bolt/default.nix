@@ -10,11 +10,11 @@ then throw "bolt is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-
-  name = "bolt-1.4";
+  pname = "bolt";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1043/${name}.tar.gz";
+    url = "https://forge.ocamlcore.org/frs/download.php/1043/bolt-${version}.tar.gz";
     sha256 = "1c807wrpxra9sbb34lajhimwra28ldxv04m570567lh2b04n38zy";
   };
 

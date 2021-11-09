@@ -4,11 +4,12 @@ if lib.versionAtLeast ocaml.version "4.06"
 then throw "ocaml-data-notation is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation {
-  name = "ocaml-data-notation-0.0.11";
+stdenv.mkDerivation rec {
+  pname = "ocaml-data-notation";
+  version = "0.0.11";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1310/ocaml-data-notation-0.0.11.tar.gz";
+    url = "https://forge.ocamlcore.org/frs/download.php/1310/ocaml-data-notation-${version}.tar.gz";
     sha256 = "09a8zdyifpc2nl4hdvg9206142y31cq95ajgij011s1qcg3z93lj";
   };
 

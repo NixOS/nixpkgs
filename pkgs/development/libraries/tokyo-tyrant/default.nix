@@ -1,10 +1,11 @@
 { fetchurl, lib, stdenv, tokyocabinet, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "tokyotyrant-1.1.41";
+  pname = "tokyotyrant";
+  version = "1.1.41";
 
   src = fetchurl {
-    url = "https://fallabs.com/tokyotyrant/${name}.tar.gz";
+    url = "https://fallabs.com/tokyotyrant/tokyotyrant-${version}.tar.gz";
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 

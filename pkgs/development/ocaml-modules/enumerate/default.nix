@@ -6,11 +6,12 @@ if lib.versionAtLeast ocaml.version "4.06"
 then throw "enumerate-111.08.00 is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation {
-  name = "ocaml-enumerate-111.08.00";
+stdenv.mkDerivation rec {
+  pname = "ocaml-enumerate";
+  version = "111.08.00";
 
   src = fetchurl {
-    url = "https://ocaml.janestreet.com/ocaml-core/111.08.00/individual/enumerate-111.08.00.tar.gz";
+    url = "https://ocaml.janestreet.com/ocaml-core/${lib.versions.majorMinor version}.00/individual/enumerate-${version}.tar.gz";
     sha256 = "0b6mx5p01lcpimvak4wx6aj2119707wsfzd83rwgb91bhpgzh156";
   };
 

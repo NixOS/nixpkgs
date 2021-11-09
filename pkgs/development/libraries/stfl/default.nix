@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "stfl-0.24";
+  pname = "stfl";
+  version = "0.24";
 
   src = fetchurl {
-    url = "http://www.clifford.at/stfl/${name}.tar.gz";
+    url = "http://www.clifford.at/stfl/stfl-${version}.tar.gz";
     sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
   };
 

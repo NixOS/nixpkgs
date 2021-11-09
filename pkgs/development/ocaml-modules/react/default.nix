@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
 
-stdenv.mkDerivation {
-  name = "ocaml-react-1.2.1";
+stdenv.mkDerivation rec {
+  pname = "ocaml-react";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://erratique.ch/software/react/releases/react-1.2.1.tbz";
+    url = "https://erratique.ch/software/react/releases/react-${version}.tbz";
     sha256 = "1aj8w79gdd9xnrbz7s5p8glcb4pmimi8jp9f439dqnf6ih3mqb3v";
   };
 

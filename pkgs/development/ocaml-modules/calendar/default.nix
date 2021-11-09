@@ -1,9 +1,11 @@
 {stdenv, lib, fetchurl, ocaml, findlib}:
 
-stdenv.mkDerivation {
-  name = "ocaml-calendar-2.5";
+stdenv.mkDerivation rec {
+  pname = "ocaml-calendar";
+  version = "2.5";
+
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/915/calendar-2.5.tar.bz2";
+    url = "https://forge.ocamlcore.org/frs/download.php/915/calendar-${version}.tar.bz2";
     sha256 = "04pvhwb664g3s644c7v7419a3kvf5s3pynkhmk5j59dvlfm1yf0f";
     };
 

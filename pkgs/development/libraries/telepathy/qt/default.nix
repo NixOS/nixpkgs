@@ -4,10 +4,11 @@
 let
   inherit (python3Packages) python dbus-python;
 in stdenv.mkDerivation rec {
-  name = "telepathy-qt-0.9.8";
+  pname = "telepathy-qt";
+  version = "0.9.8";
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-qt/telepathy-qt-${version}.tar.gz";
     sha256 = "bf8e2a09060addb80475a4938105b9b41d9e6837999b7a00e5351783857e18ad";
   };
 
