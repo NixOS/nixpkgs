@@ -24146,6 +24146,8 @@ with pkgs;
 
   boops = callPackage ../applications/audio/boops { };
 
+  ChowKick  = callPackage ../applications/audio/ChowKick { };
+
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
