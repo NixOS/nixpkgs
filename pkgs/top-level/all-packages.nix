@@ -4063,6 +4063,12 @@ with pkgs;
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
+  inherit (import ../development/libraries/libsbsms pkgs)
+    libsbsms
+    libsbsms_2_0_2
+    libsbsms_2_3_0
+  ;
+
   libskk = callPackage ../development/libraries/libskk {
     inherit (gnome) gnome-common;
   };
