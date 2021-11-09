@@ -2640,6 +2640,8 @@ in {
     inherit python;
   });
 
+  fastnumbers = callPackage ../development/python-modules/fastnumbers { };
+
   fastpair = callPackage ../development/python-modules/fastpair { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
