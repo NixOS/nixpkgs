@@ -971,19 +971,19 @@ let
       };
 
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nix-ide";
+          publisher = "jnoortheen";
+          version = "0.1.18";
+          sha256 = "sha256-dmmx/u+hRQfY/MCIaSdcVtbYnf5cLCDUwr75heQxcuw=";
+        };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
           description = "Nix language support with formatting and error report";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = licenses.mit;
-          maintainers = with maintainers; [ ];
-        };
-        mktplcRef = {
-          name = "nix-ide";
-          publisher = "jnoortheen";
-          version = "0.1.16";
-          sha256 = "04ky1mzyjjr1mrwv3sxz4mgjcq5ylh6n01lvhb19h3fmwafkdxbp";
+          maintainers = with maintainers; [ SuperSandro2000 ];
         };
       };
 
