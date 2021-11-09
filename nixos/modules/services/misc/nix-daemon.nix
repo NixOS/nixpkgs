@@ -586,11 +586,12 @@ in
 
         unitConfig.RequiresMountsFor = "/nix/store";
 
-        serviceConfig =
-          { Nice = cfg.daemonNiceLevel;
-            IOSchedulingPriority = cfg.daemonIONiceLevel;
-            LimitNOFILE = 4096;
-          };
+        serviceConfig = {
+          Nice = cfg.daemonNiceLevel;
+          IOSchedulingPriority = cfg.daemonIONiceLevel;
+          LimitNOFILE = 4096;
+          Restart = "on-failure";
+        };
 
         restartTriggers = [ nixConf ];
       };
