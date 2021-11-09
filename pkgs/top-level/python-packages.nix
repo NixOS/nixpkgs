@@ -409,6 +409,8 @@ in {
 
   airthings-cloud = callPackage ../development/python-modules/airthings-cloud { };
 
+  airtouch4pyapi = callPackage ../development/python-modules/airtouch4pyapi { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
