@@ -1,28 +1,32 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{ lib
+, stdenv
 , aiohttp
+, buildPythonPackage
 , eventlet
+, fetchFromGitHub
 , iana-etc
 , libredirect
 , mock
+, pytestCheckHook
+, pythonOlder
 , requests
 , six
 , tornado
 , websocket-client
-, websockets
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.2.1";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "sha256-aAoTeQZCtxddVBPwlyv2j4aACMO9p0vQ/ESkkv4E3VE=";
+    sha256 = "sha256-ohNRtceh0bHBlnGSFUckG5KzoLY8Q1jvpFee7T78Vto=";
   };
 
   checkInputs = [
@@ -32,7 +36,6 @@ buildPythonPackage rec {
     requests
     tornado
     websocket-client
-    websockets
     pytestCheckHook
   ];
 
@@ -43,11 +46,19 @@ buildPythonPackage rec {
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
       LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
-  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+
+  postCheck = ''
+    unset NIX_REDIRECTS LD_PRELOAD
+  '';
 
   # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
-  pythonImportsCheck = [ "engineio" ];
+  disabledTests = [
+    "test_logger"
+  ];
+
+  pythonImportsCheck = [
+    "engineio"
+  ];
 
   meta = with lib; {
     description = "Python based Engine.IO client and server";
