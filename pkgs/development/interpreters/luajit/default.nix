@@ -51,10 +51,6 @@ stdenv.mkDerivation rec {
 
   luaversion = "5.1";
 
-  # Fix for pcall on aarch64-darwin.
-  # Upstream issue: https://github.com/LuaJIT/LuaJIT/issues/698
-  patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [ ./aarch64-darwin-disable-unwind-external.patch ];
-
   postPatch = ''
     substituteInPlace Makefile --replace ldconfig :
     if test -n "''${dontStrip-}"; then
