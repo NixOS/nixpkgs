@@ -95,6 +95,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-AgJJKQA8vc5oKaTQDqMdwBR4hT4sn9+uW0jLe7GteJw=";
     })
 
+    # Fix compile errors with Eigen 3.4
+    ./eigen-3.4.patch
+
   ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
   nativeBuildInputs = [ cmake swig ctags ]
