@@ -1435,6 +1435,18 @@ let
         };
       };
 
+      stkb.rewrap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "stkb";
+          name = "rewrap";
+          version = "1.14.0";
+          sha256 = "qRwKX36a1aLzE1tqaOkH7JfE//pvKdPZ07zasPF3Dl4=";
+        };
+        meta = with lib; {
+          license = licenses.asl20;
+        };
+      };
+
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "code-spell-checker";
