@@ -36,6 +36,7 @@ artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
+b0o/SchemaStore.nvim@main
 b3nj5m1n/kommentary@main
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
@@ -882,6 +883,7 @@ vmchale/dhall-vim
 vn-ki/coc-clap
 voldikss/vim-floaterm
 VundleVim/Vundle.vim
+vuki656/package-info.nvim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
