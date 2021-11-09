@@ -249,6 +249,13 @@ self: super: ({
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
+  # streamly depends on Cocoa starting with 0.8.0
+  streamly_0_8_0 = overrideCabal (drv: {
+    libraryFrameworkDepends = [
+      darwin.apple_sdk.frameworks.Cocoa
+    ] ++ (drv.libraryFrameworkDepends or []);
+  }) super.streamly_0_8_0;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
