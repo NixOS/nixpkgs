@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Command line archiver utility";
     homepage = "https://7zip.org";
-    license = licenses.lgpl21Only;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ anna328p peterhoeg ];
     platforms = platforms.linux;
   };
