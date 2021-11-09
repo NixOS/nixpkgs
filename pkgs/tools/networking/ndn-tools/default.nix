@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://named-data.net/";
+    homepage = "https://named-data.net/";
     description = "Named Data Neworking (NDN) Essential Tools";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
