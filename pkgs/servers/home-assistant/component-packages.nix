@@ -590,7 +590,7 @@
     "nuki" = ps: with ps; [ pynuki ];
     "numato" = ps: with ps; [ ]; # missing inputs: numato-gpio
     "number" = ps: with ps; [ ];
-    "nut" = ps: with ps; [ ]; # missing inputs: pynut2
+    "nut" = ps: with ps; [ pynut2 ];
     "nws" = ps: with ps; [ pynws ];
     "nx584" = ps: with ps; [ pynx584 ];
     "nzbget" = ps: with ps; [ ]; # missing inputs: pynzbgetapi
