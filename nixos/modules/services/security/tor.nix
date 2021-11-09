@@ -1012,6 +1012,7 @@ in
         # Tor cannot currently bind privileged port when PrivateUsers=true,
         # see https://gitlab.torproject.org/legacy/trac/-/issues/20930
         PrivateUsers = !bindsPrivilegedPort;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -1019,6 +1020,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
