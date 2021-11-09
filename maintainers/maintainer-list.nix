@@ -10185,6 +10185,12 @@
     githubId = 720864;
     name = "Sébastien Bourdeauducq";
   };
+  sbellem = {
+    email = "sbellem@gmail.com";
+    github = "sbellem";
+    githubId = 125458;
+    name = "Sylvain Bellemare";
+  };
   sbond75 = {
     name = "sbond75";
     email = "43617712+sbond75@users.noreply.github.com";

@@ -22473,6 +22473,8 @@ with pkgs;
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
 
+  sgx-sdk = callPackage ../os-specific/linux/sgx-sdk { };
+
   shadow = callPackage ../os-specific/linux/shadow { };
 
   sinit = callPackage ../os-specific/linux/sinit {
