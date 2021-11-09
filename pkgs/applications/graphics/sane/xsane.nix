@@ -7,12 +7,10 @@
 , gtk2
 , pkg-config
 , libpng
-, libusb-compat-0_1 ? null
+, libusb-compat-0_1
 , gimpSupport ? false
-, gimp ? null
+, gimp
 }:
-
-assert gimpSupport -> gimp != null;
 
 stdenv.mkDerivation rec {
   pname = "xsane";
@@ -29,14 +27,15 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng sane-backends sane-frontends libX11 gtk2 ]
-    ++ (if libusb-compat-0_1 != null then [ libusb-compat-0_1 ] else [ ])
+
+  buildInputs = [ libpng libusb-compat-0_1 sane-backends sane-frontends libX11 gtk2 ]
     ++ lib.optional gimpSupport gimp;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.sane-project.org/";
     description = "Graphical scanning frontend for sane";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }
