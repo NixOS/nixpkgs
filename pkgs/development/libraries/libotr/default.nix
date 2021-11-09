@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libgcrypt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libotr-4.1.1";
+  pname = "libotr";
+  version = "4.1.1";
 
   src = fetchurl {
-    url = "https://otr.cypherpunks.ca/${name}.tar.gz";
+    url = "https://otr.cypherpunks.ca/libotr-${version}.tar.gz";
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
 
