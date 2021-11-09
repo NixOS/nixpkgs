@@ -24,19 +24,14 @@ in mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnNix = ./yarn-dependencies.nix;
 
-  pkgConfig = {
-    better-sqlite3 = {
-      buildInputs = [ python3 ];
-      postInstall = ''
-        # build native sqlite bindings
-        npm run build-release --offline --nodedir="${nodeSources}"
-     '';
-    };
-  };
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper python3 ];
 
   buildPhase = ''
+    pushd node_modules/better-sqlite3
+    # build native sqlite bindings
+    npm run build-release --offline --nodedir="${nodeSources}"
+    popd
+
     # compile TypeScript sources
     yarn --offline build
   '';
