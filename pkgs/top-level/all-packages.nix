@@ -18661,7 +18661,7 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins { nix = nix_2_3; };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
@@ -32431,7 +32431,7 @@ with pkgs;
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs { };
 
-  nix-doc = callPackage ../tools/package-management/nix-doc { };
+  nix-doc = callPackage ../tools/package-management/nix-doc { nix = nix_2_3; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
@@ -32453,7 +32453,7 @@ with pkgs;
 
   nix-linter = haskell.lib.justStaticExecutables (haskellPackages.nix-linter);
 
-  nixos-option = callPackage ../tools/nix/nixos-option { };
+  nixos-option = callPackage ../tools/nix/nixos-option { nix = nix_2_3; };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
