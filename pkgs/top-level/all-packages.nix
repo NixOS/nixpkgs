@@ -19567,6 +19567,8 @@ with pkgs;
 
   srtp = callPackage ../development/libraries/srtp { };
 
+  stargate-libcds = callPackage ../development/libraries/stargate-libcds { };
+
   stb = callPackage ../development/libraries/stb { };
 
   StormLib = callPackage ../development/libraries/StormLib { };
