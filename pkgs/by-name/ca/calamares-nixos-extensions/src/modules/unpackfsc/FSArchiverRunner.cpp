@@ -9,7 +9,8 @@
 
 #include "FSArchiverRunner.h"
 
-#include "utils/Logger.h"
+#include <utils/Logger.h>
+#include <utils/Runner.h>
 
 #include <QProcess>
 
@@ -17,6 +18,8 @@
 Calamares::JobResult
 FSArchiverRunner::run()
 {
+    const QString toolName = QStringLiteral( "fsarchiver" );
+
     if ( !checkSourceExists() )
     {
         return Calamares::JobResult::internalError(
@@ -26,20 +29,21 @@ FSArchiverRunner::run()
     }
 
     QString fsarchiverExecutable;
-    if ( !checkToolExists( QStringLiteral( "fsarchiver" ), fsarchiverExecutable ) )
+    if ( !checkToolExists( toolName, fsarchiverExecutable ) )
     {
         return Calamares::JobResult::internalError( tr( "Missing tools" ),
                                                     tr( "The <i>fsarchiver</i> tool is not installed on the system." ),
                                                     Calamares::JobResult::MissingRequirements );
     }
 
-    RunCommand r( { fsarchiverExecutable,
-                    QStringLiteral( "-v" ),
-                    QStringLiteral( "restfs" ),
-                    m_source,
-                    QStringLiteral( "id=0,dest=%1" ).arg( m_destination ) } );
-    connect( &r, &RunCommand::stdOut, this, &FSArchiverRunner::fsarchiverProgress );
-    return r.run();
+    Calamares::Utils::Runner r( { fsarchiverExecutable,
+                                  QStringLiteral( "-v" ),
+                                  QStringLiteral( "restfs" ),
+                                  m_source,
+                                  QStringLiteral( "id=0,dest=%1" ).arg( m_destination ) } );
+    r.setLocation( Calamares::Utils::RunLocation::RunInHost ).enableOutputProcessing();
+    connect( &r, &decltype( r )::output, this, &FSArchiverRunner::fsarchiverProgress );
+    return r.run().explainProcess( toolName, std::chrono::seconds( 0 ) );
 }
 
 void
