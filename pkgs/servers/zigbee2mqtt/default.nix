@@ -20,7 +20,7 @@ package.override rec {
   meta = with pkgs.lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     license = licenses.gpl3;
-    homepage = https://github.com/Koenkk/zigbee2mqtt;
+    homepage = "https://github.com/Koenkk/zigbee2mqtt";
     maintainers = with maintainers; [ sweber ];
     platforms = platforms.linux;
   };

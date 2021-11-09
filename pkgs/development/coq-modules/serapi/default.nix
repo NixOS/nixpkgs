@@ -57,7 +57,7 @@ in
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ejgallego/coq-serapi;
+    homepage = "https://github.com/ejgallego/coq-serapi";
     description = "SerAPI is a library for machine-to-machine interaction with the Coq proof assistant";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.Zimmi48 ];
