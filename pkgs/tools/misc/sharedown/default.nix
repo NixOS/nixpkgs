@@ -7,6 +7,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
+, yarnSetupHook
 , yarn2nix-moretea
 , chromium
 }:
@@ -25,6 +26,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    yarnSetupHook
   ];
 
   desktopItems = [
@@ -40,6 +42,13 @@ stdenvNoCC.mkDerivation rec {
 
   dontBuild = true;
 
+  prePatch = ''
+    cp ${./yarn.lock} ./yarn.lock
+    chmod u+w yarn.lock
+  '';
+  offlineCache = yarn2nix-moretea.importOfflineCache ./yarndeps.nix;
+  yarnFlags = yarnSetupHook.defaultYarnFlags ++ [ "--production" ];
+
   installPhase =
     let
       binPath = lib.makeBinPath ([
@@ -47,18 +56,6 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
-        name = "${pname}-modules-${version}";
-        inherit pname version;
-
-        yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
-          "--production"
-        ];
-
-        packageJSON = "${src}/package.json";
-        yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
-      };
     in
     ''
       runHook preInstall
@@ -66,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
       mkdir -p "$out/bin" "$out/share/Sharedown" "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
 
       # Electron app
-      cp -r *.js *.json sharedownlogo.png sharedown "${modules}/node_modules" "$out/share/Sharedown"
+      cp -r *.js *.json sharedownlogo.png sharedown node_modules "$out/share/Sharedown"
 
       # Desktop Launcher
       cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
