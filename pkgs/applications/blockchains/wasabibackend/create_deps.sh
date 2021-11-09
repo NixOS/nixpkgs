@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p dotnet-sdk_3 jq xmlstarlet curl nixfmt
+#! nix-shell -i bash -p dotnet-sdk_3 jq xmlstarlet curl nixpkgs-fmt
 set -euo pipefail
 
 # Run this script to generate deps.nix
@@ -95,4 +95,4 @@ echo $DEPS_FOOTER >&6
 
 exec 6>&-
 
-nixfmt "$deps_file"
+nixpkgs-fmt "$deps_file"
