@@ -21869,6 +21869,8 @@ with pkgs;
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
+  intel-cmt-cat = callPackage ../os-specific/linux/intel-cmt-cat { };
+
   intel-compute-runtime = callPackage ../os-specific/linux/intel-compute-runtime { };
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
