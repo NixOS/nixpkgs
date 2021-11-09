@@ -5681,7 +5681,9 @@ with pkgs;
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
-  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly {
+    libgit2 = libgit2_1_1; # git2go only supports v1.1.x
+  };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -9553,6 +9555,8 @@ with pkgs;
 
   syntex = callPackage ../tools/graphics/syntex {};
 
+  synapse-admin = callPackage ../tools/admin/synapse-admin {};
+
   sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
 
   socat = callPackage ../tools/networking/socat { };
@@ -11711,8 +11715,6 @@ with pkgs;
     reproducibleBuild = true;
     profiledCompiler = false;
 
-    enableLTO = !stdenv.isi686;
-
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
@@ -11725,8 +11727,6 @@ with pkgs;
     reproducibleBuild = true;
     profiledCompiler = false;
 
-    enableLTO = !stdenv.isi686;
-
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
@@ -11738,8 +11738,6 @@ with pkgs;
 
     reproducibleBuild = true;
     profiledCompiler = false;
-
-    enableLTO = !stdenv.isi686;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
@@ -15320,7 +15318,9 @@ with pkgs;
 
   ttyd = callPackage ../servers/ttyd { };
 
-  turbogit = callPackage ../development/tools/turbogit { };
+  turbogit = callPackage ../development/tools/turbogit {
+    libgit2 = libgit2_1_1; # git2go only supports v1.1.x
+  };
 
   tweak = callPackage ../applications/editors/tweak { };
 
@@ -16307,6 +16307,16 @@ with pkgs;
       "CVE-2020-12278"
       "CVE-2020-12279"
     ];
+  });
+
+  libgit2_1_1 = libgit2.overrideAttrs (oldAttrs: rec {
+    version = "1.1.1";
+    src = fetchFromGitHub {
+      owner = "libgit2";
+      repo = "libgit2";
+      rev = "v${version}";
+      sha256 = "sha256-SxceIxT0aeiiiZCeSIe6EOa+MyVpQVaiv/ZZn6fkwIc=";
+    };
   });
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
@@ -21182,6 +21192,7 @@ with pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = pkgs.postgresqlPackages;
+  postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -25635,6 +25646,8 @@ with pkgs;
     withPortAudio = stdenv.isDarwin;
   };
 
+  srain = callPackage ../applications/networking/irc/srain { };
+
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   wlroots = callPackage ../development/libraries/wlroots {
@@ -27356,6 +27369,8 @@ with pkgs;
 
   pika-backup = callPackage ../applications/backup/pika-backup { };
 
+  pur = callPackage ../development/tools/pur { };
+
   purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
@@ -28168,7 +28183,6 @@ with pkgs;
   };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {
-    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
   };
 
@@ -28333,7 +28347,9 @@ with pkgs;
 
   timg = callPackage ../tools/graphics/timg { };
 
-  timidity = callPackage ../tools/misc/timidity { };
+  timidity = callPackage ../tools/misc/timidity {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   tint2 = callPackage ../applications/misc/tint2 { };
 
@@ -32252,6 +32268,7 @@ with pkgs;
       })
     nix
     nixStable
+    nix_2_3
     nix_2_4
     nixUnstable;
 

@@ -130,14 +130,10 @@ in import ./make-test-python.nix {
 
             # This configuration just adds a new prometheus job
             # to scrape the node_exporter metrics of the s3 machine.
-            # We also use an environmentFile to test if that works correctly.
             services.prometheus = {
-              environmentFile = pkgs.writeText "prometheus-config-env-file" ''
-                JOB_NAME=s3-node_exporter
-              '';
               scrapeConfigs = [
                 {
-                  job_name = "$JOB_NAME";
+                  job_name = "s3-node_exporter";
                   static_configs = [
                     {
                       targets = [ "s3:9100" ];
@@ -231,11 +227,6 @@ in import ./make-test-python.nix {
 
     # Check if prometheus responds to requests:
     prometheus.wait_for_unit("prometheus.service")
-
-    # Check if prometheus' config file is correctly locked down because it could contain secrets.
-    prometheus.succeed(
-        "stat -c '%a %U' /var/lib/prometheus2/prometheus-substituted.yaml | grep '600 prometheus'"
-    )
 
     prometheus.wait_for_open_port(${toString queryPort})
     prometheus.succeed("curl -sf http://127.0.0.1:${toString queryPort}/metrics")

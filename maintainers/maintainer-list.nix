@@ -6748,6 +6748,12 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lrewega = {
+    email = "lrewega@c32.ca";
+    github = "lrewega";
+    githubId = 639066;
+    name = "Luke Rewega";
+  };
   lromor = {
     email = "leonardo.romor@gmail.com";
     github = "lromor";
@@ -9603,6 +9609,12 @@
     github = "rexim";
     githubId = 165283;
     name = "Alexey Kutepov";
+  };
+  rewine = {
+    email = "lhongxu@outlook.com";
+    github = "wineee";
+    githubId = 22803888;
+    name = "Lu Hongxu";
   };
   rgrunbla = {
     email = "remy@grunblatt.org";

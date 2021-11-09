@@ -70,6 +70,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-beancount" = {
+      orga = "polarmutex";
+      repo = "tree-sitter-beancount";
+    };
     "tree-sitter-clojure" = {
       orga = "sogaiu";
       repo = "tree-sitter-clojure";
