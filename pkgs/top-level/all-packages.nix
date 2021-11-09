@@ -7816,6 +7816,8 @@ with pkgs;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
 
+  netdiscover = callPackage ../tools/networking/netdiscover { };
+
   nethogs = callPackage ../tools/networking/nethogs { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
