@@ -5,12 +5,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 char *concat3(char *x, char *y, char *z) {
     int xn = strlen(x);
     int yn = strlen(y);
     int zn = strlen(z);
     char *res = malloc(sizeof(*res)*(xn + yn + zn + 1));
+    assert(res != NULL);
     strncpy(res, x, xn);
     strncpy(res + xn, y, yn);
     strncpy(res + xn + yn, z, zn);

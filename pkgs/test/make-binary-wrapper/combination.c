@@ -9,12 +9,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 char *concat3(char *x, char *y, char *z) {
     int xn = strlen(x);
     int yn = strlen(y);
     int zn = strlen(z);
     char *res = malloc(sizeof(*res)*(xn + yn + zn + 1));
+    assert(res != NULL);
     strncpy(res, x, xn);
     strncpy(res + xn, y, yn);
     strncpy(res + xn + yn, z, zn);
@@ -43,6 +45,7 @@ int main(int argc, char **argv) {
     putenv("MESSAGE2=WORLD");
 
     char **argv_tmp = malloc(sizeof(*argv_tmp) * (4 + argc));
+    assert(argv_tmp != NULL);
     argv_tmp[0] = argv[0];
     argv_tmp[1] = "-x";
     argv_tmp[2] = "-y";

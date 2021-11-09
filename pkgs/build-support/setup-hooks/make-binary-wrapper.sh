@@ -64,7 +64,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
     local argv0 n params cmd main flagsBefore flags executable params length
-    local uses_prefix uses_suffix uses_concat3
+    local uses_prefix uses_suffix uses_concat3 uses_assert
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -94,6 +94,7 @@ makeCWrapper() {
                 main="$main    $cmd"$'\n'
                 uses_prefix=1
                 uses_concat3=1
+                uses_assert=1
                 n=$((n + 3))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
@@ -102,12 +103,14 @@ makeCWrapper() {
                 main="$main    $cmd"$'\n'
                 uses_suffix=1
                 uses_concat3=1
+                uses_assert=1
                 n=$((n + 3))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
             ;;
             --add-flags)
                 flags="${params[n + 1]}"
                 flagsBefore="$flagsBefore $flags"
+                uses_assert=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
@@ -129,6 +132,7 @@ makeCWrapper() {
     printf '%s\n' "#include <unistd.h>"
     printf '%s\n' "#include <stdlib.h>"
     [ -z "$uses_concat3" ] || printf '%s\n' "#include <string.h>"
+    [ -z "$uses_assert" ]  || printf '%s\n' "#include <assert.h>"
     [ -z "$uses_concat3" ] || printf '\n%s\n' "$(concat3Fn)"
     [ -z "$uses_prefix" ]  || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ]  || printf '\n%s\n' "$(setEnvSuffixFn)"
@@ -146,6 +150,7 @@ addFlags() {
         result="$result    ${var}[$((n+1))] = \"$flag\";"$'\n'
     done
     printf '    %s\n' "char **$var = malloc(sizeof(*$var) * ($((n+1)) + argc));"
+    printf '    %s\n' "assert($var != NULL);"
     printf '    %s\n' "${var}[0] = argv[0];"
     printf '%s' "$result"
     printf '    %s\n' "for (int i = 1; i < argc; ++i) {"
@@ -222,6 +227,7 @@ char *concat3(char *x, char *y, char *z) {
     int yn = strlen(y);
     int zn = strlen(z);
     char *res = malloc(sizeof(*res)*(xn + yn + zn + 1));
+    assert(res != NULL);
     strncpy(res, x, xn);
     strncpy(res + xn, y, yn);
     strncpy(res + xn + yn, z, zn);
