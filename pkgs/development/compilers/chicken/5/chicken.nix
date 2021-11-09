@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
+{ lib, stdenv, fetchurl, makeWrapper, targetPlatform, hostPlatform, darwin, bootstrap-chicken }:
 
 let
   platform = with stdenv;
@@ -19,43 +19,45 @@ stdenv.mkDerivation rec {
     sha256 = "1yl0hxm9cirgcp8jgxp6vv29lpswfvaw3zfkh6rsj0vkrv44k4c1";
   };
 
-  setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = lib.optionals (bootstrap-chicken != null) [
+    bootstrap-chicken
+  ];
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
-  ] ++ (lib.optionals stdenv.isDarwin [
-    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+    "PLATFORM=${platform}"
+    "PREFIX=$(out)"
+    "HOSTSYSTEM=${hostPlatform.config}"
+    "TARGETSYSTEM=${targetPlatform.config}"
+    "LIBRARIAN=$(AR)"
     "C_COMPILER=$(CC)"
-  ]);
-
-  buildInputs = [
-    makeWrapper
-  ] ++ (lib.optionals (bootstrap-chicken != null) [
-    bootstrap-chicken
-  ]);
-
-  postInstall = ''
-    for f in $out/bin/*
-    do
-      wrapProgram $f \
-        --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
-    done
-  '';
+    "CXX_COMPILER=$(CXX)"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+  ];
 
   doCheck = true;
+
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
        -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
   '';
 
-  meta = {
+  postInstall = ''
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+    done
+  '';
+
+  setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
+
+  meta = with lib; {
     homepage = "https://call-cc.org/";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ corngood ];
-    platforms = lib.platforms.unix;
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.
@@ -64,5 +66,8 @@ stdenv.mkDerivation rec {
       enhancements and extensions. CHICKEN runs on Linux, macOS,
       Windows, and many Unix flavours.
     '';
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ corngood ];
   };
 }
