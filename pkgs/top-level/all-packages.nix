@@ -23639,6 +23639,8 @@ with pkgs;
     inherit (gnome) gnome-shell;
   };
 
+  vimix-icon-theme = callPackage ../data/icons/vimix-icon-theme { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
@@ -29831,7 +29833,11 @@ with pkgs;
 
   ddnet = callPackage ../games/ddnet { };
 
-  devilutionx = callPackage ../games/devilutionx {};
+  devilutionx = callPackage ../games/devilutionx {
+    SDL2 = SDL2.override {
+      withStatic = true;
+    };
+  };
 
   dhewm3 = callPackage ../games/dhewm3 {};
 

@@ -6630,6 +6630,8 @@ in {
 
   pymanopt = callPackage ../development/python-modules/pymanopt { };
 
+  pymarshal = callPackage ../development/python-modules/pymarshal { };
+
   pymata-express = callPackage ../development/python-modules/pymata-express { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };

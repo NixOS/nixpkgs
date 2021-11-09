@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index 86abc6958..a72f7b792 100644
+--- a/Makefile
++++ b/Makefile
+@@ -145,7 +145,12 @@ bumpversion:
+ ABCREV = 4f5f73d
+ ABCPULL = 1
+ ABCURL ?= https://github.com/YosysHQ/abc
++
++ifneq ($(CONFIG),clang)
++ABCMKARGS = CC=clang CXX="$(CXX)" LD=clang ABC_USE_LIBSTDCXX=1 VERBOSE=$(Q)
++else
+ ABCMKARGS = CC="$(CXX)" CXX="$(CXX)" ABC_USE_LIBSTDCXX=1 VERBOSE=$(Q)
++endif
+ 
+ # set ABCEXTERNAL = <abc-command> to use an external ABC instance
+ # Note: The in-tree ABC (yosys-abc) will not be installed when ABCEXTERNAL is set.
+@@ -187,7 +192,7 @@ endif
+ endif
+ 
+ ifeq ($(CONFIG),clang)
+-CXX = clang
++CXX = clang++
+ LD = clang++
+ CXXFLAGS += -std=$(CXXSTD) -Os
+ ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H"
