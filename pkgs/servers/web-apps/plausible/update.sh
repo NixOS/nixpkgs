@@ -4,9 +4,6 @@
 # NOTE: please check on new releases which steps aren't necessary anymore!
 # Currently the following things are done:
 #
-# * Add correct `name`/`version` field to `package.json`, otherwise `yarn2nix` fails to
-#   find required dependencies.
-# * Adjust `file:`-dependencies a bit for the structure inside a Nix build.
 # * Update hashes for the tarball & the fixed-output drv with all `mix`-dependencies.
 # * Generate `yarn.lock` & `yarn.nix` in a temporary directory.
 
@@ -24,13 +21,6 @@ then
 fi
 
 SRC="https://raw.githubusercontent.com/plausible/analytics/${latest}"
-
-package_json="$(curl -qf "$SRC/assets/package.json")"
-
-echo "$package_json" \
-  | jq '. + {"name":"plausible","version": $ENV.latest}' \
-  | sed -e 's,../deps/,../../tmp/deps/,g' \
-  > $dir/package.json
 
 tarball_meta="$(nix-prefetch-github plausible analytics --rev "$latest")"
 tarball_hash="$(nix to-base32 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
@@ -54,6 +44,7 @@ cp -r "$(nix-build -A plausible.mixFodDeps)" "$tmp_setup_dir/deps"
 chmod -R u+rwx "$tmp_setup_dir"
 
 pushd $tmp_setup_dir/assets
+yarn import
 yarn
 yarn2nix > "$dir/yarn.nix"
 cp yarn.lock "$dir/yarn.lock"

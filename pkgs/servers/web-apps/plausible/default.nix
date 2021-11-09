@@ -4,9 +4,9 @@
 , fetchFromGitHub
 , glibcLocales
 , cacert
-, mkYarnModules
+, yarn2nix-moretea
+, yarnSetupHook
 , fetchYarnDeps
-, nodejs
 , nixosTests
 }:
 
@@ -28,34 +28,31 @@ let
     sha256 = "1ikcskp4gvvdprl65x1spijdc8dz6klnrnkvgy2jbk0b3d7yn1v5";
   };
 
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
-    inherit version;
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
-    preBuild = ''
-      mkdir -p tmp/deps
-      cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
-      cp -r ${mixFodDeps}/phoenix_html tmp/deps/phoenix_html
-    '';
-    postBuild = ''
-      echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
-    '';
-  };
 in
 beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
-  nativeBuildInputs = [ nodejs ];
+  nativeBuildInputs = [ yarnSetupHook ];
 
   passthru = {
     tests = { inherit (nixosTests) plausible; };
     updateScript = ./update.sh;
   };
 
+  prePatch = ''
+    cp ${./yarn.lock} assets/yarn.lock
+    chmod u+w assets/yarn.lock
+    mkdir deps
+    cp -r ${mixFodDeps}/phoenix deps/phoenix
+    cp -r ${mixFodDeps}/phoenix_html deps/phoenix_html
+  '';
+
+  offlineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnFlags = yarnSetupHook.defaultYarnFlags;
+  yarnRoot = "assets";
+
   postBuild = ''
-    ln -sf ${yarnDeps}/node_modules assets/node_modules
+    echo 'module.exports = {}' > assets/node_modules/flatpickr/dist/postcss.config.js
     npm run deploy --prefix ./assets
 
     # for external task you need a workaround for the no deps check flag
