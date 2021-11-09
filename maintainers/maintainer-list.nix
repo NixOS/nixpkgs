@@ -6861,6 +6861,12 @@
     githubId = 13791;
     name = "Luke Gorrie";
   };
+  luker = {
+    email = "luker@fenrirproject.org";
+    github = "LucaFulchir";
+    githubId = 2486026;
+    name = "Luca Fulchir";
+  };
   lumi = {
     email = "lumi@pew.im";
     github = "lumi-me-not";
