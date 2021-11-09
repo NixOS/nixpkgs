@@ -96,6 +96,8 @@ default-package-overrides:
   - SVGFonts < 1.8
   # 2021-11-09: 0.20.6 can't be built with aeson < 2.0 which is a pain to override at the moment
   - futhark < 0.20.6
+  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
+  - ghc-bignum == 1.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
