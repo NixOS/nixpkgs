@@ -94,6 +94,8 @@ default-package-overrides:
   - autoapply < 0.4.1.1
   # 2021-10-22: 1.8 breaks shake-bench
   - SVGFonts < 1.8
+  # 2021-11-09: 0.20.6 can't be built with aeson < 2.0 which is a pain to override at the moment
+  - futhark < 0.20.6
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
