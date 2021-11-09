@@ -674,6 +674,7 @@ in {
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
+        Restart = "on-failure";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
