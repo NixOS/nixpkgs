@@ -15875,6 +15875,8 @@ with pkgs;
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
+  csdr = callPackage ../applications/radio/csdr { };
+
   ctypes_sh = callPackage ../development/libraries/ctypes_sh { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
