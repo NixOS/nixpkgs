@@ -1,4 +1,5 @@
 { self
+, fetchpatch
 , lib
 , openssl
 , zstd
@@ -576,6 +577,18 @@ with self;
     minimumOCamlVersion = "4.04.2";
     meta.description = "A ppx rewriter that inlines reverse application operators `|>` and `|!`";
     propagatedBuildInputs = [ ppxlib ];
+  };
+
+  ppx_python = janePackage {
+    pname = "ppx_python";
+    hash = "0gk4nqz4i9v3hwjg5mvgpgwj0dfcgpyc7ikba93cafyhn6fy83zk";
+    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    # Compatibility with ppxlib 0.23
+    patches = fetchpatch {
+      url = "https://github.com/janestreet/ppx_python/commit/b2fe0040cc39fa6164de868f8a20edb38d81170e.patch";
+      sha256 = "sha256:1mrdwp0zw3dqavzx3ffrmzq5cdlninyf67ksavfzxb8gb16w6zpz";
+    };
+    propagatedBuildInputs = [ ppx_base ppxlib pyml ];
   };
 
   ppx_sexp_conv = janePackage {
