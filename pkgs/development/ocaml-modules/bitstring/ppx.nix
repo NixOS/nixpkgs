@@ -13,6 +13,7 @@ buildDunePackage rec {
 
   buildInputs = [ bitstring ppxlib ];
 
+  minimalOCamlVersion = "4.08";
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
