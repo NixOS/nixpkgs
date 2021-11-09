@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ intltool gtk2 ];
+
   meta = with lib; {
     description = "A simple and fast image viewer for X";
     homepage = "http://lxde.sourceforge.net/gpicview/";
@@ -24,7 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.unix;
   };
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ intltool gtk2 ];
 }
