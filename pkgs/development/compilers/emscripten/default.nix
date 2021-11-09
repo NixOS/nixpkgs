@@ -2,7 +2,7 @@
 , jre, binaryen
 , llvmPackages
 , symlinkJoin, makeWrapper, substituteAll
-, mkYarnModules
+, yarnSetupHook, yarn2nix-moretea
 }:
 
 stdenv.mkDerivation rec {
@@ -14,15 +14,6 @@ stdenv.mkDerivation rec {
     paths = with llvmPackages; [ clang-unwrapped clang-unwrapped.lib lld llvm ];
   };
 
-  nodeModules = mkYarnModules {
-    name = "emscripten-node-modules-${version}";
-    inherit pname version;
-    # it is vitally important the the package.json has name and version fields
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
-  };
-
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
@@ -30,7 +21,7 @@ stdenv.mkDerivation rec {
     rev = version;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper yarnSetupHook ];
   buildInputs = [ nodejs python3 ];
 
   patches = [
@@ -39,6 +30,13 @@ stdenv.mkDerivation rec {
       resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
     })
   ];
+
+  prePatch = ''
+    cp ${./yarn.lock} ./yarn.lock
+    chmod u+w yarn.lock
+  '';
+  offlineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnFlags = yarnSetupHook.defaultYarnFlags;
 
   buildPhase = ''
     runHook preBuild
@@ -51,9 +49,6 @@ stdenv.mkDerivation rec {
     # disables cache in user home, use installation directory instead
     sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    # required for wasm2c
-    ln -s ${nodeModules}/node_modules .
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
@@ -85,7 +80,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
-        --set NODE_PATH ${nodeModules}/node_modules \
+        --set NODE_PATH $appdir/node_modules \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
         --set PYTHON ${python3}/bin/python
     done
@@ -108,7 +103,7 @@ stdenv.mkDerivation rec {
     popd
 
     export PYTHON=${python3}/bin/python
-    export NODE_PATH=${nodeModules}/node_modules
+    export NODE_PATH=$appdir/node_modules
     pushd $appdir
     python tests/runner.py test_hello_world
     popd
