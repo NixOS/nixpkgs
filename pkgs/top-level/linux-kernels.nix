@@ -189,7 +189,7 @@ in {
     };
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_14;
+      kernel = linux_5_15;
       kernelPatches = kernel.kernelPatches;
    };
 

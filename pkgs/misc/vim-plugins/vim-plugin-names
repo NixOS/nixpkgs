@@ -475,6 +475,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
 mtikekar/vim-bsv
+MunifTanjim/nui.nvim@main
 mzlogin/vim-markdown-toc
 mzlogin/vim-smali
 nacro90/numb.nvim

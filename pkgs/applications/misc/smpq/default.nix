@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, cmake, StormLib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "smpq";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://launchpad.net/smpq/trunk/1.6/+download/smpq_1.6.orig.tar.gz";
+    url = "https://launchpad.net/smpq/trunk/${version}/+download/${pname}_${version}.orig.tar.gz";
     sha256 = "1jqq5x3b17jy66x3kkf5hs5l322dx2v14djxxrqrnqp8bn5drlmm";
   };
 
