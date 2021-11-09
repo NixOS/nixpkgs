@@ -2,7 +2,7 @@
 
 mkYarnPackage rec {
   pname = "antennas";
-  version = "3.1+git5e1f7375";
+  version = "unstable-2021-01-21";
 
   src = fetchFromGitHub {
     owner = "TheJF";
