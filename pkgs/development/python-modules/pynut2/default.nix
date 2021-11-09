@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , requests
+#, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,10 +20,12 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [ "pynut2.nut2" ];
+  # tests are completely broken, wrong imports and old api
+  #checkInputs = [
+  #  pytestCheckHook
+  #];
 
-  # tests are unmaintained and broken
-  doCheck = false;
+  pythonImportsCheck = [ "pynut2.nut2" ];
 
   meta = with lib; {
     description = "API overhaul of PyNUT, a Python library to allow communication with NUT (Network UPS Tools) servers.";
