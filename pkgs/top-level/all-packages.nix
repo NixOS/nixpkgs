@@ -6531,6 +6531,8 @@ with pkgs;
 
   jekyll = callPackage ../applications/misc/jekyll { };
 
+  jet = callPackage ../development/tools/jet { };
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
