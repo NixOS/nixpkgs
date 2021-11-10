@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ];
 
   meta = with lib; {
     description = "Optimised functions to read and write int16/32/64";
