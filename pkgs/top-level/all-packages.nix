@@ -982,6 +982,8 @@ with pkgs;
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
+  topicctl = callPackage ../tools/misc/topicctl { };
+
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
