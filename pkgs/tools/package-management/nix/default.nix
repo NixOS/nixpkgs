@@ -151,7 +151,7 @@ common =
 
       enableParallelBuilding = true;
 
-      meta = {
+      meta = with lib; {
         description = "Powerful package manager that makes package management reliable and reproducible";
         longDescription = ''
           Nix is a powerful package manager for Linux and other Unix systems that
@@ -161,10 +161,10 @@ common =
           environments.
         '';
         homepage = "https://nixos.org/";
-        license = lib.licenses.lgpl2Plus;
-        maintainers = [ lib.maintainers.eelco ];
-        platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
+        license = licenses.lgpl2Plus;
+        maintainers = with maintainers; [ eelco lovesegfault ];
+        platforms = platforms.unix;
+        outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       };
 
       passthru = {
@@ -213,7 +213,7 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = nix_2_3;
+  nixStable = nix_2_4;
 
   nix_2_3 = callPackage common (rec {
     pname = "nix";

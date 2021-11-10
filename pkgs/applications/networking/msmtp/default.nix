@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
-  configureFlags =
-    [ "--sysconfdir=/etc" ] ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+  configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
+    ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
     install -d $out/share/doc/${pname}/scripts

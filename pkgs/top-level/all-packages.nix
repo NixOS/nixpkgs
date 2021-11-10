@@ -1429,6 +1429,8 @@ with pkgs;
     client = true;
   });
 
+  antennas = callPackage ../servers/antennas { };
+
   apg = callPackage ../tools/security/apg { };
 
   apt-dater = callPackage ../tools/package-management/apt-dater {
@@ -15718,6 +15720,8 @@ with pkgs;
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
+  ndn-tools = callPackage ../tools/networking/ndn-tools { };
+
   cddlib = callPackage ../development/libraries/cddlib {};
 
   cdk = callPackage ../development/libraries/cdk {};
@@ -17852,8 +17856,6 @@ with pkgs;
 
   libkeyfinder = callPackage ../development/libraries/audio/libkeyfinder { };
 
-  libkml = callPackage ../development/libraries/libkml { };
-
   libks = callPackage ../development/libraries/libks { };
 
   libksba = callPackage ../development/libraries/libksba { };
@@ -18659,7 +18661,7 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins { nix = nix_2_3; };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
@@ -19566,6 +19568,8 @@ with pkgs;
   srt = callPackage ../development/libraries/srt { };
 
   srtp = callPackage ../development/libraries/srtp { };
+
+  stargate-libcds = callPackage ../development/libraries/stargate-libcds { };
 
   stb = callPackage ../development/libraries/stb { };
 
@@ -21869,6 +21873,8 @@ with pkgs;
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
+  intel-cmt-cat = callPackage ../os-specific/linux/intel-cmt-cat { };
+
   intel-compute-runtime = callPackage ../os-specific/linux/intel-compute-runtime { };
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
@@ -22468,6 +22474,8 @@ with pkgs;
   setools = callPackage ../os-specific/linux/setools { };
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
+
+  sgx-sdk = callPackage ../os-specific/linux/sgx-sdk { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
@@ -23638,6 +23646,8 @@ with pkgs;
     inherit (gnome) gnome-shell;
   };
 
+  vimix-icon-theme = callPackage ../data/icons/vimix-icon-theme { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
@@ -24139,6 +24149,8 @@ with pkgs;
   bookworm = callPackage ../applications/office/bookworm { };
 
   boops = callPackage ../applications/audio/boops { };
+
+  ChowKick  = callPackage ../applications/audio/ChowKick { };
 
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
 
@@ -26931,16 +26943,7 @@ with pkgs;
   shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
-    stdenv = gcc8Stdenv;
-
-    # Workaround for the glibc abi version mismatch.
-    # Please note that opencv builds are by default disabled.
-    opencv = opencv3.override {
-      stdenv = gcc8Stdenv;
-      openexr = openexr.override {
-        stdenv = gcc8Stdenv;
-      };
-    };
+    opencv = opencv3;
   };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
@@ -27336,10 +27339,8 @@ with pkgs;
   picoloop = callPackage ../applications/audio/picoloop { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
-    openssl = if config.pidgin.openssl or true then openssl else null;
-    gnutls = if config.pidgin.gnutls or false then gnutls else null;
-    libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
-    startupnotification = libstartup_notification;
+    withOpenssl = config.pidgin.openssl or true;
+    withGnutls = config.pidgin.gnutls or false;
     plugins = [];
   };
 
@@ -29831,7 +29832,11 @@ with pkgs;
 
   ddnet = callPackage ../games/ddnet { };
 
-  devilutionx = callPackage ../games/devilutionx {};
+  devilutionx = callPackage ../games/devilutionx {
+    SDL2 = SDL2.override {
+      withStatic = true;
+    };
+  };
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
@@ -31915,7 +31920,9 @@ with pkgs;
 
   click = callPackage ../applications/networking/cluster/click { };
 
-  clinfo = callPackage ../tools/system/clinfo { };
+  clinfo = callPackage ../tools/system/clinfo {
+    inherit (darwin.apple_sdk.frameworks) OpenCL;
+  };
 
   clpeak = callPackage ../tools/misc/clpeak { };
 
@@ -32421,7 +32428,7 @@ with pkgs;
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs { };
 
-  nix-doc = callPackage ../tools/package-management/nix-doc { };
+  nix-doc = callPackage ../tools/package-management/nix-doc { nix = nix_2_3; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
@@ -32443,7 +32450,7 @@ with pkgs;
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
-  nixos-option = callPackage ../tools/nix/nixos-option { };
+  nixos-option = callPackage ../tools/nix/nixos-option { nix = nix_2_3; };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
@@ -33592,6 +33599,10 @@ with pkgs;
   zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zrythm = callPackage ../applications/audio/zrythm {
+    inherit (plasma5Packages) breeze-icons;
+  };
 
   zthrottle = callPackage ../tools/misc/zthrottle { };
 }

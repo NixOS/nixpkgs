@@ -33,7 +33,7 @@ in
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
-  bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
+  bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};

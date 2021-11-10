@@ -409,6 +409,8 @@ in {
 
   airthings-cloud = callPackage ../development/python-modules/airthings-cloud { };
 
+  airtouch4pyapi = callPackage ../development/python-modules/airtouch4pyapi { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
@@ -6630,6 +6632,8 @@ in {
 
   pymanopt = callPackage ../development/python-modules/pymanopt { };
 
+  pymarshal = callPackage ../development/python-modules/pymarshal { };
+
   pymata-express = callPackage ../development/python-modules/pymata-express { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
@@ -7490,6 +7494,7 @@ in {
   };
 
   pythonix = callPackage ../development/python-modules/pythonix {
+    nix = pkgs.nix_2_3;
     meson = pkgs.meson.override { python3 = self.python; };
   };
 

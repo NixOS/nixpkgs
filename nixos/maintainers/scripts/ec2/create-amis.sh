@@ -65,13 +65,18 @@ read_image_info() {
 # We handle a single image per invocation, store all attributes in
 # globals for convenience.
 zfs_disks=$(read_image_info .disks)
-image_label="$(read_image_info .label)${zfs_disks:+-ZFS}"
+is_zfs_image=
+if jq -e .boot <<< "$zfs_disks"; then
+  is_zfs_image=1
+  zfs_boot=".disks.boot"
+fi
+image_label="$(read_image_info .label)${is_zfs_image:+-ZFS}"
 image_system=$(read_image_info .system)
-image_files=( $(read_image_info "${zfs_disks:+.disks.root}.file") )
+image_files=( $(read_image_info ".disks.root.file") )
 
-image_logical_bytes=$(read_image_info "${zfs_disks:+.disks.boot}.logical_bytes")
+image_logical_bytes=$(read_image_info "${zfs_boot:-.disks.root}.logical_bytes")
 
-if [[ -n "$zfs_disks" ]]; then
+if [[ -n "$is_zfs_image" ]]; then
   image_files+=( $(read_image_info .disks.boot.file) )
 fi
 
@@ -192,7 +197,7 @@ upload_image() {
     for image_file in "${image_files[@]}"; do
         local aws_path=${image_file#/}
 
-        if [[ -n "$zfs_disks" ]]; then
+        if [[ -n "$is_zfs_image" ]]; then
             local suffix=${image_file%.*}
             suffix=${suffix##*.}
         fi
@@ -239,7 +244,7 @@ upload_image() {
             "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
         )
 
-        if [[ -n "$zfs_disks" ]]; then
+        if [[ -n "$is_zfs_image" ]]; then
             local root_snapshot_id=$(read_state "$region.$image_label.root.$image_system" snapshot_id)
 
             local root_image_logical_bytes=$(read_image_info ".disks.root.logical_bytes")

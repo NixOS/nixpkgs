@@ -4,7 +4,6 @@ stdenv.mkDerivation rec {
   pname = "jigdo";
   version = "0.7.3";
 
-  # Debian sources
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/j/jigdo/jigdo_${version}.orig.tar.gz";
     sha256 = "1qvqzgzb0dzq82fa1ffs6hyij655rajnfwkljk1y0mnkygnha1xv";
@@ -22,10 +21,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-libdb" ];
 
-  meta = {
+  meta = with lib; {
     description = "Download utility that can fetch files from several sources simultaneously";
-    homepage = "http://atterer.net/jigdo/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
+    homepage = "http://atterer.org/jigdo/";
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

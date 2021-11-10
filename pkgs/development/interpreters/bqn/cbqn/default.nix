@@ -11,21 +11,21 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "4d23479cdbd5ac6eb512c376ade58077b814b2b7";
-    hash = "sha256-MTvg4lOB26bqvJTqV71p4Y4qDjTYaOE40Jk4Sle/hsY=";
+    rev = "db686e89d4d2e9bfac3dddf306dff890135b2de1";
+    hash = "sha256-RJ751jCsAGjqQx3V5S5Uc611n+/TBs6G2o0q26x98NM=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2021-10-20";
+  version = "0.pre+date=2021-11-06";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "f50b8ab503d05cccb6ff61df52f2625df3292a9e";
-    hash = "sha256-pxToXVIKYS9P2TnGMGmKfJmAP54GVPVls9bm9tmS21s=";
+    rev = "cd866e1e45ce0f22bfacd25565ab912c06cb040f";
+    hash = "sha256-XuowrGDgrttRL/SY5si0nqHMKEidSNrQuquxNdBCW8o=";
   };
 
   dontConfigure = true;
