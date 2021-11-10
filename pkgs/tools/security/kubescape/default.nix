@@ -1,20 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "1.0.128";
+  version = "1.0.130";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fHXT9vg7uenFDjYmdPkMu63dlmyIATEBCxOn39c80cg=";
+    sha256 = "sha256-NZqIqqDusfWMDLVtcdFAVOuIGMxr+I2xnNB3ckBI/cY=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   vendorSha256 = "sha256-cOxjsujlpRbdw4098eMHe2oNAJXWGjKbPeYpKt0DCp8=";
 
-  ldflags = [ "-s" "-w" "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}" ];
-
-  nativeBuildInputs = [ installShellFiles ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}"
+  ];
 
   postInstall = ''
     # Running kubescape to generate completions outputs error warnings
