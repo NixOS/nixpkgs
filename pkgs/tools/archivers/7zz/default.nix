@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gnugrep, p7zip }:
+{ stdenv, lib, fetchurl, p7zip }:
 
 # https://sourceforge.net/p/sevenzip/discussion/45797/thread/7fe6c21efa/
 stdenv.mkDerivation rec {
@@ -14,19 +14,22 @@ stdenv.mkDerivation rec {
 
   # we need https://github.com/nidud/asmc/tree/master/source/asmc/linux in order
   # to build with the optimized assembler but that doesn't support building with
-  # GCC
-  # "../../cmpl_gcc_x64.mak";
-  makefile = "../../cmpl_gcc.mak";
+  # GCC: https://github.com/nidud/asmc/issues/8
+  makefile = "../../cmpl_gcc.mak"; # "../../cmpl_gcc_x64.mak";
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
 
-  nativeBuildInputs = [ gnugrep p7zip ];
+  nativeBuildInputs = [ p7zip ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin b/g/7zz
     install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
