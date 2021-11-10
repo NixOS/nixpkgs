@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-  propagatedBuildInputs = [ alsa-utils cifs-utils ffmpeg ];
-
   installPhase =
     let
       # NB: While this might seem like odd behavior, it's what Roon expects. The
@@ -57,6 +55,7 @@ stdenv.mkDerivation rec {
             --argv0 "$binName" \
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ icu66 openssl ]}" \
             --prefix PATH : "$dotnetDir" \
+            --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
             --run "cd $binDir" \
             --set DOTNET_ROOT "$dotnetDir"
         )
