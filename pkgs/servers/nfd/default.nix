@@ -37,10 +37,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
     build/unit-tests-core
     # build/unit-tests-daemon # 3 tests fail
     build/unit-tests-rib
     build/unit-tests-tools
+    runHook postCheck
   '';
 
   meta = with lib; {
