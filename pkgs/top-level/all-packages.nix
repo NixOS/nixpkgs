@@ -26709,6 +26709,8 @@ with pkgs;
 
   nload = callPackage ../applications/networking/nload { };
 
+  nali = callPackage ../applications/networking/nali { };
+
   normalize = callPackage ../applications/audio/normalize { };
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
