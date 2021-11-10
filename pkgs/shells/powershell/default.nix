@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
     patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
   '' + lib.optionalString (!stdenv.isDarwin) ''
-    # Remove liblttng-ust from dependencies once
-    # https://github.com/PowerShell/PowerShell/pull/14688 is in a release
     patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $pslibs/libcoreclrtraceptprovider.so
   '' + ''
 
