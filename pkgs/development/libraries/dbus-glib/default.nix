@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-glib-0.112";
+  pname = "dbus-glib";
+  version = "0.112";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
+    url = "https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${version}.tar.gz";
     sha256 = "sha256-fVUNzN/NKG4ziVUBgp7Zce62XGFOc6rbSgiu73GbFDo=";
   };
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dbus.freedesktop.org";
     license = with lib.licenses; [ afl21 gpl2Plus ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 }
