@@ -21,6 +21,7 @@
 , "asar"
 , "autoprefixer"
 , "aws-azure-login"
+, "awesome-lint"
 , "balanceofsatoshis"
 , "bash-language-server"
 , "beancount-langserver"

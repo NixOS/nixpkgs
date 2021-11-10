@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, libmd }:
 
 stdenv.mkDerivation rec {
   pname = "libbsd";
-  version = "0.10.0";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "11x8q45jvjvf2dvgclds64mscyg10lva33qinf2hwgc84v3svf1l";
+    sha256 = "18a2bcl9z0zyxhrm1lfv4yhhz0589s6jz0s78apaq78mhj0wz5gz";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   # darwin changes configure.ac which means we need to regenerate
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libmd ];
 
   patches = [ ./darwin.patch ];
 
