@@ -16,7 +16,7 @@
 with lib;
 
 assert stdenv.cc.isClang -> llvmPackages != null;
-assert elem precision [ "single" "double" "long-double" "quad-precision" ];
+assert lib.elem precision [ "single" "double" "float" "long-double" "quad-precision" ];
 
 let
   version = "3.3.9";
