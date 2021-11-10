@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "colorpicker";
-  version = "git-2018-01-14";
+  version = "unstable-2018-01-14";
 
   src = fetchFromGitHub {
     owner = "Ancurio";
-    repo  = "colorpicker";
-    rev   = "287676947e6e3b5b0cee784aeb1638cf22f0ce17";
+    repo = "colorpicker";
+    rev = "287676947e6e3b5b0cee784aeb1638cf22f0ce17";
     sha256 = "1kj1dpb79llrfpszraaz6r7ci114zqi5rmqxwsvq2dnnpjxyi29r";
   };
 
