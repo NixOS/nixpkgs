@@ -2267,6 +2267,8 @@ in {
 
   docloud = callPackage ../development/python-modules/docloud { };
 
+  docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
+
   docopt = callPackage ../development/python-modules/docopt { };
 
   docopt-ng = callPackage ../development/python-modules/docopt-ng { };
