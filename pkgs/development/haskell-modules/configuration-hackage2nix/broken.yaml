@@ -3917,7 +3917,6 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
-  - purescript-cst
   - pure-zlib
   - pusher-haskell
   - pusher-ws

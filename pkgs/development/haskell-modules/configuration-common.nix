@@ -976,6 +976,13 @@ self: super: {
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
+  # The most recent version of purescript-cst (0.4.0.0) has version
+  # bounds for LTS-17, so we need to jailbreak it for LTS-18.
+  # doJailbreak can likely be removed when the next version of
+  # purescript-cst is released, since the version bounds have
+  # been updated for LTS-18.
+  purescript-cst = doJailbreak super.purescript-cst;
+
   purescript =
     let
       purescriptWithOverrides = super.purescript.override {
