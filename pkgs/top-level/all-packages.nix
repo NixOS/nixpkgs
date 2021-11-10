@@ -1516,6 +1516,8 @@ with pkgs;
 
   certigo = callPackage ../tools/admin/certigo { };
 
+  certipy = callPackage ../tools/security/certipy { };
+
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
@@ -9859,7 +9861,7 @@ with pkgs;
   telescope = callPackage ../applications/networking/browsers/telescope { };
 
   termscp = callPackage ../tools/networking/termscp {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
   };
 
   termius = callPackage ../applications/networking/termius { };
@@ -27339,10 +27341,8 @@ with pkgs;
   picoloop = callPackage ../applications/audio/picoloop { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
-    openssl = if config.pidgin.openssl or true then openssl else null;
-    gnutls = if config.pidgin.gnutls or false then gnutls else null;
-    libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
-    startupnotification = libstartup_notification;
+    withOpenssl = config.pidgin.openssl or true;
+    withGnutls = config.pidgin.gnutls or false;
     plugins = [];
   };
 
