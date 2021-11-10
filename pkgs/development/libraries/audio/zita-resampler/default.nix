@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     cd source
-    sed -e "s@ldconfig@@" -i Makefile
+    substituteInPlace Makefile \
+      --replace 'ldconfig' ""
+  '' + lib.optionalString (!stdenv.targetPlatform.isx86_64) ''
+    substituteInPlace Makefile \
+      --replace '-DENABLE_SSE2' ""
   '';
 
   fixupPhase = ''

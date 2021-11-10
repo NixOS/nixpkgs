@@ -7,7 +7,8 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.2.3";
+  version = "4.2.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -15,14 +16,16 @@ buildPythonPackage rec {
     owner = "tkem";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9CHXvb+Nn3N2oWHwNbqKguzDO/q+4EnMZ50+E+MWS/A=";
+    sha256 = "sha256-doPLl7Ooc2cKlTiS/dqLTKSkTlSgPFztIumAzciM0bc=";
   };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "cachetools" ];
+  pythonImportsCheck = [
+    "cachetools"
+  ];
 
   meta = with lib; {
     description = "Extensible memoizing collections and decorators";

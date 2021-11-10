@@ -47,7 +47,7 @@ rec {
     nativeBuildInputs = [ makeWrapper unzip ];
     buildInputs = [ java ];
 
-    meta = {
+    meta = with lib; {
       description = "Enterprise-grade build system";
       longDescription = ''
         Gradle is a build system which offers you ease, power and freedom.
@@ -58,18 +58,14 @@ rec {
         build-by-convention behavior.
       '';
       homepage = "http://www.gradle.org/";
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.unix;
+      license = licenses.asl20;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ lorenzleutgeb ];
     };
   };
 
-  gradle_latest = gradle_7;
-
-  # NOTE: 7.3 is a candidate.
-  gradle_7 = gradle_7_2;
-
-  gradle_7_3 = gradleGen (gradleSpec (import ./gradle-7.3-rc-3-spec.nix));
-  gradle_7_2 = gradleGen (gradleSpec (import ./gradle-7.2-spec.nix));
+  gradle_latest = gradle_7_3;
+  gradle_7_3 = gradleGen (gradleSpec (import ./gradle-7.3-spec.nix));
   gradle_6_9 = gradleGen (gradleSpec (import ./gradle-6.9.1-spec.nix));
 
   # NOTE: No GitHub Release for this release, so update.sh does not work.
