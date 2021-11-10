@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.0.2";
+  version = "3.0.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "827a0e32839ab1600d4eb1c4c33ec5a8edfbc5cb42dafa13b81f182f97784b45";
+    sha256 = "sha256-YRuyc81o87mT+r3EBk/IWMW0epc8tap5mewbpAXIfNc=";
   };
 
   propagatedBuildInputs = [
