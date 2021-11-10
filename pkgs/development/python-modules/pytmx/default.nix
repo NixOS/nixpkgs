@@ -1,23 +1,32 @@
-{ lib, fetchFromGitHub
-, python, buildPythonPackage, isPy27
-, pygame, pyglet, pysdl2, six
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pygame
+, pyglet
+, pysdl2
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytmx";
-  version = "3.27";
+  version = "3.30";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcraft";
     repo = "PyTMX";
-    # Release was not tagged.
-    rev = "5bb094c45e648d1de6c9ba8d8c8f31f7b83478e1";
-    sha256 = "0kpd39sr2ggwzh7nd3f5801mgwm57rzrrkqcgbcypdm8l2ayga3b";
+    rev = version;
+    sha256 = "sha256-d6VPmRdqUO6YhkOYYeXOEcrli/35IFkxK73AcZYHixw=";
   };
 
-  propagatedBuildInputs = [ pygame pyglet pysdl2 six ];
+  propagatedBuildInputs = [
+    pygame
+    pyglet
+    pysdl2
+  ];
 
   pythonImportsCheck = [
     "pytmx.pytmx"
@@ -26,11 +35,14 @@ buildPythonPackage rec {
     "pytmx.util_pysdl2"
   ];
 
-  checkPhase = ''
-    # Change into the test directory due to a relative resource path.
-    cd tests/pytmx
-    ${python.interpreter} -m unittest test_pytmx
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError on the property name
+    "test_contains_reserved_property_name"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/bitcraft/PyTMX";
