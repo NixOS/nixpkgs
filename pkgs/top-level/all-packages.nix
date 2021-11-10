@@ -27867,6 +27867,8 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
+  roomeqwizard = callPackage ../applications/audio/roomeqwizard { };
+
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
     wxGTK = wxGTK30;
   };
