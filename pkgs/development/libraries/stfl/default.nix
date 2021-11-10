@@ -10,13 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libiconv ];
 
-  buildPhase = ''
+  preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + ( lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
-  '' ) + ''
-    make
   '';
 
   installPhase = ''
@@ -26,11 +24,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
   '';
 
-  meta = {
+  meta = with lib; {
     homepage    = "http://www.clifford.at/stfl/";
     description = "A library which implements a curses-based widget set for text terminals";
-    maintainers = with lib.maintainers; [ lovek323 ];
-    license     = lib.licenses.lgpl3;
-    platforms   = lib.platforms.unix;
+    maintainers = with maintainers; [ lovek323 ];
+    license     = licenses.lgpl3;
+    platforms   = platforms.unix;
   };
 }
