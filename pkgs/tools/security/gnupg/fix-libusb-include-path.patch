@@ -1,6 +1,17 @@
+From 29974d94c9e01bb7d999af925293a3ae66454d9d Mon Sep 17 00:00:00 2001
+From: Cole Mickens <cole.mickens@gmail.com>
+Date: Sun, 25 Apr 2021 03:21:02 +0000
+Subject: [PATCH] fix-libusb-include-path
+
+---
+ configure | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/configure b/configure
+index 9bea53c..d50c908 100755
 --- a/configure
 +++ b/configure
-@@ -8987,8 +8987,7 @@
+@@ -9281,8 +9281,7 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking libusb include dir" >&5
  $as_echo_n "checking libusb include dir... " >&6; }
     usb_incdir_found="no"
@@ -10,3 +21,6 @@
       _libusb_save_cppflags=$CPPFLAGS
       if test -n "${_incdir}"; then
         CPPFLAGS="-I${_incdir} ${CPPFLAGS}"
+-- 
+2.31.1
+
