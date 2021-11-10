@@ -1,7 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
-, nixUnstable
+, nix
 , git
 }:
 
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nixUnstable git ]}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
   ];
 
   doCheck = false;

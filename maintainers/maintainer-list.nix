@@ -10185,6 +10185,12 @@
     githubId = 720864;
     name = "Sébastien Bourdeauducq";
   };
+  sbellem = {
+    email = "sbellem@gmail.com";
+    github = "sbellem";
+    githubId = 125458;
+    name = "Sylvain Bellemare";
+  };
   sbond75 = {
     name = "sbond75";
     email = "43617712+sbond75@users.noreply.github.com";
@@ -11697,6 +11703,12 @@
     github = "tscholak";
     githubId = 1568873;
     name = "Torsten Scholak";
+  };
+  tshaynik = {
+    email = "tshaynik@protonmail.com";
+    github = "tshaynik";
+    githubId = 15064765;
+    name = "tshaynik";
   };
   tstrobel = {
     email = "4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains";
