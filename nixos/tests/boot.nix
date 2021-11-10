@@ -36,7 +36,7 @@ let
             machine = create_machine(${machineConfig})
             machine.start()
             machine.wait_for_unit("multi-user.target")
-            machine.succeed("nix verify -r --no-trust /run/current-system")
+            machine.succeed("nix store verify --no-trust -r --option experimental-features nix-command /run/current-system")
 
             with subtest("Check whether the channel got installed correctly"):
                 machine.succeed("nix-instantiate --dry-run '<nixpkgs>' -A hello")
