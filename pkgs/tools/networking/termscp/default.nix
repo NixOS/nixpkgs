@@ -5,6 +5,7 @@
 , openssl
 , pkg-config
 , rustPlatform
+, Foundation
 , Security
 , stdenv
 }:
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     libssh
     openssl
   ] ++ lib.optional stdenv.isDarwin [
+    Foundation
     Security
   ];
 
