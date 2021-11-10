@@ -17,7 +17,15 @@ stdenv.mkDerivation rec {
     patchShebangs ./
   '';
 
-  cmakeFlags = [ "-DENABLE_FORTRAN=ON" "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DENABLE_FORTRAN=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+    # Force compilation of higher derivatives
+    "-DDISABLE_VXC=0"
+    "-DDISABLE_FXC=0"
+    "-DDISABLE_KXC=0"
+    "-DDISABLE_LXC=0"
+  ];
 
   preCheck = ''
     export LD_LIBRARY_PATH=$(pwd)
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Library of exchange-correlation functionals for density-functional theory";
     homepage = "https://www.tddft.org/programs/Libxc/";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
   };
 }
