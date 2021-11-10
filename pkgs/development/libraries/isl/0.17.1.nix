@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "isl-0.17.1";
+  name = "isl-${version}";
+  version = "0.17.1";
 
   src = fetchurl {
     url = "https://libisl.sourceforge.io/${name}.tar.xz";

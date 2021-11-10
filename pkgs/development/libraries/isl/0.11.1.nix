@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation {
-  name = "isl-0.11.1"; # CLooG 0.16.3 fails to build with ISL 0.08.
+stdenv.mkDerivation rec {
+  name = "isl-${version}"; # CLooG 0.16.3 fails to build with ISL 0.08.
+  version = "0.11.1";
 
   src = fetchurl {
-    url = "https://libisl.sourceforge.io/isl-0.11.1.tar.bz2";
+    url = "https://libisl.sourceforge.io/${name}.tar.bz2";
     sha256 = "13d9cqa5rzhbjq0xf0b2dyxag7pqa72xj9dhsa03m8ccr1a4npq9";
   };
 
