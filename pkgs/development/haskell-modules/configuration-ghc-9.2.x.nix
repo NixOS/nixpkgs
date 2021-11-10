@@ -165,12 +165,6 @@ self: super: {
     sha256 = "02bvvy3hx3cf4y4dr64zl5pjvq8giwk4286j5g1n6k8ikyn2403p";
   }) (doJailbreak super.vector-th-unbox);
 
-  # Patch for TH code from head.hackage
-  invariant = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/invariant-0.5.4.patch";
-    sha256 = "17gg8ck4r6qmlbcbpbnqzksgf5q7i891zs6axfzhas6ajncylxvc";
-  }) (doJailbreak super.invariant);
-
   # base 4.15 support from head.hackage
   lens = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/lens-5.0.1.patch";
