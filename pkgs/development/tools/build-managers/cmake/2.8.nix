@@ -7,20 +7,12 @@ with lib;
 assert stdenv ? cc;
 assert stdenv.cc ? libc;
 
-let
-  os = lib.optionalString;
-  majorVersion = "2.8";
-  minorVersion = "12.2";
-  version = "${majorVersion}.${minorVersion}";
-in
-
 stdenv.mkDerivation rec {
-  name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
-
-  inherit majorVersion;
+  pname = "cmake${lib.optionalString useNcurses "-cursesUI"}${lib.optionalString useQt4 "-qt4UI"}";
+  version = "2.8.12.2";
 
   src = fetchurl {
-    url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
+    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     sha256 = "0phf295a9cby0v7zqdswr238v5aiy3rb2fs6dz39zjxbmzlp8rcc";
   };
 
@@ -56,11 +48,11 @@ stdenv.mkDerivation rec {
     (concatMap (p: [ (p.dev or p) (p.out or p) ]) buildInputs);
 
   configureFlags = [
-    "--docdir=/share/doc/${name}"
+    "--docdir=/share/doc/cmake-${version}"
     "--mandir=/share/man"
     "--system-libs"
     "--no-system-libarchive"
-   ] ++ lib.optional useQt4 "--qt-gui";
+  ] ++ lib.optional useQt4 "--qt-gui";
 
   setupHook = ./setup-hook.sh;
 
