@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "1.1.0";
+  version = "2021.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uDcBpPHh+wQHI2vGjnumwVGt5ZOreVq+L3kOam97uW4=";
+    sha256 = "sha256-FCavSy33fkXlboRAmGr0BkEkXLTOzsyGXQkws0LqiJk=";
   };
 
   nativeBuildInputs = [
@@ -41,10 +41,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "pyiqvia" ];
+  pythonImportsCheck = [
+    "pyiqvia"
+  ];
 
   meta = with lib; {
     description = "Python3 API for IQVIA data";
