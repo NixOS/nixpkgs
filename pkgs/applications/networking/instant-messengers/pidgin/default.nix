@@ -94,6 +94,6 @@ let unwrapped = stdenv.mkDerivation rec {
 
 in if plugins == [] then unwrapped
     else import ./wrapper.nix {
-      inherit makeWrapper symlinkJoin plugins;
+      inherit lib makeWrapper symlinkJoin plugins;
       pidgin = unwrapped;
     }
