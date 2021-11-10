@@ -9,13 +9,16 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-let inherit (lib) optional; in
-
 let self = stdenv.mkDerivation rec {
-  name = "gmp-6.2.1";
+  pname = "gmp";
+  version = "6.2.1";
 
-  src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
-    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+  src = fetchurl {
+    # we need to use bz2, others aren't in bootstrapping stdenv
+    urls = [
+      "mirror://gnu/gmp/gmp-${version}.tar.bz2"
+      "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2"
+    ];
     sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
   };
 
@@ -41,12 +44,12 @@ let self = stdenv.mkDerivation rec {
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
     "--build=${stdenv.buildPlatform.config}"
-  ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+  ] ++ lib.optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ lib.optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
     # to build a .dll on windows, we need --disable-static + --enable-shared
     # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
-    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
-    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
+    ++ lib.optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-assembly";
 
   doCheck = true; # not cross;
 
