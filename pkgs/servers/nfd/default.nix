@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
     sha256 = "1l9bchj8c68r6qw4vr1kc96jgxl0vpqa2vjkvy1xmhz92sivr6gi";
-    fetchSubmodules = withWebSocket;
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
     "--with-tests"
-  ] ++ lib.optional (!withWebSocket) "--without-websocket";
+    (lib.optionalString (!withWebSocket) "--without-websocket")
+  ];
 
   doCheck = true;
   checkPhase = ''
