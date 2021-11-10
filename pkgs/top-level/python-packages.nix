@@ -1765,6 +1765,10 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  cppe = callPackage ../development/python-modules/cppe {
+    cppe = pkgs.cppe;
+  };
+
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
   cppy = callPackage ../development/python-modules/cppy { };
