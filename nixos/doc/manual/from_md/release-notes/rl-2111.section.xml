@@ -1925,6 +1925,15 @@ Superuser created successfully.
           upgrade guide</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>julia</literal> now refers to
+          <literal>julia-stable</literal> instead of
+          <literal>julia-lts</literal>. In practice this means it has
+          been upgraded from <literal>1.0.4</literal> to
+          <literal>1.5.4</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
