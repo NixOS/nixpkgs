@@ -23268,6 +23268,8 @@ with pkgs;
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
+  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk { };
+
   nordic = callPackage ../data/themes/nordic { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
