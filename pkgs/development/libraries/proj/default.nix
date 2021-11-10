@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ (fetchpatch {
+  name = "Make-CApi-test-cross-platform.patch";
       url = "https://github.com/OSGeo/PROJ/commit/ac113a8898cded7f5359f1edd3abc17a78eee9b4.patch";
       sha256 = "0gz2xa5nxzck5c0yr7cspv3kw4cz3fxb2yic76w7qfvxidi7z1s1";
     })
