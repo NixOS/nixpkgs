@@ -5,8 +5,6 @@
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
-assert gdbUseFixed -> null != gdb;
-
 /*
   Note that this version of the extension still has some nix specific issues
   which could not be fixed merely by patching (inside a C# dll).
