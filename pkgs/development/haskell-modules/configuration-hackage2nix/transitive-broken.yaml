@@ -2444,7 +2444,6 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purescript
  - purescript-iso
  - purescript-tsd-gen
  - push-notify
