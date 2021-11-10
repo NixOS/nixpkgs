@@ -1017,6 +1017,10 @@ self: super: {
         (generateOptparseApplicativeCompletion "purs")
       ];
 
+  # purenix-1.0 has a strict version bound requiring purescript-0.14.4, but it
+  # works with later versions of purescript as well.
+  purenix = doJailbreak super.purenix;
+
   # Generate shell completion for spago
   spago = generateOptparseApplicativeCompletion "spago" super.spago;
 
