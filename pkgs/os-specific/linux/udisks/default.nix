@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace udisks/udisksclient.c \
-        --replace 'defined( __GNUC_PREREQ)' 1 \
-        --replace '__GNUC_PREREQ(4,6)' 1
+    substituteInPlace udisks/udisksclient.c \
+      --replace 'defined( __GNUC_PREREQ)' 1 \
+      --replace '__GNUC_PREREQ(4,6)' 1
   '';
 
   buildInputs = [
