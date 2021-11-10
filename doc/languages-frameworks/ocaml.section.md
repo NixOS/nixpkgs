@@ -13,7 +13,7 @@ For example:
 ```nix
 let
  pkgs = import <nixpkgs> {};
- # choose the ocaml version you want below
+ # choose the ocaml version you want to use
  ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_12;
 in
 pkgs.mkShell {
