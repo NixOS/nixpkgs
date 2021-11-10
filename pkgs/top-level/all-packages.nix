@@ -1516,6 +1516,8 @@ with pkgs;
 
   certigo = callPackage ../tools/admin/certigo { };
 
+  certipy = callPackage ../tools/security/certipy { };
+
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
   chezmoi = callPackage ../tools/misc/chezmoi { };
