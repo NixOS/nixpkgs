@@ -1,11 +1,11 @@
-{ lib, stdenv, config, vim_configurable, macvim, vimPlugins
+{ lib, stdenv, config, vim-configurable, macvim, vimPlugins
 , useMacvim ? stdenv.isDarwin && (config.vimacs.macvim or true)
 , vimacsExtraArgs ? "" }:
 
 stdenv.mkDerivation rec {
   pname = "vimacs";
   version = lib.getVersion vimPackage;
-  vimPackage = if useMacvim then macvim else vim_configurable;
+  vimPackage = if useMacvim then macvim else vim-configurable;
 
   buildInputs = [ vimPackage vimPlugins.vimacs ];
 

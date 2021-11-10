@@ -1966,6 +1966,13 @@ Superuser created successfully.
           <literal>1.5.4</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>vim_configurable</literal> has been renamed to
+          <literal>vim-configurable</literal>,
+          <literal>vim_configurable</literal> is now an alias to it.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

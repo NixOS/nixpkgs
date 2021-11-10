@@ -971,6 +971,7 @@ mapAliases ({
   vdirsyncerStable  = vdirsyncer; # added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   vimbWrapper = vimb; # added 2015-01
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # added 2019-12-05
+  vim_configurable = vim-configurable; # added 2021-11-10
   vimprobable2-unwrapped = vimprobable2; # added 2019-12-05
   virtviewer = virt-viewer; # added 2015-12-24
   virtmanager = virt-manager; # added 2019-10-29

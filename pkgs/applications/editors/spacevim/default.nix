@@ -2,7 +2,7 @@
 , git
 , fzf
 , makeWrapper
-, vim_configurable
+, vim-configurable
 , vimPlugins
 , fetchFromGitHub
 , lib
@@ -14,7 +14,7 @@
 
 let
   format = formats.toml { };
-  vim-customized = vim_configurable.customize {
+  vim-customized = vim-configurable.customize {
     name = "vim";
     # Not clear at the moment how to import plugins such that
     # SpaceVim finds them and does not auto download them to

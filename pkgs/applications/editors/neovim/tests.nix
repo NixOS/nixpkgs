@@ -1,4 +1,4 @@
-{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
+{ vimUtils, vim-configurable, writeText, neovim, vimPlugins
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab

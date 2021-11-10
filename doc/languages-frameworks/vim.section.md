@@ -17,7 +17,7 @@ At the moment we support three different methods for managing plugins:
 Adding custom .vimrc lines can be done using the following code:
 
 ```nix
-vim_configurable.customize {
+vim-configurable.customize {
   # `name` specifies the name of the executable and package
   name = "vim-with-plugins";
 
@@ -61,7 +61,7 @@ neovim-qt.override {
 To store you plugins in Vim packages (the native Vim plugin manager, see `:help packages`) the following example can be used:
 
 ```nix
-vim_configurable.customize {
+vim-configurable.customize {
   vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
     # loaded on launch
     start = [ youcompleteme fugitive ];
@@ -100,7 +100,7 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
 ```nix
 {
   packageOverrides = pkgs: with pkgs; {
-    myVim = vim_configurable.customize {
+    myVim = vim-configurable.customize {
       # `name` specifies the name of the executable and package
       name = "vim-with-plugins";
       # add here code from the example section
@@ -187,7 +187,7 @@ To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
 plugins the following example can be used:
 
 ```nix
-vim_configurable.customize {
+vim-configurable.customize {
   vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
     # loaded on launch
     plug.plugins = [ youcompleteme fugitive phpCompletion elm-vim ];
@@ -237,7 +237,7 @@ Create a default.nix file:
 
 ```nix
 { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
-nixpkgs.vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; }
+nixpkgs.vim-configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; }
 ```
 
 Create a generate.vim file:
@@ -266,7 +266,7 @@ You can add your Vim to your system's configuration file like this and start it 
 my-vim =
   let plugins = let inherit (vimUtils) buildVimPluginFrom2Nix; in {
     copy paste output1 here
-  }; in vim_configurable.customize {
+  }; in vim-configurable.customize {
     name = "vim-my";
 
     vimrcConfig.vam.knownPlugins = plugins; # optional

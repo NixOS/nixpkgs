@@ -1,5 +1,5 @@
 # tests available at pkgs/test/vim
-{ lib, stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin
+{ lib, stdenv, vim, vimPlugins, vim-configurable, buildEnv, writeText, writeScriptBin
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
 , hasLuaModule
@@ -15,7 +15,7 @@ USAGE EXAMPLE
 Install Vim like this eg using nixos option environment.systemPackages which will provide
 vim-with-plugins in PATH:
 
-  vim_configurable.customize {
+  vim-configurable.customize {
     name = "vim-with-plugins";
 
     # add custom .vimrc lines like this:
@@ -128,7 +128,7 @@ fitting the vimrcConfig.vam.pluginDictionaries option.
 Thus the most simple usage would be:
 
   vim_with_plugins =
-    let vim = vim_configurable;
+    let vim = vim-configurable;
         inherit (vimUtil.override {inherit vim}) rtpPath addRtp buildVimPlugin vimHelpTags;
         vimPlugins = [
           # the derivation list from the buffer created by nix#ExportPluginsForNix
@@ -461,7 +461,7 @@ rec {
     overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
-  pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
+  pluginnames2Nix = {name, namefiles} : vim-configurable.customize {
     inherit name;
     vimrcConfig.vam.knownPlugins = vimPlugins;
     vimrcConfig.vam.pluginDictionaries = ["vim2nix"];

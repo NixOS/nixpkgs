@@ -1,4 +1,4 @@
-{ vimUtils, vim_configurable, writeText, vimPlugins
+{ vimUtils, vim-configurable, writeText, vimPlugins
 , lib, fetchFromGitHub
 , pkgs
 }:
@@ -13,27 +13,27 @@ in
 
   ### vim tests
   ##################
-  vim_with_vim2nix = vim_configurable.customize {
+  vim_with_vim2nix = vim-configurable.customize {
     name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ];
   };
 
   # test cases:
-  test_vim_with_vim_nix_using_vam = vim_configurable.customize {
+  test_vim_with_vim_nix_using_vam = vim-configurable.customize {
    name = "vim-with-vim-addon-nix-using-vam";
     vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
   };
 
-  test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {
+  test_vim_with_vim_nix_using_pathogen = vim-configurable.customize {
     name = "vim-with-vim-addon-nix-using-pathogen";
     vimrcConfig.pathogen.pluginNames = [ "vim-nix" ];
   };
 
-  test_vim_with_vim_nix_using_plug = vim_configurable.customize {
+  test_vim_with_vim_nix_using_plug = vim-configurable.customize {
     name = "vim-with-vim-addon-nix-using-plug";
     vimrcConfig.plug.plugins = with vimPlugins; [ vim-nix ];
   };
 
-  test_vim_with_vim_nix = vim_configurable.customize {
+  test_vim_with_vim_nix = vim-configurable.customize {
     name = "vim-with-vim-addon-nix";
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
@@ -42,7 +42,7 @@ in
   # The user may have specified their own plugins which may not be formatted
   # exactly as the generated ones. In particular, they may not have the `pname`
   # attribute.
-  test_vim_with_custom_plugin = vim_configurable.customize {
+  test_vim_with_custom_plugin = vim-configurable.customize {
     name = "vim_with_custom_plugin";
     vimrcConfig.vam.knownPlugins =
       vimPlugins // ({
