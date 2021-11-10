@@ -23,7 +23,7 @@ let
                 '';
 
                 meta = old.meta // {
-                  homepage = https://github.com/NixOS/nixops;
+                  homepage = "https://github.com/NixOS/nixops";
                   description = "NixOS cloud provisioning and deployment tool";
                   maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
                   platforms = lib.platforms.unix;
