@@ -2,16 +2,33 @@
 
 let
   perlDeps = with perlPackages; [
-    Glib Gtk2 Gnome2 Pango Cairo Gnome2Canvas Gnome2VFS Gtk2GladeXML Gtk2TrayIcon
-    XMLLibXML XMLSAXBase XMLParser XMLRSS
+    Glib
+    Gtk2
+    Gnome2
+    Pango
+    Cairo
+    Gnome2Canvas
+    Gnome2VFS
+    Gtk2GladeXML
+    Gtk2TrayIcon
+    XMLLibXML
+    XMLSAXBase
+    XMLParser
+    XMLRSS
     HTMLParser
-    DateTime DateTimeFormatMail DateTimeFormatW3CDTF DateTimeLocale DateTimeTimeZone
+    DateTime
+    DateTimeFormatMail
+    DateTimeFormatW3CDTF
+    DateTimeLocale
+    DateTimeTimeZone
     ParamsValidate
-    ModuleImplementation ModuleRuntime
+    ModuleImplementation
+    ModuleRuntime
     TryTiny
     ClassSingleton
     URI
-    AnyEvent AnyEventHTTP
+    AnyEvent
+    AnyEventHTTP
     commonsense
     FileSlurp
     JSON
@@ -24,7 +41,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "git-2017-12-01";
+  version = "unstable-2017-12-01";
   pname = "yarssr";
 
   src = fetchFromGitHub {
@@ -35,7 +52,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ perlPackages.perl gettext makeWrapper ];
-  buildInputs = perlDeps ++ [gnome2.libglade];
+  buildInputs = perlDeps ++ [ gnome2.libglade ];
   propagatedBuildInputs = libs ++ perlDeps;
 
   installPhase = ''
