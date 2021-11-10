@@ -33369,6 +33369,8 @@ with pkgs;
 
   yarGen = callPackage ../tools/security/yarGen { };
 
+  yersinia = callPackage ../tools/security/yersinia { };
+
   yaxg = callPackage ../tools/graphics/yaxg {};
 
   yuzu-mainline = import ../misc/emulators/yuzu {
