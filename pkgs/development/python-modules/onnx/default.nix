@@ -1,30 +1,32 @@
 { lib
 , buildPythonPackage
+, cmake
 , fetchPypi
 , isPy27
-, cmake
-, protobuf
-, numpy
-, six
-, typing-extensions
-, pytestCheckHook
 , nbval
+, numpy
+, protobuf
+, pytestCheckHook
+, six
 , tabulate
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.10.1";
+  version = "1.10.2";
+  format = "setuptools";
 
-  # Python 2 is not supported as of Onnx v1.8
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d941ba76cab55db8913ecad9dc50cefeb368460f6338a91783a5d7643f3a044";
+    sha256 = "sha256-JNc8p9/X5sczmUT4lVS0AQcZiZM3kk/KFEfY8bXbUNY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   propagatedBuildInputs = [
     protobuf
@@ -34,8 +36,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     nbval
+    pytestCheckHook
     tabulate
   ];
 
@@ -59,10 +61,14 @@ buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
-  meta = {
-    homepage    = "http://onnx.ai";
+  pythonImportsCheck = [
+    "onnx"
+  ];
+
+  meta = with lib; {
     description = "Open Neural Network Exchange";
-    license     = lib.licenses.mit;
-    maintainers = [ lib.maintainers.acairncross ];
+    homepage = "http://onnx.ai";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ acairncross ];
   };
 }

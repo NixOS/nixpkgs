@@ -204,7 +204,7 @@ beamPackages.mixRelease rec {
 
   meta = with lib; {
     description = "ActivityPub microblogging server";
-    homepage = https://git.pleroma.social/pleroma/pleroma;
+    homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
     maintainers = with maintainers; [ petabyteboy ninjatrappeur yuka ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

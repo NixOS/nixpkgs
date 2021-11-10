@@ -20,7 +20,7 @@ let chia = python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace "==" ">="
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
   '';
 
   nativeBuildInputs = [

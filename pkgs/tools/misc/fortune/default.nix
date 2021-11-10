@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   '') ];
 
   meta = with lib; {
+    mainProgram = "fortune";
     description = "A program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;

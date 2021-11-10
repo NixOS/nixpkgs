@@ -8,8 +8,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "unstable-2021-09-29";
   format = "pyproject";
 
-  disabled = python3.pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ranguli";
     repo = pname;
@@ -43,10 +41,13 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Can be removed with the next release
     substituteInPlace pyproject.toml \
-      --replace '"hurry.filesize" = "^0.9"' ""
+      --replace '"hurry.filesize" = "^0.9"' "" \
+      --replace 'vt-py = ">=0.6.1,<0.8.0"' 'vt-py = ">=0.6.1"'
   '';
 
-  pythonImportsCheck = [ "ioccheck" ];
+  pythonImportsCheck = [
+    "ioccheck"
+  ];
 
   meta = with lib; {
     description = "Tool for researching IOCs";

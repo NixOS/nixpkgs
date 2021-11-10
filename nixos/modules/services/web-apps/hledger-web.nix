@@ -118,7 +118,7 @@ in {
         ++ extraOptions);
     in {
       description = "hledger-web - web-app for the hledger accounting tool.";
-      documentation = [ https://hledger.org/hledger-web.html ];
+      documentation = [ "https://hledger.org/hledger-web.html" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = mkMerge [
