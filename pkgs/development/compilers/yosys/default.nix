@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugin-search-dirs.patch
-    ./fix-clang-build.patch # see https://github.com/YosysHQ/yosys/issues/2011
   ];
 
   postPatch = ''
