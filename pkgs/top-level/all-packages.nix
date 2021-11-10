@@ -10616,6 +10616,8 @@ with pkgs;
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
+
   vul = callPackage ../applications/misc/vul { };
 
   xar = callPackage ../tools/compression/xar { };
