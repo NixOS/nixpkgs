@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    puppet-lint (2.3.6)
+    puppet-lint (2.4.2)
 
 PLATFORMS
   ruby

@@ -2,9 +2,9 @@
   puppet-lint = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wyk2l440d96ps3x127r52n51kqpqi2nzb3xlg92qn6aksqhnkis";
+      sha256 = "1pwpjxxr3wz71yl7jhhaa93fsrr72kz25isjydfhsf1igc9mfj9k";
       type = "gem";
     };
-    version = "2.3.6";
+    version = "2.4.2";
   };
 }
