@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
-
   pname = "carp";
   version = "0.5.3";
 
