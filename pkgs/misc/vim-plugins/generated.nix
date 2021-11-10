@@ -3970,6 +3970,18 @@ final: prev:
     meta.homepage = "https://github.com/jlesquembre/nterm.nvim/";
   };
 
+  nui-nvim = buildVimPluginFrom2Nix {
+    pname = "nui.nvim";
+    version = "2021-10-30";
+    src = fetchFromGitHub {
+      owner = "MunifTanjim";
+      repo = "nui.nvim";
+      rev = "362585d6515805d4be4eb665cf8707759a92a254";
+      sha256 = "0gzanzyn7fa0qmngrqzlflzzyjzqkn21nhwbgw48hd0x143p0fab";
+    };
+    meta.homepage = "https://github.com/MunifTanjim/nui.nvim/";
+  };
+
   null-ls-nvim = buildVimPluginFrom2Nix {
     pname = "null-ls.nvim";
     version = "2021-11-04";

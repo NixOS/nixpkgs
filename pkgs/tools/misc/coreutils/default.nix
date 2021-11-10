@@ -33,7 +33,7 @@ stdenv.mkDerivation (rec {
     ./fix-chmod-exit-code.patch
     # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
     ./disable-seek-hole.patch
-  ] ++ optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -44,9 +44,6 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
-    # Depends on the mountpoints
-    sed '2i echo Skipping df df-symlink test && exit 77' -i ./tests/df/df-symlink.sh
-
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
     sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
@@ -55,8 +52,6 @@ stdenv.mkDerivation (rec {
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
-
-    sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
 
     # Fails on systems with a rootfs. Looks like a bug in the test, see
     # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
@@ -82,6 +77,9 @@ stdenv.mkDerivation (rec {
     ''
   ])) + (optionalString stdenv.isAarch64 ''
     sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
+
+    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
   '');
 
   outputs = [ "out" "info" ];

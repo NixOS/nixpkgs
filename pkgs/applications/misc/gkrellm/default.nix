@@ -15,8 +15,6 @@
 , wrapGAppsHook
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "gkrellm";
   version = "2.3.11";
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook ];
   buildInputs = [ gettext glib gtk2 libX11 libSM libICE ]
-    ++ optionals stdenv.isDarwin [ IOKit ];
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   hardeningDisable = [ "format" ];
 
@@ -62,7 +60,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Themeable process stack of system monitors";
     longDescription = ''
       GKrellM is a single process stack of system monitors which

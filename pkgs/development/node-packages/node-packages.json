@@ -126,6 +126,7 @@
 , "gitmoji-cli"
 , "glob"
 , "graphql-cli"
+, "graphqurl"
 , "grunt-cli"
 , "makam"
 , "meshcommander"

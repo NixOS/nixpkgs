@@ -110,6 +110,8 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
+  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
+
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };

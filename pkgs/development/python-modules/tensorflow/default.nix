@@ -283,6 +283,7 @@ let
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
+    ++ lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";

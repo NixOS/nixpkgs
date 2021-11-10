@@ -13,28 +13,21 @@
 , gdk-pixbuf-xlib
 }:
 
-assert stdenv.hostPlatform.system == "i686-linux";
-
-let
-  baseVersion = "9.5.5";
-in
 stdenv.mkDerivation rec {
   pname = "adobe-reader";
-  version = "${baseVersion}-1";
+  version = "9.5.5";
 
+  # TODO: convert to phases
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/${baseVersion}/enu/AdbeRdr${version}_i486linux_enu.tar.bz2";
+    url = "http://ardownload.adobe.com/pub/adobe/reader/unix/9.x/${version}/enu/AdbeRdr${version}-1_i486linux_enu.tar.bz2";
     sha256 = "0h35misxrqkl5zlmmvray1bqf4ywczkm89n9qw7d9arqbg3aj3pf";
   };
 
   # !!! Adobe Reader contains copies of OpenSSL, libcurl, and libicu.
-  # We should probably remove those and use the regular Nixpkgs
-  # versions.
-
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf gdk-pixbuf-xlib ];
+  # We should probably remove those and use the regular Nixpkgs versions.
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf gdk-pixbuf-xlib ];
 
   passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 
@@ -46,5 +39,6 @@ stdenv.mkDerivation rec {
       "Numerous unresolved vulnerabilities"
       "See: https://www.cvedetails.com/product/497/Adobe-Acrobat-Reader.html?vendor_id=53"
     ];
+    platforms = [ "i686-linux" ];
   };
 }

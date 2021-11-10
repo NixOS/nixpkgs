@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fmt
     libpng
-    (SDL2.override { withStatic = true; })
+    SDL2
     SDL2_image
   ];
 

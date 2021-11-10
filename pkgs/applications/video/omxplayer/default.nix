@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchurl
 , raspberrypifw
 , pcre
@@ -69,26 +70,31 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "omxplayer";
-  version = "20130328-fbee325dc2";
-  src = fetchurl {
-    url = "https://github.com/huceke/omxplayer/tarball/fbee325dc2";
-    name = "omxplayer-${version}.tar.gz";
+  version = "unstable-2013-03-28";
+
+  src = fetchFromGitHub {
+    owner = "huceke";
+    repo = "omxplayer";
+    rev = "fbee325dc20441138d04d8d2022ad85956302e97";
     sha256 = "0fkvv8il7ffqxki2gp8cxa5shh6sz9jsy5vv3f4025g4gss6afkg";
   };
-  patchPhase = ''
+
+  postPatch = ''
     sed -i 1d Makefile
     export INCLUDES="-I${raspberrypifw}/include/interface/vcos/pthreads -I${raspberrypifw}/include/interface/vmcs_host/linux/"
   '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp omxplayer.bin $out/bin
   '';
+
   buildInputs = [ raspberrypifw ffmpeg pcre boost freetype zlib ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/huceke/omxplayer";
     description = "Commandline OMX player for the Raspberry Pi";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.arm;
+    license = licenses.gpl2Plus;
+    platforms = platforms.arm;
   };
 }

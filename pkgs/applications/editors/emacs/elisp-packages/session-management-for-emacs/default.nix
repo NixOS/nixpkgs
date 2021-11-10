@@ -16,12 +16,14 @@ stdenv.mkDerivation rec {
     cp lisp/*.el "$out/share/emacs/site-lisp/"
   '';
 
-  meta = {
-    # installation: add to your ~/.emacs
-    #  (require 'session)
-    #  (add-hook 'after-init-hook 'session-initialize)
+  meta = with lib; {
+    /* installation: add to your ~/.emacs
+      (require 'session)
+      (add-hook 'after-init-hook 'session-initialize)
+    */
     description = "Small session management for emacs";
     homepage = "http://emacs-session.sourceforge.net/";
-    license = "GPL";
+    license = license.gpl;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , html5lib
@@ -47,6 +48,11 @@ buildPythonPackage rec {
     "test_bad_password"
     "test_service"
     "testGuessFormatForParse"
+  ] ++ lib.optional stdenv.isDarwin [
+    # Require loopback network access
+    "test_sparqlstore"
+    "test_sparqlupdatestore_mock"
+    "TestGraphHTTP"
   ];
 
   pythonImportsCheck = [

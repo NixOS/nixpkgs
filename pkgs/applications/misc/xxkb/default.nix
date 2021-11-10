@@ -14,9 +14,6 @@
 , pkg-config
 }:
 
-assert svgSupport ->
-librsvg != null && glib != null && gdk-pixbuf != null && pkg-config != null;
-
 stdenv.mkDerivation rec {
   pname = "xxkb";
   version = "1.11.1";
@@ -27,6 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
+
   buildInputs = [
     libX11
     libXt
@@ -49,11 +47,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install.man" ];
 
-  meta = {
+  meta = with lib; {
     description = "A keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
-    license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [ rasendubi ];
-    platforms = lib.platforms.linux;
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.linux;
   };
 }
