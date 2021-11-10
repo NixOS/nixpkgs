@@ -34,7 +34,7 @@ mkDerivation {
     plasma-framework libqaccessibilityclient
 
   ];
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
