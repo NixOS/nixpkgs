@@ -1,6 +1,7 @@
 { alcotest
 , buildDunePackage
 , fetchzip
+, gcc
 , fmt
 , lib
 , uutf
@@ -18,6 +19,7 @@ buildDunePackage rec {
   useDune2 = true;
 
   checkInputs = [
+    gcc
     alcotest
     fmt
     uutf
