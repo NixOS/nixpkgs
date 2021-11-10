@@ -275,6 +275,7 @@ upload_image() {
                 --region "$region" \
                 --architecture $amazon_arch \
                 --block-device-mappings "${block_device_mappings[@]}" \
+                --boot-mode $(read_image_info .boot_mode) \
                 "${extra_flags[@]}" \
                 | jq -r '.ImageId'
               )
