@@ -9470,6 +9470,8 @@ in {
 
   types-requests = callPackage ../development/python-modules/types-requests { };
 
+  types-setuptools = callPackage ../development/python-modules/types-setuptools { };
+
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
