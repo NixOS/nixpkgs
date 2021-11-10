@@ -4,14 +4,12 @@
 , installShellFiles
 , jq
 }:
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
-in
-buildPythonApplication rec {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
   version = "4.0.0";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "4c4d0c6533da8d553f3dd170c9c4ff3752eb11fd7177ee391414a39adfef60ad";
   };
@@ -20,7 +18,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools-scm
+    python3.pkgs.setuptools-scm
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
