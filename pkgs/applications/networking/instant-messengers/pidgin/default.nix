@@ -92,8 +92,10 @@ let unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-in if plugins == [] then unwrapped
-    else callPackage ./wrapper.nix {
+# Always wrap pidgin even if plugin list is empty.
+# That way we always evaluate 'wrapper.nix' and make
+# sure we can instantiate and build it on hydra.
+in callPackage ./wrapper.nix {
       inherit plugins;
       pidgin = unwrapped;
     }
