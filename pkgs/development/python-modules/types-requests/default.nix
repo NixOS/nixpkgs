@@ -5,17 +5,20 @@
 
 buildPythonPackage rec {
   pname = "types-requests";
-  version = "2.25.12";
+  version = "2.26.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BVhjwKrPj48pzSyg0zIO/fOfKOcd5o0yd2F1HS9iu1c=";
+    sha256 = "sha256-317Iw0tBOkLrs45Plr3raAkLh1vfzFE43IKYnJVEWIM=";
   };
 
-  # Modules doesn't have tests
+  # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [ "requests-stubs" ];
+  pythonImportsCheck = [
+    "requests-stubs"
+  ];
 
   meta = with lib; {
     description = "Typing stubs for requests";
