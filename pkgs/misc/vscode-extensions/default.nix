@@ -1605,8 +1605,6 @@ let
           version = "13.0.0";
         };
 
-        buildInputs = [ jdk ];
-
         vsix = fetchurl {
            name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
            url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
@@ -1614,6 +1612,8 @@ let
         };
 
         nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [ jdk ];
 
         postInstall = ''
           cd "$out/$installPrefix"
