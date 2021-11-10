@@ -3931,6 +3931,8 @@ in {
 
   jedi = callPackage ../development/python-modules/jedi { };
 
+  jedi-language-server = callPackage ../development/python-modules/jedi-language-server { };
+
   jeepney = callPackage ../development/python-modules/jeepney { };
 
   jellyfin-apiclient-python = callPackage ../development/python-modules/jellyfin-apiclient-python { };
