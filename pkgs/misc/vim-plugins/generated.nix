@@ -2938,18 +2938,6 @@ final: prev:
     meta.homepage = "https://github.com/cohama/lexima.vim/";
   };
 
-  lingua-franca-vim = buildVimPluginFrom2Nix {
-    pname = "lingua-franca";
-    version = "2021-9-5";
-    src = fetchFromGitHub {
-      owner = "lf-lang";
-      repo = "lingua-franca.vim";
-      rev = "439b92a13744ee21cb3cd9c399e179efbcaa2967";
-      sha256 = "sha256-Bf2MabUe3fy0meL6zIYgal/yFxtLKsg3b/BUI/AVlrM=";
-    };
-    meta.homepage = "https://github.com/lf-lang/lingua-franca.vim";
-  };
-
   lf-vim = buildVimPluginFrom2Nix {
     pname = "lf.vim";
     version = "2021-02-18";
@@ -3056,6 +3044,18 @@ final: prev:
       sha256 = "1qab2pd1pyfrw0llxd5j11imzqxa3lnnfhr1w2fjn3yanbsxvlvd";
     };
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
+  };
+
+  lingua-franca-vim = buildVimPluginFrom2Nix {
+    pname = "lingua-franca.vim";
+    version = "2021-09-05";
+    src = fetchFromGitHub {
+      owner = "lf-lang";
+      repo = "lingua-franca.vim";
+      rev = "439b92a13744ee21cb3cd9c399e179efbcaa2967";
+      sha256 = "1cwn2pq26m7hdwvwhajb3cbz4pva423cryp2k6sgrp8ynmlqrz85";
+    };
+    meta.homepage = "https://github.com/lf-lang/lingua-franca.vim/";
   };
 
   lir-nvim = buildVimPluginFrom2Nix {
@@ -7778,6 +7778,18 @@ final: prev:
       sha256 = "1aiz0lmjmjvcw67aanc06ba131fvszck0y7zg4kl625wlf6ahdkx";
     };
     meta.homepage = "https://github.com/tpope/vim-fugitive/";
+  };
+
+  vim-fzf-coauthorship = buildVimPluginFrom2Nix {
+    pname = "vim-fzf-coauthorship";
+    version = "2021-07-14";
+    src = fetchFromGitHub {
+      owner = "maxjacobson";
+      repo = "vim-fzf-coauthorship";
+      rev = "c5df55743a274a2c2d6370008f199176dabae0bd";
+      sha256 = "0v52w9jiyg0q6fmsh0dq8gd6m48vhhj2fy95v7lvqyr7pnr1wqaa";
+    };
+    meta.homepage = "https://github.com/maxjacobson/vim-fzf-coauthorship/";
   };
 
   vim-gh-line = buildVimPluginFrom2Nix {
