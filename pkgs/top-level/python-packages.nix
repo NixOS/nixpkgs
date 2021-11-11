@@ -6949,7 +6949,7 @@ in {
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
-  PyRMVtransport = callPackage ../development/python-modules/PyRMVtransport { };
+  pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 

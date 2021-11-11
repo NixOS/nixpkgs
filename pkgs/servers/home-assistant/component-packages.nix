@@ -713,7 +713,7 @@
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
     "rituals_perfume_genie" = ps: with ps; [ pyrituals ];
-    "rmvtransport" = ps: with ps; [ PyRMVtransport ];
+    "rmvtransport" = ps: with ps; [ pyrmvtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
