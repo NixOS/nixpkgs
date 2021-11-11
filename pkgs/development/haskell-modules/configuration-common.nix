@@ -976,23 +976,50 @@ self: super: {
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
+  # The most recent version of purescript-cst (0.4.0.0) has version
+  # bounds for LTS-17, so we need to jailbreak it for LTS-18.
+  # doJailbreak can likely be removed when the next version of
+  # purescript-cst is released, since the version bounds have
+  # been updated for LTS-18.
+  purescript-cst = doJailbreak super.purescript-cst;
+
   purescript =
-    let
-      purescriptWithOverrides = super.purescript.override {
-        # PureScript requires an older version of happy.
-        happy = self.happy_1_19_9;
-      };
+    pkgs.lib.pipe
+      (super.purescript.override {
+        # The latest version of language-javascript is 0.7.1.0,
+        # but it seems to have a bug with async support:
+        # https://github.com/erikd/language-javascript/issues/131
+        language-javascript = self.language-javascript_0_7_0_0;
+      })
+      [ # This PR upgrades purescript from building with LTS-17 to building
+        # with LTS-18.  Aside from bumping dependency bounds, there is one
+        # minor change that needs to be made in app/Main.hs.
+        #
+        # This patch can likely be removed when purescript-0.14.6 is released.
+        (appendPatch
+          (pkgs.fetchpatch {
+            url = "https://patch-diff.githubusercontent.com/raw/purescript/purescript/pull/4199.patch";
+            sha256 = "sha256-OeG30EfCHs7gttLME909WfKxkEZr7Ch3leYiw4lElGg=";
+            includes = [
+              "app/Main.hs"
+            ];
+          })
+        )
+        # PureScript uses nodejs to run tests, so the tests have been disabled
+        # for now.  If someone is interested in figuring out how to get this
+        # working, it seems like it might be possible.
+        dontCheck
+        # The current version of purescript (0.14.5) has version bounds for LTS-17,
+        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
+        # likely be removed when purescript-0.14.6 is released.
+        doJailbreak
+        # Generate shell completions
+        (generateOptparseApplicativeCompletion "purs")
+      ];
 
-      # PureScript is built against LTS-13, so we need to jailbreak it to
-      # accept more recent versions of the libraries it requires.
-      jailBrokenPurescript = doJailbreak purescriptWithOverrides;
-
-      # Haddocks for PureScript can't be built.
-      # https://github.com/purescript/purescript/pull/3745
-      dontHaddockPurescript = dontHaddock jailBrokenPurescript;
-    in
-    # Generate shell completions
-    generateOptparseApplicativeCompletion "purs" dontHaddockPurescript;
+  # purenix-1.0 has a strict version bound requiring purescript-0.14.4, but it
+  # works with later versions of purescript as well.
+  purenix = doJailbreak super.purenix;
 
   # Generate shell completion for spago
   spago = generateOptparseApplicativeCompletion "spago" super.spago;
