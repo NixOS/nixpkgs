@@ -890,7 +890,7 @@
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
     "tplink" = ps: with ps; [ aiohttp-cors ifaddr python-kasa ];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
-    "traccar" = ps: with ps; [ aiohttp-cors stringcase ]; # missing inputs: pytraccar
+    "traccar" = ps: with ps; [ aiohttp-cors pytraccar stringcase ];
     "trace" = ps: with ps; [ ];
     "tractive" = ps: with ps; [ aiotractive ];
     "tradfri" = ps: with ps; [ pytradfri ];
