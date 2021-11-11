@@ -7202,6 +7202,16 @@
     githubId = 95194;
     name = "Mauricio Scheffer";
   };
+  max-niederman = {
+    email = "max@maxniederman.com";
+    github = "max-niederman";
+    githubId = 19580458;
+    name = "Max Niederman";
+    keys = [{
+      longkeyid = "rsa3072/0x9AED881481D8444E";
+      fingerprint = "1DE4 424D BF77 1192 5DC4  CF5E 9AED 8814 81D8 444E";
+    }];
+  };
   maxdamantus = {
     email = "maxdamantus@gmail.com";
     github = "Maxdamantus";
