@@ -591,6 +591,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
   };
 
+  cmp-cmdline = buildVimPluginFrom2Nix {
+    pname = "cmp-cmdline";
+    version = "2021-11-08";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-cmdline";
+      rev = "0ca73c3a50b72c2ca168d8904b39aba34d0c4227";
+      sha256 = "1777rv9mh3bar8lp5i4af7kip5j3s4ib8a83b67clga8pcdjla4d";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-cmdline/";
+  };
+
   cmp-conjure = buildVimPluginFrom2Nix {
     pname = "cmp-conjure";
     version = "2021-10-09";
