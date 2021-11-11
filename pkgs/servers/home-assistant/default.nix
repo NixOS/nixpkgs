@@ -683,6 +683,7 @@ in with py.pkgs; buildPythonApplication rec {
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "upnp"
     "uptime"
+    "uptimerobot"
     "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"

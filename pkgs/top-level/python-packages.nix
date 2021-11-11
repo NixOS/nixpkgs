@@ -7769,6 +7769,8 @@ in {
 
   pyupgrade = callPackage ../development/python-modules/pyupgrade { };
 
+  pyuptimerobot = callPackage ../development/python-modules/pyuptimerobot { };
+
   pyusb = callPackage ../development/python-modules/pyusb {
     inherit (pkgs) libusb1;
   };
