@@ -148,6 +148,7 @@ package-maintainers:
     - password
     - password-instances
     - pretty-simple
+    - purenix
     - spago
     - termonad
   dalpd:
