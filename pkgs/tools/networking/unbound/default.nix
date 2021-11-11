@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ bison ];
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true;
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
@@ -113,7 +113,9 @@ stdenv.mkDerivation rec {
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
       buildPhase
-      checkPhase
+      if [ -n "$doCheck" ]; then
+          checkPhase
+      fi
       installPhase
     ''
   # get rid of runtime dependencies on $dev outputs
