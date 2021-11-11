@@ -23812,7 +23812,9 @@ with pkgs;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
-  apkeep = callPackage ../tools/misc/apkeep { };
+  apkeep = callPackage ../tools/misc/apkeep {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   apngasm = callPackage ../applications/graphics/apngasm {};
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix {};
