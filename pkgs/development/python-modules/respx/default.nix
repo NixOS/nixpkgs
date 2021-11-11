@@ -1,24 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flask
 , httpcore
 , httpx
-, flask
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , starlette
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.17.1";
+  version = "0.18.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    sha256 = "0w8idh6l2iq04ydz7r2qisq9jsxq8wszkx97kx4g3yjwg4ypvc6k";
+    sha256 = "sha256-JgXnR2WpVbENFePLK2W8z9RkEwsGxqs08pO2eIpPpZ0=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +47,9 @@ buildPythonPackage rec {
     "test_pass_through"
   ];
 
-  pythonImportsCheck = [ "respx" ];
+  pythonImportsCheck = [
+    "respx"
+  ];
 
   meta = with lib; {
     description = "Python library for mocking HTTPX";
