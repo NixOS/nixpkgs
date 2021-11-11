@@ -113,7 +113,9 @@ stdenv.mkDerivation rec {
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
       buildPhase
-      checkPhase
+      if [ -n "$doCheck" ]; then
+          checkPhase
+      fi
       installPhase
     ''
   # get rid of runtime dependencies on $dev outputs
