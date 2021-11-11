@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, which, autoconf, automake, flex, bison
-, kernel, glibc, perl, libtool_2, libkrb5 }:
+, kernel, glibc, perl, libtool_2, libkrb5, fetchpatch }:
 
 with (import ./srcs.nix {
   inherit fetchurl;
@@ -17,6 +17,23 @@ in stdenv.mkDerivation {
     ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
+
+  patches = [
+    # LINUX 5.14: explicitly set set_page_dirty to default
+    ((fetchpatch {
+      url = "https://gerrit.openafs.org/changes/14830/revisions/20b8a37950b3718b85a4a3d21b23469a5176eb6a/patch";
+      sha256 = "1mkfwq0pbwvfjspsy2lxhi0f09hljgc6xyn3y97sai0dyivn05jp";
+    }).overrideAttrs (o: {
+      postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
+    }))
+    # Linux 5.15: Convert osi_Msg macro to a function
+    ((fetchpatch {
+      url = "https://gerrit.openafs.org/changes/14831/revisions/6cfa9046229d90c0625687e3fddb7877f21fbcff/patch";
+      sha256 = "18rip9a1krxf47fizf3f12ddq55apzb2w3wjj5qs7n3sh2nwks7g";
+    }).overrideAttrs (o: {
+      postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
+    }))
+  ];
 
   hardeningDisable = [ "pic" ];
 
@@ -56,6 +73,6 @@ in stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = with maintainers; [ maggesi spacefrogg ];
-    broken = versionOlder kernel.version "3.18" || kernel.kernelAtLeast "5.15" || kernel.isHardened;
+    broken = versionOlder kernel.version "3.18" || kernel.isHardened;
   };
 }
