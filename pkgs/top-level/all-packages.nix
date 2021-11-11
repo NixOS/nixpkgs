@@ -25659,6 +25659,8 @@ with pkgs;
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  levant = callPackage ../applications/networking/cluster/levant { };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   marker = callPackage ../applications/editors/marker { };
