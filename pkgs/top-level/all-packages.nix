@@ -8179,6 +8179,8 @@ with pkgs;
 
   opensm = callPackage ../tools/networking/opensm { };
 
+  tinyssh = callPackage ../tools/networking/tinyssh { };
+
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
 
   openssh = opensshPackages.openssh.override {
