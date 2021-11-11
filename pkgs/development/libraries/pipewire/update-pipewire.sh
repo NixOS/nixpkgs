@@ -23,15 +23,3 @@ for p in $outputs; do
     done
 done
 
-nix-update pipewire-media-session
-outputs=$(nix-build . -A pipewire-media-session)
-for p in $outputs; do
-    conf_files=$(find "$p/nix-support/" -name '*.conf.json')
-    for c in $conf_files; do
-        file_name=$(basename "$c")
-        if [[ ! -e "nixos/modules/services/desktops/pipewire/media-session/$file_name" ]]; then
-            echo "New file $file_name found! Add it to the module config and passthru tests!"
-        fi
-        install -m 0644 "$c" "nixos/modules/services/desktops/pipewire/media-session/"
-    done
-done
