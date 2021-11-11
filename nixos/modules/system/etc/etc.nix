@@ -85,7 +85,7 @@ in
       '';
 
       type = with types; attrsOf (submodule (
-        { name, config, ... }:
+        { name, config, options, ... }:
         { options = {
 
             enable = mkOption {
@@ -172,7 +172,9 @@ in
             target = mkDefault name;
             source = mkIf (config.text != null) (
               let name' = "etc-" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
+              in mkOverride
+                (options.text.highestPrio or lib.modules.defaultPriority)
+                (pkgs.writeText name' config.text));
           };
 
         }));
