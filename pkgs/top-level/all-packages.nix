@@ -15839,6 +15839,8 @@ with pkgs;
 
   cointop = callPackage ../applications/misc/cointop { };
 
+  collada-dom = callPackage ../development/libraries/collada-dom { };
+
   cog = callPackage ../development/web/cog { };
 
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
@@ -19228,6 +19230,8 @@ with pkgs;
   readline81 = callPackage ../development/libraries/readline/8.1.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
+
+  recastnavigation = callPackage ../development/libraries/recastnavigation { };
 
   rinutils = callPackage ../development/libraries/rinutils { };
 
