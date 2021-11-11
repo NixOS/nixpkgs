@@ -195,10 +195,10 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkg-config)
-    ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
-    ++ (optional langAda gnatboot)
+    ++ optional (perl != null) perl
+    ++ optional javaAwtGtk pkg-config
+    ++ optional (with stdenv.targetPlatform; isVc4 || isRedox) flex
+    ++ optional langAda gnatboot
     ;
 
   # For building runtime libs

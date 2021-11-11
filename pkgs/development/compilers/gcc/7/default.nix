@@ -167,7 +167,7 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl);
+    ++ optional (perl != null) perl;
 
   # For building runtime libs
   depsBuildTarget =

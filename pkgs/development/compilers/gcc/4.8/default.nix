@@ -167,8 +167,8 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional javaAwtGtk pkg-config);
+    ++ optional (perl != null) perl
+    ++ optional javaAwtGtk pkg-config;
 
   # For building runtime libs
   depsBuildTarget =
