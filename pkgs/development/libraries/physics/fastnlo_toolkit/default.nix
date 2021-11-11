@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, autoreconfHook
+, fetchurl
 , boost
 , gfortran
 , lhapdf
@@ -14,28 +13,14 @@
 , withPython ? false
 }:
 
-let
-  tag = "2823";
-in
-
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  version = "2.5.0pre-${tag}";
+  version = "2.5.0-2826";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.etp.kit.edu";
-    owner = "qcd-public";
-    repo = "fastNLO";
-    rev = tag;
-    hash = "sha256-FEKnEnK90tT4BJJ6MLva9lCl3aYzO1YGdx/8Ol2vM7M=";
-  } + /v2.5/toolkit;
-
-  postPatch = ''
-    # remove duplicate macro, to fix for autoconf 2.70
-    sed -e '0,/AC_CONFIG_MACRO_DIR\([m4]\)/{/AC_CONFIG_MACRO_DIR/d}' -i configure.ac
-  '';
-
-  nativeBuildInputs = [ autoreconfHook ];
+  src = fetchurl {
+    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
+    sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
+  };
 
   buildInputs = [
     boost
@@ -53,6 +38,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
       --replace "-fext-numeric-literals" ""
+
+    # disable test that fails due to strict floating-point number comparison
+    echo "#!/usr/bin/env perl" > check/fnlo-tk-stattest.pl.in
+    chmod +x check/fnlo-tk-stattest.pl.in
   '';
 
   configureFlags = [
@@ -88,6 +77,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # failing test "fnlo-tk-stattest.pl"
   };
 }

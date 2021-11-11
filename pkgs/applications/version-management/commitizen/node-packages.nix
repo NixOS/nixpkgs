@@ -9061,7 +9061,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Git commit, but play nice with conventions.";
-      homepage = https://github.com/commitizen/cz-cli;
+      homepage = "https://github.com/commitizen/cz-cli";
       license = "MIT";
     };
     production = false;

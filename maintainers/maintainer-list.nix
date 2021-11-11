@@ -6666,6 +6666,12 @@
       fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
     }];
   };
+  lorenzleutgeb = {
+    email = "lorenz@leutgeb.xyz";
+    github = "lorenzleutgeb";
+    githubId = 542154;
+    name = "Lorenz Leutgeb";
+  };
   luis = {
     email = "luis.nixos@gmail.com";
     github = "Luis-Hebendanz";
@@ -10067,6 +10073,17 @@
     name = "Shmarya Rubenstein";
     github = "s1341";
     githubId = 5682183;
+  };
+  sagikazarmark = {
+    name = "Mark Sagi-Kazar";
+    email = "mark.sagikazar@gmail.com";
+    matrix = "@mark.sagikazar:matrix.org";
+    github = "sagikazarmark";
+    githubId = 1226384;
+    keys = [{
+      longkeyid = "rsa4096/0xF251ADDC9D041C7E";
+      fingerprint = "E628 C811 6FB8 1657 F706  4EA4 F251 ADDC 9D04 1C7E";
+    }];
   };
   samalws = {
     email = "sam@samalws.com";

@@ -7,19 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "octofetch";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "azur1s";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ciBFTVdHotjifNAoXJjI9CumyK98OkMmfWMbrEldlNI=";
+    sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
-  cargoSha256 = "sha256-Gzemm5HY6YwlxesQlil6R+34OtAeU2k7f/9+Lll3i8k=";
+  cargoSha256 = "sha256:1ddyzbpsiy54r13nb9yrm64cbbifixnhkskwg5fvhhzj4ri4ks4a";
 
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [ openssl ];
 
   meta = with lib; {

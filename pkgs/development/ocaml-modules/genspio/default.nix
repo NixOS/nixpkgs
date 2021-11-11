@@ -24,7 +24,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://smondet.gitlab.io/genspio-doc/;
+    homepage = "https://smondet.gitlab.io/genspio-doc/";
     description = "Typed EDSL to generate POSIX Shell scripts";
     license = licenses.asl20;
     maintainers = [ maintainers.alexfmpe ];

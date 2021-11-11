@@ -4633,7 +4633,7 @@ in {
 
   mathlibtools = callPackage ../development/python-modules/mathlibtools { };
 
-  matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
+  matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -5305,7 +5305,7 @@ in {
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
 
-  openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
+  openrouteservice = callPackage ../development/python-modules/openrouteservice { };
 
   opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
 
@@ -5516,7 +5516,7 @@ in {
 
   pathvalidate = callPackage ../development/python-modules/pathvalidate { };
 
-  pathy = callPackage ../development/python-modules/pathy/default.nix { };
+  pathy = callPackage ../development/python-modules/pathy { };
 
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
@@ -8548,7 +8548,7 @@ in {
 
   signify = callPackage ../development/python-modules/signify { };
 
-  sip = callPackage ../development/python-modules/sip/default.nix { };
+  sip = callPackage ../development/python-modules/sip { };
 
   sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
