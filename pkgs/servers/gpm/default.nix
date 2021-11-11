@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.static = pkgsStatic.gpm;
+
   meta = with lib; {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "A daemon that provides mouse support on the Linux console";
