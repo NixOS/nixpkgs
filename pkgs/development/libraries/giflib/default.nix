@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
 
   passthru.tests.static = pkgsStatic.giflib;
+
   meta = {
     description = "A library for reading and writing gif images";
     platforms = lib.platforms.unix;
