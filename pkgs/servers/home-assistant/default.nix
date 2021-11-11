@@ -662,6 +662,7 @@ in with py.pkgs; buildPythonApplication rec {
     "toon"
     "totalconnect"
     "tplink"
+    "traccar"
     "trace"
     "tradfri"
     "transmission"
