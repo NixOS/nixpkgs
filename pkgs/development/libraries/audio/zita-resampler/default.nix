@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "zita-resampler";
   version = "1.8.0";
+
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
     sha256 = "sha256-5XRPI8VN0Vs/eDpoe9h57uKmkKRUWhW0nEzwN6pGSqI=";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     "SUFFIX="
   ];
 
-  patchPhase = ''
+  postPatch = ''
     cd source
     substituteInPlace Makefile \
       --replace 'ldconfig' ""
