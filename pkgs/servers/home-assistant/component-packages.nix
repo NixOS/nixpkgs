@@ -922,7 +922,7 @@
     "updater" = ps: with ps; [ ];
     "upnp" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr zeroconf ];
     "uptime" = ps: with ps; [ ];
-    "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
+    "uptimerobot" = ps: with ps; [ pyuptimerobot ];
     "usb" = ps: with ps; [ aiohttp-cors pyserial pyudev ];
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [ geojson-client ];
