@@ -122,11 +122,6 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  # Avoid Qt 5.12 problem on Big Sur: https://bugreports.qt.io/browse/QTBUG-87014
-  qtWrapperArgs = lib.optionals stdenv.isDarwin [
-    "--set QT_MAC_WANTS_LAYER 1"
-  ];
-
   postFixup = optionalString withGUI ''
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
