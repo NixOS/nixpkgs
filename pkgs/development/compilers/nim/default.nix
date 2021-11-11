@@ -73,15 +73,14 @@ let
   nimTarget = parsePlatform stdenv.targetPlatform;
 
   bootstrapCompiler = let
-    revision = "561b417c65791cd8356b5f73620914ceff845d10";
   in stdenv.mkDerivation {
     pname = "nim-bootstrap";
-    version = "g${lib.substring 0 7 revision}";
+    version = "unstable-2021-10-07";
 
     src = fetchgit {
       # A Git checkout is much smaller than a GitHub tarball.
       url = "https://github.com/nim-lang/csources_v1.git";
-      rev = revision;
+      revision = "561b417c65791cd8356b5f73620914ceff845d10";
       sha256 = "1c2k681knrha1zmf4abhb32i2wwd3nwflzylnqryxk753swla043";
     };
 
