@@ -16,7 +16,7 @@
 , curl
 , sane-backends
 , libXpm
-, epoxy
+, libepoxy
 , poppler
 , mesa
 , lirc
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     sane-backends
     libdrm
     libXpm
-    epoxy
+    libepoxy
     poppler
     lirc
     mesa

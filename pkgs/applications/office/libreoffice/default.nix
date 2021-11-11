@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome, glib, ncurses, epoxy, gpgme
+, gnome, glib, ncurses, libepoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
@@ -394,7 +394,7 @@ in (mkDrv rec {
       python3 sane-backends unzip which zip zlib
       mdds bluez5 libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
-      librevenge libe-book libmwaw glm ncurses epoxy
+      librevenge libe-book libmwaw glm ncurses libepoxy
       libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
     ]
     ++ (with gst_all_1; [

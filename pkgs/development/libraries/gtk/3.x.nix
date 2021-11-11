@@ -24,7 +24,7 @@
 , gobject-introspection
 , fribidi
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gmp
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit

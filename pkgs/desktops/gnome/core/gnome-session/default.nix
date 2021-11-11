@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
+, libxslt, gettext, makeWrapper, systemd, xorg, libepoxy, gnugrep, bash, gnome-session-ctl }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 libICE gnome-desktop json-glib xorg.xtrans gnome.adwaita-icon-theme
-    gnome.gnome-settings-daemon gsettings-desktop-schemas systemd epoxy
+    gnome.gnome-settings-daemon gsettings-desktop-schemas systemd libepoxy
   ];
 
   postPatch = ''

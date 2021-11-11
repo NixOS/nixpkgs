@@ -3,7 +3,7 @@
 , coreutils
 , cppzmq
 , curl
-, epoxy
+, libepoxy
 , fetchFromGitHub
 , glm
 , gtkmm3
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cppzmq
     curl
-    epoxy
+    libepoxy
     glm
     gtkmm3
     libgit2

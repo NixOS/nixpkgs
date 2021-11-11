@@ -17,7 +17,7 @@
 , libdatrie
 , libXdmcp
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libdatrie
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     dbus
     at-spi2-core
     libXtst

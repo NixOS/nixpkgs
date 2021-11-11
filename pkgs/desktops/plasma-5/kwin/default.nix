@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools, fetchpatch,
 
-  epoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
+  libepoxy, lcms2, libICE, libSM, libcap, libdrm, libinput, libxkbcommon, mesa,
   pipewire, udev, wayland, xcb-util-cursor, xwayland,
 
   qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
@@ -21,7 +21,7 @@ mkDerivation {
   name = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    epoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
+    libepoxy lcms2 libICE libSM libcap libdrm libinput libxkbcommon mesa pipewire
     udev wayland xcb-util-cursor xwayland
 
     qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors

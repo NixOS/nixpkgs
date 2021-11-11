@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchzip, cmake, pkg-config, lv2, alsa-lib, libjack2,
   freetype, libX11, gtk3, pcre, libpthreadstubs, libXdmcp, libxkbcommon,
-  epoxy, at-spi2-core, dbus, curl, fftwFloat }:
+  libepoxy, at-spi2-core, dbus, curl, fftwFloat }:
 
 let
   pname = "HybridReverb2";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ lv2 alsa-lib libjack2 freetype libX11 gtk3 pcre
-    libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus curl fftwFloat ];
+    libpthreadstubs libXdmcp libxkbcommon libepoxy at-spi2-core dbus curl fftwFloat ];
 
   cmakeFlags = [
     "-DHybridReverb2_AdvancedJackStandalone=ON"

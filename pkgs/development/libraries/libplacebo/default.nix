@@ -9,7 +9,7 @@
 , shaderc
 , glslang
 , lcms2
-, epoxy
+, libepoxy
 , libGL
 , xorg
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     shaderc
     glslang
     lcms2
-    epoxy
+    libepoxy
     libGL
     xorg.libX11
   ];

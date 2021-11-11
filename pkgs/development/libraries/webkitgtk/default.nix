@@ -21,7 +21,7 @@
 , enchant2
 , xorg
 , libxkbcommon
-, epoxy
+, libepoxy
 , at-spi2-core
 , libxml2
 , libsoup
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     enchant2
-    epoxy
+    libepoxy
     gnutls
     gst-plugins-bad
     gst-plugins-base
