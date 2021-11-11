@@ -5,6 +5,7 @@
 , cloudpickle
 , distributed
 , fetchFromGitHub
+, fetchpatch
 , fsspec
 , jinja2
 , numpy
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.09.1";
+  version = "2021.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +32,18 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+UkbXbWV5R/QtVb5rWm/5SA+IoWsIfBciL3vg138jkc=";
+    sha256 = "07ysrs46x5w8rc2df0j06rsw58ahcysd6lwjk5riqpjlpwdfmg7p";
   };
+
+  patches = [
+    # remove with next bump
+    (fetchpatch {
+      name = "fix-tests-against-distributed-2021.10.0.patch";
+      url = "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
+      includes = [ "dask/tests/test_distributed.py" ];
+      sha256 = "1i4i4k1lzxcydq9l80jyifq21ny0j3i47rviq07ai488pvx1r2al";
+    })
+  ];
 
   propagatedBuildInputs = [
     cloudpickle

@@ -2,8 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "mkpasswd";
-  inherit (whois) version;
-  inherit (whois) src;
+  inherit (whois) version src;
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libxcrypt ];

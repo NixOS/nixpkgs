@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "jaeger-client";
-  version = "4.6.1";
+  version = "4.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3bc27ad77e035efd0899f377a15f180467fec44b2afbf5be0660cc888a2a4ac3";
+    sha256 = "3157836edab8e2c209bd2d6ae61113db36f7ee399e66b1dcbb715d87ab49bfe0";
   };
 
   propagatedBuildInputs = [
