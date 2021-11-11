@@ -18,6 +18,7 @@
 , libglvnd
 , libxkbcommon
 , stdenv
+, Security
 , enableWayland ? stdenv.isLinux
 , wayland
 , xorg
@@ -96,6 +97,8 @@ rustPlatform.buildRustPackage rec {
         }))
       ];
     }))
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   postFixup = let
