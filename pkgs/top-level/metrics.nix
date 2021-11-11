@@ -8,7 +8,8 @@ runCommand "nixpkgs-metrics"
     #requiredSystemFeatures = [ "benchmark" ]; # dedicated machine, by @vcunat last time
   }
   ''
-    export NIX_STATE_DIR=$TMPDIR
+    export NIX_STORE_DIR=$TMPDIR/store
+    export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PAGER=
     nix-store --init
 
