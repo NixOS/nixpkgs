@@ -1,12 +1,14 @@
-{ lib, pkgs, stdenv, jdk11_headless }:
+{ lib, pkgs, stdenv, fetchFromGitHub, jdk11_headless }:
+
 stdenv.mkDerivation {
-  name = "lfc";
+  pname = "lfc";
   version = "0.1.0";
 
-  src = fetchGit {
-    url = "https://github.com/revol-xut/lingua-franca-nix-releases.git";
+  src = fetchFromGitHub {
+    owner = "revol-xut";
+    repo = "lingua-franca-nix-releases";
     rev = "11c6d5297cd63bf0b365a68c5ca31ec80083bd05";
-    ref = "master";
+    sha256 = "DgxunzC8Ep0WdwChDHWgG5QJbJZ8UgQRXtP1HZqL9Jg=";
   };
 
   buildInputs = [ jdk11_headless ];
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace bin/lfc \
       --replace 'base=`dirname $(dirname ''${abs_path})`' "base='$out'" \
-      --replace "run_lfc_with_args" "${jdk11_headless}/bin/java -jar $out/lib/jars/org.lflang.lfc-${version}-SNAPSHOT-all.jar"
+      --replace "run_lfc_with_args" "${jdk11_headless}/bin/java -jar $out/lib/jars/org.lflang.lfc-0.1.0-SNAPSHOT-all.jar"
   '';
 
   installPhase = ''
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/lf-lang/lingua-franca";
     license = licenses.bsd2;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ revol-xut ];
   };
 }
