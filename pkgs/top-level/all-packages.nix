@@ -12878,6 +12878,8 @@ with pkgs;
 
   devserver = callPackage ../development/tools/rust/devserver { };
 
+  itm = callPackage ../development/tools/rust/itm { };
+
   maturin = callPackage ../development/tools/rust/maturin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
