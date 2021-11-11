@@ -394,33 +394,12 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRock64 = let
-    rkbin = fetchFromGitHub {
-      owner = "ayufan-rock64";
-      repo = "rkbin";
-      rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
-      sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
-    };
-  in buildUBoot {
+  ubootRock64 = buildUBoot {
     extraMakeFlags = [ "all" "u-boot.itb" ];
     defconfig = "rock64-rk3328_defconfig";
-    extraMeta = {
-      platforms = [ "aarch64-linux" ];
-      license = lib.licenses.unfreeRedistributableFirmware;
-    };
+    extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
-    # Derive MAC address from cpuid
-    # Submitted upstream: https://patchwork.ozlabs.org/patch/1203686/
-    extraConfig = ''
-      CONFIG_MISC_INIT_R=y
-    '';
-    # Close to being blob free, but the U-Boot TPL causes random memory
-    # corruption
-    postBuild = ''
-      ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.13.bin idbloader.img
-      cat spl/u-boot-spl.bin >> idbloader.img
-    '';
   };
 
   ubootRockPro64 = buildUBoot {
