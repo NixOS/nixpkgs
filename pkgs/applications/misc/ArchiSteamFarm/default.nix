@@ -15,7 +15,7 @@ buildDotnetModule rec {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "0y69yazayrww5xywkbcgqjspz95hy73qnnx8dkkfhrl7laczqk8z";
+    sha256 = "sha256-H038maKHZujmbKhbi8fxsKR/tcSPrcl9L5xnr77yyXg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
@@ -40,12 +40,13 @@ buildDotnetModule rec {
     )
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     platforms = dotnetCorePackages.aspnetcore_5_0.meta.platforms;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 legendofmiracles ];
   };
-  passthru.updateScript = ./updater.sh;
 }
