@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ bison ];
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = true;
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
