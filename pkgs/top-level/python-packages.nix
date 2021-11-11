@@ -6949,7 +6949,7 @@ in {
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
-  PyRMVtransport = callPackage ../development/python-modules/PyRMVtransport { };
+  pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
@@ -9473,6 +9473,10 @@ in {
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
+
+  types-setuptools = callPackage ../development/python-modules/types-setuptools { };
+
+  types-toml = callPackage ../development/python-modules/types-toml { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 

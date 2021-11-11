@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.11.0";
+  version = "2021.11.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -713,7 +713,7 @@
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
     "rituals_perfume_genie" = ps: with ps; [ pyrituals ];
-    "rmvtransport" = ps: with ps; [ PyRMVtransport ];
+    "rmvtransport" = ps: with ps; [ pyrmvtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
