@@ -25,7 +25,9 @@
 , libXi
 , libXinerama
 , libXrender
+, libXrandr
 , libXt
+, libXtst
 , libcanberra
 , libnotify
 , gnome
@@ -120,7 +122,9 @@ stdenv.mkDerivation {
       libXi
       libXinerama
       libXrender
+      libXrandr
       libXt
+      libXtst
       libcanberra
       libnotify
       libGLU libGL
