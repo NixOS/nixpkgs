@@ -5426,6 +5426,8 @@ in {
 
   pamqp = callPackage ../development/python-modules/pamqp { };
 
+  panacotta = callPackage ../development/python-modules/panacotta { };
+
   pandas = callPackage ../development/python-modules/pandas { };
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };

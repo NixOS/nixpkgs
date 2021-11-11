@@ -631,7 +631,7 @@
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
     "p1_monitor" = ps: with ps; [ p1monitor ];
-    "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
+    "panasonic_bluray" = ps: with ps; [ panacotta ];
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
     "panel_custom" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
