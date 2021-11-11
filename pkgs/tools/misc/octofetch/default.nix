@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256:1ddyzbpsiy54r13nb9yrm64cbbifixnhkskwg5fvhhzj4ri4ks4a";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Github user information on terminal";

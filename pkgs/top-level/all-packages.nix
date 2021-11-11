@@ -8049,7 +8049,9 @@ with pkgs;
 
   ocserv = callPackage ../tools/networking/ocserv { };
 
-  octofetch = callPackage ../tools/misc/octofetch { };
+  octofetch = callPackage ../tools/misc/octofetch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   oha = callPackage ../tools/networking/oha {
     inherit (darwin.apple_sdk.frameworks) Security;
