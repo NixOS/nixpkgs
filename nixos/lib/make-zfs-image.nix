@@ -219,23 +219,12 @@ let
       nixpkgs-fmt $out
     '';
 
-  mergedConfig =
-    if configFile == null
-    then fileSystemsCfgFile
-    else
-      pkgs.runCommand "configuration.nix" {
-        buildInputs = with pkgs; [ nixpkgs-fmt ];
-      }
-        ''
-          (
-            echo '{ imports = ['
-            printf "(%s)\n" "$(cat ${fileSystemsCfgFile})";
-            printf "(%s)\n" "$(cat ${configFile})";
-            echo ']; }'
-          ) > $out
-
-          nixpkgs-fmt $out
-        '';
+  mergedConfig = pkgs.mergeNixOSModules {
+    name = "configuration.nix";
+    moduleFiles = [
+      fileSystemsCfgFile
+    ] ++ lib.optional (configFile != null) configFile;
+  };
 
   image = (
     pkgs.vmTools.override {
