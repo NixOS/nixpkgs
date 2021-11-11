@@ -6,7 +6,7 @@
 , pkg-config
 , glib
 , wrapGAppsHook
-, epoxy
+, libepoxy
 , gtk4
 , zbar
 , tiffSupport ? true
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    epoxy
+    libepoxy
     gtk4
     zbar
   ];

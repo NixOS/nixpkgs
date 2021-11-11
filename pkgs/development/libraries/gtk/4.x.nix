@@ -21,7 +21,7 @@
 , fribidi
 , harfbuzz
 , xorg
-, epoxy
+, libepoxy
 , libxkbcommon
 , libxml2
 , gnome
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxkbcommon
-    epoxy
+    libepoxy
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers

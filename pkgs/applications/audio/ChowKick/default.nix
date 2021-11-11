@@ -4,7 +4,7 @@
 , cmake
 , curl
 , dbus
-, epoxy
+, libepoxy
 , fetchFromGitHub
 , freeglut
 , freetype
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     brotli
     curl
     dbus
-    epoxy
+    libepoxy
     freeglut
     freetype
     gtk2-x11

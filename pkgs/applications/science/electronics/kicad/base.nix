@@ -27,7 +27,7 @@
 , libthai
 , libdatrie
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     libthai
     libdatrie
     libxkbcommon
-    epoxy
+    libepoxy
     dbus.daemon
     at-spi2-core
     libXtst

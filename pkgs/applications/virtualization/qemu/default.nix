@@ -18,7 +18,7 @@
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, epoxy, libdrm
+, openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
-    ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
+    ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ];

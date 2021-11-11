@@ -17,7 +17,7 @@
 , gtk3
 , harfbuzz
 , ninja
-, epoxy
+, libepoxy
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     librsvg
     webkitgtk_4_1
-    epoxy
+    libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

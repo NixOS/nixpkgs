@@ -9,7 +9,7 @@
 , glibmm_2_68
 , cairomm_1_16
 , pangomm_2_48
-, epoxy
+, libepoxy
 , gnome
 , makeFontsConf
 , xvfb-run
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    epoxy
+    libepoxy
   ];
 
   propagatedBuildInputs = [

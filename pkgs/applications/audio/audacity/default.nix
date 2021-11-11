@@ -32,7 +32,7 @@
 , linuxHeaders
 , at-spi2-core
 , dbus
-, epoxy
+, libepoxy
 , libXdmcp
 , libXtst
 , libpthreadstubs
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     at-spi2-core
     dbus
-    epoxy
+    libepoxy
     libXdmcp
     libXtst
     libpthreadstubs

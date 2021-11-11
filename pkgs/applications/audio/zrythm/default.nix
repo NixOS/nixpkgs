@@ -12,7 +12,7 @@
 , cmake
 , curl
 , dconf
-, epoxy
+, libepoxy
 , ffmpeg
 , fftw
 , fftwFloat
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     chromaprint
     curl
     dconf
-    epoxy
+    libepoxy
     ffmpeg
     fftw
     fftwFloat

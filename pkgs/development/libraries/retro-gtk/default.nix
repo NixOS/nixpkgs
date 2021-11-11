@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, epoxy
+, libepoxy
 , glib
 , gtk3
 , libpulseaudio
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    epoxy
+    libepoxy
     glib
     gtk3
     libpulseaudio

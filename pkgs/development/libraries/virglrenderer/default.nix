@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
-, libGLU, epoxy, libX11, libdrm, mesa
+, libGLU, libepoxy, libX11, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h76a1ylhh4niq33sa5knx033sr4k2816vibh4m58j54y7qc6346";
   };
 
-  buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
+  buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
 
   nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
 

@@ -37,7 +37,7 @@
 , libXdmcp
 , libselinux
 , libsepol
-, epoxy
+, libepoxy
 , at-spi2-core
 , libXtst
 , libthai
@@ -135,7 +135,7 @@ mkDerivation rec {
     libXdmcp
     libselinux
     libsepol
-    epoxy
+    libepoxy
     at-spi2-core
     libXtst
     libthai
