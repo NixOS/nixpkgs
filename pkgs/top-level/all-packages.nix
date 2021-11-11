@@ -723,6 +723,8 @@ with pkgs;
 
   replaceDependency = callPackage ../build-support/replace-dependency.nix { };
 
+  mergeNixOSModules = callPackage ../build-support/merge-nixos-modules { };
+
   nukeReferences = callPackage ../build-support/nuke-references {
     inherit (darwin) signingUtils;
   };
