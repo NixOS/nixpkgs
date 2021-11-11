@@ -12,7 +12,10 @@ import ./versions.nix ({ version, sha256 }:
 
     modRoot = "src/go";
 
-    vendorSha256 = "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn";
+    vendorSha256 =
+        if "${lib.versions.majorMinor version}" == "5.0" then "1417qi061xc4m55z0vz420fr7qpi24kw5yj9wq7iic92smakgkjn"
+        else if "${lib.versions.majorMinor version}" == "5.4" then "17hx0lnxvc4vlsdp7h66x95rwwh5skk3kynphm605klfix4hjs2k"
+        else throw "unsupported version ${version} for zabbix-agent2";
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
