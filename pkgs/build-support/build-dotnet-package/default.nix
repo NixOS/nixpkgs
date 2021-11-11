@@ -3,6 +3,7 @@
 attrsOrig @
 { baseName
 , version
+, nativeBuildInputs ? []
 , buildInputs ? []
 , xBuildFiles ? [ ]
 , xBuildFlags ? [ "/p:Configuration=Release" ]
@@ -19,7 +20,9 @@ attrsOrig @
     attrs = {
       name = "${baseName}-${version}";
 
-      nativeBuildInputs = [ pkg-config ];
+      nativeBuildInputs = [
+        pkg-config
+      ] ++ nativeBuildInputs;
       buildInputs = [
         mono
         dotnetbuildhelpers
@@ -113,4 +116,4 @@ attrsOrig @
       '';
     };
   in
-    stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "buildInputs" ] ))
+    stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "nativeBuildInputs" "buildInputs" ] ))
