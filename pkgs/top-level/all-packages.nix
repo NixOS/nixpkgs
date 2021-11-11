@@ -1461,7 +1461,9 @@ with pkgs;
 
   bic = callPackage ../development/interpreters/bic { };
 
-  binance = callPackage ../applications/misc/binance { };
+  binance = callPackage ../applications/misc/binance {
+    electron = electron_12;
+  };
 
   bit = callPackage ../applications/version-management/git-and-tools/bit { };
 
