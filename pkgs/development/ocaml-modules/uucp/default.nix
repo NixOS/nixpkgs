@@ -21,9 +21,9 @@ stdenv.mkDerivation {
     sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
 
-  propagatedBuildInputs = [ uchar ];
+  propagatedBuildInputs = [ uchar uutf uunf ];
 
   buildPhase = ''
     runHook preBuild

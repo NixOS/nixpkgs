@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   inherit (topkg) buildPhase installPhase;
 

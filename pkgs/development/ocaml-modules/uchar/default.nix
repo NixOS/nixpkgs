@@ -9,7 +9,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ ocaml ocamlbuild findlib ];
-  buildInputs = [ findlib ocaml ocamlbuild ];
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${lib.boolToString withShared}";
   installPhase = "${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR";
   configurePlatforms = [];

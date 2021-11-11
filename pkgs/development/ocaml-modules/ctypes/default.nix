@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "03zrbnl16m67ls0yfhq7a4k4238x6x6b3m456g4dw2yqwc153vks";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml findlib ncurses ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  buildInputs = [ ncurses ];
   propagatedBuildInputs = [ integers libffi bigarray-compat ];
 
   buildPhase =  ''

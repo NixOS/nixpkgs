@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./pkg-config.patch ];
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ astring ];
 

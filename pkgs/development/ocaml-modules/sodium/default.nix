@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./lib-gen-link-bigarray.patch
   ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ctypes libsodium ];
 
   createFindlibDestdir = true;

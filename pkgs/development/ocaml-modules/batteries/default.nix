@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "002pqkcg18zx59hsf172wg6s7lwsiagp5sfvf5yssp7xxal5jdgx";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 

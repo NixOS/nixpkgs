@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1dkzk0wf26rhvji80dz1r56dp6x9zqrnp87wldd4pj56jli94vir";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ type_conv camlp4 ];
 
   createFindlibDestdir = true;
