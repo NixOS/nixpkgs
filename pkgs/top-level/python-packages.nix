@@ -8426,7 +8426,7 @@ in {
 
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
-  scs = callPackage ../development/python-modules/scs { scs = pkgs.scs; };
+  scs = callPackage ../development/python-modules/scs { };
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
