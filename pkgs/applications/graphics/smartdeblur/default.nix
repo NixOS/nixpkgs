@@ -1,14 +1,12 @@
 { fetchurl, lib, stdenv, cmake, qt4, fftw }:
 
-let
-  rev = "9895036d26";
-in
 stdenv.mkDerivation rec {
-  name = "smartdeblur-git-${rev}";
+  pname = "smartdeblur";
+  version = "unstable-2013-01-09";
 
   src = fetchurl {
-    url = "https://github.com/Y-Vladimir/SmartDeblur/tarball/${rev}";
-    name = "${name}.tar.gz";
+    url = "https://github.com/Y-Vladimir/SmartDeblur/tarball/9895036d26";
+    name = "smartdeblur-${version}.tar.gz";
     sha256 = "126x9x1zhqdarjz9in0p1qhmqg3jwz7frizadjvx723g2ppi33s4";
   };
 

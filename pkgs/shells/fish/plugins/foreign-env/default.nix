@@ -2,7 +2,7 @@
 
 buildFishPlugin {
   pname = "foreign-env";
-  version = "git-20200209";
+  version = "unstable-2020-02-09";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";

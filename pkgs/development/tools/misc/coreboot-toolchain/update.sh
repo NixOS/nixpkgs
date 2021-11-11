@@ -1,9 +1,14 @@
 #!/usr/bin/env nix-shell
 #!nix-shell --pure -i bash -p nix cacert git getopt
 
-rootdir="../../../../../"
+if [ ! -d .git ]; then
+  echo "This script needs to be run from the root directory of nixpkgs. Exiting."
+  exit 1
+fi
 
-src="$(nix-build $rootdir --no-out-link -A coreboot-toolchain.src)"
+pkg_dir="$(dirname "$0")"
+
+src="$(nix-build . --no-out-link -A coreboot-toolchain.src)"
 urls=$($src/util/crossgcc/buildgcc -u)
 
 tmp=$(mktemp)
@@ -28,4 +33,4 @@ echo ']' >> $tmp
 
 sed -ie 's/https\:\/\/ftpmirror\.gnu\.org/mirror\:\/\/gnu/g' $tmp
 
-mv $tmp sources.nix
+mv $tmp $pkg_dir/sources.nix
