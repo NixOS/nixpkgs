@@ -2542,7 +2542,7 @@
     email = "darkgenius1@protonmail.com";
     matrix = "@alexoo:matrix.org";
     github = "DarkOnion0";
-    githubId = "68606322";
+    githubId = 68606322;
   };
   das-g = {
     email = "nixpkgs@raphael.dasgupta.ch";
