@@ -225,9 +225,9 @@ in {
   };
 
   zfsUnstable = common {
-    # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    # kernel compatibility checks are disabled
+    kernelCompatible = true;
+    latestCompatibleLinuxPackages = pkgs.linuxPackages_latest;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
