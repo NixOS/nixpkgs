@@ -1,4 +1,4 @@
-{ pkgs ? import ../../.. { } }:
+{ pkgs ? import ../../../../.. { } }:
 
 with pkgs;
 let
