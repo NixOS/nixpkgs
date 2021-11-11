@@ -8677,6 +8677,8 @@ in {
 
   showit = callPackage ../development/python-modules/showit { };
 
+  shtab = callPackage ../development/python-modules/shtab { };
+
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
   sievelib = callPackage ../development/python-modules/sievelib { };
