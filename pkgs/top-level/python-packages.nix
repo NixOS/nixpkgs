@@ -6145,6 +6145,8 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
+  pybalboa = callPackage ../development/python-modules/pybalboa { };
+
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pybids = callPackage ../development/python-modules/pybids { };
