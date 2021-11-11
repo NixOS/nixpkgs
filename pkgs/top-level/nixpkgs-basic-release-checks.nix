@@ -3,11 +3,10 @@
 pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; } ''
     set -o pipefail
 
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "")
-    nix-store --init
+    opts=(--option build-users-group "" --store $TMPDIR/store --readonly-mode)
+    # ???: Does not support the opts
+    # nix-store --init "''${opts[@]}"
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
@@ -22,8 +21,8 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     # Make sure that derivation paths do not depend on the Nixpkgs path.
     mkdir $TMPDIR/foo
     ln -s $(readlink -f $src) $TMPDIR/foo/bar
-    p1=$(nix-instantiate $src --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
+    p1=$(nix-instantiate "''${opts[@]}" $src --dry-run -A firefox --show-trace)
+    p2=$(nix-instantiate "''${opts[@]}" $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
         exit 1
