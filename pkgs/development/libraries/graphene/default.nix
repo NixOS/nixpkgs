@@ -67,9 +67,13 @@ stdenv.mkDerivation rec {
     PATH=${python3.withPackages (pp: [ pp.pygobject3 pp.tappy ])}/bin:$PATH patchShebangs tests/introspection.py
   '';
 
-  postFixup = ''
-    wrapProgram "${placeholder "installedTests"}/libexec/installed-tests/graphene-1.0/introspection.py" \
-      --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+  postFixup = let
+    introspectionPy = "${placeholder "installedTests"}/libexec/installed-tests/graphene-1.0/introspection.py";
+  in ''
+    if [ -x '${introspectionPy}' ] ; then
+      wrapProgram '${introspectionPy}' \
+        --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+    fi
   '';
 
   passthru = {
