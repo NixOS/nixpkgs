@@ -225,18 +225,18 @@ in {
   };
 
   zfsUnstable = common {
-    # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    # kernel compatibility checks are disabled
+    kernelCompatible = true;
+    latestCompatibleLinuxPackages = pkgs.linuxPackages_latest;
 
-    # this package should point to a version / git revision compatible with the latest kernel release
-    # IMPORTANT: Always use a tagged release candidate or commits from the
-    # zfs-<version>-staging branch, because this is tested by the OpenZFS
-    # maintainers.
-    version = "2.1.1";
-    # rev = "0000000000000000000000000000000000000000";
+    # this package should always point to a commit on the master branch.
+    # DO NOT set this to a tag of a release or release candidate because this
+    # usually implies a downgrade from the master branch which has a potentially
+    # incompatible pool format
+    version = "2021-11-11";
+    rev = "c23803be84cb5cc9d98186221f4106a9962dfc45";
 
-    sha256 = "sha256-UUuJa5w/GsEvsgH/BnXFsP/dsOt9wwmPqKzDxLPrhiY=";
+    sha256 = "sha256-outvCyHh48SncJsfKK3a58AXJwvU802n/m6IL8BF1t8=";
 
     isUnstable = true;
   };

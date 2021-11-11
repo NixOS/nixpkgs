@@ -121,10 +121,12 @@ in
         description = ''
           Use the unstable zfs package. This might be an option, if the latest
           kernel is not yet supported by a published release of ZFS. Enabling
-          this option will install a development version of ZFS on Linux. The
-          version will have already passed an extensive test suite, but it is
-          more likely to hit an undiscovered bug compared to running a released
-          version of ZFS on Linux.
+          this option will install a development version of ZFS on Linux.
+
+          <emphasis>Caution</emphasis>: This version will track the OpenZFS
+          master branch and has all kernel compatibility checks disabled. It is
+          therefore more likely to hit an undiscovered bug compared to running a
+          released version of OpenZFS.
           '';
       };
 
