@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # darwin changes configure.ac which means we need to regenerate
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libmd ];
+  propagatedBuildInputs = [ libmd ];
 
   patches = [ ./darwin.patch ];
 
