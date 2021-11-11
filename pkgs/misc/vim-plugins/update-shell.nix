@@ -7,7 +7,7 @@ mkShell {
   packages = [
     bash
     pyEnv
-    nix
+    nix_2_3
     nix-prefetch-scripts
   ];
 }
