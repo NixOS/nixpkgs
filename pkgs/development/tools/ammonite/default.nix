@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts
-, git, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, writeScript
+, common-updater-scripts
+, git
+, nixfmt
+, nix
+, coreutils
+, gnused
+, disableRemoteLogging ? true
+}:
 
 with lib;
 
@@ -61,7 +72,7 @@ let
       installCheckPhase = ''
         runHook preInstallCheck
 
-        $out/bin/amm -c 'val foo = 21; println(foo * 2)' | grep 42
+        $out/bin/amm -h "$PWD" -c 'val foo = 21; println(foo * 2)' | grep 42
 
         runHook postInstallCheck
       '';
@@ -80,7 +91,8 @@ let
         maintainers = [ maintainers.nequissimus ];
       };
     };
-in {
+in
+{
   ammonite_2_12 = common {
     scalaVersion = "2.12";
     sha256 = "K8JII6SAmnBjMWQ9a3NqSLLuP1OLcbwobj3G+OCiLdA=";
