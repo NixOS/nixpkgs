@@ -776,6 +776,10 @@ self: super: {
     ];
   });
 
+  vim-fzf-coauthorship = super.vim-fzf-coauthorship.overrideAttrs (old: {
+    dependencies = with self; [ fzf-vim ];
+  });
+
   # change the go_bin_path to point to a path in the nix store. See the code in
   # fatih/vim-go here
   # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
       pillow
       urllib3
       aiofiles
+      notify2
     ]))];
 
   installPhase = ''

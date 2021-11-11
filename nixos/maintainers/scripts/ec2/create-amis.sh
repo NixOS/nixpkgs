@@ -1,6 +1,9 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p awscli -p jq -p qemu -i bash
 # shellcheck shell=bash
+#
+# Future Deprecation?
+# This entire thing should probably be replaced with a generic terraform config
 
 # Uploads and registers NixOS images built from the
 # <nixos/release.nix> amazonImage attribute. Images are uploaded and
@@ -275,6 +278,7 @@ upload_image() {
                 --region "$region" \
                 --architecture $amazon_arch \
                 --block-device-mappings "${block_device_mappings[@]}" \
+                --boot-mode $(read_image_info .boot_mode) \
                 "${extra_flags[@]}" \
                 | jq -r '.ImageId'
               )

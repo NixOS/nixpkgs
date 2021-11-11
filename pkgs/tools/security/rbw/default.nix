@@ -74,7 +74,6 @@ rustPlatform.buildRustPackage rec {
       $out/bin/rbw gen-completions $shell > rbw.$shell
       installShellCompletion rbw.$shell
     done
-  '' + ''
     cp bin/git-credential-rbw $out/bin
   '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin

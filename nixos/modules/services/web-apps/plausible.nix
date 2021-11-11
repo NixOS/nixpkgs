@@ -9,6 +9,14 @@ in {
   options.services.plausible = {
     enable = mkEnableOption "plausible";
 
+    releaseCookiePath = mkOption {
+      default = null;
+      type = with types; nullOr (either str path);
+      description = ''
+        The path to the file with release cookie. (used for remote connection to the running node).
+      '';
+    };
+
     adminUser = {
       name = mkOption {
         default = "admin";
@@ -173,6 +181,8 @@ in {
 
     services.epmd.enable = true;
 
+    environment.systemPackages = [ pkgs.plausible ];
+
     systemd.services = mkMerge [
       {
         plausible = {
@@ -197,6 +207,8 @@ in {
             DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
 
             RELEASE_TMP = "/var/lib/plausible/tmp";
+            # Home is needed to connect to the node with iex
+            HOME = "/var/lib/plausible";
 
             ADMIN_USER_NAME = cfg.adminUser.name;
             ADMIN_USER_EMAIL = cfg.adminUser.email;
@@ -231,6 +243,9 @@ in {
                 psql -d plausible <<< "UPDATE users SET email_verified=true;"
               fi
             ''}
+            ${optionalString (cfg.releaseCookiePath != null) ''
+              export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+            ''}
             plausible start
           '';
 
@@ -242,7 +257,8 @@ in {
             LoadCredential = [
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
+            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"]
+            ++ lib.optionals (cfg.releaseCookiePath != null) [ "RELEASE_COOKIE:${cfg.releaseCookiePath}"];
           };
         };
       }
