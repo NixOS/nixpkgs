@@ -410,13 +410,18 @@ unsupported-platforms:
   gi-dbusmenu:                                  [ x86_64-darwin, aarch64-darwin ]
   gi-ggit:                                      [ x86_64-darwin, aarch64-darwin ]
   gi-ibus:                                      [ x86_64-darwin, aarch64-darwin ]
+  gi-javascriptcore:                            [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ x86_64-darwin, aarch64-darwin ]
   gi-vte:                                       [ x86_64-darwin, aarch64-darwin ]
+  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2webextension:                       [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ x86_64-darwin, aarch64-darwin ]
   gnome-keyring:                                [ x86_64-darwin, aarch64-darwin ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin, aarch64-darwin ]
   haskell-snake:                                [ x86_64-darwin, aarch64-darwin ]
+  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
   hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
