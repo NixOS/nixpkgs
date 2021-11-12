@@ -22606,8 +22606,6 @@ with pkgs;
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
 
-  sepolgen = callPackage ../os-specific/linux/sepolgen { };
-
   setools = callPackage ../os-specific/linux/setools { };
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
