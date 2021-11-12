@@ -24530,8 +24530,6 @@ with pkgs;
 
   polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic {
     inherit (pkgs) meson wrapGAppsHook;
-    pythonPackages = python3Packages;
-    inherit (python3Packages) buildPythonApplication;
   };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
