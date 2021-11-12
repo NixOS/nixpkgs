@@ -2459,6 +2459,8 @@ with pkgs;
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
+  clusterctl = callPackage ../applications/networking/cluster/clusterctl { };
+
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
