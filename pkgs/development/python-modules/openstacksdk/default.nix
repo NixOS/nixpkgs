@@ -14,7 +14,6 @@
 , pbr
 , pyyaml
 , requestsexceptions
-, stdenv
 }:
 
 buildPythonPackage rec {

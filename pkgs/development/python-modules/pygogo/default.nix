@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pkutils
   # Check Inputs
-, pytestCheckHook
 , nose
 }:
 

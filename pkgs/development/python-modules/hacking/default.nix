@@ -4,9 +4,7 @@
 , pbr
 , flake8
 , stestr
-, eventlet
 , ddt
-, testtools
 , testscenarios
 }:
 

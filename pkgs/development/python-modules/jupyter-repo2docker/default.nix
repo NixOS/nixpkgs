@@ -11,7 +11,6 @@
 , pkgs-docker
 , python-json-logger
 , pythonOlder
-, pyyaml
 , ruamel_yaml
 , semver
 , toml

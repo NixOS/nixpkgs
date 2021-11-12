@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, sqlalchemy
 , boto3
 , botocore
 , pandas

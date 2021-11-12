@@ -5,7 +5,6 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, setuptools-scm
 , urllib3
 }:
 

@@ -8,7 +8,6 @@
 , blas
 , lapack
 , writeTextFile
-, isPyPy
 , cython
 , setuptoolsBuildHook
 , pythonOlder

@@ -5,7 +5,6 @@
 , certifi
 , fetchFromGitHub
 , pythonOlder
-, coverage
 }:
 
 buildPythonPackage rec {

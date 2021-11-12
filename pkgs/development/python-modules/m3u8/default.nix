@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, requests, iso8601, bottle, pytest, pytest-cov }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, iso8601, bottle, pytest, pytest-cov }:
 
 buildPythonPackage rec {
   pname = "m3u8";
