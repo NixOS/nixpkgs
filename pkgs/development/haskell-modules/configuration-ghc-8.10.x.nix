@@ -72,20 +72,20 @@ self: super: {
   shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
-  csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
+  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
-  language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
+  language-haskell-extract = appendPatch (pkgs.fetchpatch {
     name = "language-haskell-extract-0.2.4.patch";
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  });
+  }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal super.hnix (drv: {
+    (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }));
+    }) super.hnix);
 
 }

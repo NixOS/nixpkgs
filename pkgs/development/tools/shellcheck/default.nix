@@ -15,7 +15,7 @@ let
       };
     in drv' // { meta = meta' // overrideFn meta'; };
 
-  bin = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
+  bin = haskell.lib.compose.justStaticExecutables haskellPackages.ShellCheck;
 
   shellcheck = stdenv.mkDerivation {
     pname = "shellcheck";

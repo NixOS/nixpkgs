@@ -1639,7 +1639,7 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
-  echidna = haskell.lib.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
+  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
 
   sedutil = callPackage ../tools/security/sedutil { };
 
@@ -1789,7 +1789,7 @@ with pkgs;
 
   hime = callPackage ../tools/inputmethods/hime {};
 
-  hinit = haskell.lib.justStaticExecutables haskellPackages.hinit;
+  hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
   hostctl = callPackage ../tools/system/hostctl { };
 
@@ -2316,7 +2316,7 @@ with pkgs;
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix-unwrapped = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix);
+  cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix);
 
   cabal2nix = symlinkJoin {
     inherit (cabal2nix-unwrapped) name meta;
@@ -2934,7 +2934,7 @@ with pkgs;
 
   fsmark = callPackage ../tools/misc/fsmark { };
 
-  futhark = haskell.lib.justStaticExecutables haskellPackages.futhark;
+  futhark = haskell.lib.compose.justStaticExecutables haskellPackages.futhark;
 
   inherit (nodePackages) fx;
 
@@ -3343,7 +3343,7 @@ with pkgs;
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
-  nix-output-monitor = haskell.lib.justStaticExecutables (haskellPackages.nix-output-monitor);
+  nix-output-monitor = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-output-monitor);
 
   nix-template = callPackage ../tools/package-management/nix-template {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -4578,8 +4578,8 @@ with pkgs;
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
-  dolphinEmuMaster = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
+  dolphin-emu = callPackage ../misc/emulators/dolphin-emu { };
+  dolphin-emu-beta = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
 
@@ -4795,7 +4795,7 @@ with pkgs;
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
-  uusi = haskell.lib.justStaticExecutables haskellPackages.uusi;
+  uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
     inherit (python3Packages) sphinx;
@@ -6327,7 +6327,7 @@ with pkgs;
 
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
 
-  icepeak = haskell.lib.justStaticExecutables haskellPackages.icepeak;
+  icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
 
   iceshelf = callPackage ../tools/backup/iceshelf { };
 
@@ -7382,7 +7382,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  madlang = haskell.lib.justStaticExecutables haskellPackages.madlang;
+  madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
   maeparser = callPackage ../development/libraries/maeparser { };
 
@@ -7833,7 +7833,7 @@ with pkgs;
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
+  neuron-notes = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
 
   ngrok = ngrok-2;
 
@@ -7879,7 +7879,7 @@ with pkgs;
 
   nvchecker = with python3Packages; toPythonApplication nvchecker;
 
-  nvfetcher = haskell.lib.justStaticExecutables haskellPackages.nvfetcher;
+  nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
   miller = callPackage ../tools/text/miller { };
 
@@ -8231,7 +8231,7 @@ with pkgs;
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
-  update-nix-fetchgit = haskell.lib.justStaticExecutables haskellPackages.update-nix-fetchgit;
+  update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
@@ -9471,7 +9471,9 @@ with pkgs;
 
   snallygaster = callPackage ../tools/security/snallygaster { };
 
-  snapcast = callPackage ../applications/audio/snapcast { };
+  snapcast = callPackage ../applications/audio/snapcast {
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+  };
 
   snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
 
@@ -9595,7 +9597,7 @@ with pkgs;
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
-  splot = haskell.lib.justStaticExecutables haskellPackages.splot;
+  splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
 
   spotdl = callPackage ../tools/audio/spotdl { };
 
@@ -9709,13 +9711,13 @@ with pkgs;
 
   stuntman = callPackage ../tools/networking/stuntman { };
 
-  stutter = haskell.lib.justStaticExecutables haskellPackages.stutter;
+  stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
 
   strongswan    = callPackage ../tools/networking/strongswan { };
   strongswanTNC = strongswan.override { enableTNC = true; };
   strongswanNM  = strongswan.override { enableNetworkManager = true; };
 
-  stylish-haskell = haskell.lib.justStaticExecutables haskellPackages.stylish-haskell;
+  stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
   su = shadow.su;
 
@@ -10496,7 +10498,7 @@ with pkgs;
 
   wsmancli = callPackage ../tools/system/wsmancli {};
 
-  wstunnel = haskell.lib.justStaticExecutables haskellPackages.wstunnel;
+  wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
 
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
@@ -10545,7 +10547,7 @@ with pkgs;
 
   time = callPackage ../tools/misc/time { };
 
-  tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs;
+  tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
 
   tweeny = callPackage ../development/libraries/tweeny { };
 
@@ -11481,7 +11483,7 @@ with pkgs;
 
   eql = callPackage ../development/compilers/eql {};
 
-  elm2nix = haskell.lib.justStaticExecutables haskellPackages.elm2nix;
+  elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -11982,14 +11984,14 @@ with pkgs;
 
   inherit (haskellPackages) ghc;
 
-  cabal-install = haskell.lib.justStaticExecutables haskellPackages.cabal-install;
+  cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
-  stack = haskell.lib.justStaticExecutables haskellPackages.stack;
-  hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
+  stack = haskell.lib.compose.justStaticExecutables haskellPackages.stack;
+  hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
 
-  krank = haskell.lib.justStaticExecutables haskellPackages.krank;
+  krank = haskell.lib.compose.justStaticExecutables haskellPackages.krank;
 
-  stylish-cabal = haskell.lib.justStaticExecutables haskellPackages.stylish-cabal;
+  stylish-cabal = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-cabal;
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
@@ -12344,7 +12346,7 @@ with pkgs;
 
   knightos-z80e = callPackage ../development/tools/knightos/z80e { };
 
-  koka = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
+  koka = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
 
   kotlin = callPackage ../development/compilers/kotlin { };
   kotlin-native = callPackage ../development/compilers/kotlin/native.nix { };
@@ -13189,19 +13191,19 @@ with pkgs;
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
+  dhall = haskell.lib.compose.justStaticExecutables haskellPackages.dhall;
 
-  dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
+  dhall-bash = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-bash;
 
-  dhall-docs = haskell.lib.justStaticExecutables haskellPackages.dhall-docs;
+  dhall-docs = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-docs;
 
-  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
+  dhall-lsp-server = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-lsp-server;
 
-  dhall-json = haskell.lib.justStaticExecutables haskellPackages.dhall-json;
+  dhall-json = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-json;
 
-  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
+  dhall-nix = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nix;
 
-  dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
+  dhall-text = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-text;
 
   dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
 
@@ -14438,7 +14440,7 @@ with pkgs;
 
   flootty = callPackage ../development/tools/flootty { };
 
-  fffuu = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
+  fffuu = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
 
   ffuf = callPackage ../tools/security/ffuf { };
 
@@ -14608,7 +14610,7 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  hadolint = haskell.lib.justStaticExecutables haskellPackages.hadolint;
+  hadolint = haskell.lib.compose.justStaticExecutables haskellPackages.hadolint;
 
   halfempty = callPackage ../development/tools/halfempty {};
 
@@ -14837,8 +14839,8 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  haskell-ci = haskell.lib.justStaticExecutables haskellPackages.haskell-ci;
-  haskell-ci-unstable = lowPrio (haskell.lib.justStaticExecutables haskellPackages.haskell-ci-unstable);
+  haskell-ci = haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci;
+  haskell-ci-unstable = lowPrio (haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci-unstable);
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
@@ -15128,7 +15130,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  shake = haskell.lib.justStaticExecutables haskellPackages.shake;
+  shake = haskell.lib.compose.justStaticExecutables haskellPackages.shake;
 
   shallot = callPackage ../tools/misc/shallot { };
 
@@ -15706,7 +15708,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
+  cachix = haskell.lib.compose.justStaticExecutables haskellPackages.cachix;
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
@@ -15714,7 +15716,7 @@ with pkgs;
 
   isa-l = callPackage ../development/libraries/isa-l { };
 
-  niv = lib.getBin (haskell.lib.justStaticExecutables haskellPackages.niv);
+  niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
   ormolu = haskellPackages.ormolu.bin;
 
@@ -16617,7 +16619,7 @@ with pkgs;
 
   glib-testing = callPackage ../development/libraries/glib-testing { };
 
-  glirc = haskell.lib.justStaticExecutables haskellPackages.glirc;
+  glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   gom = callPackage ../development/libraries/gom { };
 
@@ -17013,7 +17015,7 @@ with pkgs;
 
   json2hcl = callPackage ../development/tools/json2hcl { };
 
-  json2yaml = haskell.lib.justStaticExecutables haskellPackages.json2yaml;
+  json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
   json-glib = callPackage ../development/libraries/json-glib { };
 
@@ -18470,7 +18472,7 @@ with pkgs;
 
   matio = callPackage ../development/libraries/matio { };
 
-  matterhorn = haskell.lib.justStaticExecutables haskellPackages.matterhorn;
+  matterhorn = haskell.lib.compose.justStaticExecutables haskellPackages.matterhorn;
 
   maxflow = callPackage ../development/libraries/maxflow { };
 
@@ -18957,7 +18959,7 @@ with pkgs;
 
   pkgdiff = callPackage ../tools/misc/pkgdiff { };
 
-  place-cursor-at = haskell.lib.justStaticExecutables haskellPackages.place-cursor-at;
+  place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
   plib = callPackage ../development/libraries/plib { };
 
@@ -19238,7 +19240,7 @@ with pkgs;
   kissfft = callPackage ../development/libraries/kissfft { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
-    haskellLib = haskell.lib;
+    haskellLib = haskell.lib.compose;
   };
 
   lambda-mod-zsh-theme = callPackage ../shells/zsh/lambda-mod-zsh-theme { };
@@ -20665,7 +20667,7 @@ with pkgs;
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  hasura-graphql-engine = haskell.lib.justStaticExecutables haskellPackages.graphql-engine;
+  hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskellPackages.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
@@ -21422,7 +21424,7 @@ with pkgs;
   sogo = callPackage ../servers/web-apps/sogo { };
 
   spacecookie =
-    haskell.lib.justStaticExecutables haskellPackages.spacecookie;
+    haskell.lib.compose.justStaticExecutables haskellPackages.spacecookie;
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
@@ -24348,9 +24350,9 @@ with pkgs;
 
   dablin = callPackage ../applications/radio/dablin { };
 
-  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
+  darcs = haskell.lib.compose.overrideCabal (drv: {
     configureFlags = (lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
-  });
+  }) (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
 
   darcs-to-git = callPackage ../applications/version-management/git-and-tools/darcs-to-git { };
 
@@ -25557,12 +25559,12 @@ with pkgs;
 
   hivelytracker = callPackage ../applications/audio/hivelytracker { };
 
-  hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
+  hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
   hledger-check-fancyassertions = callPackage ../applications/office/hledger-check-fancyassertions { };
-  hledger-iadd = haskell.lib.justStaticExecutables haskellPackages.hledger-iadd;
-  hledger-interest = haskell.lib.justStaticExecutables haskellPackages.hledger-interest;
-  hledger-ui = haskell.lib.justStaticExecutables haskellPackages.hledger-ui;
-  hledger-web = haskell.lib.justStaticExecutables haskellPackages.hledger-web;
+  hledger-iadd = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-iadd;
+  hledger-interest = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-interest;
+  hledger-ui = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-ui;
+  hledger-web = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-web;
 
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
@@ -25580,7 +25582,7 @@ with pkgs;
 
   hdl-dump = callPackage ../tools/misc/hdl-dump { };
 
-  hpack = haskell.lib.justStaticExecutables haskellPackages.hpack;
+  hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
   hpcg = callPackage ../tools/misc/hpcg { };
 
@@ -25651,7 +25653,7 @@ with pkgs;
 
   pinboard = with python3Packages; toPythonApplication pinboard;
 
-  pinboard-notes-backup = haskell.lib.justStaticExecutables haskellPackages.pinboard-notes-backup;
+  pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
@@ -28259,7 +28261,7 @@ with pkgs;
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
-  taskell = haskell.lib.justStaticExecutables haskellPackages.taskell;
+  taskell = haskell.lib.compose.justStaticExecutables haskellPackages.taskell;
 
   tap-plugins = callPackage ../applications/audio/tap-plugins { };
 
@@ -28564,7 +28566,7 @@ with pkgs;
 
   uroboros = callPackage ../tools/system/uroboros { };
 
-  uuagc = haskell.lib.justStaticExecutables haskellPackages.uuagc;
+  uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   uucp = callPackage ../tools/misc/uucp { };
 
@@ -29759,7 +29761,7 @@ with pkgs;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
-  bench = haskell.lib.justStaticExecutables haskellPackages.bench;
+  bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
 
   beret = callPackage ../games/beret { };
 
@@ -32471,9 +32473,9 @@ with pkgs;
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
-  nix-delegate = haskell.lib.justStaticExecutables haskellPackages.nix-delegate;
-  nix-deploy = haskell.lib.justStaticExecutables haskellPackages.nix-deploy;
-  nix-diff = haskell.lib.justStaticExecutables haskellPackages.nix-diff;
+  nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
+  nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
+  nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-du = callPackage ../tools/package-management/nix-du {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -32487,7 +32489,7 @@ with pkgs;
   };
   nix-index = callPackage ../tools/package-management/nix-index/wrapper.nix { };
 
-  nix-linter = haskell.lib.justStaticExecutables (haskellPackages.nix-linter);
+  nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
   nixos-option = callPackage ../tools/nix/nixos-option { nix = nix_2_3; };
 
@@ -32518,7 +32520,7 @@ with pkgs;
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
-  nix-tree = haskell.lib.justStaticExecutables (haskellPackages.nix-tree);
+  nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
   nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
@@ -32534,7 +32536,7 @@ with pkgs;
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
-  nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
+  nixfmt = haskell.lib.compose.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 

@@ -202,6 +202,8 @@ mapAliases ({
   dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
+  dolphinEmu = dolphin-emu; # added 2021-11-10
+  dolphinEmuMaster = dolphin-emu-beta; # added 2021-11-10
   dotnet-netcore = dotnet-runtime; # added 2021-10-07
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
