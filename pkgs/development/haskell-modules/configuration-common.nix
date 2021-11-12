@@ -844,7 +844,7 @@ self: super: {
 
   # hledger-lib 1.23 depends on doctest >= 0.18
   hledger-lib_1_23 = super.hledger-lib_1_23.override {
-    doctest = self.doctest_0_18_1;
+    doctest = self.doctest_0_18_2;
   };
 
   # Copy hledger man pages from data directory into the proper place. This code

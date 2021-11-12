@@ -84,10 +84,7 @@ self: super: {
     Cabal = self.Cabal_3_6_2_0;
   });
 
-  doctest = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/doctest-0.18.1.patch";
-    sha256 = "030kdsk0fg08cgdcjpyv6z8ym1vkkrbd34aacs91y5hqzc9g79y1";
-  }) (dontCheck (doJailbreak super.doctest_0_18_1));
+  doctest = dontCheck (doJailbreak super.doctest_0_18_2);
 
   # Tests fail in GHC 9.2
   extra = dontCheck super.extra;
