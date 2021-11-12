@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "9.4.3";
+  version = "9.6.3";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
-    hash = "sha256-IZhRg2JcYQXQKU/lYZpLLcsSdjZZO+toY5yvk+RKUCY=";
+    hash = "sha256-OlIAyGUQKrl+Zu79p6cahHpx59zLozGkUDAEvykGN6Y=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip copyDesktopItems ];
   buildInputs = [ jre ];
 
-  desktopItem = makeDesktopItem {
+  desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
     icon = "${./basex.svg}"; # icon copied from Ubuntu basex package
@@ -21,21 +21,20 @@ stdenv.mkDerivation rec {
     genericName = "XML database tool";
     categories = "Development;Utility;Database";
     mimeType = "text/xml";
-  };
+  });
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     # Remove Windows batch files (unclutter $out/bin)
     rm ./bin/*.bat
 
-    mkdir -p "$out/share/basex" "$out/share/applications"
+    mkdir -p "$out/share/basex"
 
     cp -R bin etc lib webapp src BaseX.jar "$out"
     cp -R readme.txt webapp "$out/share/basex"
-
-    # Install desktop file
-    cp "$desktopItem"/share/applications/* "$out/share/applications/"
 
     # Use substitutions instead of wrapper scripts
     for file in "$out"/bin/*; do
@@ -47,6 +46,8 @@ stdenv.mkDerivation rec {
                -e "s|echo|${coreutils}/bin/echo|" \
             "$file"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://basex.org/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
