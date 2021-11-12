@@ -75,6 +75,7 @@ mapAliases ({
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20
   pytestrunner = pytest-runner; # added 2021-01-04
+  python-igraph = igraph; # added 2021-11-11
   python-lz4 = lz4; # added 2018-06-01
   python_mimeparse = python-mimeparse; # added 2021-10-31
   python-subunit = subunit; # added 2021-09-10

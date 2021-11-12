@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, antlr4-python3-runtime, pygments, python-igraph }:
+{ lib, buildPythonPackage, fetchFromGitHub, antlr4-python3-runtime, pygments, igraph }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1vzyliiyrxx8l9sfbqcyr4xn5swd7znkxy69kn0vb5rban8hm9c1";
   };
 
-  propagatedBuildInputs = [ antlr4-python3-runtime python-igraph ];
+  propagatedBuildInputs = [ antlr4-python3-runtime igraph ];
   checkInputs = [ pygments ];
 
   meta = with lib; {
