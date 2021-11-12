@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, pkg-config, perl
 , http2Support ? true, nghttp2
-, idnSupport ? false, libidn ? null
+, idnSupport ? false, libidn2 ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
 , opensslSupport ? zlibSupport, openssl ? null
@@ -27,7 +27,7 @@
 # files.
 
 assert http2Support -> nghttp2 != null;
-assert idnSupport -> libidn != null;
+assert idnSupport -> libidn2 != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
 assert opensslSupport -> openssl != null;
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   # applications that use Curl.
   propagatedBuildInputs = with lib;
     optional http2Support nghttp2 ++
-    optional idnSupport libidn ++
+    optional idnSupport libidn2 ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
     optional gssSupport libkrb5 ++
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
       (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      (lib.withFeatureAs idnSupport "libidn" (lib.getDev libidn))
+      (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
       (lib.withFeature brotliSupport "brotli")
     ]
     ++ lib.optional wolfsslSupport "--with-wolfssl=${lib.getDev wolfssl}"
