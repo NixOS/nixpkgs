@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pymetno";
-  version = "0.8.4";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyMetno";
     rev = version;
-    sha256 = "sha256-ho2SUJmUgI0ruk5lHzXhXQGs9MD6E4hQ4J6tAIz4z5E=";
+    sha256 = "sha256-2LNDFQObGqxrzswnqbmvCGLxEI0j+cIdv8o+RZM/7sM=";
   };
 
   propagatedBuildInputs = [
