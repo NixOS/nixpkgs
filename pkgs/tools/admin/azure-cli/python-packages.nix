@@ -495,6 +495,17 @@ let
           inherit version;
           sha256 = "sha256-TqpQocXnnRxcjl4XBbZhchsLg6CJaV5Z4inMJsZJY7k=";
         };
+        propagatedBuildInputs = [
+          argcomplete
+          colorama
+          jmespath
+          pygments
+          pyyaml
+          tabulate
+        ];
+
+        checkInputs = [ mock vcrpy pytestCheckHook ];
+
       });
 
       sshtunnel = super.sshtunnel.overridePythonAttrs(oldAttrs: rec {
