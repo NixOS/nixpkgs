@@ -5,6 +5,7 @@
 , mock
 , nose2
 , python
+, pythonOlder
 , requests
 , zope_interface
 }:
@@ -13,6 +14,8 @@ buildPythonPackage rec {
   pname = "mailman-hyperkitty";
   version = "1.1.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
