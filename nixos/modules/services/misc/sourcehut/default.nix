@@ -1004,6 +1004,15 @@ in
       inherit configIniOfService;
       mainService = mkMerge [ baseService {
         serviceConfig.StateDirectory = [ "sourcehut/gitsrht" "sourcehut/gitsrht/repos" ];
+        preStart = mkIf (!versionAtLeast config.system.stateVersion "22.05") (mkBefore ''
+          # Fix Git hooks of repositories pre-dating https://github.com/NixOS/nixpkgs/pull/133984
+          (
+          set +f
+          shopt -s nullglob
+          for h in /var/lib/sourcehut/gitsrht/repos/~*/*/hooks/{pre-receive,update,post-update}
+          do ln -fnsv /usr/bin/gitsrht-update-hook "$h"; done
+          )
+        '');
       } ];
       port = 5001;
       webhooks = true;
