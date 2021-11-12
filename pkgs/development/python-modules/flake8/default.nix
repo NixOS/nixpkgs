@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "3.9.2";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b";
+    sha256 = "03c7mnk34wfz7a0m5zq0273y94awz69fy5iww8alh4a4v96h6vl0";
   };
 
   postPatch = ''
