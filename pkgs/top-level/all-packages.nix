@@ -25549,9 +25549,7 @@ with pkgs;
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
-  indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop {
-    electron = electron_9;
-  };
+  indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_08;

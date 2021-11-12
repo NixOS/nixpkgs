@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "indigenous-desktop";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
-    url = "https://github.com/marksuth/indigenous-desktop/releases/download/v${version}/Indigenous-for-desktop-Linux-x64-${version}.zip";
-    sha256 = "sha256-AXbLSmeKerDKv6ogm7fNh3cXYVmj1A6L2aK3WnMO8wU=";
+    url = "https://github.com/marksuth/indigenous-desktop/releases/download/v${version}/indigenous-linux-x64-${version}.zip";
+    sha256 = "sha256-1nqj9N5RQE0PogJSULu75CTVLHeQsHIimtFXSCP6SPA=";
   };
 
   nativeBuildInputs = [
