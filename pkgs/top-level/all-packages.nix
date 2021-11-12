@@ -7549,6 +7549,8 @@ with pkgs;
 
   mole = callPackage ../tools/networking/mole { };
 
+  morgen = callPackage ../applications/office/morgen { };
+
   mosh = callPackage ../tools/networking/mosh { };
 
   mpage = callPackage ../tools/text/mpage { };
