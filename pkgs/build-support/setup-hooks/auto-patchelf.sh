@@ -175,7 +175,11 @@ findDependency() {
 
     if [ $depCacheInitialised -eq 0 ]; then
         for lib in "${autoPatchelfLibs[@]}"; do
+            shopt -u failglob
+            shopt -s nullglob
             for so in "$lib/"*.so*; do addToDepCache "$so"; done
+            shopt -u nullglob
+            shopt -s failglob
         done
         depCacheInitialised=1
     fi
