@@ -23982,6 +23982,8 @@ with pkgs;
 
   bchoppr = callPackage ../applications/audio/bchoppr { };
 
+  beeper = callPackage ../applications/networking/instant-messengers/beeper { };
+
   berry = callPackage ../applications/window-managers/berry { };
 
   bespokesynth = callPackage ../applications/audio/bespokesynth { };
