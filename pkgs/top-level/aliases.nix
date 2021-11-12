@@ -474,6 +474,11 @@ mapAliases ({
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
+  linuxPackages_4_14_hardened = linuxKernel.packages.linux_4_14_hardened;
+  linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
+  linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
+  linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
+  linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -490,6 +495,11 @@ mapAliases ({
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
   linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
   linux_5_14 = linuxKernel.kernels.linux_5_14;
+  linux_4_14_hardened = linuxKernel.kernels.linux_4_14_hardened;
+  linux_4_19_hardened = linuxKernel.kernels.linux_4_19_hardened;
+  linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
+  linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
+  linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
 
   # added 2020-04-04
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";
