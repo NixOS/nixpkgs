@@ -134,6 +134,12 @@ buildStdenv.mkDerivation ({
   ] ++
   lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionAtLeast version "90") ./no-buildconfig-ffx90.patch ++
+  # This fixes a race condition causing deadlock.
+  # https://phabricator.services.mozilla.com/D128657
+  lib.optional (lib.versionAtLeast version "94") (fetchpatch {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/9c7f25d45bb1dd6b1a865780bc249cdaa619aa83/trunk/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch";
+    sha256 = "l4bMK/YDXcDpIjPy9DPuUSFyDpzVQca201A4h9eav5g=";
+  }) ++
   patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
