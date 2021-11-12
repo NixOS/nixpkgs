@@ -7913,6 +7913,8 @@ in {
 
   qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
 
+  qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
+
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
