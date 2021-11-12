@@ -7901,11 +7901,13 @@ in {
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
 
+  qiskit = callPackage ../development/python-modules/qiskit { };
+
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
   qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
 
-  qiskit = callPackage ../development/python-modules/qiskit { };
+  qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
