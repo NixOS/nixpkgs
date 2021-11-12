@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbclient";
     description = "A client library for executing notebooks";
     license = licenses.bsd3;
+    maintainers = [ maintainers.erictapen ];
   };
 }
