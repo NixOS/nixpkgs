@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs scripts
-    
+
     substituteInPlace scripts/build-styles.sh \
       --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
