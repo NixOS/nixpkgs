@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
             --replace "add_subdirectory(gtest)" ""
   '';
 
-  checkPhase= ''
+  checkPhase = ''
     runHook preCheck
     LD_LIBRARY_PATH=$PWD/src/contrib:$PWD/src/core \
             src/test/lucene++-tester
