@@ -8,7 +8,7 @@ in fetchFromGitHub {
   owner = "publicsuffix";
   repo = "list";
   rev = "2533d032871e1ef1f410fc0754b848d4587c8021";
-  hash = "sha256-Q8uIXM1CMu8dlWcVoL17M1XRGu3kG7Y7jpx0oHQh+2I=";
+  sha256 = "sha256-Q8uIXM1CMu8dlWcVoL17M1XRGu3kG7Y7jpx0oHQh+2I=";
 
   postFetch = ''
     tar xf $downloadedFile --strip=1
