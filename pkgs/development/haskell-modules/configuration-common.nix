@@ -1338,21 +1338,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
   });
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
