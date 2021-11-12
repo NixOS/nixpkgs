@@ -7,14 +7,11 @@ with lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
-let
+stdenv.mkDerivation rec {
+  pname = "pcre"
+    + lib.optionalString (variant == "cpp") "-cpp"
+    + lib.optionalString (variant != "cpp" && variant != null) variant;
   version = "8.44";
-  pname = if (variant == null) then "pcre"
-    else  if (variant == "cpp") then "pcre-cpp"
-    else  variant;
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
@@ -43,8 +40,7 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
-  ''
-    + optionalString (variant != null) ''
+  '' + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 
@@ -62,5 +58,6 @@ in stdenv.mkDerivation {
     '';
 
     platforms = platforms.all;
+    maintainers = with maintainers; [ ];
   };
 }
