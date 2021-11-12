@@ -37,6 +37,19 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
+    (self: super: {
+      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.18";
+        src = fetchFromGitHub {
+          owner = "Salamek";
+          repo = "huawei-lte-api";
+          rev = version;
+          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
+      });
+    })
+
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
