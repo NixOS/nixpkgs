@@ -3,15 +3,22 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, async-timeout
+# install_requires
 , attrs
-, chardet
-, idna-ssl
+, charset-normalizer
 , multidict
-, typing-extensions
+, async-timeout
 , yarl
+, frozenlist
+, aiosignal
+, aiodns
+, brotli
+, cchardet
+, asynctest
+, typing-extensions
+, idna-ssl
+# tests_require
 , async_generator
-, brotlipy
 , freezegun
 , gunicorn
 , pytest-mock
@@ -22,32 +29,39 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.7.4.post0";
+  version = "3.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "493d3299ebe5f5a7c66b9819eacdcfbbaaf1a8e84911ddffcdc48888497afecf";
+    sha256 = "sha256-07GdjRg7z9aLJb7rq43DMIKC/iyj1uo8tM0QGzwnn40=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace " --cov=aiohttp" ""
+    sed -i '/--cov/d' setup.cfg
   '';
 
   propagatedBuildInputs = [
-    async-timeout
     attrs
-    chardet
+    charset-normalizer
     multidict
-    typing-extensions
+    async-timeout
     yarl
+    typing-extensions
+    frozenlist
+    aiosignal
+    aiodns
+    brotli
+    cchardet
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     idna-ssl
   ];
 
   checkInputs = [
     async_generator
-    brotlipy
     freezegun
     gunicorn
     pytest-mock
@@ -58,12 +72,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Disable tests that require network access
+    "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
+    "test_requote_redirect_url_default"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
     "test_close"
+  ];
+
+  disabledTestPaths = [
+    "test_proxy_functional.py" # FIXME package proxy.py
   ];
 
   __darwinAllowLocalNetworking = true;
