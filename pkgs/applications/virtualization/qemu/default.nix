@@ -86,6 +86,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    # Fix qemu writing `smb.conf` incorrectly, breaking
+    # `-net user,smb=/dir` mounts on samba >= 2.0.5.
+    # Remove when https://lists.gnu.org/archive/html/qemu-devel/2021-02/msg07156.html is merged and available
+    (fetchpatch {
+      name = "net-slirp-Fix-incorrect-permissions-on-samba-2.0.5.patch";
+      url = "https://github.com/nh2/qemu/commit/de30898a738bd073593d20930496ef63e54d62a3.patch";
+      sha256 = "14jwfip0l6y0i1sr14avn2di9w4748kla679p4qhb7xxvifgqdcj";
+    })
     # Cocoa clipboard support only works on macOS 10.14+
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
