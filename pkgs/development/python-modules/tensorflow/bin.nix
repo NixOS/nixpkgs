@@ -2,8 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, isPy38
-, astor
+, isPy3k, pythonOlder, pythonAtLeast, astor
 , gast
 , google-pasta
 , wrapt
@@ -25,7 +24,6 @@
 , cudnn ? null
 , zlib
 , python
-, symlinkJoin
 , keras-applications
 , keras-preprocessing
 , addOpenGLRunpath

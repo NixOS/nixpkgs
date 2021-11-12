@@ -5,7 +5,6 @@
 , buildPythonPackage
 , doCheck ? true
 , fetchFromGitHub
-, fetchpatch
 , gunicorn
 , httptools
 , multidict

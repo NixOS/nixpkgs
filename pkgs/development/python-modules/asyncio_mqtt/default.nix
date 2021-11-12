@@ -4,7 +4,6 @@
 , fetchPypi
 , async_generator
 , paho-mqtt
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

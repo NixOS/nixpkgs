@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, coverage
 , gettext
 , mock
 , pytestCheckHook

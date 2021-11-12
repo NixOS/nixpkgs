@@ -6,7 +6,6 @@
 , mock
 , ipython_genutils
 , decorator
-, enum34
 , pythonOlder
 , six
 }:

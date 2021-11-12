@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , prometheus-client
-, psycopg2
 , pytest-django
 , pytestCheckHook
 }:

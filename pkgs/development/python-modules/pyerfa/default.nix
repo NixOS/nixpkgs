@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , setuptools-scm
 , liberfa
 , packaging

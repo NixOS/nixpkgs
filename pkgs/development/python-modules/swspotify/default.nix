@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, poetry-core, requests
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
 , pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27 }:
 
 buildPythonPackage rec {

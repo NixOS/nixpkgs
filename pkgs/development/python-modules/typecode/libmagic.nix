@@ -4,7 +4,6 @@
 , plugincode
 , file
 , zlib
-, pytest
 }:
 buildPythonPackage rec {
   pname = "typecode-libmagic";

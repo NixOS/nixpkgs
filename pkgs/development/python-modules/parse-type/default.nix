@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , parse
 , pytestCheckHook
-, pythonOlder
 , six
 }:
 

@@ -4,7 +4,6 @@
 , numpy
 , six
 , pytest
-, astropy
 }:
 
 buildPythonPackage rec {
