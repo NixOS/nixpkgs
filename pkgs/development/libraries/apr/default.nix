@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
     # Fix cross.
     (fetchpatch {
+      url = "https://github.com/apache/apr/commit/374210c50ee9f4dbf265f0172dcf2d45b97d0550.patch";
+      sha256 = "04k62c5dh043jhkgs5qma6yqkq4q7nh0zswr81il4l7q1zil581y";
+    })
+    (fetchpatch {
       url = "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
       sha256 = "0hhm5v5wx985c28dq6d9ngnyqihpsphq4mw7rwylk39k2p90ppcm";
     })
@@ -48,8 +52,6 @@ stdenv.mkDerivation rec {
     # Based on ftp://sourceware.org/pub/cygwin/release/libapr1/libapr1-1.3.8-2-src.tar.bz2
     "ac_cv_header_windows_h=no"
   ];
-
-  CPPFLAGS=lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-DAPR_IOVEC_DEFINED";
 
   # - Update libtool for macOS 11 support
   # - Regenerate for cross fix patch
