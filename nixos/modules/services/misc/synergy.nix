@@ -42,6 +42,13 @@ in
           type = types.bool;
           description = "Whether the Synergy client should be started automatically.";
         };
+        tls = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Whether TLS encryption should be used.";
+          };
+        };
       };
 
       server = {
@@ -105,7 +112,7 @@ in
         description = "Synergy client";
         wantedBy = optional cfgC.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${optionalString cfgC.tls.enable " --enable-crypto "} ${cfgC.serverAddress}'';
         serviceConfig.Restart = "on-failure";
       };
     })
