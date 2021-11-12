@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytautulli";
-  version = "21.10.1";
+  version = "21.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ckDqKPseOrGyWGvcPyj99cvQS+w4AHUkO4FHOIo9MDM=";
+    sha256 = "sha256-zODU3aN+8Fdw/GQ/EfZhn6kOuLDARKgLULzRw2+b2BM=";
   };
 
   postPatch = ''
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
   ];
 
   checkInputs = [
@@ -41,7 +39,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytautulli" ];
+  pythonImportsCheck = [
+    "pytautulli"
+  ];
 
   meta = with lib; {
     description = "Python module to get information from Tautulli";

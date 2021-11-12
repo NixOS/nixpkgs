@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -63,7 +62,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.39";
+    version = "0.3.40";
 
     outputs = [
       "out"
@@ -81,7 +80,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-peTS1+NuQxZg1rrv8DrnJW5BR9yReleqooIwhZWHLjM=";
+      sha256 = "sha256-eY6uQa4+sC6yUWhF4IpAgRoppwhHO4s5fIMXOkS0z7A=";
     };
 
     patches = [
@@ -97,12 +96,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Fix compilation on some architectures
-      # XXX: REMOVE ON NEXT RELEASE
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/651f0decea5f83730c271e9bed03cdd0048fcd49.diff";
-        sha256 = "1bmpi5qn750mcspaw7m57ww0503sl9781jswqby4gr0f7c5wmqvj";
-      })
     ];
 
     nativeBuildInputs = [
@@ -188,7 +181,7 @@ let
     '';
 
     passthru = {
-      updateScript = ./update.sh;
+      updateScript = ./update-pipewire.sh;
       tests = {
         installedTests = nixosTests.installed-tests.pipewire;
 
