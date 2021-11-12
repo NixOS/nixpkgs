@@ -221,6 +221,8 @@ dont-distribute-packages:
  - IORefCAS
  - IndexedList
  - InfixApplicative
+ - JSON-Combinator
+ - JSON-Combinator-Examples
  - Javasf
  - JsContracts
  - JsonGrammar
@@ -479,6 +481,7 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
+ - aura_3_2_6
  - authoring
  - autonix-deps-kf5
  - avers
@@ -723,9 +726,7 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_5
  - clash-lib
- - clash-lib_1_4_5
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -1023,7 +1024,7 @@ dont-distribute-packages:
  - egison-quote
  - egison-tutorial
  - elerea-examples
- - eliminators_0_8
+ - eliminators_0_9
  - elliptic-curve
  - elsa
  - emacs-keys
@@ -1569,7 +1570,6 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack
  - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
@@ -1720,6 +1720,7 @@ dont-distribute-packages:
  - iException
  - ice40-prim
  - ide-backend
+ - ide-backend-server
  - ideas-math
  - ideas-math-types
  - ideas-statistics
@@ -1813,6 +1814,7 @@ dont-distribute-packages:
  - jmonkey
  - jobs-ui
  - join
+ - jordan-openapi
  - jot
  - jsc
  - jsmw
@@ -1826,6 +1828,7 @@ dont-distribute-packages:
  - json-tokens
  - json2-hdbc
  - jsons-to-schema
+ - jspath
  - jvm
  - jvm-batching
  - jvm-streaming
@@ -1897,6 +1900,8 @@ dont-distribute-packages:
  - lambdacube
  - lambdacube-bullet
  - lambdacube-compiler
+ - lambdacube-edsl
+ - lambdacube-examples
  - lambdacube-gl
  - lambdacube-samples
  - lambdaya-bus
@@ -1911,10 +1916,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack
- - lapack-carray
- - lapack-comfort-array
- - lapack-hmatrix
  - lapack_0_4
  - lat
  - latex-formulae-hakyll
@@ -1960,8 +1961,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-circuit
- - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
  - linkchk
@@ -1972,6 +1971,7 @@ dont-distribute-packages:
  - liquid-base
  - liquid-bytestring
  - liquid-containers
+ - liquid-fixpoint_8_10_7
  - liquid-ghc-prim
  - liquid-parallel
  - liquid-platform
@@ -2040,8 +2040,6 @@ dont-distribute-packages:
  - macosx-make-standalone
  - magic-wormhole
  - magicbane
- - magico
- - magico_0_0_2_2
  - mahoro
  - maid
  - mail-pool
@@ -2285,6 +2283,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
+ - pandoc_2_16_1
  - papa
  - papa-base
  - papa-base-implement
@@ -2358,6 +2357,7 @@ dont-distribute-packages:
  - pisigma
  - pitchtrack
  - pkgtreediff
+ - pkgtreediff_0_5_0
  - planet-mitchell
  - plocketed
  - ploterific
@@ -2436,7 +2436,6 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - psc-ide
  - puffytools
  - pugs-compat
  - pugs-hsregex
@@ -2445,7 +2444,6 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purescript-iso
- - purescript-tsd-gen
  - push-notify
  - push-notify-apn
  - push-notify-ccs
@@ -2574,9 +2572,6 @@ dont-distribute-packages:
  - replicant
  - repr
  - representable-tries
- - req-oauth2
- - resistor-cube
- - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
  - respond
@@ -3086,10 +3081,12 @@ dont-distribute-packages:
  - typson-esqueleto
  - typson-selda
  - u2f
+ - uber
  - ucam-webauth
  - uhc-light
  - uhc-util
  - unagi-bloomfilter
+ - unbeliever
  - unbound
  - unfoldable-restricted
  - uni-events
@@ -3300,7 +3297,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zerobin
  - zeromq3-conduit
  - zeromq3-haskell

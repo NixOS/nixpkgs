@@ -100,6 +100,7 @@ broken-packages:
   - AhoCorasick
   - aig
   - airbrake
+  - airship
   - airtable-api
   - air-th
   - ajhc
@@ -618,6 +619,7 @@ broken-packages:
   - cg
   - cgen
   - cgi-utils
+  - cgroup-rts-threads
   - chalkboard
   - chalmers-lava2000
   - character-cases
@@ -745,6 +747,7 @@ broken-packages:
   - compact-list
   - compact-map
   - compact-mutable-vector
+  - compact-sequences
   - compact-socket
   - compact-string
   - compact-string-fix
@@ -1298,6 +1301,7 @@ broken-packages:
   - event-driven
   - eventful-dynamodb
   - eventful-sql-common
+  - eventlog2html
   - eventloop
   - eventstore
   - ewe
@@ -1716,6 +1720,7 @@ broken-packages:
   - goal-core
   - gochan
   - godot-haskell
+  - godot-megaparsec
   - gofer-prelude
   - gogol-admin-emailmigration
   - gogol-affiliates
@@ -2504,6 +2509,7 @@ broken-packages:
   - IcoGrid
   - iconv-typed
   - ideas
+  - ide-backend-common
   - idempotent
   - identifiers
   - idiii
@@ -2644,6 +2650,7 @@ broken-packages:
   - join-api
   - joinlist
   - jonathanscard
+  - jordan
   - jort
   - jpeg
   - jsaddle-hello
@@ -2653,6 +2660,7 @@ broken-packages:
   - json-alt
   - json-assertions
   - json-ast-quickcheck
+  - JSONb
   - json-builder
   - json-encoder
   - jsonextfilter
@@ -2741,7 +2749,10 @@ broken-packages:
   - lambda-bridge
   - lambda-canvas
   - lambdacms-core
+  - lambdacube-core
+  - lambdacube-engine
   - lambdacube-ir
+  - LambdaDesigner
   - Lambdajudge
   - LambdaNet
   - lambdatex
@@ -3196,6 +3207,7 @@ broken-packages:
   - morphisms-functors
   - morphisms-objects
   - morte
+  - mortred
   - moto-postgresql
   - motor-reflection
   - mount
@@ -3798,6 +3810,7 @@ broken-packages:
   - postgres-embedded
   - PostgreSQL
   - postgresql-lo-stream
+  - postgresql-migration
   - postgresql-named
   - postgresql-resilient
   - postgresql-simple-bind
@@ -4884,6 +4897,7 @@ broken-packages:
   - text-and-plots
   - text-ascii
   - text-containers
+  - text-display
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -4897,6 +4911,7 @@ broken-packages:
   - text-register-machine
   - text-replace
   - text-time
+  - text-trie
   - textual
   - text-utf8
   - text-xml-qq
@@ -5323,6 +5338,7 @@ broken-packages:
   - wavefront-obj
   - weak-bag
   - weather-api
+  - webapi
   - webapp
   - WebBits
   - webby
@@ -5461,6 +5477,7 @@ broken-packages:
   - yall
   - yam-app
   - yam-config
+  - yaml-config
   - yamlkeysdiff
   - yaml-pretty-extras
   - YamlReference
