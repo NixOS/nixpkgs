@@ -45,11 +45,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.27.0-70";
+  version = "4.27.2-72";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
-    sha256 = "sha256-12EMKkMMMcQZwgvK0YjuHknv2JLqU3REcJUTPUmYZ6A=";
+    sha256 = "sha256-oCZS68n9R6Hm6lltcL6zQhPaU9FRqtB59DrstRNjnH8=";
   };
 
   unpackPhase = ''

@@ -1,0 +1,89 @@
+diff --git a/graphviz/backend/dot_command.py b/graphviz/backend/dot_command.py
+index d1903e6..6470d11 100644
+--- a/graphviz/backend/dot_command.py
++++ b/graphviz/backend/dot_command.py
+@@ -10,7 +10,7 @@ from . import parameters
+ __all__ = ['command']
+ 
+ #: :class:`pathlib.Path` of layout command (``Path('dot')``).
+-DOT_BINARY = pathlib.Path('dot')
++DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
+ 
+ 
+ def command(engine: str, format_: str, *,
+diff --git a/graphviz/backend/unflattening.py b/graphviz/backend/unflattening.py
+index 5ed25d6..8d2faf8 100644
+--- a/graphviz/backend/unflattening.py
++++ b/graphviz/backend/unflattening.py
+@@ -11,7 +11,7 @@ from . import execute
+ __all__ = ['unflatten']
+ 
+ #: :class:`pathlib.Path` of unflatten command (``Path('unflatten')``).
+-UNFLATTEN_BINARY = pathlib.Path('unflatten')
++UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
+ 
+ 
+ def unflatten(source: str,
+diff --git a/graphviz/backend/viewing.py b/graphviz/backend/viewing.py
+index 6d4a4d1..2cc6cd8 100644
+--- a/graphviz/backend/viewing.py
++++ b/graphviz/backend/viewing.py
+@@ -54,7 +54,7 @@ def view_darwin(filepath, *, quiet: bool) -> None:
+ @tools.attach(view, 'freebsd')
+ def view_unixoid(filepath, *, quiet: bool) -> None:
+     """Open filepath in the user's preferred application (linux, freebsd)."""
+-    cmd = ['xdg-open', filepath]
++    cmd = ['@xdgutils@/bin/xdg-open', filepath]
+     log.debug('view: %r', cmd)
+     kwargs = {'stderr': subprocess.DEVNULL} if quiet else {}
+     subprocess.Popen(cmd, **kwargs)
+diff --git a/tests/_common.py b/tests/_common.py
+index ab93461..7eaca89 100644
+--- a/tests/_common.py
++++ b/tests/_common.py
+@@ -10,7 +10,7 @@ __all__ = ['EXPECTED_DOT_BINARY', 'EXPECTED_DEFAULT_ENCODING',
+            'as_cwd',
+            'check_startupinfo', 'StartupinfoMatcher']
+ 
+-EXPECTED_DOT_BINARY = pathlib.Path('dot')
++EXPECTED_DOT_BINARY = pathlib.Path('@graphviz@/bin/dot')
+ 
+ EXPECTED_DEFAULT_ENCODING = 'utf-8'
+ 
+diff --git a/tests/backend/test_execute.py b/tests/backend/test_execute.py
+index 05d6525..78484cb 100644
+--- a/tests/backend/test_execute.py
++++ b/tests/backend/test_execute.py
+@@ -57,6 +57,7 @@ def test_run_check_input_lines_mocked(mocker, sentinel, mock_popen,
+     mock_sys_stderr.flush.assert_called_once_with()
+ 
+ 
++@pytest.mark.skip(reason='empty $PATH has no effect')
+ @pytest.mark.usefixtures('empty_path')
+ @pytest.mark.parametrize(
+     'func, args',
+diff --git a/tests/backend/test_unflattening.py b/tests/backend/test_unflattening.py
+index 033a4d2..7d52689 100644
+--- a/tests/backend/test_unflattening.py
++++ b/tests/backend/test_unflattening.py
+@@ -8,7 +8,7 @@ import graphviz
+ 
+ import _common
+ 
+-EXPECTED_UNFLATTEN_BINARY = pathlib.Path('unflatten')
++EXPECTED_UNFLATTEN_BINARY = pathlib.Path('@graphviz@/bin/unflatten')
+ 
+ 
+ @pytest.mark.exe
+diff --git a/tests/backend/test_viewing.py b/tests/backend/test_viewing.py
+index f5acddb..6b34884 100644
+--- a/tests/backend/test_viewing.py
++++ b/tests/backend/test_viewing.py
+@@ -25,6 +25,6 @@ def test_view(mocker, mock_platform, mock_popen, mock_startfile, quiet):
+     if mock_platform == 'darwin':
+         mock_popen.assert_called_once_with(['open', 'nonfilepath'], **kwargs)
+     elif mock_platform in ('linux', 'freebsd'):
+-        mock_popen.assert_called_once_with(['xdg-open', 'nonfilepath'], **kwargs)
++        mock_popen.assert_called_once_with(['@xdgutils@/bin/xdg-open', 'nonfilepath'], **kwargs)
+     else:
+         raise RuntimeError
