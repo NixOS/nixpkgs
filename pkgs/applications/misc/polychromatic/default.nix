@@ -3,7 +3,6 @@
 , bash
 , cairo
 , glib
-, pkgconfig
 , qt5
 , hicolor-icon-theme
 , gdk-pixbuf
