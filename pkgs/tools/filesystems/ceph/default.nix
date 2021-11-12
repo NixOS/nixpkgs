@@ -247,7 +247,7 @@ in rec {
       cp -r ${ceph}/bin/rbd-replay* $out/bin
       cp -r ${ceph}/sbin/mount.ceph $out/sbin
       cp -r ${ceph}/sbin/mount.fuse.ceph $out/sbin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out
