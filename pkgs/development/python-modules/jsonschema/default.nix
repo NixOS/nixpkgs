@@ -1,31 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, python
 , attrs
-, functools32
 , importlib-metadata
-, mock
+, importlib-resources
 , nose
 , pyperf
 , pyrsistent
 , setuptools-scm
-, twisted
-, vcversioner
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "3.2.0";
+  version = "4.2.1";
+
+  disabled = pythonOlder "3.7";
+  dontPreferSetupPy = true;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a";
+    sha256 = "sha256-OQcTRprmS4pYaYuzy8OFmr5pJbVlqXP4cyPvIbCaJ6g=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs importlib-metadata functools32 pyrsistent ];
-  checkInputs = [ nose mock pyperf twisted vcversioner ];
 
-  # zope namespace collides on py27
-  doCheck = !isPy27;
+  propagatedBuildInputs = [ attrs pyrsistent ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  checkInputs = [ nose pyperf ];
+
   checkPhase = ''
     nosetests
   '';
