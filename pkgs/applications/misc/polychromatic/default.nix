@@ -5,83 +5,93 @@
 , glib
 , pkgconfig
 , qt5
-, buildPythonApplication
 , hicolor-icon-theme
 , gdk-pixbuf
 , imagemagick
 , desktop-file-utils
 , ninja
 , meson
-, sass
 , sassc
 , ibus
 , usbutils
 , xorg
-, pythonPackages
+, python3Packages
 , gobject-introspection
 , gtk3
 , wrapGAppsHook
+, libappindicator-gtk3
 }:
 
-  buildPythonApplication rec {
-    name = "polychromatic-${version}";
-    version = "0.7.0";
+python3Packages.buildPythonApplication rec {
+  name = "polychromatic";
+  version = "0.7.2";
 
-    format = "other";
+  format = "other";
 
-    src = fetchFromGitHub {
-      owner = "polychromatic";
-      repo = "polychromatic";
-      rev = "v${version}";
-      sha256 = "0sb0h90v9k0z5321zprdxqh5mmvx39avapj7m09xxlq3qacc17qh";
-    };
+  src = fetchFromGitHub {
+    owner = "polychromatic";
+    repo = "polychromatic";
+    rev = "v${version}";
+    sha256 = "109p89d56qp0pybhrwx9n7xzj5jg74pihh4ic5c6nzjbyjkc9xjn";
+  };
 
-    postPatch = ''
-      patchShebangs scripts
-    '';
+  postPatch = ''
+    patchShebangs scripts
+    
+    substituteInPlace scripts/build-styles.sh \
+      --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
+      --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
 
+    substituteInPlace pylib/common.py --replace "/usr/share/polychromatic" "$out/share/polychromatic"
 
-    buildInputs = [
-      cairo
-      hicolor-icon-theme
-    ];
+    scripts/build-styles.sh
+  '';
 
-    pythonPath = with pythonPackages; [
-      openrazer
-      pyqt5
-      pyqtwebengine
-    ];
+  buildInputs = [
+    cairo
+    hicolor-icon-theme
+  ];
 
-    propagatedBuildInputs = with pythonPackages; [
-      xorg.libxcb
-      colour
-      colorama
-      setproctitle
-      openrazer
-      openrazer-daemon
-      requests
-      ibus
-      usbutils
-      pyqt5
-    ];
+  pythonPath = with python3Packages; [
+    openrazer
+    pyqt5
+    pyqtwebengine
+  ];
 
-    nativePropagatedBuildInputs = [
-      gobject-introspection
-      gtk3
-      gdk-pixbuf
-      imagemagick
-    ];
+  propagatedBuildInputs = with python3Packages; [
+    xorg.libxcb
+    colour
+    colorama
+    setproctitle
+    openrazer
+    openrazer-daemon
+    requests
+    ibus
+    usbutils
+    pyqt5
+    libappindicator-gtk3
+  ];
 
-    nativeBuildInputs = with pythonPackages; [
-      pyqt5
-      desktop-file-utils
-      qt5.wrapQtAppsHook
-      wrapGAppsHook
-      sass
-      sassc
-      ninja
-      meson
-    ];
+  nativePropagatedBuildInputs = [
+    gobject-introspection
+    gtk3
+    gdk-pixbuf
+    imagemagick
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    pyqt5
+    desktop-file-utils
+    qt5.wrapQtAppsHook
+    wrapGAppsHook
+    ninja
+    meson
+    sassc
+  ];
+
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
 
   meta = with lib; {
     homepage = "https://polychromatic.app/";
