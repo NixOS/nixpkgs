@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11
-, libXcursor , libXinerama, libXrandr, libXrender, libpulseaudio
-, libXi, libXext, libXfixes, freetype, openssl
-, alsa-lib, libGLU, zlib, yasm
-, withUdev ? true
-}:
+{ stdenv, lib, fetchFromGitHub, scons, pkg-config, udev, libX11, libXcursor
+, libXinerama, libXrandr, libXrender, libpulseaudio, libXi, libXext, libXfixes
+, freetype, openssl, alsa-lib, libGLU, zlib, yasm, withUdev ? true }:
 
 let
   options = {
@@ -13,32 +10,46 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
-    owner  = "godotengine";
-    repo   = "godot";
-    rev    = "${version}-stable";
-    sha256 = "0bkng0iwsfawxk8bxlq01ib4n6kaxjkbwcif1bhpvw5ra19430rg";
+    owner = "godotengine";
+    repo = "godot";
+    rev = "${version}-stable";
+    sha256 = "0pq87f9nsj9fs89aj7za3fcff1sky67imlsriy7jz84yb819kv8g";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    scons udev libX11 libXcursor libXinerama libXrandr libXrender
-    libXi libXext libXfixes freetype openssl alsa-lib libpulseaudio
-    libGLU zlib yasm
+    scons
+    udev
+    libX11
+    libXcursor
+    libXinerama
+    libXrandr
+    libXrender
+    libXi
+    libXext
+    libXfixes
+    freetype
+    openssl
+    alsa-lib
+    libpulseaudio
+    libGLU
+    zlib
+    yasm
   ];
 
-  patches = [
-    ./pkg_config_additions.patch
-    ./dont_clobber_environment.patch
-  ];
+  patches = [ ./pkg_config_additions.patch ./dont_clobber_environment.patch ];
 
   enableParallelBuilding = true;
 
   sconsFlags = "target=release_debug platform=x11";
   preConfigure = ''
-    sconsFlags+=" ${lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)}"
+    sconsFlags+=" ${
+      lib.concatStringsSep " "
+      (lib.mapAttrsToList (k: v: "${k}=${builtins.toJSON v}") options)
+    }"
   '';
 
   outputs = [ "out" "dev" "man" ];
@@ -62,10 +73,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://godotengine.org";
+    homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = licenses.mit;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.mit;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ twey ];
   };
 }
