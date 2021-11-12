@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pymetno";
-  version = "0.8.3";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyMetno";
     rev = version;
-    sha256 = "sha256-dvZz+wv9B07yKM4E4fQ9VQOgeil9KxZxcGk6D0kWY4g=";
+    sha256 = "sha256-ho2SUJmUgI0ruk5lHzXhXQGs9MD6E4hQ4J6tAIz4z5E=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     "metno"
   ];
 
-  # no tests
+  # Project has no tests
   doCheck = false;
 
   meta = with lib; {
