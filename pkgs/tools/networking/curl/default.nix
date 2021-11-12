@@ -8,6 +8,7 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, gsaslSupport ? false, gsasl ? null
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -41,6 +42,7 @@ assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
+assert gsaslSupport -> gsasl != null;
 assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
@@ -77,6 +79,7 @@ stdenv.mkDerivation rec {
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
     optional zstdSupport zstd ++
+    optional gsaslSupport gsasl ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
     optional opensslSupport openssl ++
