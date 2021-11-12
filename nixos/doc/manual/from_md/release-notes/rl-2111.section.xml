@@ -1365,6 +1365,15 @@ Superuser created successfully.
           <literal>gnat11</literal> instead of <literal>gnat9</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>wafHook</literal> hook now honors
+          <literal>NIX_BUILD_CORES</literal> when
+          <literal>enableParallelBuilding</literal> is not set
+          explicitly. Packages can restore the old behaviour by setting
+          <literal>enableParallelBuilding=false</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
