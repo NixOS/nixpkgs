@@ -4,7 +4,7 @@
 , perl
 , openssl
 , pkg-config
-, darwin
+, Security
 , stdenv
 }:
 
@@ -13,7 +13,6 @@ let
   apolloSchema = builtins.readFile ./schema.graphql;
   # The build fetches this from the headers of https://graphql.api.apollographql.com/api/schema
   etagId = "a7252784c3d195f1ffec315fb8b1481cfba06c7943fe9020ab8df2aafd4d479e";
-  inherit (darwin.apple_sdk.frameworks) Security;
 in
 rustPlatform.buildRustPackage rec {
   pname = "rover";
