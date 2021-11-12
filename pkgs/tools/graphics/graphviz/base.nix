@@ -29,6 +29,13 @@ let
       url = "https://gitlab.com/graphviz/graphviz/-/commit/784411ca3655c80da0f6025ab20634b2a6ff696b.patch";
       sha256 = "1nkw9ism8lkfvxsp5fh95i2l5s5cbjsidbb3g1kjfv10rxkyb41m";
     })
+  ] ++ [
+    # Fix cross.
+    # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
+    (fetchpatch {
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
+      sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
+    })
   ];
 in
 
