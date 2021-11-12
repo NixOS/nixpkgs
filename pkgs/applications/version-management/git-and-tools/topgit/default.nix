@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "topgit";
-  version = "0.19.12";
+  version = "0.19.13";
 
   src = fetchFromGitHub {
     owner = "mackyle";
     repo = "topgit";
     rev = "${pname}-${version}";
-    sha256 = "1wvf8hmwwl7a2fr17cfs3pbxjccdsjw9ngzivxlgja0gvfz4hjd5";
+    sha256 = "sha256-K0X1DGc1LQsoteUhoHLxVJRrZaaPLKSSF61OKyGB5Qg=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

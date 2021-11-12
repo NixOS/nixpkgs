@@ -19,15 +19,11 @@
 , gdk-pixbuf
 , gobject-introspection
 , fribidi
+, harfbuzz
 , xorg
 , epoxy
-, json-glib
 , libxkbcommon
 , libxml2
-, librest
-, libsoup
-, ffmpeg
-, gmp
 , gnome
 , gsettings-desktop-schemas
 , gst_all_1
@@ -37,6 +33,8 @@
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
 , libGL
+# experimental and can cause crashes in inspector
+, vulkanSupport ? false
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -61,7 +59,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.2.1";
+  version = "4.4.0";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "AjFpd13kPwof3gZvvBnXhUXqanViwZFavem4rkpzCeY=";
+    sha256 = "4KFQj0QWhsOiDf7EivUzsZpLLgF8GOruMdzNt9KSUFs=";
   };
 
   nativeBuildInputs = [
@@ -86,27 +84,25 @@ stdenv.mkDerivation rec {
     python3
     sassc
     gi-docgen
+    libxml2 # for xmllint
   ] ++ setupHooks;
 
   buildInputs = [
     libxkbcommon
     epoxy
-    json-glib
     isocodes
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals vulkanSupport [
     vulkan-headers
   ] ++ [
-    librest
-    libsoup
-    ffmpeg
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     fribidi
+    harfbuzz
   ] ++ (with xorg; [
     libICE
     libSM
-    libXcomposite
     libXcursor
+    libXdamage
     libXi
     libXrandr
     libXrender
@@ -134,7 +130,7 @@ stdenv.mkDerivation rec {
     glib
     graphene
     pango
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals vulkanSupport [
     vulkan-loader
   ] ++ [
     # Required for GSettings schemas at runtime.
@@ -148,10 +144,11 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=false"
     "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
     "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
+  ] ++ lib.optionals vulkanSupport [
+    "-Dvulkan=enabled"
   ] ++ lib.optionals (!cupsSupport) [
     "-Dprint-cups=disabled"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-Dvulkan=disabled"
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ] ++ lib.optionals (!x11Support) [
     "-Dx11-backend=false"
@@ -168,6 +165,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     files=(
       build-aux/meson/post-install.py
+      build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py

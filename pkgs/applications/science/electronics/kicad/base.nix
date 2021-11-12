@@ -64,7 +64,7 @@ assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = debug;
 
-  postInstall = optional (withI18n) ''
+  postInstall = optionalString (withI18n) ''
     mkdir -p $out/share
     lndir ${i18n}/share $out/share
   '';
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
       Just the build products, optionally with the i18n linked in
       the libraries are passed via an env var in the wrapper, default.nix
     '';
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;
     platforms = lib.platforms.all;
   };

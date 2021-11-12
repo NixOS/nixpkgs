@@ -48,7 +48,7 @@ in
       description = "CloudFlare Dynamic DNS Client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      startAt = "5 minutes";
+      startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
         User = config.ids.uids.cfdyndns;

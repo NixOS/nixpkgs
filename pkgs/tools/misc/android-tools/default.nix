@@ -1,15 +1,19 @@
 { lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go
+, cmake, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
 }:
 
+let
+  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+in
+
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "31.0.2";
+  version = "31.0.3";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    sha256 = "sha256-YbO/bCQMsLTQzP72lsVZhuBmV4Q2J9+VD9z2iBrw+NQ=";
+    sha256 = "0adhws565ny90vzh5jpkbcai8sfs3b9acs0bgl6bm9z1nr2xklnp";
   };
 
   patches = [
@@ -25,12 +29,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 fmt_7 ];
+  propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
   GOFLAGS = [ "-mod=vendor" ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
+  '';
+
+  postInstall = ''
+    install -Dm755 ../vendor/avb/avbtool.py -t $out/bin
+    install -Dm755 ../vendor/mkbootimg/mkbootimg.py $out/bin/mkbootimg
   '';
 
   meta = with lib; {

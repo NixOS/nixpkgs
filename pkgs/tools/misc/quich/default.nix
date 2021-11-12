@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quich";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Usbac";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n9c01q2v6g9wnmxp248yclhp8cxclnj0yyn1qrvjsn6srcpr22c";
+    sha256 = "sha256-4gsSjLZ7Z4ErNqe86Fy5IrzLMfvDyY18sE0yBnj9bvM=";
   };
 
   doCheck = true;

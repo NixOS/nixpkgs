@@ -13,6 +13,8 @@
 , withValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
+, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, libclc
 }:
 
 /** Packaging design:
@@ -31,7 +33,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "21.1.7";
+  version = "21.2.5";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -45,17 +47,15 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1fx7nfvh1drfa6vv34j7ma944qbs014b0jwlbgqlnbjgcl87rrp9";
+    sha256 = "1fxcdf4qs4vmyjcns7jv62w4jy3gr383ar5b7mr77nb0nxgmhjcf";
   };
-
-  prePatch = "patchShebangs .";
 
   # TODO:
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
-    ./opencl-install-dir.patch
+    ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
     # Fix `-Werror=int-conversion` pthread warnings on musl.
     # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
@@ -64,12 +64,6 @@ self = stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-    # For RISC-V support:
-    (fetchpatch {
-      name = "add-riscv-default-selections.patch";
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/9908da1b7a5eaf0156d458e0e24b694c070ba345.patch";
-      sha256 = "036gv95m5gzzs6qpgkydf5fwgdlm7kpbdfalg8vmayghd260rw1w";
-    })
   ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
     # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
@@ -77,6 +71,8 @@ self = stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    patchShebangs .
+
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
@@ -94,7 +90,12 @@ self = stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "drivers" ]
     ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev";
+    ++ lib.optional stdenv.isLinux "driversdev"
+    ++ lib.optional enableOpenCL "opencl";
+
+  preConfigure = ''
+    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+  '';
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -124,6 +125,9 @@ self = stdenv.mkDerivation {
     "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
+  ] ++ optionals enableOpenCL [
+    "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
+    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ];
 
   buildInputs = with xorg; [
@@ -134,6 +138,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
+    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
     ++ lib.optional withValgrind valgrind-light;
 
   depsBuildBuild = [ pkg-config ];
@@ -168,7 +173,7 @@ self = stdenv.mkDerivation {
 
     if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
       # Move other drivers to a separate output
-      mv $out/lib/lib*_mesa* $drivers/lib
+      mv -t $drivers/lib $out/lib/lib*_mesa*
     fi
 
     # Update search path used by glvnd
@@ -181,6 +186,17 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
+  '' + optionalString enableOpenCL ''
+    # Move OpenCL stuff
+    mkdir -p $opencl/lib
+    mv -t "$opencl/lib/"     \
+      $out/lib/gallium-pipe   \
+      $out/lib/libMesaOpenCL*
+
+    # We construct our own .icd file that contains an absolute path.
+    rm -r $out/etc/OpenCL
+    mkdir -p $opencl/etc/OpenCL/vendors/
+    echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
   '' + lib.optionalString enableOSMesa ''
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p $osmesa/lib
@@ -215,7 +231,10 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
+    "-UPIPE_SEARCH_DIR"
+    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+  ];
 
   passthru = {
     inherit libdrm;

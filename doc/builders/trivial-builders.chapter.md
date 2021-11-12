@@ -47,6 +47,28 @@ These functions write `text` to the Nix store. This is useful for creating scrip
 
 Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
 
+## `writeShellApplication` {#trivial-builder-writeShellApplication}
+
+This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
+
+For example, look at the following code:
+
+```nix
+writeShellApplication {
+  name = "show-nixos-org";
+
+  runtimeInputs = [ curl w3m ];
+
+  text = ''
+    curl -s 'https://nixos.org' | w3m -dump -T text/html
+  '';
+}
+```
+
+Unlike with normal `writeShellScriptBin`, there is no need to manually write out `${curl}/bin/curl`, setting the PATH
+was handled by `writeShellApplication`. Moreover, the script is being checked with `shellcheck` for more strict
+validation.
+
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
 This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.

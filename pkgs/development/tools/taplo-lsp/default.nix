@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo-lsp";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1a5v0x60iicv9snsr0a3lqbziyh38iqhiw11s2lqnr6l1hmp69jy";
+    sha256 = "sha256-jd4l9iTCeHnUa/GC13paD3zDiCZBk9VgEbCDsOs/Xq4=";
   };
 
-  cargoSha256 = "0ak70cwxcviv86b4zrcgqaxhdm6fxsji03mnacvp4pwlwv84ikkc";
+  cargoSha256 = "sha256-zQ303JFqnbulkWL4t5+fRWijaY9zd9tLKvrvdUEvKpY=";
 
   # excludes test_tcp since it fails
   cargoTestFlags = [ "test_stdio" ];

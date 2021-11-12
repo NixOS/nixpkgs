@@ -145,13 +145,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           # user that is permitted to access the unix socket
           someuser = {
             isSystemUser = true;
+            group = "someuser";
             extraGroups = [
               config.users.users.unbound.group
             ];
           };
 
           # user that is not permitted to access the unix socket
-          unauthorizeduser = { isSystemUser = true; };
+          unauthorizeduser = {
+            isSystemUser = true;
+            group = "unauthorizeduser";
+          };
+
+        };
+        users.groups = {
+          someuser = {};
+          unauthorizeduser = {};
         };
 
         # Used for testing configuration reloading

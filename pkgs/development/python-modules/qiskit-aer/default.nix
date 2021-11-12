@@ -8,7 +8,6 @@
 , catch2
 , cmake
 , cython
-, fmt
 , muparserx
 , ninja
 , nlohmann_json
@@ -66,7 +65,6 @@ buildPythonPackage rec {
   buildInputs = [
     blas
     catch2
-    fmt
     muparserx
     nlohmann_json
     spdlog

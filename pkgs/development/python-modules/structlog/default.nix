@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.1.0";
+  version = "21.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9d2d890532e8db83c6977a2a676fb1889922ff0c26ad4dc0ecac26f9fafbc57";
+    sha256 = "7ac42b565e1295712313f91edbcb64e0840a9037d888c8954f11fa6c43270e99";
   };
 
   checkInputs = [ pytest pytest-asyncio pretend freezegun simplejson twisted ]

@@ -1,7 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
-, fetchFromGitHub
+, fetchpatch
 , poppler_utils
 , pkg-config
 , libpng
@@ -27,18 +27,21 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.24.0";
+  version = "5.31.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256:18dr577nv7ijw3ar6mrk2xrc54mlrqkaj5jrc6s5sirl0710fdfg";
+    sha256 = "sha256-3LGEWuHms54ji9GWSyLl8cFWIRBqHY1Jf/CNPJOywrU=";
   };
 
+  # https://sources.debian.org/patches/calibre/5.31.1+dfsg-1
   patches = [
-    # Plugin installation (very insecure) disabled (from Debian)
-    ./disable_plugins.patch
-    # Automatic version update disabled by default (from Debian)
-    ./no_updates_dialog.patch
+    #  allow for plugin update check, but no calibre version check
+    (fetchpatch {
+      name = "0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      sha256 = "sha256-dLzO1TWP7Q4nw2a3oN7qlhGCmcA0NKJrZidUnD6hUMA=";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
@@ -101,6 +104,7 @@ mkDerivation rec {
       regex
       sip
       zeroconf
+      jeepney
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll

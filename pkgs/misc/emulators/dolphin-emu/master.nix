@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
@@ -8,26 +8,16 @@
 # - Inputs used for Darwin
 , CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "dolphin-emu-master";
-    exec = "dolphin-emu-master";
-    icon = "dolphin-emu";
-    comment = "A Wii/GameCube Emulator";
-    desktopName = "Dolphin Emulator (master)";
-    genericName = "Wii/GameCube Emulator";
-    categories = "Game;Emulator;";
-    startupNotify = "false";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-14002";
+  version = "5.0-15260";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "53222560650e4a99eceafcd537d4e04d1c50b3a6";
-    sha256 = "1m71gk9hm011fpv5hmpladf7abkylmawgr60d0czkr276pzg04ky";
+    rev = "207c931a04c8e2629a735bc2b3f36b5c89365ca7";
+    sha256 = "15r9syk7f62h16klcznw7css6sng8nqkkz4d1qr8d988rdfaiypx";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -56,6 +46,9 @@ in stdenv.mkDerivation rec {
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    # https://bugs.dolphin-emu.org/issues/11807
+    # The .desktop file should already set this, but Dolphin may be launched in other ways
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   # - Allow Dolphin to use nix-provided libraries instead of building them
@@ -67,10 +60,7 @@ in stdenv.mkDerivation rec {
       CMakeLists.txt
   '';
 
-  postInstall = ''
-    cp -r ${desktopItem}/share/applications $out/share
-    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';
 

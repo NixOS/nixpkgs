@@ -25,7 +25,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.32.0";
+  version = "2.33.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "08rnm3ipjqdd2n31dw7mxl3iv9g4nxgc409krmz892a37kd43a38";
+    sha256 = "sha256-4FSm5sKwiL0b/19h7ZulqpHJo81QlTmktBxd3wIgHy8=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
+
+    # ensure we are using the correct shell when executing the test scripts
+    patchShebangs t/*.sh
   '';
 
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
@@ -297,6 +300,8 @@ stdenv.mkDerivation {
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
+    # git-completion.bash: line 405: compgen: command not found:
+    disable_test t9902-completion 'option aliases are shown with GIT_COMPLETION_SHOW_ALL'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -316,6 +321,7 @@ stdenv.mkDerivation {
 
     # Flaky tests:
     disable_test t5319-multi-pack-index
+    disable_test t6421-merge-partial-clone
 
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
@@ -327,6 +333,13 @@ stdenv.mkDerivation {
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
     disable_test t7816-grep-binary-pattern
+    # fail (as of 2.33.0)
+    #===(   18623;1208  8/?  224/?  2/? )= =fatal: Not a valid object name refs/tags/signed-empty
+    disable_test t6300-for-each-ref
+    #===(   22665;1651  9/?  1/?  0/?  0/? )= =/private/tmp/nix-build-git-2.33.0.drv-2/git-2.33.0/t/../contrib/completion/git-completion.bash: line 405: compgen: command not found
+    disable_test t9902-completion
+    # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
+    disable_test t5003-archive-zip
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -356,6 +369,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos peti wmertens globin ];
+    maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
 }

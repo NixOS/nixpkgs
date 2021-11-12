@@ -10,7 +10,7 @@ in {
       enable = mkEnableOption "zsh-autoenv";
       package = mkOption {
         default = pkgs.zsh-autoenv;
-        defaultText = "pkgs.zsh-autoenv";
+        defaultText = literalExpression "pkgs.zsh-autoenv";
         description = ''
           Package to install for `zsh-autoenv` usage.
         '';

@@ -15,11 +15,11 @@
 }:
 
 let
-  merlinVersion = "4.1";
+  merlinVersion = "4.3.1";
 
   hashes = {
-    "4.1-411" = "9e2e6fc799c93ce1f2c7181645eafa37f64e43ace062b69218e1c29ac459937d";
-    "4.1-412" = "fb4caede73bdb8393bd60e31792af74b901ae2d319ac2f2a2252c694d2069d8d";
+    "4.3.1-411" = "0lhxkd1wa8k3fkcnhvzlahx3g519cdi5h7lgs60khqqm8nfvfcr5";
+    "4.3.1-412" = "0ah2zbj1hhrrfxp4nhfh47jsbkvm0b30dr7ikjpmvb13wa8h20sr";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -47,6 +47,9 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
+    # This fixes the test-suite on macOS
+    # See https://github.com/ocaml/merlin/pull/1399
+    ./test.patch
   ];
 
   useDune2 = true;

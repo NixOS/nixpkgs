@@ -1,16 +1,16 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
+, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
+, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
 , wrapQtAppsHook
 }:
 
 mkDerivation rec {
   pname = "teamviewer";
-  version = "15.15.5";
+  version = "15.22.3";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-H/CSc2RcjI+Fm8awYcXm3ioAJpbSNEMwGVrTozMux3A=";
+    sha256 = "15fvzhdq7mnx2l2w4byvij8ww16qwdlkbadal60rm66yzv79mv9w";
   };
 
   unpackPhase = ''
@@ -19,7 +19,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus qtbase qtwebkit qtx11extras libX11 ];
+  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
   propagatedBuildInputs = [ qtquickcontrols ];
 
   installPhase = ''
@@ -28,6 +28,7 @@ mkDerivation rec {
     rm -R \
       $out/share/teamviewer/logfiles \
       $out/share/teamviewer/config \
+      $out/share/teamviewer/tv_bin/RTlib \
       $out/share/teamviewer/tv_bin/xdg-utils \
       $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,libdepend,tv-delayed-start.sh}
 
@@ -37,6 +38,27 @@ mkDerivation rec {
     ln -s /var/lib/teamviewer $out/share/teamviewer/config
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
     ln -s ${xdg-utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
+
+    declare in_script_dir="./opt/teamviewer/tv_bin/script"
+
+    install -d "$out/share/dbus-1/services"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.service" "$out/share/dbus-1/services"
+    substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.service" \
+      --replace '/opt/teamviewer/tv_bin/TeamViewer' \
+        "$out/share/teamviewer/tv_bin/TeamViewer"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.Desktop.service" "$out/share/dbus-1/services"
+    substituteInPlace "$out/share/dbus-1/services/com.teamviewer.TeamViewer.Desktop.service" \
+      --replace '/opt/teamviewer/tv_bin/TeamViewer_Desktop' \
+        "$out/share/teamviewer/tv_bin/TeamViewer_Desktop"
+
+    install -d "$out/share/dbus-1/system.d"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.Daemon.conf" "$out/share/dbus-1/system.d"
+
+    install -d "$out/share/polkit-1/actions"
+    install -m 644 "$in_script_dir/com.teamviewer.TeamViewer.policy" "$out/share/polkit-1/actions"
+    substituteInPlace "$out/share/polkit-1/actions/com.teamviewer.TeamViewer.policy" \
+      --replace '/opt/teamviewer/tv_bin/script/execscript' \
+        "$out/share/teamviewer/tv_bin/script/execscript"
 
     for i in 16 20 24 32 48 256; do
       size=$i"x"$i
@@ -51,17 +73,23 @@ mkDerivation rec {
       --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
       --replace '/var/run/' '/run/'
+  '';
 
-    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
-    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+  ];
 
-    wrapQtApp $out/share/teamviewer/tv_bin/script/teamviewer
-    wrapQtApp $out/bin/teamviewer
+  postFixup = ''
+    wrapProgram $out/share/teamviewer/tv_bin/teamviewerd ''${makeWrapperArgs[@]}
+    # tv_bin/script/teamviewer runs tvw_main which runs tv_bin/TeamViewer
+    wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer ''${makeWrapperArgs[@]} ''${qtWrapperArgs[@]}
+    wrapProgram $out/share/teamviewer/tv_bin/teamviewer-config ''${makeWrapperArgs[@]} ''${qtWrapperArgs[@]}
+    wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop ''${makeWrapperArgs[@]} ''${qtWrapperArgs[@]}
   '';
 
   dontStrip = true;
+  dontWrapQtApps = true;
   preferLocalBuild = true;
 
   meta = with lib; {
@@ -69,6 +97,6 @@ mkDerivation rec {
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt ];
+    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
   };
 }

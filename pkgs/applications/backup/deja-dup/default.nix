@@ -14,7 +14,7 @@
 , libsecret
 , libhandy
 , wrapGAppsHook
-, libgpgerror
+, libgpg-error
 , json-glib
 , duplicity
 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gtk3
     libsecret
     libhandy
-    libgpgerror
+    libgpg-error
     json-glib
   ];
 

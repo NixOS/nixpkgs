@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, udev }:
 
 stdenv.mkDerivation {
-  pname = "moltengamepad-git";
-  version = "2016-05-04";
+  pname = "moltengamepad";
+  version = "unstable-2016-05-04";
 
   src = fetchFromGitHub {
     owner = "jgeumlek";

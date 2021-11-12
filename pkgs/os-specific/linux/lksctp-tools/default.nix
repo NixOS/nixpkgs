@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "lksctp-tools-1.0.17";
+  pname = "lksctp-tools";
+  version = "1.0.17";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lksctp/${name}.tar.gz";
+    url = "mirror://sourceforge/lksctp/lksctp-tools-${version}.tar.gz";
     sha256 = "05da6c2v3acc18ndvmkrag6x5lf914b7s0xkkr6wkvrbvd621sqs";
   };
 

@@ -28,9 +28,15 @@ buildDunePackage rec {
   })
   ];
 
+  # Fix build with ppxlib 0.23
+  postPatch = ''
+    substituteInPlace ppx/ppx_bistro.ml \
+      --replace 'Parser.parse_expression' 'Ocaml_common.Parser.parse_expression'
+  '';
+
   propagatedBuildInputs = [ base64 bos core lwt_react ocamlgraph rresult tyxml ];
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.12";
 
   meta = {
     inherit (src.meta) homepage;

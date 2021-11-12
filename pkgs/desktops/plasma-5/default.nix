@@ -24,9 +24,8 @@ existing packages here and modify it as necessary.
 
 */
 
-{
-  libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas
+{ libsForQt5, lib, config, fetchurl
+, gconf, gsettings-desktop-schemas
 }:
 
 let
@@ -123,7 +122,6 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
       ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
@@ -157,6 +155,7 @@ let
       thirdParty = let inherit (libsForQt5) callPackage; in {
         plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
         plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+        bismuth = callPackage ./3rdparty/addons/bismuth { };
         kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
         kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
         krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
@@ -164,6 +163,8 @@ let
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
       };
 
+    } // lib.optionalAttrs (config.allowAliases or true) {
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
     };
 in
 lib.makeScope libsForQt5.newScope packages

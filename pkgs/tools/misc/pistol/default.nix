@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "pistol";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NUHk48P3kUx+e9BR9k9K/VaHnbZ6Do6RRf1S0974sO8=";
+    sha256 = "sha256-rpHtU8CnRh4C75tjdyJWCzbyaHvzyBpGSbJpXW8J9VM=";
   };
 
-  vendorSha256 = "sha256-n98cjXsgg2w3shbZPnk3g7mBbzV5Tc3jd9ZtiRk1KUM=";
+  vendorSha256 = "sha256-ivFH7KtWf4nHCdAJrb6HgKP6aIIjgBKG5XwbeJHBDvU=";
 
   doCheck = false;
 
@@ -35,7 +35,7 @@ buildGoModule rec {
     installManPage pistol.1
   '';
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   meta = with lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";

@@ -1,8 +1,13 @@
-{ stdenv, fetchFromGitHub, emacs, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, emacs
+, trivialBuild
+}:
 
-stdenv.mkDerivation {
+trivialBuild {
   pname = "git-undo";
-  version = "2019-10-13";
+  version = "0.pre+unstable=2019-12-21";
 
   src = fetchFromGitHub {
     owner = "jwiegley";
@@ -11,26 +16,11 @@ stdenv.mkDerivation {
     sha256 = "sha256-cVkK9EF6qQyVV3uVqnBEjF8e9nEx/8ixnM8PvxqCyYE=";
   };
 
-  buildInputs = [ emacs ];
-
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
-  meta = {
-    description = "Revert region to most recent Git-historical version";
+  meta = with lib; {
     homepage = "https://github.com/jwiegley/git-undo-el";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
-    platforms = emacs.meta.platforms;
+    description = "Revert region to most recent Git-historical version";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ leungbk ];
+    inherit (emacs.meta) platforms;
   };
 }

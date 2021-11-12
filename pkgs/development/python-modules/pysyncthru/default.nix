@@ -3,13 +3,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
-, demjson
+, demjson3
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.7.5";
+  version = "0.7.10";
 
   disabled = isPy27;
 
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     owner = "nielstron";
     repo = "pysyncthru";
     rev = "release-${version}";
-    sha256 = "122zxwqwx03vaxbhmp3cjibjnkirayz0w68gvslsdr7n9nqv3pgz";
+    sha256 = "1c29w2ldrnq0vxr9cfa2pjhwdvrpw393c84khgg2y56jrkbidq53";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    demjson
+    demjson3
   ];
 
   checkPhase = ''

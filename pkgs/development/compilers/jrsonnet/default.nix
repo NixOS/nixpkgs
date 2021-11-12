@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jrsonnet";
@@ -11,8 +11,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-OX+iJJ3vdCsWWr8x31psV9Vne6xWDZnJc83NbJqMK1A=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
     ln -s $out/bin/jrsonnet $out/bin/jsonnet
+
+    for shell in bash zsh fish; do
+      installShellCompletion --cmd jrsonnet \
+        --$shell <($out/bin/jrsonnet --generate $shell /dev/null)
+      installShellCompletion --cmd jsonnet \
+        --$shell <($out/bin/jrsonnet --generate $shell /dev/null | sed s/jrsonnet/jsonnet/g)
+    done
   '';
 
   cargoSha256 = "sha256-eFfAU9Q3nYAJK+kKP1Y6ONjOIfkuYTlelrFrEW9IJ8c=";

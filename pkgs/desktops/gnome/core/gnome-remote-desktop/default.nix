@@ -7,6 +7,7 @@
 , python3
 , wrapGAppsHook
 , glib
+, nv-codec-headers-11
 , pipewire
 , systemd
 , libvncserver
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "40.1";
+  version = "41.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-mvpuUlVwo3IJP5cwM4JwkDiU87H5+KnfX1eDbqHSnek=";
+    hash = "sha256-wOiJsO2BGxGAm777FzOElNj1L/USC+bj/9O65angX98=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     fuse3
     gdk-pixbuf # For libnotify
     glib
+    nv-codec-headers-11
     libnotify
     libsecret
     libvncserver

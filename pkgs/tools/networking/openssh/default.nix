@@ -1,18 +1,20 @@
-{ callPackage, fetchurl, fetchpatch, autoreconfHook }:
+{ callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, autoreconfHook }:
 let
-  common = opts: callPackage (import ./common.nix opts) {};
-in {
+  common = opts: callPackage (import ./common.nix opts) { };
+in
+{
 
   openssh = common rec {
     pname = "openssh";
-    version = "8.6p1";
+    version = "8.8p1";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "1bnpivgk98h2f9afpp88jv6g9ps83vnpxd031n2jqxi12vdf9rn3";
+      sha256 = "1s8z6f7mi1pwsl79cqai8cr350m5lf2ifcxff57wx6mvm478k425";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
+    extraMeta.maintainers = with lib.maintainers; [ das_j ];
   };
 
   openssh_hpn = common rec {
@@ -20,9 +22,11 @@ in {
     version = "8.4p1";
     extraDesc = " with high performance networking patches";
 
-    src = fetchurl {
-      url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
-      sha256 = "1x2afjy1isslbg7qlvhhs4zhj2c8q2h1ljz0fc5b4h9pqcm9j540";
+    src = fetchFromGitHub {
+      owner = "rapier1";
+      repo = "openssh-portable";
+      rev = "hpn-KitchenSink-${builtins.replaceStrings [ "." "p" ] [ "_" "_P" ] version}";
+      hash = "sha256-SYQPDGxZR41m4g603RaZaOYm4vCr9uZnFnZoKhruueY=";
     };
 
     extraPatches = [
@@ -36,6 +40,7 @@ in {
 
     extraMeta.knownVulnerabilities = [
       "CVE-2021-28041"
+      "CVE-2021-41617"
     ];
   };
 
@@ -66,6 +71,7 @@ in {
 
     extraMeta.knownVulnerabilities = [
       "CVE-2021-28041"
+      "CVE-2021-41617"
     ];
   };
 }

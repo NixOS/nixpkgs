@@ -4,6 +4,7 @@
 , makeWrapper
 , makeDesktopItem
 , mkYarnPackage
+, fetchYarnDeps
 , electron
 , element-web
 , callPackage
@@ -13,27 +14,28 @@
 
 , useWayland ? false
 }:
-# Notes for maintainers:
-# * versions of `element-web` and `element-desktop` should be kept in sync.
-# * the Yarn dependency expression must be updated with `./update-element-desktop.sh <git release tag>`
 
 let
+  pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
-  version = "1.8.1";
+  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
+in
+mkYarnPackage rec {
+  pname = "element-desktop";
+  inherit (pinData) version;
+  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-FIKbyfnRuHBbmtjwxNC//n5UiGTCQNr+PeiZEi3+RGI=";
+    sha256 = pinData.desktopSrcHash;
   };
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
-in
-mkYarnPackage rec {
-  name = "element-desktop-${version}";
-  inherit version src;
 
   packageJSON = ./element-desktop-package.json;
-  yarnNix = ./element-desktop-yarndeps.nix;
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = pinData.desktopYarnHash;
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -101,6 +103,8 @@ mkYarnPackage rec {
       MimeType=x-scheme-handler/element;
     '';
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";

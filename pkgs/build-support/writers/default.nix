@@ -1,4 +1,4 @@
-{ pkgs, lib, gawk, gnused, gixy }:
+{ pkgs, buildPackages, lib, gawk, gnused, gixy }:
 
 with lib;
 rec {
@@ -77,7 +77,11 @@ rec {
     }) ''
       ${compileScript}
       ${lib.optionalString strip
-         "${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded $out"}
+          "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
+      # Sometimes binaries produced for darwin (e. g. by GHC) won't be valid
+      # mach-o executables from the get-go, but need to be corrected somehow
+      # which is done by fixupPhase.
+      ${lib.optionalString pkgs.stdenvNoCC.hostPlatform.isDarwin "fixupPhase"}
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
@@ -98,51 +102,6 @@ rec {
   # Like writeScriptBIn but the first line is a shebang to bash
   writeBashBin = name:
     writeBash "/bin/${name}";
-
-  # writeC writes an executable c package called `name` to `destination` using `libraries`.
-  #
-  #  Examples:
-  #    writeC "hello-world-ncurses" { libraries = [ pkgs.ncurses ]; } ''
-  #      #include <ncurses.h>
-  #      int main() {
-  #        initscr();
-  #        printw("Hello World !!!");
-  #        refresh(); endwin();
-  #        return 0;
-  #      }
-  #    ''
-  writeC = name: {
-    libraries ? [],
-    strip ? true
-  }:
-    makeBinWriter {
-      compileScript = ''
-        PATH=${makeBinPath [
-          pkgs.binutils-unwrapped
-          pkgs.coreutils
-          pkgs.findutils
-          pkgs.gcc
-          pkgs.pkg-config
-        ]}
-        export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
-        gcc \
-            ${optionalString (libraries != [])
-              "$(pkg-config --cflags --libs ${
-                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgconfig -name \\*.pc)") libraries
-              })"
-            } \
-            -O \
-            -o "$out" \
-            -Wall \
-            -x c \
-            "$contentPath"
-      '';
-      inherit strip;
-    } name;
-
-  # writeCBin takes the same arguments as writeC but outputs a directory (like writeScriptBin)
-  writeCBin = name:
-    writeC "/bin/${name}";
 
   # Like writeScript but the first line is a shebang to dash
   #

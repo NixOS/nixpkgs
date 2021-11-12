@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   enableParallelBuilding = true;

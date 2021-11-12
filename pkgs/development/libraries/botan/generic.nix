@@ -3,6 +3,7 @@
 , baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
+, extraPatches ? [ ]
 , postPatch ? null
 , knownVulnerabilities ? [ ]
 , CoreServices
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
     ];
     inherit sha256;
   };
+  patches = extraPatches;
   inherit postPatch;
 
   buildInputs = [ python3 bzip2 zlib gmp openssl boost ]

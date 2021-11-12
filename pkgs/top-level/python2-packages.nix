@@ -36,6 +36,10 @@ with self; with super; {
 
   box2d = callPackage ../development/python-modules/box2d { };
 
+  boto3 = callPackage ../development/python-modules/boto3/1_17.nix {};
+
+  botocore = callPackage ../development/python-modules/botocore/1_20.nix {};
+
   browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi/0_9.nix { };
@@ -70,6 +74,8 @@ with self; with super; {
 
   construct = callPackage ../development/python-modules/construct/2.10.54.nix { };
 
+  contextlib2 = callPackage ../development/python-modules/contextlib2/0.nix { };
+
   convertdate = callPackage ../development/python-modules/convertdate/2.2.x.nix { };
 
   cryptography = callPackage ../development/python-modules/cryptography/3.3.nix { };
@@ -79,6 +85,8 @@ with self; with super; {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dateparser = callPackage ../development/python-modules/dateparser/0.x.nix { };
+
+  decorator = callPackage ../development/python-modules/decorator/4.nix { };
 
   deskcon = callPackage ../development/python-modules/deskcon { };
 
@@ -101,6 +109,8 @@ with self; with super; {
   fdint = callPackage ../development/python-modules/fdint { };
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
+
+  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
 
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
@@ -162,7 +172,7 @@ with self; with super; {
     pythonPackages = self;
   });
 
-  hg-git = callPackage ../development/python-modules/hg-git { };
+  hg-git = callPackage ../development/python-modules/hg-git/0.8.nix { };
 
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
@@ -204,7 +214,7 @@ with self; with super; {
 
   jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
-  jupyter_client = callPackage ../development/python-modules/jupyter_client/5.nix { };
+  jupyter-client = callPackage ../development/python-modules/jupyter-client/5.nix { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
 
@@ -380,8 +390,6 @@ with self; with super; {
 
   pandas = callPackage ../development/python-modules/pandas/2.nix { };
 
-  pasteScript = callPackage ../development/python-modules/pastescript { };
-
   pathpy = callPackage ../development/python-modules/path.py/2.nix { };
 
   pg8000 = callPackage ../development/python-modules/pg8000/1_12.nix { };
@@ -393,13 +401,13 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
+
   postorius = disabled super.postorius;
 
   praw = callPackage ../development/python-modules/praw/6.3.nix { };
 
   prettytable = callPackage ../development/python-modules/prettytable/1.nix { };
-
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea/ldap-proxy.nix { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor/19.nix { };
 
@@ -537,6 +545,8 @@ with self; with super; {
   rpy2 = callPackage ../development/python-modules/rpy2/2.nix { };
 
   rsa = callPackage ../development/python-modules/rsa/4_0.nix { };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer/0_4.nix { };
 
   sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 

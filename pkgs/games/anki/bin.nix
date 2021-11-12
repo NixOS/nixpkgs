@@ -3,15 +3,23 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.46";
+  version = "2.1.49";
+
+  sources = {
+    linux = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
+      sha256 = "sha256-uG39g9CXnquArFsxtFHWWoDaNwu8y2KKh+SqGt8aqi0=";
+    };
+    darwin = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
+      sha256 = "sha256-sEVWZQpICL7RYrOuPm1Y5XhzPxCwNk1WGP1rctTtE4Y=";
+    };
+  };
 
   unpacked = stdenv.mkDerivation {
     inherit pname version;
 
-    src = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "1jzpf42fqhfbjr95k7bpsnf34sfinamp6v828y0sapa4gzfvwkkz";
-    };
+    src = sources.linux;
 
     installPhase = ''
       runHook preInstall
@@ -32,14 +40,14 @@ let
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
+
+  passthru = { inherit sources; };
 in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
 
   runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
     exec ${unpacked}/bin/anki
   '';
 
@@ -51,14 +59,11 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
       $out/share/
   '';
 
-  inherit meta;
+  inherit meta passthru;
 }) else stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version passthru;
 
-  src = fetchurl {
-    url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "003cmh5qdj5mkrpm51n0is872faj99dqfkaaxyyrn6x03s36l17y";
-  };
+  src = sources.darwin;
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";

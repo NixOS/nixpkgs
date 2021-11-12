@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , substituteAll
@@ -17,6 +16,7 @@
 , gettext
 , glib
 , glib-networking
+, gcr
 , glibc
 , gnome-bluetooth
 , gnome-color-manager
@@ -24,8 +24,6 @@
 , gnome-online-accounts
 , gnome-settings-daemon
 , gnome
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -70,11 +68,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "40.0";
+  version = "41.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zMmlc2UXOFEJrlpZkGwlgkTdh5t1A61ZhM9BZVyzAvE=";
+    sha256 = "sha256-6gxxSExlzizBE3b5sB5iEfpKf/0zT0MH/FLJPw/d1Mc=";
   };
 
   patches = [
@@ -84,13 +82,6 @@ stdenv.mkDerivation rec {
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
-    })
-
-    # Fix startup assertion in power panel.
-    # https://gitlab.gnome.org/GNOME/gnome-control-center/merge_requests/974
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/9acaa10567c94048657c69538e5d7813f82c4224.patch";
-      sha256 = "59GeTPcG2UiVTL4VTS/TP0p0QkAQpm3VgvuAiw64wUU=";
     })
   ];
 
@@ -119,14 +110,13 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     glib-networking
+    gcr
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
     gnome-user-share # optional, sharing panel
-    grilo
-    grilo-plugins # for setting wallpaper from Flickr
     gsettings-desktop-schemas
     gsound
     gtk3

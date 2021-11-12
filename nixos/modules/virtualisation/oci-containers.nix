@@ -28,7 +28,7 @@ let
             You still need to set the <literal>image</literal> attribute, as it
             will be used as the image name for docker to start a container.
           '';
-          example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
+          example = literalExpression "pkgs.dockerTools.buildDockerImage {...};";
         };
 
         login = {
@@ -59,7 +59,7 @@ let
           type =  with types; listOf str;
           default = [];
           description = "Commandline arguments to pass to the image's entrypoint.";
-          example = literalExample ''
+          example = literalExpression ''
             ["--port=9000"]
           '';
         };
@@ -75,7 +75,7 @@ let
           type = with types; attrsOf str;
           default = {};
           description = "Environment variables to set for this container.";
-          example = literalExample ''
+          example = literalExpression ''
             {
               DATABASE_HOST = "db.example.com";
               DATABASE_PORT = "3306";
@@ -87,7 +87,7 @@ let
           type = with types; listOf path;
           default = [];
           description = "Environment files for this container.";
-          example = literalExample ''
+          example = literalExpression ''
             [
               /path/to/.env
               /path/to/.env.secret
@@ -160,7 +160,7 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#expose-incoming-ports">
             Docker engine documentation</link> for full details.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             [
               "8080:9000"
             ]
@@ -191,7 +191,7 @@ let
             <link xlink:href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
             docker engine documentation</link> for details.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             [
               "volume_name:/path/inside/container"
               "/path/on/host:/path/inside/container"
@@ -214,7 +214,7 @@ let
 
             Use the same name as the attribute under <literal>virtualisation.oci-containers.containers</literal>.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             virtualisation.oci-containers.containers = {
               node1 = {};
               node2 = {
@@ -228,7 +228,7 @@ let
           type = with types; listOf str;
           default = [];
           description = "Extra options for <command>${defaultBackend} run</command>.";
-          example = literalExample ''
+          example = literalExpression ''
             ["--network=host"]
           '';
         };

@@ -8,24 +8,22 @@
 , alcotest
 }:
 
-buildDunePackage rec {
-  pname = "tezos-lmdb";
+let
   version = "7.4";
   src = fetchFromGitLab {
     owner = "tezos";
     repo = "tezos";
     rev = "v${version}";
-    sha256 = "18q02j74aa8mxv233kvyb62xbhjngzpgppp6kgr4m53d7a78wgsm";
+    sha256 = "0sghc60xzr02pmmkr626pnhzrnczf7mki7qyxzzfn7rbbdbrf4wp";
   };
+in
+
+buildDunePackage {
+  pname = "tezos-lmdb";
+  version = version;
+  src = "${src}/vendors/ocaml-lmdb";
 
   useDune2 = true;
-
-  preBuild = ''
-    rm dune
-    rm -rf src
-    rm -rf docs
-    ls vendors | grep -v ocaml-lmdb |xargs rm -rf
-  '';
 
   buildInputs = [
     pkg-config

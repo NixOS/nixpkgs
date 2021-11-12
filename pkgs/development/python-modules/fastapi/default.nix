@@ -13,18 +13,19 @@
 , peewee
 , python-jose
 , sqlalchemy
+, trio
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.68.0";
+  version = "0.70.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "00cjkc90h0qlca30g981zvwlxh2wc3rfipw25v667jdl9x5gxv9p";
+    sha256 = "sha256-mLI+w9PeewnwUMuUnXj6J2r/3shinjlwXMnhNcQlhrM=";
   };
 
   postPatch = ''
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     sqlalchemy
+    trio
   ];
 
   # disabled tests require orjson which requires rust nightly
@@ -55,8 +57,18 @@ buildPythonPackage rec {
   # ignoring deprecation warnings to avoid test failure from
   # tests/test_tutorial/test_testing/test_tutorial001.py
 
-  pytestFlagsArray = [ "--ignore=tests/test_default_response_class.py" "-W ignore::DeprecationWarning"];
-  disabledTests = [ "test_get_custom_response" ];
+  pytestFlagsArray = [
+    "--ignore=tests/test_default_response_class.py"
+    "-W ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    "test_get_custom_response"
+
+    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
+    "test_websocket_invalid_data"
+    "test_websocket_no_credentials"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tiangolo/fastapi";

@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.2";
+  version = "7.1.5";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8RhIw3Qt0BclH1Ws16JNuFfwiRxJ14lM6MBUK9OvNKA=";
+    sha256 = "9511dce6d23abdaa47d39d8e222c6b49206bf92e19f4acaf4966b2d402bb6541";
   };
 
   propagatedBuildInputs = [

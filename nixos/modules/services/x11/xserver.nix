@@ -217,7 +217,7 @@ in
       inputClassSections = mkOption {
         type = types.listOf types.lines;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
@@ -233,7 +233,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.xf86_input_wacom ]";
+        example = literalExpression "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
@@ -297,7 +297,11 @@ in
       dpi = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "DPI resolution to use for X server.";
+        description = ''
+          Force global DPI resolution to use for X server. It's recommended to
+          use this only when DPI is detected incorrectly; also consider using
+          <literal>Monitor</literal> section in configuration file instead.
+        '';
       };
 
       updateDbusEnvironment = mkOption {
@@ -347,6 +351,7 @@ in
       xkbDir = mkOption {
         type = types.path;
         default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -734,6 +739,9 @@ in
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
+      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+      }
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');

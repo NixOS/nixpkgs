@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
       mv * $out/lib/teamspeak/
 
       # Make a desktop item
-      mkdir -p $out/share/applications/ $out/share/icons/
+      mkdir -p $out/share/applications/ $out/share/icons/hicolor/64x64/apps/
       unzip ${pluginsdk}
-      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/teamspeak.png
+      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
       cp ${desktopItem}/share/applications/* $out/share/applications/
 
       # Make a symlink to the binary from bin.

@@ -16,10 +16,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-kuttl" ];
 
-  buildFlagsArray = ''
-    -ldflags=-s -w
-    -X  github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "The KUbernetes Test TooL (KUTTL) provides a declarative approach to testing production-grade Kubernetes operators";

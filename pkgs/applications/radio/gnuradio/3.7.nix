@@ -44,8 +44,6 @@
   minor = "14";
   patch = "0";
 }
-# We use our build of volk and not the one bundled with the release
-, fetchSubmodules ? false
 }:
 
 let
@@ -213,7 +211,6 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt4;
     gtk = gtk2;
@@ -238,34 +235,34 @@ stdenv.mkDerivation rec {
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are
     # not detected properly (slightly different then what's in
     # ./default.nix).
-    ++ lib.optionals (hasFeature "gr-vocoder" features) [
+    ++ lib.optionals (hasFeature "gr-vocoder") [
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
       "-DLIBCODEC2_INCLUDE_DIR=${codec2}/include"
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
       "-DLIBGSM_INCLUDE_DIR=${gsm}/include/gsm"
     ]
-    ++ lib.optionals (hasFeature "volk" features && volk != null) [
+    ++ lib.optionals (hasFeature "volk" && volk != null) [
       "-DENABLE_INTERNAL_VOLK=OFF"
     ]
   ;
   stripDebugList = shared.stripDebugList
     # gr-fcd feature was dropped in 3.8
-    ++ lib.optionals (hasFeature "gr-fcd" features) [ "share/gnuradio/examples/fcd" ]
+    ++ lib.optionals (hasFeature "gr-fcd") [ "share/gnuradio/examples/fcd" ]
   ;
   preConfigure = ""
     # wxgui and pygtk are not looked up properly, so we force them to be
     # detected as found, if they are requested by the `features` attrset.
-    + lib.optionalString (hasFeature "gr-wxgui" features) ''
+    + lib.optionalString (hasFeature "gr-wxgui") ''
       sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt
     ''
-    + lib.optionalString (hasFeature "gnuradio-companion" features) ''
+    + lib.optionalString (hasFeature "gnuradio-companion") ''
       sed -i 's/.*pygtk_version.*/set(PYGTK_FOUND TRUE)/g' grc/CMakeLists.txt
     ''
   ;

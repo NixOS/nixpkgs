@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpufetch";
-  version = "0.98";
+  version = "1.00";
 
   src = fetchFromGitHub {
     owner  = "Dr-Noob";
     repo   = "cpufetch";
     rev    = "v${version}";
-    sha256 = "060hmkwmb5ybcrj9jfx9681zk92489kq71nl6nacn8nfqrcn3qdb";
+    sha256 = "sha256-2Iar7RwL3T4DrFbqKJFys/R+VENRg2lmYFkslEaZeVE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

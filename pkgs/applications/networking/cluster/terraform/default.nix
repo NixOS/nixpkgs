@@ -114,7 +114,7 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins lib.attrValues;
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
 
             # Ouch
             overrideDerivation = f:
@@ -195,9 +195,9 @@ rec {
   };
 
   terraform_1_0 = mkTerraform {
-    version = "1.0.5";
-    sha256 = "0nhxrlnwg76iiqs9hj6ls54176df78ys3356nxmd9ip8jx9ix47v";
-    vendorSha256 = "08fvp6w8xsv42jjgpr73kyah20g3979rf84ysrq5whvfmrbpzm2f";
+    version = "1.0.11";
+    sha256 = "0k05s4zm16vksq21f1q00y2lzfgi5fhs1ygydm8jk0srs9x8ask7";
+    vendorSha256 = "1brgghl7fb26va4adix443rl1dkjaqrr4jkknxjkcaps0knqp172";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.11.1";
+  version = "0.11.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44e78eaed937c5a87fc7a892c329a7cc091060b67ebd1d0d306b446a74ba01ad";
+    sha256 = "cf45e9286d40826864be0e3c066f98536982baf701a7caa386511792d61ff4f6";
   };
 
   checkInputs = [ nose ];

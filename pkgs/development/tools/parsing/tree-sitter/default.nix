@@ -51,7 +51,7 @@ let
       mkdir $out
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars))));
+      (import ./grammars { inherit lib; }))));
 
   builtGrammars =
     let
@@ -62,7 +62,7 @@ let
           source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
         };
-      grammars' = (import ./grammars);
+      grammars' = (import ./grammars { inherit lib; });
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
@@ -90,8 +90,9 @@ let
           in
           {
             name =
-              (lib.strings.removePrefix "tree-sitter-"
-                (lib.strings.removeSuffix "-grammar" name))
+              (lib.strings.replaceStrings ["-"] ["_"]
+                (lib.strings.removePrefix "tree-sitter-"
+                  (lib.strings.removeSuffix "-grammar" name)))
               + stdenv.hostPlatform.extensions.sharedLibrary;
             path = "${drv}/parser";
           }

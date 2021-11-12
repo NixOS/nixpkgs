@@ -18,21 +18,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
 
-  nativeBuildInputs = [
-    cmake pkg-config installShellFiles
-    # ghc is not supported on aarch64-darwin yet.
-  ] ++ lib.optional (stdenv.hostPlatform.system != "aarch64-darwin") pandoc;
-
+  nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  outputs = [ "out" ] ++ lib.optional (stdenv.hostPlatform.system != "aarch64-darwin") "man";
+  outputs = [ "out" "man" ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.system != "aarch64-darwin") ''
+  postInstall = ''
     pandoc --standalone -f markdown -t man man/exa.1.md > man/exa.1
     pandoc --standalone -f markdown -t man man/exa_colors.5.md > man/exa_colors.5
     installManPage man/exa.1 man/exa_colors.5
-  '' + ''
     installShellCompletion \
       --name exa completions/completions.bash \
       --name exa.fish completions/completions.fish \

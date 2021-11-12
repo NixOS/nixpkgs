@@ -15,11 +15,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper go-bindata ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X
-    main.version=${version}
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+  ];
 
   postPatch = ''
     go-bindata -pkg assets -o assets/assets.go data/

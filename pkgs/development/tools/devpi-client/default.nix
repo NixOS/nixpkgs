@@ -25,12 +25,18 @@
 
 buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
+    sha256 = "24ac6d94108996efad4ff5185dabb1e5120ae238134b8175d6de2ca9e766cd92";
   };
+
+  postPatch = ''
+    # can be removed after 5.2.2, updated upstream
+    substituteInPlace setup.py \
+      --replace "pluggy>=0.6.0,<1.0" "pluggy"
+  '';
 
   buildInputs = [ glibcLocales ];
 

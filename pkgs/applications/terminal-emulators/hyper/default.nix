@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gnome2, gtk3, cairo
+{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gtk3, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
 , alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
@@ -6,7 +6,7 @@
 
 let
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc gtk3 gnome2.GConf atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
+    stdenv.cc.cc gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver nss nspr alsa-lib cups expat udev libpulseaudio
     at-spi2-atk at-spi2-core libxshmfence libdrm libxkbcommon mesa
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.1.2";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "1mixy9hlgdbbnwdgidady7q828dkf09lx1pacwxw386jj7kp4y5g";
+    sha256 = "sha256-4C0vx4m/ojOJl5ownsbasSFiIrJ9kfJJWh0y4j/DGIQ=";
   };
 
   nativeBuildInputs = [ dpkg ];

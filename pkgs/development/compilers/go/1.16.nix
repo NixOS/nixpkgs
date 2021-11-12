@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.16.7";
+  version = "1.16.9";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-Gp8olNPYeHKfcEUHLzC+zr4kNSTPL85OCnskix4GVKw=";
+    sha256 = "sha256-ChzH/XvSBEj3Hr7WTYRhOIUNUJmxjPXMEKT8RRYNjD0=";
   };
 
   # perl is used for testing go vet
@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
-  '' + lib.optionalString stdenv.isLinux ''
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go

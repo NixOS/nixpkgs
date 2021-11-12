@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
-    homepage = "https://www.gentoo.org/proj/en/eudev/";
+    homepage = "https://wiki.gentoo.org/wiki/Project:Eudev";
     downloadPage = "http://dev.gentoo.org/~blueness/eudev/";
     updateWalker = true;
   };

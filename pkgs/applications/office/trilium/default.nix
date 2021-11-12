@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.47.5";
+  version = "0.47.8";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "16sm93vzlsqmrykbzdvgwszbhq79brd74zp9n9q5wrf4s44xizzv";
+    sha256 = "1vnwjiv4bidw5xspcd7d7fn8dbhvgia9ws363fs5zs48c9k2hwwz";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "0jk9pf3ljzfdv7d91wxda8z9qz653qas58wsrx42gnf7zxn1l648";
+    sha256 = "1clgw0i3vbl8lrsjdjbn71yhim6356gm8h24831mnksb4sawhh7f";
   };
 
 in {

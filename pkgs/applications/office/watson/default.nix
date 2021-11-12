@@ -1,6 +1,4 @@
-{ lib, fetchFromGitHub, pythonPackages, installShellFiles }:
-
-with pythonPackages;
+{ lib, fetchFromGitHub, python3, installShellFiles }:
 
 let
   # Watson is currently not compatible with Click 8. See the following
@@ -10,11 +8,12 @@ let
   # https://github.com/TailorDev/Watson/pull/432
   #
   # Workaround the issue by providing click 7 explicitly.
-  click7 = pythonPackages.callPackage ../../../development/python-modules/click/7.nix {};
-  click7-didyoumean = click-didyoumean.override {
-    click = click7;
+  python = python3.override {
+    packageOverrides = self: super: {
+      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+    };
   };
-in buildPythonApplication rec {
+in with python.pkgs; buildPythonApplication rec {
   pname = "watson";
 
   # When you update Watson, please check whether the Click 7
@@ -31,10 +30,11 @@ in buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
-  propagatedBuildInputs = [ arrow click7 click7-didyoumean requests ];
+  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {

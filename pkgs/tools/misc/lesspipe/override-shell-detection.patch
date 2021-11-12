@@ -1,0 +1,12 @@
+--- a/configure
++++ b/configure
+@@ -101,7 +101,8 @@
+ open OUT, ">lesspipe.sh.tmp";
+ my $in = 1;
+ my $anyin;
+-my $shell = check_shell_vers();
++my $shell = $opt_shell;
++print OUT "#!$shell\n";
+ # ask if syntax highlighting should be included
+ $ifsyntax = '';
+ if ($opt_yes) {

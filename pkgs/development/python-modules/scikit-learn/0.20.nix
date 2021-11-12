@@ -16,7 +16,8 @@ buildPythonPackage rec {
     sha256 = "1z3w2c50dwwa297j88pr16pyrjysagsvdj7vrlq40q8777rs7a6z";
   };
 
-  buildInputs = [ pillow gfortran glibcLocales ];
+  nativeBuildInputs = [ gfortran ];
+  buildInputs = [ pillow glibcLocales ];
   propagatedBuildInputs = [ numpy scipy numpy.blas ];
   checkInputs = [ pytest ];
 

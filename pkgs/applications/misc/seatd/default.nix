@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seatd";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "seatd";
     rev = version;
-    sha256 = "sha256-JwlJLHkRgSRqfQEhXbzuFTmhxfbwKVdLICPbTDbC9M0=";
+    sha256 = "sha256-LLRGi3IACqaIHExLhALnUeiPyUnlhAJzsMFE2p+QSp4=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ systemd ];
 
-  mesonFlags = [ "-Dlogind=enabled" "-Dbuiltin=enabled" ];
+  mesonFlags = [ "-Dlibseat-logind=systemd" "-Dlibseat-builtin=enabled" ];
 
   meta = with lib; {
     description = "A universal seat management library";

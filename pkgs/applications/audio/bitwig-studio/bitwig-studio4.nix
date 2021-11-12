@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "4.0.1";
+  version = "4.0.7";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-yhCAKlbLjyBywkSYY1aqbUGFlAHBLR8g8xPDIqoUIZk=";
+    sha256 = "sha256-NAiwHLYhTAQH6xZw5u8bM7MOILcMclQMKtJc7MGJb+Q=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       -not -name '*.so.*' \
       -not -name '*.so' \
       -not -name '*.jar' \
+      -not -name 'jspawnhelper' \
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
@@ -58,6 +59,10 @@ stdenv.mkDerivation rec {
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 
+    find $out -type f -executable -name 'jspawnhelper' | \
+    while IFS= read -r f ; do
+      patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
+    done
   '';
 
   meta = with lib; {

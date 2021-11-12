@@ -1,13 +1,13 @@
 { lib, fetchzip }:
 let
-  version = "2106.17";
+  version = "2108.26";
 in
 fetchzip {
   name = "cascadia-code-${version}";
 
   url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
 
-  sha256 = "sha256-EsXD6gY3q3KIk37vYPz731lLz5989cd+s5fz5rKIn2k=";
+  sha256 = "1dvwn5rs4ss4rwd64namy8ccz8dagkk84qjg13sxxqizyd5y08h1";
 
   postFetch = ''
     mkdir -p $out/share/fonts/

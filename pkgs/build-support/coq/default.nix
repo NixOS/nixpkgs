@@ -16,7 +16,7 @@ in
   displayVersion ? {},
   release ? {},
   extraBuildInputs ? [],
-  namePrefix ? [],
+  namePrefix ? [ "coq" ],
   enableParallelBuilding ? true,
   extraInstallFlags ? [],
   setCOQBIN ? true,
@@ -27,7 +27,7 @@ in
   dropDerivationAttrs ? [],
   useDune2ifVersion ? (x: false),
   useDune2 ? false,
-  opam-name ? "coq-${pname}",
+  opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
   ...
 }@args:
 let
@@ -44,7 +44,6 @@ let
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
   fetched = fetch (if !isNull version then version else defaultVersion);
-  namePrefix = args.namePrefix or [ "coq" ];
   display-pkg = n: sep: v:
     let d = displayVersion.${n} or (if sep == "" then ".." else true); in
     n + optionalString (v != "" && v != null) (switch d [
@@ -57,7 +56,8 @@ let
     ] "") + optionalString (v == null) "-broken";
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  var-coqlib-install = (optionalString (versions.isGe "8.7" coq.coq-version) "COQMF_") + "COQLIB";
+  var-coqlib-install =
+    (optionalString (versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev") "COQMF_") + "COQLIB";
   useDune2 = args.useDune2 or (useDune2ifVersion fetched.version);
 in
 

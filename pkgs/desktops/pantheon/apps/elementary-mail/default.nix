@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.0.0";
+  version = "6.3.0";
 
   repoName = "mail";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "07iiipl0nsp63g5bn1y2hg6bmgj6i9cxqcfpd7q3vmldnkijvaxs";
+    sha256 = "sha256-lIVAMTtRrzJI5Qcd6y24ZmtzFWeTSbcKiEhG8hLC+PM=";
   };
 
   passthru = {
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/mail";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers ++ [ maintainers.ethancedwards8 ];
+    maintainers = with maintainers; [ ethancedwards8 ] ++ teams.pantheon.members;
+    mainProgram = "io.elementary.mail";
   };
 }

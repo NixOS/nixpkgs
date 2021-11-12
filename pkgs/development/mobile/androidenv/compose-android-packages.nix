@@ -3,8 +3,8 @@
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "31.0.2"
-, buildToolsVersions ? [ "30.0.3" ]
+, platformToolsVersion ? "31.0.3"
+, buildToolsVersions ? [ "31.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "30.6.3"
 , platformVersions ? []
@@ -64,9 +64,9 @@ let
                addons = repoXmls.addons or [];
              };
            in
-           builtins.fromJSON (builtins.readFile "${mkRepoJson repoXmlSpec}")
+           lib.importJSON "${mkRepoJson repoXmlSpec}"
          else
-           builtins.fromJSON (builtins.readFile repoJson);
+           lib.importJSON repoJson;
 
   # Converts all 'archives' keys in a repo spec to fetchurl calls.
   fetchArchives = attrSet:

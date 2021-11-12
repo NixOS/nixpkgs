@@ -47,7 +47,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.redis;
-        defaultText = "pkgs.redis";
+        defaultText = literalExpression "pkgs.redis";
         description = "Which Redis derivation to use.";
       };
 
@@ -133,7 +133,6 @@ in {
         type = with types; listOf (listOf int);
         default = [ [900 1] [300 10] [60 10000] ];
         description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
-        example = [ [900 1] [300 10] [60 10000] ];
       };
 
       slaveOf = mkOption {
@@ -217,7 +216,7 @@ in {
           <link xlink:href="https://redis.io/topics/config"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             loadmodule = [ "/path/to/my_module.so" "/path/to/other_module.so" ];
           }
@@ -246,6 +245,7 @@ in {
 
     users.users.redis = {
       description = "Redis database user";
+      group = "redis";
       isSystemUser = true;
     };
     users.groups.redis = {};

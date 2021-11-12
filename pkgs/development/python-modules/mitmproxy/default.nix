@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "6.0.2";
+  version = "7.0.4";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FyIZKFQtf6qvwo4+NzPa/KOmBCcdGJ3jCqxz26+S2e4=";
+    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
   };
 
   propagatedBuildInputs = [
@@ -112,6 +112,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require a git repository
     "test_get_version"
+    # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
+    # Tests require terminal
+    "test_integration"
   ];
 
   pythonImportsCheck = [ "mitmproxy" ];

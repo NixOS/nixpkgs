@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 
 , cmake
@@ -86,6 +87,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   outputs = [ "out" "terminfo" ];
+
+  patches = [
+    # Handle PTY EIO error for Rust 1.55+
+    (fetchpatch {
+      url = "https://github.com/alacritty/alacritty/commit/58985a4dcbe464230b5d2566ee68e2d34a1788c8.patch";
+      sha256 = "sha256-Z6589yRrQtpx3/vNqkMiGgGsLysd/QyfaX7trqX+k5c=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace alacritty/src/config/ui_config.rs \

@@ -19,7 +19,7 @@
 
 # Libraries
 /lib                        @edolstra @nbp @infinisil
-/lib/systems                @nbp @ericson2314 @matthewbauer
+/lib/systems                @alyssais @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
 /lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
@@ -42,6 +42,12 @@
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
+# Nixpkgs documentation
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+/doc/build-aux/pandoc-filters @jtojnar
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil
@@ -59,6 +65,7 @@
 /nixos/doc/manual/development/writing-modules.xml     @nbp
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
+/nixos/modules/system                                 @dasJ
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -90,13 +97,13 @@
 /pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
 
 # Perl
-/pkgs/development/interpreters/perl @volth @stigtsp
-/pkgs/top-level/perl-packages.nix   @volth @stigtsp
-/pkgs/development/perl-modules      @volth @stigtsp
+/pkgs/development/interpreters/perl @volth @stigtsp @zakame
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp @zakame
+/pkgs/development/perl-modules      @volth @stigtsp @zakame
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo @bcdarwin
+/pkgs/development/r-modules         @jbedo @bcdarwin
 
 # Ruby
 /pkgs/development/interpreters/ruby @marsam
@@ -104,7 +111,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @andir @danieldk @zowoq
+/pkgs/build-support/rust @andir @zowoq
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
@@ -225,3 +232,8 @@
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
+
+#nim
+/pkgs/development/compilers/nim  @ehmry
+/pkgs/development/nim-packages  @ehmry
+/pkgs/top-level/nim-packages.nix  @ehmry

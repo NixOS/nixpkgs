@@ -43,7 +43,9 @@ let
     lib.hasSuffix ".o" baseName ||
     lib.hasSuffix ".so" baseName ||
     # Filter out nix-build result symlinks
-    (type == "symlink" && lib.hasPrefix "result" baseName)
+    (type == "symlink" && lib.hasPrefix "result" baseName) ||
+    # Filter out sockets and other types of files we can't have in the store.
+    (type == "unknown")
   );
 
   # Filters a source tree removing version control files and directories using cleanSourceWith

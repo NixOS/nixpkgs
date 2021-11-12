@@ -22,6 +22,8 @@ mkDerivation {
     qtquickcontrols
   ];
   meta = {
+    homepage = "https://apps.kde.org/konquest/";
+    description = "Galactic strategy game";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ lheckemann ];
   };

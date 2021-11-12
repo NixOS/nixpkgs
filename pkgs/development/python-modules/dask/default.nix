@@ -2,44 +2,62 @@
 , stdenv
 , bokeh
 , buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
 , cloudpickle
+, distributed
+, fetchFromGitHub
+, fetchpatch
+, fsspec
+, jinja2
 , numpy
-, toolz
-, dill
+, packaging
 , pandas
 , partd
+, pytest-rerunfailures
 , pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, toolz
 , withExtraComplete ? false
-, distributed
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.06.2";
-  disabled = pythonOlder "3.5";
+  version = "2021.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qvfjdijzlqaJQrDztRAVr5PudTaVd3WOTBid2ElZQgg=";
+    sha256 = "07ysrs46x5w8rc2df0j06rsw58ahcysd6lwjk5riqpjlpwdfmg7p";
   };
 
+  patches = [
+    # remove with next bump
+    (fetchpatch {
+      name = "fix-tests-against-distributed-2021.10.0.patch";
+      url = "https://github.com/dask/dask/commit/cd65507841448ad49001cf27564102e2fb964d0a.patch";
+      includes = [ "dask/tests/test_distributed.py" ];
+      sha256 = "1i4i4k1lzxcydq9l80jyifq21ny0j3i47rviq07ai488pvx1r2al";
+    })
+  ];
+
   propagatedBuildInputs = [
-    bokeh
     cloudpickle
-    dill
     fsspec
-    numpy
-    pandas
+    packaging
     partd
+    pyyaml
     toolz
-  ] ++ lib.optionals withExtraComplete [
+    pandas
+    jinja2
+    bokeh
+    numpy
+  ] ++ lib.optionals (withExtraComplete) [
+    # infinite recursion between distributed and dask
     distributed
   ];
 
@@ -63,7 +81,11 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
+    # parallelize
+    "--numprocesses auto"
+    # rerun failed tests up to three times
+    "--reruns 3"
+    # don't run tests that require network access
     "-m 'not network'"
   ];
 
@@ -81,7 +103,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "dask.dataframe" "dask" "dask.array" ];
+  pythonImportsCheck = [
+    "dask"
+    "dask.array"
+    "dask.bag"
+    "dask.bytes"
+    "dask.dataframe"
+    "dask.dataframe.io"
+    "dask.dataframe.tseries"
+    "dask.diagnostics"
+  ];
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

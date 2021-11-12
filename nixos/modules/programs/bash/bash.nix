@@ -78,10 +78,10 @@ in
       promptInit = mkOption {
         default = ''
           # Provide a nice prompt if the terminal supports it.
-          if [ "$TERM" != "dumb" -o -n "$INSIDE_EMACS" ]; then
+          if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
-            let $UID && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" -o "$TERM" == "eterm" -o "$TERM" == "eterm-color" ]; then
+            ((UID)) && PROMPT_COLOR="1;32m"
+            if [ -n "$INSIDE_EMACS" ] || [ "$TERM" = "eterm" ] || [ "$TERM" = "eterm-color" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else
@@ -173,7 +173,7 @@ in
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_BASHRC_SOURCED" -o -n "$NOSYSBASHRC" ]; then return; fi
+        if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
         __ETC_BASHRC_SOURCED=1
 
         # If the profile was not loaded in a parent process, source

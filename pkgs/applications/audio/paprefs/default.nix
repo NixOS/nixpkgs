@@ -1,5 +1,6 @@
 { fetchurl
-, lib, stdenv
+, lib
+, stdenv
 , meson
 , ninja
 , gettext
@@ -11,10 +12,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "paprefs-1.1";
+  pname = "paprefs";
+  version = "1.1";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/paprefs/${name}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/paprefs/paprefs-${version}.tar.xz";
     sha256 = "189z5p20hk0xv9vwvym293503j4pwl03xqk9hl7cl6dwgv0l7wkf";
   };
 

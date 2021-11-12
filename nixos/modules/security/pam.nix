@@ -428,7 +428,7 @@ let
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
-                "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+                "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive"}
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
@@ -475,7 +475,7 @@ let
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
-            session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+            session required pam_env.so conffile=/etc/pam/environment readenv=0
           ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
@@ -483,13 +483,13 @@ let
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
           ${optionalString cfg.makeHomeDir
-              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0022"}
+              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString cfg.pamMount
-              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive"}
           ${optionalString use_ldap
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.services.sssd.enable
@@ -586,7 +586,7 @@ in
     };
 
     security.pam.services = mkOption {
-      default = [];
+      default = {};
       type = with types; attrsOf (submodule pamOpts);
       description =
         ''
@@ -869,9 +869,10 @@ in
 
     security.wrappers = {
       unix_chkpwd = {
-        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-        owner = "root";
         setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
       };
     };
 

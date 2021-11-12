@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.19";
+  version = "0.3.20";
   disabled = pythonOlder "3.6";
 
   # Some files for tests missing from PyPi
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = pname;
     rev = "v${version}";
-    sha256 = "012g1hyaj015k2sf38a7jnpzjic0f8j97ar84d0f00w2ifzwx4ma";
+    sha256 = "063bl21gyyd25i2v0j6kz29cxxdfhng2nins4i2qblmac90f2nqy";
   };
 
   propagatedBuildInputs = [

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.16.2";
+  version = "3.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Slpwml1GDdxAZ4P6Vn2brrupRofiOHvmQF26l0gtTJM=";
+    sha256 = "ed33557f252cf8b022b788ebd2b851c681979f200171498acde2b92d760db026";
   };
 
   propagatedBuildInputs = [
@@ -23,13 +23,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pyjwt
     pytestCheckHook
   ];
 
   disabledTests = [
     # tries to ping websites (e.g. google.com)
     "can_timeout"
+    "test_options_are_created_by_default"
+    "test_options_are_used_and_override"
   ];
 
   pythonImportsCheck = [ "auth0" ];

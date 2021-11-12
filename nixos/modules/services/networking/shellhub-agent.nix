@@ -23,7 +23,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.shellhub-agent;
-        defaultText = "pkgs.shellhub-agent";
+        defaultText = literalExpression "pkgs.shellhub-agent";
         description = ''
           Which ShellHub Agent package to use.
         '';

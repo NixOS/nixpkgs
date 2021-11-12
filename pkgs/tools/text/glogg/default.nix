@@ -25,7 +25,6 @@ mkDerivation rec {
     mkdir -p $out/Applications
     mv $out/bin/glogg.app $out/Applications/glogg.app
     rm -fr $out/{bin,share}
-    wrapQtApp $out/Applications/glogg.app/Contents/MacOS/glogg
   '';
 
   meta = with lib; {

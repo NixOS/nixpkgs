@@ -1,8 +1,9 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, duet
 , matplotlib
 , networkx
 , numpy
@@ -26,9 +27,10 @@
 , freezegun
 , pytest-asyncio
 }:
+
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.11.0";
+  version = "0.13.1";
 
   disabled = pythonOlder "3.6";
 
@@ -36,7 +38,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    hash = "sha256-JaKTGnkYhzIFb35SGaho8DRupoT0JFYKA5+rJEq4oXw=";
+    sha256 = "sha256-MVfJ8iEeW8gFvCNTqrWfYpNNYuDAufHgcjd7Nh3qp8U=";
   };
 
   sourceRoot = "source/${pname}";
@@ -45,11 +47,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy" \
-      --replace "requests~=2.18" "requests"
+      --replace "numpy~=1.16" "numpy"
   '';
 
   propagatedBuildInputs = [
+    duet
     matplotlib
     networkx
     numpy
@@ -89,10 +91,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits.";
+    description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger fab ];
   };
 }

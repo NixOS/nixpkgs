@@ -51,6 +51,11 @@ stdenv.mkDerivation rec {
   LIRC_CFLAGS="-I${lirc}/include";
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/xine.desktop \
+      --replace "MimeType=;" "MimeType="
+  '';
+
   meta = with lib; {
     homepage = "http://xinehq.de/";
     description = "Xlib-based frontend for Xine video player";

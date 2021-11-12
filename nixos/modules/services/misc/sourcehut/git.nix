@@ -49,7 +49,8 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.git;
-      example = literalExample "pkgs.gitFull";
+      defaultText = literalExpression "pkgs.git";
+      example = literalExpression "pkgs.gitFull";
       description = ''
         Git package for git.sr.ht. This can help silence collisions.
       '';

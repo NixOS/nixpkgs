@@ -34,7 +34,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
-        defaultText = "pkgs.consul";
+        defaultText = literalExpression "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';
@@ -121,7 +121,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
-          defaultText = "pkgs.consul-alerts";
+          defaultText = literalExpression "pkgs.consul-alerts";
           type = types.package;
         };
 
@@ -159,10 +159,12 @@ in
 
       users.users.consul = {
         description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
+        isSystemUser = true;
+        group = "consul";
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
+      users.groups.consul = {};
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;

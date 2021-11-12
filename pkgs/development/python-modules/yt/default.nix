@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "yt";
-  version = "3.6.1";
+  version = "4.0.1";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be454f9d05dcbe0623328b4df43a1bfd1f0925e516be97399710452931a19bb0";
+    sha256 = "6219cbf971871320a13679a57722c0363e50db5e6d4d64ea9d197461b2a7f70f";
   };
 
   buildInputs = [

@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.5.5";
+  version = "1.8.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fee5016afe5e61a640bb9d7e234a10926c17c9e83c876b617438ff5f5ce039ad";
+    sha256 = "c05913efe7fcc9f75c1fe84c157d2c2cf3ec0983e132d418c6e59fabc6361a1e";
   };
 
   postPatch = ''
@@ -67,5 +67,8 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
+    # There is no support for click > 8
+    # https://github.com/Paperspace/gradient-cli/issues/368
+    broken = true;
   };
 }

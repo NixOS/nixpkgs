@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.0.3";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4137612bc050f606b4d6f9e6a554ebfb50633c8dd9699481f82271f84d9425f";
+    sha256 = "2212129476f6d285c3aaab309b80b83664d13dca5a42c5ca3500bd32130af7ec";
   };
 
   # Project has no tests

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, python37Packages }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, python3Packages }:
 
 stdenv.mkDerivation rec {
   version = "unstable-2019-10-09";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     patchShebangs ci/isdir.py
   '';
 
-  checkInputs = with python37Packages; [ cram ];
+  checkInputs = with python3Packages; [ cram ];
 
   doCheck = true;
 

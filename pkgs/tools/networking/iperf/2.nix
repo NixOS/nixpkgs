@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/iperf2/files/${pname}-${version}.tar.gz";
-    sha256 = "1h3qyd53hnk73653nbz08bai2wb0x4hz8pwhrnjq6yqckbaadv26";
+    sha256 = "1yflnj2ni988nm0p158q8lnkiq2gn2chmvsglyn2gqmqhwp3jaq6";
   };
 
   hardeningDisable = [ "format" ];

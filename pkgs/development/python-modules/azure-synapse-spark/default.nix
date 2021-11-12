@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-spark";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b037024dc7c034f47aac551cc918f78590a1e1ae30cd2370c8a14da15994970";
+    sha256 = "86fa29463a24b7c37025ff21509b70e36b4dace28e5d92001bc920488350acd5";
     extension = "zip";
   };
 

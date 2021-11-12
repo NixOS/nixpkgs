@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, makeWrapper }:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
+  pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "0.23.16";
+  version = "0.25.11";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    sha256 = "sha256-Kx3vTbwYfILxn7n4upyVZo0V6S2lTStlezku9bfwGVw=";
+    sha256 = "sha256-0/Ez10IWvh84G//1vCZMLiu4+Y2+XcVLw9Gm9X+DY0s=";
   };
 
   dontBuild = true;
@@ -19,11 +19,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pythonEnv ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -R {autoProcessTV,gui,lib,sickbeard,sickgear.py,SickBeard.py} $out/
+  postPatch = ''
+    substituteInPlace sickgear.py --replace "/usr/bin/env python2" "/usr/bin/env python"
+  '';
 
-    makeWrapper $out/SickBeard.py $out/bin/sickgear
+  installPhase = ''
+    mkdir -p $out/bin $out/opt/sickgear
+    cp -R {autoProcessTV,gui,lib,sickbeard,sickgear.py} $out/opt/sickgear/
+
+    makeWrapper $out/opt/sickgear/sickgear.py $out/bin/sickgear
   '';
 
   meta = with lib; {

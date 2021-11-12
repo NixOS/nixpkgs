@@ -217,6 +217,7 @@ in {
       home = "${dataDir}";
       createHome = true;
       isSystemUser = true;
+      group = "dnscrypt-wrapper";
     };
     users.groups.dnscrypt-wrapper = { };
 

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , aiohttp
 , aresponses
+, backoff
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -12,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "1.0.1";
+  version = "2021.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "18qzxxn9xw9rwv3qz8k3zxh9xxy8c7rs8xlsrdrcq9wb0dhd7p0r";
+    sha256 = "sha256-FCavSy33fkXlboRAmGr0BkEkXLTOzsyGXQkws0LqiJk=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
   ];
 
   checkInputs = [
@@ -39,10 +41,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "pyiqvia" ];
+  pythonImportsCheck = [
+    "pyiqvia"
+  ];
 
   meta = with lib; {
     description = "Python3 API for IQVIA data";

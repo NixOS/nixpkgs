@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2021.5.24";
+  version = "2021.9.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "erocarrera";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qdy88dvy29ixsyfqdcvf3w6rz09vpimk0568i09v1ayhs52p62k";
+    sha256 = "0sr17rmqpr874m8rpkp8xdz8kjshhimbfgq13qy4lscaiznmlf0d";
   };
 
   nativeBuildInputs = [

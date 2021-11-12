@@ -10,7 +10,7 @@ in {
     knotLibraryPath = mkOption {
       type = types.str;
       default = "${pkgs.knot-dns.out}/lib/libknot.so";
-      defaultText = "\${pkgs.knot-dns}/lib/libknot.so";
+      defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
         Path to the library of <package>knot-dns</package>.
       '';
@@ -45,6 +45,10 @@ in {
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       SupplementaryGroups = [ "knot" ];
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

@@ -63,7 +63,7 @@ in
         description = ''
           HQplayer daemon configuration, written to /etc/hqplayer/hqplayerd.xml.
 
-          Refer to ${pkg}/share/doc/hqplayerd/readme.txt for possible values.
+          Refer to share/doc/hqplayerd/readme.txt in the hqplayerd derivation for possible values.
         '';
       };
     };

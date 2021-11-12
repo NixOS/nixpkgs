@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Unsupervised text tokenizer for Neural Network-based text generation";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk pashashocky ];
+    maintainers = with maintainers; [ pashashocky ];
   };
 }

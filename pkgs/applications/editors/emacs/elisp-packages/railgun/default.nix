@@ -1,22 +1,25 @@
-{ lib, stdenv, fetchgit }:
+{ lib
+, trivialBuild
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
-  name = "railgun-2012-10-17";
+trivialBuild {
+  pname = "railgun";
+  version= "0.pre+unstable=2012-10-17";
 
-  src = fetchgit {
-    url = "https://github.com/mbriggs/railgun.el.git";
+  src = fetchFromGitHub {
+    owner = "mbriggs";
+    repo = "railgun.el";
     rev = "66aaa1b091baef53a69d0d7425f48d184b865fb8";
-    sha256 = "00x09vjd3jz5f73qkf5v1y402zn8vl8dsyfwlq9z646p18ba7gyh";
+    hash = "sha256-0L+jFgrXEPMTptx53RDdyH4BiA+7uInHceXL0eROoAM=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp *.el *.elc $out/share/emacs/site-lisp/
-  '';
+  buildInputs = [ emacs ];
 
-  meta = {
-    description = "Propel yourself through a rails project with the power of magnets";
+  meta = with lib; {
     homepage = "https://github.com/mbriggs/railgun.el";
-    platforms = lib.platforms.all;
+    description = "Propel yourself through a rails project with the power of magnets";
+    inherit (emacs.meta) platforms;
   };
 }

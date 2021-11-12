@@ -15,11 +15,11 @@ with lib;
 
 buildGoPackage rec {
   pname = "singularity";
-  version = "3.8.1";
+  version = "3.8.4";
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "sha256-Jkg2b7x+j8up0y+PGH6hSTVsX5CDpXgm1kE1n6hBXZo=";
+    sha256 = "sha256-y5Xm1osNIPK4fWDyOjv3B7fT6HzuDdSqQ4D49IGlfrw=";
   };
 
   goPackagePath = "github.com/sylabs/singularity";

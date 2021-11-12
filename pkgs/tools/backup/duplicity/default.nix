@@ -138,9 +138,8 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = "https://www.nongnu.org/duplicity";
+    homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;
   };
 }

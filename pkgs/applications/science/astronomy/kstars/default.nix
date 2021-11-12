@@ -14,11 +14,11 @@
 
 mkDerivation rec {
   pname = "kstars";
-  version = "3.5.3";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-kgUsG2k2YSAAH7ea2qfGw4gON5CFdUoQ3EwOnATXZ5g=";
+    sha256 = "sha256-cD31YFBnKvEPyBQils6qJxNKagDoIi8/Znfxj/Gsa0M=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

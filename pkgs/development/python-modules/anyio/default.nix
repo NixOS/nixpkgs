@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.3.0";
+  version = "3.3.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bMnAijFLXZSgTWsalT/J4sJ0Jrc1kFaQHJArwXnQFaQ=";
+    sha256 = "sha256-XBIrFb/XDneaOf/TeHxyeEfyQ7qQcWO7LJF0k1f4Ark=";
   };
 
   preBuild = ''

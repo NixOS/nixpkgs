@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , autoPatchelfHook
 , fetchurl
 , glibc
@@ -24,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.54.1";
+  version = "0.55.0";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "16sv938sdbs01byqwngrfqmzb81zfhvk72ar53l68cg8qjvzs5ml";
+    sha256 = "0s7qb7z2wiypiahw1y1lz9pbhxcacj5myzy0qcqjrpnaq7ymvs05";
   };
 
   nativeBuildInputs = [

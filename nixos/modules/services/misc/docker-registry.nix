@@ -151,7 +151,9 @@ in {
         home = cfg.storagePath;
       }
       else {}) // {
+        group = "docker-registry";
         isSystemUser = true;
       };
+    users.groups.docker-registry = {};
   };
 }

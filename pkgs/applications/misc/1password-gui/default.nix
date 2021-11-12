@@ -33,11 +33,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.1.1";
+  version = "8.3.0";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy";
+    sha256 = "1cakv316ipwyw6s3x4a6qhl0nmg17bxhh08c969gma3svamh1grw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -85,6 +85,9 @@ stdenv.mkDerivation rec {
       install -Dt $out/share/applications resources/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
+
+      # Polkit file
+      install -Dm 0644 -t $out/share/polkit-1/actions com.1password.1Password.policy
 
       # Icons
       cp -a resources/icons $out/share

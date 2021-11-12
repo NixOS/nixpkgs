@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyfma";
-  version = "0.1.4";
+  version = "0.1.6";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1wkcl41j2d1yflc5dl30ys1yxx68w9zn3vj8brwkm1ar9jnfmg4h";
+    rev = version;
+    sha256 = "12i68jj9n1qj9phjnj6f0kmfhlsd3fqjlk9p6d4gs008azw5m8yn";
   };
   format = "pyproject";
 

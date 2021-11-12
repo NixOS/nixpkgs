@@ -2,18 +2,20 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.8.1";
+  version = "1.10";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     rev = "v${version}";
-    sha256 = "1lfv3sb27v5xw3y67lirp877gg9230d28qmykxipvhcqwzqc2dqb";
+    sha256 = "16k5qz5k3v232dzv99bxxw52jr2hb5ra08b6dkhqya98wjviq8l5";
   };
 
   # test require a running redis rerver, which is something we can't do yet
   doCheck = false;
+
+  pythonImportsCheck = [ "rq" ];
 
   propagatedBuildInputs = [ click redis ];
 

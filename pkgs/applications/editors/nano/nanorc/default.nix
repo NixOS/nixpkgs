@@ -32,7 +32,6 @@ in stdenv.mkDerivation rec {
         git
         gnused
         nix
-        nixfmt
       ]
     }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"' | sed 's|\\.|-|g')"
@@ -42,7 +41,6 @@ in stdenv.mkDerivation rec {
       default_nix="$nixpkgs/pkgs/applications/editors/nano/nanorc/default.nix"
       newTag=$(echo $latestTag | sed 's|\.|-|g')
       update-source-version ${pname} "$newTag" --version-key=version --print-changes
-      nixfmt "$default_nix"
     else
       echo "${pname} is already up-to-date"
     fi

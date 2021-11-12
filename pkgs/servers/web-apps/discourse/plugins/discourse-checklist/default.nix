@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-checklist";
-    rev = "6e7b9c5040c55795c7fd4db9569b3e93dad092c2";
-    sha256 = "sha256-2KAVBrfAvhLZC9idi+ijbVqOCq9rSXbDVEOZS+mWJ10=";
+    rev = "48855d81b7c3a3274f7f78a64312125c344d92d1";
+    sha256 = "0139v5wpyglfzvd07ka6gic1ssfysisgfiq09dsbjy519gnc9kjw";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-checklist";

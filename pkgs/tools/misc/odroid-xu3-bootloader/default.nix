@@ -1,7 +1,8 @@
 { stdenv, lib, fetchFromGitHub, coreutils, ubootOdroidXU3, runtimeShell }:
 
 stdenv.mkDerivation {
-  name = "odroid-xu3-bootloader-2015-12-04";
+  pname = "odroid-xu3-bootloader";
+  version = "unstable-2015-12-04";
 
   src = fetchFromGitHub {
     owner = "hardkernel";

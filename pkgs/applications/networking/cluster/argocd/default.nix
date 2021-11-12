@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.0.5";
-  commit = "4c94d886f56bcb2f9d5b3251fdc049c2d1354b88";
+  version = "2.1.6";
+  commit = "a346cf933e10d872eae26bff8e58c5e7ac40db25";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = tag;
-    sha256 = "sha256-8YymSR15e+6gGGqr5CH4ERHN8RO3wd9NJkM9K7InlFU=";
+    sha256 = "sha256-8DeVO7Wr1bFZXTp2kaEPizDwNU5ZsA1fykccaDUivh8=";
   };
 
-  vendorSha256 = "sha256-9dVkGl0gjjMehG2nt1eNpNT5fD9GbJ1mNMzYS8FTm08=";
+  vendorSha256 = "sha256-N45yRlBGZ/c9ve2YPcWA26pylV8hzxjPh6evKtkgnoc=";
 
   nativeBuildInputs = [ packr makeWrapper installShellFiles ];
 
@@ -22,11 +22,10 @@ buildGoModule rec {
     packr
   '';
 
-  buildFlagsArray =
+  ldflags =
     let package_url = "github.com/argoproj/argo-cd/v2/common"; in
     [
-      "-ldflags="
-      "-s -w"
+      "-s" "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
       "-X ${package_url}.gitCommit=${commit}"
@@ -46,7 +45,7 @@ buildGoModule rec {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/argocd version --client | grep ${tag} > /dev/null
-    $out/bin/argocd-util version | grep ${tag} > /dev/null
+    $out/bin/argocd-util version --client | grep ${tag} > /dev/null
   '';
 
   installPhase = ''
@@ -68,8 +67,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Declarative continuous deployment for Kubernetes";
     downloadPage = "https://github.com/argoproj/argo-cd";
-    homepage = "https://argoproj.github.io/projects/argo-cd";
+    homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shahrukh330 superherointj ];
+    maintainers = with maintainers; [ shahrukh330 bryanasdev000 ];
   };
 }

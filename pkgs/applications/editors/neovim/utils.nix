@@ -28,6 +28,8 @@ let
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
+    /* the function you would have passed to lua.withPackages */
+    , extraLuaPackages ? (_: [ ])
 
     # expects a list of plugin configuration
     # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
@@ -76,6 +78,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
+      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
 
       # Mapping a boolean argument to a key that tells us whether to add or not to
       # add to nvim's 'embedded rc' this:
@@ -110,6 +113,9 @@ let
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
+        ] ++ lib.optionals (luaEnv != null) [
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
         ];
 
 
@@ -123,6 +129,7 @@ let
       inherit neovimRcContent;
       inherit manifestRc;
       inherit python3Env;
+      inherit luaEnv;
       inherit withNodeJs;
     } // lib.optionalAttrs withRuby {
       inherit rubyEnv;
@@ -143,6 +150,8 @@ let
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: [])
+    /* the function you would have passed to lua.withPackages */
+    , extraLuaPackages ? (_: [])
     , withNodeJs ? false
     , withRuby ? true
     , vimAlias ? false
@@ -159,6 +168,7 @@ let
       res = makeNeovimConfig {
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
+        inherit extraLuaPackages;
         inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
         inherit extraName;

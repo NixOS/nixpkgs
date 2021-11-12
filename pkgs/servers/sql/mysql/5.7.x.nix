@@ -16,7 +16,7 @@ self = stdenv.mkDerivation rec {
     sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
   };
 
-  preConfigure = lib.optional stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
     export PATH=$PATH:$TMPDIR
   '';

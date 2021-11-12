@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon }:
+, at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.69.0.77";
+  version = "8.77.0.97";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -45,6 +45,7 @@ let
     libdrm
     mesa
     libxkbcommon
+    libxshmfence
     xorg.libxkbfile
     xorg.libX11
     xorg.libXcomposite
@@ -68,7 +69,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "PaqlPp+BRS0cH7XI4x1/5HqYti63rQThmTtPaghIQH0=";
+        sha256 = "sha256-0u1fpKJrsEgbvTwdkqJZ/SwCRDmJwEi9IXHbMmY8MJI=";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -121,7 +122,7 @@ in stdenv.mkDerivation {
     description = "Linux client for skype";
     homepage = "https://www.skype.com";
     license = licenses.unfree;
-    maintainers = with lib.maintainers; [ panaeon jraygauthier ];
+    maintainers = with maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];
   };
 }

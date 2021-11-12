@@ -1,2 +1,2 @@
-Microsoft.AspNetCore.App.Runtime.linux-x64 3.1.8
-Microsoft.NetCore.App.Runtime.linux-x64 3.1.8
+Microsoft.AspNetCore.App.Runtime.linux-x64 3.1.19
+Microsoft.NetCore.App.Runtime.linux-x64 3.1.19

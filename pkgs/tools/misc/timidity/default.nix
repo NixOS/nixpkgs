@@ -1,19 +1,35 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, ncurses, pkg-config }:
+{ lib, stdenv, fetchurl, alsa-lib, libjack2, CoreAudio, ncurses, pkg-config }:
 
-stdenv.mkDerivation {
-  name = "timidity-2.15.0";
+stdenv.mkDerivation rec {
+  pname = "timidity";
+  version = "2.15.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/timidity/TiMidity++-2.15.0.tar.bz2";
+    url = "mirror://sourceforge/timidity/TiMidity++-${version}.tar.bz2";
     sha256 = "1xf8n6dqzvi6nr2asags12ijbj1lwk1hgl3s27vm2szib8ww07qn";
   };
 
   patches = [ ./timidity-iA-Oj.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib libjack2 ncurses ];
+  buildInputs = [
+    libjack2
+    ncurses
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreAudio
+  ];
 
-  configureFlags = [ "--enable-audio=oss,alsa,jack" "--enable-alsaseq" "--with-default-output=alsa" "--enable-ncurses" ];
+  configureFlags = [
+    "--enable-ncurses"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--enable-audio=oss,alsa,jack"
+    "--enable-alsaseq"
+    "--with-default-output=alsa"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--enable-audio=darwin,jack"
+  ];
 
   NIX_LDFLAGS = "-ljack -L${libjack2}/lib";
 
@@ -28,12 +44,14 @@ stdenv.mkDerivation {
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
+  # This fixup step is unnecessary and fails on Darwin
+  dontRewriteSymlinks = stdenv.isDarwin;
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/timidity/";
     license = licenses.gpl2;
     description = "A software MIDI renderer";
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

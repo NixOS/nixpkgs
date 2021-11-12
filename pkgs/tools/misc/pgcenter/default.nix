@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd" ];
 
-  buildFlagsArray = [ "-ldflags=-w -s -X main.gitTag=${src.rev} -X main.gitCommit=${src.rev} -X main.gitBranch=master" ];
+  ldflags = [ "-w" "-s" "-X main.gitTag=${src.rev}" "-X main.gitCommit=${src.rev}" "-X main.gitBranch=master" ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/pgcenter

@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-protocols";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchPypi {
     pname = "pyroute2.protocols";
     inherit version;
-    sha256 = "0gb5r1msd14fhalfknhmg67l2hm802r4771i1srgl4rix1sk0yw8";
+    sha256 = "sha256-lj9Q8ew+44m+Y72miQyuZhzjHmdLqYB+c2FK+ph1d84=";
   };
 
   propagatedBuildInputs = [

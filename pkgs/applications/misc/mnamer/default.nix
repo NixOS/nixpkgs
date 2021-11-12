@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     rev = version;
-    sha256 = "1frrvfhp85fh82yw9yb6n61by8qp1v7f3c0f623njxk1afawhccd";
+    sha256 = "sha256-fONQq/RboWHFuEFU7HP1ThUpSjOIlkg54c2WlMUKwuk=";
   };
 
   propagatedBuildInputs = with python3Packages; [

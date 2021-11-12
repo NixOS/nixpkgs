@@ -42,7 +42,10 @@ rec {
         python <<EOF
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
-          fp.write(','.join(dir(importfile('${testDriverScript}'))))
+          t = importfile('${testDriverScript}')
+          d = t.Driver([],[],"")
+          test_symbols = d.test_symbols()
+          fp.write(','.join(test_symbols.keys()))
         EOF
       '';
 
@@ -186,14 +189,6 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
-
-        ${lib.optionalString (testScript == "") ''
-          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-          wrapProgram $out/bin/nixos-run-vms \
-            --set startScripts "''${vmStartScripts[*]}" \
-            --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
-            --set vlans '${toString vlans}'
-        ''}
       '');
 
   # Make a full-blown test
@@ -214,11 +209,41 @@ rec {
     let
       nodes = qemu_pkg:
         let
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { nodes = nodes qemu_pkg; }
+            else testScript;
+
           build-vms = import ./build-vms.nix {
-            inherit system pkgs minimal specialArgs;
+            inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
+              { config, ... }:
               {
                 virtualisation.qemu.package = qemu_pkg;
+
+                # Make sure all derivations referenced by the test
+                # script are available on the nodes. When the store is
+                # accessed through 9p, this isn't important, since
+                # everything in the store is available to the guest,
+                # but when building a root image it is, as all paths
+                # that should be available to the guest has to be
+                # copied to the image.
+                virtualisation.additionalPaths =
+                  lib.optional
+                    # A testScript may evaluate nodes, which has caused
+                    # infinite recursions. The demand cycle involves:
+                    #   testScript -->
+                    #   nodes -->
+                    #   toplevel -->
+                    #   additionalPaths -->
+                    #   hasContext testScript' -->
+                    #   testScript (ad infinitum)
+                    # If we don't need to build an image, we can break this
+                    # cycle by short-circuiting when useNixStoreImage is false.
+                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                    (pkgs.writeStringReferencesToFile testScript');
+
                 # Ensure we do not use aliases. Ideally this is only set
                 # when the test framework is used by Nixpkgs NixOS tests.
                 nixpkgs.config.allowAliases = false;
@@ -255,105 +280,17 @@ rec {
         inherit test driver driverInteractive nodes;
       };
 
-  runInMachine =
-    { drv
-    , machine
-    , preBuild ? ""
-    , postBuild ? ""
-    , qemu_pkg ? pkgs.qemu_test
-    , ... # ???
-    }:
-    let
-      build-vms = import ./build-vms.nix {
-        inherit system pkgs minimal specialArgs extraConfigurations;
-      };
+  abortForFunction = functionName: abort ''The ${functionName} function was
+    removed because it is not an essential part of the NixOS testing
+    infrastructure. It had no usage in NixOS or Nixpkgs and it had no designated
+    maintainer. You are free to reintroduce it by documenting it in the manual
+    and adding yourself as maintainer. It was removed in
+    https://github.com/NixOS/nixpkgs/pull/137013
+  '';
 
-      vm = build-vms.buildVM { }
-        [
-          machine
-          {
-            key = "run-in-machine";
-            networking.hostName = "client";
-            nix.readOnlyStore = false;
-            virtualisation.writableStore = false;
-          }
-        ];
+  runInMachine = abortForFunction "runInMachine";
 
-      buildrunner = writeText "vm-build" ''
-        source $1
-
-        ${coreutils}/bin/mkdir -p $TMPDIR
-        cd $TMPDIR
-
-        exec $origBuilder $origArgs
-      '';
-
-      testScript = ''
-        start_all()
-        client.wait_for_unit("multi-user.target")
-        ${preBuild}
-        client.succeed("env -i ${bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2")
-        ${postBuild}
-        client.succeed("sync") # flush all data before pulling the plug
-      '';
-
-      testDriver = pythonTestDriver { inherit qemu_pkg; };
-
-      vmRunCommand = writeText "vm-run" ''
-        xchg=vm-state-client/xchg
-        ${coreutils}/bin/mkdir $out
-        ${coreutils}/bin/mkdir -p $xchg
-
-        for i in $passAsFile; do
-          i2=''${i}Path
-          _basename=$(${coreutils}/bin/basename ''${!i2})
-          ${coreutils}/bin/cp ''${!i2} $xchg/$_basename
-          eval $i2=/tmp/xchg/$_basename
-          ${coreutils}/bin/ls -la $xchg
-        done
-
-        unset i i2 _basename
-        export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
-        unset xchg
-
-        export tests='${testScript}'
-        ${testDriver}/bin/nixos-test-driver --keep-vm-state ${vm.config.system.build.vm}/bin/run-*-vm
-      ''; # */
-
-    in
-    lib.overrideDerivation drv (attrs: {
-      requiredSystemFeatures = [ "kvm" ];
-      builder = "${bash}/bin/sh";
-      args = [ "-e" vmRunCommand ];
-      origArgs = attrs.args;
-      origBuilder = attrs.builder;
-    });
-
-
-  runInMachineWithX = { require ? [ ], ... } @ args:
-    let
-      client =
-        { ... }:
-        {
-          inherit require;
-          imports = [
-            ../tests/common/auto.nix
-          ];
-          virtualisation.memorySize = 1024;
-          services.xserver.enable = true;
-          test-support.displayManager.auto.enable = true;
-          services.xserver.displayManager.defaultSession = "none+icewm";
-          services.xserver.windowManager.icewm.enable = true;
-        };
-    in
-    runInMachine ({
-      machine = client;
-      preBuild =
-        ''
-          client.wait_for_x()
-        '';
-    } // args);
-
+  runInMachineWithX = abortForFunction "runInMachineWithX";
 
   simpleTest = as: (makeTest as).test;
 

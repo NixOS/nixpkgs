@@ -8,18 +8,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    sha256 = "0kbb7lh17dbkd85mcqf438qwk5masz2fxsy8ljdh23kis55nksh8";
+    sha256 = "0zzzrzc8yxw6ffwfirbrr5ahbidbvlwdvgdg82zjsdjjbarxph8c";
   };
 
   nativeBuildInputs = [
+    python3.pkgs.setuptools-scm
     wrapGAppsHook
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     gobject-introspection
@@ -28,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     deltachat
+    notify-py
     pygobject3
     urwid-readline
   ];

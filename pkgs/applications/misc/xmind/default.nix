@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.xmind.net/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ma27 ];
+    maintainers = with maintainers; [ michalrus ];
   };
 }

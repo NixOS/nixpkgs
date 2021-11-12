@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.6.1";
+  version = "2.8.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5fb8786bcad53762648ddacb008d18b49704ba5c011ade240004bfc5a628b4f6";
+    sha256 = "4b09189f3094896cfc68596adc95b7f1d92772e1de1424e5dc4dd81def56e8b0";
   };
 
   nativeBuildInputs = [ cmake ];

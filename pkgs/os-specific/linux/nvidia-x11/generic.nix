@@ -41,7 +41,7 @@ let
   i686bundled = versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
-    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
+    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc pkgs.wayland ];
 
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
@@ -75,6 +75,13 @@ let
     kernel = if libsOnly then null else kernel.dev;
     kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
+    makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
+      "IGNORE_PREEMPT_RT_PRESENCE=1"
+      "NV_BUILD_SUPPORTS_HMM=1"
+      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    ]);
+
     hardeningDisable = [ "pic" "format" ];
 
     dontStrip = true;
@@ -104,7 +111,7 @@ let
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
-      maintainers = with maintainers; [ baracoder ];
+      maintainers = with maintainers; [ ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

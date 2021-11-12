@@ -1,6 +1,7 @@
-{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch }:
+{ pkgs, nodejs, stdenv, applyPatches, fetchFromGitHub, fetchpatch, fetchurl }:
 
 let
+  inherit (pkgs) lib;
   since = (version: pkgs.lib.versionAtLeast nodejs.version version);
   before = (version: pkgs.lib.versionOlder nodejs.version version);
   super = import ./composition.nix {
@@ -46,6 +47,17 @@ let
       '';
     };
 
+    carbon-now-cli = super.carbon-now-cli.override ({
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/carbon-now \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };
@@ -77,6 +89,25 @@ let
           pkgs.lib.makeBinPath [ pkgs.nodejs ]
         }
       '';
+      # See: https://github.com/NixOS/nixpkgs/issues/142196
+      # [...]/@hyperspace/cli/node_modules/.bin/node-gyp-build: /usr/bin/env: bad interpreter: No such file or directory
+      meta.broken = true;
+    };
+
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
     };
 
     coc-imselect = super.coc-imselect.override {
@@ -139,6 +170,10 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    intelephense = super.intelephense.override {
+      meta.license = pkgs.lib.licenses.unfree;
+    };
+
     jsonplaceholder = super.jsonplaceholder.override (drv: {
       buildInputs = [ nodejs ];
       postInstall = ''
@@ -166,36 +201,6 @@ let
 
     markdownlint-cli = super.markdownlint-cli.override {
       meta.mainProgram = "markdownlint";
-    };
-
-    mirakurun = super.mirakurun.override rec {
-      nativeBuildInputs = with pkgs; [ makeWrapper ];
-      postInstall = let
-        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l-utils ]);
-      in
-      ''
-        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
-          --replace "/usr/local" ""
-
-        # XXX: Files copied from the Nix store are non-writable, so they need
-        # to be given explicit write permissions
-        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
-          --replace 'fs.copyFileSync("config/server.yml", path);' \
-                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
-                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
-          --replace 'fs.copyFileSync("config/channels.yml", path);' \
-                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
-
-        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
-        # server.  However, we invoke the server directly and let systemd
-        # manage it to avoid complication. This is okay since no features
-        # unique to PM2 is currently being used.
-        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
-          --add-flags "start" \
-          --run "cd $out/lib/node_modules/mirakurun" \
-          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
-      '';
     };
 
     node-gyp = super.node-gyp.override {
@@ -297,6 +302,32 @@ let
       meta.mainProgram = "postcss";
     };
 
+    prisma = super.prisma.override rec {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      version = "3.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
+        sha512 = "sha512-W0AFjVxPOLW5SEnf0ZwbOu4k8ElX98ioFC1E8Gb9Q/nuO2brEwxFJebXglfG+N6zphGbu2bG1I3VAu7aYzR3VA==";
+      };
+      dependencies = [ rec {
+        name = "_at_prisma_slash_engines";
+        packageName = "@prisma/engines";
+        version = "3.4.0-27.1c9fdaa9e2319b814822d6dbfd0a69e1fcc13a85";
+        src = fetchurl {
+          url = "https://registry.npmjs.org/@prisma/engines/-/engines-${version}.tgz";
+          sha512 = "sha512-jyCjXhX1ZUbzA7+6Hm0iEdeY+qFfpD/RB7iSwMrMoIhkVYvnncSdCLBgbK0yqxTJR2nglevkDY2ve3QDxFciMA==";
+        };
+      }];
+      postInstall = with pkgs; ''
+        wrapProgram "$out/bin/prisma" \
+          --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
+          --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
+          --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
+          --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
+          --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
+      '';
+    };
+
     pulp = super.pulp.override {
       # tries to install purescript
       npmFlags = "--ignore-scripts";
@@ -308,26 +339,6 @@ let
         ]}
       '';
     };
-
-    netlify-cli =
-      let
-        esbuild = pkgs.esbuild.overrideAttrs (old: rec {
-          version = "0.13.6";
-
-          src = fetchFromGitHub {
-            owner = "netlify";
-            repo = "esbuild";
-            rev = "v${version}";
-            sha256 = "0asjmqfzdrpfx2hd5hkac1swp52qknyqavsm59j8xr4c1ixhc6n9";
-          };
-
-        });
-      in
-      super.netlify-cli.override {
-        preRebuild = ''
-          export ESBUILD_BINARY_PATH="${esbuild}/bin/esbuild"
-        '';
-      };
 
     ssb-server = super.ssb-server.override {
       buildInputs = [ pkgs.automake pkgs.autoconf self.node-gyp-build ];
@@ -378,18 +389,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        # npx tries to install vega from scratch at vegalite runtime if it
-        # can't find it. We thus replace it with a direct call to the nix
-        # derivation. This might not be necessary anymore in future vl
-        # versions: https://github.com/vega/vega-lite/issues/6863.
         postInstall = ''
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2pdf \
-            --replace "npx -p vega vg2pdf"  "${self.vega-cli}/bin/vg2pdf"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2svg \
-            --replace "npx -p vega vg2svg"  "${self.vega-cli}/bin/vg2svg"
-          substituteInPlace $out/lib/node_modules/vega-lite/bin/vl2png \
-            --replace "npx -p vega vg2png"  "${self.vega-cli}/bin/vg2png"
+          cd node_modules
+          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+            if [[ ! -d $dep ]]; then
+              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+            fi
+          done
         '';
+        passthru.tests = {
+          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+            inherit (self) vega-lite;
+          };
+        };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {

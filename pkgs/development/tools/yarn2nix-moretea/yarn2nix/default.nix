@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper;
+  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
 
   compose = f: g: x: f (g x);
   id = x: x;
@@ -68,6 +68,7 @@ in rec {
     packageJSON,
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? defaultYarnFlags,
     pkgConfig ? {},
     preBuild ? "",
@@ -75,8 +76,6 @@ in rec {
     workspaceDependencies ? [], # List of yarn packages
   }:
     let
-      offlineCache = importOfflineCache yarnNix;
-
       extraBuildInputs = (lib.flatten (builtins.map (key:
         pkgConfig.${key}.buildInputs or []
       ) (builtins.attrNames pkgConfig)));
@@ -109,7 +108,12 @@ in rec {
       dontInstall = true;
       buildInputs = [ yarn nodejs git ] ++ extraBuildInputs;
 
-      configurePhase = ''
+      configurePhase = lib.optionalString (offlineCache ? outputHash) ''
+        if ! cmp -s ${yarnLock} ${offlineCache}/yarn.lock; then
+          echo "yarn.lock changed, you need to update the fetchYarnDeps hash"
+          exit 1
+        fi
+      '' + ''
         # Yarn writes cache directories etc to $HOME.
         export HOME=$PWD/yarn_home
       '';
@@ -227,6 +231,7 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
+    offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? defaultYarnFlags,
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -253,7 +258,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock yarnNix yarnFlags pkgConfig;
+        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
@@ -400,6 +405,8 @@ in rec {
 
     yarnFlags = defaultYarnFlags ++ ["--production=true"];
 
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
     buildPhase = ''
       source ${./nix/expectShFunctions.sh}
 
@@ -412,23 +419,22 @@ in rec {
       expectFileOrDirAbsent ./node_modules/.bin/eslint
       expectFileOrDirAbsent ./node_modules/eslint/package.json
     '';
-  };
 
-  fixup_yarn_lock = stdenv.mkDerivation {
-    name = "fixup_yarn_lock";
-
-    buildInputs = [ nodejs ];
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''
-      mkdir -p $out/lib
-      mkdir -p $out/bin
-
-      cp ${./lib/urlToName.js} $out/lib/urlToName.js
-      cp ${./internal/fixup_yarn_lock.js} $out/bin/fixup_yarn_lock
-
-      patchShebangs $out
+    postInstall = ''
+      wrapProgram $out/bin/yarn2nix --prefix PATH : "${pkgs.nix-prefetch-git}/bin"
     '';
   };
+
+  fixup_yarn_lock = runCommandLocal "fixup_yarn_lock"
+    {
+      buildInputs = [ nodejs ];
+    } ''
+    mkdir -p $out/lib
+    mkdir -p $out/bin
+
+    cp ${./lib/urlToName.js} $out/lib/urlToName.js
+    cp ${./internal/fixup_yarn_lock.js} $out/bin/fixup_yarn_lock
+
+    patchShebangs $out
+  '';
 }

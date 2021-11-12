@@ -2,7 +2,7 @@
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
+, icu, boost, jdk, ant, cups, xorg, fontforge
 , openssl, gperf, cppunit, poppler, util-linux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -62,8 +62,6 @@ in (mkDrv rec {
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
     "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
-
-  patches = [ ./xdg-open-brief.patch ];
 
   tarballPath = "external/tarballs";
 
@@ -312,7 +310,6 @@ in (mkDrv rec {
     "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
-    "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
     "--disable-report-builder"
     "--disable-online-update"
     "--enable-python=system"
@@ -326,7 +323,7 @@ in (mkDrv rec {
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-libabw"
-    "--with-system-libcmis"
+    "--without-system-libcmis"
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
@@ -367,7 +364,6 @@ in (mkDrv rec {
     "--without-system-mdds" # we have mdds but our version is too new
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
-    "--without-system-qrcodegen"
     "--without-system-xmlsec"
   ] ++ lib.optionals kdeIntegration [
     "--enable-kf5"
@@ -396,7 +392,7 @@ in (mkDrv rec {
       glib libmysqlclient
       neon nspr nss openldap openssl pam perl pkg-config poppler
       python3 sane-backends unzip which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf
+      mdds bluez5 libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
       librevenge libe-book libmwaw glm ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext

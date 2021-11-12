@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20210730";
+  version = "20210930";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "1pmm977nyl3bs71ipzcl4dh30qm8x9wm2p2ml0m62rl62kai832a";
+    sha256 = "08a8q174ac3jwxnd8q8iqc3cckwc2f7ncrc6f3171g0n38l2mn1w";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ bison flex ];
+
+  # We can handle stripping ourselves.
+  INSTALLFLAGS = "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

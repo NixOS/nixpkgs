@@ -45,10 +45,9 @@ let
       };
       version = "5.212.0-alpha4";
     };
-
     qtwebengine =
       let
-        branchName = "5.15.5";
+        branchName = "5.15.6";
         rev = "v${branchName}-lts";
       in
       {
@@ -56,24 +55,26 @@ let
 
         src = fetchgit {
           url = "https://github.com/qt/qtwebengine.git";
-          sha256 = "12wf30d34sgn82mbz91xybxyn3j1mhvxda452cfkxm232n1f2kjb";
+          sha256 = "17bw9yf04zmr9ck5jkrd435c8b03zpf937vn2nwgsr8p78wkg3kr";
           inherit rev branchName;
           fetchSubmodules = true;
           leaveDotGit = true;
           name = "qtwebengine-${lib.substring 0 7 rev}.tar.gz";
           postFetch = ''
             # remove submodule .git directory
-            rm -rf $out/src/3rdparty/.git
+            rm -rf "$out/src/3rdparty/.git"
 
             # compress to not exceed the 2GB output limit
-            mv $out source
             # try to make a deterministic tarball
             tar -I 'gzip -n' \
-              --sort name \
-              --mtime 1970-01-01 \
+              --sort=name \
+              --mtime=1970-01-01 \
               --owner=root --group=root \
               --numeric-owner --mode=go=rX,u+rw,a-s \
-              -cf $out source
+              --transform='s@^@source/@' \
+              -cf temp  -C "$out" .
+            rm -r "$out"
+            mv temp "$out"
           '';
         };
       };
@@ -110,6 +111,11 @@ let
         name = "0014-gcc11-compat.patch";
         url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=049e14870c13235cd066758f29c42dc96c1ccdf8";
         sha256 = "1cb2hwi859hds0fa2cbap014qaa7mah9p0rcxcm2cvj2ybl33qfc";
+      })
+      (fetchpatch { # This can be removed when https://codereview.qt-project.org/c/qt/qtbase/+/363880/3 is included in an release.
+        name = "qtbase-mysql-version-vs-functionality-check.patch";
+        url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=211369133cf40b2f522caaff259c19069ed23ca4";
+        sha256 = "19kq9h10qm344fpdqa9basrbzh1y5kr48c6jzz3nvk61pk4ja1k4";
       })
     ];
     qtdeclarative = [ ./qtdeclarative.patch ];
@@ -165,6 +171,8 @@ let
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
     in {
 
+      inherit callPackage qtCompatVersion qtModule srcs;
+
       mkDerivationWith =
         import ../mkDerivation.nix
         { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
@@ -182,6 +190,7 @@ let
         inherit (darwin) libobjc;
       };
 
+      qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
@@ -231,7 +240,7 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
+        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets

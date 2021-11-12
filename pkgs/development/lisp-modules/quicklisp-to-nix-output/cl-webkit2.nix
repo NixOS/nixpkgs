@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-webkit2";
-  version = "cl-webkit-20210411-git";
+  version = "cl-webkit-20211020-git";
 
   description = "An FFI binding to WebKit2GTK+";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-cffi-gtk" args."cl-cffi-gtk-cairo" args."cl-cffi-gtk-gdk" args."cl-cffi-gtk-gdk-pixbuf" args."cl-cffi-gtk-gio" args."cl-cffi-gtk-glib" args."cl-cffi-gtk-gobject" args."cl-cffi-gtk-pango" args."closer-mop" args."iterate" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-webkit/2021-04-11/cl-webkit-20210411-git.tgz";
-    sha256 = "10cky5v67s9mx2j96k0z01qbqfyc8w6a8byaamm7al5qkw997brh";
+    url = "http://beta.quicklisp.org/archive/cl-webkit/2021-10-20/cl-webkit-20211020-git.tgz";
+    sha256 = "0kx9mjk8zgzkm60g0469mp53mj2jzxdb2baqr7sj0rkijc609821";
   };
 
   packageName = "cl-webkit2";
@@ -19,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-webkit2 DESCRIPTION An FFI binding to WebKit2GTK+ SHA256
-    10cky5v67s9mx2j96k0z01qbqfyc8w6a8byaamm7al5qkw997brh URL
-    http://beta.quicklisp.org/archive/cl-webkit/2021-04-11/cl-webkit-20210411-git.tgz
-    MD5 01b52f031fd8742ac9d422e4fcd2a225 NAME cl-webkit2 FILENAME cl-webkit2
+    0kx9mjk8zgzkm60g0469mp53mj2jzxdb2baqr7sj0rkijc609821 URL
+    http://beta.quicklisp.org/archive/cl-webkit/2021-10-20/cl-webkit-20211020-git.tgz
+    MD5 fc73d56d8289729e93dd8c4793ea82e4 NAME cl-webkit2 FILENAME cl-webkit2
     DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -41,4 +41,4 @@ rec {
      cl-cffi-gtk-gdk cl-cffi-gtk-gdk-pixbuf cl-cffi-gtk-gio cl-cffi-gtk-glib
      cl-cffi-gtk-gobject cl-cffi-gtk-pango closer-mop iterate trivial-features
      trivial-garbage)
-    VERSION cl-webkit-20210411-git SIBLINGS NIL PARASITES NIL) */
+    VERSION cl-webkit-20211020-git SIBLINGS NIL PARASITES NIL) */

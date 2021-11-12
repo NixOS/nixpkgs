@@ -19,7 +19,7 @@ python3.pkgs.buildPythonPackage rec {
     mautrix
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     pycryptodome
     python-olm
     python_magic

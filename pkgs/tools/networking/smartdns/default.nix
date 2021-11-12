@@ -2,16 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "33";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    sha256 = "0cmzpm4y1yi96mg2cz2byqw6vl62dgnikldy08q43vi7jl3y0749";
+    sha256 = "sha256-5822qe3mdn4wPO8fHW5AsgMA7xbJnMjZn9DbiMU3GX0=";
   };
 
   buildInputs = [ openssl ];
+
+  # Force the systemd service file to be regenerated from it's template.  This
+  # file is erroneously added in version 35 and it has already been deleted from
+  # upstream's git repository.  So this "postPatch" phase can be deleted in next
+  # release.
+  postPatch = ''
+    rm -f systemd/smartdns.service
+  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

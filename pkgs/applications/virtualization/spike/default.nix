@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, dtc, nixosTests, fetchpatch }:
+{ lib, stdenv, fetchgit, dtc, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
@@ -28,9 +28,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests = {
-    can-run-hello-world = nixosTests.spike;
-  };
+  # To test whether spike is working, we run the RISC-V hello applications using the RISC-V proxy
+  # kernel on the Spike emulator and see whether we get the expected output.
+  doInstallCheck = true;
+  installCheckPhase =
+    let
+      riscvPkgs = import ../../../.. { crossSystem = lib.systems.examples.riscv64-embedded; };
+    in
+    ''
+      runHook preInstallCheck
+
+      $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk ${riscvPkgs.hello}/bin/hello | grep -Fq "Hello, world"
+
+      runHook postInstallCheck
+    '';
 
   meta = with lib; {
     description = "A RISC-V ISA Simulator";

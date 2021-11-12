@@ -20,7 +20,12 @@ let
 
     buildInputs = [ getopt lua boost ];
 
-    prePatch = lib.optionalString stdenv.cc.isClang ''
+    prePatch = ''
+      substituteInPlace src/makefile \
+        --replace "shell pkg-config" "shell $PKG_CONFIG"
+      substituteInPlace makefile \
+        --replace 'gzip' 'gzip -n'
+    '' + lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';

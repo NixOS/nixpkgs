@@ -19,13 +19,13 @@
 
 mkDerivation rec {
   pname = "punes";
-  version = "unstable-2021-07-19";
+  version = "unstable-2021-09-11";
 
   src = fetchFromGitHub {
     owner = "punesemu";
     repo = "puNES";
-    rev = "15ab85dabb220889419df0c249c06f3db2b09dc0";
-    sha256 = "1w0c5lfdl9ha4sxxva6hcpcaa444px6x25471q37l69n71rmjpy8";
+    rev = "60ca36fcb066c41d0b3f2b550ca94dc7d12d84d6";
+    sha256 = "JOi6AE1bpAc/wj9fQqHrUNc6vceeUyP0phT2f9kcJTY=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Qt-based Nintendo Entertaiment System emulator and NSF/NSFe Music Player";
+    description = "Qt-based Nintendo Entertainment System emulator and NSF/NSFe Music Player";
     homepage = "https://github.com/punesemu/puNES";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ OPNA2608 ];

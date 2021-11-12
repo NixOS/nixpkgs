@@ -21,7 +21,7 @@ in
 
     package = mkOption {
       default = pkgs.nodePackages.node-red;
-      defaultText = "pkgs.nodePackages.node-red";
+      defaultText = literalExpression "pkgs.nodePackages.node-red";
       type = types.package;
       description = "Node-RED package to use.";
     };
@@ -46,7 +46,7 @@ in
     configFile = mkOption {
       type = types.path;
       default = "${cfg.package}/lib/node_modules/node-red/settings.js";
-      defaultText = "\${cfg.package}/lib/node_modules/node-red/settings.js";
+      defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
       description = ''
         Path to the JavaScript configuration file.
         See <link
@@ -102,7 +102,7 @@ in
       type = types.attrs;
       default = {};
       description = "List of settings.js overrides to pass via -D to Node-RED.";
-      example = literalExample ''
+      example = literalExpression ''
         {
           "logging.console.level" = "trace";
         }
@@ -114,6 +114,7 @@ in
     users.users = optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         isSystemUser = true;
+        group = defaultUser;
       };
     };
 

@@ -72,10 +72,10 @@ in {
             };
             deviceUri = mkOption {
               type = types.str;
-              example = [
+              example = literalExpression ''
                 "ipp://printserver.local/printers/BrotherHL_Workroom"
                 "usb://HP/DESKJET%20940C?serial=CN16E6C364BH"
-              ];
+              '';
               description = ''
                 How to reach the printer.
                 <command>lpinfo -v</command> shows a list of supported device URIs and schemes.
@@ -83,8 +83,8 @@ in {
             };
             model = mkOption {
               type = types.str;
-              example = literalExample ''
-                gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert
+              example = literalExpression ''
+                "gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert"
               '';
               description = ''
                 Location of the ppd driver file for the printer.
@@ -116,19 +116,14 @@ in {
       description = "Ensure NixOS-configured CUPS printers";
       wantedBy = [ "multi-user.target" ];
       requires = [ cupsUnit ];
-      # in contrast to cups.socket, for cups.service, this is actually not enough,
-      # as the cups service reports its activation before clients can actually interact with it.
-      # Because of this, commands like `lpinfo -v` will report a bad file descriptor
-      # due to the missing UNIX socket without sufficient sleep time.
       after = [ cupsUnit ];
 
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
       };
 
-       # sleep 10 is required to wait until cups.service is actually initialized and has created its UNIX socket file
-      script = (optionalString (!config.services.printing.startWhenNeeded) "sleep 10\n")
-        + (concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters)
+      script = concatMapStringsSep "\n" ensurePrinter cfg.ensurePrinters
         + optionalString (cfg.ensureDefaultPrinter != null) (ensureDefaultPrinter cfg.ensureDefaultPrinter);
     };
   };

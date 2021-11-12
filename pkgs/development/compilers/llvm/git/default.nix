@@ -21,8 +21,8 @@ let
   release_version = "14.0.0";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "7d9d926a1861e2f6876943d47f297e2a08a57392"; # When using a Git commit
-  rev-version = "unstable-2021-08-03"; # When using a Git commit
+  rev = "ee65938357d5fffe9e586fa155b37268b5a358ac"; # When using a Git commit
+  rev-version = "unstable-2021-08-13"; # When using a Git commit
   version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
   targetConfig = stdenv.targetPlatform.config;
 
@@ -30,7 +30,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "0v9jk49raazy5vhccagnmf6c3cxjv56rwg3670k9x9snihx2782r";
+    sha256 = "10ahc108wbg2rsp50j3mc8h018a453ykg1rivjkhizng80pyllm1";
   };
 
   llvm_meta = {
@@ -68,14 +68,14 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputSpecified = false; };
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
@@ -264,4 +264,4 @@ let
     };
   });
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // libraries // tools

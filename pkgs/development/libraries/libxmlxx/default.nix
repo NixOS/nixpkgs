@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "libxmlxx";
       packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

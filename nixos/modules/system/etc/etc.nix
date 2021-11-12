@@ -53,7 +53,8 @@ let
     mkdir -p "$out/etc"
     ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
       "makeEtcEntry"
-      etcEntry.source
+      # Force local source paths to be added to the store
+      "${etcEntry.source}"
       etcEntry.target
       etcEntry.mode
       etcEntry.user
@@ -71,7 +72,7 @@ in
 
     environment.etc = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";

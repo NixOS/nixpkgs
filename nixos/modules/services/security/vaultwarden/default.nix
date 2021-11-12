@@ -60,7 +60,7 @@ in {
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           domain = "https://bw.domain.tld:8443";
           signupsAllowed = true;
@@ -106,14 +106,14 @@ in {
     package = mkOption {
       type = package;
       default = pkgs.vaultwarden;
-      defaultText = "pkgs.vaultwarden";
+      defaultText = literalExpression "pkgs.vaultwarden";
       description = "Vaultwarden package to use.";
     };
 
     webVaultPackage = mkOption {
       type = package;
       default = pkgs.vaultwarden-vault;
-      defaultText = "pkgs.vaultwarden-vault";
+      defaultText = literalExpression "pkgs.vaultwarden-vault";
       description = "Web vault package to use.";
     };
   };

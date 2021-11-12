@@ -1,11 +1,14 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, buildFHSUserEnvBubblewrap
+, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
 # Populate passthru.tests
 , tests
+
+# needed to fix "Save as Root"
+, nodePackages, bash
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -78,27 +81,50 @@ let
     installPhase = ''
       runHook preInstall
     '' + (if stdenv.isDarwin then ''
-      mkdir -p "$out/Applications/${longName}.app" $out/bin
+      mkdir -p "$out/Applications/${longName}.app" "$out/bin"
       cp -r ./* "$out/Applications/${longName}.app"
-      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" $out/bin/${executableName}
+      ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
     '' else ''
-      mkdir -p $out/lib/vscode $out/bin
-      cp -r ./* $out/lib/vscode
+      mkdir -p "$out/lib/vscode" "$out/bin"
+      cp -r ./* "$out/lib/vscode"
 
-      ln -s $out/lib/vscode/bin/${sourceExecutableName} $out/bin/${executableName}
+      ln -s "$out/lib/vscode/bin/${sourceExecutableName}" "$out/bin/${executableName}"
 
-      mkdir -p $out/share/applications
-      ln -s $desktopItem/share/applications/${executableName}.desktop $out/share/applications/${executableName}.desktop
-      ln -s $urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop $out/share/applications/${executableName}-url-handler.desktop
+      mkdir -p "$out/share/applications"
+      ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
+      ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
 
-      mkdir -p $out/share/pixmaps
-      cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
+      mkdir -p "$out/share/pixmaps"
+      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/code.png"
 
       # Override the previously determined VSCODE_PATH with the one we know to be correct
-      sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName}
-      grep -q "VSCODE_PATH='$out/lib/vscode'" $out/bin/${executableName} # check if sed succeeded
+      sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
+      grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
     '') + ''
       runHook postInstall
+    '';
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
+        --prefix PATH : ${glib.bin}/bin
+      )
+    '';
+
+    # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
+    # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
+    postPatch = lib.optionalString stdenv.isLinux ''
+      # this is a fix for "save as root" functionality
+      packed="resources/app/node_modules.asar"
+      unpacked="resources/app/node_modules"
+      ${nodePackages.asar}/bin/asar extract "$packed" "$unpacked"
+      substituteInPlace $unpacked/sudo-prompt/index.js \
+        --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+        --replace "/bin/bash" "${bash}/bin/bash"
+      rm -rf "$packed"
+
+      # this fixes bundled ripgrep
+      chmod +x resources/app/node_modules/vscode-ripgrep/bin/rg
     '';
 
     inherit meta;
@@ -136,9 +162,9 @@ let
 
     # restore desktop item icons
     extraInstallCommands = ''
-      mkdir -p $out/share/applications
+      mkdir -p "$out/share/applications"
       for item in ${unwrapped}/share/applications/*.desktop; do
-        ln -s $item $out/share/applications/
+        ln -s "$item" "$out/share/applications/"
       done
     '';
 

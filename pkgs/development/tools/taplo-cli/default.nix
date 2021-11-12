@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo-cli";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0hh9l83z7qymakyf7ka756gwxpzirgdhf6kpzh89bcmpdfz70005";
+    sha256 = "sha256-bGQLAANVahpiiiKKJPNmtr4uT5iKHqyLS5yVm+rSHPg=";
   };
 
-  cargoSha256 = "0bkpcnbrrfv07czs1gy8r9q1cp6fdfz2vmlfk9lsg3iapvyi5s1c";
+  cargoSha256 = "sha256-T3fbG5HKOG90kawjQK8D0PIonB6ErNfR3hVIZ5N8zgA=";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 

@@ -87,6 +87,7 @@ assert postgresSupport -> postgresql != null;
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

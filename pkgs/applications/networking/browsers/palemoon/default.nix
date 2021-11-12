@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchzip
 , writeScript
 , alsa-lib
 , autoconf213
@@ -52,15 +52,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.0.1";
+  version = "29.4.1";
 
-  src = fetchFromGitHub {
-    githubBase = "repo.palemoon.org";
-    owner = "MoonchildProductions";
-    repo = "Pale-Moon";
-    rev = "${version}_Release";
-    sha256 = "1qzsryhlxvh9xx9j7s4dmxv575z13wdx8iigj8r0pdmg5kx6rpkb";
-    fetchSubmodules = true;
+  src = fetchzip {
+    url = "http://archive.palemoon.org/source/palemoon-${version}-source.tar.xz";
+    stripRoot = false;
+    sha256 = "0kb9yn1q8rrmnlsyvxvv2gdgyyf12g6rxlyh82lmc0gysvd4qd2c";
   };
 
   passthru.updateScript = writeScript "update-${pname}" ''

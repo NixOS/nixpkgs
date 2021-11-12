@@ -324,10 +324,20 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
+    ##
+    ## GNU specific extra strip flags
+    ##
+
+    # TODO(@sternenseemann): make a generic strip wrapper?
+    + optionalString (bintools.isGNU or false) ''
+      wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}strip"
+    ''
+
     ###
     ### Remove LC_UUID
     ###
-    + optionalString (stdenv.targetPlatform.isDarwin && !(stdenv.cc.bintools.bintools.isGNU or false)) ''
+    + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 

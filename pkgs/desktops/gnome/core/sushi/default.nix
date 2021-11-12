@@ -8,8 +8,7 @@
 , gnome
 , gtksourceview4
 , gjs
-, webkitgtk
-, libmusicbrainz5
+, webkitgtk_4_1
 , icu
 , wrapGAppsHook
 , gst_all_1
@@ -23,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sushi";
-  version = "3.38.0";
+  version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vlqqk916dymv4asbyvalp1m096a5hh99nx23i4xavzvgygh4h2h";
+    url = "mirror://gnome/sources/sushi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "m3UlaQzkNmJO+gpgV3NJNDLNDva49GSYLouETtqYmO4=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +48,7 @@ stdenv.mkDerivation rec {
     gtksourceview4
     gdk-pixbuf
     librsvg
-    libmusicbrainz5
-    webkitgtk
+    webkitgtk_4_1
     epoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

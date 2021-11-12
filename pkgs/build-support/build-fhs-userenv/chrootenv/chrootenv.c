@@ -122,7 +122,7 @@ int main(gint argc, gchar **argv) {
     }
 
     // hide all mounts we do from the parent
-    fail_if(mount(0, "/", 0, MS_PRIVATE | MS_REC, 0));
+    fail_if(mount(0, "/", 0, MS_SLAVE | MS_REC, 0));
 
     if (uid != 0) {
       spit("/proc/self/setgroups", "deny");

@@ -1,36 +1,30 @@
-{ stdenv, fetchFromGitHub, emacs, lib }:
+{ lib
+, stdenv
+, trivialBuild
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
+trivialBuild rec {
   pname = "apheleia";
-  version = "2021-05-23";
+  version = "1.1.2+unstable=2021-10-03";
 
   src = fetchFromGitHub {
     owner = "raxod502";
-    repo = "apheleia";
-    rev = "f865c165dac606187a66b2b25a57d5099b452120";
-    sha256 = "sha256-n37jJsNOGhSjUtQysG3NVIjjayhbOa52iTXBc8SyKXE=";
+    repo = pname;
+    rev = "8b9d576f2fda10d0c9051fc03c1eb1d9791e32fd";
+    hash = "sha256-QwGlCdHBll16mbfQxGw1EORZFUxYCZSt8ThYTTGjRpo=";
   };
 
-  buildInputs = [ emacs ];
+  buildInputs = [
+    emacs
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
-  meta = {
-    description = "Reformat buffer stably";
+  meta = with lib; {
     homepage = "https://github.com/raxod502/apheleia";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leungbk ];
+    description = "Asynchronous buffer reformat";
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres leungbk ];
     platforms = emacs.meta.platforms;
   };
 }

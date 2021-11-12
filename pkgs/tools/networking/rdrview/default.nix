@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, libxml2, curl, libseccomp }:
+{ lib, stdenv, fetchFromGitHub, libxml2, curl, libseccomp, installShellFiles }:
 
 stdenv.mkDerivation {
-  name = "rdrview";
-  version = "unstable-2020-12-22";
+  pname = "rdrview";
+  version = "unstable-2021-05-30";
 
   src = fetchFromGitHub {
     owner = "eafer";
     repo = "rdrview";
-    rev = "7be01fb36a6ab3311a9ad1c8c2c75bf5c1345d93";
-    sha256 = "00hnvrrrkyp5429rzcvabq2z00lp1l8wsqxw4h7qsdms707mjnxs";
+    rev = "444ce3d6efd8989cd6ecfdc0560071b20e622636";
+    sha256 = "02VC8r8PdcAfMYB0/NtbPnhsWatpLQc4mW4TmSE1+zk=";
   };
 
   buildInputs = [ libxml2 curl libseccomp ];
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 rdrview -t $out/bin
+    installManPage rdrview.1
+    runHook postInstall
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Command line tool to extract main content from a webpage";

@@ -547,7 +547,6 @@ def update_plugins(editor: Editor, args):
 
     log.setLevel(LOG_LEVELS[args.debug])
     log.info("Start updating plugins")
-    nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
     update = editor.get_update(args.input_file, args.outfile, args.proc)
 
     redirects = update()
@@ -556,6 +555,7 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
+        nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
         commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
 
     if redirects:

@@ -7,6 +7,9 @@ let
   '';
 
   allowSystemdJournal = cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;
+
+  allowPositionsFile = !lib.hasPrefix "/var/cache/promtail" positionsFile;
+  positionsFile = cfg.configuration.positions.filename;
 in {
   options.services.promtail = with types; {
     enable = mkEnableOption "the Promtail ingresser";
@@ -53,6 +56,7 @@ in {
         RestrictSUIDSGID = true;
         PrivateMounts = true;
         CacheDirectory = "promtail";
+        ReadWritePaths = lib.optional allowPositionsFile (builtins.dirOf positionsFile);
 
         User = "promtail";
         Group = "promtail";

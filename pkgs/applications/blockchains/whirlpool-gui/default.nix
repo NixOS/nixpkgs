@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop GUI for Whirlpool by Samourai-Wallet";
-    homepage = https://www.samouraiwallet.com/whirlpool;
+    homepage = "https://www.samouraiwallet.com/whirlpool";
     license = licenses.unlicense;
     maintainers = [ maintainers.offline ];
     platforms = [ "x86_64-linux" ];

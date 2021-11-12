@@ -29,6 +29,7 @@ let
       "-/etc/nsswitch.conf"
       "-/etc/hosts"
       "-/etc/localtime"
+      "-/run/postgresql"
     ];
     BindPaths = [
       cfg.consumptionDir
@@ -60,7 +61,7 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
-    RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
@@ -106,14 +107,14 @@ in
     mediaDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/media";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/media"'';
       description = "Directory to store the Paperless documents.";
     };
 
     consumptionDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/consume";
-      defaultText = "\${dataDir}/consume";
+      defaultText = literalExpression ''"''${dataDir}/consume"'';
       description = "Directory from which new documents are imported.";
     };
 
@@ -166,7 +167,7 @@ in
         See <link xlink:href="https://paperless-ng.readthedocs.io/en/latest/configuration.html">the documentation</link>
         for available options.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           PAPERLESS_OCR_LANGUAGE = "deu+eng";
         }
@@ -182,7 +183,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.paperless-ng;
-      defaultText = "pkgs.paperless-ng";
+      defaultText = literalExpression "pkgs.paperless-ng";
       description = "The Paperless package to use.";
     };
   };
@@ -283,6 +284,9 @@ in
         PATH = mkForce cfg.package.path;
         PYTHONPATH = "${cfg.package.pythonPath}:${cfg.package}/lib/paperless-ng/src";
       };
+      # Allow the web interface to access the private /tmp directory of the server.
+      # This is required to support uploading files via the web interface.
+      unitConfig.JoinsNamespaceOf = "paperless-ng-server.service";
       # Bind to `paperless-ng-server` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-ng-server.service" ];

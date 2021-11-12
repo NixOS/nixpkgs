@@ -91,7 +91,7 @@ in stdenv.mkDerivation rec {
 
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest
-  postFixup = lib.optional (guiModule == "zest") ''
+  postFixup = lib.optionalString (guiModule == "zest") ''
     patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so")" \
       "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so"
 

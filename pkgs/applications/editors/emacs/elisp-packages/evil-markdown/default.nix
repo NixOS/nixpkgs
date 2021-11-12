@@ -1,46 +1,34 @@
-{ stdenv, fetchFromGitHub, emacs, emacsPackages, lib }:
+{ lib
+, trivialBuild
+, fetchFromGitHub
+, emacs
+}:
 
-let
-  runtimeDeps = with emacsPackages; [
-    evil
-    markdown-mode
-  ];
-in
-stdenv.mkDerivation {
+trivialBuild rec {
   pname = "evil-markdown";
-  version = "2020-06-01";
+  version = "0.pre+unstable=2021-07-21";
 
   src = fetchFromGitHub {
     owner = "Somelauw";
     repo = "evil-markdown";
-    rev = "064fe9b4767470472356d20bdd08e2f30ebbc9ac";
-    sha256 = "sha256-Kt2wxG1XCFowavVWtj0urM/yURKegonpZcxTy/+CrJY=";
+    rev = "8e6cc68af83914b2fa9fd3a3b8472573dbcef477";
+    hash = "sha256-HBBuZ1VWIn6kwK5CtGIvHM1+9eiNiKPH0GUsyvpUVN8=";
   };
 
   buildInputs = [
     emacs
-  ] ++ runtimeDeps;
+  ] ++ propagatedUserEnvPkgs;
 
-  propagatedUserEnvPkgs = runtimeDeps;
+  propagatedUserEnvPkgs = with emacs.pkgs; [
+    evil
+    markdown-mode
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
-  meta = {
-    description = "Vim-like keybindings for markdown-mode";
+  meta = with lib; {
     homepage = "https://github.com/Somelauw/evil-markdown";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
-    platforms = emacs.meta.platforms;
+    description = "Integrates Emacs evil and markdown";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ leungbk ];
+    inherit (emacs.meta) platforms;
   };
 }

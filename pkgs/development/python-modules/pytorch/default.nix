@@ -304,6 +304,8 @@ in buildPythonPackage rec {
   passthru = {
     inherit cudaSupport;
     cudaArchList = final_cudaArchList;
+    # At least for 1.9.0 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
+    blasProvider = blas.provider;
   };
 
   meta = with lib; {
@@ -311,7 +313,7 @@ in buildPythonPackage rec {
     homepage    = "https://pytorch.org/";
     license     = licenses.bsd3;
     platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     # error: use of undeclared identifier 'noU'; did you mean 'no'?
     broken = stdenv.isDarwin;
   };

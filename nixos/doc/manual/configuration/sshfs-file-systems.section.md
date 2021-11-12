@@ -34,7 +34,7 @@ SHA256:yjxl3UbTn31fLWeyLYTAKYJPRmzknjQZoyG8gSNEoIE my-user@workstation
 To keep the key safe, change the ownership to `root:root` and make sure the permissions are `600`:
 OpenSSH normally refuses to use the key if it's not well-protected.
 
-The file system can be configured in NixOS via the usual [fileSystems](options.html#opt-fileSystems) option.
+The file system can be configured in NixOS via the usual [fileSystems](#opt-fileSystems) option.
 Here's a typical setup:
 ```nix
 {

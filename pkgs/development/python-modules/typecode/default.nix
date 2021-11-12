@@ -11,6 +11,7 @@
 , pytestCheckHook
 , pytest-xdist
 }:
+
 buildPythonPackage rec {
   pname = "typecode";
   version = "21.6.1";
@@ -38,6 +39,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  disabledTests = [
+    "TestFileTypesDataDriven"
   ];
 
   pythonImportsCheck = [

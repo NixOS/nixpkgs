@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
+  configureFlags = [
+    # Required for cross-compilation.
+    # Prevents linking error with 'undefined reference to rpl_malloc'.
+    # I think it's safe to assume that most libcs will properly handle
+    # realloc(NULL, size) and treat it like malloc(size).
+    "ac_cv_func_malloc_0_nonnull=yes"
+  ];
   hardeningDisable = [ "format" ];
 
   meta = {

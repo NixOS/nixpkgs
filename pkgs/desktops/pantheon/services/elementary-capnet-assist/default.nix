@@ -11,6 +11,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , gcr
 , webkitgtk
 , wrapGAppsHook
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.2.5";
+  version = "2.4.0";
 
   repoName = "capnet-assist";
 
@@ -26,13 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-o6J3vNWvV0zRde8VWWfpb56PQhSck2sJQVLimq0P9CY=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-UdkS+w61c8z2TCJyG7YsDb0n0b2LOpFyaHzMbdCJsZI=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +45,8 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     webkitgtk
-  ];
-
-  # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [
-    ./remove-capnet-test.patch
   ];
 
   postPatch = ''
@@ -63,11 +54,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
     homepage = "https://github.com/elementary/capnet-assist";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.capnet-assist";
   };
 }

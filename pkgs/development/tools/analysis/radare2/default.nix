@@ -26,16 +26,30 @@
 , luaBindings ? false
 }:
 
+let
+  # FIXME: Compare revision with https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L20
+  arm64 = fetchFromGitHub {
+    owner = "radareorg";
+    repo = "vector35-arch-arm64";
+    rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
+    sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.3.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-VS8eG5RXwKtJSLmyaSifopJU7WYGMUcznn+burPqEYE=";
+    sha256 = "sha256-5GvJ7J+pAL8GIZ4Tv09wdGyihfMm1bUABhmf7ozQoxc=";
   };
+
+  preBuild = ''
+    cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
+    chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
+  '';
 
   postInstall = ''
     install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm

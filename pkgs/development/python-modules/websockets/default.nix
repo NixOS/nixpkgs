@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "9.1";
+  version = "10.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Y12IUG+ulD4+CTRlY+NE6qYZyI9gCPDydwpt+uyYZk=";
+    sha256 = "sha256-F10C8ukjYfbn2X2PMzrdSDqvs51/A9lx8Y3kv8YJ8Cw=";
   };
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`

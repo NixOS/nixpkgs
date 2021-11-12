@@ -42,6 +42,8 @@ let
 
         "0.52" = ./disable-graphviz-0.46.1.patch;
 
+        "0.54" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -69,7 +71,7 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optional  disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -89,10 +91,11 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     passthru = {
-     updateScript = gnome.updateScript {
-       attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
-       packageName = pname;
-     };
+      updateScript = gnome.updateScript {
+        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        packageName = pname;
+        freeze = true;
+      };
     };
 
     meta = with lib; {
@@ -100,7 +103,7 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar peterhoeg maxeaubrey ] ++ teams.pantheon.members;
+      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
     };
   });
 
@@ -116,19 +119,24 @@ in rec {
   };
 
   vala_0_48 = generic {
-    version = "0.48.18";
-    sha256 = "1pbz4nyrrf9wp8rp953sczx545s4g0h5mars9ynkn788dzs2h3wy";
+    version = "0.48.19";
+    sha256 = "sha256-gLdlijfZhE/NG0Mdr8WATeYWpYGW5PHxGeWyrraLSgE=";
   };
 
   vala_0_50 = generic {
-    version = "0.50.9";
-    sha256 = "0w5ngs90rq7vy21nqfq8drqyb33kxm17j161qvakwpsbjsidv1mn";
+    version = "0.50.10";
+    sha256 = "sha256-vnIf8/AYHqttM+zKzygfZvMI+qHl5VTwj99nFZpFlRU=";
   };
 
   vala_0_52 = generic {
-    version = "0.52.4";
-    sha256 = "0cfz3xshc9azxx4fn25x9gadnph6jvf1r2wzd7p5krk0a4755ppc";
+    version = "0.52.5";
+    sha256 = "sha256-hKG7MSs+Xcrkt7JcRVmNN14stpIzzvtZoV0jUMdr3ZE=";
   };
 
-  vala = vala_0_52;
+  vala_0_54 = generic {
+    version = "0.54.1";
+    sha256 = "0jlhd6hr9mai7hhc2c78w6zmnzf7xncp7fhyiavkqqzhhsn7gpjx";
+  };
+
+  vala = vala_0_54;
 }

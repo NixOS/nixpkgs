@@ -28,15 +28,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.40.1";
+  version = "0.40.2";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QkDXd1mcjNCeZ9pEzLOV0KbceEedgJzWIZgixbVooy0=";
+    sha256 = "yejHNiltIsTe/pWXJ6KdMUN7vSt6oMZHDWviQBEFBpc=";
   };
+
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -78,15 +82,9 @@ stdenv.mkDerivation rec {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
-    # Build all plug-ins except for tracker 2
-    "-Dplugins=external,gst-launch,lms,media-export,mpris,playbin,ruih,tracker3"
   ];
 
   doCheck = true;
-
-  patches = [
-    ./add-option-for-installation-sysconfdir.patch
-  ];
 
   postPatch = ''
     patchShebangs data/xml/process-xml.py

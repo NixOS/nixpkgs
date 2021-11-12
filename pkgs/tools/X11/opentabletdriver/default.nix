@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , linkFarmFromDrvs
-, dotnet-netcore
-, dotnet-sdk
+, dotnetCorePackages
 , dotnetPackages
 , dpkg
 , gtk3
@@ -21,20 +20,24 @@
 , wrapGAppsHook
 }:
 
+let
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+in
 stdenv.mkDerivation rec {
   pname = "OpenTabletDriver";
-  version = "0.5.3.2";
+  version = "0.5.3.3";
 
   src = fetchFromGitHub {
     owner = "InfinityGhost";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "qRc/9Edp3x7/XVEWgBbPush76MSQz4biYSk+E9Gt68w=";
+    sha256 = "k4SoOMKAwHeYSQ80M8Af1DiiDSZIi3gS7lGr2ZrXrEI=";
   };
 
   debPkg = fetchurl {
     url = "https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    sha256 = "14k06iyc642x42yadyfmmf8ky84y8rc6kgd63b4ipskkcxyl1gvl";
+    sha256 = "0v03qiiz28k1yzgxf5qc1mdg2n7kjx6h8vpx9dxz342wwbgqg6ic";
   };
 
   nativeBuildInputs = [
@@ -114,19 +117,19 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/OpenTabletDriver.Console $out/bin/otd \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     makeWrapper $out/lib/OpenTabletDriver.Daemon $out/bin/otd-daemon \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     makeWrapper $out/lib/OpenTabletDriver.UX.Gtk $out/bin/otd-gui \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     mkdir -p $out/lib/OpenTabletDriver

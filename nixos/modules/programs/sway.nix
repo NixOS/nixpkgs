@@ -92,10 +92,10 @@ in {
       default = with pkgs; [
         swaylock swayidle alacritty dmenu
       ];
-      defaultText = literalExample ''
+      defaultText = literalExpression ''
         with pkgs; [ swaylock swayidle alacritty dmenu ];
       '';
-      example = literalExample ''
+      example = literalExpression ''
         with pkgs; [
           i3status i3status-rust
           termite rofi light

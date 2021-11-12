@@ -1,26 +1,31 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.2.2";
+  version = "4.2.4";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JTm8ht2Ubn34uQLR0yjUjXSdDQggWfYUlS0T628OUoI=";
+    sha256 = "sha256-doPLl7Ooc2cKlTiS/dqLTKSkTlSgPFztIumAzciM0bc=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "cachetools" ];
+  pythonImportsCheck = [
+    "cachetools"
+  ];
 
   meta = with lib; {
     description = "Extensible memoizing collections and decorators";

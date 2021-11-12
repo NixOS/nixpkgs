@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.68.3";
+  version = "2.70.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0f1iprj7v0b5wn9njj39dkl25g6filfs7i4ybk20jq821k1a7qg7";
+    sha256 = "0hh7hk02fkm1bn48k4z8f3kgv9qbni5z22gizd567fn527w7s390";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -133,8 +133,6 @@ stdenv.mkDerivation rec {
     # we're using plain
     "-DG_DISABLE_CAST_CHECKS"
   ];
-
-  hardeningDisable = [ "pie" ];
 
   postPatch = ''
     chmod +x gio/tests/gengiotypefuncs.py

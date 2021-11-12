@@ -1,28 +1,36 @@
-{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config
-, alsa-lib, libtool, icu
+{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config, makeWrapper
+, alsa-lib, alsa-plugins, libtool, icu, pcre2
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "mimic";
-  version = "1.2.0.2";
+  version = "1.3.0.1";
 
   src = fetchFromGitHub {
-    rev = version;
-    repo = "mimic";
     owner = "MycroftAI";
-    sha256 = "1wkpbwk88lsahzkc7pzbznmyy0lc02vsp0vkj8f1ags1gh0lc52j";
+    repo = "mimic1";
+    rev = version;
+    sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
     alsa-lib
+    alsa-plugins
     libtool
     icu
+    pcre2
   ] ++ lib.optional pulseaudioSupport libpulseaudio;
+
+  postInstall = ''
+    wrapProgram $out/bin/mimic \
+      --run "export ALSA_PLUGIN_DIR=${alsa-plugins}/lib/alsa-lib"
+  '';
 
   meta = {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";

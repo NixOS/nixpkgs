@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
-, libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
+, libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = [
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ peti fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz vrthra ];
     platforms = platforms.all;
   };
 }

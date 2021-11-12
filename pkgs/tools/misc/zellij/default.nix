@@ -10,20 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.15.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-IcpCE9mqR7H1+gRhHyscvXhYHOynJFtOyrSr1FiMxFc=";
+    sha256 = "sha256-/1ngmthzWp9K7pBBOBiSMUv0yC66K3Tg2g2PoBskpTU=";
   };
 
-  cargoSha256 = "sha256-22ggPs4iVOI1LKHtW5skfSO7J/FLF8EinvcyHVO14Dw=";
+  cargoSha256 = "sha256-eFWsqjXO6QFTO26ppZ4tiJXc/PEYD+5ZdbTBMoDoLFI=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   preCheck = ''
     HOME=$TMPDIR

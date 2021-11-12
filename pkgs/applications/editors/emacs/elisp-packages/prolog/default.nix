@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://bruda.ca/_media/emacs/prolog.el";
-    sha256 = "oCMzks4xuor8Il8Ll8PXh1zIvMl5qN0RCFJ9yKiHOHU=";
+    sha256 = "ZzIDFQWPq1vI9z3btgsHgn0axN6uRQn9Tt8TnqGybOk=";
   };
 
   buildCommand = ''

@@ -1,34 +1,46 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, cherrypy
+, fetchFromGitHub
+, lockfile
+, mock
 , msgpack
-, pytest
+, pytestCheckHook
+, requests
 }:
 
 buildPythonPackage rec {
-  version = "0.12.6";
-  pname = "CacheControl";
+  pname = "cachecontrol";
+  version = "0.12.8";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "be9aa45477a134aee56c8fac518627e1154df063e85f67d4f83ce0ccc23688e8";
+  src = fetchFromGitHub {
+    owner = "ionrock";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0y15xbaqw2lxidwbyrgpy42v3cxgv4ys63fx2586h1szlrd4f3p4";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ requests msgpack ];
+  propagatedBuildInputs = [
+    msgpack
+    requests
+  ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    cherrypy
+    mock
+    lockfile
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  pythonImportsCheck = [
+    "cachecontrol"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/ionrock/cachecontrol";
     description = "Httplib2 caching for requests";
+    homepage = "https://github.com/ionrock/cachecontrol";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

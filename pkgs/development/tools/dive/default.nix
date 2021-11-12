@@ -19,7 +19,7 @@ buildGoModule rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";

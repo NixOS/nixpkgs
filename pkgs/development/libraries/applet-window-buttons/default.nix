@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "applet-window-buttons";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "psifidotos";
     repo = "applet-window-buttons";
     rev = version;
-    sha256 = "sha256-ikgUE8GaiTpNjwrz7SbNQ3+b8KiigDgMREQ7J2b+EEs=";
+    sha256 = "18h2g3jqzr88wkmws2iz71sgrz633zwkqvhn32sdi32sxxbrksgd";
   };
 
   nativeBuildInputs = [

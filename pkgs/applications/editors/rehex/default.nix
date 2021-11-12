@@ -1,36 +1,43 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, pkg-config
 , capstone
 , jansson
-, wxGTK30
-, darwin
+, lua5_3
+, wxGTK31
+, Carbon
+, Cocoa
+, IOKit
 , libicns
 , wxmac
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.3.1";
+  version = "0.3.92";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    sha256 = "1yj9a63j7534mmz8cl1ifg2wmgkxmk6z75jd8lkmc2sfrjbick32";
+    sha256 = "sha256-yZvJlomUpJwDJOBVSl49lU+JE1YMMs/BSzHepXoFlIY=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile.osx --replace 'iconutil -c icns -o $@ $(ICONSET)' \
       'png2icns $@ $(ICONSET)/icon_16x16.png $(ICONSET)/icon_32x32.png $(ICONSET)/icon_128x128.png $(ICONSET)/icon_256x256.png $(ICONSET)/icon_512x512.png'
   '';
 
-  nativeBuildInputs = lib.optionals (stdenv.isDarwin) [ libicns ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ libicns ];
 
-  buildInputs = [ capstone jansson ]
-    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK30 ])
-    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon Cocoa IOKit wxmac ]));
+  buildInputs = [ capstone jansson lua5_3 ]
+    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK31 ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit wxmac ];
 
-  makeFlags = [ "prefix=$(out)" ] ++ (lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ]);
+  makeFlags = [ "prefix=$(out)" ]
+    ++ lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ];
 
   meta = with lib; {
     description = "Reverse Engineers' Hex Editor";

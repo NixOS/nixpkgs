@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plr";
-  version = "8.4.1";
+  version = "8.4.4";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
     rev = "REL${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "1wy4blg8jl30kzhrkvbncl4gmy6k71zipnq89ykwi1vmx89v3ab7";
+    sha256 = "15dygf8klx2a4kzpmc1qnch629gcaa43ba1p3cqk9r1db4ima24k";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     install -D plr.so -t $out/lib/
-    install -D {plr--unpackaged--8.4.1.sql,plr--8.4.1.sql,plr.control} -t $out/share/postgresql/extension
+    install -D {plr--*.sql,plr.control} -t $out/share/postgresql/extension
   '';
 
   meta = with lib; {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
     maintainers = with maintainers; [ qoelet ];
-    platforms = [ "x86_64-linux" ];
+    platforms = postgresql.meta.platforms;
     license = licenses.gpl2Only;
   };
 }

@@ -75,7 +75,7 @@ in
     services.zope2.instances = mkOption {
       default = {};
       type = with types; attrsOf (submodule zope2Opts);
-      example = literalExample ''
+      example = literalExpression ''
         {
           plone01 = {
             http_address = "127.0.0.1:8080";
@@ -103,7 +103,11 @@ in
 
   config = mkIf (cfg.instances != {}) {
 
-    users.users.zope2.uid = config.ids.uids.zope2;
+    users.users.zope2 = {
+      isSystemUser = true;
+      group = "zope2";
+    };
+    users.groups.zope2 = {};
 
     systemd.services =
       let

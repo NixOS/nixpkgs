@@ -8,8 +8,7 @@
 }:
 
 let
-  mpiSupport = hdf5.mpiSupport;
-  mpi = hdf5.mpi;
+  inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf";
   version = "4.8.0"; # Remove patch mentioned below on upgrade
@@ -44,8 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
-    mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpiSupport mpi;
   };
 
   configureFlags = [

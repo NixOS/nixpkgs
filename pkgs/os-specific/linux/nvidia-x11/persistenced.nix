@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ];
   buildInputs = [ libtirpc ];
 
+  inherit (nvidia_x11) makeFlags;
+
   installFlags = [ "PREFIX=$(out)" ];
 
   postFixup = ''

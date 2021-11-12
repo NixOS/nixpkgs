@@ -146,9 +146,9 @@ in
       };
 
       background = mkOption {
-        type = types.path;
+        type = types.either types.path (types.strMatching "^#[0-9]\{6\}$");
         # Manual cannot depend on packages, we are actually setting the default in config below.
-        defaultText = "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
+        defaultText = literalExpression "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
           The background image or color to use.
         '';
@@ -284,7 +284,7 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
+        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so

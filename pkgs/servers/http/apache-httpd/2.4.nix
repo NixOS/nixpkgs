@@ -9,35 +9,28 @@
 , luaSupport ? false, lua5
 }:
 
-let inherit (lib) optional;
-in
-
-assert sslSupport -> aprutil.sslSupport && openssl != null;
-assert ldapSupport -> aprutil.ldapSupport && openldap != null;
-assert http2Support -> nghttp2 != null;
-
 stdenv.mkDerivation rec {
-  version = "2.4.48";
   pname = "apache-httpd";
+  version = "2.4.51";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0v4npxnvih5mlxx6dywwhhfs8xvgcckc0hxzwk3hi0g8nbkjdj0v";
+    sha256 = "20e01d81fecf077690a4439e3969a9b22a09a8d43c525356e863407741b838f4";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "man" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [perl] ++
-    optional brotliSupport brotli ++
-    optional sslSupport openssl ++
-    optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2 ++
-    optional http2Support nghttp2 ++
-    optional stdenv.isDarwin libiconv;
+  buildInputs = [ perl ] ++
+    lib.optional brotliSupport brotli ++
+    lib.optional sslSupport openssl ++
+    lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
+    lib.optional libxml2Support libxml2 ++
+    lib.optional http2Support nghttp2 ++
+    lib.optional stdenv.isDarwin libiconv;
 
-  prePatch = ''
+  postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
@@ -93,9 +86,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "http://httpd.apache.org/";
+    homepage    = "https://httpd.apache.org/";
     license     = licenses.asl20;
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with maintainers; [ lovek323 peti ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

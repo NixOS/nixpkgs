@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchCrate, installShellFiles
-, libgpgerror, gpgme, gettext, openssl, Security
+, libgpg-error, gpgme, gettext, openssl, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin sy" "--features" "vault,extract,completions,substitute,process" ];
 
-  nativeBuildInputs = [ libgpgerror gpgme gettext installShellFiles ];
+  nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 

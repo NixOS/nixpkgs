@@ -27,7 +27,7 @@ let
   #       It will rebuild itself using the version of this package (NSS) and if
   #       an update is required do the required changes to the expression.
   #       Example: nix-shell ./maintainers/scripts/update.nix --argstr package cacert
-  version = "3.68";
+  version = "3.71";
 
 in
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "0nvj7h2brcw21p1z99nrsxka056d0r1yy9nqqg0lw0w3mhnb60n4";
+    sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -166,13 +166,11 @@ stdenv.mkDerivation rec {
     in
     (lib.optionalString enableFIPS (''
       for libname in freebl3 nssdbm3 softokn3
-      do '' +
+      do libfile="$out/lib/lib$libname${stdenv.hostPlatform.extensions.sharedLibrary}"'' +
     (if stdenv.isDarwin
     then ''
-      libfile="$out/lib/lib$libname.dylib"
       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '' else ''
-      libfile="$out/lib/lib$libname.so"
       LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '') + ''
           ${nss}/bin/shlibsign -v -i "$libfile"
@@ -186,6 +184,8 @@ stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";

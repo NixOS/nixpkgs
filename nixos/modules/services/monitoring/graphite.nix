@@ -132,7 +132,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = literalExample "[ pkgs.python3Packages.influxgraph ]";
+        example = literalExpression "[ pkgs.python3Packages.influxgraph ]";
         type = types.listOf types.package;
       };
 
@@ -160,7 +160,7 @@ in {
       package = mkOption {
         description = "Package to use for graphite api.";
         default = pkgs.python3Packages.graphite_api;
-        defaultText = "pkgs.python3Packages.graphite_api";
+        defaultText = literalExpression "pkgs.python3Packages.graphite_api";
         type = types.package;
       };
 
@@ -335,7 +335,7 @@ in {
           <link xlink:href='https://github.com/scobal/seyren#config' />
         '';
         type = types.attrsOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           {
             GRAPHITE_USERNAME = "user";
             GRAPHITE_PASSWORD = "pass";
@@ -561,6 +561,7 @@ in {
      ) {
       users.users.graphite = {
         uid = config.ids.uids.graphite;
+        group = "graphite";
         description = "Graphite daemon user";
         home = dataDir;
       };

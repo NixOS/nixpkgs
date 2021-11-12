@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yubico-piv-tool-2.0.0";
+  pname = "yubico-piv-tool";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/${name}.tar.gz";
+    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
     sha256 = "124lhlim05gw32ydjh1yawqbnx6wdllz1ir9j00j09wji3m11rfs";
   };
 

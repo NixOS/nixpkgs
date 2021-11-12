@@ -14,6 +14,7 @@ buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.klntsky ];
     platforms = platforms.linux;
+    mainProgram = "px";
   };
 
   src =

@@ -1,18 +1,18 @@
-{ lib
-, python3
-, fetchpatch
-}:
+{ lib, python3, fetchpatch, writeText }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+  setuppy = writeText "setup.py" ''
+    from setuptools import setup
+    setup()
+  '';
+in buildPythonApplication rec {
   pname = "qmk";
-  version = "0.0.52";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mNF+bRhaL6JhNbROmjYDHkKKokRIALd5FZbRt9Kg5XQ=";
+    sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     appdirs
     argcomplete
     colorama
-    dotty-dict
+    qmk-dotty-dict
     hid
     hjson
     jsonschema
@@ -35,6 +35,10 @@ buildPythonApplication rec {
     pygments
     pyusb
   ];
+
+  postConfigure = ''
+    cp ${setuppy} setup.py
+  '';
 
   # no tests implemented
   doCheck = false;
@@ -57,6 +61,6 @@ buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [ bhipple babariviere ];
   };
 }

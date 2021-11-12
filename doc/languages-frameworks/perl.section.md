@@ -122,7 +122,7 @@ ImageExifTool = buildPerlPackage {
   };
 
   buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = lib.optional stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
 };

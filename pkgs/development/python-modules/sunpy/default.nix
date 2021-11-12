@@ -17,9 +17,9 @@
 , numpy
 , pandas
 , parfive
+, pytestCheckHook
 , pytest-astropy
 , pytest-mock
-, pytest-cov
 , python-dateutil
 , scikitimage
 , scipy
@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "3.0.1";
+  version = "3.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WpqkCAwDYb6L+W4VTC/1auGVbblnNYwBxbk+tZbAiBw=";
+    sha256 = "sha256-0DF+/lQpsQKO5omBKJAe3gBjQ6QQb50IdRSacIRL/JA=";
   };
 
   nativeBuildInputs = [
@@ -67,22 +67,45 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
+    pytestCheckHook
     pytest-astropy
-    pytest-cov
     pytest-mock
   ];
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
 
-  # ignore documentation tests and ignore tests with schema issues
-  checkPhase = ''
-    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst' \
-    --deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module \
-    --deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module \
-    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml \
-    --ignore=sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    "rst"
+  ];
+
+  disabledTestPaths = [
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml"
+    # requires mpl-animators package
+    "sunpy/map/tests/test_compositemap.py"
+    "sunpy/map/tests/test_mapbase.py"
+    "sunpy/map/tests/test_mapsequence.py"
+    "sunpy/map/tests/test_plotting.py"
+    "sunpy/map/tests/test_reproject_to.py"
+    "sunpy/net/tests/test_helioviewer.py"
+    "sunpy/timeseries/tests/test_timeseriesbase.py"
+    "sunpy/visualization/animator/tests/test_basefuncanimator.py"
+    "sunpy/visualization/animator/tests/test_mapsequenceanimator.py"
+    "sunpy/visualization/animator/tests/test_wcs.py"
+    "sunpy/visualization/colormaps/tests/test_cm.py"
+    # requires cdflib package
+    "sunpy/timeseries/tests/test_timeseries_factory.py"
+  ];
+
+  pytestFlagsArray = [
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module"
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module"
+  ];
 
   meta = with lib; {
     description = "SunPy: Python for Solar Physics";

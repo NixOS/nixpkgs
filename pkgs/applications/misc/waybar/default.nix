@@ -10,7 +10,6 @@
 , gtkmm3
 , libsigcxx
 , jsoncpp
-, fmt
 , scdoc
 , spdlog
 , gtk-layer-shell
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
   strictDeps = false;
 
   buildInputs = with lib;
-    [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
+    [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
     ++ optional  traySupport  libdbusmenu-gtk3
     ++ optional  pulseSupport libpulseaudio
     ++ optional  sndioSupport sndio
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  preFixup = lib.optional withMediaPlayer ''
+  preFixup = lib.optionalString withMediaPlayer ''
       cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
       wrapProgram $out/bin/waybar-mediaplayer.py \

@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  qemu-flags = import ../lib/qemu-flags.nix { inherit pkgs; };
+  qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   router = { config, pkgs, lib, ... }:
     with pkgs.lib;
@@ -42,7 +42,7 @@ let
         machines = flip map vlanIfs (vlan:
           {
             hostName = "client${toString vlan}";
-            ethernetAddress = qemu-flags.qemuNicMac vlan 1;
+            ethernetAddress = qemu-common.qemuNicMac vlan 1;
             ipAddress = "192.168.${toString vlan}.2";
           }
         );
@@ -380,12 +380,57 @@ let
               router.wait_until_succeeds("ping -c 1 192.168.1.3")
         '';
     };
+    fou = {
+      name = "foo-over-udp";
+      nodes.machine = { ... }: {
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          interfaces.eth1.ipv4.addresses = mkOverride 0
+            [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          fooOverUDP = {
+            fou1 = { port = 9001; };
+            fou2 = { port = 9002; protocol = 41; };
+            fou3 = mkIf (!networkd)
+              { port = 9003; local.address = "192.168.1.1"; };
+            fou4 = mkIf (!networkd)
+              { port = 9004; local = { address = "192.168.1.1"; dev = "eth1"; }; };
+          };
+        };
+        systemd.services = {
+          fou3-fou-encap.after = optional (!networkd) "network-addresses-eth1.service";
+        };
+      };
+      testScript = { ... }:
+        ''
+          import json
+
+          machine.wait_for_unit("network.target")
+          fous = json.loads(machine.succeed("ip -json fou show"))
+          assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
+          assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
+        '' + optionalString (!networkd) ''
+          assert {
+              "port": 9003,
+              "gue": None,
+              "family": "inet",
+              "local": "192.168.1.1",
+          } in fous, "fou3 exists"
+          assert {
+              "port": 9004,
+              "gue": None,
+              "family": "inet",
+              "local": "192.168.1.1",
+              "dev": "eth1",
+          } in fous, "fou4 exists"
+        '';
+    };
     sit = let
       node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
-          firewall.enable = false;
           useDHCP = false;
           sits.sit = {
             inherit remote;
@@ -400,8 +445,30 @@ let
       };
     in {
       name = "Sit";
-      nodes.client1 = node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; };
-      nodes.client2 = node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; };
+      # note on firewalling: the two nodes are explicitly asymmetric.
+      # client1 sends SIT packets in UDP, but accepts only proto-41 incoming.
+      # client2 does the reverse, sending in proto-41 and accepting only UDP incoming.
+      # that way we'll notice when either SIT itself or FOU breaks.
+      nodes.client1 = args@{ pkgs, ... }:
+        mkMerge [
+          (node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; } args)
+          {
+            networking = {
+              firewall.extraCommands = "iptables -A INPUT -p 41 -j ACCEPT";
+              sits.sit.encapsulation = { type = "fou"; port = 9001; };
+            };
+          }
+        ];
+      nodes.client2 = args@{ pkgs, ... }:
+        mkMerge [
+          (node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; } args)
+          {
+            networking = {
+              firewall.allowedUDPPorts = [ 9001 ];
+              fooOverUDP.fou1 = { port = 9001; protocol = 41; };
+            };
+          }
+        ];
       testScript = { ... }:
         ''
           start_all()
@@ -719,6 +786,24 @@ let
         print(client.succeed("stat /etc/systemd/network/50-foo.link"))
         client.succeed("udevadm settle")
         assert "mtu 1442" in client.succeed("ip l show dummy0")
+      '';
+    };
+    wlanInterface = let
+      testMac = "06:00:00:00:02:00";
+    in {
+      name = "WlanInterface";
+      machine = { pkgs, ... }: {
+        boot.kernelModules = [ "mac80211_hwsim" ];
+        networking.wlanInterfaces = {
+          wlan0 = { device = "wlan0"; };
+          wap0 = { device = "wlan0"; mac = testMac; };
+        };
+      };
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("network.target")
+        machine.wait_until_succeeds("ip address show wap0 | grep -q ${testMac}")
+        machine.fail("ip address show wlan0 | grep -q ${testMac}")
       '';
     };
   };

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "monkeyhex";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ba913df664c34f3ce53916c83872fddf750adc78a0b0ecdd316ac3e728bb019";
+    sha256 = "e2add1f7f1f620be9ccec0618342e6a9e47de50e0d2252628bffd452bfd3762b";
   };
 
   propagatedBuildInputs = [ future ];

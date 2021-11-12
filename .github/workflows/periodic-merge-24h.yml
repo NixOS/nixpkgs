@@ -28,12 +28,16 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
+          - from: release-21.05
+            into: staging-next-21.05
+          - from: staging-next-21.05
+            into: staging-21.05
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
       - uses: actions/checkout@v2
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
-        uses: devmasx/merge-branch@v1.3.1
+        uses: devmasx/merge-branch@1.4.0
         with:
           type: now
           from_branch: ${{ matrix.pairs.from }}

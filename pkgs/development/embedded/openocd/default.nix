@@ -5,6 +5,7 @@
 , hidapi
 , libftdi1
 , libusb1
+, libgpiod
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ hidapi libftdi1 libusb1 ];
+  buildInputs = [ hidapi libftdi1 libusb1 ]
+    ++ lib.optional stdenv.isLinux libgpiod;
 
   configureFlags = [
     "--enable-jtag_vpi"
@@ -29,6 +31,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature (! stdenv.isDarwin) "oocd_trace")
     "--enable-buspirate"
     (lib.enableFeature stdenv.isLinux "sysfsgpio")
+    (lib.enableFeature stdenv.isLinux "linuxgpiod")
     "--enable-remote-bitbang"
   ];
 

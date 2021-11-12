@@ -35,7 +35,12 @@ let
   options = {
 
     debug = {
-      DEBUG_INFO                = if (features.debug or false) then yes else no;
+      # Necessary for BTF
+      DEBUG_INFO                = mkMerge [
+        (whenOlder "5.2" (if (features.debug or false) then yes else no))
+        (whenAtLeast "5.2" yes)
+      ];
+      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
@@ -241,6 +246,8 @@ let
       FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = whenAtLeast "4.19" yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
+      # On 5.14 this conflicts with FB_SIMPLE.
+      DRM_SIMPLEDRM = whenAtLeast "5.14" no;
     };
 
     video = {
@@ -405,7 +412,7 @@ let
       CIFS_POSIX        = option yes;
       CIFS_FSCACHE      = yes;
       CIFS_STATS        = whenOlder "4.19" yes;
-      CIFS_WEAK_PW_HASH = yes;
+      CIFS_WEAK_PW_HASH = whenOlder "5.15" yes;
       CIFS_UPCALL       = yes;
       CIFS_ACL          = whenOlder "5.3" yes;
       CIFS_DFS_UPCALL   = yes;
@@ -795,6 +802,9 @@ let
       NET_FC             = yes; # Fibre Channel driver support
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
       PINCTRL_BAYTRAIL   = yes;
+      # GPIO for Braswell and Cherryview devices
+      # Needs to be built-in to for integrated keyboards to function properly
+      PINCTRL_CHERRYVIEW = yes;
       # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
       MMC_BLOCK_MINORS   = freeform "32";
 
@@ -881,6 +891,22 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
+    } // optionalAttrs (versionAtLeast version "5.4" && (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")) {
+      # Required for various hardware features on Chrome OS devices
+      CHROME_PLATFORMS = yes;
+      CHROMEOS_TBMC = module;
+
+      CROS_EC = module;
+
+      CROS_EC_I2C = module;
+      CROS_EC_SPI = module;
+      CROS_EC_LPC = module;
+      CROS_EC_ISHTP = module;
+
+      CROS_KBD_LED_BACKLIGHT = module;
+    } // optionalAttrs (versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
+      CHROMEOS_LAPTOP = module;
+      CHROMEOS_PSTORE = module;
     };
   };
 in

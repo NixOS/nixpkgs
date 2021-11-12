@@ -162,7 +162,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+      example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
@@ -231,7 +231,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };
@@ -261,7 +261,7 @@ with lib;
         inherit lib;
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

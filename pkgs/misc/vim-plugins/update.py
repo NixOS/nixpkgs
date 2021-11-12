@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nix-prefetch-git -p python3 -p python3Packages.GitPython nix -i python3
+#!nix-shell update-shell.nix -i python3
+
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -7,6 +8,11 @@
 # $ nix run nixpkgs.python3Packages.mypy -c mypy update.py
 # linted:
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265,E402 update.py
+
+# If you see `HTTP Error 429: too many requests` errors while running this script,
+# refer to:
+#
+# https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/vim.section.md#updating-plugins-in-nixpkgs-updating-plugins-in-nixpkgs
 
 import inspect
 import os
@@ -66,7 +72,7 @@ class VimEditor(pluginupdate.Editor):
                 f.write(textwrap.indent(textwrap.dedent(
                     f"""
   {plugin.normalized_name} = buildVimPluginFrom2Nix {{
-    pname = "{plugin.normalized_name}";
+    pname = "{plugin.name}";
     version = "{plugin.version}";
     src = fetchFromGitHub {{
       owner = "{owner}";

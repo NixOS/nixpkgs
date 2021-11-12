@@ -14,7 +14,7 @@ with lib;
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
-        example = literalExample "pkgs.glibcLocales";
+        example = literalExpression "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
 

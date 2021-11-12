@@ -14,7 +14,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unit;
-        defaultText = "pkgs.unit";
+        defaultText = literalExpression "pkgs.unit";
         description = "Unit package to use.";
       };
       user = mkOption {
@@ -45,7 +45,7 @@ in {
             "applications": {}
           }
         '';
-        example = literalExample ''
+        example = ''
           {
             "listeners": {
               "*:8300": {

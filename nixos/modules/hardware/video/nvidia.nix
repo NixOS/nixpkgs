@@ -23,6 +23,7 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaSettings = cfg.nvidiaSettings;
 in
 
 {
@@ -143,6 +144,15 @@ in
       '';
     };
 
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
+      '';
+    };
+
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
@@ -155,11 +165,11 @@ in
     hardware.nvidia.package = lib.mkOption {
       type = lib.types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
-      defaultText = "config.boot.kernelPackages.nvidiaPackages.stable";
+      defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy_340";
+      example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
   };
 
@@ -203,7 +213,7 @@ in
       }
 
       {
-        assertion = cfg.powerManagement.enable -> offloadCfg.enable;
+        assertion = cfg.powerManagement.finegrained -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
       }
 
@@ -274,12 +284,17 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
+    # 'nvidia_x11' installs it's files to /run/opengl-driver/...
+    environment.etc."egl/egl_external_platform.d".source =
+      "/run/opengl-driver/share/egl/egl_external_platform.d/";
+
     hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
     hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

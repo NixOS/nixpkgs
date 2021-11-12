@@ -5,14 +5,14 @@
 , cmake
 , git
 
-, llvmPackages_8
+, llvmPackages_11
 , spirv-llvm-translator
 
 , buildWithPatches ? true
 }:
 
 let
-  llvmPkgs = llvmPackages_8 // {
+  llvmPkgs = llvmPackages_11 // {
     inherit spirv-llvm-translator;
   };
 
@@ -31,7 +31,8 @@ let
     });
 
   passthru = rec {
-
+    spirv-llvm-translator = llvmPkgs.spirv-llvm-translator;
+    llvm = addPatches "llvm" llvmPkgs.llvm;
     libclang = addPatches "clang" llvmPkgs.libclang;
 
     clang-unwrapped = libclang.out;
@@ -43,14 +44,21 @@ let
     patchesOut = stdenv.mkDerivation rec {
       pname = "opencl-clang-patches";
       inherit (library) version src patches;
+      # Clang patches assume the root is the llvm root dir
+      # but clang root in nixpkgs is the clang sub-directory
+      postPatch = ''
+        for filename in patches/clang/*.patch; do
+          substituteInPlace "$filename" \
+            --replace "a/clang/" "a/" \
+            --replace "b/clang/" "b/"
+        done
+      '';
+
       installPhase = ''
         [ -d patches ] && cp -r patches/ $out || mkdir $out
-        mkdir -p $out/clang $out/spirv
+        mkdir -p $out/clang $out/llvm
       '';
     };
-
-    spirv-llvm-translator = addPatches "spirv" llvmPkgs.spirv-llvm-translator;
-
   };
 
   library = let
@@ -59,15 +67,15 @@ let
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
-      version = "unstable-2019-08-16";
+      version = "unstable-2021-06-22";
 
       inherit passthru;
 
       src = fetchFromGitHub {
         owner = "intel";
         repo = "opencl-clang";
-        rev = "94af090661d7c953c516c97a25ed053c744a0737";
-        sha256 = "05cg89m62nqjqm705h7gpdz4jd4hiczg8944dcjsvaybrqv3hcm5";
+        rev = "fd68f64b33e67d58f6c36b9e25c31c1178a1962a";
+        sha256 = "sha256-q1YPBb/LY67iEuQx1fMUQD/I7OsNfobW3yNfJxLXx3E=";
       };
 
       patches = [

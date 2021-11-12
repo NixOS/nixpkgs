@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "sysklogd-1.5.1";
+stdenv.mkDerivation rec {
+  pname = "sysklogd";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "http://www.infodrom.org/projects/sysklogd/download/sysklogd-1.5.1.tar.gz";
+    url = "http://www.infodrom.org/projects/sysklogd/download/sysklogd-${version}.tar.gz";
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 
@@ -13,6 +14,17 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-DSYSV";
 
   installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  postPatch = ''
+    # Disable stripping during installation, stripping will be done anyway.
+    # Fixes cross-compilation.
+    substituteInPlace Makefile \
+      --replace "-m 500 -s" "-m 500"
+  '';
 
   preConfigure =
     ''

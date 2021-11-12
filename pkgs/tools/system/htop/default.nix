@@ -11,13 +11,13 @@ assert systemdSupport -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "3.0.5";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9zecDd3oZ24RyOLnKdJmR29Chx6S24Kvuf/F7RYzl4I=";
+    sha256 = "JnpuBa09U086wWp0OtsDnStF4aLjhvtEj371u5XFtqc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ optional systemdSupport systemd
   ;
 
-  configureFlags = [ "--enable-unicode" ]
+  configureFlags = [ "--enable-unicode" "--sysconfdir=/etc" ]
     ++ optional sensorsSupport "--with-sensors"
   ;
 

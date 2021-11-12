@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/figsoda/xtrt";
     license = licenses.unlicense;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "xtrt";
   };
 }

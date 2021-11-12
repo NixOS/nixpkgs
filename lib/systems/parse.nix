@@ -106,6 +106,7 @@ rec {
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
 
     s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
+    s390x    = { bits = 64; significantByte = bigEndian; family = "s390"; };
 
     sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
     sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };

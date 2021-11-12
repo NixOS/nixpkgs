@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     rev = "v${version}";
-    sha256 = "1zhq7cai47649njjp3m8zaglsv9ci6ci855dymyip8qx5ppnkfj0";
+    sha256 = "17jldscmsq5lwp3pnjlxg56k3vfpr7rj4qbcbzkzhphifrfgm729";
   };
 
   propagatedBuildInputs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.3.6";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-iwmH4pbeKNkEYsaSd6I7ULSoEMwAtxOanF7vAutuW64=";
+    sha256 = "sha256-lO+FUuU7uihbRLI1X9qhOvgukRGfhDeSM/JdIqr96Fk=";
     fetchSubmodules = true;
   };
 
@@ -16,13 +16,6 @@ stdenv.mkDerivation rec {
     ninja
     makeWrapper
   ];
-
-  postPatch = ''
-    # doesn't work on aarch64, already removed on master:
-    # https://github.com/actboy168/bee.lua/commit/fd5ee552c8cff2c48eff72edc0c8db5b7bf1ee2c
-    rm {3rd/luamake/,}3rd/bee.lua/test/test_platform.lua
-    sed /test_platform/d -i {3rd/luamake/,}3rd/bee.lua/test/test.lua
-  '';
 
   preBuild = ''
     cd 3rd/luamake
@@ -40,13 +33,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/extras
-    cp -r ./{locale,meta,script,*.lua} $out/extras/
-    cp ./bin/Linux/{bee.so,lpeglabel.so} $out/extras
-    cp ./bin/Linux/lua-language-server $out/extras/.lua-language-server-unwrapped
-    makeWrapper $out/extras/.lua-language-server-unwrapped \
+    install -Dt "$out"/share/lua-language-server/bin/Linux bin/Linux/lua-language-server
+    install -m644 -t "$out"/share/lua-language-server/bin/Linux bin/Linux/*.*
+    install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
+    cp -r locale meta script "$out"/share/lua-language-server
+
+    # necessary for --version to work:
+    install -m644 -t "$out"/share/lua-language-server changelog.md
+
+    makeWrapper "$out"/share/lua-language-server/bin/Linux/lua-language-server \
       $out/bin/lua-language-server \
-      --add-flags "-E $out/extras/main.lua \
+      --add-flags "-E $out/share/lua-language-server/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
       --metapath='~/.cache/sumneko_lua/meta'"
 
@@ -59,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mjlbach ];
     platforms = platforms.linux;
+    mainProgram = "lua-language-server";
   };
 }

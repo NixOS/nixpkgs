@@ -1,13 +1,26 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p dotnet-sdk_3 nixfmt
+#! nix-shell -i bash -p dotnet-sdk_3 jq xmlstarlet curl nixfmt
+set -euo pipefail
 
 # Run this script to generate deps.nix
-# ./create_deps.sh /path/to/package/source/checkout > deps.nix
 
 # TODO: consolidate with other dotnet deps generation scripts by which
 #       this script is inspired:
 #       - pkgs/servers/nosql/eventstore/create-deps.sh
 #       - pkgs/development/dotnet-modules/python-language-server/create_deps.sh
+#       - pkgs/misc/emulators/ryujinx/updater.sh
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+deps_file="$(realpath "./deps.nix")"
+
+exec 2>&1 6> "$deps_file"
+
+store_src="$( nix-build ../../../.. -A wasabibackend.src --no-out-link )"
+src="$(mktemp -d)"
+cp -rT "$store_src" "$src"
+chmod -R +w "$src"
+pushd "$src"
 
 URLBASE="https://www.nuget.org/api/v2/package"
 
@@ -30,69 +43,56 @@ DEPS_TEMPLATE="
   sha256 = \"%s\";
 })"
 
+tmpdir="$(mktemp -d -p "$(pwd)")" # must be under source root
+trap 'rm -rf "$tmpdir"' EXIT
 
-function generate_restore_log() {
-  checkout_path=$1
-  >&2 echo "generating restore log for $checkout_path..."
-  cd $checkout_path
-  dotnet nuget locals all --clear
-  dotnet restore -v normal --no-cache WalletWasabi.Backend -r linux-x64
-  cd -
-}
+HOME="$tmpdir" dotnet restore --packages "$tmpdir"/.nuget/packages \
+        --no-cache --force --runtime linux-x64 \
+        WalletWasabi.Backend/WalletWasabi.Backend.csproj >&2
 
-function process_restore_log() {
-  restore_log=$1
-  >&2 echo "processing restore log..."
-  while read line; do
-    if echo $line | grep -q "^[[:space:]]*Installing"; then
-      l=$(echo $line | xargs)
-      l=${l#Installing }
-      l=${l%.}
-      echo $l
-    fi
-  done < $restore_log
-}
+mapfile -t repos < <(
+    xmlstarlet sel -t -v 'configuration/packageSources/add/@value' -n NuGet.config "$tmpdir"/.nuget/NuGet/NuGet.Config |
+        while IFS= read index
+        do
+            curl --compressed -fsL "$index" | \
+                jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"'
+        done
+)
 
-function prefetch_deps() {
-  processed_log=$1
-  >&2 echo "prefetching deps..."
-  while read line; do
-    name=$(echo $line | cut -d' ' -f1)
-    >&2 echo "prefetching '$name' version: $version"
-    version=$(echo $line | cut -d' ' -f2)
-    hash=$(nix-prefetch-url "$URLBASE/$name/$version" 2>/dev/null)
-    echo "$name $version $hash"
-  done < $processed_log
-}
+echo $DEPS_HEADER >&6
 
-function generate_deps_expression() {
-  packages=$1
-  >&2 echo "generating deps nix-expression..."
-  echo $DEPS_HEADER
-  while read line; do
-    name=$(echo $line | cut -d' ' -f1)
-    version=$(echo $line | cut -d' ' -f2)
-    hash=$(echo $line | cut -d' ' -f3)
-    printf "$DEPS_TEMPLATE" $name $version $hash
-  done < $packages
-  echo $DEPS_FOOTER
-}
+cd "$tmpdir/.nuget/packages"
+for package in *
+do
+    cd "$package"
+    for version in *
+    do
+        found=false
+        for repo in "${repos[@]}"
+        do
+            url="$repo$package/$version/$package.$version.nupkg"
+            if curl -fsL "$url" -o /dev/null
+            then
+                found=true
+                break
+            fi
+        done
 
-function main() {
-  checkout_path=$1
-  tmpdir=$(mktemp -d)
-  generate_restore_log $checkout_path > $tmpdir/restore.log
-  process_restore_log $tmpdir/restore.log > $tmpdir/processed.log
-  prefetch_deps $tmpdir/processed.log > $tmpdir/prefetched.log
-  generate_deps_expression $tmpdir/prefetched.log > $tmpdir/deps.nix
-  nixfmt $tmpdir/deps.nix
-  cat $tmpdir/deps.nix
-  rm -rf $tmpdir
-}
+        if ! $found
+        then
+            echo "couldn't find $package $version" >&2
+            exit 1
+        fi
 
-if [ ! -d "$1" ]; then
-    >&2 echo "First argument must be a directory, the path to the package source checkout"
-    exit 1
-fi
+        sha256=$(nix-prefetch-url "$url" 2>/dev/null)
 
-main $@
+        printf "$DEPS_TEMPLATE" $package $version $sha256 >&6
+    done
+    cd ..
+done
+
+echo $DEPS_FOOTER >&6
+
+exec 6>&-
+
+nixfmt "$deps_file"

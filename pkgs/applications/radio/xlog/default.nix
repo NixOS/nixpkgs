@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, glib, gtk2, pkg-config, hamlib }:
 stdenv.mkDerivation rec {
   pname = "xlog";
-  version = "2.0.23";
+  version = "2.0.24";
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JSPyXOJbYOCeWY6h0v8fbmBkf1Dop1gdmnn4gKdBgac=";
+    sha256 = "sha256-jUU6xt3H9bY9CAQRTFQjprlsC77VwjIB/6sSRNzE+Lw=";
   };
 
   # glib-2.62 deprecations

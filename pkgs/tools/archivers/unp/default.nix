@@ -9,15 +9,14 @@ let
 
 in stdenv.mkDerivation {
   pname = "unp";
-  version = "2.0-pre7";
+  version = "2.0-pre9";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
 
   src = fetchurl {
-    # url = "http://http.debian.net/debian/pool/main/u/unp/unp_2.0~pre7+nmu1.tar.bz2";
-    url = "mirror://debian/pool/main/u/unp/unp_2.0~pre7+nmu1.tar.bz2";
-    sha256 = "09w2sy7ivmylxf8blf0ywxicvb4pbl0xhrlbb3i9x9d56ll6ybbw";
-    name = "unp_2.0_pre7+nmu1.tar.bz2";
+    url = "mirror://debian/pool/main/u/unp/unp_2.0~pre9.tar.xz";
+    sha256 = "1lp5vi9x1qi3b21nzv0yqqacj6p74qkl5zryzwq30rjkyvahjya1";
+    name = "unp_2.0_pre9.tar.xz";
   };
 
   dontConfigure = true;

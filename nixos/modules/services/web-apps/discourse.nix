@@ -33,7 +33,7 @@ in
         apply = p: p.override {
           plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
         };
-        defaultText = "pkgs.discourse";
+        defaultText = lib.literalExpression "pkgs.discourse";
         description = ''
           The discourse package to use.
         '';
@@ -45,7 +45,7 @@ in
                     config.networking.fqdn
                   else
                     config.networking.hostName;
-        defaultText = "config.networking.fqdn";
+        defaultText = lib.literalExpression "config.networking.fqdn";
         example = "discourse.example.com";
         description = ''
           The hostname to serve Discourse on.
@@ -99,7 +99,10 @@ in
       enableACME = lib.mkOption {
         type = lib.types.bool;
         default = cfg.sslCertificate == null && cfg.sslCertificateKey == null;
-        defaultText = "true, unless services.discourse.sslCertificate and services.discourse.sslCertificateKey are set.";
+        defaultText = lib.literalDocBook ''
+          <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
+          and <option>services.discourse.sslCertificateKey</option> are set.
+        '';
         description = ''
           Whether an ACME certificate should be used to secure
           connections to the server.
@@ -109,7 +112,7 @@ in
       backendSettings = lib.mkOption {
         type = with lib.types; attrsOf (nullOr (oneOf [ str int bool float ]));
         default = {};
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             max_reqs_per_ip_per_minute = 300;
             max_reqs_per_ip_per_10_seconds = 60;
@@ -134,7 +137,7 @@ in
       siteSettings = lib.mkOption {
         type = json.type;
         default = {};
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             required = {
               title = "My Cats";
@@ -172,6 +175,15 @@ in
       };
 
       admin = {
+        skipCreate = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Do not create the admin account, instead rely on other
+            existing admin accounts.
+          '';
+        };
+
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
@@ -325,10 +337,8 @@ in
         notificationEmailAddress = lib.mkOption {
           type = lib.types.str;
           default = "${if cfg.mail.incoming.enable then "notifications" else "noreply"}@${cfg.hostname}";
-          defaultText = ''
-            "notifications@`config.services.discourse.hostname`" if
-            config.services.discourse.mail.incoming.enable is "true",
-            otherwise "noreply`config.services.discourse.hostname`"
+          defaultText = lib.literalExpression ''
+            "''${if config.services.discourse.mail.incoming.enable then "notifications" else "noreply"}@''${config.services.discourse.hostname}"
           '';
           description = ''
             The <literal>from:</literal> email address used when
@@ -439,7 +449,7 @@ in
           replyEmailAddress = lib.mkOption {
             type = lib.types.str;
             default = "%{reply_key}@${cfg.hostname}";
-            defaultText = "%{reply_key}@`config.services.discourse.hostname`";
+            defaultText = lib.literalExpression ''"%{reply_key}@''${config.services.discourse.hostname}"'';
             description = ''
               Template for reply by email incoming email address, for
               example: %{reply_key}@reply.example.com or
@@ -450,7 +460,7 @@ in
           mailReceiverPackage = lib.mkOption {
             type = lib.types.package;
             default = pkgs.discourse-mail-receiver;
-            defaultText = "pkgs.discourse-mail-receiver";
+            defaultText = lib.literalExpression "pkgs.discourse-mail-receiver";
             description = ''
               The discourse-mail-receiver package to use.
             '';
@@ -475,7 +485,7 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           with config.services.discourse.package.plugins; [
             discourse-canned-replies
             discourse-github
@@ -721,11 +731,23 @@ in
             lib.optionalString (file != null) ''
               replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
+
+          mkAdmin = ''
+            export ADMIN_EMAIL="${cfg.admin.email}"
+            export ADMIN_NAME="${cfg.admin.fullName}"
+            export ADMIN_USERNAME="${cfg.admin.username}"
+            ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+            export ADMIN_PASSWORD
+            discourse-rake admin:create_noninteractively
+          '';
+
         in ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
 
           umask u=rwx,g=rx,o=
+
+          rm -rf /var/lib/discourse/tmp/*
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
@@ -748,14 +770,9 @@ in
           )
 
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
-          chmod -R u+w /run/discourse/tmp/
+          chmod -R u+w /var/lib/discourse/tmp/
 
-          export ADMIN_EMAIL="${cfg.admin.email}"
-          export ADMIN_NAME="${cfg.admin.fullName}"
-          export ADMIN_USERNAME="${cfg.admin.username}"
-          ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
-          export ADMIN_PASSWORD
-          discourse-rake admin:create_noninteractively
+          ${lib.optionalString (!cfg.admin.skipCreate) mkAdmin}
 
           discourse-rake themes:update
           discourse-rake uploads:regenerate_missing_optimized
@@ -768,7 +785,6 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "tmp"
           "assets/javascripts/plugins"
           "public"
           "sockets"
@@ -777,6 +793,7 @@ in
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
+          "tmp"
         ];
         StateDirectoryMode = 0750;
         LogsDirectory = "discourse";

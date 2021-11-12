@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.6.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
+    sha256 = "sha256-NHKP1vzb8qu+EkUWDvLWLl4U4pW9ZxbE7YFI6Vwesfg=";
   };
 
   passthru = {
@@ -76,7 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

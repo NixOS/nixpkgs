@@ -1,10 +1,14 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , appdirs
+, bokeh
+, buildPythonPackage
 , dask
+, entrypoints
+, fetchFromGitHub
+, fsspec
 , holoviews
 , hvplot
+, intake-parquet
 , jinja2
 , msgpack
 , msgpack-numpy
@@ -13,47 +17,55 @@
 , panel
 , pyarrow
 , pytestCheckHook
-, pythonOlder
 , python-snappy
+, pythonOlder
+, pyyaml
 , requests
-, ruamel_yaml
-, six
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.2";
-  disabled = pythonOlder "3.6";
+  version = "0.6.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b0cab1d185a703acb38eecb9cff3edd5cc7004fe18a36d5e42a8f7fffc9cca1c";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "194cdd6lx92zcpkn3wgm490kxvw0c58ziix8hcihsr5ayfr1wdsl";
   };
 
   propagatedBuildInputs = [
     appdirs
+    bokeh
     dask
+    entrypoints
+    fsspec
     holoviews
     hvplot
     jinja2
-    msgpack-numpy
     msgpack
+    msgpack-numpy
     numpy
     pandas
     panel
+    pyarrow
     python-snappy
+    pyyaml
     requests
-    ruamel_yaml
-    six
     tornado
   ];
 
-  checkInputs = [ pyarrow pytestCheckHook ];
+  checkInputs = [
+    intake-parquet
+    pytestCheckHook
+  ];
 
   postPatch = ''
-    # Is in setup_requires but not used in setup.py...
-    substituteInPlace setup.py --replace "'pytest-runner'" ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
   '';
 
   # test_discover requires driver_with_entrypoints-0.1.dist-info, which is not included in tarball
@@ -64,22 +76,24 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # disable tests which touch network
+    # Disable tests which touch network and are broken
     "test_discover"
     "test_filtered_compressed_cache"
     "test_get_dir"
     "test_remote_cat"
     "http"
-
-    # broken test
     "test_read_pattern"
     "test_remote_arr"
+  ];
+
+  pythonImportsCheck = [
+    "intake"
   ];
 
   meta = with lib; {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

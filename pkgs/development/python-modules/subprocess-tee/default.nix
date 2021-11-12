@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "subprocess-tee";
-  version = "0.3.2";
+  version = "0.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01b0z8mcm568v9carhi0py1hs34wrbnlzyvdmhqzipql407kdpk2";
+    sha256 = "ff5cced589a4b8ac973276ca1ba21bb6e3de600cde11a69947ff51f696efd577";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,11 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     enrich
+  ];
+
+  disabledTests = [
+    # cyclic dependency on `molecule` (see https://github.com/pycontribs/subprocess-tee/issues/50)
+    "test_molecule"
   ];
 
   pythonImportsCheck = [

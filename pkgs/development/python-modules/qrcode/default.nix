@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "6.1";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "505253854f607f2abf4d16092c61d4e9d511a3b4392e60bff957a68592b04369";
+    sha256 = "375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578";
   };
 
   propagatedBuildInputs = [ six pillow pymaging_png setuptools ];

@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gosec";
-  version = "2.8.1";
+  version = "2.9.1";
 
   subPackages = [ "cmd/gosec" ];
 
@@ -10,14 +10,14 @@ buildGoModule rec {
     owner = "securego";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AlADSEekcUH/pCGggKlkBDiIYMe1zsoe9hh6fVUwQVA=";
+    sha256 = "0q9834siya19gj5ckymymyzkd1yn34b4xg5bvcgd7ckcpky143yw";
   };
 
-  vendorSha256 = "sha256-HBwIZfvkL9HSwkD1sZzBM7IJFAjLbCxyc95vqR5TFAg=";
+  vendorSha256 = "1h0bbkp9g5nzzjm8qkaag54n9nl711ckkjwibb1gb9ciqwsad33l";
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version} -X main.GitTag=${src.rev} -X main.BuildDate=unknown" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X main.GitTag=${src.rev}" "-X main.BuildDate=unknown" ];
 
   meta = with lib; {
     homepage = "https://github.com/securego/gosec";
@@ -27,4 +27,3 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

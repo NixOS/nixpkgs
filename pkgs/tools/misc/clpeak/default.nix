@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "A tool which profiles OpenCL devices to find their peak capacities";
     homepage = "https://github.com/krrishnarraj/clpeak/";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

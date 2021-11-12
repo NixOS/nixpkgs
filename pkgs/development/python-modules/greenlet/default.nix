@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "1.1.0";
+  version = "1.1.2";
   disabled = isPyPy;  # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c87df8ae3f01ffb4483c796fe1b15232ce2b219f0b18126948616224d3f658ee";
+    sha256 = "e30f5ea4ae2346e62cedde8794a56858a67b878dd79f7df76a0767e356b1744a";
   };
 
   checkPhase = ''

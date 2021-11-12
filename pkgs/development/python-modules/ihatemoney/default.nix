@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
+{ buildPythonPackage
+, lib
+, isPy27
+, nixosTests
+, fetchPypi
 , alembic
 , aniso8601
 , Babel
 , blinker
+, cachetools
 , click
 , dnspython
 , email_validator
@@ -12,8 +17,8 @@
 , flask_mail
 , flask_migrate
 , flask-restful
-, flask_script
 , flask_sqlalchemy
+, flask-talisman
 , flask_wtf
 , debts
 , idna
@@ -23,9 +28,12 @@
 , markupsafe
 , python-dateutil
 , pytz
+, requests
 , six
 , sqlalchemy
+, sqlalchemy-utils
 , sqlalchemy-continuum
+, sqlalchemy-i18n
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support
@@ -36,55 +44,36 @@
 # ihatemoney is not really a library. It will only ever be imported
 # by the interpreter of uwsgi. So overrides for its depencies are fine.
 let
-  # https://github.com/spiral-project/ihatemoney/issues/567
-  pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
-    pname = "WTForms";
-    version = "2.2.1";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
-    };
-  });
-  pinned_flask_wtf = flask_wtf.override { wtforms = pinned_wtforms; };
+  # sqlalchemy-continuum requires sqlalchemy < 1.4
+  pinned_sqlalchemy = sqlalchemy.overridePythonAttrs (
+    old: rec {
+      pname = "SQLAlchemy";
+      version = "1.3.24";
+
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "06bmxzssc66cblk1hamskyv5q3xf1nh1py3vi6dka4lkpxy7gfzb";
+      };
+    }
+  );
 in
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.2";
+  version = "5.1.1";
 
-  src = fetchFromGitHub {
-    owner = "spiral-project";
-    repo = pname;
-    rev = version;
-    sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0gsqba9qbs1dpmfys8qpiahy4pbn4khcc6mgmdnhssmkjsb94sx6";
   };
 
   disabled = isPy27;
 
-  patches = [
-    # fix migration on postgresql
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
-      sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
-    })
-    (fetchpatch {
-      name = "CVE-2020-15120.patch";
-      url = "https://github.com/spiral-project/ihatemoney/commit/8d77cf5d5646e1d2d8ded13f0660638f57e98471.patch";
-      sha256 = "0y855sk3qsbpq7slj876k2ifa1lccc2dccag98pkyaadpz5gbabv";
-    })
-  ];
-
-  postPatch = ''
-    # remove draconian pinning
-    sed -i 's/==.*$//' setup.cfg
-  '';
-
   propagatedBuildInputs = [
-    alembic
     aniso8601
     Babel
     blinker
+    cachetools
     click
     dnspython
     email_validator
@@ -92,11 +81,19 @@ buildPythonPackage rec {
     flask-babel
     flask-cors
     flask_mail
-    flask_migrate
+    (
+      flask_migrate.override {
+        flask_sqlalchemy = flask_sqlalchemy.override {
+          sqlalchemy = pinned_sqlalchemy;
+        };
+        alembic = alembic.override {
+          sqlalchemy = pinned_sqlalchemy;
+        };
+      }
+    )
     flask-restful
-    flask_script
-    flask_sqlalchemy
-    pinned_flask_wtf
+    flask-talisman
+    flask_wtf
     idna
     itsdangerous
     jinja2
@@ -104,23 +101,46 @@ buildPythonPackage rec {
     markupsafe
     python-dateutil
     pytz
+    requests
     six
-    sqlalchemy
-    sqlalchemy-continuum
+    (
+      (
+        sqlalchemy-continuum.override {
+          sqlalchemy = pinned_sqlalchemy;
+          sqlalchemy-utils = sqlalchemy-utils.override {
+            sqlalchemy = pinned_sqlalchemy;
+          };
+          sqlalchemy-i18n = sqlalchemy-i18n.override {
+            sqlalchemy = pinned_sqlalchemy;
+            sqlalchemy-utils = sqlalchemy-utils.override {
+              sqlalchemy = pinned_sqlalchemy;
+            };
+          };
+          flask_sqlalchemy = flask_sqlalchemy.override {
+            sqlalchemy = pinned_sqlalchemy;
+          };
+        }
+      ).overridePythonAttrs (
+        old: {
+          doCheck = false;
+        }
+      )
+    )
     werkzeug
-    pinned_wtforms
+    wtforms
     psycopg2
     debts
   ];
 
   checkInputs = [
-    flask_testing pytestCheckHook
+    flask_testing
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
   disabledTests = [
     "test_notifications"  # requires running service.
     "test_invite"         # requires running service.
+    "test_invitation_email_failure" # requires dns resolution
   ];
 
   passthru.tests = {
@@ -134,5 +154,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.symphorien ];
   };
 }
-
-

@@ -7,7 +7,7 @@ let
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
+      ${coursier}/bin/cs fetch ch.epfl.scala:scalafix-cli_2.12.7:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';

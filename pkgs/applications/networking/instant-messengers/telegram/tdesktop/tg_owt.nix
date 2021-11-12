@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2021-06-27";
+  version = "unstable-2021-10-21";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "91d836dc84a16584c6ac52b36c04c0de504d9c34";
-    sha256 = "1ir4svv5mijpzr0rmx65088iikck83vhcdqrpf9dnk6yp4j9v4v2";
+    rev = "d578c760dc6f1ae5f0f3bb5317b0b2ed04b79138";
+    sha256 = "12lr50nma3j9df55sxi6p48yhn9yxrwzz5yrx7r29p8p4fv1c75w";
     fetchSubmodules = true;
   };
 

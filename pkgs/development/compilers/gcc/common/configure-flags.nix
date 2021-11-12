@@ -93,6 +93,7 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
+    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
@@ -133,7 +134,7 @@ let
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStrings (lib.intersperse ","
+        lib.concatStringsSep ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
           ++ lib.optional langD        "d"
@@ -146,7 +147,6 @@ let
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
           ++ lib.optional langJit      "jit"
           )
-        )
       }"
     ]
 

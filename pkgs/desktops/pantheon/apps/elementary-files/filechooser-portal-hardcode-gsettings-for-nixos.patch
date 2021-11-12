@@ -1,0 +1,24 @@
+From 726ab4c0ab01273cb2197e4c151a5b69ff0954b6 Mon Sep 17 00:00:00 2001
+From: Bobby Rong <rjl931189261@126.com>
+Date: Fri, 16 Jul 2021 18:24:58 +0800
+Subject: [PATCH] filechooser-portal: hardcode gsettings for nixos
+
+---
+ filechooser-portal/LegacyFileChooserDialog.vala | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/filechooser-portal/LegacyFileChooserDialog.vala b/filechooser-portal/LegacyFileChooserDialog.vala
+index 330718f..f383bb1 100644
+--- a/filechooser-portal/LegacyFileChooserDialog.vala
++++ b/filechooser-portal/LegacyFileChooserDialog.vala
+@@ -60,7 +60,9 @@ public class Files.LegacyFileChooserDialog : Object {
+         /* If not local only during creation, strange bug occurs on fresh installs */
+         chooser_dialog.local_only = true;
+ 
+-        var chooser_settings = new Settings ("io.elementary.files.file-chooser");
++        SettingsSchemaSource sss = new SettingsSchemaSource.from_directory ("@ELEMENTARY_FILES_GSETTINGS_PATH@", SettingsSchemaSource.get_default (), true);
++        SettingsSchema chooser_schema = sss.lookup ("io.elementary.files.file-chooser", false);
++        var chooser_settings = new Settings.full (chooser_schema, null, null);
+ 
+         action_area = (Gtk.ButtonBox) chooser_dialog.get_action_area ();
+ 

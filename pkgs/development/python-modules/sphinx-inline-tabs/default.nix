@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
-  version = "2021.04.11.beta9";
+  version = "2021.08.17.beta10";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
     rev = version;
-    sha256 = "sha256-UYrLQAXPProjpGPQNkju6+DmzjPG+jbjdKveoeViVTY=";
+    sha256 = "sha256-T3OqK0eXNiBs2zQURCSPLc8aIyf2an32UyDh4qSmxQ4=";
   };
 
   propagatedBuildInputs = [

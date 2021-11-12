@@ -32,8 +32,18 @@ in
 
     # Make sure pmount and pumount are setuid wrapped.
     security.wrappers = {
-      pmount.source = "${pkgs.pmount.out}/bin/pmount";
-      pumount.source = "${pkgs.pmount.out}/bin/pumount";
+      pmount =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.pmount.out}/bin/pmount";
+        };
+      pumount =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.pmount.out}/bin/pumount";
+        };
     };
 
     environment.systemPackages = [ pkgs.pmount ];

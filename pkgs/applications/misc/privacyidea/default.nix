@@ -14,7 +14,8 @@ let
       });
       flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
-        src = oldAttrs.src.override {
+        src = python3.pkgs.fetchPypi {
+          pname = "Flask-Migrate";
           inherit version;
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };

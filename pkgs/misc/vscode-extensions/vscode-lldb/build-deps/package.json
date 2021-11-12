@@ -1,6 +1,6 @@
 {
   "name": "vscode-lldb",
-  "version": "1.6.5",
+  "version": "1.6.8",
   "dependencies": {
     "string-argv": "^0.3.1",
     "yaml": "^1.10.0",

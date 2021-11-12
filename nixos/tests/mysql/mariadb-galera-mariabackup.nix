@@ -4,6 +4,16 @@ let
   mysqlenv-common      = pkgs.buildEnv { name = "mysql-path-env-common";      pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
   mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute2 netcat procps pv socat ]; };
 
+  # Common user configuration
+  users = { ... }:
+  {
+    users.users.testuser = {
+      isSystemUser = true;
+      group = "testusers";
+    };
+    users.groups.testusers = { };
+  };
+
 in {
   name = "mariadb-galera-mariabackup";
   meta = with pkgs.lib.maintainers; {
@@ -17,6 +27,7 @@ in {
     galera_01 =
       { pkgs, ... }:
       {
+      imports = [ users ];
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -31,7 +42,6 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -75,6 +85,7 @@ in {
     galera_02 =
       { pkgs, ... }:
       {
+      imports = [ users ];
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -89,7 +100,6 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };
@@ -122,6 +132,7 @@ in {
     galera_03 =
       { pkgs, ... }:
       {
+      imports = [ users ];
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -136,7 +147,6 @@ in {
         firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
         firewall.allowedUDPPorts = [ 4567 ];
       };
-      users.users.testuser = { isSystemUser = true; };
       systemd.services.mysql = with pkgs; {
         path = [ mysqlenv-common mysqlenv-mariabackup ];
       };

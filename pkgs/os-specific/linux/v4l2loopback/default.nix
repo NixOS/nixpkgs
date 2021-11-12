@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fortuneteller2k ];
     platforms = platforms.linux;
+    outputsToInstall = [ "out" ];
   };
 }

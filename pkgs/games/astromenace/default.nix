@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.viewizard.com/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    mainProgram = "AstroMenace";
   };
 }

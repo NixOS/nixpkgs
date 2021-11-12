@@ -1,0 +1,31 @@
+From 1a2d24d210c9329e8b900fdb01576c57374581d8 Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Mon, 26 Jul 2021 16:57:43 +0200
+Subject: [PATCH 20/20] core: respect install_sysconfdir_samples in meson file
+
+The refactoring done in e11a25cadbe caused the configuration files to be
+installed into the pkgsysconfdir regardless of the state of the
+install_sysconfdir_samples boolean that indicated whether or not the
+sample files should be installed.
+---
+ src/core/meson.build | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/core/meson.build b/src/core/meson.build
+index f0d2c6f642..4ff7e00e36 100644
+--- a/src/core/meson.build
++++ b/src/core/meson.build
+@@ -187,6 +187,10 @@ foreach item : in_files
+         file = item[0]
+         dir = item[1]
+ 
++        if not install_sysconfdir_samples and dir == pkgsysconfdir
++                continue
++        endif
++
+         custom_target(
+                 file,
+                 input : file + '.in',
+-- 
+2.32.0
+

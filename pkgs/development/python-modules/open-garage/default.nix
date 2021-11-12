@@ -8,14 +8,15 @@
 
 buildPythonPackage rec {
   pname = "open-garage";
-  version = "0.1.5";
+  version = "0.1.6";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyOpenGarage";
     rev = version;
-    sha256 = "1iqcqkbb1ik5lmsvwgy6i780x6y3wlm1gx257anxyvp1b21gm24p";
+    sha256 = "sha256-vm51Fjej0OQ7LftisS/tsnxZxa5c/j7eGIROMsEcXNE=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +27,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "opengarage" ];
+  pythonImportsCheck = [
+    "opengarage"
+  ];
 
   meta = with lib; {
     description = "Python module to communicate with opengarage.io";

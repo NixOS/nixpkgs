@@ -1,9 +1,42 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
-, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
-, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
-, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
-, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
-with lib;
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, flex
+, bison
+, proj
+, geos
+, xlibsWrapper
+, sqlite
+, gsl
+, qwt
+, fcgi
+, python3Packages
+, libspatialindex
+, libspatialite
+, postgresql
+, txt2tags
+, openssl
+, libzip
+, hdf5
+, netcdf
+, exiv2
+, protobuf
+, qtbase
+, qtsensors
+, qca-qt5
+, qtkeychain
+, qscintilla
+, qtserialport
+, qtxmlpatterns
+, withGrass ? true
+, grass
+, withWebKit ? true
+, qtwebkit
+}:
+
 let
   pythonBuildInputs = with python3Packages; [
     qscintilla-qt5
@@ -24,16 +57,22 @@ let
     six
   ];
 in mkDerivation rec {
-  version = "3.16.9";
-  pname = "qgis";
-  name = "${pname}-unwrapped-${version}";
+  version = "3.16.10";
+  pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-Y9WVgKEMOSMaXxfC9EQ8yqBYEj4XNL7YdMp8vjV55d0=";
+    sha256 = "sha256-/lsfyTDlkZNIVHg5qgZW7qfOyTC2+1r3ZbsnQmEdy30=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/qgis/QGIS/commit/fc1ac8bef8dcc3194857ecd32519aca4867b4fa1.patch";
+      sha256 = "106smg3drx8c7yxzfhd1c7xrq757l5cfxx8lklihyvr4a7wc9gpy";
+    })
+  ];
 
   passthru = {
     inherit pythonBuildInputs;

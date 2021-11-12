@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , pkg-config
@@ -9,6 +10,7 @@
 , vala
 , gtk3
 , libgee
+, libhandy
 , granite
 , gettext
 , clutter-gtk
@@ -18,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.4.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N3WZysLIah40kcyIyhryZpm2FxCmlvp0EB1krZ/IsYs=";
+    sha256 = "02dfsrfmr297cxpyd5m3746ihcgjyfnb3d42ng9m4ljdvh0dxgim";
   };
 
   passthru = {
@@ -49,10 +51,17 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
   ];
 
   patches = [
     ./plugs-path-env.patch
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/switchboard/pull/214
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard/commit/8d6b5f4cbbaf134880252afbf1e25d70033e6402.patch";
+      sha256 = "0gwq3wwj45jrnlhsmxfclbjw6xjr8kf6pp3a84vbnrazw76lg5nc";
+    })
   ];
 
   postPatch = ''
@@ -65,6 +74,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.switchboard";
   };
 }

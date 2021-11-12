@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.7.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "v${version}";
-    sha256 = "sha256-EksCnhSde25hradmKaDSOfIa/QnMAlIbgbQWX6k5v+4=";
+    sha256 = "sha256-BOOtzI45Vbce2XmcleyDOg/+6YDASCIOBvBytZDK7ZA=";
   };
 
-  vendorSha256 = "sha256-Y2Yuc2pcxW0M1CJfN3dezPB9cg6MvOUg5A+yFHCwntk=";
+  vendorSha256 = "sha256-N23jdHR+Alo3dYkfZ4ygr5UU2NEO/cgrgN52glU2hd8=";
 
   doCheck = false;
 
   subPackages = [ "cmd/task" ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
   ];
 
   postInstall = ''

@@ -2,22 +2,21 @@
 
 let
   pname = "anytype";
-  version = "0.18.59";
+  version = "0.21.1";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
     url = "https://at9412003.fra1.digitaloceanspaces.com/Anytype-${version}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-HDhDd23kXhIFXg+QKPNpR2R6QC4oJCnut+gD//qMK1Y=";
+    sha256 = "sha256-5QsbB48g11TyfWCbR7Sz2AETEwdyG+bSJQNGRHrIueE=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in
 appimageTools.wrapType2 {
   inherit name src;
 
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.gnome3.libsecret
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}

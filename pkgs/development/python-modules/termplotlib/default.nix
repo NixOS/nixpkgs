@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "termplotlib";
-  version = "0.3.5";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z6bw6lkbrgjyq3ndsx20gwpai4scm1q9rjh4rdz0rvja4jdcv3z";
+    sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
   };
 
   format = "pyproject";

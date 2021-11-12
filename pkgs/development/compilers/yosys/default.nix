@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.9+4276";
+  version = "0.10+1";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "75a4cdfc8afc10fed80e43fb1ba31c7edaf6e361";
-    sha256 = "13xb7ny6i0kr6z6xkj9wmmcj551si7w05r3cghq8h8wkikyh6c8p";
+    rev    = "7a7df9a3b4996b17bb774377483b15de49aa3d9b";
+    sha256 = "sha256-gi/Q6loIQ75NTbS9b/Q8sdrl9NGBDae2+AAGHVYB0WI=";
   };
 
   enableParallelBuilding = true;
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./plugin-search-dirs.patch
+    ./fix-clang-build.patch # see https://github.com/YosysHQ/yosys/issues/2011
   ];
 
   postPatch = ''
@@ -104,12 +105,5 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     platforms   = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
-    #In file included from kernel/driver.cc:20:
-    #./kernel/yosys.h:42:10: fatal error: 'map' file not found
-    ##include <map>
-
-    #https://github.com/YosysHQ/yosys/issues/681
-    #https://github.com/YosysHQ/yosys/issues/2011
-    broken = stdenv.isDarwin;
   };
 }

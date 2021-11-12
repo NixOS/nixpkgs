@@ -1,16 +1,22 @@
-{ callPackage, wxGTK30, buildPackages, wxSupport ? true }:
+{ beam, callPackage, wxGTK30, buildPackages, stdenv
+, wxSupport ? true
+, systemdSupport ? stdenv.isLinux
+}:
 
-rec {
+with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
 
-  # Each
-  interpreters = rec {
+  # R24 is the default version.
+  # The main switch to change default Erlang version.
+  defaultVersion = "erlangR24";
 
-    # R24 is the default version.
-    erlang = erlangR24; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR24_odbc;
-    erlang_javac = erlangR24_javac;
-    erlang_odbc_javac = erlangR24_odbc_javac;
+  # Each
+  interpreters = with beam.interpreters; {
+
+    erlang = beam.interpreters.${defaultVersion};
+    erlang_odbc = beam.interpreters."${defaultVersion}_odbc";
+    erlang_javac = beam.interpreters."${defaultVersion}_javac";
+    erlang_odbc_javac = beam.interpreters."${defaultVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
 
@@ -20,7 +26,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR24_odbc = erlangR24.override { odbcSupport = true; };
     erlangR24_javac = erlangR24.override { javacSupport = true; };
@@ -35,7 +41,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR23_odbc = erlangR23.override { odbcSupport = true; };
     erlangR23_javac = erlangR23.override { javacSupport = true; };
@@ -50,7 +56,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR22_odbc = erlangR22.override { odbcSupport = true; };
     erlangR22_javac = erlangR22.override { javacSupport = true; };
@@ -63,7 +69,7 @@ rec {
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR21_odbc = erlangR21.override { odbcSupport = true; };
     erlangR21_javac = erlangR21.override { javacSupport = true; };
@@ -98,7 +104,7 @@ rec {
   # appropriate Erlang/OTP version.
   packages = {
     # Packages built with default Erlang version.
-    erlang = packagesWith interpreters.erlang;
+    erlang = packages.${defaultVersion};
 
     erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;

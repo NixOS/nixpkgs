@@ -1,36 +1,26 @@
 { lib
-, ansiwrap
-, asteval
-, buildPythonApplication
-, colorama
-, cryptography
 , fetchFromGitHub
-, keyring
-, parsedatetime
-, poetry
-, pytestCheckHook
-, python-dateutil
-, pytz
-, pyxdg
-, pyyaml
-, tzlocal
+, fetchpatch
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "2.8";
+  version = "2.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zpsvrjhami9y7204yjbdzi04bkkz6i3apda9fh3hbq83y6wzprz";
+    sha256 = "sha256-+kPr7ndY6u1HMw6m0UZJ5jxVIPNjlTfQt7OYEdZkHBE=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     ansiwrap
     asteval
     colorama
@@ -44,12 +34,32 @@ buildPythonApplication rec {
     tzlocal
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "jrnl" ];
+  checkInputs = with python3.pkgs; [
+    pytest-bdd
+    pytestCheckHook
+    toml
+  ];
+
+  patches = [
+    # Switch to poetry-core, https://github.com/jrnl-org/jrnl/pull/1359
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/jrnl-org/jrnl/commit/a55a240eff7a167af5974a03e9de6f7b818eafd9.patch";
+      sha256 = "1w3gb4vasvh51nggf89fsqsm4862m0g7hr36qz22n4vg9dds175m";
+    })
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  pythonImportsCheck = [
+    "jrnl"
+  ];
 
   meta = with lib; {
-    homepage = "http://maebert.github.io/jrnl/";
-    description = "A simple command line journal application that stores your journal in a plain text file";
+    description = "Simple command line journal application that stores your journal in a plain text file";
+    homepage = "https://jrnl.sh/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ zalakain ];
   };

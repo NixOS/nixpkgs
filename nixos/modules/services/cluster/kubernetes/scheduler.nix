@@ -79,6 +79,9 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
     };
 
     services.kubernetes.pki.certs = {

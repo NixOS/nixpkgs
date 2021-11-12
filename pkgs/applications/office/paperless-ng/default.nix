@@ -5,7 +5,6 @@
 , ghostscript
 , imagemagick
 , jbig2enc
-, ocrmypdf
 , optipng
 , pngquant
 , qpdf
@@ -27,10 +26,18 @@ let
       # https://github.com/Koed00/django-q/issues/526
       django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.4";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
+        src = oldAttrs.src.override {
           inherit version;
           sha256 = "Uj1U3PG2YVLBtlj5FPAO07UYo0MqnezUiYc4yo274Q8=";
+        };
+      });
+
+      # Incompatible with aioredis 2
+      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
     };
@@ -40,20 +47,18 @@ let
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ng";
-  version = "1.4.5";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/jonaswinkler/paperless-ng/releases/download/ng-${version}/${pname}-${version}.tar.xz";
-    sha256 = "2PJb8j3oimlfiJ3gqjK6uTemzFdtAP2Mlm5RH09bx/E=";
+    sha256 = "oVSq0AWksuWC81MF5xiZ6ZbdKKtqqphmL+xIzJLaDMw=";
   };
 
   format = "other";
 
   # Make bind address configurable
-  # Fix tests with Pillow 8.3.1: https://github.com/jonaswinkler/paperless-ng/pull/1183
-  prePatch = ''
+  postPatch = ''
     substituteInPlace gunicorn.conf.py --replace "bind = '0.0.0.0:8000'" ""
-    substituteInPlace src/paperless_tesseract/parsers.py --replace "return x" "return round(x)"
   '';
 
   propagatedBuildInputs = with py.pkgs.pythonPackages; [

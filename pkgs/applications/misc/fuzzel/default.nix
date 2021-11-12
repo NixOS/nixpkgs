@@ -13,29 +13,24 @@
 , tllist
 , fcft
 , enableCairo ? true
-, enablePNG ? true
-, enableSVG ? true
+, withPNGBackend ? "libpng"
+, withSVGBackend ? "librsvg"
 # Optional dependencies
 , cairo
 , librsvg
 , libpng
 }:
 
-let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
-in
-
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fuzzel";
     rev = version;
-    sha256 = "sha256-JW5sAlTprSRIdFbmSaUreGtNccERgQMGEW+WCSscYQk=";
+    sha256 = "sha256-wl3dO6EwLXWf0XtAIml1NlNRIvpIQJuq1pxLmo/pAUE=";
   };
 
   nativeBuildInputs = [
@@ -54,15 +49,15 @@ stdenv.mkDerivation rec {
     tllist
     fcft
   ] ++ lib.optional enableCairo cairo
-    ++ lib.optional enablePNG libpng
-    ++ lib.optional enableSVG librsvg;
+    ++ lib.optional (withPNGBackend == "libpng") libpng
+    ++ lib.optional (withSVGBackend == "librsvg") librsvg;
 
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "enable-cairo" enableCairo)
-    (mesonFeatureFlag "enable-png" enablePNG)
-    (mesonFeatureFlag "enable-svg" enableSVG)
+    "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
+    "-Dpng-backend=${withPNGBackend}"
+    "-Dsvg-backend=${withSVGBackend}"
   ];
 
   meta = with lib; {

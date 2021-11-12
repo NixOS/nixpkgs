@@ -23,15 +23,20 @@
 , packaging
 , pathy
 , pydantic
+, python
+, tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.0.6";
+  version = "3.1.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ViirifH1aAmciAsSqcN/Ts4pq4kmBmDP33KMAnEYecU=";
+    sha256 = "sha256-WAhOZKJ5lxkupI8Yq7MOwUjFu+edBNF7pNL8JiEAwqI=";
   };
 
   propagatedBuildInputs = [
@@ -42,32 +47,27 @@ buildPythonPackage rec {
     jsonschema
     murmurhash
     numpy
+    packaging
+    pathy
     preshed
+    pydantic
     requests
     setuptools
     srsly
     spacy-legacy
     thinc
-    wasabi
-    packaging
-    pathy
-    pydantic
+    tqdm
     typer
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
+    wasabi
+  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   checkInputs = [
     pytest
   ];
 
   doCheck = false;
-  # checkPhase = ''
-  #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
-  # '';
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "pydantic>=1.7.1,<1.8.0" "pydantic>=1.7.1,<1.8.3"
+  checkPhase = ''
+    ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
   pythonImportsCheck = [ "spacy" ];
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ ];
   };
 }

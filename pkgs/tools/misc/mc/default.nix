@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.26";
+  version = "4.8.27";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xt6txQWV8tmiLcbCmanyizk+NYNG6/bKREqEadwWbCc=";
+    sha256 = "sha256-Mb5ZIl/6mSCBbpqLO+CrIloW0Z5Pr0aJDyW9/6AqT/Q=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook unzip ]

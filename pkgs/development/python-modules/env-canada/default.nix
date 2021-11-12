@@ -8,17 +8,18 @@
 , pillow
 , pytestCheckHook
 , python-dateutil
+, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.0";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "v${version}";
-    sha256 = "0dgw2mf760r1y0mq8bcvx6y3bcqpaf8p97rzf7pd0pbwvwrcsj3n";
+    sha256 = "sha256-5Cxpl5iwbBtpwQ9//yhEZNCIzBZgTm/fqAo9PNNxoG4=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     lxml
     pillow
     python-dateutil
+    voluptuous
   ];
 
   checkInputs = [

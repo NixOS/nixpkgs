@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.13";
+  version = "5.14";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Wsw0iIudUQrWrJFdSo3wj1HPGukg6iRkn2pLuYTQtlY=";
+    sha256 = "sha256-kBvubbXhfeutRTDdn/tNyalsSmVu2+HDFBt8swexHnM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   # On RISC-V platforms, LLVM's libunwind implementation is unsupported by strace.
   # The build will silently fall back and -k will not work on RISC-V.
-  buildInputs = [ perl.out libunwind ]; # support -k
-
-  postPatch = "patchShebangs --host strace-graph";
+  buildInputs = [ libunwind ]; # support -k
 
   configureFlags = [ "--enable-mpers=check" ];
 

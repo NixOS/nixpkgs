@@ -78,7 +78,7 @@ in
     authorizedKeys = mkOption {
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
-      defaultText = "config.users.users.root.openssh.authorizedKeys.keys";
+      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
       description = ''
         Authorized keys for the root user on initrd.
       '';

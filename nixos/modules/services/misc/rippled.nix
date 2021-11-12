@@ -210,7 +210,7 @@ in
         description = "Which rippled package to use.";
         type = types.package;
         default = pkgs.rippled;
-        defaultText = "pkgs.rippled";
+        defaultText = literalExpression "pkgs.rippled";
       };
 
       ports = mkOption {
@@ -407,12 +407,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users.rippled =
-      { description = "Ripple server user";
-        uid = config.ids.uids.rippled;
+    users.users.rippled = {
+        description = "Ripple server user";
+        isSystemUser = true;
+        group = "rippled";
         home = cfg.databasePath;
         createHome = true;
       };
+    users.groups.rippled = {};
 
     systemd.services.rippled = {
       after = [ "network.target" ];

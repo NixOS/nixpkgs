@@ -11,7 +11,7 @@
 , libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
 , libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib
+, zlib, at-spi2-core
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
     ] ++ lib.optional libGLSupported libGL
   );
 
-  buildInputs = [ python3 ]
+  buildInputs = [ python3 at-spi2-core ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
@@ -83,6 +83,8 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  enableParallelBuilding = true;
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -177,6 +179,7 @@ stdenv.mkDerivation {
     ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+    ++ lib.optional stdenv.isLinux "-DUSE_X11"
     ++ lib.optionals withGtk3 [
          ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
          ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''

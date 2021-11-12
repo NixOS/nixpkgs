@@ -45,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unbound-with-systemd;
-        defaultText = "pkgs.unbound-with-systemd";
+        defaultText = literalExpression "pkgs.unbound-with-systemd";
         description = "The unbound package to use";
       };
 
@@ -128,7 +128,7 @@ in {
             };
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             server = {
               interface = [ "127.0.0.1" ];

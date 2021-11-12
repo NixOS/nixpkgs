@@ -2,11 +2,11 @@
 , avrdude, arduino-core }:
 
 python2Packages.buildPythonApplication rec {
-  name = "ino-0.3.6";
-  namePrefix = "";
+  pname = "ino";
+  version = "0.3.6";
 
   src = fetchurl {
-    url = "mirror://pypi/i/ino/${name}.tar.gz";
+    url = "mirror://pypi/i/ino/ino-${version}.tar.gz";
     sha256 = "0k6lzfcn55favbj0w4afrvnmwyskf7bgzg9javv2ycvskp35srwv";
   };
 

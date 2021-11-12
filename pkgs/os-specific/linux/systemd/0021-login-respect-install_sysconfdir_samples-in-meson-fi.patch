@@ -1,0 +1,29 @@
+From 189ba3af8b21cfc53527453907e800a2917b1bfd Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Mon, 26 Jul 2021 17:20:34 +0200
+Subject: [PATCH] login: respect install_sysconfdir_samples in meson file
+
+The refactoring done in c900d89faa0 caused the configuration files to be
+installed into the pkgsysconfdir regardless of the state of the
+install_sysconfdir_samples boolean that indicates whether or not the
+sample files should be installed.
+---
+ src/login/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/login/meson.build b/src/login/meson.build
+index 8c20e6be65..b637adc9a2 100644
+--- a/src/login/meson.build
++++ b/src/login/meson.build
+@@ -67,7 +67,7 @@ pam_systemd_c = files('pam_systemd.c')
+ 
+ enable_logind = conf.get('ENABLE_LOGIND') == 1
+ in_files = [
+-        ['logind.conf',        pkgsysconfdir, enable_logind],
++        ['logind.conf',        pkgsysconfdir, enable_logind and install_sysconfdir_samples],
+         ['70-uaccess.rules',   udevrulesdir,  enable_logind and conf.get('HAVE_ACL') == 1],
+         ['71-seat.rules',      udevrulesdir,  enable_logind],
+         ['73-seat-late.rules', udevrulesdir,  enable_logind],
+-- 
+2.32.0
+

@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-en3eQtRUd2schpIccnuD42+wTYOAG9zsD6yNRA73bKE=";
+    sha256 = "sha256-WxhG9X6jVcu10bl5p0f61+SYZmJw4W7DYvezbpAlNjg=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postPatch = ''
+    # --with-appname="$0" is evaluated with $0=.carla-wrapped instead of carla. Fix that.
+    for file in $(grep -rl -- '--with-appname="$0"'); do
+        filename="$(basename -- "$file")"
+        substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
+    done
+  '';
 
   dontWrapQtApps = true;
   postFixup = ''

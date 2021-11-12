@@ -20,6 +20,7 @@ let
         then callPackage ../development/coq-modules/bignums {}
         else null;
       category-theory = callPackage ../development/coq-modules/category-theory { };
+      ceres = callPackage ../development/coq-modules/ceres {};
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       compcert = callPackage ../development/coq-modules/compcert {
@@ -36,12 +37,15 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       corn = callPackage ../development/coq-modules/corn {};
+      deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
+      extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
       fourcolor = callPackage ../development/coq-modules/fourcolor {};
       gaia = callPackage ../development/coq-modules/gaia {};
+      gaia-hydras = callPackage ../development/coq-modules/gaia-hydras {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       goedel = callPackage ../development/coq-modules/goedel {};
       graph-theory = callPackage ../development/coq-modules/graph-theory {};
@@ -70,11 +74,13 @@ let
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
+      parsec = callPackage ../development/coq-modules/parsec {};
       pocklington = callPackage ../development/coq-modules/pocklington {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       reglang = callPackage ../development/coq-modules/reglang {};
@@ -129,6 +135,7 @@ in rec {
   coq_8_11 = mkCoq "8.11";
   coq_8_12 = mkCoq "8.12";
   coq_8_13 = mkCoq "8.13";
+  coq_8_14 = mkCoq "8.14";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -139,6 +146,7 @@ in rec {
   coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages_8_12 = mkCoqPackages coq_8_12;
   coqPackages_8_13 = mkCoqPackages coq_8_13;
+  coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages = recurseIntoAttrs coqPackages_8_13;
   coq = coqPackages.coq;
 

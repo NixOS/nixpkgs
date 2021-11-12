@@ -10,7 +10,7 @@
 , nbclient
 , six
 , tqdm
-, jupyter_client
+, jupyter-client
 , requests
 , entrypoints
 , tenacity
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     nbclient
     six
     tqdm
-    jupyter_client
+    jupyter-client
     requests
     entrypoints
     tenacity

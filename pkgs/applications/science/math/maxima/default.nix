@@ -4,7 +4,7 @@
 
 let
   name    = "maxima";
-  version = "5.44.0";
+  version = "5.45.0";
 
   lisp-compiler = if ecl-fasl then ecl else sbcl;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1v6jr5s6hhj6r18gfk6hgxk2qd6z1dxkrjq9ss2z1y6sqi45wgyr";
+    sha256 = "sha256-x2MfMmRIBc67e6/vOrUzHEus0sJ+OE/YgyO1A5pg0Ng=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,5 @@ stdenv.mkDerivation ({
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 })

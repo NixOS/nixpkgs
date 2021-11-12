@@ -1,11 +1,11 @@
 { lib, fetchFromGitLab, git, buildGoModule }:
 let
-  data = (builtins.fromJSON (builtins.readFile ../data.json));
+  data = lib.importJSON ../data.json;
 in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "14.1.2";
+  version = "14.4.2";
 
   src = fetchFromGitLab {
     owner = data.owner;
@@ -16,9 +16,9 @@ buildGoModule rec {
 
   sourceRoot = "source/workhorse";
 
-  vendorSha256 = "sha256-gTObI0pmRUX6Eh5FVdt+5LbckyBuFq1Ly4oPZztazHQ=";
+  vendorSha256 = "sha256-yLZY9FFUS4nJl4TkE6MwICCEwtPTXFc5zuj4FgiIy74=";
   buildInputs = [ git ];
-  buildFlagsArray = "-ldflags=-X main.Version=${version}";
+  ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;
 
   meta = with lib; {

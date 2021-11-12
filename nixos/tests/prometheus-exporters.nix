@@ -280,6 +280,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-influxdb-exporter.service")
+        wait_for_open_port(9122)
         succeed(
           "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
         )
@@ -554,7 +555,11 @@ let
             WorkingDirectory = "/var/spool/mail";
           };
         };
-        users.users.mailexporter.isSystemUser = true;
+        users.users.mailexporter = {
+          isSystemUser = true;
+          group = "mailexporter";
+        };
+        users.groups.mailexporter = {};
       };
       exporterTest = ''
         wait_for_unit("postfix.service")

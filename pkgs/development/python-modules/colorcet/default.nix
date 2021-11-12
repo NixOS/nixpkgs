@@ -1,12 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, nbsmoke
 , param
 , pyct
-, nbsmoke
-, flake8
-, pytest
 , pytest-mpl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -24,25 +23,29 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
-    flake8
     pytest-mpl
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
-
-    # requires other backends to be available
-    pytest colorcet -k 'not matplotlib_default_colormap_plot'
   '';
+
+  disabledTests = [
+    "matplotlib_default_colormap_plot"
+  ];
+
+  pythonImportsCheck = [
+    "colorcet"
+  ];
 
   meta = with lib; {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

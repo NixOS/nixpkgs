@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.13.1"
+, version ? "2.14.3"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
@@ -10,24 +10,24 @@
     aarch64 = "arm64";
     # Make sure that if the user overrides version parameter they're
     # also need to override sources, to avoid mistakes
-    version = "2.13.1";
+    version = "2.14.3";
   in
   {
     "${version}-x86_64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0kb6r2rmp5d0shvgyy37fmykbgww8qaj4f8k79rmqfv5lwa3izya";
+      sha256 = "0is4gz99i06yb4jisxcz2c15jqkaz6ayhg9b8zb3s0s8yp59r2iq";
     };
     "${version}-x86_64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "0zq8wngyrw01wjc5s6w1vz2jndms09ifiymjjixxby9k41mr6jrq";
+      sha256 = "0wg1mnj4qrv22z510032jnwb3z39gvzlrv5wic2ci5mg7316xlya";
     };
     "${version}-i686-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0zv4q8xv2i08a6izpyhhnil75qhs40m5mgyvjqjsswqkwqdf7lkj";
+      sha256 = "0gnjk3lh63m0naaw67g9w7wys5cgx2ipzd1dznqnlvxp2vj1gj5p";
     };
     "${version}-aarch64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "0bb9jdmg5p608jmmiqibp13ydiw9avgysxlmljvgsl7wl93j6rgc";
+      sha256 = "1j7snnf3a0jly85njq8npqikrdhz9lkirhvik1hkpd9sv7qfbvd6";
     };
   }
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
-    maintainers = with maintainers; [ grburst thiagokokada ];
+    maintainers = with maintainers; [ grburst thiagokokada flexagoon ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, python37Packages
+, python3Packages
 , fehSupport ? false, feh
 , imagemagickSupport ? true, imagemagick
 , intltool
@@ -13,7 +13,7 @@
 , makeWrapper
 }:
 
-with python37Packages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "variety";

@@ -40,13 +40,13 @@ in {
           executable = mkOption {
             type = types.path;
             description = "Executable to run sandboxed";
-            example = literalExample "''${lib.getBin pkgs.firefox}/bin/firefox";
+            example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
             description = "Profile to use";
-            example = literalExample "''${pkgs.firejail}/etc/firejail/firefox.profile";
+            example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
@@ -57,7 +57,7 @@ in {
         };
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           firefox = {
             executable = "''${lib.getBin pkgs.firefox}/bin/firefox";
@@ -81,7 +81,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    security.wrappers.firejail =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${lib.getBin pkgs.firejail}/bin/firejail";
+      };
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };

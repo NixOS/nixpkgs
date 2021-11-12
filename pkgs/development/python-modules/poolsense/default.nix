@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "poolsense";
-  version = "0.0.8";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp";
+    sha256 = "sha256-WCyuhk77QNJAiuzccrb2u0mfc81LYrYSSq9atgO0LdE=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

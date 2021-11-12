@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aee46d9c43b98ac6d4ddf957cf75d4d0a5174ee814cc6b53dd6134dcedb459bf";
+    sha256 = "3f40cecd5ead88184aa9550afc19d057f103728108c5102f592f8415949b5a76";
   };
 
   checkInputs = [ pytest ];

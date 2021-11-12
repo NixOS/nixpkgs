@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.11.3";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "sha256-SVcjKiIJqHYYO/zu0u/9GFR4Cg3jZvaVlZFfeCkXJoc=";
+    sha256 = "1gdks7pzaqrsdihh2m3v597x0dw2qww95jlznj0h112jgicanimj";
   };
 
-  vendorSha256 = "sha256-eO/23MQpdXQNPCIzMC9nxvrgUFuEPABJ7vkBZKv+XZI=";
+  vendorSha256 = "sha256-dGmd6tCUKoK4uwhB5kXGOpXemtLn0VssabDE4iQWEAw=";
 
   # Errors:
   #  > === RUN   TestNamespaceHandlerGlobalNamespaceDisabledSuite
@@ -38,6 +38,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/temporalio/temporal";
     homepage = "https://temporal.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

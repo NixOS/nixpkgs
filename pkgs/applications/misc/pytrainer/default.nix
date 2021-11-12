@@ -36,7 +36,7 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    sqlalchemy_migrate
+    sqlalchemy-migrate
     python-dateutil
     matplotlib
     lxml

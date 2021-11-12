@@ -1,36 +1,25 @@
-{ stdenv, fetchFromGitHub, emacs, lib }:
+{ lib
+, trivialBuild
+, fetchFromGitHub
+, emacs
+}:
 
-stdenv.mkDerivation {
+trivialBuild {
   pname = "isearch-plus";
-  version = "2021-01-01";
+  version = "3434+unstable=2021-08-23";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "isearch-plus";
-    rev = "376a8f9f8a9666d7e61d125abcdb645847cb8619";
-    sha256 = "sha256-Kd5vpu+mI1tJPcsu7EpnnBcPVdVAijkAeTz+bLB3WlQ=";
+    rev = "93088ea0ac4d51bdb76c4c32ea53172f6c435852";
+    hash = "sha256-kD+Fyps3fc5YK6ATU1nrkKHazGMYJnU2gRcpQZf6A1E=";
   };
 
-  buildInputs = [ emacs ];
-
-  buildPhase = ''
-    runHook preBuild
-    emacs -L . --batch -f batch-byte-compile *.el
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    install -d $out/share/emacs/site-lisp
-    install *.el *.elc $out/share/emacs/site-lisp
-    runHook postInstall
-  '';
-
-  meta = {
+  meta = with lib; {
+    homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Extensions to isearch";
-    homepage = "https://www.emacswiki.org/emacs/download/isearch%2b.el";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ leungbk ];
-    platforms = emacs.meta.platforms;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ leungbk AndersonTorres ];
+    inherit (emacs.meta) platforms;
   };
 }

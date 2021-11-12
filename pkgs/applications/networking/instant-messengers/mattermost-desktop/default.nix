@@ -2,7 +2,7 @@
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsa-lib, cups, expat, udev, wrapGAppsHook,
-hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
+hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk, libappindicator-gtk3 }:
 
 let
   rpath = lib.makeLibraryPath [
@@ -21,6 +21,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libappindicator-gtk3
     libuuid
     libX11
     libXScrnSaver

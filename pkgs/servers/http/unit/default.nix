@@ -7,7 +7,6 @@
 , withPerl532 ? false, perl532
 , withPerl534 ? true, perl534
 , withPerldevel ? false, perldevel
-, withRuby_2_6 ? true, ruby_2_6
 , withRuby_2_7 ? false, ruby_2_7
 , withSSL ? true, openssl ? null
 , withIPv6 ? true
@@ -30,14 +29,14 @@ let
   php80-unit = php80.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.24.0";
+  version = "1.25.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "0214dvwz31hxjxnqk3fkqhn2xznaqdrb96m5s2k8ll8rldmk1gd6";
+    sha256 = "sha256-8Xv7YTvwuI0evBO1Te4oI1IoJ0AnK8OVZoZTYtfYKfw=";
   };
 
   nativeBuildInputs = [ which ];
@@ -50,7 +49,6 @@ in stdenv.mkDerivation rec {
     ++ optional withPerl532 perl532
     ++ optional withPerl534 perl534
     ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_6 ruby_2_6
     ++ optional withRuby_2_7 ruby_2_7
     ++ optional withSSL openssl;
 
@@ -75,7 +73,6 @@ in stdenv.mkDerivation rec {
     ${optionalString withPerl532    "./configure perl   --module=perl532  --perl=${perl532}/bin/perl"}
     ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
   '';
 

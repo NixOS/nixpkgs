@@ -14,24 +14,22 @@
 , pytest-localserver
 , responses
 , rsa
-, six
 , pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.34.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8QlAiLrgRvsG89Gj198UcX6NlZ6RBbecV3Jb1OF1l6I=";
+    sha256 = "sha256-KAD2360pxs7V+vnKDDjqi6Hr4lWbEMApvQIePeMwFic=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    six
     pyopenssl
     pyu2f
   ];

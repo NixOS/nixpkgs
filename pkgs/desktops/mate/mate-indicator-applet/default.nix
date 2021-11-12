@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-indicator-applet";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0m7pvbs5hhy5f400wqb8wp0dw3pyjpjnjax9qzc73j97l1k3zawf";
+    sha256 = "144fh9f3lag2cqnmb6zxlh8k83ya8kha6rmd7r8gg3z5w3nzpyz4";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl3Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

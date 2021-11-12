@@ -5,9 +5,13 @@
 , nettle
 , expat
 , libevent
+, libsodium
+, protobufc
+, hiredis
 , dns-root-data
 , pkg-config
 , makeWrapper
+, symlinkJoin
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -21,16 +25,21 @@
 , systemd ? null
   # optionally support DNS-over-HTTPS as a server
 , withDoH ? false
+, withECS ? false
+, withDNSCrypt ? false
+, withDNSTAP ? false
+, withTFO ? false
+, withRedis ? false
 , libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
+    sha256 = "sha256-ChO1R/O5KgJrXr0EI/VMmR5XGAN/2fckRYF/agQOGoM=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -57,7 +66,23 @@ stdenv.mkDerivation rec {
     "--enable-systemd"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
+  ] ++ lib.optionals withECS [
+    "--enable-subnet"
+  ] ++ lib.optionals withDNSCrypt [
+    "--enable-dnscrypt"
+    "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
+  ] ++ lib.optionals withDNSTAP [
+    "--enable-dnstap"
+    "--with-protobuf-c=${protobufc}"
+  ] ++ lib.optionals withTFO [
+    "--enable-tfo-client"
+    "--enable-tfo-server"
+  ] ++ lib.optionals withRedis [
+    "--enable-cachedb"
+    "--with-libhiredis=${hiredis}"
   ];
+
+  PROTOC_C = if withDNSTAP then "${protobufc}/bin/protoc-c" else null;
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure = let

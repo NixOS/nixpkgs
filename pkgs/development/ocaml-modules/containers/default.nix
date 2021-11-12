@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   checkInputs = [ gen iter ounit qcheck uutf ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://github.com/c-cube/ocaml-containers";

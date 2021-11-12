@@ -1,19 +1,24 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
-, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, lua
 , nixosTests
-, withLibevent ? true, luaevent ? null
-, withDBI ? true, luadbi ? null
+, withLibevent ? true
+, withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
-assert withLibevent -> luaevent != null;
-assert withDBI -> luadbi != null;
-
 with lib;
 
 
+let
+  luaEnv = lua.withPackages(p: with p; [
+      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
+    ]
+    ++ lib.optional withLibevent p.luaevent
+    ++ lib.optional withDBI p.luadbi
+  );
+in
 stdenv.mkDerivation rec {
   version = "0.11.10"; # also update communityModules
   pname = "prosody";
@@ -41,28 +46,24 @@ stdenv.mkDerivation rec {
     sha256 = "02gj1b8sdmdvymsdmjpq47zrl7sg578jcdxbbq18s44f3njmc9q1";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    lua5 makeWrapper libidn openssl
+    luaEnv libidn openssl
   ]
-  # Lua libraries
-  ++ [
-    luasocket luasec luaexpat luafilesystem luabitop
-  ]
-  ++ optional withLibevent luaevent
-  ++ optional withDBI luadbi
   ++ withExtraLibs;
 
 
   configureFlags = [
     "--ostype=linux"
-    "--with-lua-include=${lua5}/include"
-    "--with-lua=${lua5}"
+    "--with-lua-include=${luaEnv}/include"
+    "--with-lua=${luaEnv}"
   ];
 
   postBuild = ''
     make -C tools/migration
   '';
 
+  # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/

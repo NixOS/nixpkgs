@@ -1,27 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub, bash, go, python3, ruby }:
+{ lib
+, bash
+, buildGoModule
+, fetchFromGitHub
+, go
+}:
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.4.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "1cywqrqj199hmx532h4vn0j17ypswq2zkmv8qpxpayvjwimx4pwk";
+    sha256 = "02zdgn0pnjqharvmn9rww45yrja8dzww64s3fryxx4pm8g5km9nf";
   };
 
   checkInputs = [
     bash
     go
-    python3
-    ruby
   ];
 
-  vendorSha256 = "0y6fz9rw702mji571k0gp4kpfx7xbv7rvlnmpfjygy6lmp7wga6f";
+  vendorSha256 = "06vb5xnss6ibgbsny6cadphfkzw8z3np5qgn3hp2wpf3hxgcnnvs";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X=main.Version=${version}"
   ];
 

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.14.4";
+  version = "1.14.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08e8be82c2e514e1700a75f02307f414179dc0ecfa2202702dd304a381909eaa";
+    sha256 = "3a25c4fe3195fdc4639461abbfa5a8bebce8ab737674b6673da2236a901cfefd";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
 
   # tests not fully included with pypi release
   doCheck = false;
+
+  pythonImportsCheck = [ "holoviews" ];
 
   meta = with lib; {
     description = "Python data analysis and visualization seamless and simple";

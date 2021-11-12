@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ itk4 vtk_7 ] ++ lib.optional stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ itk4 vtk_7 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
 

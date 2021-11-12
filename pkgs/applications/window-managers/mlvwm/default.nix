@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlvwm";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "morgant";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Sps2+XyMTcNuhQTLrW/8vSZIcSzMejoi1m64SK129YI=";
+    sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

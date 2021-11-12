@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "17508q9wsw6c1lsxlcbxj74z2naqhwi5c7lkbq24m4lk8qmy0576";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 

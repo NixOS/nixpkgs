@@ -24,13 +24,13 @@
 
 mkDerivation rec {
   pname = "semantik";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "semantik";
     rev = "semantik-${version}";
-    sha256 = "0dkg6mbnsbvbis17iz8v59wlhld93nc51abnkbyqvvkyyiqb006c";
+    sha256 = "sha256-aXOokji6fYTpaeI/IIV+5RnTE2Cm8X3WfADf4Uftkss=";
   };
 
   patches = [ ./qt5.patch ];

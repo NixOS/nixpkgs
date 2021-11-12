@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fnott";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
     rev = version;
-    sha256 = "sha256-gzU5AqjCIZlhLbnj/xuSGJ69ZhLv9zQxlM0Nn+MIX/U=";
+    sha256 = "sha256-+x3uN7Uj0fqO0kpHlOVnsshgEJA1z/6ZElKSTyLzfG4=";
   };
 
   nativeBuildInputs = [

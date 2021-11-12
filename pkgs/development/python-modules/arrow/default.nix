@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.1.0";
+  version = "1.2.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n2vzyrirfj7fp0zn6iipm3i8bch0g4m14z02nrvlyjiyfmi7zmq";
+    sha256 = "16fc29bbd9e425e3eb0fef3018297910a0f4568f21116fc31771e2760a50e074";
   };
 
   postPatch = ''

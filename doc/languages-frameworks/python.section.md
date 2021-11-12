@@ -765,7 +765,7 @@ and in this case the `python38` interpreter is automatically used.
 ### Interpreters {#interpreters}
 
 Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
-respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
+respectively `python27`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python39`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
@@ -830,10 +830,10 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python36Packages`
 * `pkgs.python37Packages`
 * `pkgs.python38Packages`
 * `pkgs.python39Packages`
+* `pkgs.python310Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
@@ -1513,7 +1513,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
     python = super.python.override {
       packageOverrides = python-self: python-super: {
         twisted = python-super.twisted.overrideAttrs (oldAttrs: {
-          src = super.fetchPipy {
+          src = super.fetchPypi {
             pname = "twisted";
             version = "19.10.0";
             sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
@@ -1602,3 +1602,33 @@ The following rules are desired to be respected:
   If necessary, `pname` has to be given a different value within `fetchPypi`.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+
+## Package set maintenance
+
+The whole Python package set has a lot of packages that do not see regular
+updates, because they either are a very fragile component in the Python
+ecosystem, like for example the `hypothesis` package, or packages that have
+no maintainer, so maintenance falls back to the package set maintainers.
+
+### Updating packages in bulk
+
+There is a tool to update alot of python libraries in bulk, it exists at
+`maintainers/scripts/update-python-libraries` with this repository.
+
+It can quickly update minor or major versions for all packages selected
+and create update commits, and supports the `fetchPypi`, `fetchurl` and
+`fetchFromGitHub` fetchers. When updating lots of packages that are
+hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
+
+Updating packages in bulk leads to lots of breakages, which is why a
+stabilization period on the `python-unstable` branch is required.
+
+Once the branch is sufficiently stable it should normally be merged
+into the `staging` branch.
+
+An exemplary call to update all python libraries between minor versions
+would be:
+
+```ShellSession
+$ maintainers/scripts/update-python-libraries --target minor --commit --use-pkgs-prefix pkgs/development/python-modules/**/default.nix
+```

@@ -1,4 +1,4 @@
-{lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, makeWrapper}:
+{ lib, stdenv, git, xdg-utils, gnugrep, fetchFromGitHub, installShellFiles, makeWrapper, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "git-open";
@@ -11,13 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "11n46bngvca5wbdbfcxzjhjbfdbad7sgf7h9gf956cb1q8swsdm0";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pandoc ];
 
-  buildPhase = null;
+  buildPhase = ''
+    # marked-man is broken and severly outdated.
+    # pandoc with some extra metadata is good enough and produces a by man readable file.
+    cat <(echo echo '% git-open (1) Version ${version} | Git manual') git-open.1.md > tmp
+    mv tmp git-open.1.md
+    pandoc --standalone --to man git-open.1.md -o git-open.1
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp git-open $out/bin
+    installManPage git-open.1
     wrapProgram $out/bin/git-open \
       --prefix PATH : "${lib.makeBinPath [ git xdg-utils gnugrep ]}"
   '';
@@ -27,6 +34,6 @@ stdenv.mkDerivation rec {
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre SuperSandro2000 ];
   };
 }

@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.2.0";
+  version = "2.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QMwvMPebC2a09XmKQKYFPwVIbZlnUEaXxTh8hlnS9Js=";
+    sha256 = "sha256-cU4bwfxRAp14qmSTO+8u/APa7clWXqeeyRuEOwUgFuw=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,8 @@ buildPythonPackage rec {
     # Tests are broken
     "tests/system/test_system.py"
     "tests/system/test_system_async.py"
+    # requires credentials
+    "tests/unit/v1/test_bulk_writer.py"
   ];
 
   disabledTests = [

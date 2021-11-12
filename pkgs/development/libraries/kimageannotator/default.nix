@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "kimageannotator";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kImageAnnotator";
     rev = "v${version}";
-    sha256 = "0hfvrd78lgwd7bccz0fx2pr7g0v3s401y5plra63rxwk55ffkxf8";
+    sha256 = "07m3il928gwzzab349grpaksqqv4n7r6mn317sx2jly0x0bpv0rh";
   };
 
   nativeBuildInputs = [ cmake qttools ];

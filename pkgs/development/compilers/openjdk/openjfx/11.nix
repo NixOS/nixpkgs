@@ -24,6 +24,11 @@ let
 
     dontUseCmakeConfigure = true;
 
+    postPatch = ''
+      substituteInPlace buildSrc/linux.gradle \
+        --replace ', "-Werror=implicit-function-declaration"' ""
+    '';
+
     config = writeText "gradle.properties" (''
       CONF = Release
       JDK_HOME = ${openjdk11-bootstrap.home}

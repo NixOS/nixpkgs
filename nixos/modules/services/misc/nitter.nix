@@ -79,7 +79,7 @@ in
         staticDir = mkOption {
           type = types.path;
           default = "${pkgs.nitter}/share/nitter/public";
-          defaultText = "\${pkgs.nitter}/share/nitter/public";
+          defaultText = literalExpression ''"''${pkgs.nitter}/share/nitter/public"'';
           description = "Path to the static files directory.";
         };
 

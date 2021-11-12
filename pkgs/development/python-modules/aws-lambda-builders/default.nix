@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.4.0";
+  version = "1.8.1";
 
   # No tests available in PyPI tarball
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "v${version}";
-    sha256 = "0g7qj74mgazc7y1w0d9vs276vmfb3svi5whn2c87bryhrwq650vf";
+    sha256 = "1avq04hmps2cd33dd5n4bc3lclqg0hv6khn804fbv0hmy7lywp8b";
   };
 
   # Package is not compatible with Python 3.5

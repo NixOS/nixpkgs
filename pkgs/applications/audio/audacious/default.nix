@@ -6,7 +6,7 @@
   libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
-  wavpack, openmpt123
+  wavpack, libopenmpt
 }:
 
 mkDerivation rec {
@@ -33,7 +33,7 @@ mkDerivation rec {
     libcdio libcdio-paranoia libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
-    openmpt123
+    libopenmpt
   ];
 
   # Here we build both audacious and audacious-plugins in one

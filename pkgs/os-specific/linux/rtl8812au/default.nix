@@ -42,12 +42,14 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/gordboy/rtl8812au-5.9.3.2";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fortuneteller2k ];
-    broken = kernel.kernelOlder "4.10" || kernel.isHardened;
+    broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.15" || kernel.isHardened;
   };
 }

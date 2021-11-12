@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
     "--with-rfb=no"
     "--with-vncsrv=no"
+    "--with-nogui"
 
     # These will always be "yes" on NixOS
     "--enable-ltdl-install=yes"
@@ -100,6 +101,7 @@ stdenv.mkDerivation rec {
     "--enable-sb16"
     "--enable-show-ips"
     "--enable-smp"
+    "--enable-vmx=2"
     "--enable-svm"
     "--enable-trace-linking"
     "--enable-usb"

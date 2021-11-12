@@ -1,13 +1,15 @@
-{ lib
-, callPackage
+{ callPackage
 , fetchurl
 , gcc7
 , gcc9
+, gcc10
+, lib
 }:
 
 let
   common = callPackage ./common.nix;
-in rec {
+in
+rec {
   cudatoolkit_10_0 = common {
     version = "10.0.130";
     url = "https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_410.48_linux";
@@ -56,5 +58,26 @@ in rec {
     gcc = gcc9;
   };
 
-  cudatoolkit_11 = cudatoolkit_11_2;
+  cudatoolkit_11_3 = common {
+    version = "11.3.1";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run";
+    sha256 = "0d19pwcqin76scbw1s5kgj8n0z1p4v1hyfldqmamilyfxycfm4xd";
+    gcc = gcc9;
+  };
+
+  cudatoolkit_11_4 = common {
+    version = "11.4.2";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.4.2/local_installers/cuda_11.4.2_470.57.02_linux.run";
+    sha256 = "sha256-u9h8oOkT+DdFSnljZ0c1E83e9VUILk2G7Zo4ZZzIHwo=";
+    gcc = gcc10; # can bump to 11 along with stdenv.cc
+  };
+
+  cudatoolkit_11_5 = common {
+    version = "11.5.0";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.5.0/local_installers/cuda_11.5.0_495.29.05_linux.run";
+    sha256 = "sha256-rgoWk9lJfPPYHmlIlD43lGNpANtxyY1Y7v2sr38aHkw=";
+    gcc = gcc10; # can bump to 11 along with stdenv.cc
+  };
+
+  cudatoolkit_11 = cudatoolkit_11_4;
 }

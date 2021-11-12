@@ -1,4 +1,5 @@
-{ pkgs
+{ nixosTests
+, pkgs
 , poetry2nix
 , lib
 , overrides ? (self: super: {})
@@ -17,8 +18,12 @@ let
 
             nixops = super.nixops.overridePythonAttrs (
               old: {
+                postPatch = ''
+                  substituteInPlace nixops/args.py --subst-var version
+                '';
+
                 meta = old.meta // {
-                  homepage = https://github.com/NixOS/nixops;
+                  homepage = "https://github.com/NixOS/nixops";
                   description = "NixOS cloud provisioning and deployment tool";
                   maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
                   platforms = lib.platforms.unix;
@@ -55,10 +60,18 @@ let
     }
   ).python;
 
-in interpreter.pkgs.nixops.withPlugins(ps: [
-  ps.nixops-encrypted-links
-  ps.nixops-virtd
-  ps.nixops-aws
-  ps.nixops-gcp
-  ps.nixopsvbox
-])
+  pkg = interpreter.pkgs.nixops.withPlugins(ps: [
+    ps.nixops-encrypted-links
+    ps.nixops-hercules-ci
+    ps.nixops-virtd
+    ps.nixops-aws
+    ps.nixops-gcp
+    ps.nixopsvbox
+  ]) // rec {
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/119407
+    # TODO after #1199407: Use .overrideAttrs(pkg: old: { passthru.tests = .....; })
+    tests = nixosTests.nixops.unstable.override { nixopsPkg = pkg; };
+    # Not strictly necessary, but probably expected somewhere; part of the workaround:
+    passthru.tests = tests;
+  };
+in pkg

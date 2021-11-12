@@ -30,6 +30,8 @@ buildPythonPackage rec {
   # Test fail on Python 2
   doCheck = isPy3k;
 
+  pythonNamespaces = [ "backports" ];
+
   meta = {
     description = "Backport of functools.lru_cache";
     homepage = "https://github.com/jaraco/backports.functools_lru_cache";

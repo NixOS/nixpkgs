@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noaa-apt";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
     rev = "v${version}";
-    sha256 = "0fmbg6lw7lmm402hzddpzgi7y9mc6kic14x8rif7fampk20mv3ms";
+    sha256 = "sha256-A78O5HkD/LyfvjLJjf7PpJDuftkNbaxq7Zs5kNUaULk=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoSha256 = "167q9w45lh05l27cdssg8sfz3qfskfaxayzjy6q1cj50jrn0gq13";
+  cargoSha256 = "sha256-o39RvJkaJ8ZPOfLWDqykCLadwHhgBbmOWGQ4hZ6/6BI=";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.

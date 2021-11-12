@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "4.16.2";
+  version = "4.16.3";
 
   src = fetchurl {
     url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-shouFRlD8LGU04sX/qrzghh5R+0SoCw9ZJKvt0gBKms=";
+    sha256 = "sha256-6amaYtEJgTkVCN1D88v6LVCmm9a30e7vfTC6TGc9z9o=";
   };
 
   nativeBuildInputs = [

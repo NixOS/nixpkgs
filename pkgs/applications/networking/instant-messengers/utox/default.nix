@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   pname = "utox";
 
-  version = "0.17.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "12wbq883il7ikldayh8hm0cjfrkp45vn05xx9s1jbfz6gmkidyar";
+    sha256 = "sha256-DxnolxUTn+CL6TbZHKLHOUMTHhtTSWufzzOTRpKjOwc=";
     fetchSubmodules = true;
   };
 
