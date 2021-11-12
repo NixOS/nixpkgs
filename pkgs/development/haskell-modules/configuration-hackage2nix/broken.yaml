@@ -2790,6 +2790,7 @@ broken-packages:
   - language-typescript
   - language-vhdl
   - language-webidl
+  - lapack
   - LargeCardinalHierarchy
   - Lastik
   - latest-npm-version
@@ -3917,6 +3918,7 @@ broken-packages:
   - proxy-kindness
   - proxy-mapping
   - prune-juice
+  - psc-ide
   - pseudo-trie
   - PTQ
   - publicsuffixlistcreate
@@ -3930,6 +3932,7 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
+  - purescript-tsd-gen
   - pure-zlib
   - pusher-haskell
   - pusher-ws
@@ -5573,6 +5576,7 @@ broken-packages:
   - zendesk-api
   - zenhack-prelude
   - zeno
+  - zephyr
   - zeromq4-clone-pattern
   - zeromq4-conduit
   - zeromq4-patterns
