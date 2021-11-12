@@ -3,6 +3,7 @@
 , idnSupport ? false, libidn2 ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
+, zstdSupport ? false, zstd ? null
 , opensslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
@@ -30,6 +31,7 @@ assert http2Support -> nghttp2 != null;
 assert idnSupport -> libidn2 != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
+assert zstdSupport -> zstd != null;
 assert opensslSupport -> openssl != null;
 assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
@@ -74,6 +76,7 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn2 ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
+    optional zstdSupport zstd ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
     optional opensslSupport openssl ++
@@ -102,6 +105,7 @@ stdenv.mkDerivation rec {
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
+      (lib.withFeature zstdSupport "zstd")
       (lib.withFeature brotliSupport "brotli")
     ]
     ++ lib.optional wolfsslSupport "--with-wolfssl=${lib.getDev wolfssl}"

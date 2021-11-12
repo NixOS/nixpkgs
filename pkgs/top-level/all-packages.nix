@@ -4404,6 +4404,7 @@ with pkgs;
 
   curl = curlMinimal.override ({
     idnSupport = true;
+    zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     gssSupport = true;
     brotliSupport = true;
