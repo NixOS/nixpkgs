@@ -17,7 +17,7 @@ in python2Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/build\//d' setup.py
     substituteInPlace setup.py --replace "/etc" "$out/etc"
     substituteInPlace knockknock.py --replace 'existsInPath("hping3")' '"${hping}/bin/hping3"'
