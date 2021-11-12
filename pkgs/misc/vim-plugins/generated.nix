@@ -3226,6 +3226,18 @@ final: prev:
     meta.homepage = "https://github.com/l3mon4d3/luasnip/";
   };
 
+  luatab-nvim = buildVimPluginFrom2Nix {
+    pname = "luatab.nvim";
+    version = "2021-11-08";
+    src = fetchFromGitHub {
+      owner = "alvarosevilla95";
+      repo = "luatab.nvim";
+      rev = "05eacdfd818741ff3f92bae6213c026a91711be4";
+      sha256 = "0iy45hmn6f6dp3pym0yl091kngnrg25hrk5dlm93mj3yxbmgss4r";
+    };
+    meta.homepage = "https://github.com/alvarosevilla95/luatab.nvim/";
+  };
+
   lush-nvim = buildVimPluginFrom2Nix {
     pname = "lush.nvim";
     version = "2021-11-06";
