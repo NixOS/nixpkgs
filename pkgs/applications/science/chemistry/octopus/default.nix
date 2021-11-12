@@ -11,13 +11,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "10.5";
+  version = "11.2";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "1bgdkmsp6pwq3b6nxxkimrdmz71wqr8qi25gdzwpcv9wmcf1q27v";
+    sha256 = "sha256-leEcUSjpiP13l65K9WKN2GXTtTa8vvK/MFxR2zH6Xno=";
   };
 
   nativeBuildInputs = [
