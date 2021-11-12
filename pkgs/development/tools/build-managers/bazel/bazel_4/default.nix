@@ -617,6 +617,8 @@ stdenv.mkDerivation rec {
       ./bazel_src/output/bazel-complete.fish
   '';
 
+  # Install check fails on `aarch64-darwin`
+  # https://github.com/NixOS/nixpkgs/issues/145587
   doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
