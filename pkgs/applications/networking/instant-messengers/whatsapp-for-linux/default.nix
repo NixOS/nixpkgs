@@ -1,25 +1,26 @@
 { fetchFromGitHub
 , lib
 , stdenv
-, gtkmm3
-, webkitgtk
 , cmake
-, pkg-config
-, libappindicator-gtk3
+, glib-networking
 , gst_all_1
+, gtkmm3
+, libappindicator-gtk3
 , pcre
+, pkg-config
+, webkitgtk
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dEJRufOqlY+DnJdUaG5WP9hR1qO7KxR6MjKWq1SJB8A=";
+    sha256 = "sha256-VdkCjzmZqP/ZVY1H9FxBGe5rN0nZEPZbMp3MVKL6WLc=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +30,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtkmm3
-    webkitgtk
-    libappindicator-gtk3
+    glib-networking
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
+    gtkmm3
+    libappindicator-gtk3
     pcre
+    webkitgtk
   ];
 
   meta = with lib; {
