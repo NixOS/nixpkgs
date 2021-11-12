@@ -4378,6 +4378,18 @@ final: prev:
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-neoclip-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-neoclip.lua";
+    version = "2021-11-06";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-neoclip.lua";
+      rev = "cb4eff8bb7bb4bbb3d1629178a7dc62322773e05";
+      sha256 = "1szwg804gajq84icl39gsmbqkaxh3yffdb50wh0pcgj86b4w5hda";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-neoclip.lua/";
+  };
+
   nvim-nonicons = buildVimPluginFrom2Nix {
     pname = "nvim-nonicons";
     version = "2021-10-25";
@@ -5679,12 +5691,12 @@ final: prev:
 
   stabilize-nvim = buildVimPluginFrom2Nix {
     pname = "stabilize.nvim";
-    version = "2021-11-11";
+    version = "2021-11-12";
     src = fetchFromGitHub {
       owner = "luukvbaal";
       repo = "stabilize.nvim";
-      rev = "10bb37c82e94122be082651ee6ee58b5b2e51cb5";
-      sha256 = "0667yh9yprym7vakm83x174srb2x2ch9q97137qlj28acks3wnqh";
+      rev = "cad28c53f0497b56836ca89ede404c7e57df25c8";
+      sha256 = "01bdx3pgidrps36qb1vw5nysz6yq9659a65z4xr8mbyhrwizz85f";
     };
     meta.homepage = "https://github.com/luukvbaal/stabilize.nvim/";
   };
