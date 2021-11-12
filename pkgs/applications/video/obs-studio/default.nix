@@ -25,12 +25,11 @@
 , pkg-config
 , libvlc
 , mbedtls
-
+, wrapGAppsHook
 , scriptingSupport ? true
 , luajit
 , swig
 , python3
-
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
@@ -69,6 +68,7 @@ mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
+    wrapGAppsHook
   ]
   ++ optional scriptingSupport swig;
 
