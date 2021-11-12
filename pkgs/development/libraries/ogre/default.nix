@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
      sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
   };
 
+  # fix for ARM. sys/sysctl.h has moved in later glibcs, and
+  # https://github.com/OGRECave/ogre-next/issues/132 suggests it isn't
+  # needed anyway.
+  postPatch = ''
+    substituteInPlace OgreMain/src/OgrePlatformInformation.cpp \
+      --replace '#include <sys/sysctl.h>' ""
+  '';
+
   cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
            ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
