@@ -4931,6 +4931,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/prev_indent/";
   };
 
+  project-nvim = buildVimPluginFrom2Nix {
+    pname = "project.nvim";
+    version = "2021-11-06";
+    src = fetchFromGitHub {
+      owner = "ahmedkhalf";
+      repo = "project.nvim";
+      rev = "71d0e23dcfc43cfd6bb2a97dc5a7de1ab47a6538";
+      sha256 = "0jxxckfcm0vmcblj6fr4fbdxw7b5dwpr8b7jv59mjsyzqfcdnhs5";
+    };
+    meta.homepage = "https://github.com/ahmedkhalf/project.nvim/";
+  };
+
   psc-ide-vim = buildVimPluginFrom2Nix {
     pname = "psc-ide-vim";
     version = "2021-05-31";
