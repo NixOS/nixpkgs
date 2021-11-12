@@ -6151,6 +6151,8 @@ in {
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
+  pybalboa = callPackage ../development/python-modules/pybalboa { };
+
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
   pybids = callPackage ../development/python-modules/pybids { };
@@ -6569,6 +6571,8 @@ in {
   pylast = callPackage ../development/python-modules/pylast { };
 
   pylatexenc = callPackage ../development/python-modules/pylatexenc { };
+
+  pylaunches = callPackage ../development/python-modules/pylaunches { };
 
   PyLD = callPackage ../development/python-modules/PyLD { };
 
