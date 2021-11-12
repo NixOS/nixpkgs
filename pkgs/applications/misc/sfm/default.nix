@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString (conf!=null) "cp ${configFile} config.def.h";
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
