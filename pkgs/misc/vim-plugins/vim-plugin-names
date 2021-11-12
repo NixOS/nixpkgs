@@ -722,6 +722,7 @@ sonph/onehalf
 sotte/presenting.vim
 srcery-colors/srcery-vim
 steelsojka/completion-buffers
+steelsojka/headwind.nvim@main
 steelsojka/pears.nvim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml

@@ -2445,6 +2445,18 @@ final: prev:
     meta.homepage = "https://github.com/travitch/hasksyn/";
   };
 
+  headwind-nvim = buildVimPluginFrom2Nix {
+    pname = "headwind.nvim";
+    version = "2021-05-28";
+    src = fetchFromGitHub {
+      owner = "steelsojka";
+      repo = "headwind.nvim";
+      rev = "b2664dc04b197a9c2c05820c5a28d2089d43b5a0";
+      sha256 = "1wrwk0k13l7vip1kz1ncjyfhj3x0jd6nf88ggjj8q4hh01qpywk3";
+    };
+    meta.homepage = "https://github.com/steelsojka/headwind.nvim/";
+  };
+
   hiPairs = buildVimPluginFrom2Nix {
     pname = "hiPairs";
     version = "2020-12-10";
