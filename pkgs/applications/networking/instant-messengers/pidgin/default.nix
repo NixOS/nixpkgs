@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config, gtk2, gtk2-x11, gtkspell2, aspell
+{ callPackage, stdenv, fetchurl, makeWrapper, pkg-config, gtk2, gtk2-x11, gtkspell2, aspell
 , gst_all_1, libstartup_notification, gettext, perlPackages, libxml2, nss
 , nspr, farstream, libXScrnSaver, avahi, dbus, dbus-glib, intltool, libidn
 , lib, python3, libICE, libXext, libSM, libgnt, ncurses, cyrus_sasl, openssl
@@ -93,7 +93,7 @@ let unwrapped = stdenv.mkDerivation rec {
 };
 
 in if plugins == [] then unwrapped
-    else import ./wrapper.nix {
-      inherit makeWrapper symlinkJoin plugins;
+    else callPackage ./wrapper.nix {
+      inherit plugins;
       pidgin = unwrapped;
     }
