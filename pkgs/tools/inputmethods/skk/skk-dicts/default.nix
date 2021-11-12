@@ -64,15 +64,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A collection of standard SKK dictionaries";
     longDescription = ''
       This package provides a collection of standard kana-to-kanji
       dictionaries for the SKK Japanese input method.
     '';
     homepage = "https://github.com/skk-dev/dict";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ yuriaisaka ];
+    platforms = platforms.all;
   };
 }
