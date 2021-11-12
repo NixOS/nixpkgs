@@ -23,7 +23,6 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/norwoodj/helm-docs";
     description = "A tool for automatically generating markdown documentation for Helm charts";
-    platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sagikazarmark ];
   };

@@ -58,20 +58,12 @@ stdenv.mkDerivation rec {
     # Our launchers that use paths at /run/current-system/sw/bin
     mkdir -p $out/etc/skel/.config/plank/dock1
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
-
-    # Whitelist wingpanel indicators to be used in the greeter
-    # https://github.com/elementary/greeter/blob/fc19752f147c62767cd2097c0c0c0fcce41e5873/debian/io.elementary.greeter.whitelist
-    # wingpanel 2.3.2 renamed this to .allowed to .forbidden
-    # https://github.com/elementary/wingpanel/pull/326
-    install -D ${./io.elementary.greeter.allowed} $out/etc/wingpanel.d/io.elementary.greeter.allowed
   '';
 
   postFixup = ''
     # https://github.com/elementary/default-settings/issues/55
-    rm -rf $out/share/plymouth
-    rm -rf $out/share/cups
-
-    rm -rf $out/share/applications
+    rm -r $out/share/cups
+    rm -r $out/share/applications
   '';
 
   passthru = {

@@ -4581,6 +4581,10 @@ in {
 
   manhole = callPackage ../development/python-modules/manhole { };
 
+  manimpango = callPackage ../development/python-modules/manimpango {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+  };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
@@ -5421,6 +5425,8 @@ in {
   pamela = callPackage ../development/python-modules/pamela { };
 
   pamqp = callPackage ../development/python-modules/pamqp { };
+
+  panacotta = callPackage ../development/python-modules/panacotta { };
 
   pandas = callPackage ../development/python-modules/pandas { };
 
@@ -6949,7 +6955,7 @@ in {
 
   pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
-  PyRMVtransport = callPackage ../development/python-modules/PyRMVtransport { };
+  pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
@@ -7720,6 +7726,8 @@ in {
     cudaSupport = false;
   };
 
+  pytraccar = callPackage ../development/python-modules/pytraccar { };
+
   pytradfri = callPackage ../development/python-modules/pytradfri { };
 
   pytrafikverket = callPackage ../development/python-modules/pytrafikverket { };
@@ -7768,6 +7776,8 @@ in {
   pyupdate = callPackage ../development/python-modules/pyupdate { };
 
   pyupgrade = callPackage ../development/python-modules/pyupgrade { };
+
+  pyuptimerobot = callPackage ../development/python-modules/pyuptimerobot { };
 
   pyusb = callPackage ../development/python-modules/pyusb {
     inherit (pkgs) libusb1;
@@ -8534,7 +8544,7 @@ in {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
-  simple-di = callPackage ../development/python-modules/simple_di { };
+  simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
@@ -9476,6 +9486,10 @@ in {
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
+
+  types-setuptools = callPackage ../development/python-modules/types-setuptools { };
+
+  types-toml = callPackage ../development/python-modules/types-toml { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 

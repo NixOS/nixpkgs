@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.11.0";
+  version = "2021.11.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -631,7 +631,7 @@
     "owntracks" = ps: with ps; [ pynacl pyturbojpeg aiohttp-cors hass-nabucasa paho-mqtt ];
     "ozw" = ps: with ps; [ aiohttp-cors paho-mqtt python-openzwave-mqtt ];
     "p1_monitor" = ps: with ps; [ p1monitor ];
-    "panasonic_bluray" = ps: with ps; [ ]; # missing inputs: panacotta
+    "panasonic_bluray" = ps: with ps; [ panacotta ];
     "panasonic_viera" = ps: with ps; [ ]; # missing inputs: panasonic_viera
     "pandora" = ps: with ps; [ pexpect ];
     "panel_custom" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
@@ -713,7 +713,7 @@
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [ pyrisco ];
     "rituals_perfume_genie" = ps: with ps; [ pyrituals ];
-    "rmvtransport" = ps: with ps; [ PyRMVtransport ];
+    "rmvtransport" = ps: with ps; [ pyrmvtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ rokuecp ];
     "roomba" = ps: with ps; [ roombapy ];
@@ -890,7 +890,7 @@
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
     "tplink" = ps: with ps; [ aiohttp-cors ifaddr python-kasa ];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
-    "traccar" = ps: with ps; [ aiohttp-cors stringcase ]; # missing inputs: pytraccar
+    "traccar" = ps: with ps; [ aiohttp-cors pytraccar stringcase ];
     "trace" = ps: with ps; [ ];
     "tractive" = ps: with ps; [ aiotractive ];
     "tradfri" = ps: with ps; [ pytradfri ];
@@ -922,7 +922,7 @@
     "updater" = ps: with ps; [ ];
     "upnp" = ps: with ps; [ aiohttp-cors async-upnp-client ifaddr zeroconf ];
     "uptime" = ps: with ps; [ ];
-    "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
+    "uptimerobot" = ps: with ps; [ pyuptimerobot ];
     "usb" = ps: with ps; [ aiohttp-cors pyserial pyudev ];
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [ geojson-client ];
