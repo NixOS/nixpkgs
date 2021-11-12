@@ -62,6 +62,8 @@ stdenv.mkDerivation {
       $out/share/$(dictname ${assoc}) >> $dst
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A collection of standard SKK dictionaries";
     longDescription = ''
