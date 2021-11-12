@@ -351,6 +351,18 @@ final: prev:
     meta.homepage = "https://github.com/euclidianAce/BetterLua.vim/";
   };
 
+  blueballs-neovim = buildVimPluginFrom2Nix {
+    pname = "blueballs-neovim";
+    version = "2021-09-09";
+    src = fetchFromGitHub {
+      owner = "blueballs-theme";
+      repo = "blueballs-neovim";
+      rev = "e0d73d553f663a12539682d89130d71df2db9099";
+      sha256 = "02x374wgbw3fmqlyrlxspf1n3ajik5y53g232r44y6093ly8wsw1";
+    };
+    meta.homepage = "https://github.com/blueballs-theme/blueballs-neovim/";
+  };
+
   bracey-vim = buildVimPluginFrom2Nix {
     pname = "bracey.vim";
     version = "2021-08-20";
