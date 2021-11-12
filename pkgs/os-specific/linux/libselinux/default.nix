@@ -9,14 +9,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
-  version = "3.0";
-  inherit (libsepol) se_release se_url;
+  version = "3.3";
+  inherit (libsepol) se_url;
 
   outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
-    sha256 = "0cr4p0qkr4qd5z1x677vwhz6mlz55kxyijwi2dmrvbhxcw7v78if";
+    url = "${se_url}/${version}/libselinux-${version}.tar.gz";
+    sha256 = "0mvh793g7fg6wb6zqhkdyrv80x6k84ypqwi8ii89c91xcckyxzdc";
   };
 
   nativeBuildInputs = [ pkg-config ] ++ optionals enablePython [ swig python3 ];

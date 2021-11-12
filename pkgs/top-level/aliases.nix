@@ -831,6 +831,7 @@ mapAliases ({
   sdlmame = mame; # added 2019-10-30
   seeks = throw "seeks has been removed from nixpkgs, as it was unmaintained"; # added 2020-06-21
   seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
+  sepolgen = throw "sepolgen was merged into selinux-python"; # added 2021-11-11
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
   sky = throw "sky has been removed from nixpkgs (2020-09-16)";
