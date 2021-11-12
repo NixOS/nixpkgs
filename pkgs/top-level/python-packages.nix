@@ -7915,6 +7915,8 @@ in {
 
   qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
 
+  qiskit-nature = callPackage ../development/python-modules/qiskit-nature { };
+
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
