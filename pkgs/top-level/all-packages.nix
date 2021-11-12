@@ -9471,7 +9471,9 @@ with pkgs;
 
   snallygaster = callPackage ../tools/security/snallygaster { };
 
-  snapcast = callPackage ../applications/audio/snapcast { };
+  snapcast = callPackage ../applications/audio/snapcast {
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+  };
 
   snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
 
