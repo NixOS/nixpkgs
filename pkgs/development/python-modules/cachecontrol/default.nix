@@ -6,19 +6,22 @@
 , mock
 , msgpack
 , pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.12.8";
+  version = "0.12.10";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y15xbaqw2lxidwbyrgpy42v3cxgv4ys63fx2586h1szlrd4f3p4";
+    sha256 = "sha256-mgvL0q10UbPHY1H3tJprke5p8qNl3HNYoeLAERZTcTs=";
   };
 
   propagatedBuildInputs = [
