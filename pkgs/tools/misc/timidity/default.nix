@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, CoreAudio, ncurses, pkg-config }:
+{ lib, stdenv, fetchurl
+, pkg-config, buildPackages
+, CoreAudio, alsa-lib, libjack2, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "timidity";
@@ -23,12 +26,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-ncurses"
+    "lib_cv_va_copy=yes"
+    "lib_cv___va_copy=yes"
   ] ++ lib.optionals stdenv.isLinux [
     "--enable-audio=oss,alsa,jack"
     "--enable-alsaseq"
     "--with-default-output=alsa"
+    "lib_cv_va_val_copy=yes"
   ] ++ lib.optionals stdenv.isDarwin [
     "--enable-audio=darwin,jack"
+    "lib_cv_va_val_copy=no"
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   NIX_LDFLAGS = "-ljack -L${libjack2}/lib";
@@ -37,6 +48,13 @@ stdenv.mkDerivation rec {
     url = "http://www.csee.umbc.edu/pub/midia/instruments.tar.gz";
     sha256 = "0lsh9l8l5h46z0y8ybsjd4pf6c22n33jsjvapfv3rjlfnasnqw67";
   };
+
+  preBuild = ''
+    # calcnewt has to be built with the host compiler.
+    ${buildPackages.stdenv.cc}/bin/cc -o timidity/calcnewt -lm timidity/calcnewt.c
+    # Remove dependencies of calcnewt so it doesn't try to remake it.
+    sed -i 's/^\(calcnewt\$(EXEEXT):\).*/\1/g' timidity/Makefile
+  '';
 
   # the instruments could be compressed (?)
   postInstall = ''
