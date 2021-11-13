@@ -1427,9 +1427,10 @@ self: super: {
   # 2021-09-14: Tests are broken because of undeterministic variable names
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
-  # 2021-03-21 Test hangs
+  # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  ghcide = dontCheck super.ghcide;
+  # 2021-11-13: Too strict upper bound on implicit-hie-cradle
+  ghcide = doJailbreak (dontCheck super.ghcide);
 
   data-tree-print = doJailbreak super.data-tree-print;
 
