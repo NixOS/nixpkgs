@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python3, retroarch
-, alsa-lib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
+{ lib, stdenv, fetchgit, fetchFromGitHub, fetchpatch, cmake, pkg-config, makeWrapper, python27, python3, retroarch
+, alsa-lib, fluidsynth, curl, hidapi, libGLU, gettext, portaudio, SDL, SDL2, libGL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
 , buildPackages }:
 
 let

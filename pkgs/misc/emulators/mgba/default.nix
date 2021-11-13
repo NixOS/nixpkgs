@@ -9,7 +9,6 @@
 , libedit
 , libelf
 , libzip
-, copyDesktopItems
 , makeDesktopItem
 , minizip
 , pkg-config
