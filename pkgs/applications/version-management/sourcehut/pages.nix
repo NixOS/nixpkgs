@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "pagessrht";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-SwKiNqsPbUgJyj8qSY1c7dwDiEMznEWmFun57YmDRKw=";
+    sha256 = "sha256-Cab8zx+9WHHAB1rBoyZACq7lx9JdRBGzI1H+Yu9qHfs=";
   };
 
   vendorSha256 = "sha256-udr+1y5ApQCSPhs3yQTTi9QfzRbz0A9COYuFMjQGa74=";
