@@ -9007,7 +9007,7 @@ self: super: with self; {
     inherit (pkgs) pkg-config cairo harfbuzz icu libjpeg libpng libtiff libwebp proj zlib;
     inherit boost;
     mapnik = pkgs.mapnik.override {
-      inherit python boost;
+      inherit boost;
     };
   };
 
