@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, pytest, setuptools-scm }:
+{ buildPythonPackage, fetchPypi, lib, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "qmk_dotty_dict";

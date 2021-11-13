@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , cachetools

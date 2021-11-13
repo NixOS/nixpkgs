@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy3k
 , pythonOlder
 , pytest
 }:

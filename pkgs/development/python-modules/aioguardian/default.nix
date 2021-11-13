@@ -10,7 +10,6 @@
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , voluptuous
 }:
 

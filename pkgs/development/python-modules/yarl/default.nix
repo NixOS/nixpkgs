@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , pythonOlder
 , idna
 , multidict

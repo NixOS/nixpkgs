@@ -485,6 +485,8 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
+  ./services/matrix/mjolnir.nix
+  ./services/matrix/pantalaimon.nix
   ./services/misc/ananicy.nix
   ./services/misc/airsonic.nix
   ./services/misc/ankisyncd.nix
@@ -1016,6 +1018,7 @@
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/moinmoin.nix
+  ./services/web-apps/openwebrx.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/rss-bridge.nix

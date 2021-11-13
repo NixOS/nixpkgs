@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , krakenex
 , pandas
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,5 @@
 { buildPythonPackage
 , lib
-, python
 , fetchPypi
 , six
 , requests

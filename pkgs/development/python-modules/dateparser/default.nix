@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
-, fetchpatch
 , python-dateutil
 , pytz
 , regex
