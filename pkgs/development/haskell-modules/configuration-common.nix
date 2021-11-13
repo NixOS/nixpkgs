@@ -2071,15 +2071,13 @@ EOT
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # 2021-11-05: patch to permit our language-docker version
-  # This is based on c931c0a9689cd6dff4d2083fa002414c1f08a586 from
-  # language-docker upstream
-  hadolint = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/hadolint/hadolint/commit/c931c0a9689cd6dff4d2083fa002414c1f08a586.patch";
-    sha256 = "1kv06hfn7lgrcrg56q8lq0pvdffqvmjbshazg3prlhl3kjs541f8";
-    excludes = [ "stack.yaml" "package.yaml" "hadolint.cabal" ];
-  }) (super.hadolint.override {
+  # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
+  hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_3_0;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck self.hspec-discover_2_8_4;
+    colourista = doJailbreak super.colourista;
   });
 
   # These should be updated in lockstep
