@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "redprl";
-  version = "unstable-2017-03-28";
+  version = "unstable-2019-11-04";
 
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = "sml-redprl";
-    rev = "bdf027de732e4a8d10f9f954389dfff0c822f18b";
+    rev = "c72190de76f7ed1cfbe1d2046c96e99ac5022b0c";
     fetchSubmodules = true;
-    sha256 = "0cihwnd78d3ksxp6mppifm7xpi3fsii5mixvicajy87ggw8z305c";
+    sha256 = "sha256-xrQT5o0bsIN+mCYUOz9iY4+j3HGROb1I6R2ADcLy8n4=";
   };
 
   buildInputs = [ mlton ];
