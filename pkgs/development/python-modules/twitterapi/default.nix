@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "twitterapi";
-  version = "2.7.5";
+  version = "2.7.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "geduldig";
     repo = "TwitterAPI";
     rev = "v${version}";
-    sha256 = "1s5q3gzd69syk8khlyy7ap8gpymvhgqrlv3vp6vdmwnaafjvvyy3";
+    sha256 = "sha256-KEJ0lAg6Zi2vps+ZPTkT6ts87qnIBL9pFe1tPEzviCI=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +24,10 @@ buildPythonPackage rec {
 
   # Tests are interacting with the Twitter API
   doCheck = false;
-  pythonImportsCheck = [ "TwitterAPI" ];
+
+  pythonImportsCheck = [
+    "TwitterAPI"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for Twitter's REST and Streaming APIs";

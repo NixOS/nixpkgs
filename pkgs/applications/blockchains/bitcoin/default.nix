@@ -5,6 +5,7 @@
 , pkg-config
 , util-linux
 , hexdump
+, autoSignDarwinBinariesHook
 , wrapQtAppsHook ? null
 , boost
 , libevent
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals stdenv.isDarwin [ hexdump ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]

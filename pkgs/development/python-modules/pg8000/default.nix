@@ -8,12 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.22.0";
+  version = "1.22.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5172252fc92142ec104cd5e7231be4580a1a0a814403707bafbf7bb8383a29a";
+    sha256 = "sha256-/WmtWvJ4HllgjLP02WayNNlhxi8JPt0xlKxF32W40dQ=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +25,10 @@ buildPythonPackage rec {
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
-  pythonImportsCheck = [ "pg8000" ];
+
+  pythonImportsCheck = [
+    "pg8000"
+  ];
 
   meta = with lib; {
     description = "Python driver for PostgreSQL";

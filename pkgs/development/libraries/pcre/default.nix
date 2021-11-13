@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
     sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
