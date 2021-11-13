@@ -29569,7 +29569,7 @@ with pkgs;
   aeon = callPackage ../applications/blockchains/aeon { };
 
   alfis = callPackage ../applications/blockchains/alfis {
-    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Security WebKit;
     inherit (gnome) zenity;
   };
   alfis-nogui = alfis.override {
