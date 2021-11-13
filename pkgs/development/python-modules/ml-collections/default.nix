@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # The pypi source archive does not include requirements.txt or
   # requirements-test.txt. See https://github.com/google/ml_collections/issues/7.
-  patchPhase = ''
+  postPatch = ''
     cp ${requirements} requirements.txt
     cp ${requirements-test} requirements-test.txt
   '';
