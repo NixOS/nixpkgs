@@ -4402,6 +4402,7 @@ with pkgs;
     ldapSupport = true;
     gsaslSupport = true;
     rtmpSupport = true;
+    pslSupport = true;
   };
 
   curl = curlMinimal.override ({
