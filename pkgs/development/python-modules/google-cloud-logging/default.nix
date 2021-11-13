@@ -12,7 +12,6 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
-, webapp2
 }:
 
 buildPythonPackage rec {

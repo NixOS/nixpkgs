@@ -2968,6 +2968,8 @@ in {
     pythonPackages = self;
   });
 
+  gaphas = callPackage ../development/python-modules/gaphas { };
+
   garminconnect-aio = callPackage ../development/python-modules/garminconnect-aio { };
 
   garminconnect-ha = callPackage ../development/python-modules/garminconnect-ha { };
@@ -3005,6 +3007,8 @@ in {
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
   genanki = callPackage ../development/python-modules/genanki { };
+
+  generic = callPackage ../development/python-modules/generic { };
 
   genome-collector = callPackage ../development/python-modules/genome-collector { };
 

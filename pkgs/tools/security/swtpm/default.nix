@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     perl # for pod2man
     autoreconfHook
   ];
+
   buildInputs = [
     libtpms
     openssl libtasn1 libseccomp
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  prePatch = ''
+  postPatch = ''
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
         --replace 'install-data-local:' 'do-not-execute:'

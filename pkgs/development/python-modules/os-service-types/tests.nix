@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , keystoneauth1
 , os-service-types
 , oslotest

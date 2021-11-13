@@ -12,7 +12,6 @@
 , pillow
 #, pytestCheckHook#
 , pytest
-, python
 , python-dateutil
 , pyyaml
 , selenium

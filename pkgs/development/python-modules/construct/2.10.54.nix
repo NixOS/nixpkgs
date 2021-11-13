@@ -1,5 +1,5 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, pytestCheckHook, pytest-benchmark, enum34, numpy, arrow, ruamel-yaml
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+, pytestCheckHook, pytest-benchmark, enum34, numpy, arrow, ruamel-yaml
 }:
 
 buildPythonPackage rec {

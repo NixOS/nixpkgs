@@ -3,7 +3,6 @@
 , fetchPypi
 , isPy3k
 , pytestCheckHook
-, setuptoolsBuildHook
 , python
 }:
 

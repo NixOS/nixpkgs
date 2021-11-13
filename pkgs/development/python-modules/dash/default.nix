@@ -4,9 +4,7 @@
 , plotly
 , flask
 , flask-compress
-, future
 , dash-core-components
-, dash-renderer
 , dash-html-components
 , dash-table
 , pytest-mock

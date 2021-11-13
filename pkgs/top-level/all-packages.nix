@@ -2762,6 +2762,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  dstp = callPackage ../development/tools/dstp { };
+
   dsvpn = callPackage ../applications/networking/dsvpn { };
 
   dtools = callPackage ../development/tools/dtools { };
@@ -5392,6 +5394,8 @@ with pkgs;
 
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
 
+  gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
@@ -6428,6 +6432,8 @@ with pkgs;
 
   intermodal = callPackage ../tools/misc/intermodal { };
 
+  internetarchive = with python3Packages; toPythonApplication internetarchive;
+
   invidious = callPackage ../servers/invidious {
     # needs a specific version of lsquic
     lsquic = callPackage ../servers/invidious/lsquic.nix { };
@@ -6994,6 +7000,8 @@ with pkgs;
   minisign = callPackage ../tools/security/minisign { };
 
   ministat = callPackage ../tools/misc/ministat { };
+
+  mjolnir = callPackage ../servers/mjolnir { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
@@ -8509,9 +8517,7 @@ with pkgs;
 
   phosh = callPackage ../applications/window-managers/phosh { };
 
-  pinentry = libsForQt5.callPackage ../tools/security/pinentry {
-    libcap = if stdenv.isDarwin then null else libcap;
-  };
+  pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
   pinentry-curses = (lib.getOutput "curses" pinentry);
   pinentry-emacs = (lib.getOutput "emacs" pinentry);
@@ -15885,6 +15891,8 @@ with pkgs;
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
+  csdr = callPackage ../applications/radio/csdr { };
+
   ctypes_sh = callPackage ../development/libraries/ctypes_sh { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
@@ -18908,6 +18916,11 @@ with pkgs;
   openhmd = callPackage ../development/libraries/openhmd { };
 
   openrct2 = callPackage ../games/openrct2 { };
+
+  openwebrx = callPackage ../applications/radio/openwebrx {
+    inherit (python3Packages)
+    buildPythonPackage buildPythonApplication setuptools;
+  };
 
   optparse-bash = callPackage ../development/libraries/optparse-bash { };
 
@@ -25648,6 +25661,8 @@ with pkgs;
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  levant = callPackage ../applications/networking/cluster/levant { };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   marker = callPackage ../applications/editors/marker { };
@@ -27285,6 +27300,10 @@ with pkgs;
   paprefs = callPackage ../applications/audio/paprefs { };
 
   pantalaimon = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon { };
+
+  pantalaimon-headless = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon {
+    enableDbusUi = false;
+  };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 

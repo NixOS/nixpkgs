@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, nose
 , msgpack
 , greenlet
 , pythonOlder

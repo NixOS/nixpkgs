@@ -1,6 +1,5 @@
 { lib
 , argon2_cffi
-, attrs
 , buildPythonPackage
 , cbor
 , cbor2

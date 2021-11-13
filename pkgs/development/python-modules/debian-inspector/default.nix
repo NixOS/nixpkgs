@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , chardet
 , attrs
 , commoncode

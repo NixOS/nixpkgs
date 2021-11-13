@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, makeWrapper }:
+{ lib, fetchFromGitHub, python3Packages, makeWrapper }:
 
 python3Packages.buildPythonPackage rec {
   pname = "seahub";

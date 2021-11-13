@@ -415,6 +415,11 @@ with self; with super; {
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
 
+  protobuf = callPackage ../development/python-modules/protobuf {
+    disabled = isPyPy;
+    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
+  };
+
   pyamf = callPackage ../development/python-modules/pyamf { };
 
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };

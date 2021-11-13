@@ -8,7 +8,6 @@
 , google-apputils ? null
 , six
 , pyext
-, libcxx
 , isPy27
 , disabled
 , doCheck ? true

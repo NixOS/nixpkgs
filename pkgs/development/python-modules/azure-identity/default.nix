@@ -1,6 +1,5 @@
 { buildPythonPackage
 , fetchPypi
-, isPy38
 , lib
 
 # pythonPackages

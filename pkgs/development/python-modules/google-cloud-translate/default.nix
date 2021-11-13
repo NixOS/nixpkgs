@@ -5,7 +5,6 @@
 , google-api-core
 , google-cloud-core
 , google-cloud-testutils
-, grpcio
 , libcst
 , mock
 , proto-plus

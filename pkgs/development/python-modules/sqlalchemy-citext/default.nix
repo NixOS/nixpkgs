@@ -3,7 +3,6 @@
 , fetchPypi
 , psycopg2
 , sqlalchemy
-, python
 }:
 
 buildPythonPackage rec {

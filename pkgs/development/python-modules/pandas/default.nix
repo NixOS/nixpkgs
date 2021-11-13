@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy38
 , beautifulsoup4
 , bottleneck
 , cython

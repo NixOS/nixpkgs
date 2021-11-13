@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , azure-common
-, azure-mgmt-common
 , azure-mgmt-core
 , msrest
 , msrestazure
