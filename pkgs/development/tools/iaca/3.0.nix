@@ -1,10 +1,11 @@
 { lib, stdenv, requireFile, unzip }:
 with lib;
 
-stdenv.mkDerivation {
-  name = "iaca-3.0";
+stdenv.mkDerivation rec {
+  pname = "iaca";
+  version = "3.0";
   src = requireFile {
-    name = "iaca-version-v3.0-lin64.zip";
+    name = "iaca-version-v${version}-lin64.zip";
     sha256 = "0qd81bxg269cwwvfmdp266kvhcl3sdvhrkfqdrbmanawk0w7lvp1";
     url = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer-download";
   };

@@ -16,11 +16,12 @@ let
       # this ^ also fixes CVE-2011-5244
   ];
 in
-stdenv.mkDerivation {
-  name = "t1lib-5.1.2";
+stdenv.mkDerivation rec {
+  pname = "t1lib";
+  version = "5.1.2";
 
   src = fetchurl {
-    url = "mirror://metalab/libs/graphics/t1lib-5.1.2.tar.gz";
+    url = "mirror://metalab/libs/graphics/t1lib-${version}.tar.gz";
     sha256 = "0nbvjpnmcznib1nlgg8xckrmsw3haa154byds2h90y2g0nsjh4w2";
   };
   inherit patches;
