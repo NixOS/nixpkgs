@@ -7,6 +7,7 @@
 , file
 , findutils
 , glibc
+, gnused
 , openssl
 , sysctl
 }:
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
         binutils-unwrapped
         findutils
         file
+        gnused
         openssl
         sysctl
       ];
@@ -38,10 +40,11 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/bin
       install checksec $out/bin
-      substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
-      substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
-      wrapProgram $out/bin/checksec \
-        --prefix PATH : ${path}
+      substituteInPlace $out/bin/checksec \
+        --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6 \
+        --replace "/usr/bin/id -" "${coreutils}/bin/id -" \
+        --replace " /bin/sed " " ${gnused}/bin/sed "
+      wrapProgram $out/bin/checksec --prefix PATH : ${path}
     '';
 
   meta = with lib; {
