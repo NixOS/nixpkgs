@@ -7201,6 +7201,13 @@
     githubId = 279868;
     name = "Matti Kariluoma";
   };
+  matyklug = {
+    email = "klugmathias@protonmail.com";
+    github = "matyklug18";
+    githubId = 32399575;
+    name = "Mathias Klug";
+    matrix = "@klugmathias:matrix.org";
+  };
   maurer = {
     email = "matthew.r.maurer+nix@gmail.com";
     github = "maurer";
