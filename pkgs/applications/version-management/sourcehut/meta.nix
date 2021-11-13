@@ -18,13 +18,13 @@
 , python
 }:
 let
-  version = "0.56.18";
+  version = "0.56.19";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-jt5UecpQORDr82HHDe7JBJ4ofnAYJl5Bnd7pRdVYnYM=";
+    sha256 = "sha256-YVj+aehO+2cJGvti9KXexm3y/0dx3rZBjEf0tKFC+s4=";
   };
 
   buildApi = src: buildGoModule {
