@@ -22,7 +22,7 @@ mkDerivation rec {
     qttools
     qtx11extras
     libdbusmenu
-  ] ++ lib.optional enableLibpulseaudio libpulseaudio;
+  ] ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     pkg-config
