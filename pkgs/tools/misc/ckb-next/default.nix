@@ -1,6 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, substituteAll, udev, stdenv
 , pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, enableLibpulseaudio ? stdenv.isLinux, libpulseaudio ? null }:
+, enableLibpulseaudio ? stdenv.isLinux, libpulseaudio
+}:
 
 mkDerivation rec {
   version = "0.4.4";
