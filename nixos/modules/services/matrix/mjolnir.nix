@@ -144,7 +144,7 @@ in
     protectedRooms = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      example = literalExample ''
+      example = literalExpression ''
         [
           "https://matrix.to/#/#yourroom:example.org"
           "https://matrix.to/#/#anotherroom:example.org"
@@ -158,7 +158,7 @@ in
     settings = mkOption {
       default = { };
       type = (pkgs.formats.yaml { }).type;
-      example = literalExample ''
+      example = literalExpression ''
         {
           autojoinOnlyIfManager = true;
           automaticallyRedactForReasons = [ "spam" "advertising" ];
