@@ -5108,6 +5108,8 @@ in {
     inherit (pkgs) nix;
   };
 
+  nixdeps = callPackage ../development/python-modules/nixdeps { };
+
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
