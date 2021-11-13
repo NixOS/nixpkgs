@@ -349,7 +349,7 @@ in {
           };
 
           restartSec = mkOption {
-            type = with types; nullOr (either str (listOf str));
+            type = with types; nullOr str;
             default = null;
             description = ''
               Whether and how soon a failed backup should be restarted.
