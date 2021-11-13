@@ -9809,6 +9809,8 @@ in {
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
 
+  wavefile = callPackage ../development/python-modules/wavefile { };
+
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcmatch = callPackage ../development/python-modules/wcmatch { };
