@@ -3,6 +3,7 @@
 , buildPythonPackage
 , curio
 , fetchFromGitHub
+, fetchpatch
 , flask
 , httpcore
 , httpx
@@ -19,6 +20,8 @@
 buildPythonPackage rec {
   pname = "httpx-socks";
   version = "0.5.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -46,7 +49,18 @@ buildPythonPackage rec {
     yarl
   ];
 
-  pythonImportsCheck = [ "httpx_socks" ];
+  patches = [
+    # Certificate for tests was expired
+    (fetchpatch {
+      name = "certificate.patch";
+      url = "https://github.com/romis2012/httpx-socks/commit/e12a0522ae667adf93483654206d4c09c3ae48ee.patch";
+      sha256 = "1mqykbii0r3by75bd2grppajyd4cbyhc6vp65fh0cgyp1x2gf00c";
+    })
+  ];
+
+  pythonImportsCheck = [
+    "httpx_socks"
+  ];
 
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
