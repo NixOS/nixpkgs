@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "mizani" ];
+
   meta = with lib; {
     description = "Scales for Python";
     homepage = "https://github.com/has2k1/mizani";
