@@ -6,6 +6,7 @@
 , ant
 , makeWrapper
 , makeDesktopItem
+, nixosTests
 }:
 
 let
@@ -78,6 +79,10 @@ in stdenv.mkDerivation {
       "$out/share/applications/Domination Map Editor.desktop"
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
   '';
+
+  passthru.tests = {
+    domination-starts = nixosTests.domination;
+  };
 
   meta = with lib; {
     homepage = "http://domination.sourceforge.net/";
