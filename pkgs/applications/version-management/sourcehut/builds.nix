@@ -11,13 +11,13 @@
 , python
 }:
 let
-  version = "0.73.3";
+  version = "0.74.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-/0KYQgl/pfZomD1EEF9iI9HnNR99a8OB3/n5IfgClQk=";
+    sha256 = "sha256-vdVKaI42pA0dnyMXhQ4AEaDgTtKcrH6hc9L6PFcl6ZA=";
   };
 
   worker = buildGoModule {
