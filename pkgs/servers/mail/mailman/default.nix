@@ -1,10 +1,10 @@
-{ lib, python3, fetchPypi, fetchpatch, pythonOlder, postfix, lynx
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python3, postfix, lynx
 }:
 
 let
-  py = python3.override {
+  # Mailman does not support sqlalchemy >= 1.4 https://gitlab.com/mailman/mailman/-/issues/845
+  pythonOverride = python3.override {
     packageOverrides = self: super: {
-      # https://gitlab.com/mailman/mailman/-/issues/845
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = oldAttrs.src.override {
@@ -14,10 +14,7 @@ let
       });
     };
   };
-
 in
-
-with py.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
@@ -29,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "12mgxs1ndhdjjkydx48b95na9k9h0disfqgrr6wxx7vda6dqvcwz";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with pythonOverride.pkgs; [
     aiosmtpd
     alembic
     authheaders
