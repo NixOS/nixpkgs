@@ -2085,4 +2085,9 @@ EOT
     hledger-lib = self.hledger-lib_1_23;
   };
 
+  # Needs brick > 0.64
+  nix-tree = super.nix-tree.override {
+    brick = self.brick_0_64_2;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
