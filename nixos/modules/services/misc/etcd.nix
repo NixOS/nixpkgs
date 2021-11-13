@@ -14,6 +14,12 @@ in {
       type = types.bool;
     };
 
+    package = mkOption {
+      description = "Which etcd derivation to use.";
+      default = pkgs.etcd;
+      type = types.package;
+    };
+
     name = mkOption {
       description = "Etcd unique node name.";
       default = config.networking.hostName;
@@ -184,7 +190,7 @@ in {
       };
     };
 
-    environment.systemPackages = [ pkgs.etcd ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.etcd = {
       isSystemUser = true;
