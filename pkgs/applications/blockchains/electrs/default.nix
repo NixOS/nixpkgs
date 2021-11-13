@@ -3,10 +3,13 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
-, rocksdb
+, rocksdb_6_23
 , Security
 }:
 
+let
+  rocksdb = rocksdb_6_23;
+in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
   version = "0.9.2";
