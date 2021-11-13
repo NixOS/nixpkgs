@@ -26,7 +26,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "domination";
-  version = "1.2.3";
+  version = "1.2.4";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -34,8 +34,8 @@ in stdenv.mkDerivation {
     # There are no tags in the repository.
     # Look for commits like "new version x.y.z info on website"
     # or "website update for x.y.z".
-    rev = "1964";
-    sha256 = "0718gns8d69a1dfq3ywc9kddl1khnrmxqyal7brckbjgay8dq42f";
+    rev = "2109";
+    sha256 = "sha256-awTaEkv0zUXgrKVKuFzi5sgHgrfiNmAFMODO5U0DL6I=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,10 @@ in stdenv.mkDerivation {
     makeWrapper
   ];
 
-  buildPhase = "ant";
+  buildPhase = ''
+    cd swingUI
+    ant
+  '';
 
   installPhase = ''
     # Remove unnecessary files and launchers (they'd need to be wrapped anyway)
