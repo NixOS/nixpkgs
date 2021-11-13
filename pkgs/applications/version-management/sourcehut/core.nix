@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.68.1";
+  version = "0.68.2";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "sha256-gfJB3zTzs2Uj5EREWV8a5ftt4uNCkuYsGnvTXWImitc=";
+    sha256 = "sha256-vLdKJgi3arF5PSODbCSCX7fWGZfgkOirGSdYzcNXRdk=";
     fetchSubmodules = true;
   };
 
