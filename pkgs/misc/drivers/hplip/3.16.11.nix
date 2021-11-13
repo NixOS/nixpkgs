@@ -2,7 +2,7 @@
 , pkg-config
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
 , net-snmp, openssl, nettools
-, bash, coreutils, util-linux
+, bash, util-linux
 , qtSupport ? true
 , withPlugin ? false
 }:
