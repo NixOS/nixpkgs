@@ -104,6 +104,19 @@ let
       });
     })
 
+    # Pinned due to API changes in nettigo-air-monitor>=1.2.0
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "0qfn9z3w3wr9p4i045b4pd8zwbi5nbczsapxwhmxbcpdlmvpb01q";
+        };
+      });
+    })
+
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
 
