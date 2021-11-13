@@ -5,13 +5,16 @@
 , pkg-config
 , bzip2
 , lz4
-, rocksdb
+, rocksdb_6_23
 , snappy
 , zeromq
 , zlib
 , nixosTests
 }:
 
+let
+  rocksdb = rocksdb_6_23;
+in
 buildGoModule rec {
   pname = "blockbook";
   version = "0.3.6";
