@@ -78,6 +78,18 @@ let
       });
     })
 
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
+        };
+      });
+    })
+
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
