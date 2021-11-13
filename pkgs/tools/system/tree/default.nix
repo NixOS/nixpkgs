@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
-    makeFlags+=("CC=$CC")
+    makeFlagsArray+=("CC=$CC")
   '';
 
   makeFlags = [
