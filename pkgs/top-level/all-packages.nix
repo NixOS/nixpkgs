@@ -4401,6 +4401,7 @@ with pkgs;
   curlFull = curl.override {
     ldapSupport = true;
     gsaslSupport = true;
+    rtmpSupport = true;
   };
 
   curl = curlMinimal.override ({
