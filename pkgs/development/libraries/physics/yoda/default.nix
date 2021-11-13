@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python, root, makeWrapper, zlib, withRootSupport ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
     sha256 = "sha256-xhagWmVlvlsayL0oWTihoxhq0ejejEACCsdQqFN1HUw=";
   };
+
+  patches = [
+    # Prevent ROOT from initializing X11 or Cocoa (helps with sandboxing)
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/yoda/-/commit/36c035f4f0385dec58702f09564ca66a14ca2c3e.diff";
+      sha256 = "sha256-afB+y33TVNJtxY5As18EcutJEGDE4g0UzMxzA+YgICk=";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
   buildInputs = [ python ]
