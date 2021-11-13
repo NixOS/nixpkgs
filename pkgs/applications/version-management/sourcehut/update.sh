@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p git mercurial common-updater-scripts
-set -x
+set -eux -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
 root=../../../..
@@ -46,14 +46,16 @@ update_version() {
     while IFS=' :' read -r origin hash; do
       case "$origin" in
         (expected|specified) oldHash="$hash";;
-        (got) sed -i "s|$oldHash|$(nix hash to-sri --type sha256 "$hash")|" "$default_nix"; retry=true; break;;
+        (got) sed -i "s|$oldHash|$hash|" "$default_nix"; retry=true; break;;
         (*) printf >&2 "%s\n" "$origin${hash:+:$hash}"
       esac
     done
   done
 
-  git add "$default_nix"
-  git commit -m "sourcehut.$1: $oldVersion -> $version"
+  if [ "$oldVersion" != "$version" ]; then
+    git add "$default_nix"
+    git commit -m "sourcehut.$1: $oldVersion -> $version"
+  fi
 }
 
 if [ $# -gt 0 ]; then
