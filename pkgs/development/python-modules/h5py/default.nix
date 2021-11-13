@@ -1,5 +1,5 @@
-{ lib, fetchPypi, isPy27, python, buildPythonPackage, pythonOlder
-, numpy, hdf5, cython, six, pkgconfig, unittest2, fetchpatch
+{ lib, fetchPypi, isPy27, buildPythonPackage, pythonOlder
+, numpy, hdf5, cython, six, pkgconfig, unittest2
 , mpi4py ? null, openssh, pytestCheckHook, cached-property }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
