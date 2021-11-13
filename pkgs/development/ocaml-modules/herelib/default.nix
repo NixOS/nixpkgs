@@ -2,7 +2,7 @@
 
 buildOcaml rec {
   version = "112.35.00";
-  name = "herelib";
+  pname = "herelib";
 
   minimumSupportedOcamlVersion = "4.00";
 
