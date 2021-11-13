@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
+{ lib, stdenv, fetchFromGitHub, netcdf, netcdfcxx4, gsl, udunits, antlr2, which, curl, flex, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "nco";
   version = "5.0.3";
 
-  src = fetchzip {
-    url = "https://github.com/nco/nco/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "nco";
+    repo = "nco";
+    rev = version;
     sha256 = "sha256-KrFRBlD3z/sjKIvxmE0s/xCILQmESecilnlUGzDDICw=";
   };
 
