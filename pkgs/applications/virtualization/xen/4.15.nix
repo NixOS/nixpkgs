@@ -42,11 +42,11 @@ let
 in
 
 callPackage (import ./generic.nix (rec {
-  version = "4.15.0";
+  version = "4.15.1";
 
   src = fetchurl {
     url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
-    sha256 = "1bddy402pw7brng5xnbm9l592ylvgm2hfrydxl9jk7vcfaa17x3c";
+    sha256 = "1rmc7gb72xwhr3h9rc3bkac41s8kjjzz45miwdq6yalyq7j7vss5";
   };
 
   # Sources needed to build tools and firmwares.
@@ -56,8 +56,8 @@ callPackage (import ./generic.nix (rec {
         url = "https://xenbits.xen.org/git-http/qemu-xen.git";
         # rev = "refs/tags/qemu-xen-${version}";
         # use revision hash - reproducible but must be updated with each new version
-        rev = "7ea428895af2840d85c524f0bd11a38aac308308";
-        sha256 = "0p6v8w3xasp2jggwyjnyn7hrzdmx1qimf8x49p070xcfr96mrpyp";
+        rev = "e2af2d050338c99e8436e251ad67aafb3ebbd501";
+        sha256 = "sha256-gVykPtzAA7tmpe6iVvnulaW+b0jD3gwL1JXC5yeIA7M=";
       };
       buildInputs = qemuDeps;
       postPatch = ''
@@ -90,8 +90,8 @@ callPackage (import ./generic.nix (rec {
     "firmware/seabios-dir-remote" = {
       src = fetchgit {
         url = "https://xenbits.xen.org/git-http/seabios.git";
-        rev = "b0d61ecef66eb05bd7a4eb7ada88ec5dab06dfee";
-        sha256 = "07y06vlqj0qm1945c50pg07lvcpv6bibc6qxhavfcx3zskzsz863";
+        rev = "155821a1990b6de78dde5f98fa5ab90e802021e0";
+        sha256 = "sha256-F3lzr00CMAObJtpz0eZFT/rwjFx+bvlI37/JtHXP5Eo=";
       };
       patches = [ ./0000-qemu-seabios-enable-ATA_DMA.patch ];
       meta.description = "Xen's fork of Seabios";
