@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awwbees/BespokeSynth";
     license = with licenses; [
       gpl3Plus
-      
+
       # This package is unfree and not distributable due to the license of VST2.
       # see #145607
       unfree
