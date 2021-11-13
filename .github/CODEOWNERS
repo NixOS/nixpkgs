@@ -65,6 +65,7 @@
 /nixos/doc/manual/development/writing-modules.xml     @nbp
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
+/nixos/modules/system                                 @dasJ
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -96,9 +97,9 @@
 /pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
 
 # Perl
-/pkgs/development/interpreters/perl @volth @stigtsp
-/pkgs/top-level/perl-packages.nix   @volth @stigtsp
-/pkgs/development/perl-modules      @volth @stigtsp
+/pkgs/development/interpreters/perl @volth @stigtsp @zakame
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp @zakame
+/pkgs/development/perl-modules      @volth @stigtsp @zakame
 
 # R
 /pkgs/applications/science/math/R   @jbedo @bcdarwin
@@ -231,3 +232,8 @@
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
+
+#nim
+/pkgs/development/compilers/nim  @ehmry
+/pkgs/development/nim-packages  @ehmry
+/pkgs/top-level/nim-packages.nix  @ehmry

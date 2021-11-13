@@ -19,6 +19,11 @@ in
     sha256 = "19z4zrchaxcz0a33c33n1qd11z9khj4323nfzsbzah0xxkkj8ka8";
   })
   (fetchNuGet {
+    name = "microsoft.aspnetcore.app.runtime.linux-arm64";
+    version = "3.1.19";
+    sha256 = "0xspb0xib1zsqnkkqm4s26z27v9idh9k09zziar1cavh2hxxxfcd";
+  })
+  (fetchNuGet {
     name = "microsoft.aspnet.webapi.client";
     version = "5.2.4";
     sha256 = "00fkczf69z2rwarcd8kjjdp47517a0ca6lggn72qbilsp03a5scj";
@@ -42,6 +47,11 @@ in
     name = "microsoft.netcore.app.runtime.linux-x64";
     version = "3.1.19";
     sha256 = "10c9bq1z8j173n9jzamgplbxq101yscwdhksshn1ybisn7cr5g0h";
+  })
+  (fetchNuGet {
+    name = "microsoft.netcore.app.runtime.linux-arm64";
+    version = "3.1.19";
+    sha256 = "0v9nc38bg4k2qk547pl1rlrslwprixqlbhcbbf6pw1ia6261wm5m";
   })
   (fetchNuGet {
     name = "microsoft.netcore.platforms";

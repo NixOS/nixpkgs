@@ -30,12 +30,14 @@
 , nodePackages
 , skim
 , sqlite
+, statix
 , stylish-haskell
 , tabnine
 , vim
 , which
 , xkb-switch
 , ycmd
+, nodejs
 
 # test dependencies
 , neovim-unwrapped
@@ -117,6 +119,15 @@ self: super: {
     '';
   });
 
+  cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
+    '';
+  });
+
   command-t = super.command-t.overrideAttrs (old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
@@ -165,6 +176,10 @@ self: super: {
       export PY3=ON
       ./install.sh
     '';
+  });
+
+  crates-nvim = super.crates-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   ctrlp-cmatcher = super.ctrlp-cmatcher.overrideAttrs (old: {
@@ -362,6 +377,10 @@ self: super: {
       '';
     };
 
+  lean-nvim = super.lean-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
+
   lens-vim = super.lens-vim.overrideAttrs (old: {
     # remove duplicate g:lens#animate in doc/lens.txt
     # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
@@ -380,6 +399,30 @@ self: super: {
 
   lir-nvim = super.lir-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
+    # We only need its dependencies `node-modules`.
+    nodeDep = nodePackages."markdown-preview-nvim-../../misc/vim-plugins/markdown-preview-nvim".overrideAttrs (old: {
+      dontNpmInstall = true;
+    });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./markdown-preview-nvim/fix-node-paths.patch;
+        node = "${nodejs}/bin/node";
+      })
+    ];
+    postInstall = ''
+      # The node package name is `*-vim` not `*-nvim`.
+      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+    '';
+
+    nativeBuildInputs = [ nodejs ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      node $out/app/index.js --version
+    '';
   });
 
   meson = buildVimPluginFrom2Nix {
@@ -462,10 +505,6 @@ self: super: {
       });
   });
 
-  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
-  });
-
   onehalf = super.onehalf.overrideAttrs (old: {
     configurePhase = "cd vim";
   });
@@ -497,6 +536,21 @@ self: super: {
     '';
   });
 
+  statix = buildVimPluginFrom2Nix rec {
+    inherit (statix) pname src meta;
+    version = "0.1.0";
+    dependencies = with self; [ statix ];
+    postPatch = ''
+      # check that version is up to date
+      grep 'pname = "statix-vim"' -A 1 flake.nix \
+        | grep -F 'version = "${version}"'
+
+      cd vim-plugin
+      substituteInPlace ftplugin/nix.vim --replace statix ${statix}/bin/statix
+      substituteInPlace plugin/statix.vim --replace statix ${statix}/bin/statix
+    '';
+  };
+
   sved =
     let
       # we put the script in its own derivation to benefit the magic of wrapGAppsHook
@@ -525,6 +579,10 @@ self: super: {
         description = "synctex support between vim/neovim and evince";
       };
     });
+
+  telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs (old: {
+    dependencies = with self; [ sqlite-lua telescope-nvim ];
+  });
 
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs (old: {
     dependencies = with self; [ sqlite-lua telescope-nvim ];
@@ -686,7 +744,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "083v2bnnjyf9j923p6bidgbvmwnh8sfv5ai70qfffzrysi5gvzdf";
+          cargoSha256 = "sha256-DiCQpgyz0iNEm6gjaJU5IGdsQISHhPqlDQBzZafngjY=";
         };
       in
       ''
@@ -716,6 +774,10 @@ self: super: {
         sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
       })
     ];
+  });
+
+  vim-fzf-coauthorship = super.vim-fzf-coauthorship.overrideAttrs (old: {
+    dependencies = with self; [ fzf-vim ];
   });
 
   # change the go_bin_path to point to a path in the nix store. See the code in
@@ -834,6 +896,11 @@ self: super: {
 
   vim-surround = super.vim-surround.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
+  });
+
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
   });
 
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {

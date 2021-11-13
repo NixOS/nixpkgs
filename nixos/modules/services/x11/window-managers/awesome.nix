@@ -27,7 +27,7 @@ in
         default = [];
         type = types.listOf types.package;
         description = "List of lua packages available for being used in the Awesome configuration.";
-        example = literalExample "[ pkgs.luaPackages.vicious ]";
+        example = literalExpression "[ pkgs.luaPackages.vicious ]";
       };
 
       package = mkOption {

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyezviz";
-  version = "0.1.9.3";
+  version = "0.1.9.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "baqs";
     repo = "pyEzviz";
     rev = version;
-    sha256 = "sha256-TDFkEz8I0/YoAFhWSYkLqL4+R4yiqAu+QncEieAlh2A=";
+    sha256 = "sha256-MS4icrTjjcPx3Pb8fpcKAd/JXWqknqp9wb4lQmRwFls=";
   };
 
   propagatedBuildInputs = [

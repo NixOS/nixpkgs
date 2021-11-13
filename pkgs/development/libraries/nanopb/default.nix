@@ -5,6 +5,7 @@
 , protobuf
 , python3
 , stdenv
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON" # generate $out/lib/libprotobuf-nanopb.so{.0,}
     "-DBUILD_STATIC_LIBS=ON" # generate $out/lib/libprotobuf-nanopb.a
-    "-Dnanopb_PROTOC_PATH=${protobuf}/bin/protoc"
+    "-Dnanopb_PROTOC_PATH=${buildPackages.protobuf}/bin/protoc"
   ];
 
   postInstall = ''

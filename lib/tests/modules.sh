@@ -62,17 +62,17 @@ checkConfigError() {
 
 # Check boolean option.
 checkConfigOutput "false" config.enable ./declare-enable.nix
-checkConfigError 'The option .* does not exist. Definition values:\n- In .*: true' config.enable ./define-enable.nix
+checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
 
 # Check integer types.
 # unsigned
 checkConfigOutput "42" config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
-checkConfigError 'A definition for option .* is not of type.*unsigned integer.*. Definition values:\n- In .*: -23' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
+checkConfigError 'A definition for option .* is not of type.*unsigned integer.*. Definition values:\n\s*- In .*: -23' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
 # positive
-checkConfigError 'A definition for option .* is not of type.*positive integer.*. Definition values:\n- In .*: 0' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
+checkConfigError 'A definition for option .* is not of type.*positive integer.*. Definition values:\n\s*- In .*: 0' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
 # between
 checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
-checkConfigError 'A definition for option .* is not of type.*between.*-21 and 43.*inclusive.*. Definition values:\n- In .*: -23' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
+checkConfigError 'A definition for option .* is not of type.*between.*-21 and 43.*inclusive.*. Definition values:\n\s*- In .*: -23' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
 
 # Check either types
 # types.either
@@ -125,7 +125,7 @@ checkConfigOutput 'true' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput "true" "$@"
 checkConfigOutput "false" "$@" ./disable-define-enable.nix
-checkConfigError "The option .*enable.* does not exist. Definition values:\n- In .*: true" "$@" ./disable-declare-enable.nix
+checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*- In .*: true" "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
 
@@ -142,18 +142,18 @@ checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
-checkConfigError 'The option .* does not exist. Definition values:\n- In .*' "$@"
+checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' "$@"
 checkConfigOutput "true" "$@" ./define-module-check.nix
 
 # Check coerced value.
 checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput "12" config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'A definition for option .* is not of type .*. Definition values:\n- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
-checkConfigError 'unrecognised JSON value' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'json.exception.parse_error' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
 checkConfigOutput "true" config.enable ./alias-with-priority.nix
@@ -169,7 +169,7 @@ checkConfigOutput "foo" config.submodule.foo ./declare-submoduleWith-special.nix
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to declare a value of type \`bool'\nrather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "You're trying to declare a value of type \`bool'\n\s*rather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -179,6 +179,13 @@ checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.
 # which evaluates all the modules defined by the type)
 checkConfigOutput "submodule" options.submodule.type.description ./declare-submoduleWith-modules.nix
 
+## submodules can be declared using (evalModules {...}).type
+checkConfigOutput "true" config.submodule.inner ./declare-submodule-via-evalModules.nix
+checkConfigOutput "true" config.submodule.outer ./declare-submodule-via-evalModules.nix
+# Should also be able to evaluate the type name (which evaluates freeformType,
+# which evaluates all the modules defined by the type)
+checkConfigOutput "submodule" options.submodule.type.description ./declare-submodule-via-evalModules.nix
+
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
@@ -186,7 +193,7 @@ checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.ni
 checkConfigOutput "true" config.enable ./disable-recursive/main.nix
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
-checkConfigError 'The option .* does not exist. Definition values:\n- In .*: true' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
 
 # Check that imports can depend on derivations
 checkConfigOutput "true" config.enable ./import-from-store.nix
@@ -254,8 +261,10 @@ checkConfigOutput / config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput null config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput 0.1 config.value.float ./types-anything/equal-atoms.nix
 # Functions can't be merged together
-checkConfigError "The option .* has conflicting definition values" config.value.multiple-lambdas ./types-anything/functions.nix
+checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
 checkConfigOutput '<LAMBDA>' config.value.single-lambda ./types-anything/functions.nix
+checkConfigOutput 'null' config.applied.merging-lambdas.x ./types-anything/functions.nix
+checkConfigOutput 'null' config.applied.merging-lambdas.y ./types-anything/functions.nix
 # Check that all mk* modifiers are applied
 checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix
 checkConfigOutput '{ }' config.value.mkiftrue ./types-anything/mk-mods.nix
@@ -268,7 +277,7 @@ checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 ## types.functionTo
 checkConfigOutput "input is input" config.result ./functionTo/trivial.nix
 checkConfigOutput "a b" config.result ./functionTo/merging-list.nix
-checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
+checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
 checkConfigOutput "b a" config.result ./functionTo/list-order.nix
 checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
 

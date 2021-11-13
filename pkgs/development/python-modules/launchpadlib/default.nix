@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.10.14";
+  version = "1.10.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5edfc7f615c88475b3d8549731cb57e2d9bf15d0b9bc21a43e88626b67deef4b";
+    sha256 = "4891f5b0c9bafbbb78aa06eeba1635629663c6aa80f621bcd1fc1057c8dd14b5";
   };
 
   propagatedBuildInputs = [

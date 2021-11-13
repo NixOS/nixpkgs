@@ -1,18 +1,28 @@
 { fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb-run }:
+, xorgserver, xvfb-run
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+}:
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.19.2";
+  version = "4.20";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-im7hd2idzyKWTSC2CTAU7k+gQZNF0/1RXVUS2ZgLsnk=";
+    sha256 = "sha256-jPTxdPbPVU84VjOAaBq+JYaOmVWIN5HgmG7NicU6wyI=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper meson ninja installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config makeWrapper meson ninja installShellFiles
+    asciidoc xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dmans=true"
+  ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon

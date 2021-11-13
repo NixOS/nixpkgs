@@ -9,54 +9,44 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiofiles";
-        version = "0.6.0";
+      asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.1";
         src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "0w23d88q65m06884pfcps661clr11w9wm701ihx6kfxjwga6fkzf";
-        };
-        doCheck = false;
-      });
-
-      ajsonrpc = super.ajsonrpc.overridePythonAttrs (oldAttrs: rec {
-        pname = "ajsonrpc";
-        version = "1.1.0";
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "sha256-CgHCtW0gxZho7ZavvEaODNc+KbFW4sAsHtM2Xk5Cuaw=";
+          owner = "django";
+          repo = "asgiref";
+          rev = version;
+          sha256 = "0440321alpqb1cdsmfzmiiy8rpq0ic0wvraalzk39cgrl7mghw39";
         };
       });
 
       click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "06kbzd6sjfkqan3miwj9wqyddfxc2b6hi7p5s4dvqjb3gif2bdfj";
+        version = "8.0.3";
+        src = fetchFromGitHub {
+          owner = "pallets";
+          repo = "click";
+          rev = version;
+          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
         };
       });
 
       starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        pname = "starlette";
-        version = "0.14.2";
+        version = "0.17.0";
         src = fetchFromGitHub {
           owner = "encode";
-          repo = pname;
+          repo = "starlette";
           rev = version;
-          sha256 = "sha256-Ki5jTEr5w6CrGK6F60E9uvdUlGx8pxdHMpxHvj9D4js=";
+          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
         };
-        doCheck = false;
+        disabledTestPaths = [];
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.2";
+        version = "0.15.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "uvicorn";
           rev = version;
-          sha256 = "04zgmp9z46k72ay6cz7plga6d3w3a6x41anabm7ramp7jdqf6na9";
+          sha256 = "074smp3448wcazlhc7sb8r54l4kfavr6yks3w5x60zl1qpijf52r";
         };
       });
     };
@@ -67,6 +57,7 @@ with python.pkgs; buildPythonApplication rec {
   inherit version src;
 
   propagatedBuildInputs = [
+    aiofiles
     ajsonrpc
     bottle
     click

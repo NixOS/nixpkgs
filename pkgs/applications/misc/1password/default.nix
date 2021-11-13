@@ -2,24 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "1.11.2";
+  version = "1.12.2";
   src =
-    if stdenv.isLinux then fetchzip {
-      url = {
-        "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
-        "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-        "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
-      }.${stdenv.hostPlatform.system};
-      sha256 = {
-        "i686-linux" = "0rh5bakj9qd43cf6wj5v46a3h98kcwqyc0f1yw72wvcacvjycyjz";
-        "x86_64-linux" = "00nf0cb8cxk1pvzr1wq778wvikzrlzy38r3rzkq44whdpdj50jzx";
-        "aarch64-linux" = "1gv282z49bj3ln5na4wb1z5455a64cyd54fp5i96k8shaxd0apxf";
-      }.${stdenv.hostPlatform.system};
-      stripRoot = false;
-    } else fetchurl {
-      url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_apple_universal_v${version}.pkg";
-      sha256 = "1pqdjr6d23j9fpwgahb0s1ni1bpjv9jajs1hapgq5kdrww2w7nhm";
-    };
+    if stdenv.isLinux then
+      fetchzip
+        {
+          url = {
+            "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
+            "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
+            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
+          }.${stdenv.hostPlatform.system};
+          sha256 = {
+            "i686-linux" = "tCm/vDBASPN9FBSVRJ6BrFc7hdtZWPEAgvokJhjazPg=";
+            "x86_64-linux" = "3VkVMuTAfeEowkguJi2fd1kG7GwO1VN5GBPgNaH3Zv4=";
+            "aarch64-linux" = "vWoA/0ZfdwVniHmxC4nH1QIc6bjdb00+SwlkIWc9BPs=";
+          }.${stdenv.hostPlatform.system};
+          stripRoot = false;
+        } else
+      fetchurl {
+        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_apple_universal_v${version}.pkg";
+        sha256 = "xG/6YZdkJxr5Py90rkIyG4mK40yFTmNSfih9jO2uF+4=";
+      };
 
   buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
 
@@ -43,11 +46,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "1Password command-line tool";
-    homepage     = "https://support.1password.com/command-line/";
+    description = "1Password command-line tool";
+    homepage = "https://support.1password.com/command-line/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI";
-    maintainers  = with maintainers; [ joelburget marsam ];
-    license      = licenses.unfree;
-    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    maintainers = with maintainers; [ joelburget marsam ];
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

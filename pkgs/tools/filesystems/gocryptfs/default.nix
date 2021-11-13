@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "gocryptfs";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nACBEOL/vnqxdAGI37k9bxgQKgpi35/tsuCxsQ9I2sw=";
+    sha256 = "sha256-qERtX9UcdMolbffzPiVQlblirzJ5baOmHonJIO8ang0=";
   };
 
-  vendorSha256 = "sha256-Q/oBT5xdLpgQCIk7KES6c8+BaCQVUIwCwVufl4oTFRs=";
+  vendorSha256 = "sha256-yJ7RYwhArgmGlFmSplrX1hiLkc7FkS1qQCUcRlbnNWQ=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -51,9 +51,11 @@ buildGoModule rec {
     popd
   '';
 
+  # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+  # as the setuid wrapper is required to use gocryptfs as non-root on NixOS
   postInstall = ''
     wrapProgram $out/bin/gocryptfs \
-      --prefix PATH : ${lib.makeBinPath [ fuse ]}
+      --suffix PATH : ${lib.makeBinPath [ fuse ]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
 

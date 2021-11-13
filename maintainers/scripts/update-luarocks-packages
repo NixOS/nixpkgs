@@ -33,8 +33,7 @@ TMP_FILE="$(mktemp)"
 GENERATED_NIXFILE="pkgs/development/lua-modules/generated-packages.nix"
 LUAROCKS_CONFIG="$NIXPKGS_PATH/maintainers/scripts/luarocks-config.lua"
 
-HEADER = """
-/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
+HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with:
 nixpkgs$ ./maintainers/scripts/update-luarocks-packages
 
@@ -99,9 +98,8 @@ class LuaEditor(Editor):
             header2 = textwrap.dedent(
             # header2 = inspect.cleandoc(
             """
-                { self, stdenv, lib, fetchurl, fetchgit, ... } @ args:
-                self: super:
-                with self;
+                { self, stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
+                final: prev:
                 {
             """)
             f.write(header2)
@@ -199,6 +197,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     log.debug("running %s", ' '.join(cmd))
     output = subprocess.check_output(cmd, text=True)
+    output = "callPackage(" + output.strip() + ") {};\n\n"
     return (plug, output)
 
 def main():

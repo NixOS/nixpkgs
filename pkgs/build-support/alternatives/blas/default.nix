@@ -82,7 +82,7 @@ stdenv.mkDerivation {
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libblas${canonicalExtension}
 '' else if stdenv.hostPlatform.isDarwin then ''
   install_name_tool \
-    -id libblas${canonicalExtension} \
+    -id $out/lib/libblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider}/lib \
     $out/lib/libblas${canonicalExtension}
 '' else "") + ''
@@ -114,7 +114,7 @@ EOF
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libcblas${canonicalExtension}
 '' else if stdenv.hostPlatform.isDarwin then ''
   install_name_tool \
-    -id libcblas${canonicalExtension} \
+    -id $out/lib/libcblas${canonicalExtension} \
     -add_rpath ${lib.getLib blasProvider}/lib \
     $out/lib/libcblas${canonicalExtension}
 '' else "") + ''

@@ -179,7 +179,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.neo4j;
-      defaultText = "pkgs.neo4j";
+      defaultText = literalExpression "pkgs.neo4j";
       description = ''
         Neo4j package to use.
       '';

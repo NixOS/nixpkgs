@@ -14,13 +14,13 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.git;
-        defaultText = "pkgs.git";
-        example = literalExample "pkgs.gitFull";
+        defaultText = literalExpression "pkgs.git";
+        example = literalExpression "pkgs.gitFull";
         description = "The git package to use";
       };
 
       config = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf (attrsOf anything);
         default = { };
         example = {
           init.defaultBranch = "main";
@@ -31,15 +31,39 @@ in
           section of git-config(1) for more information.
         '';
       };
+
+      lfs = {
+        enable = mkEnableOption "git-lfs";
+
+        package = mkOption {
+          type = types.package;
+          default = pkgs.git-lfs;
+          defaultText = literalExpression "pkgs.git-lfs";
+          description = "The git-lfs package to use";
+        };
+      };
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
-    environment.etc.gitconfig = mkIf (cfg.config != {}) {
-      text = generators.toGitINI cfg.config;
-    };
-  };
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages = [ cfg.package ];
+      environment.etc.gitconfig = mkIf (cfg.config != {}) {
+        text = generators.toGitINI cfg.config;
+      };
+    })
+    (mkIf (cfg.enable && cfg.lfs.enable) {
+      environment.systemPackages = [ cfg.lfs.package ];
+      programs.git.config = {
+        filter.lfs = {
+          clean = "git-lfs clean -- %f";
+          smudge = "git-lfs smudge -- %f";
+          process = "git-lfs filter-process";
+          required = true;
+        };
+      };
+    })
+  ];
 
   meta.maintainers = with maintainers; [ figsoda ];
 }

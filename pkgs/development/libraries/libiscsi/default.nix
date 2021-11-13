@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # This can be removed after >=1.20.0, or if the build suceeds with
-  # pie enabled (default on Musl).
-  hardeningDisable = [ "pie" ];
-
   # This problem is gone on libiscsi master.
   NIX_CFLAGS_COMPILE =
     lib.optional stdenv.hostPlatform.is32bit "-Wno-error=sign-compare";

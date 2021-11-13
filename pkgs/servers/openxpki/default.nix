@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage {
   buildInputs = [ perl openssl gettext python3Packages.sphinx ];
   propagatedBuildInputs = with perlPackages;
     [ # dependencies from Makefile.PL
-      libintl_perl ConfigVersioned LWP ClassAccessorChained IOSocketSSL ClassStd
+      libintl-perl ConfigVersioned LWP ClassAccessorChained IOSocketSSL ClassStd
       CGISession ConfigStd ConfigMerge Connector CryptCBC CryptOpenSSLAES CryptPKCS10
       DBDMock DataPassword DataSerializer DateTimeFormatDateParse IOPrompt
       IPCShareLite JSON LogLog4perl LWPProtocolConnect LWPProtocolHttps MailRFC822Address

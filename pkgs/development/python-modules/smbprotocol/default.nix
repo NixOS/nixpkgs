@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.6.2";
+  version = "1.8.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nSWZfhZD++I5hM2ijqft2U95kyEe3h/nrSfiT3sQiKE=";
+    sha256 = "sha256-NBwfWW02lzR4Xk+7qodQX+eIXMTtdy9WOtLzsf30d4c=";
   };
 
   propagatedBuildInputs = [

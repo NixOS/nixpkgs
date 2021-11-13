@@ -2,7 +2,7 @@
 
 with lib;
 let
-  inherit (lib) mkOption mkIf optionals literalExample;
+  inherit (lib) mkOption mkIf optionals literalExpression;
   cfg = config.services.xserver.windowManager.xmonad;
 
   ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
@@ -42,8 +42,8 @@ in {
       enable = mkEnableOption "xmonad";
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
-        defaultText = "pkgs.haskellPackages";
-        example = literalExample "pkgs.haskell.packages.ghc784";
+        defaultText = literalExpression "pkgs.haskellPackages";
+        example = literalExpression "pkgs.haskell.packages.ghc784";
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
@@ -55,8 +55,8 @@ in {
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
         default = self: [];
-        defaultText = "self: []";
-        example = literalExample ''
+        defaultText = literalExpression "self: []";
+        example = literalExpression ''
           haskellPackages: [
             haskellPackages.xmonad-contrib
             haskellPackages.monad-logger

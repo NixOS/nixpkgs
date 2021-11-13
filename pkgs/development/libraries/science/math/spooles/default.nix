@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "spooles";

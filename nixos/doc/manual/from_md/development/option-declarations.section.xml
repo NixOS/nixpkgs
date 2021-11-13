@@ -59,11 +59,29 @@ options = {
     </varlistentry>
     <varlistentry>
       <term>
+        <literal>defaultText</literal>
+      </term>
+      <listitem>
+        <para>
+          A textual representation of the default value to be rendered
+          verbatim in the manual. Useful if the default value is a
+          complex expression or depends on other values or packages. Use
+          <literal>lib.literalExpression</literal> for a Nix expression,
+          <literal>lib.literalDocBook</literal> for a plain English
+          description in DocBook format.
+        </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
         <literal>example</literal>
       </term>
       <listitem>
         <para>
-          An example value that will be shown in the NixOS manual.
+          An example value that will be shown in the NixOS manual. You
+          can use <literal>lib.literalExpression</literal> and
+          <literal>lib.literalDocBook</literal> in the same way as in
+          <literal>defaultText</literal>.
         </para>
       </listitem>
     </varlistentry>

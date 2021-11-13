@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--with-mysql=${getDev libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
-    "--with-spatialite=${libspatialite}"
+    "--with-spatialite=${libspatialite.dev}"
     "--with-python" # optional
     "--with-proj=${proj.dev}" # optional
     "--with-geos=${geos}/bin/geos-config" # optional

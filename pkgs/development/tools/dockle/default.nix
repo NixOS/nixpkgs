@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dockle";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H+qJBwKh+jh5ECMPbPgGtXzF+mm73ut0+URqpNBc3SM=";
+    sha256 = "sha256-0yeHxQW6zX8Mh9JBmp915czEZCmbIom/KYHWLc/O6NY=";
   };
 
   vendorSha256 = "sha256-klTIGmMKA6gp1strgvKnVBtYGQu2407UwxZ8brdGEkQ=";

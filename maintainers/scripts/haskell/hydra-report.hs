@@ -437,7 +437,7 @@ printBuildSummary
             <> Text.pack (formatTime defaultTimeLocale "%Y-%m-%d %H:%M UTC" fetchTime)
             <> "*"
          ]
-      brokenLine (name, rdeps) = "[" <> name <> "](https://search.nixos.org/packages?channel=unstable&show=haskellPackages." <> name <> "&query=haskellPackages." <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps)
+      brokenLine (name, rdeps) = "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <> ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
       numSummary = statusToNumSummary summary
       jobsByState predicate = Map.filter (predicate . worstState) summary
       worstState = foldl' min Success . fmap state . summaryBuilds
@@ -464,8 +464,8 @@ printBuildSummary
          if' (isNothing mergeableJob) "No `mergeable` job found." <>
          if' (isNothing maintainedJob) "No `maintained` job found." <>
          if' (Unfinished > maybe Success worstState mergeableJob) "`mergeable` jobset failed." <>
-         if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too much outstanding jobs on x86_64-linux." <>
-         if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too much outstanding jobs on aarch64-linux."
+         if' (outstandingJobs (Platform "x86_64-linux") > 100) "Too many outstanding jobs on x86_64-linux." <>
+         if' (outstandingJobs (Platform "aarch64-linux") > 100) "Too many outstanding jobs on aarch64-linux."
       if' p e = if p then [e] else mempty
       outstandingJobs platform | Table m <- numSummary = Map.findWithDefault 0 (platform, Unfinished) m
       maintainedJob = Map.lookup "maintained" summary

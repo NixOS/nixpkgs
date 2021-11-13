@@ -13,7 +13,7 @@ in
       package = mkOption {
         type        = types.package;
         default     = pkgs.lispPackages.clfswm;
-        defaultText = "pkgs.lispPackages.clfswm";
+        defaultText = literalExpression "pkgs.lispPackages.clfswm";
         description = ''
           clfswm package to use.
         '';

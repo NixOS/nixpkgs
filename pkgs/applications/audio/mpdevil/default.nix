@@ -1,18 +1,19 @@
 { lib, fetchFromGitHub
 , python3Packages
 , gdk-pixbuf, glib, gobject-introspection, gtk3
+, libnotify
 , intltool
 , wrapGAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wa5wkkv8kvzlxrhqmmhjmrzcm5v2dij516dk4vlpv9sazc6gzkm";
+    sha256 = "1zx129zl6bjb0j3f81yx2641nsj6ck04q5f0v0g8f08xgdwsyv3b";
   };
 
   nativeBuildInputs = [
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gdk-pixbuf glib
+    gdk-pixbuf glib libnotify
   ];
 
   propagatedBuildInputs = with python3Packages; [

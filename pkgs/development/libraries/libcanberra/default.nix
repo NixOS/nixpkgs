@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
-  nativeBuildInputs = [ pkg-config libtool ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpulseaudio libvorbis
+    libtool # in buildInputs rather than nativeBuildInputs since libltdl is used (not libtool itself)
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11

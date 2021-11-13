@@ -13,13 +13,13 @@
 # Uses scheme to bootstrap the build of idris2
 stdenv.mkDerivation rec {
   pname = "idris2";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
     rev = "v${version}";
-    sha256 = "sha256-JRI5/dEy9GT8SIj3X+UcJ0SiTQ20pqevWeTNX6e+Nfw=";
+    sha256 = "sha256-6CTn8o5geWSesXO7vTrrV/2EOQ3f+nPQ2M5cem13ZSY=";
   };
 
   # We do not add any propagatedNativeBuildInputs because we do not want the

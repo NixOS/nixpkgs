@@ -15,7 +15,11 @@
 , autoreconfHook
 , dbus
 , enableVideo ? stdenv.isLinux
-, enableDbus ? stdenv.isLinux
+  # The implementation is buggy and produces an error like
+  # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
+  # for every scanned code.
+  # see https://github.com/mchehab/zbar/issues/104
+, enableDbus ? false
 , libintl
 }:
 

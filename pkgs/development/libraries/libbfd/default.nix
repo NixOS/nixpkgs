@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
-, libiberty, zlib
+, libiberty, libintl, zlib
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib.dev ];
+  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [

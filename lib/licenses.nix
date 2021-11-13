@@ -153,6 +153,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  capec = {
+    fullName = "Common Attack Pattern Enumeration and Classification";
+    url = "https://capec.mitre.org/about/termsofuse.html";
+  };
+
   clArtistic = {
     spdxId = "ClArtistic";
     fullName = "Clarified Artistic License";
@@ -238,6 +243,11 @@ in mkLicense lset) ({
   cecill20 = {
     spdxId = "CECILL-2.0";
     fullName = "CeCILL Free Software License Agreement v2.0";
+  };
+
+  cecill21 = {
+    spdxId = "CECILL-2.1";
+    fullName = "CeCILL Free Software License Agreement v2.1";
   };
 
   cecill-b = {

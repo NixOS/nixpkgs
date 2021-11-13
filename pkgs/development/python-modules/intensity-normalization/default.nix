@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "intensity-normalization";
-  version = "2.0.1";
+  version = "2.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c6inlhpxarvkniq8j5j2pgl32dmggn14s8c3c0xx15j7cg90413";
+    sha256 = "sha256-aGuGdUqaUgoD95PLFch+lF9o7eeKwK0bNWTF1beslIY=";
   };
 
   postPatch = ''

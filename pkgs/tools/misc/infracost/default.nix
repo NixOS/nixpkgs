@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.6";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-lcvpNhfSgr8ky03sTo7kjnaLUJeIrzFqpYUjvQpT1Po=";
+    sha256 = "sha256-8XS30fRxHPady/snr3gfo8Ryiw9O7EeDezcYYZjod1w=";
   };
-  vendorSha256 = "sha256-TKs3xuZaO9PvlAcV5GDa3Jb36zeVWX3LcdcPxWR6KzE=";
+  vendorSha256 = "sha256-8r7v3526kY+rFHkl1+KEwNbFrSnXPlpZD6kiK4ea+Zg=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -18,9 +18,16 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   checkInputs = [ terraform ];
+  # Short only runs the unit-tests tagged short
+  checkFlags = [ "-v" "-short" ];
   checkPhase = ''
     runHook preCheck
-    make test
+
+    # Remove tests that require networking
+    rm cmd/infracost/{breakdown_test,diff_test}.go
+    # ldflags are required for some of the version testing
+    go test ./... $checkFlags ''${ldflags:+-ldflags="$ldflags"}
+
     runHook postCheck
   '';
 

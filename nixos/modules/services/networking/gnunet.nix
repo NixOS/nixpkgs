@@ -115,9 +115,9 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.gnunet;
-        defaultText = "pkgs.gnunet";
+        defaultText = literalExpression "pkgs.gnunet";
         description = "Overridable attribute of the gnunet package to use.";
-        example = literalExample "pkgs.gnunet_git";
+        example = literalExpression "pkgs.gnunet_git";
       };
 
       extraOptions = mkOption {

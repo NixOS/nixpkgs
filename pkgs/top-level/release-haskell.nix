@@ -48,7 +48,7 @@ let
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
 
   # list of all compilers to test specific packages on
-  all = with compilerNames; [
+  released = with compilerNames; [
     ghc884
     ghc8107
     ghc901
@@ -175,13 +175,14 @@ let
         hinit
         hedgewars
         hledger
+        hledger-check-fancyassertions
         hledger-iadd
         hledger-interest
         hledger-ui
         hledger-web
         hlint
         hpack
-        hyper-haskell
+        # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
         hyper-haskell-server-with-packages
         icepeak
         idris
@@ -243,19 +244,20 @@ let
       elmPackages.elm = pkgsPlatforms.elmPackages.elm;
 
       # GHCs linked to musl.
-      pkgsMusl.haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler // {
-        # remove musl ghc865Binary since it is known to be broken and
-        # causes an evaluation error on darwin.
-        # TODO: remove ghc865Binary altogether and use ghc8102Binary
-        ghc865Binary = {};
+      pkgsMusl.haskell.compiler = lib.recursiveUpdate
+        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+        {
+          # remove musl ghc865Binary since it is known to be broken and
+          # causes an evaluation error on darwin.
+          # TODO: remove ghc865Binary altogether and use ghc8102Binary
+          ghc865Binary = {};
 
-        # remove integer-simple because it appears to be broken with
-        # musl and non-static-linking.
-        integer-simple = {};
+          ghcjs = {};
+          ghcjs810 = {};
 
-        ghcjs = {};
-        ghcjs810 = {};
-      };
+          # Can't be built with musl, see meta.broken comment in the drv
+          integer-simple.ghc884 = {};
+        };
 
       # Get some cache going for MUSL-enabled GHC.
       pkgsMusl.haskellPackages =
@@ -302,18 +304,19 @@ let
       # and to confirm that critical packages for the
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
-      cabal-install = all;
-      Cabal_3_6_1_0 = with compilerNames; [ ghc884 ghc8107 ghc901 ghc921 ];
-      cabal2nix-unstable = all;
-      funcmp = all;
-      haskell-language-server = all;
-      hoogle = all;
-      hsdns = all;
-      jailbreak-cabal = all;
-      language-nix = all;
-      nix-paths = all;
-      titlecase = all;
-      ghc-api-compat = all;
+      cabal-install = released ++ [ compilerNames.ghc921 ];
+      Cabal_3_6_2_0 = released ++ [ compilerNames.ghc921 ];
+      cabal2nix = released ++ [ compilerNames.ghc921 ];
+      cabal2nix-unstable = released ++ [ compilerNames.ghc921 ];
+      funcmp = released ++ [ compilerNames.ghc921 ];
+      haskell-language-server = released;
+      hoogle = released;
+      hsdns = released ++ [ compilerNames.ghc921 ];
+      jailbreak-cabal = released ++ [ compilerNames.ghc921 ];
+      language-nix = released ++ [ compilerNames.ghc921 ];
+      nix-paths = released ++ [ compilerNames.ghc921 ];
+      titlecase = released ++ [ compilerNames.ghc921 ];
+      ghc-api-compat = released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -327,10 +330,7 @@ let
         };
         constituents = accumulateDerivations [
           # haskell specific tests
-          #
-          # TODO: The writers test appears to be failing on darwin for unknown
-          # reasons.  See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881307871.
-          (lib.recursiveUpdate jobs.tests.haskell { writers.x86_64-darwin = null; })
+          jobs.tests.haskell
           # important top-level packages
           jobs.cabal-install
           jobs.cabal2nix
@@ -380,9 +380,16 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsMusl.haskell.compiler.ghc8102Binary
+          jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc901
+          jobs.pkgsMusl.haskell.compiler.ghc921
+          jobs.pkgsMusl.haskell.compiler.ghcHEAD
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc901
+          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc921
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
 

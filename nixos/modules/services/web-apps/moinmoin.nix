@@ -151,7 +151,7 @@ in
           webHost = mkDefault name;
         };
       }));
-      example = literalExample ''
+      example = literalExpression ''
         {
           "mywiki" = {
             siteName = "Example Wiki";

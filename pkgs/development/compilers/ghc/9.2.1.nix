@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx, xattr
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx, xattr
 , bash
 
 , libiconv ? null, ncurses
@@ -134,14 +134,20 @@ let
     targetPackages.stdenv.cc.bintools.bintools
   ];
 
+  # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
+  variantSuffix = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
+    (lib.optionalString enableIntegerSimple "-integer-simple")
+  ];
+
 in
 stdenv.mkDerivation (rec {
-  version = "9.2.0.20210821";
-  name = "${targetPrefix}ghc-${version}";
+  version = "9.2.1";
+  pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/9.2.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "1q2pppxv2avhykyxvyq72r5p97rkkiqp19b77yhp85ralbcp4ivw";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "f444012f97a136d9940f77cdff03fda48f9475e2ed0fec966c4d35c4df55f746";
   };
 
   enableParallelBuilding = true;
@@ -239,7 +245,7 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals enableDocs [
     sphinx
   ] ++ lib.optionals stdenv.isDarwin [
-    # TODO(@sternenseemann): use XATTR env var after backport of
+    # TODO(@sternenseemann): backport addition of XATTR env var like
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
     xattr
   ];
@@ -306,14 +312,6 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
-
-    # integer-simple builds are broken when GHC links against musl.
-    # See https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881323743.
-    # Linker failure on macOS:
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/19950#note_373726
-    broken = (enableIntegerSimple && hostPlatform.isMusl)
-      || stdenv.hostPlatform.isDarwin;
-    hydraPlatforms = lib.remove "x86_64-darwin" ghc.meta.platforms;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

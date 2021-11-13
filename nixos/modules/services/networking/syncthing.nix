@@ -182,7 +182,7 @@ in {
           will be reverted on restart if <link linkend="opt-services.syncthing.overrideDevices">overrideDevices</link>
           is enabled.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "/home/user/sync" = {
               id = "syncme";
@@ -243,7 +243,7 @@ in {
                 There are 4 different types of versioning with different parameters.
                 See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
               '';
-              example = literalExample ''
+              example = literalExpression ''
                 [
                   {
                     versioning = {
@@ -430,8 +430,8 @@ in {
         description = ''
           The path where the settings and keys will exist.
         '';
-        default = cfg.dataDir + (optionalString cond "/.config/syncthing");
-        defaultText = literalExample "dataDir${optionalString cond " + \"/.config/syncthing\""}";
+        default = cfg.dataDir + optionalString cond "/.config/syncthing";
+        defaultText = literalExpression "dataDir${optionalString cond " + \"/.config/syncthing\""}";
       };
 
       extraFlags = mkOption {
@@ -461,7 +461,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
-        defaultText = literalExample "pkgs.syncthing";
+        defaultText = literalExpression "pkgs.syncthing";
         description = ''
           The Syncthing package to use.
         '';

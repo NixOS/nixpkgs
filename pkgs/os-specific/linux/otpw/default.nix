@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "otpw-1.3";
+  pname = "otpw";
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://www.cl.cam.ac.uk/~mgk25/download/${name}.tar.gz";
+    url = "https://www.cl.cam.ac.uk/~mgk25/download/otpw-${version}.tar.gz";
     sha256 = "1k3hc7xbxz6hkc55kvddi3cibafwf93ivn58sy1l888d3l5dwmrk";
   };
 

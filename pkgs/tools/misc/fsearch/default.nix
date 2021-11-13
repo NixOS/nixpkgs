@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ artturin ];
     platforms = platforms.unix;
+    mainProgram = "fsearch";
   };
 }

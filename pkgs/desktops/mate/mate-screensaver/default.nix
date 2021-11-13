@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     systemd
     mate.mate-desktop
     mate.mate-menus
+    mate.mate-panel
   ];
 
   configureFlags = [ "--without-console-kit" ];
@@ -40,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

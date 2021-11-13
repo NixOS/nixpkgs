@@ -1,12 +1,9 @@
 { lib
 , fetchFromGitHub
-, crystal_0_33
+, crystal
 }:
 
-let
-  crystal = crystal_0_33;
-
-in crystal.buildCrystalPackage rec {
+crystal.buildCrystalPackage rec {
   pname = "thicket";
   version = "0.1.5";
 

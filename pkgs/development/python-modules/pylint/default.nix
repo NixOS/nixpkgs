@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.10.2";
+  version = "2.11.1";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hkrkgUdC5LO1oSPFL6gvIk0zFpMw45gCmnoRbdPZuRs=";
+    sha256 = "08kc9139v1sd0vhna0rqikyds0xq8hxv0j9707n2i1nbv2z6xhsv";
   };
 
   nativeBuildInputs = [

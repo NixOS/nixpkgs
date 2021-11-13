@@ -1,4 +1,26 @@
-import ./../make-test-python.nix ({ pkgs, ...} : {
+import ./../make-test-python.nix ({ pkgs, ...}:
+
+
+let
+  # Setup common users
+  users = { ... }:
+  {
+    users.groups.testusers = { };
+
+    users.users.testuser = {
+      isSystemUser = true;
+      group = "testusers";
+    };
+
+    users.users.testuser2 = {
+      isSystemUser = true;
+      group = "testusers";
+    };
+  };
+
+in
+
+{
   name = "mysql";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -9,8 +31,8 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        users.users.testuser = { isSystemUser = true; };
-        users.users.testuser2 = { isSystemUser = true; };
+        imports = [ users ];
+
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
           { name = "testdb3"; schema = ./testdb.sql; }
@@ -40,12 +62,12 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
+        imports = [ users ];
+
         # prevent oom:
         # Kernel panic - not syncing: Out of memory: compulsory panic_on_oom is enabled
         virtualisation.memorySize = 1024;
 
-        users.users.testuser = { isSystemUser = true; };
-        users.users.testuser2 = { isSystemUser = true; };
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
           { name = "testdb3"; schema = ./testdb.sql; }
@@ -75,8 +97,8 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        users.users.testuser = { isSystemUser = true; };
-        users.users.testuser2 = { isSystemUser = true; };
+        imports = [ users ];
+
         services.mysql.enable = true;
         services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
           ALTER USER root@localhost IDENTIFIED WITH unix_socket;

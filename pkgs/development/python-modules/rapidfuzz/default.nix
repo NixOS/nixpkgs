@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.6.0";
+  version = "1.8.2";
 
   disabled = pythonOlder "3.5";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     repo = "RapidFuzz";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-dJz6OzzjqWZwzDVJzJVUshK0HDP/Bz5cML0TrwVVcvg=";
+    sha256 = "sha256-lIpi7GGKJSNgmX64K3xXvrzcu469Kxe3rW71Lp3LKms=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rapid fuzzy string matching";
-    homepage = "https://github.com/maxbachmann/rapidfuzz";
+    homepage = "https://github.com/maxbachmann/RapidFuzz";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

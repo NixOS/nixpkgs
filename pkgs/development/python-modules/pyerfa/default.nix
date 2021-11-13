@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, setuptools-scm
 , liberfa
 , packaging
 , numpy
@@ -10,17 +11,25 @@
 buildPythonPackage rec {
   pname = "pyerfa";
   format = "pyproject";
-  version = "1.7.1.1";
+  version = "2.0.0";
 
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09i2qcsvxd3q04a5yaf6fwzg79paaslpksinan9d8smj7viql15i";
+    sha256 = "sha256-+QQjHhpXD5REDgYUB5lZCJUQf5QoR7UqdTzoHJYJFi0=";
   };
 
-  nativeBuildInputs = [ packaging ];
-  propagatedBuildInputs = [ liberfa numpy ];
+  nativeBuildInputs = [
+    packaging
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    liberfa
+    numpy
+  ];
+
   preBuild = ''
     export PYERFA_USE_SYSTEM_LIBERFA=1
   '';

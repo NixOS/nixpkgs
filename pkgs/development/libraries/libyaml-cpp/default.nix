@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libyaml-cpp";
@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2tFWccifn0c2lU/U1WNg2FHrBohjx8CXMllPJCevaNk=";
   };
 
-  # implement https://github.com/jbeder/yaml-cpp/commit/52a1378e48e15d42a0b755af7146394c6eff998c
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'option(YAML_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)' \
-                'option(YAML_BUILD_SHARED_LIBS "Build yaml-cpp shared library" ''${BUILD_SHARED_LIBS})'
-  '';
+  patches = [
+    # https://github.com/jbeder/yaml-cpp/issues/774
+    # https://github.com/jbeder/yaml-cpp/pull/1037
+    (fetchpatch {
+      url = "https://github.com/jbeder/yaml-cpp/commit/4f48727b365962e31451cd91027bd797bc7d2ee7.patch";
+      sha256 = "sha256-jarZAh7NgwL3xXzxijDiAQmC/EC2WYfNMkYHEIQBPhM=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

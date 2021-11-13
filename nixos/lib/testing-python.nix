@@ -43,7 +43,8 @@ rec {
         from pydoc import importfile
         with open('driver-symbols', 'w') as fp:
           t = importfile('${testDriverScript}')
-          test_symbols = t._test_symbols()
+          d = t.Driver([],[],"")
+          test_symbols = d.test_symbols()
           fp.write(','.join(test_symbols.keys()))
         EOF
       '';
@@ -188,14 +189,6 @@ rec {
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}'
-
-        ${lib.optionalString (testScript == "") ''
-          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
-          wrapProgram $out/bin/nixos-run-vms \
-            --set startScripts "''${vmStartScripts[*]}" \
-            --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
-            --set vlans '${toString vlans}'
-        ''}
       '');
 
   # Make a full-blown test
@@ -216,11 +209,41 @@ rec {
     let
       nodes = qemu_pkg:
         let
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { nodes = nodes qemu_pkg; }
+            else testScript;
+
           build-vms = import ./build-vms.nix {
-            inherit system pkgs minimal specialArgs;
+            inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
+              { config, ... }:
               {
                 virtualisation.qemu.package = qemu_pkg;
+
+                # Make sure all derivations referenced by the test
+                # script are available on the nodes. When the store is
+                # accessed through 9p, this isn't important, since
+                # everything in the store is available to the guest,
+                # but when building a root image it is, as all paths
+                # that should be available to the guest has to be
+                # copied to the image.
+                virtualisation.additionalPaths =
+                  lib.optional
+                    # A testScript may evaluate nodes, which has caused
+                    # infinite recursions. The demand cycle involves:
+                    #   testScript -->
+                    #   nodes -->
+                    #   toplevel -->
+                    #   additionalPaths -->
+                    #   hasContext testScript' -->
+                    #   testScript (ad infinitum)
+                    # If we don't need to build an image, we can break this
+                    # cycle by short-circuiting when useNixStoreImage is false.
+                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                    (pkgs.writeStringReferencesToFile testScript');
+
                 # Ensure we do not use aliases. Ideally this is only set
                 # when the test framework is used by Nixpkgs NixOS tests.
                 nixpkgs.config.allowAliases = false;
@@ -256,7 +279,6 @@ rec {
       test // {
         inherit test driver driverInteractive nodes;
       };
-
 
   abortForFunction = functionName: abort ''The ${functionName} function was
     removed because it is not an essential part of the NixOS testing

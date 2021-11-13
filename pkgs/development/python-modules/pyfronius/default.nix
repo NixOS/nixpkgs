@@ -8,14 +8,15 @@
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.6.3";
+  version = "0.7.0";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "19cgr0y4zfyghpw9hwl9immh5c464dlasnfd8q570k9f0q682249";
+    sha256 = "1jp9vsllvzfnrkzmln2sp1ggr4pwaj47744n2ijz1wsf8v38nw2j";
   };
 
   propagatedBuildInputs = [

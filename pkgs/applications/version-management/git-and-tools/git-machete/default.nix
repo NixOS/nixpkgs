@@ -1,40 +1,46 @@
-{ lib, buildPythonApplication, fetchPypi
-, installShellFiles, pbr
-, flake8, mock, pycodestyle, pylint, tox
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, installShellFiles
+, git
+, stestr
 , nix-update-script
-, testVersion, git-machete
+, testVersion
+, git-machete
 }:
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.3.0";
+  version = "3.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0mq6hmb3wvj0ash27h4zyl46l3fikpf0mv3ng330lcy6v7bhy5b8";
+  src = fetchFromGitHub {
+    owner = "virtuslab";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-drfMD9tQe1dc61MH3Cxu9oin137f4FsZJY3X2kDHdh4=";
   };
 
-  nativeBuildInputs = [ installShellFiles pbr ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # TODO: Add missing check inputs (2019-11-22):
-  # - stestr
-  doCheck = false;
-  checkInputs = [ flake8 mock pycodestyle pylint tox ];
+  checkInputs = [ git stestr ];
+
+  postCheck = ''
+    stestr run
+  '';
 
   postInstall = ''
-      installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
-      installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+    installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
+    installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+  '';
+
+  postInstallCheck = ''
+    git init
+    test "$($out/bin/git-machete version)" = "git-machete version ${version}"
   '';
 
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
-    };
-
-    tests = {
-      version = testVersion {
-        package = git-machete;
-      };
     };
   };
 
@@ -42,7 +48,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.blitz ];
+    maintainers = with maintainers; [ blitz ];
   };
 }

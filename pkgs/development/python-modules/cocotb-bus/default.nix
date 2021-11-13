@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cocotb-bus";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc9b0bb00c95061a67f650caf96e3a294bb74ef437124dea456dd9e2a9431854";
+    sha256 = "3afe3abe73464269247263e44f39d59c1258f227298be4118377a8e8c09d7dc1";
   };
 
   postPatch = ''

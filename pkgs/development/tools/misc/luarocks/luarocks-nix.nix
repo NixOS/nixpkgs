@@ -5,8 +5,8 @@ luarocks.overrideAttrs(old: {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "test-speedup";
-    sha256 = "sha256-WfzLSpIp0V7Ib4sjYvoJHF+/vHaieccvfVAr5W47QsQ=";
+    rev = "standalone";
+    sha256 = "sha256-53Zi+GTayO9EQTCIVrzPeRRHeIkHLqy0mHyBDzbcQQk=";
   };
   patches = [];
 

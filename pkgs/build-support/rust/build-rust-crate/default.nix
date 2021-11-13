@@ -172,6 +172,11 @@ crate_: lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
     , extraRustcOpts
+      # A list of extra options to pass to rustc when building a build.rs.
+      #
+      # Example: [ "-Z debuginfo=2" ]
+      # Default: []
+    , extraRustcOptsForBuildRs
       # Whether to enable building tests.
       # Use true to enable.
       # Default: false
@@ -228,6 +233,7 @@ crate_: lib.makeOverridable
       nativeBuildInputs_ = nativeBuildInputs;
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
+      extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
       buildTests_ = buildTests;
 
       # crate2nix has a hack for the old bash based build script that did split
@@ -308,12 +314,16 @@ crate_: lib.makeOverridable
         lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
           ++ (lib.optional (edition != null) "--edition ${edition}");
+      extraRustcOptsForBuildRs =
+        lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
+        ++ extraRustcOptsForBuildRs_
+        ++ (lib.optional (edition != null) "--edition ${edition}");
 
 
       configurePhase = configureCrate {
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion
-          extraLinkFlags extraRustcOpts
+          extraLinkFlags extraRustcOptsForBuildRs
           crateAuthors crateHomepage verbose colors;
       };
       buildPhase = buildCrate {
@@ -337,6 +347,7 @@ crate_: lib.makeOverridable
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [ ];
+  extraRustcOptsForBuildRs = [ ];
   features = [ ];
   nativeBuildInputs = [ ];
   buildInputs = [ ];

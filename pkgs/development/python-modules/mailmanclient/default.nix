@@ -17,6 +17,6 @@ buildPythonPackage rec {
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ peti globin qyliss ];
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

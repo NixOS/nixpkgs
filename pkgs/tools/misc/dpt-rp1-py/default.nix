@@ -32,5 +32,6 @@ python3Packages.buildPythonApplication rec {
     description = "Python script to manage Sony DPT-RP1 without Digital Paper App";
     license = licenses.mit;
     maintainers = with maintainers; [ mt-caret ];
+    mainProgram = "dptrp1";
   };
 }

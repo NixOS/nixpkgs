@@ -36,7 +36,7 @@ in
           where <replaceable>name</replaceable> is the name of the
           corresponding attribute name.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             foo = {
               server = "tunnel.mdomain.com";

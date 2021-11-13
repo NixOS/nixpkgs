@@ -13,7 +13,8 @@
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "0.13";
+  version = "0.15";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "jongsoftdev";
     repo = "youless-python-bridge";
     rev = version;
-    sha256 = "sha256-Vywzd8wZG4eI/U69fPYuLpF54zAeuCv3Q81z5UcMGjc=";
+    sha256 = "sha256-77uQUAPDCFQiCpNAI0feOtHq82sE0n70IV1Njn/W29M=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +38,9 @@ buildPythonPackage rec {
     nose
   ];
 
-  pythonImportsCheck = [ "youless_api" ];
+  pythonImportsCheck = [
+    "youless_api"
+  ];
 
   meta = with lib; {
     description = "Python library for YouLess sensors";

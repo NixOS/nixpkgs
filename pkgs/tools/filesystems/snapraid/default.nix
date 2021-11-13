@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapraid";
-  version = "11.5";
+  version = "11.6";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    sha256 = "0dlhdsmq5l208zldfr9z9g0p67wry81dr0r23lpybb5c9fm2f2rm";
+    sha256 = "sha256-nO0Ujo9je59C+zP7l9Pp7JEdsSfVAv+9EnAq4OtJ78o=";
   };
 
   VERSION = version;

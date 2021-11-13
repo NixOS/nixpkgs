@@ -7,13 +7,13 @@
 
 trivialBuild rec {
   pname = "apheleia";
-  version = "0.0.0+unstable=2021-08-08";
+  version = "1.1.2+unstable=2021-10-03";
 
   src = fetchFromGitHub {
     owner = "raxod502";
     repo = pname;
-    rev = "8e022c67fea4248f831c678b31c19646cbcbbf6f";
-    hash = "sha256-Put/BBQ7V423C18UIVfaM17T+TDWtAxRZi7WI8doPJw=";
+    rev = "8b9d576f2fda10d0c9051fc03c1eb1d9791e32fd";
+    hash = "sha256-QwGlCdHBll16mbfQxGw1EORZFUxYCZSt8ThYTTGjRpo=";
   };
 
   buildInputs = [

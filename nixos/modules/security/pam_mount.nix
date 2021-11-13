@@ -33,7 +33,7 @@ in
       additionalSearchPaths = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.bindfs ]";
+        example = literalExpression "[ pkgs.bindfs ]";
         description = ''
           Additional programs to include in the search path of pam_mount.
           Useful for example if you want to use some FUSE filesystems like bindfs.
@@ -43,7 +43,7 @@ in
       fuseMountOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ "nodev" "nosuid" "force-user=%(USER)" "gid=%(USERGID)" "perms=0700" "chmod-deny" "chown-deny" "chgrp-deny" ]
         '';
         description = ''

@@ -8,8 +8,8 @@ mkDerivation {
   version = "0.2.3.2";
   src = fetchgit {
     url = "https://github.com/hasura/pool.git";
-    sha256 = "00q1fxh72fgjwl1pi3lnp4xg8f3kfm6q12gs9scinwbymfgzarms";
-    rev = "bc4c3f739a8fb8ec4444336a34662895831c9acf";
+    sha256 = "02wa32fl5wq5fk59id54xmxiqjl564r4rhsc79xsgf2j2spj0v94";
+    rev = "dc56753338e7b61220a09bed0469c6dcc5e9fb52";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [

@@ -72,7 +72,7 @@ in
         serverSettings = mkOption {
           type = settingsFmt.type;
           default = {};
-          example = literalExample ''
+          example = literalExpression ''
             {
               highWaterMark = 25165824;
               overflowTimeLimit = 30000;
@@ -89,7 +89,7 @@ in
         tunerSettings = mkOption {
           type = with types; nullOr settingsFmt.type;
           default = null;
-          example = literalExample ''
+          example = literalExpression ''
             [
               {
                 name = "tuner-name";
@@ -110,7 +110,7 @@ in
         channelSettings = mkOption {
           type = with types; nullOr settingsFmt.type;
           default = null;
-          example = literalExample ''
+          example = literalExpression ''
             [
               {
                 name = "channel";

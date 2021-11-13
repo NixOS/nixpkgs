@@ -32,7 +32,7 @@ in
       package = mkOption {
         default = pkgs.gitea;
         type = types.package;
-        defaultText = "pkgs.gitea";
+        defaultText = literalExpression "pkgs.gitea";
         description = "gitea derivation to use";
       };
 
@@ -55,7 +55,7 @@ in
           description = "Root path for log files.";
         };
         level = mkOption {
-          default = "Trace";
+          default = "Info";
           type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
           description = "General log level.";
         };
@@ -122,7 +122,7 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "null";
+          defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
@@ -255,8 +255,9 @@ in
       };
 
       staticRootPath = mkOption {
-        type = types.str;
-        default = "${gitea.data}";
+        type = types.either types.str types.path;
+        default = gitea.data;
+        defaultText = literalExpression "package.data";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
       };
@@ -287,7 +288,7 @@ in
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "cron.sync_external_users" = {
               RUN_AT_START = true;
@@ -348,7 +349,7 @@ in
       server = mkMerge [
         {
           DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = cfg.staticRootPath;
+          STATIC_ROOT_PATH = toString cfg.staticRootPath;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }

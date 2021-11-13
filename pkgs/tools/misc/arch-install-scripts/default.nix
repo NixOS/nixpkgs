@@ -52,6 +52,18 @@ resholvePackage rec {
 
       # packages resholve should resolve executables from
       inputs = [ coreutils gawk util-linux ];
+
+      # TODO: no good way to resolve mount/umount in Nix builds for now
+      # see https://github.com/abathur/resholve/issues/29
+      fake = {
+        external = [ "mount" "umount" ];
+      };
+
+      # TODO: remove the execer lore override below after
+      # https://github.com/abathur/binlore/issues/1
+      execer = [
+        "cannot:${util-linux}/bin/unshare"
+      ];
     };
   };
 

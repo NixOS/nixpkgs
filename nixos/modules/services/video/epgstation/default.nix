@@ -33,7 +33,7 @@ let
     fi
   '';
 
-  streamingConfig = builtins.fromJSON (builtins.readFile ./streaming.json);
+  streamingConfig = lib.importJSON ./streaming.json;
   logConfig = {
     appenders.stdout.type = "stdout";
     categories = {
@@ -126,6 +126,7 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-password" defaultPassword;
+        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
         example = "/run/keys/epgstation-password";
         description = ''
           A file containing the password for <option>basicAuth.user</option>.
@@ -145,6 +146,7 @@ in
       passwordFile = mkOption {
         type = types.path;
         default = pkgs.writeText "epgstation-db-password" defaultPassword;
+        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
         example = "/run/keys/epgstation-db-password";
         description = ''
           A file containing the password for the database named
@@ -189,14 +191,33 @@ in
           type = with types; listOf attrs;
           description = "Encoding presets for recorded videos.";
           default = [
-            { name = "H264";
+            {
+              name = "H264";
               cmd = "${pkgs.epgstation}/libexec/enc.sh main";
               suffix = ".mp4";
-              default = true; }
-            { name = "H264-sub";
+              default = true;
+            }
+            {
+              name = "H264-sub";
               cmd = "${pkgs.epgstation}/libexec/enc.sh sub";
-              suffix = "-sub.mp4"; }
+              suffix = "-sub.mp4";
+            }
           ];
+          defaultText = literalExpression ''
+            [
+              {
+                name = "H264";
+                cmd = "''${pkgs.epgstation}/libexec/enc.sh main";
+                suffix = ".mp4";
+                default = true;
+              }
+              {
+                name = "H264-sub";
+                cmd = "''${pkgs.epgstation}/libexec/enc.sh sub";
+                suffix = "-sub.mp4";
+              }
+            ]
+          '';
         };
       };
     };

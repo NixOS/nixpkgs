@@ -31,11 +31,14 @@
 , writeText
 , writeTextDir
 , writePython3
-, system
-, # Note: This is the cross system we're compiling for
 }:
 
 let
+
+  inherit (lib)
+    escapeShellArgs
+    toList
+    ;
 
   mkDbExtraCommand = contents:
     let
@@ -191,13 +194,13 @@ rec {
     , postMount ? ""
     , postUmount ? ""
     }:
-    let
-      result = vmTools.runInLinuxVM (
+      vmTools.runInLinuxVM (
         runCommand name
           {
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "docker-run-disk";
+              destination = "./image";
             };
             inherit fromImage fromImageName fromImageTag;
 
@@ -278,12 +281,6 @@ rec {
 
           ${postUmount}
         '');
-    in
-    runCommand name { } ''
-      mkdir -p $out
-      cd ${result}
-      cp layer.tar json VERSION $out
-    '';
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
     runWithOverlay {
@@ -291,7 +288,13 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
-        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out .
+        tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+      '';
+
+      postUmount = ''
+        mv $out/layer.tar .
+        rm -rf $out
+        mv layer.tar $out
       '';
     };
 
@@ -402,7 +405,7 @@ rec {
 
       preMount = lib.optionalString (contents != null && contents != [ ]) ''
         echo "Adding contents..."
-        for item in ${toString contents}; do
+        for item in ${escapeShellArgs (map (c: "${c}") (toList contents))}; do
           echo "Adding $item..."
           rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
         done

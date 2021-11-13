@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = "gtksourceviewmm";
       versionPolicy = "none";
+      freeze = true;
     };
   };
 

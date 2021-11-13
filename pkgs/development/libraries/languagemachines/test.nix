@@ -5,7 +5,7 @@
 runCommand "frog-test" {} ''
   ${languageMachines.frog}/bin/frog >$out <<EOF
   Dit is een test
-  
+
   EOF
   echo "Frog output:"
   cat $out

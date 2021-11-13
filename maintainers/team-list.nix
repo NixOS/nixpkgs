@@ -137,7 +137,7 @@ with lib.maintainers; {
       cleverca22
       disassembler
       jonringer
-      maveru
+      manveru
       nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
@@ -145,6 +145,7 @@ with lib.maintainers; {
 
   jitsi = {
     members = [
+      cleeyv
       petabyteboy
       ryantm
       yuka
@@ -164,6 +165,24 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
@@ -181,7 +200,6 @@ with lib.maintainers; {
   openstack = {
     members = [
       angustrau
-      superherointj
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";

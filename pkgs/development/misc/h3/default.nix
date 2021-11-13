@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , fetchFromGitHub
 }:
@@ -22,9 +23,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/uber/h3";
+    homepage = "https://h3geo.org/";
     description = "Hexagonal hierarchical geospatial indexing system";
     license = licenses.asl20;
+    changelog = "https://github.com/uber/h3/raw/v${version}/CHANGELOG.md";
+    platforms = platforms.all;
     maintainers = [ maintainers.kalbasit ];
   };
 }

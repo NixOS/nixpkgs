@@ -71,7 +71,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.knot-dns;
-        defaultText = "pkgs.knot-dns";
+        defaultText = literalExpression "pkgs.knot-dns";
         description = ''
           Which Knot DNS package to use
         '';

@@ -13,7 +13,7 @@ in {
   extraOpts = {
     controlSocketPaths = mkOption {
       type = types.listOf types.str;
-      example = literalExample ''
+      example = literalExpression ''
         [
           "/run/kea/kea-dhcp4.socket"
           "/run/kea/kea-dhcp6.socket"
@@ -34,6 +34,10 @@ in {
           ${concatStringsSep " \\n" cfg.controlSocketPaths}
       '';
       SupplementaryGroups = [ "kea" ];
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

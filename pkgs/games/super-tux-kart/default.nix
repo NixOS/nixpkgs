@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchsvn
 , cmake
 , pkg-config
@@ -20,15 +19,17 @@
 , mcpp
 , wiiuse
 , angelscript
+, libopenglrecorder
+, sqlite
 , Cocoa
 , IOKit
+, libsamplerate
 }:
 let
-  dir = "stk-code";
   assets = fetchsvn {
     url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-    rev = "18218";
-    sha256 = "11iv3cqzvbjg33zz5i5gkl2syn6mlw9wqv0jc7h36vjnjqjv17xw";
+    rev = "18464";
+    sha256 = "1a84j3psl4cxzkn5ynakpjill7i2f9ki2p729bpmbrvg8fki95aa";
     name = "stk-assets";
   };
 
@@ -44,44 +45,34 @@ let
     # has been fixed to support it.
     "enet"
     # Internal library of STK, nothing to do about it
+    "graphics_engine"
+    # Internal library of STK, nothing to do about it
     "graphics_utils"
     # This irrlicht is bundled with cmake
     # whereas upstream irrlicht still uses
     # archaic Makefiles, too complicated to switch to.
     "irrlicht"
     # Not packaged to this date
-    "libraqm"
-    # Not packaged to this date
     "libsquish"
     # Not packaged to this date
     "sheenbidi"
-  ]
-  # Our system angelscript causes linking error on ARM
-  # ld: libangelscript.so: undefined reference to
-  # `CallSystemFunctionNative(asCContext*, asCScriptFunction*, void*, unsigned int*, void*, unsigned long&, void*)'
-  # Bundled angelscript compiles fine
-  ++ lib.optional stdenv.hostPlatform.isAarch64 "angelscript";
+    # Not packaged to this date
+    "tinygettext"
+    # Not packaged to this date (needed on Darwin)
+    "mojoal"
+  ];
 in
 stdenv.mkDerivation rec {
 
   pname = "supertuxkart";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "supertuxkart";
     repo = "stk-code";
     rev = version;
-    sha256 = "1f98whk0v45jgwcsbdsb1qfambvrnbbgwq0w28kjz4278hinwzq6";
-    name = dir;
+    sha256 = "1llyxkdc4m9gnjxqaxlpwvv3ayvpw2bfjzfkkrljaxhznq811g0l";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix build with SDL 2.0.14
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/games-action/supertuxkart/files/supertuxkart-1.2-new-sdl.patch?id=288360dc7ce2f968a2f12099edeace3f3ed1a705";
-      sha256 = "1jgab9393qan8qbqf5bf8cgw4mynlr5a6pggqhybzsmaczgnns3n";
-    })
-  ];
 
   postPatch = ''
     # Deletes all bundled libs in stk-code/lib except those
@@ -93,7 +84,11 @@ stdenv.mkDerivation rec {
       --replace 'NOT (APPLE OR HAIKU)) AND USE_SYSTEM_WIIUSE' 'NOT (HAIKU)) AND USE_SYSTEM_WIIUSE'
   '';
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [
     SDL2
@@ -107,15 +102,16 @@ stdenv.mkDerivation rec {
     harfbuzz
     mcpp
     wiiuse
+    angelscript
+    sqlite
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isAarch64) angelscript
+  ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
   ++ lib.optional stdenv.hostPlatform.isLinux openal
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa libsamplerate ];
 
   cmakeFlags = [
-    "-DBUILD_RECORDER=OFF" # libopenglrecorder is not in nixpkgs
-    # doesn't work with our 2.35.0 on aarch64-linux
-    "-DUSE_SYSTEM_ANGELSCRIPT=${if !stdenv.hostPlatform.isAarch64 then "ON" else "OFF"}"
+    "-DBUILD_RECORDER=${if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"}"
+    "-DUSE_SYSTEM_ANGELSCRIPT=ON"
     "-DCHECK_ASSETS=OFF"
     "-DUSE_SYSTEM_WIIUSE=ON"
     "-DOpenGL_GL_PREFERENCE=GLVND"

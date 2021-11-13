@@ -38,5 +38,11 @@ in
       "/share"
     ];
 
+    security.wrappers.lumina-checkpass-wrapped = {
+      source = "${pkgs.lumina.lumina}/bin/lumina-checkpass";
+      owner = "root";
+      group = "root";
+    };
+
   };
 }

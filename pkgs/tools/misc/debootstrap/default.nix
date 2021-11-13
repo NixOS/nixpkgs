@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, util-linux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+, gnugrep, gnupg1, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
 let binPath = lib.makeBinPath [
@@ -7,6 +7,7 @@ let binPath = lib.makeBinPath [
     dpkg
     gawk
     gnugrep
+    gnupg1
     gnused
     gnutar
     gzip

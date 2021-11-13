@@ -12,7 +12,7 @@ let
   # parse the version from package.json
   version =
     let
-      packageJson = builtins.fromJSON (builtins.readFile ./package.json);
+      packageJson = lib.importJSON ./package.json;
       splits = builtins.split "^.*#v(.*)$" (builtins.getAttr "onlykey" (builtins.head packageJson));
       matches = builtins.elemAt splits 1;
       elem = builtins.head matches;

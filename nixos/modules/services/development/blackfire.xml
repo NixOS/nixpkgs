@@ -28,13 +28,14 @@ in {
     enable = true;
     settings = {
       # You will need to get credentials at https://blackfire.io/my/settings/credentials
-      # You can also use other options described in https://blackfire.io/docs/configuration/agent
+      # You can also use other options described in https://blackfire.io/docs/up-and-running/configuration/agent
       server-id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
       server-token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
     };
   };
 
   # Make the agent run on start-up.
+  # (WantedBy= from the upstream unit not respected: https://github.com/NixOS/nixpkgs/issues/81138)
   # Alternately, you can start it manually with `systemctl start blackfire-agent`.
   systemd.services.blackfire-agent.wantedBy = [ "phpfpm-foo.service" ];
 }</programlisting>

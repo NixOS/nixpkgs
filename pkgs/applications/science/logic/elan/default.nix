@@ -7,16 +7,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.0.7";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-SFY9RbUHoaOXCaK+uIqhnKbzSkbtWiS6os/JvsggagI=";
+    sha256 = "sha256-QNVzpnT77+9PXhq4Yz0q3o+GiQTVy7dOrg2yBTscoek=";
   };
 
-  cargoSha256 = "sha256-6TFionZw76V4htYQrz8eLX7ioW7Fbgd63rtz53s0TLU=";
+  cargoSha256 = "sha256-G70QopoMqFrkOnuui3+3cEHYvmnf0meX1Ecv4q8FCpM=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc leanmake; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd

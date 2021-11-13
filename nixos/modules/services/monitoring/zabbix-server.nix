@@ -6,7 +6,7 @@ let
   mysql = config.services.mysql;
 
   inherit (lib) mkAfter mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep getName literalExample optional optionalAttrs optionalString types;
+  inherit (lib) attrValues concatMapStringsSep getName literalExpression optional optionalAttrs optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
@@ -44,14 +44,14 @@ in
       package = mkOption {
         type = types.package;
         default = if cfg.database.type == "mysql" then pkgs.zabbix.server-mysql else pkgs.zabbix.server-pgsql;
-        defaultText = "pkgs.zabbix.server-pgsql";
+        defaultText = literalExpression "pkgs.zabbix.server-pgsql";
         description = "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools nmap traceroute ];
-        defaultText = "[ nettools nmap traceroute ]";
+        defaultText = literalExpression "[ nettools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix <envar>PATH</envar>.
           Typically used to add executables for scripts, but can be anything.
@@ -62,7 +62,7 @@ in
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";

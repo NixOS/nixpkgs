@@ -1,0 +1,11 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -512,7 +512,7 @@ checksum = "b71991ff56294aa922b450139ee08b3bfc70982c6b2c7562771375cf73542dd4"
+ 
+ [[package]]
+ name = "joshuto"
+-version = "0.9.0"
++version = "0.9.1"
+ dependencies = [
+  "alphanumeric-sort",
+  "chrono",

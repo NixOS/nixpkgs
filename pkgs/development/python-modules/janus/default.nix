@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "janus";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4712e0ef75711fe5947c2db855bc96221a9a03641b52e5ae8e25c2b705dd1d0c";
+    sha256 = "127edc891f9e13420dd12f230d5113fa3de7f93662b81acfaf845989edf5eebf";
   };
 
   disabled = pythonOlder "3.6";

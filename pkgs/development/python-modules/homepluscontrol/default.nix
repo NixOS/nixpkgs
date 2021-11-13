@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "homepluscontrol";
-  version = "0.0.61";
+  version = "0.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "chemaaa";
     repo = pname;
     rev = version;
-    sha256 = "1g61xj417dz1nz5g5ic8rs34fp424zvbgsymry1zldg3gskaqgvk";
+    sha256 = "sha256-COOGqfYiR4tueQHXuCvVxShrYS0XNltcW4mclbFWcfA=";
   };
 
   propagatedBuildInputs = [

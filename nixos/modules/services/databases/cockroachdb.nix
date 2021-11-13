@@ -150,7 +150,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.cockroachdb;
-        defaultText = "pkgs.cockroachdb";
+        defaultText = literalExpression "pkgs.cockroachdb";
         description = ''
           The CockroachDB derivation to use for running the service.
 

@@ -69,7 +69,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.distcc;
-        example = "pkgs.distcc";
+        defaultText = literalExpression "pkgs.distcc";
         description = ''
           The distcc package to use.
         '';

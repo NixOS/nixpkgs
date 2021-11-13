@@ -13,6 +13,7 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.step-ca;
+        defaultText = lib.literalExpression "pkgs.step-ca";
         description = "Which step-ca package to use.";
       };
       address = lib.mkOption {
@@ -118,7 +119,7 @@ in
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet
-          # ProcSubset = "pid"; # not supported by upstream upstream yet
+          # ProcSubset = "pid"; # not supported by upstream yet
           # PrivateUsers = true; # doesn't work with privileged ports therefore not supported by upstream
 
           DynamicUser = true;

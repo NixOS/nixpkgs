@@ -1,8 +1,7 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
 , rustPlatform
+, fetchFromGitHub
+, stdenv
 , AppKit
 , CoreFoundation
 , DiskArbitration
@@ -21,13 +20,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1l9zngr5l12g71j85iyph4jjri3crxc2pi9q0gczrrzvs03439mn";
   };
 
-  cargoLock = {
-    # update Cargo.lock every new release of freshfetch
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "clml_rs-0.3.0" = "0hvd59zh7czk9jd1a2wwcm1acpcfbz32v9ka7ap6f74d638jcc19";
-    };
-  };
+  cargoSha256 = "sha256-ra29AwUleHVom6Pi5bL1IPqW7yyLYwRtKFvadMB/380=";
 
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;

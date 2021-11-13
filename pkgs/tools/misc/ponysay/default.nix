@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ponysay";
-  version = "3.0.3";
+  version = "unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "erkin";
     repo = "ponysay";
-    rev = version;
-    sha256 = "sha256-R2B0TU3ZSEncGsijKgvhaHIbcZa5Dx/jVPxrILBaoVw=";
+    rev = "8a2c71416e70e4e7b0931917ebfd6479f51ddf9a";
+    sha256 = "sha256-LNc83E+7NFYYILORElNlYC7arQKGUJHv6phu+vM5xpQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

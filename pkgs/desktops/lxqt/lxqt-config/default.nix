@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, glib
 , lxqt-build-tools
 , qtbase
 , qtx11extras
@@ -18,13 +19,13 @@
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "0.17.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0b9jihmsqgdfdsisz15j3p53fgf1w30s8irj9zjh52fsj58p924p";
+    sha256 = "0yllqjmj4xbqi5681ffjxmlwlf9k9bpy3hgs7li6lnn90yy46qmr";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    glib.bin
     qtbase
     qtx11extras
     qttools
@@ -50,6 +52,12 @@ mkDerivation rec {
     xorg.xf86inputlibinput
     xorg.xf86inputlibinput.dev
   ];
+
+  postPatch = ''
+    substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
+      --replace 'QStringLiteral("gsettings' \
+                'QStringLiteral("${glib.bin}/bin/gsettings'
+  '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

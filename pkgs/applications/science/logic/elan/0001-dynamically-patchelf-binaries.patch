@@ -1,11 +1,11 @@
 diff --git a/src/elan-dist/src/component/package.rs b/src/elan-dist/src/component/package.rs
-index fd9fe74..0fefa39 100644
+index c51e76d..d0a26d7 100644
 --- a/src/elan-dist/src/component/package.rs
 +++ b/src/elan-dist/src/component/package.rs
-@@ -50,11 +50,35 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
-         };
- 
-         try!(entry.unpack(&full_path).chain_err(|| ErrorKind::ExtractingPackage));
+@@ -56,11 +56,35 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
+         entry
+             .unpack(&full_path)
+             .chain_err(|| ErrorKind::ExtractingPackage)?;
 +        nix_patchelf_if_needed(&full_path);
      }
  

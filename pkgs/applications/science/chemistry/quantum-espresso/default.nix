@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  buildInputs = [ fftw blas lapack gfortran ]
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ fftw blas lapack ]
     ++ (lib.optionals useMpi [ mpi ]);
 
   configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];

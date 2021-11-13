@@ -160,12 +160,12 @@ let
       hasElem = needle: haystack: builtins.elem needle (builtins.filter (x: builtins.typeOf x == "string") (builtins.split " " haystack));
       op = {
         "true" = x: y: true;
-        "<=" = x: y: (unmarshal x) <= (unmarshal y);
-        "<" = x: y: (unmarshal x) < (unmarshal y);
+        "<=" = x: y: op.">=" y x;
+        "<" = x: y: lib.versionOlder (unmarshal x) (unmarshal y);
         "!=" = x: y: x != y;
         "==" = x: y: x == y;
-        ">=" = x: y: (unmarshal x) >= (unmarshal y);
-        ">" = x: y: (unmarshal x) > (unmarshal y);
+        ">=" = x: y: lib.versionAtLeast (unmarshal x) (unmarshal y);
+        ">" = x: y: op."<" y x;
         "~=" = v: c:
           let
             parts = builtins.splitVersion c;

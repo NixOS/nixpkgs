@@ -15,7 +15,7 @@ let
   overridenPackages = import ./overrides.nix { inherit pkgs; };
 
   generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
-        pkgs.callPackage ./generated-packages.nix { } else (final: prev: {});
+    (final: prev: pkgs.callPackage ./generated-packages.nix { inherit (final) callPackage; } final prev) else (final: prev: {});
 
   extensible-self = lib.makeExtensible
     (extends overrides

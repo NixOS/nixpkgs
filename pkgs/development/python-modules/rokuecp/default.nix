@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.8.2";
+  version = "0.8.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    sha256 = "sha256-2FAnshIxaA52EwwwABBQ0sedAsz561YYxXDQo2Vcp1c=";
+    sha256 = "sha256-vwXBYwiDQZBxEZDwLX9if6dt7tKQQOLyKL5m0q/3eUw=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +31,10 @@ buildPythonPackage rec {
     aresponses
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  pythonImportsCheck = [
+    "rokuecp"
   ];
 
   meta = with lib; {

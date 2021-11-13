@@ -127,7 +127,7 @@ in {
     settings = mkOption {
       type = configType;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           loglevel = 8;
           log-common-errors = true;

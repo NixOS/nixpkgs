@@ -2,33 +2,34 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, xz
-, autoPatchelfHook }:
+, fetchurl
+}:
 
 let
-  assets = import ./assets.nix {
-    inherit lib stdenv fetchFromGitHub xz autoPatchelfHook;
+  nnueFile = "nn-6762d36ad265.nnue";
+  nnue = fetchurl {
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    sha256 = "0727dsxfpns9fkyir95fybibqmigk5h45k154b2c5rk5s9md6qk7";
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.2.6";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dmc58wzv758b82pjpfzcfi0hr14hqcr61cd9v5xlgk5w78cisjq";
+    sha256 = "sha256-1Gl2vJFn9yVYH62yBJefAOBX/jJaFAdSZj2Lj3imcps=";
+    fetchSubmodules = true;
   };
 
-  cargoSha256 = "1s37b0w1aav6gz399zncfp0zqh5sfy0zmabhl7n8p5cwlmlvnlsj";
-
-  preBuild = ''
-    rmdir ./assets
-    ln -snf ${assets}/${assets.relAssetsPath} ./assets
+  postPatch = ''
+    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
+    cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  passthru.assets = assets;
+  cargoSha256 = "sha256-/s7Yyi2FUh+EDvgaHLgZ/FA6kk2FQrZr3L3B76fqTuc=";
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     # Apply bugfix commit that is not yet part of a release
     (fetchpatch {
       name = "fix-time-import.patch";
-      url = "https://github.com/AGProjects/${pname}/commit/695f7d769e69c84e065872ffb403157d0af282fd.patch";
+      url = "https://github.com/AGProjects/python3-application/commit/695f7d769e69c84e065872ffb403157d0af282fd.patch";
       sha256 = "sha256-MGs8uUIFXkPXStOn5oCNNEMVmcKrq8YPl8Xvl3OTOUM=";
     })
   ];

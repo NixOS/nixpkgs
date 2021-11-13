@@ -3,6 +3,7 @@
 , cmake
 , pkg-config
 , bzip2
+, installShellFiles
 , libusb1
 , libzip
 , openssl
@@ -10,16 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";
-  version = "1.4.72";
+  version = "1.4.165";
 
   src = fetchFromGitHub {
     owner = "NXPmicro";
     repo = "mfgtools";
     rev = "uuu_${version}";
-    sha256 = "1s3wlz4yb2p8by5p66vr0z72n84mxkrmda63x9yr6pinqinsyrvv";
+    sha256 = "0k309lp27d4k6x4qq0badbk8i47xsc6f3fffz73650iyfs4hcniw";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
   buildInputs = [ bzip2 libusb1 libzip openssl ];
 
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     $out/bin/uuu -udev > udev-rules 2>stderr.txt
     rules_file="$(cat stderr.txt|grep '1: put above udev run into'|sed 's|^.*/||')"
     install -D udev-rules "$out/lib/udev/rules.d/$rules_file"
+    installShellCompletion --cmd uuu \
+      --bash ../snap/local/bash-completion/universal-update-utility
   '';
 
   meta = with lib; {
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/NXPmicro/mfgtools";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bmilanov ];
+    maintainers = with maintainers; [ bmilanov jraygauthier ];
     platforms = platforms.all;
   };
 }

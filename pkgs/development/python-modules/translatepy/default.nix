@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "translatepy";
-  version = "2.0";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
     rev = "v${version}";
-    sha256 = "Rt6FvB4kZVaB/jxxqOHsnkReTFCCyiEaZf240n0zVZs=";
+    sha256 = "rnt4nmDgQXSgzwNCcsZwbQn2bv83DFhL86kebeiSosc=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   disabledTestPaths = [
     # Requires network connection
+    "tests/test_translate.py"
     "tests/test_translators.py"
   ];
   pythonImportsCheck = [ "translatepy" ];

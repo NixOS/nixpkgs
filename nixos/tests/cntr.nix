@@ -9,7 +9,7 @@ let
     makeTest {
       name = "cntr-${backend}";
 
-      meta = { maintainers = with lib.maintainers; [ srk mic92 ]; };
+      meta = { maintainers = with lib.maintainers; [ sorki mic92 ]; };
 
       nodes = {
         ${backend} = { pkgs, ... }: {

@@ -49,5 +49,8 @@ in stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/HeinrichApfelmus/hyper-haskell";
     license = licenses.bsd3;
     maintainers = [ maintainers.rvl ];
+    # depends on electron-10.4.7 which is marked as insecure:
+    # https://github.com/NixOS/nixpkgs/pull/142641#issuecomment-957358476
+    broken = true;
   };
 }

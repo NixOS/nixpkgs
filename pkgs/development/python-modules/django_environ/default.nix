@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-environ";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a8726675c1ebefa4706b36398c4d3c5c790d335ffe55c4a10378f6bfd57ad8d0";
+    sha256 = "6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb";
   };
 
   # The testsuite fails to modify the base environment

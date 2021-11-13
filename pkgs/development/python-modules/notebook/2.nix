@@ -12,7 +12,7 @@
 , ipython_genutils
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , ipykernel
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
     prometheus-client
   ];
 

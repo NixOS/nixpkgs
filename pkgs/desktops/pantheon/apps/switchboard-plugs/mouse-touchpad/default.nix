@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , substituteAll
 , pantheon
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "19kiwrdpan8hr5r79y591591qjx7pm3x814xfkg9vi11ndbcrznr";
+    sha256 = "0nqgbpk1knvbj5xa078i0ka6lzqmaaa873gwj3mhjr5q2gzkw7y5";
   };
 
   passthru = {
@@ -59,12 +58,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       touchegg = touchegg;
-    })
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-mouse-touchpad/pull/185
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-mouse-touchpad/commit/a6f84dc08be5dc6f7535082bacfa24e2dff4ef67.patch";
-      sha256 = "0fxl894dzw1f84n36mb9y7gshs69xcb0samvs2gsa0pcdlzfp3cy";
     })
   ];
 

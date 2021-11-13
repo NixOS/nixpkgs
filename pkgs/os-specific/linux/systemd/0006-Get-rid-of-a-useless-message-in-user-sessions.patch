@@ -1,4 +1,4 @@
-From 7a6529ee27028860b93bc539e8bbf3f2374d712f Mon Sep 17 00:00:00 2001
+From e2a8db60ebfb1e0477ce989f6c3d4a95f2e08120 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Mon, 11 May 2015 15:39:38 +0200
 Subject: [PATCH 06/19] Get rid of a useless message in user sessions
@@ -9,23 +9,23 @@ Namely lots of variants of
 
 in containers.
 ---
- src/core/unit.c | 3 ++-
+ src/core/manager.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/src/core/unit.c b/src/core/unit.c
-index 45a417a090..8af3cb08d6 100644
---- a/src/core/unit.c
-+++ b/src/core/unit.c
-@@ -2163,7 +2163,8 @@ static void unit_check_binds_to(Unit *u) {
-         }
+diff --git a/src/core/manager.c b/src/core/manager.c
+index 8884437347..e23d47b4a4 100644
+--- a/src/core/manager.c
++++ b/src/core/manager.c
+@@ -1375,7 +1375,8 @@ static unsigned manager_dispatch_stop_when_bound_queue(Manager *m) {
+                 if (!unit_is_bound_by_inactive(u, &culprit))
+                         continue;
  
-         assert(other);
--        log_unit_info(u, "Unit is bound to inactive unit %s. Stopping, too.", other->id);
-+        if (u->type != UNIT_MOUNT || detect_container() <= 0)
-+                log_unit_info(u, "Unit is bound to inactive unit %s. Stopping, too.", other->id);
+-                log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
++                if (u->type != UNIT_MOUNT || detect_container() <= 0)
++                        log_unit_debug(u, "Unit is stopped because bound to inactive unit %s.", culprit->id);
  
-         /* A unit we need to run is gone. Sniff. Let's stop this. */
-         r = manager_add_job(u->manager, JOB_STOP, u, JOB_FAIL, NULL, &error, NULL);
+                 /* If stopping a unit fails continuously we might enter a stop loop here, hence stop acting on the
+                  * service being unnecessary after a while. */
 -- 
-2.30.1
+2.32.0
 

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-7YzdwGAGECj7PhaCOf/dLSILPXqtbylCkN79vuFBw5Y=";
+    sha256 = "sha256-iy8xjKnPLq1ntZa9x+KtLDznzu6m+1db3NPeGQESUVo=";
   };
 
   patches = [
@@ -42,7 +42,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-cuse"
+    "--localstatedir=/var"
   ];
+
+  prePatch = ''
+    # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
+    substituteInPlace samples/Makefile.am \
+        --replace 'install-data-local:' 'do-not-execute:'
+
+    # Use the correct path to the certtool binary
+    # instead of relying on it being in the environment
+    substituteInPlace samples/swtpm_localca.c --replace \
+        '# define CERTTOOL_NAME "certtool"' \
+        '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
+  '';
 
   enableParallelBuilding = true;
 

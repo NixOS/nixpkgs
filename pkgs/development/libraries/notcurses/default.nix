@@ -6,7 +6,6 @@
 , ncurses
 , zlib
 , ffmpeg
-, readline
 , fetchFromGitHub
 , lib
 , multimediaSupport ? true
@@ -14,20 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "2.4.1";
+  version = "2.4.8";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-Oyjdmmb+rqPgkwVJw3y4NKGPABmCZFyGFBzBJn6IEHk=";
+    sha256 = "sha256-mVSToryo7+zW1mow8eJT8GrXYlGe/BeSheJtJDKAgzo=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config pandoc ];
 
-  buildInputs = [ libunistring ncurses readline zlib ]
+  buildInputs = [ libunistring ncurses zlib ]
     ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags = [ "-DUSE_QRCODEGEN=OFF" ]

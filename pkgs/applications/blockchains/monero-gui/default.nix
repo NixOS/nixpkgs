@@ -7,7 +7,7 @@
 , qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
-, randomx, zeromq, libgcrypt, libgpgerror
+, randomx, zeromq, libgcrypt, libgpg-error
 , hidapi, rapidjson, quirc
 , trezorSupport ? true, libusb1, protobuf, python3
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     qtmultimedia qtquickcontrols qtquickcontrols2
     qtxmlpatterns
     monero miniupnpc unbound readline
-    randomx libgcrypt libgpgerror
+    randomx libgcrypt libgpg-error
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson quirc
   ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ]

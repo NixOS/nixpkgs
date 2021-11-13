@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    mainProgram = "plank";
   };
 }

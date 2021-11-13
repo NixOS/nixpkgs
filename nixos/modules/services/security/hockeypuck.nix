@@ -18,7 +18,7 @@ in {
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         {
           hockeypuck = {
             loglevel = "INFO";

@@ -2,7 +2,7 @@
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
 , pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
+, libvorbis, libtheora, speex, lua5, libgcrypt, libgpg-error, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
   # needing them
   buildInputs = [
     zlib a52dec libmad faad2 ffmpeg alsa-lib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
+    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpg-error
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp taglib libarchive
     libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
     libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     fluidsynth wayland wayland-protocols ncurses srt
-  ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
+  ] ++ optional (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
     ++ optional jackSupport libjack2
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64) then live555 else null;
+  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) then live555 else null;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler

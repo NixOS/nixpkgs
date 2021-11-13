@@ -26,18 +26,21 @@
     ++ (lib.optional stdenv.targetPlatform.isUnix "unix"))
 }:
 
-rustPlatform.buildRustPackage rec {
+let
   pname = "vector";
-  version = "0.16.1";
+  version = "0.17.3";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "timberio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-10e0cWt6XW8msNR/RXbaOpdwTAlRLm6jVvDed905rho=";
+    sha256 = "sha256-1Z2GtzWkS7cxzCs+RBKMtWbzIIt4aeS1Iy9kMBEeDMw=";
   };
 
-  cargoSha256 = "sha256-ezQ/tX/uKzJprLQt2xIUZwGuUOmuRmTO+gPsf3MLEv8=";
+  cargoSha256 = "sha256-UEGdvyRPPh5Kb9+0qFyv8UBFslOKn5/R/ineawFA91w=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -63,7 +66,8 @@ rustPlatform.buildRustPackage rec {
       -- --test-threads 1 \
       --skip=sinks::loki::tests::healthcheck_grafana_cloud \
       --skip=kubernetes::api_watcher::tests::test_stream_errors \
-      --skip=sources::socket::test::tcp_with_tls_intermediate_ca
+      --skip=sources::socket::test::tcp_with_tls_intermediate_ca \
+      --skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics
   '';
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve

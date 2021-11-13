@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast multi-dimensional array library for C++";
-    homepage = https://sourceforge.net/projects/blitz/;
+    homepage = "https://sourceforge.net/projects/blitz/";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ToxicFrog ];

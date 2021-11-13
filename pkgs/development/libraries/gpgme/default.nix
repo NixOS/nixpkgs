@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook, libgpgerror, gnupg, pkg-config, glib, pth, libassuan
+, autoreconfHook, libgpg-error, gnupg, pkg-config, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
   propagatedBuildInputs =
-    [ libgpgerror glib libassuan pth ]
+    [ libgpg-error glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
   nativeBuildInputs = [ pkg-config gnupg texinfo autoreconfHook ]
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
-    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
   ] ++ lib.optional pythonSupport "--enable-languages=python"
   # Tests will try to communicate with gpg-agent instance via a UNIX socket

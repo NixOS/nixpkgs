@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     '';
   in {
     name = "meilisearch";
-    meta.maintainers = with lib.maintainers; [ filalex77 ];
+    meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
     machine = { ... }: {
       environment.systemPackages = with pkgs; [ curl jq ];

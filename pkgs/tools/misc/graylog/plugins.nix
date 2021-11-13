@@ -107,7 +107,7 @@ in {
       cp ${pluginName}-${version}.jar $out/bin/${pluginName}-${version}.jar
     '';
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-integrations;
+      homepage = "https://github.com/Graylog2/graylog-plugin-integrations";
       description = "A collection of open source Graylog integrations that will be released together";
     };
   };
@@ -224,7 +224,7 @@ in {
       sha256 = "1hkaklwzcsvqq45b98chwqxqdgnnbj4dg68agsll13yq4zx37qpp";
     };
     meta = {
-      homepage = https://github.com/graylog-labs/graylog-plugin-snmp;
+      homepage = "https://github.com/graylog-labs/graylog-plugin-snmp";
       description = "Graylog plugin to receive SNMP traps";
     };
   };

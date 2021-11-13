@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "mediafile";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-19K5DZMstRWu/6+N/McEdM1swedI5qr15kmnIAMA60Y=";
+    sha256 = "878ccc378b77f2d6c175abea135ea25631f28c722e01e1a051924d962ebea165";
   };
 
   propagatedBuildInputs = [ mutagen six ];

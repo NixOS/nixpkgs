@@ -60,7 +60,7 @@ in {
             };
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";

@@ -26,6 +26,8 @@ let
       "nss-user-lookup.target"
       "time-sync.target"
       "cryptsetup.target"
+      "cryptsetup-pre.target"
+      "remote-cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -40,7 +42,7 @@ let
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
       "systemd-udev-settle.service"
-      "systemd-udev-trigger.service"
+      ] ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service") ++ [
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
@@ -426,7 +428,7 @@ in
 
     systemd.package = mkOption {
       default = pkgs.systemd;
-      defaultText = "pkgs.systemd";
+      defaultText = literalExpression "pkgs.systemd";
       type = types.package;
       description = "The systemd package.";
     };
@@ -446,7 +448,7 @@ in
     systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
-      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = "Packages providing systemd units and hooks.";
     };
 
@@ -663,7 +665,7 @@ in
 
     services.journald.forwardToSyslog = mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
-      defaultText = "services.rsyslogd.enable || services.syslog-ng.enable";
+      defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
       type = types.bool;
       description = ''
         Whether to forward log messages to syslog.
@@ -722,7 +724,7 @@ in
 
     services.logind.lidSwitchExternalPower = mkOption {
       default = config.services.logind.lidSwitch;
-      defaultText = "services.logind.lidSwitch";
+      defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
@@ -768,7 +770,7 @@ in
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.lvm2 ]";
+      example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
       description = ''
         List of packages containing <command>systemd-tmpfiles</command> rules.

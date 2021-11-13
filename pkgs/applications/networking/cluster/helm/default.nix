@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm";
-  version = "3.6.3";
-  gitCommit = "ee407bdf364942bcb8e8c665f82e15aa28009b71";
+  version = "3.7.1";
+  gitCommit = "1d11fcb5d3f3bf00dbe6fe31b8412839a96b3dc4";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-DfMI50eQsMHRX8S5rBzF3qlSfJizlYQyofA7HPkD4EQ=";
+    sha256 = "sha256-NjBG3yLtvnAXziLH/ALRJVaFW327qo7cvnf1Jpq3QlI=";
   };
-  vendorSha256 = "sha256-PTAyRG6PZK+vaiheUd3oiu4iBGlnFjoCrci0CYbXjBk=";
+  vendorSha256 = "sha256-gmyF/xuf5dTxorgqvW4PNA1l2SQ2oJuZCAFw7d8ufGc=";
 
   doCheck = false;
 

@@ -28,7 +28,7 @@ in
         feh
         rxvt-unicode
       ];
-      example = literalExample ''
+      defaultText = literalExpression ''
         with pkgs; [
           rofi
           dunst

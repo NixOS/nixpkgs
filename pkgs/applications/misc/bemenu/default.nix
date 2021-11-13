@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
 , pango, fribidi, harfbuzz, pcre, pkg-config
 , ncursesSupport ? true, ncurses ? null
 , waylandSupport ? true, wayland ? null, wayland-protocols ? null
@@ -19,6 +19,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-U4IMfDvQ0rfEJhE3Uext2c/Cs0mjy1tw+k8uk441Ag8=";
   };
+
+  patches = [
+    # Pull upstream fix for build against ncurses-6.3
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/Cloudef/bemenu/commit/d31164db756989579468946aba62969e42c7ed28.patch";
+      sha256 = "sha256-oyndQI7SaR8cK0IO5wIIxMpmakhfUzwUqLIKRbPkEdw=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config pcre ];
 

@@ -27,6 +27,14 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+  disabledTests = [
+    # these tests are failing due to the following error:
+    # TypeError: expected str, bytes or os.PathLike object, not int
+    "test_iter_with_etag"
+    "test_iter_with_etag_missing_uid"
+  ];
+
   meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";

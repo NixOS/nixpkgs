@@ -8,23 +8,27 @@
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2.2.1";
+  version = "2021.10.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9hpXVKCpVbUAoTxd5mHP9NK1dZxbrQUxrQrOEVHpaPo=";
+    sha256 = "sha256-3zTyW3eXOA9frSAy4g7iWhymc1hBo0hrxIgPLMqrLTs=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -36,13 +40,18 @@ buildPythonPackage rec {
     asynctest
     pytest-asyncio
     pytest-aiohttp
-    pytest-cov
     pytestCheckHook
   ];
 
   # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
-  pythonImportsCheck = [ "pyopenuv" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
+
+  pythonImportsCheck = [
+    "pyopenuv"
+  ];
 
   meta = with lib; {
     description = "Python API to retrieve data from openuv.io";

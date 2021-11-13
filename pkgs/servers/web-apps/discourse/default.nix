@@ -2,20 +2,21 @@
 , fetchFromGitHub, bundlerEnv, callPackage
 
 , ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, libpsl
-, redis, postgresql, which, brotli, procps, rsync, nodePackages, v8
+, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
+, libpsl, redis, postgresql, which, brotli, procps, rsync
+, nodePackages, v8
 
 , plugins ? []
 }@args:
 
 let
-  version = "2.7.7";
+  version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rhcTQyirgPX0ITjgotJAYLLSU957GanxAYYhy9j123U=";
+    sha256 = "sha256-SOERjFbG4l/tUfOl51XEW0nVbza3L4adjiPhz4Hj0YU=";
   };
 
   runtimeDeps = [
@@ -41,6 +42,7 @@ let
     jpegoptim
     gifsicle
     nodePackages.svgo
+    jhead
   ];
 
   runtimeEnv = {
@@ -242,9 +244,6 @@ let
       # Add a noninteractive admin creation task
       ./admin_create.patch
 
-      # Disable jhead, which is currently marked as vulnerable
-      ./disable_jhead.patch
-
       # Add the path to the CA cert bundle to make TLS work
       ./action_mailer_ca_cert.patch
 
@@ -264,6 +263,14 @@ let
       # defaults to the plugin's directory and isn't writable at the
       # time of asset generation
       ./auto_generated_path.patch
+
+      # Make sure the notification email setting applies
+      ./notification_email.patch
+
+      # Change the path to the public directory reported by Discourse
+      # to its real path instead of the symlink in the store, since
+      # the store path won't be matched by any nginx rules
+      ./public_dir_path.patch
     ];
 
     postPatch = ''
@@ -290,7 +297,7 @@ let
       cp -r . $out/share/discourse
       rm -r $out/share/discourse/log
       ln -sf /var/log/discourse $out/share/discourse/log
-      ln -sf /run/discourse/tmp $out/share/discourse/tmp
+      ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/assets/javascripts/plugins $out/share/discourse/app/assets/javascripts/plugins
       ln -sf /run/discourse/public $out/share/discourse/public

@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, fetchpatch
 , substituteAll
 , meson
 , ninja
@@ -21,22 +20,16 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1nsy9fh6qj5kyg22bs1hm6kpsvarwc63q0hl0nbwymvnhfjf6swp";
+    sha256 = "1p1l7dx5v1zzz89hhhkm6n3ls7ig4cf2prh1099f1c054qiy9b0y";
   };
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-keyboard/pull/377
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-keyboard/commit/6d8bcadba05b4ee1115b891448b0de31bcba3749.patch";
-      sha256 = "1bppxakj71r3cfy8sw19xbyngb7r6nyirc4g6pjf02cdidhw3v8l";
-    })
     ./0001-Remove-Install-Unlisted-Engines-function.patch
     (substituteAll {
       src = ./fix-paths.patch;

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -30,20 +31,14 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.7.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1llkc0p47jcx992lkwics86vv622dmmvm5hxrdsq26j9crcd5dam";
+    sha256 = "sha256-NHKP1vzb8qu+EkUWDvLWLl4U4pW9ZxbE7YFI6Vwesfg=";
   };
-
-  patches = [
-    # Try to remove other backends to make flatpak backend work.
-    # https://github.com/NixOS/nixpkgs/issues/70214
-    ./flatpak-only.patch
-  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -82,7 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -98,5 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.68.0";
+  version = "1.70.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09sawnv3xj9pzgy2qrrk87dl3jibfphnswb61i5bh0d2h4j28afj";
+    sha256 = "0jpwraip7pwl9bf9s59am3r7074p34fasvfb5ym1fb8hwc34jawh";
   };
 
   patches = [

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.21";
+  version = "0.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53e1808dc2b1f3ec20c177fa3fa6d438d75ef572a25a489e330bb01130508d87";
+    sha256 = "a42c7a13ab1ae9ed18e8e8b0f76b8d35dc476fdebe6e634354fe6fd0f261f686";
   };
 
   # No tests included.

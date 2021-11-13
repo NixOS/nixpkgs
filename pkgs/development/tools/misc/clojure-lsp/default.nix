@@ -2,30 +2,43 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.09.13-22.25.35";
+  version = "2021.11.02-15.24.47";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0ypn0m81lbhx45y0ajpgk7id9g47l1gnihvqdjxw5m1j2hdwjdzr";
+    sha256 = "sha256-PBbo8yx4g4SsViUA1jnwqF8q9Dfn3lrgK2CP026Bm4Q=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp.jar";
-    sha256 = "e93e334a4ada04a28e0b148b8364b9433b8d83f6417249d7bded7cc86d1fe081";
+    sha256 = "sha256-k0mzibcLAspklCPE6f2qsUm9bwSvcJRgWecMBq7mpF0=";
   };
 
   GRAALVM_HOME = graalvm11-ce;
   CLOJURE_LSP_JAR = jar;
-  CLOJURE_LSP_XMX = "-J-Xmx4g";
+  CLOJURE_LSP_XMX = "-J-Xmx6g";
 
   buildInputs = [ graalvm11-ce clojure ];
 
   buildPhase = with lib; ''
     runHook preBuild
 
-    bash ./graalvm/native-unix-compile.sh
+    # https://github.com/clojure-lsp/clojure-lsp/blob/2021.11.02-15.24.47/graalvm/native-unix-compile.sh#L18-L27
+    DTLV_LIB_EXTRACT_DIR=$(mktemp -d)
+    export DTLV_LIB_EXTRACT_DIR=$DTLV_LIB_EXTRACT_DIR
+
+    args=("-jar" "$CLOJURE_LSP_JAR"
+          "-H:+ReportExceptionStackTraces"
+          "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
+          "-H:CLibraryPath=$DTLV_LIB_EXTRACT_DIR"
+          "--verbose"
+          "--no-fallback"
+          "--native-image-info"
+          "$CLOJURE_LSP_XMX")
+
+    native-image ''${args[@]}
 
     runHook postBuild
   '';
@@ -76,5 +89,8 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo babariviere ];
     platforms = graalvm11-ce.meta.platforms;
+    # Depends on datalevin that is x86_64 only
+    # https://github.com/juji-io/datalevin/blob/bb7d9328f4739cddea5d272b5cd6d6dcb5345da6/native/src/java/datalevin/ni/Lib.java#L86-L102
+    broken = !stdenv.isx86_64;
   };
 }

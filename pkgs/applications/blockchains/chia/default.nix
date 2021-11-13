@@ -1,36 +1,26 @@
 { lib
 , cacert
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 }:
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-yjpBB51EgaJvFdfhC1AG5N7H5u6aJwD1UqJqIv22QpQ=";
+    sha256 = "sha256-TzSBGjgaE0IWaqJcCIoO/u+gDh17NtAqhE8ldbbjNIE=";
   };
-
-  patches = [
-    # Allow later websockets release, https://github.com/Chia-Network/chia-blockchain/pull/6304
-    (fetchpatch {
-      name = "later-websockets.patch";
-      url = "https://github.com/Chia-Network/chia-blockchain/commit/a188f161bf15a30e8e2efc5eec824e53e2a98a5b.patch";
-      sha256 = "1s5qjhd4kmi28z6ni7pc5n09czxvh8qnbwmnqsmms7cpw700g78s";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "==" ">="
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
   '';
 
   nativeBuildInputs = [

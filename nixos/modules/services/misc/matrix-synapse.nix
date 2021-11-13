@@ -122,10 +122,18 @@ in {
   options = {
     services.matrix-synapse = {
       enable = mkEnableOption "matrix.org synapse";
+      configFile = mkOption {
+        type = types.str;
+        readOnly = true;
+        description = ''
+          Path to the configuration file on the target system. Useful to configure e.g. workers
+          that also need this.
+        '';
+      };
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-synapse;
-        defaultText = "pkgs.matrix-synapse";
+        defaultText = literalExpression "pkgs.matrix-synapse";
         description = ''
           Overridable attribute of the matrix synapse server package to use.
         '';
@@ -133,7 +141,7 @@ in {
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           with config.services.matrix-synapse.package.plugins; [
             matrix-synapse-ldap3
             matrix-synapse-pam
@@ -705,6 +713,8 @@ in {
         '';
       }
     ];
+
+    services.matrix-synapse.configFile = "${configFile}";
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";

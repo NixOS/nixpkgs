@@ -9,7 +9,7 @@ in {
       type = types.package;
       default = if cfg.dmeventd.enable then pkgs.lvm2_dmeventd else pkgs.lvm2;
       internal = true;
-      defaultText = "pkgs.lvm2";
+      defaultText = literalExpression "pkgs.lvm2";
       description = ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).

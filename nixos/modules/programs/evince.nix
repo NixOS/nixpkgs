@@ -4,7 +4,9 @@
 
 with lib;
 
-{
+let cfg = config.programs.evince;
+
+in {
 
   # Added 2019-08-09
   imports = [
@@ -22,6 +24,13 @@ with lib;
       enable = mkEnableOption
         "Evince, the GNOME document viewer";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.evince;
+        defaultText = literalExpression "pkgs.evince";
+        description = "Evince derivation to use.";
+      };
+
     };
 
   };
@@ -31,11 +40,11 @@ with lib;
 
   config = mkIf config.programs.evince.enable {
 
-    environment.systemPackages = [ pkgs.evince ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.evince ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.evince ];
+    systemd.packages = [ cfg.package ];
 
   };
 

@@ -1,4 +1,4 @@
-From db38a11228eceea10dc97ecc87023b4919caa918 Mon Sep 17 00:00:00 2001
+From 8823e48b055b7e574c08069048ba21ffa4393699 Mon Sep 17 00:00:00 2001
 From: Daniel Fullmer <danielrf12@gmail.com>
 Date: Fri, 21 Feb 2020 21:52:00 -0500
 Subject: [PATCH] Don't use file timestamp in cache filename
@@ -14,13 +14,13 @@ unique.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/web/includes/functions.php b/web/includes/functions.php
-index 19567a5c1..0242c09bc 100644
+index 89d2cc8ad..52cbb6f38 100644
 --- a/web/includes/functions.php
 +++ b/web/includes/functions.php
-@@ -2223,7 +2223,8 @@ function cache_bust($file) {
+@@ -1941,7 +1941,8 @@ function cache_bust($file) {
    $parts = pathinfo($file);
    global $css;
-   $dirname = preg_replace('/\//', '_', $parts['dirname']);
+   $dirname = str_replace('/', '_', $parts['dirname']);
 -  $cacheFile = $dirname.'_'.$parts['filename'].'-'.$css.'-'.filemtime($file).'.'.$parts['extension'];
 +  $srcHash = '@srcHash@';
 +  $cacheFile = $dirname.'_'.$parts['filename'].'-'.$css.'-'.$srcHash.'.'.$parts['extension'];
@@ -28,5 +28,4 @@ index 19567a5c1..0242c09bc 100644
      return 'cache/'.$cacheFile;
    } else {
 -- 
-2.25.1
-
+2.32.0

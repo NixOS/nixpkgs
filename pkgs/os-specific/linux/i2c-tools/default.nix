@@ -7,19 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "i2c-tools";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git";
     rev = "v${version}";
-    sha256 = "0vqrbp10klr7ylarr6cy1q7nafiqaky4iq5my5dqy101h93vg4pg";
+    sha256 = "sha256-HlmIocum+HZEKNiS5BUwEIswRfTMUhD1vCPibAuAK0Q=";
   };
 
   buildInputs = [ perl ];
 
   postPatch = ''
-    substituteInPlace eeprom/decode-edid --replace "/usr/sbin/parse-edid" "${read-edid}/bin/parse-edid"
-    substituteInPlace stub/i2c-stub-from-dump --replace "/sbin/" ""
+    substituteInPlace eeprom/decode-edid \
+      --replace "/usr/sbin/parse-edid" "${read-edid}/bin/parse-edid"
+
+    substituteInPlace stub/i2c-stub-from-dump \
+      --replace "/sbin/" ""
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   postInstall = ''
-    rm -rf $out/include # Installs include/linux/i2c-dev.h that conflics with kernel headers
+    rm -rf $out/include/linux/i2c-dev.h # conflics with kernel headers
   '';
 
   meta = with lib; {

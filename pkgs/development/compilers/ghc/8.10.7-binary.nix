@@ -41,12 +41,14 @@ let
     # nixpkgs uses for the respective system.
     defaultLibc = {
       i686-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
           sha256 = "fbfc1ef194f4e7a4c0da8c11cc69b17458a4b928b609b3622c97acc4acd5c5ab";
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
           # which link it against `libtinfo.so.5` (ncurses 5).
           # Other bindists are linked `libtinfo.so.6` (ncurses 6).
@@ -54,54 +56,64 @@ let
         ];
       };
       x86_64-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-deb10-linux.tar.xz";
           sha256 = "a13719bca87a0d3ac0c7d4157a4e60887009a7f1a8dbe95c4759ec413e086d30";
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
         ];
       };
       armv7l-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-armv7-deb10-linux.tar.xz";
           sha256 = "3949c31bdf7d3b4afb765ea8246bca4ca9707c5d988d9961a244f0da100956a2";
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
         ];
       };
       aarch64-linux = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-deb10-linux.tar.xz";
           sha256 = "fad2417f9b295233bf8ade79c0e6140896359e87be46cb61cd1d35863d9d0e55";
         };
         exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = "libtinfo.so.6"; }
           { nixPackage = numactl; fileToCheckFor = null; }
         ];
       };
       x86_64-darwin = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
           sha256 = "287db0f9c338c9f53123bfa8731b0996803ee50f6ee847fe388092e5e5132047";
         };
         exePathForLibraryCheck = null; # we don't have a library check for darwin yet
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = null; }
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
       };
       aarch64-darwin = {
+        variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-apple-darwin.tar.xz";
           sha256 = "dc469fc3c35fd2a33a5a575ffce87f13de7b98c2d349a41002e200a56d9bba1c";
         };
         exePathForLibraryCheck = null; # we don't have a library check for darwin yet
         archSpecificLibraries = [
+          { nixPackage = gmp; fileToCheckFor = null; }
           { nixPackage = ncurses6; fileToCheckFor = null; }
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
@@ -110,12 +122,15 @@ let
     # Binary distributions for the musl libc for the respective system.
     musl = {
       x86_64-linux = {
+        variantSuffix = "-musl-integer-simple";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-alpine3.10-linux-integer-simple.tar.xz";
           sha256 = "16903df850ef73d5246f2ff169cbf57ecab76c2ac5acfa9928934282cfad575c";
         };
         exePathForLibraryCheck = "bin/ghc";
         archSpecificLibraries = [
+          # No `gmp` here, since this is an `integer-simple` bindist.
+
           # In contrast to glibc builds, the musl-bindist uses `libncursesw.so.*`
           # instead of `libtinfo.so.*.`
           { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
@@ -133,11 +148,8 @@ let
 
   libPath =
     lib.makeLibraryPath (
-      [
-        gmp
-      ]
       # Add arch-specific libraries.
-      ++ map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
+      map ({ nixPackage, ... }: nixPackage) binDistUsed.archSpecificLibraries
     );
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -147,26 +159,25 @@ in
 
 stdenv.mkDerivation rec {
   inherit version;
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary${binDistUsed.variantSuffix}";
 
   src = fetchurl binDistUsed.src;
+
+  # Note that for GHC 8.10 versions >= 8.10.6, the GHC HQ musl bindist
+  # uses `integer-simple` and has no `gmp` dependency:
+  # https://gitlab.haskell.org/ghc/ghc/-/commit/8306501020cd66f683ad9c215fa8e16c2d62357d
+  # Related nixpkgs issues:
+  # * https://github.com/NixOS/nixpkgs/pull/130441#issuecomment-922452843
+  # TODO: When this file is copied to `ghc-9.*-binary.nix`, determine whether
+  #       the GHC 9 branch also switched from `gmp` to `integer-simple` via the
+  #       currently-open issue:
+  #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
+  #       and update this comment accordingly.
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs =
     lib.optionals useLLVM [ llvmPackages.llvm ]
-    # Because musl bindists currently provide no way to tell where
-    # libgmp is (see not [musl bindists have no .buildinfo]), we need
-    # to propagate `gmp`, otherwise programs built by this ghc will
-    # fail linking with `cannot find -lgmp` errors.
-    # Also, as of writing, the release pages of musl bindists claim
-    # that they use `integer-simple` and do not require `gmp`; however
-    # that is incorrect, so `gmp` is required until a release has been
-    # made that includes https://gitlab.haskell.org/ghc/ghc/-/issues/20059.
-    # (Note that for packaging the `-binary` compiler, nixpkgs does not care
-    # about whether or not `gmp` is used; this comment is just here to explain
-    # why the `gmp` dependency exists despite what the release page says.)
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
+    ;
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -227,9 +238,9 @@ stdenv.mkDerivation rec {
       patchShebangs ghc-${version}/configure
     '' +
     # We have to patch the GMP paths for the integer-gmp package.
-    # Note [musl bindists have no .buildinfo]
-    # Note that musl bindists do not contain them; unclear if that's intended;
+    # Note that musl bindists do not contain them,
     # see: https://gitlab.haskell.org/ghc/ghc/-/issues/20073#note_363231
+    # However, musl bindists >= 8.10.6 use `integer-simple`, not `gmp`.
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;

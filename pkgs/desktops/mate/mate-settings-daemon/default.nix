@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
     license = with licenses; [ gpl2Plus gpl3Plus lgpl2Plus mit ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

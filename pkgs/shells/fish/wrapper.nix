@@ -20,6 +20,6 @@ in writeShellScriptBin "fish" ''
     set --prepend fish_complete_path ${escapeShellArgs complPath}
     set --prepend fish_function_path ${escapeShellArgs funcPath}
     set --local fish_conf_source_path ${escapeShellArgs confPath}
-    for c in $fish_conf_source_path/*; source $c; end
+    for c in \$fish_conf_source_path/*; source \$c; end
   " "$@"
 '')

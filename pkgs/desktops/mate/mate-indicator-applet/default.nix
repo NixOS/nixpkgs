@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl3Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

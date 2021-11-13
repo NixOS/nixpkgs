@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "chess";
-  version = "1.6.1";
+  version = "1.7.0";
 
   disabled = pythonOlder "3.7";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "niklasf";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "sha256-2pyABmr6q1Y2/ivtvMYqRHE2Zjlyz2QO0us0w4l2HQM=";
+    sha256 = "0f2q9sif1rqjlgzkf7dnxrclmw8v84hzyrnq21g8k1cwqj5fx9j2";
   };
 
   pythonImportsCheck = [ "chess" ];

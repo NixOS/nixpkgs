@@ -18,7 +18,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.crossfire-server;
-      defaultText = "pkgs.crossfire-server";
+      defaultText = literalExpression "pkgs.crossfire-server";
       description = ''
         The package to use for the Crossfire server (and map/arch data, if you
         don't change dataDir).
@@ -28,7 +28,7 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "${cfg.package}/share/crossfire";
-      defaultText = "\${config.services.crossfire.package}/share/crossfire";
+      defaultText = literalExpression ''"''${config.services.crossfire.package}/share/crossfire"'';
       description = ''
         Where to load readonly data from -- maps, archetypes, treasure tables,
         and the like. If you plan to edit the data on the live server (rather
@@ -72,30 +72,32 @@ in {
         overwrite the example files that come with the server, rather than being
         appended to them as the other configuration files are.
       '';
-      example = literalExample ''
-        dm_file = '''
-          admin:secret_password:localhost
-          jane:xyzzy:*
-        ''';
-        ban_file = '''
-          # Bob is a jerk
-          bob@*
-          # So is everyone on 192.168.86.255/24
-          *@192.168.86.
-        ''';
-        metaserver2 = '''
-          metaserver2_notification on
-          localhostname crossfire.example.net
-        ''';
-        motd = "Welcome to CrossFire!";
-        news = "No news yet.";
-        rules = "Don't be a jerk.";
-        settings = '''
-          # be nicer to newbies and harsher to experienced players
-          balanced_stat_loss true
-          # don't let players pick up and use admin-created items
-          real_wiz false
-        ''';
+      example = literalExpression ''
+        {
+          dm_file = '''
+            admin:secret_password:localhost
+            jane:xyzzy:*
+          ''';
+          ban_file = '''
+            # Bob is a jerk
+            bob@*
+            # So is everyone on 192.168.86.255/24
+            *@192.168.86.
+          ''';
+          metaserver2 = '''
+            metaserver2_notification on
+            localhostname crossfire.example.net
+          ''';
+          motd = "Welcome to CrossFire!";
+          news = "No news yet.";
+          rules = "Don't be a jerk.";
+          settings = '''
+            # be nicer to newbies and harsher to experienced players
+            balanced_stat_loss true
+            # don't let players pick up and use admin-created items
+            real_wiz false
+          ''';
+        }
       '';
       default = {};
     };

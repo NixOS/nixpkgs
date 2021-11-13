@@ -1,24 +1,30 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, requests
+, stdenv
 , attrs
-, intbitset
-, saneyaml
-, text-unidecode
 , beautifulsoup4
-, pytestCheckHook
+, buildPythonPackage
+, click
+, fetchPypi
+, intbitset
 , pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, requests
+, saneyaml
+, setuptools-scm
+, text-unidecode
+, typing
 }:
+
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "21.8.27";
+  version = "30.0.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "789ee1798cd74ab4516d2e547473d69717d3b2ed7ee180ab2746e0bdfd0d88a4";
+    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
   };
 
   dontConfigure = true;
@@ -28,18 +34,25 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    click
-    requests
     attrs
+    beautifulsoup4
+    click
     intbitset
+    requests
     saneyaml
     text-unidecode
-    beautifulsoup4
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing
   ];
 
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
   ];
 
   pythonImportsCheck = [

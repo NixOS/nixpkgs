@@ -11,14 +11,12 @@ in
   extraOpts = {
     settings.process_names = mkOption {
       type = types.listOf types.anything;
-      default = {};
-      example = literalExample ''
-        {
-          process_names = [
-            # Remove nix store path from process name
-            { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
-          ];
-        }
+      default = [];
+      example = literalExpression ''
+        [
+          # Remove nix store path from process name
+          { name = "{{.Matches.Wrapped}} {{ .Matches.Args }}"; cmdline = [ "^/nix/store[^ ]*/(?P<Wrapped>[^ /]*) (?P<Args>.*)" ]; }
+        ]
       '';
       description = ''
         All settings expressed as an Nix attrset.

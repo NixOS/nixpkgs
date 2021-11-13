@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExample;
+  inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExpression;
   inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
 
   cfg = config.services.automysqlbackup;
@@ -48,7 +48,7 @@ in
           <filename>''${pkgs.automysqlbackup}/etc/automysqlbackup.conf</filename>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             db_names = [ "nextcloud" "matomo" ];
             table_exclude = [ "nextcloud.oc_users" "nextcloud.oc_whats_new" ];

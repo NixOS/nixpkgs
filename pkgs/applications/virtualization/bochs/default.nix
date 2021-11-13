@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
     "--with-rfb=no"
     "--with-vncsrv=no"
+    "--with-nogui"
 
     # These will always be "yes" on NixOS
     "--enable-ltdl-install=yes"

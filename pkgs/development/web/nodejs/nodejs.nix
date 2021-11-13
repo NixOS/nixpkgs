@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
 , pkg-config, which
+# for `.pkgs` attribute
+, callPackage
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
@@ -40,9 +42,7 @@ let
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
-in
-
-  stdenv.mkDerivation {
+  self = stdenv.mkDerivation {
     inherit version;
 
     name = "${baseName}-${version}";
@@ -82,6 +82,10 @@ in
     enableParallelBuilding = true;
 
     passthru.interpreterName = "nodejs";
+
+    passthru.pkgs = callPackage ../../node-packages/default.nix {
+      nodejs = self;
+    };
 
     setupHook = ./setup-hook.sh;
 
@@ -139,6 +143,7 @@ in
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = "https://nodejs.org";
+      changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
@@ -146,4 +151,5 @@ in
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
-}
+  };
+in self

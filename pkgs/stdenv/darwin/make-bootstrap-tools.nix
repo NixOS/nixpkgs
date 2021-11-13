@@ -206,7 +206,7 @@ in rec {
       done
 
       for i in $out/bin/*; do
-        if test -x "$i" -a ! -L "$i" -a "$(basename $i)" != codesign; then
+        if test -x "$i" -a ! -L "$i"; then
           echo "Adding @executable_path to rpath in $i"
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi

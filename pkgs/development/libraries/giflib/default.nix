@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames, pkgsStatic }:
 
 stdenv.mkDerivation rec {
   name = "giflib-5.2.1";
@@ -19,11 +19,20 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace 'PREFIX = /usr/local' 'PREFIX = ${builtins.placeholder "out"}'
+  ''
+  # Upstream build system does not support NOT building shared libraries.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i '/all:/ s/libgif.so//' Makefile
+    sed -i '/all:/ s/libutil.so//' Makefile
+    sed -i '/-m 755 libgif.so/ d' Makefile
+    sed -i '/ln -sf libgif.so/ d' Makefile
   '';
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
+
+  passthru.tests.static = pkgsStatic.giflib;
 
   meta = {
     description = "A library for reading and writing gif images";

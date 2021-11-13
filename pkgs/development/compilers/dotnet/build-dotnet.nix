@@ -3,7 +3,7 @@
 , sha512
 }:
 
-assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
+assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
 { lib, stdenv
 , fetchurl
 , libunwind
@@ -17,25 +17,24 @@ assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
 let
   pname = if type == "aspnetcore" then
     "aspnetcore-runtime"
-  else if type == "netcore" then
+  else if type == "runtime" then
     "dotnet-runtime"
   else
     "dotnet-sdk";
-  platform = if stdenv.isDarwin then "osx" else "linux";
-  suffix = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw
-    "Unsupported system: ${stdenv.hostPlatform.system}");
+  platform = {
+    x86_64-linux = "linux-x64";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "osx-x64";
+    aarch64-darwin = "osx-arm64";
+  }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
   urls = {
-    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
+    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
+    runtime = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}.tar.gz";
+    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}.tar.gz";
   };
   descriptions = {
-    aspnetcore = "ASP .NET Core runtime ${version}";
-    netcore = ".NET Core runtime ${version}";
+    aspnetcore = "ASP.NET Core Runtime ${version}";
+    runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
 in stdenv.mkDerivation rec {
@@ -85,7 +84,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dotnet.github.io/";
     description = builtins.getAttr type descriptions;
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = builtins.attrNames sha512;
     maintainers = with maintainers; [ kuznero ];
     license = licenses.mit;
   };

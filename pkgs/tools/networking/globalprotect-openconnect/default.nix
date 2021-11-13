@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
-  version = "1.2.6";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     rev = "c14a6ad1d2b62f8d297bc4cfbcb1dcea4d99112f";
     fetchSubmodules = true;
-    sha256 = "1zkc3vk1j31n2zs5ammzv23dah7x163gfrzz222ynbkvsccrhzrk";
+    sha256 = "sha256-M3+YGdN7LuuFEP9n94YJ/UDVhti/VlX0FzYMGeYebP4=";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];

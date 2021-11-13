@@ -366,5 +366,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

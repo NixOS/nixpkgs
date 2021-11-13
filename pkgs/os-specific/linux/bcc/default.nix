@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash, libbpf
+, systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.20.0";
+  version = "0.22.0";
 
   disabled = !stdenv.isLinux;
 
@@ -14,7 +14,8 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "1xnpz2zv445dp5h0160drv6xlvrnwfj23ngc4dp3clcd59jh1baq";
+    sha256 = "sha256-7FQz02APzjCjxCaw+e3H2GWz+UKsH0Dzgk9LoDgwDpU=";
+    fetchSubmodules = true;
   };
   format = "other";
 
@@ -22,19 +23,12 @@ python.pkgs.buildPythonApplication rec {
     llvm llvm.dev libclang kernel
     elfutils luajit netperf iperf
     systemtap.stapBuild flex bash
-    libbpf
   ];
 
   patches = [
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
-    # Add definition for BTF_KIND_FLOAT, added in Linux 5.14
-    # Can be removed once linuxHeaders (used here via glibc) are bumped to 5.14+.
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/bpfcc/-/raw/71136ef5b66a2ecefd635a7aca2e0e835ff09095/debian/patches/0004-compat-defs.patch";
-      sha256 = "05s1zxihwkvbl2r2mqc5dj7fpcipqyvwr11v8b9hqbwjkm3qpz40";
-    })
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
@@ -47,7 +41,6 @@ python.pkgs.buildPythonApplication rec {
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
-    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
   postPatch = ''

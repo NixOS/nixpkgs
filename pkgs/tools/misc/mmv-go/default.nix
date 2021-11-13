@@ -20,5 +20,6 @@ buildGoModule rec {
     description = "Rename multiple files using your $EDITOR";
     license = licenses.mit;
     maintainers = with maintainers; [ zowoq ];
+    mainProgram = "mmv";
   };
 }

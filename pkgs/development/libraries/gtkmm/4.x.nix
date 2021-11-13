@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.2.0";
+  version = "4.4.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12x9j82y37r4v0ngs22rzp4wmw7k2bbb9d3bymcczzz7y8w4q328";
+    sha256 = "LrRkMmCW5qQMgunNB0Fk2BA/teB4ZWecCmSeQXRwDdo=";
   };
 
   nativeBuildInputs = [

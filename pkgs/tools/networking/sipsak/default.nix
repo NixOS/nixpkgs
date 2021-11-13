@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, c-ares, openssl ? null }:
 
 stdenv.mkDerivation rec {
   pname = "sipsak";
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "--std=gnu89";
 
-  src = fetchurl {
-    url = "https://github.com/sipwise/sipsak/archive/mr${version}.tar.gz";
-    sha256 = "769fe59966b1962b67aa35aad7beb9a2110ebdface36558072a05c6405fb5374";
+  src = fetchFromGitHub {
+    owner = "sipwise";
+    repo = "sipsak";
+    rev = "mr${version}";
+    hash = "sha256-y9P6t3xjazRNT6lDZAx+CttdyXruC6Q14b8XF9loeU4=";
   };
 
   meta = with lib; {

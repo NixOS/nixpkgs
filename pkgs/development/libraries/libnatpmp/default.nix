@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLPREFIX=$(out)" ];
 
+  postFixup = ''
+    chmod +x $out/lib/*
+  '';
+
   meta = with lib; {
     homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";

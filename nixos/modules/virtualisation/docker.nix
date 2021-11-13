@@ -138,8 +138,9 @@ in
 
     package = mkOption {
       default = pkgs.docker;
+      defaultText = literalExpression "pkgs.docker";
       type = types.package;
-      example = pkgs.docker-edge;
+      example = literalExpression "pkgs.docker-edge";
       description = ''
         Docker package to be used in the module.
       '';

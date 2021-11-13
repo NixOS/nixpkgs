@@ -217,7 +217,7 @@ in
       inputClassSections = mkOption {
         type = types.listOf types.lines;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
@@ -233,7 +233,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.xf86_input_wacom ]";
+        example = literalExpression "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
@@ -351,6 +351,7 @@ in
       xkbDir = mkOption {
         type = types.path;
         default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
         description = ''
           Path used for -xkbdir xserver parameter.
         '';

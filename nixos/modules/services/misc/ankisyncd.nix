@@ -33,7 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.ankisyncd;
-        defaultText = literalExample "pkgs.ankisyncd";
+        defaultText = literalExpression "pkgs.ankisyncd";
         description = "The package to use for the ankisyncd command.";
       };
 

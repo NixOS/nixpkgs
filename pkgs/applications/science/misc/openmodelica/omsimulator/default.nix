@@ -20,7 +20,7 @@ mkOpenModelicaDerivation rec {
     description = "The OpenModelica FMI & SSP-based co-simulation environment";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ balodja smironov ];
     platforms = platforms.linux;
   };
 }

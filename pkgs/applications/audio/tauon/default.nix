@@ -15,6 +15,7 @@
 , opusfile
 , pango
 , pulseaudio
+, withDiscordRPC ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
     pysdl2
     requests
     send2trash
-  ];
+  ] ++ lib.optional withDiscordRPC pypresence;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"

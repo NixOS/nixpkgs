@@ -8,16 +8,17 @@
 , readline
 , openssl
 , python3Packages
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-Nu6vb5UOJ/KgmJZM4bMKwLpOoKMLcnZPYCqFBQjuCYY=";
+    sha256 = "sha256-uWWdKjxctz8fdiIkSiuOYNcZPhxEWDXaA8QPLnd/I9c=";
   };
 
   outputs = [ "out" "man" ]
@@ -54,6 +55,14 @@ stdenv.mkDerivation rec {
     "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
     "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
     "--with-systemd-networkdir=${placeholder "out"}/lib/systemd/network/"
+  ];
+
+  patches = [
+    # Fix failure in test-eapol. Remove when bumping to 1.18
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=ed10b00afa3f4c087b46d7ba0b60a47bd05d8b39";
+      sha256 = "0n8ixrbfh428ajncakcb9kd2n4fw82kw9sfskn1d9ny0lrg39nvg";
+    })
   ];
 
   postUnpack = ''

@@ -1,0 +1,26 @@
+diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
+index 70cdc9e..c3a14d0 100644
+--- a/src/pikepdf/_methods.py
++++ b/src/pikepdf/_methods.py
+@@ -190,7 +190,7 @@ def _mudraw(buffer, fmt) -> bytes:
+         tmp_in.flush()
+ 
+         proc = run(
+-            ['mudraw', '-F', fmt, '-o', '-', tmp_in.name],
++            ['@mudraw@', '-F', fmt, '-o', '-', tmp_in.name],
+             stdout=PIPE,
+             stderr=PIPE,
+             check=True,
+diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
+index 80cc910..64f6d31 100644
+--- a/src/pikepdf/jbig2.py
++++ b/src/pikepdf/jbig2.py
+@@ -25,7 +25,7 @@ def extract_jbig2(
+         global_path = Path(tmpdir) / "global"
+         output_path = Path(tmpdir) / "outfile"
+ 
+-        args = ["jbig2dec", "-e", "-o", os.fspath(output_path)]
++        args = ["@jbig2dec@", "-e", "-o", os.fspath(output_path)]
+ 
+         # Get the raw stream, because we can't decode im_obj - that is why we are here
+         # (Strictly speaking we should remove any non-JBIG2 filters if double encoded)

@@ -43,7 +43,6 @@ in {
 
       port = mkOption {
         default = 4222;
-        example = 4222;
         type = types.port;
         description = ''
           Port on which to listen.
@@ -67,7 +66,7 @@ in {
       settings = mkOption {
         default = { };
         type = format.type;
-        example = literalExample ''
+        example = literalExpression ''
           {
             jetstream = {
               max_mem = "1G";

@@ -6,7 +6,6 @@
 , fetchFromGitHub
 , fetchNuGet
 , glib
-, pkg-config
 , mono
 , overrides ? {}
 }:

@@ -23,6 +23,16 @@ callPackage ./generic.nix (rec {
       url = "https://github.com/FFmpeg/FFmpeg/commit/7150f9575671f898382c370acae35f9087a30ba1.patch";
       sha256 = "0gwkc7v1wsh4j0am2nnskhsca1b5aqzhcfd41sd9mh2swsdyf27i";
     })
+    (fetchpatch {
+      name = "CVE-2021-38171.patch";
+      url = "https://github.com/FFmpeg/FFmpeg/commit/9ffa49496d1aae4cbbb387aac28a9e061a6ab0a6.patch";
+      sha256 = "0b8hsb45izw7w1vb2b94k9f6kvn2shxrap5ip1krdxg6hs7an0x8";
+    })
+    (fetchpatch {
+      name = "CVE-2021-38291.patch";
+      url = "https://github.com/FFmpeg/FFmpeg/commit/e01d306c647b5827102260b885faa223b646d2d1.patch";
+      sha256 = "0p2p8gcnb5j469xa3czfssm09w3jk08kz8rnl8wi2l9aj9l08my9";
+    })
     # Fix incorrect segment length in HLS child playlist with fmp4 segment format
     # FIXME remove in version 4.5
     # https://trac.ffmpeg.org/ticket/9193

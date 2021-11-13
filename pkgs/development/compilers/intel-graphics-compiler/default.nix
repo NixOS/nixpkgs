@@ -5,7 +5,8 @@
 , runCommandLocal
 , bison
 , flex
-, llvmPackages_8
+, llvmPackages_11
+, lld_11
 , opencl-clang
 , python3
 , spirv-llvm-translator
@@ -14,7 +15,13 @@
 }:
 
 let
-  llvmPkgs = llvmPackages_8 // {
+  vc_intrinsics_src = fetchFromGitHub {
+    owner = "intel";
+    repo = "vc-intrinsics";
+    rev = "e5ad7e02aa4aa21a3cd7b3e5d1f3ec9b95f58872";
+    sha256 = "Vg1mngwpIQ3Tik0GgRXPG22lE4sLEAEFch492G2aIXs=";
+  };
+  llvmPkgs = llvmPackages_11 // {
     inherit spirv-llvm-translator;
   };
   inherit (llvmPkgs) llvm;
@@ -24,18 +31,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.4241";
+  version = "1.0.8744";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "1jp3c67ppl1x4pazr5nzy52615cpx0kyckaridhc0fsmrkgilyxq";
+    sha256 = "G5+dYD8uZDPkRyn1sgXsRngdq4NJndiCJCYTRXyUgTA=";
   };
 
   nativeBuildInputs = [ clang cmake bison flex python3 ];
 
-  buildInputs = [ clang opencl-clang spirv-llvm-translator llvm ];
+  buildInputs = [ clang opencl-clang spirv-llvm-translator llvm lld_11 ];
 
   strictDeps = true;
 
@@ -53,9 +60,12 @@ stdenv.mkDerivation rec {
     ln -s clang $out/clang-${versions.major (getVersion clang)}
     ln -s ${opencl-clang}/lib/* $out/
     ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c-base.h $out/
   '';
 
   cmakeFlags = [
+    "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
+    "-DINSTALL_SPIRVDLL=0"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"

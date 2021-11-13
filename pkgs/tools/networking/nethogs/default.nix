@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libpcap ];
 
-  makeFlags = [ "VERSION=${version}" ];
+  makeFlags = [ "VERSION=${version}" "nethogs" ];
 
   installFlags = [ "PREFIX=$(out)" "sbin=$(out)/bin" ];
 

@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, topkg, result, lwt, cmdliner, fmt }:
+, topkg, result, lwt, cmdliner, fmt
+, js_of_ocaml
+, jsooSupport ? true
+}:
 let
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
@@ -19,10 +22,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  buildInputs = [ findlib topkg fmt cmdliner lwt ];
+  buildInputs = [ findlib topkg fmt cmdliner lwt ]
+    ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml false";
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 

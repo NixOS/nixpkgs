@@ -240,7 +240,7 @@ in
         description = ''
           Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -253,7 +253,7 @@ in
         description = ''
           Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -278,7 +278,7 @@ in
           normal = {};
           controller = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             normal = {
               includes = [ "$CONFDIR/worker-normal.inc" ];
@@ -335,10 +335,6 @@ in
             Addon to postfix configuration
           '';
           default = {
-            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-          };
-          example = {
             smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
             non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
           };

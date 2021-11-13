@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.1.1";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AfcVzQ7XpiLsizIyLnFYE/dXTeUx8Jtw9vOywQ9oJCU=";
+    sha256 = "8230f3a03f1f76c192a7844377124300fbaec83870a728b629dfabd9be9e83d0";
   };
 
   checkInputs = [ pytestCheckHook ];

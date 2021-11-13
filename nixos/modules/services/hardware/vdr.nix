@@ -17,8 +17,8 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.vdr;
-        defaultText = "pkgs.vdr";
-        example = literalExample "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
+        defaultText = literalExpression "pkgs.vdr";
+        example = literalExpression "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
         description = "Package to use.";
       };
 

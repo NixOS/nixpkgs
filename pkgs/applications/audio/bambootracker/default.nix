@@ -30,13 +30,9 @@ mkDerivation rec {
 
   postConfigure = "make qmake_all";
 
-  # 1. installs app bundle on darwin, move to app bundle dir & link binary to bin
-  # 2. wrapQtAppsHook fails to wrap mach-o binaries automatically, manually call wrapper
-  #    (see https://github.com/NixOS/nixpkgs/issues/102044)
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/{bin,Applications}/BambooTracker.app
-    wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
     ln -s $out/{Applications/BambooTracker.app/Contents/MacOS,bin}/BambooTracker
   '';
 

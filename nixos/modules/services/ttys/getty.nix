@@ -42,6 +42,7 @@ in
       loginProgram = mkOption {
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
+        defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
         description = ''
           Path to the login binary executed by agetty.
         '';
@@ -127,6 +128,14 @@ in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "%I --keep-baud ${speeds} $TERM")
+        ];
+        restartIfChanged = false;
+      };
+
+    systemd.services."autovt@" =
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear %I $TERM")
         ];
         restartIfChanged = false;
       };

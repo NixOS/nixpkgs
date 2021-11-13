@@ -96,5 +96,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hrdinka ];
     license = licenses.lgpl21;
     platforms = platforms.all;
+    # https://github.com/mapnik/mapnik/issues/4232
+    broken = lib.versionAtLeast proj.version "8.0.0";
   };
 }

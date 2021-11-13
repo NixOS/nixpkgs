@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  postPatch = ''
+    # --with-appname="$0" is evaluated with $0=.carla-wrapped instead of carla. Fix that.
+    for file in $(grep -rl -- '--with-appname="$0"'); do
+        filename="$(basename -- "$file")"
+        substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
+    done
+  '';
+
   dontWrapQtApps = true;
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables

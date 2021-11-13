@@ -12,17 +12,12 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "36d682161fdcbfa29681212c210fabecbf6849a505a0cbc54b7f70a10a5278a2";
+    sha256 = "725b989e0dd387ef2703d1cc8e86217474217f4549593c477fd94f4024a0f911";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "google-crc32c >= 1.0, <= 1.1.2" "google-crc32c~=1.0"
-  '';
 
   propagatedBuildInputs = [ google-auth google-crc32c requests ];
 

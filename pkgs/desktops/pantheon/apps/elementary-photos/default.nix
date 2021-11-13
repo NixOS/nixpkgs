@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -35,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.1";
+  version = "2.7.3";
 
   repoName = "photos";
 
@@ -43,22 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1dql14k43rv3in451amiwv4z71hz3ailx67hd8gw1ka3yw12128p";
-  };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/photos/pull/629
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/e5230a4305381734e93f1e3d1177da21a8a4121b.patch";
-      sha256 = "1igqq51sj1sx6rl8yrw037jsgnaxfwzfs0m6pqzb9q4jvfdimzfi";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-ja4ElW0FNm9oNyn+00SdI2Cxep6LyWTYM8Blc6bnuiY=";
   };
 
   nativeBuildInputs = [
@@ -108,11 +92,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta =  with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

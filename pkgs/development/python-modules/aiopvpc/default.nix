@@ -15,15 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "2.2.0";
-  disabled = pythonOlder "3.8";
+  version = "2.2.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "azogue";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hk3giwzzlcqnpw9kx3zrr808nmdb7qwac60fki5395qffd2fpqw";
+    sha256 = "sha256-wNMHzeKJ1kG0jnoI5fO3d5CBXE0cyoK92BkGunXK3pI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,9 @@ buildPythonPackage rec {
       " --cov --cov-report term --cov-report html" ""
   '';
 
-  pythonImportsCheck = [ "aiopvpc" ];
+  pythonImportsCheck = [
+    "aiopvpc"
+  ];
 
   meta = with lib; {
     description = "Python module to download Spanish electricity hourly prices (PVPC)";

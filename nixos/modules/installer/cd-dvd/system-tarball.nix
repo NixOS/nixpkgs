@@ -15,7 +15,7 @@ in
 {
   options = {
     tarball.contents = mkOption {
-      example = literalExample ''
+      example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
             target = "boot/memtest.bin";
           }
@@ -28,7 +28,7 @@ in
     };
 
     tarball.storeContents = mkOption {
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
