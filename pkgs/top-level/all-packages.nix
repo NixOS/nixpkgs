@@ -20630,6 +20630,10 @@ with pkgs;
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
+  fedigroups = callPackage ../servers/fedigroups {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   felix = callPackage ../servers/felix { };
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
@@ -29499,6 +29503,7 @@ with pkgs;
 
   alfis = callPackage ../applications/blockchains/alfis {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+    inherit (gnome) zenity;
   };
   alfis-nogui = alfis.override {
     withGui = false;
