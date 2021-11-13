@@ -8258,6 +8258,8 @@ in {
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
 
+  rsyscall = callPackage ../development/python-modules/rsyscall { };
+
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   rtoml = callPackage ../development/python-modules/rtoml { };
