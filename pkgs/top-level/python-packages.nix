@@ -4748,6 +4748,8 @@ in {
 
   milksnake = callPackage ../development/python-modules/milksnake { };
 
+  mill-local = callPackage ../development/python-modules/mill-local { };
+
   millheater = callPackage ../development/python-modules/millheater { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio { };

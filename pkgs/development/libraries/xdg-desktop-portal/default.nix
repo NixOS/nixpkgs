@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 , substituteAll
 , autoreconfHook
@@ -37,6 +38,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit flatpak;
+    })
+    # Fixes the issue in https://github.com/flatpak/xdg-desktop-portal/issues/636
+    # Remove it when the next stable release arrives
+    (fetchpatch {
+      url = "https://github.com/flatpak/xdg-desktop-portal/commit/d7622e15ff8fef114a6759dde564826d04215a9f.patch";
+      sha256 = "sha256-vmfxK4ddG6Xon//rpiz6OiBsDLtT0VG5XyBJG3E4PPs=";
     })
   ];
 
