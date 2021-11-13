@@ -8998,16 +8998,17 @@ self: super: with self; {
 
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
-  python-mapnik = let
+  python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
+    inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
     boost = pkgs.boost175.override {
       enablePython = true;
       inherit python;
     };
-  in callPackage ../development/python-modules/python-mapnik {
-    inherit (pkgs) pkg-config cairo harfbuzz icu libjpeg libpng libtiff libwebp proj zlib;
-    inherit boost;
+    harfbuzz = pkgs.harfbuzz.override {
+      withIcu = true;
+    };
     mapnik = pkgs.mapnik.override {
-      inherit boost;
+      inherit boost harfbuzz;
     };
   };
 
