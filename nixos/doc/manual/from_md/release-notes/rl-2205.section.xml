@@ -357,6 +357,18 @@
           <literal>~/.local/share/polymc/polymc.cfg</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.noto-fonts-cjk</literal> is now deprecated in
+          favor of <literal>pkgs.noto-fonts-cjk-sans</literal> and
+          <literal>pkgs.noto-fonts-cjk-serif</literal> because they each
+          have different release schedules. To maintain compatibility
+          with prior releases of Nixpkgs,
+          <literal>pkgs.noto-fonts-cjk</literal> is currently an alias
+          of <literal>pkgs.noto-fonts-cjk-sans</literal> and doesn’t
+          include serif fonts.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
