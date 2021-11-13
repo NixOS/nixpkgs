@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.13";
+  version = "0.22.15";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    sha256 = "sha256-9iRmQBt4Cxr5itTk34b8iDRyXYDHTDfZjV0SIDT/kkM=";
+    sha256 = "sha256-h4akgDn78ctBF31TX8D8NwUVUVazClPVvCR9xWyQPBk=";
   };
 
   passthru = {
