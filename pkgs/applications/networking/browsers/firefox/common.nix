@@ -110,7 +110,10 @@ let
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
-                then overrideCC stdenv llvmPackages.clangUseLLVM
+                # LTO requires LLVM bintools including ld.lld and llvm-ar.
+                then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+                  inherit (llvmPackages) bintools;
+                })
                 else stdenv;
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
