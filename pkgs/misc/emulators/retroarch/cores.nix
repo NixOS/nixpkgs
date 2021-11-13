@@ -8,11 +8,11 @@ let
 
   d2u = lib.replaceChars ["-"] ["_"];
 
-  mkLibRetroCore = { core, src, description, license, broken ? false, ... }@a:
+  mkLibRetroCore = { core, src, description, license, broken ? false, version ? "2020-03-06", ... }@a:
   lib.makeOverridable stdenv.mkDerivation ((rec {
 
     name = "libretro-${a.core}-${version}";
-    version = "2020-03-06";
+    inherit version;
     inherit (a) src;
 
     buildInputs = [ zlib ] ++ a.extraBuildInputs or [];
