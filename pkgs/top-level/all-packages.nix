@@ -27526,9 +27526,7 @@ with pkgs;
 
   premid = callPackage ../applications/misc/premid { };
 
-  processing = callPackage ../applications/graphics/processing {
-    jdk = oraclejdk8;
-  };
+  processing = callPackage ../applications/graphics/processing { };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
