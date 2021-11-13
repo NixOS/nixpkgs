@@ -15896,6 +15896,8 @@ with pkgs;
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
+  csdr = callPackage ../applications/radio/csdr { };
+
   ctypes_sh = callPackage ../development/libraries/ctypes_sh { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
@@ -18913,6 +18915,11 @@ with pkgs;
   openhmd = callPackage ../development/libraries/openhmd { };
 
   openrct2 = callPackage ../games/openrct2 { };
+
+  openwebrx = callPackage ../applications/radio/openwebrx {
+    inherit (python3Packages)
+    buildPythonPackage buildPythonApplication setuptools;
+  };
 
   optparse-bash = callPackage ../development/libraries/optparse-bash { };
 
