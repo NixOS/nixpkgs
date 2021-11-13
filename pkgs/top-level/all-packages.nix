@@ -5392,6 +5392,8 @@ with pkgs;
 
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
 
+  gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
