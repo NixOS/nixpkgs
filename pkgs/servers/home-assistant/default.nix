@@ -825,8 +825,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/auth/mfa_modules/test_notify.py"
     # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
     "tests/components/emulated_hue/test_upnp.py"
-    # tado/test_climate.py: Tries to connect to my.tado.com
+    # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
     "tests/components/tado/test_climate.py"
+    "tests/components/tado/test_water_heater.py"
   ];
 
   disabledTests = [
