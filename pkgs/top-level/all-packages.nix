@@ -7216,6 +7216,8 @@ with pkgs;
 
   libraspberrypi = callPackage ../development/libraries/libraspberrypi { };
 
+  librsyscall = callPackage ../development/libraries/librsyscall { };
+
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libspf2 = callPackage ../development/libraries/libspf2 { };
