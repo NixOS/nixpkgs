@@ -7,17 +7,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "adax";
-  version = "0.2.0";
+  pname = "mill-local";
+  version = "0.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
-    repo = "pyadax";
+    repo = "pyMillLocal";
     rev = version;
-    sha256 = "sha256-EMSX2acklwWOYiEeLHYG5mwdiGnWAUo5dGMiHCmZrko=";
+    sha256 = "0q0frwj9yxdmqi5axl7gxirfflgn8xh1932c6lhp9my2v1d0gdrk";
   };
 
   propagatedBuildInputs = [
@@ -28,11 +28,13 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "adax" ];
+  pythonImportsCheck = [
+    "mill_local"
+  ];
 
   meta = with lib; {
-    description = "Python module to communicate with Adax";
-    homepage = "https://github.com/Danielhiversen/pyAdax";
+    description = "Python module to communicate locally with Mill heaters";
+    homepage = "https://github.com/Danielhiversen/pyMillLocal";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
