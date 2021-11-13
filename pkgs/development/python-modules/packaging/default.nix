@@ -10,24 +10,21 @@
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "20.9";
+  version = "21.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WzJ6wTINyGPcpy9FFOzAhvMRhnRLhKIwN0zB/Xdv6uU=";
+    sha256 = "dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  propagatedBuildInputs = [ pyparsing six ];
+  propagatedBuildInputs = [ pyparsing ];
 
-  checkInputs = [
-    pytestCheckHook
-    pretend
-  ];
+  pythonImportsCheck = [ "pyparsing" ];
 
   # Prevent circular dependency
   doCheck = false;
