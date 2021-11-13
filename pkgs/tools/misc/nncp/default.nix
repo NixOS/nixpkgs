@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "7.7.0";
+  version = "8.0.2";
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "ppKi/JY8sKRb/Vt/SXom0L1zhjBPn6PNUm3Gn8o5Ke4=";
+    sha256 = "sha256-hMb7bAdk3xFcUe5CTu9LnIR3VSJDUKbMSE86s8d5udM=";
   };
 
   nativeBuildInputs = [ go redo-apenwarr ];
@@ -64,8 +64,9 @@ stdenv.mkDerivation rec {
       transmission exists.
     '';
     homepage = "http://www.nncpgo.org/";
+    downloadPage = "http://www.nncpgo.org/Tarballs.html";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = [ maintainers.woffs ];
+    maintainers = with maintainers; [ ehmry woffs ];
   };
 }
