@@ -21,7 +21,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/tholo/pytest-flake8/commit/eda4ef74c0f25b856fe282742ea206b21e94c24c.patch";
-      sha256 = "001ciy19dhsqa88rhb2b51g5sb0k4s3pz0zk2a191rnib65ll07x";
+      sha256 = "0kq0wshds00rk6wvkn6ccjrjyqxg7m9l7dlyaqw974asizw6byci";
     })
   ];
 
