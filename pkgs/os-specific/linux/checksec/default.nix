@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
-      mkdir -p $out/bin
-      install checksec $out/bin
+      install -D -t $out/bin checksec
       substituteInPlace $out/bin/checksec \
         --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6 \
         --replace "/usr/bin/id -" "${coreutils}/bin/id -" \
