@@ -66,11 +66,6 @@ self: super: {
     sha256 = "0c8n2krz827cv87p3vb1vpl3v0k255aysjx9lq44gz3z1dhxd64z";
   }) super.basement);
 
-  cereal = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cereal-0.5.8.1.patch";
-    sha256 = "03v4nxwz9y6viaa8anxcmp4zdf2clczv4pf9fqq6lnpplpz5i128";
-  }) (doJailbreak super.cereal);
-
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
