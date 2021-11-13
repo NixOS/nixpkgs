@@ -359,7 +359,8 @@ in {
               (in seconds) or a time span value, e.g.,
               <literal>"5min 20s"</literal>.
               If you do not want a failed backup to restart automatically, use
-              <literal>null</literal>.  '';
+              <literal>null</literal>.
+            '';
             example = "10 min";
           };
 
