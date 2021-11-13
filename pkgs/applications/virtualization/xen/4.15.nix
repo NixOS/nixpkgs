@@ -146,11 +146,13 @@ callPackage (import ./generic.nix (rec {
     "-Wno-error=zero-length-bounds"
   ];
 
-  patches = [
+  patches = with xsa; flatten [
     ./0000-fix-ipxe-src.4.15.patch
     ./0000-fix-install-python.4.15.patch
     ./0004-makefile-use-efi-ld.4.15.patch
     ./0005-makefile-fix-efi-mountdir-use.4.15.patch
+
+    XSA_386
   ];
 
   postPatch = ''
