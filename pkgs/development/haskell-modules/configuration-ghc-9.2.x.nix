@@ -107,7 +107,7 @@ self: super: {
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_0;
-  hashable-time = doJailbreak super.hashable-time;
+  hashable-time = doJailbreak super.hashable-time_0_3;
   hedgehog = doJailbreak super.hedgehog;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
@@ -134,7 +134,7 @@ self: super: {
   tasty-hspec = doJailbreak super.tasty-hspec;
   th-desugar = self.th-desugar_1_13;
   these = doJailbreak super.these;
-  time-compat = doJailbreak super.time-compat;
+  time-compat = doJailbreak super.time-compat_1_9_6_1;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
   vector = doJailbreak (dontCheck super.vector);
