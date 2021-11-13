@@ -30574,6 +30574,7 @@ in
       })
     nix
     nixStable
+    nix_2_3
     nixUnstable;
 
   nixStatic = pkgsStatic.nix;
