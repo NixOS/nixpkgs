@@ -1,7 +1,5 @@
 { lib
-, bash
 , buildPythonPackage
-, chardet
 , docker
 , entrypoints
 , escapism
