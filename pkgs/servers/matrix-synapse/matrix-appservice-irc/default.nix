@@ -30,7 +30,7 @@ ourNodePackages.package.override {
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ piegames ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
   };
