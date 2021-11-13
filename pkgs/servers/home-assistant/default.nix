@@ -180,6 +180,7 @@ in with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "bcrypt==3.1.7" "bcrypt" \
+      --replace "httpx==0.19.0" "httpx>=0.19.0" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "pyyaml==6.0" "pyyaml" \
       --replace "yarl==1.6.3" "yarl==1.7.0"
