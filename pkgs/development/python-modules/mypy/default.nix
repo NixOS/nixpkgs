@@ -12,6 +12,12 @@ buildPythonPackage rec {
     sha256 = "069i9qnfanp7dn8df1vspnqb0flvsszzn22v00vj08nzlnd061yd";
   };
 
+  # remove pin with mypy>=0.920
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "typed_ast >= 1.4.0, < 1.5.0" "typed_ast >= 1.4.0, < 2"
+  '';
+
   propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
 
   # Tests not included in pip package.
