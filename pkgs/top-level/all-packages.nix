@@ -8948,6 +8948,8 @@ with pkgs;
 
   quickserve = callPackage ../tools/networking/quickserve { };
 
+  quictls = callPackage ../development/libraries/quictls { };
+
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
