@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, p7zip }:
+{ stdenv, lib, fetchurl, unar }:
 
 # https://sourceforge.net/p/sevenzip/discussion/45797/thread/7fe6c21efa/
 stdenv.mkDerivation rec {
@@ -6,9 +6,11 @@ stdenv.mkDerivation rec {
   version = "21.04";
 
   src = fetchurl {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings ["." ] [""] version}-src.7z";
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.7z";
     sha256 = "sha256-XmuEyIJAJQM0ZbgrW02lQ2rp4KFDBjLXKRaTfY+VCOg=";
   };
+
+  unpackCmd = "unar $src -D";
 
   sourceRoot = "CPP/7zip/Bundles/Alone2";
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
 
-  nativeBuildInputs = [ p7zip ];
+  nativeBuildInputs = [ unar ];
 
   enableParallelBuilding = true;
 
