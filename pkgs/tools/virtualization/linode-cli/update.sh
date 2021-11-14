@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq yq-go
+# shellcheck shell=bash
 
 set -x -eu -o pipefail
 
