@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p poetry poetry2nix.cli
+# shellcheck shell=bash
 set -eu
 poetry lock
 poetry2nix lock
