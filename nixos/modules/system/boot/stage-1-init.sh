@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 targetRoot=/mnt-root
 console=tty1
