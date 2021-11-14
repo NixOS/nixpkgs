@@ -8,11 +8,11 @@ let
 
   d2u = lib.replaceChars ["-"] ["_"];
 
-  mkLibRetroCore = { core, src, description, license, broken ? false, ... }@a:
+  mkLibRetroCore = { core, src, description, license, broken ? false, version ? "2020-03-06", ... }@a:
   lib.makeOverridable stdenv.mkDerivation ((rec {
 
     name = "libretro-${a.core}-${version}";
-    version = "2020-03-06";
+    inherit version;
     inherit (a) src;
 
     buildInputs = [ zlib ] ++ a.extraBuildInputs or [];
@@ -334,10 +334,11 @@ in with lib.licenses;
 
   dolphin = mkLibRetroCore {
     core = "dolphin";
+    version = "2021-11-01";
     src = fetchRetro {
       repo = "dolphin";
-      rev = "1fbd59911d1b718c142d6448dee3ede98152e395";
-      sha256 = "1rymsvs034l1hbxc3w8zi9lhmgka2qaj3jynjy152dccd480nnd4";
+      rev = "3370f7693be95c23ac779e5172ff52b7eb2861a7";
+      sha256 = "0ylxi25kbv0h2p24aid7z4i0w6drf7h92q02hjdl3h3gni98lk9i";
     };
     description = "Port of Dolphin to libretro";
     license = gpl2Plus;
