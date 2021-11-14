@@ -27,10 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/32-bug-632585-use-int32_t-instead-off_t-for-file-size.patch";
       sha256 = "sha256-SooFnFK4uKNXvXQb/LEcH8GocnRtkryExI4b3BZTsAY=";
     })
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/33-CVE-2020-14315.patch";
-      sha256 = "sha256-eHu0ulZ4dneIju3GuffzvbpI0Hk2eDpovEUjmrHDk9U=";
-    })
+    ./CVE-2020-14315.patch
     ./include-systypes.patch
   ];
 
