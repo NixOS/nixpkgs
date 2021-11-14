@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchpatch
 , makeWrapper
 , nixosTests
@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.2";
+  version = "9.1.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "0r05iqmnnjq259nsibncgfrfsr0l4h3hsafizvgfl9zgmrkm6izz";
+    sha256 = "sha256-oicRqKFE6hOpcNG9o3BmrMujtEzi4hrPhBWaljOW+VI=";
   };
 
   patches = [
