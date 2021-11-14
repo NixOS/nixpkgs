@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p nix -p jq -p curl -p bash -p git -p nix-update -i bash
+# shellcheck shell=bash
 
 set -eux
 
