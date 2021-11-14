@@ -1,4 +1,5 @@
 #!@bash@
+# shellcheck shell=bash
 
 IFS=:
 
