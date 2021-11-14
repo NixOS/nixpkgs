@@ -1,4 +1,5 @@
 
+# shellcheck source=/dev/null
 source "$stdenv"/setup
 
 mkdir -p "$out"/share/keen4
