@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl
+# shellcheck shell=bash
 
 die() {
     echo "$1" >&2
