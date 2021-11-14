@@ -204,7 +204,69 @@ lib.attrsets.getAttrFromPath [ "a" "b" ] { a = { b = 3; }; }
    <title>Throwing after failing to get a value from an attribute set</title>
 <programlisting><![CDATA[
 lib.attrsets.getAttrFromPath [ "x" "y" ] { }
-=> error: cannot find attribute `x.y'
+=> error: cannot find attribute `x.y`
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrByPath">
+  <title><function>lib.attrsets.mapAttrByPath</function></title>
+
+  <subtitle><literal>mapAttrByPath :: [String] -> AttrSet -> (Value -> Value) -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrByPath" />
+
+  <para>
+   Apply a <varname>function</varname> to the attribute in the passed attribute <varname>set</varname> at the path <varname>attrPath</varname>. Will throw if the original attribute set does not have a value with that path.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrPath</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of strings representing the path through the nested attribute set <varname>set</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The nested attribute set to find the value in.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>function</varname>
+    </term>
+    <listitem>
+     <para>
+      The function to apply to that value.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrByPath-example-success">
+   <title>Succesfully applying a function to an attribute</title>
+<programlisting><![CDATA[
+mapAttrByPath ["a"] { a = { b = 5; }; } (x: { c = x.b - 2; })
+=> {a = { c = 3; }; }
+]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrByPath-example-throw">
+   <title>Throwing after failing to get a value from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrByPath [ "x" "y" ] { }
+=> error: cannot find attribute `x.y`
 ]]></programlisting>
   </example>
  </section>

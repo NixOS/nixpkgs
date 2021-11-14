@@ -74,8 +74,32 @@ rec {
        => error: cannot find attribute `z.z'
   */
   getAttrFromPath = attrPath: set:
-    let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
+    let errorMsg = "cannot find attribute `${concatStringsSep "." attrPath}`";
     in attrByPath attrPath (abort errorMsg) set;
+
+
+  /* Apply a function to an attribute in a nested attribute set. If it doesn't
+     find the path it will throw.
+
+     Example:
+       mapAttrByPath ["a"] { a = { b = 5; }; } (x: { c = x.b - 2; })
+       => {a = { c = 3; }; }
+  */
+  mapAttrByPath = attrPath: set: f:
+    let
+      errorMsg = "cannot find attribute `${concatStringsSep "." attrPath}`";
+      recur = attrPath: set:
+        if attrPath == [] then
+          f set
+        else
+          if set ? ${head attrPath} then
+            set // {
+              ${head attrPath} = recur (tail attrPath) set.${head attrPath};
+            }
+          else
+            abort errorMsg;
+    in
+      recur attrPath set;
 
 
   /* Return the specified attributes from a set.
