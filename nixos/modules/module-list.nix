@@ -759,6 +759,7 @@
   ./services/misc/nitter.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
+  ./services/misc/nixos-jobserver.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/novacomd.nix
   ./services/misc/ntfy-sh.nix

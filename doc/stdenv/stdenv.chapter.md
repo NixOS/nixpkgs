@@ -1368,8 +1368,8 @@ Helper function for running a command as a client of the global jobserver, if ap
 but separators must always be given.
 
 **Note**:
-The global jobserver must be bound to `/jobserver` in the Nix sandbox to be found by this function.
-If the provided `/jobserver` is not a `nixos-jobserver` token file it will not be used.
+The global jobserver must be bound to `/build-support/jobserver` in the Nix sandbox to be found by this function.
+If the provided `/build-support/jobserver` is not a `nixos-jobserver` token file it will not be used.
 
 Example:
 
