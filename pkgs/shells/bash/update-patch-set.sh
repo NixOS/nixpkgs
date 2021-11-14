@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell --pure -i bash -p wget -p gnupg -p cacert -p nix
+# shellcheck shell=bash
 
 # Update patch set for GNU Bash or Readline.
 
