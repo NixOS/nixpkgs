@@ -18831,6 +18831,10 @@ with pkgs;
 
   nghttp3 = callPackage ../development/libraries/nghttp3 { };
 
+  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
+
+  nix-plugins = callPackage ../development/libraries/nix-plugins { };
+
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
   nikto = callPackage ../tools/networking/nikto { };
