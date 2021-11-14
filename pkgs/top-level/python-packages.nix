@@ -9408,6 +9408,8 @@ in {
   ttp = callPackage ../development/python-modules/ttp { };
 
   tubes = callPackage ../development/python-modules/tubes { };
+  
+  tuned = callPackage ../tools/misc/tuned/default.nix { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 
