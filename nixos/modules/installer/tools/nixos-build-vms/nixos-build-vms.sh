@@ -1,4 +1,5 @@
 #! @runtimeShell@ -e
+# shellcheck shell=bash
 
 # Shows the usage of this command to the user
 
