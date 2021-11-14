@@ -290,7 +290,7 @@ let
         else
             for res in 16 32 48 64 128; do
             mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
-            icon=( "${browser}/lib/"*"/browser/chrome/icons/default/default''${res}.png" )
+            icon=$( find "${browser}/lib/" -name "default''${res}.png" )
               if [ -e "$icon" ]; then ln -s "$icon" \
                 "$out/share/icons/hicolor/''${res}x''${res}/apps/${applicationName}.png"
               fi
