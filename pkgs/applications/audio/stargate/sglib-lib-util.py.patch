@@ -1,0 +1,19 @@
+diff --git a/src/sglib/lib/util.py b/src/sglib/lib/util.py
+index d2fdf35..7872d65 100644
+--- a/src/sglib/lib/util.py
++++ b/src/sglib/lib/util.py
+@@ -187,10 +187,10 @@ elif IS_LINUX:
+         os.path.dirname(__file__),
+         '..',
+         '..',
+-        'vendor',
+-        'sbsms',
+-        'cli',
+-        'sbsms',
++        '..',
++        '..',
++        '..',
++        'bin',
+     )
+     if not os.path.exists(sbsms_util):
+         sbsms_util = which(f"{MAJOR_VERSION}-sbsms")

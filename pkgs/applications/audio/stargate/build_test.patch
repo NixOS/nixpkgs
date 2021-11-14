@@ -1,0 +1,71 @@
+diff --git a/src/Makefile b/src/Makefile
+index 5c9353d..7310e45 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -36,7 +36,7 @@ distro: commit_hash
+ 	# to provide and package: mido, pymarshal, SBSMS, python-wavefile
+ 	make -C engine
+ 
+-install: install_distro install_sbsms install_py_vendor
++install: install_distro install_sbsms
+ 	# General purpose install for users
+ 
+ install_distro: clean_pyc
+@@ -129,7 +129,6 @@ tests:
+ 	./test_parse.sh
+ 	make -C engine test
+ 	pytest test/
+-	$(BROWSER) htmlcov/index.html
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)$(PREFIX)/bin/$(MAJOR)*
+diff --git a/src/engine/Makefile b/src/engine/Makefile
+index e893dac..b1f29bf 100644
+--- a/src/engine/Makefile
++++ b/src/engine/Makefile
+@@ -7,7 +7,7 @@ CC ?= gcc
+ CC_ARGS ?= -Wall -Wformat-truncation=0 -Werror=format-security
+ OPT_LVL ?= -O2 -g -ggdb3
+ # These assume a modern x86 CPU, change or remove for other platforms
+-PLAT_FLAGS ?= -mfpmath=sse -mssse3 -mtune=generic -mstackrealign
++PLAT_FLAGS ?= @platflags@
+ LIBEXT ?= so
+ 
+ INC = -Iinclude -Ilibcds/include
+@@ -210,13 +210,3 @@ test:
+ 	    -Itests $(LINK_FLAGS) -o $(NAME).tests
+ 	rm -rf tmp
+ 	mkdir -p tmp
+-	# If Valgrind exits non-zero, try running 'gdb ./engine.tests'
+-	# to debug the test suite
+-	valgrind ./$(NAME).tests --track-origins=yes
+-	mkdir html || rm -rf html/*
+-	gcovr -r . --html --html-details \
+-		--exclude=benchmark \
+-		-o html/coverage.html
+-	rm -rf *.gcda *.gcno
+-	$(BROWSER) html/coverage.html &
+-
+diff --git a/src/setup.cfg b/src/setup.cfg
+index d74165c..9b92f47 100644
+--- a/src/setup.cfg
++++ b/src/setup.cfg
+@@ -21,5 +21,3 @@ requires =
+     vorbis-tools
+ 
+ [tool:pytest]
+-addopts = --cov=sglib --cov-report=html --cov-report=term
+-
+diff --git a/src/vendor/sbsms/cli/Makefile b/src/vendor/sbsms/cli/Makefile
+index 9d53799..790206b 100644
+--- a/src/vendor/sbsms/cli/Makefile
++++ b/src/vendor/sbsms/cli/Makefile
+@@ -6,7 +6,7 @@ CXX ?= g++
+ PREFIX ?= /usr
+ 
+ #Default flags are mostly x86 specific
+-PLAT_FLAGS     ?=
++PLAT_FLAGS     ?= @platflags@
+ #-mstackrealign -msse -msse2 -msse3 -mfpmath=sse -mtune=generic
+ 
+ BASE_FLAGS     = -ffast-math -fprefetch-loop-arrays \

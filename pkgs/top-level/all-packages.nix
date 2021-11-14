@@ -9782,6 +9782,8 @@ with pkgs;
 
   staruml = callPackage ../tools/misc/staruml { };
 
+  stargate = libsForQt5.callPackage ../applications/audio/stargate { };
+
   stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper {};

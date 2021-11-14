@@ -1,0 +1,60 @@
+diff --git a/src/sgui/widgets/hardware_dialog.py b/src/sgui/widgets/hardware_dialog.py
+index 13179b8..e6bd664 100755
+--- a/src/sgui/widgets/hardware_dialog.py
++++ b/src/sgui/widgets/hardware_dialog.py
+@@ -124,21 +124,11 @@ class hardware_dialog:
+ 
+     def open_devices(self):
+         if util.IS_LINUX:
+-            pa_paths = ("libportaudio.so.2", "libportaudio.so")
+-            pm_paths = ("libportmidi.so.0", "libportmidi.so")
++            pa_paths = ("libportaudio@.2", "@libportaudio@")
++            pm_paths = ("@libportmidi@")
+         elif util.IS_MAC_OSX:
+-            pa_paths = (
+-                os.path.join(util.INSTALL_PREFIX, 'libportaudio.2.dylib'),
+-                os.path.join(util.ENGINE_DIR, 'libportaudio.2.dylib'),
+-                "/usr/local/lib/libportaudio.dylib",
+-                "libportaudio.dylib",
+-            )
+-            pm_paths = (
+-                os.path.join(util.INSTALL_PREFIX, 'libportmidi.dylib'),
+-                os.path.join(util.ENGINE_DIR, 'libportmidi.dylib'),
+-                "/usr/local/lib/libportmidi.dylib",
+-                "libportmidi.dylib",
+-            )
++            pa_paths = ("@libportaudio@.2", "@libportaudio@")
++            pm_paths = ("@libportmidi@")
+         elif util.IS_WINDOWS:
+             pm_paths = (
+                 os.path.join(
+diff --git a/src/test/sglib/lib/test_ctypes.py b/src/test/sglib/lib/test_ctypes.py
+index 0f1c4c2..427728b 100644
+--- a/src/test/sglib/lib/test_ctypes.py
++++ b/src/test/sglib/lib/test_ctypes.py
+@@ -8,10 +8,10 @@ def test_patch_ctypes():
+     try:
+         patch_ctypes(env_vars=('SG_TEST_CTYPES',))
+         os.environ['SG_TEST_CTYPES'] = '/sg/test/path;/sg/test/path2/lib'
+-        ctypes.CDLL(("libportaudio.so", "libportaudio.so.2"))
++        ctypes.CDLL(("@libportaudio@", "@libportaudio@.2"))
+         revert_patch_ctypes()
+         patch_ctypes(True, env_vars=('SG_TEST_CTYPES',))
+-        ctypes.CDLL(("libportaudio.so", "libportaudio.so.2"))
++        ctypes.CDLL(("@libportaudio@", "@libportaudio@.2"))
+     finally:
+         revert_patch_ctypes()
+ 
+diff --git a/src/vendor/sbsms/configure b/src/vendor/sbsms/configure
+index dc57c83..ee59f72 100755
+--- a/src/vendor/sbsms/configure
++++ b/src/vendor/sbsms/configure
+@@ -5032,7 +5032,7 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; then
+-    case `/usr/bin/file conftest.o` in
++    case `@file@ conftest.o` in
+       *32-bit*)
+ 	case $host in
+ 	  x86_64-*kfreebsd*-gnu)
