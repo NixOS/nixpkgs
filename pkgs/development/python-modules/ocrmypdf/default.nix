@@ -88,7 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
-    platforms = platforms.linux;
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
   };
