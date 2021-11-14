@@ -20,8 +20,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description =
-      "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory.";
+    description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ jcouyang ];
