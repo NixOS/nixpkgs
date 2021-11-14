@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl
+# shellcheck shell=bash
 
 # We use this script to download local copies instead of using
 # fetchpatch because lmhouse/MINGW-packages-dev is constantly rebased
