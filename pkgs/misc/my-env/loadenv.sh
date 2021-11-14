@@ -1,4 +1,5 @@
 #!@shell@
+# shellcheck shell=bash
 
 OLDPATH="$PATH"
 OLDTZ="$TZ"
@@ -19,4 +20,3 @@ if test $# -gt 0; then
 else
     exec @shell@
 fi
-
