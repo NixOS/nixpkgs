@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
-, fetchurl
 , fetchFromGitHub
 , callPackage
 , autoconf
@@ -35,19 +33,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "replace-bin-cp-with-cp.patch";
-      url = "https://github.com/intel/linux-sgx/commit/e0db5291d46d1c124980719d63829d65f89cf2c7.patch";
-      sha256 = "0xwlpm1r4rl4anfhjkr6fgz0gcyhr0ng46fv8iw9hfsh891yqb7z";
-    })
-    (fetchpatch {
-      name = "sgx_ippcp.h.patch";
-      url = "https://github.com/intel/linux-sgx/commit/e5929083f8161a8e7404afc0577936003fbb9d0b.patch";
-      sha256 = "12bgs9rxlq82hn5prl9qz2r4mwypink8hzdz4cki4k4cmkw961f5";
-    })
-  ];
   postPatch = ''
+    # https://github.com/intel/linux-sgx/pull/730
+    substituteInPlace buildenv.mk --replace '/bin/cp' 'cp'
+
+    # https://github.com/intel/linux-sgx/pull/752
+    ln -s "$src/external/epid-sdk/ext/ipp/include/sgx_ippcp.h" \
+          'external/ippcp_internal/inc/sgx_ippcp.h'
+
     patchShebangs ./linux/installer/bin/build-installpkg.sh \
       ./linux/installer/common/sdk/createTarball.sh \
       ./linux/installer/common/sdk/install.sh
