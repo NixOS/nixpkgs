@@ -19,15 +19,11 @@ buildPythonPackage rec {
     ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
   '';
 
+  # needed on non-x86 linux
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
+
   propagatedBuildInputs = [
     setuptools
-  ];
-
-  # No tests present
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "unicorn"
   ];
 
   checkPhase = ''
@@ -39,6 +35,10 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
+
+  pythonImportsCheck = [
+    "unicorn"
+  ];
 
   meta = with lib; {
     description = "Python bindings for Unicorn CPU emulator engine";
