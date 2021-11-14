@@ -247,6 +247,8 @@ in {
 
   aioapns = callPackage ../development/python-modules/aioapns { };
 
+  aiocron = callPackage ../development/python-modules/aiocron { };
+
   ailment = callPackage ../development/python-modules/ailment { };
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
