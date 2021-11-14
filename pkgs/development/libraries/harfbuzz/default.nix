@@ -102,7 +102,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco erictapen ];
     license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
   };
