@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
     rev = version;
-    sha256 = "sha256-y87Cnci4gJHrttThGPeOS/h6VK8x95cQA9nZs1fBfAw=";
+    sha256 = "sha256-b6zncEAPtKgBPLFRsCSGeBqiD4A/mHEhjQaEIsefc28=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
     "tests/test_popups.py"
     "tests/test_webdriver.py"
     "tests/test_webdriver_chrome.py"
+    "tests/test_webdriver_edge_chromium.py"
     "tests/test_webdriver_firefox.py"
     "tests/test_webdriver_remote.py"
     "tests/test_zopetestbrowser.py"
