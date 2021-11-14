@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl bundix git libiconv libpcap libxml2 libxslt pkg-config postgresql ruby.devEnv sqlite xmlstarlet nix-update
+# shellcheck shell=bash
 
 set -eu -o pipefail
 cd "$(dirname "$(readlink -f "$0")")"
