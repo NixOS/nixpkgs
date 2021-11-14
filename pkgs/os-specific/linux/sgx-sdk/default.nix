@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
-    rev = "0cea078f17a24fb807e706409972d77f7a958db9";
+    rev = "sgx_${version}";
     sha256 = "1cr2mkk459s270ng0yddgcryi0zc3dfmg9rmdrdh9mhy2mc1kx0g";
     fetchSubmodules = true;
   };
