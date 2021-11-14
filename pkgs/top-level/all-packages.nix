@@ -18490,7 +18490,15 @@ with pkgs;
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
-  mapnik = callPackage ../development/libraries/mapnik { };
+  mapnik = callPackage ../development/libraries/mapnik {
+    gdal = gdal.override {
+      libgeotiff = libgeotiff.override { proj = proj_7; };
+      libspatialite = libspatialite.override { proj = proj_7; };
+      proj = proj_7;
+    };
+    proj = proj_7;
+  };
+
 
   marisa = callPackage ../development/libraries/marisa {};
 
