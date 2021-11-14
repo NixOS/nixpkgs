@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook causes the fixup phase to repack all JAR files in a
 # canonical & deterministic fashion, e.g. resetting mtimes (like with normal
 # store files) and avoiding impure metadata.

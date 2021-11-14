@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 fixupOutputHooks+=(_makeSymlinksRelative)
 
 # For every symlink in $output that refers to another file in $output

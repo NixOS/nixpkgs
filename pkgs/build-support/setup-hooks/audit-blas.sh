@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Ensure that we are always linking against “libblas.so.3” and
 # “liblapack.so.3”.
 

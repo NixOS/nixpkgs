@@ -1,4 +1,4 @@
-
+# shellcheck shell=bash
 fixupOutputHooks+=(_linkDLLs)
 
 # For every *.{exe,dll} in $output/bin/ we try to find all (potential)
@@ -42,4 +42,3 @@ _linkDLLs() {
     echo "Created $linkCount DLL link(s) in $prefix/bin"
 )
 }
-

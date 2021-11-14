@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Check whether RPATHs or wrapper scripts contain references to
 # $TMPDIR. This is a serious security bug because it allows any user
 # to inject files into search paths of other users' processes.

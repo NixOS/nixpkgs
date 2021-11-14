@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 breakpointHook() {
     local red='\033[0;31m'
     local no_color='\033[0m'
