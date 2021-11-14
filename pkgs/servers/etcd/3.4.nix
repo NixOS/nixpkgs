@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "etcd";
   version = "3.4.18";
 
-  deleteVendor = true;
   vendorSha256 = null;
 
   doCheck = false;
