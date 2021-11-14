@@ -4,9 +4,6 @@
 , fetchPypi
 , pkg-config
 , ffmpeg
-, numpy
-, pytestCheckHook
-, python
 }:
 
 buildPythonPackage rec {

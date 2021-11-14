@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , callPackage
 , fetchPypi
@@ -8,7 +7,6 @@
 , jupyter-client
 , tornado
 , traitlets
-, pythonOlder
 }:
 
 buildPythonPackage rec {

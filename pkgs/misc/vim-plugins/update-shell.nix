@@ -1,14 +1,15 @@
-{ nixpkgs ? import ../../.. { } }:
-with nixpkgs;
+{ pkgs ? import ../../.. { } }:
+
+with pkgs;
 let
-  pyEnv = python3.withPackages(ps: [ ps.GitPython ]);
+  pyEnv = python3.withPackages (ps: [ ps.GitPython ]);
 in
+
 mkShell {
   packages = [
     bash
     pyEnv
-    nix_2_3
+    nix
     nix-prefetch-scripts
   ];
 }
-

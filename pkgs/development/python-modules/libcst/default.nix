@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.20";
+  version = "0.3.21";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
-  # Some files for tests missing from PyPi
-  # https://github.com/Instagram/LibCST/issues/331
   src = fetchFromGitHub {
     owner = "instagram";
     repo = pname;
@@ -54,7 +54,9 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [ "libcst" ];
+  pythonImportsCheck = [
+    "libcst"
+  ];
 
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";

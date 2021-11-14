@@ -344,8 +344,8 @@ let
         then ppxlib.override { version = "0.15.0"; }
         else ppxlib; in
       {
-        ppx_deriving = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-        ppxlib = ppxlib_0_15;
+        ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
+        inherit ppxlib_0_15;
       }
     );
 

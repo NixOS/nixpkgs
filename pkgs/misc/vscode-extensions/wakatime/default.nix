@@ -1,5 +1,5 @@
 { lib
-, wakatime, vscode-utils }:
+, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;

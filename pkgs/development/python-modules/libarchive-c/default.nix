@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonAtLeast
 , fetchFromGitHub
 , libarchive
 , glibcLocales

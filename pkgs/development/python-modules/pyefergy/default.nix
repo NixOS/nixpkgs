@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , iso4217
-, pytestCheckHook
 , pythonOlder
 , pytz
 }:

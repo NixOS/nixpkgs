@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, python
 , pythonOlder
 , text-unidecode
 , unidecode

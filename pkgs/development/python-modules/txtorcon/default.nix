@@ -1,6 +1,6 @@
 { lib, python, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, incremental, ipaddress, twisted
 , automat, zope_interface, idna, pyopenssl, service-identity, pytest, mock, lsof
-, GeoIP, isPy27}:
+, GeoIP}:
 
 buildPythonPackage rec {
   pname = "txtorcon";

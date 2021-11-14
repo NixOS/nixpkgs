@@ -1,7 +1,5 @@
 { lib
-, bash
 , buildPythonPackage
-, chardet
 , docker
 , entrypoints
 , escapism
@@ -11,7 +9,6 @@
 , pkgs-docker
 , python-json-logger
 , pythonOlder
-, pyyaml
 , ruamel_yaml
 , semver
 , toml

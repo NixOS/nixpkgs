@@ -15,7 +15,6 @@
 , mock
 , murmurhash
 , numpy
-, pathlib
 , plac
 , pythonOlder
 , preshed

@@ -1,6 +1,5 @@
 { lib
 , pythonAtLeast
-, isPy27
 , buildPythonPackage
 , fetchPypi
 , blessings

@@ -1,4 +1,4 @@
-{ lib, fetchpatch, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , aiohttp, pytest, pytest-cov, pytest-aiohttp
 }:
 

@@ -2,7 +2,6 @@
 , meson
 , ninja
 , pkg-config
-, fetchpatch
 
 , platform-tools
 , ffmpeg

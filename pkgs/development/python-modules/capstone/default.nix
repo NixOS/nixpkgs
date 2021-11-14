@@ -2,8 +2,6 @@
 , buildPythonPackage
 , capstone
 , stdenv
-, fetchpatch
-, fetchPypi
 , setuptools
 }:
 

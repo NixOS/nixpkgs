@@ -17,6 +17,7 @@
 , "@webassemblyjs/wasm-strip"
 , "@webassemblyjs/wasm-text-gen"
 , "@webassemblyjs/wast-refmt"
+, "alex"
 , "alloy"
 , "asar"
 , "autoprefixer"

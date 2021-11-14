@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitiles
-, isPy3k
 }:
 
 buildPythonPackage {

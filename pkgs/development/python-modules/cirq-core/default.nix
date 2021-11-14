@@ -1,8 +1,8 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , duet
 , matplotlib
 , networkx
@@ -42,6 +42,22 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "source/${pname}";
+
+  patches = [
+    # present in upstream master - remove after 0.13.1
+    (fetchpatch {
+      name = "fix-test-tolerances.part-1.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
+      sha256 = "0ka24v6dfxnap9p07ni32z9zccbmw0lbrp5mcknmpsl12hza98xm";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "fix-test-tolerances.part-2.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
+      sha256 = "0k2dqsm4ydn6556d40kc8j04jgjn59z4wqqg1jn1r916a7yxw493";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -84,10 +100,6 @@ buildPythonPackage rec {
   disabledTests = [
     "test_metadata_search_path" # tries to import flynt, which isn't in Nixpkgs
     "test_benchmark_2q_xeb_fidelities" # fails due pandas MultiIndex. Maybe issue with pandas version in nix?
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Seem to fail due to math issues on aarch64?
-    "expectation_from_wavefunction"
-    "test_single_qubit_op_to_framed_phase_form_output_on_example_case"
   ];
 
   meta = with lib; {
