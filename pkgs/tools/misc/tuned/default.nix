@@ -56,6 +56,10 @@ python.pkgs.buildPythonApplication rec{
       install -D $i.py bin/$i
       chmod a+x bin/$i
     done
+    for f in tuned/consts.py tuned-adm.bash man/* profiles/*/*
+    do
+      substituteInPlace $f --replace /usr/lib $out/lib
+    done
   '';
 
   postInstall = ''
@@ -68,7 +72,6 @@ python.pkgs.buildPythonApplication rec{
     install -Dt $out/share/polkit-1/actions com.redhat.tuned.policy
     install -Dt $out/share/icons/hicolor/scalable/apps icons/tuned.svg
     install -D dbus.conf $out/share/dbus-1/system.d/tuned.conf
-    install -D modules.conf $out/etc/modprobe.d/tuned.conf
 
     mkdir -p $out/libexec/tuned
     for i in $libexecNames
@@ -82,6 +85,7 @@ python.pkgs.buildPythonApplication rec{
     libTuned=$out/lib/tuned
     mv profiles $libTuned
     mv $libTuned/{realtime/realtime,realtime-virtual-guest/realtime-virtual-guest,realtime-virtual-host/realtime-virtual-host,cpu-partitioning/cpu-partitioning}-variables.conf $etcTuned
+    touch $etcTuned/tuned-main.conf
     install -D recommend.conf $libTuned/recommend.d/50-tuned.conf
 
     #RHEL renamed pyperf to python-perf
