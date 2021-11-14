@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils curl gnused jq moreutils nix-prefetch
+# shellcheck shell=bash
 
 set -euo pipefail
 cd "$(dirname "$0")"
