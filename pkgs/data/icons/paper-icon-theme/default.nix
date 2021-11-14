@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme, jdupes }:
 
 stdenv.mkDerivation rec {
   pname = "paper-icon-theme";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gtk3
+    jdupes
   ];
 
   propagatedBuildInputs = [
@@ -25,9 +26,16 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  # These fixup steps are slow and unnecessary for this package
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   postInstall = ''
     # The cache for Paper-Mono-Dark is missing
     gtk-update-icon-cache "$out"/share/icons/Paper-Mono-Dark;
+
+    # replace duplicate files with symlinks
+    jdupes -l -r $out/share/icons
   '';
 
   meta = with lib; {
