@@ -114,6 +114,10 @@ let
       orga = "ikatyang";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-org-nvim" = {
+      orga = "milisims";
+      repo = "tree-sitter-org";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";

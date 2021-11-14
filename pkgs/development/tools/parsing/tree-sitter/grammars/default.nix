@@ -32,6 +32,7 @@
   tree-sitter-nix = lib.importJSON ./tree-sitter-nix.json;
   tree-sitter-norg = lib.importJSON ./tree-sitter-norg.json;
   tree-sitter-ocaml = lib.importJSON ./tree-sitter-ocaml.json;
+  tree-sitter-org-nvim = lib.importJSON ./tree-sitter-org-nvim.json;
   tree-sitter-php = lib.importJSON ./tree-sitter-php.json;
   tree-sitter-python = lib.importJSON ./tree-sitter-python.json;
   tree-sitter-ql = lib.importJSON ./tree-sitter-ql.json;
