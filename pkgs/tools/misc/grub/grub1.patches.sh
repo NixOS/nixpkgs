@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p nix -i bash --pure
+# shellcheck shell=bash
 
 # Does like `maintainers/scripts/debian-patches.sh`, but specialized for
 # grub1 patches, and using the new salsa service.
