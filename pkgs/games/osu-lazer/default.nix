@@ -16,13 +16,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.1105.0";
+  version = "2021.1113.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "0dhxbpqm49691hrxj0in9gb22snbb7svdrvp9664fkvvp3m3cywb";
+    sha256 = "EDW3DGnDkdH6k4XKDc5xWFYeIMcoRN4S9nMBF+TeAl8=";
   };
 
   nativeBuildInputs = [
