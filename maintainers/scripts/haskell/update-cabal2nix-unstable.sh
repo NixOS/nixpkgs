@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -E 'with import ../../.. {}; mkShell { packages = [ bash coreutils curl jq gnused haskellPackages.cabal2nix-unstable.bin nix-prefetch-scripts (import ../../../ci {}).fmt.pkg ]; }'
+# shellcheck shell=bash
 
 # Updates cabal2nix-unstable to the latest master of the nixos/cabal2nix repository.
 # See regenerate-hackage-packages.sh for details on the purpose of this script.
