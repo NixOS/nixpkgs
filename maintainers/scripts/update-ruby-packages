@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bundler bundix
+# shellcheck shell=bash
 
 set -euf -o pipefail
 

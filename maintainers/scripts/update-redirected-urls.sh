@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p bash curl ripgrep jq -i bash
+# shellcheck shell=bash
 
 set -euxo pipefail
 

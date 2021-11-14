@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils findutils gnused nix wget
+# shellcheck shell=bash
 
 set -efuo pipefail
 
