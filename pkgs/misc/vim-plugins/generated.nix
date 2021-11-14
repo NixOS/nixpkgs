@@ -4354,6 +4354,18 @@ final: prev:
     meta.homepage = "https://github.com/kosayoda/nvim-lightbulb/";
   };
 
+  nvim-lint = buildVimPluginFrom2Nix {
+    pname = "nvim-lint";
+    version = "2021-11-08";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-lint";
+      rev = "0116b78963fd24643faa34fa1bc02f8d425a73ef";
+      sha256 = "07y1z3c2mqcwlbg682h9d98wghfh1l69y9j4igw77bdxrcmnlyrr";
+    };
+    meta.homepage = "https://github.com/mfussenegger/nvim-lint/";
+  };
+
   nvim-lsp-ts-utils = buildVimPluginFrom2Nix {
     pname = "nvim-lsp-ts-utils";
     version = "2021-11-11";
