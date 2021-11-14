@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://named-data.net/";
     description = "Named Data Neworking (NDN) Forwarding Daemon";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.bertof ];
   };
