@@ -1,8 +1,5 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , cirq-core
-, pythonOlder
-, fetchFromGitHub
 , requests
 , pytestCheckHook
 , attrs
@@ -34,6 +31,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "attrs~=20.3.0" "attrs" \
+      --replace "certifi~=2021.5.30" "certifi" \
       --replace "h11~=0.9.0" "h11" \
       --replace "httpcore~=0.11.1" "httpcore" \
       --replace "httpx~=0.15.5" "httpx" \

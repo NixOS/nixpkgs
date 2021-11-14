@@ -485,6 +485,9 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
+  ./services/matrix/mjolnir.nix
+  ./services/matrix/pantalaimon.nix
+  ./services/misc/ananicy.nix
   ./services/misc/airsonic.nix
   ./services/misc/ankisyncd.nix
   ./services/misc/apache-kafka.nix
@@ -685,6 +688,7 @@
   ./services/networking/3proxy.nix
   ./services/networking/adguardhome.nix
   ./services/networking/amuled.nix
+  ./services/networking/antennas.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
@@ -772,6 +776,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
+  ./services/networking/lxd-image-server.nix
   ./services/networking/mailpile.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
@@ -973,6 +978,7 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/calibre-web.nix
+  ./services/web-apps/code-server.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dex.nix
@@ -1012,6 +1018,7 @@
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/moinmoin.nix
+  ./services/web-apps/openwebrx.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/rss-bridge.nix
@@ -1187,6 +1194,7 @@
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
+  ./virtualisation/waydroid.nix
   ./virtualisation/xen-dom0.nix
   ./virtualisation/xe-guest-utilities.nix
 ]

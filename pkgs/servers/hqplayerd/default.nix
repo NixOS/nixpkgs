@@ -11,6 +11,7 @@
 , lib
 , libgmpris
 , llvmPackages_10
+, mpg123
 , rpmextract
 , wavpack
 
@@ -44,11 +45,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.26.2-69";
+  version = "4.27.2-72";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}.fc34.x86_64.rpm";
-    sha256 = "sha256-zxUVtOi4fN3EuCbzH/SEse24Qz7/0jozzDX1yW8bhCU=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc34/${pname}-${version}sse42.fc34.x86_64.rpm";
+    sha256 = "sha256-oCZS68n9R6Hm6lltcL6zQhPaU9FRqtB59DrstRNjnH8=";
   };
 
   unpackPhase = ''
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     gupnp-av_0_12
     libgmpris
     llvmPackages_10.openmp
+    mpg123
     wavpack
   ];
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Unpack and repack android backups";
-    homepage = https://github.com/bluec0re/android-backup-tools;
+    homepage = "https://github.com/bluec0re/android-backup-tools";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

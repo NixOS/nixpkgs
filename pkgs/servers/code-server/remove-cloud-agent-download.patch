@@ -1,11 +1,11 @@
 --- ./ci/build/npm-postinstall.sh
 +++ ./ci/build/npm-postinstall.sh
-@@ -24,13 +24,6 @@ main() {
+@@ -56,13 +56,6 @@
      ;;
    esac
  
 -  OS="$(uname | tr '[:upper:]' '[:lower:]')"
--  if curl -fsSL "https://storage.googleapis.com/coder-cloud-releases/agent/latest/$OS/cloud-agent" -o ./lib/coder-cloud-agent; then
+-  if curl -fsSL "https://github.com/cdr/cloud-agent/releases/latest/download/cloud-agent-$OS-$ARCH" -o ./lib/coder-cloud-agent; then
 -    chmod +x ./lib/coder-cloud-agent
 -  else
 -    echo "Failed to download cloud agent; --link will not work"
@@ -13,4 +13,4 @@
 -
    if ! vscode_yarn; then
      echo "You may not have the required dependencies to build the native modules."
-     echo "Please see https://github.com/cdr/code-server/blob/master/doc/npm.md"
+     echo "Please see https://github.com/cdr/code-server/blob/master/docs/npm.md"

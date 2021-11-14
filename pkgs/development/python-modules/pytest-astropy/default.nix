@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pytest-astropy";
   version = "0.9.0";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,11 +43,8 @@ buildPythonPackage rec {
     pytest-remotedata
   ];
 
-  # pytest-astropy is a meta package and has no tests
-  #doCheck = false;
-  checkPhase = ''
-    # 'doCheck = false;' still invokes the pytestCheckPhase which makes the build fail
-  '';
+  # pytest-astropy is a meta package that only propagates requirements
+  doCheck = false;
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";

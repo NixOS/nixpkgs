@@ -1,11 +1,11 @@
 { lib, fetchFromGitLab, git, buildGoModule }:
 let
-  data = (builtins.fromJSON (builtins.readFile ../data.json));
+  data = lib.importJSON ../data.json;
 in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "14.4.1";
+  version = "14.4.2";
 
   src = fetchFromGitLab {
     owner = data.owner;

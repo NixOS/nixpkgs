@@ -15,8 +15,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops-aws.git";
-        rev = "371aedeb7fd53b8978a60dd7c37d3a6c38101c48";
-        sha256 = "15jz9x3ra3hsh6xj4cbri1fvvjk2rplnnhnccz7qc6f176b5r01j";
+        rev = "44f774272bd522cc7e87074c056f2225f771ded0";
+        sha256 = "0x9pv186nkcfisr1c1nxw8gpazkrg546dfl95140rif0xzw3pizx";
       };
     }
   );

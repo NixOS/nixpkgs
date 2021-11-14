@@ -1,6 +1,6 @@
 { config
 , lib
-, buildEnv
+, fetchurl
 , callPackage
 , vscode-utils
 , asciidoctor
@@ -971,19 +971,19 @@ let
       };
 
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nix-ide";
+          publisher = "jnoortheen";
+          version = "0.1.18";
+          sha256 = "sha256-dmmx/u+hRQfY/MCIaSdcVtbYnf5cLCDUwr75heQxcuw=";
+        };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
           description = "Nix language support with formatting and error report";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = licenses.mit;
-          maintainers = with maintainers; [ ];
-        };
-        mktplcRef = {
-          name = "nix-ide";
-          publisher = "jnoortheen";
-          version = "0.1.16";
-          sha256 = "04ky1mzyjjr1mrwv3sxz4mgjcq5ylh6n01lvhb19h3fmwafkdxbp";
+          maintainers = with maintainers; [ SuperSandro2000 ];
         };
       };
 
@@ -1435,6 +1435,18 @@ let
         };
       };
 
+      stkb.rewrap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "stkb";
+          name = "rewrap";
+          version = "1.14.0";
+          sha256 = "qRwKX36a1aLzE1tqaOkH7JfE//pvKdPZ07zasPF3Dl4=";
+        };
+        meta = with lib; {
+          license = licenses.asl20;
+        };
+      };
+
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "code-spell-checker";
@@ -1596,6 +1608,34 @@ let
       };
 
       vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
+
+      valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
+        mktplcRef = {
+          name = "vscode-ltex";
+          publisher = "valentjn";
+          version = "13.0.0";
+        };
+
+        vsix = fetchurl {
+           name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+           url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
+           sha256 = "6db4846dee4e394f7bcfb7e29520d45d6bc1534482ba73cf40cd5edf3f6ec266";
+        };
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        buildInputs = [ jdk ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
+        '';
+
+        meta = with lib; {
+          license = licenses.mpl20;
+          maintainers = [ maintainers._0xbe7a ];
+        };
+      };
 
       viktorqvarfordt.vscode-pitch-black-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {

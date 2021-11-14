@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
+, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -52,7 +52,7 @@ in {
     version = "20190525";
 
     buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg_3
+      vdr libxcb xcbutilwm ffmpeg
       alsa-lib
       libvdpau # vdpau
       libva # va-api

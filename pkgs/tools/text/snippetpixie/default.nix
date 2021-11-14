@@ -88,5 +88,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ianmjones ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.bytepixie.snippetpixie";
   };
 }

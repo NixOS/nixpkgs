@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Misterio77";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-77nSz3J/9TsptpSHRFYY8mZAvn+o35gro2OwQkGzEC0=";
+    sha256 = "sha256-P7F7PHP2EiZz6RgKbmqXRQOGG1P8TJ1emR0BEY9yBqk=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  cargoSha256 = "sha256-UukLWMd8+wq5Y0dtePH312c1Nm4ztXPsoPHPN0nUb1w=";
+  cargoSha256 = "sha256-QlCjAtQGITGrWNKQM39QPmv/MPZaaHfwdHjal2i1qv4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

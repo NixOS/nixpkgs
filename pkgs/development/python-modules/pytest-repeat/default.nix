@@ -3,7 +3,6 @@
 , fetchPypi
 , setuptools-scm
 , pytest
-, fetchpatch
 }:
 
 buildPythonPackage rec {

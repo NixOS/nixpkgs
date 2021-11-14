@@ -22,14 +22,14 @@ in
         type = with types; listOf package;
         default = [];
         example = literalExpression "[ pkgs.odoo_enterprise ]";
-        description = "Odoo addons";
+        description = "Odoo addons.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
         description = ''
-          Odoo configuration settings. For more details see https://www.odoo.com/documentation/15.0/administration/install/deploy.html
+          Odoo configuration settings. For more details see <link xlink:href="https://www.odoo.com/documentation/15.0/administration/install/deploy.html"/>
         '';
       };
 

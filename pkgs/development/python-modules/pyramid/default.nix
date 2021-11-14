@@ -13,7 +13,6 @@
 , webob
 , zope_deprecation
 , zope_interface
-, isPy35
 }:
 
 buildPythonPackage rec {

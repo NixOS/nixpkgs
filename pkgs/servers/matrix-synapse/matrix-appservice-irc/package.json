@@ -1,3 +1,69 @@
-[
-    {"matrix-appservice-irc": "git+https://github.com/matrix-org/matrix-appservice-irc.git#0.26.1" }
-]
+{
+  "name": "matrix-appservice-irc",
+  "version": "0.30.0",
+  "description": "An IRC Bridge for Matrix",
+  "main": "app.js",
+  "bin": "./bin/matrix-appservice-irc",
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc --project ./tsconfig.json",
+    "test": "BLUEBIRD_DEBUG=1 jasmine --stop-on-failure=true",
+    "lint": "eslint -c .eslintrc --max-warnings 0 'spec/**/*.js' 'src/**/*.ts'",
+    "check": "npm test && npm run lint",
+    "ci-test": "nyc --report text jasmine",
+    "ci": "npm run lint && npm run ci-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matrix-org/matrix-appservice-irc.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/matrix-org/matrix-appservice-irc/issues"
+  },
+  "dependencies": {
+    "@sentry/node": "^5.27.1",
+    "bluebird": "^3.7.2",
+    "escape-string-regexp": "^4.0.0",
+    "extend": "^3.0.2",
+    "he": "^1.2.0",
+    "logform": "^2.2.0",
+    "matrix-appservice": "^0.8.0",
+    "matrix-appservice-bridge": "^2.6.1",
+    "matrix-lastactive": "^0.1.5",
+    "matrix-org-irc": "^1.2.0",
+    "nedb": "^1.1.2",
+    "nodemon": "^2.0.7",
+    "nopt": "^3.0.1",
+    "p-queue": "^6.6.2",
+    "pg": "^8.6.0",
+    "quick-lru": "^4.0.1",
+    "request": "^2.54.0",
+    "request-promise-native": "^1.0.9",
+    "sanitize-html": "^2.4.0",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.32",
+    "@types/express": "^4.17.7",
+    "@types/extend": "^3.0.1",
+    "@types/he": "^1.1.1",
+    "@types/nedb": "^1.8.11",
+    "@types/nopt": "^3.0.29",
+    "@types/pg": "^8.6.0",
+    "@types/sanitize-html": "^2.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "jasmine": "^3.6.2",
+    "nyc": "^14.1.1",
+    "prom-client": "^13.0.0",
+    "proxyquire": "^1.4.0",
+    "typescript": "^4.2.2"
+  }
+}

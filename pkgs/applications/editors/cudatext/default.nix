@@ -34,7 +34,7 @@ let
         inherit (spec) owner rev sha256;
       }
     )
-    (builtins.fromJSON (builtins.readFile ./deps.json));
+    (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";

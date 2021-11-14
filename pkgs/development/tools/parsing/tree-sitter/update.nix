@@ -70,6 +70,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-beancount" = {
+      orga = "polarmutex";
+      repo = "tree-sitter-beancount";
+    };
     "tree-sitter-clojure" = {
       orga = "sogaiu";
       repo = "tree-sitter-clojure";
@@ -261,7 +265,7 @@ let
       ${foreachSh allGrammars
         ({name, ...}: ''
            # indentation hack
-             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${name}" "${name}"'')}
+             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
       echo "}" ) \
       > "$outputDir/default.nix"
   '';

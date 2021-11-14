@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , isPy27
 , mock

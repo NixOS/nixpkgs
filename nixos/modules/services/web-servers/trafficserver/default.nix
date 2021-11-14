@@ -61,7 +61,7 @@ in
 
     ipAllow = mkOption {
       type = types.nullOr yaml.type;
-      default = builtins.fromJSON (builtins.readFile ./ip_allow.json);
+      default = lib.importJSON ./ip_allow.json;
       defaultText = literalDocBook "upstream defaults";
       example = literalExpression ''
         {
@@ -84,7 +84,7 @@ in
 
     logging = mkOption {
       type = types.nullOr yaml.type;
-      default = builtins.fromJSON (builtins.readFile ./logging.json);
+      default = lib.importJSON ./logging.json;
       defaultText = literalDocBook "upstream defaults";
       example = { };
       description = ''

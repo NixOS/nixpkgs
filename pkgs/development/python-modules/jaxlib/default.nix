@@ -13,7 +13,7 @@
 #   * https://github.com/google/jax/issues/971#issuecomment-508216439
 #   * https://github.com/google/jax/issues/5723#issuecomment-913038780
 
-{ addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config, fetchPypi
+{ addOpenGLRunpath, autoPatchelfHook, buildPythonPackage, config
 , fetchurl, isPy39, lib, stdenv
 # propagatedBuildInputs
 , absl-py, flatbuffers, scipy, cudatoolkit_11

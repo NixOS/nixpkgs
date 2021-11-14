@@ -1,36 +1,34 @@
+# Test a minimal HDFS cluster with no HA
 import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
+      virtualisation.memorySize = 1024;
       services.hadoop = {
         package = pkgs.hadoop;
-        hdfs.namenode.enabled = true;
+        hdfs = {
+          namenode = {
+            enable = true;
+            formatOnInit = true;
+          };
+          httpfs.enable = true;
+        };
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
-        };
-        hdfsSite = {
-          "dfs.replication" = 1;
-          "dfs.namenode.rpc-bind-host" = "0.0.0.0";
-          "dfs.namenode.http-bind-host" = "0.0.0.0";
+          "hadoop.proxyuser.httpfs.groups" = "*";
+          "hadoop.proxyuser.httpfs.hosts" = "*";
         };
       };
-      networking.firewall.allowedTCPPorts = [
-        9870 # namenode.http-address
-        8020 # namenode.rpc-address
-      ];
     };
     datanode = {pkgs, ...}: {
       services.hadoop = {
         package = pkgs.hadoop;
-        hdfs.datanode.enabled = true;
+        hdfs.datanode.enable = true;
         coreSite = {
           "fs.defaultFS" = "hdfs://namenode:8020";
+          "hadoop.proxyuser.httpfs.groups" = "*";
+          "hadoop.proxyuser.httpfs.hosts" = "*";
         };
       };
-      networking.firewall.allowedTCPPorts = [
-        9864 # datanode.http.address
-        9866 # datanode.address
-        9867 # datanode.ipc.address
-      ];
     };
   };
 
@@ -50,5 +48,13 @@ import ../make-test-python.nix ({...}: {
 
     namenode.succeed("curl -f http://namenode:9870")
     datanode.succeed("curl -f http://datanode:9864")
+
+    datanode.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
+    datanode.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
+    assert "testfilecontents" in datanode.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
+
+    namenode.wait_for_unit("hdfs-httpfs")
+    namenode.wait_for_open_port(14000)
+    assert "testfilecontents" in datanode.succeed("curl -f \"http://namenode:14000/webhdfs/v1/testfile?user.name=hdfs&op=OPEN\" 2>&1")
   '';
 })

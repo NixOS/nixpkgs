@@ -16,18 +16,20 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "1.3.0";
+  version = "2021.10.1";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-blejTXyLe3B2kNytBh+zJz0Q0xDP+Vo2SV9gc7OX6S0=";
+    sha256 = "sha256-DCh/o7p+lO5BhN3JoLdhImkzfxoyqiscA/6CwwvAnc0=";
   };
 
   postPatch = ''
+    # https://github.com/bachya/aioambient/pull/97
     substituteInPlace pyproject.toml \
       --replace 'websockets = ">=8.1,<10.0"' 'websockets = ">=8.1,<11.0"'
   '';
@@ -52,9 +54,13 @@ buildPythonPackage rec {
   ];
 
   # Ignore the examples directory as the files are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "aioambient" ];
+  pythonImportsCheck = [
+    "aioambient"
+  ];
 
   meta = with lib; {
     description = "Python library for the Ambient Weather API";

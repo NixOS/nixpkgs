@@ -17,6 +17,15 @@
     <itemizedlist>
       <listitem>
         <para>
+          Nix has been updated to version 2.4, reference its
+          <link xlink:href="https://discourse.nixos.org/t/nix-2-4-released/15822">release
+          notes</link> for more information on what has changed. The
+          previous version of Nix, 2.3.16, remains available for the
+          time being in the <literal>nix_2_3</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>iptables</literal> now uses
           <literal>nf_tables</literal> backend.
         </para>
@@ -49,6 +58,29 @@
           <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
           guide</link> is available.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Improvements have been made to the Hadoop module and package:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              HDFS and YARN now support production-ready highly
+              available deployments with automatic failover.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Hadoop now defaults to Hadoop 3, updated from 2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              JournalNode, ZKFS and HTTPFS services have been added.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -99,6 +131,46 @@
           <link xlink:href="https://help.gnome.org/misc/release-notes/41.0/">Release
           Notes</link> for details.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          LXD support was greatly improved:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              building LXD images from configurations is now directly
+              possible with just nixpkgs
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              hydra is now building nixOS LXD images that can be used
+              standalone with full nixos-rebuild support
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          OpenSSH was updated to version 8.8p1
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This breaks connections to old SSH daemons as ssh-rsa host
+              keys and ssh-rsa public keys that were signed with SHA-1
+              are disabled by default now
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              These can be re-enabled, see the
+              <link xlink:href="https://www.openssh.com/txt/release-8.8">OpenSSH
+              changelog</link> for details
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
     </itemizedlist>
   </section>
@@ -394,11 +466,52 @@
           <link linkend="opt-hardware.rasdaemon.enable">hardware.rasdaemon</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>code-server</literal>-module now available
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xmrig/xmrig">xmrig</link>,
+          a high performance, open source, cross platform RandomX,
+          KawPow, CryptoNight and AstroBWT unified CPU/GPU miner and
+          RandomX benchmark.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Auto nice daemons
+          <link xlink:href="https://github.com/Nefelim4ag/Ananicy">ananicy</link>
+          and
+          <link xlink:href="https://gitlab.com/ananicy-cpp/ananicy-cpp/">ananicy-cpp</link>.
+          Available as
+          <link linkend="opt-services.ananicy.enable">services.ananicy</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The NixOS VM test framework,
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
+          now requires detaching commands such as
+          <literal>succeed(&quot;foo &amp;&quot;)</literal> and
+          <literal>succeed(&quot;foo | xclip -i&quot;)</literal> to
+          close stdout. This can be done with a redirect such as
+          <literal>succeed(&quot;foo &gt;&amp;2 &amp;&quot;)</literal>.
+          This breaking change was necessitated by a race condition
+          causing tests to fail or hang. It applies to all methods that
+          invoke commands on the nodes, including
+          <literal>execute</literal>, <literal>succeed</literal>,
+          <literal>fail</literal>,
+          <literal>wait_until_succeeds</literal>,
+          <literal>wait_until_fails</literal>.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>services.wakeonlan</literal> option was removed,
@@ -511,7 +624,7 @@ Superuser created successfully.
       <listitem>
         <para>
           The <literal>staticjinja</literal> package has been upgraded
-          from 1.0.4 to 4.1.0
+          from 1.0.4 to 4.1.1
         </para>
       </listitem>
       <listitem>
@@ -1724,6 +1837,25 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          A new option
+          <literal>services.prometheus.enableReload</literal> has been
+          added which can be enabled to reload the prometheus service
+          when its config file changes instead of restarting.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.prometheus.environmentFile</literal> has
+          been removed since it was causing
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/126083">issues</link>
+          and Prometheus now has native support for secret files, i.e.
+          <literal>basic_auth.password_file</literal> and
+          <literal>authorization.credentials_file</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Dokuwiki now supports caddy! However
         </para>
         <itemizedlist spacing="compact">
@@ -1744,6 +1876,65 @@ Superuser created successfully.
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.unifi.enable">services.unifi</link>
+          module has been reworked, solving a number of issues. This
+          leads to several user facing changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              The <literal>services.unifi.dataDir</literal> option is
+              removed and the data is now always located under
+              <literal>/var/lib/unifi/data</literal>. This is done to
+              make better use of systemd state direcotiry and thus
+              making the service restart more reliable.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi logs can now be found under:
+              <literal>/var/log/unifi</literal> instead of
+              <literal>/var/lib/unifi/logs</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The unifi run directory can now be found under:
+              <literal>/run/unifi</literal> instead of
+              <literal>/var/lib/unifi/run</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.pam.services.&lt;name&gt;.makeHomeDir</literal>
+          now uses <literal>umask=0077</literal> instead of
+          <literal>umask=0022</literal> when creating the home
+          directory.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Loki has had another release. Some default values have been
+          changed for the configuration and some configuration options
+          have been renamed. For more details, please check
+          <link xlink:href="https://grafana.com/docs/loki/latest/upgrading/#240">the
+          upgrade guide</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>julia</literal> now refers to
+          <literal>julia-stable</literal> instead of
+          <literal>julia-lts</literal>. In practice this means it has
+          been upgraded from <literal>1.0.4</literal> to
+          <literal>1.5.4</literal>.
+        </para>
       </listitem>
     </itemizedlist>
   </section>

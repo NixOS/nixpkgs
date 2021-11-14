@@ -483,7 +483,7 @@ let
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
           ${optionalString cfg.makeHomeDir
-              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0022"}
+              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs

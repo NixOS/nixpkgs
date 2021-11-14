@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchzip
-, buildDocs? false, tex
+, buildDocs ? false, tex
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Sbm16JX7kC/7Ws7YgNBUXNqOCl6u+RXgfNjTODhCzSM=";
   };
 
-  nativeBuildInputs = lib.optional buildDocs [ tex ];
+  nativeBuildInputs = lib.optionals buildDocs [ tex ];
 
   postPatch = lib.optionalString (!buildDocs) ''
     substituteInPlace Makefile --replace "all: binaries docs" "all: binaries"
@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
     substituteAll ${./Makefile-nixos.def} Makefile.def
     mkdir -p .objdir
   '';
-
-  hardenedDisable = [ "all" ];
-
-  # buildTargets = [ "binaries" "docs" ];
 
   meta = with lib; {
     homepage = "http://john.ccac.rwth-aachen.de:8000/as/index.html";

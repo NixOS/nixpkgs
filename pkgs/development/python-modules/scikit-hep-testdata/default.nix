@@ -5,7 +5,6 @@
 , importlib-resources
 , pyyaml
 , requests
-, pytestCheckHook
 , setuptools-scm
 }:
 

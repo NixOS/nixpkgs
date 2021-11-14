@@ -168,8 +168,8 @@ mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/icons $out/bin
-    ln $out/lib/rstudio/rstudio.png $out/share/icons
+    mkdir -p $out/share/icons/hicolor/48x48/apps $out/bin
+    ln $out/lib/rstudio/rstudio.png $out/share/icons/hicolor/48x48/apps
 
     for f in {diagnostics,rpostback,rstudio}; do
       ln -s $out/lib/rstudio/bin/$f $out/bin

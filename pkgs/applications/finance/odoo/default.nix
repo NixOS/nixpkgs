@@ -3,18 +3,11 @@
 , fetchurl
 , python3
 , python3Packages
+, nodePackages
 , wkhtmltopdf
 }:
 
 with python3Packages;
-
-/*
-
-TODO:
-  For languages with right-to-left interface (such as Arabic or Hebrew), the package rtlcss is needed:
-  $ sudo npm install -g rtlcss
-
-*/
 
 buildPythonApplication rec {
   pname = "odoo";
@@ -40,12 +33,13 @@ buildPythonApplication rec {
 
   buildInputs = [
     wkhtmltopdf
+    nodePackages.rtlcss
   ];
 
   # needs some investigation
   doCheck = false;
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${wkhtmltopdf}/bin" ];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}" ];
 
   propagatedBuildInputs = [
     Babel

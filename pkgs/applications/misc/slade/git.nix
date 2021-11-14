@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , cmake
 , pkg-config
 , wxGTK
@@ -15,7 +17,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "slade-git-3.2.0.2021.05.13";
+  pname = "slade";
+  version = "unstable-2021-05-13";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";

@@ -5,8 +5,10 @@ let
 in fetchurl {
   name = "sarasa-gothic-${version}";
 
-  url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttf-${version}.7z";
-  sha256 = "094sl6gklrdv9pk4r6451dvz0fjyjmwys7i81qrz4ik1km5dfq9b";
+  # Use the 'ttc' files here for a smaller closure size.
+  # (Using 'ttf' files gives a closure size about 15x larger, as of November 2021.)
+  url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";
+  sha256 = "0fzbqj32jiffqsr4s0i8fignk01v5d1rik6ldg2q7dgl1298sgk8";
 
   recursiveHash = true;
   downloadToTemp = true;
@@ -21,7 +23,6 @@ in fetchurl {
     homepage = "https://github.com/be5invis/Sarasa-Gothic";
     license = licenses.ofl;
     maintainers = [ maintainers.ChengCat ];
-    hydraPlatforms = [ ]; # disabled from hydra because it's so big
     platforms = platforms.all;
   };
 }

@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
 
-let
-  name = "gv-3.7.4";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "gv";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://gnu/gv/${name}.tar.gz";
+    url = "mirror://gnu/gv/gv-${version}.tar.gz";
     sha256 = "0q8s43z14vxm41pfa8s5h9kyyzk1fkwjhkiwbf2x70alm6rv6qi1";
   };
 

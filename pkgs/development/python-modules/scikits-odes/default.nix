@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchurl
 , cython
 , enum34
 , gfortran

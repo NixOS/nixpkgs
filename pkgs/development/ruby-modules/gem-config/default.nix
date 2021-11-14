@@ -437,7 +437,10 @@ in
       "--with-xslt-include=${libxslt.dev}/include"
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
-    ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    ] ++ lib.optionals stdenv.isDarwin [
+      "--with-iconv-dir=${libiconv}"
+      "--with-opt-include=${libiconv}/include"
+    ];
   };
 
   openssl = attrs: {

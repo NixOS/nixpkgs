@@ -119,7 +119,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       with subtest("Stop a container early"):
           machine.succeed(f"nixos-container stop {id1}")
-          machine.succeed(f"nixos-container start {id1} &")
+          machine.succeed(f"nixos-container start {id1} >&2 &")
           machine.wait_for_console_text("Stage 2")
           machine.succeed(f"nixos-container stop {id1}")
           machine.wait_for_console_text(f"Container {id1} exited successfully")

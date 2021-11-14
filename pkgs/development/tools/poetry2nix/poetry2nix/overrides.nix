@@ -1700,7 +1700,7 @@ self: super:
           if (!enableCuda) then ''
             export USE_CUDA=0
           '' else ''
-            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${cudatoolkit}/targets/x86_64-linux/lib"
+            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${cudatoolkit}/targets/x86_64-linux/lib"
           '';
         preFixup = lib.optionalString (!enableCuda) ''
           # For some reason pytorch retains a reference to libcuda even if it
@@ -1739,9 +1739,9 @@ self: super:
       ];
       preConfigure =
         if (enableCuda) then ''
-          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
         '' else ''
-          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${self.torch}/${self.python.sitePackages}/torch/lib"
         '';
     }))
     { };

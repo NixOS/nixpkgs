@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     # Start VSCodium with a file that doesn't exist yet
     machine.fail("ls /home/alice/foo.txt")
-    machine.succeed("su - alice -c 'codium foo.txt' &")
+    machine.succeed("su - alice -c 'codium foo.txt' >&2 &")
 
     # Wait for the window to appear
     machine.wait_for_text("VSCodium")

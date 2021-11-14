@@ -64,7 +64,8 @@ $ nix-store --optimise
     <para>
       If your <literal>/boot</literal> partition runs out of space,
       after clearing old profiles you must rebuild your system with
-      <literal>nixos-rebuild</literal> to update the
+      <literal>nixos-rebuild boot</literal> or
+      <literal>nixos-rebuild switch</literal> to update the
       <literal>/boot</literal> partition and clear space.
     </para>
   </section>

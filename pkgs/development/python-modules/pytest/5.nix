@@ -1,16 +1,13 @@
 { lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
-, funcsigs
 , hypothesis
-, mock
 , more-itertools
 , packaging
 , pathlib2
 , pluggy
 , py
 , pygments
-, python
 , setuptools
 , setuptools-scm
 , six

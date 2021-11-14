@@ -1,10 +1,10 @@
 { stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch
 # Python deps
-, buildPythonPackage, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, pythonOlder, python
 # Python libraries
 , numpy, tensorflow-tensorboard_2, absl-py
-, future, setuptools, wheel, keras-preprocessing, google-pasta
+, setuptools, wheel, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
 , dill, flatbuffers-python, tblib, typing-extensions
@@ -283,6 +283,7 @@ let
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
+    ++ lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";

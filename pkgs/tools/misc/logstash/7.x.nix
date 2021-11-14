@@ -17,16 +17,19 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux = "sha256-5qv4fbFpLf6aduD7wyxXQ6FsCeUqrszRisNBx44vbMY=";
-      x86_64-darwin = "sha256-7H+Xpo8qF1ZZMkR5n92PVplEN4JsBEYar91zHQhE+Lo=";
+      x86_64-linux  = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
+      x86_64-darwin = "0dqm66c89w1nvmbwqzphlqmf7avrycgv1nwd5b0k1z168fj0c3zm";
+      aarch64-linux = "11hjhyb48mjagmvqyxb780n57kr619h6p4adl2vs1zm97g9gslx8";
     }
     else {
-      x86_64-linux = "sha256-jiV2yGPwPgZ5plo3ftImVDLSOsk/XBzFkeeALSObLhU=";
-      x86_64-darwin = "sha256-UYG+GGr23eAc2GgNX/mXaGU0WKMjiQMPpD1wUvAVz0A=";
+      x86_64-linux  = "14b1649avjcalcsi0ffkgznq6d93qdk6m3j0i73mwfqka5d3dvy3";
+      x86_64-darwin = "0ypgdfklr5rxvsnc3czh231pa1z2h70366j1c6q5g64b3xnxpphs";
+      aarch64-linux = "01ainayr8fwwfix7dmxfhhmb23ji65dn4lbjwnj2w0pl0ym9h9w2";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
     pname = "logstash${optionalString (!enableUnfree) "-oss"}";
+
 
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}-${plat}-${arch}.tar.gz";

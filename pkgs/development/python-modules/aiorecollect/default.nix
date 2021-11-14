@@ -6,20 +6,22 @@
 , freezegun
 , poetry-core
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "1.0.8";
+  version = "2021.10.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5+v+TlLOgaIA8svpbgFSEWZAUVBRq3zqf8QbidKgygI=";
+    sha256 = "sha256-cLutszJ8VXGcqb8kZv7Qn1ZD/LRYjVgQWQxNMHNd0UQ=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +36,17 @@ buildPythonPackage rec {
     aresponses
     freezegun
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_.
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "aiorecollect" ];
+  pythonImportsCheck = [
+    "aiorecollect"
+  ];
 
   meta = with lib; {
     description = "Python library for the Recollect Waste API";

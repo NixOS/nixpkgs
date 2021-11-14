@@ -3,33 +3,24 @@
 , fetchFromGitHub
 , meson
 , ninja
-, libbsd
 , gdk-pixbuf
 , gd
 , libjpeg
 , pkg-config
-, fetchpatch
 }:
 stdenv.mkDerivation rec {
   pname = "libsixel";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "libsixel";
     repo = "libsixel";
     rev = "v${version}";
-    sha256 = "sha256-ACypJTFjXSzBjo4hQzUiJOqnaRaZnYX+/NublN9sbBo=";
+    sha256 = "1nny4295ipy4ajcxmmh04c796hcds0y7z7rv3qd17mj70y8j0r2d";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libsixel/libsixel/commit/4d3e53ee007f3b71f638875f9fabbba658b2ca8a.patch";
-      sha256 = "sha256-iDfsTyUczjtzV3pt1ZErbhVO2rMm2ZYKWSBl+ru+5HA=";
-    })
-  ];
-
   buildInputs = [
-    libbsd gdk-pixbuf gd
+    gdk-pixbuf gd
   ];
 
   nativeBuildInputs = [

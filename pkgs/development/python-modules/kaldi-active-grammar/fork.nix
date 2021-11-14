@@ -6,7 +6,6 @@
 , icu
 , pkg-config
 , fetchFromGitHub
-, git
 , python3
 , openblas
 , zlib

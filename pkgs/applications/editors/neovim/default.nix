@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
-, unibilium, xsel, gperf
+, unibilium, gperf
 , libvterm-neovim
 , tree-sitter
 , glibcLocales ? null, procps ? null
@@ -111,10 +111,6 @@ in
 
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
-
-    postInstall = lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '';
 
     # export PATH=$PWD/build/bin:${PATH}

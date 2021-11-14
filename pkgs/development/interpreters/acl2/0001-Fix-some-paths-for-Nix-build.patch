@@ -102,7 +102,7 @@ index e5db28645..65eb818a1 100644
 -                "libcrypto.dylib"                ;; default system libcrypto, which may have insufficient crypto
 -                "/usr/lib/libcrypto.dylib"))
 -  (:cygwin (:or "cygcrypto-1.1.dll" "cygcrypto-1.0.0.dll")))
-+  (t "@openssl@/lib/libcrypto.so"))
++  (t "@libcrypto@"))
  
  (cffi:define-foreign-library libssl
 -  (:windows (:or #+(and windows x86-64) "libssl-1_1-x64.dll"
@@ -145,7 +145,7 @@ index e5db28645..65eb818a1 100644
 -                                  "libssl.so"))
 -  (:cygwin (:or "cygssl-1.1.dll" "cygssl-1.0.0.dll"))
 -  (t (:default "libssl3")))
-+  (t "@openssl@/lib/libssl.so"))
++  (t "@libssl@"))
  
  (unless (member :cl+ssl-foreign-libs-already-loaded
                  *features*)

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
 
 let
-  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+  pinData = lib.importJSON ./pin.json;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics

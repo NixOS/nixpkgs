@@ -750,6 +750,7 @@ let
       SERIAL_DEV_BUS = whenAtLeast "4.11" yes; # enables support for serial devices
       SERIAL_DEV_CTRL_TTYPORT = whenAtLeast "4.11" yes; # enables support for TTY serial devices
 
+      BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
       BT_HCIUART_QCA = whenAtLeast "4.3" yes; # Qualcomm Atheros protocol support
       BT_HCIUART_SERDEV = whenAtLeast "4.12" yes; # required by BT_HCIUART_QCA
       BT_HCIUART = whenAtLeast "2.5.45" module; # required for BT devices with serial port interface (QCA6390)
@@ -865,6 +866,8 @@ let
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
+
+      SCHED_CORE = whenAtLeast "5.14" yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support

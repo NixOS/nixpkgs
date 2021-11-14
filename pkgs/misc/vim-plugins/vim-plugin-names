@@ -36,6 +36,7 @@ artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
+b0o/SchemaStore.nvim@main
 b3nj5m1n/kommentary@main
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
@@ -46,6 +47,7 @@ bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
 bling/vim-bufferline
+blueballs-theme/blueballs-neovim
 blueyed/vim-diminactive
 bogado/file-line
 bohlender/vim-smt2
@@ -227,7 +229,9 @@ honza/vim-snippets
 hotwatermorning/auto-git-diff
 hrsh7th/cmp-buffer@main
 hrsh7th/cmp-calc@main
+hrsh7th/cmp-cmdline@main
 hrsh7th/cmp-emoji@main
+hrsh7th/cmp-nvim-lsp-document-symbol@main
 hrsh7th/cmp-nvim-lsp@main
 hrsh7th/cmp-nvim-lua@main
 hrsh7th/cmp-omni@main
@@ -380,7 +384,7 @@ ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
 lewis6991/gitsigns.nvim@main
-lf-lang/lingua-franca.vim
+lf-lang/lingua-franca.vim@main
 lfe-support/vim-lfe
 lfilho/cosco.vim
 lifepillar/vim-gruvbox8
@@ -403,6 +407,7 @@ lukas-reineke/indent-blankline.nvim
 lukaszkorecki/workflowish
 lumiliet/vim-twig
 luochen1990/rainbow
+luukvbaal/stabilize.nvim
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
 machakann/vim-sandwich
@@ -437,6 +442,7 @@ mattn/webapi-vim
 matze/vim-move
 max397574/better-escape.nvim
 maximbaz/lightline-ale
+maxjacobson/vim-fzf-coauthorship
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
 mboughaba/i3config.vim
@@ -473,6 +479,7 @@ motus/pig.vim
 mpickering/hlint-refactor-vim
 ms-jpq/chadtree@chad
 mtikekar/vim-bsv
+MunifTanjim/nui.nvim@main
 mzlogin/vim-markdown-toc
 mzlogin/vim-smali
 nacro90/numb.nvim
@@ -645,6 +652,7 @@ romainl/vim-qlist
 roman/golden-ratio
 romgrk/barbar.nvim
 romgrk/nvim-treesitter-context
+ron-rs/ron.vim
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -741,6 +749,7 @@ tex/vimpreviewpandoc
 Th3Whit3Wolf/one-nvim@main
 theHamsta/nvim-dap-virtual-text
 ThePrimeagen/git-worktree.nvim
+ThePrimeagen/harpoon
 theprimeagen/refactoring.nvim
 ThePrimeagen/vim-apm
 thinca/vim-ft-diff_fold
@@ -880,6 +889,7 @@ vmchale/ats-vim
 vmchale/dhall-vim
 vn-ki/coc-clap
 voldikss/vim-floaterm
+vuki656/package-info.nvim
 VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime

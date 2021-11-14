@@ -110,6 +110,8 @@ with self; with super; {
 
   feedparser = callPackage ../development/python-modules/feedparser/5.nix { };
 
+  filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
+
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
@@ -412,6 +414,11 @@ with self; with super; {
   progressbar231 = callPackage ../development/python-modules/progressbar231 { };
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit/1.nix { };
+
+  protobuf = callPackage ../development/python-modules/protobuf {
+    disabled = isPyPy;
+    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
+  };
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 

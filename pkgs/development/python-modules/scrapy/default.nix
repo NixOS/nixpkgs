@@ -13,11 +13,9 @@
 , jmespath
 , lxml
 , parsel
-, pillow
 , protego
 , pydispatcher
 , pyopenssl
-, pytest-twisted
 , pytestCheckHook
 , pythonOlder
 , queuelib

@@ -16,7 +16,7 @@
 }:
 
 let
-  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+  pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
   electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in

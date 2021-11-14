@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchhg
-, ruamel_base
-, ruamel_ordereddict ? null
-, isPy3k
 }:
 
 buildPythonPackage rec {

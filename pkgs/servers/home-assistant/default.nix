@@ -37,16 +37,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
-    # Pinned due to API changes in aioesphomeapi>=10.0.0
     (self: super: {
-      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
-        version = "9.1.5";
+      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.18";
         src = fetchFromGitHub {
-          owner = "esphome";
-          repo = "aioesphomeapi";
-          rev = "v${version}";
-          sha256 = "sha256-PPag65ZMz9KZEe9FmiB42/DgeM0vJw5L0haAG/jBjqg=";
+          owner = "Salamek";
+          repo = "huawei-lte-api";
+          rev = version;
+          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
       });
     })
 
@@ -74,6 +74,18 @@ let
           repo = "influxdb-client-python";
           rev = "v${version}";
           sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+        };
+      });
+    })
+
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
         };
       });
     })
@@ -106,33 +118,6 @@ let
 
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
-
-    # Pinned due to missing simpliypy.errors.PendingAuthorizationError in simplisafe-python>12 which results in a failing import
-    (self: super: {
-      simplisafe-python = super.simplisafe-python.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.7";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "simplisafe-python";
-          rev = version;
-          sha256 = "02nrighkdcd5n9qgbizm9gyfnpgdm4iibw7y8nbyfaxpng069fzp";
-        };
-        checkInputs = oldAttrs.checkInputs ++ [ super.aioresponses ];
-      });
-    })
-
-    # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
-    (self: super: {
-      total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.58";
-        src = fetchFromGitHub {
-          owner = "craigjmidwinter";
-          repo = "total-connect-client";
-          rev = version;
-          sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
-        };
-      });
-    })
 
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
@@ -167,7 +152,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.10.7";
+  hassVersion = "2021.11.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -184,7 +169,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1kibny2hd91c011bv7g46sn5q9fg6wmrbwzwckwa737d6gj27c1y";
+    sha256 = "sha256-HycMb29niuUp7flRdWgrKSOcnr0l3PqjULCrgrwLrFw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -195,8 +180,8 @@ in with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "bcrypt==3.1.7" "bcrypt" \
-      --replace "jinja2==3.0.1" "jinja2" \
       --replace "pip>=8.0.3,<20.3" "pip" \
+      --replace "pyyaml==6.0" "pyyaml" \
       --replace "yarl==1.6.3" "yarl==1.7.0"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
@@ -237,9 +222,12 @@ in with py.pkgs; buildPythonApplication rec {
 
   checkInputs = [
     # test infrastructure (selectively from requirement_test.txt)
+    freezegun
     pytest-aiohttp
+    pytest-freezegun
     pytest-mock
     pytest-rerunfailures
+    pytest-socket
     pytest-xdist
     pytestCheckHook
     requests-mock
@@ -357,6 +345,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
+    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
@@ -698,6 +687,7 @@ in with py.pkgs; buildPythonApplication rec {
     "toon"
     "totalconnect"
     "tplink"
+    "traccar"
     "trace"
     "tradfri"
     "transmission"
@@ -719,6 +709,7 @@ in with py.pkgs; buildPythonApplication rec {
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "upnp"
     "uptime"
+    "uptimerobot"
     "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
@@ -834,8 +825,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/auth/mfa_modules/test_notify.py"
     # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
     "tests/components/emulated_hue/test_upnp.py"
-    # tado/test_climate.py: Tries to connect to my.tado.com
+    # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
     "tests/components/tado/test_climate.py"
+    "tests/components/tado/test_water_heater.py"
   ];
 
   disabledTests = [

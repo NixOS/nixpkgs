@@ -77,17 +77,12 @@ common =
 
       propagatedBuildInputs = [ boehmgc ];
 
-      # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS =
-        # need to list libraries individually until
+      NIX_LDFLAGS = lib.optionals (!is24) [
         # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
-        # is in a release
-          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
-
-        # need to detect it here until
+        (lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto")
         # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
-        # is in a release
-        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+        (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
+      ];
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -152,11 +147,11 @@ common =
         export TMPDIR=$NIX_BUILD_TOP
       '';
 
-      separateDebugInfo = stdenv.isLinux;
+      separateDebugInfo = stdenv.isLinux && (is24 -> !enableStatic);
 
       enableParallelBuilding = true;
 
-      meta = {
+      meta = with lib; {
         description = "Powerful package manager that makes package management reliable and reproducible";
         longDescription = ''
           Nix is a powerful package manager for Linux and other Unix systems that
@@ -166,10 +161,10 @@ common =
           environments.
         '';
         homepage = "https://nixos.org/";
-        license = lib.licenses.lgpl2Plus;
-        maintainers = [ lib.maintainers.eelco ];
-        platforms = lib.platforms.unix;
-        outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
+        license = licenses.lgpl2Plus;
+        maintainers = with maintainers; [ eelco lovesegfault ];
+        platforms = platforms.unix;
+        outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       };
 
       passthru = {
@@ -218,7 +213,9 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = callPackage common (rec {
+  nixStable = nix_2_4;
+
+  nix_2_3 = callPackage common (rec {
     pname = "nix";
     version = "2.3.16";
     src = fetchurl {
@@ -233,13 +230,13 @@ in rec {
 
   nix_2_4 = callPackage common (rec {
     pname = "nix";
-    version = "2.4pre-rc1";
+    version = "2.4";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
       rev = version;
-      sha256 = "sha256-KOb8etMm5LksvT2l+CkvqzMO1bgmo9tJmyaNh0LvaR8=";
+      sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
     };
 
     boehmgc = boehmgc_nixUnstable;

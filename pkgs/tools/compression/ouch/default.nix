@@ -1,4 +1,14 @@
-{ lib, rustPlatform, fetchFromGitHub, help2man, installShellFiles }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, help2man
+, installShellFiles
+, pkg-config
+, bzip2
+, xz
+, zlib
+, zstd
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
@@ -13,7 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-jEprWtIl5LihD9fOMYHGGlk0+h4woUlwUWNfSkd2t10=";
 
-  nativeBuildInputs = [ help2man installShellFiles ];
+  nativeBuildInputs = [ help2man installShellFiles pkg-config ];
+
+  buildInputs = [ bzip2 xz zlib zstd ];
+
+  cargoBuildFlags = [ "--features" "zstd/pkg-config" ];
+
+  cargoTestFlags = cargoBuildFlags;
 
   postInstall = ''
     help2man $out/bin/ouch > ouch.1
