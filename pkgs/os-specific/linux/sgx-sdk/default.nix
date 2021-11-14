@@ -84,51 +84,53 @@ stdenv.mkDerivation rec {
   # Build external/ippcp_internal first. The Makefile is rewritten to make the
   # build faster by splitting different versions of ipp-crypto builds and to
   # avoid patching the Makefile for reproducibility issues.
-  buildPhase = let
-    ipp-crypto-no_mitigation = callPackage (import ./ipp-crypto.nix) {};
+  buildPhase =
+    let
+      ipp-crypto-no_mitigation = callPackage (import ./ipp-crypto.nix) { };
 
-    sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
+      sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
 
-    nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
-    ipp-crypto-cve_2020_0551_load = callPackage (import ./ipp-crypto.nix) {
-      extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
-    };
+      nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
+      ipp-crypto-cve_2020_0551_load = callPackage (import ./ipp-crypto.nix) {
+        extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
+      };
 
-    nasm-cf = writeShellScript "nasm-cf" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
-    ipp-crypto-cve_2020_0551_cf = callPackage (import ./ipp-crypto.nix) {
-      extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
-    };
-  in ''
-    cd external/ippcp_internal
+      nasm-cf = writeShellScript "nasm-cf" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
+      ipp-crypto-cve_2020_0551_cf = callPackage (import ./ipp-crypto.nix) {
+        extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
+      };
+    in
+    ''
+      cd external/ippcp_internal
 
-    mkdir -p lib/linux/intel64/no_mitigation
-    cp ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a lib/linux/intel64/no_mitigation
-    chmod a+w lib/linux/intel64/no_mitigation/libippcp.a
-    cp ${ipp-crypto-no_mitigation}/include/* ./inc
+      mkdir -p lib/linux/intel64/no_mitigation
+      cp ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a lib/linux/intel64/no_mitigation
+      chmod a+w lib/linux/intel64/no_mitigation/libippcp.a
+      cp ${ipp-crypto-no_mitigation}/include/* ./inc
 
-    mkdir -p lib/linux/intel64/cve_2020_0551_load
-    cp ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_load
-    chmod a+w lib/linux/intel64/cve_2020_0551_load/libippcp.a
+      mkdir -p lib/linux/intel64/cve_2020_0551_load
+      cp ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_load
+      chmod a+w lib/linux/intel64/cve_2020_0551_load/libippcp.a
 
-    mkdir -p lib/linux/intel64/cve_2020_0551_cf
-    cp ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_cf
-    chmod a+w lib/linux/intel64/cve_2020_0551_cf/libippcp.a
+      mkdir -p lib/linux/intel64/cve_2020_0551_cf
+      cp ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_cf
+      chmod a+w lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
-    rm -f ./inc/ippcp.h
-    patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp20u3.patch -o ./inc/ippcp.h
+      rm -f ./inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp20u3.patch -o ./inc/ippcp.h
 
-    mkdir -p license
-    cp ${ipp-crypto-no_mitigation.src}/LICENSE ./license
+      mkdir -p license
+      cp ${ipp-crypto-no_mitigation.src}/LICENSE ./license
 
-    # Build the SDK installation package.
-    cd ../..
+      # Build the SDK installation package.
+      cd ../..
 
-    # Nix patches make so that $(SHELL) defaults to "sh" instead of "/bin/sh".
-    # The build uses $(SHELL) as an argument to file -L which requires a path.
-    make SHELL=$SHELL sdk_install_pkg
+      # Nix patches make so that $(SHELL) defaults to "sh" instead of "/bin/sh".
+      # The build uses $(SHELL) as an argument to file -L which requires a path.
+      make SHELL=$SHELL sdk_install_pkg
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   postBuild = ''
     patchShebangs ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
