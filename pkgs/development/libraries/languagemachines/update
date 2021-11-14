@@ -3,6 +3,7 @@
 #!nix-shell --packages jq
 #!nix-shell --packages parallel
 #!nix-shell -i bash
+# shellcheck shell=bash
 
 # Exit immediately if a command exits with a non-zero status.
 # Exit when a producer fails in a pipe
