@@ -6,6 +6,7 @@
 , perl
 , genericUpdater
 , writeShellScript
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.nncp-daemon = nixosTests.nncp;
 
   passthru.updateScript = genericUpdater {
     inherit pname version;
