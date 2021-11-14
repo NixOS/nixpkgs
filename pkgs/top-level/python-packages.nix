@@ -435,6 +435,8 @@ in {
 
   allure-python-commons-test = callPackage ../development/python-modules/allure-python-commons-test { };
 
+  allure-pytest = callPackage ../development/python-modules/allure-pytest { };
+
   alot = callPackage ../development/python-modules/alot { };
 
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
