@@ -3510,6 +3510,8 @@ with pkgs;
 
   oneshot = callPackage ../tools/networking/oneshot { };
 
+  online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
+
   xkbd = callPackage ../applications/misc/xkbd { };
 
   libpsm2 = callPackage ../os-specific/linux/libpsm2 { };
