@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p gawk nix -i bash
+# shellcheck shell=bash
 
 # Retrieve sha256 hashes for each dependency in and format fetchNuGet calls
 echo "" > deps.nix

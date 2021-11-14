@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p python3 dotnet-sdk_3 -i bash
+# shellcheck shell=bash
 
 # Run this script to generate deps.nix
 # ./create_deps.sh /path/to/microsoft/python/language/server/source/checkout
