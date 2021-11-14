@@ -74,11 +74,7 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-  } super.git-annex).override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
-  };
+  } super.git-annex);
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
