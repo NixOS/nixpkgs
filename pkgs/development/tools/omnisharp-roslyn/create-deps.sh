@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../.. -i bash -p msbuild dotnet-sdk_3 jq xmlstarlet curl
+# shellcheck shell=bash
 set -euo pipefail
 
 cat << EOL
