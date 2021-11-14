@@ -747,6 +747,7 @@ let
 
       BSD_PROCESS_ACCT_V3 = yes;
 
+      BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
