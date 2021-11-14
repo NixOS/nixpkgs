@@ -60,7 +60,7 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc {
+  git-annex = overrideCabal (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
@@ -74,7 +74,15 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-  } super.git-annex);
+    patches = [
+      # Allows compilation with git-lfs 1.2.0
+      (pkgs.fetchpatch {
+        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=f3326b8b5ae4d1caa5c6e3e192c58c6e064c425a";
+        sha256 = "1nzg4mna462ndylisyy3nfih49aznhzzf7b3krb4p9p0j1zrcy2s";
+        excludes = [ "doc/**" "CHANGELOG" ];
+      })
+    ] ++ (drv.patches or []);
+  }) super.git-annex;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
