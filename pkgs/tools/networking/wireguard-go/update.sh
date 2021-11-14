@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnused common-updater-scripts vgo2nix
+# shellcheck shell=bash
 
 set -eu -o pipefail
 
