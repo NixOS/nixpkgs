@@ -8,6 +8,11 @@ let
       rev = version;
       sha256 = "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A=";
     };
+
+    patches = [
+      # Use /etc/ssl/certs/ca-certificates.crt instead of /etc/ssl/cert.pem
+      ./use-etc-ssl-certs.patch
+    ];
   });
 in
 stdenv.mkDerivation rec {

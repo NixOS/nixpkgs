@@ -8,17 +8,17 @@ let
   #  * shards.nix (by running `crystal2nix` in invidious’ source tree)
   #  * If the lsquic.cr dependency changed: lsquic in lsquic.nix (version, sha256)
   #  * If the lsquic version changed: boringssl' in lsquic.nix (version, sha256)
-  rev = "21879da80d2dfa97e789a13b90e82e466c4854e3";
+  rev = "00904ae3f2ab6a3cf5f96012d36c5672c3aa17b4";
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
-  version = "unstable-2021-11-08";
+  version = "unstable-2021-11-13";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
     inherit rev;
-    sha256 = "0jvnwjdh2l0hxfvzim00r3zbs528bb93y1nk0bjrbbrcfv5cn5ss";
+    sha256 = "sha256-DET4jvB5epkpl5/HTORNTWDL4Ck4IsqhdTApJE8t6Tg=";
   };
 
   postPatch =
