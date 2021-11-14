@@ -23,7 +23,7 @@ in
         example = [ "192.168.16.1:564" ];
         description = ''
           Sockets to listen for clients on.
-          See <command>man 5 systemd.socket</command> for socket syntax.
+          See <xref linkend="opt-systemd.sockets._name_.listenStreams"/>.
         '';
       };
 

@@ -383,6 +383,7 @@ in rec {
       description = ''
         For each item in this list, a <literal>ListenStream</literal>
         option in the <literal>[Socket]</literal> section will be created.
+        See <command>man 5 systemd.socket</command> for socket syntax.
       '';
     };
 
