@@ -1,4 +1,5 @@
 #! @shell@ -e
+# shellcheck shell=bash
 
 fixupHooks=()
 
