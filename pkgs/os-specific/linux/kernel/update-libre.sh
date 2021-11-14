@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p nix-prefetch-svn git curl
+# shellcheck shell=bash
 set -euo pipefail
 
 nixpkgs="$(git rev-parse --show-toplevel)"
