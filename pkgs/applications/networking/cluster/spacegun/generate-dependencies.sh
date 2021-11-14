@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix
+# shellcheck shell=bash
 
 # Download package.json and package-lock.json from the v0.3.3 release
 curl https://raw.githubusercontent.com/dvallin/spacegun/f88cfd1cf653995a301ef4db4a1e387ef3ca01a1/package.json -o package.json
