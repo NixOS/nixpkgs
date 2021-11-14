@@ -535,7 +535,11 @@ self: super: builtins.intersectAttrs super {
     buildTools = [
       pkgs.buildPackages.makeWrapper
     ] ++ (drv.buildTools or []);
-  }) super.git-annex;
+  }) (super.git-annex.override {
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  });
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
