@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -I nixpkgs=../../../.. -p nodePackages.node2nix nix
+# shellcheck shell=bash
 
 # This script is meant to be run in the current directory
 
