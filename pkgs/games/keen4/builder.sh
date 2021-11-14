@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+set -o nounset
+
 # shellcheck source=/dev/null
-source "$stdenv"/setup
+source "${stdenv}/setup"
 
-mkdir -p "$out"/share/keen4
-unzip -j "$dist" -d "$out"/share/keen4
+mkdir -p "${out}/share/keen4"
+unzip -j "$dist" -d "${out}/share/keen4"
 
-mkdir -p "$out"/bin
-cat > "$out"/bin/keen4 <<EOF
+mkdir -p "${out}/bin"
+cat > "${out}/bin/keen4" <<EOF
 #! $SHELL -e
 if test -z "\$HOME"; then
     echo "HOME directory not set"
@@ -20,9 +22,9 @@ fi
 mkdir -p \$HOME/.keen4
 cd \$HOME/.keen4
 
-ln -sf "$out"/share/keen4/* .
+ln -sf "${out}/share/keen4/"* .
 
-"$dosbox"/bin/dosbox ./KEEN4E.EXE -fullscreen -exit || true
+"${dosbox}/bin/dosbox" ./KEEN4E.EXE -fullscreen -exit || true
 
 # Cleanup the symlinks.
 for i in *; do
@@ -31,4 +33,4 @@ for i in *; do
     fi
 done
 EOF
-chmod +x "$out"/bin/keen4
+chmod +x "${out}/bin/keen4"
