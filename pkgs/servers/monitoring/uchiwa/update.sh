@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl.bin git.out nix jq.out nodePackages.bower2nix
+# shellcheck shell=bash
 
 set -euo pipefail
 IFS=$'\n\t'
