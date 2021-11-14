@@ -1,4 +1,5 @@
 #!@shell@
+# shellcheck shell=bash
 set -eu -o pipefail
 shopt -s nullglob
 
