@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl -p nix-prefetch-git
+# shellcheck shell=bash
 VERSION_OVERVIEW=https://omahaproxy.appspot.com/all?os=linux
 TARGET_CHANNEL=beta
 FILE_PATH=6_x.nix
