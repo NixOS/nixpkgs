@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.47.8";
+  version = "0.48.6";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "1vnwjiv4bidw5xspcd7d7fn8dbhvgia9ws363fs5zs48c9k2hwwz";
+    sha256 = "1n7gm6mwzf5yyk8cpn70029p1iiv26bypyfi42sx14yyjvlny4rm";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "1clgw0i3vbl8lrsjdjbn71yhim6356gm8h24831mnksb4sawhh7f";
+    sha256 = "0z7cbw11mqf2mfv6ixnczg2i4jcdpvryzl0521ai26gq42jyyy0r";
   };
 
 in {
@@ -44,8 +44,8 @@ in {
     # (they did special-case icon.png but we want the scalable svg)
     # Use the version here to ensure we get any changes.
     trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
-      sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
+      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/icon.svg";
+      sha256 = "0sz3piskdlx267whx8r6afrdadn25bf0zmxplj1599zqkf7w7n0x";
     };
 
 
