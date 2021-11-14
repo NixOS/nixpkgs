@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix common-updater-scripts jq
+# shellcheck shell=bash
 
 # Build both the cacert package and an overriden version where we use the source attribute of NSS.
 # Cacert and NSS are both from the same upstream sources. They are decoupled as
