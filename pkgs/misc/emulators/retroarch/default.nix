@@ -14,7 +14,6 @@
 , udev ? null
 , enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
 , withVulkan ? stdenv.isLinux, vulkan-loader ? null
-, fetchurl
 , wayland
 , libxkbcommon
 }:

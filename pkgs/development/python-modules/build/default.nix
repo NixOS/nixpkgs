@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
@@ -56,6 +57,9 @@ buildPythonPackage rec {
     "test_default_pip_is_never_too_old"
     "test_build"
     "test_init"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # expects Apple's python and its quirks
+    "test_can_get_venv_paths_with_conflicting_default_scheme"
   ];
 
   pythonImportsCheck = [ "build" ];
