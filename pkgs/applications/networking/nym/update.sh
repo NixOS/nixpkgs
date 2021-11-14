@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq nix-prefetch
+# shellcheck shell=bash
 
 # adapted from rust-analyzer
 
