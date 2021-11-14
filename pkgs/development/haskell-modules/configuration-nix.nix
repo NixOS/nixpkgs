@@ -516,25 +516,26 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = with pkgs;
-    if (!stdenv.isLinux) then
-      let path = lib.makeBinPath [ coreutils ];
-      in overrideCabal (_drv: {
-        # This is an instance of https://github.com/NixOS/nix/pull/1085
-        # Fails with:
-        #   gpg: can't connect to the agent: File name too long
-        postPatch = lib.optionalString stdenv.isDarwin ''
-          substituteInPlace Test.hs \
-            --replace ', testCase "crypto" test_crypto' ""
-        '';
-        # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
-        # binary to ensure it uses Nixpkgs' coreutils.
-        postFixup = ''
-          wrapProgram $out/bin/git-annex \
-            --prefix PATH : "${path}"
-        '';
-      }) (addBuildTool buildPackages.makeWrapper super.git-annex)
-    else super.git-annex;
+  git-annex = let
+    pathForDarwin = pkgs.lib.makeBinPath [ pkgs.coreutils ];
+  in overrideCabal (drv: pkgs.lib.optionalAttrs (!pkgs.stdenv.isLinux) {
+    # This is an instance of https://github.com/NixOS/nix/pull/1085
+    # Fails with:
+    #   gpg: can't connect to the agent: File name too long
+    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      substituteInPlace Test.hs \
+        --replace ', testCase "crypto" test_crypto' ""
+    '' + (drv.postPatch or "");
+    # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
+    # binary to ensure it uses Nixpkgs' coreutils.
+    postFixup = ''
+      wrapProgram $out/bin/git-annex \
+        --prefix PATH : "${pathForDarwin}"
+    '' + (drv.postFixup or "");
+    buildTools = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ (drv.buildTools or []);
+  }) super.git-annex;
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
