@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme, jdupes }:
 
 stdenv.mkDerivation rec {
   pname = "moka-icon-theme";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     ninja
     gtk3
     python3
+    jdupes
   ];
 
   propagatedBuildInputs = [
@@ -25,8 +26,17 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  # These fixup steps are slow and unnecessary for this package
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   postPatch = ''
     patchShebangs meson/post_install.py
+  '';
+
+  postInstall = ''
+    # replace duplicate files with symlinks
+    jdupes -l -r $out/share/icons
   '';
 
   meta = with lib; {
