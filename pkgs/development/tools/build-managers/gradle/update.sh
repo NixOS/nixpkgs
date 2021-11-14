@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-prefetch curl jq
+# shellcheck shell=bash
 
 # Generates Gradle release specs from GitHub Releases.
 #
