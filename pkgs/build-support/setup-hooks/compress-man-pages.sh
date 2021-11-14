@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 fixupOutputHooks+=('if [ -z "${dontGzipMan-}" ]; then compressManPages "$prefix"; fi')
 
 compressManPages() {

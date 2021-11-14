@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # The base package for automatic multiple-output splitting. Used in stdenv as well.
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)

@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 fixupOutputHooks+=(_linkDLLs)
 
 addEnvHooks "$targetOffset" linkDLLGetFolders
