@@ -1385,6 +1385,8 @@ in {
 
   cartopy = callPackage ../development/python-modules/cartopy { };
 
+  casa-formats-io = callPackage ../development/python-modules/casa-formats-io { };
+
   casbin = callPackage ../development/python-modules/casbin { };
 
   case = callPackage ../development/python-modules/case { };
