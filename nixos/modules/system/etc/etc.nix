@@ -172,9 +172,8 @@ in
             target = mkDefault name;
             source = mkIf (config.text != null) (
               let name' = "etc-" + baseNameOf name;
-              in mkOverride
-                (options.text.highestPrio or lib.modules.defaultPriority)
-                (pkgs.writeText name' config.text));
+              in mkDerivedConfig options.text (pkgs.writeText name')
+            );
           };
 
         }));
