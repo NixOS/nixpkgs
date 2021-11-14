@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq common-updater-scripts dotnetCorePackages.sdk_5_0 nuget-to-nix gnused nix coreutils findutils
+# shellcheck shell=bash
 
 set -euo pipefail
 
