@@ -16,14 +16,14 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.3.2";
+  version = "0.3.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bximaalakw1dxan1lxar33l8hnmxqn0fg62hmdmprmra72z4bm8";
+    sha256 = "1hjdhj1y9xhq1i36r7g2lccsicbvgm7lzkyrxygs16dw11ah46mx";
   };
 
   checkInputs = [
