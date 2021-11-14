@@ -1,5 +1,6 @@
 #!nix-shell
 #!nix-shell -i bash -p coreutils gnugrep git cargo
+# shellcheck shell=bash
 
 # This updates cargo-lock.patch for the netease-music-tui version listed in
 # default.nix.
