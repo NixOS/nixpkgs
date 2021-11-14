@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-update yarn yarn2nix-moretea.yarn2nix
+# shellcheck shell=bash
 
 set -euo pipefail
 
