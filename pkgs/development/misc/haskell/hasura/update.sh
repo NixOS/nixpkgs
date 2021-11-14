@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p cabal2nix curl jq -I nixpkgs=.
+# shellcheck shell=bash
 #
 # This script will update the hasura derivations to the latest version using
 # cabal2nix.
