@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #!nix-shell -i bash -p bash curl gawk gnugrep gnused jq nix nix-prefetch nix-prefetch-scripts common-updater-scripts
+# shellcheck shell=bash
 
 # Script to automatically fetch latest vscode
 
