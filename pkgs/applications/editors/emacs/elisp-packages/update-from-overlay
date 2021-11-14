@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl nix
+# shellcheck shell=bash
 set -euxo pipefail
 
 export NIXPKGS_ALLOW_BROKEN=1
