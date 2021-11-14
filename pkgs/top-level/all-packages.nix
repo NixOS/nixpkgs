@@ -995,7 +995,7 @@ with pkgs;
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
-  _7zz = callPackage ../tools/archivers/7zz { };
+  _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
