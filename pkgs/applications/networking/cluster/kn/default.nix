@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kn";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     rev = "v${version}";
-    sha256 = "sha256-hquxv1BluR535WvMtJlVyP7JuARDNGDjPAbdSSj2juo=";
+    sha256 = "sha256-nuSx+JKXBgkVwuy6RMZc8pxDv5WjXN3+5pIudazTttc=";
   };
 
   vendorSha256 = null;

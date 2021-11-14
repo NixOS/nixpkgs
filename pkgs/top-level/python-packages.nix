@@ -2267,6 +2267,8 @@ in {
 
   docloud = callPackage ../development/python-modules/docloud { };
 
+  docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
+
   docopt = callPackage ../development/python-modules/docopt { };
 
   docopt-ng = callPackage ../development/python-modules/docopt-ng { };
@@ -3930,6 +3932,8 @@ in {
   jdcal = callPackage ../development/python-modules/jdcal { };
 
   jedi = callPackage ../development/python-modules/jedi { };
+
+  jedi-language-server = callPackage ../development/python-modules/jedi-language-server { };
 
   jeepney = callPackage ../development/python-modules/jeepney { };
 
@@ -7909,15 +7913,23 @@ in {
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
 
+  qiskit = callPackage ../development/python-modules/qiskit { };
+
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
   qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
 
-  qiskit = callPackage ../development/python-modules/qiskit { };
+  qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
   qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
+
+  qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
+
+  qiskit-nature = callPackage ../development/python-modules/qiskit-nature { };
+
+  qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 
@@ -9803,6 +9815,8 @@ in {
   watermark = callPackage ../development/python-modules/watermark { };
 
   wavedrom = callPackage ../development/python-modules/wavedrom { };
+
+  wavefile = callPackage ../development/python-modules/wavefile { };
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 

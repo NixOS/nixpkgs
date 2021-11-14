@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 let
   rev = "307d694076b056588c652c2bdaa543a89eb255d9";

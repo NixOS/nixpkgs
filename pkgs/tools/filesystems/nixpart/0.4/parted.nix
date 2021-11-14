@@ -1,13 +1,22 @@
-{ lib,stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
-, util-linux, check
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, lvm2
+, libuuid
+, gettext
+, readline
+, util-linux
+, check
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
-  name = "parted-3.1";
+  pname = "parted";
+  version = "3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/parted/${name}.tar.xz";
+    url = "mirror://gnu/parted/parted-${version}.tar.xz";
     sha256 = "05fa4m1bky9d13hqv91jlnngzlyn7y4rnnyq6d86w0dg3vww372y";
   };
 
@@ -26,9 +35,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
-       (if (readline != null)
-        then [ "--with-readline" ]
-        else [ "--without-readline" ])
+    (if (readline != null)
+    then [ "--with-readline" ]
+    else [ "--without-readline" ])
     ++ lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ lib.optional enableStatic "--enable-static";
 
