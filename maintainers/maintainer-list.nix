@@ -13156,4 +13156,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  sei40kr = {
+    name = "Seong Yong-ju";
+    email = "sei40kr@gmail.com";
+    github = "sei40kr";
+    githubId = 11665236;
+  };
 }
