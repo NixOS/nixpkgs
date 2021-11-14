@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix nodejs-12_x curl jq nix
+# shellcheck shell=bash
 
 set -euo pipefail
 # cd to the folder containing this script
