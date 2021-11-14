@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=channel:nixpkgs-unstable -i bash -p pandoc
+# shellcheck shell=bash
 
 # This script is temporarily needed while we transition the manual to
 # CommonMark. It converts the .md files in the regular manual folder
