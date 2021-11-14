@@ -30,6 +30,16 @@ buildPythonPackage rec {
     "unicorn"
   ];
 
+  checkPhase = ''
+    runHook preCheck
+
+    mv unicorn unicorn.hidden
+    patchShebangs sample_*.py shellcode.py
+    sh -e sample_all.sh
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";

@@ -30,14 +30,15 @@
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
+    pname = "unicorn";
+    version = "1.0.2-rc4";
+    src =  fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      rev = version;
+      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
     };
+    doCheck = false;
   });
 in
 
