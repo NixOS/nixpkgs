@@ -4405,6 +4405,11 @@ with pkgs;
     pslSupport = true;
   };
 
+  curlHTTP3 = curl.override {
+    openssl = quictls;
+    http3Support = true;
+  };
+
   curl = curlMinimal.override ({
     idnSupport = true;
     zstdSupport = true;

@@ -14,6 +14,7 @@
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
   ), libkrb5 ? null
 , http2Support ? true, nghttp2 ? null
+, http3Support ? false, nghttp3, ngtcp2 ? null
 , idnSupport ? false, libidn2 ? null
 , ldapSupport ? false, openldap ? null
 , opensslSupport ? zlibSupport, openssl ? null
@@ -39,6 +40,8 @@ assert gnutlsSupport -> gnutls != null;
 assert gsaslSupport -> gsasl != null;
 assert gssSupport -> libkrb5 != null;
 assert http2Support -> nghttp2 != null;
+assert http3Support -> nghttp3 != null;
+assert http3Support -> ngtcp2 != null;
 assert idnSupport -> libidn2 != null;
 assert ldapSupport -> openldap != null;
 assert opensslSupport -> openssl != null;
@@ -84,6 +87,7 @@ stdenv.mkDerivation rec {
     optional gsaslSupport gsasl ++
     optional gssSupport libkrb5 ++
     optional http2Support nghttp2 ++
+    optionals http3Support [ nghttp3 ngtcp2 ] ++
     optional idnSupport libidn2 ++
     optional ldapSupport openldap ++
     optional opensslSupport openssl ++
@@ -112,6 +116,8 @@ stdenv.mkDerivation rec {
       (lib.enableFeature ldapSupport "ldaps")
       # The build fails when using wolfssl with --with-ca-fallback
       (lib.withFeature (!wolfsslSupport) "ca-fallback")
+      (lib.withFeature http3Support "nghttp3")
+      (lib.withFeature http3Support "ngtcp2")
       (lib.withFeature rtmpSupport "librtmp")
       (lib.withFeature zstdSupport "zstd")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
