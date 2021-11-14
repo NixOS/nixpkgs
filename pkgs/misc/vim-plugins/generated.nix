@@ -2037,6 +2037,18 @@ final: prev:
     meta.homepage = "https://github.com/raghur/fruzzy/";
   };
 
+  FTerm-nvim = buildVimPluginFrom2Nix {
+    pname = "FTerm.nvim";
+    version = "2021-11-13";
+    src = fetchFromGitHub {
+      owner = "numToStr";
+      repo = "FTerm.nvim";
+      rev = "0911ab93b488fdd8032e695ab56d14357e14e836";
+      sha256 = "0pbfg66fd8ff1b2wshlb9c58sb8zq3ckm7yjg6vv43dk4kcnjf1i";
+    };
+    meta.homepage = "https://github.com/numToStr/FTerm.nvim/";
+  };
+
   fugitive-gitlab-vim = buildVimPluginFrom2Nix {
     pname = "fugitive-gitlab.vim";
     version = "2021-09-20";
