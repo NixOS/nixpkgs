@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p common-updater-scripts coreutils gawk replace
+# shellcheck shell=bash
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
