@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "types-typed-ast";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffa0471e0ba19c4ea0cba0436d660871b5f5215854ea9ead3cb5b60f525af75a";
+    sha256 = "sha256-2Op5y/vFIL6Nm8jeSHL0SzQtvbwJFmfi8hsDu9eWkVA=";
   };
 
   # Module doesn't have tests
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Typing stubs for typed-ast";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ superherointj veehaitch ];
+    maintainers = with maintainers; [ SuperSandro2000 veehaitch ];
   };
 }
