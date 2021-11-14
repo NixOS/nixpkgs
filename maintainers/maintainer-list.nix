@@ -9654,6 +9654,16 @@
     githubId = 500703;
     name = "Tadas Barzdžius";
   };
+  revol-xut = {
+    email = "revol-xut@protonmail.com";
+    name = "Tassilo Tanneberger";
+    github = "revol-xut";
+    githubId = 32239737;
+    keys = [{
+      longkeyid = "rsa4096/B966009D57E69CC6";
+      fingerprint = "91EB E870 1639 1323 642A  6803 B966 009D 57E6 9CC6";
+    }];
+  };
   rexim = {
     email = "reximkut@gmail.com";
     github = "rexim";
