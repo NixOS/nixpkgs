@@ -58,7 +58,7 @@ common =
            ];
 
       buildInputs =
-        [ curl libsodium openssl sqlite xz bzip2 nlohmann_json
+        [ curl libsodium openssl sqlite xz bzip2
           brotli boost editline
         ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
@@ -209,6 +209,13 @@ common =
     ];
   });
 
+  # master: https://github.com/NixOS/nix/pull/5536
+  # 2.4: https://github.com/NixOS/nix/pull/5537
+  installNlohmannJsonPatch = fetchpatch {
+    url = "https://github.com/NixOS/nix/pull/5536.diff";
+    sha256 = "sha256-SPnam4xNIjbMgnq6IP1AaM1V62X0yZNo4DEVmI8sHOo=";
+  };
+
 in rec {
 
   nix = nixStable;
@@ -241,6 +248,8 @@ in rec {
 
     boehmgc = boehmgc_nixUnstable;
 
+    patches = [ installNlohmannJsonPatch ];
+
     inherit storeDir stateDir confDir;
   });
 
@@ -257,6 +266,8 @@ in rec {
     };
 
     boehmgc = boehmgc_nixUnstable;
+
+    patches = [ installNlohmannJsonPatch ];
 
     inherit storeDir stateDir confDir;
 
