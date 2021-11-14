@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell --show-trace ./updater-emacs.nix -i bash
+# shellcheck shell=bash
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
