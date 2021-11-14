@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable git nix -I nixpkgs=.
+# shellcheck shell=bash
 
 # This script is used to regenerate nixpkgs' Haskell package set, using the
 # tool hackage2nix from the nixos/cabal2nix repo. hackage2nix looks at the

@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused gnugrep -I nixpkgs=.
+# shellcheck shell=bash
 
 set -eu -o pipefail
 

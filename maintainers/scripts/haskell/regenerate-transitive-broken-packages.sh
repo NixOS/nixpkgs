@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils nix gnused -I nixpkgs=.
+# shellcheck shell=bash
 
 config_file=pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml
 

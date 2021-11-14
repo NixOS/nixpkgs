@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p nix curl gnused -I nixpkgs=.
+# shellcheck shell=bash
 
 # On Hackage every package description shows a category "Distributions" which
 # lists a "NixOS" version.
