@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../.. -i bash -p nodePackages.node2nix
+# shellcheck shell=bash
 
 # TODO: merge with other node packages in nixpkgs/pkgs/development/node-packages once
 # * support for npm projects in sub-directories is added to node2nix:
