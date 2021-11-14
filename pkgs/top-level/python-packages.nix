@@ -431,6 +431,8 @@ in {
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
+  allure-python-commons = callPackage ../development/python-modules/allure-python-commons { };
+
   allure-python-commons-test = callPackage ../development/python-modules/allure-python-commons-test { };
 
   alot = callPackage ../development/python-modules/alot { };
