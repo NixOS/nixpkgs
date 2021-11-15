@@ -14,11 +14,12 @@ buildPythonPackage rec {
     sha256 = "McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
   };
 
+  doCheck = false; # has no tests
+
   pythonImportsCheck = [
     "slugid"
   ];
 
-  doCheck = false; # has no tests
   meta = with lib; {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
