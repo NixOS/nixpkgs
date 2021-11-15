@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
     cmake
     file
     git
-    nasm
     ncurses
     ocaml
     ocamlPackages.ocamlbuild
