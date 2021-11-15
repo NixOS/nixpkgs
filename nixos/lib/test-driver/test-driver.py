@@ -603,8 +603,13 @@ class Machine:
                 break
         return "".join(output_buffer)
 
-    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
+    def execute(
+        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+    ) -> Tuple[int, str]:
         self.connect()
+
+        if timeout is not None:
+            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
 
         out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
         assert self.shell
