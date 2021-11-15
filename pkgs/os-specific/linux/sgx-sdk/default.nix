@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
       };
     in
     ''
+      header "Setting up IPP crypto build artifacts"
+
       pushd 'external/ippcp_internal'
 
       install ${ipp-crypto-no_mitigation}/include/* inc/
@@ -135,10 +137,10 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sgxsdk="$out/sgxsdk"
 
-    echo "Fixing pkg-config files"
+    header "Fixing pkg-config files"
     sed -i "s|prefix=.*|prefix=$sgxsdk|g" $out/sgxsdk/pkgconfig/*.pc
 
-    echo "Patching GDB path in bin/sgx-gdb"
+    header "Patching GDB path in bin/sgx-gdb"
     substituteInPlace "$sgxsdk/bin/sgx-gdb" --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
