@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "less";
-  version = "590";
+  version = "596";
 
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "044fl3izmsi8n1vqzsqdp65q0qyyn5kmsg4sk7id0mxzx15zbbba";
+    sha256 = "sha256-QhqP1ZfnIELu/P6OV2NnerxL6EM/bA321zmhbMDk1cM=";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
