@@ -2,14 +2,12 @@
 , stdenv
 , fetchpatch
 , fetchurl
-
 , blas
 , cmake
 , eigen
 , gflags
 , glog
 , suitesparse
-
 , runTests ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withBlas ? true
@@ -42,7 +40,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ eigen glog ]
   ++ lib.optionals withBlas [ blas suitesparse ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}"
+  ];
 
   # The Basel BUILD file conflicts with the cmake build directory on
   # case-insensitive filesystems, eg. darwin.
