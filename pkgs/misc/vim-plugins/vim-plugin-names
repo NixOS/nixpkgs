@@ -455,6 +455,7 @@ metalelf0/jellybeans-nvim@main
 mfukar/robotframework-vim
 mfussenegger/nvim-dap
 mfussenegger/nvim-jdtls
+mfussenegger/nvim-lint
 mg979/vim-visual-multi
 mg979/vim-xtabline
 mhartington/formatter.nvim
@@ -533,6 +534,7 @@ norcalli/snippets.nvim
 ntpeters/vim-better-whitespace
 numirias/semshi
 numtostr/comment.nvim
+numToStr/FTerm.nvim
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
