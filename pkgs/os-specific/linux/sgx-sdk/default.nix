@@ -7,6 +7,7 @@
 , binutils
 , cmake
 , file
+, gdb
 , git
 , libtool
 , nasm
@@ -132,8 +133,13 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    sgxsdk="$out/sgxsdk"
+
     echo "Fixing pkg-config files"
-    sed -i "s|prefix=.*|prefix=$out/sgxsdk|g" $out/sgxsdk/pkgconfig/*.pc
+    sed -i "s|prefix=.*|prefix=$sgxsdk|g" $out/sgxsdk/pkgconfig/*.pc
+
+    echo "Patching GDB path in bin/sgx-gdb"
+    substituteInPlace "$sgxsdk/bin/sgx-gdb" --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
   doInstallCheck = true;
