@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, rustPlatform, fetchFromGitHub, fetchpatch, cmake, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://lunatic.solutions";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    broken = stdenv.isDarwin;
   };
 }
