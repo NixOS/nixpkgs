@@ -37,7 +37,8 @@ public:
     static bool checkToolExists( const QString& toolName, QString& fullPath );
 
 Q_SIGNALS:
-    // Progress?
+    // See Calamares Job::progress
+    void progress( qreal percent );
 
 protected:
     QString m_source;

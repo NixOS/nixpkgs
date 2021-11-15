@@ -64,6 +64,7 @@ UnpackFSCJob::exec()
     }
 
     // progress?
+    connect( r.get(), &Runner::progress, this, &UnpackFSCJob::progress );
     return r->run();
 }
 
