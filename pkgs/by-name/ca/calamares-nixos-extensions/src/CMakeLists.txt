@@ -111,7 +111,6 @@ calamares_add_branding_subdirectory( branding/kaos_branding NAME kaos )
 #
 set(LIST_SKIPPED_MODULES "")
 
-calamares_add_module_subdirectory( modules/filekeeper LIST_SKIPPED_MODULES )  # C++ job
 calamares_add_module_subdirectory( modules/freebsddisk LIST_SKIPPED_MODULES )  # C++ viewmodule
 calamares_add_module_subdirectory( modules/mobile LIST_SKIPPED_MODULES )
 calamares_add_module_subdirectory( modules/os-freebsd LIST_SKIPPED_MODULES )
