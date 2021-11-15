@@ -31,9 +31,10 @@ FSArchiverRunner::run()
     QString fsarchiverExecutable;
     if ( !checkToolExists( toolName, fsarchiverExecutable ) )
     {
-        return Calamares::JobResult::internalError( tr( "Missing tools" ),
-                                                    tr( "The <i>fsarchiver</i> tool is not installed on the system." ),
-                                                    Calamares::JobResult::MissingRequirements );
+        return Calamares::JobResult::internalError(
+            tr( "Missing tools" ),
+            tr( "The <i>%1</i> tool is not installed on the system." ).arg( toolName ),
+            Calamares::JobResult::MissingRequirements );
     }
 
     Calamares::Utils::Runner r( { fsarchiverExecutable,
