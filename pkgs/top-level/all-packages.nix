@@ -25862,6 +25862,8 @@ with pkgs;
 
   imagej = callPackage ../applications/graphics/imagej { };
 
+  fiji = callPackage ../applications/graphics/fiji { };
+
   imagemagick6_light = imagemagick6.override {
     bzip2 = null;
     zlib = null;
