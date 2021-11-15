@@ -159,14 +159,6 @@ in {
       ];
     };
 
-    linux_rt_5_11 = callPackage ../os-specific/linux/kernel/linux-rt-5.11.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.export-rt-sched-migrate
-      ];
-    };
-
     linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -483,7 +475,6 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
-     linux_rt_5_11 = packagesFor kernels.linux_rt_5_11;
   };
 
   rpiPackages = {
@@ -526,7 +517,7 @@ in {
     linux_latest = packages.linux_5_15;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_11;
+    linux_rt_latest = packages.linux_rt_5_10;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
