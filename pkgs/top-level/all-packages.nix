@@ -28673,7 +28673,18 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovide = callPackage ../applications/editors/neovim/neovide { };
+  neovide = callPackage ../applications/editors/neovim/neovide {
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit
+      ApplicationServices
+      Carbon
+      CoreFoundation
+      CoreGraphics
+      CoreVideo
+      Foundation
+      OpenGL
+      QuartzCore;
+  };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 

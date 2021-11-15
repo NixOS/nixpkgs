@@ -20,7 +20,18 @@
 , stdenv
 , enableWayland ? stdenv.isLinux
 , wayland
+, xcbuild
 , xorg
+# Apple frameworks
+, AppKit
+, ApplicationServices
+, Carbon
+, CoreFoundation
+, CoreGraphics
+, CoreVideo
+, Foundation
+, OpenGL
+, QuartzCore
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
@@ -73,6 +84,8 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     python2 # skia-bindings
     llvmPackages.clang # skia
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
   ];
 
   # All tests passes but at the end cargo prints for unknown reason:
@@ -96,6 +109,16 @@ rustPlatform.buildRustPackage rec {
         }))
       ];
     }))
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    ApplicationServices
+    Carbon
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
+    Foundation
+    OpenGL
+    QuartzCore
   ];
 
   postFixup = let

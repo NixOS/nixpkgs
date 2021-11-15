@@ -212,6 +212,10 @@ in
     buildInputs = [ freetype ];
   };
 
+  skia-bindings = attrs: {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
+  };
+
   thrussh-libsodium = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
