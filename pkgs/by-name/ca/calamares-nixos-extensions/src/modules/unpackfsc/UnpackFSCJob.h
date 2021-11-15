@@ -39,6 +39,7 @@ private:
     QString m_source;
     QString m_destination;
     Type m_type = Type::None;
+    QString m_progressMessage;
 };
 
 CALAMARES_PLUGIN_FACTORY_DECLARATION( UnpackFSCFactory )

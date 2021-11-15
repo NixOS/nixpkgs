@@ -32,7 +32,6 @@ private:
     // Progress reporting
     int m_processed = 0;
     int m_since = 0;
-    QString m_filename;
 };
 
 #endif

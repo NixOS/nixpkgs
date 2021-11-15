@@ -72,12 +72,12 @@ UnsquashRunner::unsquashProgress( QString line )
     m_since++;
     if ( m_since > chunk_size && line.contains( '/' ) )
     {
-        m_filename = line.split( '/', Qt::SkipEmptyParts ).last();
-        if ( !m_filename.isEmpty() )
+        const QString filename = line.split( '/', Qt::SkipEmptyParts ).last();
+        if ( !filename.isEmpty() )
         {
             m_since = 0;
             double p = m_inodes > 0 ? ( double( m_processed ) / double( m_inodes ) ) : 0.5;
-            Q_EMIT progress( p );
+            Q_EMIT progress( p, tr( "Unsquash file %1" ).arg( filename ) );
         }
     }
 }

@@ -14,6 +14,7 @@
 
 #include <utils/Logger.h>
 #include <utils/NamedEnum.h>
+#include <utils/RAII.h>
 #include <utils/Variant.h>
 
 #include <memory>
@@ -42,12 +43,13 @@ UnpackFSCJob::~UnpackFSCJob() {}
 QString
 UnpackFSCJob::prettyName() const
 {
-    return tr( "Unpack filesystems" );
+    return m_progressMessage.isEmpty() ? tr( "Unpack filesystems" ) : m_progressMessage;
 }
 
 Calamares::JobResult
 UnpackFSCJob::exec()
 {
+    cScopedAssignment messageClearer( &m_progressMessage, QString() );
     std::unique_ptr< Runner > r;
     switch ( m_type )
     {
@@ -63,8 +65,10 @@ UnpackFSCJob::exec()
         return Calamares::JobResult::ok();
     }
 
-    // progress?
-    connect( r.get(), &Runner::progress, this, &UnpackFSCJob::progress );
+    connect( r.get(), &Runner::progress, [=]( qreal percent, const QString& message ) {
+        m_progressMessage = message;
+        Q_EMIT progress( percent );
+    } );
     return r->run();
 }
 

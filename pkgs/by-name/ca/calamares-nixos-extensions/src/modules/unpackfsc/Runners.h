@@ -38,7 +38,7 @@ public:
 
 Q_SIGNALS:
     // See Calamares Job::progress
-    void progress( qreal percent );
+    void progress( qreal percent, const QString& message );
 
 protected:
     QString m_source;
