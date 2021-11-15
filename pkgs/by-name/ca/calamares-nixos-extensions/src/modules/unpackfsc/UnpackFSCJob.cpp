@@ -23,13 +23,18 @@ static const NamedEnumTable< UnpackFSCJob::Type >
 typeNames()
 {
     using T = UnpackFSCJob::Type;
-
-    static const NamedEnumTable< T > names {
-        { "none", T::None },         { "fsarchiver", T::FSArchive }, { "fsarchive", T::FSArchive },
-        { "fsa", T::FSArchive },     { "squashfs", T::Squashfs },    { "squash", T::Squashfs },
+    // clang-format off
+    static const NamedEnumTable< T > names
+    {
+        { "none", T::None },
+        { "fsarchiver", T::FSArchive },
+        { "fsarchive", T::FSArchive },
+        { "fsa", T::FSArchive },
+        { "squashfs", T::Squashfs },
+        { "squash", T::Squashfs },
         { "unsquash", T::Squashfs },
     };
-
+    // clang-format on
     return names;
 }
 
