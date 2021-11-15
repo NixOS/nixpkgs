@@ -46,25 +46,26 @@ stdenv.mkDerivation rec {
       ./linux/installer/common/sdk/install.sh
   '';
 
-  dontConfigure = true;
+  # We need `cmake` as a build input but don't use it to kick off the build phase
+  dontUseCmakeConfigure = true;
 
   # SDK built with stackprotector produces broken enclaves which crash at runtime.
   # Disable all to be safe, SDK build configures compiler mitigations manually.
   hardeningDisable = [ "all" ];
 
   nativeBuildInputs = [
+    autoconf
+    automake
     cmake
+    file
     git
+    nasm
+    ncurses
     ocaml
     ocamlPackages.ocamlbuild
     perl
     python3
     texinfo
-    nasm
-    file
-    ncurses
-    autoconf
-    automake
   ];
 
   buildInputs = [
@@ -77,24 +78,24 @@ stdenv.mkDerivation rec {
   # Build external/ippcp_internal first. The Makefile is rewritten to make the
   # build faster by splitting different versions of ipp-crypto builds and to
   # avoid patching the Makefile for reproducibility issues.
-  buildPhase =
+  preBuild =
     let
-      ipp-crypto-no_mitigation = callPackage (import ./ipp-crypto.nix) { };
+      ipp-crypto-no_mitigation = callPackage ./ipp-crypto.nix { };
 
       sgx-asm-pp = "python ${src}/build-scripts/sgx-asm-pp.py --assembler=nasm";
 
       nasm-load = writeShellScript "nasm-load" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=LOAD $@";
-      ipp-crypto-cve_2020_0551_load = callPackage (import ./ipp-crypto.nix) {
+      ipp-crypto-cve_2020_0551_load = callPackage ./ipp-crypto.nix {
         extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-load}" ];
       };
 
       nasm-cf = writeShellScript "nasm-cf" "${sgx-asm-pp} --MITIGATION-CVE-2020-0551=CF $@";
-      ipp-crypto-cve_2020_0551_cf = callPackage (import ./ipp-crypto.nix) {
+      ipp-crypto-cve_2020_0551_cf = callPackage ./ipp-crypto.nix {
         extraCmakeFlags = [ "-DCMAKE_ASM_NASM_COMPILER=${nasm-cf}" ];
       };
     in
     ''
-      cd external/ippcp_internal
+      pushd 'external/ippcp_internal'
 
       mkdir -p lib/linux/intel64/no_mitigation
       cp ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a lib/linux/intel64/no_mitigation
@@ -109,39 +110,42 @@ stdenv.mkDerivation rec {
       cp ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_cf
       chmod a+w lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
-      rm -f ./inc/ippcp.h
+      rm ./inc/ippcp.h
       patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp20u3.patch -o ./inc/ippcp.h
 
       mkdir -p license
       cp ${ipp-crypto-no_mitigation.src}/LICENSE ./license
 
-      # Build the SDK installation package.
-      cd ../..
+      popd
+  '';
 
-      # Nix patches make so that $(SHELL) defaults to "sh" instead of "/bin/sh".
-      # The build uses $(SHELL) as an argument to file -L which requires a path.
-      make SHELL=$SHELL sdk_install_pkg
-
-      runHook postBuild
-    '';
+  buildFlags = [
+    "sdk_install_pkg"
+  ];
 
   postBuild = ''
     patchShebangs ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
   '';
 
   installPhase = ''
-    echo -e 'no\n'$out | ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
-  '';
+    runHook preInstall
 
-  dontFixup = true;
+    ./linux/installer/bin/sgx_linux_x64_sdk_*.bin -prefix "$out"
+
+    runHook postInstall
+  '';
 
   doInstallCheck = true;
   installCheckInputs = [ which ];
   installCheckPhase = ''
+    runHook preInstallCheck
+
     source $out/sgxsdk/environment
     cd SampleCode/SampleEnclave
     make SGX_MODE=SGX_SIM
     ./app
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
