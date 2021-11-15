@@ -72,6 +72,8 @@ in
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/
       '';
 
+      passthru.updateScript = ./update.py;
+
       meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
         homepage = "https://www.zabbix.com/";

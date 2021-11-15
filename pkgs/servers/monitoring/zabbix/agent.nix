@@ -28,6 +28,8 @@ import ./versions.nix ({ version, sha256, ... }:
       cp conf/zabbix_agentd/*.conf $out/etc/zabbix_agentd.conf.d/
     '';
 
+    passthru.updateScript = ./update.py;
+
     meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";

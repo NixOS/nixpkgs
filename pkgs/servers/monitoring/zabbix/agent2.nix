@@ -55,6 +55,8 @@ import ./versions.nix ({ version, sha256, vendorSha256 ? throw "unsupported vers
       ln -s $out/bin/zabbix_agent2 $out/sbin/zabbix_agentd
     '';
 
+    passthru.updateScript = ./update.py;
+
     meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
