@@ -86,7 +86,7 @@ UnsquashRunner::unsquashProgress( QString line )
     m_since++;
     if ( m_since > chunk_size && line.contains( '/' ) )
     {
-        const QString filename = line.split( '/', Qt::SkipEmptyParts ).last();
+        const QString filename = line.split( '/', Qt::SkipEmptyParts ).last().strip();
         if ( !filename.isEmpty() )
         {
             m_since = 0;
