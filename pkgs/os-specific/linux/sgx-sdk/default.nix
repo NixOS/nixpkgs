@@ -209,24 +209,52 @@ stdenv.mkDerivation rec {
         --replace '$(SGX_SDK)/buildenv.mk' "$out/share/bin/buildenv.mk"
     done
 
-    header "Patching buildenv.mk to use Intel's prebuilt Nix binutils"
+    header "Fixing BINUTILS_DIR in buildenv.mk"
     substituteInPlace $out/share/bin/buildenv.mk \
       --replace 'BINUTILS_DIR := /usr/local/bin' \
                 'BINUTILS_DIR := ${BINUTILS_DIR}'
 
-    header "Patching GDB path in bin/sgx-gdb"
+    header "Fixing GDB path in bin/sgx-gdb"
     substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
   doInstallCheck = true;
   installCheckInputs = [ which ];
+
+  # Run the samples as tests in simulation mode.
+  # The following samples are omitted:
+  # - SampleCommonLoader: requires an actual SGX device
+  # - PowerTransition: requires interaction
   installCheckPhase = ''
     runHook preInstallCheck
 
-    source $out/sgxsdk/environment
-    cd SampleCode/SampleEnclave
-    make SGX_MODE=SGX_SIM
+    source $out/share/bin/environment
+
+    TESTDIR=`mktemp -d`
+    cp -r $out/share/SampleCode $TESTDIR/
+
+    for dir in "Cxx11SGXDemo" "SampleEnclave" "SampleEnclavePCL" "SealUnseal" "Switchless"; do
+      cd $TESTDIR/SampleCode/$dir/
+      make SGX_MODE=SIM
+      ./app
+    done
+
+    cd $TESTDIR/SampleCode/LocalAttestation
+    make SGX_MODE=SIM
+    cd bin/
     ./app
+
+    cd $TESTDIR/SampleCode/RemoteAttestation
+    make SGX_MODE=SIM
+    echo "a" | LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/sample_libcrypto ./app
+
+    # Make sure all symlinks are valid
+    output=$(find "$out" -type l -exec test ! -e {} \; -print)
+    if [[ -n "$output" ]]; then
+      echo "Broken symlinks:"
+      echo "$output"
+      exit 1
+    fi
 
     runHook postInstallCheck
   '';
