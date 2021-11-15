@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi }:
+{ lib, buildPythonApplication, fetchPypi, installShellFiles }:
 
 buildPythonApplication rec {
   pname = "you-get";
@@ -13,11 +13,20 @@ buildPythonApplication rec {
     sha256 = "99282aca720c7ee1d9ef4b63bbbd226e906ea170b789a459fafd5b0627b0b15f";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd you-get \
+      --zsh contrib/completion/_you-get \
+      --fish contrib/completion/you-get.fish \
+      --bash contrib/completion/you-get-completion.bash
+  '';
+
   meta = with lib; {
     description = "A tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
+    changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ryneeverett ];
-    platforms = platforms.all;
   };
 }
