@@ -1,6 +1,6 @@
 # OCaml {#sec-language-ocaml}
 
-## End-user guide {#sec-language-ocaml-end-user}
+## User guide {#sec-language-ocaml-user-guide}
 
 OCaml libraries are available in attribute sets of the form `ocaml-ng.ocamlPackages_X_XX` where X is to be replaced with the desired compiler version. For example, ocamlgraph compiled with OCaml 4.12 can be found in `ocaml-ng.ocamlPackages_4_12.ocamlgraph`. The compiler itself is also located in this set, under the name `ocaml`.
 
