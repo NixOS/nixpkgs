@@ -4601,6 +4601,8 @@ with pkgs;
 
   dorkscout = callPackage ../tools/security/dorkscout { };
 
+  downonspot = callPackage ../applications/misc/downonspot { };
+
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
   slade = callPackage ../applications/misc/slade {
