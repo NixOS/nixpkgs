@@ -9,6 +9,7 @@
 , openpyxl
 , xlrd
 , h5py
+, odfpy
 , psycopg2
 , pyshp
 , fonttools
@@ -24,13 +25,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.6.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1dmiy87x0yc0d594v3d3km13dl851mx7ym1vgh3bg91llg8ykg33";
+    sha256 = "0b2h9vy0fch0bk0b33h8p4ssk3a25j67sfn0yvmxhbqjdmhlwv4h";
   };
 
   propagatedBuildInputs = [
@@ -60,6 +61,7 @@ buildPythonApplication rec {
     tabulate
     wcwidth
     zstandard
+    odfpy
     setuptools
   ] ++ lib.optionals withPcap [ dpkt dnslib ];
 

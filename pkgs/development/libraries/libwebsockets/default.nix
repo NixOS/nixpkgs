@@ -1,4 +1,11 @@
-{ fetchFromGitHub, lib, stdenv, cmake, openssl, zlib, libuv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, zlib
+, libuv
+}:
 
 let
   generic = { version, sha256 }: stdenv.mkDerivation rec {
@@ -63,5 +70,10 @@ in {
   libwebsockets_4_2 = generic {
     version = "4.2.1";
     sha256 = "sha256-C+WGfNF4tAgbp/7aRraBgjNOe4I5ihm+8CGelXzfxbU=";
+  };
+
+  libwebsockets_4_3 = generic {
+    version = "4.3.0";
+    sha256 = "13lxb487mqlzbsbv6fbj50r1717mfwdy87ps592lgfy3307yqpr4";
   };
 }
