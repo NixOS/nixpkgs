@@ -57,6 +57,7 @@ UnsquashRunner::run()
                 m_inodes = line.split( ' ', Qt::SkipEmptyParts ).last().toInt();
             }
         } );
+        /* ignored */ r.run();
     }
     if ( m_inodes <= 0 )
     {
