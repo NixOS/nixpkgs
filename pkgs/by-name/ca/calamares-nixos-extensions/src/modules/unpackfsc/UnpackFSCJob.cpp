@@ -48,9 +48,14 @@ UnpackFSCJob::~UnpackFSCJob() {}
 QString
 UnpackFSCJob::prettyName() const
 {
-    return m_progressMessage.isEmpty() ? tr( "Unpack filesystems" ) : m_progressMessage;
+    return tr( "Unpack filesystems" );
 }
 
+QString
+UnpackFSCJob::prettyStatusMessage() const
+{
+    return m_progressMessage;
+}
 Calamares::JobResult
 UnpackFSCJob::exec()
 {

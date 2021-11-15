@@ -30,6 +30,7 @@ public:
     ~UnpackFSCJob() override;
 
     QString prettyName() const override;
+    QString prettyStatusMessage() const override;
 
     Calamares::JobResult exec() override;
 
