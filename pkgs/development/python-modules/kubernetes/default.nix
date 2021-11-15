@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "18.20.0";
+  version = "19.15.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     rev = "v${version}";
-    sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
+    sha256 = "sha256-CMk/MAqYNxBCguzIFFi5A6VkRMXB7D2ZDSN1VzEq9H8=";
     fetchSubmodules = true;
   };
 
