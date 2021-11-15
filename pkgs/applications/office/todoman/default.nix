@@ -90,8 +90,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
   };
 }
