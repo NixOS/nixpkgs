@@ -603,6 +603,12 @@
       fingerprint = "7931 EB4E 4712 D7BE 04F8  6D34 07EE 1FFC A58A 11C5";
     }];
   };
+  amfl = {
+    email = "amfl@none.none";
+    github = "amfl";
+    githubId = 382798;
+    name = "amfl";
+  };
   amiddelk = {
     email = "amiddelk@gmail.com";
     github = "amiddelk";
