@@ -235,6 +235,7 @@ mapAliases ({
   fastnlo = fastnlo_toolkit; # added 2021-04-24
   fedora-coreos-config-transpiler = throw "fedora-coreos-config-transpiler has been renamed to 'butane'."; # added 2021-04-13
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
+  fetchzip = fetchArchive;
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-68 = throw "Firefox 68 ESR reached end of life with its final release 68.12esr on 2020-08-25 and was therefore removed from nixpkgs";
   firefox-esr-wrapper = firefox-esr;  # 2016-01

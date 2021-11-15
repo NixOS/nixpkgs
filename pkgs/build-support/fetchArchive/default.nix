@@ -45,7 +45,7 @@ in {
     + (if stripRoot then ''
       if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
         echo "error: zip file must contain a single file or directory."
-        echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
+        echo "hint: Pass stripRoot=false; to fetchArchive to assume flat list of files."
         exit 1
       fi
       fn=$(cd "$unpackDir" && echo *)
