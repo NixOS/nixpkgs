@@ -21,6 +21,7 @@
 , validatePkgConfig
 , which
 , writeShellScript
+, writeText
 }:
 
 stdenv.mkDerivation rec {
@@ -219,37 +220,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckInputs = [ which ];
 
-  # Run the samples as tests in simulation mode.
-  # The following samples are omitted:
-  # - SampleCommonLoader: requires an actual SGX device
-  # - PowerTransition: requires interaction
   installCheckPhase = ''
     runHook preInstallCheck
-
-    header "Building and running SGX samples"
-
-    source $out/share/bin/environment
-
-    TESTDIR=$(mktemp -d)
-    pushd $TESTDIR
-
-    cp -r $out/share/SampleCode/. ./
-
-    for dir in "Cxx11SGXDemo" "LocalAttestation" "SampleEnclave" "SampleEnclavePCL" "SealUnseal" "Switchless"; do
-      pushd "$dir/"
-      make -j $NIX_BUILD_CORES SGX_MODE=SIM
-      ./app || ./bin/app
-      popd
-    done
-
-    pushd "RemoteAttestation"
-    make -j $NIX_BUILD_CORES SGX_MODE=SIM
-    echo "a" | LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/sample_libcrypto ./app
-    popd
-
-    popd
-
-    header "Checking symlink targets"
 
     # Make sure all symlinks are valid
     output=$(find "$out" -type l -exec test ! -e {} \; -print)
@@ -260,6 +232,14 @@ stdenv.mkDerivation rec {
     fi
 
     runHook postInstallCheck
+  '';
+
+  setupHook = writeText "setup-hook.sh" ''
+    sgxsdk() {
+        export SGX_SDK=@out@
+    }
+
+    postHooks+=(sgxsdk)
   '';
 
   meta = with lib; {
