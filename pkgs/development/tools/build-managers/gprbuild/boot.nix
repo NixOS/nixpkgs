@@ -13,8 +13,8 @@ let
     name = "gprconfig-kb-${version}-src";
     owner = "AdaCore";
     repo = "gprconfig_kb";
-    rev = "v21.0.0"; # TODO(@sternenseemann): no 22.0.0 yet
-    sha256 = "11qmzfdd0ipmhxl4k2hjidqc9i40bywrfkbiivd3lhscxca5pxpg";
+    rev = "v${version}";
+    sha256 = "0zvd0v5cz0zd1hfnhdd91c6sr3bbv1w715j2gvzx3vxlpx1c2q4n";
   };
 in
 
