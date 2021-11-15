@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   version = "1.422";
 in
-fetchzip rec {
+fetchArchive rec {
   name = "barlow-${version}";
 
   url = "https://tribby.com/fonts/barlow/download/barlow-${version}.zip";

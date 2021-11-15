@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
+{ lib, stdenv, runCommand, fetchArchive, fetchurl, fetchpatch, fetchFromGitHub
 , cmake, pkg-config, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
@@ -53,7 +53,7 @@ let
 
   pname = "k2pdfopt";
   version = "2.53";
-  k2pdfopt_src = fetchzip {
+  k2pdfopt_src = fetchArchive {
     url = "http://www.willus.com/${pname}/src/${pname}_v${version}_src.zip";
     sha256 = "1fna8bg3pascjfc3hmc6xn0xi2yh7f1qp0d344mw9hqanbnykyy8";
   };

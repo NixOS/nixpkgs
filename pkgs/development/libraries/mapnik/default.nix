@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchArchive
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "mapnik";
   version = "3.1.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     # this one contains all git submodules and is cheaper than fetchgit
     url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
     sha256 = "sha256-qqPqN4vs3ZsqKgnx21yQhX8OzHca/0O+3mvQ/vnC5EY=";

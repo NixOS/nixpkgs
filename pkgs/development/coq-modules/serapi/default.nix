@@ -1,4 +1,4 @@
-{ lib, fetchzip, mkCoqDerivation, coq, version ? null }:
+{ lib, fetchArchive, mkCoqDerivation, coq, version ? null }:
 
 let
   ocamlPackages =
@@ -7,7 +7,7 @@ let
         ppxlib = super.ppxlib.override { version = "0.15.0"; };
         # the following does not work
         ppx_sexp_conv = super.ppx_sexp_conv.overrideAttrs (_: {
-          src = fetchzip {
+          src = fetchArchive {
             url = "https://github.com/janestreet/ppx_sexp_conv/archive/v0.14.1.tar.gz";
             sha256 = "04bx5id99clrgvkg122nx03zig1m7igg75piphhyx04w33shgkz2";
           };
@@ -64,7 +64,7 @@ in
   };
 }).overrideAttrs(o:
   let inherit (o) version; in {
-  src = fetchzip {
+  src = fetchArchive {
     url =
       if version == "8.14+rc1+0.14.0"
       then "https://github.com/ejgallego/coq-serapi/archive/refs/tags/8.14+rc1+0.14.0.tar.gz"

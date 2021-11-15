@@ -1,4 +1,4 @@
-{ fetchzip, lib }:
+{ fetchArchive, lib }:
 
 { owner
 , repo, rev
@@ -15,7 +15,7 @@ assert (lib.assertOneOf "vc" vc [ "hg" "git" ]);
 let
   baseUrl = "https://${vc}.${domain}/${owner}/${repo}";
 
-in fetchzip (recursiveUpdate {
+in fetchArchive (recursiveUpdate {
   inherit name;
   url = "${baseUrl}/archive/${rev}.tar.gz";
   meta.homepage = "${baseUrl}/";

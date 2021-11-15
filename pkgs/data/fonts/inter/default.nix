@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "3.19";
-in fetchzip {
+in fetchArchive {
   name = "inter-${version}";
 
   url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";

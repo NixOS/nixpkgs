@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, ocaml_pcre }:
+{ stdenv, lib, fetchArchive, ocaml, findlib, ocamlbuild, ocaml_pcre }:
 
 let version = "1.4"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-benchmark-${version}";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/Chris00/ocaml-benchmark/releases/download/${version}/benchmark-${version}.tar.gz";
     sha256 = "16wi8ld7c3mq77ylpgbnj8qqqqimyzwxs47v06vyrwpma5pab5xa";
   };

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles }:
+{ lib, stdenv, fetchArchive, jdk, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
   version = "1.3.7";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/micronaut-projects/micronaut-core/releases/download/v${version}/${pname}-${version}.zip";
     sha256 = "1f9fhp10fdm18g33kxl70l6l3x1k8p81h2c3zahjmhlg0sam78zw";
   };

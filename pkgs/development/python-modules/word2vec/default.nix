@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchzip
+, fetchArchive
 , cython
 , numpy
 , scikit-learn
@@ -13,7 +13,7 @@
 , isPy27
 }:
 let
-  testData = fetchzip {
+  testData = fetchArchive {
     url = "http://mattmahoney.net/dc/text8.zip";
     sha256 = "0w3l64bww9znmmvd9cqbfmh3dddnlrjicz43y5qq6fhi9cfqjfar";
   };

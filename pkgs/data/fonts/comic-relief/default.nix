@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.1";
-in fetchzip rec {
+in fetchArchive rec {
   name = "comic-relief-${version}";
 
   url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";

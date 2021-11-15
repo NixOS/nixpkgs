@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
+{ lib, stdenv, fetchArchive, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
 , copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
 , nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
 , libvorbis, libjpeg, libwebp, libpng
@@ -21,7 +21,7 @@ let
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
     name = "unvanquished-binary-deps";
     version = binary-deps-version;
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
       sha256 = "08bpyavbh5lmyprvqqi59gnm8s1fjmlk9f1785wlv7f52d9f9z1p";
     };

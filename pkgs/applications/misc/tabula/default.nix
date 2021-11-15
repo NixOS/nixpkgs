@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchArchive, jre, makeWrapper }:
 
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.2.1";
 
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/tabulapdf/tabula/releases/download/v${version}/tabula-jar-${version}.zip";
     sha256 = "0lkpv8hkji81fanyxm7ph8421fr9a6phqc3pbhw2bc4gljg7sgxi";
   };

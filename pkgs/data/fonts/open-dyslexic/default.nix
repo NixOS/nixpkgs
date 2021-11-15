@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2016-06-23";
-in fetchzip {
+in fetchArchive {
   name = "open-dyslexic-${version}";
 
   url = "https://github.com/antijingoist/open-dyslexic/archive/20160623-Stable.zip";

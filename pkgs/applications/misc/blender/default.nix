@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, fetchArchive, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python39Packages
@@ -18,7 +18,7 @@
 with lib;
 let
   python = python39Packages.python;
-  optix = fetchzip {
+  optix = fetchArchive {
     url = "https://developer.download.nvidia.com/redist/optix/v7.0/OptiX-7.0.0-include.zip";
     sha256 = "1b3ccd3197anya2bj3psxdrvrpfgiwva5zfv2xmyrl73nb2dvfr7";
   };

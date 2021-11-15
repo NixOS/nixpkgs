@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchzip
+, fetchArchive
 , mkDerivation
 , stdenv
 , Cocoa
@@ -35,7 +35,7 @@ mkDerivation rec {
     sha256 = "sha256-iqwOv95JFxQ1j/9B+oBFAp7mD1/1g2EJYvvUKbrDQes=";
   };
 
-  jmpDist = fetchzip {
+  jmpDist = fetchArchive {
     url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
     sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
   };

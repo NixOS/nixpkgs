@@ -13,10 +13,10 @@ fi
 fetch_arch() {
   VER="$1"; ARCH="$2"
   URL="https://releases.hashicorp.com/boundary/${VER}/boundary_${VER}_${ARCH}.zip"
-  nix-prefetch "{ stdenv, fetchzip }:
+  nix-prefetch "{ stdenv, fetchArchive }:
 stdenv.mkDerivation rec {
   pname = \"boundary\"; version = \"${VER}\";
-  src = fetchzip { url = \"$URL\"; };
+  src = fetchArchive { url = \"$URL\"; };
 }
 "
 }

@@ -1,4 +1,4 @@
-{ fetchzip, lib }:
+{ fetchArchive, lib }:
 
 let
   fonts = {
@@ -13,7 +13,7 @@ let
     unidings  = { version = "13.00"; file = "Unidings.zip";     sha256 = "0cvnxblk9wsr8mxm5lrdpdm456vi7lln7qh53b67npg4baf0as63"; description = "Glyphs and Icons for blocks of The Unicode Standard"; };
   };
 
-  mkpkg = name_: {version, file, sha256, description}: fetchzip rec {
+  mkpkg = name_: {version, file, sha256, description}: fetchArchive rec {
     name = "${name_}-${version}";
     url = "https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
     postFetch = ''

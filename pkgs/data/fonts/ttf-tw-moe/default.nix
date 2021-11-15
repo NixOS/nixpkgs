@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   version = "2020-11-14";
 in
-fetchzip {
+fetchArchive {
   name = "ttf-tw-moe";
 
   url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";

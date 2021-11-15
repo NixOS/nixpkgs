@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, cups }:
+{ stdenv, lib, fetchArchive, cups }:
 
 let
   platform =
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchArchive {
     # this site does not like curl -> override useragent
     curlOpts = "-A ''";
     url = "https://cdn.kyostatics.net/dlc/ru/driver/all/linuxdrv_1_1203_fs-1x2xmfp.-downloadcenteritem-Single-File.downloadcenteritem.tmp/LinuxDrv_1.1203_FS-1x2xMFP.zip";

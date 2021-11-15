@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "6.2";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  # We cannot use fetchFromGitHub (which calls fetchzip)
+  # We cannot use fetchFromGitHub (which calls fetchArchive)
   # because we need to be able to use fetchurlBoot.
   src = let
     # Note the version needs to be adjusted.

@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.1.5";
-in fetchzip rec {
+in fetchArchive rec {
   name = "liberastika-${version}";
 
   url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";

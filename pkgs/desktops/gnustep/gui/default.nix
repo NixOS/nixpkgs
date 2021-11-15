@@ -1,10 +1,10 @@
-{ gsmakeDerivation, fetchzip, base }:
+{ gsmakeDerivation, fetchArchive, base }:
 
 gsmakeDerivation rec {
   version = "0.29.0";
   pname = "gnustep-gui";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
     sha256 = "0x6n48p178r4zd8f4sqjfqd6rp49w00wr59w19lpwlmrdv7bn538";
   };

@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchzip, libtool, pkg-config, ncurses, unibilium }:
+{ stdenv, lib, fetchArchive, libtool, pkg-config, ncurses, unibilium }:
 
 stdenv.mkDerivation rec {
   pname = "libtermkey";
 
   version = "0.22";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.leonerd.org.uk/code/libtermkey/libtermkey-${version}.tar.gz";
     sha256 = "02dks6bj7n23lj005yq41azf95wh3hapmgc2lzyh12vigkjh67rg";
   };

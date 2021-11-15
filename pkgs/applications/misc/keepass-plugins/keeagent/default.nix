@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, fetchzip, mono }:
+{ lib, stdenv, buildEnv, fetchArchive, mono }:
 
 let
   version = "0.12.0";
@@ -6,7 +6,7 @@ let
     pname = "keeagent";
     inherit version;
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://lechnology.com/wp-content/uploads/2020/05/KeeAgent_v0.12.0.zip";
       sha256 = "0fcfbj3yikiv3dmp69236h9r3c416amdq849kn131w1129gb68xd";
       stripRoot = false;

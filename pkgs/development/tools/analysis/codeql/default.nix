@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
+{ lib, stdenv, fetchArchive, zlib, xorg, freetype, jdk11, curl, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "codeql";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
     sha256 = "sha256-KsgtuQ0ovccZTMm19LrxRU/JOcLzfkL6VRa6W7Tprnw=";
   };

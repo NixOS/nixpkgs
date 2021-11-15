@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
-    # not included in the tarball downloaded by fetchzip. setting
+    # not included in the tarball downloaded by fetchArchive. setting
     # fetchSubmodules works around this by using fetchgit instead of
-    # fetchzip.
+    # fetchArchive.
     fetchSubmodules = true;
   };
 

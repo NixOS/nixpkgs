@@ -1,11 +1,11 @@
-{ lib, addonDir, buildKodiAddon, fetchzip, defusedxml, kodi-six }:
+{ lib, addonDir, buildKodiAddon, fetchArchive, defusedxml, kodi-six }:
 
 buildKodiAddon rec {
   pname = "keymap";
   namespace = "script.keymap";
   version = "1.1.3+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1icrailzpf60nw62xd0khqdp66dnr473m2aa9wzpmkk3qj1ay6jv";
   };

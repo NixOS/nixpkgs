@@ -4,7 +4,7 @@
 , bigarray-overlap
 , bigstringaf
 , buildDunePackage
-, fetchzip
+, fetchArchive
 , fmt
 , jsonm
 , ke
@@ -16,7 +16,7 @@ buildDunePackage rec {
   pname = "prettym";
   version = "0.0.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/dinosaure/prettym/releases/download/${version}/prettym-${version}.tbz";
     sha256 = "03x7jh62mvzc6x2d8xsy456qa6iphw72zm7jmqrakpmsy6zcf2lb";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchArchive
 , pkg-config, bmake
 , cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman
 , libucl, wayland, wayland-protocols, wlroots, mesa
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "hikari";
   version = "2.3.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-At4b6mkArKe6knNWouLdZ9v8XhfHaUW+aB+CHyEBg8o=";
   };

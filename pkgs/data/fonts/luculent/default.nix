@@ -1,7 +1,7 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let version = "2.0.0"; in
-fetchzip {
+fetchArchive {
   name = "luculent-${version}";
   url =  "http://www.eastfarthing.com/luculent/luculent.tar.xz";
 

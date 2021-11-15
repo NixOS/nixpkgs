@@ -1,6 +1,6 @@
-{ fetchzip, lib }:
+{ fetchArchive, lib }:
 { version, sha256 }:
-{ inherit version; } // fetchzip {
+{ inherit version; } // fetchArchive {
   inherit sha256;
   name   = "psol-${version}";
   url    = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchArchive, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
@@ -134,7 +134,7 @@ let
   };
 
 in rec {
-  xonotic-data = fetchzip {
+  xonotic-data = fetchArchive {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
     sha256 = "15caj11v9hhr7w55w3rs1rspblzr9lg1crqivbn9pyyq0rif8cpl";

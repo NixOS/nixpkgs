@@ -10,7 +10,7 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{ lib, ncurses, which, graphviz, lua, fetchzip,
+{ lib, ncurses, which, graphviz, lua, fetchArchive,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
   coqPackages, coq, ocamlPackages, version ? null }@args:
 with builtins // lib;
@@ -84,7 +84,7 @@ let
         { passthru = genAttrs packages mathcomp_; }
         // optionalAttrs withDoc {
             htmldoc_template =
-              fetchzip {
+              fetchArchive {
                 url = "https://github.com/math-comp/math-comp.github.io/archive/doc-1.12.0.zip";
                 sha256 = "0y1352ha2yy6k2dl375sb1r68r1qi9dyyy7dyzj5lp9hxhhq69x8";
               };

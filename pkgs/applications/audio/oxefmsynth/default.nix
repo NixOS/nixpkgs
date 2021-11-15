@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, unzip, fetchzip, libX11 }:
+{ stdenv, lib, fetchFromGitHub, unzip, fetchArchive, libX11 }:
 
 let
 
   vst-sdk = stdenv.mkDerivation rec {
     name = "vstsdk3610_11_06_2018_build_37";
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
       sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
     };

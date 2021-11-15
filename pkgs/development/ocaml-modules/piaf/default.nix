@@ -1,7 +1,7 @@
 { alcotest-lwt
 , buildDunePackage
 , dune-site
-, fetchzip
+, fetchArchive
 , gluten-lwt-unix
 , lib
 , logs
@@ -19,7 +19,7 @@ buildDunePackage rec {
   pname = "piaf";
   version = "0.1.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
     sha256 = "0d431kz3bkwlgdamvsv94mzd9631ppcjpv516ii91glzlfdzh5hz";
   };

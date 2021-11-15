@@ -1,11 +1,11 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six, requests, inputstreamhelper }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript, six, requests, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";
   version = "6.8.18+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "F950rnE/YxwWI0ieHC2TdGNSfrQDHlStnxLbA6UjEaM=";
   };

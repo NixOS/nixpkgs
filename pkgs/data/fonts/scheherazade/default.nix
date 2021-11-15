@@ -1,4 +1,4 @@
-{ lib, fetchzip, version ? "3.200" }:
+{ lib, fetchArchive, version ? "3.200" }:
 
 let
   new = lib.versionAtLeast version "3.000";
@@ -7,7 +7,7 @@ let
     "3.200" = "0qvmpsn6ja3g2hlvq0vb9pjsyk6ibna7s3w3n6q7lnhk0rhjg8bv";
   }."${version}";
 
-in fetchzip rec {
+in fetchArchive rec {
   name = "scheherazade${lib.optionalString new "-new"}-${version}";
 
   url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";

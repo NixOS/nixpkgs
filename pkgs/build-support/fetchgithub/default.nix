@@ -1,4 +1,4 @@
-{ lib, fetchgit, fetchzip }:
+{ lib, fetchgit, fetchArchive }:
 
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
@@ -11,9 +11,9 @@ let
   passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit;
-  # We prefer fetchzip in cases we don't need submodules as the hash
+  # We prefer fetchArchive in cases we don't need submodules as the hash
   # is more stable in that case.
-  fetcher = if useFetchGit then fetchgit else fetchzip;
+  fetcher = if useFetchGit then fetchgit else fetchArchive;
   privateAttrs = lib.optionalAttrs private {
     netrcPhase = ''
       if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then

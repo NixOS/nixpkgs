@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , callPackage
-, fetchzip
+, fetchArchive
 , jack
 , udev
 , libsForQt5
@@ -10,7 +10,7 @@
 rec {
   version = "20211005.2.251ac7d";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
     sha256 = "12ppbwhnk5zajb73szd04sz80bp17q577bkb9j8p45apvq201db3";
 

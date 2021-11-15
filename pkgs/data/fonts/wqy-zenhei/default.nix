@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "0.9.45";
-in fetchzip rec {
+in fetchArchive rec {
   name = "wqy-zenhei-${version}";
 
   url = "mirror://sourceforge/wqy/${name}.tar.gz";

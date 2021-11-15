@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchzip, wxGTK31, coreutils, SDL2, openal, alsa-lib, pkg-config
+{ stdenv, lib, fetchArchive, wxGTK31, coreutils, SDL2, openal, alsa-lib, pkg-config
 , autoreconfHook, withNetworking ? true, withALSA ? true }:
 
 stdenv.mkDerivation rec {
   pname = "pcem";
   version = "17";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://pcem-emulator.co.uk/files/PCemV${version}Linux.tar.gz";
     stripRoot = false;
     sha256 = "067pbnc15h6a4pnnym82klr1w8qwfm6p0pkx93gx06wvwqsxvbdv";

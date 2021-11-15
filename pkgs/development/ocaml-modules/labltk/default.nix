@@ -1,10 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, makeWrapper, fetchArchive, ocaml, findlib, tcl, tk }:
 
 let
  params =
   let mkNewParam = { version, sha256, rev ? version }: {
     inherit version;
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://github.com/garrigue/labltk/archive/${rev}.tar.gz";
       inherit sha256;
     };

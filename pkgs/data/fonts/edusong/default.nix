@@ -1,10 +1,10 @@
-{ stdenvNoCC, lib, fetchzip }:
+{ stdenvNoCC, lib, fetchArchive }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "edusong";
   version = "1.0"; # The upstream doesn't provide the version
 
-  src = fetchzip {
+  src = fetchArchive {
     name = "${pname}-${version}";
     url =
       "http://language.moe.gov.tw/001/Upload/Files/site_content/M0001/eduSong_Unicode.zip";

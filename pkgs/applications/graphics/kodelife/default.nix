@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchzip
+, fetchArchive
 , alsa-lib
 , glib
 , gst_all_1
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     x86_64-linux  = "linux-x86_64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.zip";
     sha256 = {
       aarch64-linux = "0ryjmpzpfqdqrvqpq851vvrjd8ld5g91gcigpv9rxp3z1b7qdand";

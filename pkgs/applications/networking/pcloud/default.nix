@@ -16,7 +16,7 @@
 
 {
  # Build dependencies
- appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
+ appimageTools, autoPatchelfHook, fetchArchive, lib, stdenv
 
  # Runtime dependencies;
  # A few additional ones (e.g. Node) are already shipped together with the
@@ -30,7 +30,7 @@ let
   code = "XZ0FAtXZNxFJbda6KhLejU9tKAg4N0TEqx3V";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
     hash = "sha256-6eMRFuZOLcoZd2hGw7QV+kAmzE5lK8uK6ZpGs4n7/zw=";
   };

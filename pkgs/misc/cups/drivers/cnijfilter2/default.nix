@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
+{ stdenv, lib, fetchArchive, autoconf, automake, cups, glib, libxml2, libusb1, libtool
 , withDebug ? false }:
 
 stdenv.mkDerivation {
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   version = "6.10";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://gdlp01.c-wss.com/gds/1/0100010921/01/cnijfilter2-source-6.10-1.tar.gz";
     sha256 = "0w121issdjxdv5i9ksa5m23if6pz1r9ql8p894f1pqn16w0kw1ix";
   };

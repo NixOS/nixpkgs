@@ -44,7 +44,7 @@ class UrlPackage(Package):
         return textwrap.dedent("""
             %s = super.%s.overridePythonAttrs (
               _: {
-                src = pkgs.fetchzip {
+                src = pkgs.fetchArchive {
                   url = "%s";
                   sha256 = "%s";
                 };

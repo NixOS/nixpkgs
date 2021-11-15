@@ -1,10 +1,10 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "chardet";
   namespace = "script.module.chardet";
   version = "4.0.0+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1jsd165mb1b8jdan2jbjd3y3xa0xam2cxcccmwazkybpa0r6a7dj";
   };

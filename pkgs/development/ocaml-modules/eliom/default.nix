@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, which, ocsigen_server, ocaml,
+{ stdenv, lib, fetchArchive, which, ocsigen_server, ocaml,
   lwt_react,
   opaline, ppx_deriving, findlib
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec
   pname = "eliom";
   version = "8.9.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
     sha256 = "sha256:1b1vb3ilb54ffzb98mqa6zggqchsnjspbni8qxi6j42pbajp7p2l";
   };

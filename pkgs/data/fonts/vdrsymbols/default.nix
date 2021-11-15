@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "vdrsymbols-20100612";
 
   url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";

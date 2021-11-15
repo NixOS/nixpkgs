@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   pname = "restinio";
   version = "0.6.13";
 in
-fetchzip {
+fetchArchive {
   name = "${pname}-${version}";
   url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}-full.tar.bz2";
   sha256 = "0cwbd5ni5pm25c7njs3wllrblb2i853ibjvpbb1iicy833zais8d";

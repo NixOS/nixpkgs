@@ -1,4 +1,4 @@
-{ fetchgit, fetchzip, lib }:
+{ fetchgit, fetchArchive, lib }:
 
 # gitlab example
 { owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
@@ -13,7 +13,7 @@ let
   passthruAttrs = removeAttrs args [ "domain" "owner" "group" "repo" "rev" ];
 
   useFetchGit = deepClone || fetchSubmodules || leaveDotGit;
-  fetcher = if useFetchGit then fetchgit else fetchzip;
+  fetcher = if useFetchGit then fetchgit else fetchArchive;
 
   fetcherArgs = (if useFetchGit then {
     inherit rev deepClone fetchSubmodules leaveDotGit;

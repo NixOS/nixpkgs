@@ -1,4 +1,4 @@
-{ lib, fetchzip, qt5, mkDerivation }:
+{ lib, fetchArchive, qt5, mkDerivation }:
 
 let
   version = "1.40.43";
@@ -7,7 +7,7 @@ mkDerivation {
   pname = "qtbitcointrader";
   inherit version;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
     sha256 = "07xbsi78cykpyxidp1bw5ahmymdrs2afg7b0lla7dfhagz18lzxv";
   };

@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "ipafont-003.03";
 
   url = "http://ipafont.ipa.go.jp/old/ipafont/IPAfont00303.php";

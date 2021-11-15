@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, autoconf, automake, libtool, libpcap }:
+{ lib, stdenv, fetchArchive, autoconf, automake, libtool, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "libcrafter";
   version = "1.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/pellegre/libcrafter/archive/version-${version}.zip";
     sha256 = "1d2vgxawdwk2zg3scxclxdby1rhghmivly8azdjja89kw7gls9xl";
   };

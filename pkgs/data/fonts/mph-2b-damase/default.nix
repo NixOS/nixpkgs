@@ -1,6 +1,6 @@
-{ fetchzip }:
+{ fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "MPH-2B-Damase-2";
 
   url = "http://www.wazu.jp/downloads/damase_v.2.zip";

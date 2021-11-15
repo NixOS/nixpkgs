@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.8.3";
 in
-fetchzip rec {
+fetchArchive rec {
   name = "Cozette-${version}";
 
   url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";

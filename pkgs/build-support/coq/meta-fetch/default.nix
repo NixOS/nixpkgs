@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }@args:
+{ lib, stdenv, fetchArchive }@args:
 let lib' = lib; in
 let lib = import ../extra-lib.nix {lib = lib';}; in
 with builtins; with lib;
@@ -17,7 +17,7 @@ let
           { cond = !isNull (match "(www.)?mpi-sws.org" domain);
             out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";}
         ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-        fetch = x: if args?sha256 then fetchzip (x // { inherit sha256; }) else fetchTarball x;
+        fetch = x: if args?sha256 then fetchArchive (x // { inherit sha256; }) else fetchTarball x;
     in fetch { inherit url ; };
 in
 {

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchpatch }:
+{ stdenv, lib, fetchArchive, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "miranda";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   # so the `mtime` field in the object file would no longer match
   # and Miranda would try to regenerate it at the runtime,
   # even though it is up to date.
-  # Using `fetchzip` will make all the source files have `mtime=1`
+  # Using `fetchArchive` will make all the source files have `mtime=1`
   # from the start so this mismatch cannot occur.
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/src/mira-${builtins.replaceStrings [ "." ] [ "" ] version}-src.tgz";
     sha256 = "KE/FTL9YW9l7VBAgkFZlqgSM1Bt/BXT6GkkONtyKJjQ=";
   };

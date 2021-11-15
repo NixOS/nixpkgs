@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   pname = "national-park-typeface";
   version = "206464";
-in fetchzip {
+in fetchArchive {
   name = "${pname}-${version}";
   url = "https://files.cargocollective.com/c${version}/NationalPark.zip";
 

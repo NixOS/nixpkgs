@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, gnome, gettext, glib }:
+{ lib, stdenv, fetchArchive, gnome, gettext, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clock-override";
   version = "12";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://extensions.gnome.org/extension-data/clock-overridegnomeshell.kryogenix.org.v${version}.shell-extension.zip";
     sha256 = "1cyaszks6bwnbgacqsl1pmr24mbj05mad59d4253la9am8ibb4m6";
     stripRoot = false;

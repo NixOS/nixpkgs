@@ -6,17 +6,17 @@
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
 # Packs must be installed from a local directory during the build, with dependencies
 # resolved manually, e.g. to install the 'julian' pack, which depends on the 'delay', 'list_util' and 'typedef' packs:
-#   julian = pkgs.fetchzip {
+#   julian = pkgs.fetchArchive {
 #     name = "swipl-pack-julian";
 #     url = "https://github.com/mndrix/julian/archive/v0.1.3.zip";
 #     sha256 = "1sgql7c21p3c5m14kwa0bcmlwn9fql612krn9h36gla1j9yjdfgy";
 #   };
-#   delay = pkgs.fetchzip {
+#   delay = pkgs.fetchArchive {
 #     name = "swipl-pack-delay";
 #     url = "https://github.com/mndrix/delay/archive/v0.3.3.zip";
 #     sha256 = "0ira87afxnc2dnbbmgwmrr8qvary8lhzvhqwd52dccm6yqd3nybg";
 #   };
-#   list_util = pkgs.fetchzip {
+#   list_util = pkgs.fetchArchive {
 #     name = "swipl-pack-list_util";
 #     url = "https://github.com/mndrix/list_util/archive/v0.13.0.zip";
 #     sha256 = "0lx7vffflak0y8l8vg8k0g8qddwwn23ksbz02hi3f8rbarh1n89q";

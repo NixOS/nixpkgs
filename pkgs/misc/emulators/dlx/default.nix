@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "dlx";
   version = "2012-07-08";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.davidviner.com/zip/dlx/dlx.zip";
     sha256 = "0508linnar9ivy3xr99gzrb2l027ngx12dlxaxs7w67cnwqnb0dg";
   };

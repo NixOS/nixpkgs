@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libX11, libXScrnSaver, libXext, libXft, libXrender
+{ lib, stdenv, fetchArchive, libX11, libXScrnSaver, libXext, libXft, libXrender
 , freetype, zlib, fontconfig
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.16";
   pname = "sam-ba";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.atmel.com/dyn/resources/prod_documents/sam-ba_${version}_linux.zip";
     sha256 = "18lsi4747900cazq3bf0a87n3pc7751j5papj9sxarjymcz9vks4";
   };

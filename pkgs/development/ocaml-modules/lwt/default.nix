@@ -1,4 +1,4 @@
-{ lib, fetchzip, pkg-config, ncurses, libev, buildDunePackage, ocaml
+{ lib, fetchArchive, pkg-config, ncurses, libev, buildDunePackage, ocaml
 , cppo, dune-configurator, ocplib-endian, result
 , mmap, seq
 , ocaml-syntax-shims
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
     sha256 = "0cq2qy23sa1a5zk6nja3c652mp29i84yfrkcwks6i8sdqwli36jy";
   };

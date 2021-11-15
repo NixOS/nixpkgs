@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "octant";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
         x86_64-darwin = "macOS-64bit";
         aarch64-darwin = "macOS-arm64";
       }.${system} or (throw "Unsupported system: ${system}");
-      fetchsrc = version: sha256: fetchzip {
+      fetchsrc = version: sha256: fetchArchive {
         url = "https://github.com/vmware-tanzu/octant/releases/download/v${version}/octant_${version}_${suffix}.tar.gz";
         sha256 = sha256.${system};
       };

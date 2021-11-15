@@ -1,7 +1,7 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 {
-tai-ahom = fetchzip {
+tai-ahom = fetchArchive {
   name = "tai-ahom-2015-07-06";
 
   url = "https://github.com/enabling-languages/tai-languages/blob/b57a3ea4589af69bb8e87c6c4bb7cd367b52f0b7/ahom/.fonts/ttf/.original/AhomUnicode_FromMartin.ttf?raw=true";

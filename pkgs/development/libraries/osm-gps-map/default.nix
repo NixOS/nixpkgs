@@ -1,10 +1,10 @@
-{ cairo, fetchzip, glib, gnome, gtk3, gobject-introspection, pkg-config, lib, stdenv }:
+{ cairo, fetchArchive, glib, gnome, gtk3, gobject-introspection, pkg-config, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "osm-gps-map";
   version = "1.2.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/nzjrs/osm-gps-map/releases/download/${version}/osm-gps-map-${version}.tar.gz";
     sha256 = "sha256-ciw28YXhR+GC6B2VPC+ZxjyhadOk3zYGuOssSgqjwH0=";
   };

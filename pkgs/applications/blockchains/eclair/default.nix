@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchArchive
 , jq
 , openjdk11
 }:
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.6.2";
   revision = "6817d6f";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ACINQ/eclair/releases/download/v${version}/eclair-node-${version}-${revision}-bin.zip";
     sha256 = "038r9mblm2r8mkxnv65k29r7xj22dff5gmvzv9xiy5zf9i45mmk8";
   };

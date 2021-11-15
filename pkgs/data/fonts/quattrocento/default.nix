@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.1";
-in fetchzip rec {
+in fetchArchive rec {
   name = "quattrocento-${version}";
 
   url = "http://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${version}.zip";

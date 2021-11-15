@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
+{ stdenv, lib, fetchArchive, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
   version = "1.5.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
     hash = "sha256-MEkMi2w8G9FZhE3JvzzbqObcErQ9WFXy5mtKwQOoxbk=";
   };

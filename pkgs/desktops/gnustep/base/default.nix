@@ -1,7 +1,7 @@
 { aspell, audiofile
 , gsmakeDerivation
 , cups
-, fetchzip
+, fetchArchive
 , gmp, gnutls
 , libffi, binutils-unwrapped
 , libjpeg, libtiff, libpng, giflib
@@ -14,7 +14,7 @@
 gsmakeDerivation rec {
   pname = "gnustep-base";
   version = "1.28.0";
-  src = fetchzip {
+  src = fetchArchive {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
     sha256 = "05vjz19v1w7yb7hm8qrc41bqh6xd8in7sgg2p0h1vldyyaa5sh90";
   };

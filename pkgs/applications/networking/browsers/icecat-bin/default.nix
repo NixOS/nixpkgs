@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchArchive
 , autoPatchelfHook
 , wrapGAppsHook
 , gnome2
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   pname = "icecat-bin";
   version = "60.7.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirror.tochlab.net/pub/gnu/gnuzilla/${version}/icecat-${version}.en-US.gnulinux-x86_64.tar.bz2";
     sha256 = "sha256-bEapbQIcZXQ0Tip/X1Q0guowpr3wNDYsFbHGmTbc5mE=";
   };

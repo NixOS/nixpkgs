@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, SDL, SDL_net }:
+{ lib, stdenv, fetchurl, fetchArchive, SDL, SDL_net }:
 
 stdenv.mkDerivation rec {
   pname = "opentyrian";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jnrkq616pc4dhlbd4n30d65vmn25q84w6jfv9383l9q20cqf2ph";
   };
 
-  data = fetchzip {
+  data = fetchArchive {
     url = "http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip";
     sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
   };

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook }:
+{ lib, stdenv, fetchArchive, makeWrapper, unzip, jre, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "yEd";
   version = "3.21.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
     sha256 = "1jw28hkd7p0n660gid8yh5y0kdcz6ycn4hsgjlf0pq48x9kv6w0c";
   };

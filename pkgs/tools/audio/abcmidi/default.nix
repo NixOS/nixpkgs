@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "abcMIDI";
   version = "2021.10.15";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://ifdo.ca/~seymour/runabc/${pname}-${version}.zip";
     sha256 = "sha256-OEkSgT3Rg0ZcTCTeOd2+GlopzhI19spOLkH3nDDCWo8=";
   };

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jre }:
+{ lib, stdenv, fetchArchive, jre }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-cli";
   version = "9.6.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url  = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${pname}-${version}-distribution.zip";
     sha256  = "sha256-55ydhprVC9NdDMUrKbpSAEQBb9zRYgwOc7k8aP4R89A=";
   };

@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchzip, ocaml, uchar, uutf, ounit2 }:
+{ lib, buildDunePackage, fetchArchive, ocaml, uchar, uutf, ounit2 }:
 
 buildDunePackage rec {
   pname = "markup";
@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/aantron/markup.ml/archive/${version}.tar.gz";
     sha256 = "09hkrf9pw6hpb9j06p5bddklpnjwdjpqza3bx2179l970yl67an9";
   };

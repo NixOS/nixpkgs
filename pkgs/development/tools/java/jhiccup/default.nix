@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "jhiccup";
   version = "2.0.10";
 
-  src = fetchzip {
+  src = fetchArchive {
     url    = "https://www.azul.com/files/jHiccup-${version}-dist.zip";
     sha256 = "1hsvi8wjh615fnjf75h7b5afp04chqcgvini30vfcn3m9a5icbgy";
   };

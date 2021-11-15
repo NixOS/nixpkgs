@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "mro-unicode-2013-05-25";
 
   url = "https://github.com/phjamr/MroUnicode/raw/f297de070f7eba721a47c850e08efc119d3bfbe8/MroUnicode-Regular.ttf";

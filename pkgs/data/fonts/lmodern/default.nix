@@ -1,6 +1,6 @@
-{ fetchzip }:
+{ fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "lmodern-2.004.5";
 
   url = "mirror://debian/pool/main/l/lmodern/lmodern_2.004.5.orig.tar.gz";

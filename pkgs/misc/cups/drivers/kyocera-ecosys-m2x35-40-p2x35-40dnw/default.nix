@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchArchive
   # can either be "EU" or "Global"; it's unclear what the difference is
 , region ? "Global"
   # can be either "English", "French", "German", "Italian", "Portguese" or "Spanish"
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = let
     urlVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
-  in fetchzip {
+  in fetchArchive {
     url = "https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_${urlVersion}_ECOSYS_M2x35_40_P2x35_40dnw_zip.download.zip";
     sha256 = "10crxdfj62ini70vv471445zi6q0l9fmg2jsd74sp6fr0qa0kvr7";
   };

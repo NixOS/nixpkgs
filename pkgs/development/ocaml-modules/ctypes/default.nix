@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, libffi, pkg-config, ncurses, integers, bigarray-compat }:
+{ lib, stdenv, fetchArchive, ocaml, findlib, libffi, pkg-config, ncurses, integers, bigarray-compat }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
 then throw "ctypes is not available for OCaml ${ocaml.version}"
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-ctypes-${version}";
   version = "0.18.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
     sha256 = "03zrbnl16m67ls0yfhq7a4k4238x6x6b3m456g4dw2yqwc153vks";
   };

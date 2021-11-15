@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchzip, xorg }:
+{ lib, stdenv, fetchArchive, xorg }:
 stdenv.mkDerivation rec {
   pname = "xtris";
   version = "1.15";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://web.archive.org/web/20120315061213/http://www.iagora.com/~espel/xtris/xtris-${version}.tar.gz";
     sha256 = "1vqva99lyv7r6f9c7yikk8ahcfh9aq3clvwm4pz964wlbr9mj1v6";
   };

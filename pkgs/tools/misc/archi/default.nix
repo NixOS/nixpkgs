@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchzip
+, fetchArchive
 , autoPatchelfHook
 , makeWrapper
 , jdk
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
         sha256 = "0sd57cfnh5q2p17sd86c8wgmqyipg29rz6iaa5brq8mwn8ps2fdw";
       }
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchzip {
+      fetchArchive {
         url = "https://www.archimatetool.com/downloads/archi/Archi-Mac-${version}.zip";
         sha256 = "1h05lal5jnjwm30dbqvd6gisgrmf1an8xf34f01gs9pwqvqfvmxc";
       }

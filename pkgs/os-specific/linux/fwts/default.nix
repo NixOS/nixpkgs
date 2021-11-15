@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
+{ lib, stdenv, fetchArchive, autoreconfHook, pkg-config, glib, pcre
 , json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "fwts";
   version = "21.07.00";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
     sha256 = "sha256-cTm8R7sUJk5aTjXvsxfBXX0J/ehVoqo43ILZ6VqaPTI=";
     stripRoot = false;

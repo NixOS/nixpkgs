@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, fpc , lang ? "en" } :
+{ lib, stdenv, fetchArchive, fpc , lang ? "en" } :
 assert lib.assertOneOf "lang" lang ["cn" "de" "en" "fr" "tr"];
 stdenv.mkDerivation rec {
   pname = "gavrasm";
   version = "4.5";
 
-  src = fetchzip {
+  src = fetchArchive {
     url ="http://www.avr-asm-tutorial.net/gavrasm/v45/gavrasm_sources_lin_45.zip";
     sha256 = "1f5g5ran74pznwj4g7vfqh2qhymaj3p26f2lvzbmlwq447iid52c";
     stripRoot=false;

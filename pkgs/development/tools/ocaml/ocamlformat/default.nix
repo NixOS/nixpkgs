@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchzip, callPackage }:
+{ lib, fetchurl, fetchArchive, callPackage }:
 
 let mkOCamlformat = callPackage ./generic.nix; in
 

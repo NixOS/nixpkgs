@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip, wxGTK30, zlib, zstd }:
+{ stdenv, lib, fetchArchive, wxGTK30, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "urbackup-client";
   version = "2.4.11";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
     sha256 = "0cciy9v1pxj9qaklpbhp2d5rdbkmfm74vhpqx6b4phww0f10wvzh";
   };

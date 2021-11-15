@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip rec {
+fetchArchive rec {
   name = "wqy-microhei-0.2.0-beta";
 
   url = "mirror://sourceforge/wqy/${name}.tar.gz";

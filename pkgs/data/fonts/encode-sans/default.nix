@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip rec {
+fetchArchive rec {
   name = "encode-sans-1.002";
 
   url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 let
   arch = "amd64";
@@ -6,7 +6,7 @@ in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
   version = "0.11.44593";
-  src = fetchzip {
+  src = fetchArchive {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
       sha256 = "1f06zmcpvm0f3phwc43ai6v4ykhkrd4f3br2j89nx9bfmj6ss2ic";
       stripRoot = false;

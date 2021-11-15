@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation {
   pname = "clprover";
   version = "1.0.3";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://cgi.csc.liv.ac.uk/~ullrich/CLProver++/CLProver++-v1.0.3-18-04-2015.zip";
     sha256 = "10kmlg4m572qwfzi6hkyb0ypb643xw8sfb55xx7866lyh37w1q3s";
     stripRoot = false;

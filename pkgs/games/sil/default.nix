@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ncurses, libX11, libXaw, libXt, libXext, libXmu, makeWrapper, writeScript, ... }:
+{ lib, stdenv, fetchArchive, ncurses, libX11, libXaw, libXt, libXext, libXmu, makeWrapper, writeScript, ... }:
 let
   setup = writeScript "setup" ''
     mkdir -p "$ANGBAND_PATH"
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "Sil";
   version = "1.3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.amirrorclear.net/flowers/game/sil/Sil-130-src.zip";
     sha256 = "1amp2mr3fxascra0k76sdsvikjh8g76nqh46kka9379zd35lfq8w";
     stripRoot=false;

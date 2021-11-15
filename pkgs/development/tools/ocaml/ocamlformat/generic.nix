@@ -1,11 +1,11 @@
-{ lib, fetchurl, fetchzip, ocaml-ng
+{ lib, fetchurl, fetchArchive, ocaml-ng
 , version
 , tarballName ? "ocamlformat-${version}.tbz",
 }:
 
 let src =
   if version == "0.11.0"
-  then fetchzip {
+  then fetchArchive {
     url = "https://github.com/ocaml-ppx/ocamlformat/archive/0.11.0.tar.gz";
     sha256 = "0zvjn71jd4d3znnpgh0yphb2w8ggs457b6bl6cg1fmpdgxnds6yx";
   } else fetchurl {

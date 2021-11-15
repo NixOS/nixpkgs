@@ -1,5 +1,5 @@
 { buildDunePackage
-, fetchzip
+, fetchArchive
 , findlib
 , lib
 , menhir
@@ -12,7 +12,7 @@ buildDunePackage rec {
   version = "0.1.3";
   minimalOCamlVersion = "4.03";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/mirage/coin/releases/download/v${version}/coin-v${version}.tbz";
     sha256 = "06bfidvglyp9hzvr2xwbdx8wf26is2xrzc31fldzjf5ab0vd076p";
   };

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchArchive, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libinotify-kqueue";
   version = "20180201";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/libinotify-kqueue/libinotify-kqueue/archive/${version}.tar.gz";
     sha256 = "0dkh6n0ghhcl7cjkjmpin118h7al6i4vlkmw57vip5f6ngr6q3pl";
   };

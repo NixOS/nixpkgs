@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
+{ lib, stdenv, fetchArchive, autoPatchelfHook, fetchurl, xar, cpio }:
 
 stdenv.mkDerivation rec {
   pname = "1password";
   version = "1.12.2";
   src =
     if stdenv.isLinux then
-      fetchzip
+      fetchArchive
         {
           url = {
             "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";

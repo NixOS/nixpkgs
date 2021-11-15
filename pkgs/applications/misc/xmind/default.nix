@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ stdenv, lib, fetchArchive, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
   version = "8-update8";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://xmind.net/xmind/downloads/${pname}-${version}-linux.zip";
     stripRoot = false;
     sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";

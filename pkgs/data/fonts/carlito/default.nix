@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "20130920";
-in fetchzip {
+in fetchArchive {
   name = "carlito-${version}";
 
   url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";

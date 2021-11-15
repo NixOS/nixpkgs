@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip rec {
+fetchArchive rec {
   name = "freefont-ttf-20120503";
 
   url = "mirror://gnu/freefont/${name}.zip";

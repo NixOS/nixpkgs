@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   baseName = "gyre-fonts";
   version = "2.005";
-in fetchzip {
+in fetchArchive {
   name="${baseName}-${version}";
 
   url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";

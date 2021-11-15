@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchArchive, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-csv-1.5";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/Chris00/ocaml-csv/releases/download/1.5/csv-1.5.tar.gz";
     sha256 = "1ca7jgg58j24pccs5fshis726s06fdcjshnwza5kwxpjgdbvc63g";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, cmake
+{ lib, stdenv, fetchArchive, fetchpatch, cmake
 , libjpeg, openssl, zlib, libgcrypt, libpng
 , systemd, Carbon
 }:
@@ -14,7 +14,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) pname version;
-  src = fetchzip {
+  src = fetchArchive {
     inherit (s) url sha256;
   };
 

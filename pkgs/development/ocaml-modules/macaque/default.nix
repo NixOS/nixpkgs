@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, ocamlbuild, pgocaml, camlp4 }:
+{ lib, stdenv, fetchArchive, ocaml, findlib, ocamlbuild, pgocaml, camlp4 }:
 
 stdenv.mkDerivation {
   name = "ocaml-macaque-0.7.2";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ocsigen/macaque/archive/0.7.2.tar.gz";
     sha256 = "14i0a8cndzndjmlkyhf31r451q99cnkndgxcj0id4qjqhdl4bmjv";
   };

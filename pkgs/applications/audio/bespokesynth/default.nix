@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, fetchzip
+{ lib, stdenv, fetchFromGitHub, pkg-config, fetchArchive
 , libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
 , libGL, python3, ncurses, libusb1
 , gtk3, webkitgtk, curl, xvfb-run, makeWrapper
@@ -38,7 +38,7 @@ let
   # equal to vst-sdk in ../oxefmsynth/default.nix
   vst-sdk = stdenv.mkDerivation rec {
     name = "vstsdk3610_11_06_2018_build_37";
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${name}.zip";
       sha256 = "0da16iwac590wphz2sm5afrfj42jrsnkr1bxcy93lj7a369ildkj";
     };

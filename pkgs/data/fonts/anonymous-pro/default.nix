@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.002";
-in fetchzip rec {
+in fetchArchive rec {
   name = "anonymousPro-${version}";
 
   url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";

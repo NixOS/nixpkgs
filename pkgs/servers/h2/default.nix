@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchArchive, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
 
   version = "1.4.199";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://h2database.com/h2-2019-03-13.zip";
     sha256 = "0pdvbnx7nqfqs7x1zkwz2q34331l55jknpk6arf6dksvnd71hinj";
   };

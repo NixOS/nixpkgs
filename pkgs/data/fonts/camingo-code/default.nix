@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.0";
-in fetchzip rec {
+in fetchArchive rec {
   name = "camingo-code-${version}";
 
   url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jre_headless }:
+{ lib, stdenv, fetchArchive, jre_headless }:
 
 stdenv.mkDerivation rec {
   pname = "xmlbeans";
   version = "5.0.2-20211014";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
     sha256 = "sha256-1o0kfBMhka/Midtg+GzpVDDygixL6mrfxtY5WrjLN+0=";
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libnet }:
+{ lib, stdenv, fetchArchive, libnet }:
 
 stdenv.mkDerivation rec {
   pname = "arpoison";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnet ];
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.arpoison.net/arpoison-${version}.tar.gz";
     sha256 = "0krhszx3s0qwfg4rma5a51ak71nnd9xfs2ibggc3hwiz506s2x37";
   };

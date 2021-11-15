@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchzip
+, fetchArchive
 , addOpenGLRunpath
 , cmake
 , glibc_multi
@@ -17,7 +17,7 @@ let
     pname = "hwloc";
     version = "2.2.0";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://download.open-mpi.org/release/hwloc/v${lib.versions.majorMinor version}/hwloc-${version}.tar.gz";
       sha256 = "1ibw14h9ppg8z3mmkwys8vp699n85kymdz20smjd2iq9b67y80b6";
     };

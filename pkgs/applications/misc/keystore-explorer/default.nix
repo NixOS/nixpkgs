@@ -1,9 +1,9 @@
-{ fetchzip, lib, stdenv, jdk, runtimeShell }:
+{ fetchArchive, lib, stdenv, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "5.4.4";
   pname = "keystore-explorer";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-544.zip";
     sha256 = "01kpa8g6p6vcqq9y70w5bm8jbw4kp55pbywj2zrhgjibrhgjqi0b";
   };

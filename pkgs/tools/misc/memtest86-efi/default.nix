@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchArchive
 , util-linux
 , jq
 , mtools
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "memtest86-efi";
   version = "8.4";
 
-  src = fetchzip {
+  src = fetchArchive {
     # TODO: We're using the previous version of memtest86 because the
     # company developing memtest86 has stopped providing a versioned download
     # link for the latest version:

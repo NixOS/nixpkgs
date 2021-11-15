@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip,
+{ stdenv, lib, fetchArchive,
   autoconf, automake, libtool,
   cups, popt, libtiff, libpng,
   ghostscript }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
      and 'pr_id' values to loop over). */
   version = "2.80";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://gdlp01.c-wss.com/gds/1/0100000841/01/cnijfilter-common-2.80-1.tar.gz";
     sha256 = "06s9nl155yxmx56056y22kz1p5b2sb5fhr3gf4ddlczjkd1xch53";
   };

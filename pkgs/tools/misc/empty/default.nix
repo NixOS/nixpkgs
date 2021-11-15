@@ -1,10 +1,10 @@
-{ fetchzip, lib, stdenv, which }:
+{ fetchArchive, lib, stdenv, which }:
 
 stdenv.mkDerivation rec {
   pname = "empty";
   version = "0.6.21b";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tgz";
     sha256 = "1rkixh2byr70pdxrwr4lj1ckh191rjny1m5xbjsa7nqw1fw6c2xs";
     stripRoot = false;

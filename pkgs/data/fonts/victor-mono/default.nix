@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.5.0";
 in
-fetchzip {
+fetchArchive {
   name = "victor-mono-${version}";
 
   # Upstream prefers we download from the website,

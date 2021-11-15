@@ -13,10 +13,10 @@ fi
 fetch_arch() {
   VER="$1"; ARCH="$2"
   URL="https://github.com/vmware-tanzu/octant/releases/download/v${VER}/octant_${VER}_${ARCH}.tar.gz"
-  nix-prefetch "{ stdenv, fetchzip }:
+  nix-prefetch "{ stdenv, fetchArchive }:
 stdenv.mkDerivation rec {
   pname = \"octant\"; version = \"${VER}\";
-  src = fetchzip { url = \"$URL\"; };
+  src = fetchArchive { url = \"$URL\"; };
 }
 "
 }

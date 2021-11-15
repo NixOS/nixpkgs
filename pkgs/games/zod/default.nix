@@ -1,6 +1,6 @@
 { lib
 , config
-, fetchzip
+, fetchArchive
 , stdenv
 , SDL
 , SDL_image
@@ -18,7 +18,7 @@
 let
   name = "zod-engine";
   version = "2011-09-06";
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/zod/linux_releases/zod_linux-${version}.tar.gz";
     sha256 = "017v96aflrv07g8j8zk9mq8f8rqxl5228rjff5blq8dxpsv1sx7h";
   };

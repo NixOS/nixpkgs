@@ -196,7 +196,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # to be currently using.
     callHackageDirect = {pkg, ver, sha256}:
       let pkgver = "${pkg}-${ver}";
-      in self.callCabal2nix pkg (pkgs.fetchzip {
+      in self.callCabal2nix pkg (pkgs.fetchArchive {
            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
            inherit sha256;
          });

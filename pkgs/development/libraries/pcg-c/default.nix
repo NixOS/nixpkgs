@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 with lib;
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.94";
   pname = "pcg-c";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.pcg-random.org/downloads/${pname}-${version}.zip";
     sha256 = "0smm811xbvs03a5nc2668zd0178wnyri2h023pqffy767bpy1vlv";
   };

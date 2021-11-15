@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "6.001";
 in
-  fetchzip rec {
+  fetchArchive rec {
     name = "andika-${version}";
 
     url = "https://software.sil.org/downloads/r/andika/Andika-${version}.zip";

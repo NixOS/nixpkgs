@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper }:
+{ lib, stdenv, fetchArchive, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sshoogr";
   version = "0.9.26";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://maven/com/aestasit/infrastructure/${pname}/${pname}/${version}/${pname}-${version}.zip";
     sha256 = "134qlx90y82g1rfxhyn12z9r2imm1l3fz09hrrn3pgcdcq5jz2s1";
   };

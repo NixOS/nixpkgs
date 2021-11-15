@@ -1,5 +1,5 @@
 { stdenv
-, fetchzip
+, fetchArchive
 , lib
 , makeWrapper
 , autoPatchelfHook
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   version = "10.0";
   versiondate = "20210621";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
     sha256 = "0m1ksng2fkmcg7m22lqil10qn95s06gxnxdz7ih9qpbx67pmmq9x";
   };

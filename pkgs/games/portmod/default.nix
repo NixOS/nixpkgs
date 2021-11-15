@@ -1,5 +1,5 @@
 { lib, callPackage, python3Packages, fetchFromGitLab, cacert
-, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip
+, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchArchive
 , jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
 
 let

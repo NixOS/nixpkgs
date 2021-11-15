@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, makeWrapper, jre, writeText, nixosTests
+{ stdenv, lib, fetchArchive, makeWrapper, jre, writeText, nixosTests
 , postgresql_jdbc ? null, mysql_jdbc ? null
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   pname   = "keycloak";
   version = "15.0.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url    = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
     sha256 = "sha256-GlnSsvAYBjRTtabMVrpWUH0EWEdLIe6ud+HIXJqTsqY=";
   };

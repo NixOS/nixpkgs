@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, makeWrapper, jre, python3, unzip }:
+{ lib, stdenv, fetchArchive, makeWrapper, jre, python3, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
   version = "3.14.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/theotherp/${pname}/releases/download/v${version}/${pname}-${version}-linux.zip";
     sha512 = "sha512-wC2GhCjkRt/rmLAhe6nDCdF4PsfBpOo0T4BOSdw4wlBr7eCfo4Cibt9VvK6DNLuDk7EGkUfxvw9HI9sbRJlpCw==";
     stripRoot = false;

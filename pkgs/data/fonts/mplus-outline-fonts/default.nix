@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "063a";
-in fetchzip {
+in fetchArchive {
   name = "mplus-${version}";
 
   url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-${version}.tar.xz";

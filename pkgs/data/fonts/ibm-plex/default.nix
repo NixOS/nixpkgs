@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "6.0.0";
 
-in fetchzip {
+in fetchArchive {
   name = "ibm-plex-${version}";
 
   url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";

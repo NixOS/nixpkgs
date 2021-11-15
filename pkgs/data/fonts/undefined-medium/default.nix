@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip rec {
+fetchArchive rec {
   name = "undefined-medium-1.0";
 
   url = "https://github.com/andirueckel/undefined-medium/archive/v1.0.zip";

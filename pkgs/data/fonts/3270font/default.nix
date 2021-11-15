@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   version = "2.3.1";
 in
-fetchzip {
+fetchArchive {
   name = "3270font-${version}";
 
   url = "https://github.com/rbanffy/3270font/releases/download/v${version}/3270_fonts_3b8f2fb.zip";

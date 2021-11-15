@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper }:
+{ lib, stdenv, fetchArchive, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
   version = "2.4.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
     sha256 = "1b4ivyzpg9p3idk48nfvgpz18qlxyycswkaab31j3dp1mniwvjla";
   };

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 let
   mkVariant = variant: { version, abbreviation, sha256, outputHash }: stdenv.mkDerivation {
     name = "tex-gyre-${variant}-${version}";
     inherit version;
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/${variant}/${abbreviation}${version}otf.zip";
       stripRoot = false;
       inherit sha256;

@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchzip }:
+{ pkgs, lib, stdenv, fetchArchive }:
 
 let
 
@@ -21,7 +21,7 @@ let
   stdenv.mkDerivation {
     pname = "gnome-shell-extension-${pname}";
     version = builtins.toString version;
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://extensions.gnome.org/extension-data/${
           builtins.replaceStrings [ "@" ] [ "" ] uuid
         }.v${builtins.toString version}.shell-extension.zip";

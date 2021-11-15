@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchzip, ncurses }:
+{ stdenv, lib, fetchArchive, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "eventstat";
   version = "0.04.12";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://kernel.ubuntu.com/~cking/tarballs/eventstat/eventstat-${version}.tar.gz";
     sha256 = "sha256-XBSs/jZodCpI9BHgAF8+bE23gRCr2uebYiMJxxB8T5E=";
   };

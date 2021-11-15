@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "4.004";
-in fetchzip {
+in fetchArchive {
   name = "source-serif-${version}";
 
   url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";

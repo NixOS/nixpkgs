@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip, substituteAll, bash, jre }:
+{ stdenv, lib, fetchArchive, substituteAll, bash, jre }:
 
 stdenv.mkDerivation rec {
   pname = "bonnmotion";
   version = "3.0.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://sys.cs.uos.de/bonnmotion/src/bonnmotion-${version}.zip";
     sha256 = "16bjgr0hy6an892m5r3x9yq6rqrl11n91f9rambq5ik1cxjqarxw";
   };

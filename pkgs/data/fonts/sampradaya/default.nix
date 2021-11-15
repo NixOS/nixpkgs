@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "sampradaya-2015-05-26";
 
   url = "https://bitbucket.org/OorNaattaan/sampradaya/raw/afa9f7c6ab17e14bd7dd74d0acaec2f75454dfda/Sampradaya.ttf";

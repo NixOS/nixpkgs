@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   major = "1";
   minor = "102";
   version = "${major}.${minor}";
-in fetchzip rec {
+in fetchArchive rec {
   name = "gentium-book-basic-${version}";
 
   url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${major}${minor}.zip";

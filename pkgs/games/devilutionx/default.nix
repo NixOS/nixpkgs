@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
-, fetchzip
+, fetchArchive
 , cmake
 , pkg-config
 , gettext
@@ -26,7 +26,7 @@ let
     sha256 = "0z4rizncp6gqsy72b3709zc9fr915wgcwnlx1fhhy7mrczsly630";
   };
 
-  simpleini = fetchzip {
+  simpleini = fetchArchive {
     url = "https://github.com/brofield/simpleini/archive/7bca74f6535a37846162383e52071f380c99a43a.zip";
     sha256 = "07kf1jjbc9v04hsysa6v2wh1m9csf5qz0b1wmlkf9sj00kf47zj7";
   };

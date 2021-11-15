@@ -1,8 +1,8 @@
-{ fetchzip, lib }:
+{ fetchArchive, lib }:
 
 { url, rev, name ? "source", ... } @ args:
 
-fetchzip ({
+fetchArchive ({
   inherit name;
   url = "${url}/+archive/${rev}.tar.gz";
   stripRoot = false;
