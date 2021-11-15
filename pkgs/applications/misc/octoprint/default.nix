@@ -2,7 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, python38
+, python3
 , substituteAll
 , nix-update-script
   # To include additional plugins, pass them here as an overlay.
@@ -21,7 +21,7 @@ let
     );
   };
 
-  py = python38.override {
+  py = python3.override {
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) (
       [
@@ -33,17 +33,15 @@ let
         (mkOverride "jinja2" "2.11.3" "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6")
         (mkOverride "markdown" "3.1.1" "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a")
         (mkOverride "markupsafe" "1.1.1" "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b")
-        (mkOverride "sarge" "0.1.5.post0" "1c1ll7pys9vra5cfi8jxlgrgaql6c27l6inpy15aprgqhc4ck36s")
-        (mkOverride "tornado" "5.1.1" "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409")
 
         # Requires flask<2, cannot mkOverride because tests need to be disabled
         (
           self: super: {
             flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-              version = "1.1.2";
+              version = "1.1.4";
               src = oldAttrs.src.override {
                 inherit version;
-                sha256 = "4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060";
+                sha256 = "15ni4xlm57a15f5hipp8w0c9zba20179bvfns2392fiq1lcbdghg";
               };
               doCheck = false;
             });
@@ -84,13 +82,18 @@ let
           self: super: {
             websocket-client = super.websocket-client.overridePythonAttrs (
               oldAttrs: rec {
-                version = "0.58.0";
+                version = "0.59.0";
                 src = oldAttrs.src.override {
-                  pname = "websocket_client";
                   inherit version;
-                  sha256 = "63509b41d158ae5b7f67eb4ad20fecbb4eee99434e73e140354dc3ff8e09716f";
+                  sha256 = "0p0cz2mdissq7iw1n7jrmsfir0jfmgs1dvnpnrx477ffx9hbsxnk";
                 };
-                propagatedBuildInputs = [ self.six ];
+                propagatedBuildInputs = with self; [
+                  six
+                  pysocks
+                ];
+                disabledTests = [
+                  "testConnect"  # requires network access
+                ];
               }
             );
           }
@@ -142,13 +145,13 @@ let
           self: super: {
             octoprint-firmwarecheck = self.buildPythonPackage rec {
               pname = "OctoPrint-FirmwareCheck";
-              version = "2021.8.11";
+              version = "2021.10.11";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-FirmwareCheck";
                 rev = version;
-                sha256 = "sha256-WzVjHgjF12iJ642AFaFd86GSU90XyPzKhi1CSreynW4=";
+                sha256 = "0hl0612x0h4pcwsrga5il5x3m04j37cmyzh2dg1kl971cvrw79n2";
               };
               doCheck = false;
             };
@@ -159,14 +162,14 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2021.8.2";
+              version = "2021.10.28";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                sha256 = "07akx61wadxhs0545pqa9gzjnaz9742bq710f8f4zs5x6sacjzbc";
+                sha256 = "01bpvv1sn3113fdpw6b90c2rj8lqay118x609yy64z9ccm93khl9";
               };
 
               # requires octoprint itself during tests
@@ -179,19 +182,20 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.6.1";
+              version = "1.7.2";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-3b3k9h8H9Spf/P3/pXpCANnSGOgbUw/EWISJbrSoPBM=";
+                sha256 = "sha256-jCfzUx3LQ7TlXKQU8qbhyS1P4Wew/SSgJHVSc1VLdx4=";
               };
 
               propagatedBuildInputs = with super; [
                 blinker
                 cachelib
                 click
+                colorlog
                 emoji
                 feedparser
                 filetype
@@ -211,6 +215,7 @@ let
                 octoprint-filecheck
                 octoprint-firmwarecheck
                 octoprint-pisupport
+                pathvalidate
                 pkginfo
                 pip
                 psutil
@@ -252,10 +257,14 @@ let
 
               postPatch = let
                 ignoreVersionConstraints = [
+                  "cachelib"
+                  "colorlog"
                   "emoji"
                   "immutabledict"
                   "sentry-sdk"
                   "watchdog"
+                  "wrapt"
+                  "zeroconf"
                 ];
               in
                 ''

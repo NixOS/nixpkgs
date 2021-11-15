@@ -11,7 +11,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "GrfNaowlD2L5umiFwj7DgtHGBg9a4WVfe3RlMjK3ElU=";
+    # Unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation. The documentation
+    # has such files and will be removed.
+    sha256 = "sha256-Pe7BJ+8rXw+hhRv64fI+79gJcU1npQFFAXxECx2+Trw=";
+    extraPostFetch = "rm -rf $out/docs/reST";
   };
 
   patches = [

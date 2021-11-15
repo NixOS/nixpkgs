@@ -30,13 +30,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i Makefile -e 's|^OBJS=|OBJS=$(EXTRA_OBJS) |'
-    makeFlagsArray+=("CC=$CC")
+    makeFlagsArray+=(
+      ${systemFlags}
+      "CC=$CC"
+    )
   '';
 
   makeFlags = [
     "prefix=${placeholder "out"}"
     "MANDIR=${placeholder "out"}/share/man/man1"
-    systemFlags
   ];
 
   meta = with lib; {
