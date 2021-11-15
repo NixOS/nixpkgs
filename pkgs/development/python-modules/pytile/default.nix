@@ -13,8 +13,9 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "5.2.4";
+  version = "2021.10.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -45,7 +46,9 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [ "pytile" ];
+  pythonImportsCheck = [
+    "pytile"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -6,20 +6,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2021-09-03";
+  version = "unstable-2021-11-10";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "c84956befe88daeeb9512acaa9fa82395665df16";
-    sha256 = "sha256-dHFIeA2RCoqC0ROYUUbSoLZ4frRWBJaNJWohpK8xN7I=";
+    rev = "c179db3d4331db9d85c7acfdaa1e96e295d277ba";
+    sha256 = "sha256-/fFbhKiSQq9E9iucinTgUTyOtfDKCMgvzebHjfOaJ+M=";
   };
-
-  # We have no LTO on i686 since commit 22284b0
-  postPatch = lib.optionalString stdenv.isi686 ''
-    substituteInPlace chelper/__init__.py \
-      --replace "-flto -fwhole-program " ""
-  '';
 
   sourceRoot = "source/klippy";
 

@@ -37,6 +37,19 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
+    (self: super: {
+      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.18";
+        src = fetchFromGitHub {
+          owner = "Salamek";
+          repo = "huawei-lte-api";
+          rev = version;
+          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
+      });
+    })
+
     # Pinned due to API changes in iaqualink>=2.0, remove after
     # https://github.com/home-assistant/core/pull/48137 was merged
     (self: super: {
@@ -61,6 +74,18 @@ let
           repo = "influxdb-client-python";
           rev = "v${version}";
           sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+        };
+      });
+    })
+
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
         };
       });
     })
@@ -127,7 +152,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.11.0";
+  hassVersion = "2021.11.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -144,7 +169,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1bhm2ahc9fvh3czhfim3la0vdwdis2r86fa0qldqpnh11v25hb2s";
+    sha256 = "sha256-HycMb29niuUp7flRdWgrKSOcnr0l3PqjULCrgrwLrFw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -320,6 +345,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
+    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
@@ -661,6 +687,7 @@ in with py.pkgs; buildPythonApplication rec {
     "toon"
     "totalconnect"
     "tplink"
+    "traccar"
     "trace"
     "tradfri"
     "transmission"
@@ -682,6 +709,7 @@ in with py.pkgs; buildPythonApplication rec {
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "upnp"
     "uptime"
+    "uptimerobot"
     "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
@@ -797,8 +825,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/auth/mfa_modules/test_notify.py"
     # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
     "tests/components/emulated_hue/test_upnp.py"
-    # tado/test_climate.py: Tries to connect to my.tado.com
+    # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
     "tests/components/tado/test_climate.py"
+    "tests/components/tado/test_water_heater.py"
   ];
 
   disabledTests = [

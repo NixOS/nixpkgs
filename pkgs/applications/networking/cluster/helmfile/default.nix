@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, kubernetes-helm }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "helmfile";
@@ -15,16 +15,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
-
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X github.com/roboll/helmfile/pkg/app/version.Version=${version}" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/helmfile \
-      --prefix PATH : ${lib.makeBinPath [ kubernetes-helm ]}
-  '';
 
   meta = {
     description = "Deploy Kubernetes Helm charts";

@@ -110,7 +110,7 @@ in makeTest {
       )
 
       # Hibernate machine
-      hibernate.execute("systemctl hibernate &", check_return=False)
+      hibernate.execute("systemctl hibernate >&2 &", check_return=False)
       hibernate.wait_for_shutdown()
 
       # Restore machine from hibernation, validate our ramfs file is there.

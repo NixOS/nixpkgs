@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, six
+{ lib, buildPythonPackage, fetchPypi, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 

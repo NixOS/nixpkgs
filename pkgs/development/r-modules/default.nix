@@ -309,6 +309,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ libiconv zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    HDF5Array = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl ];
@@ -337,7 +338,6 @@ let
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
-    proj4 = [ pkgs.proj ];
     protolite = [ pkgs.protobuf ];
     R2SWF = with pkgs; [ zlib libpng freetype.dev ];
     RAppArmor = [ pkgs.libapparmor ];
@@ -449,6 +449,11 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
+    RcppCWB = [ pkgs.pkg-config ];
+    rrd = [ pkgs.pkg-config ];
+    trackViewer = [ pkgs.zlib.dev ];
+    themetagenomics = [ pkgs.zlib.dev ];
+    NanoMethViz = [ pkgs.zlib.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -571,6 +576,31 @@ let
     sparkwarc = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     rGEDI = with pkgs; [ libgeotiff.dev libaec zlib.dev hdf5.dev ];
+    rawrr = [ pkgs.mono ];
+    HDF5Array = [ pkgs.zlib.dev ];
+    FLAMES = [ pkgs.zlib.dev ];
+    ncdfFlow = [ pkgs.zlib.dev ];
+    proj4 = [ pkgs.proj.dev ];
+    rtmpt = [ pkgs.gsl ];
+    mixcat = [ pkgs.gsl ];
+    libstableR = [ pkgs.gsl ];
+    landsepi = [ pkgs.gsl ];
+    flan = [ pkgs.gsl ];
+    econetwork = [ pkgs.gsl ];
+    crandep = [ pkgs.gsl ];
+    catSurv = [ pkgs.gsl ];
+    ccfindR = [ pkgs.gsl ];
+    SPARSEMODr = [ pkgs.gsl ];
+    RKHSMetaMod = [ pkgs.gsl ];
+    LCMCR = [ pkgs.gsl ];
+    BNSP = [ pkgs.gsl ];
+    scModels = [ pkgs.mpfr.dev ];
+    multibridge = [ pkgs.mpfr.dev ];
+    RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    RmecabKo = [ pkgs.mecab ];
+    PoissonBinomial = [ pkgs.fftw.dev ];
+    rrd = [ pkgs.rrdtool ];
+    flowWorkspace = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
@@ -804,6 +834,9 @@ let
     "CoTiMA"
     "TBRDist"
     "Rogue"
+    "fixest"
+    "paxtoolsr"
+    "systemPipeShiny"
   ];
 
   packagesToSkipCheck = [
@@ -817,11 +850,15 @@ let
     "av"
     "rgl"
     "NetLogoR"
-    "proj4"
     "x13binary"
+    "valse"
+    "HierO"
 
     # Impure network access during build
     "waddR"
+    "tiledb"
+    "x13binary"
+    "switchr"
 
     # ExperimentHub dependents, require net access during build
     "DuoClustering2018"
@@ -844,6 +881,7 @@ let
     "muscData"
     "org_Mxanthus_db"
     "scpdata"
+    "nullrangesData"
   ];
 
   otherOverrides = old: new: {
@@ -1182,6 +1220,24 @@ let
       '';
     });
 
+    arrow = old.arrow.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
+    proj4 = old.proj4.overrideDerivation (attrs: {
+      preConfigure = ''
+        substituteInPlace configure \
+          --replace "-lsqlite3" "-L${lib.makeLibraryPath [ pkgs.sqlite ]} -lsqlite3"
+      '';
+    });
+
+    rrd = old.rrd.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
   };
 in
   self

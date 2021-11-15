@@ -9,12 +9,14 @@
 , requirements-parser
 , setuptools
 , toml
+, types-setuptools
+, types-toml
 , tox
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "0.10.2";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11sbnlbxighmmygrlgg4d31y70067pxzjsirwicaslfq95wgdlav";
+    sha256 = "sha256-+Gu9WaGC2R5TC8XSqDNSJ3t7aMS69IeeKTzytYFcHvE=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +38,8 @@ buildPythonPackage rec {
     requirements-parser
     setuptools
     toml
+    types-setuptools
+    types-toml
   ];
 
   checkInputs = [

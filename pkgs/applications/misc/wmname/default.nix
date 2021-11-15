@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "wmname-0.1";
+  pname = "wmname";
+  version = "0.1";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/wmname-${version}.tar.gz";
     sha256 = "559ad188b2913167dcbb37ecfbb7ed474a7ec4bbcb0129d8d5d08cb9208d02c5";
   };
 

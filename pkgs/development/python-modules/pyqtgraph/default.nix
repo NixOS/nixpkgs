@@ -6,7 +6,6 @@
 , pyqt5
 , pyopengl
 , qt5
-, python
 , pytestCheckHook
 , freefont_ttf
 , makeFontsConf

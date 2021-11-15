@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, gzip, libiconv, nkf, perl, skk-dicts, which }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, buildPackages
+, gzip, libiconv, nkf, perl, which
+, skk-dicts
+}:
 
 stdenv.mkDerivation {
   pname = "cmigemo";
@@ -21,7 +24,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "INSTALL=install" ];
 
-  buildPhase = if stdenv.isDarwin then "make osx-all" else "make gcc-all";
+  preBuild = ''
+    makeFlagsArray+=(FILTER_UTF8="${lib.getBin buildPackages.stdenv.cc.libc}/bin/iconv -t utf-8 -f cp932")
+  '';
+
+  buildFlags = [ (if stdenv.isDarwin then "osx-all" else "gcc-all") ];
 
   installTargets = [ (if stdenv.isDarwin then "osx-install" else "gcc-install") ];
 

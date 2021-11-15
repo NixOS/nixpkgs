@@ -5,7 +5,7 @@ then throw "variantslib-109.15.03 is not available for OCaml ${ocaml.version}"
 else
 
 buildOcaml rec {
-  name = "variantslib";
+  pname = "variantslib";
   version = "109.15.03";
 
   minimumSupportedOcamlVersion = "4.00";

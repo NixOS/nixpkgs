@@ -10,17 +10,18 @@
 , bashInteractive
 , xcodebuild
 , makeWrapper
+, nix-update-script
 }:
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.4.2";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VtwykRX5so6LqyC0En/Jx7anXD7qW47zqq3awCY0lJE=";
+    hash = "sha256-RRQso5j249PinoWznix4x4/NURe3TrwYlKOF4q8dc5U=";
   };
 
   outputs = [ "out" "man" ];
@@ -107,6 +108,10 @@ let ccache = stdenv.mkDerivation rec {
         done
       '';
     };
+  };
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 
   meta = with lib; {

@@ -3,7 +3,7 @@
 with lib;
 
 let
-  inherit (libretro) snes9x;
+  inherit (libretro) genesis-plus-gx snes9x;
 in
 
 let self = rec {
@@ -72,7 +72,11 @@ let self = rec {
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
 
+  iagl = callPackage ../applications/video/kodi-packages/iagl { };
+
   libretro = callPackage ../applications/video/kodi-packages/libretro { };
+
+  libretro-genplus = callPackage ../applications/video/kodi-packages/libretro-genplus { inherit genesis-plus-gx; };
 
   libretro-snes9x = callPackage ../applications/video/kodi-packages/libretro-snes9x { inherit snes9x; };
 
@@ -109,6 +113,8 @@ let self = rec {
   youtube = callPackage ../applications/video/kodi-packages/youtube { };
 
   # addon packages (dependencies)
+
+  archive_tool = callPackage ../applications/video/kodi-packages/archive_tool { };
 
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
 

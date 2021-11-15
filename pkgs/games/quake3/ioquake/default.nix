@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, which, pkg-config, SDL2, libGL, openalSoft
-, curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, SDL2
+, libGL
+, openalSoft
+, curl
+, speex
+, opusfile
+, libogg
+, libvorbis
+, libopus
+, libjpeg
+, mumble
+, freetype
 }:
 
 stdenv.mkDerivation {
-  pname = "ioquake3-git";
-  version = "2021-07-20";
+  pname = "ioquake3";
+  version = "unstable-2021-07-20";
 
   src = fetchFromGitHub {
     owner = "ioquake";
@@ -15,8 +30,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which pkg-config ];
   buildInputs = [
-    SDL2 libGL openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
-    freetype mumble
+    SDL2
+    libGL
+    openalSoft
+    curl
+    speex
+    opusfile
+    libogg
+    libvorbis
+    libopus
+    libjpeg
+    freetype
+    mumble
   ];
 
   enableParallelBuilding = true;

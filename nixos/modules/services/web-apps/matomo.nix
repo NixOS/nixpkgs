@@ -24,6 +24,7 @@ in {
     (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
     (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
     (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
+    (mkRenamedOptionModule [ "services" "matomo" "periodicArchiveProcessingUrl" ] [ "services" "matomo" "hostname" ])
   ];
 
   options = {
@@ -77,7 +78,7 @@ in {
         '';
       };
 
-      periodicArchiveProcessingUrl = mkOption {
+      hostname = mkOption {
         type = types.str;
         default = "${user}.${fqdn}";
         example = "matomo.yourdomain.org";
@@ -170,6 +171,19 @@ in {
         fi
         chown -R ${user}:${user} ${dataDir}
         chmod -R ug+rwX,o-rwx ${dataDir}
+
+        if [ -e ${dataDir}/current-package ]; then
+          CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
+          NEW_PACKAGE=${cfg.package}
+          if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
+            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            rm -rf ${dataDir}/tmp
+          fi
+        elif [ -e ${dataDir}/tmp ]; then
+          # upgrade from 4.4.1
+          rm -rf ${dataDir}/tmp
+        fi
+        ln -sfT ${cfg.package} ${dataDir}/current-package
         '';
       script = ''
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
@@ -202,7 +216,7 @@ in {
         UMask = "0007";
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
-        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.periodicArchiveProcessingUrl}";
+        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.hostname}";
       };
     };
 
@@ -258,7 +272,7 @@ in {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      "${user}.${fqdn}" = mkMerge [ cfg.nginx {
+      "${cfg.hostname}" = mkMerge [ cfg.nginx {
         # don't allow to override the root easily, as it will almost certainly break Matomo.
         # disadvantage: not shown as default in docs.
         root = mkForce "${cfg.package}/share";

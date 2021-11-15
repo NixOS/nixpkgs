@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    puppet-lint (2.3.6)
+    puppet-lint (2.5.2)
 
 PLATFORMS
   ruby
@@ -10,4 +10,4 @@ DEPENDENCIES
   puppet-lint
 
 BUNDLED WITH
-   2.1.4
+   2.2.24

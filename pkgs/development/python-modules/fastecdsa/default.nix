@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "fastecdsa";
   version = "2.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,10 +19,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  # skip tests which require being online to download test vectors
-  pytestFlags = [
-     "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
-     "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
+  disabledTestPaths = [
+    # skip tests which require being online to download test vectors
+    "fastecdsa/tests/test_wycheproof_vectors.py"
+    "fastecdsa/tests/test_rfc6979_ecdsa.py"
   ];
 
   # skip tests for now, they fail with

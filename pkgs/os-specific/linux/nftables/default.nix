@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];
   };

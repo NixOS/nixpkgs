@@ -1,18 +1,17 @@
-{ lib, python27Packages, fetchgit }:
-let
-  py = python27Packages;
-  python = py.python;
-in
-py.buildPythonApplication {
-  name = "loxodo-0.20150124";
+{ lib, python2, fetchFromGitHub }:
 
-  src = fetchgit {
-    url = "https://github.com/sommer/loxodo.git";
+python2.pkgs.buildPythonApplication {
+  pname = "loxodo";
+  version = "unstable-2015-01-24";
+
+  src = fetchFromGitHub {
+    owner = "sommer";
+    repo = "loxodo";
     rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
     sha256 = "1cg0dfcv57ps54f1a0ksib7hgkrbdi9q699w302xyyfyvjcb5dd2";
   };
 
-  propagatedBuildInputs = with py; [ wxPython ];
+  propagatedBuildInputs = with python2.pkgs; [ wxPython ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
@@ -21,7 +20,7 @@ py.buildPythonApplication {
     [Desktop Entry]
     Type=Application
     Exec=$out/bin/loxodo
-    Icon=$out/lib/${python.libPrefix}/site-packages/resources/loxodo-icon.png
+    Icon=$out/lib/${python2.libPrefix}/site-packages/resources/loxodo-icon.png
     Name=Loxodo
     GenericName=Password Vault
     Categories=Application;Other;
@@ -33,5 +32,6 @@ py.buildPythonApplication {
     homepage = "https://www.christoph-sommer.de/loxodo/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

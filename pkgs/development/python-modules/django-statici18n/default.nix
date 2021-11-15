@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, django, django_appconf }:
+{ lib, buildPythonPackage, fetchPypi, django, django_appconf }:
 
 buildPythonPackage rec {
   pname = "django-statici18n";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, poetry-core, requests
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests
 , pytestCheckHook, flask, flask-cors, dbus-python, mock, isPy27 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     requests flask flask-cors dbus-python
   ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace 'flask==2.0.1' 'flask'
   '';

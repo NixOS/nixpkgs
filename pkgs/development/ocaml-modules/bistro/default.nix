@@ -1,40 +1,40 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
-, base64, bos, core, lwt_react, ocamlgraph, rresult, tyxml
+{ lib
+, ocaml
+, fetchFromGitHub
+, buildDunePackage
+, base64
+, bos
+, core
+, lwt_react
+, ocamlgraph
+, ppx_sexp_conv
+, rresult
+, sexplib
+, tyxml
 }:
 
 buildDunePackage rec {
   pname = "bistro";
-  version = "0.5.0";
+  version = "unstable-2021-07-13";
 
   useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "114gq48cpj2mvycypa9lfyqqb26wa2gkdfwkcqhnx7m6sdwv9a38";
+    rev = "4ce8d98f34f15ebf63ececccc9c763fec2b5fa6d";
+    sha256 = "sha256:16vxcdsj4dmswgm6igshs3hirz8jrg8l5b2xgcnxxgvsrc9sxljs";
   };
-
-  patches = [
-  # The following patch adds support for core.v0.13
-  (fetchpatch {
-    url = "https://github.com/pveber/bistro/commit/0931db43a146ad7829dff5120161a775f732a878.patch";
-    sha256 = "06y0sxbbab1mssc1xfjjv12lpv4rny5iqv9qkdqyzrvzpl1bdvnd";
-  })
-  # The following patch adds support for core.v0.14
-  (fetchpatch {
-    url = "https://github.com/pveber/bistro/commit/afbdcb2af7777ef7711c7f3c45dff605350a27b2.patch";
-    sha256 = "0ix6lx9qjnn3vqp0164c6l5an8b4rq69h2mxrg89piyk2g1yv0zg";
-  })
-  ];
 
   # Fix build with ppxlib 0.23
   postPatch = ''
-    substituteInPlace ppx/ppx_bistro.ml \
+    substituteInPlace ppx/bistro_script.ml \
       --replace 'Parser.parse_expression' 'Ocaml_common.Parser.parse_expression'
   '';
 
-  propagatedBuildInputs = [ base64 bos core lwt_react ocamlgraph rresult tyxml ];
+  propagatedBuildInputs = [
+    base64 bos core lwt_react ocamlgraph ppx_sexp_conv rresult sexplib tyxml
+  ];
 
   minimalOCamlVersion = "4.12";
 
@@ -43,5 +43,7 @@ buildDunePackage rec {
     description = "Build and execute typed scientific workflows";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.gpl2;
+    # ppx-related build failure; see https://github.com/pveber/bistro/issues/49:
+    broken = lib.versionAtLeast ocaml.version "4.13";
   };
 }

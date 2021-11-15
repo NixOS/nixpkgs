@@ -7,9 +7,10 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "0w44ws8b6zfixf7xz93hmplqsx18279n9x8j77y4rbzs13fldvsn"
-                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-SOZn7CGLu9x+xhQwjgm0SL7sKDODLwHRpzi7tMdRBAM="
-                     else if (stdenv.isLinux && stdenv.isAarch64) then "1axbi4kmb1ydys7c45jhp729w1srid3c8jgivb4bdmdp56rf6h32"
+    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-h5zjn8wtgHmsJFiGq1rja6kZTZj3Q72W2kH3AexRDQs="
+                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-NHM9ZUpBJb59Oq0Ke7DcvaN+bZ9MjSpXBRu5Ng9OVZ0="
+                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-gRebkDY0WOKabuLd/WNMoRPL7oGQJtHELFNe+sQ0TwA="
+                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-bUacA4DwjDNlIG7yooXxUGL9AysAogNWuQDvcTqo1sE="
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -19,7 +20,7 @@ let archString = if stdenv.isAarch64 then "arm64"
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.1.4";
+  version = "7.2.0";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";
@@ -50,8 +51,6 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
     patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
   '' + lib.optionalString (!stdenv.isDarwin) ''
-    # Remove liblttng-ust from dependencies once
-    # https://github.com/PowerShell/PowerShell/pull/14688 is in a release
     patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $pslibs/libcoreclrtraceptprovider.so
   '' + ''
 
@@ -74,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://github.com/PowerShell/PowerShell";
     maintainers = with maintainers; [ yrashk srgom p3psi ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux"];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
     license = with licenses; [ mit ];
   };
 

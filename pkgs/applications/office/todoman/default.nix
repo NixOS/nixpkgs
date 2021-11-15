@@ -4,7 +4,6 @@
 , installShellFiles
 , jq
 }:
-
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
@@ -23,6 +22,7 @@ buildPythonApplication rec {
     installShellFiles
     setuptools-scm
   ];
+
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
@@ -42,13 +42,16 @@ buildPythonApplication rec {
     flake8-import-order
     freezegun
     hypothesis
-    pytest
-    pytest-runner
-    pytest-cov
+    pytestCheckHook
     glibcLocales
   ];
 
   LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=todoman --cov-report=term-missing" ""
+  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -56,11 +59,20 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
-  preCheck = ''
-    # Remove one failing test that only checks whether the command line works
-    rm tests/test_main.py
-    rm tests/test_cli.py
-  '';
+  disabledTests = [
+    # Testing of the CLI part and output
+    "test_color_due_dates"
+    "test_color_flag"
+    "test_default_command"
+    "test_main"
+    "test_missing_cache_dir"
+    "test_sorting_null_values"
+    "test_xdg_existant"
+  ];
+
+  pythonImportsCheck = [
+    "todoman"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";

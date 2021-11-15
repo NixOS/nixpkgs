@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, django, python }:
+{ lib, buildPythonPackage, fetchPypi, django, python }:
 
 buildPythonPackage rec {
   pname = "django-formtools";

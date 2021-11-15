@@ -268,12 +268,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2021.2.3"; /* updated by script */
+    version = "2021.2.4"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "1n0yrk05xv4pard82b6z349ksiw8k75s9525pnpa2ny1ay1klhdg"; /* updated by script */
+      sha256 = "03x7yz8jz5r4pblm7cvph39zppa33lalvkpzmgvr3wjq0chqmh65"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -307,13 +307,13 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2021.2.1"; /* updated by script */
+    version = "2021.2.2"; /* updated by script */
     versionMajorMinor = "2021.2"; /* updated by script */
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/mps/${versionMajorMinor}/MPS-${version}.tar.gz";
-      sha256 = "1yawjc5xwga1mmlsl3068ml532941mq08i9ji3dhj1nwdkyav2jz"; /* updated by script */
+      sha256 = "011prnpab72kfgkwq0ms27qqnjamh33h023gb01fxvqwwzcmp6sk"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -334,12 +334,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2021.2.2"; /* updated by script */
+    version = "2021.2.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0s9kk3n5ac6lvqi2yw9gvvm45865jchiwyrs8pq2dgdkgaligrjv"; /* updated by script */
+      sha256 = "0m98qhkgwnmqkay8sclfyig2xcqvpva74l2kdira3r5sbszmxvcr"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -347,12 +347,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2021.2.2"; /* updated by script */
+    version = "2021.2.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0mgmmf926n3ipr8fxn6f9hsa5vkil8yrw5qlixi8nwnx7chmkp56"; /* updated by script */
+      sha256 = "0zp72ag9jqhq0sv4x5n43d6g9y2yzkxa4pkflc7gd5rpg555cqr7"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -386,12 +386,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2021.2.2"; /* updated by script */
+    version = "2021.2.3"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1a3vlqza9nbc4a2qxrzdckmq003zx1db9dy7wx462amc8sbh6v92"; /* updated by script */
+      sha256 = "0d79x1jz4ymd6cc1n4s3y3n8lb6gw4g0yj6d4qzjlr5c9snx3zdf"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

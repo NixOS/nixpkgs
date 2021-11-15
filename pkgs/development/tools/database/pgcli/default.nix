@@ -46,7 +46,11 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = [
+    # tests that expect output from an older version of cli-helpers
+    "test_format_output"
+    "test_format_output_auto_expand"
+  ] ++ lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

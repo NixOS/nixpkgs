@@ -747,6 +747,7 @@ let
 
       BSD_PROCESS_ACCT_V3 = yes;
 
+      BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
@@ -858,6 +859,8 @@ let
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
+
+      SCHED_CORE = whenAtLeast "5.14" yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support

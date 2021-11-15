@@ -47,7 +47,7 @@ rec {
     nativeBuildInputs = [ makeWrapper unzip ];
     buildInputs = [ java ];
 
-    meta = {
+    meta = with lib; {
       description = "Enterprise-grade build system";
       longDescription = ''
         Gradle is a build system which offers you ease, power and freedom.
@@ -58,31 +58,24 @@ rec {
         build-by-convention behavior.
       '';
       homepage = "http://www.gradle.org/";
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.unix;
+      license = licenses.asl20;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ lorenzleutgeb ];
     };
   };
 
-  gradle_latest = gradle_7;
+  gradle_latest = gradle_7_3;
+  gradle_7_3 = gradleGen (gradleSpec (import ./gradle-7.3-spec.nix));
+  gradle_6_9 = gradleGen (gradleSpec (import ./gradle-6.9.1-spec.nix));
 
-  gradle_7 = gradleGen (gradleSpec {
-    version = "7.2";
-    nativeVersion = "0.22-milestone-21";
-    sha256 = "1pg6w5czysywsgdvmll5bwd2p6y99cn5sn3gw69cps9mkjd710gm";
-  });
-
-  gradle_6_8 = gradleGen (gradleSpec {
-    version = "6.8.3";
-    nativeVersion = "0.22-milestone-9";
-    sha256 = "01fjrk5nfdp6mldyblfmnkq2gv1rz1818kzgr0k2i1wzfsc73akz";
-  });
-
+  # NOTE: No GitHub Release for this release, so update.sh does not work.
   gradle_5_6 = gradleGen (gradleSpec {
     version = "5.6.4";
     nativeVersion = "0.18";
-    sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
+    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
   });
 
+  # NOTE: No GitHub Release for this release, so update.sh does not work.
   gradle_4_10 = gradleGen (gradleSpec {
     version = "4.10.3";
     nativeVersion = "0.14";

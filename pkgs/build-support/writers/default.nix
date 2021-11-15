@@ -1,4 +1,4 @@
-{ pkgs, buildPackages, lib, gawk, gnused, gixy }:
+{ pkgs, buildPackages, lib, stdenv, libiconv, gawk, gnused, gixy }:
 
 with lib;
 rec {
@@ -150,10 +150,13 @@ rec {
       rustcArgs ? [],
       strip ? true
   }:
+  let
+    darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
+  in
     makeBinWriter {
       compileScript = ''
         cp "$contentPath" tmp.rs
-        PATH=${makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} -o "$out" tmp.rs
+        PATH=${makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
       '';
       inherit strip;
     } name;

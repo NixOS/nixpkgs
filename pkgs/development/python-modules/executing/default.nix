@@ -1,19 +1,20 @@
 { lib
+, asttokens
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools-scm
-, asttokens
 }:
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "0.5.4";
+  version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hqx94h6l2wg9sljiaajfay2nr62sqa819w3bxrz8cdki1abdygv";
+    sha256 = "sha256-CDZQ9DONn7M+2/GtmM2G6nQPpI9dOd0ca+2F1PGRwO4=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +27,13 @@ buildPythonPackage rec {
 
   # Tests appear to run fine (Ran 22 tests in 4.076s) with setuptoolsCheckPhase
   # but crash with pytestCheckHook
-  checkInputs = [ asttokens ];
+  checkInputs = [
+    asttokens
+  ];
+
+  pythonImportsCheck = [
+    "executing"
+  ];
 
   meta = with lib; {
     description = "Get information about what a frame is currently doing, particularly the AST node being executed";

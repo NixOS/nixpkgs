@@ -1,9 +1,12 @@
 { stdenv
 , lib
 , fetchurl
+, copyDesktopItems
+, makeDesktopItem
 , makeWrapper
 , libuuid
 , libunwind
+, libxkbcommon
 , icu
 , openssl
 , zlib
@@ -13,23 +16,69 @@
 , gnutar
 , atomEnv
 , libkrb5
+, libdrm
+, mesa
+, xorg
 }:
 
 # from justinwoo/azuredatastudio-nix
 # https://github.com/justinwoo/azuredatastudio-nix/blob/537c48aa3981cd1a82d5d6e508ab7e7393b3d7c8/default.nix
 
+let
+  desktopItem = makeDesktopItem {
+    name = "azuredatastudio";
+    desktopName = "Azure Data Studio";
+    comment = "Data Management Tool that enables you to work with SQL Server, Azure SQL DB and SQL DW from Windows, macOS and Linux.";
+    genericName = "Text Editor";
+    exec = "azuredatastudio --no-sandbox --unity-launch %F";
+    icon = "azuredatastudio";
+    startupNotify = "true";
+    categories = "Utility;TextEditor;Development;IDE;";
+    mimeType = "text/plain;inode/directory;application/x-azuredatastudio-workspace;";
+    extraEntries = ''
+      StartupWMClass=azuredatastudio
+      Actions=new-empty-window;
+      Keywords=azuredatastudio;
+
+      [Desktop Action new-empty-window]
+      Name=New Empty Window
+      Exec=azuredatastudio --no-sandbox --new-window %F
+      Icon=azuredatastudio
+    '';
+  };
+
+  urlHandlerDesktopItem = makeDesktopItem {
+    name = "azuredatastudio-url-handler";
+    desktopName = "Azure Data Studio - URL Handler";
+    comment = "Azure Data Studio";
+    genericName = "Text Editor";
+    exec = "azuredatastudio --no-sandbox --open-url %U";
+    icon = "azuredatastudio";
+    startupNotify = "true";
+    categories = "Utility;TextEditor;Development;IDE;";
+    mimeType = "x-scheme-handler/azuredatastudio;";
+    extraEntries = ''
+      NoDisplay=true
+      Keywords=azuredatastudio;
+    '';
+  };
+in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.17.1";
+  version = "1.33.0";
+
+  desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
-    url = "https://azuredatastudiobuilds.blob.core.windows.net/releases/${version}/azuredatastudio-linux-${version}.tar.gz";
-    sha256 = "0px9n9vyjvyddca4x7d0zindd0dim7350vkjg5dd0506fm8dc38k";
+    name = "${pname}-${version}.tar.gz";
+    url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
+    sha256 = "0593xs44ryfyxy0hc31hdbj706q16h58jb0qyfyncn7ngybm3423";
   };
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -38,7 +87,14 @@ stdenv.mkDerivation rec {
     at-spi2-atk
   ];
 
-  dontInstall = true;
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/pixmaps
+    cp ${targetPath}/resources/app/resources/linux/code.png $out/share/pixmaps/azuredatastudio.png
+
+    runHook postInstall
+  '';
 
   # change this to azuredatastudio-insiders for insiders releases
   edition = "azuredatastudio";
@@ -60,7 +116,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/2.0.0-release.56";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.139";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
@@ -71,6 +127,10 @@ stdenv.mkDerivation rec {
         at-spi2-atk
         stdenv.cc.cc.lib
         libkrb5
+        libdrm
+        libxkbcommon
+        mesa
+        xorg.libxshmfence
       ]
     )
     targetPath
@@ -111,5 +171,6 @@ stdenv.mkDerivation rec {
     description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
     license = lib.licenses.unfreeRedistributable;
+    platforms = [ "x86_64-linux" ];
   };
 }

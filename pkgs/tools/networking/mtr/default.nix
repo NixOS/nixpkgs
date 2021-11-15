@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, libcap, ncurses
+, libcap, ncurses, jansson
 , withGtk ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ ncurses ]
+  buildInputs = [ ncurses jansson ]
     ++ lib.optional withGtk gtk3
     ++ lib.optional stdenv.isLinux libcap;
 

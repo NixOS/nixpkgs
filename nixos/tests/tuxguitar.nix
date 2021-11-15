@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("tuxguitar &")
+    machine.succeed("tuxguitar >&2 &")
     machine.wait_for_window("TuxGuitar - Untitled.tg")
     machine.sleep(1)
     machine.screenshot("tuxguitar")

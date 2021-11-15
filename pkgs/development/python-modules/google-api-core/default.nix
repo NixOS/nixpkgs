@@ -8,7 +8,6 @@
 , proto-plus
 , requests
 , mock
-, pytest
 , pytest-asyncio
 , pytestCheckHook
 }:

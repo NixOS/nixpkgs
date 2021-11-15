@@ -3,7 +3,6 @@
 , fetchPypi
 , isPy27
 , python
-, pytest
 , numpy
 }:
 

@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/yunstanford/pytest-sanic/";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
+    broken = true; # 2021-11-04
   };
 }

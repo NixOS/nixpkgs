@@ -198,7 +198,7 @@ stdenv.mkDerivation ({
   BASH_SHELL = "/bin/sh";
 
   # Used by libgcc, elf-header, and others to determine ABI
-  passthru = { inherit version; };
+  passthru = { inherit version; minorRelease = version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
@@ -286,9 +286,4 @@ stdenv.mkDerivation ({
 
 // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
-
-  # To avoid a dependency on the build system 'bash'.
-  preFixup = ''
-    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-  '';
 })

@@ -23,6 +23,11 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook numpy scipy ];
+  disabledTests = [
+    # accepts a limited set of cpu models based on project
+    # developers' hardware
+    "test_architecture"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";

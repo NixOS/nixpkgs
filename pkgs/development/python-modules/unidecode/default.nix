@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "unidecode";
-  version = "1.3.1";
+  version = "1.3.2";
 
   disabled = pythonOlder "3.5";
 
@@ -22,7 +22,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "unidecode" ];
+  pythonImportsCheck = [
+    "unidecode"
+  ];
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/Unidecode/";

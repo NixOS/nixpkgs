@@ -53,7 +53,7 @@ system, [Hydra](https://hydra.nixos.org/).
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels).
+channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
 
 # Contributing
 

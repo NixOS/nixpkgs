@@ -411,7 +411,7 @@ you of the correct hash.
 
 `rustPlatform` provides the following hooks to automate Cargo builds:
 
-* `cargoSetupHook`: configure Cargo to use depenencies vendored
+* `cargoSetupHook`: configure Cargo to use dependencies vendored
   through `fetchCargoTarball`. This hook uses the `cargoDeps`
   environment variable to find the vendored dependencies. If a project
   already vendors its dependencies, the variable `cargoVendorDir` can
@@ -426,7 +426,7 @@ you of the correct hash.
 * `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
   to build a Python wheel. Similar to `cargoBuildHook`, the optional
   variable `buildAndTestSubdir` can be used to build a crate in a
-  Cargo workspace. Additional maturin flags can be passed through
+  Cargo workspace. Additional Maturin flags can be passed through
   `maturinBuildFlags`.
 * `cargoCheckHook`: run tests using Cargo. The build type for checks
   can be set using `cargoCheckType`. Additional flags can be passed to
@@ -447,7 +447,7 @@ dependencies. The build itself is then performed by
 
 The following example outlines how the `tokenizers` Python package is
 built. Since the Python package is in the `source/bindings/python`
-directory of the *tokenizers* project's source archive, we use
+directory of the `tokenizers` project's source archive, we use
 `sourceRoot` to point the tooling to this directory:
 
 ```nix
@@ -672,7 +672,7 @@ Some crates require external libraries. For crates from
 `defaultCrateOverrides` package in nixpkgs itself.
 
 Starting from that file, one can add more overrides, to add features
-or build inputs by overriding the hello crate in a seperate file.
+or build inputs by overriding the hello crate in a separate file.
 
 ```nix
 with import <nixpkgs> {};
@@ -729,7 +729,7 @@ with import <nixpkgs> {};
 Actually, the overrides introduced in the previous section are more
 general. A number of other parameters can be overridden:
 
-- The version of rustc used to compile the crate:
+- The version of `rustc` used to compile the crate:
 
   ```nix
   (hello {}).override { rust = pkgs.rust; };
@@ -742,7 +742,7 @@ general. A number of other parameters can be overridden:
   (hello {}).override { release = false; };
   ```
 
-- Whether to print the commands sent to rustc when building
+- Whether to print the commands sent to `rustc` when building
   (equivalent to `--verbose` in cargo:
 
   ```nix
@@ -883,11 +883,11 @@ detailed usage.
 
 Fenix is an alternative to `rustup` and can also be used as an overlay.
 
-Both Oxalica's overlay and fenix better integrate with nix and cache optimizations.
+Both oxalica's overlay and fenix better integrate with nix and cache optimizations.
 Because of this and ergonomics, either of those community projects
-should be preferred to the Mozilla's Rust overlay (nixpkgs-mozilla).
+should be preferred to the Mozilla's Rust overlay (`nixpkgs-mozilla`).
 
-### How to select a specific rustc and toolchain version {#how-to-select-a-specific-rustc-and-toolchain-version}
+### How to select a specific `rustc` and toolchain version {#how-to-select-a-specific-rustc-and-toolchain-version}
 
 You can consume the oxalica overlay and use it to grab a specific Rust toolchain version.
 Here is an example `shell.nix` showing how to grab the current stable toolchain:

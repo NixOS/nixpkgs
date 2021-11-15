@@ -55,6 +55,7 @@ mapAliases ({
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   HAP-python = hap-python; # added 2021-06-01
+  hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
@@ -65,6 +66,7 @@ mapAliases ({
   privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
+  pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pysmart-smartx = pysmart; # added 2021-10-22
