@@ -5,7 +5,7 @@
 , poetry-core
 , textfsm
 , pytestCheckHook
-, ruamel_yaml
+, ruamel-yaml
 , yamllint
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    ruamel_yaml
+    ruamel-yaml
     yamllint
   ];
 

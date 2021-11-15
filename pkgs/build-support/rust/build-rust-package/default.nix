@@ -36,6 +36,10 @@
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
+, buildNoDefaultFeatures ? false
+, checkNoDefaultFeatures ? buildNoDefaultFeatures
+, buildFeatures ? [ ]
+, checkFeatures ? buildFeatures
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -102,6 +106,14 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoLock" ]) // lib.o
   cargoBuildType = buildType;
 
   cargoCheckType = checkType;
+
+  cargoBuildNoDefaultFeatures = buildNoDefaultFeatures;
+
+  cargoCheckNoDefaultFeatures = checkNoDefaultFeatures;
+
+  cargoBuildFeatures = buildFeatures;
+
+  cargoCheckFeatures = checkFeatures;
 
   patchRegistryDeps = ./patch-registry-deps;
 

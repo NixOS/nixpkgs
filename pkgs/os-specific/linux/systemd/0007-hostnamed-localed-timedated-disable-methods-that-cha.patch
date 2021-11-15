@@ -1,4 +1,4 @@
-From 56ae06b48c6852071dfc57c1203c04f07309d757 Mon Sep 17 00:00:00 2001
+From e147e9defaf2bb5e8040566537661d90b4008daf Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/19] hostnamed, localed, timedated: disable methods that
@@ -35,7 +35,7 @@ index 36702f2fb0..669257ea2f 100644
  
          context_read_machine_info(c);
 diff --git a/src/locale/localed.c b/src/locale/localed.c
-index df0eb030d4..d026eae97e 100644
+index c228385d0e..942ccaa038 100644
 --- a/src/locale/localed.c
 +++ b/src/locale/localed.c
 @@ -360,6 +360,9 @@ static int method_set_locale(sd_bus_message *m, void *userdata, sd_bus_error *er
@@ -104,5 +104,5 @@ index 66b454269d..0a8fe25d0f 100644
          if (r < 0)
                  return r;
 -- 
-2.32.0
+2.33.0
 

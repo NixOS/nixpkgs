@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ m17n_db ];
 
+  # Fails parallel build due to missing intra-package depends:
+  #   https://savannah.nongnu.org/bugs/index.php?61377
+  #     make[2]: *** No rule to make target '../src/libm17n-core.la', needed by 'libm17n.la'.  Stop.
+  enableParallelBuilding = false;
+
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (runtime)";

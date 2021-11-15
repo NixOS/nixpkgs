@@ -1,7 +1,7 @@
-From 5f17b65d30480e489e135b403a072b38535b2911 Mon Sep 17 00:00:00 2001
+From 273e706ff561f2164b84c714148346ac92dd8846 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Wed, 18 Aug 2021 19:10:08 +0200
-Subject: [PATCH] core: handle lookup paths being symlinks
+Subject: [PATCH 19/19] core: handle lookup paths being symlinks
 
 With a recent change paths leaving the statically known lookup paths
 would be treated differently then those that remained within those. That
@@ -15,7 +15,7 @@ directory itself is already a symlink.
  1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/src/basic/unit-file.c b/src/basic/unit-file.c
-index 884a0674a9..3ae2a115d0 100644
+index 0d58b1c4fe..7314f1245f 100644
 --- a/src/basic/unit-file.c
 +++ b/src/basic/unit-file.c
 @@ -254,6 +254,7 @@ int unit_file_build_name_map(
@@ -76,5 +76,5 @@ index 884a0674a9..3ae2a115d0 100644
                                          log_debug("%s: linked unit file: %s → %s",
                                                    __func__, filename, simplified);
 -- 
-2.32.0
+2.33.0
 

@@ -1317,6 +1317,14 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          The <literal>fluidsynth_1</literal> attribute has been
+          removed, as this legacy version is no longer needed in
+          nixpkgs. The actively maintained 2.x series is available as
+          <literal>fluidsynth</literal> unchanged.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Nextcloud 20 (<literal>pkgs.nextcloud20</literal>) has been
           dropped because it was EOLed by upstream in 2021-10.
         </para>

@@ -5,13 +5,6 @@
 , withMPRIS ? false, dbus ? null
 }:
 
-let
-  features = [ "cursive/pancurses-backend" ]
-    ++ lib.optional withALSA "alsa_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend"
-    ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withMPRIS "mpris";
-in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
   version = "0.9.0";
@@ -25,8 +18,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0sdbba32f56z2q7kha5fxw2f00hikbz9sf4zl4wfl2i9b13j7mj0";
 
-  cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses openssl ]
@@ -35,6 +26,13 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional withMPRIS dbus;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "cursive/pancurses-backend" ]
+    ++ lib.optional withALSA "alsa_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMPRIS "mpris";
 
   doCheck = false;
 

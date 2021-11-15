@@ -859,12 +859,12 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf -
+                xz -d < "$fn" | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn"
+                tar xf "$fn" --warning=no-timestamp
                 ;;
             *)
                 return 1

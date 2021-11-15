@@ -197,6 +197,46 @@ let
         '';
       };
 
+      ttyAudit = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable or disable TTY auditing for specified users
+          '';
+        };
+
+        enablePattern = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            For each user matching one of comma-separated
+            glob patterns, enable TTY auditing
+          '';
+        };
+
+        disablePattern = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            For each user matching one of comma-separated
+            glob patterns, disable TTY auditing
+          '';
+        };
+
+        openOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Set the TTY audit flag when opening the session,
+            but do not restore it when closing the session.
+            Using this option is necessary for some services
+            that don't fork() to run the authenticated session,
+            such as sudo.
+          '';
+        };
+      };
+
       forwardXAuth = mkOption {
         default = false;
         type = types.bool;
@@ -482,6 +522,12 @@ let
               "session ${
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
+          ${optionalString cfg.ttyAudit.enable
+              "session required ${pkgs.pam}/lib/security/pam_tty_audit.so
+                open_only=${toString cfg.ttyAudit.openOnly}
+                ${optionalString (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"}
+                ${optionalString (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"}
+              "}
           ${optionalString cfg.makeHomeDir
               "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077"}
           ${optionalString cfg.updateWtmp
