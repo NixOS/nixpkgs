@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     SBINDIR="$PREFIX/bin"
     CC=${stdenv.cc.targetPrefix}cc
     AR=${stdenv.cc.bintools.targetPrefix}ar
+    # Allow makewhatis(8) to follow symlinks from a manpath to the nix store
+    READ_ALLOWED_PATH=${builtins.storeDir}
     # Bypass the locale(1)-based check for UTF-8 support since it causes trouble:
     # * We only have meaningful locale(1) implementations for glibc and macOS
     # * NetBSD's locale(1) (used for macOS) depends on mandoc
