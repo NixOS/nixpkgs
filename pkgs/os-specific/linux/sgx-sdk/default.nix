@@ -211,8 +211,8 @@ stdenv.mkDerivation rec {
 
     header "Fixing BINUTILS_DIR in buildenv.mk"
     substituteInPlace $out/share/bin/buildenv.mk \
-      --replace 'BINUTILS_DIR := /usr/local/bin' \
-                'BINUTILS_DIR := ${BINUTILS_DIR}'
+      --replace 'BINUTILS_DIR ?= /usr/local/bin' \
+                'BINUTILS_DIR ?= ${BINUTILS_DIR}'
 
     header "Fixing GDB path in bin/sgx-gdb"
     substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
