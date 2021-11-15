@@ -17,6 +17,7 @@
 , perl
 , python3
 , texinfo
+, validatePkgConfig
 , which
 , writeShellScript
 }:
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     perl
     python3
     texinfo
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -127,6 +129,11 @@ stdenv.mkDerivation rec {
     ./linux/installer/bin/sgx_linux_x64_sdk_*.bin -prefix "$out"
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    echo "Fixing pkg-config files"
+    sed -i "s|prefix=.*|prefix=$out/sgxsdk|g" $out/sgxsdk/pkgconfig/*.pc
   '';
 
   doInstallCheck = true;
