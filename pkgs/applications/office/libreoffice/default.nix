@@ -78,6 +78,8 @@ in (mkDrv rec {
     tar -xf ${srcs.translations}
   '';
 
+  patches = [ ./skip-failed-test-with-icu70.patch ];
+
   ### QT/KDE
   #
   # We have to resort to the ugly patching of configure.ac as it assumes that

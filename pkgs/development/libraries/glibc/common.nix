@@ -37,12 +37,14 @@
 , profilingLibraries ? false
 , withGd ? false
 , meta
+, extraBuildInputs ? []
+, extraNativeBuildInputs ? []
 , ...
 } @ args:
 
 let
   version = "2.33";
-  patchSuffix = "-55";
+  patchSuffix = "-56";
   sha256 = "sha256-LiVWAA4QXb1X8Layoy/yzxc73k8Nhd/8z9i35RoGd/8=";
 in
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.33/master && git describe
-          glibc-2.33-55-g4b95183785
+          glibc-2.33-56-g6090cf1330
           $ git show --minimal --reverse glibc-2.33.. | gzip -9n --rsyncable - > 2.33-master.patch.gz
 
          To compare the archive contents zdiff can be used.
@@ -189,8 +191,8 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison python3Minimal ];
-  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
+  nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
+  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux

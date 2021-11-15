@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.52.0";
+  version = "2.52.3";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "14zkdd7a9mymnfs3laqj0gr69c16nwixvbc5a4gvd534w6riz0mx";
+    sha256 = "Nuf1vIjXhgjqf2wF5K/krMFga5rxPChF1DhQc9CCuKQ=";
   };
 
   cargoVendorDir = "vendor";

@@ -129,6 +129,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "5.1" yes;
       WAN                = yes;
+      TCP_CONG_ADVANCED  = yes;
       TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -759,6 +760,8 @@ let
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
+      EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
+          whenAtLeast "5.8" yes; # initrd kernel parameter for EFI
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231

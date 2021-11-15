@@ -1,4 +1,4 @@
-From 43465a392b47238a32f8719f603ed9e2c9bb0363 Mon Sep 17 00:00:00 2001
+From 2c98ff115f7027bebde14cf3e74f2c51b343874c Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
 Subject: [PATCH 02/19] Don't try to unmount /nix or /nix/store
@@ -38,5 +38,5 @@ index c2a26242c0..9936398f32 100644
                  || path_equal(path, "/usr")
  #endif
 -- 
-2.32.0
+2.33.0
 

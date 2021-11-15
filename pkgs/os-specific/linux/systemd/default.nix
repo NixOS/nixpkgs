@@ -4,6 +4,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, fetchzip
 , buildPackages
 , ninja
 , meson
@@ -75,24 +76,24 @@
 , withHomed ? false
 , withHostnamed ? true
 , withHwdb ? true
-, withImportd ? true
+, withImportd ? !stdenv.hostPlatform.isMusl
 , withLibBPF ? false # currently fails while generating BPF objects
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
-, withNss ? true
+, withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? false
-, withRemote ? true
+, withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
-, withTpm2Tss ? true
-, withUserDb ? true
+, withTpm2Tss ? !stdenv.hostPlatform.isMusl
+, withUserDb ? !stdenv.hostPlatform.isMusl
 , libfido2
 , p11-kit
 
@@ -119,7 +120,7 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-  version = "249.4";
+  version = "249.5";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -130,7 +131,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0pqi9gbk9kgwvd0idf13ybxz7s4h5przn01bwj6fna44jr0wy41c";
+    sha256 = "0bir2syy20rdi59sv8xp8nw1c92zl9z0wmv7ggsll8dca7niqwbp";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
@@ -155,30 +156,48 @@ stdenv.mkDerivation {
     ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-logind-seat-debus-show-CanMultiSession-again.patch
-    ./0019-pkg-config-derive-prefix-from-prefix.patch
+    ./0018-pkg-config-derive-prefix-from-prefix.patch
 
-    # In v249 a bunch of meson files had been touched as part of the migration to
-    # jinja2 for templating. Unfortunately some of those files lost the `install_sysconfdir_samples` check.
-    # The following two patches are part of a PR that was filed to fix those cases.
-    # https://github.com/systemd/systemd/pull/20303
-    ./0020-core-respect-install_sysconfdir_samples-in-meson-fil.patch
-    ./0021-login-respect-install_sysconfdir_samples-in-meson-fi.patch
+    # In v248 or v249 we started to get in trouble due to our
+    # /etc/systemd/system being a symlink and thus being treated differently by
+    # systemd. With the below patch we mitigate that effect by special casing
+    # all our root unit dirs if they are symlinks. This does exactly what we
+    # need (AFAICT).
+    ./0019-core-handle-lookup-paths-being-symlinks.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl (let
+    oe-core = fetchzip {
+      url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
+      sha256 = "1jixya4czkr5p5rdcw3d6ips8zzr82dvnanvzvgjh67730scflya";
+    };
+    musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
+  in [
+    (musl-patches + "/0002-don-t-use-glibc-specific-qsort_r.patch")
+    (musl-patches + "/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch")
+    (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
+    (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
+    (musl-patches + "/0006-Include-netinet-if_ether.h.patch")
+    (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+    (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
+    (musl-patches + "/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch")
+    (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
+    (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+    (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+    (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+    (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+    (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+    (musl-patches + "/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch")
+    (musl-patches + "/0017-missing_type.h-add-__compar_d_fn_t-definition.patch")
+    (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
+    (musl-patches + "/0019-Handle-missing-LOCK_EX.patch")
+    (musl-patches + "/0021-test-json.c-define-M_PIl.patch")
+    (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
+    (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
+    (musl-patches + "/0026-Handle-missing-gshadow.patch")
+    (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
 
-    # In v248 or v249 we started to get in trouble due to our /etc/systemd/sytem being
-    # a symlink and thus being treated differently by systemd. With the below
-    # patch we mitigate that effect by special casing all our root unit dirs
-    # if they are symlinks. This does exactly what we need (AFAICT).
-    ./0022-core-Handle-lookup-paths-being-symlinks.patch
-
-    # The way files are being tested for being executable changed in v248/v249
-    # which caused our confinement setup to fail as we do not mount /proc by
-    # default.
-    # The issue has been reported upstream and this patch carries the upstream
-    # fix for the same. Upstream now has a test for this scenario.
-    # https://github.com/systemd/systemd/issues/20514
-    ./0023-path-util-make-find_executable-work-without-proc-mounted.patch
-  ];
+    # Being discussed upstream: https://lists.openembedded.org/g/openembedded-core/topic/86411771#157056
+    ./musl.diff
+  ]);
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
@@ -458,7 +477,13 @@ stdenv.mkDerivation {
     "-Dnss-systemd=false"
   ] ++ lib.optionals withLibBPF [
     "-Dbpf-framework=true"
-  ] ++ lib.optional withTpm2Tss "-Dtpm2=true";
+  ] ++ lib.optionals withTpm2Tss [
+    "-Dtpm2=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dgshadow=false"
+    "-Dutmp=false"
+    "-Didn=false"
+  ];
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -520,7 +545,7 @@ stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = toString ([
     # Can't say ${polkit.bin}/bin/pkttyagent here because that would
     # lead to a cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
@@ -534,7 +559,10 @@ stdenv.mkDerivation {
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-  ];
+
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-D__UAPI_DEF_ETHHDR=0"
+  ]);
 
   doCheck = false; # fails a bunch of tests
 

@@ -186,6 +186,33 @@ added. To find the correct hash, you can first use `lib.fakeSha256` or
 `lib.fakeHash` as a stub hash. Building the package (and thus the
 vendored dependencies) will then inform you of the correct hash.
 
+### Cargo features {#cargo-features}
+
+You can disable default features using `buildNoDefaultFeatures`, and
+extra features can be added with `buildFeatures`.
+
+If you want to use different features for check phase, you can use
+`checkNoDefaultFeatures` and `checkFeatures`. They are only passed to
+`cargo test` and not `cargo build`. If left unset, they default to
+`buildNoDefaultFeatures` and `buildFeatures`.
+
+For example:
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "color" "net" ];
+
+  # disable network features in tests
+  checkFeatures = [ "color" ];
+
+  # ...
+}
+```
+
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
@@ -261,7 +288,7 @@ rustPlatform.buildRustPackage {
 Please note that the code will be compiled twice here: once in `release` mode
 for the `buildPhase`, and again in `debug` mode for the `checkPhase`.
 
-Test flags, e.g., `--features xxx/yyy`, can be passed to `cargo test` via the
+Test flags, e.g., `--package foo`, can be passed to `cargo test` via the
 `cargoTestFlags` attribute.
 
 Another attribute, called `checkFlags`, is used to pass arguments to the test
@@ -421,18 +448,20 @@ you of the correct hash.
 * `cargoBuildHook`: use Cargo to build a crate. If the crate to be
   built is a crate in e.g. a Cargo workspace, the relative path to the
   crate to build can be set through the optional `buildAndTestSubdir`
-  environment variable. Additional Cargo build flags can be passed
-  through `cargoBuildFlags`.
+  environment variable. Features can be specified with
+  `cargoBuildNoDefaultFeatures` and `cargoBuildFeatures`. Additional
+  Cargo build flags can be passed through `cargoBuildFlags`.
 * `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
   to build a Python wheel. Similar to `cargoBuildHook`, the optional
   variable `buildAndTestSubdir` can be used to build a crate in a
   Cargo workspace. Additional Maturin flags can be passed through
   `maturinBuildFlags`.
 * `cargoCheckHook`: run tests using Cargo. The build type for checks
-  can be set using `cargoCheckType`. Additional flags can be passed to
-  the tests using `checkFlags` and `checkFlagsArray`. By default,
-  tests are run in parallel. This can be disabled by setting
-  `dontUseCargoParallelTests`.
+  can be set using `cargoCheckType`. Features can be specified with
+  `cargoCheckNoDefaultFeaatures` and `cargoCheckFeatures`. Additional
+  flags can be passed to the tests using `checkFlags` and
+  `checkFlagsArray`. By default, tests are run in parallel. This can
+  be disabled by setting `dontUseCargoParallelTests`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
 

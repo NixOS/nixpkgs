@@ -13,7 +13,9 @@ buildPythonPackage rec {
   };
 
   # pillow is a dependency in image.py which is not listed in setup.py
-  propagatedBuildInputs = [ xcffib pillow ];
+  propagatedBuildInputs = [ pillow xcffib ];
+
+  propagatedNativeBuildInputs = [ xcffib ];
 
   checkInputs = [ nose ];
 

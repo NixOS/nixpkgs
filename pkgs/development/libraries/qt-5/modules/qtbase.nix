@@ -115,6 +115,8 @@ stdenv.mkDerivation {
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+  '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
+    patchShebangs ./bin
   '' + (
     if stdenv.isDarwin then ''
         sed -i \
@@ -149,6 +151,8 @@ stdenv.mkDerivation {
     ''}
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+  '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
+    ./bin/syncqt.pl -version $version
   '';
 
   postConfigure = ''

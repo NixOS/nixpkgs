@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , git
-, ruamel_yaml
+, ruamel-yaml
 , jsonschema
 , rfc3987
 , setuptools
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm git ];
   propagatedBuildInputs = [
     setuptools
-    ruamel_yaml
+    ruamel-yaml
     jsonschema
     rfc3987
   ];

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     "SHLIBDIR=$(out)/lib"
 
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ optionals enablePython [
     "PYTHON=${python3.pythonForBuild.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"

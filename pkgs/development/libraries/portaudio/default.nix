@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
+  # Disable parallel build as it fails as:
+  #   make: *** No rule to make target '../../../lib/libportaudio.la',
+  #     needed by 'libportaudiocpp.la'.  Stop.
+  # Next release should address it with
+  #     https://github.com/PortAudio/portaudio/commit/28d2781d9216115543aa3f0a0ffb7b4ee0fac551.patch
+  enableParallelBuilding = false;
+
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''
     make install

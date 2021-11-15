@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, argh
 , pathtools
 , pyyaml
 , flaky
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   propagatedBuildInputs = [
-    argh
     pathtools
     pyyaml
   ];
