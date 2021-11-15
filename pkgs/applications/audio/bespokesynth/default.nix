@@ -5,6 +5,10 @@
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
 , gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
 , buildType ? "Release" # "Debug", or "Release"
+# It is not allowed to distribute binaries with the VST2 SDK plugin without a license
+# (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
+# Read more in https://github.com/NixOS/nixpkgs/issues/145607
+, enableVST2 ? false
 }:
 
 let
@@ -35,9 +39,8 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK"
     "-DCMAKE_BUILD_TYPE=${buildType}"
-  ];
+  ] ++ lib.optional enableVST2 "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK";
 
   nativeBuildInputs = [ python3 makeWrapper cmake pkg-config ninja ];
 
@@ -84,7 +87,9 @@ stdenv.mkDerivation rec {
     description =
       "Software modular synth with controllers support, scripting and VST";
     homepage = "https://github.com/awwbees/BespokeSynth";
-    license = licenses.gpl3Plus;
+    license = with licenses; [
+      gpl3Plus
+    ] ++ lib.optional enableVST2 unfree;
     maintainers = with maintainers; [ astro tobiasBora ];
     platforms = platforms.all;
   };

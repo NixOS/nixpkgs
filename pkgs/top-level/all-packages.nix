@@ -23924,6 +23924,10 @@ with pkgs;
 
   bespokesynth = callPackage ../applications/audio/bespokesynth { };
 
+  bespokesynth-with-vst2 = callPackage ../applications/audio/bespokesynth {
+    enableVST2 = true;
+  };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
