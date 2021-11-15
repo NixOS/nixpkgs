@@ -52,6 +52,7 @@ in buildGoPackage {
   meta = {
     homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
     license = lib.licenses.asl20;
   };
 }
