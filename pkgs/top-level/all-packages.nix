@@ -22925,6 +22925,8 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
+  cyberpunk-neon = callPackage ../data/themes/cyberpunk-neon { };
+
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {});
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
