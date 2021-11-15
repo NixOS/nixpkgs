@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "oath";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xqgcqgx6aa0j21hwsdb3aqpqhviwj756bcqjjjcm1h1aij11p6m";
+    sha256 = "bd6b20d20f2c4e3f53523ee900211dca75aeeca72f4f5a9fd8dcacc175fe1c0b";
   };
 
   meta = with lib; {
