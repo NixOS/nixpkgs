@@ -31911,7 +31911,7 @@ with pkgs;
     boost = boost170;
   };
 
-  dogecoin  = callPackage ../applications/blockchains/dogecoin {
+  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
     boost = boost165;
     withGui = true;
   };
