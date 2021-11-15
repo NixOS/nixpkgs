@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "9.3.4";
+  version = "9.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = pname;
     rev = version;
-    sha256 = "0n0l9jici2d1pck5pf1c96jj3lhw91jki9nsgxzpikvpyvsw7wga";
+    sha256 = "sha256-4jyqdA/xoIEsfouIneGs3A9++sNG2kRUhDzteN0Td6w=";
   };
 
   propagatedBuildInputs = [

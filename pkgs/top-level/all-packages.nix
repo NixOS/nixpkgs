@@ -8711,6 +8711,8 @@ with pkgs;
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
+  cnping = callPackage ../tools/networking/cnping { };
+
   past-time = python3Packages.callPackage ../tools/misc/past-time { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
@@ -15341,6 +15343,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
+
   trellis = callPackage ../development/embedded/fpga/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };
@@ -20936,9 +20940,7 @@ with pkgs;
 
   nsq = callPackage ../servers/nsq { };
 
-  oauth2-proxy = callPackage ../servers/oauth2-proxy {
-    buildGoModule = buildGo115Module;
-  };
+  oauth2-proxy = callPackage ../servers/oauth2-proxy { };
 
   openbgpd = callPackage ../servers/openbgpd { };
 
@@ -25861,6 +25863,8 @@ with pkgs;
   image-roll = callPackage ../applications/graphics/image-roll { };
 
   imagej = callPackage ../applications/graphics/imagej { };
+
+  fiji = callPackage ../applications/graphics/fiji { };
 
   imagemagick6_light = imagemagick6.override {
     bzip2 = null;
