@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, fetchurl }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook }:
 let
   libPathNative = { packages }: lib.makeLibraryPath packages;
 in
@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ri8a60fsbqgq83f8wkyfnd59nqk4d0gpz1vanj54769zflpl71s";
   };
 
+  nativeBuildInputs = [
+    wrapGAppsHook #to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
+  ];
   buildInputs = with pkgs; [
     gtk3
     stdenv.cc.cc
