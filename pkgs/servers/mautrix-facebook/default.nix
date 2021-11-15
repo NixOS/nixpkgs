@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
     rev = "v${version}";
-    sha256 = "0m7nznx3z6cg4wgvjybdivx22ifxcdri4i8501yibsri0jnpf0y2";
+    sha256 = "1n7gshm2nir6vgjkj36lq9m2bclkgy0y236xi8zvdlvfcb2m596f";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -33,10 +33,6 @@ python3.pkgs.buildPythonPackage rec {
   ] ++ lib.optional enableSystemd systemd;
 
   doCheck = false;
-
-  postPatch = ''
-    sed -ie 's/^asyncpg.*/asyncpg>=0.20/' requirements.txt
-  '';
 
   postInstall = ''
     mkdir -p $out/bin
