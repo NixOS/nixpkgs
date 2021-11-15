@@ -228,25 +228,30 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
+    header "Building and running SGX samples"
+
     source $out/share/bin/environment
 
-    TESTDIR=`mktemp -d`
-    cp -r $out/share/SampleCode $TESTDIR/
+    TESTDIR=$(mktemp -d)
+    pushd $TESTDIR
 
-    for dir in "Cxx11SGXDemo" "SampleEnclave" "SampleEnclavePCL" "SealUnseal" "Switchless"; do
-      cd $TESTDIR/SampleCode/$dir/
-      make SGX_MODE=SIM
-      ./app
+    cp -r $out/share/SampleCode/. ./
+
+    for dir in "Cxx11SGXDemo" "LocalAttestation" "SampleEnclave" "SampleEnclavePCL" "SealUnseal" "Switchless"; do
+      pushd "$dir/"
+      make -j $NIX_BUILD_CORES SGX_MODE=SIM
+      ./app || ./bin/app
+      popd
     done
 
-    cd $TESTDIR/SampleCode/LocalAttestation
-    make SGX_MODE=SIM
-    cd bin/
-    ./app
-
-    cd $TESTDIR/SampleCode/RemoteAttestation
-    make SGX_MODE=SIM
+    pushd "RemoteAttestation"
+    make -j $NIX_BUILD_CORES SGX_MODE=SIM
     echo "a" | LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/sample_libcrypto ./app
+    popd
+
+    popd
+
+    header "Checking symlink targets"
 
     # Make sure all symlinks are valid
     output=$(find "$out" -type l -exec test ! -e {} \; -print)
