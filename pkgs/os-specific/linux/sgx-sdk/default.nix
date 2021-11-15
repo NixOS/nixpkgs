@@ -19,7 +19,6 @@
 , python3
 , texinfo
 , validatePkgConfig
-, which
 , writeShellScript
 , writeText
 }:
@@ -218,7 +217,6 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  installCheckInputs = [ which ];
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -241,6 +239,8 @@ stdenv.mkDerivation rec {
 
     postHooks+=(sgxsdk)
   '';
+
+  passthru.tests = callPackage ./samples.nix { };
 
   meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
