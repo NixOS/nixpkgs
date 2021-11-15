@@ -135,10 +135,9 @@ stdenv.mkDerivation rec {
 
     header "Move files created by installer"
 
-    mkdir $out
+    mkdir -p $out/bin
     pushd $out
 
-    mkdir $out/bin
     mv $installDir/bin/sgx-gdb $out/bin
     mkdir $out/bin/x64
     for file in $installDir/bin/x64/*; do
@@ -192,8 +191,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     header "Strip sgxsdk prefix"
-    for path in "$out/share/bin/environment" "$out/bin/sgx-gdb"
-    do
+    for path in "$out/share/bin/environment" "$out/bin/sgx-gdb"; do
       substituteInPlace $path --replace "$TMPDIR/sgxsdk" "$out"
     done
 
