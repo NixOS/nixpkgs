@@ -22,6 +22,8 @@ import ./versions.nix ({ version, sha256, ... }:
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
     '';
 
+    passthru.updateScript = ./update.py;
+
     meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (web frontend)";
       homepage = "https://www.zabbix.com/";
