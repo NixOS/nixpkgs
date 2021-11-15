@@ -129,19 +129,93 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    ./linux/installer/bin/sgx_linux_x64_sdk_*.bin -prefix "$out"
+    installDir=$TMPDIR
+    ./linux/installer/bin/sgx_linux_x64_sdk_*.bin -prefix $installDir
+    installDir=$installDir/sgxsdk
+
+    header "Move files created by installer"
+
+    mkdir $out
+    pushd $out
+
+    mkdir $out/bin
+    mv $installDir/bin/sgx-gdb $out/bin
+    mkdir $out/bin/x64
+    for file in $installDir/bin/x64/*; do
+      mv $file bin/
+      ln -sr bin/$(basename $file) bin/x64/
+    done
+    rmdir $installDir/bin/{x64,}
+
+    # Move `lib64` to `lib` and symlink `lib64`
+    mv $installDir/lib64 lib
+    ln -s lib/ lib64
+
+    mv $installDir/include/ .
+
+    mkdir -p share/
+    mv $installDir/{SampleCode,licenses} share/
+
+    mkdir -p share/bin
+    mv $installDir/{environment,buildenv.mk} share/bin/
+    ln -s share/bin/{environment,buildenv.mk} .
+
+    # pkgconfig should go to lib/
+    mv $installDir/pkgconfig lib/
+    ln -s lib/pkgconfig/ .
+
+    # Also create the `sdk_libs` for compat. All the files
+    # link to libraries in `lib64/`, we shouldn't link the entire
+    # directory, however, as there seems to be some ambiguity between
+    # SDK and PSW libraries.
+    mkdir sdk_libs/
+    for file in $installDir/sdk_libs/*; do
+      ln -sr lib/$(basename $file) sdk_libs/
+      rm $file
+    done
+    rmdir $installDir/sdk_libs
+
+    # No uninstall script required
+    rm $installDir/uninstall.sh
+
+    # Create an `sgxsdk` symlink which points to `$out` for compat
+    ln -sr . sgxsdk
+
+    # Make sure we didn't forget any files
+    rmdir $installDir || (echo "Error: The directory $installDir still contains unhandled files: $(ls -A $installDir)" >&2 && exit 1)
+
+    popd
 
     runHook postInstall
   '';
 
+
   preFixup = ''
-    sgxsdk="$out/sgxsdk"
+    header "Strip sgxsdk prefix"
+    for path in "$out/share/bin/environment" "$out/bin/sgx-gdb"
+    do
+      substituteInPlace $path --replace "$TMPDIR/sgxsdk" "$out"
+    done
 
     header "Fixing pkg-config files"
-    sed -i "s|prefix=.*|prefix=$sgxsdk|g" $out/sgxsdk/pkgconfig/*.pc
+    sed -i "s|prefix=.*|prefix=$out|g" $out/lib/pkgconfig/*.pc
+
+    header "Fixing SGX_SDK default in samples"
+    substituteInPlace $out/share/SampleCode/LocalAttestation/buildenv.mk \
+      --replace '/opt/intel/sgxsdk' "$out"
+    for file in $out/share/SampleCode/*/Makefile; do
+      substituteInPlace $file \
+        --replace '/opt/intel/sgxsdk' "$out" \
+        --replace '$(SGX_SDK)/buildenv.mk' "$out/share/bin/buildenv.mk"
+    done
+
+    header "Patching buildenv.mk to use Intel's prebuilt Nix binutils"
+    substituteInPlace $out/share/bin/buildenv.mk \
+      --replace 'BINUTILS_DIR := /usr/local/bin' \
+                'BINUTILS_DIR := ${BINUTILS_DIR}'
 
     header "Patching GDB path in bin/sgx-gdb"
-    substituteInPlace "$sgxsdk/bin/sgx-gdb" --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
+    substituteInPlace $out/bin/sgx-gdb --replace '/usr/local/bin/gdb' '${gdb}/bin/gdb'
   '';
 
   doInstallCheck = true;
