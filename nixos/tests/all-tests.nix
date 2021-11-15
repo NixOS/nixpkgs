@@ -315,6 +315,7 @@ in
   moosefs = handleTest ./moosefs.nix {};
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
+  mtp = handleTest ./mtp.nix {};
   mumble = handleTest ./mumble.nix {};
   musescore = handleTest ./musescore.nix {};
   munin = handleTest ./munin.nix {};
