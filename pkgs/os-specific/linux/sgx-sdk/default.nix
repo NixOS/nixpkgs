@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     ln -s "$src/external/epid-sdk/ext/ipp/include/sgx_ippcp.h" \
           'external/ippcp_internal/inc/sgx_ippcp.h'
 
-    patchShebangs ./linux/installer/bin/build-installpkg.sh \
-      ./linux/installer/common/sdk/createTarball.sh \
-      ./linux/installer/common/sdk/install.sh
+    patchShebangs linux/installer/bin/build-installpkg.sh \
+      linux/installer/common/sdk/createTarball.sh \
+      linux/installer/common/sdk/install.sh
   '';
 
   # We need `cmake` as a build input but don't use it to kick off the build phase
@@ -97,34 +97,29 @@ stdenv.mkDerivation rec {
     ''
       pushd 'external/ippcp_internal'
 
-      mkdir -p lib/linux/intel64/no_mitigation
-      cp ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a lib/linux/intel64/no_mitigation
-      chmod a+w lib/linux/intel64/no_mitigation/libippcp.a
-      cp ${ipp-crypto-no_mitigation}/include/* ./inc
+      install ${ipp-crypto-no_mitigation}/include/* inc/
 
-      mkdir -p lib/linux/intel64/cve_2020_0551_load
-      cp ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_load
-      chmod a+w lib/linux/intel64/cve_2020_0551_load/libippcp.a
+      install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
+        lib/linux/intel64/no_mitigation/libippcp.a
+      install -D -m a+rw ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a \
+        lib/linux/intel64/cve_2020_0551_load/libippcp.a
+      install -D -m a+rw ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a \
+        lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
-      mkdir -p lib/linux/intel64/cve_2020_0551_cf
-      cp ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a lib/linux/intel64/cve_2020_0551_cf
-      chmod a+w lib/linux/intel64/cve_2020_0551_cf/libippcp.a
+      rm inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp20u3.patch -o inc/ippcp.h
 
-      rm ./inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp20u3.patch -o ./inc/ippcp.h
-
-      mkdir -p license
-      cp ${ipp-crypto-no_mitigation.src}/LICENSE ./license
+      install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
       popd
-  '';
+    '';
 
   buildFlags = [
     "sdk_install_pkg"
   ];
 
   postBuild = ''
-    patchShebangs ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
+    patchShebangs linux/installer/bin/sgx_linux_x64_sdk_*.bin
   '';
 
   installPhase = ''
