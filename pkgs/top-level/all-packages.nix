@@ -4601,6 +4601,8 @@ with pkgs;
 
   dorkscout = callPackage ../tools/security/dorkscout { };
 
+  downonspot = callPackage ../applications/misc/downonspot { };
+
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
   slade = callPackage ../applications/misc/slade {
@@ -7313,8 +7315,9 @@ with pkgs;
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
     libwebsockets_3_2
-    libwebsockets_4_2;
-  libwebsockets = libwebsockets_4_2;
+    libwebsockets_4_2
+    libwebsockets_4_3;
+  libwebsockets = libwebsockets_4_3;
 
   licensee = callPackage ../tools/package-management/licensee { };
 
@@ -9037,6 +9040,8 @@ with pkgs;
   restool = callPackage ../os-specific/linux/restool {};
 
   reuse = callPackage ../tools/package-management/reuse { };
+
+  inherit (nodePackages) reveal-md;
 
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
@@ -19320,6 +19325,17 @@ with pkgs;
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
+
+  rocksdb_6_23 = rocksdb.overrideAttrs (old: rec {
+    pname = "rocksdb";
+    version = "6.23.3";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+     sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
+   };
+  });
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
