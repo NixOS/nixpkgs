@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Verifies the integrity of PNG, JNG and MNG files";
     license = licenses.free;
     platforms = with platforms; [ unix ];
+    maintainers = with maintainers; [ starcraft66 ];
   };
 }
