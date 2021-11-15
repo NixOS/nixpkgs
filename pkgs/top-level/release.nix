@@ -45,7 +45,6 @@ let
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
               jobs.go.x86_64-darwin
-              jobs.mariadb.x86_64-darwin
               jobs.nix.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
@@ -136,7 +135,6 @@ let
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
-              jobs.mariadb.x86_64-darwin
               jobs.vim.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
