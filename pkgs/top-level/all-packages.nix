@@ -2244,6 +2244,7 @@ with pkgs;
 
   broot = callPackage ../tools/misc/broot {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (xorg) libxcb;
   };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
