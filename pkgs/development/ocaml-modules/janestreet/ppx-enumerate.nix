@@ -2,7 +2,7 @@
  ppx_core, ppx_tools, ppx_type_conv}:
 
 buildOcamlJane {
-  name = "ppx_enumerate";
+  pname = "ppx_enumerate";
   hash = "0m11921q2pjzkwckf21fynd2qfy83n9jjsgks23yagdai8a7ym16";
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv ];
 

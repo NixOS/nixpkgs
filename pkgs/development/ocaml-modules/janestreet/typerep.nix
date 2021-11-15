@@ -1,7 +1,7 @@
 {lib, buildOcamlJane, type_conv}:
 
 buildOcamlJane {
-  name = "typerep";
+  pname = "typerep";
   version = "113.33.03";
 
   minimumSupportedOcamlVersion = "4.00";
