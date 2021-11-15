@@ -19323,6 +19323,17 @@ with pkgs;
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
+  rocksdb_6_23 = rocksdb.overrideAttrs (old: rec {
+    pname = "rocksdb";
+    version = "6.23.3";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+     sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
+   };
+  });
+
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
   rote = callPackage ../development/libraries/rote { };
