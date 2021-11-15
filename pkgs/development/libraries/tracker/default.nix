@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -31,26 +30,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.2.0";
+  version = "3.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8RelKHXUpNCceqmT+Mio0GRo1dz7FT642qUesThEUTo=";
+    sha256 = "GEfgiznm5h2EhzWqH5f32WwDggFlP6DXy56Bs365wDo=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit asciidoc;
-    })
-  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
-    # Upstream: https://gitlab.gnome.org/GNOME/tracker/-/issues/332
-    (fetchpatch {
-      name = "i686-test.patch";
-      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/af707181a2c492a794daec7ce3f3062d67ffd9dc.patch";
-      sha256 = "sha256-KOdkTy79w3oiQILrPG00UVrv+VBjAk4Y868I8jtifqk=";
     })
   ];
 
