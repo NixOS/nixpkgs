@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0.5.7";
+  version = "057";
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
-    rev = "v_${lib.replaceStrings ["."] [""] version}";
-    sha256 = "4P2PT8/7oA5Q7H4+pm7BOET7w05pQYQltXVV3+YVrVE=";
+    rev = "v_${version}";
+    sha256 = "0ldd2pkdymbmnljq8hb99v1zni1qq5pacgkyxi80x87vrx7qzzg0";
   };
 
   propagatedBuildInputs = [ pygame ];
