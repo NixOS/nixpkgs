@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-iy8xjKnPLq1ntZa9x+KtLDznzu6m+1db3NPeGQESUVo=";
+    sha256 = "sha256-5MKQmZxTW8WofmTkV9kGeGN5RxsgVVMFZEF3rPDUO6Q=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
     # Use the correct path to the certtool binary
     # instead of relying on it being in the environment
-    substituteInPlace samples/swtpm_localca.c --replace \
+    substituteInPlace src/swtpm_localca/swtpm_localca.c --replace \
         '# define CERTTOOL_NAME "certtool"' \
         '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
   '';
