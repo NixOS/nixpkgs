@@ -18,6 +18,13 @@ buildPythonPackage rec {
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
 
+  postFixup =  ''
+    # Remove until fixed by upstream
+    # https://github.com/jupyter/nbclient/pull/173#issuecomment-968760082
+    rm $out/bin/.jupyter-run-wrapped
+    rm $out/bin/jupyter-run
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbclient";
     description = "A client library for executing notebooks";
