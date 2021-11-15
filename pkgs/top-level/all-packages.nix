@@ -15352,6 +15352,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
+
   trellis = callPackage ../development/embedded/fpga/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };
