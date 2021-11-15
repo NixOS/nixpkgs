@@ -22,6 +22,17 @@ public:
     using Runner::Runner;
 
     Calamares::JobResult run() override;
+
+protected Q_SLOTS:
+    void unsquashProgress( QString line );
+
+private:
+    int m_inodes = 0;  // Total in the FS
+
+    // Progress reporting
+    int m_processed = 0;
+    int m_since = 0;
+    QString m_filename;
 };
 
 #endif
