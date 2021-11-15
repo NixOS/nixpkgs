@@ -37,6 +37,15 @@ UnsquashRunner::run()
             Calamares::JobResult::MissingRequirements );
     }
 
+    const QString destinationPath = CalamaresUtils::System::instance()->targetPath( m_destination );
+    if ( destinationPath.isEmpty() )
+    {
+        return Calamares::JobResult::internalError(
+            tr( "Invalid unsquash configuration" ),
+            tr( "No destination could be found for <i>%1</i>." ).arg( m_destination ),
+            Calamares::JobResult::InvalidConfiguration );
+    }
+
     // Get the stats (number of inodes) from the FS
     {
         m_inodes = -1;
@@ -49,6 +58,10 @@ UnsquashRunner::run()
             }
         } );
     }
+    if ( m_inodes <= 0 )
+    {
+        cWarning() << "No stats could be obtained from" << unsquashExecutable << "-s";
+    }
 
     // Now do the actual unpack
     {
@@ -57,7 +70,7 @@ UnsquashRunner::run()
                                       QStringLiteral( "-i" ),  // List files
                                       QStringLiteral( "-f" ),  // Force-overwrite
                                       QStringLiteral( "-d" ),
-                                      m_destination,
+                                      destinationPath,
                                       m_source } );
         r.setLocation( Calamares::Utils::RunLocation::RunInHost ).enableOutputProcessing();
         connect( &r, &decltype( r )::output, this, &UnsquashRunner::unsquashProgress );
