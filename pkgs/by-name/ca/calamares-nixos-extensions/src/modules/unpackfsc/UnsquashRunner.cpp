@@ -63,8 +63,6 @@ UnsquashRunner::run()
         connect( &r, &decltype( r )::output, this, &UnsquashRunner::unsquashProgress );
         return r.run().explainProcess( toolName, std::chrono::seconds( 0 ) );
     }
-
-    Q_EMIT progress( 1.0 );
 }
 
 void
