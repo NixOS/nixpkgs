@@ -239,5 +239,6 @@ qtModule {
     platforms = platforms.unix;
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
+    broken = stdenv.isDarwin && (lib.versionAtLeast qtCompatVersion "5.14"); # requires a newer SDK
   };
 }

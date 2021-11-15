@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
 , parallel ? true
 }:
 
@@ -10,9 +13,11 @@ stdenv.mkDerivation rec {
   pname = "stxxl";
   version = "1.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/stxxl/stxxl/archive/${version}.tar.gz";
-    sha256 = "54006a5fccd1435abc2f3ec201997a4d7dacddb984d2717f62191798e5372f6c";
+  src = fetchFromGitHub {
+    owner = "stxxl";
+    repo = "stxxl";
+    rev = version;
+    sha256 = "sha256-U6DQ5mI83pyTmq5/ga5rI8v0h2/iEnNl8mxhIOpbF1I=";
   };
 
   nativeBuildInputs = [ cmake ];

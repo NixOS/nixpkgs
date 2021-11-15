@@ -21,16 +21,14 @@
 , curl
 , wayland
 , xorg
-, makeWrapper
 , pkg-config
 , libvlc
 , mbedtls
-
+, wrapGAppsHook
 , scriptingSupport ? true
 , luajit
 , swig
 , python3
-
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
@@ -68,7 +66,7 @@ mkDerivation rec {
     addOpenGLRunpath
     cmake
     pkg-config
-    makeWrapper
+    wrapGAppsHook
   ]
   ++ optional scriptingSupport swig;
 
@@ -121,9 +119,13 @@ mkDerivation rec {
     "-DCEF_ROOT_DIR=../../cef"
   ];
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
-  ];
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libX11 libvlc ]}"
+      ''${gappsWrapperArgs[@]}
+    )
+  '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/lib/lib*.so

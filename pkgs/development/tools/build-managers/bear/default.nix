@@ -7,7 +7,6 @@
 , openssl
 , nlohmann_json
 , gtest
-, fmt
 , spdlog
 , c-ares
 , abseil-cpp
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     openssl
     nlohmann_json
     gtest
-    fmt
     spdlog
     c-ares
     abseil-cpp

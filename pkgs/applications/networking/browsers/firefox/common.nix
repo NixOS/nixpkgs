@@ -110,7 +110,10 @@ let
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
-                then overrideCC stdenv llvmPackages.clangUseLLVM
+                # LTO requires LLVM bintools including ld.lld and llvm-ar.
+                then overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+                  inherit (llvmPackages) bintools;
+                })
                 else stdenv;
 
   # --enable-release adds -ffunction-sections & LTO that require a big amount of
@@ -131,6 +134,12 @@ buildStdenv.mkDerivation ({
   ] ++
   lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch ++
   lib.optional (lib.versionAtLeast version "90") ./no-buildconfig-ffx90.patch ++
+  # This fixes a race condition causing deadlock.
+  # https://phabricator.services.mozilla.com/D128657
+  lib.optional (lib.versionAtLeast version "94") (fetchpatch {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/9c7f25d45bb1dd6b1a865780bc249cdaa619aa83/trunk/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch";
+    sha256 = "l4bMK/YDXcDpIjPy9DPuUSFyDpzVQca201A4h9eav5g=";
+  }) ++
   patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of

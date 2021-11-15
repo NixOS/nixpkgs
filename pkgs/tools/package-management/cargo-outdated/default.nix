@@ -1,22 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, libiconv, curl, darwin }:
+{ lib, stdenv, fetchCrate, rustPlatform, pkg-config, openssl, libiconv, curl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.9.17";
+  version = "0.9.18";
 
-  src = fetchFromGitHub {
-    owner = "kbknapp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Ian/vXGoPHecguQUp2IUgdLW6Ll8OdCA2W0WmoYPDrI=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "19r4nv28iq4cmzs5j127qgvdf7y3pfmgjp6jzzbb8b5xj7w06jhl";
   };
 
-  cargoSha256 = "sha256-eDu1dAs543AryUEsCY9COHrvuamQocCk0nBXDIdFmYs=";
+  cargoSha256 = "1rf3sxprra9s76iip2xf82kclgs83fhnlx9ykl9hhn2y0z8r3342";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
   ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
     curl
   ];

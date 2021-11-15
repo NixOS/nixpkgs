@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 let
-  rev = "3a64331a1c809bbbc21eca63b825970f213ec5ac";
+  rev = "307d694076b056588c652c2bdaa543a89eb255d9";
 in
 stdenv.mkDerivation rec {
   pname = "rtl88xxau-aircrack";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "aircrack-ng";
     repo = "rtl8812au";
     inherit rev;
-    sha256 = "sha256-goaN80imfCeUwiHokJd10CFKskE3iL5BO/xOQk6PtHE=";
+    sha256 = "sha256-iSJnKWc+LxGHUhb/wbFSMh7w6Oi9v4v5V+R+LI96X7w=";
   };
 
   buildInputs = kernel.moduleBuildDependencies;
@@ -19,14 +19,6 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
-
-  # Fix build for 5.12 kernels
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/aircrack-ng/rtl8812au/commit/9b4c60a89c2a55f36454b950a86246b6b86a9681.patch";
-      sha256 = "sha256-HPhTLstqAePF3H6WeM9Fu4/8UjNL+9xl4L8xq3NOWuM=";
-    })
-  ];
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -48,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.jethro ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    broken = kernel.kernelAtLeast "5.15";
   };
 }

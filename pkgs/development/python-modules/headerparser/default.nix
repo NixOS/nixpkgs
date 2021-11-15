@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, entry-points-txt
 , six
 }:
 

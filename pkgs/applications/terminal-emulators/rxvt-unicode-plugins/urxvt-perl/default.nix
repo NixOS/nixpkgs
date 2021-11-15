@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, wmctrl }:
 
 stdenv.mkDerivation {
-  name = "urxvt-perl-2015-01-16";
+  pname = "urxvt-perl";
+  version = "unstable-2015-01-16";
 
   src = fetchFromGitHub {
     owner = "effigies";

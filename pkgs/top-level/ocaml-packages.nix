@@ -344,8 +344,8 @@ let
         then ppxlib.override { version = "0.15.0"; }
         else ppxlib; in
       {
-        ppx_deriving = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-        ppxlib = ppxlib_0_15;
+        ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
+        inherit ppxlib_0_15;
       }
     );
 
@@ -1058,9 +1058,7 @@ let
 
     ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
 
-    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix {
-      ppxlib = ppxlib.override { version = "0.22.0"; };
-    };
+    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
@@ -1152,9 +1150,7 @@ let
 
     ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix { };
 
-    ppx_cstubs = callPackage ../development/ocaml-modules/ppx_cstubs {
-      ppxlib = ppxlib.override { version = "0.22.0"; };
-    };
+    ppx_cstubs = callPackage ../development/ocaml-modules/ppx_cstubs { };
 
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 

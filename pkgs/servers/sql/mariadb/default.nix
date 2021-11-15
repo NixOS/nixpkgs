@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
+{ lib, stdenv, fetchzip, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
 , libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
@@ -22,15 +22,11 @@ mariadb = server // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.6.3";
+  version = "10.6.5";
 
-  src = fetchurl {
-    urls = [
-      "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
-      "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
-    ];
-    sha256 = "1nqq1g6h2gvsraqziv2qq42v7y6fzbfw357mh3d1zv7md9h2bhav";
-    name   = "mariadb-${version}.tar.gz";
+  src = fetchzip {
+    url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    sha256 = "0rvcllbplgn92kr5n3qxfasnsqc8cn9ijm01fb7i7j2p9zxnfhig";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -95,7 +91,6 @@ common = rec { # attributes common to both builds
     rm "$out"/bin/{mariadb-config,mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
-    rm -rf "$out"/share/aclocal
   '';
 
   passthru.mysqlVersion = "5.7";
@@ -135,8 +130,7 @@ client = stdenv.mkDerivation (common // {
   ];
 
   postInstall = common.postInstall + ''
-    rm -rf "$out"/share/doc
-    rm "$out"/bin/{mysqltest,mytop}
+    rm "$out"/bin/{mariadb-test,mysqltest}
     libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
     rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
@@ -199,6 +193,7 @@ server = stdenv.mkDerivation (common // {
   '';
 
   postInstall = common.postInstall + ''
+    rm -rf "$out"/share/aclocal
     chmod +x "$out"/bin/wsrep_sst_common
     rm "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
   '' + optionalString withStorageMroonga ''

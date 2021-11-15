@@ -14,8 +14,12 @@ rec {
   };
 
   cutensor_cudatoolkit_10_2 = cutensor_cudatoolkit_10_1.override {
+    version = "1.3.1.3";
     libPath = "lib/10.2";
     cudatoolkit = cudatoolkit_10_2;
+    # 1.3.1 is compatible with CUDA 11.0, 11.1, and 11.2:
+    # ephemeral doc at https://developer.nvidia.com/cutensor/downloads
+    sha256 = "sha256-mNlVnabB2IC3HnYY0mb06RLqQzDxN9ePGVeBy3hkBC8=";
   };
 
   cutensor_cudatoolkit_10 = cutensor_cudatoolkit_10_2;
@@ -41,5 +45,5 @@ rec {
     cudatoolkit = cudatoolkit_11_4;
   };
 
-  cutensor_cudatoolkit_11 = cutensor_cudatoolkit_11_2;
+  cutensor_cudatoolkit_11 = cutensor_cudatoolkit_11_4;
 }

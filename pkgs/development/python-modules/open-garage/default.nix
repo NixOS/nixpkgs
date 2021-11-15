@@ -8,15 +8,16 @@
 
 buildPythonPackage rec {
   pname = "open-garage";
-  version = "0.1.6";
+  version = "0.2.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyOpenGarage";
     rev = version;
-    sha256 = "sha256-vm51Fjej0OQ7LftisS/tsnxZxa5c/j7eGIROMsEcXNE=";
+    sha256 = "sha256-iJ7HcJhpTceFpHTUdNZOYDuxUWZGWPmZ9lxD3CyGvk8=";
   };
 
   propagatedBuildInputs = [

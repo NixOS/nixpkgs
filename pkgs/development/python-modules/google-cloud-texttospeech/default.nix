@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50c49005c7a807950eed730faa386fcef1dc6f5c4c351c6d6470fd211f23f973";
+    sha256 = "e81beafa612f288fe74db55dd3a409f96cb01d2bac117bcd06a4e5b427d81476";
   };
 
   propagatedBuildInputs = [ libcst google-api-core proto-plus ];

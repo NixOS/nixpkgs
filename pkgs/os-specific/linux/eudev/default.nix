@@ -9,9 +9,9 @@ let
     sha256 = "sha256-h7sCjUcP0bhRaTSbRMVdW3M3M9wtUN3xGW4CZyXq0DQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gperf ];
   buildInputs = [
-    glib gperf util-linux kmod
+    glib util-linux kmod
   ];
 in
 stdenv.mkDerivation {

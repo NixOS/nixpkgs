@@ -94,6 +94,10 @@ default-package-overrides:
   - autoapply < 0.4.1.1
   # 2021-10-22: 1.8 breaks shake-bench
   - SVGFonts < 1.8
+  # 2021-11-09: 0.20.6 can't be built with aeson < 2.0 which is a pain to override at the moment
+  - futhark < 0.20.6
+  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
+  - ghc-bignum == 1.0
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.
@@ -110,10 +114,10 @@ extra-packages:
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
-  - happy == 1.19.9                     # for purescript
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
+  - language-javascript == 0.7.0.0      # required by purescript
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
@@ -123,6 +127,9 @@ extra-packages:
   - ShellCheck == 0.7.1                 # 2021-05-09: haskell-ci 0.12.1 pins this version
   - cabal-install-parsers == 0.4.2      # 2021-09-04: needed haskell-ci by until it upgrades to Cabal >= 3.6
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
+  - ghc-lib == 9.0.1.*                  # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
 
 package-maintainers:
   abbradar:
@@ -141,6 +148,7 @@ package-maintainers:
     - password
     - password-instances
     - pretty-simple
+    - purenix
     - spago
     - termonad
   dalpd:
@@ -402,13 +410,18 @@ unsupported-platforms:
   gi-dbusmenu:                                  [ x86_64-darwin, aarch64-darwin ]
   gi-ggit:                                      [ x86_64-darwin, aarch64-darwin ]
   gi-ibus:                                      [ x86_64-darwin, aarch64-darwin ]
+  gi-javascriptcore:                            [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ x86_64-darwin, aarch64-darwin ]
   gi-vte:                                       [ x86_64-darwin, aarch64-darwin ]
+  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2webextension:                       [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ x86_64-darwin, aarch64-darwin ]
   gnome-keyring:                                [ x86_64-darwin, aarch64-darwin ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin, aarch64-darwin ]
   haskell-snake:                                [ x86_64-darwin, aarch64-darwin ]
+  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
   hevm:                                         [ aarch64-linux ] # depends on sbv, which is not supported on aarch64-linux
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]

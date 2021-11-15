@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkg-config, libpng
-, libusb-compat-0_1 ? null
-, gimpSupport ? false, gimp ? null
+{ lib
+, stdenv
+, fetchurl
+, sane-backends
+, sane-frontends
+, libX11
+, gtk2
+, pkg-config
+, libpng
+, libusb-compat-0_1
+, gimpSupport ? false
+, gimp
 }:
 
-assert gimpSupport -> gimp != null;
-
 stdenv.mkDerivation rec {
-  name = "xsane-0.999";
+  pname = "xsane";
+  version = "0.999";
 
   src = fetchurl {
-    url = "http://www.xsane.org/download/${name}.tar.gz";
+    url = "http://www.xsane.org/download/xsane-${version}.tar.gz";
     sha256 = "0jrb918sfb9jw3vmrz0z7np4q55hgsqqffpixs0ir5nwcwzd50jp";
   };
 
@@ -19,14 +27,15 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 ]
-    ++ (if libusb-compat-0_1 != null then [libusb-compat-0_1] else [])
+
+  buildInputs = [ libpng libusb-compat-0_1 sane-backends sane-frontends libX11 gtk2 ]
     ++ lib.optional gimpSupport gimp;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.sane-project.org/";
     description = "Graphical scanning frontend for sane";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

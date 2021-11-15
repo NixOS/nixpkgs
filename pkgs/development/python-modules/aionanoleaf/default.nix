@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

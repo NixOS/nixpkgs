@@ -1,9 +1,11 @@
-{lib, stdenv, fetchurl, libtiff, gettext }:
+{ lib, stdenv, fetchurl, libtiff, gettext }:
 
-stdenv.mkDerivation {
-  name = "minidjvu-0.8";
+stdenv.mkDerivation rec {
+  pname = "minidjvu";
+  version = "0.8";
+
   src = fetchurl {
-    url = "mirror://sourceforge/minidjvu/minidjvu-0.8.tar.gz";
+    url = "mirror://sourceforge/minidjvu/minidjvu-${version}.tar.gz";
     sha256 = "0jmpvy4g68k6xgplj9zsl6brg6vi81mx3nx2x9hfbr1f4zh95j79";
   };
 
@@ -11,7 +13,7 @@ stdenv.mkDerivation {
     sed -i s,/usr/bin/gzip,gzip, Makefile.in
   '';
 
-  buildInputs = [ libtiff gettext];
+  buildInputs = [ libtiff gettext ];
 
   preInstall = ''
     mkdir -p $out/lib

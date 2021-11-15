@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata }:
+{ lib, buildGo117Module, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
 
-buildGoModule rec {
+buildGo117Module rec {
   pname = "grafana";
-  version = "8.1.6";
+  version = "8.2.3";
 
   excludedPackages = "\\(alert_webhook_listener\\|clean-swagger\\|release_publisher\\|slow_proxy\\|slow_proxy_mac\\|macaron\\)";
 
@@ -10,17 +10,23 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-PUVRFa3b+O2lY6q3vO+rLUcC+fx80iB78tt60f6Vugk=";
+    sha256 = "sha256-GC4pHwthsXu/+dXb1cBk5bC0O6NnyiChC+UWleq7JzA=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-So9xzet9kPkjcDwNts3iXlCd+u2uiXTo0LVcLc8toyk=";
+    sha256 = "sha256-LOswYw0P3dy6arrmUbnzBU0ie2YcPtk6xqtp9CowG2s=";
   };
 
-  vendorSha256 = "sha256-dn4sliRp58oZALZ8Iu7kE83ntkcMIU84Xr5WoeXlhCI=";
+  vendorSha256 = "sha256-yZbdUiuRNFRaXduOYps5ygiaUgvNXw+Ah4wZrfYcJlY=";
+
+  nativeBuildInputs = [ wire ];
 
   preBuild = ''
+    # Generate DI code that's required to compile the package.
+    # From https://github.com/grafana/grafana/blob/v8.2.3/Makefile#L33-L35
+    wire gen -tags oss ./pkg/server
+
     # The testcase makes an API call against grafana.com:
     #
     # --- Expected

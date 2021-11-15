@@ -2,14 +2,14 @@
 , fetchPypi
 , buildPythonPackage
 , pytestCheckHook
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
   version = "5.2.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,11 +17,12 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=multidict --cov-report term-missing:skip-covered --cov-report xml" ""
+    sed -i '/^addopts/d' setup.cfg
   '';
 
   checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "multidict" ];
 
   meta = with lib; {
     description = "Multidict implementation";

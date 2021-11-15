@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = lib.optional (!withOpenCL) "--no-default-features";
 
   # disable tests that require gpu
-  cargoTestFlags = [ "--no-default-features" ];
+  checkNoDefaultFeatures = true;
 
   meta = with lib; {
     description = "Change the start of your git commit hashes to whatever you want";

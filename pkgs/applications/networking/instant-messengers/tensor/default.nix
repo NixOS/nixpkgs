@@ -1,17 +1,24 @@
-{ mkDerivation, lib, stdenv, fetchgit, qtbase, qtquickcontrols, qmake
-, makeDesktopItem }:
+{ mkDerivation
+, lib
+, stdenv
+, fetchgit
+, qtbase
+, qtquickcontrols
+, qmake
+, makeDesktopItem
+}:
 
 # we now have libqmatrixclient so a future version of tensor that supports it
 # should use that
 
 mkDerivation rec {
-  pname = "tensor-git";
-  version = "2017-02-21";
+  pname = "tensor";
+  version = "unstable-2017-02-21";
 
   src = fetchgit {
-    url             = "https://github.com/davidar/tensor.git";
-    rev             = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
-    sha256          = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
+    url = "https://github.com/davidar/tensor.git";
+    rev = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
+    sha256 = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
     fetchSubmodules = true;
   };
 
@@ -19,14 +26,14 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake ];
 
   desktopItem = makeDesktopItem {
-    name        = "tensor";
-    exec        = "@bin@";
-    icon        = "tensor.png";
-    comment     = meta.description;
+    name = "tensor";
+    exec = "@bin@";
+    icon = "tensor.png";
+    comment = meta.description;
     desktopName = "Tensor Matrix Client";
     genericName = meta.description;
-    categories  = "Chat;Utility";
-    mimeType    = "application/x-chat";
+    categories = "Chat;Utility";
+    mimeType = "application/x-chat";
   };
 
   installPhase = if stdenv.isDarwin then ''

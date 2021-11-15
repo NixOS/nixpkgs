@@ -1,6 +1,9 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 let
 
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
     boost17x
     alsa-lib asio avahi flac libogg libvorbis
     aixlog popl soxr
-  ];
+  ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

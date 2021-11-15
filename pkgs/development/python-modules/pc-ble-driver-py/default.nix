@@ -11,7 +11,6 @@
 , scikit-build
 , setuptools
 , swig
-, udev
 , wrapt
 }:
 

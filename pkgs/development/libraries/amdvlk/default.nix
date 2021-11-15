@@ -65,9 +65,6 @@ in stdenv.mkDerivation rec {
 
   cmakeDir = "../drivers/xgl";
 
-  # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
-
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
     install -Dm644 -t $out/share/vulkan/icd.d icd/amd_icd${suffix}.json

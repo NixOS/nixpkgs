@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     "--with-app-defaults=${placeholder "out"}/share/xscreensaver/app-defaults"
   ];
 
+  # "marbling" has NEON code that mixes signed and unsigned vector types
+  NIX_CFLAGS_COMPILE = lib.optional (with stdenv.hostPlatform; isAarch64 || isAarch32) "-flax-vector-conversions";
+
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \

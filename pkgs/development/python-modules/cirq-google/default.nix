@@ -1,6 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
+{ buildPythonPackage
 , cirq-core
 , google-api-core
 , protobuf

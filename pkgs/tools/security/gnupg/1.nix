@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, readline, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.23";
+  pname = "gnupg";
+  version = "1.4.23";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
+    url = "mirror://gnupg/gnupg/gnupg-${version}.tar.bz2";
     sha256 = "1fkq4sqldvf6a25mm2qz95swv1qjg464736091w51djiwqbjyin9";
   };
 

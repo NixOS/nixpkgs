@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "1ncknjayl6am740f49g0lc28z1zsifbicxz1j1kwps3ksj15nl7a";
+    sha256 = "sha256-rZUiaS32C77tFJmEkw/9MGbVTVscb6LOCyWaWO5FyR4=";
   };
 
   patches = [

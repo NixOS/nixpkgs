@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkg-config, libGLU, libGL, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "avogadro-1.1.1";
+  pname = "avogadro";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/avogadro/${name}.tar.bz2";
+    url = "mirror://sourceforge/avogadro/avogadro-${version}.tar.bz2";
     sha256 = "050ag9p4vg7jg8hj1wqfv7lsm6ar2isxjw2vw85s49vsl7g7nvzy";
   };
 
