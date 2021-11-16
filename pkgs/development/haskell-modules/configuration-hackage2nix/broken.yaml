@@ -2608,7 +2608,6 @@ broken-packages:
   - language-typescript
   - language-vhdl
   - language-webidl
-  - lapack-ffi
   - Lastik
   - latest-npm-version
   - latex-formulae-image

@@ -1354,7 +1354,6 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack
  - hmt
  - hmt-diagrams
  - HNM
@@ -1750,9 +1749,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack
- - lapack-carray
- - lapack-comfort-array
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -1797,7 +1793,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-circuit
  - linearmap-category
  - linearscan-hoopl
  - LinearSplit
@@ -2475,7 +2470,6 @@ dont-distribute-packages:
  - repr
  - representable-tries
  - req-oauth2
- - resistor-cube
  - resource-pool-catchio
  - resource-simple
  - respond
