@@ -9634,6 +9634,8 @@ in {
 
   uptime = callPackage ../development/python-modules/uptime { };
 
+  uptime-kuma-monitor = callPackage ../development/python-modules/uptime-kuma-monitor { };
+
   uranium = callPackage ../development/python-modules/uranium { };
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
