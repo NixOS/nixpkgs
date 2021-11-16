@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=${placeholder "out"}"
     "MANDIR=${placeholder "out"}/share/man/man1"
-    "CC=$CC"
+    "CC:=$(CC)"
     systemFlags
   ];
 
