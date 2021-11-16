@@ -22,6 +22,9 @@ public:
 
 protected Q_SLOTS:
     void fsarchiverProgress( QString line );
+
+private:
+    int m_since = 0;
 };
 
 #endif
