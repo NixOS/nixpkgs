@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
           makeWrapper "$dotnetDir/$binName" "${binPath}" \
             --add-flags "$binDir/$binName.dll" \
             --argv0 "$binName" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ icu66 openssl ]}" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
             --prefix PATH : "$dotnetDir" \
             --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
             --run "cd $binDir" \
