@@ -71,6 +71,9 @@
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
+
+# On 32bit platforms, we disable adding "-g" for easier linking.
+, enableDebugSymbols ? !stdenv.is32bit
 }:
 
 assert stdenv.cc.libc or null != null;
@@ -116,12 +119,6 @@ let
                 })
                 else stdenv;
 
-  # --enable-release adds -ffunction-sections & LTO that require a big amount of
-  # RAM and the 32-bit memory space cannot handle that linking
-  # We also disable adding "-g" for easier linking
-  releaseFlags = if stdenv.is32bit
-                 then [ "--disable-release" "--disable-debug-symbols" ]
-                 else [ "--enable-release" ];
 in
 
 buildStdenv.mkDerivation ({
@@ -202,6 +199,9 @@ buildStdenv.mkDerivation ({
     ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
+  separateDebugInfo = enableDebugSymbols;
+  setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
+
   preConfigure = ''
     # remove distributed configuration files
     rm -f configure
@@ -225,7 +225,11 @@ buildStdenv.mkDerivation ({
       ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc.lib}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
       ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${lib.getDev buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
-
+    ${
+    # Bindgen doesn't like the flag added by `separateDebugInfo`.
+    lib.optionalString enableDebugSymbols ''
+      BINDGEN_CFLAGS="''${BINDGEN_CFLAGS/ -Wa,--compress-debug-sections/}"
+    ''}
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
   '' + (lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
@@ -283,9 +287,13 @@ buildStdenv.mkDerivation ({
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else ([ "--disable-debug"
-                           "--enable-optimize"
-                           "--enable-strip" ] ++ releaseFlags))
+                    else [ "--disable-debug" "--enable-optimize" ])
+  # --enable-release adds -ffunction-sections & LTO that require a big amount of
+  # RAM and the 32-bit memory space cannot handle that linking
+  ++ flag (!debugBuild && !stdenv.is32bit) "release"
+  ++ flag enableDebugSymbols "debug-symbols"
+  ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
+
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
 
@@ -309,6 +317,42 @@ buildStdenv.mkDerivation ({
 
     # Needed to find Mozilla runtime
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
+  '';
+
+  # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
+  # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
+  # Remove it when PR #146275 is merged.
+  preFixup = lib.optionalString enableDebugSymbols ''
+    _separateDebugInfo() {
+        [ -e "$prefix" ] || return 0
+
+        local dst="''${debug:-$out}"
+        if [ "$prefix" = "$dst" ]; then return 0; fi
+
+        dst="$dst/lib/debug/.build-id"
+
+        # Find executables and dynamic libraries.
+        local i
+        while IFS= read -r -d $'\0' i; do
+            if ! isELF "$i"; then continue; fi
+
+            # Extract the Build ID. FIXME: there's probably a cleaner way.
+            local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
+            if [[ -z "$id" ]]; then
+                echo "could not find build ID of $i, skipping" >&2
+                continue
+            fi
+
+            # Extract the debug info.
+            header "separating debug info from $i (build ID $id)"
+            mkdir -p "$dst/''${id:0:2}"
+            $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
+            $STRIP --strip-debug "$i"
+
+            # Also a create a symlink <original-name>.debug.
+            ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
+        done < <(find "$prefix" -type f -print0)
+    }
   '';
 
   doInstallCheck = true;
