@@ -14715,9 +14715,9 @@ with pkgs;
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
-  kafkacat = callPackage ../development/tools/kafkacat { };
-
   kati = callPackage ../development/tools/build-managers/kati { };
+
+  kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
 
@@ -17235,6 +17235,8 @@ with pkgs;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+
+  libbde = callPackage ../development/libraries/libbde { };
 
   libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
@@ -31548,6 +31550,8 @@ with pkgs;
   hologram = callPackage ../tools/security/hologram { };
 
   honeytrap = callPackage ../tools/security/honeytrap { };
+
+  kissat = callPackage ../applications/science/logic/kissat {};
 
   tini = callPackage ../applications/virtualization/tini {};
 
