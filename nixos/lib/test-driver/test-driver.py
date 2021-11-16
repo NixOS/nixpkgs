@@ -1081,14 +1081,14 @@ class VM(PrivateVM, MonitorMixin, ExecuteMixin):
         self,
         tmp_dir: pathlib.Path,
         start_command: StartCommand,
-        name: str = "machine",
+        name: str = "VM",
         keep_vm_state: bool = False,
     ) -> None:
         Machine.__init__(self, name)
         PrivateVM.__init__(self, tmp_dir, start_command, keep_vm_state)
 
     def __repr__(self) -> str:
-        return f"<Machine '{self.name}'>"
+        return f"<VM '{self.name}'>"
 
 
 class VLan:
@@ -1148,7 +1148,7 @@ class Driver:
 
     tests: str
     vlans: List[VLan]
-    machines: List[Machine]
+    machines: List[VM]
 
     def __init__(
         self,
@@ -1170,7 +1170,7 @@ class Driver:
                 yield NixStartScript(s)
 
         self.machines = [
-            Machine(
+            VM(
                 start_command=cmd,
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
@@ -1277,7 +1277,7 @@ class Driver:
             cmd = Machine.create_startcommand(args)  # type: ignore
             name = args.get("name", "machine")
 
-        return Machine(
+        return VM(
             tmp_dir=tmp_dir,
             start_command=cmd,
             name=name,
