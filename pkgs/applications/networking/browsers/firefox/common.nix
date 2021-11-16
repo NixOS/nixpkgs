@@ -174,10 +174,6 @@ buildStdenv.mkDerivation ({
                                           AVFoundation MediaToolbox CoreLocation
                                           Foundation libobjc AddressBook cups ];
 
-  NIX_LDFLAGS = lib.optionalString ltoSupport ''
-    -rpath ${llvmPackages.libunwind.out}/lib
-  '';
-
   MACH_USE_SYSTEM_PYTHON = "1";
 
   postPatch = ''
@@ -297,14 +293,7 @@ buildStdenv.mkDerivation ({
     cd obj-*
   '';
 
-  makeFlags = lib.optionals ltoSupport [
-    "AR=${buildStdenv.cc.bintools.bintools}/bin/llvm-ar"
-    "LLVM_OBJDUMP=${buildStdenv.cc.bintools.bintools}/bin/llvm-objdump"
-    "NM=${buildStdenv.cc.bintools.bintools}/bin/llvm-nm"
-    "RANLIB=${buildStdenv.cc.bintools.bintools}/bin/llvm-ranlib"
-    "STRIP=${buildStdenv.cc.bintools.bintools}/bin/llvm-strip"
-  ]
-  ++ extraMakeFlags;
+  makeFlags = extraMakeFlags;
 
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
