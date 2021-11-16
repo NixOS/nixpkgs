@@ -1570,7 +1570,6 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack
  - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
@@ -1962,7 +1961,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-circuit
  - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
@@ -2577,7 +2575,6 @@ dont-distribute-packages:
  - replicant
  - repr
  - representable-tries
- - resistor-cube
  - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
