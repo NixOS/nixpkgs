@@ -401,7 +401,6 @@ class Machine:
     shell_path: pathlib.Path
 
     start_command: StartCommand
-    keep_vm_state: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -426,7 +425,6 @@ class Machine:
         keep_vm_state: bool = False,
     ) -> None:
         self.tmp_dir = tmp_dir
-        self.keep_vm_state = keep_vm_state
         self.name = name
         self.start_command = start_command
 
@@ -437,7 +435,7 @@ class Machine:
         self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
         self.monitor_path = self.state_dir / "monitor"
         self.shell_path = self.state_dir / "shell"
-        if (not self.keep_vm_state) and self.state_dir.exists():
+        if (not keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
 
