@@ -25470,6 +25470,8 @@ with pkgs;
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
+  q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
+
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
 
   qrencode = callPackage ../development/libraries/qrencode { };
