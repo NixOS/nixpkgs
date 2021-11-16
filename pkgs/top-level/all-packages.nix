@@ -1343,6 +1343,8 @@ with pkgs;
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
+  awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
+
   awslogs = callPackage ../tools/admin/awslogs { };
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
