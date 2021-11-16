@@ -159,14 +159,6 @@ in {
       ];
     };
 
-    linux_rt_5_11 = callPackage ../os-specific/linux/kernel/linux-rt-5.11.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.export-rt-sched-migrate
-      ];
-    };
-
     linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -233,6 +225,7 @@ in {
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_14_hardened = hardenedKernelFor kernels.linux_5_14 { };
+    linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -482,7 +475,6 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
-     linux_rt_5_11 = packagesFor kernels.linux_rt_5_11;
   };
 
   rpiPackages = {
@@ -506,6 +498,7 @@ in {
     linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_14 { });
+    linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -524,7 +517,7 @@ in {
     linux_latest = packages.linux_5_15;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_11;
+    linux_rt_latest = packages.linux_rt_5_10;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 

@@ -498,10 +498,10 @@ in
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "0.9.0";
-      sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
+      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
+      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg_3 ];
+    inputs = [ pkgs.ffmpeg ];
   };
 
   vod = {

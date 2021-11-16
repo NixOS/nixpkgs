@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytcc";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     rev = "v${version}";
-    sha256 = "0xpinilb8rnha35laxq076p6v7hdis6davr9ckm5xycs3m4aj7s8";
+    sha256 = "1skhg8ca2bjjfi02pjsi3w7v3f4xhzg7bqyy0cajxsymzqzqp7lm";
   };
 
   postPatch = ''

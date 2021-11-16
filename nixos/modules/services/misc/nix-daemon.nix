@@ -184,34 +184,51 @@ in
         '';
       };
 
-      daemonNiceLevel = mkOption {
-        type = types.int;
-        default = 0;
+      daemonCPUSchedPolicy = mkOption {
+        type = types.enum ["other" "batch" "idle"];
+        default = "other";
+        example = "batch";
         description = ''
-          Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 19 is the lowest. Note that nix
-          bypasses nix-daemon when running as root and this option does not have
-          any effect in such a case.
+          Nix daemon process CPU scheduling policy. This policy propagates to
+          build processes. other is the default scheduling policy for regular
+          tasks. The batch policy is similar to other, but optimised for
+          non-interactive tasks. idle is for extremely low-priority tasks
+          that should only be run when no other task requires CPU time.
 
-          Please note that if used on a recent Linux kernel with group scheduling,
-          setting the nice level will only have an effect relative to other threads
-          in the same task group. Therefore this option is only useful if
-          autogrouping has been disabled (see the kernel.sched_autogroup_enabled
-          sysctl) and no systemd unit uses any of the per-service CPU accounting
-          features of systemd. Otherwise the Nix daemon process may be placed in a
-          separate task group and the nice level setting will have no effect.
-          Refer to the man pages sched(7) and systemd.resource-control(5) for
-          details.
-        '';
+          Please note that while using the idle policy may greatly improve
+          responsiveness of a system performing expensive builds, it may also
+          slow down and potentially starve crucial configuration updates
+          during load.
+      '';
       };
 
-      daemonIONiceLevel = mkOption {
+      daemonIOSchedClass = mkOption {
+        type = types.enum ["best-effort" "idle"];
+        default = "best-effort";
+        example = "idle";
+        description = ''
+          Nix daemon process I/O scheduling class. This class propagates to
+          build processes. best-effort is the default class for regular tasks.
+          The idle class is for extremely low-priority tasks that should only
+          perform I/O when no other task does.
+
+          Please note that while using the idle scheduling class can improve
+          responsiveness of a system performing expensive builds, it might also
+          slow down or starve crucial configuration updates during load.
+      '';
+      };
+
+      daemonIOSchedPriority = mkOption {
         type = types.int;
         default = 0;
+        example = 1;
         description = ''
-          Nix daemon process I/O priority. This priority propagates to build processes.
-          0 is the default Unix process I/O priority, 7 is the lowest.
-        '';
+          Nix daemon process I/O scheduling priority. This priority propagates
+          to build processes. The supported priorities depend on the
+          scheduling policy: With idle, priorities are not used in scheduling
+          decisions. best-effort supports values in the range 0 (high) to 7
+          (low).
+      '';
       };
 
       buildMachines = mkOption {
@@ -587,8 +604,9 @@ in
         unitConfig.RequiresMountsFor = "/nix/store";
 
         serviceConfig =
-          { Nice = cfg.daemonNiceLevel;
-            IOSchedulingPriority = cfg.daemonIONiceLevel;
+          { CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
+            IOSchedulingClass = cfg.daemonIOSchedClass;
+            IOSchedulingPriority = cfg.daemonIOSchedPriority;
             LimitNOFILE = 4096;
           };
 

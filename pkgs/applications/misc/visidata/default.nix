@@ -9,6 +9,7 @@
 , openpyxl
 , xlrd
 , h5py
+, odfpy
 , psycopg2
 , pyshp
 , fonttools
@@ -24,13 +25,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1dmiy87x0yc0d594v3d3km13dl851mx7ym1vgh3bg91llg8ykg33";
+    sha256 = "13s1541n1sr2rkfk1qpsm61y2q773x6fs4cwin660qq4bzmgymhy";
   };
 
   propagatedBuildInputs = [
@@ -60,6 +61,7 @@ buildPythonApplication rec {
     tabulate
     wcwidth
     zstandard
+    odfpy
     setuptools
   ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
@@ -88,7 +90,7 @@ buildPythonApplication rec {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

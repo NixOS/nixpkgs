@@ -10,10 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pLKWq4KIiT6X37EUIOw5SBb1KWopnFcDO+iE++Uie5s=";
   };
 
-  installPhase = ''
-    mkdir $out
-    make install PREFIX=$out
-  '';
+  makeFlags = [ "RANLIB:=$(RANLIB)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://codemadness.org/sfeed-simple-feed-parser.html";

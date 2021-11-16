@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libiconv, skktools }:
+{ lib, stdenv, fetchurl, buildPackages, libiconv, skktools }:
 
 let
   # kana to kanji
@@ -33,6 +33,8 @@ stdenv.mkDerivation {
   srcs = [ small medium large edict assoc ];
   nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
 
+  strictDeps = true;
+
   dontUnpack = true;
 
   installPhase = ''
@@ -47,28 +49,30 @@ stdenv.mkDerivation {
     for src in $srcs; do
       dst=$out/share/$(dictname $src)
       echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
-      iconv -f EUC-JP -t UTF-8 $src |\
-        ${skktools}/bin/skkdic-expr2 >> $dst
+      ${lib.getBin buildPackages.stdenv.cc.libc}/bin/iconv \
+        -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
     done
 
     # combine .L .edict and .assoc for convenience
     dst=$out/share/SKK-JISYO.combined
     echo ";;; -*- coding: utf-8 -*-" > $dst
-    ${skktools}/bin/skkdic-expr2 \
+    skkdic-expr2 \
       $out/share/$(dictname ${large}) + \
       $out/share/$(dictname ${edict}) + \
       $out/share/$(dictname ${assoc}) >> $dst
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A collection of standard SKK dictionaries";
     longDescription = ''
       This package provides a collection of standard kana-to-kanji
       dictionaries for the SKK Japanese input method.
     '';
     homepage = "https://github.com/skk-dev/dict";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ yuriaisaka ];
+    platforms = platforms.all;
   };
 }

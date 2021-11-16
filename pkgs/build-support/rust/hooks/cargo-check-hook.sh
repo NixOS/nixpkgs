@@ -20,7 +20,16 @@ cargoCheckHook() {
         cargoCheckProfileFlag="--${cargoCheckType}"
     fi
 
-    argstr="${cargoCheckProfileFlag} --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}";
+    if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
+        cargoCheckNoDefaultFeaturesFlag=--no-default-features
+    fi
+
+    if [ -n "${cargoCheckFeatures-}" ]; then
+        cargoCheckFeaturesFlag="--features=${cargoCheckFeatures// /,}"
+    fi
+
+    argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
+        --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}"
 
     (
         set -x

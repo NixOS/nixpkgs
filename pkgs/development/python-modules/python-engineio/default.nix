@@ -10,7 +10,6 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 , tornado
 , websocket-client
 }:

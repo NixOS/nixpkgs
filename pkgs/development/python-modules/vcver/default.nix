@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
-, python
 }:
 
 buildPythonPackage rec {

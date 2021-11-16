@@ -14,7 +14,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-846";
+  version = "1.8-850";
 
   src =
     let
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-BoHvODaAcK5b4/syOm3vpOTpq9ETovpWKUqG+UGr2e0=";
+      sha256 = "sha256-NSNaL0ERYTSYn9ETjWcQiuI4hY+w/lWVOz3n9lt6O+4=";
     };
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
           makeWrapper "$dotnetDir/$binName" "${binPath}" \
             --add-flags "$binDir/$binName.dll" \
             --argv0 "$binName" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ icu66 openssl ]}" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
             --prefix PATH : "$dotnetDir" \
             --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
             --run "cd $binDir" \

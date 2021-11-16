@@ -20,7 +20,6 @@
 , sqlalchemy
 , gorilla
 , gunicorn
-, pytest
 }:
 
 buildPythonPackage rec {

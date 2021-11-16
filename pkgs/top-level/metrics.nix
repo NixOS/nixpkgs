@@ -4,8 +4,7 @@ with pkgs;
 
 runCommand "nixpkgs-metrics"
   { nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
-    #FIXME: the job doesn't work, see issue #76776
-    #requiredSystemFeatures = [ "benchmark" ]; # dedicated machine, by @vcunat last time
+    requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
   }
   ''
     export NIX_STORE_DIR=$TMPDIR/store

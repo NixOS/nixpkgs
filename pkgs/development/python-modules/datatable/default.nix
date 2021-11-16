@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
 , pipInstallHook, writeText
 , blessed
 , docutils

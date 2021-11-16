@@ -128,7 +128,11 @@ let
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        patchShebangs scripts
+        # Some linux-hardened patches now remove certain files in the scripts directory, so we cannot
+        # patch all scripts until after patches are applied.
+        # However, scripts/ld-version.sh is still ran when generating a configfile for a kernel, so it needs
+        # to be patched prior to patchPhase
+        patchShebangs scripts/ld-version.sh
       '';
 
       postPatch = ''
@@ -142,6 +146,8 @@ let
             --replace NIXOS_RANDSTRUCT_SEED \
             $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
         fi
+
+        patchShebangs scripts
       '';
 
       configurePhase = ''

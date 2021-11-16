@@ -1,10 +1,10 @@
 { stdenv
 , lib
-, fetchFromSourcehut
+, fetchFromGitLab
+, glib
 , meson
 , ninja
 , pkg-config
-, glib
 , wrapGAppsHook
 , epoxy
 , gtk4
@@ -27,20 +27,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
-  version = "1.3.0";
+  version = "1.4.0";
 
-  src = fetchFromSourcehut {
-    owner = "~martijnbraam";
+  src = fetchFromGitLab {
+    owner = "postmarketOS";
     repo = "megapixels";
     rev = version;
-    sha256 = "0dagp1sh5whnnllrydk7ijjid0hmvcbdm8kkzq2g168khdfn80jm";
+    sha256 = "sha256-I7eevbIg+DEY9hnvat65J4Kem1FFNZc4XzaQQaewP/4=";
   };
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
-    glib
     wrapGAppsHook
   ];
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK4 camera application that knows how to deal with the media request api";
-    homepage = "https://sr.ht/~martijnbraam/Megapixels";
-    changelog = "https://git.sr.ht/~martijnbraam/megapixels/refs/${version}";
+    homepage = "https://gitlab.com/postmarketOS/megapixels";
+    changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 dotlambda ];
     platforms = platforms.linux;

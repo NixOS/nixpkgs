@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.11.2";
+  version = "2021.11.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -448,7 +448,7 @@
     "lametric" = ps: with ps; [ lmnotify ];
     "lannouncer" = ps: with ps; [ ];
     "lastfm" = ps: with ps; [ pylast ];
-    "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
+    "launch_library" = ps: with ps; [ pylaunches ];
     "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ pylgnetcast ];
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal

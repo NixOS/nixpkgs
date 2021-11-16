@@ -4,8 +4,6 @@
 , fetchPypi
 , django
 , djangorestframework
-, mock
-, isort
 , python
 }:
 

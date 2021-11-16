@@ -11,7 +11,6 @@
 , jsonschema
 , murmurhash
 , numpy
-, pathlib
 , preshed
 , requests
 , setuptools

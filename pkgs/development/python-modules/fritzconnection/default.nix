@@ -8,7 +8,8 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.7.1";
+  version = "1.7.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -16,14 +17,20 @@ buildPythonPackage rec {
     owner = "kbr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yrkFtvGXkeHD5hp0Fzz3M1hsuSIt6bQriyUy4NagD0U=";
+    sha256 = "sha256-TT0mc3ID+R5Dhm0xSMpyg68wZR70xJfRfgPkHkvLstA=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "fritzconnection" ];
+  pythonImportsCheck = [
+    "fritzconnection"
+  ];
 
   meta = with lib; {
     description = "Python module to communicate with the AVM Fritz!Box";

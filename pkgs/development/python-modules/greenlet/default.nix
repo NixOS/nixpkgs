@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
 , isPyPy
 , python
 }:

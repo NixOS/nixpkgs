@@ -479,6 +479,16 @@
           RandomX benchmark.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Auto nice daemons
+          <link xlink:href="https://github.com/Nefelim4ag/Ananicy">ananicy</link>
+          and
+          <link xlink:href="https://gitlab.com/ananicy-cpp/ananicy-cpp/">ananicy-cpp</link>.
+          Available as
+          <link linkend="opt-services.ananicy.enable">services.ananicy</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -1290,6 +1300,21 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          <literal>nix.daemonNiceLevel</literal> and
+          <literal>nix.daemonIONiceLevel</literal> have been removed in
+          favour of the new options
+          <link xlink:href="options.html#opt-nix.daemonCPUSchedPolicy"><literal>nix.daemonCPUSchedPolicy</literal></link>,
+          <link xlink:href="options.html#opt-nix.daemonIOSchedClass"><literal>nix.daemonIOSchedClass</literal></link>
+          and
+          <link xlink:href="options.html#opt-nix.daemonIOSchedPriority"><literal>nix.daemonIOSchedPriority</literal></link>.
+          Please refer to the options documentation and the
+          <literal>sched(7)</literal> and
+          <literal>ioprio_set(2)</literal> man pages for guidance on how
+          to use them.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coursier</literal> package’s binary was renamed
           from <literal>coursier</literal> to <literal>cs</literal>.
           Completions which haven’t worked for a while should now work
@@ -1303,6 +1328,14 @@ Superuser created successfully.
           rewritten to support multiple listeners and per-listener
           configuration. Module configurations from previous releases
           will no longer work and must be updated.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>fluidsynth_1</literal> attribute has been
+          removed, as this legacy version is no longer needed in
+          nixpkgs. The actively maintained 2.x series is available as
+          <literal>fluidsynth</literal> unchanged.
         </para>
       </listitem>
       <listitem>
@@ -1323,6 +1356,13 @@ Superuser created successfully.
           The <literal>services.ddclient.password</literal> option was
           removed, and replaced with
           <literal>services.ddclient.passwordFile</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default GNAT version has been changed: The
+          <literal>gnat</literal> attribute now points to
+          <literal>gnat11</literal> instead of <literal>gnat9</literal>.
         </para>
       </listitem>
     </itemizedlist>

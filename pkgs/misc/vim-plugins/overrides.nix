@@ -1037,6 +1037,7 @@ self: super: {
       "coc-tslint"
       "coc-tslint-plugin"
       "coc-tsserver"
+      "coc-ultisnips"
       "coc-vetur"
       "coc-vimlsp"
       "coc-vimtex"

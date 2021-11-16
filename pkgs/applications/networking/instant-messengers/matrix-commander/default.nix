@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "matrix-commander";
-  version = "unstable-2021-05-26";
+  version = "unstable-2021-08-05";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
-    rev = "06b4738bc74ee86fb3ac88c04b8230abf82e7421";
-    sha256 = "1skpq3xfnz11m298qnsw68xv391p5qg47flagzsk86pnzi841vc1";
+    rev = "7ab3fd9a0ef4eb19d882cb3701d2025b4d41b63a";
+    sha256 = "sha256-WWf7GbJxGlqIdsS1d0T1DO0WN2RBepHGgJrl/nt7UIg=";
   };
 
   buildInputs = [

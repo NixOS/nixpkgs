@@ -3,7 +3,29 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Support for later tweepy releases is missing
+      # https://github.com/ranguli/ioccheck/issues/70
+      tweepy = super.tweepy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.10.0";
+
+        src = fetchFromGitHub {
+          owner = "tweepy";
+          repo = "tweepy";
+          rev = "v${version}";
+          sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "ioccheck";
   version = "unstable-2021-09-29";
   format = "pyproject";
@@ -15,11 +37,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0lgqypcd5lzb2yqd5lr02pba24m26ghly4immxgz13svi8f6vzm9";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with py.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     backoff
     click
     emoji
@@ -34,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     vt-py
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with py.pkgs; [
     pytestCheckHook
   ];
 

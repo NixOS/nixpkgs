@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , gcc10
 , cmake
 , boost17x

@@ -9,11 +9,11 @@ let
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4d0c6533da8d553f3dd170c9c4ff3752eb11fd7177ee391414a39adfef60ad";
+    sha256 = "ec88f8009321e77deb0ae682f7d036c139edf4175f8413011b532905c6e7d2b1";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -90,8 +90,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
   };
 }

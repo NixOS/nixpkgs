@@ -11,7 +11,7 @@
 , convertdate
 , umalqurra
 , jdatetime
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     # install_requires
     python-dateutil pytz regex tzlocal
     # extra_requires
-    convertdate umalqurra jdatetime ruamel_yaml
+    convertdate umalqurra jdatetime ruamel-yaml
   ];
 
   pythonImportsCheck = [ "dateparser" ];

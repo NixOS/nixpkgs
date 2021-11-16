@@ -121,9 +121,7 @@ stdenv.mkDerivation (rec {
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if stdenv.hostPlatform == stdenv.buildPlatform then null else "missing";
 
-  # Saw random failures like ‘help2man: can't get '--help' info from
-  # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";

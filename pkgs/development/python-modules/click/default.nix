@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7027bc7bbafaab8b2c2816861d8eb372429ee3c02e193fc2f93d6c4ab9de49c5";
+    sha256 = "sha256-QQ6TKwUPXu13PEzalN51lxyJzbMVWnKggxE5p55ey1s=";
   };
 
   postPatch = ''
     substituteInPlace src/click/_unicodefun.py \
-      --replace "'locale'" "'${locale}/bin/locale'"
+      --replace '"locale"' "'${locale}/bin/locale'"
   '';
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [

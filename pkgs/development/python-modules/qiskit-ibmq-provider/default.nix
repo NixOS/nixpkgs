@@ -7,9 +7,9 @@
 , qiskit-terra
 , requests
 , requests_ntlm
-, websockets
+, websocket-client
   # Visualization inputs
-, withVisualization ? false
+, withVisualization ? true
 , ipython
 , ipyvuetify
 , ipywidgets
@@ -23,6 +23,7 @@
 , nbformat
 , pproxy
 , qiskit-aer
+, websockets
 , vcrpy
 }:
 
@@ -39,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.13.1";
+  version = "0.18.0";
 
   disabled = pythonOlder "3.6";
 
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-DlHlXncttzGo4uVoh2aQ7urW6krN3ej2sJ/EwuxeF2I=";
+    sha256 = "sha256-mVgR9vq9UpM/3VED4hpEev8YAoZY1URAxu7pVv+cjU8=";
   };
 
   propagatedBuildInputs = [
@@ -56,8 +57,12 @@ buildPythonPackage rec {
     qiskit-terra
     requests
     requests_ntlm
-    websockets
+    websocket-client
   ] ++ lib.optionals withVisualization visualizationPackages;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "websocket-client>=1.0.1" "websocket-client"
+  '';
 
   # Most tests require credentials to run on IBMQ
   checkInputs = [
@@ -67,6 +72,7 @@ buildPythonPackage rec {
     pproxy
     qiskit-aer
     vcrpy
+    websockets
   ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
@@ -75,6 +81,7 @@ buildPythonPackage rec {
     "test_old_api_url"
     "test_non_auth_url"
     "test_non_auth_url_with_hub"
+    "test_coder_optimizers" # TODO: reenable when package scikit-quant is packaged, either in NUR or nixpkgs
 
     # slow tests
     "test_websocket_retry_failure"

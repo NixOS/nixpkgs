@@ -344,8 +344,8 @@ let
         then ppxlib.override { version = "0.15.0"; }
         else ppxlib; in
       {
-        ppx_deriving = ppx_deriving.override { ppxlib = ppxlib_0_15; };
-        ppxlib = ppxlib_0_15;
+        ppx_deriving_0_15 = ppx_deriving.override { ppxlib = ppxlib_0_15; };
+        inherit ppxlib_0_15;
       }
     );
 
@@ -1459,7 +1459,7 @@ let
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
       inherit self;
-      inherit (pkgs) lib openssl zstd;
+      inherit (pkgs) fetchpatch lib openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {

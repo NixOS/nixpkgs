@@ -129,6 +129,7 @@ let
       XDP_SOCKETS        = whenAtLeast "4.19" yes;
       XDP_SOCKETS_DIAG   = whenAtLeast "5.1" yes;
       WAN                = yes;
+      TCP_CONG_ADVANCED  = yes;
       TCP_CONG_CUBIC     = yes; # This is the default congestion control algorithm since 2.6.19
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -747,6 +748,7 @@ let
 
       BSD_PROCESS_ACCT_V3 = yes;
 
+      BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
@@ -758,6 +760,8 @@ let
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself
+      EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER =
+          whenAtLeast "5.8" yes; # initrd kernel parameter for EFI
       CGROUPS             = yes; # used by systemd
       FHANDLE             = yes; # used by systemd
       SECCOMP             = yes; # used by systemd >= 231
@@ -858,6 +862,8 @@ let
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
+
+      SCHED_CORE = whenAtLeast "5.14" yes;
 
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support

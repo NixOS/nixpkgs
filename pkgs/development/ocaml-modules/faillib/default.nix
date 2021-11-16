@@ -6,7 +6,7 @@ else
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.00";
-  name = "faillib";
+  pname = "faillib";
   version = "111.17.00";
 
   src = fetchurl {

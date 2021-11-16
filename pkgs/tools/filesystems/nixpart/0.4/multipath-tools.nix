@@ -3,10 +3,11 @@
 { lib, stdenv, fetchurl, fetchpatch, lvm2, libaio, gzip, readline, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "multipath-tools-0.4.9";
+  pname = "multipath-tools";
+  version = "0.4.9";
 
   src = fetchurl {
-    url = "http://christophe.varoqui.free.fr/multipath-tools/${name}.tar.bz2";
+    url = "http://christophe.varoqui.free.fr/multipath-tools/multipath-tools-${version}.tar.bz2";
     sha256 = "04n7kazp1zrlqfza32phmqla0xkcq4zwn176qff5ida4a60whi4d";
   };
 

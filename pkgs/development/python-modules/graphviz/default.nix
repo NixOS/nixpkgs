@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , substituteAll
 , graphviz
+, xdg-utils
 , makeFontsConf
 , freefont_ttf
 , mock
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.17";
+  version = "0.18";
 
   disabled = pythonOlder "3.6";
 
@@ -22,13 +23,14 @@ buildPythonPackage rec {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-K6z2C7hQH2A9bqgRR4MRqxVAH/k2NQBEelb2/6KDUr0=";
+    sha256 = "sha256-K98CwG+V+EFwzyawVjRwVhbX2FVfoX7dCAD5PXAWTq8=";
   };
 
   patches = [
     (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+      src = ./paths.patch;
       inherit graphviz;
+      xdgutils = xdg-utils;
     })
   ];
 

@@ -1,4 +1,4 @@
-{ lib, fetchCrate, rustPlatform, openssl, pkg-config }:
+{ lib, stdenv, fetchCrate, rustPlatform, openssl, pkg-config, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "apkeep";
@@ -11,8 +11,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-YFs2AOMGp0WNrceK14AnigZdJl+UsQdUchpxaI7HSXw=";
 
+  prePatch = ''
+    rm .cargo/config.toml
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "A command-line tool for downloading APK files from various sources";

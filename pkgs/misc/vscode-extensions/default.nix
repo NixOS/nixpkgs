@@ -1,6 +1,5 @@
 { config
 , lib
-, buildEnv
 , fetchurl
 , callPackage
 , vscode-utils

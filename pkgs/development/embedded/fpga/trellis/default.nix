@@ -41,6 +41,12 @@ in stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for f in $out/bin/* ; do
+      install_name_tool -change "$out/lib/libtrellis.dylib" "$out/lib/trellis/libtrellis.dylib" "$f"
+    done
+  '';
+
   doInstallCheck = true;
 
   installCheckPhase = ''
