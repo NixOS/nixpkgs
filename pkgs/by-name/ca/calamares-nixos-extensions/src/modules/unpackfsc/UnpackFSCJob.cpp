@@ -30,6 +30,8 @@ typeNames()
         { "fsarchiver", T::FSArchive },
         { "fsarchive", T::FSArchive },
         { "fsa", T::FSArchive },
+        { "fsa-dir", T::FSArchive },
+        // TODO: support fsa-block, savefs/restfs format
         { "squashfs", T::Squashfs },
         { "squash", T::Squashfs },
         { "unsquash", T::Squashfs },
