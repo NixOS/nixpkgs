@@ -6,6 +6,16 @@ This is the changelog for Calamares-Extensions. For each release, the major
 changes and contributors are listed. Note that Calamares-Extensions does not
 have a historical changelog -- this log starts with version 1.0.0.
 
+# 1.2.1 (2021-11-16)
+
+The 1.2.0 release had no release-notes for that version, and failed to
+credit Anke and Otus.
+
+Changes and new modules in this release:
+ - *unpackfsc* can use `fsarchiver` and unpack that, instead of squashfs;
+   a distro might choose one tool or the other. Currently, only *savedir* /
+   *restdir* mode (i.e. directories, not block-devices) are supported.
+
 # 1.2.0 (2021-11-16)
 
 This release contains contributions from (alphabetically by first name):
