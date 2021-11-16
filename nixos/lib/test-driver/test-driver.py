@@ -438,39 +438,6 @@ class Machine(ABC):
         my_attrs.update(attrs)
         return rootlog.nested(msg, my_attrs)
 
-    def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
-        """Forward a TCP port on the host to a TCP port on the guest.
-        Useful during interactive testing.
-        """
-        self.send_monitor_command(
-            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
-        )
-
-    def block(self) -> None:
-        """Make the machine unreachable by shutting down eth1 (the multicast
-        interface used to talk to the other VMs).  We keep eth0 up so that
-        the test driver can continue to talk to the machine.
-        """
-        self.send_monitor_command("set_link virtio-net-pci.1 off")
-
-    def unblock(self) -> None:
-        """Make the machine reachable."""
-        self.send_monitor_command("set_link virtio-net-pci.1 on")
-
-    def release(self) -> None:
-        if self.pid is None:
-            return
-        rootlog.info(f"kill machine (pid {self.pid})")
-        assert self.process
-        assert self.shell
-        assert self.monitor
-        assert self.serial_thread
-
-        self.process.terminate()
-        self.shell.close()
-        self.monitor.close()
-        self.serial_thread.join()
-
 
 class ExecuteMixin(Machine):
     """Contains methods that only need access to execute() in addition to the base Machine interface"""
@@ -785,6 +752,25 @@ class MonitorMixin(Machine):
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
 
+    def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
+        """Forward a TCP port on the host to a TCP port on the guest.
+        Useful during interactive testing.
+        """
+        self.send_monitor_command(
+            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
+        )
+
+    def block(self) -> None:
+        """Make the machine unreachable by shutting down eth1 (the multicast
+        interface used to talk to the other VMs).  We keep eth0 up so that
+        the test driver can continue to talk to the machine.
+        """
+        self.send_monitor_command("set_link virtio-net-pci.1 off")
+
+    def unblock(self) -> None:
+        """Make the machine reachable."""
+        self.send_monitor_command("set_link virtio-net-pci.1 on")
+
 
 class PrivateVM(Machine):
     """Manages a VM's lifecycle with the help of a start script / command. Only methods that require access to VM instance variables should be added here"""
@@ -1074,6 +1060,20 @@ class PrivateVM(Machine):
     def sleep(self, secs: int) -> None:
         # We want to sleep in *guest* time, not *host* time.
         self.succeed(f"sleep {secs}")
+
+    def release(self) -> None:
+        if self.pid is None:
+            return
+        rootlog.info(f"kill machine (pid {self.pid})")
+        assert self.process
+        assert self.shell
+        assert self.monitor
+        assert self.serial_thread
+
+        self.process.terminate()
+        self.shell.close()
+        self.monitor.close()
+        self.serial_thread.join()
 
 
 class VM(PrivateVM, MonitorMixin, ExecuteMixin):
