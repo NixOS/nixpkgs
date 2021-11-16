@@ -404,6 +404,10 @@ class Machine(ABC):
     ) -> None:
         self.name = name
 
+    @abstractmethod
+    def succeed(self, *commands: str) -> str:
+        pass
+
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
         rootlog.warning(
@@ -1009,9 +1013,17 @@ class Machine(ABC):
 class ExecuteMixin(Machine):
     """Contains methods that only need access to execute() in addition to the base Machine interface"""
 
+    @abstractmethod
+    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
+        pass
+
 
 class MonitorMixin(Machine):
     """Contains methods that only need access to send_monitor_command() in addition to the base Machine interface"""
+
+    @abstractmethod
+    def send_monitor_command(self, command: str) -> str:
+        pass
 
 
 class PrivateVM(Machine):
