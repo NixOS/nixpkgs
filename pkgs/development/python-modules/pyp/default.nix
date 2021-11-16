@@ -11,13 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pyp";
-  version = "0.3.4";
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hauntsaninja";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K9dGmvy4siurmhqwNfg1dT0TWc6tCSaxfPyaJkYM2Vw=";
+    sha256 = "09k7y77h7g4dg0x6lg9pn2ga9z7xiy4vlj15fj0991ffsi4ydqgm";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
@@ -27,6 +30,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
+
   checkInputs = [
     pytestCheckHook
     coreutils
@@ -34,8 +38,12 @@ buildPythonPackage rec {
     bc
   ];
 
+  pythonImportsCheck = [
+    "pyp"
+  ];
+
   meta = with lib; {
-    description = "Easily run Python at the shell! Magical, but never mysterious.";
+    description = "Easily run Python at the shell! Magical, but never mysterious";
     homepage = "https://github.com/hauntsaninja/pyp";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo ];
