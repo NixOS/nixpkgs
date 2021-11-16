@@ -14715,9 +14715,9 @@ with pkgs;
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
-  kafkacat = callPackage ../development/tools/kafkacat { };
-
   kati = callPackage ../development/tools/build-managers/kati { };
+
+  kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
 
