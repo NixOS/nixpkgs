@@ -1459,7 +1459,7 @@ let
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {
       inherit self;
-      inherit (pkgs) lib openssl zstd;
+      inherit (pkgs) fetchpatch lib openssl zstd;
     }
     else if lib.versionOlder "4.07" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.12.nix {

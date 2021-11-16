@@ -25,13 +25,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.7";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "0b2h9vy0fch0bk0b33h8p4ssk3a25j67sfn0yvmxhbqjdmhlwv4h";
+    sha256 = "13s1541n1sr2rkfk1qpsm61y2q773x6fs4cwin660qq4bzmgymhy";
   };
 
   propagatedBuildInputs = [
@@ -90,7 +90,7 @@ buildPythonApplication rec {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

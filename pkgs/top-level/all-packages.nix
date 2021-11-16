@@ -2228,7 +2228,7 @@ with pkgs;
   bozohttpd = callPackage ../servers/http/bozohttpd { };
   bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
-  bpb = callPackage ../tools/security/bpb { };
+  bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
 
   bpytop = callPackage ../tools/system/bpytop { };
 
@@ -22120,6 +22120,8 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
   linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
+  linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
+  linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
