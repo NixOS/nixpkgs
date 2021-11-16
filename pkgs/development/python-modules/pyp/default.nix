@@ -12,6 +12,9 @@
 buildPythonPackage rec {
   pname = "pyp";
   version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hauntsaninja";
@@ -27,6 +30,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
+
   checkInputs = [
     pytestCheckHook
     coreutils
@@ -34,8 +38,12 @@ buildPythonPackage rec {
     bc
   ];
 
+  pythonImportsCheck = [
+    "pyp"
+  ];
+
   meta = with lib; {
-    description = "Easily run Python at the shell! Magical, but never mysterious.";
+    description = "Easily run Python at the shell! Magical, but never mysterious";
     homepage = "https://github.com/hauntsaninja/pyp";
     license = licenses.mit;
     maintainers = with maintainers; [ rmcgibbo ];
