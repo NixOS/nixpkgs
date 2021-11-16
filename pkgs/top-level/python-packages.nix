@@ -5918,6 +5918,8 @@ in {
 
   pot = callPackage ../development/python-modules/pot { };
 
+  potentials = callPackage ../development/python-modules/potentials { };
+
   potr = callPackage ../development/python-modules/potr { };
 
   power = callPackage ../development/python-modules/power { };
