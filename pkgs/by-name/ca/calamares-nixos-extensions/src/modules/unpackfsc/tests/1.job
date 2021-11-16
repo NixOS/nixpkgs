@@ -1,0 +1,4 @@
+---
+source: /tmp/src.fsa
+sourcefs: fsarchive
+destination: "/calasrc"
