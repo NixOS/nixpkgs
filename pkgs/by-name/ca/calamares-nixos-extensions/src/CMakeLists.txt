@@ -40,7 +40,7 @@
 #
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
-set( CALAMARES_EXTENSIONS_VERSION 1.2.0 )
+set( CALAMARES_EXTENSIONS_VERSION 1.2.1 )
 
 include( ${CMAKE_CURRENT_LIST_DIR}/CMakeModules/ExtendedVersion.cmake )
 if ( CMAKE_SCRIPT_MODE_FILE )

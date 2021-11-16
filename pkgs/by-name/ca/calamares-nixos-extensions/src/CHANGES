@@ -6,6 +6,21 @@ This is the changelog for Calamares-Extensions. For each release, the major
 changes and contributors are listed. Note that Calamares-Extensions does not
 have a historical changelog -- this log starts with version 1.0.0.
 
+# 1.2.0 (2021-11-16)
+
+This release contains contributions from (alphabetically by first name):
+ - Anke Boersma
+ - Otus9051
+
+Changes and new modules in this release:
+ - *refind* is a new module that installs the rEFInd bootloader. It can
+   be used instead of the *bootloader* module from core Calamares. (Thanks Anke)
+ - *unpackfsc* is a new module that uses `unsquashfs` directly. This may
+   be faster or more convenient than the *unpackfs* module from core Calamares.
+   The configuration file supports only one entry, but is otherwise easy to
+   adapt from an existing `unpackfs.conf`.
+
+
 # 1.1.2 (2021-05-14)
 
 This release contains contributions from (alphabetically by first name):
