@@ -9430,7 +9430,9 @@ in {
 
   tubeup = callPackage ../development/python-modules/tubeup { };
 
-  tumpa = callPackage ../development/python-modules/tumpa { };
+  tumpa = callPackage ../development/python-modules/tumpa {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 
