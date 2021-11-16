@@ -20,7 +20,7 @@ _separateDebugInfo() {
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.
         local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
-        if [ "${#id}" != 40 ]; then
+        if [ "${#id}" < 3 ]; then
             echo "could not find build ID of $i, skipping" >&2
             continue
         fi
