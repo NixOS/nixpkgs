@@ -37,11 +37,20 @@ FSArchiverRunner::run()
             Calamares::JobResult::MissingRequirements );
     }
 
+    const QString destinationPath = CalamaresUtils::System::instance()->targetPath( m_destination );
+    if ( destinationPath.isEmpty() )
+    {
+        return Calamares::JobResult::internalError(
+            tr( "Invalid fsarchiver configuration" ),
+            tr( "No destination could be found for <i>%1</i>." ).arg( m_destination ),
+            Calamares::JobResult::InvalidConfiguration );
+    }
+
     Calamares::Utils::Runner r( { fsarchiverExecutable,
                                   QStringLiteral( "-v" ),
-                                  QStringLiteral( "restfs" ),
+                                  QStringLiteral( "restdir" ),
                                   m_source,
-                                  QStringLiteral( "id=0,dest=%1" ).arg( m_destination ) } );
+                                  destinationPath } );
     r.setLocation( Calamares::Utils::RunLocation::RunInHost ).enableOutputProcessing();
     connect( &r, &decltype( r )::output, this, &FSArchiverRunner::fsarchiverProgress );
     return r.run().explainProcess( toolName, std::chrono::seconds( 0 ) );
