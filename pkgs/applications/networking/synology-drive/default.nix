@@ -35,8 +35,10 @@ qt5.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.synology.com/";
     description = "Synchronize files between client and Synology NAS.";
-    longDescription =
-      "Drive for PC, the desktop utility of the DSM add-on package, Drive, allows you to sync and share files owned by you or shared by others between a centralized Synology NAS and multiple client computers.";
+    longDescription = ''
+      Drive for PC, the desktop utility of the DSM add-on package.
+      Drive, allows you to sync and share files owned by you or shared by others between a centralized Synology NAS and multiple client computers.
+    '';
     license = licenses.unfree;
     maintainers = with maintainers; [ MoritzBoehme ];
     platforms = [ "x86_64-linux" ];
