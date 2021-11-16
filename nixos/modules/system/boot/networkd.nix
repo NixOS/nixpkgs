@@ -131,6 +131,7 @@ let
           "fou"
           "xfrm"
           "ifb"
+          "batadv"
         ])
         (assertByteFormat "MTUBytes")
         (assertMacAddress "MACAddress")
@@ -381,6 +382,29 @@ let
         (assertInt "Table")
         (assertMinimum "Table" 0)
       ];
+
+      sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
+        (assertOnlyFields [
+          "GatewayMode"
+          "Aggregation"
+          "BridgeLoopAvoidance"
+          "DistributedArpTable"
+          "Fragmentation"
+          "HopPenalty"
+          "OriginatorIntervalSec"
+          "GatewayBandwithDown"
+          "GatewayBandwithUp"
+          "RoutingAlgorithm"
+        ])
+        (assertValueOneOf "GatewayMode" ["off" "client" "server"])
+        (assertValueOneOf "Aggregation" boolValues)
+        (assertValueOneOf "BridgeLoopAvoidance" boolValues)
+        (assertValueOneOf "DistributedArpTable" boolValues)
+        (assertValueOneOf "Fragmentation" boolValues)
+        (assertInt "HopPenalty")
+        (assertRange "HopPenalty" 0 255)
+        (assertValueOneOf "RoutingAlgorithm" ["batman-v" "batman-iv"])
+      ];
     };
 
     network = {
@@ -473,6 +497,7 @@ let
           "IgnoreCarrierLoss"
           "Xfrm"
           "KeepConfiguration"
+          "BatmanAdvanced"
         ])
         # Note: For DHCP the values both, none, v4, v6 are deprecated
         (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
@@ -1056,6 +1081,21 @@ let
       '';
     };
 
+    batmanAdvancedConfig = mkOption {
+      default = {};
+      example = {
+        GatewayMode = "server";
+        RoutingAlgorithm = "batman-v";
+      };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionBatmanAdvanced;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[BatmanAdvanced]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
   };
 
   addressOptions = {
@@ -1506,6 +1546,10 @@ let
         + optionalString (def.vrfConfig != { }) ''
           [VRF]
           ${attrsToSection def.vrfConfig}
+        ''
+        + optionalString (def.batmanAdvancedConfig != { }) ''
+          [BatmanAdvanced]
+          ${attrsToSection def.batmanAdvancedConfig}
         ''
         + def.extraConfig;
     };
