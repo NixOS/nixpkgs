@@ -137,7 +137,7 @@ in
         description = ''
           Set of key value pairs to include as user commands.
           If this is used, you may not use the Keyword "Include" in services.zabbixAgent.settings.
-          Key names and values must be provided as strings, you may need to include binaries in the services.zabbixAgent.extraPackages option. 
+          Key names and values must be provided as strings, you may need to include binaries in the services.zabbixAgent.extraPackages option.
         '';
         example = {
           "zfs.zpool.health[*]" = ''zpool list -H -o health $1 '';
