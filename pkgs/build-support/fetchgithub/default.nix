@@ -8,7 +8,7 @@
 }@args:
 let
   baseUrl = "https://${githubBase}/${owner}/${repo}";
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit;
   # We prefer fetchzip in cases we don't need submodules as the hash
