@@ -2244,6 +2244,7 @@ with pkgs;
 
   broot = callPackage ../tools/misc/broot {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (xorg) libxcb;
   };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
@@ -11877,8 +11878,7 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   });
 
-  # aarch64-darwin doesn't support earlier gcc
-  gnat = if (stdenv.isDarwin && stdenv.isAarch64) then gnat11 else gnat9;
+  gnat = gnat11;
 
   gnat6 = wrapCC (gcc6.cc.override {
     name = "gnat";
@@ -14600,8 +14600,7 @@ with pkgs;
     java = jdk8; # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
   };
   gradle = res.gradleGen.gradle_latest;
-  gradle_4_10 = res.gradleGen.gradle_4_10;
-  gradle_4 = gradle_4_10;
+  gradle_4 = res.gradleGen.gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
   gradle_6 = res.gradleGen.gradle_6_9;
   gradle_7 = res.gradleGen.gradle_7_3;
