@@ -26,12 +26,6 @@ let
       sha256 = "0jsq1p66l46k2qq0gbqmx25flj2nprsz4wrd1ybn286p11kdkvvs";
     };
 
-    prePatch = ''
-      for i in texk/kpathsea/mktex*; do
-        sed -i '/^mydir=/d' "$i"
-      done
-    '';
-
     configureFlags = [
       "--with-banner-add=/NixOS.org"
       "--disable-missing" "--disable-native-texlive-build"
@@ -64,7 +58,7 @@ core = stdenv.mkDerivation rec {
   pname = "texlive-bin";
   inherit version;
 
-  inherit (common) src prePatch;
+  inherit (common) src;
 
   outputs = [ "out" "doc" ];
 
@@ -156,7 +150,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
 
-  inherit (common) src prePatch;
+  inherit (common) src;
 
   hardeningDisable = [ "format" ];
 
