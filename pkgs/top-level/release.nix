@@ -12,7 +12,13 @@
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+  # The platforms for which we build bootstrap-tools but not Nixpkgs.
+, limitedSupportedSystems ? [
+  "i686-linux" "x86_64-unknown-linux-musl"
+  "aarch64-unknown-linux-musl" "armv5tel-linux" "armv6l-unknown-linux-musl" "armv6l-linux" "armv7l-linux"
+  "mipsel-linux"
+  "powerpc64le-linux"
+  "sparc64-linux"]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -158,14 +164,15 @@ let
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport
-          (system: {
-            inherit
-              (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
-              })
-              dist test;
-          })
+        genAttrs supportedSystems
+          (from: genAttrs systemsWithAnySupport
+            (to: {
+              inherit
+                (import ../stdenv/linux/scratch {
+                  inherit from to;
+                })
+                dist test;
+            }))
         # darwin is special in this
         // optionalAttrs supportDarwin {
           x86_64-darwin =

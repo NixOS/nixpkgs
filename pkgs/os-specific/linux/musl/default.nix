@@ -147,7 +147,16 @@ stdenv.mkDerivation rec {
     homepage    = "https://musl.libc.org/";
     changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
-    platforms   = platforms.linux;
+    # See https://wiki.musl-libc.org/supported-platforms.html
+    platforms   = [
+      "i386-linux" "x86_64-linux"
+      "armv5tel-linux" "armv6l-linux" "armv7l-linux" "armv7a-linux" "aarch64-linux"
+      "mipsel-linux"
+      "powerpc64-linux" "powerpc64le-linux"
+      "or1k-linux"
+      "s390x-linux"
+      "riscv64-linux"
+    ];
     maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

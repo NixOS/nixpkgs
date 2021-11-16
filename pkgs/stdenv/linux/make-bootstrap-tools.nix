@@ -1,25 +1,37 @@
 { localSystem ? { system = builtins.currentSystem; }
 , crossSystem ? null
+, nixpkgs ? import ../../..
+, pkgs ? import nixpkgs { inherit localSystem crossSystem; }
+, stage ? null
 }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
+  systemSuffix =
+    if crossSystem == null
+    then "-${localSystem.system}"
+    else "-${localSystem.system}-to-${crossSystem.system}";
+  stageSuffix = if stage == null then "" else "-${stage}";
+  suffix = "${systemSuffix}${stageSuffix}";
 in with pkgs; rec {
 
 
-  coreutilsMinimal = coreutils.override (args: {
+  coreutilsMinimal = (coreutils.override (args: {
     # We want coreutils without ACL/attr support.
     aclSupport = false;
     attrSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
+  })).overrideAttrs (super: {
+    pname = "stdenv-bootstrap-coreutils${suffix}";
   });
 
-  tarMinimal = gnutar.override { acl = null; };
+  tarMinimal = (gnutar.override { acl = null; }).overrideAttrs (super: {
+    pname = "stdenv-bootstrap-tar${suffix}";
+  });
 
-  busyboxMinimal = busybox.override {
-    useMusl = !stdenv.targetPlatform.isRiscV;
+  busyboxMinimal = (busybox.override {
+    useMusl = !stdenv.targetPlatform.isSparc;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -31,21 +43,27 @@ in with pkgs; rec {
       CONFIG_TAR y
       CONFIG_UNXZ y
     '';
-  };
+  }).overrideAttrs (super: {
+    pname = "stdenv-bootstrap-busybox${suffix}";
+  });
 
-  bootGCC = gcc.cc.override { enableLTO = false; };
-  bootBinutils = binutils.bintools.override {
+  bootGCC = (gcc.cc.override { enableLTO = false; }).overrideAttrs (super: {
+    pname = "stdenv-bootstrap-gcc${suffix}";
+  });
+  bootBinutils = (binutils.bintools.override {
     withAllTargets = false;
     # Don't need two linkers, disable whatever's not primary/default.
     gold = false;
     # bootstrap is easier w/static
     enableShared = false;
-  };
+  }).overrideAttrs (super: {
+    pname = "stdenv-bootstrap-binutils${suffix}";
+  });
 
   build =
 
     stdenv.mkDerivation {
-      name = "stdenv-bootstrap-tools";
+      name = "stdenv-bootstrap-tools${suffix}";
 
       meta = {
         # Increase priority to unblock nixpkgs-unstable
@@ -203,7 +221,7 @@ in with pkgs; rec {
     };
 
   dist = stdenv.mkDerivation {
-    name = "stdenv-bootstrap-tools";
+    name = "stdenv-bootstrap-tools${suffix}";
 
     meta = {
       # Increase priority to unblock nixpkgs-unstable
@@ -246,7 +264,7 @@ in with pkgs; rec {
     else throw "unsupported libc";
 
   test = derivation {
-    name = "test-bootstrap-tools";
+    name = "test-bootstrap-tools${suffix}";
     inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
@@ -295,5 +313,10 @@ in with pkgs; rec {
       make
       make install
     '';
+  };
+
+  # Get an instance of nixpkgs with these tools
+  pkgsWithTools = import pkgs.path {
+    inherit localSystem crossSystem bootstrapFiles;
   };
 }

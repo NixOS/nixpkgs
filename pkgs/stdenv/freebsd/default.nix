@@ -1,5 +1,5 @@
 { lib
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], ...
 }:
 
 assert crossSystem == localSystem;

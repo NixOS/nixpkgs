@@ -156,6 +156,10 @@ rec {
     config = "s390x-unknown-linux-gnu";
   };
 
+  sparc64-linux = {
+    config = "sparc64-unknown-linux-gnu";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

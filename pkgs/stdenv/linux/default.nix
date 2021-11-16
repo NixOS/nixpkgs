@@ -6,23 +6,25 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
 
-, bootstrapFiles ?
-  let table = {
-    glibc = {
-      i686-linux = import ./bootstrap-files/i686.nix;
-      x86_64-linux = import ./bootstrap-files/x86_64.nix;
-      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
-      armv6l-linux = import ./bootstrap-files/armv6l.nix;
-      armv7l-linux = import ./bootstrap-files/armv7l.nix;
-      aarch64-linux = import ./bootstrap-files/aarch64.nix;
-      mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+, bootstrapFiles ? let
+    table = {
+      glibc = {
+        i686-linux = import ./bootstrap-files/i686.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64.nix;
+        armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l.nix;
+        armv7l-linux = import ./bootstrap-files/armv7l.nix;
+        aarch64-linux = import ./bootstrap-files/aarch64.nix;
+        mipsel-linux = import ./bootstrap-files/loongson2f.nix;
+        powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
+        sparc64-linux = import ./bootstrap-files/sparc64.nix;
+      };
+      musl = {
+        aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
+        armv6l-linux = import ./bootstrap-files/armv6l-musl.nix;
+        x86_64-linux = import ./bootstrap-files/x86_64-musl.nix;
+      };
     };
-    musl = {
-      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
-      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
-      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
-    };
-  };
 
   # Try to find an architecture compatible with our current system. We
   # just try every bootstrap we’ve got and test to see if it is
@@ -37,7 +39,8 @@
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (abort "unsupported platform for the pure Linux stdenv"));
   in files
-}:
+
+, ... }:
 
 assert crossSystem == localSystem;
 
@@ -288,19 +291,26 @@ in
   (prevStage: stageFun prevStage {
     name = "bootstrap-stage3";
 
-    overrides = self: super: rec {
+    overrides = self: super: let
+      wrapStage3 = pkg: (pkg.override {
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
+        stdenv = self.makeStaticLibraries self.stdenv;
+      }).overrideAttrs (oa: {
+        # Work around faulty stackprotector support in cross bootstrap tools
+        hardeningDisable = (oa.hardeningDisable or []) ++ [ "stackprotector" ];
+      });
+    in rec {
       inherit (prevStage)
         ccWrapperStdenv
         binutils coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
       ${localSystem.libc} = getLibc prevStage;
-      # Link GCC statically against GMP etc.  This makes sense because
-      # these builds of the libraries are only used by GCC, so it
-      # reduces the size of the stdenv closure.
-      gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      gmp = wrapStage3 super.gmp;
+      mpfr = wrapStage3 super.mpfr;
+      libmpc = wrapStage3 super.libmpc;
+      isl_0_20 = wrapStage3 super.isl_0_20;
       gcc-unwrapped = super.gcc-unwrapped.override {
         isl = isl_0_20;
         # Use a deterministically built compiler
@@ -315,11 +325,45 @@ in
                    prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
+  # Construct a fourth stdenv with a new GCC with stackprotector hardening
+  (prevStage: stageFun prevStage {
+    name = "bootstrap-stage4";
+
+    overrides = self: super: let
+      wrapStage4 = pkg: pkg.override {
+        # Link GCC statically against GMP etc.  This makes sense because
+        # these builds of the libraries are only used by GCC, so it
+        # reduces the size of the stdenv closure.
+        stdenv = self.makeStaticLibraries self.stdenv;
+      };
+    in rec {
+      inherit (prevStage)
+        ccWrapperStdenv
+        binutils coreutils gnugrep
+        perl patchelf linuxHeaders gnum4 bison libidn2 libunistring;
+      ${localSystem.libc} = getLibc prevStage;
+      gmp = wrapStage4 super.gmp;
+      mpfr = wrapStage4 super.mpfr;
+      libmpc = wrapStage4 super.libmpc;
+      isl_0_20 = wrapStage4 super.isl_0_20;
+      gcc-unwrapped = super.gcc-unwrapped.override {
+        isl = isl_0_20;
+        # Use a deterministically built compiler
+        # see https://github.com/NixOS/nixpkgs/issues/108475 for context
+        reproducibleBuild = true;
+        profiledCompiler = false;
+      };
+    };
+    extraNativeBuildInputs = [ prevStage.patchelf ] ++
+      # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
+      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
+                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+  })
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   (prevStage: stageFun prevStage {
-    name = "bootstrap-stage4";
+    name = "bootstrap-stage5";
 
     overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,

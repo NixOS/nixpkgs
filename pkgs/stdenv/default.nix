@@ -7,7 +7,7 @@
 { # Args just for stdenvs' usage
   lib
   # Args to pass on to the pkgset builder, too
-, localSystem, crossSystem, config, overlays, crossOverlays ? []
+, localSystem, crossSystem, config, overlays, crossOverlays ? [], ...
 } @ args:
 
 let
@@ -56,6 +56,7 @@ in
     powerpc-linux = /* stagesLinux */ stagesNative;
     powerpc64-linux = stagesLinux;
     powerpc64le-linux = stagesLinux;
+    sparc64-linux = stagesLinux;
     x86_64-darwin = stagesDarwin;
     aarch64-darwin = stagesDarwin;
     x86_64-solaris = stagesNix;
