@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradleGen
+{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_5
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
 , ffmpeg, python3, ruby }:
 
@@ -7,9 +7,9 @@ let
   update = ".0.1";
   build = "+1";
   repover = "${major}${update}${build}";
-  gradle_ = (gradleGen.override {
+  gradle_ = (gradle_5.override {
     java = openjdk11_headless;
-  }).gradle_5_6;
+  });
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";

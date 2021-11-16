@@ -14598,14 +14598,15 @@ with pkgs;
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
-  gradleGen = callPackage ../development/tools/build-managers/gradle {
-    java = jdk8; # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
+  gradle-packages = import ../development/tools/build-managers/gradle {
+    inherit jdk8 jdk11 jdk17;
   };
-  gradle = res.gradleGen.gradle_latest;
-  gradle_4 = res.gradleGen.gradle_4_10;
-  gradle_5 = res.gradleGen.gradle_5_6;
-  gradle_6 = res.gradleGen.gradle_6_9;
-  gradle_7 = res.gradleGen.gradle_7_3;
+  gradleGen = gradle-packages.gen;
+  gradle_4 = callPackage gradle-packages.gradle_4 { };
+  gradle_5 = callPackage gradle-packages.gradle_5 { };
+  gradle_6 = callPackage gradle-packages.gradle_6 { };
+  gradle_7 = callPackage gradle-packages.gradle_7 { };
+  gradle = gradle_7;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
