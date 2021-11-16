@@ -20,8 +20,8 @@
 , tensorflow-estimator_2
 , tensorflow-tensorboard_2
 , cudaSupport ? false
-, cudatoolkit ? null
-, cudnn ? null
+, cudatoolkit
+, cudnn
 , zlib
 , python
 , keras-applications
@@ -36,9 +36,6 @@
 # We keep this binary build for two reasons:
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
-
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null;
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
