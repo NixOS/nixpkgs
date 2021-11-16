@@ -1,11 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , pytestCheckHook
-, python
 , google-api-core
-, grpcio
 , mock
 }:
 

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, zlib, gmp }:
 
 stdenv.mkDerivation {
-  name = "open-wbo-2.0";
+  pname = "open-wbo";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "sat-group";

@@ -330,7 +330,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with lib.maintainers; [ peti veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
 
     platforms = lib.platforms.unix;
     badPlatforms = [ "x86_64-darwin" ];

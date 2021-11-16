@@ -17,6 +17,7 @@ import base64
 supported_versions = {
     "38": "3.38",
     "40": "40",
+    "41": "41",
 }
 
 

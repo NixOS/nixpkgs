@@ -81,6 +81,14 @@ stdenv.mkDerivation rec {
 
     CONFIG_LFS y
 
+    # More features for modprobe.
+    ${lib.optionalString (!enableMinimal) ''
+      CONFIG_FEATURE_MODPROBE_BLACKLIST y
+      CONFIG_FEATURE_MODUTILS_ALIAS y
+      CONFIG_FEATURE_MODUTILS_SYMBOLS y
+      CONFIG_MODPROBE_SMALL n
+    ''}
+
     ${lib.optionalString enableStatic ''
       CONFIG_STATIC y
     ''}

@@ -6,9 +6,8 @@ from xml.sax.saxutils import XMLGenerator
 from colorama import Style
 import queue
 import io
-import _thread
+import threading
 import argparse
-import atexit
 import base64
 import codecs
 import os
@@ -405,13 +404,14 @@ class Machine:
     keep_vm_state: bool
     allow_reboot: bool
 
-    process: Optional[subprocess.Popen] = None
-    pid: Optional[int] = None
-    monitor: Optional[socket.socket] = None
-    shell: Optional[socket.socket] = None
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
 
-    booted: bool = False
-    connected: bool = False
+    booted: bool
+    connected: bool
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
@@ -443,6 +443,15 @@ class Machine:
         if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
+        self.serial_thread = None
+
+        self.booted = False
+        self.connected = False
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
@@ -572,24 +581,40 @@ class Machine:
                     + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
-    def execute(self, command: str) -> Tuple[int, str]:
+    def _next_newline_closed_block_from_shell(self) -> str:
+        assert self.shell
+        output_buffer = []
+        while True:
+            # This receives up to 4096 bytes from the socket
+            chunk = self.shell.recv(4096)
+            if not chunk:
+                # Probably a broken pipe, return the output we have
+                break
+
+            decoded = chunk.decode()
+            output_buffer += [decoded]
+            if decoded[-1] == "\n":
+                break
+        return "".join(output_buffer)
+
+    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
         assert self.shell
         self.shell.send(out_command.encode())
 
-        output = ""
-        status_code_pattern = re.compile(r"(.*)\|\!=EOF\s+(\d+)")
+        # Get the output
+        output = base64.b64decode(self._next_newline_closed_block_from_shell())
 
-        while True:
-            chunk = self.shell.recv(4096).decode(errors="ignore")
-            match = status_code_pattern.match(chunk)
-            if match:
-                output += match[1]
-                status_code = int(match[2])
-                return (status_code, output)
-            output += chunk
+        if not check_return:
+            return (-1, output.decode())
+
+        # Get the return code
+        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
+        rc = int(self._next_newline_closed_block_from_shell().strip())
+
+        return (rc, output.decode())
 
     def shell_interact(self) -> None:
         """Allows you to interact with the guest shell
@@ -921,7 +946,8 @@ class Machine:
                 self.last_lines.put(line)
                 self.log_serial(line)
 
-        _thread.start_new_thread(process_serial_output, ())
+        self.serial_thread = threading.Thread(target=process_serial_output)
+        self.serial_thread.start()
 
         self.wait_for_monitor_prompt()
 
@@ -1021,9 +1047,12 @@ class Machine:
         assert self.process
         assert self.shell
         assert self.monitor
+        assert self.serial_thread
+
         self.process.terminate()
         self.shell.close()
         self.monitor.close()
+        self.serial_thread.join()
 
 
 class VLan:
@@ -1114,11 +1143,13 @@ class Driver:
             for cmd in cmd(start_scripts)
         ]
 
-        @atexit.register
-        def clean_up() -> None:
-            with rootlog.nested("clean up"):
-                for machine in self.machines:
-                    machine.release()
+    def __enter__(self) -> "Driver":
+        return self
+
+    def __exit__(self, *_: Any) -> None:
+        with rootlog.nested("cleanup"):
+            for machine in self.machines:
+                machine.release()
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
@@ -1126,9 +1157,9 @@ class Driver:
             try:
                 yield
                 return True
-            except:
-                rootlog.error(f'Test "{name}" failed with error:')
-                raise
+            except Exception as e:
+                rootlog.error(f'Test "{name}" failed with error: "{e}"')
+                raise e
 
     def test_symbols(self) -> Dict[str, Any]:
         @contextmanager
@@ -1293,14 +1324,13 @@ if __name__ == "__main__":
     if not args.keep_vm_state:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
-    driver = Driver(
+    with Driver(
         args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
-    )
-
-    if args.interactive:
-        ptpython.repl.embed(driver.test_symbols(), {})
-    else:
-        tic = time.time()
-        driver.run_tests()
-        toc = time.time()
-        rootlog.info(f"test script finished in {(toc-tic):.2f}s")
+    ) as driver:
+        if args.interactive:
+            ptpython.repl.embed(driver.test_symbols(), {})
+        else:
+            tic = time.time()
+            driver.run_tests()
+            toc = time.time()
+            rootlog.info(f"test script finished in {(toc-tic):.2f}s")

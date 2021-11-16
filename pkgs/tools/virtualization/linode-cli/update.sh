@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq yq-go
 
-set -eu -o pipefail
+set -x -eu -o pipefail
 
 cd $(dirname "${BASH_SOURCE[0]}")
 
@@ -21,7 +21,7 @@ VERSION=$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
 SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/linode/linode-cli/archive/refs/tags/${VERSION}.tar.gz)
 
 setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"$2\"|" ./default.nix
+    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
 }
 
 setKV specVersion ${SPEC_VERSION}

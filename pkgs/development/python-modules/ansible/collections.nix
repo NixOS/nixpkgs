@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ansible-base
 , jsonschema
 , jxmlease
 , ncclient

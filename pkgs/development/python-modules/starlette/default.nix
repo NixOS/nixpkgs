@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , aiofiles
 , anyio
 , contextlib2

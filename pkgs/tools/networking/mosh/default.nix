@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
   ];
+
   postPatch = ''
     # Fix build with Xcode 12.5 toolchain/case-insensitive filesystems
     # Backport of https://github.com/mobile-shell/mosh/commit/12199114fe4234f791ef4c306163901643b40538;
@@ -40,12 +41,12 @@ stdenv.mkDerivation rec {
     }}
 
     substituteInPlace scripts/mosh.pl \
-        --subst-var-by ssh "${openssh}/bin/ssh"
-    substituteInPlace scripts/mosh.pl \
-        --subst-var-by mosh-client "$out/bin/mosh-client"
+      --subst-var-by ssh "${openssh}/bin/ssh" \
+      --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
-  configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
+  configureFlags = [ "--enable-completion" ]
+    ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

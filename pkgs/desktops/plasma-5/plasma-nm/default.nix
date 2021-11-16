@@ -25,10 +25,6 @@ mkDerivation {
   ];
   patches = [
     (substituteAll {
-      src = ./0001-mobile-broadband-provider-info-path.patch;
-      mobile_broadband_provider_info = mobile-broadband-provider-info;
-    })
-    (substituteAll {
       src = ./0002-openvpn-binary-path.patch;
       inherit openvpn;
     })

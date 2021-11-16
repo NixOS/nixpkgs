@@ -4,6 +4,7 @@
 , makeWrapper
 , ruby
 , bundlerEnv
+, python3
 }:
 
 let
@@ -14,16 +15,17 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.1.9";
+  version = "6.1.14";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-ZhNy6rp3Jdrua1dZr3dTQxLOVAflWiI0lc/f38d0kqc=";
+    sha256 = "sha256-ySQOc/k+kvdSj5g88ujm4e2apvPVbiaspzSbCdEQ4ZA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
 
   dontPatchELF = true; # stay away from exploit executables
 
@@ -31,6 +33,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
+
+    grep -rl "^#\!.*python2$" $out/share/msf | xargs -d '\n' rm
 
     (
       cd $out/share/msf/

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.6.6";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "64TfXPz1NCGKnozI9j+yog+hln1rA/qpzCLvPNSvH+c=";
+    sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
   };
 
   postPatch = lib.optionalString (batchSize != null) ''

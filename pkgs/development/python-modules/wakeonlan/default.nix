@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "2.0.1";
+  version = "2.1.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "remcohaszing";
     repo = "pywakeonlan";
     rev = version;
-    sha256 = "sha256-WgoL8ntfEaHcvVbJjdewe0wE31Lq7WBj8Bppeq1uJx8=";
+    sha256 = "sha256-5ri4bXc0EMNntzmcUZYpRIfaXoex4s5M6psf/9ta17Y=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test_wakeonlan.py" ];
+  pytestFlagsArray = [
+    "test_wakeonlan.py"
+  ];
 
-  pythonImportsCheck = [ "wakeonlan" ];
+  pythonImportsCheck = [
+    "wakeonlan"
+  ];
 
   meta = with lib; {
-    description = "A small python module for wake on lan";
+    description = "Python module for wake on lan";
     homepage = "https://github.com/remcohaszing/pywakeonlan";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

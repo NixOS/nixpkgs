@@ -18,12 +18,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.7.1";
+  version = "2.8.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c8852eb00a09e45c403086e10965cb6d13e5cd203a1688d91e9c81aa080d052";
+    sha256 = "0648eba58d72653755f28e26c9bd83147d9652c1f2f5e87fbf5a87d7f8fbf83a";
   };
 
   propagatedBuildInputs = [
@@ -59,7 +61,16 @@ buildPythonPackage rec {
     "tests/sspi_stub.py"
   ];
 
-  pythonImportsCheck = [ "asyncssh" ];
+  disabledTests = [
+    # No PIN set
+    "TestSKAuthCTAP2"
+    # Requires network access
+    "test_connect_timeout_exceeded"
+  ];
+
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";

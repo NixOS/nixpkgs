@@ -48,8 +48,8 @@ in [
 
   (fetchNuGet {
     name = "Microsoft.AspNetCore.App.Runtime.linux-x64";
-    version = "3.1.19";
-    sha256 = "19z4zrchaxcz0a33c33n1qd11z9khj4323nfzsbzah0xxkkj8ka8";
+    version = "3.1.21";
+    sha256 = "056g9nv8a7n8zdbgzmyzmn3pbg52yq2kv5d1rcp7h6plwzgpiwql";
   })
 
   (fetchNuGet {
@@ -78,8 +78,8 @@ in [
 
   (fetchNuGet {
     name = "Microsoft.NetCore.App.Runtime.linux-x64";
-    version = "3.1.19";
-    sha256 = "10c9bq1z8j173n9jzamgplbxq101yscwdhksshn1ybisn7cr5g0h";
+    version = "3.1.21";
+    sha256 = "13692wqcww0w6x4nhyxpxwprdg6mx9xmlvv38m6fvp6g0m27r43v";
   })
 
   (fetchNuGet {

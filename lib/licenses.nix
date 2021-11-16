@@ -153,6 +153,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  capec = {
+    fullName = "Common Attack Pattern Enumeration and Classification";
+    url = "https://capec.mitre.org/about/termsofuse.html";
+  };
+
   clArtistic = {
     spdxId = "ClArtistic";
     fullName = "Clarified Artistic License";

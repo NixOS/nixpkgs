@@ -17,6 +17,7 @@ buildGoPackage rec {
     homepage = "https://github.com/cbroglie/mustache";
     description = "The mustache template language in Go";
     license = [ licenses.mit ];
-    maintainers = [ maintainers.Zimmi48 ];
+    maintainers = with maintainers; [ Zimmi48 ];
+    mainProgram = "mustache";
   };
 }

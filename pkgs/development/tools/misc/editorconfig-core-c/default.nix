@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 bsd3 ];
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
+    mainProgram = "editorconfig";
   };
 }

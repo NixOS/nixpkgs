@@ -57,7 +57,7 @@ in
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ejgallego/coq-serapi;
+    homepage = "https://github.com/ejgallego/coq-serapi";
     description = "SerAPI is a library for machine-to-machine interaction with the Coq proof assistant";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.Zimmi48 ];
@@ -75,4 +75,19 @@ in
         }.tbz";
     sha256 = release."${version}".sha256;
   };
+
+  patches =
+    if version == "8.10.0+0.7.2"
+    then [
+      ./8.10.0+0.7.2.patch
+    ]
+    else if version == "8.11.0+0.11.1"
+    then [
+      ./8.11.0+0.11.1.patch
+    ]
+    else if version == "8.12.0+0.12.1" || version == "8.13.0+0.13.0"
+    then [
+      ./8.12.0+0.12.1.patch
+    ]
+    else [];
 })

@@ -7,24 +7,14 @@ python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.11.2a0";
+  version = "0.12.2a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "05dn6mr86ly65gdqarl16a2jk1bwiw5xa6r4kyag3s6lqsv66iw8";
+    sha256 = "0sk4vgj3cn75nyrng2d6q0pj1h968kcmbpr9sv1lj1g8fc7g0n4f";
   };
-
-  # urwidtrees 1.0.3 is requested by the developer because 1.0.2 (which is packaged
-  # in nixpkgs) is not uploaded to pypi and 1.0.1 has a problematic `setup.py`.
-  # As long as we don't have any problems installing it, no special features / specific bugs
-  # were fixed in 1.0.3 that aren't available in 1.0.2 are used by stig.
-  # See https://github.com/rndusr/stig/issues/120
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
-  '';
 
   propagatedBuildInputs = with python3Packages; [
     urwid
@@ -62,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ doronbehar ];
   };
 }

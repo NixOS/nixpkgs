@@ -6,7 +6,7 @@
 
 let
   pname = "libint";
-  version = "2.6.0";
+  version = "2.7.1";
 
   meta = with lib; {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -23,10 +23,22 @@ let
       owner = "evaleev";
       repo = pname;
       rev = "v${version}";
-      sha256 = "0pbc2j928jyffhdp4x5bkw68mqmx610qqhnb223vdzr0n2yj5y19";
+      sha256 = "5nSeyT1DhFsA76Dt3dqYfhfBYD+iTl34O3lVeH6+OVw=";
     };
 
-    patches = [ ./fix-paths.patch ];
+    # Replace hardcoded "/bin/rm" with normal "rm"
+    postPatch = ''
+      for f in \
+        bin/ltmain.sh \
+        configure.ac \
+        src/bin/libint/Makefile \
+        src/lib/libint/Makefile.library \
+        tests/eri/Makefile \
+        tests/hartree-fock/Makefile \
+        tests/unit/Makefile; do
+          substituteInPlace $f --replace "/bin/rm" "rm"
+      done
+    '';
 
     nativeBuildInputs = [
       autoconf
@@ -56,8 +68,7 @@ let
       "--with-g12dkh-opt-am=3"
       "--enable-contracted-ints"
       "--enable-shared"
-    ] ++ lib.optional enableFMA "--enable-fma"
-      ++ lib.optional enableFortran "--enable-fortran";
+    ] ++ lib.optional enableFMA "--enable-fma";
 
     makeFlags = [ "export" ];
 

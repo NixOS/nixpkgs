@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -13,18 +14,21 @@
 , libwnck
 , libgee
 , libgtop
+, libhandy
+, sassc
+, udisks2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-Gin/1vbQbOAKFrjzDuDTNDQlTGTIlb0NUfIWWXd5tQ4=";
+    sha256 = "sha256-xWhhjn7zk/juXx50wLG2TpB5aqU+588kWBBquWrVJbM=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +49,10 @@ stdenv.mkDerivation rec {
     pantheon.wingpanel
     libgee
     libgtop
+    libhandy
     libwnck
+    sassc
+    udisks2
   ];
 
   postPatch = ''
@@ -70,5 +77,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "com.github.stsdc.monitor";
   };
 }

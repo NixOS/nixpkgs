@@ -8,30 +8,34 @@
 
 stdenv.mkDerivation rec {
   pname = "dapl" + lib.optionalString buildNativeImage "-native";
-  version = "0.2.0+unstable=2021-06-30";
+  version = "0.2.0+date=2021-10-16";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "APL";
-    rev = "28b3667beb23c6472266bb2b6eb701708fa421c6";
-    hash = "sha256-2kM9XDMclxJNOZngwLvoDQG23UZQQ6ePK/j215UumCg=";
+    rev = "5eb0a4205e27afa6122096a25008474eec562dc0";
+    hash = "sha256-UdumMytqT909JRpNqzhYPuKPw644m/vRUsEbIVF2a7U=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     jdk
+    makeWrapper
   ];
 
   dontConfigure = true;
 
+  postPatch = ''
+    patchShebangs --build ./build
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    patchShebangs --build ./build
     ./build
   '' + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
-      -H:CLibraryPath=${lib.getLib jdk}/lib -jar APL.jar dapl
+      -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
+      -jar APL.jar dapl
   '' + ''
     runHook postBuild
   '';

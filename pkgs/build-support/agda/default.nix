@@ -79,7 +79,12 @@ let
           find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
+
         meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
+
+        # Retrieve all packages from the finished package set that have the current package as a dependency and build them
+        passthru.tests = with builtins;
+          lib.filterAttrs (name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)) self;
       };
 in
 {

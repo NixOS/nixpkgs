@@ -37,7 +37,7 @@ with pkgs;
           keep = self: {
             # TODO maybe only define these here so nothing is needed to be kept in sync.
             inherit (self)
-              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder
+              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy310 isPy3k isPyPy pythonAtLeast pythonOlder
               python bootstrapped-pip buildPythonPackage buildPythonApplication
               fetchPypi
               hasPythonModule requiredPythonModules makePythonPath disabledIf
@@ -123,10 +123,10 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "8";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      sha256 = "1chg8b0m1yrz50lizid20zha0dmj40z0iih3jqcrg7pyxca126pv";
+      sha256 = "1si8hw2xpagh4iji89zdx69p3dv5mjqwwbx2x2sl6lrp41jaglxi";
     };
     python39 = {
       sourceVersion = {
@@ -154,28 +154,15 @@ in {
     inherit passthruFun;
   };
 
-  python36 = callPackage ./cpython {
-    self = python36;
-    sourceVersion = {
-      major = "3";
-      minor = "6";
-      patch = "14";
-      suffix = "";
-    };
-    sha256 = "1bnm0bx7xf1jpfm0bmzlq19vwm0bvcbl7klx4rvgq05xryhafqr6";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
   python37 = callPackage ./cpython {
     self = python37;
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "11";
+      patch = "12";
       suffix = "";
     };
-    sha256 = "0d57b5a47wapzpkkq5rbvvi4caylc35j5910b64rxxn4nmm1kd6x";
+    sha256 = "041jqjl5wf7gsw84zd3jgvg91skq20l2fy5zbhz237w38zxzfyzp";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -198,9 +185,9 @@ in {
       major = "3";
       minor = "10";
       patch = "0";
-      suffix = "rc1";
+      suffix = "";
     };
-    sha256 = "0f76q6rsvbvrzcnsp0k7sp555krrgvjpcd09l1rybl4249ln2w3r";
+    sha256 = "00mhn6kj4qkvkkv6hh2klnnjr0yk0c9hspp7njc7n6m1lvkzi6as";
     inherit (darwin) configd;
     inherit passthruFun;
   };

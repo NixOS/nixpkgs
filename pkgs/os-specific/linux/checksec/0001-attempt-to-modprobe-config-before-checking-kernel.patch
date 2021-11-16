@@ -1,28 +1,24 @@
-From 6503848d9e0eb009e5f462116a963beacb208930 Mon Sep 17 00:00:00 2001
+From 5cfb08effd21d9278e3eb8901c85112a331c3181 Mon Sep 17 00:00:00 2001
 From: Austin Seipp <aseipp@pobox.com>
-Date: Thu, 20 Feb 2014 00:11:44 -0600
+Date: Tue, 26 Oct 2021 09:23:07 +0000
 Subject: [PATCH] attempt to 'modprobe config' before checking kernel
 
-Signed-off-by: Austin Seipp <aseipp@pobox.com>
 ---
- checksec.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ checksec | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/checksec b/checksec
-index dd1f72e..63acc29 100644
+index 5536250..895073b 100755
 --- a/checksec
 +++ b/checksec
-@@ -676,7 +676,8 @@ kernelcheck() {
-   echo_message "  userspace processes, this option lists the status of kernel configuration\n" '' '' ''
+@@ -1059,6 +1059,7 @@ kernelcheck() {
    echo_message "  options that harden the kernel itself against attack.\n\n" '' '' ''
    echo_message "  Kernel config:\n" '' '' '{ "kernel": '
--
-+
+
 +  modprobe configs 2> /dev/null
-   if [[ ! "${1}" == "" ]] ; then
+   if [[ ! "${1}" == "" ]]; then
      kconfig="cat ${1}"
-     echo_message "  Warning: The config ${1} on disk may not represent running kernel config!\n\n" "${1}" "<kernel config=\"${1}\"" "{ \"KernelConfig\":\"${1}\","
-     # update the architecture based on the config rather than the system
+     echo_message "  Warning: The config ${1} on disk may not represent running kernel config!\n\n" "${1}" "<kernel config=\"${1}\"" "{ \"KernelConfig\":\"${1}\""
 -- 
-1.8.3.2
+2.33.0
 

@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, dpkg, jre_headless, makeWrapper }:
+{ lib, stdenv, fetchurl, dpkg, jre8_headless, makeWrapper, writeText, xorg }:
 
+let
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorg.xorgserver}/lib/xorg/modules
+      ModulePath "${xorg.xorgserver}/lib/xorg/extensions
+      ModulePath "${xorg.xorgserver}/lib/xorg/drivers
+      ModulePath "${xorg.xf86videodummy}/lib/xorg/modules/drivers
+    EndSection
+  '';
+
+in
 stdenv.mkDerivation rec {
   pname = "jibri";
   version = "8.0-93-g51fe7a2";
@@ -19,7 +30,9 @@ stdenv.mkDerivation rec {
     mv etc/jitsi/jibri/* $out/etc/jitsi/jibri/
     mv opt/jitsi/jibri/* $out/opt/jitsi/jibri/
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
+    cat '${xorgModulePaths}' >> $out/etc/jitsi/jibri/xorg-video-dummy.conf
+
+    makeWrapper ${jre8_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
 
     runHook postInstall
   '';

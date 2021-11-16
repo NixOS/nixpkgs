@@ -25,7 +25,6 @@ pname
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
 , propagatedBuildInputs ? []
-, propagatedNativeBuildInputs ? []
 
 # used to disable derivation, useful for specific lua versions
 # TODO move from this setting meta.broken to a 'disabled' attribute on the
@@ -50,7 +49,7 @@ pname
 # The latter is used to work-around luarocks having a problem with
 # multiple-output derivations as external deps:
 # https://github.com/luarocks/luarocks/issues/766<Paste>
-, externalDeps ? lib.unique (lib.filter (drv: !drv ? luaModule) (propagatedBuildInputs ++ buildInputs))
+, externalDeps ? []
 
 # Appended to the generated luarocks config
 , extraConfig ? ""
@@ -74,7 +73,6 @@ pname
 let
   generatedRockspecFilename = "${rockspecDir}/${pname}-${version}.rockspec";
 
-
   # TODO fix warnings "Couldn't load rockspec for ..." during manifest
   # construction -- from initial investigation, appears it will require
   # upstream luarocks changes to fix cleanly (during manifest construction,
@@ -83,7 +81,7 @@ let
   luarocks_config = "luarocks-config.lua";
   luarocks_content = let
     generatedConfig = lua.pkgs.lib.generateLuarocksConfig {
-      inherit externalDeps;
+      externalDeps = externalDeps ++ externalDepsGenerated;
       inherit extraVariables;
       inherit rocksSubdir;
       inherit requiredLuaRocks;
@@ -99,12 +97,13 @@ let
   # Filter out the lua derivation itself from the Lua module dependency
   # closure, as it doesn't have a rock tree :)
   requiredLuaRocks = lib.filter (d: d ? luaModule)
-    (lua.pkgs.requiredLuaModules propagatedBuildInputs);
+    (lua.pkgs.requiredLuaModules luarocksDrv.propagatedBuildInputs);
 
   # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
+  externalDepsGenerated = lib.unique (lib.filter (drv: !drv ? luaModule) (luarocksDrv.propagatedBuildInputs ++ luarocksDrv.buildInputs));
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
-in
-toLuaModule ( lua.stdenv.mkDerivation (
+
+  luarocksDrv = toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
   name = namePrefix + pname + "-" + version;
@@ -146,13 +145,12 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     runHook postConfigure
   '';
 
-  # TODO could be moved to configurePhase
   buildPhase = ''
     runHook preBuild
 
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
-    LUAROCKS=luarocks
+    LUAROCKS=${lua.pkgs.luarocks}/bin/luarocks
     if (( ''${NIX_DEBUG:-0} >= 1 )); then
         LUAROCKS="$LUAROCKS --verbose"
     fi
@@ -195,6 +193,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   passthru = {
     inherit lua; # The lua interpreter
     inherit externalDeps;
+    inherit luarocks_content;
   } // passthru;
 
   meta = {
@@ -203,4 +202,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     maintainers = (meta.maintainers or []) ++ [ ];
     broken = disabled;
   } // meta;
-}))
+}));
+in
+  luarocksDrv

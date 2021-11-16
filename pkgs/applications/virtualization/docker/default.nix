@@ -8,16 +8,16 @@ rec {
       , moby-src
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256, buildxSupport ? true
+      , tiniRev, tiniSha256, buildxSupport ? true, composeSupport ? true
       # package dependencies
       , stdenv, fetchFromGitHub, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd_1_4, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx
+      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp
       , nixosTests
-      , clientOnly ? !stdenv.isLinux
+      , clientOnly ? !stdenv.isLinux, symlinkJoin
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -117,6 +117,10 @@ rec {
         ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
         ++ optional (libseccomp != null) "seccomp";
     });
+
+    plugins = optionals buildxSupport [ docker-buildx ]
+      ++ optionals composeSupport [ docker-compose_2 ];
+    pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
 
@@ -141,14 +145,14 @@ rec {
     ];
     buildInputs = optionals (!clientOnly) [
       sqlite lvm2 btrfs-progs systemd libseccomp
-    ] ++ optionals (buildxSupport) [ docker-buildx ];
+    ] ++ plugins;
 
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString buildxSupport ''
+    '' + optionalString (plugins != []) ''
       substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
-          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
+          "${pluginsRef}/libexec/docker/cli-plugins"
     '';
 
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder, click
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, click
 , click-completion, factory_boy, faker, inquirer, notify-py, pbr, pendulum
 , ptable, pytestCheckHook, pytest-cov, pytest-mock, requests, twine
 , validate-email }:

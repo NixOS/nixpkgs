@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , isPy3k
 , simplejson
 , psutil
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "le";
   version = "1.4.29";
 
-  src = fetchurl {
-    url = "https://github.com/logentries/le/archive/v${version}.tar.gz";
-    sha256 = "d29738937cb6e714b6ec2ae74b66b1983482ffd54b4faa40767af18509521d4c";
+  src = fetchFromGitHub {
+    owner = "logentries";
+    repo = "le";
+    rev = "v${version}";
+    sha256 = "sha256-67JPnof0olReu90rM78e1px8NvbGcj8pphFhPaiSVmA=";
   };
 
   disabled = isPy3k;

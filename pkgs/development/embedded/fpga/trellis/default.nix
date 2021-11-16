@@ -31,12 +31,26 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
   cmakeFlags = [
     "-DCURRENT_GIT_VERSION=${realVersion}"
+    # TODO: should this be in stdenv instead?
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
 
   preConfigure = ''
     rmdir database && ln -sfv ${builtins.elemAt srcs 1} ./database
 
     cd libtrellis
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for f in $out/bin/* ; do
+      install_name_tool -change "$out/lib/libtrellis.dylib" "$out/lib/trellis/libtrellis.dylib" "$f"
+    done
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/ecppack $out/share/trellis/misc/basecfgs/empty_lfe5u-85f.config /tmp/test.bin
   '';
 
   meta = with lib; {
@@ -49,7 +63,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/YosysHQ/prjtrellis";
     license     = licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    maintainers = with maintainers; [ q3k thoughtpolice emily rowanG077 ];
     platforms   = platforms.all;
   };
 }

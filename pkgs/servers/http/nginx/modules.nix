@@ -498,10 +498,10 @@ in
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "0.9.0";
-      sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
+      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
+      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
     };
-    inputs = [ pkgs.ffmpeg_3 ];
+    inputs = [ pkgs.ffmpeg ];
   };
 
   vod = {
@@ -509,10 +509,10 @@ in
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "e46079f51282d5a378e6911714b5f3a533bb7700";
-      sha256 = "0pzzq4xcq7jg8mxwnz7srj1nczg9ajd1b8q58qlm03lny8nd2hr5";
+      rev = "1.29";
+      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
     };
-    inputs = [ pkgs.ffmpeg_3 pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
+    inputs = with pkgs; [ ffmpeg fdk_aac openssl libxml2 libiconv ];
   };
 
   vts = {

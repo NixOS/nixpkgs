@@ -27,7 +27,7 @@ python3.pkgs.buildPythonPackage rec {
     pycryptodome
     python-olm
     python_magic
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
   ] ++ lib.optional enableSystemd systemd;

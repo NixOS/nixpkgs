@@ -1,15 +1,15 @@
-{ lib, buildPythonApplication, fetchPypi, requests, pytestCheckHook }:
+{ lib, buildPythonApplication, fetchPypi, requests, youtube-dl, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.19.0";
+  version = "1.19.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ceffaa5022d76132165ca9004c1e57d7400b56c9ab3866e3bd139e2ffe38cb72";
+    sha256 = "7fec9ac69582dbd9922666e6ece3142ae52dc9679a2c4a613f6ee94ad09e5f68";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ requests youtube-dl ];
 
   checkInputs = [ pytestCheckHook ];
   pytestFlagsArray = [

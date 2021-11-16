@@ -1,33 +1,29 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, openssl
-, pkg-config
-, installShellFiles
+, stdenv
 , enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellFiles
+, pkg-config
 , Security
 , libiconv
+, openssl
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6RgT/SxO4vsk8Yx2AbaNIFvnAvgDmeTXvb/v6nUJxhc=";
+    sha256 = "sha256-BmV4kekl0QDbX/ueSrWM5jRvqr6WQeZIs7hiXhiHBSI=";
   };
 
-  cargoSha256 = "sha256-NEuIh7FwIdAWzlChna3+G0VukfV8nYZfVWa+3LxQCIA=";
+  cargoSha256 = "sha256-lu5xVuAw9yTeQr3gpiW5g5bdm7Alf0YXmlbSkPaXhk0=";
 
-  # use --lib flag to avoid test with imap server
-  # https://github.com/soywod/himalaya/issues/145
-  cargoTestFlags = [ "--lib" ];
-
-  nativeBuildInputs = [ ]
-    ++ lib.optionals (enableCompletions) [ installShellFiles ]
+  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   buildInputs =
@@ -49,6 +45,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI email client written in Rust";
     homepage = "https://github.com/soywod/himalaya";
+    changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yanganto ];
   };

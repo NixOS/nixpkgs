@@ -305,6 +305,9 @@ else let
           cpu_family = '${cpuFamily stdenv.targetPlatform}'
           cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
           endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+
+          [binaries]
+          llvm-config = 'llvm-config-native'
         '';
       in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
     } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {

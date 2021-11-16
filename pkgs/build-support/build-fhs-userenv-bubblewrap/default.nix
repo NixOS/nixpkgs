@@ -66,6 +66,7 @@ let
       "asound.conf"
       # SSL
       "ssl/certs"
+      "ca-certificates"
       "pki"
     ];
   in concatStringsSep "\n  "

@@ -28,7 +28,7 @@ mkOpenModelicaDerivation rec {
     description = "Plotting tool for OpenModelica-generated results files";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ balodja smironov ];
     platforms = platforms.linux;
   };
 }

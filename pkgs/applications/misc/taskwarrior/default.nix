@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     rev = "v${version}";
-    sha256 = "sha256-2wVjRecfIlNFAxXFaiKfxy9zArDIYDTfDdrnSM7H8fM=";
+    sha256 = "sha256-jMZzo2cegoapEHTvfD6ThU1IsXru3iOcpyDbZxkSXzQ=";
     fetchSubmodules = true;
   };
 

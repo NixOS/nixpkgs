@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, libiconv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "cconv";
   version = "0.6.3";
 
-  src = fetchurl {
-    url = "https://github.com/xiaoyjy/cconv/archive/v${version}.tar.gz";
-    sha256 = "82f46a94829f5a8157d6f686e302ff5710108931973e133d6e19593061b81d84";
+  src = fetchFromGitHub {
+    owner = "xiaoyjy";
+    repo = "cconv";
+    rev = "v${version}";
+    sha256 = "RAFl/+I+usUfeG/l17F3ltThK7G4+TekyQGwzQIgeH8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

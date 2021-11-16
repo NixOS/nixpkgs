@@ -14,6 +14,8 @@ mkDerivation rec {
   pname = "adwaita-qt";
   version = "1.4.0";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = pname;

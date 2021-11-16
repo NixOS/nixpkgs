@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
-    sha256 = "FGllflk72Ky8+sC4ObCG9kDr8SBjPpPxFsq2UrWyc4c=";
+    sha256 = "sha256:08ynw1cmld41p4bwrw84gb1nv229va70i91qiqsjr3c2jnqy8zml";
   };
 
   nativeBuildInputs = [ nasm ];

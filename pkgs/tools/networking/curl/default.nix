@@ -3,7 +3,7 @@
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? true, zlib ? null
-, sslSupport ? zlibSupport, openssl ? null
+, opensslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
@@ -30,10 +30,10 @@ assert http2Support -> nghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert !(gnutlsSupport && sslSupport);
+assert opensslSupport -> openssl != null;
+assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
-assert !(sslSupport && wolfsslSupport);
+assert !(opensslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
@@ -43,20 +43,18 @@ assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.76.1";
+  version = "7.79.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1scmfrp0c27pkd7yva9k50miprjpsyfbb33apx72qc9igm6ii3ks";
+    sha256 = "0lbq73wz44p4fm2gp05mzrqrzfvhlmvlgfg8c8wkj5lkkamw8qny";
   };
 
   patches = [
-    ./CVE-2021-22897.patch
-    ./CVE-2021-22898.patch
-    ./CVE-2021-22901.patch
+    ./7.79.1-darwin-no-systemconfiguration.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -78,7 +76,7 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl ++
+    optional opensslSupport openssl ++
     optional gnutlsSupport gnutls ++
     optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
@@ -98,7 +96,7 @@ stdenv.mkDerivation rec {
       # The build fails when using wolfssl with --with-ca-fallback
       (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      (lib.withFeatureAs sslSupport "ssl" openssl.dev)
+      (lib.withFeatureAs opensslSupport "openssl" openssl.dev)
       (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
       (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
       (lib.enableFeature ldapSupport "ldap")
@@ -136,7 +134,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sslSupport openssl;
+    inherit opensslSupport openssl;
   };
 
   meta = with lib; {

@@ -31,6 +31,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  # make compatible with libusb1 2.x
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'libusb1>=1.7,<2.0' 'libusb1>=1.7'
+  '';
+
   # tests require to clone quite a few firmwares
   doCheck = false;
 

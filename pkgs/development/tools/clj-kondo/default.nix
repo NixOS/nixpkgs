@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clj-kondo";
-  version = "2021.09.25";
+  version = "2021.10.19";
 
   src = fetchurl {
     url = "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-kS6bwsYH/cbjJlIeiDAy6QsAw+D1uHp26d4NBLfStjg=";
+    sha256 = "sha256-i0OeQPZfQPUeXC/Bs84I91IahBKK6W1mFix97s8/lVA=";
   };
 
   dontUnpack = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    # https://github.com/clj-kondo/clj-kondo/blob/v2021.09.25/script/compile#L17-L21
+    # https://github.com/clj-kondo/clj-kondo/blob/v2021.10.19/script/compile#L17-L21
     args=("-jar" "$src"
           "-H:CLibraryPath=${graalvm11-ce.lib}/lib"
           # Required to build babashka on darwin. Do not remove.

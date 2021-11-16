@@ -3,6 +3,7 @@
 { lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
+, linkableRuntime ? (stdenv.isi686 || stdenv.isx86_64)
 , disableImmobileSpace ? false
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
 
   enableFeatures = with lib;
     optional threadSupport "sb-thread" ++
+    optional linkableRuntime "sb-linkable-runtime" ++
     optional stdenv.isAarch32 "arm";
 
   disableFeatures = with lib;

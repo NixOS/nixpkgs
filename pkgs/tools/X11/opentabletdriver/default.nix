@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , linkFarmFromDrvs
-, dotnet-netcore
-, dotnet-sdk
+, dotnetCorePackages
 , dotnetPackages
 , dpkg
 , gtk3
@@ -21,6 +20,10 @@
 , wrapGAppsHook
 }:
 
+let
+  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+in
 stdenv.mkDerivation rec {
   pname = "OpenTabletDriver";
   version = "0.5.3.3";
@@ -114,19 +117,19 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/OpenTabletDriver.Console $out/bin/otd \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     makeWrapper $out/lib/OpenTabletDriver.Daemon $out/bin/otd-daemon \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     makeWrapper $out/lib/OpenTabletDriver.UX.Gtk $out/bin/otd-gui \
         "''${gappsWrapperArgs[@]}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --set DOTNET_ROOT "${dotnet-netcore}" \
+        --set DOTNET_ROOT "${dotnet-runtime}" \
         --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
     mkdir -p $out/lib/OpenTabletDriver

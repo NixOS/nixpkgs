@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A program that throttles a pipeline, only letting a line through at most every $1 seconds.";
     homepage = "https://github.com/anko/zthrottle";
     license = licenses.unlicense;
-    maintainers = [ maintainers.ronthecookie ];
+    maintainers = [ maintainers.ckie ];
     platforms = platforms.unix;
   };
 }

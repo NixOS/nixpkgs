@@ -5,7 +5,6 @@
 , pybind11
 , pytestCheckHook
 , pythonOlder
-, cffi
 , six
 }:
 

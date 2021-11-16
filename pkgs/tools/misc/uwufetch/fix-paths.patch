@@ -1,0 +1,22 @@
+diff --git a/uwufetch.c b/uwufetch.c
+index 75863a2..ab31dda 100644
+--- a/uwufetch.c
++++ b/uwufetch.c
+@@ -921,7 +921,7 @@ void print_ascii()
+ 		}
+ 		else
+ 		{
+-			sprintf(ascii_file, "/usr/lib/uwufetch/ascii/%s.txt", version_name);
++			sprintf(ascii_file, "@out@/lib/uwufetch/ascii/%s.txt", version_name);
+ 		}
+ 		file = fopen(ascii_file, "r");
+ 		if (!file)
+@@ -1220,7 +1220,7 @@ void print_image()
+ 		if (strcmp(version_name, "android") == 0)
+ 			sprintf(command, "viu -t -w 18 -h 8 /data/data/com.termux/files/usr/lib/uwufetch/%s.png 2> /dev/null", version_name);
+ 		else
+-			sprintf(command, "viu -t -w 18 -h 8 /usr/lib/uwufetch/%s.png 2> /dev/null", version_name);
++			sprintf(command, "viu -t -w 18 -h 8 @out@/lib/uwufetch/%s.png 2> /dev/null", version_name);
+ 	}
+ 	printf("\n");
+ 	if (system(command) != 0)

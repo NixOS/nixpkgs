@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     libsoup
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonPath = with python3Packages; [
     pygobject3
   ];
 

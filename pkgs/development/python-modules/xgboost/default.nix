@@ -6,7 +6,6 @@
 , scikit-learn
 , stdenv
 , xgboost
-, substituteAll
 , pandas
 , matplotlib
 , graphviz

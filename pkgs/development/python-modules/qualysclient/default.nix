@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "qualysclient";
-  version = "0.0.4.8.1";
+  version = "0.0.4.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "woodtechie1428";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fdcmspjm1cy53x9gm7frfq175saskcwn565zqprgxzfcigip1n3";
+    sha256 = "0hrbp5ci1l06j709k5y3z3ad9dryvrkvmc2wyb4a01gw7qzry7ys";
   };
 
   propagatedBuildInputs = [

@@ -7,16 +7,15 @@
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "0.1.3";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d1847f44a23a2fba815cbfbe7391a0364fd6a5c088fcd5f5a09d454aad8cc7c";
+    sha256 = "4ac688593279c48d7863f0a90457202ff9b235e3ee8862498e8a5b8f867cc137";
   };
 
   propagatedBuildInputs = [

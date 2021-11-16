@@ -779,6 +779,7 @@ self: super:
     stdenv = if isDarwin then clangStdenv else stdenv;
   }).overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ lib.optional isDarwin bootstrap_cmds;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
     configureFlags = [
       "--with-xserver=${self.xorgserver.out}/bin/X"
     ] ++ lib.optionals isDarwin [
@@ -794,6 +795,10 @@ self: super:
         sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
       })
     ];
+    postPatch = ''
+      # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
+      substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
+    '';
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xauth ]
                          ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     postFixup = ''

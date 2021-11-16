@@ -5,8 +5,20 @@ let
   in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
   # Check whether a derivation provides a lua module.
   hasLuaModule = drv: drv ? luaModule;
+
+
+  /*
+  Use this to override the arguments passed to buildLuarocksPackage
+  */
+  overrideLuarocks = drv: f: (drv.override (args: args // {
+    buildLuarocksPackage = drv: (args.buildLuarocksPackage drv).override f;
+  })) // {
+    overrideScope = scope: overrideLuarocks (drv.overrideScope scope) f;
+  };
+
 in
 rec {
+  inherit overrideLuarocks;
   inherit hasLuaModule requiredLuaModules;
 
   luaPathList = [

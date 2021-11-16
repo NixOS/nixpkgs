@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "6.0.0";
+  version = "6.0.1";
 
   repoName = "screenshot";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1fvsl9zdkv7bgx3jpy7pr9lflm4ckr3swdby379mdxn2x6kxji0x";
+    sha256 = "sha256-MDmk+0IUCe6PSV5QOjjDRedv7X3lcBJ04jn9cE9DP3M=";
   };
 
   passthru = {
@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.screenshot";
   };
 }

@@ -6,6 +6,8 @@
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
+
+, enableXWayland ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -40,13 +42,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
     pango cairo libinput libcap pam gdk-pixbuf librsvg
-    wlroots wayland-protocols libdrm
+    wayland-protocols libdrm
+    (wlroots.override { inherit enableXWayland; })
   ];
 
   mesonFlags = [
     "-Ddefault-wallpaper=false"
     "-Dsd-bus-provider=libsystemd"
-  ];
+  ]
+    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"
+  ;
 
   passthru.tests.basic = nixosTests.sway;
 

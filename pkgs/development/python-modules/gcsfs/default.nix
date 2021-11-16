@@ -5,6 +5,7 @@
 , pythonOlder
 , google-auth
 , google-auth-oauthlib
+, google-cloud-storage
 , requests
 , decorator
 , fsspec
@@ -17,14 +18,15 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2021.10.0";
+  version = "2021.10.1";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GDVIENtNpo8cg7pplOgoDMVguZmxoUUSs860WNfhmfM=";
+    sha256 = "sha256-BME40kyxZHx9+XrMCqWYp8+q6tjeYwAw/zISMNpQxDU=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +36,7 @@ buildPythonPackage rec {
     fsspec
     google-auth
     google-auth-oauthlib
+    google-cloud-storage
     requests
     ujson
   ];
@@ -49,12 +52,14 @@ buildPythonPackage rec {
     "test_GoogleCredentials_None"
   ];
 
-  pythonImportsCheck = [ "gcsfs" ];
+  pythonImportsCheck = [
+    "gcsfs"
+  ];
 
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/dask/gcsfs";
     license = licenses.bsd3;
-    maintainers = [ maintainers.nbren12 ];
+    maintainers = with maintainers; [ nbren12 ];
   };
 }

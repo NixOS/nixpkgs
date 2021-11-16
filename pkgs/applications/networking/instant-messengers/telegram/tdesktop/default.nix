@@ -29,6 +29,7 @@
 , webkitgtk
 , jemalloc
 , rnnoise
+, abseil-cpp
   # Transitive dependencies:
 , util-linuxMinimal
 , pcre
@@ -57,11 +58,15 @@
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 let
-  tg_owt = callPackage ./tg_owt.nix { };
+  tg_owt = callPackage ./tg_owt.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "17";
+    };
+  };
 in
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.1.9";
+  version = "3.1.11";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -70,7 +75,7 @@ mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1nmakl9jxmw3k8gka56cyywbjwv06a5983dy6h9jhkkq950fn33s";
+    sha256 = "0hpcsraw3gx37wk3r88q51qf68ny0kb3kd6slnklwf22d1jqr3fn";
   };
 
   postPatch = ''

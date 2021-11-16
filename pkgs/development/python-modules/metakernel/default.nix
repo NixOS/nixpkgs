@@ -2,9 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, isPy27
-, mock
-, pytest
 }:
 
 buildPythonPackage rec {

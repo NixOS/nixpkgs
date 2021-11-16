@@ -67,6 +67,10 @@ in
     inherit lua lib;
   };
 
+  luarocks-3_7 = callPackage ../development/tools/misc/luarocks/3.7.nix {
+    inherit lua lib;
+  };
+
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 

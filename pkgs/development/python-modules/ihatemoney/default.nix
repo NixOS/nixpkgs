@@ -1,14 +1,13 @@
 { buildPythonPackage
 , lib
-, fetchFromGitHub
 , isPy27
 , nixosTests
-, fetchpatch
 , fetchPypi
 , alembic
 , aniso8601
 , Babel
 , blinker
+, cachetools
 , click
 , dnspython
 , email_validator
@@ -19,6 +18,7 @@
 , flask_migrate
 , flask-restful
 , flask_sqlalchemy
+, flask-talisman
 , flask_wtf
 , debts
 , idna
@@ -28,6 +28,7 @@
 , markupsafe
 , python-dateutil
 , pytz
+, requests
 , six
 , sqlalchemy
 , sqlalchemy-utils
@@ -43,17 +44,6 @@
 # ihatemoney is not really a library. It will only ever be imported
 # by the interpreter of uwsgi. So overrides for its depencies are fine.
 let
-  # fixed in next release, but patches don't apply
-  # https://github.com/spiral-project/ihatemoney/issues/567
-  pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
-    pname = "WTForms";
-    version = "2.2.1";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
-    };
-  });
-
   # sqlalchemy-continuum requires sqlalchemy < 1.4
   pinned_sqlalchemy = sqlalchemy.overridePythonAttrs (
     old: rec {
@@ -70,43 +60,20 @@ in
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.2";
+  version = "5.1.1";
 
-  src = fetchFromGitHub {
-    owner = "spiral-project";
-    repo = pname;
-    rev = version;
-    sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0gsqba9qbs1dpmfys8qpiahy4pbn4khcc6mgmdnhssmkjsb94sx6";
   };
 
   disabled = isPy27;
-
-  patches = [
-    # fix migration on postgresql
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
-      sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
-    })
-    (fetchpatch {
-      name = "CVE-2020-15120.patch";
-      url = "https://github.com/spiral-project/ihatemoney/commit/8d77cf5d5646e1d2d8ded13f0660638f57e98471.patch";
-      sha256 = "0y855sk3qsbpq7slj876k2ifa1lccc2dccag98pkyaadpz5gbabv";
-    })
-    # backported from current master
-    # remove dependency on flask-script, which removed support on some features ihm used to need
-    ./remove_flask_script.patch
-  ];
-
-  postPatch = ''
-    # remove draconian pinning
-    sed -i 's/==.*$//' setup.cfg
-  '';
 
   propagatedBuildInputs = [
     aniso8601
     Babel
     blinker
+    cachetools
     click
     dnspython
     email_validator
@@ -125,7 +92,8 @@ buildPythonPackage rec {
       }
     )
     flask-restful
-    (flask_wtf.override { wtforms = pinned_wtforms; })
+    flask-talisman
+    flask_wtf
     idna
     itsdangerous
     jinja2
@@ -133,6 +101,7 @@ buildPythonPackage rec {
     markupsafe
     python-dateutil
     pytz
+    requests
     six
     (
       (
@@ -158,7 +127,7 @@ buildPythonPackage rec {
       )
     )
     werkzeug
-    pinned_wtforms
+    wtforms
     psycopg2
     debts
   ];
@@ -168,10 +137,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
   disabledTests = [
     "test_notifications"  # requires running service.
     "test_invite"         # requires running service.
+    "test_invitation_email_failure" # requires dns resolution
   ];
 
   passthru.tests = {

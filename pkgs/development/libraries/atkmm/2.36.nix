@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "atkmm_2_36";
       packageName = pname;
       versionPolicy = "odd-unstable";
     };

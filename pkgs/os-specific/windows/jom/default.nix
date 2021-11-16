@@ -4,7 +4,8 @@
 # both mingw32 and mingw64.
 
 stdenv.mkDerivation {
-  name = "jom-1.0.11";
+  pname = "jom";
+  version = "1.0.11";
 
   src = fetchgit {
     url = "git://gitorious.org/qt-labs/jom.git";

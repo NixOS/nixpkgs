@@ -42,7 +42,7 @@ in python3.pkgs.buildPythonApplication rec {
     mutagen
     pycdio
     pygobject3
-    ruamel_yaml
+    ruamel-yaml
     discid
     pillow
   ];

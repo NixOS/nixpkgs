@@ -1,2 +1,2 @@
 [net.launchpad.plank.dock.settings]
-dock-items=['gala-multitaskingview.dockitem','org.gnome.Epiphany.dockitem','io.elementary.mail.dockitem','io.elementary.calendar.dockitem','io.elementary.music.dockitem','io.elementary.videos.dockitem','io.elementary.photos.dockitem','io.elementary.switchboard.dockitem']
+dock-items=['gala-multitaskingview.dockitem','org.gnome.Epiphany.dockitem','io.elementary.mail.dockitem','io.elementary.tasks.dockitem','io.elementary.calendar.dockitem','io.elementary.music.dockitem','io.elementary.videos.dockitem','io.elementary.photos.dockitem','io.elementary.switchboard.dockitem']

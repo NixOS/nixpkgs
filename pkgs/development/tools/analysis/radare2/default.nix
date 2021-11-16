@@ -31,19 +31,19 @@ let
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "5837915960c2ce862a77c99a374abfb7d18a8534";
-    sha256 = "sha256-bs8wjOX+txB193oqIIZ7yx9pwpVhR3HAaWuDLPLG7m4=";
+    rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
+    sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.4.0";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-KRHMJ0lW0OF8ejcrigp4caPsuR3iaGcglCYxJSUhGJw=";
+    sha256 = "sha256-5GvJ7J+pAL8GIZ4Tv09wdGyihfMm1bUABhmf7ozQoxc=";
   };
 
   preBuild = ''

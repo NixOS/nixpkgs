@@ -677,15 +677,13 @@ in {
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
-        CapabilityBoundingSet = [ "" ];
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -701,6 +699,8 @@ in {
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
+        # Upstream grafana is not setting SystemCallFilter for compatibility
+        # reasons, see https://github.com/grafana/grafana/pull/40176
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0027";
       };

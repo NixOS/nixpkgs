@@ -55,10 +55,10 @@ stdenv.mkDerivation {
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
     ./gnu-install-dirs.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ./sys-ustat.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch
-    ++ [ ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch ];
+
+    ./sys-ustat.patch
+    ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
+  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

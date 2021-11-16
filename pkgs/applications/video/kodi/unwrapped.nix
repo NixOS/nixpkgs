@@ -16,7 +16,7 @@
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
-, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
@@ -38,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20211006";
-  kodiVersion = "19.2";
+  kodiReleaseDate = "20211024";
+  kodiVersion = "19.3";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-w5m7xlnjQDJ4l75b3ctF0wMZ4kqi+H0X6WFLs0gV6lM=";
+    sha256 = "02bnknk87zzv9j6b6k9c0xx47q2gh399j6v25rm94g7rhzf8phbw";
   };
 
   ffmpeg = stdenv.mkDerivation rec {
@@ -125,7 +125,7 @@ in stdenv.mkDerivation {
       libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
-      ffmpeg flatbuffers fmt fstrcmp rapidjson
+      ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]

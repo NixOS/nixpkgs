@@ -1,5 +1,5 @@
 diff --git a/out/serverPath.js b/out/serverPath.js
-index ffb1b80..990ca2b 100644
+index d25f5d4..289f0dd 100644
 --- a/out/serverPath.js
 +++ b/out/serverPath.js
 @@ -8,7 +8,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
@@ -16,4 +16,4 @@ index ffb1b80..990ca2b 100644
 +        }
      }
      installPath() {
-         return this.context.asAbsolutePath(INSTALL_FOLDER_NAME);
+         return path.join(this.context.globalStorageUri.fsPath, INSTALL_FOLDER_NAME);

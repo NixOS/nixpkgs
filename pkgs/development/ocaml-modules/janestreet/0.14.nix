@@ -1,4 +1,5 @@
 { self
+, fetchpatch
 , lib
 , openssl
 , zstd
@@ -41,7 +42,7 @@ with self;
     version = "0.14.1";
     hash = "1cdkv34m6czhacivpbb2sasj83fgcid6gnqk30ig9i84z8nh2gw2";
     meta.description = "Accessors for Core types, for use with the Accessor library";
-    meta.broken = lib.versionAtLeast ocaml.version "4.12";
+    meta.broken = true; # Not compatible with ppxlib ≥ 0.23
     propagatedBuildInputs = [ accessor_base core_kernel ];
   };
 
@@ -375,9 +376,9 @@ with self;
 
   ppx_accessor = janePackage {
     pname = "ppx_accessor";
-    version = "0.14.2";
+    version = "0.14.3";
     minimumOCamlVersion = "4.09";
-    hash = "01nifsh7gap28cpvff6i569lqr1gmyhrklkisgri538cp4pf1wq1";
+    hash = "sha256:1c8blzh2f34vbm1z3mnvh670c6vda70chw805n2hmkd9j46l0cll";
     meta.description = "[@@deriving] plugin to generate accessors for use with the Accessor libraries";
     propagatedBuildInputs = [ accessor ];
   };
@@ -578,6 +579,18 @@ with self;
     propagatedBuildInputs = [ ppxlib ];
   };
 
+  ppx_python = janePackage {
+    pname = "ppx_python";
+    hash = "0gk4nqz4i9v3hwjg5mvgpgwj0dfcgpyc7ikba93cafyhn6fy83zk";
+    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    # Compatibility with ppxlib 0.23
+    patches = fetchpatch {
+      url = "https://github.com/janestreet/ppx_python/commit/b2fe0040cc39fa6164de868f8a20edb38d81170e.patch";
+      sha256 = "sha256:1mrdwp0zw3dqavzx3ffrmzq5cdlninyf67ksavfzxb8gb16w6zpz";
+    };
+    propagatedBuildInputs = [ ppx_base ppxlib pyml ];
+  };
+
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
     version = "0.14.3";
@@ -633,9 +646,9 @@ with self;
 
   ppx_variants_conv = janePackage {
     pname = "ppx_variants_conv";
-    version = "0.14.1";
+    version = "0.14.2";
     minimumOCamlVersion = "4.04.2";
-    hash = "0q6a43zrwqzdz7aja0k44a2llyjjj5xzi2kigwhsnww3g0r5ig84";
+    hash = "1p11fiz4m160hs0xzg4g9rxchp053sz3s3d1lyciqixad1xi47a4";
     meta.description = "Generation of accessor and iteration functions for ocaml variant types";
     propagatedBuildInputs = [ variantslib ppxlib ];
   };
@@ -645,6 +658,13 @@ with self;
     hash = "0lfblv2yqw01bl074ga6vxii0p9mqwlqw1g9b9z7pfdva9wqilrd";
     meta.description = "Protocol versioning";
     propagatedBuildInputs = [ core_kernel ];
+  };
+
+  pythonlib = janePackage {
+    pname = "pythonlib";
+    hash = "0qr0mh9jiv1ham5zlz9i4im23a1vh6x1yp6dp2db2s4icmfph639";
+    meta.description = "A library to help writing wrappers around ocaml code for python";
+    propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
   };
 
   re2 = janePackage {

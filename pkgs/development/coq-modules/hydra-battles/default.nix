@@ -5,12 +5,14 @@ mkCoqDerivation {
   pname = "hydra-battles";
   owner = "coq-community";
 
-  release."0.4".sha256 = "sha256:1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
+  release."0.4".sha256 = "1f7pc4w3kir4c9p0fjx5l77401bx12y72nmqxrqs3qqd3iynvqlp";
+  release."0.5".sha256 = "121pcbn6v59l0c165ha9n00whbddpy11npx2y9cn7g879sfk2nqk";
   releaseRev = (v: "v${v}");
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.11"; out = "0.4"; }
+    { case = range "8.13" "8.14"; out = "0.5"; }
+    { case = range "8.11" "8.12"; out = "0.4"; }
   ] null;
 
   propagatedBuildInputs = [ equations ];

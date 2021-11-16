@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
 , buildDunePackage
 }:
 
@@ -21,13 +21,15 @@ if lib.versionAtLeast ocaml.version "4.02" then
 
 buildDunePackage rec {
   inherit pname;
-  version = "1.6.7";
+  version = "1.6.8";
 
   useDune2 = true;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-community/cppo/releases/download/v${version}/cppo-v${version}.tbz";
-    sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256:0xjb1dnj8lvdcccskrhrakknd9q4vfy5330sjbqpf4h95dsz90k9";
   };
 
   doCheck = true;

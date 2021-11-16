@@ -16,13 +16,13 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2021.9.3";
+  version = "2021.10.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-vQ4OX+iHWWIxi/r5ayChgNglI7QQsgx0LqXCR6J0pLE=";
+    sha256 = "sha256-zVZantMYtDWkvFrXmX0HpUchmc3T2gbkrMiWGP2ibNc=";
   };
 
   patches = [
@@ -54,12 +54,14 @@ with python.pkgs; buildPythonApplication rec {
     cryptography
     esphome-dashboard
     ifaddr
+    kconfiglib
     paho-mqtt
     pillow
     protobuf
     pyserial
     pyyaml
     tornado
+    tzdata
     tzlocal
     voluptuous
   ];

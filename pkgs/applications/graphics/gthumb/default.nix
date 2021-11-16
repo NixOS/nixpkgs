@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.11.4";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3ZsPiUXX34Ev/a3OyMO94dyXZyMy4AVt5Cp/ELZLIGw=";
+    sha256 = "sha256-Pe/8AwOE5ktXNhxDfHm0ga4Uie9EyHroVugbsQ2OOD8=";
   };
 
   nativeBuildInputs = [

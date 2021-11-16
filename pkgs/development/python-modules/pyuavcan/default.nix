@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, nunavut
-, pyserial , pytest, ruamel_yaml}:
+, pyserial , pytest, ruamel-yaml}:
 
  buildPythonPackage rec {
   pname = "pyuavcan";
@@ -18,7 +18,7 @@
     nunavut
     pyserial
     pytest
-    ruamel_yaml
+    ruamel-yaml
   ];
 
   # allow for writable directory for darwin

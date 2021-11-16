@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.28.8";
+  version = "1.30.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bju70gC8G2SyP2JU/vkhLyaZ7HfPsyB10rpQecc6n3g=";
+    sha256 = "sha256-vgHs4OosIZTL6ldEv1qvBsBLpft+x4h6ExFsdtEU/t0=";
   };
 
   nativeBuildInputs = [

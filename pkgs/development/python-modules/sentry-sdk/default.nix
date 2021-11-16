@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # `socket.getprotobyname('tcp')`, which reads from this file). Normally
   # this path isn't available in the sandbox. Therefore, use libredirect
   # to make on eavailable from `iana-etc`. This is a test-only operation.
-  preCheck = ''
+  preCheck = lib.optionalString doCheck ''
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';

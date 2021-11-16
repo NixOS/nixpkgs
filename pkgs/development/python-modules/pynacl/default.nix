@@ -6,6 +6,7 @@
 , libsodium
 , cffi
 , hypothesis
+, stdenv
 , six
 }:
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    cffi
     six
   ];
 

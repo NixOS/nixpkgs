@@ -137,10 +137,18 @@
   }
   {
     name = "microsoft.netcore.app.host.linux-x64";
-    version = "3.1.19";
+    version = "3.1.21";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.19/microsoft.netcore.app.host.linux-x64.3.1.19.nupkg";
-      sha256 = "10fs93kg8vhhm1l05815m8yqz796i6gk824pk1bps239mshmkybr";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.21/microsoft.netcore.app.host.linux-x64.3.1.21.nupkg";
+      sha256 = "01kbhi29lhv6mg1zfsyakz3z8hfbxnc0kxy0fczl8xqviik9svx7";
+    };
+  }
+  {
+    name = "microsoft.netcore.app.host.linux-arm64";
+    version = "3.1.21";
+    src = fetchurl {
+      url = "https://globalcdn.nuget.org/packages/microsoft.netcore.app.host.linux-arm64.3.1.21.nupkg";
+      sha256 = "0mv79mv0g539437jy4cxvkic7iqgh2xs1nlpd8bzx7jha27g5mlr";
     };
   }
   {
@@ -269,14 +277,6 @@
     src = fetchurl {
       url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg";
       sha256 = "1fn9fxppfcg4jgypp2pmrpr6awl3qz1xmnri0cygpkwvyx27df1y";
-    };
-  }
-  {
-    name = "nuget.build.tasks.pack";
-    version = "5.10.0-preview.2.7169";
-    src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/nuget.build.tasks.pack/5.10.0-preview.2.7169/nuget.build.tasks.pack.5.10.0-preview.2.7169.nupkg";
-      sha256 = "0siby8s8km50hfwvqx34nfnn9qwhygxlhw57wm1j5d22nf16kasb";
     };
   }
   {

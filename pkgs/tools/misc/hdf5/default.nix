@@ -1,10 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
-, cpp ? false
-, gfortran ? null
-, zlib ? null
-, szip ? null
+, cppSupport ? false
+, fortranSupport ? false
+, fortran
+, zlibSupport ? true
+, zlib
+, szipSupport ? false
+, szip
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -15,7 +19,7 @@
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
-assert !cpp || !mpiSupport;
+assert !cppSupport || !mpiSupport;
 
 let inherit (lib) optional optionals; in
 
@@ -28,28 +32,35 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit mpiSupport;
-    inherit mpi;
+    inherit
+      cppSupport
+      fortranSupport
+      fortran
+      zlibSupport
+      zlib
+      szipSupport
+      szip
+      mpiSupport
+      mpi
+      ;
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ removeReferencesTo ]
-    ++ optional (gfortran != null) gfortran;
+    ++ optional fortranSupport fortran;
 
-  buildInputs = []
-    ++ optional (szip != null) szip
+  buildInputs = optional fortranSupport fortran
+    ++ optional szipSupport szip
     ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = []
-    ++ optional (zlib != null) zlib
+  propagatedBuildInputs = optional zlibSupport zlib
     ++ optional mpiSupport mpi;
 
-  configureFlags = []
-    ++ optional cpp "--enable-cxx"
-    ++ optional (gfortran != null) "--enable-fortran"
-    ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+  configureFlags = optional cppSupport "--enable-cxx"
+    ++ optional fortranSupport "--enable-fortran"
+    ++ optional szipSupport "--with-szlib=${szip}"
+    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java"
     ++ optional usev110Api "--with-default-api-version=v110";

@@ -12,7 +12,6 @@
 , nose-randomly
 , six
 , mock
-, eventlet
 , pytest
 , freezegun
 }:

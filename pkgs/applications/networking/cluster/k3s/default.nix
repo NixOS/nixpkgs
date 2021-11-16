@@ -13,7 +13,6 @@
 , pkg-config
 , ethtool
 , util-linux
-, ipset
 , fetchFromGitHub
 , fetchurl
 , fetchzip
@@ -43,24 +42,24 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.21.4+k3s1";     # k3s git tag
-  k3sCommit = "3e250fdbab72d88f7e6aae57446023a0567ffc97"; # k3s git commit at the above version
-  k3sRepoSha256 = "1w7drvk0bmlmqrxh1y6dxjy7dk6bdrl72pkd25lc1ir6wbzb05h9";
+  k3sVersion = "1.22.3+k3s1";     # k3s git tag
+  k3sCommit = "61a2aab25eeb97c26fa3f2b177e4355a7654c991"; # k3s git commit at the above version
+  k3sRepoSha256 = "0lz5hr3c86gxm9w5jy3g26n6a26m8k0y559hv6220rsi709j7ma9";
 
-  traefikChartVersion = "9.18.2"; # taken from ./manifests/traefik.yaml at spec.version
-  traefikChartSha256 = "sha256-9d7p0ngyMN27u4OPgz7yI14Zj9y36t9o/HMX5wyDpUI=";
+  traefikChartVersion = "10.3.0"; # taken from ./manifests/traefik.yaml at spec.version
+  traefikChartSha256 = "0y6wr64xp7bgx24kqil0x6myr3pnfrg8rw0d1h5zd2n5a8nfd73f";
 
   k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
-  k3sRootSha256 = "sha256-qI84KYJKY/T6pqWZW9lOTq5NzZiu//v1zrMzUCiRTGQ=";
+  k3sRootSha256 = "0r2cj4l50cxkrvszpzxfk36lvbjf9vcmp6d5lvxg8qsah8lki3x8";
 
-  k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
-  k3sCNISha256 = "sha256-uAy17eRRAXPCcnh481KxFMvFQecnnBs24jn5YnVNfY4=";
+  k3sCNIVersion = "0.9.1-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
+  k3sCNISha256 = "1327vmfph7b8i14q05c2xdfzk60caflg1zhycx0mrf3d59f4zsz5";
 
   baseMeta = {
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank superherointj ];
+    maintainers = with maintainers; [ euank ];
     platforms = platforms.linux;
   };
 
@@ -243,6 +242,9 @@ stdenv.mkDerivation rec {
   pname = "k3s";
   version = k3sVersion;
 
+  # `src` here is a workaround for the updateScript bot. It couldn't be empty.
+  src = builtins.filterSource (path: type: false) ./.;
+
   # Important utilities used by the kubelet, see
   # https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
   # Note the list in that issue is stale and some aren't relevant for k3s.
@@ -254,7 +256,6 @@ stdenv.mkDerivation rec {
     bridge-utils
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
-    ipset
     conntrack-tools
   ];
 

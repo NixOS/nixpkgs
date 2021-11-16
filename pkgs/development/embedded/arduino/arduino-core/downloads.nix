@@ -83,17 +83,17 @@
     url = "https://github.com/arduino-libraries/SD/archive/1.2.4.zip";
     sha256 = "123g9px9nqcrsx696wqwzjd5s4hr55nxgfz95b7ws3v007i1f3fz";
   };
-  "build/Servo-1.1.6.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/Servo/archive/1.1.6.zip";
-    sha256 = "1z9k9lxzj5d3f8h9hy86f4k5wgfr2a9zcvjh76qmpvv6clcv3js3";
+  "build/Servo-1.1.8.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/Servo/archive/1.1.8.zip";
+    sha256 = "sha256-8mfRQG/HIRVvdiRApjMib6n1ENqAB63vGsxe6vwndeU=";
   };
   "build/LiquidCrystal-1.0.7.zip" = fetchurl {
     url = "https://github.com/arduino-libraries/LiquidCrystal/archive/1.0.7.zip";
     sha256 = "1wrxrqz3n4yrj9j1a2b7pdd7a1rlyi974ra7crv5amjng8817x9n";
   };
-  "build/Adafruit_Circuit_Playground-1.10.4.zip" = fetchurl {
-    url = "https://github.com/adafruit/Adafruit_CircuitPlayground/archive/1.10.4.zip";
-    sha256 = "194az5pxxzs0wg4ng7w0zqrdw93qdyv02y0q2yy57dr4kwfrm6nl";
+  "build/Adafruit_Circuit_Playground-1.11.3.zip" = fetchurl {
+    url = "https://github.com/adafruit/Adafruit_CircuitPlayground/archive/1.11.3.zip";
+    sha256 = "sha256-YL4ZAi9Fno+rG/bAdjxnXIglfZnbN6KpXFpj23Bf3LQ=";
   };
   "build/libastylej-2.05.1-5.zip" = fetchurl {
     url = "https://downloads.arduino.cc/libastylej-2.05.1-5.zip";
@@ -103,20 +103,24 @@
     url = "https://downloads.arduino.cc/liblistSerials/liblistSerials-1.4.2-2.zip";
     sha256 = "0sqzwp1lfjy452z3d4ma5c4blwsj7za72ymxf7crpq9dh9qd8f53";
   };
-  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip" = fetchurl {
-    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.10.10/WiFi101-Updater-ArduinoIDE-Plugin-0.10.10.zip";
-    sha256 = "0bs5qdglsfc2q5c48m6wdjpzhz4ya4askh1g8364dp6p7jmg6w0d";
+  "build/shared/WiFi101-Updater-ArduinoIDE-Plugin-0.12.0.zip" = fetchurl {
+    url = "https://github.com/arduino-libraries/WiFi101-FirmwareUpdater-Plugin/releases/download/v0.12.0/WiFi101-Updater-ArduinoIDE-Plugin-0.12.0.zip";
+    sha256 = "sha256-6RM7Sr/tk5PVeonhzaa6WvRaz+7av+MhSYKPAinaOkg=";
   };
   "build/avr-1.8.3.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/cores/avr-1.8.3.tar.bz2";
     sha256 = "051wnc0nmsmxvvs4c79zvjag33yx5il2pz2j7qyjsxkp4jc9p2ny";
   };
+  "build/arduino-examples-1.9.1.zip" = fetchurl {
+    url = "https://github.com/arduino/arduino-examples/archive/refs/tags/1.9.1.zip";
+    sha256 = "sha256-kAxIhYQ8P2ULTzQwi6bUXXEXJ53mKNgQxuwX3QYhNoQ=";
+  };
 }
 
 // optionalAttrs (system == "x86_64-linux") {
-  "build/arduino-builder-linux64-1.5.4.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.5.4.tar.bz2";
-    sha256 = "1cgvwlvxzzpjaj4njz1mrsif27l26dwkz9c7gbhdj0lvlk3xsa7s";
+  "build/arduino-builder-linux64-1.6.1.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linux64-1.6.1.tar.bz2";
+    sha256 = "sha256-QUHuC+rE5vrMX8+Bkfuw+59UQdJAekeoaZd1Mch7UXE=";
   };
   "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-pc-linux-gnu.tar.bz2";
@@ -133,9 +137,9 @@
 }
 
 // optionalAttrs (system == "i686-linux") {
-  "build/arduino-builder-linux32-1.5.2.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.5.2.tar.bz2";
-    sha256 = "1slzw8fzxkqsp2izjisjd1rxxbqkrq6n72jc4frk5z2gdm6zfa0l";
+  "build/arduino-builder-linux32-1.6.1.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linux32-1.6.1.tar.bz2";
+    sha256 = "sha256-GX2oGUGYYyatLroASBCBOGjsdCws06907O+O5Rz7Kls=";
   };
   "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-i686-pc-linux-gnu.tar.bz2";
@@ -152,9 +156,9 @@
 }
 
 // optionalAttrs (system == "x86_64-darwin") {
-  "build/arduino-builder-macosx-1.5.2-signed.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-macosx-1.5.2-signed.tar.bz2";
-    sha256 = "1pa795vwly1z9h1bp5qzbx2c2pq4n6p7ab5ivhmd3q89z0ywyqgz";
+  "build/arduino-builder-macosx-1.6.1-signed.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-macosx-1.6.1-signed.tar.bz2";
+    sha256 = "sha256-icMXwovzT2UQAKry9sWyRvcNxPXaFdltAPyW/DDVEFA=";
   };
   "build/macosx/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-apple-darwin14-signed.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-x86_64-apple-darwin14-signed.tar.bz2";
@@ -175,13 +179,13 @@
 }
 
 // optionalAttrs (system == "aarch64-linux") {
-  "build/arduino-builder-linuxaarch64-1.5.2.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxaarch64-1.5.2.tar.bz2";
-    sha256 = "14k7h7anjizbs2h04phw784slpfbi6hch9skvhy5ll805dmr24ci";
+  "build/arduino-builder-linuxaarch64-1.6.1.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxaarch64-1.6.1.tar.bz2";
+    sha256 = "sha256-BLcAIvGt0OQfjN87W1aLpLAQchhdFHoBqJPCcIWyHxQ=";
   };
-  "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino5-aarch64-pc-linux-gnu.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-aarch64-pc-linux-gnu.tar.bz2";
-    sha256 = "040cspc41iv59fb2g9fzc6w5523dvqa1bavxni7s8w731ccp176x";
+  "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino7-aarch64-pc-linux-gnu.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-aarch64-pc-linux-gnu.tar.bz2";
+    sha256 = "sha256-A9Miud9toXKJ6efGIzw0qFNdnGRcGe/HcroZ5WkU8zk=";
   };
   "build/linux/avrdude-6.3.0-arduino17-aarch64-pc-linux-gnu.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avrdude-6.3.0-arduino17-aarch64-pc-linux-gnu.tar.bz2";
@@ -194,9 +198,9 @@
 }
 
 // optionalAttrs (builtins.match "armv[67]l-linux" system != null) {
-  "build/arduino-builder-linuxarm-1.5.2.tar.bz2" = fetchurl {
-    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.5.2.tar.bz2";
-    sha256 = "1vs2s5px07jb2sdv83qxkf9lxmsy8j4dm7bn3vpw5dcjqd3qdyww";
+  "build/arduino-builder-linuxarm-1.6.1.tar.bz2" = fetchurl {
+    url = "https://downloads.arduino.cc/tools/arduino-builder-linuxarm-1.6.1.tar.bz2";
+    sha256 = "sha256-VtJxhRaOOKdBxmTWjTYnSPAXl728hMksBKSKS49qiMU=";
   };
   "build/linux/avr-gcc-7.3.0-atmel3.6.1-arduino5-arm-linux-gnueabihf.tar.bz2" = fetchurl {
     url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino5-arm-linux-gnueabihf.tar.bz2";

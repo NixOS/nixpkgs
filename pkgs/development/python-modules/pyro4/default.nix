@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , serpent
 , dill
 , cloudpickle

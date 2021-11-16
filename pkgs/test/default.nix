@@ -37,6 +37,8 @@ with pkgs;
 
   cross = callPackage ./cross {};
 
+  php = recurseIntoAttrs (callPackages ./php {});
+
   rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
@@ -51,8 +53,13 @@ with pkgs;
 
   cuda = callPackage ./cuda { };
 
-  trivial = callPackage ../build-support/trivial-builders/test.nix {};
-  trivial-overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+  trivial-builders = recurseIntoAttrs {
+    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
+    references = callPackage ../build-support/trivial-builders/test/references.nix {};
+    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+  };
 
   writers = callPackage ../build-support/writers/test.nix {};
+
+  dhall = callPackage ./dhall { };
 }

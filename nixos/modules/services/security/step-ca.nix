@@ -119,7 +119,7 @@ in
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet
-          # ProcSubset = "pid"; # not supported by upstream upstream yet
+          # ProcSubset = "pid"; # not supported by upstream yet
           # PrivateUsers = true; # doesn't work with privileged ports therefore not supported by upstream
 
           DynamicUser = true;

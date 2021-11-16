@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   version = "1.3.0.1";
 
   src = fetchFromGitHub {
-    rev = version;
-    repo = "mimic1";
     owner = "MycroftAI";
+    repo = "mimic1";
+    rev = version;
     sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
   };
 

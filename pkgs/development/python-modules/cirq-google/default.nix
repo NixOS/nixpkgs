@@ -1,6 +1,4 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
+{ buildPythonPackage
 , cirq-core
 , google-api-core
 , protobuf
@@ -27,5 +25,8 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  checkInputs = [ pytestCheckHook freezegun ];
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 }

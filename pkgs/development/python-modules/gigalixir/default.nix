@@ -16,11 +16,11 @@
 
 buildPythonApplication rec {
   pname = "gigalixir";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b7a9aed7e61a3828f5a11774803edc39358e2ac463b3b5e52af267f3420dc66";
+    sha256 = "894b7e5bef30abc2c003e6df47f7758de5649b6f593e33926fcd398cc88d9ce2";
   };
 
   postPatch = ''
@@ -50,6 +50,6 @@ buildPythonApplication rec {
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

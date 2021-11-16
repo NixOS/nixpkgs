@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
     rev = version;
-    sha256 = "02jhk34znpvq522pqr3x4c0rljw37x62znwycijf1zx81dpbn4rm";
+    sha256 = "sha256-jG0uVfeAfbX809XTUhoSpYdh2i42NoGzortv96dWEAs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     fastapi
     lxml
     netaddr
+    orjson
     plotly
     pyppeteer
     pyyaml

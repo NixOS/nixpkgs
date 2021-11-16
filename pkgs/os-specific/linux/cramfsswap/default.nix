@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://debian/pool/main/c/cramfsswap/${pname}_${version}.tar.xz";
     sha256 = "10mj45zx71inaa3l1d81g64f7yn1xcprvq4v4yzpdwbxqmqaikw1";
   };
+  #  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996964
+  patches = [ ./parallel-make.patch ];
 
   # Needed for cross-compilation
   postPatch = ''

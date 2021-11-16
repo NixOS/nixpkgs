@@ -221,7 +221,7 @@ in {
 
     assertions = [
       { assertion = db.createLocally -> db.user == user;
-        message = "services.bookstack.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true.";
+        message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
       { assertion = db.createLocally -> db.passwordFile == null;
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";

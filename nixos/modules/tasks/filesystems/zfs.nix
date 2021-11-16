@@ -561,7 +561,8 @@ in
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
                   ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
-                    (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
+                    {
+                      ${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
                          fi
@@ -575,7 +576,8 @@ in
                       * )
                         ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
-                    esac) < /dev/null # To protect while read ds kl in case anything reads stdin
+                    esac
+                    } < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
                 ''}
                 echo "Successfully imported ${pool}"

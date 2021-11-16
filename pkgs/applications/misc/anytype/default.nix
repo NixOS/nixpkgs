@@ -2,13 +2,13 @@
 
 let
   pname = "anytype";
-  version = "0.20.2";
+  version = "0.21.1";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
     url = "https://at9412003.fra1.digitaloceanspaces.com/Anytype-${version}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-jqRxNd6lx1hnOa4F3m3YOr8ZBnSKQBz0XVC5absf9mM=";
+    sha256 = "sha256-5QsbB48g11TyfWCbR7Sz2AETEwdyG+bSJQNGRHrIueE=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in

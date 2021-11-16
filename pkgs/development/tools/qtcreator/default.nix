@@ -20,12 +20,12 @@ in
 
 mkDerivation rec {
   pname = "qtcreator";
-  version = "4.14.0";
+  version = "5.0.2";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "07i045mzwbfhwj2jlijhz9xs6ay03qs5dgcw2kzlcr79a69i0h6j";
+    sha256 = "1bf07150226da46237f26f5eaa9f090ce81ed79b9bc75e0dfa6328043e360103";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
@@ -75,6 +75,8 @@ mkDerivation rec {
   '';
 
   postInstall = ''
+    mkdir -p $out/share/applications
+    cp share/applications/org.qt-project.qtcreator.desktop $out/share/applications
     substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
       --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';

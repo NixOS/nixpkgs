@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"
-    "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
 
   meta = with lib; {

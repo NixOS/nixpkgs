@@ -2,7 +2,8 @@
 
 # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx, xattr
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
+, xattr, autoSignDarwinBinariesHook
 , bash
 
 , libiconv ? null, ncurses
@@ -263,6 +264,8 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf autoreconfHook automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
   ];

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Error tracking and logging from Python to Rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
     license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

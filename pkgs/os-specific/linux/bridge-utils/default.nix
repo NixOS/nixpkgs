@@ -2,29 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bridge-utils";
-  version = "1.5";
+  version = "1.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bridge/bridge-utils-${version}.tar.gz";
-    sha256 = "42f9e5fb8f6c52e63a98a43b81bd281c227c529f194913e1c51ec48a393b6688";
+    url = "https://kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-${version}.tar.xz";
+    sha256 = "sha256-ph2L5PGhQFxgyO841UTwwYwFszubB+W0sxAzU2Fl5g4=";
   };
 
-  patches = [
-    ./autoconf-ar.patch
-    ./add-ip6-header.patch # Remove patch once the kernel headers are updated
-  ];
+  patches = [ ./autoconf-ar.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  postInstall = ''
-    # The bridge utils build does not fail even if the brctl binary
-    # is not build. This test ensures that we fail if we don't produce a brctl
-    # binary.
-    test -f $out/sbin/brctl
-  '';
-
   meta = {
-    description = "https://sourceforge.net/projects/bridge/";
+    description = "An userspace tool to configure linux bridges (deprecated in favour or iproute2).";
     homepage = "https://wiki.linuxfoundation.org/networking/bridge";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

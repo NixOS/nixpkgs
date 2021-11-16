@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.2"; # always change at once with ./minimal.nix
+  version = "8.3"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "10kl9xxl9swz8hdpycpy1vjc8biah5h07dzaygsf0ylfjdrczwx0";
+    sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -71,6 +71,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
+
+  patches = [
+    # Hardcode variant detection because we wrap the Racket binary making it
+    # fail to detect its variant at runtime.
+    # See: https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+    ./force-cs-variant.patch
+  ];
 
   preConfigure = ''
     unset AR
@@ -96,10 +103,6 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   enableParallelBuilding = false;
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapProgram $out/bin/drracket --prefix DYLD_LIBRARY_PATH : ${xorg.libX11}/lib
-  '';
 
   meta = with lib; {
     description = "A programmable programming language";

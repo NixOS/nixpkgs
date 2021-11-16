@@ -33,11 +33,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.2.0";
+  version = "8.3.0";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "1hnpvvval8a9ny5x5zffn5lf5qrwc4hcs3jvhqmd7m4adh2i6y2i";
+    sha256 = "1cakv316ipwyw6s3x4a6qhl0nmg17bxhh08c969gma3svamh1grw";
   };
 
   nativeBuildInputs = [ makeWrapper ];

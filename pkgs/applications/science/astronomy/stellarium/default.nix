@@ -28,15 +28,11 @@ mkDerivation rec {
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
-  '';
-
   meta = with lib; {
     description = "Free open-source planetarium";
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti ma27 ];
+    maintainers = with maintainers; [ ma27 ];
   };
 }

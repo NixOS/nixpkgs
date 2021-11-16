@@ -8,16 +8,22 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.22.2";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-37+Gor3xyo0yb3I4rrleJoPnqTA7G3WmeMSTltthi2E=";
+    sha256 = "sha256-lbOsJsmZxdBNTbhsGJ1mcjWlJ6802GYM3waTiWYOErY=";
   };
 
-  cargoSha256 = "sha256-+zu5OfvXj8DMglf5Xv5ZcaUlbE03cwyD8TN7YftgWO0=";
+  cargoSha256 = "sha256-ViXpoPkBznB0o/dc/l1r3m0y+z2w58wqlU8/cg8u7tI=";
+
+  postPatch = ''
+    # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working
+    # vaultwarden when using RUSTC_BOOTSTRAP=1
+    sed -ri 's/^rust-version = .*//g' Cargo.toml
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
@@ -25,6 +31,8 @@ in rustPlatform.buildRustPackage rec {
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
+  # vaultwarden depends on rocket v0.5.0-dev, which requires nightly features.
+  # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
   RUSTC_BOOTSTRAP = 1;
 
   cargoBuildFlags = [ featuresFlag ];
@@ -42,6 +50,6 @@ in rustPlatform.buildRustPackage rec {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ msteen ];
+    maintainers = with maintainers; [ msteen ivan ];
   };
 }

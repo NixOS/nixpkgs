@@ -14,14 +14,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.2";
+  version = "4.1.3";
   pname = "yara";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "0n716snh0h5pk00kps6xvfi8z16xw12h1a8cd7w02cj2537xzj3m";
+    sha256 = "sha256-7t2KksI3l+wFHqUSw2L4FXepMTJfTow/cTFYA47YBqY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotgun";
-  version = "2.2.0";
+  version = "2.2.1";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     owner = "neXromancers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fpc09yvxjcvjkai7afyig4gyc7inaqxxrwzs17mh8wdgzawb6dl";
+    sha256 = "sha256-ClQP/iNs9b4foDUVpH37YCZyjVSgweHLKnSwnpkRwZI=";
   };
 
-  cargoSha256 = "06zplpy480965lhgav984m6wkfijv7cqa49kpramp8b6ws62pikl";
+  cargoSha256 = "sha256-w5s9I7lXO8HN9zHqZQCeqBXSd7jmbsaqMZRwPLnbqNk=";
 
   meta = with lib; {
     description = "Minimal X screenshot utility";

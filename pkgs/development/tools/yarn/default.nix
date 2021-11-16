@@ -1,12 +1,12 @@
-{ lib, stdenv, nodejs, fetchzip }:
+{ lib, stdenv, nodejs, fetchzip, testVersion, yarn }:
 
 stdenv.mkDerivation rec {
   pname = "yarn";
-  version = "1.22.15";
+  version = "1.22.17";
 
   src = fetchzip {
     url = "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
-    sha256 = "1xw9z55wvij6x0dns6z0xydywvlc80kgvsh3w4xxkq9cbiman1v6";
+    sha256 = "1skzlyv2976bl1063f94422jbjy4ns1nxl622biizq31z4821yvj";
   };
 
   buildInputs = [ nodejs ];
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarn
     ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarnpkg
   '';
+
+  passthru.tests = testVersion { package = yarn; };
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";

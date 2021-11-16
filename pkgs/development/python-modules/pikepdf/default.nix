@@ -2,7 +2,7 @@
 , attrs
 , buildPythonPackage
 , defusedxml
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
 , isPy3k
 , jbig2dec
@@ -24,12 +24,20 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "3.2.0";
+  version = "4.0.1.post1";
   disabled = ! isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a0582f00440668c07edb8403e82724961c7812c8e6c30655e34825b2645f15cd";
+  src = fetchFromGitHub {
+    owner = "pikepdf";
+    repo = "pikepdf";
+    rev = "v${version}";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    extraPostFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    sha256 = "sha256-s7eS7jYGohYt75/r++4v9K6BRfiQ3drdG5wbIL3WoiU=";
   };
 
   patches = [
@@ -39,6 +47,8 @@ buildPythonPackage rec {
       mudraw = "${lib.getBin mupdf}/bin/mudraw";
     })
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pybind11

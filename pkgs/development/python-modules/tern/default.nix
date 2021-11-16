@@ -12,15 +12,16 @@
 , GitPython
 , prettytable
 , idna
+, packageurl-python
 }:
 
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfd59431cafd6adf05ccb94be964098d9301f83a03bf715def7861811e4a4b74";
+    sha256 = "dd7d8ad929ffe951b1f7f86310b9d5ba749b4306132c3611ff1d5a2c4d79d2bd";
   };
 
   preBuild = ''
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     GitPython
     prettytable
     idna
+    packageurl-python
   ];
 
   # No tests

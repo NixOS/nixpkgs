@@ -1,5 +1,5 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
@@ -174,7 +174,10 @@ in stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.llvm = llvmShared;
+  passthru = {
+    llvm = llvmShared;
+    llvmPackages = llvmPackagesForBuild;
+  };
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";

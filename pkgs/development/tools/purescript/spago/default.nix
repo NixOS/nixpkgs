@@ -12,14 +12,14 @@
 
 let
   spago =
-    haskell.lib.justStaticExecutables
-      (haskell.lib.overrideCabal haskellPackages.spago (oldAttrs: {
+    haskell.lib.compose.justStaticExecutables
+      (haskell.lib.compose.overrideCabal (oldAttrs: {
         maintainers = (oldAttrs.maintainers or []) ++ [
           lib.maintainers.cdepillabout
         ];
         changelog =
           "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
-      }));
+      }) haskellPackages.spago);
 in
 
 spago.overrideAttrs (oldAttrs: {

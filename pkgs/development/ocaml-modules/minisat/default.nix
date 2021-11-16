@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "minisat";
-  version = "0.3";
+  version = "0.4";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner  = "c-cube";
     repo   = "ocaml-minisat";
     rev    = "v${version}";
-    sha256 = "01wggbziqz5x6d7mwdl40sbf6qal7fd853b224zjf9n0kzzsnczh";
+    sha256 = "009jncrvnl9synxx6jnm6gp0cs7zlj71z22zz7bs1750b0jrfm2r";
   };
 
   meta = {

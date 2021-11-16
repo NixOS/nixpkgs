@@ -63,6 +63,14 @@ in stdenv.mkDerivation ({
       sha256 = "0rwx6jpqq4xnf4mvfm8v2d4r34y1yi05am0mx5k2d5bha9j64lqg";
     })
     ./gnu-install-dirs.patch
+
+    # Fix missing includes for GCC 11
+    (fetchpatch {
+      name = "headers-gcc-11.patch";
+      url = "https://github.com/llvm/llvm-project/commit/b498303066a63a203d24f739b2d2e0e56dca70d1.patch";
+      sha256 = "0nh123kld0dgz2h941lng331dkj3wbm5lfxm375k1f569gv83hlk";
+      stripLen = 1;
+    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''

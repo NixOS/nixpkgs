@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fortuneteller2k ];
-    broken = kernel.kernelOlder "4.10" || kernel.isHardened;
+    broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.15" || kernel.isHardened;
   };
 }

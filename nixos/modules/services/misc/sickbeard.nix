@@ -86,7 +86,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${sickbeard}/SickBeard.py --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port}";
+        ExecStart = "${sickbeard}/bin/${sickbeard.pname} --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port}";
       };
     };
   };

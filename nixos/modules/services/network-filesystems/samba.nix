@@ -87,10 +87,17 @@ in
           <note>
             <para>If you use the firewall consider adding the following:</para>
           <programlisting>
-            networking.firewall.allowedTCPPorts = [ 139 445 ];
-            networking.firewall.allowedUDPPorts = [ 137 138 ];
+            services.samba.openFirewall = true;
           </programlisting>
           </note>
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open the necessary ports in the firewall.
         '';
       };
 
@@ -235,7 +242,10 @@ in
         };
 
         security.pam.services.samba = {};
-        environment.systemPackages = [ config.services.samba.package ];
+        environment.systemPackages = [ cfg.package ];
+
+        networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
+        networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
       })
     ];
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "crownstone-cloud";
-  version = "1.4.5";
+  version = "1.4.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-cloud";
-    rev = "v${version}";
-    sha256 = "1a8bkqkrc7iyggr5rr20qdqg67sycdx2d94dd1ylkmr7627r34ys";
+    rev = version;
+    sha256 = "sha256-CS1zeQiWPnsGCWixCsN9sz08mPORW5sVqIpSFPh0Qt0=";
   };
 
   propagatedBuildInputs = [
@@ -33,8 +33,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "codecov>=2.1.10" ""
+    sed -i '/codecov/d' requirements.txt
   '';
 
   pythonImportsCheck = [

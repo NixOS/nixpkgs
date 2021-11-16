@@ -6,23 +6,29 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.51";
+  version = "2.1.55";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32c5bf3926c1ac001d57f6b7569fc1fdd7ccfe747190f2e61d6baf610811beb8";
+    sha256 = "1f6b60b9c50996ec3476e36dddff34afa98dc2d68fa73ed121d3c41232df1379";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;
 
+  pythonImportsCheck = [
+    "pex"
+  ];
+
   meta = with lib; {
-    description = "A library and tool for generating .pex (Python EXecutable) files";
+    description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     license = licenses.asl20;
     maintainers = with maintainers; [ copumpkin ];
   };
-
 }

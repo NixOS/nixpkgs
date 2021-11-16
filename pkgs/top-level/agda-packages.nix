@@ -13,7 +13,10 @@ let
 
     lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 
-    agda = withPackages [] // { inherit withPackages; };
+    agda = withPackages [] // {
+      inherit withPackages;
+      passthru.tests.allPackages = withPackages (lib.filter (pkg: self.lib.isUnbrokenAgdaPackage pkg) (lib.attrValues self));
+    };
 
     standard-library = callPackage ../development/libraries/agda/standard-library {
       inherit (pkgs.haskellPackages) ghcWithPackages;

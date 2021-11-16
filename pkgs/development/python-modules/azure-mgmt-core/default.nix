@@ -1,9 +1,7 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-core
-, isPy3k
 }:
 
 buildPythonPackage rec {

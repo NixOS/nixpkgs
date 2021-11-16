@@ -13,8 +13,6 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile --replace "--static" ""
-  '' + lib.optionalString stdenv.isi686 ''
-    substituteInPlace Makefile --replace "-flto" ""
   '';
 
   installPhase = ''

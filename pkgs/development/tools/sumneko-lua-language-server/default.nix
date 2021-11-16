@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.4.2";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-PYlHjKMnqnhAJAvmHbH6Bb+qOyNzDH+ewOkXkj2u4CU=";
+    sha256 = "sha256-lO+FUuU7uihbRLI1X9qhOvgukRGfhDeSM/JdIqr96Fk=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     install -m644 -t "$out"/share/lua-language-server/bin/Linux bin/Linux/*.*
     install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
     cp -r locale meta script "$out"/share/lua-language-server
+
+    # necessary for --version to work:
+    install -m644 -t "$out"/share/lua-language-server changelog.md
 
     makeWrapper "$out"/share/lua-language-server/bin/Linux/lua-language-server \
       $out/bin/lua-language-server \

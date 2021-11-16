@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
     tests = {
       acme-integration = nixosTests.acme;
+      proxy = nixosTests.proxy;
+      php = nixosTests.php.httpd;
     };
   };
 
@@ -89,6 +91,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://httpd.apache.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ lovek323 peti ];
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

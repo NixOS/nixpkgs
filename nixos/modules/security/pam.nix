@@ -197,6 +197,46 @@ let
         '';
       };
 
+      ttyAudit = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable or disable TTY auditing for specified users
+          '';
+        };
+
+        enablePattern = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            For each user matching one of comma-separated
+            glob patterns, enable TTY auditing
+          '';
+        };
+
+        disablePattern = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            For each user matching one of comma-separated
+            glob patterns, disable TTY auditing
+          '';
+        };
+
+        openOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Set the TTY audit flag when opening the session,
+            but do not restore it when closing the session.
+            Using this option is necessary for some services
+            that don't fork() to run the authenticated session,
+            such as sudo.
+          '';
+        };
+      };
+
       forwardXAuth = mkOption {
         default = false;
         type = types.bool;
@@ -428,7 +468,7 @@ let
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
-                "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+                "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive"}
               ${optionalString cfg.enableKwallet
                 ("auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
@@ -482,14 +522,20 @@ let
               "session ${
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
+          ${optionalString cfg.ttyAudit.enable
+              "session required ${pkgs.pam}/lib/security/pam_tty_audit.so
+                open_only=${toString cfg.ttyAudit.openOnly}
+                ${optionalString (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"}
+                ${optionalString (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"}
+              "}
           ${optionalString cfg.makeHomeDir
-              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0022"}
+              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString cfg.pamMount
-              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive"}
           ${optionalString use_ldap
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.services.sssd.enable

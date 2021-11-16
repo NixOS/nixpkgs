@@ -88,7 +88,6 @@ broken-packages:
   - aeson-tiled
   - aeson-typescript
   - aeson-utils
-  - aeson-via
   - affection
   - affine-invariant-ensemble-mcmc
   - Agata
@@ -101,6 +100,7 @@ broken-packages:
   - AhoCorasick
   - aig
   - airbrake
+  - airship
   - airtable-api
   - air-th
   - ajhc
@@ -128,6 +128,7 @@ broken-packages:
   - alure
   - amazon-emailer
   - amazonka-contrib-rds-utils
+  - amazonka-mediaconvert
   - amazonka-s3-streaming
   - amazon-products
   - amby
@@ -499,7 +500,6 @@ broken-packages:
   - bytestring-show
   - bytestring-substring
   - bytestring-time
-  - bytestring-trie
   - bytestring-typenats
   - c0parser
   - c10k
@@ -619,6 +619,7 @@ broken-packages:
   - cg
   - cgen
   - cgi-utils
+  - cgroup-rts-threads
   - chalkboard
   - chalmers-lava2000
   - character-cases
@@ -742,11 +743,11 @@ broken-packages:
   - commodities
   - commonmark-cli
   - commsec
-  - compactable
   - Compactable
   - compact-list
   - compact-map
   - compact-mutable-vector
+  - compact-sequences
   - compact-socket
   - compact-string
   - compact-string-fix
@@ -842,6 +843,7 @@ broken-packages:
   - CoreErlang
   - core-haskell
   - corenlp-parser
+  - core-telemetry
   - Coroutine
   - coroutine-object
   - CouchDB
@@ -1052,7 +1054,6 @@ broken-packages:
   - dia-base
   - diagrams-boolean
   - diagrams-builder
-  - diagrams-canvas
   - diagrams-graphviz
   - diagrams-gtk
   - diagrams-pdf
@@ -1284,6 +1285,7 @@ broken-packages:
   - escape-artist
   - escoger
   - espial
+  - esqueleto-pgcrypto
   - ess
   - estimators
   - EstProgress
@@ -1331,6 +1333,7 @@ broken-packages:
   - expresso
   - extcore
   - extended-categories
+  - extensible
   - extensible-effects-concurrent
   - extensible-skeleton
   - external-sort
@@ -1341,6 +1344,7 @@ broken-packages:
   - ez-couch
   - Facebook-Password-Hacker-Online-Latest-Version
   - faceted
+  - factory
   - facts
   - fadno-braids
   - failable-list
@@ -1409,6 +1413,7 @@ broken-packages:
   - fingertree-tf
   - finitary-derive
   - firefly-example
+  - firestore
   - first-and-last
   - first-class-instances
   - fit
@@ -1434,6 +1439,7 @@ broken-packages:
   - flamethrower
   - flamingra
   - flat-maybe
+  - flatparse
   - flay
   - flexible-time
   - flickr
@@ -1534,7 +1540,6 @@ broken-packages:
   - funcons-values
   - function-instances-algebra
   - functor
-  - functor-combinators
   - functor-friends
   - functor-infix
   - functorm
@@ -1655,7 +1660,6 @@ broken-packages:
   - ghc-tcplugin-api
   - ghc-time-alloc-prof
   - ghc-usage
-  - ghc-vis
   - gh-labeler
   - giak
   - Gifcurry
@@ -1676,6 +1680,7 @@ broken-packages:
   - git-cuk
   - git-date
   - gitdo
+  - github
   - github-backup
   - github-data
   - github-tools
@@ -1715,8 +1720,22 @@ broken-packages:
   - goal-core
   - gochan
   - godot-haskell
+  - godot-megaparsec
   - gofer-prelude
-  - gogol-core
+  - gogol-admin-emailmigration
+  - gogol-affiliates
+  - gogol-autoscaler
+  - gogol-bigtableadmin
+  - gogol-cloudmonitoring
+  - gogol-freebasesearch
+  - gogol-latencytest
+  - gogol-maps-coordinate
+  - gogol-maps-engine
+  - gogol-photoslibrary
+  - gogol-resourceviews
+  - gogol-servicemanagement
+  - gogol-taskqueue
+  - gogol-useraccounts
   - gooey
   - google-cloud
   - GoogleCodeJam
@@ -1822,6 +1841,7 @@ broken-packages:
   - haddock-cheatsheet
   - haddock-leksah
   - haddock-test
+  - hadolint
   - hadoop-formats
   - hadoop-rpc
   - hafar
@@ -1907,6 +1927,7 @@ broken-packages:
   - hashable-orphans
   - hashabler
   - hashed-storage
+  - hashes
   - hashring
   - hashtables-plus
   - hasim
@@ -2325,6 +2346,8 @@ broken-packages:
   - hslogger-reader
   - hslogger-template
   - hs-logo
+  - hslua-examples
+  - hslua-module-version
   - hsluv-haskell
   - hsmagick
   - hsmodetweaks
@@ -2403,6 +2426,7 @@ broken-packages:
   - htssets
   - http2-client
   - http2-grpc-proto-lens
+  - http3
   - http-attoparsec
   - http-client-lens
   - http-client-request-modifiers
@@ -2455,7 +2479,6 @@ broken-packages:
   - hw-json-simd
   - hw-mquery
   - hworker
-  - hw-prim-bits
   - hw-simd
   - hwsl2
   - hx
@@ -2486,6 +2509,7 @@ broken-packages:
   - IcoGrid
   - iconv-typed
   - ideas
+  - ide-backend-common
   - idempotent
   - identifiers
   - idiii
@@ -2626,6 +2650,7 @@ broken-packages:
   - join-api
   - joinlist
   - jonathanscard
+  - jordan
   - jort
   - jpeg
   - jsaddle-hello
@@ -2635,6 +2660,7 @@ broken-packages:
   - json-alt
   - json-assertions
   - json-ast-quickcheck
+  - JSONb
   - json-builder
   - json-encoder
   - jsonextfilter
@@ -2723,7 +2749,10 @@ broken-packages:
   - lambda-bridge
   - lambda-canvas
   - lambdacms-core
+  - lambdacube-core
+  - lambdacube-engine
   - lambdacube-ir
+  - LambdaDesigner
   - Lambdajudge
   - LambdaNet
   - lambdatex
@@ -2761,7 +2790,7 @@ broken-packages:
   - language-typescript
   - language-vhdl
   - language-webidl
-  - lapack-ffi
+  - lapack
   - LargeCardinalHierarchy
   - Lastik
   - latest-npm-version
@@ -2830,6 +2859,7 @@ broken-packages:
   - libtagc
   - libxls
   - libxslt
+  - libyaml-streamly
   - lie
   - life-sync
   - lifted-protolude
@@ -2845,6 +2875,7 @@ broken-packages:
   - linear-algebra-cblas
   - linear-base
   - linear-code
+  - linear-generics
   - linear-maps
   - linear-opengl
   - linearscan
@@ -3177,6 +3208,7 @@ broken-packages:
   - morphisms-functors
   - morphisms-objects
   - morte
+  - mortred
   - moto-postgresql
   - motor-reflection
   - mount
@@ -3640,6 +3672,7 @@ broken-packages:
   - persistent-mongoDB
   - persistent-mysql-haskell
   - persistent-odbc
+  - persistent-postgresql-streaming
   - persistent-protobuf
   - persistent-ratelimit
   - persistent-redis
@@ -3741,6 +3774,7 @@ broken-packages:
   - pointful
   - pointless-haskell
   - pokemon-go-protobuf-types
+  - poker-base
   - poker-eval
   - pokitdok
   - polar-configfile
@@ -3777,6 +3811,7 @@ broken-packages:
   - postgres-embedded
   - PostgreSQL
   - postgresql-lo-stream
+  - postgresql-migration
   - postgresql-named
   - postgresql-resilient
   - postgresql-simple-bind
@@ -3847,7 +3882,6 @@ broken-packages:
   - process-leksah
   - process-listlike
   - processmemory
-  - procex
   - procrastinating-variable
   - procstat
   - prof2pretty
@@ -3884,6 +3918,7 @@ broken-packages:
   - proxy-kindness
   - proxy-mapping
   - prune-juice
+  - psc-ide
   - pseudo-trie
   - PTQ
   - publicsuffixlistcreate
@@ -3897,7 +3932,7 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
-  - purescript-cst
+  - purescript-tsd-gen
   - pure-zlib
   - pusher-haskell
   - pusher-ws
@@ -4108,6 +4143,7 @@ broken-packages:
   - resource-effect
   - resource-embed
   - restartable
+  - rest-rewrite
   - restyle
   - resumable-exceptions
   - rethinkdb
@@ -4384,10 +4420,14 @@ broken-packages:
   - shopify
   - shortcut-links
   - shorten-strings
+  - short-vec
   - show-prettyprint
+  - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-isreal
   - Shpadoinkle-streaming
+  - Shpadoinkle-template
+  - Shpadoinkle-widgets
   - shwifty
   - sifflet
   - sifflet-lib
@@ -4791,7 +4831,6 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
-  - tasty-checklist
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
@@ -4808,6 +4847,7 @@ broken-packages:
   - tds
   - teams
   - teeth
+  - telega
   - telegram
   - telegram-api
   - telegram-bot-simple
@@ -4860,6 +4900,7 @@ broken-packages:
   - text-and-plots
   - text-ascii
   - text-containers
+  - text-display
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -4873,6 +4914,7 @@ broken-packages:
   - text-register-machine
   - text-replace
   - text-time
+  - text-trie
   - textual
   - text-utf8
   - text-xml-qq
@@ -5288,6 +5330,7 @@ broken-packages:
   - warc
   - warp-dynamic
   - warp-grpc
+  - warp-quic
   - warp-static
   - warp-systemd
   - wasm
@@ -5298,6 +5341,7 @@ broken-packages:
   - wavefront-obj
   - weak-bag
   - weather-api
+  - webapi
   - webapp
   - WebBits
   - webby
@@ -5436,6 +5480,7 @@ broken-packages:
   - yall
   - yam-app
   - yam-config
+  - yaml-config
   - yamlkeysdiff
   - yaml-pretty-extras
   - YamlReference
@@ -5531,6 +5576,7 @@ broken-packages:
   - zendesk-api
   - zenhack-prelude
   - zeno
+  - zephyr
   - zeromq4-clone-pattern
   - zeromq4-conduit
   - zeromq4-patterns

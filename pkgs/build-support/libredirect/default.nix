@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
     install -vD "$libName" "$out/lib/$libName"
 
+    # Provide a setup hook that injects our library into every process.
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
     ${if stdenv.isDarwin then ''
     export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
-    export DYLD_FORCE_FLAT_NAMESPACE=1
     '' else ''
     export LD_PRELOAD="$out/lib/$libName"
     ''}

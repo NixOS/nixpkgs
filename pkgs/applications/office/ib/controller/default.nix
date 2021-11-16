@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "17a8bcgg9z3b4y38k035hm2lgvhmf8srlz59c7n2q3fdw2i95i68";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   nativeBuildInputs = [ unzip ];
   buildInputs = [ jdk ib-tws ];
 

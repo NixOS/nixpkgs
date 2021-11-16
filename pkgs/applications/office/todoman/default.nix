@@ -4,17 +4,16 @@
 , installShellFiles
 , jq
 }:
-
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4d0c6533da8d553f3dd170c9c4ff3752eb11fd7177ee391414a39adfef60ad";
+    sha256 = "ec88f8009321e77deb0ae682f7d036c139edf4175f8413011b532905c6e7d2b1";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -23,6 +22,7 @@ buildPythonApplication rec {
     installShellFiles
     setuptools-scm
   ];
+
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
@@ -42,13 +42,16 @@ buildPythonApplication rec {
     flake8-import-order
     freezegun
     hypothesis
-    pytest
-    pytest-runner
-    pytest-cov
+    pytestCheckHook
     glibcLocales
   ];
 
   LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=todoman --cov-report=term-missing" ""
+  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -56,11 +59,20 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
-  preCheck = ''
-    # Remove one failing test that only checks whether the command line works
-    rm tests/test_main.py
-    rm tests/test_cli.py
-  '';
+  disabledTests = [
+    # Testing of the CLI part and output
+    "test_color_due_dates"
+    "test_color_flag"
+    "test_default_command"
+    "test_main"
+    "test_missing_cache_dir"
+    "test_sorting_null_values"
+    "test_xdg_existant"
+  ];
+
+  pythonImportsCheck = [
+    "todoman"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
@@ -78,8 +90,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
   };
 }

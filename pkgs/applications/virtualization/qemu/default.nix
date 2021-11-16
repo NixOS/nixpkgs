@@ -23,6 +23,7 @@
 , libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
 , tpmSupport ? true
+, uringSupport ? stdenv.isLinux, liburing
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -77,7 +78,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
-    ++ lib.optionals smbdSupport [ samba ];
+    ++ lib.optionals smbdSupport [ samba ]
+    ++ lib.optionals uringSupport [ liburing ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -92,12 +94,26 @@ stdenv.mkDerivation rec {
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
+    (fetchpatch {
+      name = "CVE-2021-3713.patch"; # remove with next release
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
+      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
+    })
+    # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
+    # on some systems. Remove with next release.
+    (fetchpatch {
+      name = "fix-crash-in-v9fs_walk.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
+      sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
+    })
+    # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
+    (fetchpatch {
+      name = "fix-aio-discard-return-value.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
+      sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
+    })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch";
-      sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
-    })
     ./sigrtminmax.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
@@ -173,7 +189,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional virglSupport "--enable-virglrenderer"
     ++ lib.optional tpmSupport "--enable-tpm"
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
-    ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd";
+    ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
+    ++ lib.optional uringSupport "--enable-linux-io-uring";
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;

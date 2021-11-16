@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    mainProgram = "com.github.phase1geo.minder";
   };
 }

@@ -24,7 +24,7 @@ symlinkJoin {
     description = "An open-source Modelica-based modeling and simulation environment intended for industrial and academic usage";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ smironov ];
+    maintainers = with maintainers; [ balodja smironov ];
     platforms = platforms.linux;
   };
 }

@@ -140,6 +140,13 @@ let
         "INSTALL_MOD_PATH=\${out}"
       ];
 
+      # Enabling BTF causes zfs to be build with debug symbols.
+      # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
+      # Hence we strip modules prior to compression.
+      postBuild = optionalString buildKernel ''
+         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+      '';
+
       postInstall = optionalString buildKernel ''
         # Add reference that cannot be detected due to compressed kernel module
         mkdir -p "$out/nix-support"
@@ -208,8 +215,8 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
+    latestCompatibleLinuxPackages = linuxPackages_5_15;
 
     # this package should point to the latest release.
     version = "2.1.1";
@@ -219,8 +226,8 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
+    latestCompatibleLinuxPackages = linuxPackages_5_15;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the

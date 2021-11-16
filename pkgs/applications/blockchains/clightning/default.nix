@@ -16,15 +16,15 @@
 , zlib
 }:
 let
-  py3 = python3.withPackages (p: [ p.Mako ]);
+  py3 = python3.withPackages (p: [ p.Mako p.mrkd ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "9271e9e89d60332b66afedbf8d6eab2a4a488782ab400ee1f60667d73c5a9a96";
+    sha256 = "3c9dcb686217b2efe0e988e90b95777c4591e3335e259e01a94af87e0bf01809";
   };
 
   nativeBuildInputs = [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];

@@ -1,5 +1,5 @@
 diff --git a/src/protontricks/cli/main.py b/src/protontricks/cli/main.py
-index 535ec9b..690c1f9 100755
+index d811cb7..a376a34 100755
 --- a/src/protontricks/cli/main.py
 +++ b/src/protontricks/cli/main.py
 @@ -14,8 +14,8 @@ import sys
@@ -48,7 +48,7 @@ index 535ec9b..690c1f9 100755
              steam_app=steam_app,
              use_steam_runtime=use_steam_runtime,
 -            legacy_steam_runtime_path=legacy_steam_runtime_path,
-             command=[winetricks_path, "--gui"],
+             command=[str(winetricks_path), "--gui"],
              use_bwrap=use_bwrap
          )
 @@ -286,7 +276,6 @@ def main(args=None):
@@ -57,7 +57,7 @@ index 535ec9b..690c1f9 100755
              use_steam_runtime=use_steam_runtime,
 -            legacy_steam_runtime_path=legacy_steam_runtime_path,
              use_bwrap=use_bwrap,
-             command=[winetricks_path] + args.winetricks_command)
+             command=[str(winetricks_path)] + args.winetricks_command)
      elif args.command:
 @@ -296,7 +285,6 @@ def main(args=None):
              steam_app=steam_app,
@@ -68,10 +68,10 @@ index 535ec9b..690c1f9 100755
              # Pass the command directly into the shell *without*
              # escaping it
 diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
-index e898caf..7448d11 100644
+index be5322b..552f894 100644
 --- a/src/protontricks/steam.py
 +++ b/src/protontricks/steam.py
-@@ -12,8 +12,8 @@ from .util import lower_dict
+@@ -12,8 +12,8 @@ from .util import lower_dict, is_flatpak_sandbox
  
  __all__ = (
      "COMMON_STEAM_DIRS", "SteamApp", "find_steam_path",
@@ -82,7 +82,7 @@ index e898caf..7448d11 100644
      "find_proton_app", "get_steam_lib_paths", "get_compat_tool_dirs",
      "get_custom_compat_tool_installations_in_dir", "get_custom_compat_tool_installations",
      "find_current_steamid3", "get_appid_from_shortcut",
-@@ -311,37 +311,6 @@ def find_steam_path():
+@@ -318,37 +318,6 @@ def find_steam_path():
      return None, None
  
  
@@ -275,7 +275,7 @@ index 5252d6c..f16dfec 100644
          os.environ["PATH"] = "".join([
              str(wine_bin_dir), os.pathsep, os.environ["PATH"]
 diff --git a/tests/cli/test_main.py b/tests/cli/test_main.py
-index e6da0fb..46b9545 100644
+index f714f2c..b03fac1 100644
 --- a/tests/cli/test_main.py
 +++ b/tests/cli/test_main.py
 @@ -116,15 +116,10 @@ class TestCLIRun:

@@ -9,7 +9,9 @@
 , kirigami2
 , knotifications
 , kpeople
+, libphonenumber
 , libqofono
+, protobuf
 , telepathy
 }:
 
@@ -27,7 +29,9 @@ mkDerivation rec {
     kirigami2
     knotifications
     kpeople
+    libphonenumber
     libqofono
+    protobuf # Needed by libphonenumber
     telepathy
   ];
 

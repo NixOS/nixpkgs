@@ -25,6 +25,7 @@ self = rec {
       libfixposix
       libmysqlclient
       libuv
+      openblas
       openssl
       openssl_lib_marked
       pango

@@ -1,5 +1,4 @@
 { lib
-, nixosTests
 , buildPythonPackage
 , fetchPypi
 , substituteAll
@@ -45,7 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yq" ];
 
-  passthru.tests = { inherit (nixosTests) yq; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    echo '{"hello":{"foo":"bar"}}' | $out/bin/yq -y . | grep 'foo: bar'
+  '';
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents";

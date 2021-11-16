@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytestCheckHook
 , python-gvm
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "21.6.1";
+  version = "21.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n9alryf52xkwxwagmq8bdn3a8scnmgh3qfdjwj6jybcyk36rv6n";
+    sha256 = "sha256-LGdbqkIKdmtUOGSoCme6oVG1aCbtASSxi9K9f3khafA=";
   };
 
   nativeBuildInputs = [
@@ -32,15 +31,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/greenbone/gvm-tools/pull/520
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/greenbone/gvm-tools/commit/db65495181ca339610b1007a33cc13285a470242.patch";
-      sha256 = "069rg742pxjd36vap0xp6367rd69pji4yfxbycc7z0b8gvf80w5z";
-    })
   ];
 
   disabledTests = [

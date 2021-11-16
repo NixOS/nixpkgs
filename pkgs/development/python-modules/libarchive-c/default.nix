@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonAtLeast
 , fetchFromGitHub
 , libarchive
 , glibcLocales
@@ -36,11 +35,6 @@ buildPythonPackage rec {
     glibcLocales
     mock
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.9") [
-    # causes python3.9 to segfault
-    "test_custom_writer_and_stream_reader"
   ];
 
   meta = with lib; {

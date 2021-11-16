@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.17.0";
+  version = "3.18.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "18l5jbk301j3462gipqn9bkfx44mdmwn0pwr73r40gl1irkfqfmd";
+    sha256 = "sha256-AIWaoTp3Lt33giIl9LRu4NOa++Bx0yd42k2ZmECB9/U=";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
       "riscv32-linux" "riscv64-linux"
       "alpha-linux"
     ];
-    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

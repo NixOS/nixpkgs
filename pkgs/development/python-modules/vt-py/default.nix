@@ -10,7 +10,8 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.7.5";
+  version = "0.8.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vC2teem231Lw7cglVc+0M+QbgMgZ23JzTYy7wvnhFI4=";
+    sha256 = "sha256-j9TlZDzl9sWFPt8TeuyoJi01JhyPBVXs1w3YJMoVvLw=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +37,9 @@ buildPythonPackage rec {
       --replace "'pytest-runner'" ""
   '';
 
-  pythonImportsCheck = [ "vt" ];
+  pythonImportsCheck = [
+    "vt"
+  ];
 
   meta = with lib; {
     description = "Python client library for VirusTotal";

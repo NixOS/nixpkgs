@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config
-, withGui ? true, webkitgtk, Cocoa, WebKit
-}:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, withGui ? true
+, webkitgtk, Cocoa, WebKit, zenity, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
@@ -27,9 +26,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = lib.optional (withGui && stdenv.isLinux) webkitgtk
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+
+  postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
+    wrapProgram $out/bin/alfis \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+  '';
 
   meta = with lib; {
     description = "Alternative Free Identity System";

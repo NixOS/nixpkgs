@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , gcc10
 , cmake
 , boost17x
@@ -48,12 +47,12 @@ buildPythonPackage rec {
     "-DOPENCOLLADA_LIBRARY_DIR=${opencollada}/lib/opencollada"
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
     "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
-    "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/${if stdenv.isDarwin then "libxml2.dylib" else "libxml2.so"}"
+    "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   meta = with lib; {
     description = "Open source IFC library and geometry engine";
-    homepage    = http://ifcopenshell.org/;
+    homepage    = "http://ifcopenshell.org/";
     license     = licenses.lgpl3;
     maintainers = with maintainers; [ fehnomenal ];
   };

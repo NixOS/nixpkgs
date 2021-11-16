@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rdma-core";
-  version = "37.0";
+  version = "37.1";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0cz6dq34w0zxm1c6xk4pqascvvppa1b0m8jfnpncg5a68day8x65";
+    sha256 = "19s59id4m0zkkm4hqa36f2xnah4rs4z207kxzn4zdg2x1d06j9jg";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc docutils ];

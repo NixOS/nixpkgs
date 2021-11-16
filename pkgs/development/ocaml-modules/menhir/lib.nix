@@ -2,14 +2,14 @@
 
 buildDunePackage rec {
   pname = "menhirLib";
-  version = "20210419";
+  version = "20211012";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "menhir";
     rev = version;
-    sha256 = "0jcbr7s3iwfr7xxfybs3h407g76yfp5yq5r9i0wg2ahvvbqh03ky";
+    sha256 = "08kf5apbv15n2kcr3qhyr3rvsf2lg25ackr3x9kfgiiqc0p3sz40";
   };
 
   useDune2 = true;

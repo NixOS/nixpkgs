@@ -1,9 +1,5 @@
-{ lib, fetchFromGitHub, crystal_1_0, openssl }:
+{ lib, fetchFromGitHub, crystal, openssl }:
 
-let
-  crystal = crystal_1_0;
-
-in
 crystal.buildCrystalPackage rec {
   version = "0.14.0";
   pname = "mint";

@@ -29,18 +29,21 @@ let
   nugetSource = linkFarm "nuget-packages" nugetPackages;
 
   dotnetSdk = dotnetCorePackages.sdk_3_1;
-  runtimeId = "linux-x64";
+  runtimeId =
+    if stdenv.isAarch64
+    then "linux-arm64"
+    else "linux-x64";
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.283.3";
+  version = "2.284.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    sha256 = "sha256-B2dn3AIGk+xMFqRsKv4pvlZ6K4xySsS0klk8vN8giso=";
+    sha256 = "sha256-JR0OzbT5gGhO/dxb/eSjP/d/VxW/aLmTs/oPwN8b8Rc=";
   };
 
   nativeBuildInputs = [
@@ -271,7 +274,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ veehaitch newam ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

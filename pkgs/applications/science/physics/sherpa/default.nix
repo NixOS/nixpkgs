@@ -1,20 +1,19 @@
-{ lib, stdenv, fetchurl, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
+{ lib, stdenv, fetchurl, autoconf, gfortran, hepmc2, fastjet, lhapdf, rivet, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "sherpa";
-  version = "2.2.10";
+  version = "2.2.11";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "1iwa17s8ipj6a2b8zss5csb1k5y9s5js38syvq932rxcinbyjsl4";
+    sha256 = "sha256-DrA/h/f/MjGylKxAtVMq6OLvEdb6yB7pRt8UJXNmwi0=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
-
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [ autoconf gfortran ];
 
   buildInputs = [ sqlite lhapdf rivet ];
 

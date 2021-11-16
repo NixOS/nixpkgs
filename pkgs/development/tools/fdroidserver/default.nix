@@ -44,7 +44,7 @@ python.pkgs.buildPythonApplication rec {
     pyyaml
     qrcode
     requests
-    ruamel_yaml
+    ruamel-yaml
     yamllint
   ];
 

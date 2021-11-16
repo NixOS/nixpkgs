@@ -1,22 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi
 , pygments, dominate, beautifulsoup4, docutils, sphinx }:
 
 buildPythonPackage rec {
   pname = "alectryon";
-  owner = "cpitclaudel";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256:0mca25jv917myb4n91ccpl5fz058aiqsn8cniflwfw5pp6lqnfg7";
+    sha256 = "00cxzfifvgcf3d3s8lsj1yxcwyf3a1964p86fj7b42q8pa0b4r3i";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/cpitclaudel/alectryon/commit/c779def3fa268e703d4e0ff8ae0b2981e194b269.patch";
-      sha256 = "0xsz56ibq8xj7gg530pfm1jmxbxw4r6v8xvzj5k1wdry83srqi65";
-     })
-   ];
 
   propagatedBuildInputs = [
     pygments

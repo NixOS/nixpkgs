@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
-  version = "0.10.5";
+  version = "0.10.12";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+H6dUKgpgXG1fh8r6k7TpVFMBso4G762zRfLAZD+Nss=";
+    sha256 = "sha256-8v38NN9qrgdrshMx3l2wLrl7l77HjsW2GPu8IwkclJQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
 
   meta = with lib; {

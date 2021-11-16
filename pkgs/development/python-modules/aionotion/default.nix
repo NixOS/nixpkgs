@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "3.0.2";
+  version = "2021.10.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1328g2245h9gcrnzrbcxaxw78723d0skznrrj8k77fbijxdc4kwv";
+    sha256 = "sha256-5bu2XveDi2e6lGdI/T+0apqXzcnqdztVtaHEpp+Vkzs=";
   };
 
   nativeBuildInputs = [ poetry-core ];
