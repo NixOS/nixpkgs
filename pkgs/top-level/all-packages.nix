@@ -2228,7 +2228,7 @@ with pkgs;
   bozohttpd = callPackage ../servers/http/bozohttpd { };
   bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
-  bpb = callPackage ../tools/security/bpb { };
+  bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
 
   bpytop = callPackage ../tools/system/bpytop { };
 
