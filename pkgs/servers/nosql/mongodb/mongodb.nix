@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+{ xz, lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
 , sasl, openssl, libpcap, curl, Security, CoreFoundation, cctools }:
 
 # Note:
@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ variants.scons ];
   buildInputs = [
+    xz
     boost
     curl
     gperftools
@@ -59,6 +60,8 @@ in stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
 
+  makeFlags = [ "PREFIX=$(out)" ];
+  dontAddPrefix = true;
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
   # We remove the build flags from buildInfo data.
@@ -119,7 +122,7 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  prefixKey = "--prefix=";
+  #prefixKey = "--prefix=";
 
   enableParallelBuilding = true;
 
