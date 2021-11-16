@@ -5439,6 +5439,8 @@ with pkgs;
 
   gelasio = callPackage ../data/fonts/gelasio { };
 
+  gemget = callPackage ../tools/networking/gemget {};
+
   gen-oath-safe = callPackage ../tools/security/gen-oath-safe { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
