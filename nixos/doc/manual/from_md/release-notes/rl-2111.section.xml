@@ -1358,6 +1358,13 @@ Superuser created successfully.
           <literal>services.ddclient.passwordFile</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The default GNAT version has been changed: The
+          <literal>gnat</literal> attribute now points to
+          <literal>gnat11</literal> instead of <literal>gnat9</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
