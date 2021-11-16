@@ -1912,6 +1912,7 @@ in {
 
   inherit (callPackage ../development/python-modules/databricks-connect { })
     databricks-connect_7
+    databricks-connect_8
     databricks-connect_9
   ;
 

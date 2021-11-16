@@ -40,6 +40,11 @@ in {
     sha256 = "sha256-JtsmcvvseJYPm/AAgKCvwvTPaxOd6srb2zHKTJVwgDQ=";
   };
 
+  databricks-connect_8 = mkDatabricks {
+    version = "8.1.14";
+    sha256 = "sha256-jxEJVaGlDkbcA9vZaah2W5STJoFT3hZwR2eyJuT+GG4=";
+  };
+
   databricks-connect_9 = mkDatabricks {
     version = "9.1.3";
     sha256 = "sha256-awA8zX6a4n2CkWSrfG9bE+QKUyVBAQae2k+deBeErX8=";
