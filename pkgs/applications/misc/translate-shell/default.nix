@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
         rlwrap
         groff
         fribidi
-		hexdump
+        hexdump
       ]}
   '';
 
