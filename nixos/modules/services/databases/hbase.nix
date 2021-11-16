@@ -103,7 +103,8 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        JAVA_HOME = "${pkgs.jre}";
+        # JRE 15 removed option `UseConcMarkSweepGC` which is needed.
+        JAVA_HOME = "${pkgs.jre8}";
         HBASE_LOG_DIR = cfg.logDir;
       };
 
