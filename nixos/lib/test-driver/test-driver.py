@@ -402,7 +402,6 @@ class Machine:
 
     start_command: StartCommand
     keep_vm_state: bool
-    allow_reboot: bool
 
     process: Optional[subprocess.Popen]
     pid: Optional[int]
@@ -425,11 +424,9 @@ class Machine:
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
-        allow_reboot: bool = False,
     ) -> None:
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
-        self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
 
@@ -1246,7 +1243,6 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
-            allow_reboot=args.get("allow_reboot", False),
         )
 
     def serial_stdout_on(self) -> None:
