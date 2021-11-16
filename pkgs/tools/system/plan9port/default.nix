@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "plan9port";
-  version = "0.pre+date=2021-10-19";
+  version = "2021-10-19";
 
   src =  fetchFromGitHub {
     owner = "9fans";
