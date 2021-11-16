@@ -438,10 +438,6 @@ class Machine(ABC):
         my_attrs.update(attrs)
         return rootlog.nested(msg, my_attrs)
 
-    def sleep(self, secs: int) -> None:
-        # We want to sleep in *guest* time, not *host* time.
-        self.succeed(f"sleep {secs}")
-
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """Forward a TCP port on the host to a TCP port on the guest.
         Useful during interactive testing.
@@ -1074,6 +1070,10 @@ class PrivateVM(Machine):
         self.log("forced crash")
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
+
+    def sleep(self, secs: int) -> None:
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
 
 class VM(PrivateVM, MonitorMixin, ExecuteMixin):
