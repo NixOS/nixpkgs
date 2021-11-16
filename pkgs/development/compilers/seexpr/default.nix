@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpng, zlib, qt4,
-bison, flex, libGLU, python3Packages
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libpng
+, zlib
+, qt4
+, bison
+, flex
+, libGLU
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -7,9 +16,9 @@ stdenv.mkDerivation rec {
   version = "3.0.1";
 
   src = fetchFromGitHub {
-    owner  = "wdas";
-    repo   = "SeExpr";
-    rev    = "v${version}";
+    owner = "wdas";
+    repo = "SeExpr";
+    rev = "v${version}";
     sha256 = "sha256-r6mgyb/FGz4KYZOgLDgmIqjO+PSmneD3KUWjymZXtEk=";
   };
 
