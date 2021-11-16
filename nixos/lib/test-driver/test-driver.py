@@ -1,4 +1,5 @@
 #! /somewhere/python3
+from abc import ABC, abstractmethod
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
 from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
@@ -389,9 +390,8 @@ class LegacyStartCommand(StartCommand):
             self._cmd += f" {qemuFlags}"
 
 
-class Machine:
-    """A handle to the machine with this name, that also knows how to manage
-    the machine lifecycle with the help of a start script / command."""
+class Machine(ABC):
+    """Minimal abstract base class that contains functions required by multiple subclasses"""
 
     name: str
     tmp_dir: pathlib.Path
@@ -1048,6 +1048,21 @@ class Machine:
         self.shell.close()
         self.monitor.close()
         self.serial_thread.join()
+
+
+class ExecuteMixin(Machine):
+    """Contains methods that only need access to execute() in addition to the base Machine interface"""
+
+
+class MonitorMixin(Machine):
+    """Contains methods that only need access to send_monitor_command() in addition to the base Machine interface"""
+
+
+class PrivateVM(Machine):
+    """Manages a VM's lifecycle with the help of a start script / command. Only methods that require access to VM instance variables should be added here"""
+
+
+class VM(PrivateVM, MonitorMixin, ExecuteMixin):
 
 
 class VLan:
