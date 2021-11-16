@@ -82,9 +82,7 @@ let
   luarocks_content = let
     generatedConfig = lua.pkgs.lib.generateLuarocksConfig {
       externalDeps = externalDeps ++ externalDepsGenerated;
-      inherit extraVariables;
-      inherit rocksSubdir;
-      inherit requiredLuaRocks;
+      inherit extraVariables rocksSubdir requiredLuaRocks;
     };
     in
       ''
@@ -191,9 +189,8 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   '';
 
   passthru = {
-    inherit lua; # The lua interpreter
-    inherit externalDeps;
-    inherit luarocks_content;
+    # The lua interpreter
+    inherit lua externalDeps luarocks_content;
   } // passthru;
 
   meta = {
