@@ -17,7 +17,7 @@ in
       };
       settings = mkOption {
         default = { };
-        description = "configuration options for influxdb2, see https://docs.influxdata.com/influxdb/v2.0/reference/config-options for details.";
+        description = ''configuration options for influxdb2, see <link xlink:href="https://docs.influxdata.com/influxdb/v2.0/reference/config-options"/> for details.'';
         type = format.type;
       };
     };
