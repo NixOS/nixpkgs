@@ -76,7 +76,7 @@ in
           in Plex's scanners directory will be cleared and this module will
           symlink all of the paths specified here to that directory.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           [
             (fetchFromGitHub {
               owner = "ZeroQI";
