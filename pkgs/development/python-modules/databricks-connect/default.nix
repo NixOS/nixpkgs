@@ -36,7 +36,7 @@ let
   };
 in {
   databricks-connect_9 = mkDatabricks {
-    version = "9.1.2";
-    sha256 = "9672aae60b299de58a527f320df45769cadf436398e21f4ce73424a25badb7a7";
+    version = "9.1.3";
+    sha256 = "sha256-awA8zX6a4n2CkWSrfG9bE+QKUyVBAQae2k+deBeErX8=";
   };
 }
