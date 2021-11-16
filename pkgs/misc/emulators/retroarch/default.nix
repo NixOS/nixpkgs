@@ -22,12 +22,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.9.13.2";
+  # FIXME: retroarch >=1.9.3 doesn't load the cores
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-fehHchn+o9QM2wIK6zYamnbFvQda32Gw0rJk8Orx00U=";
+    sha256 = "sha256-Dwv0hl+d99FbVMG4KnkjO1aYfAw0m4x+zvrbyb/wOX8=";
     rev = "v${version}";
   };
 
