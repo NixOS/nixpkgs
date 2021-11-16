@@ -1,20 +1,19 @@
 { lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
-let
-  gradleSpec = { version, nativeVersion, sha256 }: rec {
-    inherit nativeVersion;
-    name = "gradle-${version}";
+rec {
+  gradleGen = { version, nativeVersion, sha256 }: stdenv.mkDerivation {
+    pname = "gradle";
+    inherit version;
+
     src = fetchurl {
       inherit sha256;
-      url = "https://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
     };
-  };
-in
-rec {
-  gradleGen = { name, src, nativeVersion }: stdenv.mkDerivation {
-    inherit name src nativeVersion;
 
     dontBuild = true;
+
+    nativeBuildInputs = [ makeWrapper unzip ];
+    buildInputs = [ java ];
 
     installPhase = ''
       mkdir -pv $out/lib/gradle/
@@ -44,9 +43,6 @@ rec {
       echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
     '';
 
-    nativeBuildInputs = [ makeWrapper unzip ];
-    buildInputs = [ java ];
-
     meta = with lib; {
       description = "Enterprise-grade build system";
       longDescription = ''
@@ -57,7 +53,9 @@ rec {
         between the flexibility of Ant and the convenience of a
         build-by-convention behavior.
       '';
-      homepage = "http://www.gradle.org/";
+      homepage = "https://www.gradle.org/";
+      changelog = "https://docs.gradle.org/${version}/release-notes.html";
+      downloadPage = "https://gradle.org/next-steps/?version=${version}";
       license = licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ lorenzleutgeb ];
@@ -65,20 +63,11 @@ rec {
   };
 
   gradle_latest = gradle_7_3;
-  gradle_7_3 = gradleGen (gradleSpec (import ./gradle-7.3-spec.nix));
-  gradle_6_9 = gradleGen (gradleSpec (import ./gradle-6.9.1-spec.nix));
 
-  # NOTE: No GitHub Release for this release, so update.sh does not work.
-  gradle_5_6 = gradleGen (gradleSpec {
-    version = "5.6.4";
-    nativeVersion = "0.18";
-    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
-  });
+  gradle_7_3 = gradleGen (import ./gradle-7.3-spec.nix);
+  gradle_6_9 = gradleGen (import ./gradle-6.9.1-spec.nix);
 
-  # NOTE: No GitHub Release for this release, so update.sh does not work.
-  gradle_4_10 = gradleGen (gradleSpec {
-    version = "4.10.3";
-    nativeVersion = "0.14";
-    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-  });
+  # NOTE: No GitHub Release for the following versions. Update.sh will not work.
+  gradle_5_6 = gradleGen (import ./gradle-5.6.4-spec.nix);
+  gradle_4_10 = gradleGen (import ./gradle-4.10.3-spec.nix);
 }

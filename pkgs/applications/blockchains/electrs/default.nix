@@ -3,10 +3,13 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
-, rocksdb
+, rocksdb_6_23
 , Security
 }:
 
+let
+  rocksdb = rocksdb_6_23;
+in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
   version = "0.9.2";
@@ -24,12 +27,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ llvmPackages.clang ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  # temporarily disable dynamic linking, which broke with rocksdb update 6.23.3 -> 6.25.3
-  # https://github.com/NixOS/nixpkgs/pull/143524#issuecomment-955053331
-  #
   # link rocksdb dynamically
-  # ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  # ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

@@ -239,6 +239,7 @@
 , "redoc-cli"
 , "remod-cli"
 , "reveal.js"
+, "reveal-md"
 , "rimraf"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }

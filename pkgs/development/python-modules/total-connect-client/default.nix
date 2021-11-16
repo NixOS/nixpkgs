@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2021.11.2";
+  version = "2021.11.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     rev = version;
-    sha256 = "sha256-JXau+NmulnZ0gg2XsXD9EFv3j2FBMqVqzpT1XGvMZuA=";
+    sha256 = "sha256-iggxKefrVZP4ljf8jGRrCAq0/xQLsr54L42KkdjBqgI=";
   };
 
   propagatedBuildInputs = [
