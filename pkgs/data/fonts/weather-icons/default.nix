@@ -1,18 +1,24 @@
-{ lib, fetchzip }:
+{ stdenv, lib, fetchFromGitHub }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "weather-icons";
   version = "2.0.12";
-in fetchzip {
-  name = "weather-icons-${version}";
 
-  url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
-  sha256 = "sha256-NGPzAloeZa1nCazb+mjAbYw7ZYYDoKpLwcvzg1Ly9oM=";
+  src = fetchFromGitHub {
+    owner = "erikflowers";
+    repo = "weather-icons";
+    rev = version;
+    sha256 = "sha256-0ZFH2awUo4BkTpK1OsWZ4YKczJHo+HHM6ezGBJAmT+U=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile weather-icons-${version}/_docs/font-source/weathericons-regular.otf -d $out/share/fonts/opentype
-  '';
+    cp $src/_docs/font-source/weathericons-regular.otf $out/share/fonts/opentype
 
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Weather Icons";
