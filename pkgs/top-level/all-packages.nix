@@ -8203,6 +8203,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
 
+  openseachest = callPackage ../tools/system/openseachest { };
+
   opensm = callPackage ../tools/networking/opensm { };
 
   tinyssh = callPackage ../tools/networking/tinyssh { };
