@@ -9696,6 +9696,8 @@ in {
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
+  vehicle = callPackage ../development/python-modules/vehicle { };
+
   vega = callPackage ../development/python-modules/vega { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
