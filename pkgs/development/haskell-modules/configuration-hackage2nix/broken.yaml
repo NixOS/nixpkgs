@@ -2789,7 +2789,6 @@ broken-packages:
   - language-typescript
   - language-vhdl
   - language-webidl
-  - lapack
   - LargeCardinalHierarchy
   - Lastik
   - latest-npm-version

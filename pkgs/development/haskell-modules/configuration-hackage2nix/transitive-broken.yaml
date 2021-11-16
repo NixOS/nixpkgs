@@ -1570,7 +1570,6 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack
  - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
@@ -1917,7 +1916,7 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack-hmatrix
+ - lapack_0_4
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -1962,8 +1961,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-circuit
- - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
  - linkchk
@@ -2043,8 +2040,6 @@ dont-distribute-packages:
  - macosx-make-standalone
  - magic-wormhole
  - magicbane
- - magico
- - magico_0_0_2_2
  - mahoro
  - maid
  - mail-pool
@@ -2579,8 +2574,6 @@ dont-distribute-packages:
  - replicant
  - repr
  - representable-tries
- - resistor-cube
- - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
  - respond
