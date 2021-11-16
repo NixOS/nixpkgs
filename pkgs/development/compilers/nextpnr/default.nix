@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen, python3Packages
+, boost, python3, eigen
 , icestorm, trellis
 , llvmPackages
 
 , enableGui ? false
 , wrapQtAppsHook ? null
 , qtbase ? null
-, OpenGL ? null
+, OpenGL
 }:
 
 let
@@ -35,31 +35,30 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "nextpnr";
 
-  nativeBuildInputs
-     = [ cmake ]
-    ++ (lib.optional enableGui wrapQtAppsHook);
-  buildInputs
-     = [ boostPython python3 eigen python3Packages.apycula ]
-    ++ (lib.optional enableGui qtbase)
-    ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional enableGui wrapQtAppsHook;
 
-  cmakeFlags =
-    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5;gowin"
-      "-DBUILD_TESTS=ON"
-      "-DICESTORM_INSTALL_PREFIX=${icestorm}"
-      "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
-      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
-      "-DUSE_OPENMP=ON"
-      # warning: high RAM usage
-      "-DSERIALIZE_CHIPDBS=OFF"
-    ]
-    ++ (lib.optional enableGui "-DBUILD_GUI=ON")
-    ++ (lib.optional (enableGui && stdenv.isDarwin)
-        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
+  buildInputs = [ boostPython python3 eigen python3.pkgs.apycula ]
+    ++ lib.optional enableGui qtbase
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  patchPhase = with builtins; ''
+  cmakeFlags = [
+    "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
+    "-DARCH=generic;ice40;ecp5;gowin"
+    "-DBUILD_TESTS=ON"
+    "-DICESTORM_INSTALL_PREFIX=${icestorm}"
+    "-DTRELLIS_INSTALL_PREFIX=${trellis}"
+    "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
+    "-DGOWIN_BBA_EXECUTABLE=${python3.pkgs.apycula}/bin/gowin_bba"
+    "-DUSE_OPENMP=ON"
+    # warning: high RAM usage
+    "-DSERIALIZE_CHIPDBS=OFF"
+  ]
+  ++ lib.optional enableGui "-DBUILD_GUI=ON"
+  ++ lib.optional (enableGui && stdenv.isDarwin)
+      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+
+  postPatch = with builtins; ''
     # use PyPy for icestorm if enabled
     substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'

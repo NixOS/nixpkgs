@@ -12602,7 +12602,9 @@ with pkgs;
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = callPackage ../development/compilers/nextpnr { };
+  nextpnr = callPackage ../development/compilers/nextpnr {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   nextpnrWithGui = libsForQt5.callPackage ../development/compilers/nextpnr {
     enableGui = true;
