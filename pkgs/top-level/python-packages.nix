@@ -1911,6 +1911,7 @@ in {
   databricks-connect = (callPackage ../development/python-modules/databricks-connect { }).databricks-connect_9;
 
   inherit (callPackage ../development/python-modules/databricks-connect { })
+    databricks-connect_7
     databricks-connect_9
   ;
 
