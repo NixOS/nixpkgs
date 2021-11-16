@@ -388,6 +388,7 @@ in
   prowlarr = handleTest ./prowlarr.nix {};
   pt2-clone = handleTest ./pt2-clone.nix {};
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
+  qt-wayland = handleTest ./qt-wayland.nix {};
   quorum = handleTest ./quorum.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};

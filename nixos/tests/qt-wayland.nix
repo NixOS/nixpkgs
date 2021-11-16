@@ -1,17 +1,19 @@
 import ./make-test-python.nix ({ pkgs, ...} :
 
 {
-  name = "cage";
+  name = "qt-wayland";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ matthewbauer ];
+    maintainers = [ synthetica ];
   };
 
   machine = { ... }:
 
   {
     imports = [ ./common/wayland-cage.nix ];
-    # Disable color and bold and use a larger font to make OCR easier:
-    services.cage.program = "${pkgs.xterm}/bin/xterm -cm -pc -fa Monospace -fs 24";
+    services.cage = {
+      program = "${pkgs.lxqt.qterminal}/bin/qterminal";
+      package = pkgs.cage.override { xwayland = null; };
+    };
   };
 
   enableOCR = true;
@@ -22,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     with subtest("Wait for cage to boot up"):
         start_all()
         machine.wait_for_file("/run/user/${toString user.uid}/wayland-0.lock")
-        machine.wait_until_succeeds("pgrep xterm")
+        machine.wait_until_succeeds("pgrep qterminal")
         machine.wait_for_text("alice@machine")
         machine.screenshot("screen")
   '';
