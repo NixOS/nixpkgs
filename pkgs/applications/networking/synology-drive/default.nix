@@ -1,6 +1,6 @@
-{ lib, qt5, fetchurl, autoPatchelfHook, dpkg, glibc, gnome }:
+{ lib, fetchurl, autoPatchelfHook, dpkg, glibc, gnome }:
 
-qt5.mkDerivation rec {
+mkDerivation rec {
   pname = "synology-drive";
   subVersion = "12674";
   version = "3.0.1-${subVersion}";
