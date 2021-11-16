@@ -140,7 +140,7 @@ fi
 ### Get version number for this release
 #
 #
-V=$( cmake -DVERSION_STYLE=short -P CMakeLists.txt )
+V=$( cmake -DVERSION_STYLE=short -P CMakeLists.txt 2>&1 )
 test -n "$V" || { echo "Could not obtain version in $BUILDDIR ." ; exit 1 ; }
 
 ### Create signed tag
