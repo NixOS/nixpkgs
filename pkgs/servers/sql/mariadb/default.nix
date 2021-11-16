@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
-, libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
+, libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, pmdk, curl
 , liburing, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , fixDarwinDylibNames, cctools, CoreServices, less
@@ -159,7 +159,7 @@ server = stdenv.mkDerivation (common // {
     libxml2 judy libevent cracklib
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
     ++ optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
-    ++ optional stdenv.hostPlatform.isLinux linux-pam
+    ++ optionals stdenv.hostPlatform.isLinux [ linux-pam pmdk.dev ]
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
   patches = common.patches;
