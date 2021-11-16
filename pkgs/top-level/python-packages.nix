@@ -1908,7 +1908,7 @@ in {
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
-  databricks-connect = callPackage ../development/python-modules/databricks-connect { };
+  databricks-connect = (callPackage ../development/python-modules/databricks-connect { }).databricks-connect_9;
 
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
