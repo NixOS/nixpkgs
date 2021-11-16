@@ -394,59 +394,15 @@ class Machine(ABC):
     """Minimal abstract base class that contains functions required by multiple subclasses"""
 
     name: str
-    tmp_dir: pathlib.Path
-    shared_dir: pathlib.Path
-    state_dir: pathlib.Path
-    monitor_path: pathlib.Path
-    shell_path: pathlib.Path
-
-    start_command: StartCommand
-
-    process: Optional[subprocess.Popen]
-    pid: Optional[int]
-    monitor: Optional[socket.socket]
-    shell: Optional[socket.socket]
-    serial_thread: Optional[threading.Thread]
-
-    booted: bool
-    connected: bool
-    # Store last serial console lines for use
-    # of wait_for_console_text
-    last_lines: Queue = Queue()
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
 
     def __init__(
         self,
-        tmp_dir: pathlib.Path,
-        start_command: StartCommand,
         name: str = "machine",
-        keep_vm_state: bool = False,
     ) -> None:
-        self.tmp_dir = tmp_dir
         self.name = name
-        self.start_command = start_command
-
-        # set up directories
-        self.shared_dir = self.tmp_dir / "shared-xchg"
-        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
-
-        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
-        self.monitor_path = self.state_dir / "monitor"
-        self.shell_path = self.state_dir / "shell"
-        if (not keep_vm_state) and self.state_dir.exists():
-            self.cleanup_statedir()
-        self.state_dir.mkdir(mode=0o700, exist_ok=True)
-
-        self.process = None
-        self.pid = None
-        self.monitor = None
-        self.shell = None
-        self.serial_thread = None
-
-        self.booted = False
-        self.connected = False
 
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
@@ -1061,8 +1017,66 @@ class MonitorMixin(Machine):
 class PrivateVM(Machine):
     """Manages a VM's lifecycle with the help of a start script / command. Only methods that require access to VM instance variables should be added here"""
 
+    tmp_dir: pathlib.Path
+    shared_dir: pathlib.Path
+    state_dir: pathlib.Path
+    monitor_path: pathlib.Path
+    shell_path: pathlib.Path
+
+    start_command: StartCommand
+
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
+
+    booted: bool
+    connected: bool
+    # Store last serial console lines for use
+    # of wait_for_console_text
+    last_lines: Queue = Queue()
+
+    def __init__(
+        self,
+        tmp_dir: pathlib.Path,
+        start_command: StartCommand,
+        keep_vm_state: bool = False,
+    ) -> None:
+        self.tmp_dir = tmp_dir
+        self.start_command = start_command
+
+        # set up directories
+        self.shared_dir = self.tmp_dir / "shared-xchg"
+        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
+        self.monitor_path = self.state_dir / "monitor"
+        self.shell_path = self.state_dir / "shell"
+        if (not keep_vm_state) and self.state_dir.exists():
+            self.cleanup_statedir()
+        self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
+        self.serial_thread = None
+
+        self.booted = False
+        self.connected = False
+
 
 class VM(PrivateVM, MonitorMixin, ExecuteMixin):
+    def __init__(
+        self,
+        tmp_dir: pathlib.Path,
+        start_command: StartCommand,
+        name: str = "machine",
+        keep_vm_state: bool = False,
+    ) -> None:
+        Machine.__init__(self, name)
+        PrivateVM.__init__(self, tmp_dir, start_command, keep_vm_state)
 
 
 class VLan:
