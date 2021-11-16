@@ -50,5 +50,13 @@ FSArchiverRunner::run()
 void
 FSArchiverRunner::fsarchiverProgress( QString line )
 {
-    cDebug() << Logger::SubEntry << line;
+    // Typical line of output is this:
+    // -[00][ 99%][REGFILEM] /boot/thing
+    //      5   9           ^21
+    if (line.length() > 21 && line[5] == '[' && line[9] == '%')
+    {
+        double p = double(line.mid(6,3).toInt()) / 100.0;
+        const QString filename = line.mid(22);
+        Q_EMIT progress(p, filename);
+    }
 }
