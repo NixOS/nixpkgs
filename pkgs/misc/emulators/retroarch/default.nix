@@ -22,12 +22,12 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.5";
+  version = "1.9.13.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
+    sha256 = "sha256-fehHchn+o9QM2wIK6zYamnbFvQda32Gw0rJk8Orx00U=";
     rev = "v${version}";
   };
 
