@@ -395,9 +395,6 @@ class Machine(ABC):
 
     name: str
 
-    def __repr__(self) -> str:
-        return f"<Machine '{self.name}'>"
-
     def __init__(
         self,
         name: str = "machine",
@@ -430,9 +427,6 @@ class Machine(ABC):
             qemuFlags=args.get("qemuFlags"),
         )
 
-    def is_up(self) -> bool:
-        return self.booted and self.connected
-
     def log(self, msg: str) -> None:
         rootlog.log(msg, {"machine": self.name})
 
@@ -444,24 +438,50 @@ class Machine(ABC):
         my_attrs.update(attrs)
         return rootlog.nested(msg, my_attrs)
 
-    def wait_for_monitor_prompt(self) -> str:
-        assert self.monitor is not None
-        answer = ""
-        while True:
-            undecoded_answer = self.monitor.recv(1024)
-            if not undecoded_answer:
-                break
-            answer += undecoded_answer.decode()
-            if answer.endswith("(qemu) "):
-                break
-        return answer
+    def sleep(self, secs: int) -> None:
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
-    def send_monitor_command(self, command: str) -> str:
-        message = ("{}\n".format(command)).encode()
-        self.log("sending monitor command: {}".format(command))
-        assert self.monitor is not None
-        self.monitor.send(message)
-        return self.wait_for_monitor_prompt()
+    def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
+        """Forward a TCP port on the host to a TCP port on the guest.
+        Useful during interactive testing.
+        """
+        self.send_monitor_command(
+            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
+        )
+
+    def block(self) -> None:
+        """Make the machine unreachable by shutting down eth1 (the multicast
+        interface used to talk to the other VMs).  We keep eth0 up so that
+        the test driver can continue to talk to the machine.
+        """
+        self.send_monitor_command("set_link virtio-net-pci.1 off")
+
+    def unblock(self) -> None:
+        """Make the machine reachable."""
+        self.send_monitor_command("set_link virtio-net-pci.1 on")
+
+    def release(self) -> None:
+        if self.pid is None:
+            return
+        rootlog.info(f"kill machine (pid {self.pid})")
+        assert self.process
+        assert self.shell
+        assert self.monitor
+        assert self.serial_thread
+
+        self.process.terminate()
+        self.shell.close()
+        self.monitor.close()
+        self.serial_thread.join()
+
+
+class ExecuteMixin(Machine):
+    """Contains methods that only need access to execute() in addition to the base Machine interface"""
+
+    @abstractmethod
+    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
+        pass
 
     def wait_for_unit(self, unit: str, user: Optional[str] = None) -> None:
         """Wait for a systemd unit to get into "active" state.
@@ -536,54 +556,6 @@ class Machine(ABC):
                     + "'{}' but it is in state ‘{}’".format(require_state, state)
                 )
 
-    def _next_newline_closed_block_from_shell(self) -> str:
-        assert self.shell
-        output_buffer = []
-        while True:
-            # This receives up to 4096 bytes from the socket
-            chunk = self.shell.recv(4096)
-            if not chunk:
-                # Probably a broken pipe, return the output we have
-                break
-
-            decoded = chunk.decode()
-            output_buffer += [decoded]
-            if decoded[-1] == "\n":
-                break
-        return "".join(output_buffer)
-
-    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
-        self.connect()
-
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
-        assert self.shell
-        self.shell.send(out_command.encode())
-
-        # Get the output
-        output = base64.b64decode(self._next_newline_closed_block_from_shell())
-
-        if not check_return:
-            return (-1, output.decode())
-
-        # Get the return code
-        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
-        rc = int(self._next_newline_closed_block_from_shell().strip())
-
-        return (rc, output.decode())
-
-    def shell_interact(self) -> None:
-        """Allows you to interact with the guest shell
-
-        Should only be used during test development, not in the production test."""
-        self.connect()
-        self.log("Terminal is ready (there is no prompt):")
-
-        assert self.shell
-        subprocess.run(
-            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
-            pass_fds=[self.shell.fileno()],
-        )
-
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
         output = ""
@@ -641,19 +613,6 @@ class Machine(ABC):
             retry(check_failure)
             return output
 
-    def wait_for_shutdown(self) -> None:
-        if not self.booted:
-            return
-
-        with self.nested("waiting for the VM to power off"):
-            sys.stdout.flush()
-            assert self.process
-            self.process.wait()
-
-            self.pid = None
-            self.booted = False
-            self.connected = False
-
     def get_tty_text(self, tty: str) -> str:
         status, output = self.execute(
             "fold -w$(stty -F /dev/tty{0} size | "
@@ -678,11 +637,6 @@ class Machine(ABC):
 
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
             retry(tty_matches)
-
-    def send_chars(self, chars: List[str]) -> None:
-        with self.nested("sending keys ‘{}‘".format(chars)):
-            for char in chars:
-                self.send_key(char)
 
     def wait_for_file(self, filename: str) -> None:
         """Waits until the file exists in machine's file system."""
@@ -718,23 +672,74 @@ class Machine(ABC):
     def wait_for_job(self, jobname: str) -> None:
         self.wait_for_unit(jobname)
 
-    def connect(self) -> None:
-        if self.connected:
-            return
+    def copy_from_host_via_shell(self, source: str, target: str) -> None:
+        """Copy a file from the host into the guest by piping it over the
+        shell into the destination file. Works without host-guest shared folder.
+        Prefer copy_from_host for whenever possible.
+        """
+        with open(source, "rb") as fh:
+            content_b64 = base64.b64encode(fh.read()).decode()
+            self.succeed(
+                f"mkdir -p $(dirname {target})",
+                f"echo -n {content_b64} | base64 -d > {target}",
+            )
 
-        with self.nested("waiting for the VM to finish booting"):
-            self.start()
+    def dump_tty_contents(self, tty: str) -> None:
+        """Debugging: Dump the contents of the TTY<n>"""
+        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
 
-            assert self.shell
+    def wait_for_x(self) -> None:
+        """Wait until it is possible to connect to the X server.  Note that
+        testing the existence of /tmp/.X11-unix/X0 is insufficient.
+        """
 
-            tic = time.time()
-            self.shell.recv(1024)
-            # TODO: Timeout
-            toc = time.time()
+        def check_x(_: Any) -> bool:
+            cmd = (
+                "journalctl -b SYSLOG_IDENTIFIER=systemd | "
+                + 'grep "Reached target Current graphical"'
+            )
+            status, _ = self.execute(cmd)
+            if status != 0:
+                return False
+            status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
+            return status == 0
 
-            self.log("connected to guest root shell")
-            self.log("(connecting took {:.2f} seconds)".format(toc - tic))
-            self.connected = True
+        with self.nested("waiting for the X11 server"):
+            retry(check_x)
+
+    def get_window_names(self) -> List[str]:
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(self, regexp: str) -> None:
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try: bool) -> bool:
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    "Last chance to match {} on the window list,".format(regexp)
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("Waiting for a window to appear"):
+            retry(window_is_visible)
+
+
+class MonitorMixin(Machine):
+    """Contains methods that only need access to send_monitor_command() in addition to the base Machine interface"""
+
+    @abstractmethod
+    def send_monitor_command(self, command: str) -> str:
+        pass
+
+    def send_chars(self, chars: List[str]) -> None:
+        with self.nested("sending keys ‘{}‘".format(chars)):
+            for char in chars:
+                self.send_key(char)
 
     def screenshot(self, filename: str) -> None:
         out_dir = os.environ.get("out", os.getcwd())
@@ -753,17 +758,190 @@ class Machine(ABC):
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
-    def copy_from_host_via_shell(self, source: str, target: str) -> None:
-        """Copy a file from the host into the guest by piping it over the
-        shell into the destination file. Works without host-guest shared folder.
-        Prefer copy_from_host for whenever possible.
-        """
-        with open(source, "rb") as fh:
-            content_b64 = base64.b64encode(fh.read()).decode()
-            self.succeed(
-                f"mkdir -p $(dirname {target})",
-                f"echo -n {content_b64} | base64 -d > {target}",
-            )
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            screenshot_path = os.path.join(tmpdir, "ppm")
+            self.send_monitor_command(f"screendump {screenshot_path}")
+            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
+
+    def get_screen_text_variants(self) -> List[str]:
+        return self._get_screen_text_variants([0, 1, 2])
+
+    def get_screen_text(self) -> str:
+        return self._get_screen_text_variants([2])[0]
+
+    def wait_for_text(self, regex: str) -> None:
+        def screen_matches(last: bool) -> bool:
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
+
+            if last:
+                self.log("Last OCR attempt failed. Text was: {}".format(variants))
+
+            return False
+
+        with self.nested("waiting for {} to appear on screen".format(regex)):
+            retry(screen_matches)
+
+    def send_key(self, key: str) -> None:
+        key = CHAR_TO_KEY.get(key, key)
+        self.send_monitor_command("sendkey {}".format(key))
+
+
+class PrivateVM(Machine):
+    """Manages a VM's lifecycle with the help of a start script / command. Only methods that require access to VM instance variables should be added here"""
+
+    tmp_dir: pathlib.Path
+    shared_dir: pathlib.Path
+    state_dir: pathlib.Path
+    monitor_path: pathlib.Path
+    shell_path: pathlib.Path
+
+    start_command: StartCommand
+
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
+
+    booted: bool
+    connected: bool
+    # Store last serial console lines for use
+    # of wait_for_console_text
+    last_lines: Queue = Queue()
+
+    def __init__(
+        self,
+        tmp_dir: pathlib.Path,
+        start_command: StartCommand,
+        keep_vm_state: bool = False,
+    ) -> None:
+        self.tmp_dir = tmp_dir
+        self.start_command = start_command
+
+        # set up directories
+        self.shared_dir = self.tmp_dir / "shared-xchg"
+        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
+        self.monitor_path = self.state_dir / "monitor"
+        self.shell_path = self.state_dir / "shell"
+        if (not keep_vm_state) and self.state_dir.exists():
+            self.cleanup_statedir()
+        self.state_dir.mkdir(mode=0o700, exist_ok=True)
+
+        self.process = None
+        self.pid = None
+        self.monitor = None
+        self.shell = None
+        self.serial_thread = None
+
+        self.booted = False
+        self.connected = False
+
+    def is_up(self) -> bool:
+        return self.booted and self.connected
+
+    def wait_for_monitor_prompt(self) -> str:
+        assert self.monitor is not None
+        answer = ""
+        while True:
+            undecoded_answer = self.monitor.recv(1024)
+            if not undecoded_answer:
+                break
+            answer += undecoded_answer.decode()
+            if answer.endswith("(qemu) "):
+                break
+        return answer
+
+    def send_monitor_command(self, command: str) -> str:
+        message = ("{}\n".format(command)).encode()
+        self.log("sending monitor command: {}".format(command))
+        assert self.monitor is not None
+        self.monitor.send(message)
+        return self.wait_for_monitor_prompt()
+
+    def _next_newline_closed_block_from_shell(self) -> str:
+        assert self.shell
+        output_buffer = []
+        while True:
+            # This receives up to 4096 bytes from the socket
+            chunk = self.shell.recv(4096)
+            if not chunk:
+                # Probably a broken pipe, return the output we have
+                break
+
+            decoded = chunk.decode()
+            output_buffer += [decoded]
+            if decoded[-1] == "\n":
+                break
+        return "".join(output_buffer)
+
+    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
+        self.connect()
+
+        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
+        assert self.shell
+        self.shell.send(out_command.encode())
+
+        # Get the output
+        output = base64.b64decode(self._next_newline_closed_block_from_shell())
+
+        if not check_return:
+            return (-1, output.decode())
+
+        # Get the return code
+        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
+        rc = int(self._next_newline_closed_block_from_shell().strip())
+
+        return (rc, output.decode())
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+
+        assert self.shell
+        subprocess.run(
+            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            pass_fds=[self.shell.fileno()],
+        )
+
+    def wait_for_shutdown(self) -> None:
+        if not self.booted:
+            return
+
+        with self.nested("waiting for the VM to power off"):
+            sys.stdout.flush()
+            assert self.process
+            self.process.wait()
+
+            self.pid = None
+            self.booted = False
+            self.connected = False
+
+    def connect(self) -> None:
+        if self.connected:
+            return
+
+        with self.nested("waiting for the VM to finish booting"):
+            self.start()
+
+            assert self.shell
+
+            tic = time.time()
+            self.shell.recv(1024)
+            # TODO: Timeout
+            toc = time.time()
+
+            self.log("connected to guest root shell")
+            self.log("(connecting took {:.2f} seconds)".format(toc - tic))
+            self.connected = True
 
     def copy_from_host(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest via the `shared_dir` shared
@@ -809,37 +987,6 @@ class Machine(ABC):
             else:
                 shutil.copy(intermediate, abs_target)
 
-    def dump_tty_contents(self, tty: str) -> None:
-        """Debugging: Dump the contents of the TTY<n>"""
-        self.execute("fold -w 80 /dev/vcs{} | systemd-cat".format(tty))
-
-    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path = os.path.join(tmpdir, "ppm")
-            self.send_monitor_command(f"screendump {screenshot_path}")
-            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
-
-    def get_screen_text_variants(self) -> List[str]:
-        return self._get_screen_text_variants([0, 1, 2])
-
-    def get_screen_text(self) -> str:
-        return self._get_screen_text_variants([2])[0]
-
-    def wait_for_text(self, regex: str) -> None:
-        def screen_matches(last: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
-                if re.search(regex, text) is not None:
-                    return True
-
-            if last:
-                self.log("Last OCR attempt failed. Text was: {}".format(variants))
-
-            return False
-
-        with self.nested("waiting for {} to appear on screen".format(regex)):
-            retry(screen_matches)
-
     def wait_for_console_text(self, regex: str) -> None:
         self.log("waiting for {} to appear on console".format(regex))
         # Buffer the console output, this is needed
@@ -855,10 +1002,6 @@ class Machine(ABC):
             matches = re.search(regex, console.read())
             if matches is not None:
                 return
-
-    def send_key(self, key: str) -> None:
-        key = CHAR_TO_KEY.get(key, key)
-        self.send_monitor_command("sendkey {}".format(key))
 
     def start(self) -> None:
         if self.booted:
@@ -932,152 +1075,6 @@ class Machine(ABC):
         self.send_monitor_command("quit")
         self.wait_for_shutdown()
 
-    def wait_for_x(self) -> None:
-        """Wait until it is possible to connect to the X server.  Note that
-        testing the existence of /tmp/.X11-unix/X0 is insufficient.
-        """
-
-        def check_x(_: Any) -> bool:
-            cmd = (
-                "journalctl -b SYSLOG_IDENTIFIER=systemd | "
-                + 'grep "Reached target Current graphical"'
-            )
-            status, _ = self.execute(cmd)
-            if status != 0:
-                return False
-            status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
-            return status == 0
-
-        with self.nested("waiting for the X11 server"):
-            retry(check_x)
-
-    def get_window_names(self) -> List[str]:
-        return self.succeed(
-            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
-        ).splitlines()
-
-    def wait_for_window(self, regexp: str) -> None:
-        pattern = re.compile(regexp)
-
-        def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
-            if last_try:
-                self.log(
-                    "Last chance to match {} on the window list,".format(regexp)
-                    + " which currently contains: "
-                    + ", ".join(names)
-                )
-            return any(pattern.search(name) for name in names)
-
-        with self.nested("Waiting for a window to appear"):
-            retry(window_is_visible)
-
-    def sleep(self, secs: int) -> None:
-        # We want to sleep in *guest* time, not *host* time.
-        self.succeed(f"sleep {secs}")
-
-    def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
-        """Forward a TCP port on the host to a TCP port on the guest.
-        Useful during interactive testing.
-        """
-        self.send_monitor_command(
-            "hostfwd_add tcp::{}-:{}".format(host_port, guest_port)
-        )
-
-    def block(self) -> None:
-        """Make the machine unreachable by shutting down eth1 (the multicast
-        interface used to talk to the other VMs).  We keep eth0 up so that
-        the test driver can continue to talk to the machine.
-        """
-        self.send_monitor_command("set_link virtio-net-pci.1 off")
-
-    def unblock(self) -> None:
-        """Make the machine reachable."""
-        self.send_monitor_command("set_link virtio-net-pci.1 on")
-
-    def release(self) -> None:
-        if self.pid is None:
-            return
-        rootlog.info(f"kill machine (pid {self.pid})")
-        assert self.process
-        assert self.shell
-        assert self.monitor
-        assert self.serial_thread
-
-        self.process.terminate()
-        self.shell.close()
-        self.monitor.close()
-        self.serial_thread.join()
-
-
-class ExecuteMixin(Machine):
-    """Contains methods that only need access to execute() in addition to the base Machine interface"""
-
-    @abstractmethod
-    def execute(self, command: str, check_return: bool = True) -> Tuple[int, str]:
-        pass
-
-
-class MonitorMixin(Machine):
-    """Contains methods that only need access to send_monitor_command() in addition to the base Machine interface"""
-
-    @abstractmethod
-    def send_monitor_command(self, command: str) -> str:
-        pass
-
-
-class PrivateVM(Machine):
-    """Manages a VM's lifecycle with the help of a start script / command. Only methods that require access to VM instance variables should be added here"""
-
-    tmp_dir: pathlib.Path
-    shared_dir: pathlib.Path
-    state_dir: pathlib.Path
-    monitor_path: pathlib.Path
-    shell_path: pathlib.Path
-
-    start_command: StartCommand
-
-    process: Optional[subprocess.Popen]
-    pid: Optional[int]
-    monitor: Optional[socket.socket]
-    shell: Optional[socket.socket]
-    serial_thread: Optional[threading.Thread]
-
-    booted: bool
-    connected: bool
-    # Store last serial console lines for use
-    # of wait_for_console_text
-    last_lines: Queue = Queue()
-
-    def __init__(
-        self,
-        tmp_dir: pathlib.Path,
-        start_command: StartCommand,
-        keep_vm_state: bool = False,
-    ) -> None:
-        self.tmp_dir = tmp_dir
-        self.start_command = start_command
-
-        # set up directories
-        self.shared_dir = self.tmp_dir / "shared-xchg"
-        self.shared_dir.mkdir(mode=0o700, exist_ok=True)
-
-        self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
-        self.monitor_path = self.state_dir / "monitor"
-        self.shell_path = self.state_dir / "shell"
-        if (not keep_vm_state) and self.state_dir.exists():
-            self.cleanup_statedir()
-        self.state_dir.mkdir(mode=0o700, exist_ok=True)
-
-        self.process = None
-        self.pid = None
-        self.monitor = None
-        self.shell = None
-        self.serial_thread = None
-
-        self.booted = False
-        self.connected = False
-
 
 class VM(PrivateVM, MonitorMixin, ExecuteMixin):
     def __init__(
@@ -1089,6 +1086,9 @@ class VM(PrivateVM, MonitorMixin, ExecuteMixin):
     ) -> None:
         Machine.__init__(self, name)
         PrivateVM.__init__(self, tmp_dir, start_command, keep_vm_state)
+
+    def __repr__(self) -> str:
+        return f"<Machine '{self.name}'>"
 
 
 class VLan:
