@@ -129,6 +129,7 @@ def main():
     info(f"Generating '{HASHES_PATH}'...")
     with open(HASHES_PATH, "w") as f:
         f.write(json.dumps(repo_hashes, indent=4))
+        f.write("\n")
     info("Finished!")
 
 
