@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
 , poetry-core
 , textfsm
 , pytestCheckHook
@@ -13,7 +13,8 @@ buildPythonPackage rec {
   pname = "ntc-templates";
   version = "3.0.0";
   format = "pyproject";
-  disabled = isPy27;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "networktocode";
