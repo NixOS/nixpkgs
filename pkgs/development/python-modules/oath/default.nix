@@ -6,11 +6,16 @@
 buildPythonPackage rec {
   pname = "oath";
   version = "1.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "bd6b20d20f2c4e3f53523ee900211dca75aeeca72f4f5a9fd8dcacc175fe1c0b";
   };
+
+  pythonImportsCheck = [
+    "oath"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the three main OATH specifications: HOTP, TOTP and OCRA";
