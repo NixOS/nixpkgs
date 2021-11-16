@@ -4,19 +4,20 @@
 , setuptools-scm
 , getmac
 , requests
+, semver
 , pytestCheckHook
 , responses
 }:
 
 buildPythonPackage rec {
   pname = "vilfo-api-client";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    rev = "v${version}";
-    sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
+    rev = version;
+    sha256 = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
   };
 
   postPatch = ''
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     getmac
     requests
+    semver
   ];
 
   checkInputs = [
