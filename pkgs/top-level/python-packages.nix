@@ -1910,6 +1910,10 @@ in {
 
   databricks-connect = (callPackage ../development/python-modules/databricks-connect { }).databricks-connect_9;
 
+  inherit (callPackage ../development/python-modules/databricks-connect { })
+    databricks-connect_9
+  ;
+
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
