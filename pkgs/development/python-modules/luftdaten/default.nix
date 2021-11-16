@@ -1,20 +1,42 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, aiohttp, async-timeout }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, httpx
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.6.5";
+  version = "0.7.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-5SFb+psULyg9UKVY3oJPNLF3TGS/W+Bxoj79iTzReL4=";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-luftdaten";
+    rev = version;
+    sha256 = "0ij56zmdxwlqla11ii32nrv0fxd96d9m7q4bzlkrvw5hkp9lvrqq";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  # No tests implemented
-  doCheck = false;
+  propagatedBuildInputs = [
+    httpx
+  ];
+
+  checkInputs = [
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "luftdaten" ];
 
