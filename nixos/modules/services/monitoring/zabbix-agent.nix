@@ -17,6 +17,21 @@ let
 
   configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
+  # This will get the keys and values from userParameters, split them into newlines, append "UserParameter=" and seperate key and value with a comma.
+  # For example, {"key1" = "value1"} would turn into
+  # UserParameter=key1,value1
+  userParameterFile = pkgs.writeText "zabbix_agent_userParameters.conf" (
+    builtins.replaceStrings [" UserParameter=" ] [ "UserParameter="] (
+      toString (
+        map (x: x+"\n") (
+          builtins.attrValues (
+            builtins.mapAttrs (name: value: "UserParameter=" + name + "," + value) cfg.userParameters
+          )
+        )
+      )
+    )
+  );
+
 in
 
 {
@@ -116,6 +131,21 @@ in
         };
       };
 
+      userParameters = mkOption {
+        type = with types; attrsOf (oneOf [ str str (listOf str) ]);
+        default = {};
+        description = ''
+          Set of key value pairs to include as user commands.
+          If this is used, you may not use the Keyword "Include" in services.zabbixAgent.settings.
+          Key names and values must be provided as strings, you may need to include binaries in the services.zabbixAgent.extraPackages option. 
+        '';
+        example = {
+          "zfs.zpool.health[*]" = ''zpool list -H -o health $1 '';
+          "zfs.get.fsinfo[*]" = ''zfs get -o value -Hp $2 $1 '';
+          "zfs.get.compressratio[*]" = ''zfs get -o value -Hp compressratio $1 | sed "s/x//" '';
+        };
+      };
+
     };
 
   };
@@ -134,6 +164,11 @@ in
         LoadModule = builtins.attrNames cfg.modules;
         LoadModulePath = "${moduleEnv}/lib";
       })
+
+      (mkIf (cfg.userParameters != {}) {
+        Include = "${userParameterFile}";
+      })
+
 
       # the default value for "ListenIP" is 0.0.0.0 but zabbix agent 2 cannot accept configuration files which
       # explicitly set "ListenIP" to the default value...
