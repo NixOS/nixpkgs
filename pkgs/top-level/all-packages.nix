@@ -2459,6 +2459,8 @@ with pkgs;
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
+  clusterctl = callPackage ../applications/networking/cluster/clusterctl { };
+
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
@@ -15541,7 +15543,9 @@ with pkgs;
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
 
-  apr = callPackage ../development/libraries/apr { };
+  apr = callPackage ../development/libraries/apr {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   aprutil = callPackage ../development/libraries/apr-util {
     db = if stdenv.isFreeBSD then db4 else db;
