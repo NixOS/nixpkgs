@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.22.0";
+  version = "11.23.0";
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "v${version}";
-    sha256 = "0fhzpss3zs5x3hr4amrmw8hras75qc385ikpw0sx5a907kigk7w5";
+    sha256 = "1zrwr73dirmkbkcpy8v49hb52xffh0k9wp2603aysg9435w1rxvx";
   };
 
   postPatch = ''
