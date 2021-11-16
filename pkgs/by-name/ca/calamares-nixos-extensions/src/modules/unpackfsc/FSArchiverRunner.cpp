@@ -14,6 +14,7 @@
 
 #include <QProcess>
 
+static constexpr const int chunk_size = 137;
 
 Calamares::JobResult
 FSArchiverRunner::run()
@@ -37,11 +38,20 @@ FSArchiverRunner::run()
             Calamares::JobResult::MissingRequirements );
     }
 
+    const QString destinationPath = CalamaresUtils::System::instance()->targetPath( m_destination );
+    if ( destinationPath.isEmpty() )
+    {
+        return Calamares::JobResult::internalError(
+            tr( "Invalid fsarchiver configuration" ),
+            tr( "No destination could be found for <i>%1</i>." ).arg( m_destination ),
+            Calamares::JobResult::InvalidConfiguration );
+    }
+
     Calamares::Utils::Runner r( { fsarchiverExecutable,
                                   QStringLiteral( "-v" ),
-                                  QStringLiteral( "restfs" ),
+                                  QStringLiteral( "restdir" ),
                                   m_source,
-                                  QStringLiteral( "id=0,dest=%1" ).arg( m_destination ) } );
+                                  destinationPath } );
     r.setLocation( Calamares::Utils::RunLocation::RunInHost ).enableOutputProcessing();
     connect( &r, &decltype( r )::output, this, &FSArchiverRunner::fsarchiverProgress );
     return r.run().explainProcess( toolName, std::chrono::seconds( 0 ) );
@@ -50,5 +60,15 @@ FSArchiverRunner::run()
 void
 FSArchiverRunner::fsarchiverProgress( QString line )
 {
-    cDebug() << Logger::SubEntry << line;
+    m_since++;
+    // Typical line of output is this:
+    // -[00][ 99%][REGFILEM] /boot/thing
+    //      5   9           ^21
+    if (m_since >= chunk_size && line.length() > 21 && line[5] == '[' && line[9] == '%')
+    {
+        m_since = 0;
+        double p = double(line.mid(6,3).toInt()) / 100.0;
+        const QString filename = line.mid(22);
+        Q_EMIT progress(p, filename);
+    }
 }
