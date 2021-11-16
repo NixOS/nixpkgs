@@ -21108,6 +21108,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  mongodb-5_0 = callPackage ../servers/nosql/mongodb/v5_0.nix {
+    sasl = cyrus_sasl;
+    boost = boost169;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   nginx-sso = callPackage ../servers/nginx-sso { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
