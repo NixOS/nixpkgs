@@ -15,6 +15,9 @@ with haskellLib;
 
 self: super: {
 
+  # Tests exclude random-1.2, although it would work
+  lapack = doJailbreak super.lapack;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
