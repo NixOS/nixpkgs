@@ -42,13 +42,10 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-
-  variant = if cudaSupport then "-gpu" else "";
-  pname = "tensorflow${variant}";
   metadataPatch = ./relax-dependencies-metadata.patch;
   patch = ./relax-dependencies.patch;
 in buildPythonPackage {
-  inherit pname;
+  pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
