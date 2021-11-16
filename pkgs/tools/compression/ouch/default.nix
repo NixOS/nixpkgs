@@ -27,9 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ bzip2 xz zlib zstd ];
 
-  cargoBuildFlags = [ "--features" "zstd/pkg-config" ];
-
-  cargoTestFlags = cargoBuildFlags;
+  buildFeatures = [ "zstd/pkg-config" ];
 
   postInstall = ''
     help2man $out/bin/ouch > ouch.1
