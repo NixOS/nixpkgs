@@ -11,6 +11,7 @@
 
 #include <utils/Logger.h>
 #include <utils/Runner.h>
+#include <utils/String.h>
 
 #include <QString>
 
@@ -54,7 +55,7 @@ UnsquashRunner::run()
         QObject::connect( &r, &decltype( r )::output, [&]( QString line ) {
             if ( line.startsWith( "Number of inodes " ) )
             {
-                m_inodes = line.split( ' ', Qt::SkipEmptyParts ).last().toInt();
+                m_inodes = line.split( ' ', SplitSkipEmptyParts ).last().toInt();
             }
         } );
         /* ignored */ r.run();
@@ -86,7 +87,7 @@ UnsquashRunner::unsquashProgress( QString line )
     m_since++;
     if ( m_since > chunk_size && line.contains( '/' ) )
     {
-        const QString filename = line.split( '/', Qt::SkipEmptyParts ).last().trimmed();
+        const QString filename = line.split( '/', SplitSkipEmptyParts ).last().trimmed();
         if ( !filename.isEmpty() )
         {
             m_since = 0;
