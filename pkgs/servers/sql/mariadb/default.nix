@@ -30,7 +30,8 @@ common = rec { # attributes common to both builds
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
-    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+    ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = [
     ncurses openssl zlib pcre2 libiconv curl
@@ -96,6 +97,11 @@ common = rec { # attributes common to both builds
     rm -r $out/lib/pkgconfig
   '';
 
+  # perlPackages.DBDmysql is broken on darwin
+  postFixup = optionalString (!stdenv.hostPlatform.isDarwin) ''
+    wrapProgram $out/bin/mytop --set PATH ${makeBinPath [ less ncurses ]}
+  '';
+
   passthru.mysqlVersion = "5.7";
 
   passthru.tests = {
@@ -146,7 +152,7 @@ server = stdenv.mkDerivation (common // {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ bison boost.dev ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison boost.dev ];
 
   buildInputs = common.buildInputs ++ [
     bzip2 lz4 lzo snappy xz zstd
@@ -205,11 +211,6 @@ server = stdenv.mkDerivation (common // {
     mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
     mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
     rm -r "$out"/OFF
-  '';
-
-  # perlPackages.DBDmysql is broken on darwin
-  postFixup = optionalString (!stdenv.hostPlatform.isDarwin) ''
-    wrapProgram $out/bin/mytop --set PATH ${makeBinPath [ less ncurses ]}
   '';
 
   CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
