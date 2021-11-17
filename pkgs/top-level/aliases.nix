@@ -76,6 +76,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bcat = throw "bcat has been removed because upstream is dead"; # added 2021-08-22
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
+  beret = throw "beret has been removed"; # added 2021-11-16
   bluezFull = bluez; # Added 2019-12-03
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24

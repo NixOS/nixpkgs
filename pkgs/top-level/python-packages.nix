@@ -3468,6 +3468,8 @@ in {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
+  hdfs = callPackage ../development/python-modules/hdfs { };
+
   hdlparse = callPackage ../development/python-modules/hdlparse { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
@@ -6304,6 +6306,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydeck = callPackage ../development/python-modules/pydeck { };
+
   pydeconz = callPackage ../development/python-modules/pydeconz { };
 
   pydelijn = callPackage ../development/python-modules/pydelijn { };
@@ -9090,6 +9094,8 @@ in {
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
   tailer = callPackage ../development/python-modules/tailer { };
+
+  tailscale = callPackage ../development/python-modules/tailscale { };
 
   tappy = callPackage ../development/python-modules/tappy { };
 
