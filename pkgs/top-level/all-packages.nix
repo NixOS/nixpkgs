@@ -4283,6 +4283,8 @@ with pkgs;
 
   crackxls = callPackage ../tools/security/crackxls { };
 
+  crd2pulumi = callPackage ../development/tools/crd2pulumi { };
+
   create-cycle-app = nodePackages.create-cycle-app;
 
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
