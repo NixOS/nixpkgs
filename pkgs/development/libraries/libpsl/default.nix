@@ -21,11 +21,11 @@ let
     && !stdenv.isAarch64;
 in stdenv.mkDerivation rec {
   pname = "libpsl";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchurl {
-    url = "https://github.com/rockdaboot/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.lz";
-    sha256 = "183hadbira0d2zvv8272lspy31dgm9x26z35c61s5axcd5wd9g9i";
+    url = "https://github.com/rockdaboot/${pname}/releases/download/${version}/${pname}-${version}.tar.lz";
+    sha256 = "sha256-ZEN11Ve7O4TEhd8trpjuOI/h4R+3UjAATkuGI7O4M6k=";
   };
 
   nativeBuildInputs = [
