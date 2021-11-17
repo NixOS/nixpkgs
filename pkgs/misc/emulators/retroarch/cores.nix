@@ -612,7 +612,6 @@ in
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
-    broken = true; # since 2021-01-03
   };
 
   ppsspp = mkLibRetroCore {

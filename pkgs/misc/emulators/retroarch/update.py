@@ -61,7 +61,7 @@ CORES = {
     "parallel-n64": {"repo": "parallel-n64"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},
-    "play": {"repo": "Play-", "fetch_submodules": True},
+    "play": {"repo": "Play-", "owner": "jpd002", "fetch_submodules": True},
     "ppsspp": {"repo": "ppsspp", "owner": "hrydgard", "fetch_submodules": True},
     "prboom": {"repo": "libretro-prboom"},
     "prosystem": {"repo": "prosystem-libretro"},
@@ -116,9 +116,7 @@ def get_repo_hashes():
     repo_hashes = {}
 
     for core, repo in CORES.items():
-        info(
-            f"Getting repo hash for '{core}'...",
-        )
+        info(f"Getting repo hash for '{core}'...")
         repo_hashes[core] = get_repo_hash(**repo)
 
     return repo_hashes

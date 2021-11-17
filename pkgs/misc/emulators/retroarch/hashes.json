@@ -357,10 +357,10 @@
         "fetchSubmodules": true
     },
     "play": {
-        "owner": "libretro",
+        "owner": "jpd002",
         "repo": "Play-",
-        "rev": "884ae3b96c631f235cd18b2643d1f318fa6951fb",
-        "sha256": "zK1GRt3Rp9DsGmr0EvRfI/F1FzHc/afjFsATKIGYN1U=",
+        "rev": "b8e16159734c2068db0f2f12b11bc16ef55058ce",
+        "sha256": "qjp1rEjmDAAB2wXITA3lAS+ERJuZinoneJToYiYRi/w=",
         "fetchSubmodules": true
     },
     "ppsspp": {
