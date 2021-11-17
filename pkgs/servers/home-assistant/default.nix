@@ -536,6 +536,7 @@ in with py.pkgs; buildPythonApplication rec {
     "nam"
     "namecheapdns"
     "neato"
+    "ness_alarm"
     "netatmo"
     "nexia"
     "nightscout"
