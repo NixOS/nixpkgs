@@ -5076,6 +5076,8 @@ in {
 
   neo = callPackage ../development/python-modules/neo { };
 
+  nessclient = callPackage ../development/python-modules/nessclient { };
+
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   nestedtext = callPackage ../development/python-modules/nestedtext { };
