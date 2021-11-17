@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 libftdi1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
-  cargoBuildFlags = [ "--features=ftdi" ];
+  buildFeatures = [ "ftdi" ];
 
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";

@@ -26,9 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional robloxSupport openssl
     ++ lib.optional (robloxSupport && stdenv.isDarwin) Security;
 
-  cargoBuildFlags = lib.optional (!robloxSupport) "--no-default-features";
-
-  cargoTestFlags = cargoBuildFlags;
+  buildNoDefaultFeatures = !robloxSupport;
 
   meta = with lib; {
     description = "A blazing-fast modern Lua linter written in Rust";

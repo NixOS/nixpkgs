@@ -56,15 +56,14 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "crates/rust-analyzer";
 
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
-  cargoTestFlags = lib.optional useMimalloc "--features=mimalloc";
-
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
     libiconv
   ];
+
+  buildFeatures = lib.optional useMimalloc "mimalloc";
 
   RUST_ANALYZER_REV = version;
 

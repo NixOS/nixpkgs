@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ];
 
-  cargoBuildFlags = lib.optional (!withSki) "--no-default-features";
+  buildNoDefaultFeatures = !withSki;
 
   postInstall = ''
     installManPage man/*
