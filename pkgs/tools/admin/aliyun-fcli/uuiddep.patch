@@ -1,0 +1,28 @@
+diff --git a/glide.lock b/glide.lock
+index c73290d..a70b70f 100644
+--- a/glide.lock
++++ b/glide.lock
+@@ -63,8 +63,8 @@ imports:
+   version: 062282ea0dcff40c9fb8525789eef9644b1fbd6e
+   subpackages:
+   - internal/xxh32
+-- name: github.com/satori/go.uuid
+-  version: b2ce2384e17bbe0c6d34077efa39dbab3e09123b
++- name: github.com/gofrs/uuid
++  version: 6fe74fff266df57f91ca3f49a202057c27bf3f4b
+ - name: github.com/spf13/afero
+   version: f4711e4db9e9a1d3887343acb72b2bbfc2f686f5
+   subpackages:
+diff --git a/ram/client.go b/ram/client.go
+index ba72a26..3b0a273 100644
+--- a/ram/client.go
++++ b/ram/client.go
+@@ -12,7 +12,7 @@ import (
+ 	"strings"
+ 	"time"
+ 
+-	"github.com/satori/go.uuid"
++	"github.com/gofrs/uuid"
+ 	"gopkg.in/matryer/try.v1"
+ )
+ 
