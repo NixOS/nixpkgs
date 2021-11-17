@@ -15,9 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-e20POz9ZvuT0S+YG+9x7hcudhXQpOR4rVSFJbz76OI0=";
 
-  cargoBuildFlags = lib.optionals withJson [ "--features" "json" ];
-
-  cargoCheckFlags = cargoBuildFlags;
+  buildFeatures = lib.optional withJson "json";
 
   meta = with lib; {
     description = "Lints and suggestions for the nix programming language";

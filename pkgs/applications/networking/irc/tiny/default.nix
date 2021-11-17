@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
 
-  cargoBuildFlags = lib.optionals stdenv.isLinux [ "--features=desktop-notifications" ];
-
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
+
+  buildFeatures = lib.optional stdenv.isLinux "desktop-notifications";
 
   meta = with lib; {
     description = "A console IRC client";

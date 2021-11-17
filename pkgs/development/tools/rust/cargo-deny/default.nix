@@ -28,9 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
-  cargoBuildFlags = [ "--no-default-features" ];
-
-  cargoTestFlags = cargoBuildFlags;
+  buildNoDefaultFeatures = true;
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
