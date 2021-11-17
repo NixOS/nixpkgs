@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils }:
-
+{ lib, stdenv, fetchurl, jdk11_headless, makeWrapper, bash, coreutils }:
+let
+  # Latest supported LTS JDK for Zookeeper 3.6:
+  # https://zookeeper.apache.org/doc/r3.6.3/zookeeperAdmin.html#sc_requiredSoftware
+  jre = jdk11_headless;
+in
 stdenv.mkDerivation rec {
   pname = "zookeeper";
   version = "3.6.3";
