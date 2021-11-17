@@ -6,6 +6,12 @@
 , guiSupport ? fullBuild, tk
 , highlightSupport ? fullBuild
 , ApplicationServices
+# test dependencies
+, unzip
+, which
+, sqlite
+, git
+, gnupg
 }:
 
 let
@@ -55,6 +61,25 @@ let
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";
+
+    doCheck = true;
+    checkInputs = [
+      unzip
+      which
+      sqlite
+      git
+      gnupg
+    ];
+    checkPhase = ''
+      cat << EOF > tests/blacklists/nix
+      # tests enforcing "/usr/bin/env" shebangs, which are patched for nix
+      test-run-tests.t
+      test-check-shbang.t
+      EOF
+
+      export HGTESTFLAGS="--blacklist blacklists/nix"
+      make check
+    '';
 
     postInstall = (lib.optionalString guiSupport ''
       mkdir -p $out/etc/mercurial
