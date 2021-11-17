@@ -8,10 +8,8 @@
 , pkg-config
 , popt
 , enablePython ? true
-, python ? null
+, python
 }:
-
-assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
