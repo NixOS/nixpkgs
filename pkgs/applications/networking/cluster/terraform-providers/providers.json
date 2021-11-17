@@ -1109,8 +1109,8 @@
     "repo": "terraform-provider-vault",
     "rev": "v2.24.1",
     "sha256": "1xk14q06js774lqyylkbp53dnlsbgh3vi38mqqmndh80xigs6d99",
-    "version": "2.24.1",
-    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48"
+    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48",
+    "version": "2.24.1"
   },
   "vcd": {
     "owner": "terraform-providers",
