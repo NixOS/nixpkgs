@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchArchive
 , installShellFiles
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   pname = "msr";
   version = "20060208";
 
-  src = fetchzip {
+  src = fetchArchive {
     name = "${pname}-${version}";
     url = "http://www.etallen.com/msr/${pname}-${version}.src.tar.gz";
     hash = "sha256-e01qYWbOALkXp5NpexuVodMxA3EBySejJ6ZBpZjyT+E=";

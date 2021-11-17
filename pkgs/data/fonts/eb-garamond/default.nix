@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "0.016";
-in fetchzip rec {
+in fetchArchive rec {
   name = "eb-garamond-${version}";
 
   url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";

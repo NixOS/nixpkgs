@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 stdenv.mkDerivation rec {
   pname = "ries";
   version = "2018.04.11-1";
 
   # upstream does not provide a stable link
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://salsa.debian.org/debian/ries/-/archive/debian/${version}/ries-debian-${version}.zip";
     sha256 = "1h2wvd4k7f0l0i1vm9niz453xdbcs3nxccmri50qyrzzzc1b0842";
   };

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, unzip, bison, flex, gperf, zlib }:
+{ lib, stdenv, fetchArchive, unzip, bison, flex, gperf, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "flasm";
   version = "1.64";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.nowrap.de/download/flasm16src.zip";
     sha256 = "03hvxm66rb6rjwbr07hc3k7ia5rim2xlhxbd9qmcai9xwmyiqafg";
     stripRoot = false;

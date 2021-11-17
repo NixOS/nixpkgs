@@ -1,11 +1,11 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript }:
 
 buildKodiAddon rec {
   pname = "six";
   namespace = "script.module.six";
   version = "1.15.0+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "0c8vb0c4vhknkqqgvzj8l2ddgcm4iah0ca686slxbxbp800cydnf";
   };

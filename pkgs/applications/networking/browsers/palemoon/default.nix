@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchArchive
 , writeScript
 , alsa-lib
 , autoconf213
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   pname = "palemoon";
   version = "29.4.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://archive.palemoon.org/source/palemoon-${version}-source.tar.xz";
     stripRoot = false;
     sha256 = "0kb9yn1q8rrmnlsyvxvv2gdgyyf12g6rxlyh82lmc0gysvd4qd2c";

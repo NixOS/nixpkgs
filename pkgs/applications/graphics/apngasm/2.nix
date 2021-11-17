@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, libpng, zlib, zopfli }:
+{ lib, stdenv, fetchArchive, libpng, zlib, zopfli }:
 
 stdenv.mkDerivation rec {
   pname = "apngasm";
   version = "2.91";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/${pname}/${pname}-${version}-src.zip";
     stripRoot = false;
     sha256 = "0qhljqql159xkn1l83vz0q8wvzr7rjz4jnhiy0zn36pgvacg0zn1";

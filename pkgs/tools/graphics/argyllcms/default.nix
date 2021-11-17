@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
+{ stdenv, fetchArchive, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "argyllcms";
   version = "2.2.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ocaml, findlib }:
+{ lib, stdenv, fetchArchive, ocaml, findlib }:
 let
   pname = "easy-format";
   version = "1.2.0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   name = "${pname}-${version}";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/mjambon/${pname}/archive/v${version}.tar.gz";
     sha256 = "00ga7mrlycjc99gzp3bgx6iwhf7i6j8856f8xzrf1yas7zwzgzm9";
   };

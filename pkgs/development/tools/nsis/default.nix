@@ -2,7 +2,7 @@
 , stdenv
 , symlinkJoin
 , fetchurl
-, fetchzip
+, fetchArchive
 , sconsPackages
 , zlib
 , libiconv
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       sha256 = "1w1z2m982l6j8lw8hy91c3979wbnqglcf4148f9v79vl32znhpcv";
     };
   srcWinDistributable =
-    fetchzip {
+    fetchArchive {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
       sha256 = "04qm9jqbcybpwcrjlksggffdyafzwxxcaz9xhjw8w5rb95x7lw5q";
     };

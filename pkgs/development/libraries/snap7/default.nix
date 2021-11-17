@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, p7zip }:
+{ stdenv, lib, fetchFromGitHub, fetchArchive, p7zip }:
 
 stdenv.mkDerivation rec {
   pname = "snap7";
   version = "1.4.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/snap7/${version}/snap7-full-${version}.7z";
     sha256 = "1n5gs8bwb6g9vfllf3x12r5yzqzapmlq1bmc6hl854b8vkg30y8c";
     postFetch = ''

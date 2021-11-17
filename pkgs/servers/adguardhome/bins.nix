@@ -1,6 +1,6 @@
-{ fetchurl, fetchzip }:
+{ fetchurl, fetchArchive }:
 {
-"x86_64-darwin" = fetchzip {
+"x86_64-darwin" = fetchArchive {
   sha256 = "sha256-ec1l4KxKJH4Iwg9hW+xlxLADGLN1vParYaWIw7nCfKA=";
   url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.106.3/AdGuardHome_darwin_amd64.zip";
 };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, kernel, perl, wireguard-tools, bc }:
+{ lib, stdenv, fetchArchive, kernel, perl, wireguard-tools, bc }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert lib.versionAtLeast kernel.version "3.10";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "wireguard";
   version = "1.0.20210606";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${version}.tar.xz";
     sha256 = "sha256-ha7x6+41oPRRhuRwEb1ojRWLF1dlEMoJtqXrzRKQ408=";
   };

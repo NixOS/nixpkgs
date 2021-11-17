@@ -1,4 +1,4 @@
-{ fetchzip, buildDunePackage, lwt, ppxlib }:
+{ fetchArchive, buildDunePackage, lwt, ppxlib }:
 
 buildDunePackage {
   pname = "lwt_ppx";
@@ -8,7 +8,7 @@ buildDunePackage {
 
   minimumOCamlVersion = "4.04";
 
-  src = fetchzip {
+  src = fetchArchive {
     # `lwt_ppx` has a different release cycle than Lwt, but it's included in
     # one of its release bundles.
     # Because there could exist an Lwt release _without_ a `lwt_ppx` release,

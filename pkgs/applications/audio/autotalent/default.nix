@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "autotalent";
   version = "0.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://tombaran.info/${pname}-${version}.tar.gz";
     sha256 = "19srnkghsdrxxlv2c7qimvyslxz63r97mkxfq78vbg654l3qz1a6";
   };

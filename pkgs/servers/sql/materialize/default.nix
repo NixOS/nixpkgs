@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchzip
+, fetchArchive
 , rustPlatform
 , bootstrap_cmds
 , DiskArbitration
@@ -15,7 +15,7 @@
 let
   fetchNpmPackage = {name, version, hash, js_prod_file, js_dev_file, ...} @ args:
   let
-    package = fetchzip {
+    package = fetchArchive {
       url = "https://registry.npmjs.org/${name}/-/${baseNameOf name}-${version}.tgz";
       inherit hash;
     };

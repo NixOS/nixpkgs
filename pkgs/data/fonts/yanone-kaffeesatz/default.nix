@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "yanone-kaffeesatz-2004";
 
   url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";

@@ -15,7 +15,7 @@
 , util-linux
 , fetchFromGitHub
 , fetchurl
-, fetchzip
+, fetchArchive
 , fetchgit
 , zstd
 }:
@@ -77,7 +77,7 @@ let
   # mostly strongswan configuration), and k3s does use those files.
   # As such, we download it in order to grab 'etc' and bundle it into the final
   # k3s binary.
-  k3sRoot = fetchzip {
+  k3sRoot = fetchArchive {
     # Note: marked as apache 2.0 license
     url = "https://github.com/k3s-io/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
     sha256 = k3sRootSha256;

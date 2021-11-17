@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, perl, pkg-config, libbson
+{ lib, stdenv, fetchArchive, perl, pkg-config, libbson
 , openssl, which, zlib, snappy
 }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "mongoc";
   version = "1.8.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/mongodb/mongo-c-driver/releases/download/${version}/mongo-c-driver-${version}.tar.gz";
     sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
   };

@@ -1,4 +1,4 @@
-{ stdenv, lib, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
+{ stdenv, lib, autoPatchelfHook, fetchArchive, libunwind, libuuid, icu, curl
 , darwin, makeWrapper, less, openssl_1_1, pam, lttng-ust }:
 
 let archString = if stdenv.isAarch64 then "arm64"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   pname = "powershell";
   version = "7.2.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";
     sha256 = platformSha;
     stripRoot = false;

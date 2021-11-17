@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, cups, autoPatchelfHook
+{ stdenv, lib, fetchArchive, cups, autoPatchelfHook
 
   # Can either be "EU" or "Global"; it's unclear what the difference is
   , region ? "Global", qt4
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://la.kyoceradocumentsolutions.com/content/dam/kdc/kdag/downloads/technical/executables/drivers/kyoceradocumentsolutions/lad/en/Kyocera_Linux_PPD_Ver_${version}.tar.gz";
     sha256 = "11znnlkfssakml7w80gxlz1k59f3nvhph91fkzzadnm9i7a8yjal";
   };

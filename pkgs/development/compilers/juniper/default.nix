@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, makeWrapper, mono }:
+{ lib, stdenv, fetchArchive, makeWrapper, mono }:
 
 stdenv.mkDerivation rec {
   pname = "juniper";
   version = "2.3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://www.juniper-lang.org/installers/Juniper-${version}.zip";
     sha256 = "10am6fribyl7742yk6ag0da4rld924jphxja30gynzqysly8j0vg";
     stripRoot = false;

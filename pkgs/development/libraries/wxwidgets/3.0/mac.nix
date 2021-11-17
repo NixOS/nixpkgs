@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ lib, stdenv, fetchArchive, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
 , derez, rez, setfile
 , AGL, Cocoa, Kernel, WebKit
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.0.5.1";
   pname = "wxmac";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/wxWidgets/wxWidgets/archive/v${version}.tar.gz";
     sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
   };

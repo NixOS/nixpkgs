@@ -1,10 +1,10 @@
-{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
+{ lib, fetchArchive, buildGoModule, go-bindata, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
   version = "2.5.3";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
     sha256 = "sha256-Bq7wuc127aC/GO5wsgNkwvZsRbxFnZk2fzTWTygl6Sw=";
     stripRoot = false;

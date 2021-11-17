@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, jre, makeWrapper }:
+{ stdenv, lib, fetchurl, fetchArchive, jre, makeWrapper }:
 
 let
 translation-file = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.0.5";
 
   # use the pre compiled source, as compilation is a bit complex
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://gitlab.com/bmwinger/tr-patcher/uploads/b57899980b2351c136393f02977c4fab/tr-patcher-shadow.zip";
     sha256 = "0va7nbmlgf3p2nc0z2b9n1285y4q5rpyjr4w93rdnx38wrhinxnw";
   };

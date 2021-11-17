@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "paratype-pt-mono";
 
   urls = [

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchArchive, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
   version = "3.5.8";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
     sha256 = "sha256-IJ3p7+0fs/2dCbE1BOb2580upR9W/1R2/e3xmkAsJ+M=";
   };

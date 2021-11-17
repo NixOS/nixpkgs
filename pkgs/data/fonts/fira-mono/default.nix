@@ -1,7 +1,7 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let version = "4.202";
-in fetchzip {
+in fetchArchive {
   name = "fira-mono-${version}";
 
   url = "https://github.com/mozilla/Fira/archive/${version}.zip";

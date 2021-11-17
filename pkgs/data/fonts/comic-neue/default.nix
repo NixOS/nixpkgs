@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "comic-neue";
   version = "2.51";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://comicneue.com/${pname}-${version}.zip";
     sha256 = "sha256-DjRZtFnJOtZnxhfpgU5ihZFAonRK608/BQztCAExIU0=";
     stripRoot = false; # because it comes with a __MACOSX directory

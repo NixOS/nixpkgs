@@ -7,7 +7,7 @@
 , bigstringaf
 , buildDunePackage
 , emile
-, fetchzip
+, fetchArchive
 , fmt
 , fpath
 , hxd
@@ -29,7 +29,7 @@ buildDunePackage rec {
   pname = "mrmime";
   version = "0.5.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/mirage/mrmime/releases/download/v${version}/mrmime-v${version}.tbz";
     sha256 = "14k67v0b39b8jq3ny2ymi8g8sqx2gd81mlzsjphdzdqnlx6fk716";
   };

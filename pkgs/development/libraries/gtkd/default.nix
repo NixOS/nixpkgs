@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
+{ lib, stdenv, fetchArchive, fetchpatch, atk, cairo, ldc, gdk-pixbuf, gnome, gst_all_1, librsvg
 , glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
     sha256 = "12kc4s5gp6gn456d8pzhww1ggi9qbxldmcpp6855297g2x8xxy5p";
     stripRoot = false;

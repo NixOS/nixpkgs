@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "3.003";
-in fetchzip {
+in fetchArchive {
   name = "hack-font-${version}";
 
   url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, oasis, ocaml_optcomp, camlp4
+{ stdenv, lib, fetchArchive, ocaml, findlib, ocamlbuild, oasis, ocaml_optcomp, camlp4
 , num
 }:
 
@@ -19,7 +19,7 @@ let inherit (param) version; in
 stdenv.mkDerivation {
   pname = "ocsigen-deriving";
   inherit version;
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/ocsigen/deriving/archive/${version}.tar.gz";
     inherit (param) sha256;
   };

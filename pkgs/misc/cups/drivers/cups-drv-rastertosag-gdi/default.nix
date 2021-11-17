@@ -1,5 +1,5 @@
 { lib
-, fetchzip
+, fetchArchive
 , fetchpatch
 , cups
 , python3Packages
@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "rastertosag-gdi";
   version = "0.1";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.openprinting.org/download/printing/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1ldplpv497j8vhw24sksg3fiw8c5pqr0wajajh7p5xpvb6zlcmvw";
   };

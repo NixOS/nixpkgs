@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip }:
+{ stdenv, lib, fetchArchive }:
 
 stdenv.mkDerivation {
   pname = "quake3hires";
   version = "2020-01-20"; # Unknown version, used the date of web.archive.org capture.
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://web.archive.org/web/20200120024216/http://ioquake3.org/files/xcsv_hires.zip";
     sha256 = "09vhrray8mh1ic2qgcwv0zlmsnz789y32dkkvrz1vdki4yqkf717";
     stripRoot = false;

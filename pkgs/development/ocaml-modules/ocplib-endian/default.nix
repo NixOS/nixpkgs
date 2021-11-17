@@ -1,10 +1,10 @@
-{ lib, buildDunePackage, fetchzip, cppo }:
+{ lib, buildDunePackage, fetchArchive, cppo }:
 
 buildDunePackage rec {
   version = "1.1";
   pname = "ocplib-endian";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/OCamlPro/ocplib-endian/archive/${version}.tar.gz";
     sha256 = "sha256-zKsSkhlZBXSqPtw+/WN3pwo9plM9rDZfMbGVfosqb10=";
   };

@@ -178,7 +178,7 @@ self: super: {
     pkgs = super.postgresql_11.pkgs // {
       pg_repack = super.postgresql_11.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
-        src = self.fetchzip {
+        src = self.fetchArchive {
           url = "https://github.com/reorg/pg_repack/archive/923fa2f3c709a506e111cc963034bf2fd127aa00.tar.gz";
           sha256 = "17k6hq9xaax87yz79j773qyigm4fwk8z4zh5cyp6z0sxnwfqxxw5";
         };

@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchzip, libpcap, glib, pkg-config, libnet }:
+{ lib, stdenv, fetchArchive, libpcap, glib, pkg-config, libnet }:
 stdenv.mkDerivation {
   pname = "libnids";
   version = "1.24";
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/libnids/libnids-1.24.tar.gz";
     sha256 = "1cblklfdfxcmy0an6xyyzx4l877xdawhjd28daqfsvrh81mb07k1";
   };

@@ -5,7 +5,7 @@
 , xorg
 , libdrm
 , libva
-, fetchzip
+, fetchArchive
 , copyDesktopItems
 , fontconfig
 , libpng
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "weylus";
   version = "0.11.4";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/H-M-H/Weylus/releases/download/v${version}/linux.zip";
     sha256 = "sha256-EW3TdI4F4d4X/BeSqI05QtS77ym1U5jdswFfNtSFyFk=";
     stripRoot = false;

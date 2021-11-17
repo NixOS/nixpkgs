@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, cmake }:
+{ lib, stdenv, fetchArchive, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "clingo";
   version = "5.5.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/potassco/clingo/archive/v${version}.tar.gz";
     sha256 = "sha256-6xKtNi5IprjaFNadfk8kKjKzuPRanUjycLWCytnk0mU=";
   };

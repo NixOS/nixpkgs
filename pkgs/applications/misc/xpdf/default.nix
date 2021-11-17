@@ -1,7 +1,7 @@
 { enableGUI ? true
 , enablePDFtoPPM ? true
 , enablePrinting ? true
-, lib, stdenv, fetchzip, cmake, makeDesktopItem
+, lib, stdenv, fetchArchive, cmake, makeDesktopItem
 , zlib, libpng, cups ? null, freetype ? null
 , qtbase ? null, qtsvg ? null, wrapQtAppsHook
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "xpdf";
   version = "4.03";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
     sha256 = "09yhvmh1vxjy763nnmawynygp5bh3j4i8ixqja64j11676yl77n6";
   };

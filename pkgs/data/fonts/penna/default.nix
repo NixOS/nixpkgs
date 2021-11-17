@@ -1,4 +1,4 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   majorVersion = "0";
@@ -6,7 +6,7 @@ let
   pname = "penna";
 in
 
-fetchzip {
+fetchArchive {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}.zip";

@@ -1966,6 +1966,13 @@ Superuser created successfully.
           <literal>1.5.4</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>fetchzip</literal> has been renamed to
+          <literal>fetchArchive</literal> but is still available via the
+          alias <literal>fetchzip</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

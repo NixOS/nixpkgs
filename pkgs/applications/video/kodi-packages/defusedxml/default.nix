@@ -1,11 +1,11 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript }:
 
 buildKodiAddon rec {
   pname = "defusedxml";
   namespace = "script.module.defusedxml";
   version = "0.6.0+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "026i5rx9rmxcc18ixp6qhbryqdl4pn7cbwqicrishivan6apnacd";
   };

@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.3.2";
   pname = "d2codingfont";
 
-in fetchzip {
+in fetchArchive {
   name = "${pname}-${version}";
   url = "https://github.com/naver/${pname}/releases/download/VER${version}/D2Coding-Ver${version}-20180524.zip";
 

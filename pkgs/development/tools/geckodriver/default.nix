@@ -1,5 +1,5 @@
 { lib
-, fetchzip
+, fetchArchive
 , rustPlatform
 , stdenv
 , Security
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   # Source revisions are noted alongside the binary releases:
   # https://github.com/mozilla/geckodriver/releases
-  src = (fetchzip {
+  src = (fetchArchive {
     url = "https://hg.mozilla.org/mozilla-central/archive/970ef713fe58cbc8a29bfb2fb452a57e010bdb08.zip/testing";
     sha256 = "0cpx0kx8asqkmz2nyanbmcvhnrsksgd6jp3wlcd0maid3qbyw7s2";
   }).overrideAttrs (_: {

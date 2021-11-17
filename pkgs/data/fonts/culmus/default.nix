@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "0.133";
-in fetchzip {
+in fetchArchive {
   name = "culmus-${version}";
   url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
   postFetch = ''

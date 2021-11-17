@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchzip
+, fetchArchive
 }:
 
 buildPythonPackage rec {
   version = "1.16";
   pname = "patch";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://pypi/p/${pname}/${pname}-${version}.zip";
     sha256 = "1nj55hvyvzax4lxq7vkyfbw91pianzr3hp7ka7j12pgjxccac50g";
     stripRoot = false;

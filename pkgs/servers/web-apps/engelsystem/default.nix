@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, php, writeText, nixosTests }:
+{ lib, stdenv, fetchArchive, php, writeText, nixosTests }:
 
 let
   phpExt = php.withExtensions
@@ -7,7 +7,7 @@ in stdenv.mkDerivation rec {
   pname = "engelsystem";
   version = "3.1.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url =
       "https://github.com/engelsystem/engelsystem/releases/download/v3.1.0/engelsystem-v3.1.0.zip";
     sha256 = "01wra7li7n5kn1l6xkrmw4vlvvyqh089zs43qzn98hj0mw8gw7ai";

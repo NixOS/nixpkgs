@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchzip
+, fetchArchive
 , libX11
 , libXi
 , libGL
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "virtual-ans";
   version = "3.0.2c";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
     sha256 = "03r1v3l7rd59dakr7ndvgsqchv00ppkvi6sslgf1ng07r3rsvb1n";
   };

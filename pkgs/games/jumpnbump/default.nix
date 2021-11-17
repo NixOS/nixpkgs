@@ -1,13 +1,13 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchzip
+, fetchArchive
 , SDL2, SDL2_mixer, SDL2_net
 , gtk3, gobject-introspection
 , python3Packages
 , wrapGAppsHook
 }:
 
-let data = fetchzip {
+let data = fetchArchive {
   url = "https://mirandir.pagesperso-orange.fr/files/additional-levels.tar.xz";
   sha256 = "167hisscsbldrwrs54gq6446shl8h26qdqigmfg0lq3daynqycg2";
 }; in

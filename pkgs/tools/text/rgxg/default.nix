@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "rgxg";
   version = "0.1.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/rgxg/rgxg/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = "050jxc3qhfrm9fdbzd67hlsqlp4qk1fa20q1g2v919sh7s6v77si";
   };

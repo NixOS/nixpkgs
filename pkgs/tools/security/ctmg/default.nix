@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "ctmg";
   version = "1.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://git.zx2c4.com/ctmg/snapshot/ctmg-${version}.tar.xz";
     sha256 = "1i4v8sriwjrmj3yizbl1ysckb711yl9qsn9x45jq0ij1apsydhyc";
   };

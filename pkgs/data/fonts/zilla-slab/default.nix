@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.002";
-in fetchzip {
+in fetchArchive {
   name = "zilla-slab-${version}";
 
   url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";

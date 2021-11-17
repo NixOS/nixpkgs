@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, breeze-icons, gtk3, gnome-icon-theme, hicolor-icon-theme, mint-x-icons, pantheon }:
+{ lib, stdenv, fetchArchive, breeze-icons, gtk3, gnome-icon-theme, hicolor-icon-theme, mint-x-icons, pantheon }:
 
 stdenv.mkDerivation rec {
   pname = "BeautyLine";
   version = "0.0.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     name = "${pname}-${version}";
     url = "https://github.com/gvolpe/BeautyLine/releases/download/${version}/BeautyLine.tar.gz";
     sha256 = "030bjk333fr9wm1nc740q8i31rfsgf3vg6cvz36xnvavx3q363l7";

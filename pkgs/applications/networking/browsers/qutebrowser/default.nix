@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, python3
+{ stdenv, lib, fetchurl, fetchArchive, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, pipewire_0_2
 , libxslt, gst_all_1 ? null
@@ -14,7 +14,7 @@ let
   pdfjs = let
     version = "2.8.335";
   in
-  fetchzip rec {
+  fetchArchive rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
     sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";

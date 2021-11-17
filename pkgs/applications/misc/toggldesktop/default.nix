@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
+{ mkDerivation, lib, fetchArchive, buildEnv, makeDesktopItem, runCommand, writeText, pkg-config
 , cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
 , qtbase, qtwebengine, qtx11extras, sqlite }:
 
@@ -6,7 +6,7 @@ let
   name = "toggldesktop-${version}";
   version = "7.4.231";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/toggl/toggldesktop/archive/v${version}.tar.gz";
     sha256 = "01hqkx9dljnhwnyqi6mmzfp02hnbi2j50rsfiasniqrkbi99x9v1";
   };
@@ -15,7 +15,7 @@ let
     pname = "bugsnag-qt";
     version = "20180522.005732";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://github.com/yegortimoshenko/bugsnag-qt/archive/${version}.tar.gz";
       sha256 = "02s6mlggh0i4a856md46dipy6mh47isap82jlwmjr7hfsk2ykgnq";
     };
@@ -28,7 +28,7 @@ let
     pname = "qxtglobalshortcut";
     version = "f584471dada2099ba06c574bdfdd8b078c2e3550";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://github.com/hluk/qxtglobalshortcut/archive/${version}.tar.gz";
       sha256 = "1iy17gypav10z8aa62s5jb6mq9y4kb9ms4l61ydmk3xwlap7igw1";
     };
@@ -41,7 +41,7 @@ let
     pname = "qt-oauth-lib";
     version = "20190125.190943";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://github.com/yegortimoshenko/qt-oauth-lib/archive/${version}.tar.gz";
       sha256 = "0zmfgvdf6n79mgfvbda7lkdxxlzjmy86436gqi2r5x05vq04sfrj";
     };

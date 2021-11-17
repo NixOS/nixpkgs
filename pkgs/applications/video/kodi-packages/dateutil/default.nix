@@ -1,11 +1,11 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript, six }:
 
 buildKodiAddon rec {
   pname = "dateutil";
   namespace = "script.module.dateutil";
   version = "2.8.1+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "1jr77017ihs7j3455i72af71wyvs792kbizq4539ccd98far8lm7";
   };

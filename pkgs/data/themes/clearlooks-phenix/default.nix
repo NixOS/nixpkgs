@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation rec {
   version = "7.0.1";
   pname = "clearlooks-phenix";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
     sha256 = "1b6y4l3rf3c5r4v72fyj3ppvnvw13kvr2a1dyl63ni1jxnlk50kd";
   };

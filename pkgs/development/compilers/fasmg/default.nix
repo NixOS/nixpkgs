@@ -1,12 +1,12 @@
 { lib, stdenv
-, fetchzip
+, fetchArchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "fasmg";
   version = "j27m";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://flatassembler.net/fasmg.${version}.zip";
     sha256 = "0qmklb24n3r0my2risid8r61pi88gqrvm1c0xvyd0bp1ans6d7zd";
     stripRoot = false;

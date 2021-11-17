@@ -1,6 +1,6 @@
-{ fetchzip }:
+{ fetchArchive }:
 
-fetchzip rec {
+fetchArchive rec {
   name = "baekmuk-ttf-2.2";
 
   url = "http://kldp.net/baekmuk/release/865-${name}.tar.gz";

@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, zlib }:
+{ lib, stdenv, fetchArchive, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "randtype";
   version = "1.13";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/randtype/${pname}-${version}.tar.gz";
     sha256 = "055xs02qwpgbkn2l57bwghbsrsysg1zhm2asp0byvjpz4sc4w1rd";
   };

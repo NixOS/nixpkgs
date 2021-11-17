@@ -603,7 +603,7 @@ with pkgs;
     inherit curl stdenv;
   };
 
-  fetchzip = callPackage ../build-support/fetchzip { };
+  fetchArchive = callPackage ../build-support/fetchArchive { };
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 

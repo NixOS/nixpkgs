@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchArchive, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
   version = "5.5";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
     sha256 = "sha256-v9p+G1aSzrvuoJLfRqWQXGVJ+2vysxdTgrD+ZUt6Yg4=";
   };

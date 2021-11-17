@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildDunePackage }:
+{ lib, fetchArchive, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "nonstd";
@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://bitbucket.org/smondet/${pname}/get/${pname}.${version}.tar.gz";
     sha256 = "0ccjwcriwm8fv29ij1cnbc9win054kb6pfga3ygzdbjpjb778j46";
   };

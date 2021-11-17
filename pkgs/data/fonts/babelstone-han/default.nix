@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "13.0.3";
-in fetchzip {
+in fetchArchive {
   name = "babelstone-han-${version}";
 
   # upstream download links are unversioned, so hash changes

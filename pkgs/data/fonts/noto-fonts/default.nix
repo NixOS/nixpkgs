@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , fetchurl
-, fetchzip
+, fetchArchive
 , cairo
 , python3
 , pkg-config
@@ -74,7 +74,7 @@ in
     weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
   };
 
-  noto-fonts-cjk = let zip = fetchzip {
+  noto-fonts-cjk = let zip = fetchArchive {
     url = let rev = "be6c059ac1587e556e2412b27f5155c8eb3ddbe6"; in
       "https://raw.githubusercontent.com/googlefonts/noto-cjk/${rev}/NotoSansCJK.ttc.zip";
     # __MACOSX...

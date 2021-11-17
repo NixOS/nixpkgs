@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, mkDerivation
+{ stdenv, lib, fetchArchive, mkDerivation
 , appimageTools
 , autoPatchelfHook
 , desktop-file-utils
@@ -11,7 +11,7 @@ mkDerivation rec {
   version = "2018-1-30";
   name="${pname}-${version}";
 
-  src = fetchzip {
+  src = fetchArchive {
       url = "https://www.slsknet.org/SoulseekQt/Linux/SoulseekQt-${version}-64bit-appimage.tgz";
       sha256 = "16ncnvv8h33f161mgy7qc0wjvvqahsbwvby65qhgfh9pbbgb4xgg";
   };

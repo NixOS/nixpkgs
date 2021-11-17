@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchArchive
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
 # libjulia dependencies
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
     sha256 = src_sha256;
   };

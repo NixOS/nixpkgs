@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   version = "1.000";
 in
-fetchzip {
+fetchArchive {
   name = "fraunces-${version}";
 
   url = "https://github.com/undercasetype/Fraunces/releases/download/${version}/UnderCaseType_Fraunces_${version}.zip";

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchzip, bzip2, lzo, openssl, zlib }:
+{ stdenv, lib, fetchArchive, bzip2, lzo, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.11.0";
   pname = "quickbms";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://aluigi.altervista.org/papers/quickbms-src-${version}.zip";
     hash = "sha256-uQKTE36pLO8uhrX794utqaDGUeyqRz6zLCQFA7DYkNc=";
   };

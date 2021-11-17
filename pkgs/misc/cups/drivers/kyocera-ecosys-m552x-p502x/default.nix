@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchArchive
   # can either be "EU" or "Global"; it's unclear what the difference is
 , region ? "Global"
 }:
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "cups-kyocera-ecosys-m552x-p502x";
   version = "8.1602";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.kyoceradocumentsolutions.de/content/download-center/de/drivers/all/Linux_8_1602_ECOSYS_M5521_5526_P5021_5026_zip.download.zip";
     sha256 = "sha256-XDH5deZmWNghfoO7JaYYvnVq++mbQ8RwLY57L2CKYaY=";
   };

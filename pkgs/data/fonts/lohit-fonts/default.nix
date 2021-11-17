@@ -1,4 +1,4 @@
-{ fetchzip, lib }:
+{ fetchArchive, lib }:
 let
   fonts = {
     assamese        = { label = "Assamese";          version = "2.91.5"; sha256 = "06cw416kgw0m6883n5ixmpniinsd747rdmacf06z83w1hqwj2js6"; };
@@ -23,7 +23,7 @@ let
     sindhi          = { label = "Sindhi";            version = "2.4.3" ; sha256 = "1iywzyy185bvfsfi5pp11c8bzrp40kni2cpwcmxqwha7c9v8brlc"; };
   };
 
-  mkpkg = license: name: {label, version, sha256}: fetchzip {
+  mkpkg = license: name: {label, version, sha256}: fetchArchive {
     name = "lohit-${name}-${version}";
 
     url = "https://releases.pagure.org/lohit/lohit-${name}-ttf-${version}.tar.gz";

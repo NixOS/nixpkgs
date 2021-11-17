@@ -4,7 +4,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, fetchzip
+, fetchArchive
 , buildPackages
 , ninja
 , meson
@@ -165,7 +165,7 @@ stdenv.mkDerivation {
     # need (AFAICT).
     ./0019-core-handle-lookup-paths-being-symlinks.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (let
-    oe-core = fetchzip {
+    oe-core = fetchArchive {
       url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
       sha256 = "1jixya4czkr5p5rdcw3d6ips8zzr82dvnanvzvgjh67730scflya";
     };

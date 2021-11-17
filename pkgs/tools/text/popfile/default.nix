@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, perlPackages,
+{ lib, stdenv, fetchArchive, makeWrapper, perlPackages,
 ... }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.1.3";
   name = "${appname}-${version}";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://getpopfile.org/downloads/${appname}-${version}.zip";
     sha256 = "0gcib9j7zxk8r2vb5dbdz836djnyfza36vi8215nxcdfx1xc7l63";
     stripRoot = false;

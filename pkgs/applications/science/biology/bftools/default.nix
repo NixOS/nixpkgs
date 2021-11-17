@@ -1,10 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchzip, jre }:
+{ stdenv, lib, makeWrapper, fetchArchive, jre }:
 
 stdenv.mkDerivation rec {
   pname = "bftools";
   version = "6.3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://downloads.openmicroscopy.org/bio-formats/${version}/artifacts/bftools.zip";
     sha256 = "02nvvmpfglpah1ihd08aw65g1794w588c988cdar1hfl4s80qwhb";
   };

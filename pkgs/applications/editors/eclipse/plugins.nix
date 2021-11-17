@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, unzip }:
+{ lib, stdenv, fetchurl, fetchArchive, unzip }:
 
 rec {
 
@@ -250,7 +250,7 @@ rec {
     # find current version at https://www.eclipse.org/cdt/downloads.php
     version = "10.4.1";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
       sha256 = "1l3v6dryaqifwrv2h4knwmpyf11qbyl04p7gcvgrx3hczc82a6p1";
@@ -269,7 +269,7 @@ rec {
     name = "checkstyle-${version}";
     version = "8.7.0.201801131309";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/8.7.0/net.sf.eclipsecs-updatesite_${version}.zip";
       sha256 = "07fymk705x4mwq7vh2i6frsf67jql4bzrkdzhb4n74zb0g1dib60";
@@ -342,7 +342,7 @@ rec {
     name = "drools-${version}";
     version = "7.17.0.Final";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
       sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
       extraPostFetch = ''
@@ -366,7 +366,7 @@ rec {
     name = "eclemma-${version}";
     version = "2.3.2.201409141915";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "mirror://sourceforge/project/eclemma/01_EclEmma_Releases/2.3.2/eclemma-2.3.2.zip";
       sha256 = "0w1kwcjh45p7msv5vpc8i6dsqwrnfmjama6vavpnxlji56jd3c43";
@@ -406,7 +406,7 @@ rec {
     name = "freemarker-${version}";
     version = "1.5.305";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://github.com/ddekany/jbosstools-freemarker/releases/download/v${version}/freemarker.site-${version}.zip";
       sha256 = "1qrhi300vk07gi14r445wvy0bvghbjd6c4k7q09pqpaxv6raiczn";
       stripRoot = false;
@@ -422,7 +422,7 @@ rec {
     name = "gnuarmeclipse-${version}";
     version = "3.1.1-201606210758";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
       sha256 = "1g77jlhfa3csaxxps1z5lasrd9l2p5ajnddnq9ra5syw8ggkdc2h";
@@ -503,7 +503,7 @@ rec {
     repo = "rustdt.github.io";
     rev = "5cbe753008c40555c493092a6f4ae1ffbff0b3ce";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
@@ -525,7 +525,7 @@ rec {
     name = "scala-${version}";
     version = "4.4.1.201605041056";
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/base-20160504-1321.zip";
       sha256 = "13xgx2rwlll0l4bs0g6gyvrx5gcc0125vzn501fdj0wv2fqxn5lw";
     };
@@ -542,7 +542,7 @@ rec {
     name = "spotbugs-${version}";
     version = "3.1.11";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
       sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
@@ -585,7 +585,7 @@ rec {
     repo = "vrapper";
     date = "20170311";
 
-    src = fetchzip {
+    src = fetchArchive {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/releases/download/${version}/vrapper_${version}_${date}.zip";
       sha256 = "0nyirf6km97q211cxfy01kidxac20m8ba3kk9xj73ykrhsk3cxjp";

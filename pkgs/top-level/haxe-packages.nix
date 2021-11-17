@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
+{ stdenv, lib, fetchArchive, fetchFromGitHub, haxe, neko, jdk, mono }:
 
 let
   self = haxePackages;
@@ -31,7 +31,7 @@ let
         name = "${libname}-${version}";
 
         buildInputs = (attrs.buildInputs or []) ++ [ haxe neko ]; # for setup-hook.sh to work
-        src = fetchzip rec {
+        src = fetchArchive rec {
           name = "${libname}-${version}";
           url = "http://lib.haxe.org/files/3.0/${withCommas name}.zip";
           inherit sha256;

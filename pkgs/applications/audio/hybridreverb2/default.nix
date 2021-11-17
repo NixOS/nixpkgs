@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, pkg-config, lv2, alsa-lib, libjack2,
+{ lib, stdenv, fetchFromGitHub, fetchArchive, cmake, pkg-config, lv2, alsa-lib, libjack2,
   freetype, libX11, gtk3, pcre, libpthreadstubs, libXdmcp, libxkbcommon,
   epoxy, at-spi2-core, dbus, curl, fftwFloat }:
 
@@ -12,7 +12,7 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
-  impulseDB = fetchzip {
+  impulseDB = fetchArchive {
     url = "https://github.com/${owner}/${pname}-impulse-response-database/archive/v${DBversion}.zip";
     sha256 = "1hlfxbbkahm1k2sk3c3n2mjaz7k80ky3r55xil8nfbvbv0qan89z";
   };

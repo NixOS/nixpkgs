@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.1";
-in fetchzip {
+in fetchArchive {
   name = "hasklig-${version}";
 
   url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";

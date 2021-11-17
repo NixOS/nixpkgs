@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.3";
-in fetchzip {
+in fetchArchive {
   name = "mononoki-${version}";
 
   url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";

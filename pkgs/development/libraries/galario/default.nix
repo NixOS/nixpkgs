@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchzip
+, fetchArchive
 , fetchFromGitHub
 , cmake
 , fftw
@@ -11,7 +11,7 @@
 let
   # CMake recipes are needed to build galario
   # Build process would usually download them
-  great-cmake-cookoff = fetchzip {
+  great-cmake-cookoff = fetchArchive {
     url = "https://github.com/UCL/GreatCMakeCookOff/archive/v2.1.9.tar.gz";
     sha256 = "1yd53b5gx38g6f44jmjk4lc4igs3p25z6616hfb7aq79ly01q0w2";
   };

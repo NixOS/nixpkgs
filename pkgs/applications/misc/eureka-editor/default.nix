@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, fltk, zlib, xdg-utils, xorg, libjpeg, libGL }:
+{ lib, stdenv, fetchArchive, fltk, zlib, xdg-utils, xorg, libjpeg, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "eureka-editor";
   version = "1.21";
   shortver = "121";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/eureka-editor/Eureka/${version}/eureka-${shortver}-source.tar.gz";
     sha256 = "0fpj13aq4wh3f7473cdc5jkf1c71jiiqmjc0ihqa0nm3hic1d4yv";
   };

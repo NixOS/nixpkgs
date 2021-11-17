@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchzip, libGLU, libGL, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
+{ lib, stdenv, fetchArchive, libGLU, libGL, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
 
 let
-  common = import ./common.nix { inherit fetchzip; };
+  common = import ./common.nix { inherit fetchArchive; };
 in
 
 stdenv.mkDerivation rec {

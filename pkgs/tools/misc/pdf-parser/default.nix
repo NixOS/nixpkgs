@@ -1,10 +1,10 @@
-{ lib, python3Packages, fetchzip }:
+{ lib, python3Packages, fetchArchive }:
 
 python3Packages.buildPythonApplication {
   pname = "pdf-parser";
   version = "0.7.4";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://didierstevens.com/files/software/pdf-parser_V0_7_4.zip";
     sha256 = "1j39yww2yl4cav8xgd4zfl5jchbbkvffnrynkamkzvz9dd5np2mh";
   };

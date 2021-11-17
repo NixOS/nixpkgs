@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip }:
+{ stdenv, lib, fetchArchive }:
 
 stdenv.mkDerivation rec {
   pname = "boundary";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
         x86_64-darwin = "sha256-LdCakVru1sbB88plsGrJiMDQl5HtH1GkCkcjmIVjeec=";
       };
     in
-    fetchzip {
+    fetchArchive {
       url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
       inherit sha256;
     };

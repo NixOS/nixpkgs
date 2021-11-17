@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2.138";
-in fetchzip {
+in fetchArchive {
   name = "roboto-${version}";
 
   url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # Can be removed with https://github.com/dlang/dub/pull/1368
   dubvar = "\\$DUB";
   postPatch = ''
-      substituteInPlace test/fetchzip.sh \
+      substituteInPlace test/fetchArchive.sh \
           --replace "dub remove" "\"${dubvar}\" remove"
   '';
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     rm test/issue1773-lint.sh
 
     rm test/ddox.sh
-    rm test/fetchzip.sh
+    rm test/fetchArchive.sh
     rm test/feat663-search.sh
     rm -rf test/git-dependency
     rm test/interactive-remove.sh

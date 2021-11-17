@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchArchive
 , pkg-config
 , libressl
 }:
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "notemap";
   version = "1.3";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://git.causal.agency/notemap/snapshot/notemap-${version}.tar.gz";
     sha256 = "0s9c1xx0iggyzclqw3294bjv7qgvd5l5zgbryks4hvfibr73r6ps";
   };

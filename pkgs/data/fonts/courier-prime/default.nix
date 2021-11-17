@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "unstable-2019-12-05";
   repo = "CourierPrime";
   rev = "7f6d46a766acd9391d899090de467c53fd9c9cb0";
-in fetchzip rec {
+in fetchArchive rec {
   name = "courier-prime-${version}";
   url = "https://github.com/quoteunquoteapps/${repo}/archive/${rev}/${name}.zip";
   sha256 = "1xh4pkksm6zrafhb69q4lq093q6pl245zi9qhqw3x6c1ab718704";

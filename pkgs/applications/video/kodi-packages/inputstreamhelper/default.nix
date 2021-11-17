@@ -1,10 +1,10 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchArchive, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
   version = "0.5.8+matrix.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
     sha256 = "xdsUzmz8ji9JcYLEUFWwvXq0Oig5i08VPQD93K8R9hk=";
   };

@@ -1,6 +1,6 @@
 { stdenvNoCC
 , lib
-, fetchzip
+, fetchArchive
 }:
 
 let
@@ -18,7 +18,7 @@ let
       lib.toUpper (lib.substring 0 1 family) +
       lib.substring 1 (lib.stringLength family) family;
     in
-    fetchzip {
+    fetchArchive {
       name = "source-han-${family}-${lib.removeSuffix "R" rev}";
 
       url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";

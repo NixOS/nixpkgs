@@ -1,7 +1,7 @@
 { lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
+, nss, nspr, cups, fetchArchive, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
 , e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems
 }:
@@ -16,13 +16,13 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
-    x86_64-linux = fetchzip {
+    x86_64-linux = fetchArchive {
 
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
       sha256 = "sha256-yC7MGTVxD8xEutlleH3WKRnendnv0KijhUwQ00wwJYQ";
     };
 
-    x86_64-darwin = fetchzip {
+    x86_64-darwin = fetchArchive {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
       sha256 = "sha256-SP+LCsxjl5YNOu4rDZOiDIqkynGE+iiLJtxi8tFugKM=";
     };

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchzip
+, fetchArchive
 , cmake
 , boost
 , catch
@@ -19,7 +19,7 @@
 }:
 let
   external = {
-    avalon = fetchzip {
+    avalon = fetchArchive {
       url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
       sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
       stripRoot = false;

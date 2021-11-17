@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "bash-completion";
   version = "2.11";
 
-  # Using fetchurl because fetchGithub or fetchzip will have trouble on
+  # Using fetchurl because fetchGithub or fetchArchive will have trouble on
   # e.g. APFS filesystems (macOS) because of non UTF-8 characters in some of the
   # test fixtures that are part of the repository.
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768

@@ -1,10 +1,10 @@
-{ lib, fetchzip, stdenvNoCC, writeText }:
+{ lib, fetchArchive, stdenvNoCC, writeText }:
 
 let
   version = "20210225";
 in stdenvNoCC.mkDerivation {
   name = "iana-etc-${version}";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
     sha256 = "sha256:1bbbnj2ya0apyyhnw37521yl1hrz3zy3l8dw6sacmir0y6pmx9gi";
   };

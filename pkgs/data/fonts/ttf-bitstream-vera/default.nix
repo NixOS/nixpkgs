@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   pname = "ttf-bitstream-vera";
   version = "1.10";
 in
-fetchzip rec {
+fetchArchive rec {
   name = "${pname}-${version}";
 
   url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.bz2";

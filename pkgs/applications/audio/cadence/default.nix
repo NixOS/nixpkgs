@@ -3,7 +3,7 @@
 , coreutils
 , libjack2
 , fetchpatch
-, fetchzip
+, fetchArchive
 , jack_capture
 , pkg-config
 , pulseaudioFull
@@ -20,7 +20,7 @@ mkDerivation rec {
   version = "0.9.1";
   pname = "cadence";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/falkTX/Cadence/archive/v${version}.tar.gz";
     sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };

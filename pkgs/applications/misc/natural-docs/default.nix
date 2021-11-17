@@ -1,10 +1,10 @@
-{ stdenv, fetchzip, makeWrapper, mono, lib }:
+{ stdenv, fetchArchive, makeWrapper, mono, lib }:
 
 stdenv.mkDerivation rec {
   pname = "natural-docs";
   version = "2.1.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://naturaldocs.org/download/natural_docs/${version}/Natural_Docs_${version}.zip";
     sha256 = "03fizjgvhiw3lqyykqw1whdh97xyiy3f226c1348ll61ryjxamqw";
   };

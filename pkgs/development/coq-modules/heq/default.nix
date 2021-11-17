@@ -1,4 +1,4 @@
-{lib, fetchzip, mkCoqDerivation, coq, version ? null }:
+{lib, fetchArchive, mkCoqDerivation, coq, version ? null }:
 
 with lib; mkCoqDerivation {
   pname = "heq";

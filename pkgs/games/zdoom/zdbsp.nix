@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, cmake, zlib }:
+{ lib, stdenv, fetchArchive, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "zdbsp";
   version = "1.19";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://zdoom.org/files/utils/zdbsp/zdbsp-${version}-src.zip";
     sha256 = "1j6k0appgjjj3ffbll9hy9nnbqr17szd1s66q08zrbkfqf6g8f0d";
     stripRoot = false;

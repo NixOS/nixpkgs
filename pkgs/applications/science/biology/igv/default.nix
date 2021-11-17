@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchzip, jdk11 }:
+{ lib, stdenv, fetchArchive, jdk11 }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
   version = "2.8.13";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://data.broadinstitute.org/igv/projects/downloads/2.8/IGV_${version}.zip";
     sha256 = "0sab478jq96iw3fv0560hrrj8qbh40r8m4ncypdb7991j9haxl09";
   };

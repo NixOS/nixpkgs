@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.082";
 in
-fetchzip {
+fetchArchive {
   name = "recursive-${version}";
 
   url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";

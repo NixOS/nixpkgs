@@ -1,10 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchzip, androidenv, makeWrapper }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchArchive, androidenv, makeWrapper }:
 let
 version = "2.5";
 apk = stdenv.mkDerivation {
   pname = "gnirehtet.apk";
   inherit version;
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/Genymobile/gnirehtet/releases/download/v${version}/gnirehtet-rust-linux64-v${version}.zip";
     sha256 = "1db0gkg5z8lighhkyqfsr9jiacrck89zmfnmp74vj865hhxgjzgq";
   };

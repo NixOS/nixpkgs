@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild }:
+{ stdenv, lib, fetchArchive, ocaml, findlib, ocamlbuild }:
 
 let version = "0.2.4"; in
 
 stdenv.mkDerivation {
   pname = "ocaml-iso8601";
   inherit version;
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/sagotch/ISO8601.ml/archive/${version}.tar.gz";
     sha256 = "0ypdd1p04xdjxxx3b61wp7abswfrq3vcvwwaxvywxwqljw0dhydi";
   };

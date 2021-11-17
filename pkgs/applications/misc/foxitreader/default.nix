@@ -1,10 +1,10 @@
-{ mkDerivation, lib, fetchzip, libarchive, autoPatchelfHook, libsecret, libGL, zlib, openssl, qtbase, qtwebkit, qtxmlpatterns }:
+{ mkDerivation, lib, fetchArchive, libarchive, autoPatchelfHook, libsecret, libGL, zlib, openssl, qtbase, qtwebkit, qtxmlpatterns }:
 
 mkDerivation rec {
   pname = "foxitreader";
   version = "2.4.4.0911";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://cdn01.foxitsoftware.com/pub/foxit/reader/desktop/linux/${lib.versions.major version}.x/${lib.versions.majorMinor version}/en_us/FoxitReader.enu.setup.${version}.x64.run.tar.gz";
     sha256 = "0ff4xs9ipc7sswq0czfhpsd7qw7niw0zsf9wgsqhbbgzcpbdhcb7";
     stripRoot = false;

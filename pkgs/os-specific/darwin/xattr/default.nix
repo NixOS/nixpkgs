@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchArchive
 , buildPythonPackage
 , python
 , ed
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "xattr";
   version = "61.60.1";
 
-  src = fetchzip rec {
+  src = fetchArchive rec {
     url = "https://opensource.apple.com/tarballs/python_modules/python_modules-${version}.tar.gz";
     sha256 = "19kydl7w4vpdi7zmfd5z9vjkq24jfk2cv4j0pppw69j06czhdwwi";
   };

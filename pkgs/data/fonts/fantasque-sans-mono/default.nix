@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.8.0";
 in
 
-fetchzip rec {
+fetchArchive rec {
   name = "fantasque-sans-mono-${version}";
 
   url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";

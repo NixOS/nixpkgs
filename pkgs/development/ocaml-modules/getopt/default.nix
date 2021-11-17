@@ -1,10 +1,10 @@
-{ lib, fetchzip, stdenv, ocaml, findlib, ocamlbuild }:
+{ lib, fetchArchive, stdenv, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-getopt";
   version = "20120615";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://download.ocamlcore.org/ocaml-getopt/ocaml-getopt/${version}/ocaml-getopt-${version}.tar.gz";
     sha256 = "0bng2mmdixpmj23xn8krlnaq66k22iclwz46r8zjrsrq3wcn1xgn";
   };

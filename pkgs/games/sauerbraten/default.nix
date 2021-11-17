@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, SDL2, SDL2_image, SDL2_mixer
+{ lib, stdenv, fetchArchive, SDL2, SDL2_image, SDL2_mixer
 , zlib, makeWrapper
 }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "sauerbraten";
   version = "2020-12-27";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/sauerbraten/sauerbraten_${builtins.replaceStrings [ "-" ] [ "_" ] version}_linux.tar.bz2";
     sha256 = "0llknzj23vx6f3y452by9c7wlhzclyq4bqi22qd52m3l916z2mn5";
   };

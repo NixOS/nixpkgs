@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, fetchzip, mono }:
+{ lib, stdenv, buildEnv, fetchArchive, mono }:
 
 let
   version = "2.6";
@@ -6,7 +6,7 @@ let
     pname = "otpkeyprov";
     inherit version;
 
-    src = fetchzip {
+    src = fetchArchive {
       url = "https://keepass.info/extensions/v2/otpkeyprov/OtpKeyProv-${version}.zip";
       sha256 = "1p60k55v2sxnv1varmp0dgbsi2rhjg9kj19cf54mkc87nss5h1ki";
       stripRoot = false;

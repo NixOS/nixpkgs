@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip }:
+{ lib, buildGoModule, fetchFromGitHub, fetchArchive }:
 
 buildGoModule rec {
   pname = "mutagen";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0szs9yc49fyh55ra1wf8zj76kdah0x49d45cgivk3gqh2hl17j6l";
 
-  agents = fetchzip {
+  agents = fetchArchive {
     name = "mutagen-agents-${version}";
     # The package architecture does not matter since all packages contain identical mutagen-agents.tar.gz.
     url = "https://github.com/mutagen-io/mutagen/releases/download/v${version}/mutagen_linux_amd64_v${version}.tar.gz";

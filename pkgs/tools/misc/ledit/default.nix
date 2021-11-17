@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, ocaml, camlp5}:
+{ lib, stdenv, fetchArchive, ocaml, camlp5}:
 
 stdenv.mkDerivation {
   pname = "ledit";
   version = "2.04";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://pauillac.inria.fr/~ddr/ledit/distrib/src/ledit-2.04.tgz";
     sha512 = "16vlv6rcsddwrvsqqiwxdfv5rxvblhrx0k84g7pjibi0an241yx8aqf8cj4f4sgl5xfs3frqrdf12zqwjf2h4jvk8jyhyar8n0nj3g0";
   };

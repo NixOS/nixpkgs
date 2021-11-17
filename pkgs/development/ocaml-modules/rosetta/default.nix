@@ -1,6 +1,6 @@
 { buildDunePackage
 , coin
-, fetchzip
+, fetchArchive
 , lib
 , yuscii
 , uuuu
@@ -10,7 +10,7 @@ buildDunePackage rec {
   pname = "rosetta";
   version = "0.3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/mirage/rosetta/releases/download/v${version}/rosetta-v${version}.tbz";
     sha256 = "1gzp3fbk8qd207cm25dgj9kj7b44ldqpjs63pl6xqvi9hx60m3ij";
   };

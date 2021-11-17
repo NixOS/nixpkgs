@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, perl, python2, gnuplot, coreutils, gnugrep }:
+{ lib, stdenv, fetchArchive, perl, python2, gnuplot, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
   version = "2016-01-08";
 
   # upstream does not make releases
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/hoxu/gitstats/archive/55c5c285558c410bb35ebf421245d320ab9ee9fa.zip";
     sha256 = "1bfcwhksylrpm88vyp33qjby4js31zcxy7w368dzjv4il3fh2i59";
     name = "${pname}-${version}" + "-src";

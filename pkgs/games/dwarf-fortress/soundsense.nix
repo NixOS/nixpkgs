@@ -1,9 +1,9 @@
 { stdenv
-, fetchzip
+, fetchArchive
 , dos2unix
 , soundPack ? stdenv.mkDerivation {
     name = "soundsense-soundpack";
-    src = fetchzip {
+    src = fetchArchive {
       url = "http://df.zweistein.cz/soundsense/soundpack.zip";
       sha256 = "0qz0mjkp7wp0gxk3ws2x760awv8c9lkacj2fn9bz3gqqnq262ffa";
     };
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   dfVersion = "0.44.12";
   inherit soundPack;
   pname = "soundsense";
-  src = fetchzip {
+  src = fetchArchive {
     url = "http://df.zweistein.cz/soundsense/soundSense_${version}.zip";
     sha256 = "1gkrs69l3xsh858yjp204ddp29m668j630akm7arssc9359wxqkk";
   };

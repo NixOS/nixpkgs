@@ -1,6 +1,6 @@
 # This file defines cabal2nix-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
 { mkDerivation, aeson, ansi-wl-pprint, base, bytestring, Cabal
-, containers, deepseq, directory, distribution-nixpkgs, fetchzip
+, containers, deepseq, directory, distribution-nixpkgs, fetchArchive
 , filepath, hackage-db, hopenssl, hpack, language-nix, lens, lib
 , monad-par, monad-par-extras, mtl, optparse-applicative, pretty
 , process, split, tasty, tasty-golden, text, time, transformers
@@ -9,7 +9,7 @@
 mkDerivation {
   pname = "cabal2nix";
   version = "unstable-2021-10-23";
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/NixOS/cabal2nix/archive/8aeef87436468a416e5908b48ec82ac3f15eb885.tar.gz";
     sha256 = "1w6wabp0v2fii5i28nsp0ss6dsz222p94mmxrrns3q0df82s2cm1";
   };

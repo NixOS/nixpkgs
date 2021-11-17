@@ -1,4 +1,4 @@
-{ mkDerivation, lib, callPackage, fetchzip, fetchFromGitHub, cmake, pkg-config
+{ mkDerivation, lib, callPackage, fetchArchive, fetchFromGitHub, cmake, pkg-config
 , ninja, copyDesktopItems, qtbase, qttools, opencv4, procps, eigen, libXdmcp
 , libevdev, makeDesktopItem, fetchurl }:
 
@@ -8,7 +8,7 @@ let
   aruco = callPackage ./aruco.nix { };
 
   # license.txt inside the zip file is MIT
-  xplaneSdk = fetchzip {
+  xplaneSdk = fetchArchive {
     url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK303.zip";
     sha256 = "11wqjsr996c5qhiv2djsd55gc373a9qcq30dvc6rhzm0fys42zba";
   };

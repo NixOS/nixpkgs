@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
+{ lib, stdenv, makeWrapper, fetchArchive, fetchFromGitHub, pkg-config
 , alsa-lib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
@@ -7,7 +7,7 @@ let
   # Others are downloaded with `make deps`. Due to previous issues with the
   # `glfw` submodule (see above) and because we can not access the network when
   # building in a sandbox, we fetch the dependency source manually.
-  pfft-source = fetchzip {
+  pfft-source = fetchArchive {
     url = "https://vcvrack.com/downloads/dep/pffft.zip";
     sha256 = "084csgqa6f1a270bhybjayrh3mpyi2jimc87qkdgsqcp8ycsx1l1";
   };

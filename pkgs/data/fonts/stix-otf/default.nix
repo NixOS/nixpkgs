@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "1.1.1";
-in fetchzip {
+in fetchArchive {
   name = "stix-otf-${version}";
 
   url = "http://ftp.fi.muni.cz/pub/linux/gentoo/distfiles/STIXv${version}-word.zip";

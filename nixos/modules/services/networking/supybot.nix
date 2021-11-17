@@ -51,7 +51,7 @@ in
         '';
         example = literalExpression ''
           let
-            plugins = pkgs.fetchzip {
+            plugins = pkgs.fetchArchive {
               url = "https://github.com/ProgVal/Supybot-plugins/archive/57c2450c.zip";
               sha256 = "077snf84ibnva3sbpzdfpfma6hcdw7dflwnhg6pw7mgnf0nd84qd";
             };

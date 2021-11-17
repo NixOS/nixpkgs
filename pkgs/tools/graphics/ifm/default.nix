@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, autoreconfHook, bison, flex, help2man, perl, tk }:
+{ lib, stdenv, fetchArchive, autoreconfHook, bison, flex, help2man, perl, tk }:
 
 stdenv.mkDerivation rec {
   pname = "ifm";
   version = "2015-11-08";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://bitbucket.org/zondo/ifm/get/dca0774e4d3a.zip";
     sha256 = "14af21qjd5jvsscm6vxpsdrnipdr33g6niagzmykrhyfhwcbjahi";
   };

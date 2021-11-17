@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchurl, fetchzip
+{ lib, stdenv, fetchpatch, fetchurl, fetchArchive
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , cmake
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     sha256 = src_sha256;
   };

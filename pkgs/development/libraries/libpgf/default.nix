@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip, autoreconfHook }:
+{ lib, stdenv, fetchArchive, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libpgf";
   version = "7.21.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}.zip";
     sha256 = "0l1j5b1d02jn27miggihlppx656i0pc70cn6x89j1rpj33zn0g9r";
   };

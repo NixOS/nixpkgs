@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, wrapGAppsHook, alsa-lib, atk, cairo, gdk-pixbuf
+{ stdenv, fetchArchive, lib, wrapGAppsHook, alsa-lib, atk, cairo, gdk-pixbuf
 , glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "9.00";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchzip {
+    fetchArchive {
       url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.00.0.tar.gz";
       sha256 = "0mgjx0hnps3jmc2d9hkskxbmwcqf7f9jx595j5sc501br1l84sdf";
     }

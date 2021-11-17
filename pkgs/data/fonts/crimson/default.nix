@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2014.10";
-in fetchzip rec {
+in fetchArchive rec {
   name = "crimson-${version}";
 
   url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";

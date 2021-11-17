@@ -1,10 +1,10 @@
-{ stdenvNoCC, lib, fetchzip }:
+{ stdenvNoCC, lib, fetchArchive }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "eduli";
   version = "3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     name = "${pname}-${version}";
     url =
       "http://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";

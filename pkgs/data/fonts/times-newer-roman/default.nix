@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "unstable-2018-09-11";
 in
-fetchzip {
+fetchArchive {
   name = "times-newer-roman-${version}";
 
   url = "https://web.archive.org/web/20210609022835/https://timesnewerroman.com/assets/TimesNewerRoman.zip";

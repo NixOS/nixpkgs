@@ -1,10 +1,10 @@
-{ lib, which, stdenv, fetchzip, ocaml, findlib, hacl-star, ctypes, cppo }:
+{ lib, which, stdenv, fetchArchive, ocaml, findlib, hacl-star, ctypes, cppo }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
   version = "0.3.2";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/project-everest/hacl-star/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
     sha256 = "1wp27vf0g43ggs7cv85hpa62jjvzkwzzg5rfznbwac6j6yr17zc7";
     stripRoot = false;

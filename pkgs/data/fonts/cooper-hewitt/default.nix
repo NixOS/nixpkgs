@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "cooper-hewitt-2014-06-09";
 
   url = "https://www.cooperhewitt.org/wp-content/uploads/fonts/CooperHewitt-OTF-public.zip";

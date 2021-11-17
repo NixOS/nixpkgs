@@ -1,8 +1,8 @@
-{lib, fetchzip}:
+{lib, fetchArchive}:
 
 let
   version = "3.5";
-in fetchzip {
+in fetchArchive {
   name = "jost-${version}";
   url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
 

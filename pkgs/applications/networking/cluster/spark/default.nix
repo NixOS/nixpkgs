@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, jdk8, python3Packages, extraPythonPackages ? [], coreutils, hadoop
+{ lib, stdenv, fetchArchive, makeWrapper, jdk8, python3Packages, extraPythonPackages ? [], coreutils, hadoop
 , RSupport? true, R
 }:
 
@@ -58,7 +58,7 @@ in {
     pname = "spark";
     version = "3.1.2";
 
-    src = fetchzip {
+    src = fetchArchive {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
     };
@@ -67,7 +67,7 @@ in {
     pname = "spark";
     version = "2.4.8";
 
-    src = fetchzip {
+    src = fetchArchive {
       url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
       sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
     };

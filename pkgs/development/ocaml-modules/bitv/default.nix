@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, autoreconfHook, which, ocaml, findlib }:
+{ stdenv, lib, fetchArchive, autoreconfHook, which, ocaml, findlib }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
 then throw "bitv is not available for OCaml ${ocaml.version}"
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bitv-${version}";
   version = "1.3";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/backtracking/bitv/archive/${version}.tar.gz";
     sha256 = "0vkh1w9fpi5m1sgiqg6r38j3fqglhdajmbyiyr91113lrpljm75i";
   };

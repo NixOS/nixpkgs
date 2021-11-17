@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 stdenv.mkDerivation {
   pname = "pthreads-w32";
   version = "2.9.1";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.tar.gz";
     sha256 = "1s8iny7g06z289ahdj0kzaxj0cd3wvjbd8j3bh9xlg7g444lhy9w";
   };

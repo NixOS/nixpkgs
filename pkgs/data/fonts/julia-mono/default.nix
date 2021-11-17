@@ -1,10 +1,10 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "0.043";
 
 in
-fetchzip {
+fetchArchive {
   name = "JuliaMono-ttf-${version}";
   url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
   sha256 = "sha256-oxQRrFhTf37OrJSbDlmzh/7xOuKrtxO7v2+j7QcsAmE=";

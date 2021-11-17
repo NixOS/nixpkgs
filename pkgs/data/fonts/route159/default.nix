@@ -1,4 +1,4 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   majorVersion = "1";
@@ -6,7 +6,7 @@ let
   pname = "route159";
 in
 
-fetchzip {
+fetchArchive {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";

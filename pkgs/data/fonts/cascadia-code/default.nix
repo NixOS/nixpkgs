@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 let
   version = "2108.26";
 in
-fetchzip {
+fetchArchive {
   name = "cascadia-code-${version}";
 
   url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";

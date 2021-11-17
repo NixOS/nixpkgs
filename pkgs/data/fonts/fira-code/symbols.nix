@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "fira-code-symbols-20160811";
 
   url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";

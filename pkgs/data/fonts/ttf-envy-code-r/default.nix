@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   pname = "ttf-envy-code-r";
   version = "PR7";
-in fetchzip {
+in fetchArchive {
   name = "${pname}-0.${version}";
 
   url = "http://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";

@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let version = "20030809";
 in
-fetchzip {
+fetchArchive {
   name = "kochi-substitute-naga10-${version}";
 
   url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";

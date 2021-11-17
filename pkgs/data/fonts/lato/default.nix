@@ -1,6 +1,6 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
-fetchzip {
+fetchArchive {
   name = "lato-2.0";
 
   url = "https://www.latofonts.com/download/Lato2OFL.zip";

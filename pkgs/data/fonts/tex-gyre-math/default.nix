@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 
 let
   variants = {
@@ -34,7 +34,7 @@ let
       name = "tex-gyre-${variant}-math-${version}";
       inherit version;
 
-      src = fetchzip {
+      src = fetchArchive {
         url = "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
         inherit sha256;
       };

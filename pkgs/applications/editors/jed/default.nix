@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchArchive
 , pkg-config
 , gpm
 , libXext
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "jed";
   version = "0.99-19";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
   };

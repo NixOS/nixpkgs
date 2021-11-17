@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2.2";
 in
-fetchzip {
+fetchArchive {
   name = "ultimate-oldschool-pc-font-pack-${version}";
   url = "https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v${version}_linux.zip";
   sha256 = "sha256-BOA2fMa2KT3Bkpvj/0DzrzuZbl3RARvNn4qbI/+dApU=";

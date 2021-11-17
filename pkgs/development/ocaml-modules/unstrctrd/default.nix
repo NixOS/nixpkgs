@@ -3,7 +3,7 @@
 , bigstringaf
 , buildDunePackage
 , crowbar
-, fetchzip
+, fetchArchive
 , fmt
 , hxd
 , ke
@@ -16,7 +16,7 @@ buildDunePackage rec {
   pname = "unstrctrd";
   version = "0.3";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/dinosaure/unstrctrd/releases/download/v${version}/unstrctrd-v${version}.tbz";
     sha256 = "0mjm4v7kk75iwwsfnpmxc3bsl8aisz53y7z21sykdp60f4rxnah7";
   };

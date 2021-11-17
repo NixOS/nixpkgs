@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2014.08.16"; # date of most recent file in distribution
-in fetchzip {
+in fetchArchive {
   name = "helvetica-neue-lt-std-${version}";
 
   url = "https://web.archive.org/web/20190823153624/http://ephifonts.com/downloads/helvetica-neue-lt-std.zip";

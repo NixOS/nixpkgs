@@ -1,9 +1,9 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "2.242";
 in
-fetchzip {
+fetchArchive {
   name = "JetBrainsMono-${version}";
 
   url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";

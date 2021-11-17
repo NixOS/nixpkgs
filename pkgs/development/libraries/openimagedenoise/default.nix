@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, cmake, tbb, python3, ispc }:
+{ lib, stdenv, fetchArchive, cmake, tbb, python3, ispc }:
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
   version = "1.4.1";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://github.com/OpenImageDenoise/oidn/releases/download/v${version}/oidn-${version}.src.tar.gz";
     sha256 = "sha256-TQ7cL0/6pnSTuW21DESA5I3S/C1BHStrWK9yaPoim6E=";
   };

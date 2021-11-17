@@ -1,8 +1,8 @@
-{ lib, fetchzip }:
+{ lib, fetchArchive }:
 
 let
   version = "5.0.0";
-in fetchzip {
+in fetchArchive {
   name = "emacs-all-the-icons-fonts-${version}";
 
   url = "https://github.com/domtronn/all-the-icons.el/archive/${version}.zip";

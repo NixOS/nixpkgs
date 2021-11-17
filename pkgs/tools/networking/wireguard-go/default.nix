@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchzip }:
+{ lib, buildGoPackage, fetchArchive }:
 
 buildGoPackage rec {
   pname = "wireguard-go";
@@ -6,7 +6,7 @@ buildGoPackage rec {
 
   goPackagePath = "golang.zx2c4.com/wireguard";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${version}.tar.xz";
     sha256 = "RUUueSsfEi1H+ckrnPKqbVlWONhCplMMftlyAmwK+ss=";
   };

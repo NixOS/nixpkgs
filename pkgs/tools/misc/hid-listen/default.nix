@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchArchive }:
 stdenv.mkDerivation rec {
   pname = "hid-listen";
   version = "1.01";
 
-  src = fetchzip {
+  src = fetchArchive {
     name = "hid_listen_${version}";
     url = "https://www.pjrc.com/teensy/hid_listen_${version}.zip";
     sha256 = "0sd4dvi39fl4vy880mg531ryks5zglfz5mdyyqr7x6qv056ffx9w";

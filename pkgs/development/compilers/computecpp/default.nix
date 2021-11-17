@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchzip
+, fetchArchive
 , pkg-config
 , autoPatchelfHook
 , installShellFiles
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "computecpp";
   version = "2.3.0";
 
-  src = fetchzip {
+  src = fetchArchive {
     url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
     hash = "sha256-AUHSls4BOX20PVKzDAp3RqpeRDwgbgYzz6CRvRN+kdk=";
     stripRoot = true;
