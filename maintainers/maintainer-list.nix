@@ -4717,6 +4717,12 @@
     githubId = 896431;
     name = "Chris Hodapp";
   };
+  hollowman6 = {
+    email = "hollowman@hollowman.ml";
+    github = "HollowMan6";
+    githubId = 43995067;
+    name = "Songlin Jiang";
+  };
   holymonson = {
     email = "holymonson@gmail.com";
     github = "holymonson";

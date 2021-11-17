@@ -3,6 +3,7 @@
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "caffeine@patapon.info" = callPackage ./caffeine { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
+  "customize-ibus@hollowman.ml" = callPackage ./customize-ibus { };
   "dash-to-panel@jderose9.github.com" = callPackage ./dash-to-panel { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
