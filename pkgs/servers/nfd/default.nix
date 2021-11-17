@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
     "--with-tests"
-    (lib.optionalString (!withWebSocket) "--without-websocket")
-  ];
+  ] ++ lib.optional (!withWebSocket) "--without-websocket";
 
   doCheck = true;
   checkPhase = ''
