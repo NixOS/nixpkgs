@@ -1,24 +1,18 @@
 { stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
-let
-  s = # Generated upstream information
-    {
-      version = "1.7.0";
-      pname = "fbterm";
-      hash = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
-      sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-    };
-  buildInputs = [ gpm freetype fontconfig ncurses ]
-    ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) libx86;
-in
-stdenv.mkDerivation {
-  inherit (s) pname version;
+
+stdenv.mkDerivation rec {
+  pname = "fbterm";
+  version = "1.7.0";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-${version}.tar.gz";
+    sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
 
   nativeBuildInputs = [ pkg-config ncurses ];
-  inherit buildInputs;
+
+  buildInputs = [ gpm freetype fontconfig ncurses ]
+    ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) libx86;
 
   preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
@@ -27,6 +21,7 @@ stdenv.mkDerivation {
     export HOME=$PWD;
     export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
   '';
+
   preBuild = ''
     mkdir -p "$out/share/terminfo"
     tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
@@ -51,7 +46,6 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    inherit (s) version;
     description = "Framebuffer terminal emulator";
     homepage = "https://code.google.com/archive/p/fbterm/";
     maintainers = [ maintainers.raskin ];
