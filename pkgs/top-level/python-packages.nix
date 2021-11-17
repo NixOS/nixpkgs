@@ -4093,6 +4093,8 @@ in {
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
+  justbackoff = callPackage ../development/python-modules/justbackoff { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
