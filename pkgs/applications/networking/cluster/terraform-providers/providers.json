@@ -179,10 +179,10 @@
     "owner": "cloudflare",
     "provider-source-address": "registry.terraform.io/cloudflare/cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v2.23.0",
-    "sha256": "0cyw6lddw3pj5lqra78qn0nd16ffay86vc8sqa68grx7ik9jgn7l",
-    "vendorSha256": "19fdwif81lqp848jhawd09b0lalslrwadd519vsdw03v2wp4p962",
-    "version": "2.23.0"
+    "rev": "v3.4.0",
+    "sha256": "1w37wkpb785jfqq91piclcsrhy3idpbmwb90n5y7rkgmm37ij7ij",
+    "vendorSha256": "004pb5xnvisq3j113i6qfvnh1j06nkpkgzav3wb08k0bl19b6jks",
+    "version": "3.4.0"
   },
   "cloudinit": {
     "owner": "hashicorp",

@@ -1,10 +1,17 @@
-{ lib, stdenv, buildPythonPackage, setuptools, unicorn-emu }:
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, unicorn-emu
+}:
 
 buildPythonPackage rec {
   pname = "unicorn";
   version = lib.getVersion unicorn-emu;
+  format = "setuptools";
 
   src = unicorn-emu.src;
+
   sourceRoot = "source/bindings/python";
 
   prePatch = ''
@@ -12,12 +19,21 @@ buildPythonPackage rec {
     ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
   '';
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  # No tests present
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "unicorn"
+  ];
 
   meta = with lib; {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
-    license = [ licenses.gpl2 ];
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bennofs ris ];
   };
 }
