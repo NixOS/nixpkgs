@@ -76,20 +76,20 @@ echo "$maintainers" | cut -f 2 | sed -e 's@.*@<my://name/&>	<my://is-name>	<my:/
 sparql="$(nix-build '<nixpkgs>' -Q -A apache-jena --no-out-link)/bin/sparql"
 name_list="$(
     "$sparql" --results=TSV --data="$n3" "
-	select ?x ?y ?g where {
-	  ?x <my://can-be>+ ?y.
-	  ?x <my://is-name> ?g.
+    select ?x ?y ?g where {
+      ?x <my://can-be>+ ?y.
+      ?x <my://is-name> ?g.
         }
-	" | tail -n +2 |
+    " | tail -n +2 |
     sed -re 's@<my://name/@@g; s@<my://@@g; s@>@@g;' |
     sort -k 2,3 -t '	'
 )"
 github_name_list="$(
     "$sparql" --results=TSV --data="$n3" "
-	select ?x ?y where {
-	  ?x (<my://can-be>+ / <my://at-github>) ?y.
+    select ?x ?y where {
+      ?x (<my://can-be>+ / <my://at-github>) ?y.
         }
-	" | tail -n +2 |
+    " | tail -n +2 |
     sed -re 's@<my://(name|github)/@@g; s@<my://@@g; s@>@@g;'
 )"
 
