@@ -3126,6 +3126,10 @@ in {
 
   glcontext = callPackage ../development/python-modules/glcontext { };
 
+  glean-parser = callPackage ../development/python-modules/glean-parser { };
+
+  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
+
   glfw = callPackage ../development/python-modules/glfw { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
@@ -7532,6 +7536,8 @@ in {
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
 
   python-gvm = callPackage ../development/python-modules/python-gvm { };
+
+  python-hglib = callPackage ../development/python-modules/python-hglib { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
