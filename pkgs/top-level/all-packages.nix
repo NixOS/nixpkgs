@@ -9226,6 +9226,8 @@ with pkgs;
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
 
+  stderred = callPackage ../development/tools/stderred { };
+
   safe = callPackage ../tools/security/safe { };
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
