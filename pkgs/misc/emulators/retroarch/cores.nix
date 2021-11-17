@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , SDL
-, SDL2
 , alsa-lib
 , boost
 , buildPackages
@@ -43,68 +42,73 @@
 let
   d2u = lib.replaceChars [ "-" ] [ "_" ];
 
-  mkLibRetroCore =
-    { core
-    , src
-    , description
-    , license
-    , broken ? false
-    , version ? "unstable-2021-11-16"
-    , ...
-    }@args:
-    lib.makeOverridable stdenv.mkDerivation ((rec {
-      pname = "libretro-${core}";
-      inherit src version;
-
-      buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
-      nativeBuildInputs = [ makeWrapper ] ++ args.extraNativeBuildInputs or [ ];
-
-      makefile = "Makefile.libretro";
-      makeFlags = [
-        "platform=${{
-        linux = "unix";
-        darwin = "osx";
-        windows = "win";
-      }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
-        "ARCH=${{
-        armv7l = "arm";
-        armv6l = "arm";
-        i686 = "x86";
-      }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
-      ] ++ (args.makeFlags or [ ]);
-
-      installPhase = ''
-        COREDIR="$out/lib/retroarch/cores"
-        mkdir -p $out/bin
-        mkdir -p $COREDIR
-        mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR
-        makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-          --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
-      '';
-
-      passthru = {
-        inherit core;
-        libretroCore = "/lib/retroarch/cores";
-      };
-
-      meta = with lib; {
-        inherit broken description license;
-        homepage = "https://www.libretro.com/";
-        maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
-        platforms = platforms.unix;
-      };
-    }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]);
-
   hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
+
+  mkLibRetroCore =
+    { core
+    , description
+    , license
+    , src ? null
+    , broken ? false
+    , version ? "unstable-2021-11-16"
+    , ...
+    }@args:
+    lib.makeOverridable stdenv.mkDerivation (
+      let
+        finalSrc = if src == null then getCoreSrc core else src;
+      in
+      (rec {
+        pname = "libretro-${core}";
+        inherit version;
+        src = finalSrc;
+
+        buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
+        nativeBuildInputs = [ makeWrapper ] ++ args.extraNativeBuildInputs or [ ];
+
+        makefile = "Makefile.libretro";
+        makeFlags = [
+          "platform=${{
+            linux = "unix";
+            darwin = "osx";
+            windows = "win";
+          }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
+          "ARCH=${{
+            armv7l = "arm";
+            armv6l = "arm";
+            i686 = "x86";
+          }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
+        ] ++ (args.makeFlags or [ ]);
+
+        installPhase = ''
+          COREDIR="$out/lib/retroarch/cores"
+          mkdir -p $out/bin
+          mkdir -p $COREDIR
+          mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR
+          makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
+            --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+        '';
+
+        passthru = {
+          inherit core;
+          libretroCore = "/lib/retroarch/cores";
+        };
+
+        meta = with lib; {
+          inherit broken description license;
+          homepage = "https://www.libretro.com/";
+          maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
+          platforms = platforms.unix;
+        };
+      }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
+    );
 in
 with lib.licenses;
 {
-  atari800 = mkLibRetroCore rec {
+  atari800 = mkLibRetroCore {
     core = "atari800";
-    src = getCoreSrc core;
     description = "Port of Atari800 to libretro";
     license = gpl2;
     makefile = "Makefile";
@@ -151,7 +155,7 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  beetle-pcfx = mkLibRetroCore rec {
+  beetle-pcfx = mkLibRetroCore {
     core = "mednafen-pcfx";
     src = getCoreSrc "beetle-pcfx";
     description = "Port of Mednafen's PCFX core to libretro";
@@ -223,9 +227,8 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  bluemsx = mkLibRetroCore rec {
+  bluemsx = mkLibRetroCore {
     core = "bluemsx";
-    src = getCoreSrc core;
     description = "Port of BlueMSX to libretro";
     license = gpl2;
   };
@@ -239,7 +242,7 @@ with lib.licenses;
     makeFlags = [ "PROFILE=accuracy" ];
   };
 
-  citra = mkLibRetroCore rec {
+  citra = mkLibRetroCore {
     core = "citra";
     # `nix-prefetch-github` doesn't support `deepClone`, necessary for citra
     # https://github.com/seppeljordan/nix-prefetch-github/issues/41
@@ -264,9 +267,8 @@ with lib.licenses;
     postBuild = "cd src/citra_libretro";
   };
 
-  desmume = mkLibRetroCore rec {
+  desmume = mkLibRetroCore {
     core = "desmume";
-    src = getCoreSrc core;
     description = "libretro wrapper for desmume NDS emulator";
     license = gpl2;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
@@ -275,9 +277,8 @@ with lib.licenses;
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
   };
 
-  desmume2015 = mkLibRetroCore rec {
+  desmume2015 = mkLibRetroCore {
     core = "desmume2015";
-    src = getCoreSrc core;
     description = "libretro wrapper for desmume NDS emulator from 2015";
     license = gpl2;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
@@ -286,9 +287,8 @@ with lib.licenses;
     preBuild = "cd desmume";
   };
 
-  dolphin = mkLibRetroCore rec {
+  dolphin = mkLibRetroCore {
     core = "dolphin";
-    src = getCoreSrc core;
     description = "Port of Dolphin to libretro";
     license = gpl2Plus;
 
@@ -316,32 +316,29 @@ with lib.licenses;
     dontUseCmakeBuildDir = true;
   };
 
-  dosbox = mkLibRetroCore rec {
+  dosbox = mkLibRetroCore {
     core = "dosbox";
-    src = getCoreSrc core;
     description = "Port of DOSBox to libretro";
     license = gpl2;
   };
 
-  eightyone = mkLibRetroCore rec {
+  eightyone = mkLibRetroCore {
     core = "81";
     src = getCoreSrc "eightyone";
     description = "Port of EightyOne to libretro";
     license = gpl3;
   };
 
-  fbalpha2012 = mkLibRetroCore rec {
+  fbalpha2012 = mkLibRetroCore {
     core = "fbalpha2012";
-    src = getCoreSrc core;
     description = "Port of Final Burn Alpha ~2012 to libretro";
     license = "Non-commercial";
     makefile = "makefile.libretro";
     preBuild = "cd svn-current/trunk";
   };
 
-  fbneo = mkLibRetroCore rec {
+  fbneo = mkLibRetroCore {
     core = "fbneo";
-    src = getCoreSrc core;
     description = "Port of FBNeo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
@@ -352,16 +349,14 @@ with lib.licenses;
     makeFlags = [ "USE_EXPERIMENTAL_FLAGS=1" ];
   };
 
-  fceumm = mkLibRetroCore rec {
+  fceumm = mkLibRetroCore {
     core = "fceumm";
-    src = getCoreSrc core;
     description = "FCEUmm libretro port";
     license = gpl2;
   };
 
-  flycast = mkLibRetroCore rec {
+  flycast = mkLibRetroCore {
     core = "flycast";
-    src = getCoreSrc core;
     description = "Flycast libretro port";
     license = gpl2;
     extraBuildInputs = [ libGL libGLU ];
@@ -370,63 +365,55 @@ with lib.licenses;
     meta.platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
-  fmsx = mkLibRetroCore rec {
+  fmsx = mkLibRetroCore {
     core = "fmsx";
-    src = getCoreSrc core;
     description = "FMSX libretro port";
     license = "Non-commercial";
     makefile = "Makefile";
   };
 
-  freeintv = mkLibRetroCore rec {
+  freeintv = mkLibRetroCore {
     core = "freeintv";
-    src = getCoreSrc core;
     description = "FreeIntv libretro port";
     license = gpl3;
     makefile = "Makefile";
   };
 
-  gambatte = mkLibRetroCore rec {
+  gambatte = mkLibRetroCore {
     core = "gambatte";
-    src = getCoreSrc core;
     description = "Gambatte libretro port";
     license = gpl2;
   };
 
-  genesis-plus-gx = mkLibRetroCore rec {
+  genesis-plus-gx = mkLibRetroCore {
     core = "genesis-plus-gx";
-    src = getCoreSrc core;
     description = "Enhanced Genesis Plus libretro port";
     license = "Non-commercial";
   };
 
-  gpsp = mkLibRetroCore rec {
+  gpsp = mkLibRetroCore {
     core = "gpsp";
-    src = getCoreSrc core;
     description = "Port of gpSP to libretro";
     license = gpl2;
     makefile = "Makefile";
   };
 
-  gw = mkLibRetroCore rec {
+  gw = mkLibRetroCore {
     core = "gw";
-    src = getCoreSrc core;
     description = "Port of Game and Watch to libretro";
     license = lib.licenses.zlib;
     makefile = "Makefile";
   };
 
-  handy = mkLibRetroCore rec {
+  handy = mkLibRetroCore {
     core = "handy";
-    src = getCoreSrc core;
     description = "Port of Handy to libretro";
     license = "Handy-License";
     makefile = "Makefile";
   };
 
-  hatari = mkLibRetroCore rec {
+  hatari = mkLibRetroCore {
     core = "hatari";
-    src = getCoreSrc core;
     description = "Port of Hatari to libretro";
     license = gpl2;
     extraBuildInputs = [ SDL zlib ];
@@ -437,9 +424,8 @@ with lib.licenses;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
   };
 
-  mame = mkLibRetroCore rec {
+  mame = mkLibRetroCore {
     core = "mame";
-    src = getCoreSrc core;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
@@ -452,43 +438,38 @@ with lib.licenses;
     makefile = "Makefile.libretro";
   };
 
-  mame2000 = mkLibRetroCore rec {
+  mame2000 = mkLibRetroCore {
     core = "mame2000";
-    src = getCoreSrc core;
     description = "Port of MAME ~2000 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
   };
 
-  mame2003 = mkLibRetroCore rec {
+  mame2003 = mkLibRetroCore {
     core = "mame2003";
-    src = getCoreSrc core;
     description = "Port of MAME ~2003 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
   };
 
-  mame2003-plus = mkLibRetroCore rec {
+  mame2003-plus = mkLibRetroCore {
     core = "mame2003-plus";
-    src = getCoreSrc core;
     description = "Port of MAME ~2003+ to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
   };
 
-  mame2010 = mkLibRetroCore rec {
+  mame2010 = mkLibRetroCore {
     core = "mame2010";
-    src = getCoreSrc core;
     description = "Port of MAME ~2010 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
   };
 
-  mame2015 = mkLibRetroCore rec {
+  mame2015 = mkLibRetroCore {
     core = "mame2015";
-    src = getCoreSrc core;
     description = "Port of MAME ~2015 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
@@ -496,9 +477,8 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  mame2016 = mkLibRetroCore rec {
+  mame2016 = mkLibRetroCore {
     core = "mame2016";
-    src = getCoreSrc core;
     patches = [
       (fetchpatch {
         name = "fix_mame_build_on_make-4.3.patch";
@@ -517,27 +497,24 @@ with lib.licenses;
     '';
   };
 
-  mesen = mkLibRetroCore rec {
+  mesen = mkLibRetroCore {
     core = "mesen";
-    src = getCoreSrc core;
     description = "Port of Mesen to libretro";
     license = gpl3;
     makefile = "Makefile";
     preBuild = "cd Libretro";
   };
 
-  meteor = mkLibRetroCore rec {
+  meteor = mkLibRetroCore {
     core = "meteor";
-    src = getCoreSrc core;
     description = "Port of Meteor to libretro";
     license = gpl3;
     makefile = "Makefile";
     preBuild = "cd libretro";
   };
 
-  mgba = mkLibRetroCore rec {
+  mgba = mkLibRetroCore {
     core = "mgba";
-    src = getCoreSrc core;
     description = "Port of mGBA to libretro";
     license = mpl20;
   };
@@ -552,17 +529,15 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  neocd = mkLibRetroCore rec {
+  neocd = mkLibRetroCore {
     core = "neocd";
-    src = getCoreSrc core;
     description = "NeoCD libretro port";
     license = gpl3;
     makefile = "Makefile";
   };
 
-  nestopia = mkLibRetroCore rec {
+  nestopia = mkLibRetroCore {
     core = "nestopia";
-    src = getCoreSrc core;
     description = "Nestopia libretro port";
     license = gpl2;
     makefile = "Makefile";
@@ -583,26 +558,23 @@ with lib.licenses;
     preBuild = "cd sdl";
   };
 
-  o2em = mkLibRetroCore rec {
+  o2em = mkLibRetroCore {
     core = "o2em";
-    src = getCoreSrc core;
     description = "Port of O2EM to libretro";
     license = artistic1;
     makefile = "Makefile";
   };
 
-  opera = mkLibRetroCore rec {
+  opera = mkLibRetroCore {
     core = "opera";
-    src = getCoreSrc core;
     description = "Opera is a port of 4DO/libfreedo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
     makeFlags = [ "CC_PREFIX=${stdenv.cc.targetPrefix}" ];
   };
 
-  parallel-n64 = mkLibRetroCore rec {
+  parallel-n64 = mkLibRetroCore {
     core = "parallel-n64";
-    src = getCoreSrc core;
     description = "Parallel Mupen64plus rewrite for libretro.";
     license = gpl2;
     extraBuildInputs = [ libGLU libGL libpng ];
@@ -613,17 +585,15 @@ with lib.licenses;
     '';
   };
 
-  pcsx_rearmed = mkLibRetroCore rec {
+  pcsx_rearmed = mkLibRetroCore {
     core = "pcsx_rearmed";
-    src = getCoreSrc core;
     description = "Port of PCSX ReARMed with GNU lightning to libretro";
     license = gpl2;
     dontConfigure = true;
   };
 
-  picodrive = mkLibRetroCore rec {
+  picodrive = mkLibRetroCore {
     core = "picodrive";
-    src = getCoreSrc core;
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
 
@@ -634,9 +604,8 @@ with lib.licenses;
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
-  play = mkLibRetroCore rec {
+  play = mkLibRetroCore {
     core = "play";
-    src = getCoreSrc core;
     description = "Port of Play! to libretro";
     license = bsd2;
     extraBuildInputs = [ boost ];
@@ -647,9 +616,8 @@ with lib.licenses;
     broken = true; # since 2021-01-03
   };
 
-  ppsspp = mkLibRetroCore rec {
+  ppsspp = mkLibRetroCore {
     core = "ppsspp";
-    src = getCoreSrc core;
     description = "ppsspp libretro port";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
@@ -659,33 +627,29 @@ with lib.licenses;
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
-  prboom = mkLibRetroCore rec {
+  prboom = mkLibRetroCore {
     core = "prboom";
-    src = getCoreSrc core;
     description = "Prboom libretro port";
     license = gpl2;
     makefile = "Makefile";
   };
 
-  prosystem = mkLibRetroCore rec {
+  prosystem = mkLibRetroCore {
     core = "prosystem";
-    src = getCoreSrc core;
     description = "Port of ProSystem to libretro";
     license = gpl2;
     makefile = "Makefile";
   };
 
-  quicknes = mkLibRetroCore rec {
+  quicknes = mkLibRetroCore {
     core = "quicknes";
-    src = getCoreSrc core;
     description = "QuickNES libretro port";
     license = lgpl21Plus;
     makefile = "Makefile";
   };
 
-  sameboy = mkLibRetroCore rec {
+  sameboy = mkLibRetroCore {
     core = "sameboy";
-    src = getCoreSrc core;
     description = "SameBoy libretro port";
     license = mit;
     extraNativeBuildInputs = [ which hexdump ];
@@ -693,9 +657,8 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  scummvm = mkLibRetroCore rec {
+  scummvm = mkLibRetroCore {
     core = "scummvm";
-    src = getCoreSrc core;
     description = "Libretro port of ScummVM";
     license = gpl2;
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
@@ -703,33 +666,30 @@ with lib.licenses;
     preConfigure = "cd backends/platform/libretro/build";
   };
 
-  smsplus-gx = mkLibRetroCore rec {
+  smsplus-gx = mkLibRetroCore {
     core = "smsplus";
     src = getCoreSrc "smsplus-gx";
     description = "SMS Plus GX libretro port";
     license = gpl2Plus;
   };
 
-  snes9x = mkLibRetroCore rec {
+  snes9x = mkLibRetroCore {
     core = "snes9x";
-    src = getCoreSrc core;
     description = "Port of SNES9x git to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
     preBuild = "cd libretro";
   };
 
-  snes9x2002 = mkLibRetroCore rec {
+  snes9x2002 = mkLibRetroCore {
     core = "snes9x2002";
-    src = getCoreSrc core;
     description = "Optimized port/rewrite of SNES9x 1.39 to Libretro";
     license = "Non-commercial";
     makefile = "Makefile";
   };
 
-  snes9x2005 = mkLibRetroCore rec {
+  snes9x2005 = mkLibRetroCore {
     core = "snes9x2005";
-    src = getCoreSrc core;
     description = "Optimized port/rewrite of SNES9x 1.43 to Libretro";
     license = "Non-commercial";
     makefile = "Makefile";
@@ -737,16 +697,14 @@ with lib.licenses;
     postBuild = "mv snes9x2005_plus_libretro${stdenv.hostPlatform.extensions.sharedLibrary} snes9x2005_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
-  snes9x2010 = mkLibRetroCore rec {
+  snes9x2010 = mkLibRetroCore {
     core = "snes9x2010";
-    src = getCoreSrc core;
     description = "Optimized port/rewrite of SNES9x 1.52+ to Libretro";
     license = "Non-commercial";
   };
 
-  stella = mkLibRetroCore rec {
+  stella = mkLibRetroCore {
     core = "stella";
-    src = getCoreSrc core;
     description = "Port of Stella to libretro";
     license = gpl2;
     extraBuildInputs = [ libpng pkg-config SDL ];
@@ -755,25 +713,22 @@ with lib.licenses;
     dontConfigure = true;
   };
 
-  stella2014 = mkLibRetroCore rec {
+  stella2014 = mkLibRetroCore {
     core = "stella2014";
-    src = getCoreSrc core;
     description = "Port of Stella to libretro";
     license = gpl2;
     makefile = "Makefile";
   };
 
-  tgbdual = mkLibRetroCore rec {
+  tgbdual = mkLibRetroCore {
     core = "tgbdual";
-    src = getCoreSrc core;
     description = "Port of TGBDual to libretro";
     license = gpl2;
     makefile = "Makefile";
   };
 
-  thepowdertoy = mkLibRetroCore rec {
+  thepowdertoy = mkLibRetroCore {
     core = "thepowdertoy";
-    src = getCoreSrc core;
     description = "Port of The Powder Toy to libretro";
     license = gpl3Only;
     extraNativeBuildInputs = [ cmake ];
@@ -781,9 +736,8 @@ with lib.licenses;
     postBuild = "cd src/";
   };
 
-  tic80 = mkLibRetroCore rec {
+  tic80 = mkLibRetroCore {
     core = "tic80";
-    src = getCoreSrc core;
     description = "Port of TIC-80 to libretro";
     license = mit;
     extraNativeBuildInputs = [ cmake pkg-config libGL libGLU ];
@@ -799,14 +753,13 @@ with lib.licenses;
     postBuild = "cd lib";
   };
 
-  vba-next = mkLibRetroCore rec {
+  vba-next = mkLibRetroCore {
     core = "vba-next";
-    src = getCoreSrc core;
     description = "VBA-M libretro port with modifications for speed";
     license = gpl2;
   };
 
-  vba-m = mkLibRetroCore rec {
+  vba-m = mkLibRetroCore {
     core = "vbam";
     src = getCoreSrc "vba-m";
     description = "vanilla VBA-M libretro port";
@@ -815,25 +768,22 @@ with lib.licenses;
     preBuild = "cd src/libretro";
   };
 
-  vecx = mkLibRetroCore rec {
+  vecx = mkLibRetroCore {
     core = "vecx";
-    src = getCoreSrc core;
     description = "Port of Vecx to libretro";
     license = gpl3;
     extraBuildInputs = [ libGL libGLU ];
   };
 
-  virtualjaguar = mkLibRetroCore rec {
+  virtualjaguar = mkLibRetroCore {
     core = "virtualjaguar";
-    src = getCoreSrc core;
     description = "Port of VirtualJaguar to libretro";
     license = gpl3;
     makefile = "Makefile";
   };
 
-  yabause = mkLibRetroCore rec {
+  yabause = mkLibRetroCore {
     core = "yabause";
-    src = getCoreSrc core;
     description = "Port of Yabause to libretro";
     license = gpl2;
     makefile = "Makefile";
