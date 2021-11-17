@@ -9,7 +9,11 @@
 
 with haskellLib;
 
-self: super: {
+let
+  configuration-9_2 = import ./configuration-ghc-9.2.x.nix { inherit pkgs haskellLib; };
+in
+
+self: super: configuration-9_2 self super // {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
 
