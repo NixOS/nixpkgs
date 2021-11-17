@@ -7047,6 +7047,8 @@ with pkgs;
 
   motion = callPackage ../applications/video/motion { };
 
+  moz-phab = callPackage ../applications/misc/moz-phab { };
+
   mtail = callPackage ../servers/monitoring/mtail { };
 
   multitail = callPackage ../tools/misc/multitail { };
