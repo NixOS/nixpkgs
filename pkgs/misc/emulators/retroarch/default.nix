@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
   };
