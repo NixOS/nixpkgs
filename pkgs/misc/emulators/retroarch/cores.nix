@@ -99,7 +99,7 @@ let
         meta = with lib; {
           inherit broken description license;
           homepage = "https://www.libretro.com/";
-          maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
+          maintainers = with maintainers; [ edwtjo hrdinka MP2E thiagokokada ];
           platforms = platforms.unix;
         };
       }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
