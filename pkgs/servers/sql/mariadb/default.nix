@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
 , libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
@@ -24,9 +24,9 @@ mariadb = server // {
 common = rec { # attributes common to both builds
   version = "10.6.5";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0rvcllbplgn92kr5n3qxfasnsqc8cn9ijm01fb7i7j2p9zxnfhig";
+    sha256 = "sha256-4L4EBCjZpCqLtL0iG1Z/8lIs1vqJBjhic9pPA8XCCo8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
