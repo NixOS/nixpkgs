@@ -105,12 +105,11 @@ let
       }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
     );
 in
-with lib.licenses;
 {
   atari800 = mkLibRetroCore {
     core = "atari800";
     description = "Port of Atari800 to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     makeFlags = [ "GIT_VERSION=" ];
   };
@@ -119,7 +118,7 @@ with lib.licenses;
     core = "mednafen-snes";
     src = getCoreSrc "beetle-snes";
     description = "Port of Mednafen's SNES core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -127,7 +126,7 @@ with lib.licenses;
     core = "mednafen-gba";
     src = getCoreSrc "beetle-gba";
     description = "Port of Mednafen's GameBoy Advance core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -135,7 +134,7 @@ with lib.licenses;
     core = "mednafen-lynx";
     src = getCoreSrc "beetle-lynx";
     description = "Port of Mednafen's Lynx core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -143,7 +142,7 @@ with lib.licenses;
     core = "mednafen-ngp";
     src = getCoreSrc "beetle-ngp";
     description = "Port of Mednafen's NeoGeo Pocket core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -151,7 +150,7 @@ with lib.licenses;
     core = "mednafen-pce-fast";
     src = getCoreSrc "beetle-pce-fast";
     description = "Port of Mednafen's PC Engine core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -159,7 +158,7 @@ with lib.licenses;
     core = "mednafen-pcfx";
     src = getCoreSrc "beetle-pcfx";
     description = "Port of Mednafen's PCFX core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -167,7 +166,7 @@ with lib.licenses;
     core = "mednafen-psx";
     src = getCoreSrc "beetle-psx";
     description = "Port of Mednafen's PSX Engine core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
   };
@@ -176,7 +175,7 @@ with lib.licenses;
     core = "mednafen-psx-hw";
     src = getCoreSrc "beetle-psx";
     description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
@@ -186,7 +185,7 @@ with lib.licenses;
     core = "mednafen-saturn";
     src = getCoreSrc "beetle-saturn";
     description = "Port of Mednafen's Saturn core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
@@ -196,7 +195,7 @@ with lib.licenses;
     core = "mednafen-saturn-hw";
     src = getCoreSrc "beetle-saturn";
     description = "Port of Mednafen's Saturn core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_OPENGL=1" "HAVE_HW=1" ];
@@ -207,7 +206,7 @@ with lib.licenses;
     core = "mednafen-supergrafx";
     src = getCoreSrc "beetle-supergrafx";
     description = "Port of Mednafen's SuperGrafx core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -215,7 +214,7 @@ with lib.licenses;
     core = "mednafen-wswan";
     src = getCoreSrc "beetle-wswan";
     description = "Port of Mednafen's WonderSwan core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -223,21 +222,21 @@ with lib.licenses;
     core = "mednafen-vb";
     src = getCoreSrc "beetle-vb";
     description = "Port of Mednafen's VirtualBoy core to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
   bluemsx = mkLibRetroCore {
     core = "bluemsx";
     description = "Port of BlueMSX to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
   };
 
   bsnes-mercury = mkLibRetroCore {
     core = "bsnes-mercury-accuracy";
     src = getCoreSrc "bsnes-mercury";
     description = "Fork of bsnes with HLE DSP emulation restored";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     makeFlags = [ "PROFILE=accuracy" ];
   };
@@ -252,7 +251,7 @@ with lib.licenses;
       sha256 = "sha256-bwnYkMvbtRF5bGZRYVtMWxnCu9P45qeX4+ntOj9eRds=";
     };
     description = "Port of Citra to libretro";
-    license = gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     extraNativeBuildInputs = [ cmake pkg-config ];
     extraBuildInputs = [ libGLU libGL boost ];
     makefile = "Makefile";
@@ -270,7 +269,7 @@ with lib.licenses;
   desmume = mkLibRetroCore {
     core = "desmume";
     description = "libretro wrapper for desmume NDS emulator";
-    license = gpl2;
+    license = lib.licenses.gpl2Plus;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
     preBuild = "cd desmume/src/frontend/libretro";
     makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
@@ -280,7 +279,7 @@ with lib.licenses;
   desmume2015 = mkLibRetroCore {
     core = "desmume2015";
     description = "libretro wrapper for desmume NDS emulator from 2015";
-    license = gpl2;
+    license = lib.licenses.gpl2Plus;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
     makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
@@ -290,7 +289,7 @@ with lib.licenses;
   dolphin = mkLibRetroCore {
     core = "dolphin";
     description = "Port of Dolphin to libretro";
-    license = gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     extraNativeBuildInputs = [ cmake curl pkg-config ];
     extraBuildInputs = [
@@ -319,14 +318,14 @@ with lib.licenses;
   dosbox = mkLibRetroCore {
     core = "dosbox";
     description = "Port of DOSBox to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
   };
 
   eightyone = mkLibRetroCore {
     core = "81";
     src = getCoreSrc "eightyone";
     description = "Port of EightyOne to libretro";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
   };
 
   fbalpha2012 = mkLibRetroCore {
@@ -352,13 +351,13 @@ with lib.licenses;
   fceumm = mkLibRetroCore {
     core = "fceumm";
     description = "FCEUmm libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
   };
 
   flycast = mkLibRetroCore {
     core = "flycast";
     description = "Flycast libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
@@ -375,14 +374,14 @@ with lib.licenses;
   freeintv = mkLibRetroCore {
     core = "freeintv";
     description = "FreeIntv libretro port";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     makefile = "Makefile";
   };
 
   gambatte = mkLibRetroCore {
     core = "gambatte";
     description = "Gambatte libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
   };
 
   genesis-plus-gx = mkLibRetroCore {
@@ -394,7 +393,7 @@ with lib.licenses;
   gpsp = mkLibRetroCore {
     core = "gpsp";
     description = "Port of gpSP to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
@@ -408,14 +407,14 @@ with lib.licenses;
   handy = mkLibRetroCore {
     core = "handy";
     description = "Port of Handy to libretro";
-    license = "Handy-License";
+    license = lib.licenses.zlib;
     makefile = "Makefile";
   };
 
   hatari = mkLibRetroCore {
     core = "hatari";
     description = "Port of Hatari to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ SDL zlib ];
     extraNativeBuildInputs = [ cmake which ];
     dontUseCmakeConfigure = true;
@@ -427,7 +426,7 @@ with lib.licenses;
   mame = mkLibRetroCore {
     core = "mame";
     description = "Port of MAME to libretro";
-    license = gpl2Plus;
+    license = with lib.licenses; [ bsd3 gpl2Plus ];
 
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
     postPatch = ''
@@ -441,7 +440,7 @@ with lib.licenses;
   mame2000 = mkLibRetroCore {
     core = "mame2000";
     description = "Port of MAME ~2000 to libretro";
-    license = gpl2Plus;
+    license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
   };
@@ -449,21 +448,21 @@ with lib.licenses;
   mame2003 = mkLibRetroCore {
     core = "mame2003";
     description = "Port of MAME ~2003 to libretro";
-    license = gpl2Plus;
+    license = "MAME";
     makefile = "Makefile";
   };
 
   mame2003-plus = mkLibRetroCore {
     core = "mame2003-plus";
     description = "Port of MAME ~2003+ to libretro";
-    license = gpl2Plus;
+    license = "MAME";
     makefile = "Makefile";
   };
 
   mame2010 = mkLibRetroCore {
     core = "mame2010";
     description = "Port of MAME ~2010 to libretro";
-    license = gpl2Plus;
+    license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
   };
@@ -471,7 +470,7 @@ with lib.licenses;
   mame2015 = mkLibRetroCore {
     core = "mame2015";
     description = "Port of MAME ~2015 to libretro";
-    license = gpl2Plus;
+    license = "MAME";
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
@@ -487,7 +486,7 @@ with lib.licenses;
       })
     ];
     description = "Port of MAME ~2016 to libretro";
-    license = gpl2Plus;
+    license = with lib.licenses; [ bsd3 gpl2Plus ];
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsa-lib ];
     postPatch = ''
@@ -500,7 +499,7 @@ with lib.licenses;
   mesen = mkLibRetroCore {
     core = "mesen";
     description = "Port of Mesen to libretro";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     preBuild = "cd Libretro";
   };
@@ -508,7 +507,7 @@ with lib.licenses;
   meteor = mkLibRetroCore {
     core = "meteor";
     description = "Port of Meteor to libretro";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     preBuild = "cd libretro";
   };
@@ -516,14 +515,14 @@ with lib.licenses;
   mgba = mkLibRetroCore {
     core = "mgba";
     description = "Port of mGBA to libretro";
-    license = mpl20;
+    license = lib.licenses.mpl20;
   };
 
   mupen64plus = mkLibRetroCore {
     core = "mupen64plus-next";
     src = getCoreSrc "mupen64plus";
     description = "Libretro port of Mupen64 Plus, GL only";
-    license = gpl2;
+    license = lib.licenses.gpl3Only;
 
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
@@ -532,14 +531,14 @@ with lib.licenses;
   neocd = mkLibRetroCore {
     core = "neocd";
     description = "NeoCD libretro port";
-    license = gpl3;
+    license = lib.licenses.lgpl3Only;
     makefile = "Makefile";
   };
 
   nestopia = mkLibRetroCore {
     core = "nestopia";
     description = "Nestopia libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     preBuild = "cd libretro";
   };
@@ -548,7 +547,7 @@ with lib.licenses;
     core = "np2kai";
     src = getCoreSrc core;
     description = "Neko Project II kai libretro port";
-    license = mit;
+    license = lib.licenses.mit;
     makefile = "Makefile.libretro";
     makeFlags = [
       # See https://github.com/AZO234/NP2kai/tags
@@ -561,7 +560,7 @@ with lib.licenses;
   o2em = mkLibRetroCore {
     core = "o2em";
     description = "Port of O2EM to libretro";
-    license = artistic1;
+    license = lib.licenses.artistic1;
     makefile = "Makefile";
   };
 
@@ -576,7 +575,7 @@ with lib.licenses;
   parallel-n64 = mkLibRetroCore {
     core = "parallel-n64";
     description = "Parallel Mupen64plus rewrite for libretro.";
-    license = gpl2;
+    license = lib.licenses.gpl3Only;
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
     postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -588,7 +587,7 @@ with lib.licenses;
   pcsx_rearmed = mkLibRetroCore {
     core = "pcsx_rearmed";
     description = "Port of PCSX ReARMed with GNU lightning to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     dontConfigure = true;
   };
 
@@ -607,7 +606,7 @@ with lib.licenses;
   play = mkLibRetroCore {
     core = "play";
     description = "Port of Play! to libretro";
-    license = bsd2;
+    license = lib.licenses.bsd2;
     extraBuildInputs = [ boost ];
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
     makefile = "Makefile";
@@ -619,7 +618,7 @@ with lib.licenses;
   ppsspp = mkLibRetroCore {
     core = "ppsspp";
     description = "ppsspp libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Plus;
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
     extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
     makefile = "Makefile";
@@ -630,28 +629,28 @@ with lib.licenses;
   prboom = mkLibRetroCore {
     core = "prboom";
     description = "Prboom libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
   prosystem = mkLibRetroCore {
     core = "prosystem";
     description = "Port of ProSystem to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
   quicknes = mkLibRetroCore {
     core = "quicknes";
     description = "QuickNES libretro port";
-    license = lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     makefile = "Makefile";
   };
 
   sameboy = mkLibRetroCore {
     core = "sameboy";
     description = "SameBoy libretro port";
-    license = mit;
+    license = lib.licenses.mit;
     extraNativeBuildInputs = [ which hexdump ];
     preBuild = "cd libretro";
     makefile = "Makefile";
@@ -660,7 +659,7 @@ with lib.licenses;
   scummvm = mkLibRetroCore {
     core = "scummvm";
     description = "Libretro port of ScummVM";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
@@ -670,7 +669,7 @@ with lib.licenses;
     core = "smsplus";
     src = getCoreSrc "smsplus-gx";
     description = "SMS Plus GX libretro port";
-    license = gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 
   snes9x = mkLibRetroCore {
@@ -706,7 +705,7 @@ with lib.licenses;
   stella = mkLibRetroCore {
     core = "stella";
     description = "Port of Stella to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libpng pkg-config SDL ];
     makefile = "Makefile";
     preBuild = "cd src/libretro";
@@ -716,21 +715,21 @@ with lib.licenses;
   stella2014 = mkLibRetroCore {
     core = "stella2014";
     description = "Port of Stella to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
   tgbdual = mkLibRetroCore {
     core = "tgbdual";
     description = "Port of TGBDual to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
 
   thepowdertoy = mkLibRetroCore {
     core = "thepowdertoy";
     description = "Port of The Powder Toy to libretro";
-    license = gpl3Only;
+    license = lib.licenses.gpl3Only;
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
     postBuild = "cd src/";
@@ -739,7 +738,7 @@ with lib.licenses;
   tic80 = mkLibRetroCore {
     core = "tic80";
     description = "Port of TIC-80 to libretro";
-    license = mit;
+    license = lib.licenses.mit;
     extraNativeBuildInputs = [ cmake pkg-config libGL libGLU ];
     makefile = "Makefile";
     cmakeFlags = [
@@ -756,14 +755,14 @@ with lib.licenses;
   vba-next = mkLibRetroCore {
     core = "vba-next";
     description = "VBA-M libretro port with modifications for speed";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
   };
 
   vba-m = mkLibRetroCore {
     core = "vbam";
     src = getCoreSrc "vba-m";
     description = "vanilla VBA-M libretro port";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     preBuild = "cd src/libretro";
   };
@@ -771,21 +770,21 @@ with lib.licenses;
   vecx = mkLibRetroCore {
     core = "vecx";
     description = "Port of Vecx to libretro";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     extraBuildInputs = [ libGL libGLU ];
   };
 
   virtualjaguar = mkLibRetroCore {
     core = "virtualjaguar";
     description = "Port of VirtualJaguar to libretro";
-    license = gpl3;
+    license = lib.licenses.gpl3Only;
     makefile = "Makefile";
   };
 
   yabause = mkLibRetroCore {
     core = "yabause";
     description = "Port of Yabause to libretro";
-    license = gpl2;
+    license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     # Disable SSE for non-x86. DYNAREC doesn't build on either Aarch64 or x86_64.
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
