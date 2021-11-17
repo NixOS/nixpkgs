@@ -520,6 +520,7 @@ in with py.pkgs; buildPythonApplication rec {
     "modbus"
     "mold_indicator"
     "moon"
+    "motion_blinds"
     "motioneye"
     "mqtt"
     "mqtt_eventstream"
