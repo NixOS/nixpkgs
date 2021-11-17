@@ -2379,7 +2379,7 @@ with pkgs;
 
   catclock = callPackage ../applications/misc/catclock { };
 
-  cardpeek = callPackage ../applications/misc/cardpeek { };
+  cardpeek = callPackage ../applications/misc/cardpeek { inherit (darwin.apple_sdk.frameworks) PCSC; };
 
   cawbird = callPackage ../applications/networking/cawbird { };
 
@@ -10647,7 +10647,9 @@ with pkgs;
     withRedis = true;
   };
 
-  unicorn = callPackage ../development/libraries/unicorn { };
+  unicorn = callPackage ../development/libraries/unicorn {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   units = callPackage ../tools/misc/units {
     enableCurrenciesUpdater = true;
@@ -18508,7 +18510,15 @@ with pkgs;
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
-  mapnik = callPackage ../development/libraries/mapnik { };
+  mapnik = callPackage ../development/libraries/mapnik {
+    gdal = gdal.override {
+      libgeotiff = libgeotiff.override { proj = proj_7; };
+      libspatialite = libspatialite.override { proj = proj_7; };
+      proj = proj_7;
+    };
+    proj = proj_7;
+  };
+
 
   marisa = callPackage ../development/libraries/marisa {};
 
@@ -26611,6 +26621,7 @@ with pkgs;
 
   menyoki = callPackage ../applications/graphics/menyoki {
     inherit (xorg) libX11 libXrandr;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   mercurial = callPackage ../applications/version-management/mercurial {

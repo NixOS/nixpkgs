@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
+, IOKit
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Lightweight multi-platform CPU emulator library";
