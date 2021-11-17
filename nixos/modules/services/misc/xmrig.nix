@@ -64,8 +64,6 @@ with lib;
   };
 
   meta = with lib; {
-    description = "XMRig Mining Software Service";
-    license = licenses.gpl3Only;
     maintainers = with maintainers; [ ratsclub ];
   };
 }
