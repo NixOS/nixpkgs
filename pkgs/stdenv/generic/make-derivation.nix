@@ -378,7 +378,12 @@ in
 lib.extendDerivation
   validity.handled
   ({
-     overrideAttrs = f: stdenv.mkDerivation (attrs // (f attrs));
+      overrideAttrs = f: let
+        f' =
+          if builtins.typeOf f == "set"
+          then (if lib.hasAttr "__functor" f then f else (_: f))
+          else f;
+      in stdenv.mkDerivation (attrs // (f' attrs));
 
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
