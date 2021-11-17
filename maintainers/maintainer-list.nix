@@ -2346,6 +2346,12 @@
     githubId = 12202789;
     name = "CrazedProgrammer";
   };
+  creator54 = {
+    email = "hi.creator54@gmail.com";
+    github = "creator54";
+    githubId = 34543609;
+    name = "creator54";
+  };
   cript0nauta = {
     email = "shareman1204@gmail.com";
     github = "cript0nauta";
