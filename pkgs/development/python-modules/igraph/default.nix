@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-igraph";
-  version = "0.9.6";
+  version = "0.9.8";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = version;
-    sha256 = "sha256-x/BUlMmSgjY2v6bVKPxmz86OCz6xgRUcfSqI3vV9MPs=";
+    sha256 = "sha256-RtvT5/LZ/xP68yBB7DDKJGeNCiX4HyPTCuk+Ijd2nFs=";
   };
 
   nativeBuildInputs = [
