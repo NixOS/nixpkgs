@@ -3,6 +3,7 @@
 , lib
 , fetchFromGitHub
 , ncurses
+, perl
 , pkg-config
 , python3
 , fontconfig
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     python3
     ncurses # tic for terminfo
-  ];
+  ] ++ lib.optional stdenv.isDarwin perl;
 
   buildInputs = [
     fontconfig
