@@ -1,13 +1,41 @@
 diff --git a/meilisearch-http/Cargo.toml b/meilisearch-http/Cargo.toml
-index de418cd4..ecc78d6f 100644
+index aab32113..8e48ad41 100644
 --- a/meilisearch-http/Cargo.toml
 +++ b/meilisearch-http/Cargo.toml
-@@ -92,7 +92,7 @@ mini-dashboard = [
+@@ -1,10 +1,11 @@
+ [package]
+ authors = ["Quentin de Quelen <quentin@dequelen.me>", "Clément Renault <clement@meilisearch.com>"]
+ description = "MeiliSearch HTTP server"
+-edition = "2018"
++edition = "2021"
+ license = "MIT"
+ name = "meilisearch-http"
+ version = "0.24.0"
++resolver = "2"
+ 
+ [[bin]]
+ name = "meilisearch"
+@@ -92,7 +93,7 @@ mini-dashboard = [
      "zip",
  ]
- analytics = ["whoami", "reqwest"]
+ analytics = ["segment"]
 -default = ["analytics", "mini-dashboard"]
 +default = []
  
  [target.'cfg(target_os = "linux")'.dependencies]
  tikv-jemallocator = "0.4.1"
+diff --git a/meilisearch-http/build.rs b/meilisearch-http/build.rs
+index 41f429ba..eedf113c 100644
+--- a/meilisearch-http/build.rs
++++ b/meilisearch-http/build.rs
+@@ -1,10 +1,6 @@
+ use vergen::{vergen, Config};
+ 
+ fn main() {
+-    if let Err(e) = vergen(Config::default()) {
+-        println!("cargo:warning=vergen: {}", e);
+-    }
+-
+     #[cfg(feature = "mini-dashboard")]
+     mini_dashboard::setup_mini_dashboard().expect("Could not load the mini-dashboard assets");
+ }
