@@ -1,19 +1,20 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, stdenv
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.17.5";
+  version = "3.17.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vljsd5bk12gasadkxcddwhmp38fj64x1aqi4frk3frq9lp8h3a1";
+    sha256 = "sha256-r7PACv9itFL8qN+ov8HklcqcMui54hOOY66tqXS5NMc=";
   };
 
   checkInputs = [
@@ -22,7 +23,9 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [ "simplejson" ];
+  pythonImportsCheck = [
+    "simplejson"
+  ];
 
   meta = with lib; {
     description = "Extensible JSON encoder/decoder for Python";
