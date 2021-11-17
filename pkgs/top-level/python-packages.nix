@@ -1413,6 +1413,8 @@ in {
 
   cchardet = callPackage ../development/python-modules/cchardet { };
 
+  cdcs = callPackage ../development/python-modules/cdcs { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   cement = callPackage ../development/python-modules/cement { };
@@ -5925,6 +5927,8 @@ in {
   postorius = callPackage ../servers/mail/mailman/postorius.nix { };
 
   pot = callPackage ../development/python-modules/pot { };
+
+  potentials = callPackage ../development/python-modules/potentials { };
 
   potr = callPackage ../development/python-modules/potr { };
 
