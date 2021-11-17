@@ -41,7 +41,6 @@
 }:
 
 let
-
   d2u = lib.replaceChars [ "-" ] [ "_" ];
 
   mkLibRetroCore =
@@ -54,8 +53,7 @@ let
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation ((rec {
-
-      name = "libretro-${core}-${version}";
+      pname = "libretro-${core}";
       inherit src version;
 
       buildInputs = [ zlib ] ++ args.extraBuildInputs or [ ];
@@ -101,12 +99,9 @@ let
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
-
 in
 with lib.licenses;
-
 {
-
   atari800 = mkLibRetroCore rec {
     core = "atari800";
     src = getCoreSrc core;
@@ -148,17 +143,13 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  beetle-pce-fast =
-    let drv = mkLibRetroCore {
-      core = "mednafen-pce-fast";
-      src = getCoreSrc "beetle-pce-fast";
-      description = "Port of Mednafen's PC Engine core to libretro";
-      license = gpl2;
-      makefile = "Makefile";
-    }; in
-    drv.override {
-      name = "beetle-pce-fast-${drv.version}";
-    };
+  beetle-pce-fast = mkLibRetroCore {
+    core = "mednafen-pce-fast";
+    src = getCoreSrc "beetle-pce-fast";
+    description = "Port of Mednafen's PC Engine core to libretro";
+    license = gpl2;
+    makefile = "Makefile";
+  };
 
   beetle-pcfx = mkLibRetroCore rec {
     core = "mednafen-pcfx";
@@ -168,19 +159,16 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  beetle-psx = let drv = (mkLibRetroCore {
+  beetle-psx = mkLibRetroCore {
     core = "mednafen-psx";
     src = getCoreSrc "beetle-psx";
     description = "Port of Mednafen's PSX Engine core to libretro";
     license = gpl2;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
-  }); in
-    drv.override {
-      name = "beetle-psx-${drv.version}";
-    };
+  };
 
-  beetle-psx-hw = let drv = (mkLibRetroCore {
+  beetle-psx-hw = mkLibRetroCore {
     core = "mednafen-psx-hw";
     src = getCoreSrc "beetle-psx";
     description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
@@ -188,12 +176,9 @@ with lib.licenses;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
-  }); in
-    drv.override {
-      name = "beetle-psx-hw-${drv.version}";
-    };
+  };
 
-  beetle-saturn = let drv = (mkLibRetroCore {
+  beetle-saturn = mkLibRetroCore {
     core = "mednafen-saturn";
     src = getCoreSrc "beetle-saturn";
     description = "Port of Mednafen's Saturn core to libretro";
@@ -201,12 +186,9 @@ with lib.licenses;
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
-  }); in
-    drv.override {
-      name = "beetle-saturn-${drv.version}";
-    };
+  };
 
-  beetle-saturn-hw = let drv = (mkLibRetroCore {
+  beetle-saturn-hw = mkLibRetroCore {
     core = "mednafen-saturn-hw";
     src = getCoreSrc "beetle-saturn";
     description = "Port of Mednafen's Saturn core to libretro";
@@ -215,12 +197,9 @@ with lib.licenses;
     makefile = "Makefile";
     makeFlags = [ "HAVE_OPENGL=1" "HAVE_HW=1" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
-  }); in
-    drv.override {
-      name = "beetle-saturn-${drv.version}";
-    };
+  };
 
-  beetle-supergrafx = mkLibRetroCore rec {
+  beetle-supergrafx = mkLibRetroCore {
     core = "mednafen-supergrafx";
     src = getCoreSrc "beetle-supergrafx";
     description = "Port of Mednafen's SuperGrafx core to libretro";
@@ -228,7 +207,7 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  beetle-wswan = mkLibRetroCore rec {
+  beetle-wswan = mkLibRetroCore {
     core = "mednafen-wswan";
     src = getCoreSrc "beetle-wswan";
     description = "Port of Mednafen's WonderSwan core to libretro";
@@ -236,7 +215,7 @@ with lib.licenses;
     makefile = "Makefile";
   };
 
-  beetle-vb = mkLibRetroCore rec {
+  beetle-vb = mkLibRetroCore {
     core = "mednafen-vb";
     src = getCoreSrc "beetle-vb";
     description = "Port of Mednafen's VirtualBoy core to libretro";
@@ -251,15 +230,14 @@ with lib.licenses;
     license = gpl2;
   };
 
-  bsnes-mercury = let bname = "bsnes-mercury"; in
-    mkLibRetroCore {
-      core = bname + "-accuracy";
-      src = getCoreSrc "bsnes-mercury";
-      description = "Fork of bsnes with HLE DSP emulation restored";
-      license = gpl3;
-      makefile = "Makefile";
-      makeFlags = [ "PROFILE=accuracy" ];
-    };
+  bsnes-mercury = mkLibRetroCore {
+    core = "bsnes-mercury-accuracy";
+    src = getCoreSrc "bsnes-mercury";
+    description = "Fork of bsnes with HLE DSP emulation restored";
+    license = gpl3;
+    makefile = "Makefile";
+    makeFlags = [ "PROFILE=accuracy" ];
+  };
 
   citra = mkLibRetroCore rec {
     core = "citra";
@@ -863,5 +841,4 @@ with lib.licenses;
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
     preBuild = "cd yabause/src/libretro";
   };
-
 }
