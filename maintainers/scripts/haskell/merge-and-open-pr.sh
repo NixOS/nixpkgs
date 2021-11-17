@@ -86,6 +86,8 @@ echo "Updating Hackage hashes..."
 ./maintainers/scripts/haskell/update-hackage.sh --do-commit
 echo "Regenerating Hackage packages..."
 ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
+echo "Updating head.hackage..."
+./maintainers/scripts/haskell/update-head.hackage.hs --do-commit
 
 # Push these new commits to the haskell-updates branch
 echo "Pushing commits just created to the remote haskell-updates branch..."
