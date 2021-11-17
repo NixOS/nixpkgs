@@ -1,0 +1,119 @@
+diff --git a/onlinejudge_verify/main.py b/onlinejudge_verify/main.py
+index d1f139f..7605ee6 100644
+--- a/onlinejudge_verify/main.py
++++ b/onlinejudge_verify/main.py
+@@ -68,8 +68,8 @@ def subcommand_run(paths: List[pathlib.Path], *, timeout: float = 600, tle: floa
+     if does_push:
+         # checkout in advance to push
+         branch = os.environ['GITHUB_REF'][len('refs/heads/'):]
+-        logger.info('$ git checkout %s', branch)
+-        subprocess.check_call(['git', 'checkout', branch])
++        logger.info('$ @git@/bin/git checkout %s', branch)
++        subprocess.check_call(['@git@/bin/git', 'checkout', branch])
+ 
+     # NOTE: the GITHUB_TOKEN expires in 60 minutes (https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token#about-the-github_token-secret)
+     # use 10 minutes as timeout for safety; 理由はよく分かってないぽいけど以前 20 分でやって死んだことがあるらしいので
+@@ -95,16 +95,16 @@ def push_timestamp_to_branch() -> None:
+     logger.info('GITHUB_REPOSITORY = %s', os.environ['GITHUB_REPOSITORY'])
+ 
+     # commit and push
+-    subprocess.check_call(['git', 'config', '--global', 'user.name', 'GitHub'])
+-    subprocess.check_call(['git', 'config', '--global', 'user.email', 'noreply@github.com'])
++    subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.name', 'GitHub'])
++    subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.email', 'noreply@github.com'])
+     path = onlinejudge_verify.marker.get_verification_marker().json_path
+-    logger.info('$ git add %s && git commit && git push', str(path))
++    logger.info('$ @git@/bin/git add %s && @git@/bin/git commit && @git@/bin/git push', str(path))
+     if path.exists():
+-        subprocess.check_call(['git', 'add', str(path)])
+-    if subprocess.run(['git', 'diff', '--quiet', '--staged'], check=False).returncode:
++        subprocess.check_call(['@git@/bin/git', 'add', str(path)])
++    if subprocess.run(['@git@/bin/git', 'diff', '--quiet', '--staged'], check=False).returncode:
+         message = '[auto-verifier] verify commit {}'.format(os.environ['GITHUB_SHA'])
+-        subprocess.check_call(['git', 'commit', '-m', message])
+-        subprocess.check_call(['git', 'push', url, 'HEAD'])
++        subprocess.check_call(['@git@/bin/git', 'commit', '-m', message])
++        subprocess.check_call(['@git@/bin/git', 'push', url, 'HEAD'])
+ 
+ 
+ def push_documents_to_gh_pages(*, src_dir: pathlib.Path, dst_branch: str = 'gh-pages') -> None:
+@@ -127,13 +127,13 @@ def push_documents_to_gh_pages(*, src_dir: pathlib.Path, dst_branch: str = 'gh-p
+                 src_files[path.relative_to(src_dir)] = fh.read()
+ 
+     # checkout gh-pages
+-    logger.info('$ git checkout %s', dst_branch)
++    logger.info('$ @git@/bin/git checkout %s', dst_branch)
+     subprocess.check_call(['rm', '.verify-helper/.gitignore'])  # required, to remove .gitignore even if it is untracked
+-    subprocess.check_call(['git', 'stash'])
++    subprocess.check_call(['@git@/bin/git', 'stash'])
+     try:
+-        subprocess.check_call(['git', 'checkout', dst_branch])
++        subprocess.check_call(['@git@/bin/git', 'checkout', dst_branch])
+     except subprocess.CalledProcessError:
+-        subprocess.check_call(['git', 'checkout', '--orphan', dst_branch])
++        subprocess.check_call(['@git@/bin/git', 'checkout', '--orphan', dst_branch])
+ 
+     # remove all non-hidden files and write new files
+     logger.info('write files to . on %s', dst_branch)
+@@ -147,14 +147,14 @@ def push_documents_to_gh_pages(*, src_dir: pathlib.Path, dst_branch: str = 'gh-p
+             fh.write(data)
+ 
+     # commit and push
+-    logger.info('$ git add . && git commit && git push')
+-    subprocess.check_call(['git', 'config', '--global', 'user.name', 'GitHub'])
+-    subprocess.check_call(['git', 'config', '--global', 'user.email', 'noreply@github.com'])
+-    subprocess.check_call(['git', 'add', '.'])
+-    if subprocess.run(['git', 'diff', '--quiet', '--staged'], check=False).returncode:
++    logger.info('$ @git@/bin/git add . && @git@/bin/git commit && @git@/bin/git push')
++    subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.name', 'GitHub'])
++    subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.email', 'noreply@github.com'])
++    subprocess.check_call(['@git@/bin/git', 'add', '.'])
++    if subprocess.run(['@git@/bin/git', 'diff', '--quiet', '--staged'], check=False).returncode:
+         message = '[auto-verifier] docs commit {}'.format(os.environ['GITHUB_SHA'])
+-        subprocess.check_call(['git', 'commit', '-m', message])
+-        subprocess.check_call(['git', 'push', url, 'HEAD'])
++        subprocess.check_call(['@git@/bin/git', 'commit', '-m', message])
++        subprocess.check_call(['@git@/bin/git', 'push', url, 'HEAD'])
+ 
+ 
+ def subcommand_docs(*, jobs: int = 1) -> None:
+@@ -237,12 +237,12 @@ def _delete_gitignore() -> None:
+ 
+         # checkout the target branch
+         branch = os.environ['GITHUB_REF'][len('refs/heads/'):]
+-        logger.info('$ git checkout %s', branch)
+-        subprocess.check_call(['git', 'checkout', branch])
++        logger.info('$ @git@/bin/git checkout %s', branch)
++        subprocess.check_call(['@git@/bin/git', 'checkout', branch])
+ 
+         # check if .verify-helper/.gitignore exists
+         gitignore_path = pathlib.Path('.verify-helper', '.gitignore')
+-        gitignore_checked_in = (subprocess.run(['git', 'ls-files', '--error-unmatch', str(gitignore_path)], check=False).returncode == 0)
++        gitignore_checked_in = (subprocess.run(['@git@/bin/git', 'ls-files', '--error-unmatch', str(gitignore_path)], check=False).returncode == 0)
+         if not gitignore_checked_in:
+             return
+         logger.warning('file %s exists in this Git repository. It should not be checked in.', str(gitignore_path))
+@@ -254,15 +254,15 @@ def _delete_gitignore() -> None:
+         logger.info('GITHUB_REPOSITORY = %s', os.environ['GITHUB_REPOSITORY'])
+ 
+         # remove .verify-helper/.gitignore
+-        subprocess.check_call(['git', 'config', '--global', 'user.name', 'GitHub'])
+-        subprocess.check_call(['git', 'config', '--global', 'user.email', 'noreply@github.com'])
+-        logger.info('$ git rm --cached %s', str(gitignore_path))
+-        subprocess.check_call(['git', 'rm', '--cached', str(gitignore_path)])
++        subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.name', 'GitHub'])
++        subprocess.check_call(['@git@/bin/git', 'config', '--global', 'user.email', 'noreply@github.com'])
++        logger.info('$ @git@/bin/git rm --cached %s', str(gitignore_path))
++        subprocess.check_call(['@git@/bin/git', 'rm', '--cached', str(gitignore_path)])
+         message = '[auto-verifier] remove .verify-helper/.gitignore (see https://github.com/online-judge-tools/verification-helper/issues/332)'
+-        logger.info('$ git commit -m ...')
+-        subprocess.check_call(['git', 'commit', '-m', message])
+-        logger.info('$ git push ... HEAD')
+-        subprocess.check_call(['git', 'push', url, 'HEAD'])
++        logger.info('$ @git@/bin/git commit -m ...')
++        subprocess.check_call(['@git@/bin/git', 'commit', '-m', message])
++        logger.info('$ @git@/bin/git push ... HEAD')
++        subprocess.check_call(['@git@/bin/git', 'push', url, 'HEAD'])
+ 
+     except Exception:
+         logger.exception('something wrong in _delete_gitignore(). ignored.')
