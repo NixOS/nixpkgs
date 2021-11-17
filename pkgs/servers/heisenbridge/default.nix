@@ -1,15 +1,22 @@
-{ lib, fetchurl, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.6.0";
 
-  # Use the release tarball because it has the version set correctly using the
-  # version.txt file.
-  src = fetchurl {
-    url = "https://github.com/hifi/heisenbridge/releases/download/v${version}/heisenbridge-${version}.tar.gz";
-    sha256 = "sha256-NhHMReY48lg1FhJlCRjRiSpy+9bDLtIV+j+zX8GZcL4=";
+  src = fetchFromGitHub {
+    owner = "hifi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Q7xqKjAUBHh87VAgsgDOCPDINDh0yUdr3UoUlLqJr5k=";
   };
+
+  postPatch = ''
+    echo "${version}" > heisenbridge/version.txt
+
+    substituteInPlace setup.cfg \
+      --replace "mautrix >=0.10.5, <0.11" "mautrix >=0.10.5, <0.12"
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp
@@ -17,6 +24,10 @@ python3Packages.buildPythonPackage rec {
     mautrix
     python-socks
     pyyaml
+  ];
+
+  checkInputs = with python3Packages; [
+    pytestCheckHook
   ];
 
   meta = with lib; {
