@@ -202,7 +202,7 @@ in {
           PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
           PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
           PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-          PRUNE_BIND_MOUNTSFR="${lib.boolToString cfg.pruneBindMounts}"
+          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
         '';
       };
     };
