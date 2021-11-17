@@ -559,7 +559,7 @@
     "nanoleaf" = ps: with ps; [ aionanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
-    "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
+    "ness_alarm" = ps: with ps; [ nessclient ];
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
