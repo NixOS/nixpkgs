@@ -32095,6 +32095,8 @@ with pkgs;
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
 
+  cups-brother-hll2350dw = callPackage  ../misc/cups/drivers/hll2350dw { };
+
   cups-drv-rastertosag-gdi = callPackage ../misc/cups/drivers/cups-drv-rastertosag-gdi { };
 
   # this driver ships with pre-compiled 32-bit binary libraries
