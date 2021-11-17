@@ -29850,8 +29850,6 @@ with pkgs;
 
   bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
 
-  beret = callPackage ../games/beret { };
-
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
   };
