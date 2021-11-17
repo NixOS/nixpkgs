@@ -2379,7 +2379,7 @@ with pkgs;
 
   catclock = callPackage ../applications/misc/catclock { };
 
-  cardpeek = callPackage ../applications/misc/cardpeek { };
+  cardpeek = callPackage ../applications/misc/cardpeek { inherit (darwin.apple_sdk.frameworks) PCSC; };
 
   cawbird = callPackage ../applications/networking/cawbird { };
 
