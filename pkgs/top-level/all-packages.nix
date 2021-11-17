@@ -21035,6 +21035,8 @@ with pkgs;
 
   pshs = callPackage ../servers/http/pshs { };
 
+  quark = callPackage ../servers/http/quark { };
+
   sympa = callPackage ../servers/mail/sympa { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
