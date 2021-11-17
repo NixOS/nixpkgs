@@ -23219,6 +23219,11 @@ with pkgs;
 
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
 
+  la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
+    inherit (plasma5Packages) breeze-icons;
+    inherit (pantheon) elementary-icon-theme;
+  };
+
   layan-gtk-theme = callPackage ../data/themes/layan-gtk-theme { };
 
   lato = callPackage ../data/fonts/lato {};
