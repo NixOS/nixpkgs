@@ -25517,6 +25517,8 @@ with pkgs;
 
   gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
 
+  globe-cli = callPackage ../applications/misc/globe-cli { };
+
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
