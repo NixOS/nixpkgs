@@ -1413,6 +1413,8 @@ in {
 
   cchardet = callPackage ../development/python-modules/cchardet { };
 
+  cdcs = callPackage ../development/python-modules/cdcs { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   cement = callPackage ../development/python-modules/cement { };
@@ -3470,6 +3472,8 @@ in {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
+  hdfs = callPackage ../development/python-modules/hdfs { };
+
   hdlparse = callPackage ../development/python-modules/hdlparse { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
@@ -3701,6 +3705,10 @@ in {
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell { };
 
   ignite = callPackage ../development/python-modules/ignite { };
+
+  igraph = callPackage ../development/python-modules/igraph {
+    inherit (pkgs) igraph;
+  };
 
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
 
@@ -5920,6 +5928,8 @@ in {
 
   pot = callPackage ../development/python-modules/pot { };
 
+  potentials = callPackage ../development/python-modules/potentials { };
+
   potr = callPackage ../development/python-modules/potr { };
 
   power = callPackage ../development/python-modules/power { };
@@ -6305,6 +6315,8 @@ in {
   pydash = callPackage ../development/python-modules/pydash { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
+
+  pydeck = callPackage ../development/python-modules/pydeck { };
 
   pydeconz = callPackage ../development/python-modules/pydeconz { };
 
@@ -7513,10 +7525,6 @@ in {
 
   python-http-client = callPackage ../development/python-modules/python-http-client { };
 
-  python-igraph = callPackage ../development/python-modules/python-igraph {
-    inherit (pkgs) igraph;
-  };
-
   pythonix = callPackage ../development/python-modules/pythonix {
     nix = pkgs.nix_2_3;
     meson = pkgs.meson.override { python3 = self.python; };
@@ -8635,6 +8643,8 @@ in {
 
   slowapi = callPackage ../development/python-modules/slowapi { };
 
+  slugid = callPackage ../development/python-modules/slugid { };
+
   sly = callPackage ../development/python-modules/sly { };
 
   smart-meter-texas = callPackage ../development/python-modules/smart-meter-texas { };
@@ -9091,6 +9101,8 @@ in {
 
   tailer = callPackage ../development/python-modules/tailer { };
 
+  tailscale = callPackage ../development/python-modules/tailscale { };
+
   tappy = callPackage ../development/python-modules/tappy { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
@@ -9341,6 +9353,8 @@ in {
   toonapi = callPackage ../development/python-modules/toonapi { };
 
   toposort = callPackage ../development/python-modules/toposort { };
+
+  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
@@ -9693,6 +9707,8 @@ in {
   vdf = callPackage ../development/python-modules/vdf { };
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
+
+  vehicle = callPackage ../development/python-modules/vehicle { };
 
   vega = callPackage ../development/python-modules/vega { };
 

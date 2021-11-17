@@ -4,7 +4,7 @@
  ppx_variants_conv, re, sexplib, variantslib, fieldslib}:
 
 buildOcamlJane {
-  name = "ppx_expect";
+  pname = "ppx_expect";
   hash = "0cwagb4cj3x1vsr19kyfa9pxlvaz9a5v863cahi5glinsh4mzgdx";
   propagatedBuildInputs =
     [ ppx_assert ppx_compare ppx_core ppx_custom_printf ppx_driver

@@ -603,6 +603,12 @@
       fingerprint = "7931 EB4E 4712 D7BE 04F8  6D34 07EE 1FFC A58A 11C5";
     }];
   };
+  amfl = {
+    email = "amfl@none.none";
+    github = "amfl";
+    githubId = 382798;
+    name = "amfl";
+  };
   amiddelk = {
     email = "amiddelk@gmail.com";
     github = "amiddelk";
@@ -2339,6 +2345,12 @@
     github = "CrazedProgrammer";
     githubId = 12202789;
     name = "CrazedProgrammer";
+  };
+  creator54 = {
+    email = "hi.creator54@gmail.com";
+    github = "creator54";
+    githubId = 34543609;
+    name = "creator54";
   };
   cript0nauta = {
     email = "shareman1204@gmail.com";
@@ -7577,6 +7589,12 @@
       longkeyid = "rsa4096/0xDA015B05B5A11B22";
       fingerprint = "DB43 2895 CF68 F0CE D4B7  EF60 DA01 5B05 B5A1 1B22";
     }];
+  };
+  milahu = {
+    email = "milahu@gmail.com";
+    github = "milahu";
+    githubId = 12958815;
+    name = "Milan Hauth";
   };
   milesbreslin = {
     email = "milesbreslin@gmail.com";

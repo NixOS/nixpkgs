@@ -9,19 +9,20 @@
 , oniguruma
 , libiconv
 , Security
+, libxcb
 , zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.6.6";
+  version = "1.7.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Aezi005CKhGwCRZ2HwxFRRORBvVoZEzljTcKQZ8b8XI=";
+    sha256 = "sha256-Gg60jeDfHNKUYynJRgN4oLWhcdApWUdO5kRwl5hrFMM=";
   };
 
-  cargoHash = "sha256-d06lvS5ajXPY/AwmE2rkya82mAOeEv04EtBElDvX2+I=";
+  cargoHash = "sha256-xsTlFfgX3Np3M/RqmK30DZBCrY1OXnEkjqBDI+ffd/U=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib

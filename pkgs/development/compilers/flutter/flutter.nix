@@ -156,7 +156,10 @@ runCommand drvName
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;
-  passthru = { unwrapped = flutter; };
+  passthru = {
+    unwrapped = flutter;
+    inherit dart;
+  };
   meta = with lib; {
     description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
     longDescription = ''

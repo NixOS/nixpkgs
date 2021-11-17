@@ -76,6 +76,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bcat = throw "bcat has been removed because upstream is dead"; # added 2021-08-22
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
+  beret = throw "beret has been removed"; # added 2021-11-16
   bluezFull = bluez; # Added 2019-12-03
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
@@ -378,6 +379,7 @@ mapAliases ({
   joseki = apache-jena-fuseki; # added 2016-02-28
   jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   json_glib = json-glib; # added 2018-02-25
+  kafkacat = kcat; # added 2021-10-07
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # added 2021-06-09
@@ -461,7 +463,6 @@ mapAliases ({
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
-  linuxPackages_rt_5_11 = linuxKernel.packages.linux_rt_5_11;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
@@ -489,7 +490,6 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
   linux_5_14 = linuxKernel.kernels.linux_5_14;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
 

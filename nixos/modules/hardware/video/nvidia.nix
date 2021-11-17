@@ -294,7 +294,7 @@ in
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
     environment.systemPackages = [ nvidia_x11.bin ]
-      ++ optionals nvidiaSettings [ nvidia_x11.settings ]
+      ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;

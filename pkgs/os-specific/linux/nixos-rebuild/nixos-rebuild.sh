@@ -29,7 +29,9 @@ upgrade_all=
 profile=/nix/var/nix/profiles/system
 buildHost=localhost
 targetHost=
-maybeSudo=()
+remoteSudo=
+# comma separated list of vars to preserve when using sudo
+preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -100,7 +102,7 @@ while [ "$#" -gt 0 ]; do
         shift 1
         ;;
       --use-remote-sudo)
-        maybeSudo=(sudo --)
+        remoteSudo=1
         ;;
       --flake)
         flake="$1"
@@ -126,8 +128,8 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [ -n "$SUDO_USER" ]; then
-    maybeSudo=(sudo --)
+if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
+    maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
 if [ -z "$buildHost" -a -n "$targetHost" ]; then

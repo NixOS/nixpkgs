@@ -22,12 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-/rLv2/bcVsmWw+ZfyumDcj0ptHPQBCCYR9O/lVlV+G0=";
 
-  # Enables build against a generic BLAS.
-  cargoBuildFlags = [
-    "--features"
-    "netlib"
-  ];
-
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
@@ -37,6 +31,9 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
+
+  # Enables build against a generic BLAS.
+  buildFeatures = [ "netlib" ];
 
   postInstall = ''
     # Install shell completions

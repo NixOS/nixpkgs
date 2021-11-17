@@ -24,13 +24,13 @@ let
   cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     rev = "v${version}";
-    sha256 = "0dw4q4yf86wwkm38bpsjf0yfzai46icvaly861ymh5v9f90q60jw";
+    sha256 = "05dg835mmpzf7k2jn101l7x7cnra1kldwbgf19zblym5lfn21zhf";
   };
 
   nativeBuildInputs = [ libpng ninja which ]

@@ -6,6 +6,7 @@
 , stdenv
 , libX11
 , libXrandr
+, AppKit
 , withSki ? true
 }:
 
@@ -25,9 +26,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ];
+  buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ]
+    ++ lib.optional stdenv.isDarwin AppKit;
 
-  cargoBuildFlags = lib.optional (!withSki) "--no-default-features";
+  buildNoDefaultFeatures = !withSki;
 
   postInstall = ''
     installManPage man/*
