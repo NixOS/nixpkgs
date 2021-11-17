@@ -6904,6 +6904,8 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  mani = callPackage ../development/tools/mani { };
+
   mapcache = callPackage ../servers/mapcache { };
 
   mapserver = callPackage ../servers/mapserver { };
