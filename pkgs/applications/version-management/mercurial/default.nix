@@ -32,6 +32,15 @@ let
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
+    postPatch = ''
+      patchShebangs .
+
+      for f in **/*.{py,c,t}; do
+        # not only used in shebangs
+        substituteAllInPlace "$f" '/bin/sh' '${stdenv.shell}'
+      done
+    '';
+
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
