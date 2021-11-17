@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
     ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
-  outputs = ["out"]
-    ++ optionals buildPythonBindings ["python"];
+  outputs = [ "out" ]
+    ++ optionals buildPythonBindings [ "python" ];
 
   # "Release" does not work. non-debug mode is Debug compiled with optimization
   cmakeBuildType = "Debug";
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = optional debug "VERBOSE=1";
 
-  # needed to ensure correct perl dependency in outputs
-  preBuild = ''
-    patchShebangs ..
+  # needed to ensure correct shabangs in output scripts
+  preFixup = lib.optionalString (!withoutBin) ''
+    patchShebangs $out/bin
   '';
 
   # needed by tests (so libsimgrid.so is found)
@@ -86,22 +86,18 @@ stdenv.mkDerivation rec {
     make tests -j $NIX_BUILD_CORES
   '';
 
-  postInstall = "" + lib.optionalString withoutBin ''
+  postInstall = lib.optionalString withoutBin ''
     # remove bin from output if requested.
     # having a specific bin output would be cleaner but it does not work currently (circular references)
     rm -rf $out/bin
   '' + lib.optionalString buildPythonBindings ''
     # manually install the python binding if requested.
-    # library output file is expected to be formatted as simgrid.cpython-XY-.*.so
-    # where X is python version major and Y python version minor.
-    PYTHON_VERSION_MAJOR=$(ls lib/simgrid.cpython*.so | sed -E 'sWlib/simgrid\.cpython-([[:digit:]])([[:digit:]])-.*W\1W')
-    PYTHON_VERSION_MINOR=$(ls lib/simgrid.cpython*.so | sed -E 'sWlib/simgrid\.cpython-([[:digit:]])([[:digit:]])-.*W\2W')
-    mkdir -p $python/lib/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages/
-    cp lib/simgrid.cpython*.so $python/lib/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages/
+    mkdir -p $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
+    cp lib/simgrid.cpython*.so $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
   '';
 
   # improve debuggability if requested
-  hardeningDisable = if debug then [ "fortify" ] else [];
+  hardeningDisable = lib.optionals debug [ "fortify" ];
   dontStrip = debug;
 
   meta = {
