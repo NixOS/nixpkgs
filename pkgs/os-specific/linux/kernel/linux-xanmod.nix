@@ -1,9 +1,9 @@
 { lib, stdenv, buildLinux, fetchFromGitHub, ... } @ args:
 
 let
-  version = "5.14.16";
+  version = "5.15.2";
   release = "1";
-  suffix = "xanmod${release}-cacule";
+  suffix = "xanmod${release}-tt";
 in
 buildLinux (args // rec {
   inherit version;
@@ -13,19 +13,32 @@ buildLinux (args // rec {
     owner = "xanmod";
     repo = "linux";
     rev = modDirVersion;
-    sha256 = "sha256-ro7WnN0BPxW/8sajUyGTnvmbemKJEadSBcFmjZ+Wtrs=";
+    sha256 = "sha256-3tIwj+4xf/I5srEAqECbfH343J5nzCWViq1ZnidZI24=";
   };
 
   structuredExtraConfig = with lib.kernel; {
+    # removed options
+    CFS_BANDWIDTH = lib.mkForce (option no);
+    RT_GROUP_SCHED = lib.mkForce (option no);
+    SCHED_AUTOGROUP = lib.mkForce (option no);
+
+    # AMD P-state driver
+    X86_AMD_PSTATE = yes;
+
+    # Linux RNG framework
+    LRNG = yes;
+
+    # Paragon's NTFS3 driver
+    NTFS3_FS = module;
+    NTFS3_LZX_XPRESS = yes;
+    NTFS3_FS_POSIX_ACL = yes;
+
     # Preemptive Full Tickless Kernel at 500Hz
+    SCHED_CORE = lib.mkForce (option no);
     PREEMPT_VOLUNTARY = lib.mkForce no;
     PREEMPT = lib.mkForce yes;
     NO_HZ_FULL = yes;
     HZ_500 = yes;
-
-    # Google's Multigenerational LRU Framework
-    LRU_GEN = yes;
-    LRU_GEN_ENABLED = yes;
 
     # Google's BBRv2 TCP congestion Control
     TCP_CONG_BBR2 = yes;
@@ -46,14 +59,12 @@ buildLinux (args // rec {
     ANDROID_BINDER_DEVICES = freeform "binder,hwbinder,vndbinder";
 
     # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-    # Futex2 interface compatible w/ latest Wine / Proton Fsync.
     FUTEX = yes;
-    FUTEX2 = yes;
     FUTEX_PI = yes;
   };
 
   extraMeta = {
-    branch = "5.14-cacule";
+    branch = "5.15-tt";
     maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
     description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
     broken = stdenv.isAarch64;
