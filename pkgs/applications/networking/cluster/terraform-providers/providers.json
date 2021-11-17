@@ -690,11 +690,13 @@
     "version": "0.0.1"
   },
   "nomad": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/nomad",
     "repo": "terraform-provider-nomad",
-    "rev": "v1.4.5",
-    "sha256": "1sccm4mspjn92ky6nscsrmbb573mx53wzsvvapsf2p4119h9s30i",
-    "version": "1.4.5"
+    "rev": "v1.4.15",
+    "sha256": "18rrvp7h27f51di8hajl2jb53v7wadqv4241rxdx1d180fas69k1",
+    "vendorSha256": "1y5wpilnqn17zbi88z23159gx2p57a9c10ajb7gn9isbxfdqj9mb",
+    "version": "1.4.15"
   },
   "ns1": {
     "owner": "terraform-providers",
