@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiolookin";
-  version = "0.0.3";
+  version = "0.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ANMalko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15mdvrzvqpdvg9zkczzgzzc5v2ri3v5f17000mhxill1nhirxhqx";
+    sha256 = "sha256-Kqys76c/9Mw3ETgF0N4rA9mz5DELwTMjAK38PPN8Ahs=";
   };
 
   propagatedBuildInputs = [

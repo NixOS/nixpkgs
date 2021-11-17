@@ -4,7 +4,6 @@
 # this is python3 only because setools only supports python3
 
 with lib;
-with python3.pkgs;
 
 stdenv.mkDerivation rec {
   pname = "selinux-python";
@@ -17,9 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1pjzsyay5535cxcjag7y7k193ajry0s0xc3dqv5905qd7cwval1n";
   };
 
-  nativeBuildInputs = [ wrapPython ];
-  buildInputs = [ libsepol python3 ];
-  propagatedBuildInputs = [ libselinux libsemanage setools ipy ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
+  buildInputs = [ libsepol ];
+  propagatedBuildInputs = [ libselinux libsemanage setools python3.pkgs.ipy ];
 
   postPatch = ''
     substituteInPlace sepolicy/Makefile --replace "echo --root" "echo --prefix"
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
     "BASHCOMPLETIONDIR=$(out)/share/bash-completion/completions"
     "PYTHON=python"
-    "PYTHONLIBDIR=$(out)/${python.sitePackages}"
+    "PYTHONLIBDIR=$(out)/${python3.sitePackages}"
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 

@@ -9344,6 +9344,8 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
+  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
+
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
@@ -9695,6 +9697,8 @@ in {
   vdf = callPackage ../development/python-modules/vdf { };
 
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
+
+  vehicle = callPackage ../development/python-modules/vehicle { };
 
   vega = callPackage ../development/python-modules/vega { };
 

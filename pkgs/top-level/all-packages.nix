@@ -422,9 +422,9 @@ with pkgs;
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-runtime = dotnetCorePackages.runtime_5_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -1343,6 +1343,8 @@ with pkgs;
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
+  awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
+
   awslogs = callPackage ../tools/admin/awslogs { };
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
@@ -2228,7 +2230,7 @@ with pkgs;
   bozohttpd = callPackage ../servers/http/bozohttpd { };
   bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
-  bpb = callPackage ../tools/security/bpb { };
+  bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
 
   bpytop = callPackage ../tools/system/bpytop { };
 
@@ -2458,6 +2460,8 @@ with pkgs;
   clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
+
+  clusterctl = callPackage ../applications/networking/cluster/clusterctl { };
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
@@ -5435,6 +5439,8 @@ with pkgs;
 
   gelasio = callPackage ../data/fonts/gelasio { };
 
+  gemget = callPackage ../tools/networking/gemget {};
+
   gen-oath-safe = callPackage ../tools/security/gen-oath-safe { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
@@ -8198,6 +8204,8 @@ with pkgs;
   opensc = callPackage ../tools/security/opensc {
     inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
   };
+
+  openseachest = callPackage ../tools/system/openseachest { };
 
   opensm = callPackage ../tools/networking/opensm { };
 
@@ -12782,7 +12790,9 @@ with pkgs;
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
   cargo-license = callPackage ../tools/package-management/cargo-license { };
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
-  cargo-outdated = callPackage ../tools/package-management/cargo-outdated {};
+  cargo-outdated = callPackage ../tools/package-management/cargo-outdated {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
   cargo-release = callPackage ../tools/package-management/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -14709,9 +14719,9 @@ with pkgs;
 
   k2tf = callPackage ../development/tools/misc/k2tf { };
 
-  kafkacat = callPackage ../development/tools/kafkacat { };
-
   kati = callPackage ../development/tools/build-managers/kati { };
+
+  kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
 
@@ -15541,7 +15551,9 @@ with pkgs;
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
 
-  apr = callPackage ../development/libraries/apr { };
+  apr = callPackage ../development/libraries/apr {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   aprutil = callPackage ../development/libraries/apr-util {
     db = if stdenv.isFreeBSD then db4 else db;
@@ -17227,6 +17239,8 @@ with pkgs;
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
+
+  libbde = callPackage ../development/libraries/libbde { };
 
   libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
@@ -22116,6 +22130,8 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
   linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
+  linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
+  linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -25463,6 +25479,8 @@ with pkgs;
   grisbi = callPackage ../applications/office/grisbi { gtk = gtk3; };
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
+
+  q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
 
@@ -31536,6 +31554,8 @@ with pkgs;
   hologram = callPackage ../tools/security/hologram { };
 
   honeytrap = callPackage ../tools/security/honeytrap { };
+
+  kissat = callPackage ../applications/science/logic/kissat {};
 
   tini = callPackage ../applications/virtualization/tini {};
 
