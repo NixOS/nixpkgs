@@ -1,6 +1,6 @@
 { lib, python3Packages, fetchFromGitHub, gettext }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "ibus-theme-tools";
   version = "4.2.0";
   disabled = python3Packages.pythonOlder "3.6";
@@ -12,7 +12,9 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0i8vwnikwd1bfpv4xlgzc51gn6s18q58nqhvcdiyjzcmy3z344c2";
   };
 
-  propagatedBuildInputs = [ python3Packages.tinycss2 python3Packages.pygobject3 gettext ];
+  BuildInputs = [ gettext ];
+
+  propagatedBuildInputs = with python3Packages; [ tinycss2 pygobject3 ];
 
   # No test.
   doCheck = false;
