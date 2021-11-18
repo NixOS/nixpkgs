@@ -171,7 +171,7 @@ class Logger:
         yield
         self.drain_log_queue()
         toc = time.time()
-        self.log("({:.2f} seconds)".format(toc - tic))
+        self.log("(finished: {}, in {:.2f} seconds)".format(message, toc - tic))
 
         self.xml.endElement("nest")
 
