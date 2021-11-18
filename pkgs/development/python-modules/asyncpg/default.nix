@@ -1,22 +1,34 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, uvloop, postgresql }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, postgresql
+, pythonOlder
+, typing-extensions
+, uvloop
+}:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.24.0";
-  disabled = !isPy3k;
+  version = "0.25.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3S+gY8M0SCNIfZ3cy0CALwJiLd+L+KbMU4he56LBwMY=";
+    sha256 = "sha256-Y/jmppczsoVJfChVRko03mV/LMzSWurutQcYcuk4JUA=";
   };
 
   checkInputs = [
     uvloop
     postgresql
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  pythonImportsCheck = [ "asyncpg" ];
+  pythonImportsCheck = [
+    "asyncpg"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/MagicStack/asyncpg";
