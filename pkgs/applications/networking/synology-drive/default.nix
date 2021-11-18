@@ -1,4 +1,4 @@
-{ lib, fetchurl, autoPatchelfHook, dpkg, glibc, gnome }:
+{ lib, mkDerivation, fetchurl, autoPatchelfHook, dpkg, glibc, gnome }:
 
 mkDerivation rec {
   pname = "synology-drive";
