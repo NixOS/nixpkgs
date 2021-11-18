@@ -12524,7 +12524,9 @@ with pkgs;
     stdenv = gcc7Stdenv;
   }));
 
-  llvmPackages_latest = llvmPackages_13;
+  # FIXME: llvmPackages_13.libcxx is currently broken on Darwin, leaving Clang
+  # to be broken too.
+  llvmPackages_latest = if stdenv.isDarwin then llvmPackages_12 else llvmPackages_13;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
