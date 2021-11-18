@@ -65,6 +65,7 @@ let
     ps.nixops-encrypted-links
     ps.nixops-gcp
     ps.nixops-hercules-ci
+    ps.nixops-hetzner
     ps.nixopsvbox
     ps.nixops-virtd
   ]) // rec {

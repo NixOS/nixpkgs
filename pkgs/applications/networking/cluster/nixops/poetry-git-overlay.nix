@@ -51,6 +51,16 @@ self: super: {
     }
   );
 
+  nixops-hetzner = super.nixops-hetzner.overridePythonAttrs (
+    _: {
+      src = pkgs.fetchgit {
+        url = "https://github.com/NixOS/nixops-hetzner";
+        rev = "84f4eebb89b049c4f86aa779349397c3dedc0c43";
+        sha256 = "0qx8v775jhlbqyhid8wkzy3xcha08kkzb42h6ayszwq4alyfx0b0";
+      };
+    }
+  );
+
   nixops-virtd = super.nixops-virtd.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
