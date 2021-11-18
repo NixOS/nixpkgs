@@ -1,10 +1,17 @@
 { lib, stdenv, fetchurl, clang, llvmPackages, perl, makeWrapper, python3 }:
 
+let
+  isLLVM13OrLater = lib.versionAtLeast llvmPackages.clang.version "13.0";
+in
 stdenv.mkDerivation rec {
   pname = "clang-analyzer";
   inherit (llvmPackages.clang-unwrapped) src version;
 
-  patches = [ ./0001-Fix-scan-build-to-use-NIX_CFLAGS_COMPILE.patch ];
+  patches =
+    if isLLVM13OrLater
+    then [ ./0001-Fix-scan-build-to-use-NIX_CFLAGS_COMPILE.patch ]
+    else [ ./0001-LLVM12-Fix-scan-build-to-use-NIX_CFLAGS_COMPILE.patch ];
+
   buildInputs = [ clang llvmPackages.clang perl python3 ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -12,9 +19,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/scan-view $out/bin
-    cp -R clang/tools/scan-view/share/* $out/share/scan-view
-    cp -R clang/tools/scan-view/bin/* $out/bin/scan-view
-    cp -R clang/tools/scan-build/* $out
+    ${lib.optionalString isLLVM13OrLater "pushd clang"}
+    cp -R tools/scan-view/share/* $out/share/scan-view
+    cp -R tools/scan-view/bin/* $out/bin/scan-view
+    cp -R tools/scan-build/* $out
+    ${lib.optionalString isLLVM13OrLater "popd"}
 
     rm $out/bin/*.bat $out/libexec/*.bat $out/CMakeLists.txt
 
