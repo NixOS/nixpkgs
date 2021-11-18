@@ -1564,6 +1564,16 @@
     githubId = 87764;
     name = "Ben Ford";
   };
+  boppyt = {
+    email = "boppy@nwcpz.com";
+    github = "boppyt";
+    githubId = 71049646;
+    name = "Zack A";
+    keys = [{
+      longkeyid = "rsa4096/0x6310C97DE31D1545";
+      fingerprint = "E8D7 5C19 9F65 269B 439D  F77B 6310 C97D E31D 1545";
+    }];
+  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
@@ -4717,6 +4727,12 @@
     githubId = 896431;
     name = "Chris Hodapp";
   };
+  hollowman6 = {
+    email = "hollowman@hollowman.ml";
+    github = "HollowMan6";
+    githubId = 43995067;
+    name = "Songlin Jiang";
+  };
   holymonson = {
     email = "holymonson@gmail.com";
     github = "holymonson";
@@ -7839,6 +7855,12 @@
     githubId = 99988;
     name = "Maarten Hoogendoorn";
   };
+  MoritzBoehme = {
+    email = "mail@moritzboeh.me";
+    github = "MoritzBoehme";
+    githubId = 42215704;
+    name = "Moritz Böhme";
+  };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
     github = "MostAwesomeDude";
@@ -9984,6 +10006,12 @@
     github = "rpearce";
     githubId = 592876;
     name = "Robert W. Pearce";
+  };
+  rprecenth = {
+    email = "rasmus@precenth.eu";
+    github = "Prillan";
+    githubId = 1675190;
+    name = "Rasmus Précenth";
   };
   rprospero = {
     email = "rprospero+nix@gmail.com";

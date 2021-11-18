@@ -22,12 +22,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.5";
+  # FIXME: retroarch >=1.9.3 doesn't load the cores
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
+    sha256 = "sha256-Dwv0hl+d99FbVMG4KnkjO1aYfAw0m4x+zvrbyb/wOX8=";
     rev = "v${version}";
   };
 
@@ -55,8 +56,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
   };
 }

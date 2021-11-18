@@ -3098,6 +3098,8 @@ in {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  gistyc = callPackage ../development/python-modules/gistyc { };
+
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
 
@@ -6361,6 +6363,8 @@ in {
   pydub = callPackage ../development/python-modules/pydub { };
 
   pydy = callPackage ../development/python-modules/pydy { };
+
+  pydyf = callPackage ../development/python-modules/pydyf { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 

@@ -259,7 +259,9 @@ with pkgs;
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
-  cloak = callPackage ../applications/misc/cloak { };
+  cloak = callPackage ../applications/misc/cloak {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cmark = callPackage ../development/libraries/cmark { };
 
@@ -1044,6 +1046,8 @@ with pkgs;
 
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
+  iqueue = callPackage ../development/libraries/iqueue {};
+
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 {};
 
   kitty = callPackage ../applications/terminal-emulators/kitty {
@@ -1734,6 +1738,8 @@ with pkgs;
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
+
+  gistyc = with python3Packages; toPythonApplication gistyc;
 
   gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
 
@@ -3222,6 +3228,10 @@ with pkgs;
 
   lite = callPackage ../applications/editors/lite { };
 
+  lite-xl = callPackage ../applications/editors/lite-xl {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
@@ -4158,6 +4168,8 @@ with pkgs;
   };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix { };
+
+  ibus-theme-tools = callPackage ../tools/misc/ibus-theme-tools { };
 
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = {
@@ -6741,6 +6753,8 @@ with pkgs;
 
   kibi = callPackage ../applications/editors/kibi { };
 
+  kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
+
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   kiterunner = callPackage ../tools/security/kiterunner { };
@@ -7664,7 +7678,9 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
-  mhost = callPackage ../applications/networking/mhost { };
+  mhost = callPackage ../applications/networking/mhost {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
@@ -19665,7 +19681,7 @@ with pkgs;
 
   StormLib = callPackage ../development/libraries/StormLib { };
 
-  stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
+  stxxl = callPackage ../development/libraries/stxxl { };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
@@ -27116,6 +27132,8 @@ with pkgs;
     mlt-qt5 = libsForQt514.mlt;
   };
 
+  synology-drive = libsForQt5.callPackage ../applications/networking/synology-drive { };
+
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   librep = callPackage ../development/libraries/librep { };
@@ -33034,6 +33052,8 @@ with pkgs;
   terranix = callPackage ../applications/networking/cluster/terranix {};
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
+
+  tgswitch = callPackage ../applications/networking/cluster/tgswitch {};
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
 

@@ -2,20 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q7xqKjAUBHh87VAgsgDOCPDINDh0yUdr3UoUlLqJr5k=";
+    sha256 = "sha256-rN+qoBS9zIy5EHlFQxgAlcz9haoYJNMKJ2wlS46UOi0=";
   };
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
-
-    substituteInPlace setup.cfg \
-      --replace "mautrix >=0.10.5, <0.11" "mautrix >=0.10.5, <0.12"
   '';
 
   propagatedBuildInputs = with python3Packages; [
