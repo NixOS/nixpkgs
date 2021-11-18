@@ -27536,6 +27536,8 @@ with pkgs;
 
   purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
 
+  purple-googlechat = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-googlechat { };
+
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
   purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
