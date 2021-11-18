@@ -2,39 +2,95 @@
 #! nix-shell -i bash -p coreutils findutils gnused nix wget
 
 set -efuo pipefail
+export LC_COLLATE=C # fix sort order
 
-SRCS=
-if [ -d "$1" ]; then
-    SRCS="$(pwd)/$1/srcs.nix"
-    . "$1/fetch.sh"
-else
-    SRCS="$(pwd)/$(dirname $1)/srcs.nix"
-    . "$1"
+# you can override this function in fetch.sh
+function PARSE_INDEX() {
+    cat "$1" | grep -o -E '\shref="[^"]+\.tar\.xz"' | cut -d'"' -f2 | sort | uniq
+}
+
+echo "$1" | grep '^pkgs/' >/dev/null || {
+    echo "error: path argument must start with pkgs/"
+    exit 1
+}
+
+basedirrel="$1"
+basedir="$(readlink -f "$basedirrel")" # resolve absolute path
+if ! [ -d "$basedir" ]; then
+    basedir="$(dirname "$basedir")"
 fi
 
-tmp=$(mktemp -d)
+pkgname=$(basename "$basedir")
+fetchfile="$basedir/fetch.sh"
+SRCS="$basedir/srcs.nix"
+srcsrel="$basedirrel/srcs.nix"
+
+# minimize diff. old hashes are base16
+# TODO remove this in future
+outputbase32=true
+if (echo "$basedirrel" | grep -E '^pkgs/development/libraries/qt-5/5\.(14|15)/?$' >/dev/null)
+then outputbase32=false; fi
+
+. "$fetchfile"
+
+echo "$BASE_URL" >/dev/null # throws 'unbound variable' when BASE_URL is not defined
+
+tmptpl=tmp.fetch-kde-qt.$pkgname.XXXXXXXXXX
+
+tmp=$(mktemp -d $tmptpl)
 pushd $tmp >/dev/null
+echo "tempdir is $tmp"
 
-# use mirrorlist files to get sha256 sums
-# patch WGET_ARGS from nixpkgs/pkgs/development/libraries/qt-6/6.2/fetch.sh etc
-[ "${WGET_ARGS[-1]}" = '*.tar.xz' ] && WGET_ARGS[-1]='*.tar.xz.mirrorlist'
+wgetargs='--quiet'
 
-echo 'fetching mirrorlist files ...'
-echo wget -nH -r -c --no-parent "${WGET_ARGS[@]}"
+echo "fetching index.html from $BASE_URL"
+wget $wgetargs -O 'index.html' "$BASE_URL"
 
-wget -nH -r -c --no-parent "${WGET_ARGS[@]}" >/dev/null
+echo 'parsing index.html'
+filelist="$(PARSE_INDEX 'index.html')"
+filecount=$(echo -n "$filelist" | wc -l)
 
-csv=$(mktemp)
-find . -type f -name '*.mirrorlist' | while read mirrorlist; do
-    src="${mirrorlist%.*}" # remove extension
+if [ "$filecount" = '0' ]
+then
+    echo "error: no files parsed from $tmp/index.html"
+    exit 1
+fi
+
+if false; then
+# debug
+echo "getting file sizes ..."
+totalsize=0
+while read file
+do
+    size=$(curl -I -L -s "$BASE_URL/$file" | grep -i Content-Length | cut -d' ' -f2 | tr -d '\r')
+    printf "size %10i %s\n" "$size" "$file"
+    totalsize=$(expr "$totalsize" + "$size")
+done <<<"$filelist"
+echo "total size: $totalsize byte"
+fi
+
+# most time is spent here
+echo "fetching $filecount sha256 files ..."
+urllist="$(echo "$filelist" | while read file; do echo "$BASE_URL/$file.sha256"; done)"
+echo "$urllist" | xargs wget $wgetargs -nH -r -c --no-parent
+# wget -r: keep directory structure
+
+csv=$(mktemp $tmptpl.csv)
+find . -type f -name '*.sha256' | while read sha256file; do
+    src="${sha256file%.*}" # remove extension
+    sha256=$(cat $sha256file | cut -d' ' -f1) # base16
+    if $outputbase32; then
+        sha256=$(nix-hash --type sha256 --to-base32 $sha256)
+    fi
     # Sanitize file name
     filename=$(basename "$src" | tr '@' '_')
     nameVersion="${filename%.tar.*}"
     name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
     version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
-    echo "$name,$version,$src,$filename,$mirrorlist" >>$csv
+    echo "$name,$version,$src,$filename,$sha256" >>$csv
 done
 
+echo "writing output"
 cat >"$SRCS" <<EOF
 # DO NOT EDIT! This file is generated automatically.
 # Command: $0 $@
@@ -48,9 +104,8 @@ gawk -F , "{ print \$1 }" $csv | sort | uniq | while read name; do
     latestVersion=$(echo "$versions" | sort -rV | head -n 1)
     src=$(gawk -F , "/^$name,$latestVersion,/ { print \$3 }" $csv)
     filename=$(gawk -F , "/^$name,$latestVersion,/ { print \$4 }" $csv)
-    mirrorlist=$(gawk -F , "/^$name,$latestVersion,/ { print \$5 }" $csv)
+    sha256=$(gawk -F , "/^$name,$latestVersion,/ { print \$5 }" $csv)
     url="${src:2}"
-    sha256=$(grep -F '>SHA-256 Hash<' "$mirrorlist" | sed -E 's|^.*<tt>([0-9a-f]{64})</tt>.*|\1|')
     cat >>"$SRCS" <<EOF
   $name = {
     version = "$latestVersion";
@@ -64,6 +119,9 @@ EOF
 done
 
 echo "}" >>"$SRCS"
+
+echo "compare:"
+echo "git diff $srcsrel"
 
 popd >/dev/null
 rm -fr $tmp >/dev/null

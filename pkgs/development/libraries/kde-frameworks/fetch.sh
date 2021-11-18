@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.kde.org/stable/frameworks/5.85/ -A '*.tar.xz' )
+BASE_URL='https://download.kde.org/stable/frameworks/5.85/'
