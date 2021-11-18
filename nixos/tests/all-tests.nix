@@ -343,6 +343,7 @@ in
   osrm-backend = handleTest ./osrm-backend.nix {};
   overlayfs = handleTest ./overlayfs.nix {};
   packagekit = handleTest ./packagekit.nix {};
+  pam = handleTest ./pam/default.nix {};
   pam-oath-login = handleTest ./pam-oath-login.nix {};
   pam-u2f = handleTest ./pam-u2f.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
