@@ -22,6 +22,8 @@
 , AppKit
 , Cocoa
 , Foundation
+
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -78,6 +80,10 @@ stdenv.mkDerivation rec {
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
   '';
+
+  passthru.tests = {
+    libresprite-can-open-png = nixosTests.libresprite;
+  };
 
   meta = with lib; {
     homepage = "https://libresprite.github.io/";
