@@ -74,7 +74,8 @@ users.groups.students.gid = 1000;
   <para>
     To make all nix tools available to this new user use `su - USER`
     which opens a login shell (==shell that loads the profile) for given
-    user. This will create the ~/.nix-defexpr symlink. So run:
+    user. This will create the
+    <literal>$XDG_DATA_HOME/nix/defexpr</literal> symlink. So run:
   </para>
   <programlisting>
 # su - alice -c &quot;true&quot;

@@ -72,19 +72,21 @@ $ git merge origin/nixos-17.03
     If you want <literal>nix-env</literal> to use the expressions in
     <literal>/my/sources</literal>, use
     <literal>nix-env -f /my/sources/nixpkgs</literal>, or change the
-    default by adding a symlink in <literal>~/.nix-defexpr</literal>:
+    default by adding a symlink in
+    <literal>$XDG_DATA_HOME/nix/defexpr</literal> (or the legacy
+    <literal>~/.nix-defexpr</literal>):
   </para>
   <programlisting>
-$ ln -s /my/sources/nixpkgs ~/.nix-defexpr/nixpkgs
+$ ln -s /my/sources/nixpkgs &quot;$XDG_DATA_HOME/nix/defexpr&quot;
 </programlisting>
   <para>
     You may want to delete the symlink
-    <literal>~/.nix-defexpr/channels_root</literal> to prevent root’s
-    NixOS channel from clashing with your own tree (this may break the
-    command-not-found utility though). If you want to go back to the
-    default state, you may just remove the
-    <literal>~/.nix-defexpr</literal> directory completely, log out and
-    log in again and it should have been recreated with a link to the
-    root channels.
+    <literal>$XDG_DATA_HOME/nix/defexpr/channels_root</literal> to
+    prevent root’s NixOS channel from clashing with your own tree (this
+    may break the command-not-found utility though). If you want to go
+    back to the default state, you may just remove the
+    <literal>$XDG_DATA_HOME/nix/defexpr</literal> directory completely,
+    log out and log in again and it should have been recreated with a
+    link to the root channels.
   </para>
 </chapter>

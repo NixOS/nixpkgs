@@ -66,8 +66,17 @@ if currentSystem=$(nixos-version 2>/dev/null); then
     updateRef current-system "$sha1"
 fi
 
-echo "Fetching channels from $HOME/.nix-defexpr:"
-for revFile in : $(find -L "$HOME/.nix-defexpr/" -maxdepth 4 -name svn-revision); do
+NIX_DEFEXPR="$HOME/.nix-defexpr"
+if ! [ -e "$NIX_DEFEXPR" ]; then
+    if [ -n "$XDG_DATA_HOME" ]; then
+        NIX_DEFEXPR="$XDG_DATA_HOME/nix/defexpr"
+    else
+        NIX_DEFEXPR="$HOME/.local/share/nix/defexpr"
+    fi
+fi
+
+echo "Fetching channels from $NIX_DEFEXPR"
+for revFile in : $(find -L "$NIX_DEFEXPR" -maxdepth 4 -name svn-revision); do
     test "$revFile" = : && continue;
 
     # Deconstruct a path such as, into:
@@ -78,7 +87,7 @@ for revFile in : $(find -L "$HOME/.nix-defexpr/" -maxdepth 4 -name svn-revision)
     #   /home/luke/.nix-defexpr/channels/nixpkgs/svn-revision
     #     channelName = nixpkgs
     #
-    user=${revFile#*.nix-defexpr/channels}
+    user=${revFile#$NIX_DEFEXPR/channels}
     repo=${user#*/}
     repo=${repo%%/*}
     user=${user%%/*}

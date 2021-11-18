@@ -63,15 +63,16 @@ need to tell `nixos-rebuild` about them using the `-I` flag:
 If you want `nix-env` to use the expressions in `/my/sources`, use
 `nix-env -f
   /my/sources/nixpkgs`, or change the default by adding a symlink in
-`~/.nix-defexpr`:
+`$XDG_DATA_HOME/nix/defexpr` (or the legacy `~/.nix-defexpr`):
 
 ```ShellSession
-$ ln -s /my/sources/nixpkgs ~/.nix-defexpr/nixpkgs
+$ ln -s /my/sources/nixpkgs "$XDG_DATA_HOME/nix/defexpr"
 ```
 
-You may want to delete the symlink `~/.nix-defexpr/channels_root` to
-prevent root's NixOS channel from clashing with your own tree (this may
-break the command-not-found utility though). If you want to go back to
-the default state, you may just remove the `~/.nix-defexpr` directory
-completely, log out and log in again and it should have been recreated
-with a link to the root channels.
+You may want to delete the symlink
+`$XDG_DATA_HOME/nix/defexpr/channels_root` to prevent root's NixOS
+channel from clashing with your own tree (this may break the
+command-not-found utility though). If you want to go back to the
+default state, you may just remove the `$XDG_DATA_HOME/nix/defexpr`
+directory completely, log out and log in again and it should have been
+recreated with a link to the root channels.

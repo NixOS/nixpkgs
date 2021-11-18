@@ -81,13 +81,9 @@ if [ -n "$opt_profile" ]; then
         usage_tip
     fi
 else
-    NIX_LINK=$HOME/.nix-profile
+    NIX_LINK="$HOME/.nix-profile"
     if ! [ -e "$NIX_LINK" ]; then
-        if [ -n "$XDG_DATA_HOME" ]; then
-            NIX_LINK="$XDG_DATA_HOME/nix/profile"
-        else
-            NIX_LINK=$HOME/.local/share/nix/profile
-        fi
+        NIX_LINK="${XDG_DATA_HOME:-$HOME/.local/share}/nix/profile"
     fi
     opt_profile=$(readlink "$NIX_LINK")
     if (( $? != 0 )); then

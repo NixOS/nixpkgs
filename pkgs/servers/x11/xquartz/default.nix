@@ -40,11 +40,7 @@ let
   installer = writeScript "xquartz-install" ''
     NIX_LINK="$HOME/.nix-profile"
     if ! [ -e "$NIX_LINK" ]; then
-        if [ -n "$XDG_DATA_HOME" ]; then
-            NIX_LINK="$XDG_DATA_HOME/nix/profile"
-        else
-            NIX_LINK="$HOME/.local/share/nix/profile"
-        fi
+        NIX_LINK="''${XDG_DATA_HOME:-$HOME/.local/share}/nix/profile"
     fi
 
     tmpdir=$(/usr/bin/mktemp -d $TMPDIR/xquartz-installer-XXXXXXXX)

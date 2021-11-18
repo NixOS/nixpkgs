@@ -264,7 +264,7 @@ This provides us with some useful documentation for using our packages.  However
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-      if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+      XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
       export PATH=$XDG_DATA_HOME/nix/profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
       export MANPATH=$XDG_DATA_HOME/nix/profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
     '';
@@ -297,7 +297,7 @@ For this to work fully, you must also have this script sourced when you are logg
 
 ```ShellSession
 #!/bin/sh
-if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 if [ -d $XDG_DATA_HOME/nix/profile/etc/profile.d ]; then
   for i in $XDG_DATA_HOME/nix/profile/etc/profile.d/*.sh; do
     if [ -r $i ]; then
@@ -317,7 +317,7 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-      if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+      XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
       export PATH=$XDG_DATA_HOME/nix/profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
       export MANPATH=$XDG_DATA_HOME/nix/profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
       export INFOPATH=$XDG_DATA_HOME/nix/profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
