@@ -132,6 +132,13 @@ buildPythonPackage rec {
     debts
   ];
 
+  # upstream performed the update without needing to patch the code
+  # the original patch does not apply, sadly
+  # https://github.com/spiral-project/ihatemoney/pull/912
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2"
+  '';
+
   checkInputs = [
     flask_testing
     pytestCheckHook
