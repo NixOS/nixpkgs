@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "11.0.0-SNAPSHOT.20211116202136";
 
   src = fetchurl {
-    url = "https://github.com/airsonic/airsonic-advanced/releases/tag/${version}/airsonic.war";
+    url = "https://github.com/airsonic-advanced/airsonic-advanced/releases/download/${version}/airsonic.war";
     sha256 = "0la7px07gw1s4hfbw4x22nd31x2ddqbpr3kfkg6f4i2grh3218mh";
   };
 
