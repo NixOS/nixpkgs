@@ -49,13 +49,13 @@ let
         sha1 = "309f10ba29f2002f74a92fb870b8a53ba2131593";
       };
     };
-    "underscore-1.12.0" = {
+    "underscore-1.13.1" = {
       name = "underscore";
       packageName = "underscore";
-      version = "1.12.0";
+      version = "1.13.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/underscore/-/underscore-1.12.0.tgz";
-        sha512 = "21rQzss/XPMjolTiIezSu3JAjgagXKROtNrYFEOWK109qY1Uv2tVjPTZ1ci2HgvQDA16gHYSthQIJfB+XId/rQ==";
+        url = "https://registry.npmjs.org/underscore/-/underscore-1.13.1.tgz";
+        sha512 = "hzSoAVtJF+3ZtiFX0VgfFPHEDRm7Y/QPjGyNo4TVdnDTdft3tr8hEkD25a1jC+TjTuE7tkHGKkhwCgs9dgBB2g==";
       };
     };
     "underscore-1.4.4" = {
@@ -93,7 +93,7 @@ in
           sources."underscore-1.4.4"
         ];
       })
-      sources."underscore-1.12.0"
+      sources."underscore-1.13.1"
     ];
     buildInputs = globalBuildInputs;
     meta = {
