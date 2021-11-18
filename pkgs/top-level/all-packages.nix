@@ -25747,6 +25747,8 @@ with pkgs;
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
+  hyperspace = callPackage ../applications/misc/hyperspace { };
+
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_08;
   };
