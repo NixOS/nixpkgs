@@ -70,6 +70,7 @@ in {
             done
 
             if [[ -n "$channels" ]]; then
+              # We don't use the new XDG location here to stay compatible with old Nix
               printf "%s" "$channels" > /root/.nix-channels
               nix-channel --update
             fi
