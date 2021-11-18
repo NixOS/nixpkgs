@@ -7657,7 +7657,7 @@
     email = "mail@moritzboeh.me";
     github = "MoritzBoehme";
     githubId = 42215704;
-    name = "Moritz Boehme";
+    name = "Moritz Böhme";
   };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
