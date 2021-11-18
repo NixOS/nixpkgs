@@ -25,6 +25,7 @@ in
   acme = handleTest ./acme.nix {};
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
+  airsonic-advanced = handleTest ./airsonic-advanced.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};

@@ -919,6 +919,8 @@ with pkgs;
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
+  airsonic-advanced = callPackage ../servers/misc/airsonic-advanced { };
+
   airspy = callPackage ../applications/radio/airspy { };
 
   airspyhf = callPackage ../applications/radio/airspyhf { };
