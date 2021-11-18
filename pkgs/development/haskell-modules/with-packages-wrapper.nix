@@ -1,5 +1,14 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? !(stdenv.targetPlatform.isx86_64 || stdenv.targetPlatform.isPowerPC)
+# Include LLVM by default if GHC doesn't have native code generation support
+# See https://gitlab.haskell.org/ghc/ghc/-/wikis/platforms
+, withLLVM ? !(lib.any lib.id ([
+    stdenv.targetPlatform.isx86
+    stdenv.targetPlatform.isPowerPC
+    stdenv.targetPlatform.isSparc
+  ] ++ lib.optionals (lib.versionAtLeast ghc.version "9.2" || ghc.version == "8.10.7") [
+    (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+    # TODO(@sternenseemann): Is armv7a supported for iOS?
+  ]))
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
