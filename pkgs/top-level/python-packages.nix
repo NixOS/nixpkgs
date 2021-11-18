@@ -6400,6 +6400,8 @@ in {
 
   pyevmasm = callPackage ../development/python-modules/pyevmasm { };
 
+  pyevilgenius = callPackage ../development/python-modules/pyevilgenius { };
+
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
   pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
