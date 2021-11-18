@@ -1,5 +1,5 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
-, withLLVM ? !(stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isPowerPC)
+, withLLVM ? !(stdenv.targetPlatform.isx86_64 || stdenv.targetPlatform.isPowerPC)
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
