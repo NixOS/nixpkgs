@@ -4169,6 +4169,8 @@ with pkgs;
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix { };
 
+  ibus-theme-tools = callPackage ../tools/misc/ibus-theme-tools { };
+
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = {
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
