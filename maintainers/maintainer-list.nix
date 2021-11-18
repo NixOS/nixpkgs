@@ -9967,6 +9967,12 @@
     githubId = 592876;
     name = "Robert W. Pearce";
   };
+  rprecenth = {
+    email = "rasmus@precenth.eu";
+    github = "Prillan";
+    githubId = 1675190;
+    name = "Rasmus Précenth";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
