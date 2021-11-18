@@ -18678,8 +18678,6 @@ with pkgs;
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
-  mumlib = callPackage ../development/libraries/mumlib { };
-
   muparser = callPackage ../development/libraries/muparser {
     inherit (darwin.stubs) setfile;
   };
@@ -20931,8 +20929,6 @@ with pkgs;
   morty = callPackage ../servers/web-apps/morty { };
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
-
-  mumsi = callPackage ../servers/mumsi { };
 
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
