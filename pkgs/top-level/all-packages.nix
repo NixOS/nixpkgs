@@ -32816,7 +32816,9 @@ with pkgs;
 
   qdl = callPackage ../tools/misc/qdl { };
 
-  rates = callPackage ../tools/misc/rates { };
+  rates = callPackage ../tools/misc/rates {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rargs = callPackage ../tools/misc/rargs { };
 
