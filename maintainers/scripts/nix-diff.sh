@@ -81,9 +81,17 @@ if [ -n "$opt_profile" ]; then
         usage_tip
     fi
 else
-    opt_profile=$(readlink ~/.nix-profile)
+    NIX_LINK=$HOME/.nix-profile
+    if ! [ -e "$NIX_LINK" ]; then
+        if [ -n "$XDG_DATA_HOME" ]; then
+            NIX_LINK="$XDG_DATA_HOME/nix/profile"
+        else
+            NIX_LINK=$HOME/.local/share/nix/profile
+        fi
+    fi
+    opt_profile=$(readlink "$NIX_LINK")
     if (( $? != 0 )); then
-        echo 'error: unable to dereference `~/.nix-profile`' >&2
+        echo 'error: unable to dereference the user profile' >&2
         echo 'specify the profile manually with the `-p` flag' >&2
         usage_tip
     fi

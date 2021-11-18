@@ -204,7 +204,7 @@ Using `packageOverrides`, it is possible to manage packages declaratively. This 
 }
 ```
 
-To install it into our environment, you can just run `nix-env -iA nixpkgs.myPackages`. If you want to load the packages to be built from a working copy of `nixpkgs` you just run `nix-env -f. -iA myPackages`. To explore what's been installed, just look through `~/.nix-profile/`. You can see that a lot of stuff has been installed. Some of this stuff is useful some of it isn't. Let's tell Nixpkgs to only link the stuff that we want:
+To install it into our environment, you can just run `nix-env -iA nixpkgs.myPackages`. If you want to load the packages to be built from a working copy of `nixpkgs` you just run `nix-env -f. -iA myPackages`. To explore what's been installed, just look through your user profile (`$XDG_DATA_HOME/nix/profile`, or a legacy location `~/.nix-profile/`). You can see that a lot of stuff has been installed. Some of this stuff is useful some of it isn't. Let's tell Nixpkgs to only link the stuff that we want:
 
 ```nix
 {
@@ -233,7 +233,7 @@ To install it into our environment, you can just run `nix-env -iA nixpkgs.myPack
 
 ### Getting documentation {#sec-getting-documentation}
 
-After building that new environment, look through `~/.nix-profile` to make sure everything is there that we wanted. Discerning readers will note that some files are missing. Look inside `~/.nix-profile/share/man/man1/` to verify this. There are no man pages for any of the Nix tools! This is because some packages like Nix have multiple outputs for things like documentation (see section 4). Let's make Nix install those as well.
+After building that new environment, look through `$XDG_DATA_HOME/nix/profile` (or, as noted above, `~/.nix-profile`) to make sure everything is there that we wanted. Discerning readers will note that some files are missing. Look inside `$XDG_DATA_HOME/nix/profile/share/man/man1/` to verify this. There are no man pages for any of the Nix tools! This is because some packages like Nix have multiple outputs for things like documentation (see section 4). Let's make Nix install those as well.
 
 ```nix
 {
@@ -264,8 +264,9 @@ This provides us with some useful documentation for using our packages.  However
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+      if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+      export PATH=$XDG_DATA_HOME/nix/profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$XDG_DATA_HOME/nix/profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";
@@ -296,8 +297,9 @@ For this to work fully, you must also have this script sourced when you are logg
 
 ```ShellSession
 #!/bin/sh
-if [ -d $HOME/.nix-profile/etc/profile.d ]; then
-  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do
+if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+if [ -d $XDG_DATA_HOME/nix/profile/etc/profile.d ]; then
+  for i in $XDG_DATA_HOME/nix/profile/etc/profile.d/*.sh; do
     if [ -r $i ]; then
       . $i
     fi
@@ -315,9 +317,10 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
-      export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
+      if [ -z "$XDG_DATA_HOME" ]; then XDG_DATA_HOME=$HOME/.local/share; fi
+      export PATH=$XDG_DATA_HOME/nix/profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$XDG_DATA_HOME/nix/profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+      export INFOPATH=$XDG_DATA_HOME/nix/profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";

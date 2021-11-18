@@ -40,7 +40,7 @@
       </para>
       <programlisting>
 $ curl -L https://nixos.org/nix/install | sh
-$ . $HOME/.nix-profile/etc/profile.d/nix.sh # …or open a fresh shell
+$ . $XDG_DATA_HOME/nix/profile/etc/profile.d/nix.sh # …or open a fresh shell
 </programlisting>
       <para>
         More details in the

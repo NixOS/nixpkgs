@@ -160,7 +160,7 @@ let
 
       with subtest("Check whether the channel works"):
           machine.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in machine.succeed("type -tP ps | tee /dev/stderr")
+          assert "nix/profile" in machine.succeed("type -tP ps | tee /dev/stderr")
 
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "

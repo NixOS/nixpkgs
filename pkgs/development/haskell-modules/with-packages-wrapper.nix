@@ -26,8 +26,8 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 # A good way to import the environment set by the wrapper below into
 # your shell is to add the following snippet to your ~/.bashrc:
 #
-#   if [ -e ~/.nix-profile/bin/ghc ]; then
-#     eval $(grep export ~/.nix-profile/bin/ghc)
+#   if [ -e $XDG_DATA_HOME/nix/profile/bin/ghc ]; then
+#     eval $(grep export $XDG_DATA_HOME/nix/profile/bin/ghc)
 #   fi
 
 let

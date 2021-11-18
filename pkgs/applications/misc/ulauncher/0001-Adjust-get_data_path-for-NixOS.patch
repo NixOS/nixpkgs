@@ -7,7 +7,7 @@ We construct the ulauncher data path from xdg_data_dirs
 and prevent it from being a nix store path or being xdg_data_home.
 We do this to prevent /nix/store paths being hardcoded to shortcuts.json.
 On NixOS this path will either be /run/current-system/sw/share/ulauncher
-or $HOME/.nix-profile/share/ulauncher if the user used nix-env.
+or $XDG_DATA_HOME/nix/profile/share/ulauncher if the user used nix-env.
 ---
  ulauncher/config.py | 27 ++++++++++++++++++---------
  1 file changed, 18 insertions(+), 9 deletions(-)

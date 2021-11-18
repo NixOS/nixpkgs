@@ -590,6 +590,8 @@ in {
 
     environment.profiles = [
       "$HOME/.nix-profile"
+      "$XDG_DATA_HOME/nix/profile"
+      "$HOME/.local/share/nix/profile"
       "/etc/profiles/per-user/$USER"
     ];
 

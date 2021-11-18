@@ -1,8 +1,16 @@
 diff --git a/src/config.rs b/src/config.rs
-index de7d04b..291114b 100644
+index 33bdcaa..5e79283 100644
 --- a/src/config.rs
 +++ b/src/config.rs
-@@ -197,6 +197,12 @@ impl Default for Format {
+@@ -195,6 +195,7 @@ impl Default for Menu {
+
+ impl Default for Format {
+     fn default() -> Self {
++        let data_home = std::env::var("XDG_DATA_HOME").unwrap_or("~/.local/share".to_string());
+         Format {
+             window_format: Some(
+                 "{urgency_start}<b>“{title}”</b>{urgency_end} \
+@@ -214,6 +215,15 @@ impl Default for Format {
              ),
              urgency_end: Some("</span>".to_string()),
              icon_dirs: Some(vec![
@@ -12,6 +20,9 @@ index de7d04b..291114b 100644
 +                "~/.nix-profile/share/icons/hicolor/scalable/apps".to_string(),
 +                "~/.nix-profile/share/icons/hicolor/48x48/apps".to_string(),
 +                "~/.nix-profile/share/pixmaps".to_string(),
++                format!("{}/nix/profile/share/icons/hicolor/scalable/apps", data_home),
++                format!("{}/nix/profile/share/icons/hicolor/48x48/apps", data_home),
++                format!("{}/nix/profile/share/pixmaps", data_home),
                  "/usr/share/icons/hicolor/scalable/apps".to_string(),
                  "/usr/share/icons/hicolor/48x48/apps".to_string(),
                  "/usr/share/pixmaps".to_string(),

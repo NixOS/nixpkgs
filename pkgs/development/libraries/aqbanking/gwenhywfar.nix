@@ -7,6 +7,7 @@
 , pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
     ".nix-profile/lib/gwenhywfar/plugins"
+    "$XDG_DATA_HOME/nix/profile/lib/gwenhywfar/plugins"
   ]
 }:
 
@@ -39,13 +40,13 @@ in stdenv.mkDerivation rec {
     '';
 
   in ''
-    sed -i -e '/GWEN_PathManager_DefinePath.*GWEN_PM_PLUGINDIR/,/^#endif/ {
+    sed -i -e "/GWEN_PathManager_DefinePath.*GWEN_PM_PLUGINDIR/,/^#endif/ {
       /^#if/,/^#endif/ {
         H; /^#endif/ {
           ${lib.concatMapStrings mkSearchPath pluginSearchPaths}
         }
       }
-    }' src/gwenhywfar.c
+    }" src/gwenhywfar.c
 
     # Strip off the effective SO version from the path so that for example
     # "lib/gwenhywfar/plugins/60" becomes just "lib/gwenhywfar/plugins".
