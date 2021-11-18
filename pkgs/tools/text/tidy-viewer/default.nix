@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tidy-viewer";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "alexhallam";
     repo = "tv";
     rev = version;
-    sha256 = "sha256-YXYz+SvL6YRwnZ7frmmx4NevNTh0rJcW7e4jSuX3TNs=";
+    sha256 = "sha256-onLu4XNe3sLfZ273Hq9IvgZEV9ir8oEXX7tQG75K2Hw=";
   };
 
-  cargoSha256 = "sha256-KwnnoVacTMw7kHLQynv9557zUq8aFZfzBD+Zc9Q6XBs=";
+  cargoSha256 = "sha256-CYiRi6ny0wzTddpjdnnMHGqcWRM9wVjF34RmETgLH5A=";
 
   # this test parses command line arguments
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context

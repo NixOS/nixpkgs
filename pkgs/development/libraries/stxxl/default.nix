@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, parallel ? true
+, parallelSupport ? (!stdenv.isDarwin)
 }:
 
 let
@@ -25,11 +25,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
-    (mkFlag parallel "USE_GNU_PARALLEL")
+    (mkFlag parallelSupport "USE_GNU_PARALLEL")
+    (mkFlag parallelSupport "USE_OPENMP")
   ];
 
   passthru = {
-    inherit parallel;
+    inherit parallelSupport;
   };
 
   meta = with lib; {
