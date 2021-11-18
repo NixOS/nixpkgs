@@ -2259,6 +2259,8 @@ in {
 
   dnspython = callPackage ../development/python-modules/dnspython { };
 
+  dnspythonchia = callPackage ../development/python-modules/dnspythonchia { };
+
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   docker = callPackage ../development/python-modules/docker { };
@@ -5299,6 +5301,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  oocsi = callPackage ../development/python-modules/oocsi { };
+
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   openant = callPackage ../development/python-modules/openant { };
@@ -6359,6 +6363,8 @@ in {
   pydub = callPackage ../development/python-modules/pydub { };
 
   pydy = callPackage ../development/python-modules/pydy { };
+
+  pydyf = callPackage ../development/python-modules/pydyf { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 

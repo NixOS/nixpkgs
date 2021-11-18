@@ -259,7 +259,9 @@ with pkgs;
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
-  cloak = callPackage ../applications/misc/cloak { };
+  cloak = callPackage ../applications/misc/cloak {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cmark = callPackage ../development/libraries/cmark { };
 
@@ -1044,6 +1046,8 @@ with pkgs;
 
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
+  iqueue = callPackage ../development/libraries/iqueue {};
+
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 {};
 
   kitty = callPackage ../applications/terminal-emulators/kitty {
@@ -1334,6 +1338,8 @@ with pkgs;
   autosuspend = callPackage ../os-specific/linux/autosuspend { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
+
+  aliyun-cli = callPackage ../tools/admin/aliyun-cli { };
 
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
@@ -3219,6 +3225,10 @@ with pkgs;
   lisgd = callPackage ../tools/inputmethods/lisgd { };
 
   lite = callPackage ../applications/editors/lite { };
+
+  lite-xl = callPackage ../applications/editors/lite-xl {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
 
@@ -6739,6 +6749,8 @@ with pkgs;
 
   kibi = callPackage ../applications/editors/kibi { };
 
+  kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
+
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   kiterunner = callPackage ../tools/security/kiterunner { };
@@ -7662,7 +7674,9 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
-  mhost = callPackage ../applications/networking/mhost { };
+  mhost = callPackage ../applications/networking/mhost {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
@@ -9691,8 +9705,6 @@ with pkgs;
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
 
   svgbob = callPackage ../tools/graphics/svgbob { };
-
-  svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssb = callPackage ../tools/security/ssb { };
 
@@ -13910,7 +13922,8 @@ with pkgs;
     electron_12
     electron_13
     electron_14
-    electron_15;
+    electron_15
+    electron_16;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -27114,6 +27127,8 @@ with pkgs;
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
     mlt-qt5 = libsForQt514.mlt;
   };
+
+  synology-drive = libsForQt5.callPackage ../applications/networking/synology-drive { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
