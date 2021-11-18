@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ systemd ]
     ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
-  cargoBuildFlags = [ "--features final" ];
+  buildFeatures = [ "final" ];
 
   # Fix tests by preventing them from writing to /homeless-shelter.
   preCheck = ''

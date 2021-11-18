@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-/4ZW1FIfK51ak2EIV6dYY3XpucPPR+OZySPWwcKP4v0=";
 
-  cargoBuildFlags = lib.optionals lua52Support [ "--features" "lua52" ]
-    ++ lib.optionals luauSupport [ "--features" "luau" ];
+  buildFeatures = lib.optional lua52Support "lua52"
+    ++ lib.optional luauSupport "luau";
 
   # test_standard fails on darwin
   doCheck = !stdenvNoCC.isDarwin;

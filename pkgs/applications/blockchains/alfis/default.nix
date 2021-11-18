@@ -14,12 +14,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1n7kb1lyghpkgdgd58pw8ldvfps30rnv5niwx35pkdg74h59hqgj";
 
-  cargoBuildFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
-
-  cargoTestFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
-
   checkFlags = [
     # these want internet access, disable them
     "--skip=dns::client::tests::test_tcp_client"
@@ -29,6 +23,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = lib.optional (withGui && stdenv.isLinux) webkitgtk
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withGui "webgui";
 
   postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
     wrapProgram $out/bin/alfis \

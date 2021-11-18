@@ -3,10 +3,7 @@
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
-let
-  featuresFlag = "--features ${dbBackend}";
-
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
   version = "1.23.0";
 
@@ -35,14 +32,7 @@ in rustPlatform.buildRustPackage rec {
   # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
   RUSTC_BOOTSTRAP = 1;
 
-  cargoBuildFlags = [ featuresFlag ];
-
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-  '';
+  buildFeatures = dbBackend;
 
   passthru.tests = nixosTests.vaultwarden;
 

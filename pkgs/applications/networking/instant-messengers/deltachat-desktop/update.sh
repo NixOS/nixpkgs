@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq nix-prefetch
+#! nix-shell -i bash -p coreutils curl gnused jq moreutils nix-prefetch
 
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -13,7 +13,7 @@ rev=$(
     jq 'map(select(.prerelease | not)) | .[0].tag_name' --raw-output
 )
 ver=$(echo "$rev" | sed 's/^v//')
-old_ver=$(sed -n 's/.*\bversion = "\(.*\)".*/\1/p' default.nix)
+old_ver=$(tac default.nix | sed -n 's/.*\bversion = "\(.*\)".*/\1/p' | head -1)
 if [ "$ver" = "$old_ver" ]; then
     echo "Up to date: $ver"
     exit
@@ -21,9 +21,12 @@ fi
 echo "$old_ver -> $ver"
 
 sha256=$(nix-prefetch -f "$nixpkgs" deltachat-desktop --rev "$rev")
-sed -e "s#\\bversion = \".*\"#version = \"$ver\"#" \
-    -e "s#\\bsha256 = \".*\"#sha256 = \"$sha256\"#" \
-    -i default.nix
+tac default.nix \
+    | sed -e "0,/version = \".*\"/s//version = \"$ver\"/" \
+          -e "0,/sha256 = \".*\"/s//sha256 = \"$sha256\"/" \
+    | tac \
+    | sponge default.nix
+
 src=$(nix-build "$nixpkgs" -A deltachat-desktop.src --no-out-link)
 
 jq '{ name, version, dependencies: (.dependencies + (.devDependencies | del(.["@typescript-eslint/eslint-plugin","@typescript-eslint/parser","esbuild","electron-builder","electron-devtools-installer","electron-notarize","esbuild","eslint","eslint-config-prettier","eslint-plugin-react-hooks","hallmark","prettier","tape","testcafe","testcafe-browser-provider-electron","testcafe-react-selectors","walk"]))) }' \

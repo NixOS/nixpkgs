@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ curl zlib openssl ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.

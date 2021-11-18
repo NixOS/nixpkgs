@@ -1,40 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, mock
 , pycrypto
+, pythonOlder
 , requests
-, pytest-runner
-, pytest
-, requests-mock
-, typing
 }:
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "3.4.0";
+  version = "3.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17618ccbe3493f2be015db9e1efa35080ff34d470de723f1384d908ff126e51c";
+    sha256 = "sha256-iPGNoM8/rAr3I+dD+3QdnRviUYge2reloNFimVW1ARs=";
   };
 
-  checkInputs = [ mock pytest pytest-runner requests-mock ];
-  propagatedBuildInputs = [ pycrypto requests ] ++ lib.optionals isPy27 [ typing ];
+  propagatedBuildInputs = [
+    pycrypto
+    requests
+  ];
 
-  preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
+  preConfigure = ''
+    cp libcloud/test/secrets.py-dist libcloud/test/secrets.py
+  '';
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setup_requires=pytest_runner," "setup_requires=[],"
+  '';
 
   # requires a certificates file
   doCheck = false;
 
-  pythonImportsCheck = [ "libcloud" ];
+  pythonImportsCheck = [
+    "libcloud"
+  ];
 
   meta = with lib; {
     description = "A unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

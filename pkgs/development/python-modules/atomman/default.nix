@@ -1,39 +1,66 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, buildPythonPackage
 , cython
 , datamodeldict
+, fetchFromGitHub
 , matplotlib
 , numericalunits
 , numpy
 , pandas
+, potentials
 , pytest
+, pythonOlder
 , scipy
 , toolz
 , xmltodict
+, python
 }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
+  version = "1.4.2";
   pname = "atomman";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
-    repo  = "atomman";
+    repo = "atomman";
     rev = "v${version}";
-    sha256 = "09pfykd96wmw00s3kgabghykjn8b4yjml4ybpi7kwy7ygdmzcx51";
+    sha256 = "sha256-Kq4mDykYf74ylWw2golxc81CYKGokXro64YUsFctLmk=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ xmltodict datamodeldict numpy matplotlib scipy pandas cython numericalunits toolz ];
+  propagatedBuildInputs = [
+    cython
+    datamodeldict
+    matplotlib
+    numericalunits
+    numpy
+    pandas
+    potentials
+    scipy
+    toolz
+    xmltodict
+  ];
+
+  checkInputs = [
+    pytest
+  ];
 
   checkPhase = ''
-    py.test tests -k 'not test_atomic'
+    # pytestCheckHook doesn't work
+    py.test tests -k "not test_rootdir and not test_version \
+      and not test_atomic_mass and not imageflags"
   '';
 
+  pythonImportsCheck = [
+    "atomman"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/usnistgov/atomman/";
     description = "Atomistic Manipulation Toolkit";
+    homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
