@@ -33,24 +33,16 @@
 , nixosTestRunner ? false
 }:
 
-let
-  audio = lib.optionalString alsaSupport "alsa,"
-    + lib.optionalString pulseSupport "pa,"
-    + lib.optionalString sdlSupport "sdl,"
-    + lib.optionalString jackSupport "jack,";
-
-in
-
 stdenv.mkDerivation rec {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
+    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -101,55 +93,7 @@ stdenv.mkDerivation rec {
       sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
       revert = true;
     })
-    (fetchpatch {
-      name = "CVE-2021-3713.patch"; # remove with next release
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13b250b12ad3c59114a6a17d59caf073ce45b33a.patch";
-      sha256 = "0lkzfc7gdlvj4rz9wk07fskidaqysmx8911g914ds1jnczgk71mf";
-    })
-    # Fixes a crash that frequently happens in some setups that share /nix/store over 9p like nixos tests
-    # on some systems. Remove with next release.
-    (fetchpatch {
-      name = "fix-crash-in-v9fs_walk.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f83df00900816476cca41bb536e4d532b297d76e.patch";
-      sha256 = "sha256-LYGbBLS5YVgq8Bf7NVk7HBFxXq34NmZRPCEG79JPwk8=";
-    })
-    # Fixes an io error on discard/unmap operation for aio/file backend. Remove with next release.
-    (fetchpatch {
-      name = "fix-aio-discard-return-value.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
-      sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
-    })
-    # Fixes managedsave (snapshot creation) with QXL video device. Remove with next release.
-    (fetchpatch {
-      name = "qxl-fix-pre-save-logic.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
-      sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
-    })
-    # Fixes socket_sockaddr_to_address_unix assertion errors in some setups. Remove with next release.
-    (fetchpatch {
-      name = "fix-unix-socket-path-copy-again.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
-      sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
-    })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ./sigrtminmax.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
-      sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # The Hypervisor.framework support patch converted something that can be applied:
-    # * https://patchwork.kernel.org/project/qemu-devel/list/?series=548227
-    # The base revision is whatever commit there is before the series starts:
-    # * https://github.com/patchew-project/qemu/commits/patchew/20210916155404.86958-1-agraf%40csgraf.de
-    # The target revision is what patchew has as the series tag from patchwork:
-    # * https://github.com/patchew-project/qemu/releases/tag/patchew%2F20210916155404.86958-1-agraf%40csgraf.de
-    (fetchpatch {
-      url = "https://github.com/patchew-project/qemu/compare/7adb961995a3744f51396502b33ad04a56a317c3..d2603c06d9c4a28e714b9b70fe5a9d0c7b0f934d.diff";
-      sha256 = "sha256-nSi5pFf9+EefUmyJzSEKeuxOt39ztgkXQyUB8fTHlcY=";
-    })
-  ];
+  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -180,12 +124,9 @@ stdenv.mkDerivation rec {
       --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace "'VERSION'" "'QEMU_VERSION'"
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags = [
-    "--audio-drv-list=${audio}"
     "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
