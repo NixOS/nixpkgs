@@ -1,6 +1,6 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qtmultimedia }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtmultimedia }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kristall";
   version = "0.3";
 
