@@ -4872,6 +4872,8 @@ in {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motionblinds = callPackage ../development/python-modules/motionblinds { };
+
   motioneye-client = callPackage ../development/python-modules/motioneye-client { };
 
   moto = callPackage ../development/python-modules/moto { };
@@ -8928,6 +8930,8 @@ in {
   sslyze = callPackage ../development/python-modules/sslyze { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
+
+  stanza = callPackage ../development/python-modules/stanza { };
 
   starlette = callPackage ../development/python-modules/starlette {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
