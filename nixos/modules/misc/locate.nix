@@ -157,7 +157,7 @@ in {
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';
