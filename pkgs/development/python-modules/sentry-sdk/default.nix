@@ -1,4 +1,6 @@
-{ aiohttp
+{ lib
+, aiohttp
+, asttokens
 , blinker
 , botocore
 , bottle
@@ -7,41 +9,65 @@
 , certifi
 , chalice
 , django
+, executing
 , falcon
 , fetchPypi
 , flask
+, httpx
 , iana-etc
 , isPy3k
 , libredirect
+, pure-eval
 , pyramid
+, pyspark
 , rq
 , sanic
 , sqlalchemy
-, lib
 , tornado
-, urllib3
 , trytond
+, urllib3
 , werkzeug
-, executing
-, pure-eval
-, asttokens
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.4.3";
+  version = "1.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b9844751e40710e84a457c5bc29b21c383ccb2b63d76eeaad72f7f1c808c8828";
+    sha256 = "sha256-eJoRqHygJJGJbhIe/dZOj9kzJ7aejy99QvA+JWlkjog=";
   };
 
-  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
-    executing pure-eval asttokens ]
-  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ urllib3 certifi ];
-
+  checkInputs = [
+    asttokens
+    blinker
+    botocore
+    bottle
+    chalice
+    django
+    executing
+    falcon
+    flask
+    pure-eval
+    rq
+    sqlalchemy
+    tornado
+    trytond
+    werkzeug
+  ] ++ lib.optionals isPy3k [
+    aiohttp
+    celery
+    httpx
+    pyramid
+    pyspark
+    sanic
+  ];
 
   # The Sentry tests need access to `/etc/protocols` (the tests call
   # `socket.getprotobyname('tcp')`, which reads from this file). Normally
@@ -55,8 +81,11 @@ buildPythonPackage rec {
   postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
 
   # no tests
-  doCheck = false;
-  pythonImportsCheck = [ "sentry_sdk" ];
+  doCheck = true;
+
+  pythonImportsCheck = [
+    "sentry_sdk"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/getsentry/sentry-python";
