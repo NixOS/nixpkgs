@@ -19675,7 +19675,7 @@ with pkgs;
 
   StormLib = callPackage ../development/libraries/StormLib { };
 
-  stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
+  stxxl = callPackage ../development/libraries/stxxl { };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
