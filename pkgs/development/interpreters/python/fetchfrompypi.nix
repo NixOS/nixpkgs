@@ -1,4 +1,4 @@
-# `fetchPypi` function for fetching artifacts from PyPI.
+# `fetchFromPyPI` function for fetching artifacts from PyPI.
 { fetchurl
 , makeOverridable
 }:

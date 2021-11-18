@@ -56,7 +56,8 @@ let
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../build-support/build-setupcfg self;
 
-  fetchPypi = callPackage ../development/interpreters/python/fetchpypi.nix { };
+  fetchPypi = fetchFromPyPI;
+  fetchFromPyPI = callPackage ../development/interpreters/python/fetchfrompypi.nix { };
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;

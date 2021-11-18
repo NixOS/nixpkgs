@@ -40,6 +40,7 @@ with pkgs;
               isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy310 isPy3k isPyPy pythonAtLeast pythonOlder
               python bootstrapped-pip buildPythonPackage buildPythonApplication
               fetchPypi
+              fetchFromPyPI
               hasPythonModule requiredPythonModules makePythonPath disabledIf
               toPythonModule toPythonApplication
               buildSetupcfg
