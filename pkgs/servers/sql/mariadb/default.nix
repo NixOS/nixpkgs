@@ -50,11 +50,11 @@ common = rec { # attributes common to both builds
   '';
 
   patches = [
-    ./cmake-includedir.patch
+    ./patch/cmake-includedir.patch
   ]
   # Fixes a build issue as documented on
   # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
-  ++ lib.optional (!stdenv.isLinux) ./macos-MDEV-26769-regression-fix.patch;
+  ++ lib.optional (!stdenv.isLinux) ./patch/macos-MDEV-26769-regression-fix.patch;
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
@@ -134,7 +134,7 @@ client = stdenv.mkDerivation (common // {
   outputs = [ "out" "man" ];
 
   patches = common.patches ++ [
-    ./cmake-plugin-includedir.patch
+    ./patch/cmake-plugin-includedir.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
