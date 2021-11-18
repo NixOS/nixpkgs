@@ -33011,6 +33011,8 @@ with pkgs;
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
+  tgswitch = callPackage ../applications/networking/cluster/tgswitch {};
+
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
   timeular = callPackage ../applications/office/timeular {};
