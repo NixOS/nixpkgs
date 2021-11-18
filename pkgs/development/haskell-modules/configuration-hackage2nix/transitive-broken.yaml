@@ -822,6 +822,7 @@ dont-distribute-packages:
  - convertible-text
  - coordinate
  - copilot
+ - copilot-c99
  - copilot-cbmc
  - copilot-language
  - copilot-libraries
@@ -948,6 +949,7 @@ dont-distribute-packages:
  - diagrams-pgf
  - diagrams-reflex
  - diagrams-wx
+ - dialog
  - difference-monoid
  - digestive-functors-hsp
  - dingo-core
@@ -1222,6 +1224,7 @@ dont-distribute-packages:
  - ghc-mod
  - ghc-tags-plugin
  - ghci-pretty
+ - ghcjs-dom-webkit
  - ghcjs-hplay
  - ght
  - gi-cairo-again
@@ -1485,6 +1488,8 @@ dont-distribute-packages:
  - hbb
  - hbcd
  - hbf
+ - hbro
+ - hbro-contrib
  - hcg-minus-cairo
  - hcheat
  - hcheckers
@@ -2139,6 +2144,8 @@ dont-distribute-packages:
  - moo-nad
  - morley
  - morloc
+ - morpheus-graphql-client_0_18_0
+ - morpheus-graphql_0_18_0
  - morphisms-functors-inventory
  - mosaico-lib
  - motor-diagrams
