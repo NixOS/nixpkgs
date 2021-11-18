@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, flex, bison, systemd
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
 , boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib
 # Databases
 , withMysql ? true, withPostgresql ? false
@@ -9,19 +9,24 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.13.1";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    sha256 = "sha256-cGVUNO3p00bkPd4tPbipevuixHz8ptk6W8y1rl3dge8=";
+    sha256 = "sha256:1ijvav2ymgq1i8jycrqbp2y4r54y0dkwjnwxc20bmcixxh877zdn";
   };
 
   patches = [
     ./etc-icinga2.patch # Makes /etc/icinga2 relative to / instead of the store path
     ./no-systemd-service.patch # Prevent systemd service from being written to /usr
     ./no-var-directories.patch # Prevent /var directories from being created
+    # Fix the non-unity build
+    (fetchpatch {
+      url = "https://github.com/Icinga/icinga2/commit/2ad0a4b8c3852ad937fec9fc85780230257c821e.patch";
+      sha256 = "sha256:06qn7x73zbccmd8ycj46a29x2rr6qjwg0rr831wc2gc6q2k9d2g0";
+    })
   ];
 
   cmakeFlags = let
