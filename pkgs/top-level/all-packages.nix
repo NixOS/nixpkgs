@@ -4759,7 +4759,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pax = callPackage ../tools/archivers/pax { };
+  pax = callPackage ../tools/archivers/pax {
+    inherit (pkgs.darwin.apple_sdk.libs) utmp;
+  };
 
   rage = callPackage ../tools/security/rage {
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
