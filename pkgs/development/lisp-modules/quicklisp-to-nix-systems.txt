@@ -165,6 +165,7 @@ local-time
 log4cl
 lparallel
 lquery
+magicl
 marshal
 md5
 metabang-bind

@@ -277,6 +277,47 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "policy-cond" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."policy-cond" or (x: {}))
+       (import ./quicklisp-to-nix-output/policy-cond.nix {
+         inherit fetchurl;
+       }));
+
+
+  "interface" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."interface" or (x: {}))
+       (import ./quicklisp-to-nix-output/interface.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "global-vars" = quicklisp-to-nix-packages."global-vars";
+       }));
+
+
+  "cffi-libffi" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cffi-libffi" or (x: {}))
+       (import ./quicklisp-to-nix-output/cffi-libffi.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cffi-grovel" = quicklisp-to-nix-packages."cffi-grovel";
+           "cffi-toolchain" = quicklisp-to-nix-packages."cffi-toolchain";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "abstract-classes" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."abstract-classes" or (x: {}))
+       (import ./quicklisp-to-nix-output/abstract-classes.nix {
+         inherit fetchurl;
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+       }));
+
+
   "cl-num-utils" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-num-utils" or (x: {}))
@@ -2621,6 +2662,26 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."marshal" or (x: {}))
        (import ./quicklisp-to-nix-output/marshal.nix {
          inherit fetchurl;
+       }));
+
+
+  "magicl" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."magicl" or (x: {}))
+       (import ./quicklisp-to-nix-output/magicl.nix {
+         inherit fetchurl;
+           "abstract-classes" = quicklisp-to-nix-packages."abstract-classes";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cffi-grovel" = quicklisp-to-nix-packages."cffi-grovel";
+           "cffi-libffi" = quicklisp-to-nix-packages."cffi-libffi";
+           "cffi-toolchain" = quicklisp-to-nix-packages."cffi-toolchain";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "global-vars" = quicklisp-to-nix-packages."global-vars";
+           "interface" = quicklisp-to-nix-packages."interface";
+           "policy-cond" = quicklisp-to-nix-packages."policy-cond";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
        }));
 
 

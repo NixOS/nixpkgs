@@ -113,7 +113,17 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
-  cffi = addNativeLibs [pkgs.libffi];
+  cffi-libffi = x: {
+    # Current upstream version only finds libffi.so.7 not libffi.so.8...
+    propagatedBuildInputs = [ (pkgs.libffi.overrideAttrs (oldAttrs: rec {
+      version = "3.3";
+      src = pkgs.fetchurl {
+        url = "https://sourceware.org/pub/libffi/libffi-3.3.tar.gz";
+        sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
+      };
+    })
+    )];
+  };
   cl-mysql = x: {
     propagatedBuildInputs = [pkgs.libmysqlclient];
     overrides = y: (x.overrides y) // {
@@ -292,6 +302,10 @@ $out/lib/common-lisp/query-fs"
     };
   };
   lla = addNativeLibs [ pkgs.openblas ];
+  magicl = x: {
+    parasites = [ "magicl/core" "magicl/ext" "magicl/ext-blas" "magicl/ext-lapack" "magicl/ext-expokit" ];
+    propagatedBuildInputs = [ pkgs.gfortran pkgs.openblas pkgs.libffi ];
+  };
   uax-15 = x: {
     overrides = y: (x.overrides y) // {
       postPatch = ''
