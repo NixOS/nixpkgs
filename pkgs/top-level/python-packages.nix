@@ -3098,6 +3098,8 @@ in {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  gistyc = callPackage ../development/python-modules/gistyc { };
+
   git-annex-adapter =
     callPackage ../development/python-modules/git-annex-adapter { };
 
