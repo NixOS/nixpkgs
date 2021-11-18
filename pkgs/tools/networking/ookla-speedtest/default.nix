@@ -2,16 +2,16 @@
 
 let
   pname = "ookla-speedtest";
-  version = "1.0.0";
+  version = "1.1.0";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-x86_64-linux.tgz";
-      sha256 = "sha256-X+ICjw1EJ+T0Ix2fnPcOZpG7iQpwY211Iy/k2XBjMWg=";
+      sha256 = "sha256-/NWN8G6uqokjchSnNcC3FU1qDsOjt4Jh2kCnZc5B9H8=";
     };
     aarch64-linux = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-aarch64-linux.tgz";
-      sha256 = "sha256-BzaE3DSQUIygGwTFhV4Ez9eX/tM/bqam7cJt+8b2qp4=";
+      sha256 = "sha256-kyOrChC3S8kn4ArO5IylFIstS/N3pXxBVx4ZWI600oU=";
     };
   };
 in

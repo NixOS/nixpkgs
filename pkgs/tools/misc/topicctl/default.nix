@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "topicctl";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = "topicctl";
     rev = "v${version}";
-    sha256 = "sha256-LsMt2BHfO0I5N2C247fmoOgQ5EXMgk/3Kj/lI+vTRV0=";
+    sha256 = "sha256-bCTlKhYmMe89dYuLiZ58CPpYZiXSGqbddxugsZS5/Cs=";
   };
 
-  vendorSha256 = "sha256-ur7qMm7l1CocQwX58fTL1PpdgIEJyRAzSlNJM1WTvM0=";
+  vendorSha256 = "sha256-1VRK8tmsbOuP5t5uJ1h+KPcS4K9D+y6UQKeUP2HPXrQ=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
