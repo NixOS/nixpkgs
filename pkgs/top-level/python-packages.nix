@@ -5299,6 +5299,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  oocsi = callPackage ../development/python-modules/oocsi { };
+
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   openant = callPackage ../development/python-modules/openant { };
