@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3-20090110";
 
   src = fetchurl {
-    url = "http://tuomov.iki.fi/software/dl/ion-${version}.tar.gz";
+    url = "https://tuomov.iki.fi/software/ion/dl/ion-${version}.tar.gz";
     sha256 = "1nkks5a95986nyfkxvg2rik6zmwx0lh7szd5fji7yizccwzc9xns";
   };
 
