@@ -15,6 +15,9 @@ with haskellLib;
 
 self: super: {
 
+  # There are numerical tests on random data, that may fail occasionally
+  lapack = dontCheck super.lapack;
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
@@ -60,7 +63,7 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc {
+  git-annex = overrideCabal (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
@@ -74,11 +77,15 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-  } super.git-annex).override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
-  };
+    patches = [
+      # Allows compilation with git-lfs 1.2.0
+      (pkgs.fetchpatch {
+        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=f3326b8b5ae4d1caa5c6e3e192c58c6e064c425a";
+        sha256 = "1nzg4mna462ndylisyy3nfih49aznhzzf7b3krb4p9p0j1zrcy2s";
+        excludes = [ "doc/**" "CHANGELOG" ];
+      })
+    ] ++ (drv.patches or []);
+  }) super.git-annex;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
@@ -844,7 +851,7 @@ self: super: {
 
   # hledger-lib 1.23 depends on doctest >= 0.18
   hledger-lib_1_23 = super.hledger-lib_1_23.override {
-    doctest = self.doctest_0_18_1;
+    doctest = self.doctest_0_18_2;
   };
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -1338,21 +1345,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
   hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
   });
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_8_3;
-    hspec-core = dontCheck self.hspec-core_2_8_3;
-    hspec-discover = dontCheck super.hspec-discover_2_8_3;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck super.hspec-discover_2_8_4;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -1427,9 +1434,10 @@ self: super: {
   # 2021-09-14: Tests are broken because of undeterministic variable names
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
-  # 2021-03-21 Test hangs
+  # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
-  ghcide = dontCheck super.ghcide;
+  # 2021-11-13: Too strict upper bound on implicit-hie-cradle
+  ghcide = doJailbreak (dontCheck super.ghcide);
 
   data-tree-print = doJailbreak super.data-tree-print;
 
@@ -2070,20 +2078,23 @@ EOT
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # 2021-11-05: patch to permit our language-docker version
-  # This is based on c931c0a9689cd6dff4d2083fa002414c1f08a586 from
-  # language-docker upstream
-  hadolint = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/hadolint/hadolint/commit/c931c0a9689cd6dff4d2083fa002414c1f08a586.patch";
-    sha256 = "1kv06hfn7lgrcrg56q8lq0pvdffqvmjbshazg3prlhl3kjs541f8";
-    excludes = [ "stack.yaml" "package.yaml" "hadolint.cabal" ];
-  }) (super.hadolint.override {
+  # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
+  hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_3_0;
+    hspec = dontCheck self.hspec_2_8_4;
+    hspec-core = dontCheck self.hspec-core_2_8_4;
+    hspec-discover = dontCheck self.hspec-discover_2_8_4;
+    colourista = doJailbreak super.colourista;
   });
 
   # These should be updated in lockstep
   hledger_1_23 = super.hledger_1_23.override {
     hledger-lib = self.hledger-lib_1_23;
+  };
+
+  # Needs brick > 0.64
+  nix-tree = super.nix-tree.override {
+    brick = self.brick_0_64_2;
   };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

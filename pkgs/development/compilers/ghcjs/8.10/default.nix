@@ -3,7 +3,7 @@
 , callPackage
 , fetchgit
 , ghcjsSrcJson ? null
-, ghcjsSrc ? fetchgit lib.importJSON ghcjsSrcJson
+, ghcjsSrc ? fetchgit (lib.importJSON ghcjsSrcJson)
 , bootPkgs
 , stage0
 , haskellLib
