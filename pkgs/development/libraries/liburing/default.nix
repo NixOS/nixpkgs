@@ -33,16 +33,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" "man" ];
 
-  postInstall =
-  # Copy the examples into $bin. Most reverse dependency of this package should
-  # reference only the $out output
-  ''
+  postInstall = ''
+    # Copy the examples into $bin. Most reverse dependency of this package should
+    # reference only the $out output
     mkdir -p $bin/bin
     cp ./examples/io_uring-cp examples/io_uring-test $bin/bin
     cp ./examples/link-cp $bin/bin/io_uring-link-cp
+  '' + lib.optionalString stdenv.hostPlatform.isGnu ''
     cp ./examples/ucontext-cp $bin/bin/io_uring-ucontext-cp
-  ''
-  ;
+  '';
 
   meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
