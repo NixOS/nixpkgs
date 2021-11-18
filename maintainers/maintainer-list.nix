@@ -8680,6 +8680,12 @@
     githubId = 101514;
     name = "Orivej Desh";
   };
+  ornxka = {
+    email = "ornxka@littledevil.sh";
+    github = "ornxka";
+    githubId = 52086525;
+    name = "ornxka";
+  };
   oro = {
     email = "marco@orovecchia.at";
     github = "oro";
