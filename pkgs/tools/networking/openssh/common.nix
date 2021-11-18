@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # display ssh-keygen command to remove offending entry from known-host when ssh host key changed
+    (fetchpatch {
+      url = "https://salsa.debian.org/ssh-team/openssh/-/raw/debian/1%258.7p1-2/debian/patches/mention-ssh-keygen-on-keychange.patch";
+      sha256 = "sha256-K2IPgh2cGmZU3+bXFHgueBTw2SFtUFrdWKv7MJ5+ltc=";
+    })
   ] ++ extraPatches;
 
   postPatch =
