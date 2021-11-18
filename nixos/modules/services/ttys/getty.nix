@@ -24,6 +24,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
+    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
   ];
 
   options = {
@@ -92,17 +93,6 @@ in
         '';
       };
 
-      serialSpeed = mkOption {
-        type = types.listOf types.int;
-        default = [ 115200 57600 38400 9600 ];
-        example = [ 38400 9600 ];
-        description = ''
-            Bitrates to allow for agetty's listening on serial ports. Listing more
-            bitrates gives more interoperability but at the cost of long delays
-            for getting a sync on the line.
-        '';
-      };
-
     };
 
   };
@@ -124,10 +114,9 @@ in
       };
 
     systemd.services."serial-getty@" =
-      let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I --keep-baud ${speeds} $TERM")
+          (gettyCmd "%I --keep-baud $TERM")
         ];
         restartIfChanged = false;
       };
