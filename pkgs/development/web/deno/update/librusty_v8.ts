@@ -26,7 +26,7 @@ const getLibrustyV8Version = async (
   fetch(`https://github.com/${owner}/${repo}/raw/${version}/core/Cargo.toml`)
     .then((res) => res.text())
     .then((txt) =>
-      txt.match(genValueRegExp("rusty_v8", versionRegExp))?.shift()
+      txt.match(genValueRegExp("v8", versionRegExp))?.shift()
     );
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
