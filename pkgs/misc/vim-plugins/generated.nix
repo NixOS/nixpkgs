@@ -4678,6 +4678,18 @@ final: prev:
     meta.homepage = "https://github.com/Th3Whit3Wolf/one-nvim/";
   };
 
+  onebuddy = buildVimPluginFrom2Nix {
+    pname = "onebuddy";
+    version = "2021-04-01";
+    src = fetchFromGitHub {
+      owner = "Th3Whit3Wolf";
+      repo = "onebuddy";
+      rev = "7e16006e7dde15e3cb72889f736c49409db6ff42";
+      sha256 = "1vfd7bv43q5g0q5ygv00yjfwa637zpy4lby6ilcg6hdpyqx6avid";
+    };
+    meta.homepage = "https://github.com/Th3Whit3Wolf/onebuddy/";
+  };
+
   onedark-vim = buildVimPluginFrom2Nix {
     pname = "onedark.vim";
     version = "2021-10-15";

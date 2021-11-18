@@ -749,6 +749,7 @@ terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
 Th3Whit3Wolf/one-nvim@main
+Th3Whit3Wolf/onebuddy@main
 theHamsta/nvim-dap-virtual-text
 ThePrimeagen/git-worktree.nvim
 ThePrimeagen/harpoon
