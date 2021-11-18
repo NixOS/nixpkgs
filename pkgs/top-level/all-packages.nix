@@ -7674,7 +7674,9 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
-  mhost = callPackage ../applications/networking/mhost { };
+  mhost = callPackage ../applications/networking/mhost {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
