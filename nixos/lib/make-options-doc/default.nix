@@ -31,7 +31,7 @@ let
     else if lib.isFunction x then "<function>"
     else x;
 
-  optionsListDesc = lib.flip map optionsListVisible
+  optionsList = lib.flip map optionsListVisible
    (opt: transformOptions opt
     // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
     // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
@@ -69,27 +69,13 @@ let
         + "</listitem>";
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
-  # Custom "less" that pushes up all the things ending in ".enable*"
-  # and ".package*"
-  optionLess = a: b:
-    let
-      ise = lib.hasPrefix "enable";
-      isp = lib.hasPrefix "package";
-      cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp a.loc b.loc < 0;
-
   # Remove invisible and internal options.
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
-
-  # Customly sort option list for the man page.
-  # Always ensure that the sort order matches sortXML.py!
-  optionsList = lib.sort optionLess optionsListDesc;
 
   # Convert the list of options into an XML file.
   # This file is *not* sorted sorted to save on eval time, since the docbook XML
   # and the manpage depend on it and thus we evaluate this on every system rebuild.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsListDesc);
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
