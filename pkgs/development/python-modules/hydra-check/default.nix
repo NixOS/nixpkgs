@@ -6,6 +6,7 @@
 , requests
 , beautifulsoup4
 , mypy
+, types-requests
 }:
 
 buildPythonPackage rec {
@@ -26,14 +27,17 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  checkInputs = [ mypy ];
+  checkInputs = [
+    mypy
+    types-requests
+  ];
 
   checkPhase = ''
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy hydracheck
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "check hydra for the build status of a package";
     homepage = "https://github.com/nix-community/hydra-check";
     license = licenses.mit;
