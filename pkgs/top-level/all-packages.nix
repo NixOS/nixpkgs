@@ -1739,6 +1739,8 @@ with pkgs;
 
   gitless = callPackage ../applications/version-management/gitless { python = python3; };
 
+  gistyc = with python3Packages; toPythonApplication gistyc;
+
   gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
