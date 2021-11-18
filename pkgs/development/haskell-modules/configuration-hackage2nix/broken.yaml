@@ -4788,7 +4788,6 @@ broken-packages:
   - syntax-trees
   - syntax-trees-fork-bairyn
   - synthesizer
-  - synthesizer-alsa
   - Sysmon
   - sys-process
   - system-canonicalpath
