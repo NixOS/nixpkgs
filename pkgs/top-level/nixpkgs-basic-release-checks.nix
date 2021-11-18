@@ -4,7 +4,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     set -o pipefail
 
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "" --store $TMPDIR/store --readonly-mode)
+    opts=(--option build-users-group "" --store dummy://)
     # ???: Does not support the opts
     # nix-store --init "''${opts[@]}"
 
