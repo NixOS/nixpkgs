@@ -27128,6 +27128,8 @@ with pkgs;
     mlt-qt5 = libsForQt514.mlt;
   };
 
+  synology-drive = libsForQt5.callPackage ../applications/networking/synology-drive { };
+
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   librep = callPackage ../development/libraries/librep { };
