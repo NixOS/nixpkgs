@@ -129,6 +129,15 @@ stdenv.mkDerivation rec {
     rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
   '' + cleanupMindustrySrc;
 
+  # Propagate glew to prevent it from being cleaned up.
+  # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+  # and will assume that it's not actually needed.
+  # This can cause issues.
+  # See https://github.com/NixOS/nixpkgs/issues/109798.
+  propagatedBuildInputs = lib.optionals enableClient [
+    glew.out
+  ];
+
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
@@ -157,9 +166,11 @@ stdenv.mkDerivation rec {
   '' + optionalString enableClient ''
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed ${glew.out}/lib/libGLEW.so \
-      --add-needed ${SDL2}/lib/libSDL2.so
+      --add-needed $glewlib \
+      --add-needed $sdllib
     gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
   '' + optionalString enableServer ''
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
