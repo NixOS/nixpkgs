@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , python3
 , fetchFromGitHub
 , makeWrapper
@@ -13,7 +14,7 @@ let
     pycparser
     pyelftools
     python-ptrace
-    ROPGadget
+    ropgadget
     six
     unicorn
     pygments
