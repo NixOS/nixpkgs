@@ -62,6 +62,7 @@ let
 
   pkg = interpreter.pkgs.nixops.withPlugins(ps: [
     ps.nixops-aws
+    ps.nixops-digitalocean
     ps.nixops-encrypted-links
     ps.nixops-gcp
     ps.nixops-hercules-ci

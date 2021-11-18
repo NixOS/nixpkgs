@@ -21,6 +21,16 @@ self: super: {
     }
   );
 
+  nixops-digitalocean = super.nixops-digitalocean.overridePythonAttrs (
+    _: {
+      src = pkgs.fetchgit {
+        url = "https://github.com/nix-community/nixops-digitalocean.git";
+        rev = "b527b4bd27a419753e38c8231fd7528b3ea33886";
+        sha256 = "069jlgcjqgyb1v3dnrp2h0w4gv5hfx624iq2xazaix2wxpx9w7f8";
+      };
+    }
+  );
+
   nixops-encrypted-links = super.nixops-encrypted-links.overridePythonAttrs (
     _: {
       src = pkgs.fetchgit {
