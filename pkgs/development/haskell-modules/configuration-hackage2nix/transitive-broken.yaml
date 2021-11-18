@@ -2122,6 +2122,7 @@ dont-distribute-packages:
  - mmark-cli
  - mmark-cli_0_0_5_1
  - mmark-ext
+ - mmark-ext_0_2_1_4
  - mmtl-base
  - moan
  - modify-fasta
@@ -2333,6 +2334,7 @@ dont-distribute-packages:
  - persona-idp
  - peyotls
  - peyotls-codec
+ - pg-entity
  - pgsql-simple
  - phonetic-languages-examples
  - phonetic-languages-general
