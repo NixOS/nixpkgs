@@ -3,6 +3,7 @@
 , python3Packages
 , rustPlatform
 , setuptools-rust
+, fetchpatch
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -13,6 +14,12 @@ python3Packages.buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-X2p6KQnEB6ZHdCHGFVEoEMiI+0R2vfGqel+jFKTcx74=";
   };
+
+  patches = [
+    # Fix the environment for spawned process
+    # https://github.com/mozilla/glean/pull/1542
+    ./pr-1542.patch
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
