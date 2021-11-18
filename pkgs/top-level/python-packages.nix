@@ -5108,6 +5108,8 @@ in {
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
+  niko-home-control = callPackage ../development/python-modules/niko-home-control { };
+
   nilearn = callPackage ../development/python-modules/nilearn { };
 
   niluclient = callPackage ../development/python-modules/niluclient { };
