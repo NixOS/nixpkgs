@@ -11617,6 +11617,12 @@
       fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
     }];
   };
+  tmarkovski = {
+    email = "tmarkovski@gmail.com";
+    github = "tmarkovski";
+    githubId = 1280118;
+    name = "Tomislav Markovski";
+  };
   tmountain = {
     email = "tinymountain@gmail.com";
     github = "tmountain";
