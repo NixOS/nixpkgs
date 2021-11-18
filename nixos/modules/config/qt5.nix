@@ -101,4 +101,7 @@ in
     environment.systemPackages = packages;
 
   };
+
+  # uses relatedPackages
+  meta.buildDocsInSandbox = false;
 }

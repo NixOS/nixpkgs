@@ -932,4 +932,6 @@ in {
   ]);
 
   meta.doc = ./nextcloud.xml;
+  # uses relatedPackages
+  meta.buildDocsInSandbox = false;
 }

@@ -21,6 +21,10 @@
 , options
 , transformOptions ? lib.id  # function for additional tranformations of the options
 , revision ? "" # Specify revision for the options
+# a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
+# used to split the options doc build into a static part (nixos/modules) and a dynamic part
+# (non-nixos modules imported via configuration.nix, other module sources).
+, baseOptionsJSON ? null
 }:
 
 let
@@ -99,13 +103,23 @@ in rec {
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
       buildInputs = [ pkgs.brotli ];
+      options = builtins.toFile "options.json"
+        (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
     }
     ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix))} $dst/options.json
+      ${
+        if baseOptionsJSON == null
+          then "cp $options $dst/options.json"
+          else ''
+            ${pkgs.python3Minimal}/bin/python ${./mergeJSON.py} \
+              ${baseOptionsJSON} $options \
+              > $dst/options.json
+          ''
+      }
 
       brotli -9 < $dst/options.json > $dst/options.json.br
 
