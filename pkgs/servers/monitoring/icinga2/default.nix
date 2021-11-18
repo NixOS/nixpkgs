@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
-, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib
+{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
+, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
 # Databases
 , withMysql ? true, withPostgresql ? false
 # Features
@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
     ./etc-icinga2.patch # Makes /etc/icinga2 relative to / instead of the store path
     ./no-systemd-service.patch # Prevent systemd service from being written to /usr
     ./no-var-directories.patch # Prevent /var directories from being created
-    # Fix the non-unity build
-    (fetchpatch {
-      url = "https://github.com/Icinga/icinga2/commit/2ad0a4b8c3852ad937fec9fc85780230257c821e.patch";
-      sha256 = "sha256:06qn7x73zbccmd8ycj46a29x2rr6qjwg0rr831wc2gc6q2k9d2g0";
-    })
   ];
 
   cmakeFlags = let
@@ -40,7 +35,7 @@ stdenv.mkDerivation rec {
     "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
     "-DICINGA2_PLUGINDIR=bin"
-    "-DICINGA2_UNITY_BUILD=no"
+    "-DICINGA2_LTO_BUILD=yes"
     # Features
     (mkFeatureFlag "MYSQL" withMysql)
     (mkFeatureFlag "PGSQL" withPostgresql)
@@ -54,14 +49,18 @@ stdenv.mkDerivation rec {
     "-DICINGA2_USER=icinga2"
     "-DICINGA2_GROUP=icinga2"
     "-DICINGA2_GIT_VERSION_INFO=OFF"
-    "-DICINGA2_WITH_TESTS=OFF"
     "-DUSE_SYSTEMD=ON"
   ];
+
+  outputs = [ "out" "doc" ];
 
   buildInputs = [ boost openssl systemd ]
     ++ lib.optional withPostgresql postgresql;
 
   nativeBuildInputs = [ cmake flex bison patchelf ];
+
+  doCheck = true;
+  checkInputs = [ tzdata ]; # legacytimeperiod/dst needs this
 
   postFixup = ''
     rm -r $out/etc/logrotate.d $out/etc/sysconfig $out/lib/icinga2/prepare-dirs
@@ -69,8 +68,9 @@ stdenv.mkDerivation rec {
     # Fix hardcoded paths
     sed -i 's:/usr/bin/::g' $out/etc/icinga2/scripts/*
 
-    # Cleanup sbin
+    # Get rid of sbin
     sed -i 's/sbin/bin/g' $out/lib/icinga2/safe-reload
+    sed -i 's/sbin/bin/g' $out/bin/icinga2
     rm $out/sbin
 
     ${lib.optionalString withMysql ''
@@ -83,18 +83,10 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  vim = stdenv.mkDerivation {
-    pname = "vim-icinga2";
-    inherit version src;
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/share/vim-plugins
-      cp -r tools/syntax/vim $out/share/vim-plugins/icinga2
-    '';
-  };
+  vim = runCommand "vim-icinga2-${version}" {} ''
+    mkdir -p $out/share/vim-plugins
+    cp -r "${src}/tools/syntax/vim" $out/share/vim-plugins/icinga2
+  '';
 
   meta = {
     description = "Open source monitoring system";
