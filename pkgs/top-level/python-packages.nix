@@ -6364,6 +6364,8 @@ in {
 
   pydy = callPackage ../development/python-modules/pydy { };
 
+  pydyf = callPackage ../development/python-modules/pydyf { };
+
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
