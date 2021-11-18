@@ -228,9 +228,10 @@ in
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
-  lidarr = handleTest ./lidarr.nix {};
   libreswan = handleTest ./libreswan.nix {};
+  lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   litestream = handleTest ./litestream.nix {};
