@@ -61,7 +61,13 @@
   </section>
   <section xml:id="sec-release-22.05-notable-changes">
     <title>Other Notable Changes</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to a 1.2.x
+          release instead of 1.1.x
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
 </section>
