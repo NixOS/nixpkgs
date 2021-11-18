@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/airsonic-advanced/airsonic-advanced/releases/download/${version}/airsonic.war";
-    sha256 = "0la7px07gw1s4hfbw4x22nd31x2ddqbpr3kfkg6f4i2grh3218mh";
+    sha256 = "sha256-soLnjltoATjqNHRpcVcqiTSQGJwSSzxwKEMk/cr42YU=";
   };
 
   buildCommand = ''
