@@ -22691,6 +22691,10 @@ with pkgs;
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
+  trinsic-cli = callPackage ../tools/admin/trinsic-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   twa = callPackage ../tools/networking/twa { };
