@@ -618,6 +618,12 @@ in mkLicense lset) ({
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
+  npl4 = {
+    url = "https://git.pixie.town/thufie/NPL";
+    fullName = "Non-Violent Public License v4";
+    free = false;
+  };
+
   nposl3 = {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
