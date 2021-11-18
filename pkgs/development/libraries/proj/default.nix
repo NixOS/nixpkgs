@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
     "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+    export TMP=$TMPDIR
+  '';
+
   doCheck = true;
 
   meta = with lib; {
