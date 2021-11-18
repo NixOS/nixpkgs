@@ -5,20 +5,21 @@
 , pbr
 , requests
 , pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.7.22";
+  version = "0.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = version;
-    sha256 = "sha256-tAkgOZvf9nyrAfFRxGkp7O/2oIAdBx+hNZbK9den+5c=";
+    sha256 = "sha256-sox24UpuIK5SP0IWVxa/NiyR5IrTzXe0SVTCd4FB6mo=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    requests-mock
   ];
 
   meta = with lib; {
