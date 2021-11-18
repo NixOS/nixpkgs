@@ -5,7 +5,6 @@
 , extra-cmake-modules
 , kio
 , fuse3
-, ...
 }:
 
 mkDerivation rec {
