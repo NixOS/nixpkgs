@@ -5,8 +5,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops.git";
-        rev = "35ac02085169bc2372834d6be6cf4c1bdf820d09";
-        sha256 = "1jh0jrxyywjqhac2dvpj7r7isjv68ynbg7g6f6rj55raxcqc7r3j";
+        rev = "7ebdd8ace8d6bcefc18ee9e3e590f8bfa3368771";
+        sha256 = "16pwxs5bca6cd83f0rs4sf5r8yf07wmha051waysmxs9xxl856yc";
       };
     }
   );
@@ -15,8 +15,8 @@ self: super: {
     _: {
       src = pkgs.fetchgit {
         url = "https://github.com/NixOS/nixops-aws.git";
-        rev = "44f774272bd522cc7e87074c056f2225f771ded0";
-        sha256 = "0x9pv186nkcfisr1c1nxw8gpazkrg546dfl95140rif0xzw3pizx";
+        rev = "83900880a413218020ddd91d6cd3f5b823acb3fb";
+        sha256 = "17gf4vfcl1vx81y9vk26zzcj6kac41kfhzwcx15cj91ivqrgn3b2";
       };
     }
   );
