@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , fetchCrate
 , rustPlatform
 , openssl
 , pkg-config
+, CoreServices
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin CoreServices;
 
   cargoSha256 = "sha256-XlrQ6CvjeWnzvfaeNbe8FtMXMVSQNLxDVIEjyHm57Js=";
 
