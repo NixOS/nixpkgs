@@ -93,72 +93,20 @@ let
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
-  # TODO: declarations: link to github
-  singleAsciiDoc = name: value: ''
-    == ${name}
-
-    ${value.description}
-
-    [discrete]
-    === details
-
-    Type:: ${value.type}
-    ${ if lib.hasAttr "default" value
-       then ''
-        Default::
-        +
-        ----
-        ${builtins.toJSON value.default}
-        ----
-      ''
-      else "No Default:: {blank}"
-    }
-    ${ if value.readOnly
-       then "Read Only:: {blank}"
-      else ""
-    }
-    ${ if lib.hasAttr "example" value
-       then ''
-        Example::
-        +
-        ----
-        ${builtins.toJSON value.example}
-        ----
-      ''
-      else "No Example:: {blank}"
-    }
-  '';
-
-  singleMDDoc = name: value: ''
-    ## ${lib.escape [ "<" ">" ] name}
-    ${value.description}
-
-    ${lib.optionalString (value ? type) ''
-      *_Type_*:
-      ${value.type}
-    ''}
-
-    ${lib.optionalString (value ? default) ''
-      *_Default_*
-      ```
-      ${builtins.toJSON value.default}
-      ```
-    ''}
-
-    ${lib.optionalString (value ? example) ''
-      *_Example_*
-      ```
-      ${builtins.toJSON value.example}
-      ```
-    ''}
-  '';
-
-in {
+in rec {
   inherit optionsNix;
 
-  optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
+  optionsAsciiDoc = pkgs.runCommand "options.adoc" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateAsciiDoc.py} \
+      < ${optionsJSON}/share/doc/nixos/options.json \
+      > $out
+  '';
 
-  optionsMDDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleMDDoc optionsNix);
+  optionsCommonMark = pkgs.runCommand "options.md" {} ''
+    ${pkgs.python3Minimal}/bin/python ${./generateCommonMark.py} \
+      < ${optionsJSON}/share/doc/nixos/options.json \
+      > $out
+  '';
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
