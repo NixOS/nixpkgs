@@ -9,7 +9,11 @@
 
 with haskellLib;
 
-self: super: {
+let
+  configuration-9_2 = import ./configuration-ghc-9.2.x.nix { inherit pkgs haskellLib; };
+in
+
+self: super: configuration-9_2 self super // {
 
   llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_10;
 
@@ -67,6 +71,13 @@ self: super: {
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
+  QuickCheck = dontCheck super.QuickCheck;
+  HUnit = dontCheck super.HUnit;
+  optparse-applicative = dontCheck super.optparse-applicative;
+  hspec-discover = dontCheck super.hspec-discover_2_8_4;
+  hspec-core = dontCheck super.hspec-core_2_8_4;
+  hspec = dontCheck super.hspec_2_8_4;
+  tasty-discover = dontCheck super.tasty-discover;
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
@@ -77,4 +88,25 @@ self: super: {
   # Fix build with ghc 8.6.x.
   git-annex = appendPatch ./patches/git-annex-fix-ghc-8.6.x-build.patch super.git-annex;
 
+  # loosen upper bound on ghc bignum for these two (jailbreak can't handle the funky line)
+  integer-logarithms = overrideCabal (drv: {
+    postPatch = "sed -i -e 's, <1.3, <1.4,' integer-logarithms.cabal";
+  }) (super.integer-logarithms);
+  hashable = overrideCabal (drv: {
+    postPatch = "sed -i -e 's, <1.3, <1.4,' hashable.cabal";
+  }) self.hashable_1_4_0_0;
+
+  # Test suite fails when GHC returns a qualified name instead of
+  # qualification, not an important failure
+  base-orphans = dontCheck super.base-orphans;
+
+  # Patch emailed to upstream and MR opened against head.hackage
+  # https://gitlab.haskell.org/ghc/head.hackage/-/merge_requests/187
+  concurrent-output = appendPatch (pkgs.fetchpatch {
+    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/99c06aa0960c6c8f8c9ed242118e9724a112d9d4/patches/concurrent-output-1.10.12.patch";
+    sha256 = "sha256-LspT1GkdwrUBXfDJp3aQBvQ9KVMS5dIR6OFEJfhslik=";
+  }) super.concurrent-output;
+
+  # Too tight upper bound on base
+  tasty-hspec = doJailbreak super.tasty-hspec_1_2;
 }

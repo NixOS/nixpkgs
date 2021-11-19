@@ -48,6 +48,12 @@ In this section we create the PR for merging `haskell-updates` into `master`.
     $ ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
     ```
 
+1.  Update the head.hackage overlay used for haskell.packages.ghcHEAD
+
+    ```console
+    $ ./maintainers/scripts/haskell/update-head.hackage.hs --do-commit
+    ```
+
 1.  Push these commits to the `haskell-updates` branch of the NixOS/nixpkgs repository.
 
 1.  Open a PR on Nixpkgs for merging `haskell-updates` into `master`.  The recommended

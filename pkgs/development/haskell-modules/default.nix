@@ -9,6 +9,8 @@
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
+, useHeadHackage ? false
+, configurationHeadHackage ? import ./configuration-head.hackage.nix
 }:
 
 let
@@ -32,8 +34,14 @@ let
     nonHackagePackages
     (configurationNix { inherit pkgs haskellLib; })
     (configurationCommon { inherit pkgs haskellLib; })
-  ] ++ platformConfigurations ++ [
-    compilerConfig
+  ] ++ platformConfigurations
+    ++ [ compilerConfig ]
+    # head.hackage checks the version of packages before overriding, so has to
+    # come after compilerConfig, in which we specify newer versions for some
+    # packages.
+    ++ lib.optional useHeadHackage
+         (configurationHeadHackage { inherit pkgs haskellLib;})
+    ++ [
     packageSetConfig
     overrides
   ]);

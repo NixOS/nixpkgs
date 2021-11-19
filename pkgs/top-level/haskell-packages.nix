@@ -227,6 +227,7 @@ in {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
+      useHeadHackage = true;
     };
 
     ghcjs = packages.ghcjs810;
