@@ -48,6 +48,7 @@
 , bzip2
 , pcre2
 , e2fsprogs
+, elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gnu-efi
 , iptables
@@ -374,6 +375,7 @@ stdenv.mkDerivation {
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
+    ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
     ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
