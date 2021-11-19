@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # On macOS, frameworks are linked to the system CoreFoundation but
 # dynamic libraries built with nix use a pure version of CF this
 # causes segfaults for binaries that depend on it at runtime.  This
