@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/ssh-team/openssh/-/raw/debian/1%258.7p1-2/debian/patches/mention-ssh-keygen-on-keychange.patch";
       sha256 = "sha256-K2IPgh2cGmZU3+bXFHgueBTw2SFtUFrdWKv7MJ5+ltc=";
     })
+    # improve scp filenames with spaces in verbose
+    (fetchpatch {
+      url = "https://salsa.debian.org/ssh-team/openssh/-/raw/debian/1%258.7p1-2/debian/patches/scp-quoting.patch";
+      sha256 = "sha256-oMHG9ELMQa+agA937QJKvj1HAkjmFaPMbxfRO34u09U=";
+    })
   ] ++ extraPatches;
 
   postPatch =
