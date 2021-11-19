@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 mergeNetBSDSourceDir() {
   # merge together all extra paths
   # there should be a better way to do this
