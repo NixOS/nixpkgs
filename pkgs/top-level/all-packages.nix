@@ -16729,6 +16729,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  pangomm_2_42 = callPackage ../development/libraries/pangomm/2.42.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
+
   gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
 
   gdk-pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
@@ -27866,6 +27870,8 @@ with pkgs;
   };
 
   renoise = callPackage ../applications/audio/renoise {};
+
+  roomeqwizard = callPackage ../applications/audio/roomeqwizard { };
 
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
     wxGTK = wxGTK30;
