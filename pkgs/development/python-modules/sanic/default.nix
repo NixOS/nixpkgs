@@ -83,6 +83,8 @@ buildPythonPackage rec {
     "test_create_server_main_convenience"
     "test_debug"
     "test_auto_reload"
+    "test_no_exceptions_when_cancel_pending_request"
+    "test_ipv6_address_is_not_wrapped"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/sanic-org/sanic/issues/2298
     "test_no_exceptions_when_cancel_pending_request"
