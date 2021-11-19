@@ -1,47 +1,61 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+let
+  tests = {
+    vscodium-wayland = { pkgs, ... }: {
+      imports = [ ./common/wayland-cage.nix ];
 
-{
-  name = "vscodium";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ turion ];
+      services.cage.program = ''
+        ${pkgs.vscodium}/bin/codium \
+          --enable-features=UseOzonePlatform \
+          --ozone-platform=wayland
+      '';
+
+      fonts.fonts = with pkgs; [ dejavu_fonts ];
+    };
+    vscodium-xorg = { pkgs, ... }: {
+      imports = [ ./common/user-account.nix ./common/x11.nix ];
+
+      virtualisation.memorySize = 2047;
+      services.xserver.enable = true;
+      services.xserver.displayManager.sessionCommands = ''
+        ${pkgs.vscodium}/bin/codium
+      '';
+      test-support.displayManager.auto.user = "alice";
+    };
   };
 
-  machine = { ... }:
+  mkTest = name: machine:
+    import ./make-test-python.nix ({ pkgs, ... }: {
+      inherit name machine;
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ synthetica turion ];
+      };
+      enableOCR = true;
+      testScript = ''
+        start_all()
 
-  {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+        machine.wait_for_unit('graphical.target')
+        machine.wait_until_succeeds('pgrep -x codium')
 
-    virtualisation.memorySize = 2047;
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = with pkgs; [
-      vscodium
-    ];
-  };
+        machine.wait_for_text('VSCodium')
+        machine.screenshot('start_screen')
 
-  enableOCR = true;
+        test_string = 'testfile'
 
-  testScript = { nodes, ... }: ''
-    # Start up X
-    start_all()
-    machine.wait_for_x()
+        machine.send_key('ctrl-n')
+        machine.wait_for_text('Untitled')
+        machine.screenshot('empty_editor')
 
-    # Start VSCodium with a file that doesn't exist yet
-    machine.fail("ls /home/alice/foo.txt")
-    machine.succeed("su - alice -c 'codium foo.txt' >&2 &")
+        machine.send_chars(test_string)
+        machine.wait_for_text(test_string)
+        machine.screenshot('editor')
 
-    # Wait for the window to appear
-    machine.wait_for_text("VSCodium")
+        machine.send_key('ctrl-s')
+        machine.wait_for_text('Save')
+        machine.screenshot('save_window')
 
-    # Save file
-    machine.send_key("ctrl-s")
+        machine.send_key('ret')
+        machine.wait_for_file(f'/home/alice/{test_string}')
+      '';
+    });
 
-    # Wait until the file has been saved
-    machine.wait_for_file("/home/alice/foo.txt")
-
-    machine.screenshot("VSCodium")
-  '';
-})
+in builtins.mapAttrs (k: v: mkTest k v { }) tests
