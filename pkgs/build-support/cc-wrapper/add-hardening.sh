@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 declare -a hardeningCFlagsAfter=()
 declare -a hardeningCFlagsBefore=()
 
