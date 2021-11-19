@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, isInsiders ? false, commandLineArgs ? "" }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -22,6 +22,7 @@ let
   }.${system};
 in
   callPackage ./generic.nix rec {
+    inherit commandLineArgs;
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
     version = "1.62.3";

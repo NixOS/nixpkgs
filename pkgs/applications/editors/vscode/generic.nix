@@ -13,6 +13,7 @@
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname, updateScript
+, commandLineArgs
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
@@ -108,6 +109,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
+        --add-flags ${lib.escapeShellArg (lib.escapeShellArg commandLineArgs)}
       )
     '';
 
