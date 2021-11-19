@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 gnConfigurePhase() {
     runHook preConfigure
 
