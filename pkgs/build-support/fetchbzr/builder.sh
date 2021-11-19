@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "exporting \`$url' (revision $rev) into \`$out'"
 
 # Perform a lightweight checkout so that we don't end up importing
