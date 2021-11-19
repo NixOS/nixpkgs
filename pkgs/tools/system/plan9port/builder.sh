@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 export PLAN9=$out/plan9
