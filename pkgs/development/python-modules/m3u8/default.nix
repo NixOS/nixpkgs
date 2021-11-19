@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "globocom";
     repo = pname;
     rev = version;
-    sha256 = "0cmg993icpsa1b19kljxvjwhs167bsqrs0ad4wnwsi8qq6na5d4p";
+    sha256 = "sha256-EfHhmV2otEgEy2OVohS+DF7dk97GFdWZ4cFCERZBmlA=";
   };
 
-  checkInputs = [ bottle pytestCheckHook ];
-
   propagatedBuildInputs = [ requests iso8601 ];
+
+  checkInputs = [ bottle pytestCheckHook ];
 
   pytestFlagsArray = [
     "tests/test_parser.py"
