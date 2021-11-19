@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "drush-ops";
     repo  = pname;
     rev = version;
-    sha256 = "1jgnc4jjyapyn04iczvcz92ic0vq8d1w8xi55ismqyy5cxhqj6bp";
+    sha256 = "sha256-0nf/m+xJmfHsFLuordiMp8UyrGGXuS70+zFHkIxLWhU=";
   };
 
   consoleTable = fetchurl {
