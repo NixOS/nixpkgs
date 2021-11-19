@@ -21,6 +21,11 @@ buildPythonPackage rec {
     "tests/test_variant_m3u8.py"
   ];
 
+  preCheck = ''
+    # Fix test on Hydra
+    substituteInPlace tests/test_model.py --replace "/tmp/d.m3u8" "$TMPDIR/d.m3u8"
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/globocom/m3u8";
     description = "Python m3u8 parser";
