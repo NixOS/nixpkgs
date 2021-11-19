@@ -133,6 +133,7 @@ extra-packages:
   - ghc-lib == 9.0.1.*                  # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser == 9.0.1.*           # 2021-11-05: Need one GHC 9.0.1 compatible version
   - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.1 compatible version
+  - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
 
 package-maintainers:
   abbradar:
