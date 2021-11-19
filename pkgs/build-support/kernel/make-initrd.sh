@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 set -o pipefail
 
 mkdir root
