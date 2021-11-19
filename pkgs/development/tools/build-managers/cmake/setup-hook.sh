@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addCMakeParams() {
     addToSearchPath CMAKE_PREFIX_PATH $1
 }
