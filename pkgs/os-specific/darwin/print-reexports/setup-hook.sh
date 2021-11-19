@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 fixupOutputHooks+=('checkTbdReexports')
 
 checkTbdReexports() {
