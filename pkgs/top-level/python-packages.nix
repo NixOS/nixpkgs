@@ -8046,8 +8046,6 @@ in {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
-
   rdkit = callPackage ../development/python-modules/rdkit { };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
