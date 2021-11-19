@@ -1,16 +1,20 @@
 { lib
-, pkgs
-, python3Packages
+, buildPythonPackage
+, fetchPypi
 , rustPlatform
+, rustc
+, cargo
 , setuptools-rust
-, fetchpatch
+# build inputs
+, cffi
+, glean-parser
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "glean-sdk";
   version = "42.2.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-X2p6KQnEB6ZHdCHGFVEoEMiI+0R2vfGqel+jFKTcx74=";
   };
@@ -28,12 +32,12 @@ python3Packages.buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkgs.rustc
-    pkgs.cargo
+    rustc
+    cargo
     setuptools-rust
     rustPlatform.cargoSetupHook
   ];
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     cffi
     glean-parser
   ];

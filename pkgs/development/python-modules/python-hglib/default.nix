@@ -1,22 +1,25 @@
 { lib
-, python3Packages
+, buildPythonPackage
+, fetchPypi
+, mercurial
+, nose
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "python-hglib";
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1741686
-  version = "2.6.1";
+  version = "2.6.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fB+gy00zLdbshAmwR4fOukYj6X+zeGVvfKsLmWxso7I=";
+    sha256 = "sha256-sYvR7VPJDuV9VxTWata7crZOkw1K7KmDCJLAi7KNpgg=";
   };
 
-  buildInputs = [
-  ];
+  checkInputs = [ mercurial nose ];
 
-  # attempts to create a temporary `HGTMP` folder
-  doCheck = false;
+  preCheck = ''
+    export HGTMP=$(mktemp -d)
+    export HGUSER=test
+  '';
 
   pythonImportsCheck = [ "hglib" ];
 

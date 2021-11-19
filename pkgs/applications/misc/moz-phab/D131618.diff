@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+--- a/setup.py
++++ b/setup.py
+@@ -15,7 +15,7 @@
+     install_requires=[
+         "distro",
+         "glean-sdk>=36.0.0",
+-        "python-hglib==2.6.1",
++        "python-hglib>=2.6.2",
+         "sentry-sdk>=0.14.3",
+         "setuptools",
+     ],
+

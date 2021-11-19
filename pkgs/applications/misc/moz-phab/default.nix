@@ -1,27 +1,44 @@
-{ lib, python3Packages, pkgs }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, mercurial
+# build inputs
+, distro
+, glean-sdk
+, python-hglib
+, sentry-sdk
+, setuptools
+}:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "MozPhab";
   version = "0.1.99";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-uKoMMSp5AIvB1qTRYAh7n1+2dDLneFbssfkfTTshfcs=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  patches = [
+    # Relax python-hglib requirement
+    # https://phabricator.services.mozilla.com/D131618
+    ./D131618.diff
+  ];
+
+  propagatedBuildInputs = [
     distro
     glean-sdk
     python-hglib
     sentry-sdk
     setuptools
   ];
-  buildInputs = [
-    pkgs.mercurial
+  checkInputs = [
+    mercurial
   ];
 
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1741683
-  doCheck = false;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";

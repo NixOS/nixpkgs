@@ -1,28 +1,38 @@
 { lib
-, pkgs
-, python3Packages
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest
+, pytest-runner
+, pythonOlder
 , setuptools-scm
+# build inputs
+, appdirs
+, click
+, diskcache
+, jinja2
+, jsonschema
+, pyyaml
+, yamllint
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "glean_parser";
   version = "4.3.1";
 
-  disabled = python3Packages.pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-wZSro1pX/50TlSfFMh71JlmXlJlONVutTDFL06tkw+s=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     appdirs
     click
     diskcache
     jinja2
     jsonschema
-    pytest
-    pytest-runner
     pyyaml
     yamllint
   ];
@@ -31,7 +41,9 @@ python3Packages.buildPythonPackage rec {
   ];
 
   checkInputs = [
-    python3Packages.pytestCheckHook
+    pytestCheckHook
+    pytest
+    pytest-runner
   ];
   disabledTests = [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668
