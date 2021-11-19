@@ -8732,6 +8732,8 @@ with pkgs;
 
   proxify = callPackage ../tools/networking/proxify { };
 
+  proxysql = callPackage ../servers/sql/proxysql { };
+
   proxytunnel = callPackage ../tools/misc/proxytunnel {
     openssl = openssl_1_0_2;
   };
