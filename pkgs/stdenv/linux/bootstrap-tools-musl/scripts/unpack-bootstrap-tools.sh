@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Unpack the bootstrap tools tarball.
 echo Unpacking the bootstrap tools...
 $builder mkdir $out
