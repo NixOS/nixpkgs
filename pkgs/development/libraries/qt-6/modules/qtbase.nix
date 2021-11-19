@@ -1042,6 +1042,9 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     echo "verify that all _IMPORT_PREFIX are replaced done"
     )
 
+    # .* = $$[QT_HOST_DATA/get] -> $dev
+    sed -i -E 's,^(QMAKE_QT_CONFIG) = .*/(mkspecs/qconfig.pri)$,\1 = '$dev'/\2,' $dev/mkspecs/features/qt_config.prf
+
     echo "cached build: qtbaseDrv = ${qtbaseDrv}"
 
     echo "out = $out"
