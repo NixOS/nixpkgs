@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "getting $url${rev:+ ($rev)} into $out"
 
 hg clone --insecure "$url" hg-clone
