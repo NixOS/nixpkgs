@@ -60,6 +60,8 @@
 , ceph
 , enableGlusterfs ? false
 , glusterfs
+, Carbon
+, AppKit
 }:
 
 with lib;
@@ -152,6 +154,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isDarwin [
     libiconv
     gmp
+    Carbon
+    AppKit
   ];
 
   preConfigure =
