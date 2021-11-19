@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 args=
@@ -15,4 +16,3 @@ if test -n "$isExecutable"; then
 fi
 
 eval "$postInstall"
-
