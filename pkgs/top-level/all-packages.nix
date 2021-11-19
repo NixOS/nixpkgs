@@ -12066,7 +12066,7 @@ with pkgs;
 
   pscid = nodePackages.pscid;
 
-  coreboot-toolchain = callPackage ../development/tools/misc/coreboot-toolchain { };
+  coreboot-toolchain = callPackages ../development/tools/misc/coreboot-toolchain { };
 
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
