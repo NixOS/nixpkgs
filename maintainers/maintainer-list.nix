@@ -9827,12 +9827,6 @@
       }
     ];
   };
-  rittelle = {
-    email = "rittelle@posteo.de";
-    github = "rittelle";
-    githubId = 33598633;
-    name = "Lennart Rittel";
-  };
   rixed = {
     email = "rixed-github@happyleptic.org";
     github = "rixed";

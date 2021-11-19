@@ -32,4 +32,5 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
   - [ ] (Package updates) Added a release notes entry if the change is major or breaking
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
+  - [ ] (Release notes changes) Ran `nixos/doc/manual/md-to-db.sh` to update generated release notes
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
