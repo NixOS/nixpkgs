@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 boot_bin=$out/bin/boot
