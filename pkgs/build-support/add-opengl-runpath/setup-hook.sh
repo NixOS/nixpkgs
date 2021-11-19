@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Set RUNPATH so that driver libraries in /run/opengl-driver(-32)/lib can be found.
 # This is needed to not rely on LD_LIBRARY_PATH which does not work with setuid
 # executables. Fixes https://github.com/NixOS/nixpkgs/issues/22760. It must be run
@@ -26,4 +27,3 @@ addOpenGLRunpath() {
         patchelf --set-rpath "@driverLink@/lib:$origRpath" ${forceRpath:+--force-rpath} "$file"
     done
 }
-
