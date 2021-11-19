@@ -1183,9 +1183,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             Machine=Machine,  # for typing
         )
-        machine_symbols = {
-            m.name: self.machines[idx] for idx, m in enumerate(self.machines)
-        }
+        machine_symbols = {m.name: m for m in self.machines}
         vlan_symbols = {
             f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
         }
