@@ -1,6 +1,6 @@
 let
   tests = {
-    vscodium-wayland = { pkgs, ... }: {
+    wayland = { pkgs, ... }: {
       imports = [ ./common/wayland-cage.nix ];
 
       services.cage.program = ''
@@ -11,7 +11,7 @@ let
 
       fonts.fonts = with pkgs; [ dejavu_fonts ];
     };
-    vscodium-xorg = { pkgs, ... }: {
+    xorg = { pkgs, ... }: {
       imports = [ ./common/user-account.nix ./common/x11.nix ];
 
       virtualisation.memorySize = 2047;
@@ -25,7 +25,10 @@ let
 
   mkTest = name: machine:
     import ./make-test-python.nix ({ pkgs, ... }: {
-      inherit name machine;
+      inherit name;
+
+      nodes = { "${name}" = machine; };
+
       meta = with pkgs.lib.maintainers; {
         maintainers = [ synthetica turion ];
       };
