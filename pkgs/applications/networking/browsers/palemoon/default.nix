@@ -1,37 +1,36 @@
-{ stdenv
-, lib
-, fetchzip
-, writeScript
+{ lib
+, stdenv
 , alsa-lib
 , autoconf213
 , cairo
-, desktop-file-utils
 , dbus
 , dbus-glib
+, desktop-file-utils
+, fetchzip
 , ffmpeg
 , fontconfig
 , freetype
 , gnome2
 , gnum4
-, gtk2
-, libevent
 , libGL
 , libGLU
+, libevent
 , libnotify
 , libpulseaudio
 , libstartup_notification
+, pango
 , perl
 , pkg-config
 , python2
 , unzip
 , which
 , wrapGAppsHook
+, writeScript
 , xorg
 , yasm
 , zip
 , zlib
-, withGTK3 ? true
-, gtk3
+, withGTK3 ? true, gtk3, gtk2
 }:
 
 # Only specific GCC versions are supported with branding
@@ -43,37 +42,15 @@ assert with lib.strings; (
   && versionOlder stdenv.cc.version "11"
 );
 
-let
-  libPath = lib.makeLibraryPath [
-    ffmpeg
-    libpulseaudio
-  ];
-  gtkVersion = if withGTK3 then "3" else "2";
-in
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.1";
+  version = "29.4.2.1";
 
   src = fetchzip {
-    url = "http://archive.palemoon.org/source/palemoon-${version}-source.tar.xz";
-    stripRoot = false;
-    sha256 = "0kb9yn1q8rrmnlsyvxvv2gdgyyf12g6rxlyh82lmc0gysvd4qd2c";
+    name = "${pname}-${version}";
+    url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
+    sha256 = "sha256-iTn1jbbsw7u+rVe/1J9yJbS0wi5Rlkcy4rO8nWcXu2I=";
   };
-
-  passthru.updateScript = writeScript "update-${pname}" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl libxml2
-
-    set -eu -o pipefail
-
-    # Only release note announcement == finalized release
-    version="$(
-      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
-      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
-      sed 's/v\(\S*\).*/\1/'
-    )"
-    update-source-version ${pname} "$version"
-  '';
 
   nativeBuildInputs = [
     autoconf213
@@ -99,12 +76,13 @@ stdenv.mkDerivation rec {
     freetype
     gnome2.GConf
     gtk2
-    libevent
     libGL
     libGLU
+    libevent
     libnotify
     libpulseaudio
     libstartup_notification
+    pango
     zlib
   ]
   ++ (with xorg; [
@@ -118,9 +96,15 @@ stdenv.mkDerivation rec {
     pixman
     xorgproto
   ])
-  ++ lib.optional withGTK3 gtk3;
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs ./mach
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -135,8 +119,8 @@ stdenv.mkDerivation rec {
     # Clear this if not a 64bit build
     _BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
 
-    # Set GTK Version to 2 or 3
-    _GTK_VERSION=${gtkVersion}
+    # Set GTK Version
+    _GTK_VERSION=${if withGTK3 then "3" else "2"}
 
     # Standard build options for Pale Moon
     ac_add_options --enable-application=palemoon
@@ -212,14 +196,22 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${libPath}"
-    )
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        ffmpeg
+        libpulseaudio
+      ];
+    in
+      ''
+        gappsWrapperArgs+=(
+          --prefix LD_LIBRARY_PATH : "${libPath}"
+        )
     wrapGApp $out/lib/palemoon-${version}/palemoon
   '';
 
   meta = with lib; {
+    homepage = "https://www.palemoon.org/";
     description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
@@ -232,10 +224,24 @@ stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage = "https://www.palemoon.org/";
     changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
     license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
+
+  passthru.updateScript = writeScript "update-${pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+    set -eu -o pipefail
+
+    # Only release note announcement == finalized release
+    version="$(
+      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+      sed 's/v\(\S*\).*/\1/'
+    )"
+    update-source-version ${pname} "$version"
+  '';
 }
