@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cargoInstallPostBuildHook() {
     echo "Executing cargoInstallPostBuildHook"
 
