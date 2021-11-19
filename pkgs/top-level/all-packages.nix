@@ -6851,6 +6851,7 @@ with pkgs;
 
   libcryptui = callPackage ../development/libraries/libcryptui {
     autoreconfHook = buildPackages.autoreconfHook269;
+    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   };
 
   libshumate = callPackage ../development/libraries/libshumate { };
@@ -18103,7 +18104,9 @@ with pkgs;
 
   libpgf = callPackage ../development/libraries/libpgf { };
 
-  libphonenumber = callPackage ../development/libraries/libphonenumber { };
+  libphonenumber = callPackage ../development/libraries/libphonenumber {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
