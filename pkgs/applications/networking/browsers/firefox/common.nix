@@ -273,7 +273,7 @@ buildStdenv.mkDerivation ({
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
   # elf-hack is broken when using clang+lld:
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional ltoSupport "--enable-lto"
+  ++ lib.optional ltoSupport "--enable-lto=cross" # Cross-language LTO.
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
 
