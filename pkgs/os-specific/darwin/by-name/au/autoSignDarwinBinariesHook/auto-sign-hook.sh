@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 postFixupHooks+=(signDarwinBinariesInAllOutputs)
 
 # Uses signingUtils, see definition of autoSignDarwinBinariesHook in
