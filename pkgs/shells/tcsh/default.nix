@@ -1,24 +1,31 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.22.04";
+  version = "6.23.00";
 
   src = fetchurl {
     urls = [
-      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
+      "https://astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
+      "https://astron.com/pub/tcsh/${pname}-${version}.tar.gz"
       "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
-      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
+      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
       "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/${pname}-${version}.tar.gz"
+      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
+      "ftp://ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
+      "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-6xY1YkMhjDLzngcljXK/iyHmLOlLsOipXjGLFROX4jE=";
+    hash = "sha256-Tr6y8zYz0RXZU19VTGUahSMEDY2R5d4zP7LuBFuOAB4=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
   patches = lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
@@ -47,7 +54,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  passthru = {
-    shellPath = "/bin/tcsh";
-  };
+  passthru.shellPath = "/bin/tcsh";
 }
