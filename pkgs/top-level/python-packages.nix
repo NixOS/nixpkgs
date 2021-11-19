@@ -6370,6 +6370,8 @@ in {
 
   pydyf = callPackage ../development/python-modules/pydyf { };
 
+  pyebus = callPackage ../development/python-modules/pyebus { };
+
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
