@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 header "exporting $url (r$rev) into $out"
