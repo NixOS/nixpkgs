@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "exporting egg ${eggName} (version $version) into $out"
 
 mkdir -p $out
