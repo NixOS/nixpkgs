@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-prefetch-scripts
+# shellcheck shell=bash
 
 set -eou pipefail
 
