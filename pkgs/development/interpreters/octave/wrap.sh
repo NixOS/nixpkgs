@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Unlinks a directory (given as the first argument), and re-creates that
 # directory as an actual directory. Then descends into the directory of
 # the same name in the origin (arg_2/arg_3) and symlinks the contents of
