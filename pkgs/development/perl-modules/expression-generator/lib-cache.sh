@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 
 # First argument: command to run
 # Second argument: cache name
