@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 unpackCmdHooks+=(_trySourceRock)
 unpackCmdHooks+=(_tryRockSpec)
 
