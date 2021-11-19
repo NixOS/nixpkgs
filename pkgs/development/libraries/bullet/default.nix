@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
-, Cocoa,  OpenGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, Cocoa
+, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +44,7 @@ stdenv.mkDerivation rec {
     "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
     "-DBUILD_BULLET2_DEMOS=OFF"
     "-DBUILD_UNIT_TESTS=OFF"
+    "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
   ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
