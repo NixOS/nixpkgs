@@ -4244,6 +4244,8 @@ in {
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
+  lc7001 = callPackage ../development/python-modules/lc7001 { };
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl;
   };
