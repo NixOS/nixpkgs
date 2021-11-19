@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 wafConfigurePhase() {
     runHook preConfigure
 
