@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 set -e
 
 # Unpack the bootstrap tools tarball.

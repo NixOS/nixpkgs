@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 set -euo pipefail
 
 # Unpack the bootstrap tools tarball.
