@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 mkdir -p $out
 
 for ((i = 1; i <= $nrFrames; i++)); do
