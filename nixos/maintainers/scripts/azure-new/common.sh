@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 export group="${AZURE_RESOURCE_GROUP:-"azure"}"
 export location="${AZURE_LOCATION:-"westus2"}"
 
