@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 aa_action() {
   STRING=$1
   shift
