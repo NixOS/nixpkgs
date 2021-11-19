@@ -13,6 +13,7 @@ mkXfceDerivation {
   category = "thunar-plugins";
   pname = "thunar-media-tags-plugin";
   version = "0.3.0";
+  odd-unstable = false;
 
   sha256 = "sha256-jtgcHH5U5GOvzDVUwPEreMtTdk5DT6sXvFPDbzbF684=";
 

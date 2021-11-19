@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config, makeWrapper, ncurses, nixosTests
 , libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
-, libaio, libevent, jemalloc, cracklib, systemd, perl
+, liburing, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
 , fixDarwinDylibNames, cctools, CoreServices, less
 , numactl # NUMA Support
@@ -34,7 +34,7 @@ common = rec { # attributes common to both builds
 
   buildInputs = [
     ncurses openssl zlib pcre2 libiconv curl
-  ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
+  ] ++ optionals stdenv.hostPlatform.isLinux [ liburing systemd libkrb5 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ perl cctools CoreServices ]
     ++ optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 

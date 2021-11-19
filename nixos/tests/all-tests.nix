@@ -230,6 +230,7 @@ in
   leaps = handleTest ./leaps.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
+  libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
