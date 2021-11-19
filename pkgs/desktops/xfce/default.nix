@@ -82,6 +82,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-terminal = callPackage ./applications/xfce4-terminal { };
 
+  xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
+
   xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter {
     inherit (pkgs.gnome) libsoup;
   };
