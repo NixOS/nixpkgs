@@ -588,11 +588,22 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.lightdm.enable =
-      let dmconf = cfg.displayManager;
-          default = !(dmconf.gdm.enable
-                    || dmconf.sddm.enable
-                    || dmconf.xpra.enable );
-      in mkIf (default) true;
+      let dmConf = cfg.displayManager;
+          default = !(dmConf.gdm.enable
+                    || dmConf.sddm.enable
+                    || dmConf.xpra.enable
+                    || dmConf.sx.enable
+                    || dmConf.startx.enable);
+      in mkIf (default) (mkDefault true);
+
+    # so that the service won't be enabled when only startx is used
+    systemd.services.display-manager.enable  =
+      let dmConf = cfg.displayManager;
+          noDmUsed = !(dmConf.gdm.enable
+                    || dmConf.sddm.enable
+                    || dmConf.xpra.enable
+                    || dmConf.lightdm.enable);
+      in mkIf (noDmUsed) (mkDefault false);
 
     hardware.opengl.enable = mkDefault true;
 
@@ -702,7 +713,8 @@ in
             rm -f /tmp/.X0-lock
           '';
 
-        script = "${cfg.displayManager.job.execCmd}";
+        # TODO: move declaring the systemd service to its own mkIf
+        script = mkIf (config.systemd.services.display-manager.enable == true) "${cfg.displayManager.job.execCmd}";
 
         # Stop restarting if the display manager stops (crashes) 2 times
         # in one minute. Starting X typically takes 3-4s.
