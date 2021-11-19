@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook calls patchelf to automatically remove unneeded
 # directories from the RPATH of every library or executable in every
 # output.
