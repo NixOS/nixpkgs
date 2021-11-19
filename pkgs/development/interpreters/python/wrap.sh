@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Wrapper around wrapPythonProgramsIn, below. The $pythonPath
 # variable is passed in from the buildPythonPackage function.
 wrapPythonPrograms() {
