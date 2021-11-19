@@ -9582,6 +9582,8 @@ in {
 
   ujson = callPackage ../development/python-modules/ujson { };
 
+  ukkonen = callPackage ../development/python-modules/ukkonen { };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
