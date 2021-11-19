@@ -9811,6 +9811,8 @@ in {
     enablePython = true;
   });
 
+  vulcan-api = callPackage ../development/python-modules/vulcan-api { };
+
   vultr = callPackage ../development/python-modules/vultr { };
 
   vulture = callPackage ../development/python-modules/vulture { };
