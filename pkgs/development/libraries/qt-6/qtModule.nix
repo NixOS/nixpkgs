@@ -62,6 +62,7 @@ drv1 = mkDerivation (args // {
 
   # TODO verify for qt6: patching of pkgconfig files
   # TODO test before buildPhase if the module will produce plugins
+  # FIXME cycle error: mv $out/plugins $bin/lib/qt-${self.qtbase.version}
   postFixup = ''
     if [ -d "''${!outputDev}/lib/pkgconfig" ]; then
         find "''${!outputDev}/lib/pkgconfig" -name '*.pc' | while read pc; do
@@ -74,8 +75,6 @@ drv1 = mkDerivation (args // {
 
     # TODO refactor. same code in qtbase.nix and qtModule.nix
     echo "patching output paths in cmake files ..."
-    (
-    cd $dev/lib/cmake
     moduleNAME="${lib.toUpper pname}"
     outEscaped=$(echo $out | sed 's,/,\\/,g')
     devEscaped=$(echo $dev | sed 's,/,\\/,g')
@@ -98,6 +97,7 @@ drv1 = mkDerivation (args // {
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?plugins/\\\''${_''${moduleNAME}_NIX_BIN}\/lib\/qt-${version}\/plugins/g;"
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?bin/\\\''${_''${moduleNAME}_NIX_DEV}\/bin/g;" # qmake ...
     s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?mkspecs/\\\''${_''${moduleNAME}_NIX_DEV}\/mkspecs/g;"
+    s+="s/\\\''${_IMPORT_PREFIX}\/(\.\/)?qml/\\\''${_''${moduleNAME}_NIX_OUT}\/qml/g;"
     s+="s/set\(_IMPORT_PREFIX\)"
     s+="/set(_''${moduleNAME}_NIX_OUT)"
     s+="\nset(_''${moduleNAME}_NIX_DEV)"
@@ -119,20 +119,10 @@ drv1 = mkDerivation (args // {
     perlRegex="$s"
 
     echo "debug: perlRegex = $perlRegex"
-    find . -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
+    find $dev/lib/cmake -name '*.cmake' -exec perl -00 -p -i -e "$perlRegex" '{}' \;
     echo "rc of find = $?" # zero when perl returns nonzero?
     # FIXME catch errors from perl: find -> xargs
     echo "patching output paths in cmake files done"
-
-    echo "verify that all _IMPORT_PREFIX are replaced ..."
-    matches="$(find . -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
-    if [ -n "$matches" ]; then
-      echo "fatal: _IMPORT_PREFIX was not replaced in:"
-      echo "$matches"
-      exit 1
-    fi
-    echo "verify that all _IMPORT_PREFIX are replaced done"
-    )
 
     moveQtDevTools
 
@@ -156,6 +146,15 @@ drv1 = mkDerivation (args // {
     fi
 
     ${args.postFixup or ""}
+
+    echo "verify that all _IMPORT_PREFIX are replaced ..."
+    matches="$(find $dev/lib/cmake -name '*.cmake' -exec grep -HnF _IMPORT_PREFIX '{}' \;)"
+    if [ -n "$matches" ]; then
+      echo "fatal: _IMPORT_PREFIX was not replaced in:"
+      echo "$matches"
+      exit 1
+    fi
+    echo "verify that all _IMPORT_PREFIX are replaced done"
   '';
 
   meta = with lib; {
