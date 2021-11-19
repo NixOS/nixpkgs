@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 lzipUnpackCmdHook() {
     [[ "$1" = *.tar.lz ]] && tar --lzip -xf "$1"
 }
