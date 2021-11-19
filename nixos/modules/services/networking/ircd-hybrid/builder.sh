@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 doSub() {
     local src=$1
     local dst=$2
