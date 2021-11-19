@@ -20117,7 +20117,7 @@ with pkgs;
   };
 
   wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK30-gtk3;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
