@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     distutils_extra
     intltool
     wrapGAppsHook
+    gdk-pixbuf
   ];
 
   buildInputs = [
@@ -58,6 +59,7 @@ python3Packages.buildPythonApplication rec {
     pyinotify
     python-Levenshtein
     pyxdg
+    pycairo
     requests
     websocket-client
   ];
@@ -105,7 +107,10 @@ python3Packages.buildPythonApplication rec {
   # do not double wrap
   dontWrapGApps = true;
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}" --prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
+    makeWrapperArgs+=(
+     "''${gappsWrapperArgs[@]}"
+     --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
+    )
   '';
 
   passthru = {

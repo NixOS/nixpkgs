@@ -98,6 +98,9 @@ default-package-overrides:
   - futhark < 0.20.6
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
+  # 2021-11-18: lucid-{alpine, htmx} are not in stackage, so we need to downgrade them
+  - lucid-alpine == 0.1.0.2
+  - lucid-htmx == 0.1.0.2
 
 extra-packages:
   - base16-bytestring < 1               # required for cabal-install etc.

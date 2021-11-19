@@ -88,6 +88,7 @@ buildPythonPackage rec {
   ];
   # Slow tests
   disabledTests = [
+    "test_clifford" # fails on cvxpy >= 1.1.15. https://github.com/Qiskit/qiskit-aer/pull/1318. Remove in future.
     "test_snapshot" # TODO: these ~30 tests fail on setup due to pytest fixture issues?
     "test_initialize_2" # TODO: simulations appear incorrect, off by >10%.
 
@@ -111,7 +112,6 @@ buildPythonPackage rec {
     "_144"
     "test_sparse_output_probabilities"
     "test_reset_2_qubit"
-    # "test_clifford"
   ];
   checkInputs = [
     pytestCheckHook
