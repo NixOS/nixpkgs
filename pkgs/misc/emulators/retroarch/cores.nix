@@ -435,6 +435,8 @@ in
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
     '';
     makefile = "Makefile.libretro";
+
+    enableParallelBuilding = true;
   };
 
   mame2000 = mkLibRetroCore {
@@ -474,6 +476,7 @@ in
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
+    enableParallelBuilding = true;
   };
 
   mame2016 = mkLibRetroCore {
@@ -494,6 +497,7 @@ in
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
     '';
+    enableParallelBuilding = true;
   };
 
   mesen = mkLibRetroCore {
