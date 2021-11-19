@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Canonicalize the manifest & repack with deterministic timestamps.
 canonicalizeJar() {
     local input='' outer=''
