@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addHaxeLibPath() {
   if [ ! -d "$1/lib/haxe/std" ]; then
     addToSearchPath HAXELIB_PATH "$1/lib/haxe"
