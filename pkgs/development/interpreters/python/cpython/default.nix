@@ -284,7 +284,10 @@ in with passthru; stdenv.mkDerivation {
   CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
   LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
-  NIX_LDFLAGS = optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) "-lgcc_s" + optionalString stdenv.hostPlatform.isMusl "-lgcc_eh";
+  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU ({
+    "glibc" = "-lgcc_s";
+    "musl" = "-lgcc_eh";
+  }."${stdenv.hostPlatform.libc}" or "");
   # Determinism: We fix the hashes of str, bytes and datetime objects.
   PYTHONHASHSEED=0;
 

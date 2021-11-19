@@ -37,7 +37,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -405,8 +405,8 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+      sed -i 's|/sbin/md5|md5sum|g' \
+        src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \

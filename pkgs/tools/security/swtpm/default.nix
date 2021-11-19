@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
-    sha256 = "sha256-7YzdwGAGECj7PhaCOf/dLSILPXqtbylCkN79vuFBw5Y=";
+    sha256 = "sha256-iy8xjKnPLq1ntZa9x+KtLDznzu6m+1db3NPeGQESUVo=";
   };
 
   patches = [
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     perl # for pod2man
     autoreconfHook
   ];
+
   buildInputs = [
     libtpms
     openssl libtasn1 libseccomp
@@ -45,8 +46,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  prePatch = ''
-    # Makefile tries to create the directory /var/lib/swtpm-localcafor, which fails
+  postPatch = ''
+    # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
         --replace 'install-data-local:' 'do-not-execute:'
 

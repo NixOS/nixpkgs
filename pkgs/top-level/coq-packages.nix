@@ -74,6 +74,7 @@ let
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -87,6 +88,7 @@ let
       semantics = callPackage ../development/coq-modules/semantics {};
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
+      smpl = callPackage ../development/coq-modules/smpl { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};

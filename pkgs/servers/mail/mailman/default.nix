@@ -1,23 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
-, flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
-, requests, zope_configuration, click, falcon, importlib-resources
-, zope_component, lynx, postfix, authheaders, gunicorn
+{ lib, python3, fetchPypi, fetchpatch, pythonOlder, postfix, lynx
 }:
+
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # https://gitlab.com/mailman/mailman/-/issues/845
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "06bmxzssc66cblk1hamskyv5q3xf1nh1py3vi6dka4lkpxy7gfzb";
+        };
+      });
+    };
+  };
+
+in
+
+with py.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.4";
-  disabled = !isPy3k;
+  version = "3.3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01rx322b8mzcdj9xh4bjwnl0zis6n2wxd31rrij4cw3a2j03xpas";
+    sha256 = "12mgxs1ndhdjjkydx48b95na9k9h0disfqgrr6wxx7vda6dqvcwz";
   };
 
   propagatedBuildInputs = [
-    alembic aiosmtpd click dnspython falcon flufl_bounce flufl_i18n flufl_lock
-    importlib-resources lazr_config passlib requests zope_configuration
-    zope_component authheaders gunicorn
+    aiosmtpd
+    alembic
+    authheaders
+    click
+    dnspython
+    falcon
+    flufl_bounce
+    flufl_i18n
+    flufl_lock
+    gunicorn
+    importlib-resources
+    lazr_config
+    passlib
+    requests
+    sqlalchemy
+    zope_component
+    zope_configuration
   ];
 
   patches = [
@@ -33,6 +62,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
+
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -48,6 +80,7 @@ buildPythonPackage rec {
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
+  # requires flufl.testing, which the upstream has archived
   doCheck = false;
 
   meta = {

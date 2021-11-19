@@ -39,6 +39,16 @@ let
         doCheck = false;
       });
 
+      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.2";
+        src = fetchFromGitHub {
+          owner = "CycloneDX";
+          repo = "cyclonedx-python-lib";
+          rev = "v${version}";
+          sha256 = "10cmp2aqbnbiyrsq5r9p7ppghqj3zyg612d2dldk6m85li3jr500";
+        };
+      });
+
     };
   };
 in
@@ -46,15 +56,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.509";
-
-  disabled = python3.pythonOlder "3.7";
+  version = "2.0.587";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dds01scC93d/WdQTTL/JvXvfbiFAF3nEESL/zdFpOYA=";
+    sha256 = "sha256-uLH3g3UeWdIZsMsUwCYpTehgxDKGraPBlENdTz+QYLI=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -62,6 +70,9 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with py.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
     bc-python-hcl2
     boto3
     cachetools
@@ -90,7 +101,11 @@ buildPythonApplication rec {
   ];
 
   checkInputs = with py.pkgs; [
+    aioresponses
     jsonschema
+    mock
+    pytest-asyncio
+    pytest-mock
     pytest-xdist
     pytestCheckHook
   ];
@@ -107,6 +122,8 @@ buildPythonApplication rec {
     # https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml
     "integration_tests/"
     "tests/terraform/"
+    # Performance tests have no value for us
+    "performance_tests/test_checkov_performance.py"
   ];
 
   pythonImportsCheck = [
@@ -121,6 +138,6 @@ buildPythonApplication rec {
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 ];
+    maintainers = with maintainers; [ anhdle14 fab ];
   };
 }

@@ -26,6 +26,7 @@
 , libsodium
 , libsndfile
 , libunwind
+, thrift
 , cppzmq
 , zeromq
 # Needed only if qt-gui is disabled, from some reason
@@ -45,14 +46,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.9";
-  minor = "2";
+  minor = "3";
   patch = "0";
 }
-, fetchSubmodules ? false
 }:
 
 let
-  sourceSha256 = "01wyqazrpphmb0fl69j93k0w4vm4d1l4177m1fyg7qx8hzia0aaq";
+  sourceSha256 = "sha256-jVfExv1CcnlOaaj/XtnfhWAHnQsshZJ1l/zXo0uovdo=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -69,7 +69,7 @@ let
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
         # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -100,11 +100,15 @@ let
       ];
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.9.0.0/gnuradio-runtime/lib/controlport/thrift/README
       runtime = [
         libunwind
+        thrift
+      ];
+      pythonRuntime = with python.pkgs; [
+        python.pkgs.thrift
+        # For gr-perf-monitorx
+        matplotlib
+        networkx
       ];
       cmakeEnableFlag = "GR_CTRLPORT";
     };
@@ -140,6 +144,10 @@ let
     gr-filter = {
       runtime = [ fftwFloat ];
       cmakeEnableFlag = "GR_FILTER";
+      pythonRuntime = with python.pkgs; [
+        scipy
+        pyqtgraph
+      ];
     };
     gr-analog = {
       cmakeEnableFlag = "GR_ANALOG";
@@ -174,11 +182,22 @@ let
       ];
       cmakeEnableFlag = "GR_UHD";
     };
+    gr-uhd-rfnoc = {
+      runtime = [
+        uhd
+      ];
+      cmakeEnableFlag = "UHD_RFNOC";
+    };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
+      pythonRuntime = with python.pkgs; [
+        # For gr_plot
+        matplotlib
+      ];
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
+        setuptools
         click
         click-plugins
       ];
@@ -225,7 +244,6 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt5;
     gtk = gtk3;
@@ -248,18 +266,27 @@ stdenv.mkDerivation rec {
     dontWrapQtApps
     meta
   ;
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.patch
+    (fetchpatch {
+      # https://github.com/gnuradio/gnuradio/pull/5225
+      url = "https://github.com/gnuradio/gnuradio/commit/4cef46e3ea0faf04e05ca1a5846cd1568fa51bb2.patch";
+      sha256 = "sha256-6AlGbtD1S0c3I9JSoLTMP4YqwDU17i2j+XRkuR+QTuc=";
+    })
+  ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
     inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
 
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
-    + lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake

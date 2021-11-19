@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, doCheck ? true }:
+{ stdenv, lib, fetchzip, bash, makeWrapper, coreutils, gnugrep, ncurses, doCheck ? true }:
 
 stdenv.mkDerivation rec {
   pname = "bats";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchzip {
     url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
-    hash = "sha256-bGZXjq6zG9MJgDccpVYATsgYhhb1Zf7Deoa/DoSv8QE=";
+    hash = "sha256-MEkMi2w8G9FZhE3JvzzbqObcErQ9WFXy5mtKwQOoxbk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   inherit doCheck;
+  checkInputs = [ ncurses ];
   checkPhase = ''
     # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
     sed -i '/test works even if PATH is reset/a skip' test/bats.bats

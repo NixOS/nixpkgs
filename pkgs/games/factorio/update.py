@@ -23,6 +23,8 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('username', '', 'Factorio username for retrieving binaries.')
 flags.DEFINE_string('token', '', 'Factorio token for retrieving binaries.')
 flags.DEFINE_string('out', '', 'Output path for versions.json.')
+flags.DEFINE_list('release_type', '', 'If non-empty, a comma-separated list of release types to update (e.g. alpha).')
+flags.DEFINE_list('release_channel', '', 'If non-empty, a comma-separated list of release channels to update (e.g. experimental).')
 
 
 @dataclass
@@ -65,7 +67,7 @@ RELEASE_CHANNELS = [
 
 def find_versions_json() -> str:
     if FLAGS.out:
-        return out
+        return FLAGS.out
     try_paths = ["pkgs/games/factorio/versions.json", "versions.json"]
     for path in try_paths:
         if os.path.exists(path):
@@ -118,6 +120,12 @@ def merge_versions(old: OurVersionJSON, new: OurVersionJSON) -> OurVersionJSON:
         old_system = old.get(system_name, {})
         old_release_type = old_system.get(release_type_name, {})
         old_release = old_release_type.get(release_channel_name, {})
+        if FLAGS.release_type and release_type_name not in FLAGS.release_type:
+            logging.info("%s/%s/%s: not in --release_type, not updating", system_name, release_type_name, release_channel_name)
+            return old_release
+        if FLAGS.release_channel and release_channel_name not in FLAGS.release_channel:
+            logging.info("%s/%s/%s: not in --release_channel, not updating", system_name, release_type_name, release_channel_name)
+            return old_release
         if not "sha256" in old_release:
             logging.info("%s/%s/%s: not copying sha256 since it's missing", system_name, release_type_name, release_channel_name)
             return release

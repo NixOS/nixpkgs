@@ -131,10 +131,15 @@ in
       };
       imgUrl = mkOption {
         type = types.str;
-        default = "http://${cfg.hostName}:${toString cfg.port}/cache";
-        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/cache"'';
+        default = "cache";
+        defaultText = literalExpression ''"cache"'';
         example = "https://somewhere.example.com/cache";
-        description = "Base url for images generated in the cgi.";
+        description = ''
+          Base url for images generated in the cgi.
+
+          The default is a relative URL to ensure it works also when e.g. forwarding
+          the GUI port via SSH.
+        '';
       };
       linkStyle = mkOption {
         type = types.enum ["original" "absolute" "relative"];
@@ -166,6 +171,17 @@ in
         default = pkgs.smokeping;
         defaultText = literalExpression "pkgs.smokeping";
         description = "Specify a custom smokeping package";
+      };
+      host = mkOption {
+        type = types.nullOr types.str;
+        default = "localhost";
+        example = "192.0.2.1"; # rfc5737 example IP for documentation
+        description = ''
+          Host/IP to bind to for the web server.
+
+          Setting it to <literal>null</literal> skips passing the -h option to thttpd,
+          which makes it bind to all interfaces.
+        '';
       };
       port = mkOption {
         type = types.int;
@@ -297,10 +313,11 @@ in
     };
     users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
+        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
@@ -311,18 +328,29 @@ in
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       requires = [ "smokeping.service"];
-      partOf = [ "smokeping.service"];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
-      script = ''thttpd -u ${cfg.user} -c "**.fcgi" -d ${smokepingHome} -p ${builtins.toString cfg.port} -D -nos'';
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        Restart = "always";
+        ExecStart = lib.concatStringsSep " " (lib.concatLists [
+          [ "${pkgs.thttpd}/bin/thttpd" ]
+          [ "-u ${cfg.user}" ]
+          [ ''-c "**.fcgi"'' ]
+          [ "-d ${smokepingHome}" ]
+          (lib.optional (cfg.host != null) "-h ${cfg.host}")
+          [ "-p ${builtins.toString cfg.port}" ]
+          [ "-D -nos" ]
+        ]);
+      };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    nh2
+  ];
 }
 

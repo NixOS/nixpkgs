@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
-  version = "0.13.0";
+  version = "0.14.0";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
-    sha256 = "d7944637ab4a17d3a299c04ff6f146e89b2a0f433ddd9d08d8632a25bae9c9cb";
+    sha256 = "sha256-zKufrUsLZmjw6pNbOAv+dPyolWpgXgygEnW0Lka6zw8=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +36,7 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
-  # tests broken with -DNDEBUG
-  # https://github.com/build2/libbutl/issues/4
-  # doCheck = true;
+  doCheck = true;
 
   meta = with lib; {
     description = "build2 utility library";
@@ -50,5 +48,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.build2.org/cgit/libbutl/log";
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

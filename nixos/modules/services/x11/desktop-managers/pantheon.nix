@@ -227,8 +227,10 @@ in
       environment.sessionVariables.GTK_CSD = "1";
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
-      xdg.portal.extraPortals = [
-        pkgs.pantheon.elementary-files
+      xdg.portal.extraPortals = with pkgs; [
+        pantheon.elementary-files
+        pantheon.elementary-settings-daemon
+        xdg-desktop-portal-pantheon
       ];
 
       # Override GSettings schemas
@@ -266,7 +268,7 @@ in
 
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Roboto Mono" ];
-        sansSerif = [ "Open Sans" ];
+        sansSerif = [ "Inter" ];
       };
     })
 
@@ -281,6 +283,7 @@ in
         elementary-music
         elementary-photos
         elementary-screenshot
+        elementary-tasks
         elementary-terminal
         elementary-videos
         epiphany

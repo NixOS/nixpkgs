@@ -1,18 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , six
 , isPyPy
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "jsonwatch";
   version = "0.2.0";
   disabled = isPyPy; # doesn't find setuptools
 
-  src = fetchurl {
-    url = "https://github.com/dbohdan/jsonwatch/archive/v0.2.0.tar.gz";
-    sha256 = "04b616ef97b9d8c3887004995420e52b72a4e0480a92dbf60aa6c50317261e06";
+  src = fetchFromGitHub {
+    owner = "dbohdan";
+    repo = "jsonwatch";
+    rev = "v${version}";
+    sha256 = "sha256-yLN6jOxAz+B7zvV3tGT6Nxi17v9ZOtWpbtSi0o1h48U=";
   };
 
   propagatedBuildInputs = [ six ];

@@ -3,7 +3,6 @@
 , fetchPypi
 , buildPythonPackage
 , isPy3k
-, isPy38
 , python
 }:
 

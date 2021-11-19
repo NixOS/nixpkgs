@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , boehmgc
 , boost
 , cairo
@@ -52,11 +53,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-cebozj/fcC9Z28SidmZeuYLreCKwKbvb7O0t9DAXleY=";
+    sha256 = "sha256-rsoLnTO1sc+pqnBDO97mqMPQIP+vwubwyaYO7Xp5eK8=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be

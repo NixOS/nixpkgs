@@ -1,5 +1,0 @@
---- a/snappy-test.cc
-+++ b/snappy-test.cc
-@@ -46 +46 @@
--DEFINE_bool(run_microbenchmarks, true,
-+DEFINE_bool(run_microbenchmarks, false,

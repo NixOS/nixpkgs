@@ -13,13 +13,13 @@ assert enableLTO -> stdenv.cc.isGNU;
 
 stdenv.mkDerivation rec {
   pname = "dictu";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "dictu-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GiiNIySrfpjYf5faNNml7ZRXT5pDU0SVvNvMyBh1K8E=";
+    sha256 = "sha256-bAoSFHX8sQgmV3hAXsR9qT4BnUsyneeynRAByEfzjE4=";
   };
 
   nativeBuildInputs = [ cmake ];

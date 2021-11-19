@@ -1,6 +1,10 @@
-{ lib, newScope, kodi }:
+{ lib, newScope, kodi, libretro }:
 
 with lib;
+
+let
+  inherit (libretro) genesis-plus-gx mgba snes9x;
+in
 
 let self = rec {
 
@@ -68,9 +72,21 @@ let self = rec {
     snes = callPackage ../applications/video/kodi-packages/controllers { controller = "snes"; };
   };
 
+  iagl = callPackage ../applications/video/kodi-packages/iagl { };
+
+  libretro = callPackage ../applications/video/kodi-packages/libretro { };
+
+  libretro-genplus = callPackage ../applications/video/kodi-packages/libretro-genplus { inherit genesis-plus-gx; };
+
+  libretro-mgba = callPackage ../applications/video/kodi-packages/libretro-mgba { inherit mgba; };
+
+  libretro-snes9x = callPackage ../applications/video/kodi-packages/libretro-snes9x { inherit snes9x; };
+
   jellyfin = callPackage ../applications/video/kodi-packages/jellyfin { };
 
   joystick = callPackage ../applications/video/kodi-packages/joystick { };
+
+  keymap = callPackage ../applications/video/kodi-packages/keymap { };
 
   netflix = callPackage ../applications/video/kodi-packages/netflix { };
 
@@ -100,11 +116,15 @@ let self = rec {
 
   # addon packages (dependencies)
 
+  archive_tool = callPackage ../applications/video/kodi-packages/archive_tool { };
+
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
 
   chardet = callPackage ../applications/video/kodi-packages/chardet { };
 
   dateutil = callPackage ../applications/video/kodi-packages/dateutil { };
+
+  defusedxml = callPackage ../applications/video/kodi-packages/defusedxml { };
 
   idna = callPackage ../applications/video/kodi-packages/idna { };
 

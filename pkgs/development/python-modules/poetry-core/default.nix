@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+, git
 , importlib-metadata
 , intreehooks
 , pathlib2
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.0.4";
+  version = "1.0.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "0jgd4d7m5y8ly8n0l9lcq7cjab2y3hifk90f343ksmjzssfd5lg3";
+    sha256 = "0v86x8f8pcbviv2cdn7jjbgj3c994qasx0bqk1kr0mj8m6pjwy9z";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.8") ''
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    git
     pep517
     pytest-mock
     pytestCheckHook

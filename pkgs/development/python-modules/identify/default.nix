@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , pytestCheckHook
 , editdistance-s
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.3.0";
+  version = "2.3.7";
+  format = "setuptools";
 
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V+pRxdbWPaIVqIJYcrmeZKPmmC1ouRgdFsaVVrDUsQc=";
+    sha256 = "sha256-L71Zi0SWFh7K4BRwF57prdrIdxLp8Igs0k/gc6k1+Mo=";
   };
 
   checkInputs = [
@@ -22,7 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "identify" ];
+  pythonImportsCheck = [
+    "identify"
+  ];
 
   meta = with lib; {
     description = "File identification library for Python";

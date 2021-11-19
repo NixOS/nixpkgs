@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.4";
+  version = "0.27.5";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
-    sha256 = "0m1x79q6i5fw3gr9k0dw0bbl7ym27g9vbmxiamks6yw028xqwc5a";
+    sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
   };
 
   nativeBuildInputs = [

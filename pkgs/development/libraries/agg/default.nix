@@ -8,8 +8,18 @@ stdenv.mkDerivation rec {
     url = "https://www.antigrain.com/${pname}-${version}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+  ];
+  buildInputs = [
+    freetype
+    SDL
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
+  ];
 
   postPatch = ''
     substituteInPlace include/agg_renderer_outline_aa.h \
@@ -22,7 +32,11 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = [ "--x-includes=${libX11.dev}/include" "--x-libraries=${libX11.out}/lib" "--enable-examples=no" ];
+  configureFlags = lib.optionals stdenv.isLinux [
+    "--x-includes=${lib.getDev libX11}/include"
+    "--x-libraries=${lib.getLib libX11}/lib"
+    "--enable-examples=no"
+  ];
 
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
   # libtool: error: cannot find the library 'libexamples.la'
@@ -43,6 +57,6 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
     homepage = "http://www.antigrain.com/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

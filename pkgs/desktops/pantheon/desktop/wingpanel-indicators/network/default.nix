@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , substituteAll
 , pantheon
@@ -14,18 +14,17 @@
 , libnma
 , wingpanel
 , libgee
-, elementary-capnet-assist
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0q5ad2sj0nmigrh1rykb2kvik3hzibzyafdvkkmjd6y92145lwl1";
+    sha256 = "sha256-xr1ZihWK8fU8M/rXRKk5dOjoQNe3aJO8ouKC/iVZ7Sk=";
   };
 
   passthru = {
@@ -48,19 +47,6 @@ stdenv.mkDerivation rec {
     networkmanager
     libnma
     wingpanel
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      elementary_capnet_assist = elementary-capnet-assist;
-    })
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/wingpanel-indicator-network/pull/228
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-network/commit/eacc7d46a94a980005e87e38e6c943143a09692a.patch";
-      sha256 = "1svg07fqmplchp1ass0h8qkr3g24pkw8dcsnd54ddmvnjzwrzz0a";
-    })
   ];
 
   meta = with lib; {

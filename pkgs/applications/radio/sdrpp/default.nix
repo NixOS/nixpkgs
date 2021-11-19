@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, libX11, glfw, glew, fftwFloat, volk
+, libX11, glfw, glew, fftwFloat, volk, AppKit
 # Sources
 , airspy_source ? true, airspy
 , airspyhf_source ? true, airspyhf
@@ -13,7 +13,7 @@
 , sdrplay_source ? false, sdrplay
 , soapy_source ? true, soapysdr
 , spyserver_source ? true
-, plutosdr_source ? true, libiio, libad9361
+, plutosdr_source ? stdenv.isLinux, libiio, libad9361
 # Sinks
 , audio_sink ? true, rtaudio
 , portaudio_sink ? false, portaudio
@@ -42,9 +42,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-g9tpWvVRMXRhPfgvOeJhX6IMouF9+tLUr9wo5r35i/c=";
   };
 
+  patches = [ ./runtime-prefix.patch ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr" $out
+      --replace "/usr/share" "share" \
+      --replace "set(CMAKE_INSTALL_PREFIX" "#set(CMAKE_INSTALL_PREFIX"
     substituteInPlace decoder_modules/m17_decoder/src/m17dsp.h \
       --replace "codec2.h" "codec2/codec2.h"
   '';
@@ -52,6 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ glfw glew fftwFloat volk ]
+    ++ lib.optional stdenv.isDarwin AppKit
     ++ lib.optional stdenv.isLinux libX11
     ++ lib.optional airspy_source airspy
     ++ lib.optional airspyhf_source airspyhf
@@ -95,13 +99,18 @@ stdenv.mkDerivation rec {
     OPT_BUILD_RIGCTL_SERVER = rigctl_server;
   };
 
+  CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++17";
+  LDFLAGS = lib.optional stdenv.cc.isClang "-lc++fs";
+
   NIX_CFLAGS_COMPILE = "-fpermissive";
+
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
   meta = with lib; {
     description = "Cross-Platform SDR Software";
     homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
   };
 }

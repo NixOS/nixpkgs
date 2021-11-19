@@ -508,7 +508,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      install mandoc groff nbperf
+      install mandoc groff nbperf rsync
     ];
     makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
     extraPaths = with self; [
@@ -674,7 +674,7 @@ in lib.makeScopeWithSplicing
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
       makeMinimal
-      byacc install tsort lorder mandoc statHook
+      byacc install tsort lorder mandoc statHook rsync
     ];
     buildInputs = with self; [ headers ];
     SHLIBINSTALLDIR = "$(out)/lib";
@@ -707,7 +707,7 @@ in lib.makeScopeWithSplicing
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.netbsd; [
       bsdSetupHook netbsdSetupHook
-      makeMinimal install tsort lorder mandoc statHook nbperf tic
+      makeMinimal install tsort lorder mandoc statHook nbperf tic rsync
     ];
     buildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";

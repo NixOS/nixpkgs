@@ -47,5 +47,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ etu ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.alecaddd.sequeler";
   };
 }

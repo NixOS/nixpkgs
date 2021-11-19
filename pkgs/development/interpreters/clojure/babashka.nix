@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchurl {
     url = "https://github.com/babashka/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-exNOdm17Xg4HVpjX2avoftww/flejL4mB7kSIAJUSco=";
+    sha256 = "sha256-72D/HzDIxkGD4zTPE9gHf/uFtboLbNnT7CTslSlAqjc=";
   };
 
   dontUnpack = true;

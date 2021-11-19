@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "wimpysworld";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gextBOWxJafwdWzkp89thhRgcy1XBTDh2VyseHQM1G0=";
+    sha256 = "sha256-TNG1pCePsi12QQafhayhj+V5EXq+v7qmaW5v5X8ER6s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

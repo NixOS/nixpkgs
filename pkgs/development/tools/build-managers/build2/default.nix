@@ -1,7 +1,6 @@
 { stdenv, lib
 , build2
 , fetchurl
-, fetchpatch
 , fixDarwinDylibNames
 , libbutl
 , libpkgconf
@@ -17,7 +16,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.13.0";
+  version = "0.14.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    sha256 = "aff53a87c23534e0232b5cf746e0be4b2aaa840c3de4e668b98e382a3973c45e";
+    sha256 = "sha256-/pWj68JmBthOJ2CTQHo9Ww3MCv4xBOw0SusJpMfX5Y8=";
   };
 
   patches = [
@@ -33,11 +32,6 @@ stdenv.mkDerivation rec {
     ./remove-config-store-paths.patch
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
-    # Fix stray '-l' linker flags in pkg-config files (remove in next release)
-    (fetchpatch {
-      url = "https://github.com/build2/build2/commit/d51892e33a0fe69e743e02d9620312133a7ac61d.patch";
-      sha256 = "0xzm084bxnfi8lqng0cwxvz8ylbfzk0didbr2wf385gssv4fva81";
-    })
   ];
 
   strictDeps = true;

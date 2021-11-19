@@ -1,7 +1,7 @@
 {lib, buildOcaml, fetchurl, type_conv, pa_ounit}:
 
 buildOcaml rec {
-  name = "pa_bench";
+  pname = "pa_bench";
   version = "113.00.00";
 
   minimumSupportedOcamlVersion = "4.00";

@@ -36,7 +36,6 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/${mainProgram}.app $out/Applications/
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}/${mainProgram}
   '';
 

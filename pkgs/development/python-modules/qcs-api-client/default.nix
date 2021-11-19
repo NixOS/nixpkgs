@@ -18,13 +18,14 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.8.0";
+  version = "0.19.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c0g3aa2pk4zd40banap2j797080qivd42q7imla2yvv6cvq24b8";
+    sha256 = "sha256-OfhOYvGcBzbirsD05D206b+mAOVvDVAwBvDgCKfXxSw=";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +56,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "qcs_api_client" ];
+  pythonImportsCheck = [
+    "qcs_api_client"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";

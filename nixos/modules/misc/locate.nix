@@ -149,7 +149,7 @@ in {
 
     prunePaths = mkOption {
       type = listOf path;
-      default = ["/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store"];
+      default = [ "/tmp" "/var/tmp" "/var/cache" "/var/lock" "/var/run" "/var/spool" "/nix/store" "/nix/var/log/nix" ];
       description = ''
         Which paths to exclude from indexing
       '';
@@ -157,7 +157,7 @@ in {
 
     pruneNames = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
       description = ''
         Directory components which should exclude paths containing them from indexing
       '';

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "a3fc448cbce3209575f93a3cf1224fa37802fc6606f7c7d4bb3aa6dbeaed2c64";
+    sha256 = "05ebca053b4ce62205a095b6885ed1a1167c629ccac2b3c8dcc431bd2deedf70";
   };
 
   outputs = [ "bin" "out" "dev" ];

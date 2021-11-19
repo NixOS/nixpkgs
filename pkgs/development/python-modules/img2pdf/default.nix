@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.4.2";
+  version = "0.4.3";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qs9YZQPWET5Tv7A8hcheVGw4RBOlbBXd0I7lHIZEeaI=";
+    sha256 = "sha256-jlHFBD76lddRSBtRYHGgBvh8KkBZlhqaxD7COJFd4J8=";
   };
 
   propagatedBuildInputs = [

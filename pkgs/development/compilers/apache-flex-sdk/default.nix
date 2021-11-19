@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   version = "4.16.1";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/flex/${version}/binaries/${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/flex/${version}/binaries/${pname}-${version}-bin.tar.gz";
     sha256 = "13iq16dqvgcpb0p35x66hzxsq5pkbr2lbwr766nnqiryinnagz8p";
   };
 

@@ -36,15 +36,6 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
-    afl-persistent
-    bigarray-compat
-    bigarray-overlap
-    bigstringaf
-    fpath
-    mirage-crypto-rng
-  ];
-
   propagatedBuildInputs = [
     angstrom
     base64
@@ -59,6 +50,12 @@ buildDunePackage rec {
     rresult
     unstrctrd
     uutf
+    afl-persistent
+    bigarray-compat
+    bigarray-overlap
+    bigstringaf
+    fpath
+    mirage-crypto-rng
   ];
 
   checkInputs = [
@@ -72,6 +69,6 @@ buildDunePackage rec {
     description = "Parser and generator of mail in OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/mrmime";
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

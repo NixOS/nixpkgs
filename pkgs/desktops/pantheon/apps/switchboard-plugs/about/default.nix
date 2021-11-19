@@ -15,6 +15,7 @@
 , switchboard
 , fwupd
 , appstream
+, nixos-artwork
 }:
 
 stdenv.mkDerivation rec {
@@ -53,9 +54,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # The NixOS logo is not centered in the circular background and path
-    # to the background is hardcoded, we will drop the background.
-    ./remove-logo-background.patch
+    # Use NixOS's default wallpaper
+    (substituteAll {
+      src = ./fix-background-path.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
   ];
 
   meta = with lib; {

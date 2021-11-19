@@ -198,8 +198,12 @@ let
     '';
 
     linkVimlPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}/${lib.getName plugin}
-      ln -sf ${plugin}/${rtpPath}/* $out/pack/${packageName}/${dir}/${lib.getName plugin}
+      mkdir -p $out/pack/${packageName}/${dir}
+      if test -e "$out/pack/${packageName}/${dir}/${lib.getName plugin}"; then
+        printf "\nERROR - Duplicated vim plugin: ${lib.getName plugin}\n\n"
+        exit 1
+      fi
+      ln -sf ${plugin}/${rtpPath} $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
     link = pluginPath: if hasLuaModule pluginPath

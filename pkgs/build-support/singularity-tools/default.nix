@@ -73,7 +73,7 @@ rec {
             ''}
 
             # Build /bin and copy across closure
-            mkdir -p bin nix/store
+            mkdir -p bin ./${builtins.storeDir}
             for f in $(cat $layerClosure) ; do
               cp -ar $f ./$f
             done

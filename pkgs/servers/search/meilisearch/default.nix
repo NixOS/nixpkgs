@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
   meta = with lib; {
     description = "Powerful, fast, and an easy to use search engine ";
-    homepage = https://docs.meilisearch.com/;
+    homepage = "https://docs.meilisearch.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

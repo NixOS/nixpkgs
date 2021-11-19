@@ -1,23 +1,18 @@
-{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, fetchpatch
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
-
-let
-  libPath = lib.makeLibraryPath [ gmp ];
-in
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl, runtimeShell
+, openssl, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "0xmml81krr0i18b14dymfdq43szpzws7qj8k404qab51lkqxyxsb";
+    sha256 = "sha256-QNVzpnT77+9PXhq4Yz0q3o+GiQTVy7dOrg2yBTscoek=";
   };
 
-  cargoSha256 = "sha256-xjJ39hoSDn0VUH0YcL+mQBXbzFcIvZ38dPjBxV/yVNc=";
+  cargoSha256 = "sha256-G70QopoMqFrkOnuui3+3cEHYvmnf0meX1Ecv4q8FCpM=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -25,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ curl zlib openssl ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
@@ -33,19 +28,14 @@ rustPlatform.buildRustPackage rec {
     (runCommand "0001-dynamically-patchelf-binaries.patch" {
         CC = stdenv.cc;
         patchelf = patchelf;
-        libPath = "$ORIGIN/../lib:${libPath}";
+        shell = runtimeShell;
       } ''
      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
        --subst-var patchelf \
        --subst-var dynamicLinker \
-       --subst-var libPath
+       --subst-var shell
     '')
-    # fix build, will be included in 1.1.1
-    (fetchpatch {
-      url = "https://github.com/leanprover/elan/commit/8d1dec09d67b2ac1768b111d24f1a1cabdd563fa.patch";
-      sha256 = "sha256-yMdnXqycu4VF9EKavZ85EuspvAqvzDSIm5894SB+3+A=";
-    })
   ];
 
   postInstall = ''
@@ -55,8 +45,6 @@ rustPlatform.buildRustPackage rec {
       ln -s elan $link
     done
     popd
-
-    wrapProgram $out/bin/elan --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .elan
     export HOME=$(mktemp -d)

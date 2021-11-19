@@ -1,6 +1,6 @@
 # This file originates from node2nix
 
-{lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile}:
+{lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile, writeShellScript}:
 
 let
   # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
@@ -40,36 +40,22 @@ let
       '';
     };
 
-  includeDependencies = {dependencies}:
-    lib.optionalString (dependencies != [])
-      (lib.concatMapStrings (dependency:
-        ''
-          # Bundle the dependencies of the package
-          mkdir -p node_modules
-          cd node_modules
+  # Common shell logic
+  installPackage = writeShellScript "install-package" ''
+    installPackage() {
+      local packageName=$1 src=$2
 
-          # Only include dependencies if they don't exist. They may also be bundled in the package.
-          if [ ! -e "${dependency.name}" ]
-          then
-              ${composePackage dependency}
-          fi
+      local strippedName
 
-          cd ..
-        ''
-      ) dependencies);
-
-  # Recursively composes the dependencies of a package
-  composePackage = { name, packageName, src, dependencies ? [], ... }@args:
-    builtins.addErrorContext "while evaluating node package '${packageName}'" ''
-      DIR=$(pwd)
+      local DIR=$PWD
       cd $TMPDIR
 
-      unpackFile ${src}
+      unpackFile $src
 
       # Make the base dir in which the target dependency resides first
-      mkdir -p "$(dirname "$DIR/${packageName}")"
+      mkdir -p "$(dirname "$DIR/$packageName")"
 
-      if [ -f "${src}" ]
+      if [ -f "$src" ]
       then
           # Figure out what directory has been unpacked
           packageDir="$(find . -maxdepth 1 -type d | tail -1)"
@@ -79,28 +65,53 @@ let
           chmod -R u+w "$packageDir"
 
           # Move the extracted tarball into the output folder
-          mv "$packageDir" "$DIR/${packageName}"
-      elif [ -d "${src}" ]
+          mv "$packageDir" "$DIR/$packageName"
+      elif [ -d "$src" ]
       then
           # Get a stripped name (without hash) of the source directory.
           # On old nixpkgs it's already set internally.
           if [ -z "$strippedName" ]
           then
-              strippedName="$(stripHash ${src})"
+              strippedName="$(stripHash $src)"
           fi
 
           # Restore write permissions to make building work
           chmod -R u+w "$strippedName"
 
           # Move the extracted directory into the output folder
-          mv "$strippedName" "$DIR/${packageName}"
+          mv "$strippedName" "$DIR/$packageName"
       fi
 
-      # Unset the stripped name to not confuse the next unpack step
-      unset strippedName
+      # Change to the package directory to install dependencies
+      cd "$DIR/$packageName"
+    }
+  '';
 
-      # Include the dependencies of the package
-      cd "$DIR/${packageName}"
+  # Bundle the dependencies of the package
+  #
+  # Only include dependencies if they don't exist. They may also be bundled in the package.
+  includeDependencies = {dependencies}:
+    lib.optionalString (dependencies != []) (
+      ''
+        mkdir -p node_modules
+        cd node_modules
+      ''
+      + (lib.concatMapStrings (dependency:
+        ''
+          if [ ! -e "${dependency.name}" ]; then
+              ${composePackage dependency}
+          fi
+        ''
+      ) dependencies)
+      + ''
+        cd ..
+      ''
+    );
+
+  # Recursively composes the dependencies of a package
+  composePackage = { name, packageName, src, dependencies ? [], ... }@args:
+    builtins.addErrorContext "while evaluating node package '${packageName}'" ''
+      installPackage "${packageName}" "${src}"
       ${includeDependencies { inherit dependencies; }}
       cd ..
       ${lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
@@ -415,6 +426,8 @@ let
       passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
       installPhase = ''
+        source ${installPackage}
+
         # Create and enter a root node_modules/ folder
         mkdir -p $out/lib/node_modules
         cd $out/lib/node_modules
@@ -492,6 +505,8 @@ let
         passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
 
         installPhase = ''
+          source ${installPackage}
+
           mkdir -p $out/${packageName}
           cd $out/${packageName}
 

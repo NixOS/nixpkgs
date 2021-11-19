@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   version = "1.11";
 
   src = fetchurl {
-    url = "http://www.eu.apache.org/dist/xalan/xalan-c/sources/xalan_c-${version}-src.tar.gz";
+    url = "mirror://apache/xalan/xalan-c/sources/xalan_c-${version}-src.tar.gz";
     sha256 = "0a3a2b15vpacnqgpp6fiy1pwyc8q6ywzvyb5445f6wixfdspypjg";
   };
 
@@ -21,6 +21,15 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ xercesc getopt ];
+
+  # Parallel build fails as:
+  #   c++ ... -c ... ExecutionContext.cpp
+  #   ProblemListenerBase.hpp:28:10: fatal error: LocalMsgIndex.hpp: No such file or directory
+  # The build failure happens due to missing intra-project dependencies
+  # against generated headers. Future 1.12 version dropped
+  # autotools-based build system. Let's disable parallel builds until
+  # next release.
+  enableParallelBuilding = false;
 
   meta = {
     homepage = "http://xalan.apache.org/";

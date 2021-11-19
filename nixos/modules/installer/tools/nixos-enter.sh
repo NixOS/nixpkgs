@@ -60,6 +60,35 @@ chmod 0755 "$mountPoint/dev" "$mountPoint/sys"
 mount --rbind /dev "$mountPoint/dev"
 mount --rbind /sys "$mountPoint/sys"
 
+# modified from https://github.com/archlinux/arch-install-scripts/blob/bb04ab435a5a89cd5e5ee821783477bc80db797f/arch-chroot.in#L26-L52
+chroot_add_resolv_conf() {
+    local chrootdir=$1 resolv_conf=$1/etc/resolv.conf
+
+    [[ -e /etc/resolv.conf ]] || return 0
+
+    # Handle resolv.conf as a symlink to somewhere else.
+    if [[ -L $chrootdir/etc/resolv.conf ]]; then
+      # readlink(1) should always give us *something* since we know at this point
+      # it's a symlink. For simplicity, ignore the case of nested symlinks.
+      # We also ignore the possibility if `../`s escaping the root.
+      resolv_conf=$(readlink "$chrootdir/etc/resolv.conf")
+      if [[ $resolv_conf = /* ]]; then
+        resolv_conf=$chrootdir$resolv_conf
+      else
+        resolv_conf=$chrootdir/etc/$resolv_conf
+      fi
+    fi
+
+    # ensure file exists to bind mount over
+    if [[ ! -f $resolv_conf ]]; then
+      install -Dm644 /dev/null "$resolv_conf" || return 1
+    fi
+
+    mount --bind /etc/resolv.conf "$resolv_conf"
+}
+
+chroot_add_resolv_conf "$mountPoint" || print "ERROR: failed to set up resolv.conf"
+
 (
     # If silent, write both stdout and stderr of activation script to /dev/null
     # otherwise, write both streams to stderr of this process

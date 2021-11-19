@@ -13,7 +13,7 @@
 }:
 
 let
-  pinData = (builtins.fromJSON (builtins.readFile ./pin.json));
+  pinData = lib.importJSON ./pin.json;
 
   # we need a different version than the one already available in nixpkgs
   esbuild-hedgedoc = buildGoModule rec {

@@ -16,14 +16,14 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "12b1417dg8jqyxd72kg5a3xhg5h11vz0k7bkv72mzrv83jvgn5ci";
+    sha256 = "sha256-xrRKpZ6NSBtEL2CBN7KggDwIvQKIPD8EBlA0oCJv8mw=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;

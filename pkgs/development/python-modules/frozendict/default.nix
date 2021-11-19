@@ -3,20 +3,19 @@
 , fetchPypi
 , isPy3k
 , pytestCheckHook
-, setuptoolsBuildHook
 , python
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.0.5";  # 2.0.6 breaks canonicaljson
+  version = "2.0.7";  # 2.0.6 breaks canonicaljson
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wb7hwHDY2fZA4SjluHV2pEAAhgCfeGLRPAv4YA5iE9M=";
+    sha256 = "a68f609d1af67da80b45519fdcfca2d60249c0a8c96e68279c1b6ddd92128204";
   };
 
   pythonImportsCheck = [

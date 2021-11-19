@@ -19,13 +19,13 @@ let
     "ghcHEAD"
   ];
 
-  haskellLib = import ../development/haskell-modules/lib.nix {
+  haskellLibUncomposable = import ../development/haskell-modules/lib.nix {
     inherit (pkgs) lib;
     inherit pkgs;
   };
 
   callPackage = newScope {
-    inherit haskellLib;
+    haskellLib = haskellLibUncomposable.compose;
     overrides = pkgs.haskell.packageOverrides;
   };
 
@@ -44,7 +44,7 @@ let
   inherit (pkgs.haskell) compiler packages;
 
 in {
-  lib = haskellLib;
+  lib = haskellLibUncomposable;
 
   package-list = callPackage ../development/haskell-modules/package-list.nix {};
 
@@ -108,6 +108,7 @@ in {
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
+      inherit (buildPackages.darwin) autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
@@ -122,17 +123,17 @@ in {
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc901; # no binary yet
+      bootPkgs = packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
-      inherit (buildPackages.darwin) xattr;
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildLlvmPackages = buildPackages.llvmPackages_10;
       llvmPackages = pkgs.llvmPackages_10;
       libffi = pkgs.libffi;

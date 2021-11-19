@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     machine.wait_for_x()
 
     # start KeePassXC window
-    machine.execute("su - alice -c keepassxc &")
+    machine.execute("su - alice -c keepassxc >&2 &")
 
     machine.wait_for_text("KeePassXC ${pkgs.keepassxc.version}")
     machine.screenshot("KeePassXC")

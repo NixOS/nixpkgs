@@ -5,9 +5,7 @@
 , docopt
 , requests
 , beautifulsoup4
-, black
 , mypy
-, flake8
 }:
 
 buildPythonPackage rec {

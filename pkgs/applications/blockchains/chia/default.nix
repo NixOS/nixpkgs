@@ -6,21 +6,21 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.10";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-TzSBGjgaE0IWaqJcCIoO/u+gDh17NtAqhE8ldbbjNIE=";
+    sha256 = "sha256-hRpZce8ydEsyq7htNfzlRSKPwMAOUurC3uiQpX6WiB8=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "==" ">="
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
   '';
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ let chia = python3Packages.buildPythonApplication rec {
     colorlog
     concurrent-log-handler
     cryptography
-    dnspython
+    dnspythonchia
     fasteners
     keyrings-cryptfile
     pyyaml

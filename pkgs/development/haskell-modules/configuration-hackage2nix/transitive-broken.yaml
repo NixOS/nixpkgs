@@ -223,7 +223,6 @@ dont-distribute-packages:
  - InfixApplicative
  - JSON-Combinator
  - JSON-Combinator-Examples
- - JSONb
  - Javasf
  - JsContracts
  - JsonGrammar
@@ -234,7 +233,6 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
- - LambdaDesigner
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -408,7 +406,6 @@ dont-distribute-packages:
  - agda-snippets-hakyll
  - agentx
  - aip
- - airship
  - aivika-distributed
  - algebra-checkers
  - algebra-driven-design
@@ -484,6 +481,7 @@ dont-distribute-packages:
  - atuin
  - audiovisual
  - aura
+ - aura_3_2_6
  - authoring
  - autonix-deps-kf5
  - avers
@@ -728,9 +726,7 @@ dont-distribute-packages:
  - claferwiki
  - clash
  - clash-ghc
- - clash-ghc_1_4_5
  - clash-lib
- - clash-lib_1_4_5
  - clash-multisignal
  - clash-prelude-quickcheck
  - clash-shake
@@ -826,6 +822,7 @@ dont-distribute-packages:
  - convertible-text
  - coordinate
  - copilot
+ - copilot-c99
  - copilot-cbmc
  - copilot-language
  - copilot-libraries
@@ -952,6 +949,7 @@ dont-distribute-packages:
  - diagrams-pgf
  - diagrams-reflex
  - diagrams-wx
+ - dialog
  - difference-monoid
  - digestive-functors-hsp
  - dingo-core
@@ -1003,7 +1001,6 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
- - dprox
  - dropbox-sdk
  - dropsolve
  - dsh-sql
@@ -1029,7 +1026,7 @@ dont-distribute-packages:
  - egison-quote
  - egison-tutorial
  - elerea-examples
- - eliminators_0_8
+ - eliminators_0_9
  - elliptic-curve
  - elsa
  - emacs-keys
@@ -1045,6 +1042,7 @@ dont-distribute-packages:
  - enumeration
  - enumerator-fd
  - enumerator-tf
+ - envy-extensible
  - ephemeral
  - erf-native
  - eros-client
@@ -1053,6 +1051,7 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+ - esqueleto-streaming
  - estreps
  - eternity
  - eternity-timestamped
@@ -1225,6 +1224,7 @@ dont-distribute-packages:
  - ghc-mod
  - ghc-tags-plugin
  - ghci-pretty
+ - ghcjs-dom-webkit
  - ghcjs-hplay
  - ght
  - gi-cairo-again
@@ -1488,6 +1488,8 @@ dont-distribute-packages:
  - hbb
  - hbcd
  - hbf
+ - hbro
+ - hbro-contrib
  - hcg-minus-cairo
  - hcheat
  - hcheckers
@@ -1573,7 +1575,6 @@ dont-distribute-packages:
  - hmeap
  - hmeap-utils
  - hmep
- - hmm-lapack
  - hmm-lapack_0_4_1
  - hmt
  - hmt-diagrams
@@ -1724,7 +1725,6 @@ dont-distribute-packages:
  - iException
  - ice40-prim
  - ide-backend
- - ide-backend-common
  - ide-backend-server
  - ideas-math
  - ideas-math-types
@@ -1819,6 +1819,7 @@ dont-distribute-packages:
  - jmonkey
  - jobs-ui
  - join
+ - jordan-openapi
  - jot
  - jsc
  - jsmw
@@ -1904,9 +1905,7 @@ dont-distribute-packages:
  - lambdacube
  - lambdacube-bullet
  - lambdacube-compiler
- - lambdacube-core
  - lambdacube-edsl
- - lambdacube-engine
  - lambdacube-examples
  - lambdacube-gl
  - lambdacube-samples
@@ -1922,10 +1921,6 @@ dont-distribute-packages:
  - language-python-colour
  - language-qux
  - language-spelling
- - lapack
- - lapack-carray
- - lapack-comfort-array
- - lapack-hmatrix
  - lapack_0_4
  - lat
  - latex-formulae-hakyll
@@ -1971,8 +1966,6 @@ dont-distribute-packages:
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
- - linear-circuit
- - linear-circuit_0_1_0_3
  - linearmap-category
  - linearscan-hoopl
  - linkchk
@@ -1983,6 +1976,7 @@ dont-distribute-packages:
  - liquid-base
  - liquid-bytestring
  - liquid-containers
+ - liquid-fixpoint_8_10_7
  - liquid-ghc-prim
  - liquid-parallel
  - liquid-platform
@@ -2051,8 +2045,6 @@ dont-distribute-packages:
  - macosx-make-standalone
  - magic-wormhole
  - magicbane
- - magico
- - magico_0_0_2_2
  - mahoro
  - maid
  - mail-pool
@@ -2130,6 +2122,7 @@ dont-distribute-packages:
  - mmark-cli
  - mmark-cli_0_0_5_1
  - mmark-ext
+ - mmark-ext_0_2_1_4
  - mmtl-base
  - moan
  - modify-fasta
@@ -2151,6 +2144,8 @@ dont-distribute-packages:
  - moo-nad
  - morley
  - morloc
+ - morpheus-graphql-client_0_18_0
+ - morpheus-graphql_0_18_0
  - morphisms-functors-inventory
  - mosaico-lib
  - motor-diagrams
@@ -2296,6 +2291,7 @@ dont-distribute-packages:
  - pairing
  - panda
  - pandoc-japanese-filters
+ - pandoc_2_16_1
  - papa
  - papa-base
  - papa-base-implement
@@ -2340,6 +2336,7 @@ dont-distribute-packages:
  - persona-idp
  - peyotls
  - peyotls-codec
+ - pg-entity
  - pgsql-simple
  - phonetic-languages-examples
  - phonetic-languages-general
@@ -2369,6 +2366,7 @@ dont-distribute-packages:
  - pisigma
  - pitchtrack
  - pkgtreediff
+ - pkgtreediff_0_5_0
  - planet-mitchell
  - plocketed
  - ploterific
@@ -2447,7 +2445,6 @@ dont-distribute-packages:
  - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - psc-ide
  - puffytools
  - pugs-compat
  - pugs-hsregex
@@ -2455,9 +2452,7 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purescript
  - purescript-iso
- - purescript-tsd-gen
  - push-notify
  - push-notify-apn
  - push-notify-ccs
@@ -2586,9 +2581,6 @@ dont-distribute-packages:
  - replicant
  - repr
  - representable-tries
- - req-oauth2
- - resistor-cube
- - resistor-cube_0_0_1_3
  - resource-pool-catchio
  - resource-simple
  - respond
@@ -2871,6 +2863,8 @@ dont-distribute-packages:
  - sql-simple-postgresql
  - sql-simple-sqlite
  - sqlite-simple-typed
+ - squeal-postgresql-ltree
+ - squeal-postgresql-uuid-ossp
  - squeeze
  - sr-extra
  - sscgi
@@ -2995,7 +2989,6 @@ dont-distribute-packages:
  - testbench
  - text-json-qq
  - text-plus
- - text-trie
  - text-xml-generic
  - textmatetags
  - th-alpha
@@ -3102,6 +3095,7 @@ dont-distribute-packages:
  - uhc-light
  - uhc-util
  - unagi-bloomfilter
+ - unbeliever
  - unbound
  - unfoldable-restricted
  - uni-events
@@ -3205,7 +3199,6 @@ dont-distribute-packages:
  - web-routes-regular
  - web-routing
  - web3
- - webapi
  - webcrank-wai
  - webdriver-w3c
  - webserver
@@ -3284,6 +3277,7 @@ dont-distribute-packages:
  - yam-web
  - yaml-rpc-scotty
  - yaml-rpc-snap
+ - yaml-streamly
  - yaml-unscrambler
  - yarr-image-io
  - yavie
@@ -3312,7 +3306,6 @@ dont-distribute-packages:
  - yu-launch
  - yuuko
  - zasni-gerna
- - zephyr
  - zerobin
  - zeromq3-conduit
  - zeromq3-haskell

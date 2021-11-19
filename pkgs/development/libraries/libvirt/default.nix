@@ -22,7 +22,6 @@
 , gettext
 , libtasn1
 , iptables
-, ebtables
 , libgcrypt
 , yajl
 , pmutils
@@ -61,6 +60,8 @@
 , ceph
 , enableGlusterfs ? false
 , glusterfs
+, Carbon
+, AppKit
 }:
 
 with lib;
@@ -68,30 +69,17 @@ with lib;
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
   buildFromTarball = stdenv.isDarwin;
-  # libvirt hardcodes the binary name 'ebtables', but in nixpkgs the ebtables
-  # binary we want to use is named 'ebtables-legacy'.
-  # Create a derivation to alias the binary name so that libvirt can find the right one, and use that below.
-  ebtables-compat = stdenv.mkDerivation {
-    pname = "ebtables-compat";
-    version = ebtables.version;
-    src = null;
-    buildInputs = [ ebtables ];
-    buildCommand = ''
-      mkdir -p $out/bin
-      ln -sf ${ebtables}/bin/ebtables-legacy $out/bin/ebtables
-    '';
-  };
 in
 stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "7.8.0";
+  version = "7.9.0";
 
   src =
     if buildFromTarball then
       fetchurl
         {
           url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-pyfNCke/ok+n3ih00j86n58Czra0m6FSiPbZoJixmSE=";
+          sha256 = "sha256-gpzytfV0J5xA8ERuEWiBXT82uJcQVgJjyiznAlb3Low=";
         }
     else
       fetchFromGitLab
@@ -99,7 +87,7 @@ stdenv.mkDerivation rec {
           owner = pname;
           repo = pname;
           rev = "v${version}";
-          sha256 = "sha256-/tSMJFgLPAiQXcZ2qZLM4XZqf96NtW3+zwKyrwGho2s=";
+          sha256 = "sha256-Ua6+EKLES3385fqhH2+qwnwE+X/nmWqIBxCXXE3SVhs=";
           fetchSubmodules = true;
         };
 
@@ -166,6 +154,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isDarwin [
     libiconv
     gmp
+    Carbon
+    AppKit
   ];
 
   preConfigure =
@@ -179,7 +169,7 @@ stdenv.mkDerivation rec {
       '';
     in
     ''
-      PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables ebtables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+      PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute2 iptables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
       # the path to qemu-kvm will be stored in VM's .xml and .save files
       # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
       substituteInPlace src/lxc/lxc_conf.c \
@@ -227,8 +217,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      # Keep the legacy iptables binary for now for backwards compatibility (comment on #109332)
-      binPath = [ iptables ebtables-compat iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
+      binPath = [ iptables iproute2 pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
     in
     ''
         substituteInPlace $out/libexec/libvirt-guests.sh \

@@ -95,7 +95,7 @@ let
     (lib.attrNames self.df-hashes));
 
   self = rec {
-    df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
+    df-hashes = lib.importJSON ./game.json;
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;

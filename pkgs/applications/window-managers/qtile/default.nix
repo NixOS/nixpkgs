@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
+{ lib, fetchFromGitHub, python3, mypy, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
 
 let
   enabled-xcffib = cairocffi-xcffib: cairocffi-xcffib.override {
@@ -47,6 +47,14 @@ let
       psutil
       pyxdg
       pygobject3
+      pywayland
+      pywlroots
+      xkbcommon
+    ];
+
+    # for `qtile check`, needs `stubtest` and `mypy` commands
+    makeWrapperArgs = [
+      "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
     ];
 
     doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.

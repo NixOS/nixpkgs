@@ -18,10 +18,12 @@
 , mtxclient
 , boost17x
 , spdlog
-, fmt
 , olm
 , pkg-config
 , nlohmann_json
+, coeurl
+, libevent
+, curl
 , voipSupport ? true
 , gst_all_1
 , libnice
@@ -29,13 +31,13 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "sha256-w4l91/W6F1FL+Q37qWSjYRHv4vad/10fxdKwfNeEwgw=";
+    sha256 = "1akhnngxkxbjwjkg5ispl6j5s2ylbcj92r3zxqqry4gbfxbjpx8k";
   };
 
   nativeBuildInputs = [
@@ -52,7 +54,6 @@ mkDerivation rec {
     libsecret
     lmdb
     spdlog
-    fmt
     cmark
     qtbase
     qtmultimedia
@@ -60,6 +61,9 @@ mkDerivation rec {
     qtquickcontrols2
     qtgraphicaleffects
     qtkeychain
+    coeurl
+    libevent
+    curl
   ] ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optionals voipSupport (with gst_all_1; [
       gstreamer

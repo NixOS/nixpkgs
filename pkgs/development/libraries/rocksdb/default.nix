@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.23.3";
+  version = "6.26.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
+    sha256 = "1nd8ixj249qiw089piw28aly0zmlla2k62gd6axd0bs2wfc4zma8";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional enableJemalloc jemalloc;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
+    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field";
 
   cmakeFlags = [
     "-DPORTABLE=1"

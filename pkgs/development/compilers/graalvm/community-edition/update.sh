@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p curl -i bash coreutils nix common-updater-scripts curl jq
+#!nix-shell -p coreutils curl nix jq gnused -i bash
 
 set -eou pipefail
 
@@ -13,18 +13,23 @@ verlte() {
     [  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]
 }
 
-readonly old_version="$(cat version)"
+readonly nixpkgs=../../../../..
+
+readonly old_version="$(nix-instantiate "$nixpkgs" --eval --strict -A graalvm11-ce.version)"
 
 if [[ -z "${1:-}" ]]; then
-  readonly gh_version="$(curl -s https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest | jq --raw-output .tag_name)"
+  readonly gh_version="$(curl \
+      ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest | \
+      jq --raw-output .tag_name)"
   readonly new_version="${gh_version//vm-/}"
 else
   readonly new_version="$1"
 fi
 
-if verlte "$new_version" "$old_version"; then
-  info "graalvm-ce $old_version is up-to-date. Exiting..."
-  exit 0
+if verlte "$old_version" "$new_version"; then
+  info "graalvm-ce $old_version is up-to-date."
+  [[ -z "${FORCE:-}" ]]  && exit 0
 else
   info "graalvm-ce $old_version is out-of-date. Updating..."
 fi
@@ -39,8 +44,11 @@ readonly urls=(
 
 readonly platforms=(
   "11-linux-aarch64"
+  "17-linux-aarch64"
   "11-linux-amd64"
+  "17-linux-amd64"
   "11-darwin-amd64"
+  "17-darwin-amd64"
 )
 
 info "Deleting old hashes.nix file..."
@@ -66,7 +74,8 @@ done
 
 echo_file "]"
 
-info "Updating 'version' file..."
-echo "$new_version" > version
+info "Updating graalvm-ce version..."
+# update-source-version does not work here since it expects src attribute
+sed "s|$old_version|\"$new_version\"|" -i default.nix
 
 info "Done!"

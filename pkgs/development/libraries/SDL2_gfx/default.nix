@@ -1,4 +1,4 @@
-{ lib, stdenv, darwin, fetchurl, SDL2 }:
+{ lib, stdenv, darwin, fetchurl, pkg-config, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_gfx";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://www.ferzkopp.net/Software/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0qk2ax7f7grlxb13ba0ll3zlm8780s7j8fmrhlpxzjgdvldf1q33";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ SDL2 ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc;

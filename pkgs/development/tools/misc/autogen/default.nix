@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
     (dp {
       pname = "31_allow_overriding_AGexe_for_crossbuild";
       sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
+    })
+    # Next upstream release will contain guile-3 support. We apply non-invasive
+    # patch meanwhile.
+    (fetchpatch {
+      name = "guile-3.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7";
+      sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
     })
   ];
 
@@ -79,9 +86,9 @@ stdenv.mkDerivation rec {
     done
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    # remove /build/** from RPATHs
+    # remove build directory (/build/**, or /tmp/nix-build-**) from RPATHs
     for f in "$bin"/bin/*; do
-      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)/build/[^:]*:@\1@g')"
+      local nrp="$(patchelf --print-rpath "$f" | sed -E 's@(:|^)'$NIX_BUILD_TOP'[^:]*:@\1@g')"
       patchelf --set-rpath "$nrp" "$f"
     done
   '';

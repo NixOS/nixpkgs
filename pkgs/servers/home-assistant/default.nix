@@ -21,19 +21,32 @@
 
 let
   defaultOverrides = [
+    # aiounify 29 breaks integration tests
+    (self: super: {
+      aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
+        version = "28";
+        src = fetchFromGitHub {
+          owner = "Kane610";
+          repo = "aiounifi";
+          rev = "v${version}";
+          sha256 = "1r86pk80sa1la2s7c6v9svh5cpkci6jcw1xziz0h09jdvv5j5iff";
+        };
+      });
+    })
+
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
     (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
 
-    # Pinned due to API changes in aioesphomeapi>=10.0.0
     (self: super: {
-      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
-        version = "9.1.5";
+      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.18";
         src = fetchFromGitHub {
-          owner = "esphome";
-          repo = "aioesphomeapi";
-          rev = "v${version}";
-          sha256 = "sha256-PPag65ZMz9KZEe9FmiB42/DgeM0vJw5L0haAG/jBjqg=";
+          owner = "Salamek";
+          repo = "huawei-lte-api";
+          rev = version;
+          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
       });
     })
 
@@ -49,6 +62,31 @@ let
           sha256 = "0c8ckbbr1n8gx5k63ymgyfkbz3d0rbdvghg8fqdvbg4nrigrs5v0";
         };
         checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
+      });
+    })
+
+    # Pinned due to API changes in influxdb-client>1.21.0
+    (self: super: {
+      influxdb-client = super.influxdb-client.overridePythonAttrs (oldAttrs: rec {
+        version = "1.21.0";
+        src = fetchFromGitHub {
+          owner = "influxdata";
+          repo = "influxdb-client-python";
+          rev = "v${version}";
+          sha256 = "081pwd3aa7kbgxqcl1hfi2ny4iapnxkcp9ypsfslr69d0khvfc4s";
+        };
+      });
+    })
+
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
+        };
       });
     })
 
@@ -80,33 +118,6 @@ let
 
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
-
-    # Pinned due to missing simpliypy.errors.PendingAuthorizationError in simplisafe-python>12 which results in a failing import
-    (self: super: {
-      simplisafe-python = super.simplisafe-python.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.7";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "simplisafe-python";
-          rev = version;
-          sha256 = "02nrighkdcd5n9qgbizm9gyfnpgdm4iibw7y8nbyfaxpng069fzp";
-        };
-        checkInputs = oldAttrs.checkInputs ++ [ super.aioresponses ];
-      });
-    })
-
-    # Pinned due to changes in total-connect-client>0.58 which made the tests fails at the moment
-    (self: super: {
-      total-connect-client = super.total-connect-client.overridePythonAttrs (oldAttrs: rec {
-        version = "0.58";
-        src = fetchFromGitHub {
-          owner = "craigjmidwinter";
-          repo = "total-connect-client";
-          rev = version;
-          sha256 = "1dqmgvgvwjh235wghygan2jnfvmn9vz789in2as3asig9cifix9z";
-        };
-      });
-    })
 
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
@@ -141,7 +152,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.10.6";
+  hassVersion = "2021.11.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -158,7 +169,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0275f327dzr4cggfw5n8x533b4h8zz8yli5d0js7cw1rmi3cmkbc";
+    sha256 = "sha256-411oqzC8VTD7CM9vM/M3m4zW0Ygf2g2hoAXAxGBv7iw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -168,13 +179,10 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "awesomeversion==21.4.0" "awesomeversion" \
       --replace "bcrypt==3.1.7" "bcrypt" \
-      --replace "cryptography==3.3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "requests==2.25.1" "requests>=2.25.1" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml" \
-      --replace "voluptuous==0.12.1" "voluptuous==0.12.2"
+      --replace "pyyaml==6.0" "pyyaml" \
+      --replace "yarl==1.6.3" "yarl==1.7.0"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -197,7 +205,7 @@ in with py.pkgs; buildPythonApplication rec {
     pytz
     pyyaml
     requests
-    ruamel_yaml
+    ruamel-yaml
     voluptuous
     voluptuous-serialize
     yarl
@@ -214,9 +222,12 @@ in with py.pkgs; buildPythonApplication rec {
 
   checkInputs = [
     # test infrastructure (selectively from requirement_test.txt)
+    freezegun
     pytest-aiohttp
+    pytest-freezegun
     pytest-mock
     pytest-rerunfailures
+    pytest-socket
     pytest-xdist
     pytestCheckHook
     requests-mock
@@ -334,6 +345,7 @@ in with py.pkgs; buildPythonApplication rec {
     "ecobee"
     "econet"
     "ee_brightbox"
+    "efergy"
     "elgato"
     "elkm1"
     "emonitor"
@@ -508,6 +520,7 @@ in with py.pkgs; buildPythonApplication rec {
     "modbus"
     "mold_indicator"
     "moon"
+    "motion_blinds"
     "motioneye"
     "mqtt"
     "mqtt_eventstream"
@@ -675,6 +688,7 @@ in with py.pkgs; buildPythonApplication rec {
     "toon"
     "totalconnect"
     "tplink"
+    "traccar"
     "trace"
     "tradfri"
     "transmission"
@@ -696,6 +710,7 @@ in with py.pkgs; buildPythonApplication rec {
     # disabled, because it tries to join a multicast group and fails to find a usable network interface
     # "upnp"
     "uptime"
+    "uptimerobot"
     "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
@@ -811,8 +826,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/auth/mfa_modules/test_notify.py"
     # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
     "tests/components/emulated_hue/test_upnp.py"
-    # tado/test_climate.py: Tries to connect to my.tado.com
+    # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
     "tests/components/tado/test_climate.py"
+    "tests/components/tado/test_water_heater.py"
   ];
 
   disabledTests = [

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nbsmoke
 , param
 , pyct
 , pytest-mpl

@@ -12,6 +12,7 @@
 , werkzeug
 , wrapt
 , passlib
+, pillow
 , bcrypt
 , pydot
 , python-Levenshtein
@@ -23,12 +24,14 @@
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "6.0.5";
-  disabled = pythonOlder "3.5";
+  version = "6.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ccb98dbf905d99991ed0151e13c91cd9267e4aa104fa40097df4e02580dadfc";
+    sha256 = "sha256-U73dzLTUJnOw24/ELQzjnxJ0PvjV+zE/PNuQHXbEukw=";
   };
 
   # Tells the tests which database to use
@@ -37,6 +40,7 @@ buildPythonApplication rec {
   buildInputs = [
     mock
   ];
+
   propagatedBuildInputs = [
     lxml
     relatorio
@@ -46,6 +50,7 @@ buildPythonApplication rec {
     python-sql
     werkzeug
     wrapt
+    pillow
     passlib
 
     # extra dependencies

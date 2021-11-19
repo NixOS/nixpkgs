@@ -42,15 +42,15 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
     with subtest("Run Dolphin"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")
         machine.wait_for_window(" Dolphin")
 
     with subtest("Run Konsole"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole >&2 &'")
         machine.wait_for_window("Konsole")
 
     with subtest("Run systemsettings"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 >&2 &'")
         machine.wait_for_window("Settings")
 
     with subtest("Wait to get a screenshot"):

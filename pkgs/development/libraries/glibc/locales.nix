@@ -6,7 +6,7 @@
    https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
-{ lib, stdenv, buildPackages, callPackage, writeText
+{ lib, stdenv, buildPackages, callPackage, writeText, glibc
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
@@ -17,6 +17,8 @@ callPackage ./common.nix { inherit stdenv; } {
 
   outputs = [ "out" ];
 
+  extraNativeBuildInputs = [ glibc ];
+
   # Awful hack: `localedef' doesn't allow the path to `locale-archive'
   # to be overriden, but you *can* specify a prefix, i.e. it will use
   # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
@@ -24,7 +26,7 @@ callPackage ./common.nix { inherit stdenv; } {
   # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
   buildPhase =
     ''
-      mkdir -p $TMPDIR/"${buildPackages.stdenv.cc.libc.out}/lib/locale"
+      mkdir -p $TMPDIR/"${buildPackages.glibc.out}/lib/locale"
 
       echo 'C.UTF-8/UTF-8 \' >> ../glibc-2*/localedata/SUPPORTED
 

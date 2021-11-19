@@ -3,7 +3,7 @@
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
-, bash, coreutils, util-linux
+, bash, util-linux
 # To remove references to gcc-unwrapped
 , removeReferencesTo, qt5
 , withQt5 ? true

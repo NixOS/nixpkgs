@@ -3,17 +3,18 @@
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
+, testVersion, dunst
 }:
 
 stdenv.mkDerivation rec {
   pname = "dunst";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     rev = "v${version}";
-    sha256 = "sha256-BWbvGetXXCXbfPRY+u6gEfzBmX8PLSnI6a5vfCByiC0=";
+    sha256 = "0v15fhwzcg7zfn092sry0f4qb6dccz9bb312y9dadg745wf3n9qw";
   };
 
   nativeBuildInputs = [ perl pkg-config which systemd makeWrapper ];
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
+
+  passthru.tests.version = testVersion { package = dunst; };
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";

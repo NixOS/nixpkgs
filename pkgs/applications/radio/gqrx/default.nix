@@ -4,6 +4,7 @@
 , pkg-config
 , qt5
 , gnuradio3_8Minimal
+, thrift
 , log4cpp
 , mpir
 , fftwFloat
@@ -19,13 +20,13 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.14.4";
+  version = "2.14.6";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
+    sha256 = "sha256-DMmQXcGPudAVOwuc+LVrcIzfwMMQVBZPbM6Bt1w56D8=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,9 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     gnuradio3_8Minimal.pkgs.osmosdr
     rtl-sdr
     hackrf
+  ] ++ lib.optionals (gnuradio3_8Minimal.hasFeature "gr-ctrlport") [
+    thrift
+    gnuradio3_8Minimal.unwrapped.python.pkgs.thrift
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''

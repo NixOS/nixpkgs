@@ -1,39 +1,34 @@
-{ rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
-, pkg-config, curl, openssl
-, CoreFoundation, libiconv, Security
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, curl
+, openssl
+, stdenv
+, CoreFoundation
+, libiconv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
   version = "0.9.2";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-source-${version}";
-
-    src = fetchFromGitHub {
-      owner = "lu-zero";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "0hvlrhmbplx4cj4l5fynihgr9cdh0rkpwvipizk1gpp6p1ksr5hz";
-    };
-    cargoLock = fetchurl {
-      url = "https://github.com/lu-zero/${pname}/releases/download/v${version}/Cargo.lock";
-      sha256 = "0ckn31asz7013206j153ig96602dxvxm6skdz1plan0h05j5mgah";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -R ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname;
+    # this version may need to be updated along with package version
+    version = "${version}+cargo-0.55";
+    sha256 = "sha256-yh5vAtKlBvoSlJBsW2RSduSK6T8aOssM84WQMNjLZqA=";
   };
 
-  cargoSha256 = "0c0vn2pcy5px02mc0l4a3w7z9n8hc6br5w3ww6nrav5w6911jp52";
-
+  cargoSha256 = "sha256-YikTjAeroaHyNe3ygUWRHSXJwdm2BSBV7RgIDN4suZ4=";
 
   nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
-  buildInputs = [ openssl curl ]
-  ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    libiconv
+    Security
+  ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";
@@ -55,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lu-zero/cargo-c";
     changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ ];
   };
 }

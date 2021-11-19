@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f519bdf1ed5bfedc4bdcd237c5d3cfa50ef37dd92cf14db123ff80ac99950e0";
+    sha256 = "b99e11360668ed0c034c8cf3a34caf6fd4a52efaf62d54dd85407c3ad20b715c";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core grpc-google-iam-v1 proto-plus ];

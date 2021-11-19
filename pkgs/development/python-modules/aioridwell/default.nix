@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "0.2.0";
+  version = "2021.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0kzxh1igncql1rwh12n42qahlc94z0fsd344d1vgni50jg7i34v7";
+    sha256 = "sha256-h89gfdZvk7H22xAczaPMscTYZu0YeFxvFfL6/Oz2cJw=";
   };
 
   nativeBuildInputs = [

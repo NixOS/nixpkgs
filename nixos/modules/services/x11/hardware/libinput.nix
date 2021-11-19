@@ -13,7 +13,7 @@ let cfg = config.services.xserver.libinput;
         example = "/dev/input/event0";
         description =
           ''
-            Path for ${deviceType} device.  Set to null to apply to any
+            Path for ${deviceType} device.  Set to <literal>null</literal> to apply to any
             auto-detected ${deviceType}.
           '';
       };
@@ -24,8 +24,8 @@ let cfg = config.services.xserver.libinput;
         example = "flat";
         description =
           ''
-            Sets  the pointer acceleration profile to the given profile.
-            Permitted values are adaptive, flat.
+            Sets the pointer acceleration profile to the given profile.
+            Permitted values are <literal>adaptive</literal>, <literal>flat</literal>.
             Not all devices support this option or all profiles.
             If a profile is unsupported, the default profile for this is used.
             <literal>flat</literal>: Pointer motion is accelerated by a constant
@@ -38,12 +38,14 @@ let cfg = config.services.xserver.libinput;
       accelSpeed = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "-0.5";
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       buttonMapping = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "1 6 3 4 5 0 7";
         description =
           ''
             Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
@@ -58,9 +60,10 @@ let cfg = config.services.xserver.libinput;
       calibrationMatrix = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description =
           ''
-            A  string  of  9 space-separated floating point numbers.  Sets the calibration matrix to the
+            A string of 9 space-separated floating point numbers. Sets the calibration matrix to the
             3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
           '';
       };
@@ -68,6 +71,7 @@ let cfg = config.services.xserver.libinput;
       clickMethod = mkOption {
         type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
+        example = "buttonareas";
         description =
           ''
             Enables a click method. Permitted values are <literal>none</literal>,
@@ -166,8 +170,9 @@ let cfg = config.services.xserver.libinput;
       transformationMatrix = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description = ''
-          A  string  of  9 space-separated floating point numbers.  Sets the transformation matrix to
+          A string of 9 space-separated floating point numbers. Sets the transformation matrix to
           the 3x3 matrix where the first row is (abc), the second row is (def) and the third row is (ghi).
         '';
       };

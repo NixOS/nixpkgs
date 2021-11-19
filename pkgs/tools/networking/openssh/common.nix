@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ eelco aneeshusa ];
+    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
 }

@@ -144,7 +144,7 @@ let
       # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
       # Hence we strip modules prior to compression.
       postBuild = optionalString buildKernel ''
-         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES strip --strip-debug
+         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
       '';
 
       postInstall = optionalString buildKernel ''
@@ -202,7 +202,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = licenses.cddl;
         platforms = platforms.linux;
-        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
+        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.

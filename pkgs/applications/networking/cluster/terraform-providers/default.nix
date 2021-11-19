@@ -57,6 +57,7 @@ let
     libvirt = callPackage ./libvirt { };
     linuxbox = callPackage ./linuxbox { };
     lxd = callPackage ./lxd { };
+    teleport = callPackage ./teleport { };
     vpsadmin = callPackage ./vpsadmin { };
     vercel = callPackage ./vercel { };
   } // (lib.optionalAttrs (config.allowAliases or false) {

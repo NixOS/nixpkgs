@@ -13,7 +13,6 @@
 , pkg-config
 , ethtool
 , util-linux
-, ipset
 , fetchFromGitHub
 , fetchurl
 , fetchzip
@@ -43,9 +42,9 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.22.2+k3s2";     # k3s git tag
-  k3sCommit = "3f5774b41eb475eb10c93bb0ce58459a6f777c5f"; # k3s git commit at the above version
-  k3sRepoSha256 = "1kjf2zkm5d3s1aj4w9gzsc3ms3a0cm900fyi9899ijczw1cbrc61";
+  k3sVersion = "1.22.3+k3s1";     # k3s git tag
+  k3sCommit = "61a2aab25eeb97c26fa3f2b177e4355a7654c991"; # k3s git commit at the above version
+  k3sRepoSha256 = "0lz5hr3c86gxm9w5jy3g26n6a26m8k0y559hv6220rsi709j7ma9";
 
   traefikChartVersion = "10.3.0"; # taken from ./manifests/traefik.yaml at spec.version
   traefikChartSha256 = "0y6wr64xp7bgx24kqil0x6myr3pnfrg8rw0d1h5zd2n5a8nfd73f";
@@ -60,7 +59,7 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank superherointj ];
+    maintainers = with maintainers; [ euank ];
     platforms = platforms.linux;
   };
 
@@ -257,7 +256,6 @@ stdenv.mkDerivation rec {
     bridge-utils
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
-    ipset
     conntrack-tools
   ];
 

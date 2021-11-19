@@ -5,7 +5,7 @@
 }:
 
 let
-  data = (builtins.fromJSON (builtins.readFile ./data.json));
+  data = lib.importJSON ./data.json;
 
   version = data.version;
   src = fetchFromGitLab {
@@ -35,6 +35,15 @@ let
         ruby-magic = x.ruby-magic // {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
+        };
+        # the included yarn rake task attaches the yarn:install task
+        # to assets:precompile, which is both unnecessary (since we
+        # run `yarn install` ourselves) and undoes the shebang patches
+        # in node_modules
+        railties = x.railties // {
+          dontBuild = false;
+          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
+          patchFlags = "-p2";
         };
       };
     groups = [
@@ -189,7 +198,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

@@ -25,9 +25,13 @@ buildDotnetModule rec {
   };
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
-  projectFile = "OpenTracker.sln";
   nugetDeps = ./deps.nix;
+
+  projectFile = "OpenTracker.sln";
   executables = [ "OpenTracker" ];
+
+  doCheck = true;
+  dotnet-test-sdk = dotnetCorePackages.sdk_3_1;
 
   nativeBuildInputs = [
     autoPatchelfHook

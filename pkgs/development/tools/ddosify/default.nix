@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ddosify";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z7jYnEZSHh/Omg5DMNFzuPhV1d8lZSy8I+8tM86O43s=";
+    sha256 = "sha256-kccn6tnJfy4mx0hyBi2ggPvNPu/iQgGBMxQ6hsYy7So=";
   };
 
-  vendorSha256 = "sha256-VWWik7oovVJq0J/tj/2Mm5QtvRkJLtMROJhRC2JFZdw=";
+  vendorSha256 = "sha256-TY8shTb77uFm8/yCvlIncAfq7brWgnH/63W+hj1rvqg=";
 
   # triggers a different set of tests that seems to be interactive and fail (no url target defined)
   ldflags = [

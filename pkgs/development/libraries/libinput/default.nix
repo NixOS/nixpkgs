@@ -3,6 +3,7 @@
 , documentationSupport ? false, doxygen, graphviz # Documentation
 , eventGUISupport ? false, cairo, glib, gtk3 # GUI event viewer support
 , testsSupport ? false, check, valgrind, python3
+, nixosTests
 }:
 
 let
@@ -22,11 +23,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.18.1";
+  version = "1.19.1";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libinput/libinput-${version}.tar.xz";
-    sha256 = "1jx7y48ym89grjz67jmn80h5j8c36qgwb0h5c703nln2zchl18cw";
+    sha256 = "sha256-C9z1sXg7c3hUt68coi32e8Nqb+fJz6cfAekUn5IgRG0=";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -75,6 +76,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  passthru.tests = {
+    libinput-module = nixosTests.libinput;
+  };
 
   meta = with lib; {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";

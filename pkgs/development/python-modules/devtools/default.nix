@@ -1,23 +1,47 @@
-{ buildPythonPackage, pythonOlder, fetchFromGitHub, lib, pygments
-, pytestCheckHook, pytest-mock }:
+{ lib
+, asttokens
+, buildPythonPackage
+, executing
+, fetchFromGitHub
+, pygments
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.6.1";
+  version = "0.8.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "0s1d2jwijini7y1a3318yhb98mh1mw4pzlfx2zck3a8nqw984ki3";
+    sha256 = "0yavcbxzxi1nfa1k326gsl03y8sadi5z5acamwd8b1bsiv15p757";
   };
 
-  propagatedBuildInputs = [ pygments ];
+  propagatedBuildInputs = [
+    asttokens
+    executing
+    pygments
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
 
-  pythonImportsCheck = [ "devtools" ];
+  disabledTests = [
+    # Test for Windows32
+    "test_print_subprocess"
+  ];
+
+  pythonImportsCheck = [
+    "devtools"
+  ];
 
   meta = with lib; {
     description = "Python's missing debug print command and other development tools";

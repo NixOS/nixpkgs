@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1jx3854zxvfhxrdshbipxfgyq1yxb9ll9agjc2n0cj4vxkjyh9mn";
   };
 
+  patches = [
+    # musl las no ldconfig, create symlinks explicitly
+    ./linux-no-ldconfig.patch
+  ];
+  postPatch = "patchShebangs tests/regress/check.sh";
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ cudd gmp-static gperf libpoly ];
   configureFlags =
@@ -22,22 +28,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
-
-  # Usual shenanigans
-  patchPhase = "patchShebangs tests/regress/check.sh";
-
-  # Includes a fix for the embedded soname being libyices.so.X.Y, but
-  # only installing the libyices.so.X.Y.Z file.
-  installPhase = let
-    ver_XdotY = lib.versions.majorMinor version;
-  in ''
-      make install LDCONFIG=true
-      # guard against packaging of unstable versions: they
-      # have a soname of hext (not current) release.
-      echo "Checking expected library version to be ${version}"
-      [ -f $out/lib/libyices.so.${version} ]
-      ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
-  '';
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";

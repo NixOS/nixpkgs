@@ -3,14 +3,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , iso4217
-, pytestCheckHook
 , pythonOlder
 , pytz
 }:
 
 buildPythonPackage rec {
   pname = "pyefergy";
-  version = "0.1.0";
+  version = "0.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = version;
-    sha256 = "0nm7dc5q4wvdpqxpirlc4nwm68lf3n2df6j5yy4m8wr294yb7a1k";
+    sha256 = "sha256-X/dWEBg3WG6SmMore5otLL4iIueGUS5KgjCPYoMSNd0=";
   };
 
   propagatedBuildInputs = [

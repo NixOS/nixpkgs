@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyvolumio";
-  version = "0.1.4";
+  version = "0.1.5";
 
   disabled = pythonOlder "3.7";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "PyVolumio";
     rev = "v${version}";
-    sha256 = "0c6kcz9x0n9w67h2gncyhq0dw3q17nmzipcgx59pwqnn33jan5nf";
+    sha256 = "1nyvflap39cwq1cm9wwl9idvfmz1ixsl80f1dnskx22fk0lmvj4h";
   };
 
   propagatedBuildInputs = [ aiohttp ];

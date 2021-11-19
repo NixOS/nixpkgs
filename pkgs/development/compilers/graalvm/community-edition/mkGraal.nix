@@ -1,4 +1,4 @@
-{ version, javaVersion, platforms }:
+{ version, javaVersion, platforms, hashes ? import ./hashes.nix }:
 
 { stdenv, lib, fetchurl, autoPatchelfHook, setJavaClassPath, makeWrapper
 # minimum dependencies
@@ -35,9 +35,7 @@ let
         maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
       in
       (lib.remove null
-        (map
-          maybeFetchUrl
-          (import ./hashes.nix { inherit javaVersionPlatform; })));
+        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -111,12 +109,6 @@ let
     outputs = [ "out" "lib" ];
 
     installPhase = let
-      nativePRNGWorkaround = path: ''
-        # BUG workaround http://mail.openjdk.java.net/pipermail/graal-dev/2017-December/005141.html
-        substituteInPlace ${path} \
-          --replace file:/dev/random    file:/dev/./urandom \
-          --replace NativePRNGBlocking  SHA1PRNG
-      '';
       copyClibrariesToOut = basepath: ''
         # provide libraries needed for static compilation
         for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
@@ -134,25 +126,30 @@ let
       '';
     in {
       "11-linux-amd64" = ''
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
+        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
 
+        ${copyClibrariesToLib}
+      '';
+      "17-linux-amd64" = ''
         ${copyClibrariesToOut "$out/lib/svm/clibraries"}
 
         ${copyClibrariesToLib}
       '';
       "11-linux-aarch64" = ''
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
-
         ${copyClibrariesToOut "$out/lib/svm/clibraries"}
 
         ${copyClibrariesToLib}
       '';
-      "11-darwin-amd64" = ''
-        # create empty $lib/lib to avoid breaking builds
-        mkdir -p $lib/lib
-        ${nativePRNGWorkaround "$out/conf/security/java.security"}
+      "17-linux-aarch64" = ''
+        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+        ${copyClibrariesToLib}
       '';
+      "11-darwin-amd64" = "";
+      "17-darwin-amd64" = "";
     }.${javaVersionPlatform} + ''
+      # ensure that $lib/lib exists to avoid breaking builds
+      mkdir -p $lib/lib
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
     '';
@@ -237,9 +234,12 @@ let
       }
 
       echo "Testing TruffleRuby"
+      # Hide warnings about wrong locale
+      export LANG=C
+      export LC_ALL=C
       $out/bin/ruby -e 'puts(1 + 1)'
-
-      ${# TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
+      ${# FIXME: irb is broken in all platforms
+        # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
         # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
         # though `openssl` is in `propagatedBuildInputs`. For more details see:
         # https://github.com/NixOS/nixpkgs/pull/105815
@@ -252,7 +252,7 @@ let
           echo '1 + 1' | $out/bin/irb
         ''
       }
-      '';
+    '';
 
     passthru = {
       home = graalvmXXX-ce;

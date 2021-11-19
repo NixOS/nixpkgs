@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "Swiss army knife of image processing";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    mainProgram = "gm";
   };
 }

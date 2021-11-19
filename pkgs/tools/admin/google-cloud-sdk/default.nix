@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -21,33 +21,33 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1gwi15rkgxmqcr1vi5bd123833zhln725bhs5k1ip6fvhdrx31mf";
+      sha256 = "19s3nryngzv7zs7piwx92hii5p2y97fs7wngqrd9v8cxvgavp1dc";
     };
 
     aarch64-darwin = {
       url = "${baseUrl}/${name}-darwin-arm.tar.gz";
-      sha256 = "0pw2cwdx18cw77lqsq1bsd8d79mjxn7lwd27hm9j8d45r0fzj0ci";
+      sha256 = "1iphpkxrrp0gdan7ikbjbhykdpazcs1fnlcwkfyv2m9baggkd53z";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "01v3v4408p1wwqlqqawbc9g8j6lipwnm1sr6wckq9q0a5zpsissg";
+      sha256 = "1z1ymvij9vi8jc05b004jhd08dqbk133wd03fdxnagd6nfr0bjqm";
     };
 
     i686-linux = {
       url = "${baseUrl}/${name}-linux-x86.tar.gz";
-      sha256 = "125akqbbz1ahq0hhgbjrv1cfnv41h1pksnclz6mbdn3z2297r6dp";
+      sha256 = "17i5pkwjmi38klgr12xqgza7iwkx459cbavlq0x33zaq2a4zanlc";
     };
 
     aarch64-linux = {
       url = "${baseUrl}/${name}-linux-arm.tar.gz";
-      sha256 = "13p0vjs330zljkyfb412n6l33m5sn6kakg1wch9nhgikrqig5avl";
+      sha256 = "17zjnab4ai5w6p3cbxys9zsg4bdlp0lh6pvmkvdz9hszxxch4yms";
     };
   }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "361.0.0";
+  version = "362.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -99,6 +99,11 @@ in stdenv.mkDerivation rec {
     mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud
     ln -s $out/share/bash-completion/completions/gcloud $out/share/bash-completion/completions/gsutil
 
+    # setup zsh completion
+    mkdir -p $out/share/zsh/site-functions
+    mv $out/google-cloud-sdk/completion.zsh.inc $out/share/zsh/site-functions/_gcloud
+    ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
+
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
     rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
@@ -115,6 +120,11 @@ in stdenv.mkDerivation rec {
     done
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
   '';
 
   meta = with lib; {

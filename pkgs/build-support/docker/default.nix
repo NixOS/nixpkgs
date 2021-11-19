@@ -31,8 +31,6 @@
 , writeText
 , writeTextDir
 , writePython3
-, system
-, # Note: This is the cross system we're compiling for
 }:
 
 let

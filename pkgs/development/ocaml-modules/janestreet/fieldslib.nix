@@ -1,7 +1,7 @@
 { lib, type_conv, buildOcamlJane }:
 
 buildOcamlJane {
-  name = "fieldslib";
+  pname = "fieldslib";
   version = "113.33.03";
 
   minimumSupportedOcamlVersion = "4.02";

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage
+{ lib, fetchurl, fetchpatch, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -24,6 +24,20 @@ buildPythonPackage rec {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
     sha256 = "1hqan9h55x9gfdakw554vic68w9gpvhblchwxlw265zxp56hxjrw";
   };
+
+  patches = [
+    # Fixes throttling on youtube.com. Without the patch downloads are capped at
+    # about 80KiB/s. See, e.g.,
+    #
+    #   https://github.com/ytdl-org/youtube-dl/issues/29326
+    #
+    # The patch comes from PR https://github.com/ytdl-org/youtube-dl/pull/30188
+    (fetchpatch {
+      name = "fix-youtube-dl-speed.patch";
+      url = "https://github.com/ytdl-org/youtube-dl/pull/30188.patch";
+      sha256 = "15liban37ina2y4bnykfdywdy4rbkfff2r6vd0kqn2k7rfkcczyz";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
   buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;

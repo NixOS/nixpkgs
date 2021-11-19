@@ -1,5 +1,4 @@
 { buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , lib
 , pythonOlder

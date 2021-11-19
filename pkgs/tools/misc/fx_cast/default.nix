@@ -8,7 +8,7 @@
 # nix run nixpkgs.nodePackages.node2nix -c node2nix -l package-lock.json -d
 # cp -v node-*.nix package*.json ~/p/nixpkgs/pkgs/tools/misc/fx_cast/app
 # ```
-{ pkgs, stdenv, system }: let
+{ pkgs, stdenv }: let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) nodejs stdenv lib python2 runCommand writeTextFile;
     inherit pkgs;

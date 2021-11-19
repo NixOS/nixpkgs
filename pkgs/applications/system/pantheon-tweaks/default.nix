@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tAfDxX/RD7pO5PN/LaZ92Cj/iZtBI/EHb0+pORfYnPM=";
+    sha256 = "sha256-2spZ6RQ5PhBNrv/xG1TNbYsJrmuRpaZ72CeH2s8+P8g=";
   };
 
   patches = [
@@ -38,9 +38,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     libgee
-    pantheon.granite
-    pantheon.switchboard
-  ];
+  ] ++ (with pantheon; [
+    elementary-files # settings schemas
+    elementary-terminal # settings schemas
+    granite
+    switchboard
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py

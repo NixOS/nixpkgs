@@ -1,5 +1,4 @@
 { lib
-, nixosTests
 , python3
 , groff
 , less
@@ -34,9 +33,6 @@ with py.pkgs; buildPythonApplication rec {
       --replace "docutils>=0.10,<0.16" "docutils>=0.10"
   '';
 
-  # No tests included
-  doCheck = false;
-
   propagatedBuildInputs = [
     botocore
     bcdoc
@@ -62,9 +58,17 @@ with py.pkgs; buildPythonApplication rec {
 
   passthru = {
     python = py; # for aws_shell
-
-    tests = { inherit (nixosTests) awscli; };
   };
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
+    $out/bin/aws --version | grep "${version}"
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";

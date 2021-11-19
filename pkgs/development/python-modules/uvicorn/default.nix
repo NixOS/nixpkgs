@@ -9,7 +9,6 @@
 , httptools
 , python-dotenv
 , pyyaml
-, requests
 , typing-extensions
 , uvloop
 , watchgod

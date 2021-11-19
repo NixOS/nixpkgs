@@ -2,7 +2,6 @@
 , itsdangerous, hypothesis
 , pytestCheckHook, requests
 , pytest-timeout
-, isPy3k
  }:
 
 buildPythonPackage rec {
@@ -16,6 +15,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ itsdangerous ];
   checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
+
+  postPatch = ''
+    # ResourceWarning causes tests to fail
+    rm tests/test_routing.py
+  '';
 
   disabledTests = [
     "test_save_to_pathlib_dst"
@@ -38,6 +42,9 @@ buildPythonPackage rec {
     # E   File "/nix/store/cwv8aj4vsqvimzljw5dxsxy663vjgibj-python3.9-Werkzeug-1.0.1/lib/python3.9/site-packages/werkzeug/formparser.py", line 318, in parse_multipart_headers
     # E     return Headers(result)
     # E ResourceWarning: unclosed file <_io.FileIO name=11 mode='rb+' closefd=True>
+    "test_basic_routing"
+    "test_merge_slashes_match"
+    "test_merge_slashes_build"
     "TestMultiPart"
     "TestHTTPUtility"
   ] ++ lib.optionals stdenv.isDarwin [

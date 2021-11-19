@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -35,7 +34,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.2";
+  version = "2.7.3";
 
   repoName = "photos";
 
@@ -43,17 +42,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1zq9zfsc987vvrzadw9xqi3rlbi4jv2s82axkgy7ijm3ibi58ddc";
+    sha256 = "sha256-ja4ElW0FNm9oNyn+00SdI2Cxep6LyWTYM8Blc6bnuiY=";
   };
-
-  patches = [
-    # Fix build with vala 0.54
-    # https://github.com/elementary/photos/pull/650
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/bc7feca8caa4c8fc076a759a2d36e26e93c75596.patch";
-      sha256 = "sha256-iOHYKV7rSAuMm4ZhoJWjlpu96zlxwTosQe+z/iEVFR8=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream
@@ -114,5 +104,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

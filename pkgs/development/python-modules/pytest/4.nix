@@ -43,6 +43,19 @@ buildPythonPackage rec {
     }
 
     preDistPhases+=" pytestcachePhase"
+
+    # pytest generates it's own bytecode files to improve assertion messages.
+    # These files similar to cpython's bytecode files but are never laoded
+    # by python interpreter directly. We remove them for a few reasons:
+    # - files are non-deterministic: https://github.com/NixOS/nixpkgs/issues/139292
+    #   (file headers are generatedt by pytest directly and contain timestamps)
+    # - files are not needed after tests are finished
+    pytestRemoveBytecodePhase () {
+        # suffix is defined at:
+        #    https://github.com/pytest-dev/pytest/blob/4.6.11/src/_pytest/assertion/rewrite.py#L32-L47
+        find $out -name "*-PYTEST.py[co]" -delete
+    }
+    preDistPhases+=" pytestRemoveBytecodePhase"
   '';
 
   meta = with lib; {

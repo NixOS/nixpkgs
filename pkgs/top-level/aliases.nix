@@ -76,6 +76,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bcat = throw "bcat has been removed because upstream is dead"; # added 2021-08-22
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
+  beret = throw "beret has been removed"; # added 2021-11-16
   bluezFull = bluez; # Added 2019-12-03
   bpftool = bpftools; # Added 2021-05-03
   brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
@@ -164,6 +165,7 @@ mapAliases ({
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
   cups-googlecloudprint = throw "Google Cloudprint is officially discontinued since Jan 2021, more info https://support.google.com/chrome/a/answer/9633006";
+  cloud-print-connector = throw "Google Cloudprint is officially discontinued since Jan 2021, more info https://support.google.com/chrome/a/answer/9633006";
   curaLulzbot = throw "curaLulzbot has been removed due to insufficient upstream support for a modern dependency chain"; # added 2021-10-23
   cquery = throw "cquery has been removed because it is abandoned by upstream. Consider switching to clangd or ccls instead."; # added 2020-06-15
   cv = progress; # added 2015-09-06
@@ -201,6 +203,8 @@ mapAliases ({
   dnnl = oneDNN; # added 2020-04-22
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
+  dolphinEmu = dolphin-emu; # added 2021-11-10
+  dolphinEmuMaster = dolphin-emu-beta; # added 2021-11-10
   dotnet-netcore = dotnet-runtime; # added 2021-10-07
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
@@ -212,6 +216,7 @@ mapAliases ({
   ec2_ami_tools = ec2-ami-tools; # added 2021-10-08
   ec2_api_tools = ec2-api-tools; # added 2021-10-08
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
+  elasticsearch7-oss = throw "elasticsearch7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # added 2021-06-09
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
@@ -265,6 +270,7 @@ mapAliases ({
     and has only been used for old fontconfig caches.
   '';
   foomatic_filters = foomatic-filters;  # 2016-08
+  fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl."; # 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
@@ -373,8 +379,10 @@ mapAliases ({
   joseki = apache-jena-fuseki; # added 2016-02-28
   jvmci8 = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   json_glib = json-glib; # added 2018-02-25
+  kafkacat = kcat; # added 2021-10-07
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
+  kibana7-oss = throw "kibana7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # added 2021-06-09
   kodiGBM = kodi-gbm;
   kodiPlain = kodi;
   kodiPlainWayland = kodi-wayland;
@@ -428,6 +436,7 @@ mapAliases ({
   libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjpeg_drop = libjpeg_original; # added 2020-06-05
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  libkml = throw "libkml has been removed from nixpkgs, as it's abandoned and no package needed it."; # added 2021-11-09
   liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
   liblastfm = libsForQt5.liblastfm; # added 2020-06-14
   liblrdf = lrdf; # added 2018-04-25
@@ -454,7 +463,6 @@ mapAliases ({
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
-  linuxPackages_rt_5_11 = linuxKernel.packages.linux_rt_5_11;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
   linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
@@ -467,6 +475,7 @@ mapAliases ({
   linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
+  linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
 
   linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -481,8 +490,8 @@ mapAliases ({
   linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
-  linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
   linux_5_14 = linuxKernel.kernels.linux_5_14;
+  linux_5_15 = linuxKernel.kernels.linux_5_15;
 
   # added 2020-04-04
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";
@@ -566,6 +575,7 @@ mapAliases ({
   mssys = ms-sys; # added 2015-12-13
   mpv-with-scripts = self.wrapMpv self.mpv-unwrapped { }; # added 2020-05-22
   multipath_tools = multipath-tools;  # added 2016-01-21
+  mumsi = throw "mumsi has been removed from nixpkgs, as it's unmaintained and does not build anymore"; # added 2021-11-18
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   mx = throw "graalvm8 and its tools were deprecated in favor of graalvm8-ce"; # added 2021-10-15
   mxisd = throw "mxisd has been removed from nixpkgs as it has reached end of life, see https://github.com/kamax-matrix/mxisd/blob/535e0a5b96ab63cb0ddef90f6f42c5866407df95/EOL.md#end-of-life-notice . ma1sd may be a suitable alternative."; # added 2021-04-15
@@ -585,8 +595,9 @@ mapAliases ({
   nfsUtils = nfs-utils;  # added 2014-12-06
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
+  nix-direnv-flakes = nix-direnv;
   nix-review = nixpkgs-review; # added 2019-12-22
-  nixFlakes = nixUnstable; # added 2021-05-21
+  nixFlakes = nixStable; # added 2021-05-21
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25
@@ -882,6 +893,7 @@ mapAliases ({
   stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   stumpwm-git = throw "stumpwm-git has been broken for a long time and lispPackages.stumpwm follows Quicklisp that is close to git version"; # added 2021-05-09
   surf-webkit2 = surf; # added 2017-04-02
+  svgcleaner = throw "svgcleaner has been removed."; # added 2021-11-17
   swec = throw "swec has been removed; broken and abandoned upstream."; # added 2021-10-14
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
@@ -967,6 +979,7 @@ mapAliases ({
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
   virtinst = throw "virtinst has been removed, as it's included in virt-manager"; # added 2021-07-21
   vorbisTools = vorbis-tools; # added 2016-01-26
+  vtun = throw "vtune has been removed as it's unmaintained upstream."; # added 2021-10-29
   way-cooler = throw "way-cooler is abandoned by its author: https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"; # added 2020-01-13
   webkit = webkitgtk; # added 2019-03-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
@@ -1213,5 +1226,7 @@ mapAliases ({
     buildLlvmTools = buildPackages.llvmPackages_git.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
   });
+
+  inherit (stdenv.hostPlatform) system; # added 2021-10-22
 
 })

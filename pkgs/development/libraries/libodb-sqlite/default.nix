@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libodb-sqlite";
-  version = "2.5.0-b.19";
+  version = "2.5.0-b.21";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${version}.tar.gz";
-    sha256 = "9443653bfc31d02d0d723f18072f6b04083d090e6580844e33c1e769db122494";
+    sha256 = "sha256-dxU8HyzowFGNYCrZIKrZEZDGi9zo3G0x3/L7nfQKo0Y=";
   };
 
   nativeBuildInputs = [
@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb-sqlite/tree/NEWS";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
   };
 }

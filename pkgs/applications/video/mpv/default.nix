@@ -1,7 +1,25 @@
-{ config, lib, stdenv, fetchFromGitHub, fetchpatch
-, addOpenGLRunpath, docutils, perl, pkg-config, python3, wafHook, which
-, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
-, nv-codec-headers, lua, libuchardet, libiconv ? null
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, addOpenGLRunpath
+, docutils
+, perl
+, pkg-config
+, python3
+, wafHook
+, which
+, ffmpeg
+, freefont_ttf
+, freetype
+, libass
+, libpthreadstubs
+, mujs
+, nv-codec-headers
+, lua
+, libuchardet
+, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
 , waylandSupport ? stdenv.isLinux
@@ -30,7 +48,7 @@
   , libdrm ? null
   , mesa   ? null
 
-, alsaSupport        ? stdenv.isLinux, alsa-lib       ? null
+, alsaSupport        ? stdenv.isLinux, alsa-lib      ? null
 , archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
@@ -95,54 +113,22 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.33.1";
+  version = "0.34.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitHub {
-    owner  = "mpv-player";
-    repo   = "mpv";
-    rev    = "v${version}";
-    sha256 = "06rw1f55zcsj78ql8w70j9ljp2qb1pv594xj7q9cmq7i92a7hq45";
+    owner = "mpv-player";
+    repo = "mpv";
+    rev = "v${version}";
+    sha256 = "sha256-qa6xZV4aLcHBMa2bIqoKjte4+KWEGGZre4L0u1+eDE8=";
   };
-
-  patches = [
-    # To make mpv build with libplacebo 3.104.0:
-    (fetchpatch { # vo_gpu: placebo: update for upstream API changes
-      url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
-      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
-    })
-    # TOREMOVE when > 0.33.1
-    # youtube-dl has been abandonned and is now unusable w/
-    # youtube.com. Mpv migrated to yt-dlp since the 0.33.1 but did not
-    # cut a new release yet. See
-    # https://github.com/mpv-player/mpv/pull/9209
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/d1c92bfd79ef81ac804fcc20aee2ed24e8d587aa.patch";
-      sha256 = "1dwxzng3gsrx0gjljm5jmfcjz3pzdss9z2l0n25rmmb4nbcrcx1f";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
   '';
-
-  passthru = {
-    inherit
-    # The wrapper consults luaEnv and lua.version
-    luaEnv
-    lua
-    # In the wrapper, we want to reference vapoursynth which has the
-    # `python3` passthru attribute (which has the `sitePrefix`
-    # attribute). This way we'll be sure that in the wrapper we'll
-    # use the same python3.sitePrefix used to build vapoursynth.
-    vapoursynthSupport
-    vapoursynth
-    ;
-  };
-
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
-              + optionalString stdenv.isDarwin "-framework CoreFoundation";
+  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
+              + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   wafConfigureFlags = [
     "--enable-libmpv-shared"
@@ -150,60 +136,71 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
-    (enableFeature archiveSupport  "libarchive")
-    (enableFeature cddaSupport     "cdda")
-    (enableFeature dvdnavSupport   "dvdnav")
-    (enableFeature openalSupport   "openal")
-    (enableFeature sdl2Support     "sdl2")
-    (enableFeature sixelSupport    "sixel")
-    (enableFeature vaapiSupport    "vaapi")
-    (enableFeature waylandSupport  "wayland")
-    (enableFeature stdenv.isLinux  "dvbin")
+    (lib.enableFeature archiveSupport  "libarchive")
+    (lib.enableFeature cddaSupport     "cdda")
+    (lib.enableFeature dvdnavSupport   "dvdnav")
+    (lib.enableFeature openalSupport   "openal")
+    (lib.enableFeature sdl2Support     "sdl2")
+    (lib.enableFeature sixelSupport    "sixel")
+    (lib.enableFeature vaapiSupport    "vaapi")
+    (lib.enableFeature waylandSupport  "wayland")
+    (lib.enableFeature stdenv.isLinux  "dvbin")
   ] # Disable whilst Swift isn't supported
     ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils perl pkg-config python3 wafHook which
-  ] ++ optional swiftSupport swift;
+    addOpenGLRunpath
+    docutils
+    perl
+    pkg-config
+    python3
+    wafHook
+    which
+  ] ++ lib.optionals swiftSupport [ swift ];
 
   buildInputs = [
-    ffmpeg freetype libass libpthreadstubs
-    luaEnv libuchardet mujs
-  ] ++ optional alsaSupport        alsa-lib
-    ++ optional archiveSupport     libarchive
-    ++ optional bluraySupport      libbluray
-    ++ optional bs2bSupport        libbs2b
-    ++ optional cacaSupport        libcaca
-    ++ optional cmsSupport         lcms2
-    ++ optional jackaudioSupport   libjack2
-    ++ optional libpngSupport      libpng
-    ++ optional openalSupport      openalSoft
-    ++ optional pulseSupport       libpulseaudio
-    ++ optional rubberbandSupport  rubberband
-    ++ optional screenSaverSupport libXScrnSaver
-    ++ optional sdl2Support        SDL2
-    ++ optional sixelSupport       libsixel
-    ++ optional speexSupport       speex
-    ++ optional theoraSupport      libtheora
-    ++ optional vaapiSupport       libva
-    ++ optional vapoursynthSupport vapoursynth
-    ++ optional vdpauSupport       libvdpau
-    ++ optional xineramaSupport    libXinerama
-    ++ optional xvSupport          libXv
-    ++ optional zimgSupport        zimg
-    ++ optional stdenv.isDarwin    libiconv
-    ++ optional stdenv.isLinux     nv-codec-headers
-    ++ optionals cddaSupport       [ libcdio libcdio-paranoia ]
-    ++ optionals drmSupport        [ libdrm mesa ]
-    ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
-    ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support        [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
-    ++ optionals vulkanSupport     [ libplacebo shaderc vulkan-headers vulkan-loader ]
-    ++ optionals stdenv.isDarwin   [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
+    ffmpeg
+    freetype
+    libass
+    libpthreadstubs
+    libuchardet
+    luaEnv
+    mujs
+  ] ++ lib.optionals alsaSupport        [ alsa-lib ]
+    ++ lib.optionals archiveSupport     [ libarchive ]
+    ++ lib.optionals bluraySupport      [ libbluray ]
+    ++ lib.optionals bs2bSupport        [ libbs2b ]
+    ++ lib.optionals cacaSupport        [ libcaca ]
+    ++ lib.optionals cddaSupport        [ libcdio libcdio-paranoia ]
+    ++ lib.optionals cmsSupport         [ lcms2 ]
+    ++ lib.optionals drmSupport         [ libdrm mesa ]
+    ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
+    ++ lib.optionals jackaudioSupport   [ libjack2 ]
+    ++ lib.optionals libpngSupport      [ libpng ]
+    ++ lib.optionals openalSupport      [ openalSoft ]
+    ++ lib.optionals pulseSupport       [ libpulseaudio ]
+    ++ lib.optionals rubberbandSupport  [ rubberband ]
+    ++ lib.optionals screenSaverSupport [ libXScrnSaver ]
+    ++ lib.optionals sdl2Support        [ SDL2 ]
+    ++ lib.optionals sixelSupport       [ libsixel ]
+    ++ lib.optionals speexSupport       [ speex ]
+    ++ lib.optionals theoraSupport      [ libtheora ]
+    ++ lib.optionals vaapiSupport       [ libva ]
+    ++ lib.optionals vapoursynthSupport [ vapoursynth ]
+    ++ lib.optionals vdpauSupport       [ libvdpau ]
+    ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
+    ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals xineramaSupport    [ libXinerama ]
+    ++ lib.optionals xvSupport          [ libXv ]
+    ++ lib.optionals zimgSupport        [ zimg ]
+    ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
+    ++ lib.optionals stdenv.isDarwin    [ libiconv ]
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
   enableParallelBuilding = true;
 
-  postBuild = optionalString stdenv.isDarwin ''
+  postBuild = lib.optionalString stdenv.isDarwin ''
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
@@ -219,28 +216,40 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace $out/lib/pkgconfig/mpv.pc \
       --replace "$out/include" "$dev/include"
-  '' + optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/bin/mpv
   '';
 
   meta = with lib; {
-    description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = "https://mpv.io";
+    description = "General-purpose media player, fork of MPlayer and mplayer2";
+    longDescription = ''
+      mpv is a free and open-source general-purpose video player, based on the
+      MPlayer and mplayer2 projects, with great improvements above both.
+    '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.darwin ++ platforms.linux;
+  };
 
-    longDescription = ''
-      mpv is a free and open-source general-purpose video player,
-      based on the MPlayer and mplayer2 projects, with great
-      improvements above both.
-    '';
+  passthru = {
+    inherit
+    # The wrapper consults luaEnv and lua.version
+    luaEnv
+    lua
+    # In the wrapper, we want to reference vapoursynth which has the `python3`
+    # passthru attribute (which has the `sitePrefix` attribute). This way we'll
+    # be sure that in the wrapper we'll use the same python3.sitePrefix used to
+    # build vapoursynth.
+    vapoursynthSupport
+    vapoursynth
+    ;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
 , python, twisted, jinja2, zope_interface, sqlalchemy
-, sqlalchemy_migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq
+, sqlalchemy-migrate, python-dateutil, txaio, autobahn, pyjwt, pyyaml, unidiff, treq
 , txrequests, pypugjs, boto3, moto, mock, lz4, setuptoolsTrial
 , isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins
 , parameterized, git, openssh, glibcLocales, ldap3, nixosTests
@@ -44,7 +44,7 @@ let
       jinja2
       zope_interface
       sqlalchemy
-      sqlalchemy_migrate
+      sqlalchemy-migrate
       python-dateutil
       txaio
       autobahn
