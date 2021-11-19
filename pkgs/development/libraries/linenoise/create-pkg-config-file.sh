@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 cat <<EOF > linenoise.pc
 prefix=$out
 exec_prefix=\${prefix}
