@@ -63,4 +63,10 @@ let
   };
 in {
   i386 = common "i386";
+  x86_64 = common "x64";
+  arm = common "arm";
+  aarch64 = common "aarch64";
+  riscv = common "riscv";
+  ppc64 = common "ppc64";
+  nds32le = common "nds32le";
 }
