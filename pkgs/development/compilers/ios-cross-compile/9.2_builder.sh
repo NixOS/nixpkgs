@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # -*- shell-script -*-
 source $stdenv/setup
 
