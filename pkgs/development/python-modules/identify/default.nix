@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
+, editdistance-s
 , fetchFromGitHub
 , pytestCheckHook
-, editdistance-s
 , pythonOlder
+, ukkonen
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.3.7";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,12 +18,13 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L71Zi0SWFh7K4BRwF57prdrIdxLp8Igs0k/gc6k1+Mo=";
+    sha256 = "sha256-0J3P3RawafVAfOUhK9qSz5K8y0goMqTjMh5PL60sqME=";
   };
 
   checkInputs = [
     editdistance-s
     pytestCheckHook
+    ukkonen
   ];
 
   pythonImportsCheck = [
