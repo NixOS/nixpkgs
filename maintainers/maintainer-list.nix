@@ -4228,6 +4228,12 @@
     githubId = 127353;
     name = "Geoffrey Huntley";
   };
+  giang = {
+    name = "Giang Nguyen";
+    email = "giang.nghg@gmail.com";
+    github = "giang-nghg";
+    githubId = 747633;
+  };
   gila = {
     email = "jeffry.molanus@gmail.com";
     github = "gila";
