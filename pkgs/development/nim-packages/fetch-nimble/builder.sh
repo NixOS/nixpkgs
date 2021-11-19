@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 export HOME=$NIX_BUILD_TOP
 
