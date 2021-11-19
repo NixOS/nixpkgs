@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 . @fix_qmake_libtool@
 
 qmakeFlags=( ${qmakeFlags-} )
