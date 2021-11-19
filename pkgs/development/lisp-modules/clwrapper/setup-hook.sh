@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 NIX_LISP_ASDF="@out@"
 
 CL_SOURCE_REGISTRY="${CL_SOURCE_REGISTRY:+$CL_SOURCE_REGISTRY:}@out@/lib/common-lisp/asdf/"
