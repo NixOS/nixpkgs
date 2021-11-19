@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 build2ConfigurePhase() {
     runHook preConfigure
 
