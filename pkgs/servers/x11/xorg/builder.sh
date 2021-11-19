@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This is the builder for all X.org components.
 source $stdenv/setup
 
