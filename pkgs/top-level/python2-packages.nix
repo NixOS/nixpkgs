@@ -644,6 +644,8 @@ with self; with super; {
 
   typing = callPackage ../development/python-modules/typing { };
 
+  tzlocal = callPackage ../development/python-modules/tzlocal/2.nix { };
+
   ujson = callPackage ../development/python-modules/ujson/2.nix { };
 
   umemcache = callPackage ../development/python-modules/umemcache { };
