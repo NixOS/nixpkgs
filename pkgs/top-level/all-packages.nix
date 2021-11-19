@@ -11117,6 +11117,8 @@ with pkgs;
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
+  zsh-vi-mode = callPackage ../shells/zsh/zsh-vi-mode {};
+
   zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
 
   zsh-z = callPackage ../shells/zsh/zsh-z { };
