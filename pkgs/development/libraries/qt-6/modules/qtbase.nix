@@ -311,9 +311,18 @@ qtbaseDrv = stdenv.mkDerivation rec {
 
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
-    "-plugindir $(out)/$(qtPluginPrefix)"
-    "-qmldir $(out)/$(qtQmlPrefix)"
-    "-docdir $(out)/$(qtDocPrefix)"
+    # TODO verify: `qmake -query QT_INSTALL_HEADERS` should return $dev/include, qmake should find qt headers
+    # TODO try to remove the cmake/qmake patches
+    "-prefix" "$(out)" # required to set other paths https://bugreports.qt.io/browse/QTBUG-33995
+    # TODO test: "-prefix" "/"
+    # plugindir: $(out) or $(bin)?
+    "-plugindir" "$(out)/$(qtPluginPrefix)"
+    "-qmldir" "$(out)/$(qtQmlPrefix)"
+    "-docdir" "$(out)/$(qtDocPrefix)"
+    "-libdir" "$(out)/lib"
+    "-bindir" "$(bin)/bin"
+    "-headerdir" "$(dev)/include"
+    #"-hostdatadir $(dev)" # Data used by qmake. $(dev) or $(out)?
 
     "-verbose"
     "-confirm-license"
