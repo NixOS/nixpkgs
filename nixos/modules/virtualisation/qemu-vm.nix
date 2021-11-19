@@ -306,7 +306,7 @@ in
     virtualisation.msize =
       mkOption {
         type = types.ints.positive;
-        default = 16384;
+        default = pkgs.vmTools.default9PMsizeBytes;
         description =
           ''
             The msize (maximum packet size) option passed to 9p file systems, in
