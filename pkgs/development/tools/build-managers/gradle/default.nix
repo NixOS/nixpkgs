@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
-  gradleGen = { version, nativeVersion, sha256 }: stdenv.mkDerivation {
+  gradleGen = { version, nativeVersion, sha256, toolchains ? { } }: stdenv.mkDerivation {
     pname = "gradle";
     inherit version;
 
@@ -15,15 +15,22 @@ rec {
     nativeBuildInputs = [ makeWrapper unzip ];
     buildInputs = [ java ];
 
-    installPhase = ''
+    # NOTE: For more information on toolchains, see https://docs.gradle.org/current/userguide/toolchains.html
+    installPhase = let toolchain = with builtins; rec {
+      var = x: "GRADLE_TOOLCHAIN_${lib.toUpper x}";
+      vars = map var (attrNames toolchains);
+      have = 0 == length vars;
+      setVars = if have then "" else "\n" + mapAttrs (name: value: ("--set ${var name} ${value} \\\n")) toolchains;
+      property = if have then "" else " -Porg.gradle.java.installations.fromEnv=${concatStringsSep "," vars}";
+    }; in ''
       mkdir -pv $out/lib/gradle/
       cp -rv lib/ $out/lib/gradle/
 
       gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
       test -f $gradle_launcher_jar
       makeWrapper ${java}/bin/java $out/bin/gradle \
-        --set JAVA_HOME ${java} \
-        --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
+        --set JAVA_HOME ${java} \${toolchain.setVars}
+        --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
     '';
 
     fixupPhase = if (!stdenv.isLinux) then ":" else
