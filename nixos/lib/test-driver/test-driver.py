@@ -1184,6 +1184,10 @@ class Driver:
             Machine=Machine,  # for typing
         )
         machine_symbols = {m.name: m for m in self.machines}
+        # If there's exactly one machine, make it available under the name
+        # "machine", even if it's not called that.
+        if len(self.machines) == 1:
+            (machine_symbols["machine"],) = self.machines
         vlan_symbols = {
             f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
         }

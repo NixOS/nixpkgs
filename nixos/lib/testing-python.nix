@@ -134,7 +134,9 @@ rec {
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      nodeHostNames = map (c: c.config.system.name) (lib.attrValues nodes);
+      nodeHostNames = let
+        nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
+      in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
 
       # TODO: This is an implementation error and needs fixing
       # the testing famework cannot legitimately restrict hostnames further
