@@ -305,6 +305,16 @@ $out/lib/common-lisp/query-fs"
   magicl = x: {
     parasites = [ "magicl/core" "magicl/ext" "magicl/ext-blas" "magicl/ext-lapack" "magicl/ext-expokit" ];
     propagatedBuildInputs = [ pkgs.gfortran pkgs.openblas pkgs.libffi ];
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        # Fix relative path of Fortran output
+        patch -p1 < ${
+          pkgs.fetchurl {
+            url = "https://github.com/quil-lang/magicl/commit/fd9aebbb3b1c60562174cca14a00d6348b4079e0.diff";
+            sha256 = "0cwp2a8h2b0fq1wwcdkvis7w0brdgl1rwmy2vfcjwfv9w7avwg6j";
+          }}
+      '';
+    };
   };
   uax-15 = x: {
     overrides = y: (x.overrides y) // {
