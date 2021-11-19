@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for setuptools.
 echo "Sourcing setuptools-build-hook"
 

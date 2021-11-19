@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for flit
 echo "Sourcing flit-build-hook"
 

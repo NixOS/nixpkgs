@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for checking whether Python imports succeed
 echo "Sourcing python-imports-check-hook.sh"
 

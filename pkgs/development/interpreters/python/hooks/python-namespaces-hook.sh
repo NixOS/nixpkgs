@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Clean up __init__.py's found in namespace directories
 echo "Sourcing python-namespaces-hook"
 
@@ -38,4 +39,3 @@ pythonNamespacesHook() {
 if [ -z "${dontUsePythonNamespacesHook-}" -a -n "${pythonNamespaces-}" ]; then
     postFixupHooks+=(pythonNamespacesHook)
 fi
-
