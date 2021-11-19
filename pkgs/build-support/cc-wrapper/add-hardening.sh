@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 declare -a hardeningCFlags=()
 
 declare -A hardeningEnableMap=()

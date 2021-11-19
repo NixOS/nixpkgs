@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # N.B. It may be a surprise that the derivation-specific variables are exported,
 # since this is just sourced by the wrapped binaries---the end consumers. This
 # is because one wrapper binary may invoke another (e.g. cc invoking ld). In
