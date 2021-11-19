@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
 __nix_wrapQtAppsHook=1
 # wrap only once per output

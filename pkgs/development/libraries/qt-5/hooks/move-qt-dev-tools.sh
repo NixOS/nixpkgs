@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 updateToolPath() {
     local tool="$1"
     local target="$2"
