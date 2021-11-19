@@ -22,18 +22,25 @@
 , writeShellScript
 , writeText
 }:
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
-  version = "2.14";
+  version = "2.14.100.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
-    rev = "sgx_${version}";
+    rev = "sgx_${concatStringsSep "." (take 2 (splitVersion version))}";
     sha256 = "1cr2mkk459s270ng0yddgcryi0zc3dfmg9rmdrdh9mhy2mc1kx0g";
     fetchSubmodules = true;
   };
+
+  postUnpack = ''
+    # Make sure this is the right version
+    grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
+      || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+  '';
 
   postPatch = ''
     # https://github.com/intel/linux-sgx/pull/730
@@ -123,14 +130,14 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    patchShebangs linux/installer/bin/sgx_linux_x64_sdk_*.bin
+    patchShebangs linux/installer/bin/sgx_linux_x64_sdk_${version}.bin
   '';
 
   installPhase = ''
     runHook preInstall
 
     installDir=$TMPDIR
-    ./linux/installer/bin/sgx_linux_x64_sdk_*.bin -prefix $installDir
+    ./linux/installer/bin/sgx_linux_x64_sdk_${version}.bin -prefix $installDir
     installDir=$installDir/sgxsdk
 
     header "Move files created by installer"
@@ -242,7 +249,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = callPackage ./samples.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
     maintainers = with maintainers; [ sbellem arturcygan veehaitch ];
