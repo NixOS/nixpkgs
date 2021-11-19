@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
 
+let
+  inherit (stdenv.hostPlatform) isx86;
+in
 stdenv.mkDerivation rec {
   pname = "lrzip";
   version = "0.641";
@@ -11,11 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-253CH6TiHWyr13C76y9PXjyB7gj2Bhd2VRgJ5r+cm/g=";
   };
 
-  nativeBuildInputs = [ autoreconfHook nasm perl ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Building the ASM/x86 directory creates an empty archive,
+    # which fails on darwin, so remove it
+    # https://github.com/ckolivas/lrzip/issues/193
+    # https://github.com/Homebrew/homebrew-core/pull/85360
+    substituteInPlace lzma/Makefile.am --replace "SUBDIRS = C ASM/x86" "SUBDIRS = C"
+    substituteInPlace configure.ac --replace "-f elf64" "-f macho64"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals isx86 [ nasm ];
 
   buildInputs = [ zlib lzo bzip2 lz4 ];
 
-  configureFlags = [
+  configureFlags = lib.optionals (!isx86) [
     "--disable-asm"
   ];
 
