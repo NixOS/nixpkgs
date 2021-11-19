@@ -106,4 +106,6 @@ self: super: {
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
 
+  mime-string = disableOptimization super.mime-string;
+
 }

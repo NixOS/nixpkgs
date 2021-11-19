@@ -129,4 +129,6 @@ self: super: {
   vector = dontCheck super.vector;
 
   ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
+
+  mime-string = disableOptimization super.mime-string;
 }
