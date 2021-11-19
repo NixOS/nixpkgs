@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 unpackCmdHooks+=(_tryUnzip)
 _tryUnzip() {
     if ! [[ "$curSrc" =~ \.zip$ ]]; then return 1; fi
