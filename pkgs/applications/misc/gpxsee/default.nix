@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "9.11";
+  version = "9.12";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-5FGdcmkVOxjDngVQIlXnH3OPRMjaixqJ2Xb239usUuo=";
+    sha256 = "sha256-hIDphwmS4UNSTvE+Icupipo6AmT2fiPdaufT/I3EeJ4=";
   };
 
   patches = (substituteAll {
@@ -23,7 +23,7 @@ mkDerivation rec {
     lrelease gpxsee.pro
   '';
 
-  postInstall = with stdenv; lib.optionalString isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
   '';

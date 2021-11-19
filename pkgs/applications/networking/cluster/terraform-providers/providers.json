@@ -229,12 +229,13 @@
     "version": "0.1.0"
   },
   "consul": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/consul",
     "repo": "terraform-provider-consul",
-    "rev": "v2.8.0",
-    "sha256": "1brd0fp9ksc3x8cygxm0k2q1sh4v5x89298pnidg6xirn41lvcr4",
-    "version": "2.8.0"
+    "rev": "v2.14.0",
+    "sha256": "19kmjjg4f74askwwwslbh5wvi5ndcr4wzm0374qr8gc57qiwxkpy",
+    "vendorSha256": null,
+    "version": "2.14.0"
   },
   "ct": {
     "owner": "poseidon",
@@ -362,11 +363,13 @@
     "version": "1.1.0"
   },
   "github": {
-    "owner": "terraform-providers",
+    "owner": "integrations",
+    "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v3.1.0",
-    "sha256": "1xl4fd1lfbn1vnrdmg2xljnv8hy6rmf0iv7g8pzbnzbvj2pi7w3b",
-    "version": "3.1.0"
+    "rev": "v4.18.0",
+    "sha256": "0vr7vxlpq1lbp85qm2084w7mqkz5yp7gxj5ln29plhm7xjpd87bp",
+    "vendorSha256": null,
+    "version": "4.18.0"
   },
   "gitlab": {
     "owner": "gitlabhq",
@@ -687,11 +690,13 @@
     "version": "0.0.1"
   },
   "nomad": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/nomad",
     "repo": "terraform-provider-nomad",
-    "rev": "v1.4.5",
-    "sha256": "1sccm4mspjn92ky6nscsrmbb573mx53wzsvvapsf2p4119h9s30i",
-    "version": "1.4.5"
+    "rev": "v1.4.15",
+    "sha256": "18rrvp7h27f51di8hajl2jb53v7wadqv4241rxdx1d180fas69k1",
+    "vendorSha256": "1y5wpilnqn17zbi88z23159gx2p57a9c10ajb7gn9isbxfdqj9mb",
+    "version": "1.4.15"
   },
   "ns1": {
     "owner": "terraform-providers",
@@ -1109,8 +1114,8 @@
     "repo": "terraform-provider-vault",
     "rev": "v2.24.1",
     "sha256": "1xk14q06js774lqyylkbp53dnlsbgh3vi38mqqmndh80xigs6d99",
-    "version": "2.24.1",
-    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48"
+    "vendorSha256": "1ksla455qfgxpk2dmq3pg52nyyw3v0bg6fm5s60j6cb0lzvjbq48",
+    "version": "2.24.1"
   },
   "vcd": {
     "owner": "terraform-providers",
