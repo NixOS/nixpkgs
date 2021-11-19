@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 mkdir -p $out
@@ -16,4 +17,3 @@ lhstex() {
 }
 
 lhstex $source
-
