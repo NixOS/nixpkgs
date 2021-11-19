@@ -6,7 +6,6 @@
 , lockfile
 , mistune
 , rdflib
-, rdflib-jsonld
 , ruamel-yaml
 , pytestCheckHook
 , pythonOlder
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     lockfile
     mistune
     rdflib
-    rdflib-jsonld
     ruamel-yaml
   ];
 
