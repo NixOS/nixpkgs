@@ -1,43 +1,46 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 , pythonOlder
-, lib
 , setuptools-scm
-, pytest
 , typing-extensions
-, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.12.1";
+  version = "2.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2af8b9bdd7657f4bd27b45336e7930171aead796711bc4cfc99b4731bb9d051";
+    sha256 = "sha256-BOOPkutZQQyTddO+I99l4KdkPy6Ly9QhQj2AjS+emd8=";
   };
 
-  buildInputs = [ setuptools-scm ];
-  nativeBuildInputs = [ glibcLocales ];
+  buildInputs = [
+    setuptools-scm
+  ];
 
-  LC_ALL="en_US.utf-8";
+  checkInputs = [
+    pytestCheckHook
+    typing-extensions
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace " --cov" ""
-  '';
+  disabledTestPaths = [
+    # mypy tests aren't passing with latest mypy
+    "tests/mypy"
+  ];
 
-  checkInputs = [ pytest typing-extensions ];
-
-  # mypy tests aren't passing with latest mypy
-  checkPhase = ''
-    py.test . --ignore=tests/mypy
-  '';
-
-  disabled = pythonOlder "3.3";
+  pythonImportsCheck = [
+    "typeguard"
+  ];
 
   meta = with lib; {
-    description = "This library provides run-time type checking for functions defined with argument type annotations";
+    description = "Python library which provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
