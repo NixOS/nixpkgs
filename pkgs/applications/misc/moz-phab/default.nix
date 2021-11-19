@@ -11,18 +11,19 @@
 }:
 
 buildPythonApplication rec {
-  pname = "MozPhab";
+  pname = "moz-phab";
   version = "0.1.99";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "MozPhab";
+    inherit version;
     sha256 = "sha256-uKoMMSp5AIvB1qTRYAh7n1+2dDLneFbssfkfTTshfcs=";
   };
 
   patches = [
     # Relax python-hglib requirement
     # https://phabricator.services.mozilla.com/D131618
-    ./D131618.diff
+    ./relax-hglib-version.diff
   ];
 
   propagatedBuildInputs = [
@@ -50,6 +51,6 @@ buildPythonApplication rec {
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
     maintainers = [ maintainers.kvark ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytest
 , pytest-runner
 , pythonOlder
 , setuptools-scm
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest
     pytest-runner
   ];
   disabledTests = [

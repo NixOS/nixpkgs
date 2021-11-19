@@ -22,7 +22,7 @@ buildPythonPackage rec {
   patches = [
     # Fix the environment for spawned process
     # https://github.com/mozilla/glean/pull/1542
-    ./pr-1542.patch
+    ./fix-spawned-process-environment.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
