@@ -18,6 +18,7 @@
 , wayland-protocols
 , waylandSupport ? false
 # Xorg backend
+, x11Support ? true
 , libxcb
 , xcbutil
 , xcbutilcursor
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     udev
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!waylandSupport) [
+  ] ++ lib.optionals (x11Support) [
     xcbutil
     xcbutilcursor
     xcbutilerrors
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "backend-x11" (!waylandSupport))
+    (mesonFeatureFlag "backend-x11" (x11Support))
     (mesonFeatureFlag "backend-wayland" waylandSupport)
   ];
 
