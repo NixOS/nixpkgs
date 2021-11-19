@@ -395,11 +395,10 @@ in {
   };
 
   ubootRock64 = buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img"];
+    filesToInstall = [ "u-boot-rockchip.bin" "u-boot.itb" "idbloader.img" ];
   };
 
   ubootRockPro64 = buildUBoot {
