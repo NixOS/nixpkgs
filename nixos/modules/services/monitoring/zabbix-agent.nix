@@ -113,6 +113,10 @@ in
         example = {
           Hostname = "example.org";
           DebugLevel = 4;
+          UserParams = [
+            "zfs.get.fsinfo[*],zfs get -o value -Hp $2 $1"
+            "zfs.zpool.health[*],zpool list -H -o health $1"
+          ];
         };
       };
 
