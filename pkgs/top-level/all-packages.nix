@@ -26430,6 +26430,10 @@ with pkgs;
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
 
+  libresprite = callPackage ../applications/editors/libresprite {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
+  };
+
   libvmi = callPackage ../development/libraries/libvmi { };
 
   libutp = callPackage ../applications/networking/p2p/libutp { };
