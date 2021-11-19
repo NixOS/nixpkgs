@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 export IMAKECPP="@tradcpp@/bin/tradcpp"
 
 imakeConfigurePhase() {
