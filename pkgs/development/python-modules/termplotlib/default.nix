@@ -18,8 +18,15 @@ buildPythonPackage rec {
     sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
   };
 
+  postPatch = ''
+    substituteInPlace src/termplotlib/plot.py \
+      --replace '"gnuplot"' '"${gnuplot}/bin/gnuplot"'
+    substituteInPlace src/termplotlib/helpers.py \
+      --replace '"gnuplot"' '"${gnuplot}/bin/gnuplot"'
+  '';
+
   format = "pyproject";
-  checkInputs = [ pytestCheckHook numpy exdown gnuplot ];
+  checkInputs = [ pytestCheckHook numpy exdown ];
   pythonImportsCheck = [ "termplotlib" ];
 
   # there seems to be a newline in the very front of the output
