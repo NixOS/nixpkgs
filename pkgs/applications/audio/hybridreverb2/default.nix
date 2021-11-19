@@ -13,7 +13,7 @@
 , libpthreadstubs
 , libXdmcp
 , libxkbcommon
-, epoxy
+, libepoxy
 , at-spi2-core
 , dbus
 , curl
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
     curl
