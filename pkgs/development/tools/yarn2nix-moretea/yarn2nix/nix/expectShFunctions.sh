@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 expectFilePresent () {
   if [ -f "$1" ]; then
     echo "Test passed: file is present - $1"
