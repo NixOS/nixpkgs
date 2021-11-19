@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "aws_lambda_builders==" "aws-lambda-builders #" \
       --replace "typing_extensions==" "typing-extensions #" \
       --replace "regex==" "regex #" \
-      --replace "tzlocal==3.0" "tzlocal==2.*"
+      --replace "tzlocal==3.0" "tzlocal"
   '';
 
   meta = with lib; {
