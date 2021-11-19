@@ -1,0 +1,19 @@
+diff --git a/configuration.c b/configuration.c
+index e6a3841324..5c6027dcea 100644
+--- a/configuration.c
++++ b/configuration.c
+@@ -2919,6 +2919,14 @@ void config_load(void *data)
+ #ifdef HAVE_CONFIGFILE
+    config_parse_file(global);
+ #endif
++   // Ignore config paths and use the values from /nix/store instead
++   settings_t *settings = config_st;
++   fill_pathname_expand_special(settings->paths.directory_libretro,
++         "@libretro_directory@",
++         sizeof(settings->paths.directory_libretro));
++   fill_pathname_expand_special(settings->paths.path_libretro_info,
++         "@libretro_info_path@",
++         sizeof(settings->paths.path_libretro_info));
+ }
+ 
+ #ifdef HAVE_CONFIGFILE

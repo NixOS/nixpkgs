@@ -1,53 +1,101 @@
-{ lib, stdenv, fetchFromGitHub, which, pkg-config, makeWrapper
-, ffmpeg, libGLU, libGL, freetype, libxml2, python3
-, libobjc, AppKit, Foundation
-, alsa-lib ? null
-, libdrm ? null
-, libpulseaudio ? null
-, libv4l ? null
-, libX11 ? null
-, libXdmcp ? null
-, libXext ? null
-, libXxf86vm ? null
-, mesa ? null
-, SDL2 ? null
-, udev ? null
-, enableNvidiaCgToolkit ? false, nvidia_cg_toolkit ? null
-, withVulkan ? stdenv.isLinux, vulkan-loader ? null
-, wayland
+{ lib
+, stdenv
+, enableNvidiaCgToolkit ? false
+, withVulkan ? stdenv.isLinux
+, alsa-lib
+, AppKit
+, fetchFromGitHub
+, ffmpeg
+, Foundation
+, freetype
+, libdrm
+, libGL
+, libGLU
+, libobjc
+, libpulseaudio
+, libv4l
+, libX11
+, libXdmcp
+, libXext
 , libxkbcommon
+, libxml2
+, libXxf86vm
+, makeWrapper
+, mesa
+, nvidia_cg_toolkit
+, pkg-config
+, python3
+, SDL2
+, substituteAll
+, udev
+, vulkan-loader
+, wayland
+, which
 }:
 
 with lib;
 
+let
+  libretroSuperSrc = fetchFromGitHub {
+    owner = "libretro";
+    repo = "libretro-super";
+    sha256 = "sha256-4WB6/1DDec+smhMJKLCxWb4+LQlZN8v2ik69saKixkE=";
+    # Update it when cores is updated
+    rev = "fa70d9843838df719623094965bd447e4db0d1b4";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  # FIXME: retroarch >=1.9.3 doesn't load the cores
-  version = "1.9.2";
+  version = "1.9.13.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-Dwv0hl+d99FbVMG4KnkjO1aYfAw0m4x+zvrbyb/wOX8=";
+    sha256 = "sha256-fehHchn+o9QM2wIK6zYamnbFvQda32Gw0rJk8Orx00U=";
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkg-config wayland ]
-                      ++ optional withVulkan makeWrapper;
+  patches = [
+    ./disable-core-updater.patch
+    ./fix-paths.patch
+  ];
 
-  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ]
-                ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
-                ++ optional withVulkan vulkan-loader
-                ++ optionals stdenv.isDarwin [ libobjc AppKit Foundation ]
-                ++ optionals stdenv.isLinux [ alsa-lib libdrm libpulseaudio libv4l libX11
-                                              libXdmcp libXext libXxf86vm mesa udev
-                                              wayland libxkbcommon ];
+  postPatch = ''
+    substituteInPlace configuration.c \
+      --replace "@libretro_directory@" "$out/lib" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info" \
+  '';
+
+  nativeBuildInputs = [ pkg-config wayland ] ++
+    optional withVulkan makeWrapper;
+
+  buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
+    optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
+    optional withVulkan vulkan-loader ++
+    optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
+    optionals stdenv.isLinux [
+      alsa-lib
+      libdrm
+      libpulseaudio
+      libv4l
+      libX11
+      libXdmcp
+      libXext
+      libXxf86vm
+      mesa
+      udev
+      wayland
+      libxkbcommon
+    ];
 
   enableParallelBuilding = true;
 
   configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
+    mkdir -p $out/share/libretro/info
+    # TODO: ideally each core should have its own core information
+    cp -r ${libretroSuperSrc}/dist/info/* $out/share/libretro/info
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
