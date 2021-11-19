@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 # Wrap the given `aclocal' program, appending extra `-I' flags
