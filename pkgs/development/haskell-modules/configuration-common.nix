@@ -2097,4 +2097,9 @@ EOT
     brick = self.brick_0_64_2;
   };
 
+  # Needs matching xmonad version
+  xmonad-contrib_0_17_0 = super.xmonad-contrib_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
