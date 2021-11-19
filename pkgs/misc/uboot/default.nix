@@ -41,14 +41,7 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
-
-      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
-      # See also: https://github.com/NixOS/nixpkgs/issues/135828
-      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
-      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
-    ] ++ extraPatches;
+    patches = extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -114,6 +107,14 @@ let
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
+  rpiPatches = [
+    ./0001-configs-rpi-allow-for-bigger-kernels.patch
+
+    # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
+    # See also: https://github.com/NixOS/nixpkgs/issues/135828
+    # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
+    ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
+  ];
 in {
   inherit buildUBoot;
 
@@ -356,42 +357,49 @@ in {
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPi2 = buildUBoot {
     defconfig = "rpi_2_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPi3_32bit = buildUBoot {
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
     defconfig = "rpi_4_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPi4_64bit = buildUBoot {
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRaspberryPiZero = buildUBoot {
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
+    extraPatches = rpiPatches;
   };
 
   ubootRock64 = let
