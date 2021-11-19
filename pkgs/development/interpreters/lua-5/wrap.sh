@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Inspired by python/wrapper.nix
 # Wrapper around wrapLuaProgramsIn, below. The $luaPath
 # variable is passed in from the buildLuarocksPackage function.
