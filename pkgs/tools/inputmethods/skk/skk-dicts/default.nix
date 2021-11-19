@@ -25,6 +25,8 @@ let
     url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.assoc";
     sha256 = "1smcbyv6srrhnpl7ic9nqds9nz3g2dgqngmhzkrdlwmvcpvakp1v";
   };
+
+  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
 in
 
 stdenv.mkDerivation {
@@ -49,7 +51,7 @@ stdenv.mkDerivation {
     for src in $srcs; do
       dst=$out/share/$(dictname $src)
       echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
-      ${lib.getBin buildPackages.stdenv.cc.libc}/bin/iconv \
+      ${lib.getBin iconvBin}/bin/iconv \
         -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
     done
 
