@@ -1,13 +1,21 @@
-{ stdenv, fetchurl, lib }:
+{ stdenv, fetchFromGitHub, lib, autoconf, automake, libtool, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
     pname = "jellyfish";
     version = "2.3.0";
 
-    src = fetchurl {
-        url = "https://github.com/gmarcais/Jellyfish/releases/download/v${version}/${pname}-${version}.tar.gz";
-        sha256 = "e195b7cf7ba42a90e5e112c0ed27894cd7ac864476dc5fb45ab169f5b930ea5a";
+    src = fetchFromGitHub {
+        owner = "gmarcais";
+        repo = pname;
+        rev = "v${version}";
+        sha256 = "1d9f0ni2ll1basc5p0shwb4gq1iz1ahnzv2imfgb93bihyvcmq66";
     };
+
+    buildInputs = [ autoconf automake libtool gettext pkg-config ];
+
+    preConfigure = ''
+        autoreconf -i
+    '';
 
     meta = with lib; {
         description = "A fast multi-threaded k-mer counter";
@@ -21,9 +29,9 @@ stdenv.mkDerivation rec {
             Guillaume Marcais and Carl Kingsford, A fast, lock-free approach for efficient parallel counting of occurrences of k-mers. Bioinformatics (2011) 27(6): 764-770 (first published online January 7, 2011) doi:10.1093/bioinformatics/btr011
         '';
         branch = "master";
-        homepage = "https://github.com/gmarcais/Jellyfish";
-        downloadPage = "https://github.com/gmarcais/Jellyfish/releases";
-        changelog = "https://github.com/gmarcais/Jellyfish/blob/master/CHANGES";
+        homepage = "https://github.com/${owner}/${repo}";
+        downloadPage = "https://github.com/${owner}/${repo}/releases";
+        changelog = "https://github.com/${owner}/${repo}/blob/master/CHANGES";
         license = with lib.licenses; [ bsd3 gpl3Only ];
         maintainers = [ maintainers.giang ];
         platforms = platforms.linux;
