@@ -32,7 +32,11 @@ buildPythonPackage rec {
   # there seems to be a newline in the very front of the output
   # which causes the test to fail, since it apparently doesn't
   # strip whitespace. might be a gnuplot choice? sigh...
-  disabledTests = [ "test_plot_lim" ];
+  disabledTests = [
+    "test_nolabel"
+    "test_plot"
+    "test_plot_lim"
+  ];
 
   meta = with lib; {
     description = "matplotlib for your terminal";
