@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 args=
 
 target=$out
@@ -19,4 +21,3 @@ if test -n "$isExecutable"; then
 fi
 
 eval "$postInstall"
-
