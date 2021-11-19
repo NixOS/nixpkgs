@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "exporting $url (r$rev) into $out"
 
 # Pipe the "p" character into Subversion to force it to accept the
