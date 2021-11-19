@@ -1,15 +1,19 @@
-{ lib, stdenv, fetchurl, zlib, lzo, bzip2, lz4, nasm, perl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, zlib, lzo, bzip2, lz4, nasm, perl }:
 
 stdenv.mkDerivation rec {
   pname = "lrzip";
   version = "0.641";
 
-  src = fetchurl {
-    url = "http://ck.kolivas.org/apps/lrzip/${pname}-${version}.tar.xz";
-    sha256 = "0ziyanspd96dc3lp2qdcylc7aq8dhb511jhqrhxvlp502fjqjqrc";
+  src = fetchFromGitHub {
+    owner = "ckolivas";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-253CH6TiHWyr13C76y9PXjyB7gj2Bhd2VRgJ5r+cm/g=";
   };
 
-  buildInputs = [ zlib lzo bzip2 lz4 nasm perl ];
+  nativeBuildInputs = [ autoreconfHook nasm perl ];
+
+  buildInputs = [ zlib lzo bzip2 lz4 ];
 
   configureFlags = [
     "--disable-asm"
