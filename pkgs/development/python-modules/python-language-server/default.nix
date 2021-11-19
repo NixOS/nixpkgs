@@ -85,8 +85,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/palantir/python-language-server";
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
-    # not compatible with jedi 0.18.0
-    broken = true;
     maintainers = [ ];
     # no longer maintained
     # see https://github.com/palantir/python-language-server/pull/918#issuecomment-817361554
