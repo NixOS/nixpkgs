@@ -39,7 +39,7 @@ let
         machine.wait_for_unit('graphical.target')
         machine.wait_until_succeeds('pgrep -x codium')
 
-        machine.wait_for_text('VSCodium')
+        machine.wait_for_text('File')
         machine.screenshot('start_screen')
 
         test_string = 'testfile'
