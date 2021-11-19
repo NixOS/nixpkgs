@@ -6487,6 +6487,8 @@ with pkgs;
 
   jekyll = callPackage ../applications/misc/jekyll { };
 
+  jellyfish = callPackage ../applications/science/biology/jellyfish {};
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
@@ -33497,6 +33499,4 @@ with pkgs;
   zthrottle = callPackage ../tools/misc/zthrottle { };
 
   zktree = callPackage ../applications/misc/zktree {};
-
-  jellyfish = callPackage ../applications/science/biology/jellyfish {};
 }
