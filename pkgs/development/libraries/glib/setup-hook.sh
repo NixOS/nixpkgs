@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 make_glib_find_gsettings_schemas() {
     # For packages that need gschemas of other packages (e.g. empathy)
     for maybe_dir in "$1"/share/gsettings-schemas/*; do
