@@ -96,17 +96,17 @@ stdenv.mkDerivation rec {
       # The build fails when using wolfssl with --with-ca-fallback
       (lib.withFeature (!wolfsslSupport) "ca-fallback")
       "--disable-manual"
-      (lib.withFeatureAs opensslSupport "openssl" openssl.dev)
-      (lib.withFeatureAs gnutlsSupport "gnutls" gnutls.dev)
-      (lib.withFeatureAs scpSupport "libssh2" libssh2.dev)
+      (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
+      (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
+      (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      (lib.withFeatureAs idnSupport "libidn" libidn.dev)
+      (lib.withFeatureAs idnSupport "libidn" (lib.getDev libidn))
       (lib.withFeature brotliSupport "brotli")
     ]
-    ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+    ++ lib.optional wolfsslSupport "--with-wolfssl=${lib.getDev wolfssl}"
     ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+    ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     # Install completions
     make -C scripts install
   '' + lib.optionalString scpSupport ''
-    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+    sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
   '' + lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
