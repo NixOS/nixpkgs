@@ -2301,8 +2301,6 @@ in {
 
   dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
 
-  dogpile-core = callPackage ../development/python-modules/dogpile-core { };
-
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   doit = callPackage ../development/python-modules/doit { };
