@@ -1,39 +1,40 @@
 { lib
 , buildPythonPackage
-, editdistance-s
 , fetchFromGitHub
+, cffi
 , pytestCheckHook
 , pythonOlder
-, ukkonen
 }:
 
 buildPythonPackage rec {
-  pname = "identify";
-  version = "2.4.0";
+  pname = "ukkonen";
+  version = "1.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "pre-commit";
+    owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0J3P3RawafVAfOUhK9qSz5K8y0goMqTjMh5PL60sqME=";
+    sha256 = "jG6VP/P5sadrdrmneH36/ExSld9blyMAAG963QS9+p0=";
   };
 
+  nativeBuildInputs = [
+    cffi
+  ];
+
   checkInputs = [
-    editdistance-s
     pytestCheckHook
-    ukkonen
   ];
 
   pythonImportsCheck = [
-    "identify"
+    "ukkonen"
   ];
 
   meta = with lib; {
-    description = "File identification library for Python";
-    homepage = "https://github.com/chriskuehl/identify";
+    description = "Python implementation of bounded Levenshtein distance (Ukkonen)";
+    homepage = "https://github.com/asottile/ukkonen";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
