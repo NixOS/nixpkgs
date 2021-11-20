@@ -3,7 +3,7 @@
 , libjack2, alsa-lib, alsa-tools, freetype, libusb1
 , libX11, libXrandr, libXinerama, libXext, libXcursor, libGL
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
-, gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf,
+, gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
 , buildType ? "Release" # "Debug", or "Release"
 # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
 # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
