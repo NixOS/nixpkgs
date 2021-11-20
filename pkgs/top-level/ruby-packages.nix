@@ -2955,6 +2955,16 @@
     };
     version = "0.6.0";
   };
+  yaggo = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "18ffl28d2wyzyq47350xas1n1fwgsqms316bb1bvfqhdqnwgmy6g";
+      type = "gem";
+    };
+    version = "1.5.10";
+  };
   yard = {
     groups = ["default"];
     platforms = [];
