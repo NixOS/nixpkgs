@@ -13071,7 +13071,9 @@ with pkgs;
   tinycc = callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    inherit (llvmPackages_10) llvm clang-unwrapped lld;
+    # Use same llvm version as upstream
+    # https://github.com/tinygo-org/tinygo/blob/release/Makefile
+    inherit (llvmPackages_11) llvm clang-unwrapped lld;
     avrgcc = pkgsCross.avr.buildPackages.gcc;
   };
 

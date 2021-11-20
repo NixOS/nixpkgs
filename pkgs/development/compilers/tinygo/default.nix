@@ -1,64 +1,74 @@
-{ lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper, fetchurl }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, llvm
+, clang-unwrapped
+, lld
+, avrgcc
+, go
+, gcc-arm-embedded
+, avrdude
+, openocd
+}:
 
-let main = ./main.go;
-    gomod = ./go.mod;
-in
-buildGoModule rec {
+let
+  llvmMajor = lib.versions.major llvm.version;
+in buildGoModule rec {
   pname = "tinygo";
-  version = "0.16.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
-    repo = "tinygo";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "063aszbsnr0myq56kms1slmrfs7m4nmg0zgh2p66lxdsifrfly7j";
+    sha256 = "sha256-ZAUvOKApwOIKWINta9jEs/M32pHgW86+a0Y1jHEMupk=";
     fetchSubmodules = true;
   };
 
-  overrideModAttrs = (_: {
-      patches = [];
-      preBuild = ''
-      rm -rf *
-      cp ${main} main.go
-      cp ${gomod} go.mod
-      chmod +w go.mod
-      '';
-  });
+  vendorSha256 = "sha256-fD9/hPRXIT7cPljA+QNWDRESqHXeCbtWHMq12280R1g=";
 
-  preBuild = "cp ${gomod} go.mod";
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ llvm clang-unwrapped ];
 
-  postBuild = "make gen-device";
-
-  vendorSha256 = "12k2gin0v7aqz5543m12yhifc0xsz26qyqra5l4c68xizvzcvkxb";
+  subPackages = [ "." ];
 
   doCheck = false;
 
-  prePatch = ''
+  # We need to set GOROOT to import and compile
+  # standard go libraries with tinygo
+  allowGoReference = true;
+
+  postPatch = ''
+    patchShebangs lib/wasi-libc
     sed -i s/', "-nostdlibinc"'// builder/builtins.go
     sed -i s/'"-nostdlibinc", '// compileopts/config.go builder/picolibc.go
   '';
 
-  subPackages = [ "." ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ llvm clang-unwrapped ];
-  propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
+  postBuild = ''
+    make gen-device
+  '';
 
   postInstall = ''
-    mkdir -p $out/share/tinygo
+    mkdir -p $out/share/tinygo $out/libexec/tinygo
     cp -a lib src targets $out/share/tinygo
-    wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo" \
-      --prefix "PATH" : "$out/libexec/tinygo"
-    mkdir -p $out/libexec/tinygo
-    ln -s ${clang-unwrapped}/bin/clang $out/libexec/tinygo/clang-10
-    ln -s ${lld}/bin/lld $out/libexec/tinygo/ld.lld-10
-    ln -sf $out/bin $out/share/tinygo
+
+    ln -s ${lib.getBin clang-unwrapped}/bin/clang $out/libexec/tinygo/clang-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/ld.lld $out/libexec/tinygo/ld.lld-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/wasm-ld $out/libexec/tinygo/wasm-ld-${llvmMajor}
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/tinygo \
+      --prefix PATH : ${lib.makeBinPath [ avrgcc avrdude openocd gcc-arm-embedded ]}:$out/libexec/tinygo \
+      --prefix TINYGOROOT : $out/share/tinygo \
+      --prefix GOROOT : ${go.outPath}/share/go
   '';
 
   meta = with lib; {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ chiiruno musfay ];
   };
 }
