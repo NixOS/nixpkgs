@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid libselinux ];
 
+  # According to upstream, libmount should be detected automatically but the
+  # build system fails to do this. This is likely a bug with their build system
+  # hence it is explicitly enabled here.
+  configureFlags = [ "--with-libmount" ];
+
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
     "root_sbindir=${placeholder "out"}/sbin"
