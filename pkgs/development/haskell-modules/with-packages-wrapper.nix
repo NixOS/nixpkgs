@@ -9,9 +9,6 @@
 
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
-# This wrapper works only with GHC 6.12 or later.
-assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
-
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
 # that package in Nix that honors these environment variables
