@@ -5224,6 +5224,12 @@
     githubId = 3874017;
     name = "Jappie Klooster";
   };
+  jauchi = {
+    email = "tst@p1ng.link";
+    github = "Jauchi";
+    githubId = 17363382;
+    name = "Jauchi";
+  };
   javaguirre = {
     email = "contacto@javaguirre.net";
     github = "javaguirre";
