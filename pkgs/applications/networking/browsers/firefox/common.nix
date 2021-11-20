@@ -27,7 +27,9 @@
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , gssSupport ? true, libkrb5
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
-, jemallocSupport ? true, jemalloc
+# Workaround: disabled since currently jemalloc causes crashes with LLVM 13.
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+, jemallocSupport ? false, jemalloc
 
 ## privacy-related options
 
