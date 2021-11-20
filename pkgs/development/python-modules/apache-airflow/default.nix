@@ -58,7 +58,7 @@
 , termcolor
 , unicodecsv
 , werkzeug
-, pytest
+, pytestCheckHook
 , freezegun
 , mkYarnPackage
 }:
@@ -171,7 +171,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
-    pytest
+    pytestCheckHook
   ];
 
   INSTALL_PROVIDERS_FROM_SOURCES = "true";
@@ -204,7 +204,7 @@ buildPythonPackage rec {
   # allow for gunicorn processes to have access to python packages
   makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
 
-  checkPhase = ''
+  preCheck = ''
    export HOME=$(mktemp -d)
    export AIRFLOW_HOME=$HOME
    export AIRFLOW__CORE__UNIT_TEST_MODE=True
@@ -214,9 +214,11 @@ buildPythonPackage rec {
    airflow version
    airflow db init
    airflow db reset -y
-
-   pytest tests/core/test_core.py
   '';
+
+  pytestFlagsArray = [
+    "tests/core/test_core.py"
+  ];
 
   postInstall = ''
     cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
