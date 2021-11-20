@@ -255,20 +255,19 @@ let
             else defaultListen;
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          "listen ${addr}:${toString port} "
-          + optionalString ssl "ssl "
+          (if ssl && vhost.http3 then "
+          # UDP listener for **QUIC+HTTP/3
+          listen ${addr}:${toString port} http3 "
+          + optionalString vhost.default "default_server "
+          + ";" else "")
+          + "
+
+            listen ${addr}:${toString port} "
           + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";"
-          + (if ssl && vhost.http3 then ''
-          # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 reuseport;
-          # Advertise that HTTP/3 is available
-          add_header Alt-Svc 'h3=":443"';
-          # Sent when QUIC was used
-          add_header QUIC-Status $quic;
-          '' else "");
+          + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
@@ -319,6 +318,11 @@ let
           ''}
           ${optionalString (hasSSL && vhost.kTLS) ''
             ssl_conf_command Options KTLS;
+          ''}
+
+          ${optionalString (hasSSL && vhost.http3) ''
+            # Advertise that HTTP/3 is available
+            add_header Alt-Svc 'h3=":443"; ma=86400' always;
           ''}
 
           ${mkBasicAuth vhostName vhost}
