@@ -315,6 +315,8 @@ in {
 
   aiohue = callPackage ../development/python-modules/aiohue { };
 
+  aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
+
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
   aioinflux = callPackage ../development/python-modules/aioinflux { };
@@ -4539,6 +4541,8 @@ in {
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
+  luxtronik = callPackage ../development/python-modules/luxtronik { };
+
   lupa = callPackage ../development/python-modules/lupa { };
 
   lupupy = callPackage ../development/python-modules/lupupy { };
@@ -6372,6 +6376,8 @@ in {
 
   pydyf = callPackage ../development/python-modules/pydyf { };
 
+  pyebus = callPackage ../development/python-modules/pyebus { };
+
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
@@ -8092,6 +8098,8 @@ in {
 
   reikna = callPackage ../development/python-modules/reikna { };
 
+  related = callPackage ../development/python-modules/related { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
@@ -9584,6 +9592,8 @@ in {
 
   ujson = callPackage ../development/python-modules/ujson { };
 
+  ukkonen = callPackage ../development/python-modules/ukkonen { };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
@@ -9637,6 +9647,8 @@ in {
   untangle = callPackage ../development/python-modules/untangle { };
 
   untokenize = callPackage ../development/python-modules/untokenize { };
+
+  uonet-request-signer-hebe = callPackage ../development/python-modules/uonet-request-signer-hebe { };
 
   upass = callPackage ../development/python-modules/upass { };
 
@@ -9808,6 +9820,8 @@ in {
     pythonInterpreter = python;
     enablePython = true;
   });
+
+  vulcan-api = callPackage ../development/python-modules/vulcan-api { };
 
   vultr = callPackage ../development/python-modules/vultr { };
 
