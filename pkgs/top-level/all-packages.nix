@@ -28203,7 +28203,7 @@ with pkgs;
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
-  super-slicer-staging = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix { }).staging;
+  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix { }).latest;
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
