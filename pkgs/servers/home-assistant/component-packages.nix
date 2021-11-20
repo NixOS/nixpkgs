@@ -945,7 +945,7 @@
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
-    "vlc_telnet" = ps: with ps; [ ]; # missing inputs: aiovlc
+    "vlc_telnet" = ps: with ps; [ aiovlc ];
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];
