@@ -29126,94 +29126,6 @@ with pkgs;
 
   wp-cli = callPackage ../development/tools/wp-cli { };
 
-  retroArchCores =
-    let
-      cfg = config.retroarch or {};
-      inherit (lib) optional;
-    in with libretro;
-      ([ ]
-      ++ optional (cfg.enableAtari800 or false) atari800
-      ++ optional (cfg.enableBeetleGBA or false) beetle-gba
-      ++ optional (cfg.enableBeetleLynx or false) beetle-lynx
-      ++ optional (cfg.enableBeetleNGP or false) beetle-ngp
-      ++ optional (cfg.enableBeetlePCEFast or false) beetle-pce-fast
-      ++ optional (cfg.enableBeetlePCFX or false) beetle-pcfx
-      ++ optional (cfg.enableBeetlePSX or false) beetle-psx
-      ++ optional (cfg.enableBeetlePSXHW or false) beetle-psx-hw
-      ++ optional (cfg.enableBeetleSaturn or false) beetle-saturn
-      ++ optional (cfg.enableBeetleSaturnHW or false) beetle-saturn-hw
-      ++ optional (cfg.enableBeetleSNES or false) beetle-snes
-      ++ optional (cfg.enableBeetleSuperGrafx or false) beetle-supergrafx
-      ++ optional (cfg.enableBeetleWswan or false) beetle-wswan
-      ++ optional (cfg.enableBeetleVB or false) beetle-vb
-      ++ optional (cfg.enableBlueMSX or false) bluemsx
-      ++ optional (cfg.enableBsnesMercury or false) bsnes-mercury
-      ++ optional (cfg.enableCitra or false) citra
-      ++ optional (cfg.enableDesmume or false) desmume
-      ++ optional (cfg.enableDesmume2015 or false) desmume2015
-      ++ optional (cfg.enableDolphin or false) dolphin
-      ++ optional (cfg.enableDOSBox or false) dosbox
-      ++ optional (cfg.enableEightyOne or false) eightyone
-      ++ optional (cfg.enableFBAlpha2012 or false) fbalpha2012
-      ++ optional (cfg.enableFBNeo or false) fbneo
-      ++ optional (cfg.enableFceumm or false) fceumm
-      ++ optional (cfg.enableFlycast or false) flycast
-      ++ optional (cfg.enableFMSX or false) fmsx
-      ++ optional (cfg.enableFreeIntv or false) freeintv
-      ++ optional (cfg.enableGambatte or false) gambatte
-      ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
-      ++ optional (cfg.enableGpsp or false) gpsp
-      ++ optional (cfg.enableGW or false) gw
-      ++ optional (cfg.enableHandy or false) handy
-      ++ optional (cfg.enableHatari or false) hatari
-      ++ optional (cfg.enableMAME or false) mame
-      ++ optional (cfg.enableMAME2000 or false) mame2000
-      ++ optional (cfg.enableMAME2003 or false) mame2003
-      ++ optional (cfg.enableMAME2003Plus or false) mame2003-plus
-      ++ optional (cfg.enableMAME2010 or false) mame2010
-      ++ optional (cfg.enableMAME2015 or false) mame2015
-      ++ optional (cfg.enableMAME2016 or false) mame2016
-      ++ optional (cfg.enableMesen or false) mesen
-      ++ optional (cfg.enableMeteor or false) meteor
-      ++ optional (cfg.enableMGBA or false) mgba
-      ++ optional (cfg.enableMupen64Plus or false) mupen64plus
-      ++ optional (cfg.enableNeoCD or false) neocd
-      ++ optional (cfg.enableNestopia or false) nestopia
-      ++ optional (cfg.enableNP2kai or false) np2kai
-      ++ optional (cfg.enableO2EM or false) o2em
-      ++ optional (cfg.enableOpera or false) opera
-      ++ optional (cfg.enableParallelN64 or false) parallel-n64
-      ++ optional (cfg.enablePCSXRearmed or false) pcsx_rearmed
-      ++ optional (cfg.enablePicodrive or false) picodrive
-      ++ optional (cfg.enablePlay or false) play
-      ++ optional (cfg.enablePPSSPP or false) ppsspp
-      ++ optional (cfg.enablePrboom or false) prboom
-      ++ optional (cfg.enableProSystem or false) prosystem
-      ++ optional (cfg.enableQuickNES or false) quicknes
-      ++ optional (cfg.enableSameBoy or false) sameboy
-      ++ optional (cfg.enableScummVM or false) scummvm
-      ++ optional (cfg.enableSMSPlusGX or false) smsplus-gx
-      ++ optional (cfg.enableSnes9x or false) snes9x
-      ++ optional (cfg.enableSnes9x2002 or false) snes9x2002
-      ++ optional (cfg.enableSnes9x2005 or false) snes9x2005
-      ++ optional (cfg.enableSnes9x2010 or false) snes9x2010
-      ++ optional (cfg.enableStella or false) stella
-      ++ optional (cfg.enableStella2014 or false) stella2014
-      ++ optional (cfg.enableTGBDual or false) tgbdual
-      ++ optional (cfg.enableThePowderToy or false) the-powder-toy
-      ++ optional (cfg.enableTIC80 or false) tic80
-      ++ optional (cfg.enableVbaNext or false) vba-next
-      ++ optional (cfg.enableVbaM or false) vba-m
-      ++ optional (cfg.enableVecx or false) vecx
-      ++ optional (cfg.enableVirtualJaguar or false) virtualjaguar
-      ++ optional (cfg.enableYabause or false) yabause
-      );
-
-  wrapRetroArch = { retroarch }: callPackage ../misc/emulators/retroarch/wrapper.nix {
-    inherit retroarch;
-    cores = retroArchCores;
-  };
-
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
@@ -29293,10 +29205,7 @@ with pkgs;
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
   kodi-retroarch-advanced-launchers =
-    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix {
-      cores = retroArchCores;
-  };
-  xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
+    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix { };
 
   xca = libsForQt5.callPackage ../applications/misc/xca { };
 
@@ -32867,6 +32776,10 @@ with pkgs;
   retroarchBare = callPackage ../misc/emulators/retroarch {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
+
+  wrapRetroArch = { retroarch }: callPackage ../misc/emulators/retroarch/wrapper.nix {
+    inherit retroarch;
   };
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
