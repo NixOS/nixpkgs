@@ -41,11 +41,6 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # enable using a local hoogle with extra packagages in the database
-  # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
-  # $ hoogle server
-  hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
-
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
