@@ -19,12 +19,22 @@ buildPythonPackage rec {
     ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
   '';
 
+  # needed on non-x86 linux
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
+
   propagatedBuildInputs = [
     setuptools
   ];
 
-  # No tests present
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
+
+    mv unicorn unicorn.hidden
+    patchShebangs sample_*.py shellcode.py
+    sh -e sample_all.sh
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "unicorn"
