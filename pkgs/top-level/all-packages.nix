@@ -25936,6 +25936,8 @@ with pkgs;
 
   icecat-bin = callPackage ../applications/networking/browsers/icecat-bin { };
 
+  icon-library = callPackage ../applications/graphics/icon-library { };
+
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
   ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
