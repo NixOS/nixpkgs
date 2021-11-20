@@ -157,11 +157,8 @@ self: super: {
     sha256 = "02bvvy3hx3cf4y4dr64zl5pjvq8giwk4286j5g1n6k8ikyn2403p";
   }) (doJailbreak super.vector-th-unbox);
 
-  # base 4.15 support from head.hackage
-  lens = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/lens-5.0.1.patch";
-    sha256 = "1s8qqg7ymvv94dnfnr1ragx91chh9y7ydc4jx25zn361wbn00pv7";
-  }) (doJailbreak super.lens_5_0_1);
+  # lens >= 5.1 supports 9.2.1
+  lens = super.lens_5_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;

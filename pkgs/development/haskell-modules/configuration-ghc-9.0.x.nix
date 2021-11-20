@@ -105,7 +105,7 @@ self: super: {
   base64-bytestring = dontCheck super.base64-bytestring;
 
   # 5 introduced support for GHC 9.0.x, but hasn't landed in stackage yet
-  lens = super.lens_5_0_1;
+  lens = super.lens_5_1;
 
   # 0.16.0 introduced support for GHC 9.0.x, stackage has 0.15.0
   memory = super.memory_0_16_0;
