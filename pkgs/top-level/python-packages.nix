@@ -2028,6 +2028,8 @@ in {
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
+  devolo-plc-api = callPackage ../development/python-modules/devolo-plc-api { };
+
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
   devtools = callPackage ../development/python-modules/devtools { };
@@ -8047,8 +8049,6 @@ in {
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
-
-  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
 
   rdkit = callPackage ../development/python-modules/rdkit { };
 

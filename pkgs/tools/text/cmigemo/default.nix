@@ -3,6 +3,9 @@
 , skk-dicts
 }:
 
+let
+  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
+in
 stdenv.mkDerivation {
   pname = "cmigemo";
   version = "1.3e";
@@ -25,7 +28,7 @@ stdenv.mkDerivation {
   makeFlags = [ "INSTALL=install" ];
 
   preBuild = ''
-    makeFlagsArray+=(FILTER_UTF8="${lib.getBin buildPackages.stdenv.cc.libc}/bin/iconv -t utf-8 -f cp932")
+    makeFlagsArray+=(FILTER_UTF8="${lib.getBin iconvBin}/bin/iconv -t utf-8 -f cp932")
   '';
 
   buildFlags = [ (if stdenv.isDarwin then "osx-all" else "gcc-all") ];

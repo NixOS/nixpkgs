@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, coreutils, gnused, util-linux
+, coreutils, gnused, util-linux, fetchpatch
 , boost
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
@@ -36,6 +36,14 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
   ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+
+  patches = [
+    (fetchpatch {
+      # part of https://github.com/intel/hyperscan/pull/336
+      url = "https://github.com/intel/hyperscan/commit/e2c4010b1fc1272cab816ba543940b3586e68a0c.patch";
+      sha256 = "sha256-doVNwROL6MTcgOW8jBwGTnxe0zvxjawiob/g6AvXLak=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/examples/d' CMakeLists.txt

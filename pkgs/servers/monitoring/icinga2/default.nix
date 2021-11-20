@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
 
     # Get rid of sbin
     sed -i 's/sbin/bin/g' $out/lib/icinga2/safe-reload
-    sed -i 's/sbin/bin/g' $out/bin/icinga2
     rm $out/sbin
 
     ${lib.optionalString withMysql ''

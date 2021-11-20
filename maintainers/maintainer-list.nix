@@ -5261,6 +5261,16 @@
     githubId = 938744;
     name = "John Chadwick";
   };
+  jcouyang = {
+    email = "oyanglulu@gmail.com";
+    github = "jcouyang";
+    githubId = 1235045;
+    name = "Jichao Ouyang";
+    keys = [{
+      longkeyid = "rsa2048/0xDA8B833B52604E63";
+      fingerprint = "A506 C38D 5CC8 47D0 DF01  134A DA8B 833B 5260 4E63";
+    }];
+  };
   jcumming = {
     email = "jack@mudshark.org";
     github = "jcumming";
@@ -9816,12 +9826,6 @@
         fingerprint = "C0A7 A9BB 115B C857 4D75  EA99 BBB7 A680 1DF1 E03F";
       }
     ];
-  };
-  rittelle = {
-    email = "rittelle@posteo.de";
-    github = "rittelle";
-    githubId = 33598633;
-    name = "Lennart Rittel";
   };
   rixed = {
     email = "rixed-github@happyleptic.org";
