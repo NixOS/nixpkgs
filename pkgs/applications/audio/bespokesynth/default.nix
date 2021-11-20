@@ -3,7 +3,7 @@
 , libjack2, alsa-lib, alsa-tools, freetype, libusb1
 , libX11, libXrandr, libXinerama, libXext, libXcursor, libGL
 , libxcb, xcbutil, libxkbcommon, xcbutilkeysyms, xcb-util-cursor
-, gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf
+, gtk3, webkitgtk, python3, curl, pcre, mount, gnome, patchelf, utillinux
 , buildType ? "Release" # "Debug", or "Release"
 # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
 # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bespokesynth";
-  version = "1.0.999";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Lu9f2Qou/nL/atAIdEgyEI9tLKkf2FNtUSLJ4d9dfgI=";
+    sha256 = "sha256-PN0Q6/gI1PeMaF/8EZFGJdLR8JVHQZfWunAhOIQxkHw=";
     fetchSubmodules = true;
   };
 
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     pcre
     mount
     patchelf
+    utillinux
   ];
 
   # Ensure zenity is available, or it won't be able to open new files.
