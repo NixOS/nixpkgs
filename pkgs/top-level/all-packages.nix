@@ -32784,6 +32784,10 @@ with pkgs;
 
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
 
+  retroarchFull = retroarch.override {
+    cores = builtins.filter (c: c ? libretroCore) (builtins.attrValues libretro);
+  };
+
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;
   });
