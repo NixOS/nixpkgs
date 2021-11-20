@@ -3076,6 +3076,8 @@ with pkgs;
 
   gotify-cli = callPackage ../tools/misc/gotify-cli { };
 
+  gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
+
   gping = callPackage ../tools/networking/gping { };
 
   gpu-burn = callPackage ../applications/misc/gpu-burn { };
@@ -12066,7 +12068,7 @@ with pkgs;
 
   pscid = nodePackages.pscid;
 
-  coreboot-toolchain = callPackage ../development/tools/misc/coreboot-toolchain { };
+  coreboot-toolchain = callPackages ../development/tools/misc/coreboot-toolchain { };
 
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
@@ -21069,6 +21071,8 @@ with pkgs;
 
   pshs = callPackage ../servers/http/pshs { };
 
+  quark = callPackage ../servers/http/quark { };
+
   sympa = callPackage ../servers/mail/sympa { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
@@ -23549,6 +23553,8 @@ with pkgs;
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
   rime-data = callPackage ../data/misc/rime-data { };
+
+  rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
 
   route159 = callPackage ../data/fonts/route159 { };
 

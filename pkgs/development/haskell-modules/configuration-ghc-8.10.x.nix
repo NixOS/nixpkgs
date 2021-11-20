@@ -88,4 +88,6 @@ self: super: {
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }) super.hnix);
 
+  mime-string = disableOptimization super.mime-string;
+
 }

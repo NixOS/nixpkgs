@@ -1,24 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gdk-pixbuf
+, gnome-themes-extra
+, gtk-engine-murrine
+, librsvg
+, sassc
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2021-08-02";
+  version = "2021-11-17";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-U048qNBfxjx/5iHIXcqAwXfIwmux+sw4hVQkN3TDLzk=";
+    sha256 = "1ri2dh34vw2pfv0lxzk9f4755v0d4ilnr6fzj3raw9b5fp5zzi91";
   };
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  nativeBuildInputs = [
+    sassc
+    which
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  buildInputs = [
+    gdk-pixbuf # pixbuf engine for Gtk2
+    gnome-themes-extra # adwaita engine for Gtk2
+    librsvg # pixbuf loader for svg
+  ];
+
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine # murrine engine for Gtk2
+  ];
 
   installPhase = ''
     patchShebangs .
     mkdir -p $out/share/themes
-    name= ./install.sh -d $out/share/themes
+    name= ./install.sh -t all -d $out/share/themes
     mkdir -p $out/share/doc/${pname}
     cp -a src/firefox $out/share/doc/${pname}
     rm $out/share/themes/*/{AUTHORS,COPYING}

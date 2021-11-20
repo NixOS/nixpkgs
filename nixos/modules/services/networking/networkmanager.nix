@@ -527,7 +527,6 @@ in {
 
       {
         networkmanager.connectionConfig = {
-          "ipv6.ip6-privacy" = 2;
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
           "wifi.powersave" =

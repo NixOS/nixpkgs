@@ -103,6 +103,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/zsh/site-functions
     mv $out/google-cloud-sdk/completion.zsh.inc $out/share/zsh/site-functions/_gcloud
     ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
+    # zsh doesn't load completions from $FPATH without #compdef as the first line
+    sed -i '1 i #compdef gcloud' $out/share/zsh/site-functions/_gcloud
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

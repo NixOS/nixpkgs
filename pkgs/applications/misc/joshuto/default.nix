@@ -1,20 +1,17 @@
-{ fetchFromGitHub, lib, rustPlatform, stdenv, SystemConfiguration }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "kamiyaa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+qKOvFoEF/gZL4ijL8lIRWE9ZWJM2eBlk29Lk46jAfQ=";
+    sha256 = "sha256-9TGHSGYCzU6uAIO4zZ/6+B4oVPE6SD9Phl4dShylW5o=";
   };
 
-  # upstream includes an outdated Cargo.lock that stops cargo from compiling
-  cargoPatches = [ ./fix-cargo-lock.patch ];
-
-  cargoSha256 = "sha256-JlekxU9pMkHNsIcH3+7b2I6MYUlxRqNX+0wwyVrQMAE=";
+  cargoSha256 = "sha256-g8YYOk2RW4GPdkWlvAxd5KFdV4S1l5yKEzNm9OAc8RI=";
 
   buildInputs = lib.optional stdenv.isDarwin SystemConfiguration;
 
