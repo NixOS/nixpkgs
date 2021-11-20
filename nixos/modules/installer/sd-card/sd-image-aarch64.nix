@@ -14,9 +14,10 @@
   boot.consoleLogLevel = lib.mkDefault 7;
 
   # The serial ports listed here are:
+  # - ttyS2: for RockPro64 and Rock64 (1500000 baud to match the bootloader)
   # - ttyS0: for Tegra (Jetson TX1)
   # - ttyAMA0: for QEMU's -machine virt
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+  boot.kernelParams = [ "console=ttyS2,1500000n8" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0" ];
 
   sdImage = {
     populateFirmwareCommands = let
