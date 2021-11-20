@@ -1,9 +1,10 @@
 #! /somewhere/python3
 from contextlib import contextmanager, _GeneratorContextManager
 from queue import Queue, Empty
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable
+from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List, Iterable, Union
 from xml.sax.saxutils import XMLGenerator
 from colorama import Style
+from pathlib import Path
 import queue
 import io
 import threading
@@ -11,7 +12,6 @@ import argparse
 import base64
 import codecs
 import os
-import pathlib
 import ptpython.repl
 import pty
 import re
@@ -198,7 +198,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 def _perform_ocr_on_screenshot(
-    screenshot_path: str, model_ids: Iterable[int]
+    screenshot_path: Union[str, Path], model_ids: Iterable[int]
 ) -> List[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
@@ -239,8 +239,8 @@ class StartCommand:
 
     def cmd(
         self,
-        monitor_socket_path: pathlib.Path,
-        shell_socket_path: pathlib.Path,
+        monitor_socket_path: Path,
+        shell_socket_path: Path,
         allow_reboot: bool = False,  # TODO: unused, legacy?
     ) -> str:
         display_opts = ""
@@ -272,8 +272,8 @@ class StartCommand:
 
     @staticmethod
     def build_environment(
-        state_dir: pathlib.Path,
-        shared_dir: pathlib.Path,
+        state_dir: Path,
+        shared_dir: Path,
     ) -> dict:
         # We make a copy to not update the current environment
         env = dict(os.environ)
@@ -288,10 +288,10 @@ class StartCommand:
 
     def run(
         self,
-        state_dir: pathlib.Path,
-        shared_dir: pathlib.Path,
-        monitor_socket_path: pathlib.Path,
-        shell_socket_path: pathlib.Path,
+        state_dir: Path,
+        shared_dir: Path,
+        monitor_socket_path: Path,
+        shell_socket_path: Path,
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(monitor_socket_path, shell_socket_path),
@@ -334,7 +334,7 @@ class LegacyStartCommand(StartCommand):
         self,
         netBackendArgs: Optional[str] = None,
         netFrontendArgs: Optional[str] = None,
-        hda: Optional[Tuple[pathlib.Path, str]] = None,
+        hda: Optional[Tuple[Path, str]] = None,
         cdrom: Optional[str] = None,
         usb: Optional[str] = None,
         bios: Optional[str] = None,
@@ -394,11 +394,11 @@ class Machine:
     the machine lifecycle with the help of a start script / command."""
 
     name: str
-    tmp_dir: pathlib.Path
-    shared_dir: pathlib.Path
-    state_dir: pathlib.Path
-    monitor_path: pathlib.Path
-    shell_path: pathlib.Path
+    tmp_dir: Path
+    shared_dir: Path
+    state_dir: Path
+    monitor_path: Path
+    shell_path: Path
 
     start_command: StartCommand
     keep_vm_state: bool
@@ -421,7 +421,7 @@ class Machine:
 
     def __init__(
         self,
-        tmp_dir: pathlib.Path,
+        tmp_dir: Path,
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
@@ -463,7 +463,7 @@ class Machine:
         hda = None
         if args.get("hda"):
             hda_arg: str = args.get("hda", "")
-            hda_arg_path: pathlib.Path = pathlib.Path(hda_arg)
+            hda_arg_path: Path = Path(hda_arg)
             hda = (hda_arg_path, args.get("hdaInterface", ""))
         return LegacyStartCommand(
             netBackendArgs=args.get("netBackendArgs"),
@@ -782,19 +782,21 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
-        word_pattern = re.compile(r"^\w+$")
+        out_dir = Path(os.environ.get("out", ".")).absolute()
+        word_pattern = re.compile(r"^[\w\-]+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
-        tmp = "{}.ppm".format(filename)
+            path = out_dir / f"{filename}.png"
+        else:
+            path = Path(filename)
+        tmp = (path.parent) / (path.name + ".ppm")
 
         with self.nested(
-            "making screenshot {}".format(filename),
-            {"image": os.path.basename(filename)},
+            f"making screenshot {path}",
+            {"image": str(path.parent)},
         ):
-            self.send_monitor_command("screendump {}".format(tmp))
-            ret = subprocess.run("pnmtopng {} > {}".format(tmp, filename), shell=True)
-            os.unlink(tmp)
+            self.send_monitor_command(f"screendump {tmp}")
+            ret = subprocess.run(f"pnmtopng {tmp} > {path}", shell=True)
+            tmp.unlink()
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
 
@@ -814,12 +816,12 @@ class Machine:
         """Copy a file from the host into the guest via the `shared_dir` shared
         among all the VMs (using a temporary directory).
         """
-        host_src = pathlib.Path(source)
-        vm_target = pathlib.Path(target)
+        host_src = Path(source)
+        vm_target = Path(target)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = pathlib.Path(shared_td)
+            shared_temp = Path(shared_td)
             host_intermediate = shared_temp / host_src.name
-            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / host_src.name
 
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
@@ -836,11 +838,11 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = pathlib.Path(os.environ.get("out", os.getcwd()))
-        vm_src = pathlib.Path(source)
+        out_dir = Path(os.environ.get("out", os.getcwd()))
+        vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
-            shared_temp = pathlib.Path(shared_td)
-            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
+            shared_temp = Path(shared_td)
+            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM
@@ -860,7 +862,7 @@ class Machine:
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path = os.path.join(tmpdir, "ppm")
+            screenshot_path = Path(tmpdir) / "ppm"
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
@@ -911,12 +913,12 @@ class Machine:
 
         self.log("starting vm")
 
-        def clear(path: pathlib.Path) -> pathlib.Path:
+        def clear(path: Path) -> Path:
             if path.exists():
                 path.unlink()
             return path
 
-        def create_socket(path: pathlib.Path) -> socket.socket:
+        def create_socket(path: Path) -> socket.socket:
             s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
             s.bind(str(path))
             s.listen(1)
@@ -1061,7 +1063,7 @@ class VLan:
     """
 
     nr: int
-    socket_dir: pathlib.Path
+    socket_dir: Path
 
     process: subprocess.Popen
     pid: int
@@ -1070,7 +1072,7 @@ class VLan:
     def __repr__(self) -> str:
         return f"<Vlan Nr. {self.nr}>"
 
-    def __init__(self, nr: int, tmp_dir: pathlib.Path):
+    def __init__(self, nr: int, tmp_dir: Path):
         self.nr = nr
         self.socket_dir = tmp_dir / f"vde{self.nr}.ctl"
 
@@ -1123,7 +1125,7 @@ class Driver:
     ):
         self.tests = tests
 
-        tmp_dir = pathlib.Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         with rootlog.nested("start all VLans"):
@@ -1230,7 +1232,7 @@ class Driver:
             "Using legacy create_machine(), please instantiate the"
             "Machine class directly, instead"
         )
-        tmp_dir = pathlib.Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
+        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
         tmp_dir.mkdir(mode=0o700, exist_ok=True)
 
         if args.get("startCommand"):
@@ -1316,7 +1318,7 @@ if __name__ == "__main__":
         action=EnvDefault,
         envvar="testScript",
         help="the test script to run",
-        type=pathlib.Path,
+        type=Path,
     )
 
     args = arg_parser.parse_args()
