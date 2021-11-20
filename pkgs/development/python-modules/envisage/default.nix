@@ -1,7 +1,7 @@
 { lib, fetchPypi, isPy27
 , buildPythonPackage
 , traits, apptools, pytestCheckHook
-, ipykernel, ipython, setuptools
+, ipython, setuptools
 }:
 
 buildPythonPackage rec {
@@ -15,6 +15,8 @@ buildPythonPackage rec {
     sha256 = "8864c29aa344f7ac26eeb94788798f2d0cc791dcf95c632da8d79ebc580e114c";
   };
 
+  # for the optional dependency ipykernel, only versions < 6 are
+  # supported, so it's not included in the tests, and not propagated
   propagatedBuildInputs = [ traits apptools setuptools ];
 
   preCheck = ''
@@ -22,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    ipykernel ipython pytestCheckHook
+    ipython pytestCheckHook
   ];
 
   meta = with lib; {
