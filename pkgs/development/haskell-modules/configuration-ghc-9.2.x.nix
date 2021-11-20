@@ -55,9 +55,6 @@ self: super: {
     excludes = ["*.cabal"];
   }) (doJailbreak super.aeson);
 
-  # Tests use Data.Semigroup.Option
-  aeson_2_0_1_0 = dontCheck (doJailbreak super.aeson_2_0_1_0);
-
   basement = overrideCabal (drv: {
     # This is inside a conditional block so `doJailbreak` doesn't work
     postPatch = "sed -i -e 's,<4.16,<4.17,' basement.cabal";
