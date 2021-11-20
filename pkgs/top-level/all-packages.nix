@@ -23554,6 +23554,8 @@ with pkgs;
 
   rime-data = callPackage ../data/misc/rime-data { };
 
+  rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
+
   route159 = callPackage ../data/fonts/route159 { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
