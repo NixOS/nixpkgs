@@ -4187,6 +4187,16 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
+  genofire = {
+    name = "genofire";
+    email = "geno+dev@fireorbit.de";
+    github = "genofire";
+    githubId = 6905586;
+    keys = [{
+      longkeyid = "rsa4096/0xFC83907C125BC2BC";
+      fingerprint = "386E D1BF 848A BB4A 6B4A  3C45 FC83 907C 125B C2BC";
+    }];
+  };
   georgewhewell = {
     email = "georgerw@gmail.com";
     github = "georgewhewell";
