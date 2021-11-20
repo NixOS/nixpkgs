@@ -8,6 +8,8 @@
 , gdk-pixbuf
 , atk
 , gtk3
+, testVersion
+, czkawka
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +37,11 @@ rustPlatform.buildRustPackage rec {
     atk
     gtk3
   ];
+
+  passthru.tests.version = testVersion {
+    package = czkawka;
+    command = "czkawka_cli --version";
+  };
 
   meta = with lib; {
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
