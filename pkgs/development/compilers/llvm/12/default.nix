@@ -75,22 +75,20 @@ let
 
     clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
 
-    # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.libllvm.override {
-    #  enableManpages = true;
-    #  python3 = pkgs.python3;  # don't use python-boot
-    #});
+    llvm-manpages = lowPrio (tools.libllvm.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    # disabled until recommonmark supports sphinx 3
-    # lldb-manpages = lowPrio (tools.lldb.override {
-    #   enableManpages = true;
-    #   python3 = pkgs.python3;  # don't use python-boot
-    # });
+    lldb-manpages = lowPrio (tools.lldb.override {
+      enableManpages = true;
+      python3 = pkgs.python3;  # don't use python-boot
+    });
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
