@@ -317,6 +317,8 @@ in {
 
   aiohue = callPackage ../development/python-modules/aiohue { };
 
+  aiohwenergy = callPackage ../development/python-modules/aiohwenergy { };
+
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
   aioinflux = callPackage ../development/python-modules/aioinflux { };
