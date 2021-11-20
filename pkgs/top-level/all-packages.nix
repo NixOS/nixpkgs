@@ -4687,6 +4687,8 @@ with pkgs;
 
   asunder = callPackage ../applications/audio/asunder { };
 
+  asusctl = callPackage ../os-specific/linux/asusctl { };
+
   autossh = callPackage ../tools/networking/autossh { };
 
   assh = callPackage ../tools/networking/assh { };
