@@ -8100,6 +8100,8 @@ in {
 
   reikna = callPackage ../development/python-modules/reikna { };
 
+  related = callPackage ../development/python-modules/related { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
@@ -9648,6 +9650,8 @@ in {
 
   untokenize = callPackage ../development/python-modules/untokenize { };
 
+  uonet-request-signer-hebe = callPackage ../development/python-modules/uonet-request-signer-hebe { };
+
   upass = callPackage ../development/python-modules/upass { };
 
   upb-lib = callPackage ../development/python-modules/upb-lib { };
@@ -9818,6 +9822,8 @@ in {
     pythonInterpreter = python;
     enablePython = true;
   });
+
+  vulcan-api = callPackage ../development/python-modules/vulcan-api { };
 
   vultr = callPackage ../development/python-modules/vultr { };
 
