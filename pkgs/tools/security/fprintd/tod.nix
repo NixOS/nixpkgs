@@ -3,7 +3,7 @@
 , libfprint-tod
 }:
 
-(fprintd.override { libfprint = libfprintd-tod; }).overrideAttrs (oldAttrs:
+(fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (oldAttrs:
   let
     pname = "fprintd-tod";
     version = "1.90.9";
