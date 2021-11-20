@@ -4430,6 +4430,8 @@ in {
     inherit python;
   })).py;
 
+  life360 = callPackage ../development/python-modules/life360 { };
+
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightning = callPackage ../development/python-modules/lightning { };
