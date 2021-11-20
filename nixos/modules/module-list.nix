@@ -488,6 +488,7 @@
   ./services/mail/nullmailer.nix
   ./services/matrix/matrix-appservice-discord.nix
   ./services/matrix/matrix-appservice-irc.nix
+  ./services/matrix/matrix-synapse.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
   ./services/misc/ananicy.nix
@@ -551,7 +552,6 @@
   ./services/misc/libreddit.nix
   ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
-  ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-facebook.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
