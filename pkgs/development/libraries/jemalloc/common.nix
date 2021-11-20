@@ -20,8 +20,11 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  # see the comment on stripPrefix
-  configureFlags = []
+  # force 16-byte alignment for malloc, matching glibc malloc and compilers'
+  # assumptions. see https://reviews.llvm.org/D100879#3144766 and
+  # https://github.com/jemalloc/jemalloc/issues/1533#issuecomment-974697328
+  configureFlags = ["--with-lg-quantum=4"]
+    # see the comment on stripPrefix
     ++ optional stripPrefix "--with-jemalloc-prefix="
     ++ optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
