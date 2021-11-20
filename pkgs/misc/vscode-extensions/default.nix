@@ -867,7 +867,7 @@ let
           name = "haskell";
           publisher = "haskell";
           version = "1.7.1";
-          sha256 = "UWdj2J5z5cTUsfvlU++LRil0tEiAH2AFb1AwBsfMvoY=";
+          sha256 = "sha256-UWdj2J5z5cTUsfvlU++LRil0tEiAH2AFb1AwBsfMvoY=";
         };
         meta = with lib; {
           license = licenses.mit;
