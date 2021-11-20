@@ -723,6 +723,7 @@ in with py.pkgs; buildPythonApplication rec {
     "vesync"
     "vilfo"
     "vizio"
+    "vlc_telnet"
     "voicerss"
     "volumio"
     # disabled, becaused AttributeError: <class 'vultr.vultr.Vultr'> does not have the attribute 'server_list'
