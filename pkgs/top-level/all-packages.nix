@@ -3076,6 +3076,8 @@ with pkgs;
 
   gotify-cli = callPackage ../tools/misc/gotify-cli { };
 
+  gotify-desktop = callPackage ../tools/misc/gotify-desktop { };
+
   gping = callPackage ../tools/networking/gping { };
 
   gpu-burn = callPackage ../applications/misc/gpu-burn { };
@@ -21068,6 +21070,8 @@ with pkgs;
   postgrey = callPackage ../servers/mail/postgrey { };
 
   pshs = callPackage ../servers/http/pshs { };
+
+  quark = callPackage ../servers/http/quark { };
 
   sympa = callPackage ../servers/mail/sympa { };
 
