@@ -27638,6 +27638,8 @@ with pkgs;
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  popcorntime-bin = callPackage ../applications/video/popcorntime {};
+
   portfolio-filemanager = callPackage ../applications/misc/portfolio-filemanager { };
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
