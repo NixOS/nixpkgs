@@ -11,6 +11,10 @@
 # the upstream repository's sources.
 super: super // {
 
+  "caffeine@patapon.info" = super."caffeine@patapon.info".overrideAttrs (old: {
+    meta.maintainers = with lib.maintainers; [ eperuffo ];
+  });
+
   "dash-to-dock@micxgx.gmail.com" = super."dash-to-dock@micxgx.gmail.com".overrideAttrs (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
   });
