@@ -26,6 +26,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
   doCheck = false; # requires network access
 
+  pythonImportsCheck = [ "libasyncns" ];
+
   meta = with lib; {
     description = "libasyncns-python is a python binding for the asynchronous name service query library";
     license = licenses.lgpl21;
