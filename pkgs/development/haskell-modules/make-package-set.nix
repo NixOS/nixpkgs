@@ -87,8 +87,11 @@ let
       drv = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
 
+      # Converts a returned function to a functor attribute set if necessary
+      ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
+
       # this wraps the `drv` function to add a `overrideScope` function to the result.
-      drvScope = allArgs: drv allArgs // {
+      drvScope = allArgs: ensureAttrs (drv allArgs) // {
         overrideScope = f:
           let newScope = mkScope (fix' (extends f scope.__unfix__));
           # note that we have to be careful here: `allArgs` includes the auto-arguments that
