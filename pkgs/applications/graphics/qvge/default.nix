@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , qmake
+, qtsvg
 , qtx11extras
 , graphviz
 }:
@@ -27,13 +28,13 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtx11extras ];
+  buildInputs = if stdenv.isDarwin then [ qtsvg ] else [ qtx11extras ];
 
   meta = with lib; {
     description = "Qt Visual Graph Editor";
     homepage = "https://github.com/ArsMasiuk/qvge";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }
