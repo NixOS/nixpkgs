@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
       --replace "@libretro_info_path@" "$out/share/libretro/info"
   '';
 
-  nativeBuildInputs = [ pkg-config wayland ] ++
+  nativeBuildInputs = [ pkg-config ] ++
+    optional stdenv.isLinux wayland ++
     optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
@@ -109,5 +110,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    # FIXME: exits with error on macOS:
+    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
+    broken = stdenv.isDarwin;
   };
 }
