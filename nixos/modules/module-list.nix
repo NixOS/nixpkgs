@@ -492,6 +492,7 @@
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mjolnir.nix
+  ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
   ./services/misc/ananicy.nix
   ./services/misc/airsonic.nix
@@ -559,7 +560,6 @@
   ./services/misc/metabase.nix
   ./services/misc/moonraker.nix
   ./services/misc/mwlib.nix
-  ./services/misc/mx-puppet-discord.nix
   ./services/misc/n8n.nix
   ./services/misc/nitter.nix
   ./services/misc/nix-daemon.nix
