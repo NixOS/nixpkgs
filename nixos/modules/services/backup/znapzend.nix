@@ -306,7 +306,7 @@ in
         type = types.listOf types.str;
         default = [];
         description = "Extra flags passed to the znapzend daemon.";
-        example = literalExample ''[ "--rootexec=sudo" ]'';
+        example = literalExpression ''[ "--rootexec=sudo" ]'';
       };
 
       features.oracleMode = mkEnableOption ''
