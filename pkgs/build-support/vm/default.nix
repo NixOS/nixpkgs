@@ -1179,5 +1179,6 @@ rec {
   # See: https://wiki.qemu.org/Documentation/9psetup#msize
   # Use 128KiB which is the default in linux 5.15+
   # https://github.com/torvalds/linux/commit/9c4d94dc9a64426d2fa0255097a3a84f6ff2eebe
-  default9PMsizeBytes = 128 * 1024;
+  # TODO: actually set it to 128KiB, it was causing failures in many tests due to memory usage
+  default9PMsizeBytes = 16 * 1024;
 }
