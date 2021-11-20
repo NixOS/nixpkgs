@@ -7961,6 +7961,8 @@ in {
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 
+  qnap-qsw = callPackage ../development/python-modules/qnap-qsw{ };
+
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
