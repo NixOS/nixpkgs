@@ -144,9 +144,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
+  doCheck = true;
 
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
