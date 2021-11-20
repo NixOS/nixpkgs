@@ -4145,7 +4145,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -4762,7 +4762,7 @@ with pkgs;
   };
 
   pax = callPackage ../tools/archivers/pax {
-    inherit (pkgs.darwin.apple_sdk.libs) utmp;
+    inherit (darwin.apple_sdk.libs) utmp;
   };
 
   rage = callPackage ../tools/security/rage {
@@ -5074,7 +5074,7 @@ with pkgs;
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -6012,7 +6012,7 @@ with pkgs;
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = gnulib.overrideAttrs (oldAttrs: rec {
       version = "20200223";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -6192,7 +6192,7 @@ with pkgs;
     llvmPackages = llvmPackages_9;
   };
 
-  ham = pkgs.perlPackages.ham;
+  ham = perlPackages.ham;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
@@ -8033,7 +8033,7 @@ with pkgs;
   };
 
   # ntfsprogs are merged into ntfs-3g
-  ntfsprogs = pkgs.ntfs3g;
+  ntfsprogs = ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
 
@@ -8165,8 +8165,8 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
-  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
-  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
+  openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = jre_headless; };
+  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = jre_headless; };
 
   openbazaar = callPackage ../applications/networking/openbazaar { };
   openbazaar-client = callPackage ../applications/networking/openbazaar/client.nix { };
@@ -10811,7 +10811,7 @@ with pkgs;
 
   wget2 = callPackage ../tools/networking/wget2 {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = gnulib.overrideAttrs (oldAttrs: rec {
       version = "20210208";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -13170,8 +13170,8 @@ with pkgs;
 
   zulip = callPackage ../applications/networking/instant-messengers/zulip {
     # Bubblewrap breaks zulip, see https://github.com/NixOS/nixpkgs/pull/97264#issuecomment-704454645
-    appimageTools = pkgs.appimageTools.override {
-      buildFHSUserEnv = pkgs.buildFHSUserEnv;
+    appimageTools = appimageTools.override {
+      buildFHSUserEnv = buildFHSUserEnv;
     };
   };
 
@@ -14997,7 +14997,7 @@ with pkgs;
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  pgcli = pkgs.python3Packages.pgcli;
+  pgcli = python3Packages.pgcli;
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
@@ -15088,7 +15088,7 @@ with pkgs;
 
   retry = callPackage ../tools/system/retry { };
 
-  rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
+  rizin = callPackage ../development/tools/analysis/rizin { };
 
   cutter = libsForQt515.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
@@ -16608,7 +16608,7 @@ with pkgs;
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg; });
+    callPackage = newScope (gst_all_1 // { libav = ffmpeg; });
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
   });
 
@@ -17314,16 +17314,16 @@ with pkgs;
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
   };
-  libcanberra-gtk2 = pkgs.libcanberra.override {
+  libcanberra-gtk2 = libcanberra.override {
     gtkSupport = "gtk2";
   };
-  libcanberra-gtk3 = pkgs.libcanberra.override {
+  libcanberra-gtk3 = libcanberra.override {
     gtkSupport = "gtk3";
   };
 
   libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
-    then pkgs.libcanberra
-    else pkgs.libcanberra-gtk2;
+    then libcanberra
+    else libcanberra-gtk2;
 
   libcbor = callPackage ../development/libraries/libcbor { };
 
@@ -18446,7 +18446,7 @@ with pkgs;
 
   libxml2Python = let
     libxml2 = python2Packages.libxml2;
-  in pkgs.buildEnv { # slightly hacky
+  in buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (libxml2) passthru;
