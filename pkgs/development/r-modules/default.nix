@@ -15,14 +15,15 @@ let
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  mkDerive = {mkHomepage, mkUrls}: args:
+  mkDerive = {mkHomepage, mkUrls, hydraPlatforms ? R.meta.platforms}: args:
+    let hydraPlatforms' = hydraPlatforms; in
       lib.makeOverridable ({
         name, version, sha256,
         depends ? [],
         doCheck ? true,
         requireX ? false,
         broken ? false,
-        hydraPlatforms ? R.meta.platforms,
+        hydraPlatforms ? hydraPlatforms',
         maintainers ? []
       }: buildRPackage {
     name = "${name}-${version}";
@@ -56,12 +57,14 @@ let
     mkUrls = {name, version, biocVersion}: [
       "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz"
     ];
+    hydraPlatforms = [];
   };
   deriveBiocExp = mkDerive {
     mkHomepage = {name, ...}: "http://www.bioconductor.org/packages/${name}.html";
     mkUrls = {name, version, biocVersion}: [
       "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz"
     ];
+    hydraPlatforms = [];
   };
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot, ...}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
