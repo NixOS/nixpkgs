@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "9.2.0";
+  version = "9.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "37ecd44c49ceca7d7c9431e59148febd15d7fec261651ed72ddd58755e7450b0";
+    sha256 = "54156422e618b686d52232a7989594b240bd18afd0fa381e12e4772ed4ab5ea8";
   };
 
   propagatedBuildInputs = [
