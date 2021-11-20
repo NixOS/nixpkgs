@@ -538,6 +538,7 @@ in with py.pkgs; buildPythonApplication rec {
     "neato"
     "netatmo"
     "nexia"
+    "nightscout"
     "no_ip"
     "notify"
     "notion"

@@ -572,7 +572,7 @@
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
     "nextcloud" = ps: with ps; [ nextcloudmonitor ];
     "nfandroidtv" = ps: with ps; [ ]; # missing inputs: notifications-android-tv
-    "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
+    "nightscout" = ps: with ps; [ py-nightscout ];
     "niko_home_control" = ps: with ps; [ niko-home-control ];
     "nilu" = ps: with ps; [ niluclient ];
     "nissan_leaf" = ps: with ps; [ pycarwings2 ];
