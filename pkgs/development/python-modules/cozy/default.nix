@@ -17,9 +17,14 @@ buildPythonPackage {
     sha256 = "1jhr5gzihj8dkg0yc5dmi081v2isxharl0ph7v2grqj0bwqzl40j";
   };
 
-  # Yoink the Z3 dependency name, because our Z3 package doesn't provide it.
+  # - yoink the Z3 dependency name, because our Z3 package doesn't provide it.
+  # - remove "dictionaries" version bound
+  # - patch igraph package name
   postPatch = ''
-    sed -i -e '/z3-solver/d' -e 's/^dictionaries.*$/dictionaries/' requirements.txt
+    sed -i -e '/z3-solver/d' \
+           -e 's/^dictionaries.*$/dictionaries/' \
+           -e 's/python-igraph/igraph/' \
+            requirements.txt
   '';
 
   # Tests are not correctly set up in the source tree.
