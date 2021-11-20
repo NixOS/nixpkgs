@@ -150,6 +150,7 @@ in
         # console = {
         #   font = "Lat2-Terminus16";
         #   keyMap = "us";
+        #   useXkbConfig = true; # use xkbOptions in tty.
         # };
 
       $xserverConfig
@@ -157,7 +158,10 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = "eurosign:e";
+        # services.xserver.xkbOptions = {
+        #   "eurosign:e";
+        #   "caps:escape" # map caps to escape.
+        # };
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;
