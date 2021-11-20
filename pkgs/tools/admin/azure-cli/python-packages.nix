@@ -1,24 +1,7 @@
 { stdenv, python, lib, src, version }:
 
 let
-  buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage (attrs // {
-    # Remove overly restrictive version contraints and obsolete namespace setup
-    prePatch = (attrs.prePatch or "") + ''
-      rm -f azure_bdist_wheel.py tox.ini
-      substituteInPlace setup.py \
-        --replace "cryptography>=3.2,<3.4" "cryptography"
-      sed -i "/azure-namespace-package/c\ " setup.cfg
-    '';
-
-    # Prevent these __init__'s from violating PEP420, only needed for python2
-    pythonNamespaces = [ "azure.cli" ];
-
-    checkInputs = [ mock pytest ] ++ (attrs.checkInputs or []);
-    checkPhase = attrs.checkPhase or ''
-      cd azure
-      HOME=$TMPDIR pytest
-    '';
-  });
+  buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage attrs;
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
     # check to make sure overriding is even necessary
@@ -91,6 +74,7 @@ let
             --replace "cryptography>=3.2,<3.4" "cryptography"
         '';
 
+        checkInputs = with self; [ pytest ];
         doCheck = stdenv.isLinux;
         # ignore tests that does network call, or assume powershell
         checkPhase = ''
@@ -127,6 +111,7 @@ let
             --replace "portalocker~=1.6" "portalocker"
         '';
 
+        checkInputs = [ py.pkgs.pytest ];
         # ignore flaky test
         checkPhase = ''
           cd azure
