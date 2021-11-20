@@ -3,15 +3,13 @@
 , libfprint-tod
 }:
 
-fprintd.overrideAttrs (oldAttrs:
+(fprintd.override { libfprint = libfprintd-tod; }).overrideAttrs (oldAttrs:
   let
     pname = "fprintd-tod";
     version = "1.90.9";
-
-    libfprint = libfprint-tod;
   in
   {
-    inherit pname version libfprint;
+    inherit pname version;
 
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
