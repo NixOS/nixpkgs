@@ -33,8 +33,9 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+    detectvirt = "${pkgs.systemd}/bin/systemd-detect-virt";
+    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
