@@ -486,6 +486,7 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
+  ./services/matrix/dendrite.nix
   ./services/matrix/matrix-appservice-discord.nix
   ./services/matrix/matrix-appservice-irc.nix
   ./services/matrix/matrix-synapse.nix
@@ -513,7 +514,6 @@
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
   ./services/misc/couchpotato.nix
-  ./services/misc/dendrite.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/duckling.nix
