@@ -967,6 +967,8 @@ in {
 
   azure-mgmt-servicefabricmanagedclusters = callPackage ../development/python-modules/azure-mgmt-servicefabricmanagedclusters { };
 
+  azure-mgmt-servicelinker = callPackage ../development/python-modules/azure-mgmt-servicelinker { };
+
   azure-mgmt-signalr = callPackage ../development/python-modules/azure-mgmt-signalr { };
 
   azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
