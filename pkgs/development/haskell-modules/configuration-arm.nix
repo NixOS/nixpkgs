@@ -94,6 +94,7 @@ self: super: {
   hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
