@@ -3073,6 +3073,12 @@
     githubId = 10198051;
     name = "Drew Risinger";
   };
+   drzoidberg = {
+    email = "jakob@mast3rsoft.com";
+    github = "jakobneufeld";
+    githubId = 24791219;
+    name = "Jakob Neufeld";
+  };
   drupol = {
     name = "Pol Dellaiera";
     email = "pol.dellaiera@protonmail.com";
