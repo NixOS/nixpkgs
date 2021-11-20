@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-igraph";
+  pname = "igraph";
   version = "0.9.8";
 
   disabled = pythonOlder "3.6";
