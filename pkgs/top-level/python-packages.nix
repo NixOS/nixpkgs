@@ -7071,6 +7071,8 @@ in {
 
   pysearpc = toPythonModule pkgs.libsearpc;
 
+  pysecuritas = callPackage ../development/python-modules/pysecuritas { };
+
   pysendfile = callPackage ../development/python-modules/pysendfile { };
 
   pysensors = callPackage ../development/python-modules/pysensors { };
