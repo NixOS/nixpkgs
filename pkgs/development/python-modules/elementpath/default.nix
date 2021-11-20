@@ -5,8 +5,9 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.4.0";
   pname = "elementpath";
+  version = "2.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +21,9 @@ buildPythonPackage rec {
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
-  pythonImportsCheck = [ "elementpath" ];
+  pythonImportsCheck = [
+    "elementpath"
+  ];
 
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
