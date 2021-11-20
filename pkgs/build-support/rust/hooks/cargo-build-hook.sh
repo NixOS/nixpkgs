@@ -21,21 +21,18 @@ cargoBuildHook() {
         cargoBuildFeaturesFlag="--features=${cargoBuildFeatures// /,}"
     fi
 
-    (
-    set -x
-    env \
+    runInJobserver -F CARGO_MAKEFLAGS env \
       "CC_@rustBuildPlatform@=@ccForBuild@" \
       "CXX_@rustBuildPlatform@=@cxxForBuild@" \
       "CC_@rustTargetPlatform@=@ccForHost@" \
       "CXX_@rustTargetPlatform@=@cxxForHost@" \
-      cargo build -j $NIX_BUILD_CORES \
+      cargo build ---- -j $NIX_BUILD_CORES ---- \
         --target @rustTargetPlatformSpec@ \
         --frozen \
         ${cargoBuildProfileFlag} \
         ${cargoBuildNoDefaultFeaturesFlag} \
         ${cargoBuildFeaturesFlag} \
         ${cargoBuildFlags}
-    )
 
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd

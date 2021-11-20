@@ -6,9 +6,7 @@
   libuuid,
   python3,
   bc,
-  clang_9,
   llvmPackages_9,
-  overrideCC,
   lib,
 }:
 
@@ -25,7 +23,7 @@ else
   throw "Unsupported architecture";
 
 buildStdenv = if stdenv.isDarwin then
-  overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
+  llvmPackages_9.stdenv
 else
   stdenv;
 

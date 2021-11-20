@@ -31,15 +31,12 @@ cargoCheckHook() {
     argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
         --target @rustTargetPlatformSpec@ --frozen ${cargoTestFlags}"
 
-    (
-        set -x
-        cargo test \
-              -j $NIX_BUILD_CORES \
-              ${argstr} -- \
-              --test-threads=${threads} \
-              ${checkFlags} \
-              ${checkFlagsArray+"${checkFlagsArray[@]}"}
-    )
+    runInJobserver cargo test ---- \
+          -j $NIX_BUILD_CORES ---- \
+          ${argstr} -- \
+          --test-threads=${threads} \
+          ${checkFlags} \
+          ${checkFlagsArray+"${checkFlagsArray[@]}"}
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd
