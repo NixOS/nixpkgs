@@ -276,10 +276,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0k1lwg0d2phs9n9zdx7nv5rv2p2vipm9jgzalr8x9nrq1is6wgvr";
+      sha256 = "0x908645i92w012xglc07lb6k2irn1zpzwgn1n99h2x54qk1pz4v";
       type = "gem";
     };
-    version = "2.3.1";
+    version = "2.3.2";
   };
   kubeclient = {
     dependencies = ["http" "recursive-open-struct" "rest-client"];
@@ -308,10 +308,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wvbwlkf6i17xvxx70cffw26ijvcc400vfhpbnvd8mmx556cnb4g";
+      sha256 = "0ipw892jbksbxxcrlx9g5ljq60qx47pm24ywgfbyjskbcl78pkvb";
       type = "gem";
     };
-    version = "3.4.0";
+    version = "3.4.1";
   };
   mime-types-data = {
     groups = ["default"];

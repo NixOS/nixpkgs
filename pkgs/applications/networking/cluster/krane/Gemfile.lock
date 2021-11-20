@@ -61,7 +61,7 @@ GEM
       multi_json
       to_regexp (~> 0.2.1)
     jwt (2.3.0)
-    krane (2.3.1)
+    krane (2.3.2)
       activesupport (>= 5.0)
       colorize (~> 0.8)
       concurrent-ruby (~> 1.1)
@@ -77,7 +77,7 @@ GEM
       recursive-open-struct (~> 1.1, >= 1.1.1)
       rest-client (~> 2.0)
     memoist (0.16.2)
-    mime-types (3.4.0)
+    mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.1115)
     minitest (5.14.4)
