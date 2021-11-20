@@ -15,6 +15,9 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
+  "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
+
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated
@@ -71,7 +74,6 @@
   # These extensions are automatically packaged at the moment. We preserve the old attribute name
   # for backwards compatibility.
   "appindicatorsupport@rgcjonas.gmail.com" = "appindicator"; # extensionPortalSlug is "appindicator-support"
-  "unredirect@vaina.lt" = "disable-unredirect"; # extensionPortalSlug is "disable-unredirect-fullscreen-windows"
   "drawOnYourScreen@abakkk.framagit.org" = "draw-on-your-screen"; # extensionPortalSlug is "draw-on-you-screen"
   "timepp@zagortenay333" = "timepp"; # extensionPortalSlug is "time"
   "windowIsReady_Remover@nunofarruca@gmail.com" = "window-is-ready-remover"; # extensionPortalSlug is "window-is-ready-notification-remover"
