@@ -1434,6 +1434,16 @@ self: super: {
   # 2021-09-14: Tests are broken because of undeterministic variable names
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
 
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
+  hls-explicit-imports-plugin = dontCheck super.hls-explicit-imports-plugin;
+
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+
+  # 2021-11-20: Testsuite hangs.
+  # https://github.com/haskell/haskell-language-server/issues/2375
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
   # 2021-11-13: Too strict upper bound on implicit-hie-cradle
