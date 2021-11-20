@@ -21,6 +21,10 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonImportsCheck = [
+    "gistyc"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/ThomasAlbin/gistyc";
     description = "A Python based GitHub GIST management tool";
