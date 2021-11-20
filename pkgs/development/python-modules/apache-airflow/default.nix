@@ -199,6 +199,10 @@ buildPythonPackage rec {
 
     substituteInPlace tests/core/test_core.py \
       --replace "/bin/bash" "${stdenv.shell}"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Fix failing test on Hydra
+    substituteInPlace airflow/utils/db.py \
+      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
   # allow for gunicorn processes to have access to python packages
@@ -218,6 +222,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "tests/core/test_core.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "bash_operator_kill"  # psutil.AccessDenied
   ];
 
   postInstall = ''
