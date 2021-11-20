@@ -942,7 +942,7 @@
     "viaggiatreno" = ps: with ps; [ ];
     "vicare" = ps: with ps; [ pyvicare ];
     "vilfo" = ps: with ps; [ vilfo-api-client ];
-    "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
+    "vivotek" = ps: with ps; [ libpyvivotek ];
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: aiovlc
