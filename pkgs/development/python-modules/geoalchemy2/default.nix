@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
-    homepage =  "http://geoalchemy.org/";
+    homepage = "http://geoalchemy.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

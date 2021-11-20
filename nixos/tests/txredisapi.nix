@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.redis.enable = true;
         services.redis.unixSocket = "/run/redis/redis.sock";
 
-        environment.systemPackages = with pkgs; [ (python38.withPackages (ps: [ ps.twisted ps.txredisapi ps.mock ]))];
+        environment.systemPackages = with pkgs; [ (python38.withPackages (ps: [ ps.twisted ps.txredisapi ps.mock ])) ];
       };
   };
 

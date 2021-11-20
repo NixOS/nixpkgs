@@ -17,7 +17,7 @@ buildOcaml rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configurePhase = "./configure --prefix $prefix";
   installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR js-build-tools.install";
 

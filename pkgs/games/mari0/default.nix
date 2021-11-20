@@ -29,14 +29,14 @@ stdenv.mkDerivation {
   buildInputs = [ lua love_11 zip ];
 
   installPhase =
-  ''
-    mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
-    zip -9 -r ${pname}.love ./*
-    mv ${pname}.love $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love_11}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-    chmod +x $out/bin/${pname}
-  '';
+    ''
+      mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
+      zip -9 -r ${pname}.love ./*
+      mv ${pname}.love $out/share/games/lovegames/${pname}.love
+      makeWrapper ${love_11}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+      chmod +x $out/bin/${pname}
+    '';
 
   meta = with lib; {
     description = "Crossover between Super Mario Bros. and Portal";

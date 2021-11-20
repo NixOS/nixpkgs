@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, asciidoc
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_45
+, readline
+, makeWrapper
+, git
+, libiconv
+, autoreconfHook
+, findXMLCatalogs
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +35,7 @@ stdenv.mkDerivation rec {
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm contrib/config.make-*
+    rm contrib/config.make-*
   '';
 
   enableParallelBuilding = true;

@@ -12,7 +12,8 @@ let
     }
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -64,6 +65,6 @@ in {
       isSystemUser = true;
       group = "peerflix";
     };
-    users.groups.peerflix = {};
+    users.groups.peerflix = { };
   };
 }

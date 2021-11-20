@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, getopt, tzdata, ksh
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, getopt
+, tzdata
+, ksh
 , pkgsMusl # for passthru.tests
 }:
 
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "20210621";
 
   src = fetchurl {
-    url    = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
+    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
     sha256 = "0gpzv75ibzqz1j1h0hdjgx1v7hkl3i5cb5yf6q9sfcgx0bvb55xa";
   };
 
@@ -95,9 +100,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable version of NetBSD 'make'";
-    homepage    = "http://www.crufty.net/help/sjg/bmake.html";
-    license     = licenses.bsd3;
-    platforms   = platforms.unix;
+    homepage = "http://www.crufty.net/help/sjg/bmake.html";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

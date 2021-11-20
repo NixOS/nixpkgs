@@ -8,7 +8,7 @@
 , lockFileContents ? null
 
   # Hashes for git dependencies.
-, outputHashes ? {}
+, outputHashes ? { }
 } @ args:
 
 assert (lockFile == null) != (lockFileContents == null);
@@ -21,11 +21,11 @@ let
       type = builtins.elemAt parts 2; # rev, tag or branch
       value = builtins.elemAt parts 3;
     in
-      if parts == null then null
-      else {
-        url = builtins.elemAt parts 0;
-        sha = builtins.elemAt parts 4;
-      } // lib.optionalAttrs (type != null) { inherit type value; };
+    if parts == null then null
+    else {
+      url = builtins.elemAt parts 0;
+      sha = builtins.elemAt parts 4;
+    } // lib.optionalAttrs (type != null) { inherit type value; };
 
   # shadows args.lockFileContents
   lockFileContents =
@@ -52,10 +52,11 @@ let
     builtins.map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
   );
 
-  nameGitSha = pkg: let gitParts = parseGit pkg.source; in {
-    name = "${pkg.name}-${pkg.version}";
-    value = gitParts.sha;
-  };
+  nameGitSha = pkg:
+    let gitParts = parseGit pkg.source; in {
+      name = "${pkg.name}-${pkg.version}";
+      value = gitParts.sha;
+    };
 
   # Convert the attrset provided through the `outputHashes` argument to a
   # a mapping from git commit SHA -> output hash.
@@ -65,13 +66,17 @@ let
   # workspace). By using the git commit SHA as a universal identifier,
   # the user does not have to specify the output hash for every package
   # individually.
-  gitShaOutputHash = lib.mapAttrs' (nameVer: hash:
-    let
-      unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
-      rev = namesGitShas.${nameVer} or unusedHash; in {
-      name = rev;
-      value = hash;
-    }) outputHashes;
+  gitShaOutputHash = lib.mapAttrs'
+    (nameVer: hash:
+      let
+        unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
+        rev = namesGitShas.${nameVer} or unusedHash;
+      in
+      {
+        name = rev;
+        value = hash;
+      })
+    outputHashes;
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
@@ -94,17 +99,18 @@ let
     let
       gitParts = parseGit pkg.source;
     in
-      if pkg.source == "registry+https://github.com/rust-lang/crates.io-index" then
+    if pkg.source == "registry+https://github.com/rust-lang/crates.io-index" then
       let
         crateTarball = fetchCrate pkg;
-      in runCommand "${pkg.name}-${pkg.version}" {} ''
+      in
+      runCommand "${pkg.name}-${pkg.version}" { } ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
 
         # Cargo is happy with largely empty metadata.
         printf '{"files":{},"package":"${pkg.checksum}"}' > "$out/.cargo-checksum.json"
       ''
-      else if gitParts != null then
+    else if gitParts != null then
       let
         missingHash = throw ''
           No hash was found while vendoring the git dependency ${pkg.name}-${pkg.version}. You can add
@@ -123,7 +129,8 @@ let
           inherit (gitParts) url;
           rev = gitParts.sha; # The commit SHA is always available.
         };
-      in runCommand "${pkg.name}-${pkg.version}" {} ''
+      in
+      runCommand "${pkg.name}-${pkg.version}" { } ''
         tree=${tree}
 
         # If the target package is in a workspace, or if it's the top-level
@@ -164,12 +171,13 @@ let
         replace-with = "vendored-sources"
         EOF
       ''
-      else throw "Cannot handle crate source: ${pkg.source}";
+    else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
-    inherit lockFileContents;
-    passAsFile = [ "lockFileContents" ];
-  }) ''
+  vendorDir = runCommand "cargo-vendor-dir"
+    (lib.optionalAttrs (lockFile == null) {
+      inherit lockFileContents;
+      passAsFile = [ "lockFileContents" ];
+    }) ''
     mkdir -p $out/.cargo
 
     ${
@@ -202,4 +210,4 @@ let
     done
   '';
 in
-  vendorDir
+vendorDir

@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchgit, libtoxcore
-, conf ? null }:
+{ lib
+, stdenv
+, fetchgit
+, libtoxcore
+, conf ? null
+}:
 
 with lib;
 
 let
-  configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
+  configFile = optionalString (conf != null) (builtins.toFile "config.h" conf);
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ratox";
   version = "0.4.20180303";
 

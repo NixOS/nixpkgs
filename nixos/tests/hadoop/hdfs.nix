@@ -1,7 +1,7 @@
 # Test a minimal HDFS cluster with no HA
-import ../make-test-python.nix ({...}: {
+import ../make-test-python.nix ({ ... }: {
   nodes = {
-    namenode = {pkgs, ...}: {
+    namenode = { pkgs, ... }: {
       virtualisation.memorySize = 1024;
       services.hadoop = {
         package = pkgs.hadoop;
@@ -19,7 +19,7 @@ import ../make-test-python.nix ({...}: {
         };
       };
     };
-    datanode = {pkgs, ...}: {
+    datanode = { pkgs, ... }: {
       services.hadoop = {
         package = pkgs.hadoop;
         hdfs.datanode.enable = true;

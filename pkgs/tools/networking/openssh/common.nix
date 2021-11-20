@@ -2,14 +2,15 @@
 , version
 , extraDesc ? ""
 , src
-, extraPatches ? []
-, extraNativeBuildInputs ? []
-, extraMeta ? {}
+, extraPatches ? [ ]
+, extraNativeBuildInputs ? [ ]
+, extraMeta ? { }
 }:
 
-{ lib, stdenv
-# This *is* correct, though unusual. as a way of getting krb5-config from the
-# package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
+{ lib
+, stdenv
+  # This *is* correct, though unusual. as a way of getting krb5-config from the
+  # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
 , fetchpatch
@@ -89,10 +90,10 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if stdenv.isLinux then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withFIDO "--with-security-key-builtin=yes"
-    ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
-    ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl";
+  ++ optional withFIDO "--with-security-key-builtin=yes"
+  ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
+  ++ optional stdenv.isDarwin "--disable-libutil"
+  ++ optional (!linkOpenssl) "--without-openssl";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
@@ -122,7 +123,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
+    maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ eelco aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
 }

@@ -4,7 +4,7 @@ let
   inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
   cfg = config.services.zeronet;
   dataDir = "/var/lib/zeronet";
-  configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
+  configFile = pkgs.writeText "zeronet.conf" (generators.toINI { } (recursiveUpdate defaultSettings cfg.settings));
 
   defaultSettings = {
     global = {
@@ -15,13 +15,14 @@ let
       tor = if !cfg.tor then "disable" else if cfg.torAlways then "always" else "enable";
     };
   };
-in with lib; {
+in
+with lib; {
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
-      default = {};
+      default = { };
       example = literalExpression "{ global.tor = enable; }";
 
       description = ''

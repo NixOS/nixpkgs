@@ -1,6 +1,19 @@
-{ lib, buildDunePackage, fetchurl, alcotest, asn1-combinators, benchmark
-, bigarray-compat, cstruct, eqaf, hex, ppx_deriving_yojson, rresult
-, stdlib-shims, yojson, dune-configurator }:
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, asn1-combinators
+, benchmark
+, bigarray-compat
+, cstruct
+, eqaf
+, hex
+, ppx_deriving_yojson
+, rresult
+, stdlib-shims
+, yojson
+, dune-configurator
+}:
 
 buildDunePackage rec {
   pname = "fiat-p256";
@@ -20,8 +33,15 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ bigarray-compat cstruct eqaf hex ];
-  checkInputs = [ alcotest asn1-combinators benchmark
-                  ppx_deriving_yojson rresult stdlib-shims yojson ];
+  checkInputs = [
+    alcotest
+    asn1-combinators
+    benchmark
+    ppx_deriving_yojson
+    rresult
+    stdlib-shims
+    yojson
+  ];
   doCheck = true;
 
   meta = with lib; {

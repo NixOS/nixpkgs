@@ -1,16 +1,58 @@
-{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
-, qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
-# If open-watcom-bin is not passed, VirtualBox will fall back to use
-# the shipped alternative sources (assembly).
+{ config
+, stdenv
+, fetchurl
+, lib
+, acpica-tools
+, dev86
+, pam
+, libxslt
+, libxml2
+, wrapQtAppsHook
+, libX11
+, xorgproto
+, libXext
+, libXcursor
+, libXmu
+, libIDL
+, SDL
+, libcap
+, libGL
+, libpng
+, glib
+, lvm2
+, libXrandr
+, libXinerama
+, libopus
+, qtbase
+, qtx11extras
+, qttools
+, qtsvg
+, qtwayland
+, pkg-config
+, which
+, docbook_xsl
+, docbook_xml_dtd_43
+, alsa-lib
+, curl
+, libvpx
+, nettools
+, dbus
+, substituteAll
+, gsoap
+, zlib
+  # If open-watcom-bin is not passed, VirtualBox will fall back to use
+  # the shipped alternative sources (assembly).
 , open-watcom-bin
-, makeself, perl
-, javaBindings ? true, jdk # Almost doesn't affect closure size
-, pythonBindings ? false, python3
-, extensionPack ? null, fakeroot
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, makeself
+, perl
+, javaBindings ? true
+, jdk # Almost doesn't affect closure size
+, pythonBindings ? false
+, python3
+, extensionPack ? null
+, fakeroot
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -24,7 +66,8 @@ let
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "6.1.28";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
@@ -42,15 +85,35 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs = [
-    acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-    libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libpng libopus python3 ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
-    ++ optionals enableWebService [ gsoap zlib ];
+    acpica-tools
+    dev86
+    libxslt
+    libxml2
+    xorgproto
+    libX11
+    libXext
+    libXcursor
+    libIDL
+    libcap
+    glib
+    lvm2
+    alsa-lib
+    curl
+    libvpx
+    pam
+    makeself
+    perl
+    libXmu
+    libpng
+    libopus
+    python3
+  ]
+  ++ optional javaBindings jdk
+  ++ optional pythonBindings python3 # Python is needed even when not building bindings
+  ++ optional pulseSupport libpulseaudio
+  ++ optionals headless [ libXrandr libGL ]
+  ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+  ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -80,24 +143,24 @@ in stdenv.mkDerivation {
   '';
 
   patches =
-     optional enableHardening ./hardened.patch
-  ++ [ ./extra_symbols.patch ]
-     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
-     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
-     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
-     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
-     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
-     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
-     # the user's icon theme can be loaded.
-  ++ optional (!headless && enableHardening) (substituteAll {
+    optional enableHardening ./hardened.patch
+    ++ [ ./extra_symbols.patch ]
+    # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+    # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+    # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+    # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+    # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+    # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+    # the user's icon theme can be loaded.
+    ++ optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
-  ++ [
-    ./qtx11extras.patch
-    # https://github.com/NixOS/nixpkgs/issues/123851
-    ./fix-audio-driver-loading.patch
-  ];
+    ++ [
+      ./qtx11extras.patch
+      # https://github.com/NixOS/nixpkgs/issues/123851
+      ./fix-audio-driver-loading.patch
+    ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -218,7 +281,7 @@ in stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;       # for guest additions
+    inherit version; # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
     updateScript = ./update.sh;
   };

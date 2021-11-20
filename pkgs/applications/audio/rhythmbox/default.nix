@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, fetchFromGitLab
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, fetchFromGitLab
 , python3
 , perl
 , perlPackages
@@ -38,7 +42,8 @@ let
     };
   });
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "rhythmbox";
   version = "3.4.4";
 
@@ -49,7 +54,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    intltool perl perlPackages.XMLParser
+    intltool
+    perl
+    perlPackages.XMLParser
     itstool
     wrapGAppsHook
   ];

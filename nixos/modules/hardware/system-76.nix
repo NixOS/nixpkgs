@@ -53,7 +53,8 @@ let
       wantedBy = [ "multi-user.target" ];
     };
   };
-in {
+in
+{
   options = {
     hardware.system76 = {
       enableAll = mkEnableOption "all recommended configuration for system76 systems";

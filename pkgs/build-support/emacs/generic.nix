@@ -7,10 +7,10 @@ with lib;
 { pname
 , version ? null
 
-, buildInputs ? []
-, packageRequires ? []
+, buildInputs ? [ ]
+, packageRequires ? [ ]
 
-, meta ? {}
+, meta ? { }
 
 , ...
 }@args:
@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
     esac
   '';
 
-  buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
+  buildInputs = [ emacs texinfo ] ++ packageRequires ++ buildInputs;
   propagatedBuildInputs = packageRequires;
   propagatedUserEnvPkgs = packageRequires;
 
@@ -90,6 +90,8 @@ stdenv.mkDerivation ({
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires"
-                      "meta"
-                    ])
+  // removeAttrs args [
+  "buildInputs"
+  "packageRequires"
+  "meta"
+])

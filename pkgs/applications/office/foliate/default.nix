@@ -1,6 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, meson, gettext, glib, gjs, ninja, python3, gtk3
-, webkitgtk, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
-, gobject-introspection, glib-networking }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, gettext
+, glib
+, gjs
+, ninja
+, python3
+, gtk3
+, webkitgtk
+, gsettings-desktop-schemas
+, wrapGAppsHook
+, desktop-file-utils
+, gobject-introspection
+, glib-networking
+}:
 
 stdenv.mkDerivation rec {
   pname = "foliate";

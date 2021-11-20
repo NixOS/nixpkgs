@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.racoon;
-in {
+in
+{
   options.services.racoon = {
     enable = mkEnableOption "racoon";
 

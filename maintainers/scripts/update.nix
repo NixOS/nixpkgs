@@ -13,7 +13,7 @@
 let
   pkgs = import ./../../default.nix (
     if include-overlays == false then
-      { overlays = []; }
+      { overlays = [ ]; }
     else if include-overlays == true then
       { } # Let Nixpkgs include overlays impurely.
     else { overlays = include-overlays; }
@@ -24,14 +24,14 @@ let
   /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
    */
   nubOn = f: list:
-    if list == [] then
-      []
+    if list == [ ] then
+      [ ]
     else
       let
         x = lib.head list;
         xs = lib.filter (p: f x != f p) (lib.drop 1 list);
       in
-        [x] ++ nubOn f xs;
+      [ x ] ++ nubOn f xs;
 
   /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
 
@@ -50,25 +50,25 @@ let
 
           dedupResults = lst: nubOn ({ package, attrPath }: package.updateScript) (lib.concatLists lst);
         in
-          if result.success then
-            let
-              evaluatedPathContent = result.value;
-            in
-              if lib.isDerivation evaluatedPathContent then
-                lib.optional (cond path evaluatedPathContent) { attrPath = lib.concatStringsSep "." path; package = evaluatedPathContent; }
-              else if lib.isAttrs evaluatedPathContent then
-                # If user explicitly points to an attrSet or it is marked for recursion, we recur.
-                if path == rootPath || evaluatedPathContent.recurseForDerivations or false || evaluatedPathContent.recurseForRelease or false then
-                  dedupResults (lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [name]) elem) evaluatedPathContent)
-                else []
-              else []
-          else [];
+        if result.success then
+          let
+            evaluatedPathContent = result.value;
+          in
+          if lib.isDerivation evaluatedPathContent then
+            lib.optional (cond path evaluatedPathContent) { attrPath = lib.concatStringsSep "." path; package = evaluatedPathContent; }
+          else if lib.isAttrs evaluatedPathContent then
+          # If user explicitly points to an attrSet or it is marked for recursion, we recur.
+            if path == rootPath || evaluatedPathContent.recurseForDerivations or false || evaluatedPathContent.recurseForRelease or false then
+              dedupResults (lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [ name ]) elem) evaluatedPathContent)
+            else [ ]
+          else [ ]
+        else [ ];
     in
-      packagesWithPathInner rootPath pkgs;
+    packagesWithPathInner rootPath pkgs;
 
   /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
    */
-  packagesWith = packagesWithPath [];
+  packagesWith = packagesWithPath [ ];
 
   /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
    */
@@ -85,15 +85,16 @@ let
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
-      packagesWithUpdateScriptMatchingPredicate (path: pkg:
-                         (if builtins.hasAttr "maintainers" pkg.meta
-                           then (if builtins.isList pkg.meta.maintainers
-                                   then builtins.elem maintainer pkg.meta.maintainers
-                                   else maintainer == pkg.meta.maintainers
-                                )
-                           else false
-                         )
-                   );
+    packagesWithUpdateScriptMatchingPredicate (path: pkg:
+      (if builtins.hasAttr "maintainers" pkg.meta
+      then
+        (if builtins.isList pkg.meta.maintainers
+        then builtins.elem maintainer pkg.meta.maintainers
+        else maintainer == pkg.meta.maintainers
+        )
+      else false
+      )
+    );
 
   /* Recursively find all packages under `path` in `pkgs` with updateScript.
    */
@@ -102,24 +103,24 @@ let
       prefix = lib.splitString "." path;
       pathContent = lib.attrByPath prefix null pkgs;
     in
-      if pathContent == null then
-        builtins.throw "Attribute path `${path}` does not exist."
-      else
-        packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
-                       pathContent;
+    if pathContent == null then
+      builtins.throw "Attribute path `${path}` does not exist."
+    else
+      packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
+        pathContent;
 
   /* Find a package under `path` in `pkgs` and require that it has an updateScript.
    */
   packageByName = path: pkgs:
     let
-        package = lib.attrByPath (lib.splitString "." path) null pkgs;
+      package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
-      if package == null then
-        builtins.throw "Package with an attribute name `${path}` does not exist."
-      else if ! builtins.hasAttr "updateScript" package then
-        builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
-      else
-        { attrPath = path; inherit package; };
+    if package == null then
+      builtins.throw "Package with an attribute name `${path}` does not exist."
+    else if ! builtins.hasAttr "updateScript" package then
+      builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+    else
+      { attrPath = path; inherit package; };
 
   /* List of packages matched based on the CLI arguments.
    */
@@ -178,7 +179,7 @@ let
     pname = lib.getName package;
     oldVersion = lib.getVersion package;
     updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
-    supportedFeatures = package.updateScript.supportedFeatures or [];
+    supportedFeatures = package.updateScript.supportedFeatures or [ ];
     attrPath = package.updateScript.attrPath or attrPath;
   };
 
@@ -193,7 +194,8 @@ let
 
   args = [ packagesJson ] ++ optionalArgs;
 
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
   buildCommand = ''
     echo ""

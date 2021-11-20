@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  smbToString = x: if builtins.typeOf x == "bool"
-                   then boolToString x
-                   else toString x;
+  smbToString = x:
+    if builtins.typeOf x == "bool"
+    then boolToString x
+    else toString x;
 
   cfg = config.services.samba;
 
@@ -15,9 +16,9 @@ let
   shareConfig = name:
     let share = getAttr name cfg.shares; in
     "[${name}]\n " + (smbToString (
-       map
-         (key: "${key} = ${smbToString (getAttr key share)}\n")
-         (attrNames share)
+      map
+        (key: "${key} = ${smbToString (getAttr key share)}\n")
+        (attrNames share)
     ));
 
   configFile = pkgs.writeText "smb.conf"
@@ -37,7 +38,8 @@ let
   nssModulesPath = config.system.nssModules.path;
 
   daemonService = appName: args:
-    { description = "Samba Service Daemon ${appName}";
+    {
+      description = "Samba Service Daemon ${appName}";
 
       after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
@@ -177,7 +179,7 @@ in
       };
 
       shares = mkOption {
-        default = {};
+        default = { };
         description = ''
           A set describing shared resources.
           See <command>man smb.conf</command> for options.
@@ -203,17 +205,18 @@ in
   ###### implementation
 
   config = mkMerge
-    [ { assertions =
-          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
-              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
-            }
-          ];
-        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
-        environment.etc."samba/smb.conf".source = mkOptionDefault (
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
-        );
-      }
+    [{
+      assertions =
+        [{
+          assertion = cfg.nsswins -> cfg.enableWinbindd;
+          message = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+        }];
+      # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+      environment.etc."samba/smb.conf".source = mkOptionDefault (
+        if cfg.enable then configFile
+        else pkgs.writeText "smb-dummy.conf" "# Samba is disabled."
+      );
+    }
 
       (mkIf cfg.enable {
 
@@ -241,12 +244,11 @@ in
           ];
         };
 
-        security.pam.services.samba = {};
+        security.pam.services.samba = { };
         environment.systemPackages = [ cfg.package ];
 
         networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
         networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
-      })
-    ];
+      })];
 
 }

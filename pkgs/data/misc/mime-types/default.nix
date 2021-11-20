@@ -2,7 +2,8 @@
 
 let
   version = "9";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "mime-types-${version}";
   url = "https://mirrors.kernel.org/gentoo/distfiles/${name}.tar.bz2";
   postFetch = ''

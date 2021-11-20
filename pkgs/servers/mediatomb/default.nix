@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchgit
-, sqlite, expat, mp4v2, flac, spidermonkey_68, taglib, libexif, curl, ffmpeg, file
-, pkg-config, autoreconfHook }:
+{ lib
+, stdenv
+, fetchgit
+, sqlite
+, expat
+, mp4v2
+, flac
+, spidermonkey_68
+, taglib
+, libexif
+, curl
+, ffmpeg
+, file
+, pkg-config
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "mediatomb";
@@ -12,8 +25,20 @@ stdenv.mkDerivation rec {
     sha256 = "1mimslr4q6mky865y6561rr64cbn4gf0qc2dhgb31hxp4rc1kmzd";
   };
 
-  buildInputs = [ sqlite expat spidermonkey_68 taglib libexif curl ffmpeg file mp4v2 flac
-                  pkg-config autoreconfHook ];
+  buildInputs = [
+    sqlite
+    expat
+    spidermonkey_68
+    taglib
+    libexif
+    curl
+    ffmpeg
+    file
+    mp4v2
+    flac
+    pkg-config
+    autoreconfHook
+  ];
 
   meta = with lib; {
     homepage = "http://mediatomb.cc";

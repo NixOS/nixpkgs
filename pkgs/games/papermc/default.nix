@@ -6,7 +6,8 @@ let
     url = "https://papermc.io/api/v1/paper/${mcVersion}/${buildNum}/download";
     sha256 = "sha256:0d7q6v5w872phcgkha7j5sxniqq9wqbh1jxdvyvy6d2jl74g1gzw";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "papermc";
   version = "${mcVersion}r${buildNum}";
 
@@ -28,9 +29,9 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "High-performance Minecraft Server";
-    homepage    = "https://papermc.io/";
-    license     = lib.licenses.gpl3Only;
-    platforms   = lib.platforms.unix;
+    homepage = "https://papermc.io/";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
   };
 }

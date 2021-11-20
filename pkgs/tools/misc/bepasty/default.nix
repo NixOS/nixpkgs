@@ -5,8 +5,8 @@
 let
   python = python3.override {
     self = python;
-    packageOverrides = self: super : {
-      xstatic-bootstrap = super.xstatic-bootstrap.overridePythonAttrs(oldAttrs: rec {
+    packageOverrides = self: super: {
+      xstatic-bootstrap = super.xstatic-bootstrap.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.7.1";
         src = oldAttrs.src.override {
           inherit version;
@@ -16,10 +16,11 @@ let
     };
   };
 
-#We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
-#This is needed for services.bepasty
-#https://github.com/NixOS/nixpkgs/pull/38300
-in with python.pkgs; buildPythonPackage rec {
+  #We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
+  #This is needed for services.bepasty
+  #https://github.com/NixOS/nixpkgs/pull/38300
+in
+with python.pkgs; buildPythonPackage rec {
   pname = "bepasty";
   version = "0.5.0";
 

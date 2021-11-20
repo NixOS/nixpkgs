@@ -2,7 +2,8 @@
 let
   pythonPackages = python2Packages;
 
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "zabbix-cli";
   version = "2.2.1";
 

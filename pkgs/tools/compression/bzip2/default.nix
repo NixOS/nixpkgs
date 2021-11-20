@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
 , autoreconfHook
 }:

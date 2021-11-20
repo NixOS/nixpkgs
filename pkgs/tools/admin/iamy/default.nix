@@ -16,7 +16,9 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X main.Version=v${version}" "-s" "-w"
+    "-X main.Version=v${version}"
+    "-s"
+    "-w"
   ];
 
   meta = with lib; {

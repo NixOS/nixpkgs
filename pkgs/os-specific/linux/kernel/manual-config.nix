@@ -1,10 +1,29 @@
-{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
+{ lib
+, buildPackages
+, runCommand
+, nettools
+, bc
+, bison
+, flex
+, perl
+, rsync
+, gmp
+, libmpc
+, mpfr
+, openssl
+, libelf
+, cpio
+, elfutils
+, zstd
+, gawk
+, python3Minimal
+, zlib
+, pahole
 , writeTextFile
 }:
 
 let
-  readConfig = configfile: import (runCommand "config.nix" {} ''
+  readConfig = configfile: import (runCommand "config.nix" { } ''
     echo "{" > "$out"
     while IFS='=' read key val; do
       [ "x''${key#CONFIG_}" != "x$key" ] || continue
@@ -13,42 +32,41 @@ let
     done < "${configfile}"
     echo "}" >> $out
   '').outPath;
-in {
-  lib,
-  # Allow overriding stdenv on each buildLinux call
-  stdenv,
-  # The kernel version
-  version,
-  # Position of the Linux build expression
-  pos ? null,
-  # Additional kernel make flags
-  extraMakeFlags ? [],
-  # The version of the kernel module directory
-  modDirVersion ? version,
-  # The kernel source (tarball, git checkout, etc.)
-  src,
-  # a list of { name=..., patch=..., extraConfig=...} patches
-  kernelPatches ? [],
-  # The kernel .config file
-  configfile,
-  # Manually specified nixexpr representing the config
+in
+{ lib
+, # Allow overriding stdenv on each buildLinux call
+  stdenv
+, # The kernel version
+  version
+, # Position of the Linux build expression
+  pos ? null
+, # Additional kernel make flags
+  extraMakeFlags ? [ ]
+, # The version of the kernel module directory
+  modDirVersion ? version
+, # The kernel source (tarball, git checkout, etc.)
+  src
+, # a list of { name=..., patch=..., extraConfig=...} patches
+  kernelPatches ? [ ]
+, # The kernel .config file
+  configfile
+, # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
-  # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile)
+, # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
-  randstructSeed ? "",
-  # Use defaultMeta // extraMeta
-  extraMeta ? {},
-
-  # for module compatibility
-  isZen      ? false,
-  isLibre    ? false,
-  isHardened ? false,
-
-  # Whether to utilize the controversial import-from-derivation feature to parse the config
-  allowImportFromDerivation ? false,
-  # ignored
-  features ? null,
+  randstructSeed ? ""
+, # Use defaultMeta // extraMeta
+  extraMeta ? { }
+, # for module compatibility
+  isZen ? false
+, isLibre ? false
+, isHardened ? false
+, # Whether to utilize the controversial import-from-derivation feature to parse the config
+  allowImportFromDerivation ? false
+, # ignored
+  features ? null
+,
 }:
 
 let
@@ -59,12 +77,16 @@ let
   moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
 
 
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!${stdenv.shell} -e
-    mkdir -p $4
-    cp -av $2 $4
-    cp -av $3 $4
-  ''; };
+  installkernel = writeTextFile {
+    name = "installkernel";
+    executable = true;
+    text = ''
+      #!${stdenv.shell} -e
+      mkdir -p $4
+      cp -av $2 $4
+      cp -av $3 $4
+    '';
+  };
 
   commonMakeFlags = [
     "O=$(buildRoot)"
@@ -96,7 +118,8 @@ let
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
         (lib.versionOlder version "4.14");
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in
+    (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
@@ -185,9 +208,9 @@ let
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
         kernelConf.target
-        "vmlinux"  # for "perf" and things like that
+        "vmlinux" # for "perf" and things like that
       ] ++ optional isModular "modules"
-        ++ optional buildDTBs "dtbs"
+      ++ optional buildDTBs "dtbs"
       ++ extraMakeFlags;
 
       installFlags = [
@@ -195,7 +218,7 @@ let
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
-      ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
+      ++ optionals buildDTBs [ "dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs" ];
 
       preInstall = ''
         installFlagsArray+=("-j$NIX_BUILD_CORES")
@@ -203,10 +226,12 @@ let
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [
-        (kernelConf.installTarget or (
-          /**/ if kernelConf.target == "uImage" then "uinstall"
+        (
+          kernelConf.installTarget or (
+            /**/ if kernelConf.target == "uImage" then "uinstall"
           else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
-          else "install"))
+          else "install")
+        )
       ];
 
       postInstall = (optionalString installsFirmware ''
@@ -284,20 +309,21 @@ let
 
         # Remove reference to kmod
         sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '' else optionalString installsFirmware ''
-        make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
-          $installFlags "''${installFlagsArray[@]}"
-      '');
+      '' else
+        optionalString installsFirmware ''
+          make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
+            $installFlags "''${installFlagsArray[@]}"
+        '');
 
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
         description =
           "The Linux kernel" +
-          (if kernelPatches == [] then "" else
-            " (with patches: "
-            + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
-            + ")");
+          (if kernelPatches == [ ] then "" else
+          " (with patches: "
+          + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
+          + ")");
         license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
         repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
@@ -321,13 +347,13 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd python3Minimal ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
-      # Removed util-linuxMinimal since it should not be a dependency.
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
+    ++ optional (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+    ++ optional (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
+    # Removed util-linuxMinimal since it should not be a dependency.
+    ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    ++ optionals (lib.versionAtLeast version "5.2") [ cpio pahole zlib ]
+    ++ optional (lib.versionAtLeast version "5.8") elfutils
+  ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 

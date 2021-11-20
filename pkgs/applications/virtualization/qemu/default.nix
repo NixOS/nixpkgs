@@ -1,34 +1,91 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
-, perl, pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, autoPatchelfHook
-, attr, libcap, libcap_ng
-, CoreServices, Cocoa, Hypervisor, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python
+, zlib
+, pkg-config
+, glib
+, perl
+, pixman
+, vde2
+, alsa-lib
+, texinfo
+, flex
+, bison
+, lzo
+, snappy
+, libaio
+, libtasn1
+, gnutls
+, nettle
+, curl
+, ninja
+, meson
+, sigtool
+, makeWrapper
+, autoPatchelfHook
+, attr
+, libcap
+, libcap_ng
+, CoreServices
+, Cocoa
+, Hypervisor
+, rez
+, setfile
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32
+, numactl
+, seccompSupport ? stdenv.isLinux
+, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
-, usbredirSupport ? spiceSupport, usbredir
-, xenSupport ? false, xen
-, cephSupport ? false, ceph
-, glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, epoxy, libdrm
-, virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
-, smbdSupport ? false, samba
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner
+, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner
+, SDL2
+, SDL2_image
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner
+, gtk3
+, gettext
+, vte
+, wrapGAppsHook
+, vncSupport ? !nixosTestRunner
+, libjpeg
+, libpng
+, smartcardSupport ? !nixosTestRunner
+, libcacard
+, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner
+, spice
+, spice-protocol
+, ncursesSupport ? !nixosTestRunner
+, ncurses
+, usbredirSupport ? spiceSupport
+, usbredir
+, xenSupport ? false
+, xen
+, cephSupport ? false
+, ceph
+, glusterfsSupport ? false
+, glusterfs
+, libuuid
+, openGLSupport ? sdlSupport
+, mesa
+, epoxy
+, libdrm
+, virglSupport ? openGLSupport
+, virglrenderer
+, libiscsiSupport ? true
+, libiscsi
+, smbdSupport ? false
+, samba
 , tpmSupport ? true
-, uringSupport ? stdenv.isLinux, liburing
+, uringSupport ? stdenv.isLinux
+, liburing
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
-                          ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
-                    else null)
+  then
+    (lib.optional stdenv.isx86_64 "i386-softmmu"
+      ++ [ "${stdenv.hostPlatform.qemuArch}-softmmu" ])
+  else null)
 , nixosTestRunner ? false
 }:
 
@@ -47,7 +104,7 @@ stdenv.mkDerivation rec {
   version = "6.1.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
     sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
   };
 
@@ -56,30 +113,40 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
-  buildInputs = [ zlib glib perl pixman
-    vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
+  buildInputs = [
+    zlib
+    glib
+    perl
+    pixman
+    vde2
+    texinfo
+    lzo
+    snappy
+    libtasn1
+    gnutls
+    nettle
+    curl
   ]
-    ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
-    ++ lib.optionals seccompSupport [ libseccomp ]
-    ++ lib.optionals numaSupport [ numactl ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
-    ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
-    ++ lib.optionals vncSupport [ libjpeg libpng ]
-    ++ lib.optionals smartcardSupport [ libcacard ]
-    ++ lib.optionals spiceSupport [ spice-protocol spice ]
-    ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals cephSupport [ ceph ]
-    ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
-    ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
-    ++ lib.optionals virglSupport [ virglrenderer ]
-    ++ lib.optionals libiscsiSupport [ libiscsi ]
-    ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+  ++ lib.optionals ncursesSupport [ ncurses ]
+  ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
+  ++ lib.optionals seccompSupport [ libseccomp ]
+  ++ lib.optionals numaSupport [ numactl ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
+  ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
+  ++ lib.optionals vncSupport [ libjpeg libpng ]
+  ++ lib.optionals smartcardSupport [ libcacard ]
+  ++ lib.optionals spiceSupport [ spice-protocol spice ]
+  ++ lib.optionals usbredirSupport [ usbredir ]
+  ++ lib.optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
+  ++ lib.optionals xenSupport [ xen ]
+  ++ lib.optionals cephSupport [ ceph ]
+  ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
+  ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
+  ++ lib.optionals virglSupport [ virglrenderer ]
+  ++ lib.optionals libiscsiSupport [ libiscsi ]
+  ++ lib.optionals smbdSupport [ samba ]
+  ++ lib.optionals uringSupport [ liburing ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -113,7 +180,7 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./sigrtminmax.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch";
@@ -173,24 +240,24 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ] ++ lib.optional numaSupport "--enable-numa"
-    ++ lib.optional seccompSupport "--enable-seccomp"
-    ++ lib.optional smartcardSupport "--enable-smartcard"
-    ++ lib.optional spiceSupport "--enable-spice"
-    ++ lib.optional usbredirSupport "--enable-usb-redir"
-    ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
-    ++ lib.optional stdenv.isDarwin "--enable-hvf"
-    ++ lib.optional stdenv.isLinux "--enable-linux-aio"
-    ++ lib.optional gtkSupport "--enable-gtk"
-    ++ lib.optional xenSupport "--enable-xen"
-    ++ lib.optional cephSupport "--enable-rbd"
-    ++ lib.optional glusterfsSupport "--enable-glusterfs"
-    ++ lib.optional openGLSupport "--enable-opengl"
-    ++ lib.optional virglSupport "--enable-virglrenderer"
-    ++ lib.optional tpmSupport "--enable-tpm"
-    ++ lib.optional libiscsiSupport "--enable-libiscsi"
-    ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring";
+  ++ lib.optional seccompSupport "--enable-seccomp"
+  ++ lib.optional smartcardSupport "--enable-smartcard"
+  ++ lib.optional spiceSupport "--enable-spice"
+  ++ lib.optional usbredirSupport "--enable-usb-redir"
+  ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
+  ++ lib.optional stdenv.isDarwin "--enable-cocoa"
+  ++ lib.optional stdenv.isDarwin "--enable-hvf"
+  ++ lib.optional stdenv.isLinux "--enable-linux-aio"
+  ++ lib.optional gtkSupport "--enable-gtk"
+  ++ lib.optional xenSupport "--enable-xen"
+  ++ lib.optional cephSupport "--enable-rbd"
+  ++ lib.optional glusterfsSupport "--enable-glusterfs"
+  ++ lib.optional openGLSupport "--enable-opengl"
+  ++ lib.optional virglSupport "--enable-virglrenderer"
+  ++ lib.optional tpmSupport "--enable-tpm"
+  ++ lib.optional libiscsiSupport "--enable-libiscsi"
+  ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
+  ++ lib.optional uringSupport "--enable-linux-io-uring";
 
   doCheck = false; # tries to access /dev
   dontWrapGApps = true;

@@ -1,6 +1,22 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmake, python
-, libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, nose, shapely, pythonOlder, isPyPy, lz4, requests }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, python
+, libosmium
+, protozero
+, boost
+, expat
+, bzip2
+, zlib
+, pybind11
+, nose
+, shapely
+, pythonOlder
+, isPyPy
+, lz4
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "pyosmium";

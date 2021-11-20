@@ -1,50 +1,99 @@
-{ lib, stdenv, patchelf, makeWrapper
+{ lib
+, stdenv
+, patchelf
+, makeWrapper
 
-# Linked dynamic libraries.
-, glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
-, libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
-, alsa-lib, libXdamage, libXtst, libXrandr, libxshmfence, expat, cups
-, dbus, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, libkrb5, libdrm, mesa
-, libxkbcommon, pipewire, wayland # ozone/wayland
+  # Linked dynamic libraries.
+, glib
+, fontconfig
+, freetype
+, pango
+, cairo
+, libX11
+, libXi
+, atk
+, gconf
+, nss
+, nspr
+, libXcursor
+, libXext
+, libXfixes
+, libXrender
+, libXScrnSaver
+, libXcomposite
+, libxcb
+, alsa-lib
+, libXdamage
+, libXtst
+, libXrandr
+, libxshmfence
+, expat
+, cups
+, dbus
+, gtk3
+, gdk-pixbuf
+, gcc-unwrapped
+, at-spi2-atk
+, at-spi2-core
+, libkrb5
+, libdrm
+, mesa
+, libxkbcommon
+, pipewire
+, wayland # ozone/wayland
 
-# Command line programs
+  # Command line programs
 , coreutils
 
-# command line arguments which are always set e.g "--disable-gpu"
+  # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
 
-# Will crash without.
+  # Will crash without.
 , systemd
 
-# Loaded at runtime.
-, libexif, pciutils
+  # Loaded at runtime.
+, libexif
+, pciutils
 
-# Additional dependencies according to other distros.
-## Ubuntu
-, liberation_ttf, curl, util-linux, xdg-utils, wget
-## Arch Linux.
-, flac, harfbuzz, icu, libpng, libopus, snappy, speechd
-## Gentoo
-, bzip2, libcap
+  # Additional dependencies according to other distros.
+  ## Ubuntu
+, liberation_ttf
+, curl
+, util-linux
+, xdg-utils
+, wget
+  ## Arch Linux.
+, flac
+, harfbuzz
+, icu
+, libpng
+, libopus
+, snappy
+, speechd
+  ## Gentoo
+, bzip2
+, libcap
 
-# Which distribution channel to use.
+  # Which distribution channel to use.
 , channel ? "stable"
 
-# Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio ? null
+  # Necessary for USB audio devices.
+, pulseSupport ? true
+, libpulseaudio ? null
 
-# Only needed for getting information about upstream binaries
+  # Only needed for getting information about upstream binaries
 , chromium
 
 , gsettings-desktop-schemas
 , gnome
 
-# For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
-, libvaSupport ? true, libva
+  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+, libvaSupport ? true
+, libva
 
-# For Vulkan support (--enable-features=Vulkan)
-, vulkanSupport ? true, vulkan-loader
+  # For Vulkan support (--enable-features=Vulkan)
+, vulkanSupport ? true
+, vulkan-loader
 }:
 
 with lib;
@@ -57,29 +106,74 @@ let
   version = chromium.upstream-info.version;
 
   deps = [
-    glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
-    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
-    alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
-    dbus gdk-pixbuf gcc-unwrapped.lib
+    glib
+    fontconfig
+    freetype
+    pango
+    cairo
+    libX11
+    libXi
+    atk
+    gconf
+    nss
+    nspr
+    libXcursor
+    libXext
+    libXfixes
+    libXrender
+    libXScrnSaver
+    libXcomposite
+    libxcb
+    alsa-lib
+    libXdamage
+    libXtst
+    libXrandr
+    libxshmfence
+    expat
+    cups
+    dbus
+    gdk-pixbuf
+    gcc-unwrapped.lib
     systemd
-    libexif pciutils
-    liberation_ttf curl util-linux xdg-utils wget
-    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-    bzip2 libcap at-spi2-atk at-spi2-core
-    libkrb5 libdrm mesa coreutils
-    libxkbcommon pipewire wayland
+    libexif
+    pciutils
+    liberation_ttf
+    curl
+    util-linux
+    xdg-utils
+    wget
+    flac
+    harfbuzz
+    icu
+    libpng
+    opusWithCustomModes
+    snappy
+    speechd
+    bzip2
+    libcap
+    at-spi2-atk
+    at-spi2-core
+    libkrb5
+    libdrm
+    mesa
+    coreutils
+    libxkbcommon
+    pipewire
+    wayland
   ] ++ optional pulseSupport libpulseaudio
-    ++ optional libvaSupport libva
-    ++ optional vulkanSupport vulkan-loader
-    ++ [ gtk3 ];
+  ++ optional libvaSupport libva
+  ++ optional vulkanSupport vulkan-loader
+  ++ [ gtk3 ];
 
   suffix = if channel != "stable" then "-" + channel else "";
 
-  crashpadHandlerBinary = if lib.versionAtLeast version "94"
+  crashpadHandlerBinary =
+    if lib.versionAtLeast version "94"
     then "chrome_crashpad_handler"
     else "crashpad_handler";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
 
   name = "google-chrome${suffix}-${version}";
@@ -89,7 +183,9 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas
+    glib
+    gtk3
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme

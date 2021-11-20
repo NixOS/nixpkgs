@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , runCommand
 , fetch
 , cmake
@@ -31,9 +33,10 @@ stdenv.mkDerivation (rec {
 
   patches = [
     ./procfs.patch
-    (runCommand "resource-dir.patch" {
-      clangLibDir = "${libclang.lib}/lib";
-    } ''
+    (runCommand "resource-dir.patch"
+      {
+        clangLibDir = "${libclang.lib}/lib";
+      } ''
       substitute '${./resource-dir.patch}' "$out" --subst-var clangLibDir
     '')
     ./gnu-install-dirs.patch
@@ -42,9 +45,15 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake
+    python3
+    which
+    swig
+    lit
+    makeWrapper
   ] ++ lib.optionals enableManpages [
-    python3.pkgs.sphinx python3.pkgs.recommonmark
+    python3.pkgs.sphinx
+    python3.pkgs.recommonmark
   ];
 
   buildInputs = [
@@ -118,7 +127,7 @@ stdenv.mkDerivation (rec {
     make docs-lldb-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   # manually install lldb man page
   installPhase = ''

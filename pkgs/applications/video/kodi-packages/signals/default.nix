@@ -9,7 +9,7 @@ buildKodiAddon rec {
     sha256 = "1qcjbakch8hvx02wc01zv014nmzgn6ahc4n2bj5mzr114ppd3hjs";
   };
 
-  passthru= {
+  passthru = {
     pythonPath = "lib";
     updateScript = addonUpdateScript {
       attrPath = "kodi.packages.signals";

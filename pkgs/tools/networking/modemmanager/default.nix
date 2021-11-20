@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchurl
-, glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus
+{ lib
+, stdenv
+, fetchurl
+, glib
+, udev
+, libgudev
+, polkit
+, ppp
+, gettext
+, pkg-config
+, python3
+, libmbim
+, libqmi
+, systemd
+, vala
+, gobject-introspection
+, dbus
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +31,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
   installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
   ];
 
   configureFlags = [

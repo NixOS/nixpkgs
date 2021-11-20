@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.airsonic;
-in {
+in
+{
   options = {
 
     services.airsonic = {
@@ -171,6 +172,6 @@ in {
       createHome = true;
       isSystemUser = true;
     };
-    users.groups.airsonic = {};
+    users.groups.airsonic = { };
   };
 }

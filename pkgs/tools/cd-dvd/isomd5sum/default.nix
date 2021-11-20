@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , python3
 , popt
 }:
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs = [ popt ] ;
+  buildInputs = [ popt ];
 
   postPatch = ''
     substituteInPlace Makefile --replace "#/usr/" "#"

@@ -10,7 +10,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    colorama flask flask-httpauth werkzeug pyopenssl
+    colorama
+    flask
+    flask-httpauth
+    werkzeug
+    pyopenssl
   ];
 
   checkPhase = ''

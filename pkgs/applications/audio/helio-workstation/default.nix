@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
-, pkg-config, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, freetype
+, xorg
+, curl
+, libGL
+, libjack2
+, gnome
+, pkg-config
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +25,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
-    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
+    alsa-lib
+    freetype
+    xorg.libX11
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXcomposite
+    curl
+    libGL
+    libjack2
+    gnome.zenity
   ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

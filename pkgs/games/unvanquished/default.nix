@@ -1,8 +1,33 @@
-{ lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
-, copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
-, nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
-, libvorbis, libjpeg, libwebp, libpng
-, cacert, aria2 # to download assets
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, buildFHSUserEnv
+, makeDesktopItem
+, copyDesktopItems
+, gcc
+, cmake
+, gmp
+, libGL
+, zlib
+, ncurses
+, geoip
+, lua5
+, nettle
+, curl
+, SDL2
+, freetype
+, glew
+, openal
+, libopus
+, opusfile
+, libogg
+, libvorbis
+, libjpeg
+, libwebp
+, libpng
+, cacert
+, aria2 # to download assets
 }:
 
 let
@@ -87,8 +112,9 @@ let
     buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
   };
 
-# this really is the daemon game engine, the game itself is in the assets
-in stdenv.mkDerivation rec {
+  # this really is the daemon game engine, the game itself is in the assets
+in
+stdenv.mkDerivation rec {
   pname = "unvanquished";
   inherit version src binary-deps-version;
 
@@ -185,8 +211,15 @@ in stdenv.mkDerivation rec {
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
-      mit gpl3Plus lib.licenses.zlib bsd3 # engine
-      cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
+      mit
+      gpl3Plus
+      lib.licenses.zlib
+      bsd3 # engine
+      cc-by-sa-25
+      cc-by-sa-30
+      cc-by-30
+      cc-by-sa-40
+      cc0 # assets
     ];
   };
 }

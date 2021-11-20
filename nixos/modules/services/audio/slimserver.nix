@@ -6,7 +6,8 @@ let
 
   cfg = config.services.slimserver;
 
-in {
+in
+{
   options = {
 
     services.slimserver = {
@@ -65,7 +66,7 @@ in {
         group = "slimserver";
         isSystemUser = true;
       };
-      groups.slimserver = {};
+      groups.slimserver = { };
     };
   };
 

@@ -1,9 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, cmake, makeWrapper
-, SDL2, libGL, curl
-, oggSupport ? true, libogg, libvorbis
-, openalSupport ? true, openal
-, zipSupport ? true, zlib
-, Cocoa, OpenAL
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildEnv
+, cmake
+, makeWrapper
+, SDL2
+, libGL
+, curl
+, oggSupport ? true
+, libogg
+, libvorbis
+, openalSupport ? true
+, openal
+, zipSupport ? true
+, zlib
+, Cocoa
+, OpenAL
 }:
 
 let
@@ -69,7 +81,8 @@ let
     };
   };
 
-in {
+in
+{
   inherit yquake2;
 
   yquake2-ctf = wrapper {

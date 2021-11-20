@@ -6,17 +6,18 @@
 let
   commands = {
     ditto = "/usr/bin/ditto"; # ditto is not opensource
-    sudo  = "/usr/bin/sudo";  # sudo must be owned by uid 0 and have the setuid bit set
+    sudo = "/usr/bin/sudo"; # sudo must be owned by uid 0 and have the setuid bit set
   };
 
   mkImpureDrv = name: path:
-    runCommandLocal "${name}-impure-darwin" {
-      __impureHostDeps = [ path ];
+    runCommandLocal "${name}-impure-darwin"
+      {
+        __impureHostDeps = [ path ];
 
-      meta = {
-        platforms = lib.platforms.darwin;
-      };
-    } ''
+        meta = {
+          platforms = lib.platforms.darwin;
+        };
+      } ''
       if ! [ -x ${path} ]; then
         echo Cannot find command ${path}
         exit 1
@@ -31,4 +32,5 @@ let
         ln -s $manpage $out/share/man/man1
       fi
     '';
-in lib.mapAttrs mkImpureDrv commands
+in
+lib.mapAttrs mkImpureDrv commands

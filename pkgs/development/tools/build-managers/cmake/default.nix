@@ -1,15 +1,31 @@
-{ stdenv, lib, fetchurl, pkg-config
-, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, bzip2
+, curlMinimal
+, expat
+, libarchive
+, xz
+, zlib
+, libuv
+, rhash
 , buildPackages
-# darwin attributes
+  # darwin attributes
 , SystemConfiguration
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, useOpenSSL ? !isBootstrap, openssl
-, useNcurses ? false, ncurses
-, withQt5 ? false, qtbase, wrapQtAppsHook
-, buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
+, useOpenSSL ? !isBootstrap
+, openssl
+, useNcurses ? false
+, ncurses
+, withQt5 ? false
+, qtbase
+, wrapQtAppsHook
+, buildDocs ? (!isBootstrap && (useNcurses || withQt5))
+, sphinx
+, texinfo
 }:
 
 stdenv.mkDerivation rec {

@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.programs.msmtp;
 
-in {
+in
+{
   meta.maintainers = with maintainers; [ pacien ];
 
   options = {
@@ -22,7 +23,7 @@ in {
 
       defaults = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           aliases = "/etc/aliases";
           port = 587;
@@ -36,7 +37,7 @@ in {
 
       accounts = mkOption {
         type = with types; attrsOf attrs;
-        default = {};
+        default = { };
         example = {
           "default" = {
             host = "smtp.example";
@@ -82,25 +83,27 @@ in {
       group = "root";
     };
 
-    environment.etc."msmtprc".text = let
-      mkValueString = v:
-        if v == true then "on"
-        else if v == false then "off"
-        else generators.mkValueStringDefault {} v;
-      mkKeyValueString = k: v: "${k} ${mkValueString v}";
-      mkInnerSectionString =
-        attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
-      mkAccountString = name: attrs: ''
-        account ${name}
-        ${mkInnerSectionString attrs}
+    environment.etc."msmtprc".text =
+      let
+        mkValueString = v:
+          if v == true then "on"
+          else if v == false then "off"
+          else generators.mkValueStringDefault { } v;
+        mkKeyValueString = k: v: "${k} ${mkValueString v}";
+        mkInnerSectionString =
+          attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValueString attrs);
+        mkAccountString = name: attrs: ''
+          account ${name}
+          ${mkInnerSectionString attrs}
+        '';
+      in
+      ''
+        defaults
+        ${mkInnerSectionString cfg.defaults}
+
+        ${concatStringsSep "\n" (mapAttrsToList mkAccountString cfg.accounts)}
+
+        ${cfg.extraConfig}
       '';
-    in ''
-      defaults
-      ${mkInnerSectionString cfg.defaults}
-
-      ${concatStringsSep "\n" (mapAttrsToList mkAccountString cfg.accounts)}
-
-      ${cfg.extraConfig}
-    '';
   };
 }

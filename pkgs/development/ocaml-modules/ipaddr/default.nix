@@ -1,6 +1,10 @@
-{ lib, buildDunePackage
-, macaddr, domain-name, stdlib-shims
-, ounit, ppx_sexp_conv
+{ lib
+, buildDunePackage
+, macaddr
+, domain-name
+, stdlib-shims
+, ounit
+, ppx_sexp_conv
 }:
 
 buildDunePackage rec {

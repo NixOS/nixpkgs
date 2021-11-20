@@ -12,12 +12,19 @@
 , settings32Bit ? false
 
 , prePatch ? ""
-, patches ? []
+, patches ? [ ]
 , broken ? false
 }@args:
 
-{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences
+{ lib
+, stdenv
+, callPackage
+, pkgs
+, pkgsi686Linux
+, fetchurl
+, kernel ? null
+, perl
+, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -41,9 +48,17 @@ let
   i686bundled = versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
-    libdrm xorg.libXext xorg.libX11
-    xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
-    wayland mesa libGL
+    libdrm
+    xorg.libXext
+    xorg.libX11
+    xorg.libXv
+    xorg.libXrandr
+    xorg.libxcb
+    zlib
+    stdenv.cc.cc
+    wayland
+    mesa
+    libGL
   ]);
 
   self = stdenv.mkDerivation {
@@ -53,15 +68,17 @@ let
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl {
-          url = args.url or "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
-          sha256 = sha256_64bit;
-        }
+        fetchurl
+          {
+            url = args.url or "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+            sha256 = sha256_64bit;
+          }
       else if stdenv.hostPlatform.system == "i686-linux" then
-        fetchurl {
-          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
-          sha256 = sha256_32bit;
-        }
+        fetchurl
+          {
+            url = args.url or "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
+            sha256 = sha256_32bit;
+          }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
@@ -71,8 +88,8 @@ let
     inherit i686bundled;
 
     outputs = [ "out" ]
-        ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin";
+      ++ optional i686bundled "lib32"
+      ++ optional (!libsOnly) "bin";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
@@ -120,4 +137,5 @@ let
     };
   };
 
-in self
+in
+self

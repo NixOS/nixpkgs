@@ -23,8 +23,8 @@ with serviceCfg; with lib; recursiveUpdate
     Restart = "always";
     WorkingDirectory = statePath;
   } // (if (cfg.statePath == "/var/lib/sourcehut/${serviceDrv.pname}") then {
-          StateDirectory = [ "sourcehut/${serviceDrv.pname}" ];
-        } else {})
+    StateDirectory = [ "sourcehut/${serviceDrv.pname}" ];
+  } else { })
   ;
 
   preStart = ''

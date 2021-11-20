@@ -5,7 +5,7 @@
 { nixpkgs
 , officialRelease
 , supportedSystems
-, pkgs ? import nixpkgs.outPath {}
+, pkgs ? import nixpkgs.outPath { }
 , nix ? pkgs.nix
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
 }:
@@ -33,7 +33,7 @@ pkgs.releaseTools.sourceTarball {
   '';
 
   nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
-   { inherit nix pkgs nixpkgs supportedSystems; };
+    { inherit nix pkgs nixpkgs supportedSystems; };
 
   dontBuild = false;
 

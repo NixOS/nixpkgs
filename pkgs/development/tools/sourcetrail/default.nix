@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, writeScript, fetchpatch, cmake
-, wrapQtAppsHook, qt5, boost, llvmPackages, gcc, jdk, maven, pythonPackages
-, coreutils, which, desktop-file-utils, shared-mime-info, imagemagick, libicns
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, writeScript
+, fetchpatch
+, cmake
+, wrapQtAppsHook
+, qt5
+, boost
+, llvmPackages
+, gcc
+, jdk
+, maven
+, pythonPackages
+, coreutils
+, which
+, desktop-file-utils
+, shared-mime-info
+, imagemagick
+, libicns
 }:
 
 let
@@ -13,16 +31,18 @@ let
     pythonPackages.callPackage ./python.nix { inherit jedi parso; };
   javaIndexer = callPackage ./java.nix { };
 
-  appPrefixDir = if stdenv.isDarwin then
-    "$out/Applications/Sourcetrail.app/Contents"
-  else
-    "$out/opt/sourcetrail";
+  appPrefixDir =
+    if stdenv.isDarwin then
+      "$out/Applications/Sourcetrail.app/Contents"
+    else
+      "$out/opt/sourcetrail";
   appBinDir =
     if stdenv.isDarwin then "${appPrefixDir}/MacOS" else "${appPrefixDir}/bin";
-  appResourceDir = if stdenv.isDarwin then
-    "${appPrefixDir}/Resources"
-  else
-    "${appPrefixDir}/share";
+  appResourceDir =
+    if stdenv.isDarwin then
+      "${appPrefixDir}/Resources"
+    else
+      "${appPrefixDir}/share";
 
   # Upstream script:
   # https://github.com/CoatiSoftware/Sourcetrail/blob/master/script/update_java_indexer.sh
@@ -45,7 +65,8 @@ let
     mkdir -p ${appResourceDir}/data
     ln -s "${pythonIndexer}/bin" "${appResourceDir}/data/python"
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sourcetrail";
   # NOTE: skip 2020.4.35 https://github.com/CoatiSoftware/Sourcetrail/pull/1136
   version = "2020.2.43";
@@ -57,24 +78,26 @@ in stdenv.mkDerivation rec {
     sha256 = "0jp9y86xzkcxikc1cn4f6gqgg6zdssck08677ldagw25p1zadvzw";
   };
 
-  patches = let
-    url = commit:
-      "https://github.com/CoatiSoftware/Sourcetrail/commit/${commit}.patch";
-  in [
-    ./disable-updates.patch
-    ./disable-failing-tests.patch # FIXME: 5 test cases failing due to sandbox
-    # TODO: remove on next release
-    (fetchpatch {
-      name = "fix-filecopy.patch";
-      url = url "d079d1787c9e5cadcf41a003666dc0746cc1cda0";
-      sha256 = "0mixy2a4s16kv2q89k7y4dv21wnv2zd86i4gdwn3xz977y8hf92b";
-    })
-    (fetchpatch {
-      name = "fix-broken-test.patch";
-      url = url "85329174bac8a301733100dc4540258f977e2c5a";
-      sha256 = "17l4417sbmkrgr6v3fbazlmkzl9774zrpjv2n9zwfrz52y30f7b9";
-    })
-  ];
+  patches =
+    let
+      url = commit:
+        "https://github.com/CoatiSoftware/Sourcetrail/commit/${commit}.patch";
+    in
+    [
+      ./disable-updates.patch
+      ./disable-failing-tests.patch # FIXME: 5 test cases failing due to sandbox
+      # TODO: remove on next release
+      (fetchpatch {
+        name = "fix-filecopy.patch";
+        url = url "d079d1787c9e5cadcf41a003666dc0746cc1cda0";
+        sha256 = "0mixy2a4s16kv2q89k7y4dv21wnv2zd86i4gdwn3xz977y8hf92b";
+      })
+      (fetchpatch {
+        name = "fix-broken-test.patch";
+        url = url "85329174bac8a301733100dc4540258f977e2c5a";
+        sha256 = "17l4417sbmkrgr6v3fbazlmkzl9774zrpjv2n9zwfrz52y30f7b9";
+      })
+    ];
 
   nativeBuildInputs = [
     cmake
@@ -84,7 +107,7 @@ in stdenv.mkDerivation rec {
     imagemagick
     javaIndexer # the resulting jar file is copied by our install script
   ] ++ lib.optional (stdenv.isDarwin) libicns
-    ++ lib.optionals doCheck testBinPath;
+  ++ lib.optionals doCheck testBinPath;
   buildInputs = [ boost pythonIndexer shared-mime-info ]
     ++ (with qt5; [ qtbase qtsvg ]) ++ (with llvmPackages; [ libclang llvm ]);
   binPath = [ gcc jdk.jre maven which ];
@@ -97,35 +120,37 @@ in stdenv.mkDerivation rec {
     "-DBUILD_PYTHON_LANGUAGE_PACKAGE=ON"
   ] ++ lib.optional stdenv.isLinux
     "-DCMAKE_PREFIX_PATH=${llvmPackages.clang-unwrapped}"
-    ++ lib.optional stdenv.isDarwin
+  ++ lib.optional stdenv.isDarwin
     "-DClang_DIR=${llvmPackages.clang-unwrapped}";
 
-  postPatch = let
-    major = lib.versions.major version;
-    minor = lib.versions.minor version;
-    patch = lib.versions.patch version;
-  in ''
-    # Upstream script obtains it's version from git:
-    # https://github.com/CoatiSoftware/Sourcetrail/blob/master/cmake/version.cmake
-    cat > cmake/version.cmake <<EOF
-    set(GIT_BRANCH "")
-    set(GIT_COMMIT_HASH "")
-    set(GIT_VERSION_NUMBER "")
-    set(VERSION_YEAR "${major}")
-    set(VERSION_MINOR "${minor}")
-    set(VERSION_COMMIT "${patch}")
-    set(BUILD_TYPE "Release")
-    set(VERSION_STRING "${major}.${minor}.${patch}")
-    EOF
+  postPatch =
+    let
+      major = lib.versions.major version;
+      minor = lib.versions.minor version;
+      patch = lib.versions.patch version;
+    in
+    ''
+      # Upstream script obtains it's version from git:
+      # https://github.com/CoatiSoftware/Sourcetrail/blob/master/cmake/version.cmake
+      cat > cmake/version.cmake <<EOF
+      set(GIT_BRANCH "")
+      set(GIT_COMMIT_HASH "")
+      set(GIT_VERSION_NUMBER "")
+      set(VERSION_YEAR "${major}")
+      set(VERSION_MINOR "${minor}")
+      set(VERSION_COMMIT "${patch}")
+      set(BUILD_TYPE "Release")
+      set(VERSION_STRING "${major}.${minor}.${patch}")
+      EOF
 
-    # Sourcetrail attempts to copy clang headers from the LLVM store path
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_BINARY_DIR}" '${lib.getLib llvmPackages.clang-unwrapped}'
+      # Sourcetrail attempts to copy clang headers from the LLVM store path
+      substituteInPlace CMakeLists.txt \
+        --replace "\''${LLVM_BINARY_DIR}" '${lib.getLib llvmPackages.clang-unwrapped}'
 
-    patchShebangs script
-    ln -sf ${installJavaIndexer} script/update_java_indexer.sh
-    ln -sf ${installPythonIndexer} script/download_python_indexer.sh
-  '';
+      patchShebangs script
+      ln -sf ${installJavaIndexer} script/update_java_indexer.sh
+      ln -sf ${installPythonIndexer} script/download_python_indexer.sh
+    '';
 
   # Directory layout for Linux:
   #

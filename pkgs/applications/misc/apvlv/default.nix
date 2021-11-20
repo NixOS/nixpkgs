@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, epoxy
-, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, pcre
+, libxkbcommon
+, epoxy
+, gtk3
+, poppler
+, freetype
+, libpthreadstubs
+, libXdmcp
+, libxshmfence
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +36,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    poppler pcre libxkbcommon epoxy
-    freetype gtk3
-    libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
+    poppler
+    pcre
+    libxkbcommon
+    epoxy
+    freetype
+    gtk3
+    libpthreadstubs
+    libXdmcp
+    libxshmfence # otherwise warnings in compilation
   ];
 
   patches = [

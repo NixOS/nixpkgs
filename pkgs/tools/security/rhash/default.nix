@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 

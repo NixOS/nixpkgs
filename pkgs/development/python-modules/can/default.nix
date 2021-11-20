@@ -11,7 +11,7 @@
 , hypothesis
 , future
 , pytest
- }:
+}:
 
 buildPythonPackage rec {
   pname = "python-can";

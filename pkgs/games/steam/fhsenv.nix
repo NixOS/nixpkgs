@@ -1,5 +1,11 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
-, steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
+{ config
+, lib
+, writeScript
+, buildFHSUserEnv
+, steam
+, glxinfo-i686
+, steam-runtime-wrapped
+, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
@@ -8,7 +14,7 @@
 , runtimeShell
 , stdenv
 
-# DEPRECATED
+  # DEPRECATED
 , withJava ? config.steam.java or false
 , withPrimus ? config.steam.primus or false
 }:
@@ -41,13 +47,13 @@ let
       mesa
       sqlite
     ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
-      ++ lib.optional withPrimus primus
-      ++ extraPkgs pkgs;
+    ++ lib.optional withPrimus primus
+    ++ extraPkgs pkgs;
 
   ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
-  ++ [ "/lib32" ]
-  ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
-  ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+    ++ [ "/lib32" ]
+    ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
+    ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
   # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
   exportLDPath = ''
@@ -79,7 +85,8 @@ let
     exec "$@"
   '';
 
-in buildFHSUserEnv rec {
+in
+buildFHSUserEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
@@ -107,7 +114,7 @@ in buildFHSUserEnv rec {
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
-    at-spi2-core   # CrossCode
+    at-spi2-core # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base

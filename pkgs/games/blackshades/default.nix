@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromSourcehut
-, SDL, stb, libGLU, libGL, openal, libvorbis, freealut }:
+{ lib
+, stdenv
+, fetchFromSourcehut
+, SDL
+, stb
+, libGLU
+, libGL
+, openal
+, libvorbis
+, freealut
+}:
 
 stdenv.mkDerivation rec {
   pname = "blackshades";

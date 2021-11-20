@@ -8,9 +8,9 @@ buildGoModule rec {
   version = "0.22.15";
 
   src = fetchFromGitHub {
-    owner  = "tilt-dev";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "tilt-dev";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-Aim80bg1vGRkiIlVqDa4qOFQ+mwSOL75HOPYQYovYlE=";
   };
   vendorSha256 = null;

@@ -10,7 +10,8 @@ mkCoqDerivation rec {
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isEq "8.13"; out = "8.13+no"; }
-  ] null;
+  ]
+    null;
 
   mlPlugin = true;
   extraBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ocaml, findlib, camlp4}:
+{ lib, stdenv, fetchurl, ocaml, findlib, camlp4 }:
 stdenv.mkDerivation rec {
   pname = "ocamlscript";
   version = "2.0.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://martin.jambon.free.fr/ocamlscript.html";
     license = licenses.boost;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     description = "Natively-compiled OCaml scripts";
     maintainers = [ maintainers.vbgl ];
   };

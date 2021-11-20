@@ -14,7 +14,8 @@
 , xdg-utils
 , systemd
 , nodePackages
-, enableRectOverlay ? false }:
+, enableRectOverlay ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "teams";

@@ -47,7 +47,8 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "tokenizers";
   version = "unstable-2021-08-13";
 

@@ -2,7 +2,8 @@
 
 let
   version = "1.4.9";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gogui";
   inherit version;
   nativeBuildInputs = [ makeWrapper unzip ];

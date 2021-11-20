@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-     # fix recursive cycle:
-     # wolfssl-config points to dev, dev propagates bin
-     moveToOutput bin/wolfssl-config "$dev"
-     # moveToOutput also removes "$out" so recreate it
-     mkdir -p "$out"
+    # fix recursive cycle:
+    # wolfssl-config points to dev, dev propagates bin
+    moveToOutput bin/wolfssl-config "$dev"
+    # moveToOutput also removes "$out" so recreate it
+    mkdir -p "$out"
   '';
 
   meta = with lib; {

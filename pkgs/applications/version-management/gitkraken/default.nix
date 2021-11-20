@@ -1,9 +1,50 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
-, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems
+{ lib
+, stdenv
+, libXcomposite
+, libgnome-keyring
+, makeWrapper
+, udev
+, curl
+, alsa-lib
+, libXfixes
+, atk
+, gtk3
+, libXrender
+, pango
+, gnome
+, cairo
+, freetype
+, fontconfig
+, libX11
+, libXi
+, libxcb
+, libXext
+, libXcursor
+, glib
+, libXScrnSaver
+, libxkbfile
+, libXtst
+, nss
+, nspr
+, cups
+, fetchzip
+, expat
+, gdk-pixbuf
+, libXdamage
+, libXrandr
+, dbus
+, makeDesktopItem
+, openssl
+, wrapGAppsHook
+, at-spi2-atk
+, at-spi2-core
+, libuuid
+, e2fsprogs
+, krb5
+, libdrm
+, mesa
+, unzip
+, copyDesktopItems
 }:
 
 with lib;
@@ -88,15 +129,17 @@ let
       mesa
     ];
 
-    desktopItems = [ (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = "GitKraken";
-      genericName = "Git Client";
-      categories = "Development;";
-      comment = "Graphical Git client from Axosoft";
-    }) ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = pname;
+        exec = pname;
+        icon = pname;
+        desktopName = "GitKraken";
+        genericName = "Git Client";
+        categories = "Development;";
+        comment = "Graphical Git client from Axosoft";
+      })
+    ];
 
     nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
     buildInputs = [ gtk3 gnome.adwaita-icon-theme ];

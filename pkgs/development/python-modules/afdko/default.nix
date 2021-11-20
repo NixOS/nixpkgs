@@ -1,7 +1,25 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
-, fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
-, brotli, fontmath, mutatormath, booleanoperations
-, ufoprocessor, ufonormalizer, psautohint, tqdm
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, fonttools
+, defcon
+, lxml
+, fs
+, unicodedata2
+, zopfli
+, brotlipy
+, fontpens
+, brotli
+, fontmath
+, mutatormath
+, booleanoperations
+, ufoprocessor
+, ufonormalizer
+, psautohint
+, tqdm
 , setuptools-scm
 , pytestCheckHook
 }:
@@ -37,11 +55,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     booleanoperations
     fonttools
-    lxml           # fonttools[lxml], defcon[lxml] extra
-    fs             # fonttools[ufo] extra
-    unicodedata2   # fonttools[unicode] extra
-    brotlipy       # fonttools[woff] extra
-    zopfli         # fonttools[woff] extra
+    lxml # fonttools[lxml], defcon[lxml] extra
+    fs # fonttools[ufo] extra
+    unicodedata2 # fonttools[unicode] extra
+    brotlipy # fonttools[woff] extra
+    zopfli # fonttools[woff] extra
     fontpens
     brotli
     defcon

@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A session manager designed for audio applications.";
     maintainers = [ maintainers._6AA4FD ];
     license = licenses.gpl3Plus;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

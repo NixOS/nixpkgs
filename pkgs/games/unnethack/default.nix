@@ -16,12 +16,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ util-linux flex bison ];
 
-  configureFlags = [ "--enable-curses-graphics"
-                     "--disable-tty-graphics"
-                     "--with-owner=no"
-                     "--with-group=no"
-                     "--with-gamesdir=/tmp/unnethack"
-                   ];
+  configureFlags = [
+    "--enable-curses-graphics"
+    "--disable-tty-graphics"
+    "--with-owner=no"
+    "--with-group=no"
+    "--with-gamesdir=/tmp/unnethack"
+  ];
 
   makeFlags = [ "GAMEPERM=744" ];
   patches = [

@@ -1,5 +1,15 @@
-{ lib, buildDunePackage, base64, benchmark, csv, cmdliner, wodan, afl-persistent
-, io-page-unix, mirage-block-ramdisk, mirage-block-unix }:
+{ lib
+, buildDunePackage
+, base64
+, benchmark
+, csv
+, cmdliner
+, wodan
+, afl-persistent
+, io-page-unix
+, mirage-block-ramdisk
+, mirage-block-unix
+}:
 
 buildDunePackage rec {
   outputs = [ "bin" "out" ];

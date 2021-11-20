@@ -19,17 +19,18 @@ buildGoModule rec {
 
   subPackages = [ "cmd/lncli" "cmd/lnd" ];
 
-  preBuild = let
-    buildVars = {
-      RawTags = lib.concatStringsSep "," tags;
-      GoVersion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
-    };
-    buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X github.com/lightningnetwork/lnd/build.${k}=${v}") buildVars);
-  in
-  lib.optionalString (tags != []) ''
-    buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
-    buildFlagsArray+=("-ldflags=${buildVarsFlags}")
-  '';
+  preBuild =
+    let
+      buildVars = {
+        RawTags = lib.concatStringsSep "," tags;
+        GoVersion = "$(go version | egrep -o 'go[0-9]+[.][^ ]*')";
+      };
+      buildVarsFlags = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "-X github.com/lightningnetwork/lnd/build.${k}=${v}") buildVars);
+    in
+    lib.optionalString (tags != [ ]) ''
+      buildFlagsArray+=("-tags=${lib.concatStringsSep " " tags}")
+      buildFlagsArray+=("-ldflags=${buildVarsFlags}")
+    '';
 
   meta = with lib; {
     description = "Lightning Network Daemon";

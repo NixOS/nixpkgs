@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ numactl ncurses ];
   checkInputs = [ check ];
 
-  doCheck  = true;
+  doCheck = true;
 
   meta = with lib; {
     description = "Tool for runtime memory locality characterization and analysis of processes and threads on a NUMA system";

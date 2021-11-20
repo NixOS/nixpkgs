@@ -80,40 +80,42 @@ import ./make-test-python.nix {
           { address = "192.168.1.3"; prefixLength = 24; }
         ];
       };
-      environment.systemPackages = let
-        sendTestMail = pkgs.writeScriptBin "send-a-test-mail" ''
-          #!${pkgs.python3.interpreter}
-          import smtplib, sys
+      environment.systemPackages =
+        let
+          sendTestMail = pkgs.writeScriptBin "send-a-test-mail" ''
+            #!${pkgs.python3.interpreter}
+            import smtplib, sys
 
-          with smtplib.SMTP('192.168.1.1') as smtp:
-            smtp.sendmail('alice@[192.168.1.1]', 'bob@[192.168.1.2]', """
-              From: alice@smtp1
-              To: bob@smtp2
-              Subject: Test
+            with smtplib.SMTP('192.168.1.1') as smtp:
+              smtp.sendmail('alice@[192.168.1.1]', 'bob@[192.168.1.2]', """
+                From: alice@smtp1
+                To: bob@smtp2
+                Subject: Test
 
-              Hello World
-              Here goes the spam test
-              XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
-            """)
-        '';
+                Hello World
+                Here goes the spam test
+                XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
+              """)
+          '';
 
-        checkMailBounced = pkgs.writeScriptBin "check-mail-bounced" ''
-          #!${pkgs.python3.interpreter}
-          import imaplib
+          checkMailBounced = pkgs.writeScriptBin "check-mail-bounced" ''
+            #!${pkgs.python3.interpreter}
+            import imaplib
 
-          with imaplib.IMAP4('192.168.1.1', 143) as imap:
-            imap.login('alice', 'foobar')
-            imap.select()
-            status, refs = imap.search(None, 'ALL')
-            assert status == 'OK'
-            assert len(refs) == 1
-            status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
-            assert status == 'OK'
-            content = msg[0][1]
-            print("===> content:", content)
-            assert b"An error has occurred while attempting to deliver a message" in content
-        '';
-      in [ sendTestMail checkMailBounced ];
+            with imaplib.IMAP4('192.168.1.1', 143) as imap:
+              imap.login('alice', 'foobar')
+              imap.select()
+              status, refs = imap.search(None, 'ALL')
+              assert status == 'OK'
+              assert len(refs) == 1
+              status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
+              assert status == 'OK'
+              content = msg[0][1]
+              print("===> content:", content)
+              assert b"An error has occurred while attempting to deliver a message" in content
+          '';
+        in
+        [ sendTestMail checkMailBounced ];
     };
   };
 

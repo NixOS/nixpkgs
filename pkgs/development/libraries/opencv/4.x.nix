@@ -94,12 +94,13 @@ let
 
   # See opencv/3rdparty/ippicv/ippicv.cmake
   ippicv = {
-    src = fetchFromGitHub {
-      owner = "opencv";
-      repo = "opencv_3rdparty";
-      rev = "a56b6ac6f030c312b2dce17430eef13aed9af274";
-      sha256 = "1msbkc3zixx61rcg6a04i1bcfhw1phgsrh93glq1n80hgsk3nbjq";
-    } + "/ippicv";
+    src = fetchFromGitHub
+      {
+        owner = "opencv";
+        repo = "opencv_3rdparty";
+        rev = "a56b6ac6f030c312b2dce17430eef13aed9af274";
+        sha256 = "1msbkc3zixx61rcg6a04i1bcfhw1phgsrh93glq1n80hgsk3nbjq";
+      } + "/ippicv";
     files = let name = platform: "ippicv_2019_${platform}_general_20180723.tgz"; in
       if stdenv.hostPlatform.system == "x86_64-linux" then
         { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }

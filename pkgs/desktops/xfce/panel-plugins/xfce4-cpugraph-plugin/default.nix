@@ -18,8 +18,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-cpugraph-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-cpugraph-plugin";
   version = "1.2.5";
 
   src = fetchurl {

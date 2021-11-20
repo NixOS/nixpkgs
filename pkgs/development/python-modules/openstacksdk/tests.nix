@@ -36,13 +36,15 @@ buildPythonPackage rec {
   ];
 
   checkPhase =
-    let aarch64TestsExcluded = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_node_set_provision_state_with_retries
-      openstack.tests.unit.cloud.test_role_assignment.TestRoleAssignment.test_grant_role_user_domain_exists
-      openstack.tests.unit.cloud.test_volume_backups.TestVolumeBackups.test_delete_volume_backup_force
-      openstack.tests.unit.object_store.v1.test_proxy.TestTempURLBytesPathAndKey.test_set_account_temp_url_key_second
-      openstack.tests.unit.cloud.test_security_groups.TestSecurityGroups.test_delete_security_group_neutron_not_found
-    ''; in
+    let
+      aarch64TestsExcluded = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_node_set_provision_state_with_retries
+        openstack.tests.unit.cloud.test_role_assignment.TestRoleAssignment.test_grant_role_user_domain_exists
+        openstack.tests.unit.cloud.test_volume_backups.TestVolumeBackups.test_delete_volume_backup_force
+        openstack.tests.unit.object_store.v1.test_proxy.TestTempURLBytesPathAndKey.test_set_account_temp_url_key_second
+        openstack.tests.unit.cloud.test_security_groups.TestSecurityGroups.test_delete_security_group_neutron_not_found
+      '';
+    in
     ''
       stestr run -e <(echo "${aarch64TestsExcluded}
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_wait_for_baremetal_node_lock_locked

@@ -76,7 +76,7 @@ let
             "nix-support/media-session.conf.json"
             "nix-support/v4l2-monitor.conf.json"
           ];
-          paths-lib = [];
+          paths-lib = [ ];
         };
       };
     };

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./dont-check-users_groups.patch  # needed for "make testdeps" to work in the build
+    ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
   ];
 

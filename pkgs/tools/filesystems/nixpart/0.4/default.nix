@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl, python, buildPythonApplication
+{ lib
+, stdenv
+, fetchurl
+, python
+, buildPythonApplication
 , libselinux
-# Propagated to blivet
+  # Propagated to blivet
 , useNixUdev ? true
-# Needed by NixOps
+  # Needed by NixOps
 , udevSoMajor ? null
-# Propagated dependencies
-, pkgs, urlgrabber
+  # Propagated dependencies
+, pkgs
+, urlgrabber
 }:
 
 let
@@ -53,7 +58,8 @@ let
     inherit (pkgs) pkg-config e2fsprogs;
   };
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "nixpart";
   version = "0.4.1";
   disabled = python.isPy3k;

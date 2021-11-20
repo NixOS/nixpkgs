@@ -21,7 +21,8 @@
 , shared-mime-info
 , wrapGAppsHook
 , xapps
-, yelp-tools }:
+, yelp-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";

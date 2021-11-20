@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchgit, fetchurl, python2, makeWrapper, pkg-config, gcc,
-  pypy, libffi, libedit, libuv, boost, zlib,
-  variant ? "jit", buildWithPypy ? false }:
+{ lib
+, stdenv
+, fetchgit
+, fetchurl
+, python2
+, makeWrapper
+, pkg-config
+, gcc
+, pypy
+, libffi
+, libedit
+, libuv
+, boost
+, zlib
+, variant ? "jit"
+, buildWithPypy ? false
+}:
 
 let
   commit-count = "1364";
@@ -24,17 +38,18 @@ let
   };
   libs = [ libffi libedit libuv boost.dev boost.out zlib ];
   include-path = lib.concatStringsSep ":"
-                   (map (p: "${p}/include") libs);
+    (map (p: "${p}/include") libs);
   library-path = lib.concatStringsSep ":"
-                   (map (p: "${p}/lib") libs);
+    (map (p: "${p}/lib") libs);
   bin-path = lib.concatStringsSep ":"
-               (map (p: "${p}/bin") [ gcc ]);
-  build = {flags, target}: stdenv.mkDerivation rec {
+    (map (p: "${p}/bin") [ gcc ]);
+  build = { flags, target }: stdenv.mkDerivation rec {
     pname = "pixie";
     version = "0-r${commit-count}-${variant}";
     nativeBuildInputs = [ makeWrapper pkg-config ];
     buildInputs = libs;
-    PYTHON = if buildWithPypy
+    PYTHON =
+      if buildWithPypy
       then "${pypy}/pypy-c/pypy-c"
       else python2.interpreter;
     unpackPhase = ''
@@ -86,8 +101,9 @@ let
       description = "A clojure-like lisp, built with the pypy vm toolkit";
       homepage = "https://github.com/pixie-lang/pixie";
       license = lib.licenses.lgpl3;
-      platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+      platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
       maintainers = with lib.maintainers; [ bendlas ];
     };
   };
-in build (builtins.getAttr variant variants)
+in
+build (builtins.getAttr variant variants)

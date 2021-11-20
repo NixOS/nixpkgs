@@ -1,8 +1,25 @@
 { buildVersion, aarch64sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, lib, xorg, glib, libglvnd, glibcLocales, gtk3, cairo, pango, makeWrapper, wrapGAppsHook
-, writeShellScript, common-updater-scripts, curl
-, openssl, bzip2, bash, unzip, zip
+{ fetchurl
+, stdenv
+, lib
+, xorg
+, glib
+, libglvnd
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, makeWrapper
+, wrapGAppsHook
+, writeShellScript
+, common-updater-scripts
+, curl
+, openssl
+, bzip2
+, bash
+, unzip
+, zip
 }:
 
 let
@@ -24,7 +41,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango ];
-in let
+in
+let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
     version = buildVersion;
@@ -96,7 +114,8 @@ in let
         "''${gappsWrapperArgs[@]}"
     '';
   };
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 

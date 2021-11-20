@@ -18,7 +18,7 @@ let
     };
 
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     buildInputs = [ erlang ];
@@ -37,4 +37,5 @@ let
     };
 
   };
-in lib.fix pkg
+in
+lib.fix pkg

@@ -2,7 +2,7 @@
 , trivialBuild
 , fetchFromGitHub
 , emacs
- }:
+}:
 
 trivialBuild rec {
   pname = "rect-mark";

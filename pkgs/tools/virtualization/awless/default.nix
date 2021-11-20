@@ -7,9 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/wallix/awless";
 
   src = fetchFromGitHub {
-    owner  = "wallix";
-    repo   = "awless";
-    rev    = "v${version}";
+    owner = "wallix";
+    repo = "awless";
+    rev = "v${version}";
     sha256 = "187i21yrm10r3f5naj3jl0rmydr5dkhmdhxs90hhf8hjp59a89kg";
   };
 

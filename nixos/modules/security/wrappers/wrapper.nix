@@ -9,9 +9,12 @@ stdenv.mkDerivation {
   CFLAGS = [
     ''-DWRAPPER_DIR="${parentWrapperDir}"''
   ] ++ (if debug then [
-    "-Werror" "-Og" "-g"
+    "-Werror"
+    "-Og"
+    "-g"
   ] else [
-    "-Wall" "-O2"
+    "-Wall"
+    "-O2"
   ]);
   dontStrip = debug;
   installPhase = ''

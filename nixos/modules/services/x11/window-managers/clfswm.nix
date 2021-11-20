@@ -11,8 +11,8 @@ in
     services.xserver.windowManager.clfswm = {
       enable = mkEnableOption "clfswm";
       package = mkOption {
-        type        = types.package;
-        default     = pkgs.lispPackages.clfswm;
+        type = types.package;
+        default = pkgs.lispPackages.clfswm;
         defaultText = literalExpression "pkgs.lispPackages.clfswm";
         description = ''
           clfswm package to use.

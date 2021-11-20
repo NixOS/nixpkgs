@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
-, libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cairo
+, curl
+, fcgi
+, freetype
+, fribidi
+, gdal
+, geos
+, giflib
+, harfbuzz
+, libjpeg
+, libpng
+, librsvg
+, libxml2
+, postgresql
+, proj
+, protobufc
+, zlib
+, withPython ? true
+, swig
+, python
 }:
 
 stdenv.mkDerivation rec {

@@ -68,9 +68,9 @@ let
     };
   };
 in
-  (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
-    # otherwise will be exported as "env", this restores `nix search` behavior
-    name = "${unwrapped.pname}-${unwrapped.version}";
-    # export underlying qtile package
-    passthru = { inherit unwrapped; };
-  })
+(python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+  # otherwise will be exported as "env", this restores `nix search` behavior
+  name = "${unwrapped.pname}-${unwrapped.version}";
+  # export underlying qtile package
+  passthru = { inherit unwrapped; };
+})

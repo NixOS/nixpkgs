@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     jar -xf IBJts/jts.jar
     cp trader/common/images/ibapp_icon.gif ibtws_icon.gif
-    '';
+  '';
 
   unpackPhase = ''
     jar xf ${src}
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out $out/bin $out/etc/ib/tws $out/share/IBJts $out/share/icons
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     ${jdk}/bin/java -cp $classpath -Dsun.java2d.noddraw=true \$$javaOptions ibgateway.GWClient \$IB_USER_PROFILE
     EOF
     chmod u+x $out/bin/ib-gw
-    '';
+  '';
 
   meta = with lib; {
     description = "Trader Work Station of Interactive Brokers";

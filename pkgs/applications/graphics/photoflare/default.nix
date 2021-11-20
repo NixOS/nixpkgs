@@ -1,4 +1,10 @@
-{ mkDerivation, lib, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
+{ mkDerivation
+, lib
+, graphicsmagick
+, fetchFromGitHub
+, qmake
+, qtbase
+, qttools
 }:
 
 mkDerivation rec {

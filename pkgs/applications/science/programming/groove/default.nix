@@ -10,7 +10,8 @@ let
     categories = "Science;ComputerScience;";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "groove";
   version = "5.7.4";
 

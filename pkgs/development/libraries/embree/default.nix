@@ -1,5 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
-  openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ispc
+, tbb
+, glfw
+, openimageio
+, libjpeg
+, libpng
+, libpthreadstubs
+, libX11
+, glib
+}:
 
 stdenv.mkDerivation rec {
   pname = "embree";
@@ -29,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ispc pkg-config cmake ];
   buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
-                ++ lib.optionals stdenv.isDarwin [ glib ];
+    ++ lib.optionals stdenv.isDarwin [ glib ];
 
   meta = with lib; {
     description = "High performance ray tracing kernels from Intel";

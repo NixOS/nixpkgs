@@ -6,7 +6,7 @@ buildDunePackage {
   inherit (functoria) version useDune2 src;
 
   propagatedBuildInputs = [ cmdliner fmt ];
-  checkInputs = [ alcotest functoria];
+  checkInputs = [ alcotest functoria ];
   doCheck = true;
 
   meta = with lib; {

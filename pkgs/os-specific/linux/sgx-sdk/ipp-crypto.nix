@@ -4,7 +4,7 @@
 , cmake
 , python3
 , nasm
-, extraCmakeFlags ? []
+, extraCmakeFlags ? [ ]
 }:
 
 stdenv.mkDerivation rec {

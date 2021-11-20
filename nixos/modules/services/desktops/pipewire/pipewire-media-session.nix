@@ -4,11 +4,11 @@
 with lib;
 
 let
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
   cfg = config.services.pipewire.media-session;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
+    && pkgs.stdenv.isx86_64
+    && pkgs.pkgsi686Linux.pipewire != null;
 
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
@@ -25,7 +25,8 @@ let
     media-session = recursiveUpdate defaults.media-session cfg.config.media-session;
     v4l2-monitor = recursiveUpdate defaults.v4l2-monitor cfg.config.v4l2-monitor;
   };
-in {
+in
+{
 
   meta = {
     maintainers = teams.freedesktop.members;
@@ -57,7 +58,7 @@ in {
             Configuration for the media session core. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
           '';
-          default = {};
+          default = { };
         };
 
         alsa-monitor = mkOption {
@@ -66,7 +67,7 @@ in {
             Configuration for the alsa monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
           '';
-          default = {};
+          default = { };
         };
 
         bluez-monitor = mkOption {
@@ -75,7 +76,7 @@ in {
             Configuration for the bluez5 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
           '';
-          default = {};
+          default = { };
         };
 
         v4l2-monitor = mkOption {
@@ -84,7 +85,7 @@ in {
             Configuration for the V4L2 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
           '';
-          default = {};
+          default = { };
         };
       };
     };

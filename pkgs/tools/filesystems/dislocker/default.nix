@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -37,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read BitLocker encrypted partitions in Linux";
-    homepage    = "https://github.com/aorimn/dislocker";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/aorimn/dislocker";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ elitak ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

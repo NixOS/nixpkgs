@@ -7,10 +7,10 @@ let
     pname = "sedlex";
     version = "2.3";
     src = fetchFromGitHub {
-       owner = "ocaml-community";
-       repo = "sedlex";
-       rev = "v${version}";
-       sha256 = "WXUXUuIaBUrFPQOKtZ7dgDZYdpEVnoJck0dkrCi8g0c=";
+      owner = "ocaml-community";
+      repo = "sedlex";
+      rev = "v${version}";
+      sha256 = "WXUXUuIaBUrFPQOKtZ7dgDZYdpEVnoJck0dkrCi8g0c=";
     };
   });
 in

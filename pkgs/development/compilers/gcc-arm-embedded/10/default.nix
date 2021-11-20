@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   release = "10.3-2021.10";
 
   suffix = {
-    aarch64-darwin = "mac";  # use intel binaries via rosetta
+    aarch64-darwin = "mac"; # use intel binaries via rosetta
     aarch64-linux = "aarch64-linux";
     x86_64-darwin = "mac";
-    x86_64-linux  = "x86_64-linux";
+    x86_64-linux = "x86_64-linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       aarch64-darwin = "0fr8pki2g4bfk1rk90dzwql37d0b71ngzs9zyx0g2jainan3sqgv";
       aarch64-linux = "020j8gkzc0i0b74vz98gvngnwjm5222j1gk5nswfk6587krba1gn";
       x86_64-darwin = "0fr8pki2g4bfk1rk90dzwql37d0b71ngzs9zyx0g2jainan3sqgv";
-      x86_64-linux  = "18y92vpl22hf74yqdvmpw8adrkl92s4crzzs6avm05md37qb9nwp";
+      x86_64-linux = "18y92vpl22hf74yqdvmpw8adrkl92s4crzzs6avm05md37qb9nwp";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

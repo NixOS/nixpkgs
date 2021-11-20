@@ -20,7 +20,8 @@
 
 let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "scikit-image";
   version = "0.18.3";
 

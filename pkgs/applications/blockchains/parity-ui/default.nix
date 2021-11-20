@@ -2,9 +2,10 @@
 
 let
 
-uiEnv = pkgs.callPackage ./env.nix { };
+  uiEnv = pkgs.callPackage ./env.nix { };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "parity-ui";
   version = "0.3.4";
 

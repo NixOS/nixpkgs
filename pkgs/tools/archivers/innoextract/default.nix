@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, makeWrapper
-, boost, xz
-, withGog ? false, unar ? null }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, makeWrapper
+, boost
+, xz
+, withGog ? false
+, unar ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "innoextract";

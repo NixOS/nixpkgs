@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages
+, ncurses
+, cmake
+, libxml2
+, symlinkJoin
+, breakpointHook
+, cudaPackages
+, enableCUDA ? false
+}:
 
 let
   luajitRev = "9143e86498436892cb4316550be4d45b68a61224";
@@ -28,7 +38,8 @@ let
 
   clangVersion = llvmPackages.clang-unwrapped.version;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.0.0-beta3_${builtins.substring 0 7 src.rev}";
 

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , fetchpatch
@@ -29,7 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
+    cunit
+    dpdk
+    libaio
+    libbsd
+    libuuid
+    numactl
+    openssl
+    ncurses
   ];
 
   postPatch = ''
@@ -46,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
   };
 }

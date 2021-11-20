@@ -57,7 +57,8 @@ let
       sha256 = "sha256-m2y7No7BNbIjLNgdAqIAEr6UuAZZ/wwM2+iPWKK17gQ=";
     };
   };
-in multiStdenv.mkDerivation rec {
+in
+multiStdenv.mkDerivation rec {
   pname = "yabridge";
   version = "3.6.0";
 
@@ -116,7 +117,8 @@ in multiStdenv.mkDerivation rec {
   BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dwith-bitbridge=true"
 
     # Requires CMake and is unnecessary

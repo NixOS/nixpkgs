@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, io-page-unix, irmin-chunk, irmin-git, irmin-unix
-, mirage-block-ramdisk, mirage-block-unix, wodan }:
+{ lib
+, buildDunePackage
+, io-page-unix
+, irmin-chunk
+, irmin-git
+, irmin-unix
+, mirage-block-ramdisk
+, mirage-block-unix
+, wodan
+}:
 
 buildDunePackage rec {
   pname = "wodan-irmin";

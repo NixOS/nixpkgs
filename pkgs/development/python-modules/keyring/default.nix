@@ -59,9 +59,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://github.com/jaraco/keyring";
-    license     = licenses.mit;
+    homepage = "https://github.com/jaraco/keyring";
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 dotlambda ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -8,7 +8,8 @@ let
     rev = "v4.0.0.rc2";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wofi-emoji";
   version = "unstable-2021-05-24";
 

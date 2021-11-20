@@ -144,7 +144,8 @@ in
 
       security.wrappers = lib.mkIf cfg.setuidWrapper.enable {
         atop =
-          { setuid = true;
+          {
+            setuid = true;
             owner = "root";
             group = "root";
             source = "${atop}/bin/atop";

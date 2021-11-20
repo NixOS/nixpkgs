@@ -30,7 +30,7 @@ let
     maintainers = with maintainers; [ sikmir ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {

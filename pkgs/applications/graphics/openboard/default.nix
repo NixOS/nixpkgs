@@ -1,7 +1,34 @@
-{ mkDerivation, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
-, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
-, libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, qmake
+, qtbase
+, qtxmlpatterns
+, qttools
+, qtwebkit
+, libGL
+, fontconfig
+, openssl
+, poppler
+, ffmpeg
+, libva
+, alsa-lib
+, SDL
+, x264
+, libvpx
+, libvorbis
+, libtheora
+, libogg
+, libopus
+, lame
+, fdk_aac
+, libass
+, quazip
+, libXext
+, libXfixes
+}:
 
 let
   importer = mkDerivation rec {
@@ -21,7 +48,8 @@ let
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "openboard";
   version = "1.6.1";
 

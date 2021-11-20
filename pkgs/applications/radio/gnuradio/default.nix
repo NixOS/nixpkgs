@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
-# Remove gcc and python references
+  # Remove gcc and python references
 , removeReferencesTo
 , pkg-config
 , volk
@@ -29,26 +30,26 @@
 , thrift
 , cppzmq
 , zeromq
-# Needed only if qt-gui is disabled, from some reason
+  # Needed only if qt-gui is disabled, from some reason
 , icu
-# GUI related
+  # GUI related
 , gtk3
 , pango
 , gobject-introspection
 , cairo
 , qt5
 , libsForQt5
-# Features available to override, the list of them is in featuresInfo. They
-# are all turned on by default.
-, features ? {}
-# If one wishes to use a different src or name for a very custom build
-, overrideSrc ? {}
+  # Features available to override, the list of them is in featuresInfo. They
+  # are all turned on by default.
+, features ? { }
+  # If one wishes to use a different src or name for a very custom build
+, overrideSrc ? { }
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "3";
-  patch = "0";
-}
+    major = "3.9";
+    minor = "3";
+    patch = "0";
+  }
 }:
 
 let
@@ -67,9 +68,9 @@ let
         log4cpp
         mpir
       ]
-        # when gr-qtgui is disabled, icu needs to be included, otherwise
-        # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      # when gr-qtgui is disabled, icu needs to be included, otherwise
+      # building with boost 1.7x fails
+      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
         Mako
         six
@@ -159,7 +160,7 @@ let
       cmakeEnableFlag = "GR_DTV";
     };
     gr-audio = {
-      runtime = []
+      runtime = [ ]
         ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
@@ -244,11 +245,11 @@ let
       sourceSha256
       overrideSrc
       fetchFromGitHub
-    ;
+      ;
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared) hasFeature;# function
 in
 
 stdenv.mkDerivation rec {
@@ -265,7 +266,7 @@ stdenv.mkDerivation rec {
     dontWrapPythonPrograms
     dontWrapQtApps
     meta
-  ;
+    ;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
@@ -287,9 +288,9 @@ stdenv.mkDerivation rec {
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
-      ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
-    ''
+    ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+    ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+    ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+  ''
   ;
 }

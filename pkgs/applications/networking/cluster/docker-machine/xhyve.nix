@@ -20,9 +20,9 @@ buildGoPackage rec {
   tags = [ "lib9p" ];
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "machine-drivers";
-    repo   = "docker-machine-driver-xhyve";
+    rev = "v${version}";
+    owner = "machine-drivers";
+    repo = "docker-machine-driver-xhyve";
     sha256 = "0000v97fr8xc5b39v44hsa87wrbk4bcwyaaivxv4hxlf4vlgg863";
   };
 

@@ -8,8 +8,10 @@
 , ninja
 , pkg-config
 , gcc
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, enablePython ? false, pythonPackages ? null
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit
+, enablePython ? false
+, pythonPackages ? null
 }:
 
 assert cudaSupport -> cudatoolkit != null;
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     libusb1
     gcc.cc.lib
   ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
+  ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ]);
 
   patches = [
     # fix build on aarch64-darwin
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
-  postInstall = lib.optionalString enablePython  ''
+  postInstall = lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 

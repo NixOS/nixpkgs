@@ -1,15 +1,30 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
-, alsa-lib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
-, libSM, libICE, libXext, factorio-utils
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, alsa-lib
+, libpulseaudio
+, libX11
+, libXcursor
+, libXinerama
+, libXrandr
+, libXi
+, libGL
+, libSM
+, libICE
+, libXext
+, factorio-utils
 , releaseType
-, mods ? []
-, username ? "", token ? "" # get/reset token at https://factorio.com/profile
+, mods ? [ ]
+, username ? ""
+, token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
 }:
 
 assert releaseType == "alpha"
-    || releaseType == "headless"
-    || releaseType == "demo";
+  || releaseType == "headless"
+  || releaseType == "demo";
 
 let
 
@@ -67,16 +82,17 @@ let
   actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
 
   makeBinDists = versions:
-    let f = path: name: value:
-      if builtins.isAttrs value then
-        if value ? "name" then
-          makeBinDist value
+    let
+      f = path: name: value:
+        if builtins.isAttrs value then
+          if value ? "name" then
+            makeBinDist value
+          else
+            builtins.mapAttrs (f (path ++ [ name ])) value
         else
-          builtins.mapAttrs (f (path ++ [ name ])) value
-      else
-        throw "expected attrset at ${toString path} - got ${toString value}";
+          throw "expected attrset at ${toString path} - got ${toString value}";
     in
-      builtins.mapAttrs (f []) versions;
+    builtins.mapAttrs (f [ ]) versions;
   makeBinDist = { name, version, tarDirectory, url, sha256, needsAuth }: {
     inherit version tarDirectory;
     src =
@@ -88,26 +104,29 @@ let
             inherit name url sha256;
             curlOpts = [
               "--get"
-              "--data-urlencode" "username@username"
-              "--data-urlencode" "token@token"
+              "--data-urlencode"
+              "username@username"
+              "--data-urlencode"
+              "token@token"
             ];
           })
-          (_: { # This preHook hides the credentials from /proc
-                preHook =
-                  if username != "" && token != "" then ''
-                    echo -n "${username}" >username
-                    echo -n "${token}"    >token
-                  '' else ''
-                    # Deliberately failing since username/token was not provided, so we can't fetch.
-                    # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
-                    exit 1
-                  '';
-                failureHook = ''
-                  cat <<EOF
-                  ${helpMsg}
-                  EOF
-                '';
-              }));
+          (_: {
+            # This preHook hides the credentials from /proc
+            preHook =
+              if username != "" && token != "" then ''
+                echo -n "${username}" >username
+                echo -n "${token}"    >token
+              '' else ''
+                # Deliberately failing since username/token was not provided, so we can't fetch.
+                # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
+                exit 1
+              '';
+            failureHook = ''
+              cat <<EOF
+              ${helpMsg}
+              EOF
+            '';
+          }));
   };
 
   configBaseCfg = ''
@@ -148,9 +167,12 @@ let
         $out/bin/factorio
     '';
 
-    passthru.updateScript = if (username != "" && token != "") then [
-      ./update.py "--username=${username}" "--token=${token}"
-    ] else null;
+    passthru.updateScript =
+      if (username != "" && token != "") then [
+        ./update.py
+        "--username=${username}"
+        "--token=${token}"
+      ] else null;
 
     meta = {
       description = "A game in which you build and maintain factories";
@@ -242,4 +264,5 @@ let
     };
   };
 
-in stdenv.mkDerivation (releases.${releaseType})
+in
+stdenv.mkDerivation (releases.${releaseType})

@@ -13,10 +13,11 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-h5UybTcvr9Zxpfw7zBCeSAG2oAZzFWpuYugqXUCMtjs=";
 
-  subPackages = ["cmd/skaffold"];
+  subPackages = [ "cmd/skaffold" ];
 
   ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X ${t}/version.version=v${version}"
     "-X ${t}/version.gitCommit=${src.rev}"
     "-X ${t}/version.buildDate=unknown"

@@ -36,7 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "huggingface_hub" ];
 
-   meta = with lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/huggingface_hub";
     description = "Download and publish models and other files on the huggingface.co hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";

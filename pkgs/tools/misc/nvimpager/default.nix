@@ -1,7 +1,12 @@
 { fetchFromGitHub
-, lib, stdenv
-, ncurses, neovim, procps
-, scdoc, lua51Packages, util-linux
+, lib
+, stdenv
+, ncurses
+, neovim
+, procps
+, scdoc
+, lua51Packages
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +31,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
-    '';
+  '';
 
   doCheck = true;
   checkInputs = [ lua51Packages.busted util-linux neovim ];

@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
       --replace "assert" "assert 1==1 #"
     substituteInPlace src/tt \
       --replace "locale.setlocale" "#locale.setlocale"
-    '';
+  '';
 
   meta = with lib; {
     description = "Console NOS Teletekst viewer in Python";

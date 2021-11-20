@@ -1,20 +1,21 @@
-{ lib, stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  cmake,
-  python3,
-  openssl,
-  pkg-config,
-  mosquitto,
-  lua5_3,
-  sqlite,
-  jsoncpp,
-  zlib,
-  boost,
-  curl,
-  git,
-  libusb-compat-0_1,
-  cereal
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, python3
+, openssl
+, pkg-config
+, mosquitto
+, lua5_3
+, sqlite
+, jsoncpp
+, zlib
+, boost
+, curl
+, git
+, libusb-compat-0_1
+, cereal
 }:
 
 stdenv.mkDerivation rec {

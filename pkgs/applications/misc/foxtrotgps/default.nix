@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
-, curl, gnome2, gpsd, gtk2, wrapGAppsHook
-, intltool, libexif, python3Packages, sqlite }:
+{ lib
+, stdenv
+, fetchbzr
+, autoreconfHook
+, texinfo
+, help2man
+, imagemagick
+, pkg-config
+, curl
+, gnome2
+, gpsd
+, gtk2
+, wrapGAppsHook
+, intltool
+, libexif
+, python3Packages
+, sqlite
+}:
 
 let
   srcs = {
@@ -15,7 +30,8 @@ let
       sha256 = "1sgysn3dhfhrv7rj7wf8f2119vmhc1s1zzsp4r3nlrr45d20wmsv";
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "foxtrotgps";
   version = "1.2.2+331";
 
@@ -23,8 +39,13 @@ in stdenv.mkDerivation rec {
   src = srcs.foxtrot;
 
   nativeBuildInputs = [
-    pkg-config autoreconfHook texinfo help2man
-    imagemagick wrapGAppsHook intltool
+    pkg-config
+    autoreconfHook
+    texinfo
+    help2man
+    imagemagick
+    wrapGAppsHook
+    intltool
   ];
 
   buildInputs = [

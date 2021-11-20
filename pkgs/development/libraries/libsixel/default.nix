@@ -20,11 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gdk-pixbuf gd
+    gdk-pixbuf
+    gd
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config
+    meson
+    ninja
+    pkg-config
   ];
 
   doCheck = true;

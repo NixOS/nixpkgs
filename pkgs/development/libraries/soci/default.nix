@@ -3,7 +3,8 @@
 , sqlite
 , postgresql
 , boost
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

@@ -184,7 +184,7 @@ appleDerivation' stdenv {
 
   meta = with lib; {
     maintainers = with maintainers; [ joelteon copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

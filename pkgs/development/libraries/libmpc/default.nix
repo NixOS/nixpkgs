@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, gmp, mpfr
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, mpfr
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

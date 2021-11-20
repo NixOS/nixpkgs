@@ -8,7 +8,8 @@ let
     rev = "rocm-${version}";
     hash = "sha256-7XVtHcrTpw+NYUvuKQFWWFE0FlOTt8EnfZpvepQqE1c=";
   };
-in rec {
+in
+rec {
   clang = wrapCCWith rec {
     cc = clang-unwrapped;
     extraBuildCommands = ''

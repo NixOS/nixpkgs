@@ -1,5 +1,13 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
-, cmake, pkg-config, fftw, libpcap, libusb1, python3
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fftw
+, libpcap
+, libusb1
+, python3
 }:
 
 mkDerivation rec {

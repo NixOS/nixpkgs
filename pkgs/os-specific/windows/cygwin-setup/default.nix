@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
-, zlib, bzip2, xz, libgcrypt
+{ lib
+, stdenv
+, fetchcvs
+, autoconf
+, automake
+, libtool
+, flex
+, bison
+, pkg-config
+, zlib
+, bzip2
+, xz
+, libgcrypt
 }:
 
 with lib;
@@ -17,14 +28,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
 
-  buildInputs = let
-    mkStatic = flip overrideDerivation (o: {
-      dontDisableStatic = true;
-      configureFlags = toList (o.configureFlags or []) ++ [ "--enable-static" ];
-      buildInputs = map mkStatic (o.buildInputs or []);
-      propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or []);
-    });
-  in map mkStatic [ zlib bzip2 xz libgcrypt ];
+  buildInputs =
+    let
+      mkStatic = flip overrideDerivation (o: {
+        dontDisableStatic = true;
+        configureFlags = toList (o.configureFlags or [ ]) ++ [ "--enable-static" ];
+        buildInputs = map mkStatic (o.buildInputs or [ ]);
+        propagatedBuildInputs = map mkStatic (o.propagatedBuildInputs or [ ]);
+      });
+    in
+    map mkStatic [ zlib bzip2 xz libgcrypt ];
 
   configureFlags = [ "--disable-shared" ];
 

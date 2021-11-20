@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p \$out/share/man";
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
-  patches = [./malloc.patch];
+  patches = [ ./malloc.patch ];
 
   meta = {
     homepage = "https://replace.richardlloyd.org.uk/";

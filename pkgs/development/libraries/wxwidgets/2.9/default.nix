@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, libXinerama
+, libSM
+, libXxf86vm
+, xorgproto
 , setfile
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, libGLU ? null, libGL ? null
-, compat24 ? false, compat26 ? true, unicode ? true
-, Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
+, libGLU ? null
+, libGL ? null
+, compat24 ? false
+, compat26 ? true
+, unicode ? true
+, Carbon ? null
+, Cocoa ? null
+, Kernel ? null
+, QuickTime ? null
+, AGL ? null
 }:
 
 assert withMesa -> libGLU != null && libGL != null;
@@ -21,9 +36,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
+    (fetchurl {
+      # https://trac.wxwidgets.org/ticket/17942
       url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
-          + "fix_assertion_using_hide_in_destroy.diff";
+        + "fix_assertion_using_hide_in_destroy.diff";
       sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
     })
   ];
@@ -38,9 +54,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers"
+    [
+      "--enable-gtk2"
+      "--disable-precomp-headers"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
-      (if compat26 then "--enable-compat26" else "--disable-compat26") ]
+      (if compat26 then "--enable-compat26" else "--disable-compat26")
+    ]
     ++ optional unicode "--enable-unicode"
     ++ optional withMesa "--with-opengl"
     ++ optionals stdenv.isDarwin

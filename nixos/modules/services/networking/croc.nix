@@ -9,7 +9,7 @@ in
     enable = lib.mkEnableOption "croc relay";
     ports = lib.mkOption {
       type = with types; listOf port;
-      default = [9009 9010 9011 9012 9013];
+      default = [ 9009 9010 9011 9012 9013 ];
       description = "Ports of the relay.";
     };
     pass = lib.mkOption {
@@ -68,11 +68,18 @@ in
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "700";
         SystemCallFilter = [
           "@system-service"
-          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@setuid" "~@sync" "~@timer"
+          "~@aio"
+          "~@keyring"
+          "~@memlock"
+          "~@privileged"
+          "~@resources"
+          "~@setuid"
+          "~@sync"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";

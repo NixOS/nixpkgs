@@ -22,7 +22,12 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kauth kcmutils kconfigwidgets kcoreaddons kdbusaddons
-    kwallet kxmlgui
+    kauth
+    kcmutils
+    kconfigwidgets
+    kcoreaddons
+    kdbusaddons
+    kwallet
+    kxmlgui
   ];
 }

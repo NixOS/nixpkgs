@@ -1,4 +1,6 @@
-{ lib, mkDerivation, fetchFromGitHub
+{ lib
+, mkDerivation
+, fetchFromGitHub
 , callPackage
 , pkg-config
 , makeWrapper
@@ -31,7 +33,7 @@ mkDerivation rec {
     qtwebengine
     qtsvg
     qtimageformats
-    (callPackage ./lib.nix {})
+    (callPackage ./lib.nix { })
   ];
 
   qtWrapperArgs = [

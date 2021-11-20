@@ -51,9 +51,9 @@ buildPythonPackage rec {
     homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
-        A double-entry bookkeeping computer language that lets you define
-        financial transaction records in a text file, read them in memory,
-        generate a variety of reports from them, and provides a web interface.
+      A double-entry bookkeeping computer language that lets you define
+      financial transaction records in a text file, read them in memory,
+      generate a variety of reports from them, and provides a web interface.
     '';
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ bhipple ];

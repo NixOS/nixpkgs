@@ -22,13 +22,15 @@ buildPythonPackage rec {
 
   buildInputs = [ libyaml ];
 
-  checkPhase = let
-    testdir = if isPy27 then "tests/lib" else "tests/lib3";
-  in ''
-    runHook preCheck
-    PYTHONPATH="${testdir}:$PYTHONPATH" ${python.interpreter} -m test_all
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      testdir = if isPy27 then "tests/lib" else "tests/lib3";
+    in
+    ''
+      runHook preCheck
+      PYTHONPATH="${testdir}:$PYTHONPATH" ${python.interpreter} -m test_all
+      runHook postCheck
+    '';
 
   pythonImportsCheck = [ "yaml" ];
 

@@ -1,6 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, apacheHttpd, apr, aprutil, curl, db, fcgi, gdal, geos
-, libgeotiff, libjpeg, libpng, libtiff, pcre, pixman, proj, sqlite, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, apacheHttpd
+, apr
+, aprutil
+, curl
+, db
+, fcgi
+, gdal
+, geos
+, libgeotiff
+, libjpeg
+, libpng
+, libtiff
+, pcre
+, pixman
+, proj
+, sqlite
+, zlib
 }:
 
 stdenv.mkDerivation rec {

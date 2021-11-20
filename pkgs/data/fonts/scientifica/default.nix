@@ -2,7 +2,8 @@
 
 let
   version = "2.3";
-in fetchurl rec {
+in
+fetchurl rec {
   name = "scientifica-${version}";
 
   url = "https://github.com/NerdyPepper/scientifica/releases/download/v${version}/scientifica.tar";

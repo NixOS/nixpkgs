@@ -1,5 +1,7 @@
-{ isoBaseName ? "nixos-graphical-gnome", system ? builtins.currentSystem
-, extraModules ? [] }:
+{ isoBaseName ? "nixos-graphical-gnome"
+, system ? builtins.currentSystem
+, extraModules ? [ ]
+}:
 
 let
 
@@ -11,5 +13,5 @@ let
   }).config;
 
 in
-  config.system.build.isoImage
+config.system.build.isoImage
 

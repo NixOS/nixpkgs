@@ -1,5 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
- qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, qtbase
+, qtquickcontrols2
+, qtgraphicaleffects
+, curaengine
+, plugins ? [ ]
+}:
 
 mkDerivation rec {
   pname = "cura";
@@ -21,8 +30,16 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   propagatedBuildInputs = with python3.pkgs; [
-    libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring
+    libsavitar
+    numpy-stl
+    pyserial
+    requests
+    uranium
+    zeroconf
+    pynest2d
+    sentry-sdk
+    trimesh
+    keyring
   ] ++ plugins;
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 

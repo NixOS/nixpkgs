@@ -2,7 +2,8 @@
 
 let
   mkRambox = opts: callPackage (import ./rambox.nix opts) { };
-in mkRambox rec {
+in
+mkRambox rec {
   pname = "rambox-pro";
   version = "1.5.0";
 

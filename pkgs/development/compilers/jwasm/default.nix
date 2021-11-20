@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
-    repo  = "JWasm";
+    repo = "JWasm";
     rev = "v${version}";
     hash = "sha256-BUSsF73Q2vq6tF/YHMUyAmmFE/WWVQLRFJZkOD8T7f8=";
   };

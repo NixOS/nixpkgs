@@ -1,4 +1,10 @@
-{ lib, appleDerivation', stdenv, stdenvNoCC, Libinfo, configd, mDNSResponder
+{ lib
+, appleDerivation'
+, stdenv
+, stdenvNoCC
+, Libinfo
+, configd
+, mDNSResponder
 , headersOnly ? false
 }:
 

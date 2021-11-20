@@ -34,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config which doxygen ]
-  ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
+    ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
 
   buildInputs = [ ncurses libintl ]
-  ++ (if stdenv.isDarwin
+    ++ (if stdenv.isDarwin
   then
     [ AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL ]
   else

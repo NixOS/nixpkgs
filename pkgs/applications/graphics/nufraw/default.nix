@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
       '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ asbachb ];
-    platforms   = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

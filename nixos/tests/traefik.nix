@@ -13,9 +13,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     traefik = { config, pkgs, ... }: {
       virtualisation.oci-containers.containers.nginx = {
         extraOptions = [
-          "-l" "traefik.enable=true"
-          "-l" "traefik.http.routers.nginx.entrypoints=web"
-          "-l" "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
+          "-l"
+          "traefik.enable=true"
+          "-l"
+          "traefik.http.routers.nginx.entrypoints=web"
+          "-l"
+          "traefik.http.routers.nginx.rule=Host(`nginx.traefik.test`)"
         ];
         image = "nginx-container";
         imageFile = pkgs.dockerTools.examples.nginx;

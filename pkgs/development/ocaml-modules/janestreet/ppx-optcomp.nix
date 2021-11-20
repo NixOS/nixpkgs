@@ -1,5 +1,8 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_tools}:
+{ lib
+, buildOcamlJane
+, ppx_core
+, ppx_tools
+}:
 
 buildOcamlJane {
   pname = "ppx_optcomp";

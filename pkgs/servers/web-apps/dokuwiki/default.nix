@@ -12,29 +12,29 @@ stdenv.mkDerivation rec {
   };
 
   preload = writeText "preload.php" ''
-  <?php
+    <?php
 
-    $config_cascade = array(
-      'acl' => array(
-        'default'   => getenv('DOKUWIKI_ACL_AUTH_CONFIG'),
-      ),
-      'plainauth.users' => array(
-        'default'   => getenv('DOKUWIKI_USERS_AUTH_CONFIG'),
-        'protected' => "" // not used by default
-      ),
-    );
+      $config_cascade = array(
+        'acl' => array(
+          'default'   => getenv('DOKUWIKI_ACL_AUTH_CONFIG'),
+        ),
+        'plainauth.users' => array(
+          'default'   => getenv('DOKUWIKI_USERS_AUTH_CONFIG'),
+          'protected' => "" // not used by default
+        ),
+      );
   '';
 
   phpLocalConfig = writeText "local.php" ''
-  <?php
-    return require(getenv('DOKUWIKI_LOCAL_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('DOKUWIKI_LOCAL_CONFIG'));
+    ?>
   '';
 
   phpPluginsLocalConfig = writeText "plugins.local.php" ''
-  <?php
-    return require(getenv('DOKUWIKI_PLUGINS_LOCAL_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('DOKUWIKI_PLUGINS_LOCAL_CONFIG'));
+    ?>
   '';
 
   installPhase = ''

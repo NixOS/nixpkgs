@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkg-config, glib, pango}:
+{ lib, stdenv, fetchurl, pkg-config, glib, pango }:
 
 stdenv.mkDerivation {
   name = "pangoxsl-1.6.0.3";

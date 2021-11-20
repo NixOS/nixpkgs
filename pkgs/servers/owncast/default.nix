@@ -22,22 +22,24 @@ buildGoModule rec {
     cp -r $src/{static,webroot} $out
   '';
 
-  postInstall = let
+  postInstall =
+    let
 
-    setupScript = ''
-      [ ! -d "$PWD/webroot" ] && (
-        ${coreutils}/bin/cp --no-preserve=mode -r "${placeholder "out"}/webroot" "$PWD"
-      )
+      setupScript = ''
+        [ ! -d "$PWD/webroot" ] && (
+          ${coreutils}/bin/cp --no-preserve=mode -r "${placeholder "out"}/webroot" "$PWD"
+        )
 
-      [ ! -d "$PWD/static" ] && (
-        ${coreutils}/bin/ln -s "${placeholder "out"}/static" "$PWD"
-      )
+        [ ! -d "$PWD/static" ] && (
+          ${coreutils}/bin/ln -s "${placeholder "out"}/static" "$PWD"
+        )
+      '';
+    in
+    ''
+      wrapProgram $out/bin/owncast \
+        --run '${setupScript}' \
+        --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
     '';
-  in ''
-    wrapProgram $out/bin/owncast \
-      --run '${setupScript}' \
-      --prefix PATH : ${lib.makeBinPath [ bash which ffmpeg ]}
-  '';
 
   installCheckPhase = ''
     runHook preCheck

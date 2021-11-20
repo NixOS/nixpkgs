@@ -59,27 +59,28 @@ let
     inherit lib;
   };
 
-in makeScope pkgs'.newScope (self: makeOverridable ({
-  pkgs ? pkgs'
-  , lib ? pkgs.lib
-  , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
-  , nongnuPackages ? mkNongnuPackages { inherit pkgs lib; } self
-  , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
-  , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
-  , orgPackages ? mkOrgPackages { inherit lib; } self
-  , manualPackages ? mkManualPackages { inherit pkgs lib; } self
-}: ({}
-  // elpaPackages // { inherit elpaPackages; }
-  // nongnuPackages // { inherit nongnuPackages; }
-  // melpaStablePackages // { inherit melpaStablePackages; }
-  // melpaPackages // { inherit melpaPackages; }
-  // orgPackages // { inherit orgPackages; }
-  // manualPackages // { inherit manualPackages; }
-  // {
+in
+makeScope pkgs'.newScope (self: makeOverridable
+  ({ pkgs ? pkgs'
+   , lib ? pkgs.lib
+   , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
+   , nongnuPackages ? mkNongnuPackages { inherit pkgs lib; } self
+   , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
+   , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
+   , orgPackages ? mkOrgPackages { inherit lib; } self
+   , manualPackages ? mkManualPackages { inherit pkgs lib; } self
+   }: ({ }
+    // elpaPackages // { inherit elpaPackages; }
+    // nongnuPackages // { inherit nongnuPackages; }
+    // melpaStablePackages // { inherit melpaStablePackages; }
+    // melpaPackages // { inherit melpaPackages; }
+    // orgPackages // { inherit orgPackages; }
+    // manualPackages // { inherit manualPackages; }
+    // {
 
     # Propagate overriden scope
-    emacs = emacs'.overrideAttrs(old: {
-      passthru = (old.passthru or {}) // {
+    emacs = emacs'.overrideAttrs (old: {
+      passthru = (old.passthru or { }) // {
         pkgs = dontRecurseIntoAttrs self;
       };
     });
@@ -104,4 +105,5 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
     inherit (melpaStablePackages) telega;
 
   })
-) {})
+  )
+{ })

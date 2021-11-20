@@ -29,7 +29,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    colorama coverage unidecode lxml
+    colorama
+    coverage
+    unidecode
+    lxml
   ];
 
   # let green run it's own test suite

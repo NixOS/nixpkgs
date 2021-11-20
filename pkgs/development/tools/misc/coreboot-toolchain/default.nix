@@ -61,7 +61,8 @@ let
       platforms = platforms.linux;
     };
   };
-in {
+in
+{
   i386 = common "i386";
   x86_64 = common "x64";
   arm = common "arm";

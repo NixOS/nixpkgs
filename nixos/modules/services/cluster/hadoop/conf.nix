@@ -29,7 +29,7 @@ let
     export HADOOP_LOG_DIR=/tmp/hadoop/$USER
   '';
 in
-pkgs.runCommand "hadoop-conf" {} ''
+pkgs.runCommand "hadoop-conf" { } ''
   mkdir -p $out/
   cp ${siteXml "core-site.xml" cfg.coreSite}/* $out/
   cp ${siteXml "hdfs-site.xml" cfg.hdfsSite}/* $out/

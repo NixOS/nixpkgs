@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , fetch
 , cmake
 , zlib
@@ -44,15 +46,26 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake perl python3 which swig
+    cmake
+    perl
+    python3
+    which
+    swig
   ];
 
   buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
+    ncurses
+    zlib
+    libedit
+    libxml2
+    libllvm
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
-    darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.bootstrap_cmds
+    darwin.apple_sdk.frameworks.Carbon
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   CXXFLAGS = "-fno-rtti";

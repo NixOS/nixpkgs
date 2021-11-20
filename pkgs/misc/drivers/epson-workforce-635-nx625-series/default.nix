@@ -1,6 +1,11 @@
-{
-  autoreconfHook, cups, gzip, libjpeg, rpmextract,
-  fetchurl, lib, stdenv
+{ autoreconfHook
+, cups
+, gzip
+, libjpeg
+, rpmextract
+, fetchurl
+, lib
+, stdenv
 }:
 
 let
@@ -8,7 +13,8 @@ let
     filter = "epson-inkjet-printer-filter-1.0.0";
     driver = "epson-inkjet-printer-workforce-635-nx625-series-1.0.1";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-workforce-635-nx625-series";
   version = "1.0.1";
 
@@ -39,13 +45,14 @@ in stdenv.mkDerivation rec {
   installPhase =
     let
       filterdir = "$out/cups/lib/filter";
-      docdir  = "$out/share/doc";
-      ppddir  = "$out/share/cups/model/${pname}";
+      docdir = "$out/share/doc";
+      ppddir = "$out/share/cups/model/${pname}";
       libdir =
-        if stdenv.system == "x86_64-linux"    then "lib64"
+        if stdenv.system == "x86_64-linux" then "lib64"
         else if stdenv.system == "i686_linux" then "lib"
         else throw "other platforms than i686_linux and x86_64-linux are not yet supported";
-    in ''
+    in
+    ''
       mkdir -p "$out" "${docdir}" "${filterdir}" "${ppddir}"
       cp src/epson_inkjet_printer_filter "${filterdir}"
 

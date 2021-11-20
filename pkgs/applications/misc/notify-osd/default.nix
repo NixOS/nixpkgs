@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
+    glib
+    libwnck
+    libnotify
+    dbus-glib
+    makeWrapper
     gsettings-desktop-schemas
   ];
 

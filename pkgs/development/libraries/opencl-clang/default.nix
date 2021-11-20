@@ -61,10 +61,11 @@ let
     };
   };
 
-  library = let
-    inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
-  in
+  library =
+    let
+      inherit (llvmPkgs) llvm;
+      inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
+    in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
       version = "unstable-2021-06-22";
@@ -79,8 +80,8 @@ let
       };
 
       patches = [
-      # Build script tries to find Clang OpenCL headers under ${llvm}
-      # Work around it by specifying that directory manually.
+        # Build script tries to find Clang OpenCL headers under ${llvm}
+        # Work around it by specifying that directory manually.
         ./opencl-headers-dir.patch
       ];
 
@@ -104,12 +105,12 @@ let
       ];
 
       meta = with lib; {
-        homepage    = "https://github.com/intel/opencl-clang/";
+        homepage = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
-        license     = licenses.ncsa;
-        platforms   = platforms.all;
+        license = licenses.ncsa;
+        platforms = platforms.all;
         maintainers = with maintainers; [ gloaming ];
       };
     };
 in
-  library
+library

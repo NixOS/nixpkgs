@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy pytorch threadpoolctl tqdm ];
   checkInputs = [ dill pytest-cov pytestCheckHook ];
 
-  disabledTests = [ "test_affine" ];  # deprecated division operator '/'
+  disabledTests = [ "test_affine" ]; # deprecated division operator '/'
 
   meta = {
     description = "High-performance data loading and augmentation library in PyTorch";

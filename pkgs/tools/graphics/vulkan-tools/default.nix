@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, cmake, glslang, libX11, libxcb
-, libXrandr, vulkan-headers, vulkan-loader, wayland }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, glslang
+, libX11
+, libxcb
+, libXrandr
+, vulkan-headers
+, vulkan-loader
+, wayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
@@ -8,13 +18,15 @@ stdenv.mkDerivation rec {
   # It's not strictly necessary to have matching versions here, however
   # since we're using the SDK version we may as well be consistent with
   # the rest of nixpkgs.
-  src = (assert version == vulkan-headers.version;
+  src = (
+    assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Tools";
       rev = "sdk-${version}";
       sha256 = "0izmzyj6gb51d71vbdjcgd9qw34aidvbmz0mg4bkc13n48w8s9vj";
-    });
+    }
+  );
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ glslang libX11 libxcb libXrandr vulkan-headers vulkan-loader wayland ];
@@ -39,9 +51,9 @@ stdenv.mkDerivation rec {
       development by enabling developers to verify their applications correct
       use of the Vulkan API.
     '';
-    homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
+    platforms = platforms.linux;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }

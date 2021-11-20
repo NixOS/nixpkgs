@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, ounit
+{ lib
+, fetchurl
+, buildDunePackage
+, ppx_sexp_conv
+, ounit
 }:
 
 buildDunePackage rec {

@@ -17,12 +17,14 @@ let
 
     buildInputs = [ opencl-headers ocl-icd openssl zlib ];
 
-    postInstall = let
-      python = python2Packages.python;
-    in ''
-      # pyrit uses "import _cpyrit_cuda" so put the output in the root site-packages
-      mv $out/lib/${python.libPrefix}/site-packages/cpyrit/_cpyrit_opencl.so $out/lib/${python.libPrefix}/site-packages/
-    '';
+    postInstall =
+      let
+        python = python2Packages.python;
+      in
+      ''
+        # pyrit uses "import _cpyrit_cuda" so put the output in the root site-packages
+        mv $out/lib/${python.libPrefix}/site-packages/cpyrit/_cpyrit_opencl.so $out/lib/${python.libPrefix}/site-packages/
+      '';
   };
 in
 python2Packages.buildPythonApplication rec {

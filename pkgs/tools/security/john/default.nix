@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, openssl, nss, nspr, libkrb5, gmp, zlib, libpcap, re2
-, gcc, python3Packages, perl, perlPackages, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, nss
+, nspr
+, libkrb5
+, gmp
+, zlib
+, libpcap
+, re2
+, gcc
+, python3Packages
+, perl
+, perlPackages
+, makeWrapper
 }:
 
 with lib;
@@ -39,9 +53,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl nss nspr libkrb5 gmp zlib libpcap re2 ];
   nativeBuildInputs = [ gcc python3Packages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with python3Packages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
-                          (with perlPackages; [ DigestMD4 DigestSHA1 GetoptLong # For pass_gen.pl
-                                                perlldap ]); # For sha-dump.pl
-                          # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
+    (with perlPackages; [
+      DigestMD4
+      DigestSHA1
+      GetoptLong # For pass_gen.pl
+      perlldap
+    ]); # For sha-dump.pl
+  # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
   # gcc: error: memdbg.o: No such file or directory

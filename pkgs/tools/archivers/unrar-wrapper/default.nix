@@ -12,7 +12,10 @@ buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ unar ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ unar ]}"
   ];
 
   postFixup = ''

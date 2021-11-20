@@ -5,7 +5,7 @@
 
 # To add a new version, run "prefetch.sh 'new-version'" to paste the generated file as follows.
 
-version : builtins.getAttr version {
+version: builtins.getAttr version {
   "1.10.0" = {
     x86_64-linux-37 = {
       name = "torch-1.10.0-cp37-cp37m-linux_x86_64.whl";

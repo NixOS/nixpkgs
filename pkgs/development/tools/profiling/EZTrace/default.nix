@@ -1,14 +1,14 @@
-{ lib,
-  stdenv,
-  fetchFromGitLab,
-  gfortran,
-  libelf,
-  libiberty,
-  zlib,
-  libbfd,
-  libopcodes,
-  buildPackages,
-  autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitLab
+, gfortran
+, libelf
+, libiberty
+, zlib
+, libbfd
+, libopcodes
+, buildPackages
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {

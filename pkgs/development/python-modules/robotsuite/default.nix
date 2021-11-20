@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, unittest2, lxml, robotframework
+{ lib
+, buildPythonPackage
+, fetchPypi
+, unittest2
+, lxml
+, robotframework
 }:
 
 buildPythonPackage rec {

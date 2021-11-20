@@ -21,14 +21,14 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "--noCPU" "--currency monero" ];
         description = "List of parameters to pass to xmr-stak.";
       };
 
       configFiles = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "config.txt" = '''
@@ -78,13 +78,13 @@ in
         WorkingDirectory = "/tmp";
         PrivateTmp = true;
         DynamicUser = !rootRequired;
-        LimitMEMLOCK = toString (1024*1024);
+        LimitMEMLOCK = toString (1024 * 1024);
       };
     };
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "xmr-stak" "configText"] ''
+    (mkRemovedOptionModule [ "services" "xmr-stak" "configText" ] ''
       This option was removed in favour of `services.xmr-stak.configFiles`
       because the new config file `pools.txt` was introduced. You are
       now able to define all other config files like cpu.txt or amd.txt.

@@ -10,7 +10,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    boost pkg-config scons util-linux fuse libevent openssl zlib
+    boost
+    pkg-config
+    scons
+    util-linux
+    fuse
+    libevent
+    openssl
+    zlib
   ];
 
   buildPhase = ''

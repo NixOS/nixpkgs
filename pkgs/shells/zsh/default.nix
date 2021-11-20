@@ -47,39 +47,39 @@ stdenv.mkDerivation {
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
-    mkdir -p $out/share/info
-    tar xf ${documentation} -C $out/share
-    ln -s $out/share/zsh-*/Doc/zsh.info* $out/share/info/
+        mkdir -p $out/share/info
+        tar xf ${documentation} -C $out/share
+        ln -s $out/share/zsh-*/Doc/zsh.info* $out/share/info/
 
-    mkdir -p $out/etc/
-    cat > $out/etc/zprofile <<EOF
-if test -e /etc/NIXOS; then
-  if test -r /etc/zprofile; then
-    . /etc/zprofile
-  else
-    emulate bash
-    alias shopt=false
-    . /etc/profile
-    unalias shopt
-    emulate zsh
-  fi
-  if test -r /etc/zprofile.local; then
-    . /etc/zprofile.local
-  fi
-else
-  # on non-nixos we just source the global /etc/zprofile as if we did
-  # not use the configure flag
-  if test -r /etc/zprofile; then
-    . /etc/zprofile
-  fi
-fi
-EOF
-    ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
-      $out/bin/zsh -c "zcompile $out/etc/zprofile"
-    '' else ''
-      ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
-    ''}
-    mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
+        mkdir -p $out/etc/
+        cat > $out/etc/zprofile <<EOF
+    if test -e /etc/NIXOS; then
+      if test -r /etc/zprofile; then
+        . /etc/zprofile
+      else
+        emulate bash
+        alias shopt=false
+        . /etc/profile
+        unalias shopt
+        emulate zsh
+      fi
+      if test -r /etc/zprofile.local; then
+        . /etc/zprofile.local
+      fi
+    else
+      # on non-nixos we just source the global /etc/zprofile as if we did
+      # not use the configure flag
+      if test -r /etc/zprofile; then
+        . /etc/zprofile
+      fi
+    fi
+    EOF
+        ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
+          $out/bin/zsh -c "zcompile $out/etc/zprofile"
+        '' else ''
+          ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+        ''}
+        mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 

@@ -15,13 +15,14 @@ rec {
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommandLocal name (if (types.str.check content) then {
-      inherit content interpreter;
-      passAsFile = [ "content" ];
-    } else {
-      inherit interpreter;
-      contentPath = content;
-    }) ''
+    pkgs.runCommandLocal name
+      (if (types.str.check content) then {
+        inherit content interpreter;
+        passAsFile = [ "content" ];
+      } else {
+        inherit interpreter;
+        contentPath = content;
+      }) ''
       # On darwin a script cannot be used as an interpreter in a shebang but
       # there doesn't seem to be a limit to the size of shebang and multiple
       # arguments to the interpreter are allowed.
@@ -69,12 +70,13 @@ rec {
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.str.check content) then {
-      inherit content;
-      passAsFile = [ "content" ];
-    } else {
-      contentPath = content;
-    }) ''
+    pkgs.runCommand name
+      (if (types.str.check content) then {
+        inherit content;
+        passAsFile = [ "content" ];
+      } else {
+        contentPath = content;
+      }) ''
       ${compileScript}
       ${lib.optionalString strip
           "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
@@ -126,40 +128,42 @@ rec {
   #
   #     main = launchMissiles
   #   '';
-  writeHaskell = name: {
-    libraries ? [],
-    ghc ? pkgs.ghc,
-    ghcArgs ? [],
-    strip ? true
-  }:
-    makeBinWriter {
-      compileScript = ''
-        cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
-        mv tmp $out
-      '';
-      inherit strip;
-    } name;
+  writeHaskell = name: { libraries ? [ ]
+                       , ghc ? pkgs.ghc
+                       , ghcArgs ? [ ]
+                       , strip ? true
+                       }:
+    makeBinWriter
+      {
+        compileScript = ''
+          cp $contentPath tmp.hs
+          ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
+          mv tmp $out
+        '';
+        inherit strip;
+      }
+      name;
 
   # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
 
-  writeRust = name: {
-      rustc ? pkgs.rustc,
-      rustcArgs ? [],
-      strip ? true
-  }:
-  let
-    darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
-  in
-    makeBinWriter {
-      compileScript = ''
-        cp "$contentPath" tmp.rs
-        PATH=${makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
-      '';
-      inherit strip;
-    } name;
+  writeRust = name: { rustc ? pkgs.rustc
+                    , rustcArgs ? [ ]
+                    , strip ? true
+                    }:
+    let
+      darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
+    in
+    makeBinWriter
+      {
+        compileScript = ''
+          cp "$contentPath" tmp.rs
+          PATH=${makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
+        '';
+        inherit strip;
+      }
+      name;
 
   writeRustBin = name:
     writeRust "/bin/${name}";
@@ -174,19 +178,20 @@ rec {
   #     var result = UglifyJS.minify(code);
   #     console.log(result.code);
   #   ''
-  writeJS = name: { libraries ? [] }: content:
-  let
-    node-env = pkgs.buildEnv {
-      name = "node";
-      paths = libraries;
-      pathsToLink = [
-        "/lib/node_modules"
-      ];
-    };
-  in writeDash name ''
-    export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
-  '';
+  writeJS = name: { libraries ? [ ] }: content:
+    let
+      node-env = pkgs.buildEnv {
+        name = "node";
+        paths = libraries;
+        pathsToLink = [
+          "/lib/node_modules"
+        ];
+      };
+    in
+    writeDash name ''
+      export NODE_PATH=${node-env}/lib/node_modules
+      exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
+    '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
   writeJSBin = name:
@@ -198,13 +203,14 @@ rec {
     /\{/{ctx++;idx=1}
     /\}/{ctx--}
     {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-   '';
+  '';
 
-  writeNginxConfig = name: text: pkgs.runCommandLocal name {
-    inherit text;
-    passAsFile = [ "text" ];
-    nativeBuildInputs = [ gawk gnused gixy ];
-  } /* sh */ ''
+  writeNginxConfig = name: text: pkgs.runCommandLocal name
+    {
+      inherit text;
+      passAsFile = [ "text" ];
+      nativeBuildInputs = [ gawk gnused gixy ];
+    } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
     gixy $out
@@ -218,10 +224,12 @@ rec {
   #     use boolean;
   #     print "Howdy!\n" if true;
   #   ''
-  writePerl = name: { libraries ? [] }:
-    makeScriptWriter {
-      interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
-    } name;
+  writePerl = name: { libraries ? [ ] }:
+    makeScriptWriter
+      {
+        interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
+      }
+      name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
   writePerlBin = name:
@@ -230,20 +238,22 @@ rec {
   # makePythonWriter takes python and compatible pythonPackages and produces python script writer,
   # which validates the script with flake8 at build time. If any libraries are specified,
   # python.withPackages is used as interpreter, otherwise the "bare" python is used.
-  makePythonWriter = python: pythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
-  let
-    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
-  in
-  makeScriptWriter {
-    interpreter =
-      if libraries == []
-      then "${python}/bin/python"
-      else "${python.withPackages (ps: libraries)}/bin/python"
-    ;
-    check = writeDash "python2check.sh" ''
-      exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
-  } name;
+  makePythonWriter = python: pythonPackages: name: { libraries ? [ ], flakeIgnore ? [ ] }:
+    let
+      ignoreAttribute = optionalString (flakeIgnore != [ ]) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
+    in
+    makeScriptWriter
+      {
+        interpreter =
+          if libraries == [ ]
+          then "${python}/bin/python"
+          else "${python.withPackages (ps: libraries)}/bin/python"
+        ;
+        check = writeDash "python2check.sh" ''
+          exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+        '';
+      }
+      name;
 
   # writePython2 takes a name an attributeset with libraries and some python2 sourcecode and
   # returns an executable

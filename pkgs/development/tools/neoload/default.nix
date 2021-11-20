@@ -5,7 +5,8 @@
 # This can be fixed by setting a different WM name:
 # http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
 
-if !licenseAccepted then throw ''
+if !licenseAccepted then
+  throw ''
     You have to accept the neoload EULA at
     https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
     by setting nixpkgs config option 'neoload.accept_license = true';
@@ -13,12 +14,18 @@ if !licenseAccepted then throw ''
 else assert licenseAccepted;
 
 # the installer is very picky and demands 1.7.0.07
-let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
+let
+  dotInstall4j = path: writeTextFile {
+    name = "dot-install4j";
+    text = ''
       JRE_VERSION	${path}	1	7	0	7
       JRE_INFO	${path}	94
-    ''; };
+    '';
+  };
 
-    responseVarfile = writeTextFile { name = "response.varfile"; text = ''
+  responseVarfile = writeTextFile {
+    name = "response.varfile";
+    text = ''
       sys.programGroupDisabled$Boolean=false
       sys.component.Monitor\ Agent$Boolean=true
       sys.component.Common$Boolean=true
@@ -28,19 +35,26 @@ let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
       sys.installationTypeId=Controller
       sys.installationDir=INSTALLDIR/lib/neoload
       sys.symlinkDir=INSTALLDIR/bin
-    ''; };
+    '';
+  };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "neoload";
   version = "4.1.4";
 
   src = fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      { url = "http://neoload.installers.neotys.com/documents/download/${pname}/v${lib.versions.majorMinor version}/${pname}_${lib.replaceStrings ["."] ["_"] version}_linux_x64.sh";
-        sha256 = "199jcf5a0nwfm8wfld2rcjgq64g91vvz2bkmki8dxfzf1yasifcd"; }
+      {
+        url = "http://neoload.installers.neotys.com/documents/download/${pname}/v${lib.versions.majorMinor version}/${pname}_${lib.replaceStrings ["."] ["_"] version}_linux_x64.sh";
+        sha256 = "199jcf5a0nwfm8wfld2rcjgq64g91vvz2bkmki8dxfzf1yasifcd";
+      }
     else
-      { url = "http://neoload.installers.neotys.com/documents/download/${pname}/v${lib.versions.majorMinor version}/${pname}_${lib.replaceStrings ["."] ["_"] version}_linux_x86.sh";
-        sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
+      {
+        url = "http://neoload.installers.neotys.com/documents/download/${pname}/v${lib.versions.majorMinor version}/${pname}_${lib.replaceStrings ["."] ["_"] version}_linux_x86.sh";
+        sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912";
+      }
+  );
 
   nativeBuildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];

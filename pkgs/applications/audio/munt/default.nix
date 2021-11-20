@@ -8,7 +8,8 @@
 , qtbase
 , glib
 , alsa-lib
-, withJack ? stdenv.hostPlatform.isUnix, jack
+, withJack ? stdenv.hostPlatform.isUnix
+, jack
 }:
 
 let

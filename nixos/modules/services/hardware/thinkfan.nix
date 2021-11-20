@@ -21,7 +21,7 @@ let
       level = ints.unsigned;
       special = enum [ "level auto" "level full-speed" "level disengage" ];
     in
-      tuple [ (either level special) level level ];
+    tuple [ (either level special) level level ];
 
   # sensor or fan config
   sensorType = name: types.submodule {
@@ -77,7 +77,7 @@ let
 
   # removes NixOS special and unused attributes
   sensorToConf = { type, query, ... }@args:
-    (filterAttrs (k: v: v != null && !(elem k ["type" "query"])) args)
+    (filterAttrs (k: v: v != null && !(elem k [ "type" "query" ])) args)
     // { "${type}" = query; };
 
   syntaxNote = name: ''
@@ -95,7 +95,8 @@ let
     </para></note>
   '';
 
-in {
+in
+{
 
   options = {
 
@@ -127,7 +128,8 @@ in {
       sensors = mkOption {
         type = types.listOf (sensorType "sensor");
         default = [
-          { type = "tpacpi";
+          {
+            type = "tpacpi";
             query = "/proc/acpi/ibm/thermal";
           }
         ];
@@ -139,7 +141,8 @@ in {
       fans = mkOption {
         type = types.listOf (sensorType "fan");
         default = [
-          { type = "tpacpi";
+          {
+            type = "tpacpi";
             query = "/proc/acpi/ibm/fan";
           }
         ];
@@ -151,13 +154,13 @@ in {
       levels = mkOption {
         type = types.listOf levelType;
         default = [
-          [0  0   55]
-          [1  48  60]
-          [2  50  61]
-          [3  52  63]
-          [6  56  65]
-          [7  60  85]
-          ["level auto" 80 32767]
+          [ 0 0 55 ]
+          [ 1 48 60 ]
+          [ 2 50 61 ]
+          [ 3 52 63 ]
+          [ 6 56 65 ]
+          [ 7 60 85 ]
+          [ "level auto" 80 32767 ]
         ];
         description = ''
           [LEVEL LOW HIGH]
@@ -203,8 +206,8 @@ in {
 
     services.thinkfan.settings = mapAttrs (k: v: mkDefault v) {
       sensors = map sensorToConf cfg.sensors;
-      fans    = map sensorToConf cfg.fans;
-      levels  = cfg.levels;
+      fans = map sensorToConf cfg.fans;
+      levels = cfg.levels;
     };
 
     systemd.packages = [ thinkfan ];

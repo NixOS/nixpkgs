@@ -1,6 +1,24 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, librevisa, python3, qtbase, qtsvg
+{ mkDerivation
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, cmake
+, glib
+, boost
+, libsigrok
+, libsigrokdecode
+, libserialport
+, libzip
+, udev
+, libusb1
+, libftdi1
+, glibmm
+, pcre
+, librevisa
+, python3
+, qtbase
+, qtsvg
 }:
 
 mkDerivation rec {
@@ -15,9 +33,21 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
-    pcre librevisa python3
-    qtbase qtsvg
+    glib
+    boost
+    libsigrok
+    libsigrokdecode
+    libserialport
+    libzip
+    udev
+    libusb1
+    libftdi1
+    glibmm
+    pcre
+    librevisa
+    python3
+    qtbase
+    qtsvg
   ];
 
   patches = [

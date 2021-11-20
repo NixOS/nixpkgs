@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
-, python3, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pcre
+, pcre2
+, libxslt
+, groff
+, ncurses
+, pkg-config
+, readline
+, libedit
+, coreutils
+, python3
+, makeWrapper
+}:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, sha256, extraNativeBuildInputs ? [ ] }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
@@ -16,7 +30,13 @@ let
 
       nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
       buildInputs = [
-        libxslt groff ncurses readline libedit makeWrapper python3
+        libxslt
+        groff
+        ncurses
+        readline
+        libedit
+        makeWrapper
+        python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
       ++ lib.optional (lib.versionAtLeast version "7") pcre2;

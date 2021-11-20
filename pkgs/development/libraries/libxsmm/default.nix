@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
-, python3, util-linux, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, gfortran
+, gnused
+, python3
+, util-linux
+, which
 
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -28,13 +35,15 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = let
-    static = if enableStatic then "1" else "0";
-  in [
-    "OMP=1"
-    "PREFIX=$(out)"
-    "STATIC=${static}"
-  ];
+  makeFlags =
+    let
+      static = if enableStatic then "1" else "0";
+    in
+    [
+      "OMP=1"
+      "PREFIX=$(out)"
+      "STATIC=${static}"
+    ];
 
   prePatch = ''
     patchShebangs .

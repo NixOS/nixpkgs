@@ -6,7 +6,8 @@ let
     from setuptools import setup
     setup()
   '';
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "qmk";
   version = "1.0.0";
 

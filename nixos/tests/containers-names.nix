@@ -9,21 +9,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Please see https://github.com/NixOS/nixpkgs/issues/38509 for details.
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    containers = let
-      container = subnet: {
-        autoStart = true;
-        privateNetwork = true;
-        hostAddress = "192.168.${subnet}.1";
-        localAddress = "192.168.${subnet}.2";
-        config = { };
-      };
+    containers =
+      let
+        container = subnet: {
+          autoStart = true;
+          privateNetwork = true;
+          hostAddress = "192.168.${subnet}.1";
+          localAddress = "192.168.${subnet}.2";
+          config = { };
+        };
 
-     in {
-      first = container "1";
-      second = container "2";
-      really-long-name = container "3";
-      really-long-long-name-2 = container "4";
-    };
+      in
+      {
+        first = container "1";
+        second = container "2";
+        really-long-name = container "3";
+        really-long-long-name-2 = container "4";
+      };
   };
 
   testScript = ''

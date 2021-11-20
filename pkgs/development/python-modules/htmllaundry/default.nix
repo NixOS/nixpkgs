@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi, nose
+, fetchPypi
+, nose
 , six
 , lxml
 }:

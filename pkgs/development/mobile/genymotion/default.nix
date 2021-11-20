@@ -1,7 +1,24 @@
-{ stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
-, xdg-utils, libXrender, fontconfig, freetype, systemd, libpulseaudio
-# For glewinfo
-, libXmu, libXi, libXext }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, which
+, zlib
+, libGL
+, glib
+, xorg
+, libxkbcommon
+, xdg-utils
+, libXrender
+, fontconfig
+, freetype
+, systemd
+, libpulseaudio
+  # For glewinfo
+, libXmu
+, libXi
+, libXext
+}:
 
 let
   packages = [
@@ -86,10 +103,10 @@ stdenv.mkDerivation rec {
       Genymotion is a relatively fast Android emulator which comes with
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
-     '';
+    '';
     homepage = "https://www.genymotion.com/";
     license = licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.puffnfresh ];
   };
 }

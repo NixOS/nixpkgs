@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
   '';
   nativeBuildInputs = [ perl zlib ];
-#  buildInputs = [ zlib ];
+  #  buildInputs = [ zlib ];
 
   meta = with lib; {
     description = "Hebrew spell checker";

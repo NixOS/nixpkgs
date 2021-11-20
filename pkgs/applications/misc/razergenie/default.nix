@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, meson, ninja, pkg-config, qtbase, qttools
+{ stdenv
+, fetchFromGitHub
+, lib
+, meson
+, ninja
+, pkg-config
+, qtbase
+, qttools
 , wrapQtAppsHook
 , enableExperimental ? false
 , includeMatrixDiscovery ? false
@@ -8,7 +15,8 @@ let
   version = "0.9.0";
   pname = "razergenie";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -19,11 +27,15 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkg-config meson ninja wrapQtAppsHook
+    pkg-config
+    meson
+    ninja
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase qttools
+    qtbase
+    qttools
   ];
 
   mesonFlags = [

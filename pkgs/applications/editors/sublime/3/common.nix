@@ -1,8 +1,23 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl
+, lib
+, stdenv
+, xorg
+, glib
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, libredirect
+, makeWrapper
+, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
-, openssl, bzip2, bash, unzip, zip
+, openssl
+, bzip2
+, bash
+, unzip
+, zip
 }:
 
 let
@@ -27,7 +42,8 @@ let
 
   libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ];
-in let
+in
+let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
     version = buildVersion;
@@ -104,7 +120,8 @@ in let
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 

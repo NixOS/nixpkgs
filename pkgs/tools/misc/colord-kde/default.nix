@@ -1,8 +1,23 @@
-{ mkDerivation, lib, fetchurl
-, extra-cmake-modules, ki18n
-, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
-, kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
-, kitemviews, lcms2, libXrandr, qtx11extras
+{ mkDerivation
+, lib
+, fetchurl
+, extra-cmake-modules
+, ki18n
+, kconfig
+, kconfigwidgets
+, kcoreaddons
+, kdbusaddons
+, kiconthemes
+, kcmutils
+, kio
+, knotifications
+, plasma-framework
+, kwidgetsaddons
+, kwindowsystem
+, kitemviews
+, lcms2
+, libXrandr
+, qtx11extras
 }:
 
 mkDerivation rec {
@@ -17,9 +32,22 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [
-    kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
-    kcmutils ki18n kio knotifications plasma-framework kwidgetsaddons
-    kwindowsystem kitemviews lcms2 libXrandr qtx11extras
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kdbusaddons
+    kiconthemes
+    kcmutils
+    ki18n
+    kio
+    knotifications
+    plasma-framework
+    kwidgetsaddons
+    kwindowsystem
+    kitemviews
+    lcms2
+    libXrandr
+    qtx11extras
   ];
 
   meta = with lib; {

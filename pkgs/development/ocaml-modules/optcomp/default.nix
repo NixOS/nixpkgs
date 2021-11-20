@@ -34,11 +34,11 @@ stdenv.mkDerivation {
     ocamlfind install optcomp META _build/src/optcomp.{a,cma,cmxa,cmxs} _build/src/pa_optcomp.{cmi,cmx,mli}
   '';
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/diml/optcomp";
     description = "Optional compilation for OCaml with cpp-like directives";
     license = lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       lib.maintainers.gal_bolle
     ];

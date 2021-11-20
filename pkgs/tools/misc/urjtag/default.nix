@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature bsdlSupport  "bsdl")
+    (lib.enableFeature bsdlSupport "bsdl")
     (lib.enableFeature jedecSupport "jedec-exp")
     (lib.enableFeature staplSupport "stapl")
-    (lib.enableFeature svfSupport   "svf")
+    (lib.enableFeature svfSupport "svf")
   ];
 
   meta = with lib; {

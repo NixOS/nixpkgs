@@ -1,9 +1,36 @@
-{ mkDerivation, fetchurl, lib, makeWrapper
-, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
-, kconfig, kcrash, kinit, kpmcore
-, cryptsetup, lvm2, mdadm, smartmontools, systemdMinimal, util-linux
-, btrfs-progs, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs
-, jfsutils, nilfs-utils, ntfs3g, reiser4progs, reiserfsprogs, udftools, xfsprogs, zfs
+{ mkDerivation
+, fetchurl
+, lib
+, makeWrapper
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, wrapQtAppsHook
+, kconfig
+, kcrash
+, kinit
+, kpmcore
+, cryptsetup
+, lvm2
+, mdadm
+, smartmontools
+, systemdMinimal
+, util-linux
+, btrfs-progs
+, dosfstools
+, e2fsprogs
+, exfat
+, f2fs-tools
+, fatresize
+, hfsprogs
+, jfsutils
+, nilfs-utils
+, ntfs3g
+, reiser4progs
+, reiserfsprogs
+, udftools
+, xfsprogs
+, zfs
 }:
 
 let
@@ -38,7 +65,8 @@ let
     # FIXME: Missing command: tune.exfat hfsck hformat fsck.nilfs2 {fsck,mkfs,debugfs,tunefs}.ocfs2
   ];
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "partitionmanager";
   # NOTE: When changing this version, also change the version of `kpmcore`.
   version = "4.2.0";

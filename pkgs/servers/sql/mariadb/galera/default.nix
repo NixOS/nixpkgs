@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, buildEnv
-, asio, boost, check, openssl, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildEnv
+, asio
+, boost
+, check
+, openssl
+, cmake
 }:
 
 stdenv.mkDerivation rec {

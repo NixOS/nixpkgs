@@ -1,4 +1,4 @@
-{callPackage, fetchFromGitHub, fetchpatch}:
+{ callPackage, fetchFromGitHub, fetchpatch }:
 callPackage ./dvtm.nix {
   pname = "dvtm-unstable";
   version = "2018-03-31";

@@ -8,7 +8,7 @@
 , ncurses
 , readline
 , which
-# options
+  # options
 , conf ? null
 , withIcons ? false
 , withNerdIcons ? false

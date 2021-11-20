@@ -11,7 +11,8 @@ let
     installPhase = "cp -r . $out";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "oxefmsynth";
   version = "1.3.5";
 

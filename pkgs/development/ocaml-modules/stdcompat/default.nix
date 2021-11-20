@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl
-, ocaml, findlib
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
 }:
 
 stdenv.mkDerivation rec {

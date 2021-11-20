@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
-    owner  = "timescale";
-    repo   = "timescaledb";
+    owner = "timescale";
+    repo = "timescaledb";
     # some branches are named like tags which confuses git
-    rev    = "refs/tags/${version}";
+    rev = "refs/tags/${version}";
     sha256 = "0j8fbhf69q0074c02ilzdrhwc1ciyw6dq48217xxv274df2lcxzd";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = "https://www.timescale.com/";
-    changelog   = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
+    homepage = "https://www.timescale.com/";
+    changelog = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ volth marsam ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
-    broken      = versionOlder postgresql.version "12";
+    platforms = postgresql.meta.platforms;
+    license = licenses.asl20;
+    broken = versionOlder postgresql.version "12";
   };
 }

@@ -2,7 +2,8 @@
 with lib;
 let
   cfg = config.services.hound;
-in {
+in
+{
   options = {
     services.hound = {
       enable = mkOption {
@@ -116,8 +117,8 @@ in {
         WorkingDirectory = cfg.home;
         ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
         ExecStart = "${cfg.package}/bin/houndd" +
-                    " -addr ${cfg.listen}" +
-                    " -conf ${pkgs.writeText "hound.json" cfg.config}";
+          " -addr ${cfg.listen}" +
+          " -conf ${pkgs.writeText "hound.json" cfg.config}";
 
       };
       path = [ pkgs.git pkgs.mercurial pkgs.openssh ];

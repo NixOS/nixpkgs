@@ -1,13 +1,59 @@
-{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
-, file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
-, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
-, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
-, libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking
+{ lib
+, stdenv
+, requireFile
+, makeWrapper
+, autoPatchelfHook
+, wrapGAppsHook
+, which
+, more
+, file
+, atk
+, alsa-lib
+, cairo
+, fontconfig
+, gdk-pixbuf
+, glib
+, webkitgtk
+, gtk2-x11
+, gtk3
+, heimdal
+, krb5
+, libsoup
+, libvorbis
+, speex
+, openssl
+, zlib
+, xorg
+, pango
+, gtk2
+, gnome2
+, mesa
+, nss
+, nspr
+, gtk_engines
+, freetype
+, dconf
+, libpng12
+, libxml2
+, libjpeg
+, libredirect
+, tzdata
+, cacert
+, systemd
+, libcxxabi
+, libcxx
+, e2fsprogs
+, symlinkJoin
+, libpulseaudio
+, pcsclite
+, glib-networking
 
-, homepage, version, prefix, hash
+, homepage
+, version
+, prefix
+, hash
 
-, extraCerts ? []
+, extraCerts ? [ ]
 }:
 
 let
@@ -98,7 +144,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     zlib
   ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
-    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio;
+  ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio;
 
   runtimeDependencies = [
     glib
@@ -116,81 +162,83 @@ stdenv.mkDerivation rec {
     xorg.libxcb
   ];
 
-  installPhase = let
-    icaFlag = program:
-      if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
-      else "-icaroot";
-    wrap = program: ''
-      wrapProgram $out/opt/citrix-icaclient/${program} \
-        --add-flags "${icaFlag program} $ICAInstDir" \
-        --set ICAROOT "$ICAInstDir" \
-        --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
+  installPhase =
+    let
+      icaFlag = program:
+        if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
+        else "-icaroot";
+      wrap = program: ''
+        wrapProgram $out/opt/citrix-icaclient/${program} \
+          --add-flags "${icaFlag program} $ICAInstDir" \
+          --set ICAROOT "$ICAInstDir" \
+          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
+      '';
+      wrapLink = program: ''
+        ${wrap program}
+        ln -sf $out/opt/citrix-icaclient/${program} $out/bin/${baseNameOf program}
+      '';
+
+      copyCert = path: ''
+        cp -v ${path} $out/opt/citrix-icaclient/keystore/cacerts/${baseNameOf path}
+      '';
+
+      mkWrappers = lib.concatMapStringsSep "\n";
+
+      toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
+        ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out/{bin,share/applications}
+      export ICAInstDir="$out/opt/citrix-icaclient"
+      export HOME=$(mktemp -d)
+
+      # Run upstream installer in the store-path.
+      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
+      ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+
+      if [ -f "$ICAInstDir/util/setlog" ]; then
+        chmod +x "$ICAInstDir/util/setlog"
+        ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
+      fi
+      ${mkWrappers wrapLink toWrap}
+      ${mkWrappers wrap [ "PrimaryAuthManager" "ServiceRecord" "AuthManagerDaemon" "util/ctxwebhelper" ]}
+
+      ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
+
+      # As explained in https://wiki.archlinux.org/index.php/Citrix#Security_Certificates
+      echo "Expanding certificates..."
+      pushd "$ICAInstDir/keystore/cacerts"
+      awk 'BEGIN {c=0;} /BEGIN CERT/{c++} { print > "cert." c ".pem"}' \
+        < ${cacert}/etc/ssl/certs/ca-bundle.crt
+      popd
+
+      ${mkWrappers copyCert extraCerts}
+
+      # See https://developer-docs.citrix.com/projects/workspace-app-for-linux-oem-guide/en/latest/reference-information/#library-files
+      # Those files are fallbacks to support older libwekit.so and libjpeg.so
+      rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
+      rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
+
+      # We support only Gstreamer 1.0
+      rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so}
+      ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
+      ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+
+      echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
+      echo UTC > "$ICAInstDir/timezone"
+
+      echo "Copy .desktop files."
+      cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
+
+      # We introduce a dependency on the source file so that it need not be redownloaded everytime
+      echo $src >> "$out/share/workspace_dependencies.pin"
+
+      runHook postInstall
     '';
-    wrapLink = program: ''
-      ${wrap program}
-      ln -sf $out/opt/citrix-icaclient/${program} $out/bin/${baseNameOf program}
-    '';
-
-    copyCert = path: ''
-      cp -v ${path} $out/opt/citrix-icaclient/keystore/cacerts/${baseNameOf path}
-    '';
-
-    mkWrappers = lib.concatMapStringsSep "\n";
-
-    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
-      ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
-  in ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,share/applications}
-    export ICAInstDir="$out/opt/citrix-icaclient"
-    export HOME=$(mktemp -d)
-
-    # Run upstream installer in the store-path.
-    sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
-    ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
-
-    if [ -f "$ICAInstDir/util/setlog" ]; then
-      chmod +x "$ICAInstDir/util/setlog"
-      ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
-    fi
-    ${mkWrappers wrapLink toWrap}
-    ${mkWrappers wrap [ "PrimaryAuthManager" "ServiceRecord" "AuthManagerDaemon" "util/ctxwebhelper" ]}
-
-    ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
-
-    # As explained in https://wiki.archlinux.org/index.php/Citrix#Security_Certificates
-    echo "Expanding certificates..."
-    pushd "$ICAInstDir/keystore/cacerts"
-    awk 'BEGIN {c=0;} /BEGIN CERT/{c++} { print > "cert." c ".pem"}' \
-      < ${cacert}/etc/ssl/certs/ca-bundle.crt
-    popd
-
-    ${mkWrappers copyCert extraCerts}
-
-    # See https://developer-docs.citrix.com/projects/workspace-app-for-linux-oem-guide/en/latest/reference-information/#library-files
-    # Those files are fallbacks to support older libwekit.so and libjpeg.so
-    rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
-    rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
-
-    # We support only Gstreamer 1.0
-    rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so}
-    ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
-    ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
-
-    echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
-    echo UTC > "$ICAInstDir/timezone"
-
-    echo "Copy .desktop files."
-    cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
-
-    # We introduce a dependency on the source file so that it need not be redownloaded everytime
-    echo $src >> "$out/share/workspace_dependencies.pin"
-
-    runHook postInstall
-  '';
 
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.

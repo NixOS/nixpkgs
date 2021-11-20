@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
-, python3, perl, gmpxx, mpfr, boost, eigen, gfortran, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, python3
+, perl
+, gmpxx
+, mpfr
+, boost
+, eigen
+, gfortran
+, cmake
 , enableFMA ? stdenv.hostPlatform.fmaSupport
 , enableFortran ? true
 }:
@@ -99,8 +111,8 @@ let
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
     cmakeFlags = [
       (if enableFortran
-        then "-DENABLE_FORTRAN=ON"
-        else "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble"
+      then "-DENABLE_FORTRAN=ON"
+      else "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble"
       )
     ];
 
@@ -110,4 +122,5 @@ let
     inherit meta;
   };
 
-in codeComp
+in
+codeComp

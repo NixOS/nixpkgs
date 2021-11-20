@@ -69,33 +69,34 @@
   ];
 
   installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+    ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
 
   doCheck = true;
   checkInputs = [ checkbashisms perlcritic shellcheck ];
   checkTarget = [ "checkall" ];
 
   # TODO: Consider using resholve here
-  postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        util-linux
-      ] ++ lib.optional enableRDW networkmanager
+  postInstall =
+    let
+      paths = lib.makeBinPath (
+        [
+          coreutils
+          ethtool
+          gawk
+          gnugrep
+          gnused
+          hdparm
+          iw
+          kmod
+          pciutils
+          perl
+          smartmontools
+          systemd
+          util-linux
+        ] ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
-    );
-  in
+      );
+    in
     ''
       fixup_perl=(
         $out/share/tlp/tlp-pcilist

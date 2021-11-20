@@ -1,18 +1,29 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
 , python3
-, glib, appstream-glib , desktop-file-utils
-, gobject-introspection, gtk3
+, glib
+, appstream-glib
+, desktop-file-utils
+, gobject-introspection
+, gtk3
 , wrapGAppsHook
-, libhandy, webkitgtk, glib-networking
-, gnome, dconf
+, libhandy
+, webkitgtk
+, glib-networking
+, gnome
+, dconf
 }:
 let
   pythonEnv = python3.withPackages (p: with p; [
     pygobject3
     requests
   ]);
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wike";
   version = "1.5.7";
 

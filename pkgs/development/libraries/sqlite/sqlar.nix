@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, fuse, zlib
-, withFuse ? true }:
+{ lib
+, stdenv
+, fetchurl
+, fuse
+, zlib
+, withFuse ? true
+}:
 
 stdenv.mkDerivation {
   pname = "sqlar";

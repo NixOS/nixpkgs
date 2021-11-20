@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config
-, bzip2, lz4, lzo, xz, zlib, zstd
+{ stdenv
+, lib
+, fetchurl
+, doxygen
+, graphviz
+, perl
+, pkg-config
+, bzip2
+, lz4
+, lzo
+, xz
+, zlib
+, zstd
 }:
 
 stdenv.mkDerivation rec {

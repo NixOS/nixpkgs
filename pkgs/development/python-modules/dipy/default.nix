@@ -19,9 +19,9 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   src = fetchFromGitHub {
-    owner  = "dipy";
-    repo   = pname;
-    rev    = version;
+    owner = "dipy";
+    repo = pname;
+    rev = version;
     sha256 = "0zaqsiq73vprbqbzvzswjfmqgappl5vhpl2fwjrrda33c27klpzj";
   };
 

@@ -316,8 +316,8 @@ crate_: lib.makeOverridable
           ++ (lib.optional (edition != null) "--edition ${edition}");
       extraRustcOptsForBuildRs =
         lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
-        ++ extraRustcOptsForBuildRs_
-        ++ (lib.optional (edition != null) "--edition ${edition}");
+          ++ extraRustcOptsForBuildRs_
+          ++ (lib.optional (edition != null) "--edition ${edition}");
 
 
       configurePhase = configureCrate {

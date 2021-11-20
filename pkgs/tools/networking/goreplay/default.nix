@@ -9,8 +9,8 @@ buildGoPackage rec {
 
   src = fetchFromGitHub {
     inherit rev;
-    owner  = "buger";
-    repo   = "goreplay";
+    owner = "buger";
+    repo = "goreplay";
     sha256 = "07nsrx5hwmk6l8bqp48gqk40i9bxf0g4fbmpqbngx6j5f7lpbk2n";
   };
 

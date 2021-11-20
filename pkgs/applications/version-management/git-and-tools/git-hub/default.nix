@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gitMinimal        # Used during build to generate Bash completion.
+    gitMinimal # Used during build to generate Bash completion.
     docutils
   ];
 

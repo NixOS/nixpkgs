@@ -1,5 +1,19 @@
-{ stdenv, lib, substituteAll, fetchurl, cmake, libogg, libvorbis, libtheora, curl, freetype
-, libjpeg, libpng, SDL2, libGL, openal, zlib
+{ stdenv
+, lib
+, substituteAll
+, fetchurl
+, cmake
+, libogg
+, libvorbis
+, libtheora
+, curl
+, freetype
+, libjpeg
+, libpng
+, SDL2
+, libGL
+, openal
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +35,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    libogg libvorbis libtheora curl freetype libjpeg SDL2 libGL openal zlib
+    libogg
+    libvorbis
+    libtheora
+    curl
+    freetype
+    libjpeg
+    SDL2
+    libGL
+    openal
+    zlib
     libpng
   ];
 

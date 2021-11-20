@@ -1,14 +1,15 @@
-{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
+{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [ ] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "4.78.0";
   python = pythonPackages.python;
-  owner   = "DataDog";
-  repo    = "datadog-agent";
+  owner = "DataDog";
+  repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
 
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "datadog-agent";
   version = "7.31.0";
 
@@ -33,19 +34,21 @@ in buildGoModule rec {
   buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
-  preBuild = let
-    ldFlags = lib.concatStringsSep " " [
-      "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
-      "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
-      "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-      "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
-      "-r ${python}/lib"
-    ];
-  in ''
-    buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
-    # Keep directories to generate in sync with tasks/go.py
-    go generate ./pkg/status ./cmd/agent/gui
-  '';
+  preBuild =
+    let
+      ldFlags = lib.concatStringsSep " " [
+        "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
+        "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
+        "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
+        "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
+        "-r ${python}/lib"
+      ];
+    in
+    ''
+      buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
+      # Keep directories to generate in sync with tasks/go.py
+      go generate ./pkg/status ./cmd/agent/gui
+    '';
 
   # DataDog use paths relative to the agent binary, so fix these.
   postPatch = ''
@@ -75,8 +78,8 @@ in buildGoModule rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = licenses.bsd3;
+    homepage = "https://www.datadoghq.com";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
   };
 }

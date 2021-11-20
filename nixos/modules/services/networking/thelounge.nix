@@ -8,7 +8,8 @@ let
   configJsData = "module.exports = " + builtins.toJSON (
     { private = cfg.private; port = cfg.port; } // cfg.extraConfig
   );
-in {
+in
+{
   options.services.thelounge = {
     enable = mkEnableOption "The Lounge web IRC client";
 
@@ -30,7 +31,7 @@ in {
     };
 
     extraConfig = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
       example = literalExpression ''{
         reverseProxy = true;
@@ -58,7 +59,7 @@ in {
       group = "thelounge";
       isSystemUser = true;
     };
-    users.groups.thelounge = {};
+    users.groups.thelounge = { };
     systemd.services.thelounge = {
       description = "The Lounge web IRC client";
       wantedBy = [ "multi-user.target" ];

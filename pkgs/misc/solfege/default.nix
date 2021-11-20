@@ -1,7 +1,21 @@
-{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
-, buildPythonApplication, pycairo, pygobject3
-, gobject-introspection, gtk3, librsvg
-, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
+{ lib
+, fetchurl
+, gettext
+, pkg-config
+, texinfo
+, wrapGAppsHook
+, buildPythonApplication
+, pycairo
+, pygobject3
+, gobject-introspection
+, gtk3
+, librsvg
+, alsa-utils
+, timidity
+, mpg123
+, vorbis-tools
+, csound
+, lilypond
 }:
 
 buildPythonApplication rec {

@@ -1,15 +1,21 @@
-{ stdenv, lib, fetchurl, iosevka, unzip
+{ stdenv
+, lib
+, fetchurl
+, iosevka
+, unzip
 , variant ? ""
 }:
 
 let
-  name = if lib.hasPrefix "sgr" variant then variant
+  name =
+    if lib.hasPrefix "sgr" variant then variant
     else "iosevka" + lib.optionalString (variant != "") "-" + variant;
 
   variantHashes = import ./variants.nix;
   validVariants = map (lib.removePrefix "iosevka-")
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "${name}-bin";
   version = "10.1.0";
 

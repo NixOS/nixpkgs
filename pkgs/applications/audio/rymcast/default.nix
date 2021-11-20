@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, makeWrapper
-, alsa-lib, curl, gtk3, webkitgtk, zenity }:
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, alsa-lib
+, curl
+, gtk3
+, webkitgtk
+, zenity
+}:
 
 stdenv.mkDerivation rec {
   pname = "rymcast";

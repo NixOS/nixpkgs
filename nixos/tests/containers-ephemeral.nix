@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         services.nginx = {
           enable = true;
           virtualHosts.localhost = {
-            root = pkgs.runCommand "localhost" {} ''
+            root = pkgs.runCommand "localhost" { } ''
               mkdir "$out"
               echo hello world > "$out/index.html"
             '';

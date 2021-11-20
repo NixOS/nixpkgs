@@ -1,7 +1,20 @@
-{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, libX11
+, libgdiplus
+, ffmpeg
+, SDL2_mixer
+, openal
+, libsoundio
+, sndio
+, pulseaudio
+, gtk3
+, gobject-introspection
+, gdk-pixbuf
+, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
@@ -61,15 +74,17 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Ryujinx";
-    name = "ryujinx";
-    exec = "Ryujinx";
-    icon = "ryujinx";
-    comment = meta.description;
-    type = "Application";
-    categories = "Game;";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Ryujinx";
+      name = "ryujinx";
+      exec = "Ryujinx";
+      icon = "ryujinx";
+      comment = meta.description;
+      type = "Application";
+      categories = "Game;";
+    })
+  ];
 
   meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";

@@ -3,7 +3,8 @@
 let
   version = "28-1ubuntu4"; # impish 2021-06-24
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "kmod-blacklist";
   inherit version;
 

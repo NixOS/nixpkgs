@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "pywick";
+  pname = "pywick";
   version = "0.5.6";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
+    h5py
+    hickle
+    numpy
+    pandas
+    pillow
+    six
+    pytorch
+    torchvision
+    tqdm
   ];
 
   checkInputs = [ pytest ];

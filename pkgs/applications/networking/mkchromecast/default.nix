@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , python3Packages
 , sox
@@ -13,17 +14,18 @@
 , opusTools
 , gst_all_1
 }:
-let packages = [
-  vorbis-tools
-  sox
-  flac
-  lame
-  opusTools
-  gst_all_1.gstreamer
-  nodejs
-  ffmpeg
-  youtube-dl
-] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
+let
+  packages = [
+    vorbis-tools
+    sox
+    flac
+    lame
+    opusTools
+    gst_all_1.gstreamer
+    nodejs
+    ffmpeg
+    youtube-dl
+  ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication rec {

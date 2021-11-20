@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl, gfortran, python
-, boost, eigen, zlib
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, gfortran
+, python
+, boost
+, eigen
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcmsolver";
   version = "1.3.0";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "PCMSolver";
     repo = pname;
     rev = "v${version}";
-    sha256= "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
+    sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
   };
 
   nativeBuildInputs = [

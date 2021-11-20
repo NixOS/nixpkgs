@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python2
-, unzip, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python2
+, unzip
+, makeWrapper
+}:
 let
   python' = python2.override {
     packageOverrides = self: super: {
@@ -37,14 +42,15 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "5.11.2";
   pname = "dd-agent";
 
   src = fetchFromGitHub {
-    owner  = "datadog";
-    repo   = "dd-agent";
-    rev    = version;
+    owner = "datadog";
+    repo = "dd-agent";
+    rev = version;
     sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
@@ -103,9 +109,9 @@ in stdenv.mkDerivation rec {
       Event collector for the DataDog analysis service
       -- v5 Python implementation
     '';
-    homepage    = "https://www.datadoghq.com";
-    license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.all;
+    homepage = "https://www.datadoghq.com";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

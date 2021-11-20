@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchurl
 , qtbase
@@ -64,7 +65,10 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   meta = with lib; {

@@ -1,9 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libjxl, libpng, liblqr1, libraw, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libtool
+, bzip2
+, zlib
+, libX11
+, libXext
+, libXt
+, fontconfig
+, freetype
+, ghostscript
+, libjpeg
+, djvulibre
+, lcms2
+, openexr
+, libjxl
+, libpng
+, liblqr1
+, libraw
+, librsvg
+, libtiff
+, libxml2
+, openjpeg
+, libwebp
+, libheif
 , ApplicationServices
 , Foundation
-, testVersion, imagemagick
+, testVersion
+, imagemagick
 }:
 
 let
@@ -11,7 +36,7 @@ let
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux"  || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
+    else if stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
     else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
     else null;
 in
@@ -41,18 +66,29 @@ stdenv.mkDerivation rec {
     # let's disable it for now to unbreak the imagemagick build.
     ++ lib.optional (libjxl != null && !stdenv.isAarch64) "--with-jxl"
     ++ lib.optionals (ghostscript != null)
-      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
+      [
+        "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-    ;
+  ;
 
   nativeBuildInputs = [ pkg-config libtool ];
 
   buildInputs =
-    [ zlib fontconfig freetype ghostscript
-      liblqr1 libpng libraw libtiff libxml2 libheif djvulibre
+    [
+      zlib
+      fontconfig
+      freetype
+      ghostscript
+      liblqr1
+      libpng
+      libraw
+      libtiff
+      libxml2
+      libheif
+      djvulibre
     ]
     # libjxl is broken on aarch64 (see meta.broken in libjxl) for now,
     # let's disable it for now to unbreak the imagemagick build.
@@ -69,7 +105,7 @@ stdenv.mkDerivation rec {
     [ bzip2 freetype libjpeg lcms2 ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
-    ;
+  ;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)

@@ -30,9 +30,10 @@ let
     end
   ''));
 
-  netInfo = if (cfg.advertisedAddresses != []) then
-    pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
-  else null;
+  netInfo =
+    if (cfg.advertisedAddresses != [ ]) then
+      pkgs.writeText "NetInfo" ((concatStringsSep "\nf " cfg.advertisedAddresses) + "\n")
+    else null;
 
   buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.roles.backup.cellServDB);
 
@@ -40,7 +41,8 @@ let
 
   udpSizeStr = toString cfg.udpPacketSize;
 
-in {
+in
+{
 
   options = {
 
@@ -62,7 +64,7 @@ in {
 
       advertisedAddresses = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of IP addresses this server is advertised under. See NetInfo(5)";
       };
 
@@ -74,8 +76,8 @@ in {
       };
 
       cellServDB = mkOption {
-        default = [];
-        type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+        default = [ ];
+        type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
         description = "Definition of all cell-local database server machines.";
       };
 
@@ -173,8 +175,8 @@ in {
           };
 
           cellServDB = mkOption {
-            default = [];
-            type = with types; listOf (submodule [ { options = cellServDBConfig;} ]);
+            default = [ ];
+            type = with types; listOf (submodule [{ options = cellServDBConfig; }]);
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
@@ -184,7 +186,7 @@ in {
         };
       };
 
-      dottedPrincipals= mkOption {
+      dottedPrincipals = mkOption {
         default = false;
         type = types.bool;
         description = ''
@@ -212,10 +214,12 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.cellServDB != [];
+      {
+        assertion = cfg.cellServDB != [ ];
         message = "You must specify all cell-local database servers in config.services.openafsServer.cellServDB.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsServer.cellName.";
       }
     ];
@@ -239,7 +243,7 @@ in {
         mode = "0644";
       };
       buCellServDB = {
-        enable = (cfg.roles.backup.cellServDB != []);
+        enable = (cfg.roles.backup.cellServDB != [ ]);
         text = mkCellServDB cfg.cellName cfg.roles.backup.cellServDB;
         target = "openafs/backup/CellServDB";
       };

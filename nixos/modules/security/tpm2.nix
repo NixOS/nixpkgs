@@ -15,7 +15,8 @@ let
      }
   '';
 
-in {
+in
+{
   options.security.tpm2 = {
     enable = lib.mkEnableOption "Trusted Platform Module 2 support";
 
@@ -147,13 +148,14 @@ in {
         isSystemUser = true;
         group = "tss";
       };
-      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
+      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") { };
 
       environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
         lib.attrsets.genAttrs [
           "TPM2TOOLS_TCTI"
           "TPM2_PKCS11_TCTI"
-        ] (_: ''${cfg.tctiEnvironment.interface}:${
+        ]
+          (_: ''${cfg.tctiEnvironment.interface}:${
           if cfg.tctiEnvironment.interface == "tabrmd" then
             cfg.tctiEnvironment.tabrmdConf
           else

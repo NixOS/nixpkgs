@@ -1,9 +1,15 @@
-{ stdenv, lib, which, file, mumble, mumble_i686
+{ stdenv
+, lib
+, which
+, file
+, mumble
+, mumble_i686
 }:
 
 let
   binPath = lib.makeBinPath [ which file ];
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mumble-overlay";
   version = mumble.version;
 

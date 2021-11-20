@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jre_headless, coreutils, gradle_6, git, perl
-, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitLab
+, jre_headless
+, coreutils
+, gradle_6
+, git
+, perl
+, makeWrapper
+}:
 
 let
   pname = "signald";
@@ -48,7 +57,8 @@ let
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname src version postPatch;
 
   patches = [ ./gradle-plugin.patch ];

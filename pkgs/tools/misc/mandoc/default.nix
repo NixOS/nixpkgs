@@ -17,7 +17,7 @@ let
 in
 
 assert executableCross ||
-  throw "mandoc relies on executing compiled programs in configurePhase, can't cross compile";
+throw "mandoc relies on executing compiled programs in configurePhase, can't cross compile";
 
 stdenv.mkDerivation rec {
   pname = "mandoc";

@@ -1,7 +1,26 @@
-{ buildDunePackage, dns, dns-tsig, dns-client, dns-server, dns-certify
-, rresult, bos, cmdliner, fpath, x509, mirage-crypto, mirage-crypto-pk
-, mirage-crypto-rng, hex, ptime, mtime, logs, fmt, ipaddr, lwt
-, randomconv, alcotest
+{ buildDunePackage
+, dns
+, dns-tsig
+, dns-client
+, dns-server
+, dns-certify
+, rresult
+, bos
+, cmdliner
+, fpath
+, x509
+, mirage-crypto
+, mirage-crypto-pk
+, mirage-crypto-rng
+, hex
+, ptime
+, mtime
+, logs
+, fmt
+, ipaddr
+, lwt
+, randomconv
+, alcotest
 }:
 
 buildDunePackage {

@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus,
-libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeDesktopItem
+, unzip
+, fpc
+, lazarus
+, libX11
+, glib
+, gtk2
+, gdk-pixbuf
+, pango
+, atk
+, cairo
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
@@ -14,8 +29,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config unzip ];
   buildInputs = [
-    fpc lazarus stdenv.cc
-    libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl
+    fpc
+    lazarus
+    stdenv.cc
+    libX11
+    glib
+    gtk2
+    gdk-pixbuf
+    pango
+    atk
+    cairo
+    openssl
   ];
 
   NIX_LDFLAGS = "
@@ -50,11 +74,16 @@ stdenv.mkDerivation rec {
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
     categories = lib.concatStringsSep ";" [
-      "Application" "Network" "FileTransfer" "P2P" "GTK"
+      "Application"
+      "Network"
+      "FileTransfer"
+      "P2P"
+      "GTK"
     ];
     startupNotify = "true";
     mimeType = lib.concatStringsSep ";" [
-      "application/x-bittorrent" "x-scheme-handler/magnet"
+      "application/x-bittorrent"
+      "x-scheme-handler/magnet"
     ];
   };
 

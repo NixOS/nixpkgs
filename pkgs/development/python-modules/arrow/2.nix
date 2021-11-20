@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, simplejson, backports_functools_lru_cache
-, python-dateutil, pytz, pytest-mock, sphinx, dateparser, pytest-cov
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, simplejson
+, backports_functools_lru_cache
+, python-dateutil
+, pytz
+, pytest-mock
+, sphinx
+, dateparser
+, pytest-cov
 , pytestCheckHook
 }:
 

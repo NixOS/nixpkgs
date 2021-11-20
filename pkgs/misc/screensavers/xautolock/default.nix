@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, xlibsWrapper
-, imake, gccmakedep, libXScrnSaver, xorgproto
+{ lib
+, stdenv
+, fetchFromGitHub
+, xlibsWrapper
+, imake
+, gccmakedep
+, libXScrnSaver
+, xorgproto
 }:
 
 stdenv.mkDerivation rec {

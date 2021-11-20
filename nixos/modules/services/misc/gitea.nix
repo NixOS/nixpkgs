@@ -283,7 +283,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
-        default = {};
+        default = { };
         description = ''
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
           for details on supported values.
@@ -318,7 +318,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+      {
+        assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
@@ -409,7 +410,8 @@ in
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
@@ -421,7 +423,8 @@ in
 
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -468,73 +471,75 @@ in
       # values for JWT_SECRET and the file jwt_secret gets renamed to
       # lfs_jwt_secret.
       # We have to consider this to stay compatible with older installations.
-      preStart = let
-        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
-        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
-        oauth2JwtSecret = "${cfg.stateDir}/custom/conf/oauth2_jwt_secret";
-        oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
-        lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
-        internalToken = "${cfg.stateDir}/custom/conf/internal_token";
-      in ''
-        # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
-          function gitea_setup {
-            cp -f ${configFile} ${runConfig}
+      preStart =
+        let
+          runConfig = "${cfg.stateDir}/custom/conf/app.ini";
+          secretKey = "${cfg.stateDir}/custom/conf/secret_key";
+          oauth2JwtSecret = "${cfg.stateDir}/custom/conf/oauth2_jwt_secret";
+          oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
+          lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
+          internalToken = "${cfg.stateDir}/custom/conf/internal_token";
+        in
+        ''
+          # copy custom configuration and generate a random secret key if needed
+          ${optionalString (cfg.useWizard == false) ''
+            function gitea_setup {
+              cp -f ${configFile} ${runConfig}
 
-            if [ ! -e ${secretKey} ]; then
-                ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
-            fi
+              if [ ! -e ${secretKey} ]; then
+                  ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+              fi
 
-            # Migrate LFS_JWT_SECRET filename
-            if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
-                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
-            fi
+              # Migrate LFS_JWT_SECRET filename
+              if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
+                  mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+              fi
 
-            if [ ! -e ${oauth2JwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
-            fi
+              if [ ! -e ${oauth2JwtSecret} ]; then
+                  ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
+              fi
 
-            if [ ! -e ${lfsJwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
-            fi
+              if [ ! -e ${lfsJwtSecret} ]; then
+                  ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+              fi
 
-            if [ ! -e ${internalToken} ]; then
-                ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
-            fi
+              if [ ! -e ${internalToken} ]; then
+                  ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
+              fi
 
-            SECRETKEY="$(head -n1 ${secretKey})"
-            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
-            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
-            INTERNALTOKEN="$(head -n1 ${internalToken})"
-            ${if (cfg.mailerPasswordFile == null) then ''
-              MAILERPASSWORD="#mailerpass#"
-            '' else ''
-              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
-            ''}
-            sed -e "s,#secretkey#,$SECRETKEY,g" \
-                -e "s,#dbpass#,$DBPASS,g" \
-                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
-                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
-                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
-                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-                -i ${runConfig}
-          }
-          (umask 027; gitea_setup)
-        ''}
+              SECRETKEY="$(head -n1 ${secretKey})"
+              DBPASS="$(head -n1 ${cfg.database.passwordFile})"
+              OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
+              LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
+              INTERNALTOKEN="$(head -n1 ${internalToken})"
+              ${if (cfg.mailerPasswordFile == null) then ''
+                MAILERPASSWORD="#mailerpass#"
+              '' else ''
+                MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+              ''}
+              sed -e "s,#secretkey#,$SECRETKEY,g" \
+                  -e "s,#dbpass#,$DBPASS,g" \
+                  -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
+                  -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
+                  -e "s,#internaltoken#,$INTERNALTOKEN,g" \
+                  -e "s,#mailerpass#,$MAILERPASSWORD,g" \
+                  -i ${runConfig}
+            }
+            (umask 027; gitea_setup)
+          ''}
 
-        # run migrations/init the database
-        ${gitea}/bin/gitea migrate
+          # run migrations/init the database
+          ${gitea}/bin/gitea migrate
 
-        # update all hooks' binary paths
-        ${gitea}/bin/gitea admin regenerate hooks
+          # update all hooks' binary paths
+          ${gitea}/bin/gitea admin regenerate hooks
 
-        # update command option in authorized_keys
-        if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
-        then
-          ${gitea}/bin/gitea admin regenerate keys
-        fi
-      '';
+          # update command option in authorized_keys
+          if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
+          then
+            ${gitea}/bin/gitea admin regenerate keys
+          fi
+        '';
 
       serviceConfig = {
         Type = "simple";
@@ -593,7 +598,7 @@ in
       };
     };
 
-    users.groups.gitea = {};
+    users.groups.gitea = { };
 
     warnings =
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
@@ -609,23 +614,23 @@ in
       })));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
-       description = "gitea dump";
-       after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
-       path = [ gitea ];
+      description = "gitea dump";
+      after = [ "gitea.service" ];
+      wantedBy = [ "default.target" ];
+      path = [ gitea ];
 
-       environment = {
-         USER = cfg.user;
-         HOME = cfg.stateDir;
-         GITEA_WORK_DIR = cfg.stateDir;
-       };
+      environment = {
+        USER = cfg.user;
+        HOME = cfg.stateDir;
+        GITEA_WORK_DIR = cfg.stateDir;
+      };
 
-       serviceConfig = {
-         Type = "oneshot";
-         User = cfg.user;
-         ExecStart = "${gitea}/bin/gitea dump";
-         WorkingDirectory = cfg.dump.backupDir;
-       };
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        ExecStart = "${gitea}/bin/gitea dump";
+        WorkingDirectory = cfg.dump.backupDir;
+      };
     };
 
     systemd.timers.gitea-dump = mkIf cfg.dump.enable {

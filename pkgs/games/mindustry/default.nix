@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -7,7 +8,7 @@
 , jdk
 , perl
 
-# for arc
+  # for arc
 , SDL2
 , pkg-config
 , stb
@@ -15,10 +16,10 @@
 , alsa-lib
 , glew
 
-# Make the build version easily overridable.
-# Server and client build versions must match, and an empty build version means
-# any build is allowed, so this parameter acts as a simple whitelist.
-# Takes the package version and returns the build version.
+  # Make the build version easily overridable.
+  # Server and client build versions must match, and an empty build version means
+  # any build is allowed, so this parameter acts as a simple whitelist.
+  # Takes the package version and returns the build version.
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
@@ -192,7 +193,7 @@ stdenv.mkDerivation rec {
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin
-    # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
+      # does not work with any maintained java version (https://github.com/Anuken/Mindustry/issues/5114)
       || true;
   };
 }

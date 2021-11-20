@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ultra-fast theory predictions for collider observables";
-    license     = licenses.mit;
-    homepage    = "http://nhartland.github.io/APFELgrid/";
-    platforms   = platforms.unix;
+    license = licenses.mit;
+    homepage = "http://nhartland.github.io/APFELgrid/";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.services.shiori;
-in {
+in
+{
   options = {
     services.shiori = {
       enable = mkEnableOption "Shiori simple bookmarks manager";
@@ -86,7 +87,14 @@ in {
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@resources" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@resources"
+          "~@setuid"
         ];
       };
     };

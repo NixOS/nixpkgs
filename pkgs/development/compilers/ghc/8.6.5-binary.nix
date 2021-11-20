@@ -1,6 +1,13 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
-, ncurses5, ncurses6, gmp, glibc, libiconv
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gcc
+, ncurses5
+, ncurses6
+, gmp
+, glibc
+, libiconv
 , llvmPackages
 }:
 
@@ -15,7 +22,8 @@ let
   ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
 
   libPath = lib.makeLibraryPath ([
-    ourNcurses gmp
+    ourNcurses
+    gmp
   ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -23,8 +31,8 @@ let
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
@@ -37,29 +45,31 @@ stdenv.mkDerivation rec {
   pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
-  src = fetchurl ({
-    i686-linux = {
-      # Don't use the Fedora27 build (as below) because there isn't one!
-      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-      sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
-    };
-    x86_64-linux = {
-      # This is the Fedora build because it links against ncurses6 where the
-      # deb9 one links against ncurses5, see here
-      # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
-      sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
-    };
-    aarch64-linux = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
-      sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
-    };
-    x86_64-darwin = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-      sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
-    };
-  }.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform"));
+  src = fetchurl (
+    {
+      i686-linux = {
+        # Don't use the Fedora27 build (as below) because there isn't one!
+        url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+        sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
+      };
+      x86_64-linux = {
+        # This is the Fedora build because it links against ncurses6 where the
+        # deb9 one links against ncurses5, see here
+        # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+        sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
+      };
+      aarch64-linux = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
+        sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
+      };
+      x86_64-darwin = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+        sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
+      };
+    }.${stdenv.hostPlatform.system}
+      or (throw "cannot bootstrap GHC on this platform")
+  );
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
@@ -124,7 +134,7 @@ stdenv.mkDerivation rec {
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
@@ -187,7 +197,7 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;

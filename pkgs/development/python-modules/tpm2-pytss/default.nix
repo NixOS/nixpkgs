@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pkg-config
+, swig
 , tpm2-tss
-, cryptography, ibm-sw-tpm2
+, cryptography
+, ibm-sw-tpm2
 }:
 
 buildPythonPackage rec {

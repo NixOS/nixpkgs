@@ -15,7 +15,8 @@ let
     propagatedBuildInputs = [ python_fedora pyopenssl ];
     doCheck = false;
   };
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "fedpkg";
   version = "1.29";
 

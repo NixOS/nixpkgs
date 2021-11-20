@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   # build only the "package" target, which generates the fop command.
   buildPhase = ''
-     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
-     ant -f fop/build.xml package
+    export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+    ant -f fop/build.xml package
   '';
 
   installPhase = ''

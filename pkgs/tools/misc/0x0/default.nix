@@ -1,4 +1,4 @@
-{ lib, stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
+{ lib, stdenv, xsel, curl, fetchFromGitLab, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "0x0";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "somasis";
     repo = "scripts";
-    rev  = "70422c83b2ac5856559b0ddaf6e2dc3dbef40dee";
+    rev = "70422c83b2ac5856559b0ddaf6e2dc3dbef40dee";
     sha256 = "1qpylyxrisy3p2lyirfarfj5yzrdjgsgxwf8gqwljpcjn207hr72";
   };
 

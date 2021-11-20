@@ -12,9 +12,9 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "A tool to validate HTML files";
-    homepage    = "https://github.com/gjtorikian/html-proofer";
-    license     = licenses.mit;
+    homepage = "https://github.com/gjtorikian/html-proofer";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

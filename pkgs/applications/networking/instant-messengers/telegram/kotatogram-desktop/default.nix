@@ -1,18 +1,49 @@
-{ mkDerivation, lib, fetchFromGitHub, callPackage
-, pkg-config, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
-, qtbase, qtimageformats, gtk3, libsForQt5, lz4, xxHash
-, ffmpeg, openalSoft, minizip, libopus, alsa-lib, libpulseaudio, range-v3
-, tl-expected, hunspell, glibmm, webkitgtk
-# Transitive dependencies:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy
-, at-spi2-core, libXtst, libthai, libdatrie
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
+, qtbase
+, qtimageformats
+, gtk3
+, libsForQt5
+, lz4
+, xxHash
+, ffmpeg
+, openalSoft
+, minizip
+, libopus
+, alsa-lib
+, libpulseaudio
+, range-v3
+, tl-expected
+, hunspell
+, glibmm
+, webkitgtk
+  # Transitive dependencies:
+, pcre
+, xorg
+, util-linux
+, libselinux
+, libsepol
+, epoxy
+, at-spi2-core
+, libXtst
+, libthai
+, libdatrie
 }:
 
 with lib;
 
 let
-  tg_owt = callPackage ./tg_owt.nix {};
-in mkDerivation rec {
+  tg_owt = callPackage ./tg_owt.nix { };
+in
+mkDerivation rec {
   pname = "kotatogram-desktop";
   version = "1.4.1";
 
@@ -36,13 +67,36 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu lz4 xxHash
-    ffmpeg openalSoft minizip libopus alsa-lib libpulseaudio range-v3
-    tl-expected hunspell glibmm webkitgtk
+    qtbase
+    qtimageformats
+    gtk3
+    libsForQt5.kwayland
+    libsForQt5.libdbusmenu
+    lz4
+    xxHash
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsa-lib
+    libpulseaudio
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk
     tg_owt
     # Transitive dependencies:
-    pcre xorg.libXdmcp util-linux libselinux libsepol epoxy
-    at-spi2-core libXtst libthai libdatrie
+    pcre
+    xorg.libXdmcp
+    util-linux
+    libselinux
+    libsepol
+    epoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
   ];
 
   cmakeFlags = [ "-DTDESKTOP_API_TEST=ON" ];

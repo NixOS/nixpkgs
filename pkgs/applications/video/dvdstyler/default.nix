@@ -19,15 +19,20 @@
 , xmlto
 , zip
 
-, dvdisasterSupport ? true, dvdisaster ? null
-, thumbnailSupport ? true, libgnomeui ? null
-, udevSupport ? true, udev ? null
-, dbusSupport ? true, dbus ? null
+, dvdisasterSupport ? true
+, dvdisaster ? null
+, thumbnailSupport ? true
+, libgnomeui ? null
+, udevSupport ? true
+, udev ? null
+, dbusSupport ? true
+, dbus ? null
 }:
 
 let
   inherit (lib) optionals makeBinPath;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dvdstyler";
   version = "3.1.2";
 
@@ -56,21 +61,23 @@ in stdenv.mkDerivation rec {
     xine-ui
     xmlto
     zip
- ]
+  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
   ++ optionals dbusSupport [ dbus ]
   ++ optionals thumbnailSupport [ libgnomeui ];
 
 
-  postInstall = let
-    binPath = makeBinPath [
-      cdrtools
-      dvdauthor
-      dvdplusrwtools
-    ]; in
+  postInstall =
+    let
+      binPath = makeBinPath [
+        cdrtools
+        dvdauthor
+        dvdplusrwtools
+      ];
+    in
     ''
-       wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
+      wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
     '';
 
   enableParallelBuilding = true;

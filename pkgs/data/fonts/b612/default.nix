@@ -3,7 +3,8 @@
 let
   version = "1.008";
   pname = "b612";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-font-${version}";
   owner = "polarsys";
   repo = "b612";
@@ -31,8 +32,8 @@ in fetchFromGitHub {
       variants of the font. This one, baptized B612 in reference to the
       imaginary asteroid of the aviator Saint‑Exupéry, benefited from a complete
       hinting on all the characters.
-      '';
-    license = with licenses; [ ofl epl10 bsd3 ] ;
+    '';
+    license = with licenses; [ ofl epl10 bsd3 ];
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };

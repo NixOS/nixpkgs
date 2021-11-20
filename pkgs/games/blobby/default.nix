@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config zip ];
   buildInputs = [ SDL2 SDL2_image libGLU libGL physfs boost zlib ];
 
-  preConfigure=''
+  preConfigure = ''
     sed -e '1i#include <iostream>' -i src/NetworkMessage.cpp
   '';
 

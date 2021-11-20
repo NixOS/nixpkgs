@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-      ./gcc43.patch
-      ./find-config-file-in-system-etc-dir.patch
-      ./gmrun-0.9.2-xdg.patch
-    ];
+    ./gcc43.patch
+    ./find-config-file-in-system-etc-dir.patch
+    ./gmrun-0.9.2-xdg.patch
+  ];
 
   meta = with lib; {
     description = "Gnome Completion-Run Utility";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/gmrun/";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

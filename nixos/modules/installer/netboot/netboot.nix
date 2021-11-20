@@ -26,31 +26,35 @@ with lib;
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
       ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
-          then []
-          else [ pkgs.grub2 pkgs.syslinux ]);
+    then [ ]
+    else [ pkgs.grub2 pkgs.syslinux ]);
 
     fileSystems."/" = mkImageMediaOverride
-      { fsType = "tmpfs";
+      {
+        fsType = "tmpfs";
         options = [ "mode=0755" ];
       };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
     fileSystems."/nix/.ro-store" = mkImageMediaOverride
-      { fsType = "squashfs";
+      {
+        fsType = "squashfs";
         device = "../nix-store.squashfs";
         options = [ "loop" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/.rw-store" = mkImageMediaOverride
-      { fsType = "tmpfs";
+      {
+        fsType = "tmpfs";
         options = [ "mode=0755" ];
         neededForBoot = true;
       };
 
     fileSystems."/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
+      {
+        fsType = "overlay";
         device = "overlay";
         options = [
           "lowerdir=/nix/.ro-store"
@@ -86,10 +90,10 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
-          }
-        ];
+        [{
+          object = config.system.build.squashfsStore;
+          symlink = "/nix-store.squashfs";
+        }];
     };
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''

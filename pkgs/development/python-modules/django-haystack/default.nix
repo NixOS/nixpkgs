@@ -3,13 +3,13 @@
 , pythonOlder
 , fetchPypi
 
-# build dependencies
+  # build dependencies
 , setuptools-scm
 
-# dependencies
+  # dependencies
 , django
 
-# tests
+  # tests
 , geopy
 , nose
 , pysolr

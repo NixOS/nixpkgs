@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, dune-configurator
-, mdx, qtest, result
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, dune-configurator
+, mdx
+, qtest
+, result
 }:
 
 buildDunePackage rec {

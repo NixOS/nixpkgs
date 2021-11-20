@@ -6,7 +6,7 @@ buildGoPackage rec {
   rev = "v${version}";
 
   goPackagePath = "github.com/sahib/brig";
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "sahib";

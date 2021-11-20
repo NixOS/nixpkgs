@@ -7,9 +7,10 @@ let
   nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
-  nscd = if pkgs.stdenv.hostPlatform.libc == "glibc"
-         then pkgs.stdenv.cc.libc.bin
-         else pkgs.glibc.bin;
+  nscd =
+    if pkgs.stdenv.hostPlatform.libc == "glibc"
+    then pkgs.stdenv.cc.libc.bin
+    else pkgs.glibc.bin;
 
 in
 
@@ -48,7 +49,8 @@ in
     environment.etc."nscd.conf".text = cfg.config;
 
     systemd.services.nscd =
-      { description = "Name Service Cache Daemon";
+      {
+        description = "Name Service Cache Daemon";
 
         wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
 
@@ -67,14 +69,16 @@ in
         # files. So prefix the ExecStart command with "!" to prevent systemd
         # from dropping privileges early. See ExecStart in systemd.service(5).
         serviceConfig =
-          { ExecStart = "!@${nscd}/sbin/nscd nscd";
+          {
+            ExecStart = "!@${nscd}/sbin/nscd nscd";
             Type = "forking";
             DynamicUser = true;
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${nscd}/sbin/nscd --invalidate passwd"
+              [
+                "${nscd}/sbin/nscd --invalidate passwd"
                 "${nscd}/sbin/nscd --invalidate group"
                 "${nscd}/sbin/nscd --invalidate hosts"
               ];

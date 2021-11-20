@@ -83,7 +83,8 @@ let
     outputHash = "0zikbakbr2fhyv4h4h52ajhznjka0hg6hiqfy1528a39i6psipn3";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [ makeWrapper jdk11 gradle_5 ];

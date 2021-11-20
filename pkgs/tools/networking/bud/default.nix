@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    python2 python2.pkgs.gyp
+    python2
+    python2.pkgs.gyp
   ] ++ lib.optional stdenv.isLinux util-linux;
 
   strictDeps = true;
@@ -29,8 +30,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A TLS terminating proxy";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     # Does not build on aarch64-linux.
     badPlatforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

@@ -15,9 +15,11 @@ let
       # toString prints floats with hardcoded high precision
       floatToString = f: builtins.toJSON f;
     in
-      addCheck float (x: x <= b && x >= a)
-      // { description = "a floating point number in " +
-                         "range [${floatToString a}, ${floatToString b}]"; };
+    addCheck float (x: x <= b && x >= a)
+    // {
+      description = "a floating point number in " +
+      "range [${floatToString a}, ${floatToString b}]";
+    };
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
@@ -31,22 +33,24 @@ let
 
   # This serializes a Nix expression to the libconfig format.
   mkValueString = v:
-         if types.bool.check  v then boolToString v
-    else if types.int.check   v then toString v
+    if types.bool.check v then boolToString v
+    else if types.int.check v then toString v
     else if types.float.check v then toString v
-    else if types.str.check   v then "\"${escape [ "\"" ] v}\""
-    else if builtins.isList   v then "[ ${concatMapStringsSep " , " mkValueString v} ]"
+    else if types.str.check v then "\"${escape [ "\"" ] v}\""
+    else if builtins.isList v then "[ ${concatMapStringsSep " , " mkValueString v} ]"
     else if types.attrs.check v then "{ ${concatStringsSep " " (mkAttrsString false v) } }"
-    else throw ''
-                 invalid expression used in option services.picom.settings:
-                 ${v}
-               '';
+    else
+      throw ''
+        invalid expression used in option services.picom.settings:
+        ${v}
+      '';
 
   toConf = attrs: concatStringsSep "\n" (mkAttrsString true cfg.settings);
 
   configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
 
-in {
+in
+{
 
   imports = [
     (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
@@ -97,7 +101,7 @@ in {
 
     fadeExclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
@@ -137,7 +141,7 @@ in {
 
     shadowExclude = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
@@ -179,7 +183,7 @@ in {
     wintypes = mkOption {
       type = types.attrs;
       default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
-      example = {};
+      example = { };
       description = ''
         Rules for specific window types.
       '';
@@ -187,7 +191,7 @@ in {
 
     opacityRules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a"
         "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"
@@ -213,10 +217,10 @@ in {
         let
           res = x != "none";
           msg = "The type of services.picom.vSync has changed to bool:"
-                + " interpreting ${x} as ${boolToString res}";
+            + " interpreting ${x} as ${boolToString res}";
         in
-          if isBool x then x
-          else warn msg res;
+        if isBool x then x
+        else warn msg res;
 
       description = ''
         Enable vertical synchronization. Chooses the best method
@@ -230,73 +234,75 @@ in {
       default = 0;
       example = 60;
       description = ''
-       Screen refresh rate (0 = automatically detect).
+        Screen refresh rate (0 = automatically detect).
       '';
     };
 
     settings = with types;
-    let
-      scalar = oneOf [ bool int float str ]
-        // { description = "scalar types"; };
+      let
+        scalar = oneOf [ bool int float str ]
+          // { description = "scalar types"; };
 
-      libConfig = oneOf [ scalar (listOf libConfig) (attrsOf libConfig) ]
-        // { description = "libconfig type"; };
+        libConfig = oneOf [ scalar (listOf libConfig) (attrsOf libConfig) ]
+          // { description = "libconfig type"; };
 
-      topLevel = attrsOf libConfig
-        // { description = ''
-               libconfig configuration. The format consists of an attributes
-               set (called a group) of settings. Each setting can be a scalar type
-               (boolean, integer, floating point number or string), a list of
-               scalars or a group itself
-             '';
-           };
+        topLevel = attrsOf libConfig
+          // {
+          description = ''
+            libconfig configuration. The format consists of an attributes
+            set (called a group) of settings. Each setting can be a scalar type
+            (boolean, integer, floating point number or string), a list of
+            scalars or a group itself
+          '';
+        };
 
-    in mkOption {
-      type = topLevel;
-      default = { };
-      example = literalExpression ''
-        blur =
-          { method = "gaussian";
-            size = 10;
-            deviation = 5.0;
-          };
-      '';
-      description = ''
-        Picom settings. Use this option to configure Picom settings not exposed
-        in a NixOS option or to bypass one.  For the available options see the
-        CONFIGURATION FILES section at <literal>picom(1)</literal>.
-      '';
-    };
+      in
+      mkOption {
+        type = topLevel;
+        default = { };
+        example = literalExpression ''
+          blur =
+            { method = "gaussian";
+              size = 10;
+              deviation = 5.0;
+            };
+        '';
+        description = ''
+          Picom settings. Use this option to configure Picom settings not exposed
+          in a NixOS option or to bypass one.  For the available options see the
+          CONFIGURATION FILES section at <literal>picom(1)</literal>.
+        '';
+      };
   };
 
   config = mkIf cfg.enable {
     services.picom.settings = mkDefaultAttrs {
       # fading
-      fading           = cfg.fade;
-      fade-delta       = cfg.fadeDelta;
-      fade-in-step     = elemAt cfg.fadeSteps 0;
-      fade-out-step    = elemAt cfg.fadeSteps 1;
-      fade-exclude     = cfg.fadeExclude;
+      fading = cfg.fade;
+      fade-delta = cfg.fadeDelta;
+      fade-in-step = elemAt cfg.fadeSteps 0;
+      fade-out-step = elemAt cfg.fadeSteps 1;
+      fade-exclude = cfg.fadeExclude;
 
       # shadows
-      shadow           = cfg.shadow;
-      shadow-offset-x  = elemAt cfg.shadowOffsets 0;
-      shadow-offset-y  = elemAt cfg.shadowOffsets 1;
-      shadow-opacity   = cfg.shadowOpacity;
-      shadow-exclude   = cfg.shadowExclude;
+      shadow = cfg.shadow;
+      shadow-offset-x = elemAt cfg.shadowOffsets 0;
+      shadow-offset-y = elemAt cfg.shadowOffsets 1;
+      shadow-opacity = cfg.shadowOpacity;
+      shadow-exclude = cfg.shadowExclude;
 
       # opacity
-      active-opacity   = cfg.activeOpacity;
+      active-opacity = cfg.activeOpacity;
       inactive-opacity = cfg.inactiveOpacity;
 
-      wintypes         = cfg.wintypes;
+      wintypes = cfg.wintypes;
 
-      opacity-rule     = cfg.opacityRules;
+      opacity-rule = cfg.opacityRules;
 
       # other options
-      backend          = cfg.backend;
-      vsync            = cfg.vSync;
-      refresh-rate     = cfg.refreshRate;
+      backend = cfg.backend;
+      vsync = cfg.vSync;
+      refresh-rate = cfg.refreshRate;
     };
 
     systemd.user.services.picom = {

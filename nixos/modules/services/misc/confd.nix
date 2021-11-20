@@ -15,14 +15,15 @@ let
     watch = ${boolToString cfg.watch}
   '';
 
-in {
+in
+{
   options.services.confd = {
     enable = mkEnableOption "confd service";
 
     backend = mkOption {
       description = "Confd config storage backend to use.";
       default = "etcd";
-      type = types.enum ["etcd" "consul" "redis" "zookeeper"];
+      type = types.enum [ "etcd" "consul" "redis" "zookeeper" ];
     };
 
     interval = mkOption {
@@ -52,7 +53,7 @@ in {
     logLevel = mkOption {
       description = "Confd log level.";
       default = "info";
-      type = types.enum ["info" "debug"];
+      type = types.enum [ "info" "debug" ];
     };
 
     confDir = mkOption {

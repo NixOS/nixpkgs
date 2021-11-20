@@ -2,8 +2,8 @@
 
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
-                mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-                optional types mkOptionDefault flip attrNames;
+    mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
+    optional types mkOptionDefault flip attrNames;
 
   cfg = config.services.prometheus.exporters;
 
@@ -72,9 +72,10 @@ let
     "varnish"
     "wireguard"
     "flow"
-  ] (name:
-    import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
-  );
+  ]
+    (name:
+      import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
+    );
 
   mkExporterOpts = ({ name, port }: {
     enable = mkEnableOption "the prometheus ${name} exporter";
@@ -94,7 +95,7 @@ let
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra commandline options to pass to the ${name} exporter.
       '';
@@ -138,24 +139,28 @@ let
     ${name} = mkOption {
       type = types.submodule [{
         inherit imports;
-        options = (mkExporterOpts {
-          inherit name port;
-        } // extraOpts);
-      } ({ config, ... }: mkIf config.openFirewall {
-        firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
-      })];
+        options = (mkExporterOpts
+          {
+            inherit name port;
+          } // extraOpts);
+      }
+        ({ config, ... }: mkIf config.openFirewall {
+          firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+        })];
       internal = true;
-      default = {};
+      default = { };
     };
   };
 
-  mkSubModules = (foldl' (a: b: a//b) {}
-    (mapAttrsToList (name: opts: mkSubModule {
-      inherit name;
-      inherit (opts) port;
-      extraOpts = opts.extraOpts or {};
-      imports = opts.imports or [];
-    }) exporterOpts)
+  mkSubModules = (foldl' (a: b: a // b) { }
+    (mapAttrsToList
+      (name: opts: mkSubModule {
+        inherit name;
+        inherit (opts) port;
+        extraOpts = opts.extraOpts or { };
+        imports = opts.imports or [ ];
+      })
+      exporterOpts)
   );
 
   mkExporterConf = { name, conf, serviceOpts }:
@@ -163,14 +168,14 @@ let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
     in
     mkIf conf.enable {
-      warnings = conf.warnings or [];
+      warnings = conf.warnings or [ ];
       users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
         description = "Prometheus ${name} exporter service user";
         isSystemUser = true;
         inherit (conf) group;
       });
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {};
+        "${name}-exporter" = { };
       });
       networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
@@ -207,25 +212,35 @@ let
         serviceConfig.RestrictSUIDSGID = true;
         serviceConfig.SystemCallArchitectures = "native";
         serviceConfig.UMask = "0077";
-      } serviceOpts ]);
-  };
+      }
+        serviceOpts]);
+    };
 in
 {
 
-  imports = (lib.forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
-                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
-                   "snmpExporter" "unifiExporter" "varnishExporter" ]
-       (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
-         The prometheus exporters are now configured using `services.prometheus.exporters'.
-         See the 18.03 release notes for more information.
-       '' ));
+  imports = (lib.forEach [
+    "blackboxExporter"
+    "collectdExporter"
+    "fritzboxExporter"
+    "jsonExporter"
+    "minioExporter"
+    "nginxExporter"
+    "nodeExporter"
+    "snmpExporter"
+    "unifiExporter"
+    "varnishExporter"
+  ]
+    (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
+      The prometheus exporters are now configured using `services.prometheus.exporters'.
+      See the 18.03 release notes for more information.
+    ''));
 
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
     };
     description = "Prometheus exporter configuration";
-    default = {};
+    default = { };
     example = literalExpression ''
       {
         node = {
@@ -238,7 +253,7 @@ in
   };
 
   config = mkMerge ([{
-    assertions = [ {
+    assertions = [{
       assertion = cfg.snmp.enable -> (
         (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
       );
@@ -246,51 +261,62 @@ in
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
-    } {
-      assertion = cfg.mikrotik.enable -> (
-        (cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null)
-      );
-      message = ''
-        Please specify either `services.prometheus.exporters.mikrotik.configuration'
-          or `services.prometheus.exporters.mikrotik.configFile'.
-      '';
-    } {
-      assertion = cfg.mail.enable -> (
-        (cfg.mail.configFile == null) != (cfg.mail.configuration == null)
-      );
-      message = ''
-        Please specify either 'services.prometheus.exporters.mail.configuration'
-          or 'services.prometheus.exporters.mail.configFile'.
-      '';
-    } {
-      assertion = cfg.sql.enable -> (
-        (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
-      );
-      message = ''
-        Please specify either 'services.prometheus.exporters.sql.configuration' or
-          'services.prometheus.exporters.sql.configFile'
-      '';
-    } ] ++ (flip map (attrNames cfg) (exporter: {
+    }
+      {
+        assertion = cfg.mikrotik.enable -> (
+          (cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null)
+        );
+        message = ''
+          Please specify either `services.prometheus.exporters.mikrotik.configuration'
+            or `services.prometheus.exporters.mikrotik.configFile'.
+        '';
+      }
+      {
+        assertion = cfg.mail.enable -> (
+          (cfg.mail.configFile == null) != (cfg.mail.configuration == null)
+        );
+        message = ''
+          Please specify either 'services.prometheus.exporters.mail.configuration'
+            or 'services.prometheus.exporters.mail.configFile'.
+        '';
+      }
+      {
+        assertion = cfg.sql.enable -> (
+          (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
+        );
+        message = ''
+          Please specify either 'services.prometheus.exporters.sql.configuration' or
+            'services.prometheus.exporters.sql.configFile'
+        '';
+      }] ++ (flip map (attrNames cfg) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
         The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
         `openFirewall' is set to `true'!
       '';
     }));
-  }] ++ [(mkIf config.services.minio.enable {
-    services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
-    services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
-    services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
-    hardware.rtl-sdr.enable = mkDefault true;
-  })] ++ [(mkIf config.services.postfix.enable {
-    services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
-  })] ++ (mapAttrsToList (name: conf:
-    mkExporterConf {
-      inherit name;
-      inherit (conf) serviceOpts;
-      conf = cfg.${name};
-    }) exporterOpts)
+  }] ++ [
+    (mkIf config.services.minio.enable {
+      services.prometheus.exporters.minio.minioAddress = mkDefault "http://localhost:9000";
+      services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
+      services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
+    })
+  ] ++ [
+    (mkIf config.services.prometheus.exporters.rtl_433.enable {
+      hardware.rtl-sdr.enable = mkDefault true;
+    })
+  ] ++ [
+    (mkIf config.services.postfix.enable {
+      services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
+    })
+  ] ++ (mapAttrsToList
+    (name: conf:
+      mkExporterConf {
+        inherit name;
+        inherit (conf) serviceOpts;
+        conf = cfg.${name};
+      })
+    exporterOpts)
   );
 
   meta = {

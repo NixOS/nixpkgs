@@ -1,6 +1,21 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, runCommandLocal, makeWrapper, substituteAll
-, sbcl, bash, which, perl, hostname
-, openssl, glucose, minisat, abc-verifier, z3, python
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, runCommandLocal
+, makeWrapper
+, substituteAll
+, sbcl
+, bash
+, which
+, perl
+, hostname
+, openssl
+, glucose
+, minisat
+, abc-verifier
+, z3
+, python
 , certifyBooks ? true
 } @ args:
 
@@ -15,7 +30,8 @@ let
       --add-flags "--dynamic-space-size 2000"
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "acl2";
   version = "8.4";
 
@@ -33,22 +49,32 @@ in stdenv.mkDerivation rec {
   # $IPASIR_SHARED_LIBRARY environment variable.
   libipasir = callPackage ./libipasirglucose4 { };
 
-  patches = [(substituteAll {
-    src = ./0001-Fix-some-paths-for-Nix-build.patch;
-    libipasir = "${libipasir}/lib/${libipasir.libname}";
-    libssl = "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
-    libcrypto = "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
-  })];
+  patches = [
+    (substituteAll {
+      src = ./0001-Fix-some-paths-for-Nix-build.patch;
+      libipasir = "${libipasir}/lib/${libipasir.libname}";
+      libssl = "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libcrypto = "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
     sbcl
   ] ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
-    which perl hostname makeWrapper
+    which
+    perl
+    hostname
+    makeWrapper
     # Some of the books require one or more of these external tools:
-    openssl.out glucose minisat abc-verifier libipasir
-    z3 (python.withPackages (ps: [ ps.z3 ]))
+    openssl.out
+    glucose
+    minisat
+    abc-verifier
+    libipasir
+    z3
+    (python.withPackages (ps: [ ps.z3 ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -138,7 +164,12 @@ in stdenv.mkDerivation rec {
     ] ++ optionals certifyBooks [
       # The community books are mostly bsd3 or mit but with a few
       # other things thrown in.
-      mit gpl2 llgpl21 cc0 publicDomain unfreeRedistributable
+      mit
+      gpl2
+      llgpl21
+      cc0
+      publicDomain
+      unfreeRedistributable
     ];
     maintainers = with maintainers; [ kini raskin ];
     platforms = platforms.all;

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, asio, boost, cmake, hwloc, gperftools, ninja
-, pkg-config, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, asio
+, boost
+, cmake
+, hwloc
+, gperftools
+, ninja
+, pkg-config
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "hpx";

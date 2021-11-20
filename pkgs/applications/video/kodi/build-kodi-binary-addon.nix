@@ -2,11 +2,13 @@
 { name ? "${attrs.pname}-${attrs.version}"
 , namespace
 , version
-, extraNativeBuildInputs ? []
-, extraBuildInputs ? []
-, extraRuntimeDependencies ? []
-, extraCMakeFlags ? []
-, extraInstallPhase ? "", ... } @ attrs:
+, extraNativeBuildInputs ? [ ]
+, extraBuildInputs ? [ ]
+, extraRuntimeDependencies ? [ ]
+, extraCMakeFlags ? [ ]
+, extraInstallPhase ? ""
+, ...
+} @ attrs:
 toKodiAddon (stdenv.mkDerivation ({
   name = "kodi-" + name;
 

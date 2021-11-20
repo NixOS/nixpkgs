@@ -3,7 +3,8 @@
 let
   pname = "agave";
   version = "35";
-in fetchurl {
+in
+fetchurl {
   name = "${pname}-${version}";
   url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-Regular.ttf";
 

@@ -1,4 +1,4 @@
-  { config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -8,16 +8,18 @@ let
 
   isRBACEnabled = elem "RBAC" cfg.authorizationMode;
 
-  apiserverServiceIP = (concatStringsSep "." (
-    take 3 (splitString "." cfg.serviceClusterIpRange
-  )) + ".1");
+  apiserverServiceIP = (concatStringsSep "."
+    (
+      take 3 (splitString "." cfg.serviceClusterIpRange
+      )
+    ) + ".1");
 in
 {
 
   imports = [
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] [ "services" "kubernetes" "apiserver" "bindAddress" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] [ "services" "kubernetes" "apiserver" "insecurePort" ])
     (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
@@ -49,8 +51,8 @@ in
         Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
         <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
       '';
-      default = ["RBAC" "Node"]; # Enabling RBAC by default, although kubernetes default is AllowAllow
-      type = listOf (enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node"]);
+      default = [ "RBAC" "Node" ]; # Enabling RBAC by default, although kubernetes default is AllowAllow
+      type = listOf (enum [ "AlwaysAllow" "AlwaysDeny" "ABAC" "Webhook" "RBAC" "Node" ]);
     };
 
     authorizationPolicy = mkOption {
@@ -58,7 +60,7 @@ in
         Kubernetes apiserver authorization policy file. See
         <link xlink:href="https://kubernetes.io/docs/reference/access-authn-authz/authorization/"/>
       '';
-      default = [];
+      default = [ ];
       type = listOf attrs;
     };
 
@@ -92,7 +94,7 @@ in
         Kubernetes admission control plugins to disable. See
         <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
       '';
-      default = [];
+      default = [ ];
       type = listOf str;
     };
 
@@ -104,14 +106,24 @@ in
         <link xlink:href="https://kubernetes.io/docs/admin/admission-controllers/"/>
       '';
       default = [
-        "NamespaceLifecycle" "LimitRanger" "ServiceAccount"
-        "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds"
+        "NamespaceLifecycle"
+        "LimitRanger"
+        "ServiceAccount"
+        "ResourceQuota"
+        "DefaultStorageClass"
+        "DefaultTolerationSeconds"
         "NodeRestriction"
       ];
       example = [
-        "NamespaceLifecycle" "NamespaceExists" "LimitRanger"
-        "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
-        "PodSecurityPolicy" "NodeRestriction" "DefaultStorageClass"
+        "NamespaceLifecycle"
+        "NamespaceExists"
+        "LimitRanger"
+        "SecurityContextDeny"
+        "ServiceAccount"
+        "ResourceQuota"
+        "PodSecurityPolicy"
+        "NodeRestriction"
+        "DefaultStorageClass"
       ];
       type = listOf str;
     };
@@ -119,7 +131,7 @@ in
     etcd = {
       servers = mkOption {
         description = "List of etcd servers.";
-        default = ["http://127.0.0.1:2379"];
+        default = [ "http://127.0.0.1:2379" ];
         type = types.listOf types.str;
       };
 
@@ -150,7 +162,7 @@ in
 
     extraSANs = mkOption {
       description = "Extra x509 Subject Alternative Names to be added to the kubernetes apiserver tls cert.";
-      default = [];
+      default = [ ];
       type = listOf str;
     };
 
@@ -223,7 +235,7 @@ in
         Kubernetes apiserver storage backend.
       '';
       default = "etcd3";
-      type = enum ["etcd2" "etcd3"];
+      type = enum [ "etcd2" "etcd3" ];
     };
 
     securePort = mkOption {
@@ -323,13 +335,13 @@ in
   config = mkMerge [
 
     (mkIf cfg.enable {
-        systemd.services.kube-apiserver = {
-          description = "Kubernetes APIServer Service";
-          wantedBy = [ "kubernetes.target" ];
-          after = [ "network.target" ];
-          serviceConfig = {
-            Slice = "kubernetes.slice";
-            ExecStart = ''${top.package}/bin/kube-apiserver \
+      systemd.services.kube-apiserver = {
+        description = "Kubernetes APIServer Service";
+        wantedBy = [ "kubernetes.target" ];
+        after = [ "network.target" ];
+        serviceConfig = {
+          Slice = "kubernetes.slice";
+          ExecStart = ''${top.package}/bin/kube-apiserver \
               --allow-privileged=${boolToString cfg.allowPrivileged} \
               --authorization-mode=${concatStringsSep "," cfg.authorizationMode} \
                 ${optionalString (elem "ABAC" cfg.authorizationMode)
@@ -391,63 +403,63 @@ in
               ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
               ${cfg.extraOpts}
             '';
-            WorkingDirectory = top.dataDir;
-            User = "kubernetes";
-            Group = "kubernetes";
-            AmbientCapabilities = "cap_net_bind_service";
-            Restart = "on-failure";
-            RestartSec = 5;
-          };
-
-          unitConfig = {
-            StartLimitIntervalSec = 0;
-          };
+          WorkingDirectory = top.dataDir;
+          User = "kubernetes";
+          Group = "kubernetes";
+          AmbientCapabilities = "cap_net_bind_service";
+          Restart = "on-failure";
+          RestartSec = 5;
         };
 
-        services.etcd = {
-          clientCertAuth = mkDefault true;
-          peerClientCertAuth = mkDefault true;
-          listenClientUrls = mkDefault ["https://0.0.0.0:2379"];
-          listenPeerUrls = mkDefault ["https://0.0.0.0:2380"];
-          advertiseClientUrls = mkDefault ["https://${top.masterAddress}:2379"];
-          initialCluster = mkDefault ["${top.masterAddress}=https://${top.masterAddress}:2380"];
-          name = mkDefault top.masterAddress;
-          initialAdvertisePeerUrls = mkDefault ["https://${top.masterAddress}:2380"];
+        unitConfig = {
+          StartLimitIntervalSec = 0;
         };
+      };
 
-        services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled {
+      services.etcd = {
+        clientCertAuth = mkDefault true;
+        peerClientCertAuth = mkDefault true;
+        listenClientUrls = mkDefault [ "https://0.0.0.0:2379" ];
+        listenPeerUrls = mkDefault [ "https://0.0.0.0:2380" ];
+        advertiseClientUrls = mkDefault [ "https://${top.masterAddress}:2379" ];
+        initialCluster = mkDefault [ "${top.masterAddress}=https://${top.masterAddress}:2380" ];
+        name = mkDefault top.masterAddress;
+        initialAdvertisePeerUrls = mkDefault [ "https://${top.masterAddress}:2380" ];
+      };
 
-          apiserver-kubelet-api-admin-crb = {
-            apiVersion = "rbac.authorization.k8s.io/v1";
-            kind = "ClusterRoleBinding";
-            metadata = {
-              name = "system:kube-apiserver:kubelet-api-admin";
-            };
-            roleRef = {
-              apiGroup = "rbac.authorization.k8s.io";
-              kind = "ClusterRole";
-              name = "system:kubelet-api-admin";
-            };
-            subjects = [{
-              kind = "User";
-              name = "system:kube-apiserver";
-            }];
+      services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled {
+
+        apiserver-kubelet-api-admin-crb = {
+          apiVersion = "rbac.authorization.k8s.io/v1";
+          kind = "ClusterRoleBinding";
+          metadata = {
+            name = "system:kube-apiserver:kubelet-api-admin";
           };
-
+          roleRef = {
+            apiGroup = "rbac.authorization.k8s.io";
+            kind = "ClusterRole";
+            name = "system:kubelet-api-admin";
+          };
+          subjects = [{
+            kind = "User";
+            name = "system:kube-apiserver";
+          }];
         };
+
+      };
 
       services.kubernetes.pki.certs = with top.lib; {
         apiServer = mkCert {
           name = "kube-apiserver";
           CN = "kubernetes";
           hosts = [
-                    "kubernetes.default.svc"
-                    "kubernetes.default.svc.${top.addons.dns.clusterDomain}"
-                    cfg.advertiseAddress
-                    top.masterAddress
-                    apiserverServiceIP
-                    "127.0.0.1"
-                  ] ++ cfg.extraSANs;
+            "kubernetes.default.svc"
+            "kubernetes.default.svc.${top.addons.dns.clusterDomain}"
+            cfg.advertiseAddress
+            top.masterAddress
+            apiserverServiceIP
+            "127.0.0.1"
+          ] ++ cfg.extraSANs;
           action = "systemctl restart kube-apiserver.service";
         };
         apiserverProxyClient = mkCert {
@@ -477,11 +489,11 @@ in
           name = "etcd";
           CN = top.masterAddress;
           hosts = [
-                    "etcd.local"
-                    "etcd.${top.addons.dns.clusterDomain}"
-                    top.masterAddress
-                    cfg.advertiseAddress
-                  ];
+            "etcd.local"
+            "etcd.${top.addons.dns.clusterDomain}"
+            top.masterAddress
+            cfg.advertiseAddress
+          ];
           privateKeyOwner = "etcd";
           action = "systemctl restart etcd.service";
         };

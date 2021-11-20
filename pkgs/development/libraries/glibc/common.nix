@@ -6,12 +6,12 @@
    first output is `lib` so that the libraries provided by this derivation
    can be accessed directly, e.g.
 
-     "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
+   "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
 
    The executables are put into `bin` output and need to be referenced via
    the `bin` attribute of the main package, e.g.
 
-     "${pkgs.glibc.bin}/bin/ldd".
+   "${pkgs.glibc.bin}/bin/ldd".
 
   The executables provided by glibc typically include `ldd`, `locale`, `iconv`
   but the exact set depends on the library version and the configuration.
@@ -22,11 +22,13 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-{ stdenv, lib
+{ stdenv
+, lib
 , buildPackages
 , fetchurl
 , linuxHeaders ? null
-, gd ? null, libpng ? null
+, gd ? null
+, libpng ? null
 , libidn2
 , bison
 , python3Minimal
@@ -37,8 +39,8 @@
 , profilingLibraries ? false
 , withGd ? false
 , meta
-, extraBuildInputs ? []
-, extraNativeBuildInputs ? []
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
 , ...
 } @ args:
 
@@ -154,7 +156,8 @@ stdenv.mkDerivation ({
     '';
 
   configureFlags =
-    [ "-C"
+    [
+      "-C"
       "--enable-add-ons"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
@@ -171,7 +174,7 @@ stdenv.mkDerivation ({
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       (lib.flip lib.withFeature "fp"
-         (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
+        (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
     ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
@@ -286,6 +289,6 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+  // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 })

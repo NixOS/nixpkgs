@@ -12,7 +12,8 @@
 #
 # This function is primarily used by `dhall-to-nixpkgs directory --fixed-output-derivations`.
 
-{ # URL of the input Dhall file.
+{
+  # URL of the input Dhall file.
   # example: "https://raw.githubusercontent.com/cdepillabout/example-dhall-repo/c1b0d0327146648dcf8de997b2aa32758f2ed735/example1.dhall"
   url
 
@@ -65,32 +66,32 @@ let
         ${dhall}/bin/dhall --alpha --plain --file in-dhall-file | ${dhallNoHTTP}/bin/dhall encode > $out
       '';
 
-   cache = ".cache";
+  cache = ".cache";
 
-   data = ".local/share";
+  data = ".local/share";
 
-   cacheDhall = "${cache}/dhall";
+  cacheDhall = "${cache}/dhall";
 
-   dataDhall = "${data}/dhall";
+  dataDhall = "${data}/dhall";
 
-   sourceFile = "source.dhall";
+  sourceFile = "source.dhall";
 
 in
-  runCommand name { } (''
-    set -eu
+runCommand name { } (''
+  set -eu
 
-    mkdir -p ${cacheDhall} $out/${cacheDhall}
+  mkdir -p ${cacheDhall} $out/${cacheDhall}
 
-    export XDG_CACHE_HOME=$PWD/${cache}
+  export XDG_CACHE_HOME=$PWD/${cache}
 
-    SHA_HASH="${dhallHash}"
+  SHA_HASH="${dhallHash}"
 
-    HASH_FILE="''${SHA_HASH/sha256:/1220}"
+  HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    cp ${downloadedEncodedFile} $out/${cacheDhall}/$HASH_FILE
+  cp ${downloadedEncodedFile} $out/${cacheDhall}/$HASH_FILE
 
-    echo "missing $SHA_HASH" > $out/binary.dhall
-  '' +
-  lib.optionalString source ''
-    ${dhallNoHTTP}/bin/dhall decode --file ${downloadedEncodedFile} > $out/${sourceFile}
-  '')
+  echo "missing $SHA_HASH" > $out/binary.dhall
+'' +
+lib.optionalString source ''
+  ${dhallNoHTTP}/bin/dhall decode --file ${downloadedEncodedFile} > $out/${sourceFile}
+'')

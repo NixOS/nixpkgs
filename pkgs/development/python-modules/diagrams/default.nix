@@ -53,8 +53,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
   };
 }

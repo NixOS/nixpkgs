@@ -6,7 +6,8 @@ let
   jenkinsCfg = config.services.jenkins;
   cfg = config.services.jenkins.jobBuilder;
 
-in {
+in
+{
   options = {
     services.jenkins.jobBuilder = {
       enable = mkOption {
@@ -116,10 +117,11 @@ in {
 
   config = mkIf (jenkinsCfg.enable && cfg.enable) {
     assertions = [
-      { assertion =
+      {
+        assertion =
           if cfg.accessUser != ""
           then (cfg.accessToken != "" && cfg.accessTokenFile == "") ||
-               (cfg.accessToken == "" && cfg.accessTokenFile != "")
+            (cfg.accessToken == "" && cfg.accessTokenFile != "")
           else true;
         message = ''
           One of accessToken and accessTokenFile options must be non-empty
@@ -148,7 +150,7 @@ in {
           yamlJobsFile = builtins.toFile "jobs.yaml" cfg.yamlJobs;
           jsonJobsFiles =
             map (x: (builtins.toFile "jobs.json" x))
-              (cfg.jsonJobs ++ [(builtins.toJSON cfg.nixJobs)]);
+              (cfg.jsonJobs ++ [ (builtins.toJSON cfg.nixJobs) ]);
           jobBuilderOutputDir = "/run/jenkins-job-builder/output";
           # Stamp file is placed in $JENKINS_HOME/jobs/$JOB_NAME/ to indicate
           # ownership. Enables tracking and removal of stale jobs.
@@ -164,74 +166,74 @@ in {
             curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
           '';
         in
-          ''
-            joinByString()
-            {
-                local separator="$1"
-                shift
-                local first="$1"
-                shift
-                printf "%s" "$first" "''${@/#/$separator}"
-            }
+        ''
+          joinByString()
+          {
+              local separator="$1"
+              shift
+              local first="$1"
+              shift
+              printf "%s" "$first" "''${@/#/$separator}"
+          }
 
-            # Map a relative directory path in the output from
-            # jenkins-job-builder (jobname) to the layout expected by jenkins:
-            # each directory level gets prepended "jobs/".
-            getJenkinsJobDir()
-            {
-                IFS='/' read -ra input_dirs <<< "$1"
-                printf "jobs/"
-                joinByString "/jobs/" "''${input_dirs[@]}"
-            }
+          # Map a relative directory path in the output from
+          # jenkins-job-builder (jobname) to the layout expected by jenkins:
+          # each directory level gets prepended "jobs/".
+          getJenkinsJobDir()
+          {
+              IFS='/' read -ra input_dirs <<< "$1"
+              printf "jobs/"
+              joinByString "/jobs/" "''${input_dirs[@]}"
+          }
 
-            # The inverse of getJenkinsJobDir (remove the "jobs/" prefixes)
-            getJobname()
-            {
-                IFS='/' read -ra input_dirs <<< "$1"
-                local i=0
-                local nelem=''${#input_dirs[@]}
-                for e in "''${input_dirs[@]}"; do
-                    if [ $((i % 2)) -eq 1 ]; then
-                        printf "$e"
-                        if [ $i -lt $(( nelem - 1 )) ]; then
-                            printf "/"
-                        fi
-                    fi
-                    i=$((i + 1))
-                done
-            }
+          # The inverse of getJenkinsJobDir (remove the "jobs/" prefixes)
+          getJobname()
+          {
+              IFS='/' read -ra input_dirs <<< "$1"
+              local i=0
+              local nelem=''${#input_dirs[@]}
+              for e in "''${input_dirs[@]}"; do
+                  if [ $((i % 2)) -eq 1 ]; then
+                      printf "$e"
+                      if [ $i -lt $(( nelem - 1 )) ]; then
+                          printf "/"
+                      fi
+                  fi
+                  i=$((i + 1))
+              done
+          }
 
-            rm -rf ${jobBuilderOutputDir}
-            cur_decl_jobs=/run/jenkins-job-builder/declarative-jobs
-            rm -f "$cur_decl_jobs"
+          rm -rf ${jobBuilderOutputDir}
+          cur_decl_jobs=/run/jenkins-job-builder/declarative-jobs
+          rm -f "$cur_decl_jobs"
 
-            # Create / update jobs
-            mkdir -p ${jobBuilderOutputDir}
-            for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
-                HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test --config-xml -o "${jobBuilderOutputDir}" "$inputFile"
-            done
+          # Create / update jobs
+          mkdir -p ${jobBuilderOutputDir}
+          for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
+              HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test --config-xml -o "${jobBuilderOutputDir}" "$inputFile"
+          done
 
-            find "${jobBuilderOutputDir}" -type f -name config.xml | while read -r f; do echo "$(dirname "$f")"; done | sort | while read -r dir; do
-                jobname="$(realpath --relative-to="${jobBuilderOutputDir}" "$dir")"
-                jenkinsjobname=$(getJenkinsJobDir "$jobname")
-                jenkinsjobdir="${jenkinsCfg.home}/$jenkinsjobname"
-                echo "Creating / updating job \"$jobname\""
-                mkdir -p "$jenkinsjobdir"
-                touch "$jenkinsjobdir/${ownerStamp}"
-                cp "$dir"/config.xml "$jenkinsjobdir/config.xml"
-                echo "$jenkinsjobname" >> "$cur_decl_jobs"
-            done
+          find "${jobBuilderOutputDir}" -type f -name config.xml | while read -r f; do echo "$(dirname "$f")"; done | sort | while read -r dir; do
+              jobname="$(realpath --relative-to="${jobBuilderOutputDir}" "$dir")"
+              jenkinsjobname=$(getJenkinsJobDir "$jobname")
+              jenkinsjobdir="${jenkinsCfg.home}/$jenkinsjobname"
+              echo "Creating / updating job \"$jobname\""
+              mkdir -p "$jenkinsjobdir"
+              touch "$jenkinsjobdir/${ownerStamp}"
+              cp "$dir"/config.xml "$jenkinsjobdir/config.xml"
+              echo "$jenkinsjobname" >> "$cur_decl_jobs"
+          done
 
-            # Remove stale jobs
-            find "${jenkinsCfg.home}" -type f -name "${ownerStamp}" | while read -r f; do echo "$(dirname "$f")"; done | sort --reverse | while read -r dir; do
-                jenkinsjobname="$(realpath --relative-to="${jenkinsCfg.home}" "$dir")"
-                grep --quiet --line-regexp "$jenkinsjobname" "$cur_decl_jobs" 2>/dev/null && continue
-                jobname=$(getJobname "$jenkinsjobname")
-                echo "Deleting stale job \"$jobname\""
-                jobdir="${jenkinsCfg.home}/$jenkinsjobname"
-                rm -rf "$jobdir"
-            done
-          '' + (if cfg.accessUser != "" then reloadScript else "");
+          # Remove stale jobs
+          find "${jenkinsCfg.home}" -type f -name "${ownerStamp}" | while read -r f; do echo "$(dirname "$f")"; done | sort --reverse | while read -r dir; do
+              jenkinsjobname="$(realpath --relative-to="${jenkinsCfg.home}" "$dir")"
+              grep --quiet --line-regexp "$jenkinsjobname" "$cur_decl_jobs" 2>/dev/null && continue
+              jobname=$(getJobname "$jenkinsjobname")
+              echo "Deleting stale job \"$jobname\""
+              jobdir="${jenkinsCfg.home}/$jenkinsjobname"
+              rm -rf "$jobdir"
+          done
+        '' + (if cfg.accessUser != "" then reloadScript else "");
       serviceConfig = {
         User = jenkinsCfg.user;
         RuntimeDirectory = "jenkins-job-builder";

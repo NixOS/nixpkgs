@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
+{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null, guile ? null }:
 
-assert guileSupport -> ( pkg-config != null && guile != null );
+assert guileSupport -> (pkg-config != null && guile != null);
 
 stdenv.mkDerivation rec {
   pname = "gnumake";

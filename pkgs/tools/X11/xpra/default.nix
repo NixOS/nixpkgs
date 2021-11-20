@@ -1,14 +1,41 @@
 { lib
 , fetchurl
 , fetchpatch
-, substituteAll, python3, pkg-config, runCommand, writeText
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
-, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
-, ffmpeg, x264, libvpx, libwebp, x265, librsvg
+, substituteAll
+, python3
+, pkg-config
+, runCommand
+, writeText
+, xorg
+, gtk3
+, glib
+, pango
+, cairo
+, gdk-pixbuf
+, atk
+, pandoc
+, wrapGAppsHook
+, xorgserver
+, getopt
+, xauth
+, util-linux
+, which
+, ffmpeg
+, x264
+, libvpx
+, libwebp
+, x265
+, librsvg
 , libfakeXinerama
-, gst_all_1, pulseaudio, gobject-introspection
-, withNvenc ? false, cudatoolkit, nv-codec-headers-10, nvidia_x11 ? null
-, pam }:
+, gst_all_1
+, pulseaudio
+, gobject-introspection
+, withNvenc ? false
+, cudatoolkit
+, nv-codec-headers-10
+, nvidia_x11 ? null
+, pam
+}:
 
 with lib;
 
@@ -35,14 +62,16 @@ let
     EndSection
   '';
 
-  nvencHeaders = runCommand "nvenc-headers" {
-    inherit nvidia_x11;
-  } ''
+  nvencHeaders = runCommand "nvenc-headers"
+    {
+      inherit nvidia_x11;
+    } ''
     mkdir -p $out/include $out/lib/pkgconfig
     cp ${nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
     substituteAll ${./nvenc.pc} $out/lib/pkgconfig/nvenc.pc
   '';
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "xpra";
   version = "4.2";
 
@@ -52,11 +81,12 @@ in buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {  # correct hardcoded paths
+    (substituteAll {
+      # correct hardcoded paths
       src = ./fix-paths.patch;
       inherit libfakeXinerama;
     })
-    ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
+    ./fix-41106.patch # https://github.com/NixOS/nixpkgs/issues/41106
     # Xorg won't start without. Remove on next version!
     (fetchpatch {
       url = "https://github.com/Xpra-org/xpra/commit/f9f242abad69363dfa558e1f6f7956ae99164b67.patch";
@@ -71,16 +101,32 @@ in buildPythonApplication rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ]
     ++ lib.optional withNvenc cudatoolkit;
   buildInputs = with xorg; [
-    libX11 xorgproto libXrender libXi
-    libXtst libXfixes libXcomposite libXdamage
-    libXrandr libxkbfile
-    ] ++ [
+    libX11
+    xorgproto
+    libXrender
+    libXi
+    libXtst
+    libXfixes
+    libXcomposite
+    libXdamage
+    libXrandr
+    libxkbfile
+  ] ++ [
     cython
     librsvg
 
-    pango cairo gdk-pixbuf atk.out gtk3 glib
+    pango
+    cairo
+    gdk-pixbuf
+    atk.out
+    gtk3
+    glib
 
-    ffmpeg libvpx x264 libwebp x265
+    ffmpeg
+    libvpx
+    x264
+    libwebp
+    x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -92,13 +138,30 @@ in buildPythonApplication rec {
     gobject-introspection
   ] ++ lib.optional withNvenc nvencHeaders;
   propagatedBuildInputs = with python3.pkgs; [
-    pillow rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy pygobject3 pycairo gst-python pam
-    pyopengl paramiko opencv4 python-uinput pyxdg
-    ipaddress idna pyinotify
-  ] ++ lib.optionals withNvenc (with python3.pkgs; [pynvml pycuda]);
+    pillow
+    rencode
+    pycrypto
+    cryptography
+    pycups
+    lz4
+    dbus-python
+    netifaces
+    numpy
+    pygobject3
+    pycairo
+    gst-python
+    pam
+    pyopengl
+    paramiko
+    opencv4
+    python-uinput
+    pyxdg
+    ipaddress
+    idna
+    pyinotify
+  ] ++ lib.optionals withNvenc (with python3.pkgs; [ pynvml pycuda ]);
 
-    # error: 'import_cairo' defined but not used
+  # error: 'import_cairo' defined but not used
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
@@ -121,7 +184,7 @@ in buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux pulseaudio ]}
   '' + lib.optionalString withNvenc ''
-      --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
+    --prefix LD_LIBRARY_PATH : ${nvidia_x11}/lib
   '' + ''
     )
   '';

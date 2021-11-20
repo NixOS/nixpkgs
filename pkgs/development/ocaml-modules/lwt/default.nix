@@ -1,6 +1,16 @@
-{ lib, fetchzip, pkg-config, ncurses, libev, buildDunePackage, ocaml
-, cppo, dune-configurator, ocplib-endian, result
-, mmap, seq
+{ lib
+, fetchzip
+, pkg-config
+, ncurses
+, libev
+, buildDunePackage
+, ocaml
+, cppo
+, dune-configurator
+, ocplib-endian
+, result
+, mmap
+, seq
 , ocaml-syntax-shims
 }:
 
@@ -19,7 +29,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config cppo dune-configurator ];
   buildInputs = optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims
-   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {

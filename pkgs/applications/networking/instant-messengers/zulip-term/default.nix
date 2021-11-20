@@ -41,7 +41,10 @@ python3.pkgs.buildPythonApplication rec {
   ]);
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ libnotify ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ libnotify ])
   ];
 
   meta = with lib; {

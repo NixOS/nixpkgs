@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.cadvisor;
 
-in {
+in
+{
   options = {
     services.cadvisor = {
       enable = mkOption {
@@ -87,7 +88,7 @@ in {
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional cadvisor options.
 
@@ -98,7 +99,8 @@ in {
   };
 
   config = mkMerge [
-    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
+    {
+      services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
         mkDefault (toString (pkgs.writeTextFile {
           name = "cadvisor-storage-driver-password";
           text = cfg.storageDriverPassword;
@@ -135,7 +137,7 @@ in {
             ''}
         '';
 
-        serviceConfig.TimeoutStartSec=300;
+        serviceConfig.TimeoutStartSec = 300;
       };
     })
   ];

@@ -7,24 +7,25 @@ let
   cfg = config.services.privoxy;
 
   serialise = name: val:
-         if isList val then concatMapStrings (serialise name) val
+    if isList val then concatMapStrings (serialise name) val
     else if isBool val then serialise name (if val then "1" else "0")
     else "${name} ${toString val}\n";
 
   configType = with types;
     let atom = oneOf [ int bool string path ];
     in attrsOf (either atom (listOf atom))
-    // { description = ''
-          privoxy configuration type. The format consists of an attribute
-          set of settings. Each setting can be either a value (integer, string,
-          boolean or path) or a list of such values.
-        '';
-       };
+      // {
+      description = ''
+        privoxy configuration type. The format consists of an attribute
+        set of settings. Each setting can be either a value (integer, string,
+        boolean or path) or a list of such values.
+      '';
+    };
 
   ageType = types.str // {
     check = x:
       isString x &&
-      (builtins.match "([0-9]+([smhdw]|min|ms|us)*)+" x != null);
+        (builtins.match "([0-9]+([smhdw]|min|ms|us)*)+" x != null);
     description = "tmpfiles.d(5) age format";
   };
 
@@ -163,7 +164,7 @@ in
           '';
         };
       };
-      default = {};
+      default = { };
       example = literalExpression ''
         { # Listen on IPv6 only
           listen-address = "[::]:8118";
@@ -203,7 +204,7 @@ in
       group = "privoxy";
     };
 
-    users.groups.privoxy = {};
+    users.groups.privoxy = { };
 
     systemd.tmpfiles.rules = optional cfg.inspectHttps
       "d ${cfg.settings.certificate-directory} 0770 privoxy privoxy ${cfg.certsLifetime}";
@@ -221,7 +222,7 @@ in
         ProtectHome = true;
         ProtectSystem = "full";
       };
-      unitConfig =  mkIf cfg.inspectHttps {
+      unitConfig = mkIf cfg.inspectHttps {
         ConditionPathExists = with cfg.settings;
           [ ca-cert-file ca-key-file ];
       };
@@ -238,7 +239,8 @@ in
       temporary-directory = "/tmp";
       filterfile = [ "default.filter" ];
       actionsfile =
-        [ "match-all.action"
+        [
+          "match-all.action"
           "default.action"
         ] ++ optional cfg.inspectHttps (toString inspectAction);
     } // (optionalAttrs cfg.enableTor {
@@ -261,17 +263,18 @@ in
       top = x: [ "services" "privoxy" x ];
       setting = x: [ "services" "privoxy" "settings" x ];
     in
-    [ (mkRenamedOptionModule (top "enableEditActions") (setting "enable-edit-actions"))
+    [
+      (mkRenamedOptionModule (top "enableEditActions") (setting "enable-edit-actions"))
       (mkRenamedOptionModule (top "listenAddress") (setting "listen-address"))
       (mkRenamedOptionModule (top "actionsFiles") (setting "actionsfile"))
       (mkRenamedOptionModule (top "filterFiles") (setting "filterfile"))
       (mkRemovedOptionModule (top "extraConfig")
-      ''
-        Use services.privoxy.settings instead.
-        This is part of the general move to use structured settings instead of raw
-        text for config as introduced by RFC0042:
-        https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md
-      '')
+        ''
+          Use services.privoxy.settings instead.
+          This is part of the general move to use structured settings instead of raw
+          text for config as introduced by RFC0042:
+          https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md
+        '')
     ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

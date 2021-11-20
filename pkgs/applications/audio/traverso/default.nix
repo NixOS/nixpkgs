@@ -1,6 +1,21 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config
-, alsa-lib, fftw, flac, lame, libjack2, libmad, libpulseaudio
-, libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, alsa-lib
+, fftw
+, flac
+, lame
+, libjack2
+, libmad
+, libpulseaudio
+, libsamplerate
+, libsndfile
+, libvorbis
+, portaudio
+, qtbase
+, wavpack
 }:
 mkDerivation {
   pname = "traverso";
@@ -12,9 +27,21 @@ mkDerivation {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ alsa-lib fftw flac.dev libjack2 lame
-                  libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
-                  portaudio qtbase wavpack ];
+  buildInputs = [
+    alsa-lib
+    fftw
+    flac.dev
+    libjack2
+    lame
+    libmad
+    libpulseaudio
+    libsamplerate.dev
+    libsndfile.dev
+    libvorbis
+    portaudio
+    qtbase
+    wavpack
+  ];
 
   cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0" ];
 

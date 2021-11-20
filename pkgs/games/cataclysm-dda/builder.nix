@@ -28,19 +28,21 @@ stdenvNoCC.mkDerivation (args // rec {
     runHook postCheck
   '';
 
-  installPhase = let
-    baseDir = {
-      mod = "mods";
-      soundpack = "sound";
-      tileset = "gfx";
-    }.${type};
-  in args.installPhase or ''
-    runHook preInstall
-    destdir="$out/share/cataclysm-dda/${baseDir}"
-    mkdir -p "$destdir"
-    cp -R "${modRoot}" "$destdir/${modName}"
-    runHook postInstall
-  '';
+  installPhase =
+    let
+      baseDir = {
+        mod = "mods";
+        soundpack = "sound";
+        tileset = "gfx";
+      }.${type};
+    in
+      args.installPhase or ''
+        runHook preInstall
+        destdir="$out/share/cataclysm-dda/${baseDir}"
+        mkdir -p "$destdir"
+        cp -R "${modRoot}" "$destdir/${modName}"
+        runHook postInstall
+      '';
 
   passthru = {
     forTiles = true;

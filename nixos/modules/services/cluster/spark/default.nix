@@ -1,4 +1,4 @@
-{config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 let
   cfg = config.services.spark;
 in
@@ -14,7 +14,7 @@ with lib;
           default = "127.0.0.1";
           example = "0.0.0.0";
         };
-        restartIfChanged  = mkOption {
+        restartIfChanged = mkOption {
           type = types.bool;
           description = ''
             Automatically restart master service on config change.
@@ -27,7 +27,7 @@ with lib;
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
           description = "Extra environment variables to pass to spark master. See spark-standalone documentation.";
-          default = {};
+          default = { };
           example = {
             SPARK_MASTER_WEBUI_PORT = 8181;
             SPARK_MASTER_OPTS = "-Dspark.deploy.defaultCores=5";
@@ -46,7 +46,7 @@ with lib;
           description = "Address of the spark master.";
           default = "127.0.0.1:7077";
         };
-        restartIfChanged  = mkOption {
+        restartIfChanged = mkOption {
           type = types.bool;
           description = ''
             Automatically restart worker service on config change.
@@ -59,7 +59,7 @@ with lib;
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
           description = "Extra environment variables to pass to spark worker.";
-          default = {};
+          default = { };
           example = {
             SPARK_WORKER_CORES = 5;
             SPARK_WORKER_MEMORY = "2g";
@@ -115,9 +115,9 @@ with lib;
             Group = "spark";
             WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
             ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-master.sh";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-master.sh";
+            ExecStop = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-master.sh";
             TimeoutSec = 300;
-            StartLimitBurst=10;
+            StartLimitBurst = 10;
             Restart = "always";
           };
         };
@@ -138,9 +138,9 @@ with lib;
             User = "spark";
             WorkingDirectory = "${cfg.package}/lib/${cfg.package.untarDir}";
             ExecStart = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/start-worker.sh spark://${cfg.worker.master}";
-            ExecStop  = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-worker.sh";
+            ExecStop = "${cfg.package}/lib/${cfg.package.untarDir}/sbin/stop-worker.sh";
             TimeoutSec = 300;
-            StartLimitBurst=10;
+            StartLimitBurst = 10;
             Restart = "always";
           };
         };

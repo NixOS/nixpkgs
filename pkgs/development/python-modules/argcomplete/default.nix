@@ -1,4 +1,6 @@
-{ buildPythonPackage, fetchPypi, lib
+{ buildPythonPackage
+, fetchPypi
+, lib
 , dicttoxml
 , importlib-metadata
 , pexpect

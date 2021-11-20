@@ -13,7 +13,7 @@ in
     services.gogoclient = {
       enable = mkOption {
         default = false;
-        type =  types.bool;
+        type = types.bool;
         description = ''
           Enable the gogoCLIENT IPv6 tunnel.
         '';

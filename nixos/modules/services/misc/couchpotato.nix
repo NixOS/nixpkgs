@@ -30,7 +30,8 @@ in
     };
 
     users.users.couchpotato =
-      { group = "couchpotato";
+      {
+        group = "couchpotato";
         home = "/var/lib/couchpotato/";
         description = "CouchPotato daemon user";
         uid = config.ids.uids.couchpotato;

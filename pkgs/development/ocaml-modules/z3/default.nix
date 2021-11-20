@@ -1,9 +1,11 @@
 { stdenv, ocaml, findlib, zarith, z3 }:
 
-let z3-with-ocaml = z3.override {
-  ocamlBindings = true;
-  inherit ocaml findlib zarith;
-}; in
+let
+  z3-with-ocaml = z3.override {
+    ocamlBindings = true;
+    inherit ocaml findlib zarith;
+  };
+in
 
 stdenv.mkDerivation {
 

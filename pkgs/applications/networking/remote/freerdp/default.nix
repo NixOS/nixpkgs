@@ -1,9 +1,42 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, alsa-lib, ffmpeg, glib, openssl
-, pcre, zlib, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama
-, libXrandr, libXrender, libXv, libXtst, libxkbcommon, libxkbfile, wayland
-, gstreamer, gst-plugins-base, gst-plugins-good, libunwind, orc, libxslt, cairo
-, libusb1, libpulseaudio, cups, pcsclite, systemd, libjpeg_turbo
-, buildServer ? true, nocaps ? false
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, ffmpeg
+, glib
+, openssl
+, pcre
+, zlib
+, libX11
+, libXcursor
+, libXdamage
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libXv
+, libXtst
+, libxkbcommon
+, libxkbfile
+, wayland
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, libunwind
+, orc
+, libxslt
+, cairo
+, libusb1
+, libpulseaudio
+, cups
+, pcsclite
+, systemd
+, libjpeg_turbo
+, buildServer ? true
+, nocaps ? false
 }:
 
 let
@@ -16,7 +49,8 @@ let
     }
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freerdp";
   version = "2.4.1";
 
@@ -88,18 +122,18 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ]
     ++ lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
-      BUILD_TESTING = doCheck;
-      WITH_CUNIT = doCheck;
-      WITH_CUPS = (cups != null);
-      WITH_OSS = false;
-      WITH_PCSC = (pcsclite != null);
-      WITH_PULSE = (libpulseaudio != null);
-      WITH_SERVER = buildServer;
-      WITH_SSE2 = stdenv.isx86_64;
-      WITH_VAAPI = true;
-      WITH_JPEG = (libjpeg_turbo != null);
-      WITH_CAIRO = (cairo != null);
-    };
+    BUILD_TESTING = doCheck;
+    WITH_CUNIT = doCheck;
+    WITH_CUPS = (cups != null);
+    WITH_OSS = false;
+    WITH_PCSC = (pcsclite != null);
+    WITH_PULSE = (libpulseaudio != null);
+    WITH_SERVER = buildServer;
+    WITH_SSE2 = stdenv.isx86_64;
+    WITH_VAAPI = true;
+    WITH_JPEG = (libjpeg_turbo != null);
+    WITH_CAIRO = (cairo != null);
+  };
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

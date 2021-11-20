@@ -2,7 +2,8 @@
 
 let
   version = "4.202";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "fira-${version}";
 
   owner = "mozilla";

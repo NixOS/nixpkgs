@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , gnome
 , dconf
@@ -148,7 +149,8 @@ let
       };
 
   python = python3;
-  wxPython = if (stable)
+  wxPython =
+    if (stable)
     then python.pkgs.wxPython_4_0
     else python.pkgs.wxPython_4_1;
 
@@ -199,27 +201,27 @@ stdenv.mkDerivation rec {
     "--set-default MOZ_DBUS_REMOTE 1"
   ]
   ++ optionals (stable)
-  [
-    "--set-default KISYSMOD ${footprints}/share/kicad/modules"
-    "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
-    "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
-  ]
+    [
+      "--set-default KISYSMOD ${footprints}/share/kicad/modules"
+      "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
+      "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
+      "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+      "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    ]
   ++ optionals (stable && with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
   ++ optionals (!stable)
-  [
-    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/modules"
-    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/library"
-    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
-  ]
+    [
+      "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/modules"
+      "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/library"
+      "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
+      "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+      "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    ]
   ++ optionals (!stable && with3d)
-  [
-    "--set-default KISYS3DMOD ${packages3d}/share/kicad/3dmodels"
-    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
-  ]
+    [
+      "--set-default KISYS3DMOD ${packages3d}/share/kicad/3dmodels"
+      "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493

@@ -1,6 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config, cmake
-, libzip, boost, fftw, qtbase, libusb1, libsigrok4dsl
-, libsigrokdecode4dsl, python3, fetchpatch
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, pkg-config
+, cmake
+, libzip
+, boost
+, fftw
+, qtbase
+, libusb1
+, libsigrok4dsl
+, libsigrokdecode4dsl
+, python3
+, fetchpatch
 }:
 
 mkDerivation rec {
@@ -9,10 +20,10 @@ mkDerivation rec {
   version = "1.12";
 
   src = fetchFromGitHub {
-      owner = "DreamSourceLab";
-      repo = "DSView";
-      rev = "v${version}";
-      sha256 = "q7F4FuK/moKkouXTNPZDVon/W/ZmgtNHJka4MiTxA0U=";
+    owner = "DreamSourceLab";
+    repo = "DSView";
+    rev = "v${version}";
+    sha256 = "q7F4FuK/moKkouXTNPZDVon/W/ZmgtNHJka4MiTxA0U=";
   };
 
   sourceRoot = "source/DSView";
@@ -41,7 +52,13 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    boost fftw qtbase libusb1 libzip libsigrokdecode4dsl libsigrok4dsl
+    boost
+    fftw
+    qtbase
+    libusb1
+    libzip
+    libsigrokdecode4dsl
+    libsigrok4dsl
     python3
   ];
 

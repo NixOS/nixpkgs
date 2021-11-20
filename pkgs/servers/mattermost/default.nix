@@ -18,7 +18,9 @@ let
     doCheck = false;
 
     ldflags = [
-      "-s" "-w" "-X github.com/mattermost/mattermost-server/v${lib.versions.major version}/model.BuildNumber=${version}"
+      "-s"
+      "-w"
+      "-X github.com/mattermost/mattermost-server/v${lib.versions.major version}/model.BuildNumber=${version}"
     ];
 
   };
@@ -44,15 +46,15 @@ let
   };
 
 in
-  buildEnv {
-    name = "mattermost-${version}";
-    paths = [ mattermost-server mattermost-webapp ];
+buildEnv {
+  name = "mattermost-${version}";
+  paths = [ mattermost-server mattermost-webapp ];
 
-    meta = with lib; {
-      description = "Open-source, self-hosted Slack-alternative";
-      homepage = "https://www.mattermost.org";
-      license = with licenses; [ agpl3 asl20 ];
-      maintainers = with maintainers; [ fpletz ryantm ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Open-source, self-hosted Slack-alternative";
+    homepage = "https://www.mattermost.org";
+    license = with licenses; [ agpl3 asl20 ];
+    maintainers = with maintainers; [ fpletz ryantm ];
+    platforms = platforms.unix;
+  };
+}

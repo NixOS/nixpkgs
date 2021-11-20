@@ -30,24 +30,24 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase =
-  ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/games/lovegames
+    ''
+      mkdir -p $out/bin
+      mkdir -p $out/share/games/lovegames
 
-    cp -v ${src} $out/share/games/lovegames/${pname}.love
+      cp -v ${src} $out/share/games/lovegames/${pname}.love
 
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+      makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-  '';
+      chmod +x $out/bin/${pname}
+      mkdir -p $out/share/applications
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    '';
 
   meta = with lib; {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.free;
     downloadPage = "http://tangramgames.dk/games/duckmarines";
   };

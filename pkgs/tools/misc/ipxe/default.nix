@@ -1,7 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, perl, cdrkit, xz, openssl, gnu-efi, mtools
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, cdrkit
+, xz
+, openssl
+, gnu-efi
+, mtools
 , syslinux ? null
 , embedScript ? null
-, additionalTargets ? {}
+, additionalTargets ? { }
 }:
 
 let
@@ -45,7 +53,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
-    [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
+    [
+      "ECHO_E_BIN_ECHO=echo"
+      "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
     ] ++ lib.optionals (stdenv.isi686 || stdenv.isx86_64) [
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
       "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
@@ -90,7 +100,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib;
-    { description = "Network boot firmware";
+    {
+      description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2Only;
       maintainers = with maintainers; [ ehmry ];

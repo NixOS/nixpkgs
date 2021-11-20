@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "gnet";

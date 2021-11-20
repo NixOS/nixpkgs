@@ -20,15 +20,15 @@ let
       overrideCabal
         cabalOverrides
         arion-compose
-      );
+    );
 
   inherit (haskell.lib.compose) justStaticExecutables overrideCabal;
 
   inherit (haskellPackages) arion-compose;
 
   cabalOverrides = o: {
-    buildTools = (o.buildTools or []) ++ [pkgs.makeWrapper];
-    passthru = (o.passthru or {}) // {
+    buildTools = (o.buildTools or [ ]) ++ [ pkgs.makeWrapper ];
+    passthru = (o.passthru or { }) // {
       inherit eval build;
     };
     # Patch away the arion-compose name. Unlike the Haskell library, the program
@@ -57,7 +57,7 @@ let
   };
 
   # Unpacked sources for evaluation by `eval`
-  srcUnpacked = runCommand "arion-src" {}
+  srcUnpacked = runCommand "arion-src" { }
     "mkdir $out; tar -C $out --strip-components=1 -xf ${arion-compose.src}";
 
   /* Function for evaluating a composition
@@ -66,7 +66,7 @@ let
 
      Returns the module system's `config` and `options` variables.
    */
-  eval = args@{...}:
+  eval = args@{ ... }:
     import (srcUnpacked + "/src/nix/eval-composition.nix")
       ({ inherit pkgs; } // args);
 
@@ -76,8 +76,9 @@ let
     This function is particularly useful on CI, although the references
     to image tarballs may not always be desirable.
    */
-  build = args@{...}:
+  build = args@{ ... }:
     let composition = eval args;
     in composition.config.out.dockerComposeYaml;
 
-in arion
+in
+arion

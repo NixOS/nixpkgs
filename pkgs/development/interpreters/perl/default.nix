@@ -1,6 +1,15 @@
-{ config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, pkgs
+, buildPackages
 , callPackage
-, enableThreading ? true, coreutils, makeWrapper
+, enableThreading ? true
+, coreutils
+, makeWrapper
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -73,8 +82,8 @@ let
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
       (if crossCompiling
-       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
-       else [ "-de" "-Dcc=cc" ])
+      then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
+      else [ "-de" "-Dcc=cc" ])
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
@@ -101,14 +110,14 @@ let
     enableParallelBuilding = !crossCompiling;
 
     preConfigure = ''
-        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
-        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString stdenv.isDarwin ''
-        substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
-      '' + optionalString (!enableThreading) ''
-        # We need to do this because the bootstrap doesn't have a static libpthread
-        sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
-      '';
+      substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
+      substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
+    '' + optionalString (!enableThreading) ''
+      # We need to do this because the bootstrap doesn't have a static libpthread
+      sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
+    '';
 
     setupHook = ./setup-hook.sh;
 
@@ -117,7 +126,7 @@ let
       libPrefix = "lib/perl5/site_perl";
       pkgs = callPackage ../../../top-level/perl-packages.nix {
         inherit perl buildPerl;
-        overrides = config.perlPackageOverrides or (p: {}); # TODO: (self: super: {}) like in python
+        overrides = config.perlPackageOverrides or (p: { }); # TODO: (self: super: {}) like in python
       };
       buildEnv = callPackage ./wrapper.nix {
         inherit perl;
@@ -146,28 +155,28 @@ let
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
       '' + optionalString crossCompiling
-      ''
-        mkdir -p $mini/lib/perl5/cross_perl/${version}
-        for dir in cnf/{stub,cpan}; do
-          cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
-        done
+        ''
+          mkdir -p $mini/lib/perl5/cross_perl/${version}
+          for dir in cnf/{stub,cpan}; do
+            cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
+          done
 
-        mkdir -p $mini/bin
-        install -m755 miniperl $mini/bin/perl
+          mkdir -p $mini/bin
+          install -m755 miniperl $mini/bin/perl
 
-        export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
-        # wrapProgram should use a runtime-native SHELL by default, but
-        # it actually uses a buildtime-native one. If we ever fix that,
-        # we'll need to fix this to use a buildtime-native one.
-        #
-        # Adding the arch-specific directory is morally incorrect, as
-        # miniperl can't load the native modules there. However, it can
-        # (and sometimes needs to) load and run some of the pure perl
-        # code there, so we add it anyway. When needed, stubs can be put
-        # into $mini/lib/perl5/cross_perl/${version}.
-        wrapProgram $mini/bin/perl --prefix PERL5LIB : \
-          "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
-      ''; # */
+          export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
+          # wrapProgram should use a runtime-native SHELL by default, but
+          # it actually uses a buildtime-native one. If we ever fix that,
+          # we'll need to fix this to use a buildtime-native one.
+          #
+          # Adding the arch-specific directory is morally incorrect, as
+          # miniperl can't load the native modules there. However, it can
+          # (and sometimes needs to) load and run some of the pure perl
+          # code there, so we add it anyway. When needed, stubs can be put
+          # into $mini/lib/perl5/cross_perl/${version}.
+          wrapProgram $mini/bin/perl --prefix PERL5LIB : \
+            "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
+        ''; # */
 
     meta = {
       homepage = "https://www.perl.org/";
@@ -201,7 +210,8 @@ let
     # TODO merge setup hooks
     setupHook = ./setup-hook-cross.sh;
   });
-in {
+in
+{
   # Maint version
   perl532 = common {
     perl = pkgs.perl532;

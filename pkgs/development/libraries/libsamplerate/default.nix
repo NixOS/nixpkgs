@@ -3,7 +3,8 @@
 let
   inherit (lib) optionals optionalString;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libsamplerate";
   version = "0.1.9";
 
@@ -30,9 +31,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sample Rate Converter for audio";
-    homepage    = "http://www.mega-nerd.com/SRC/index.html";
-    license     = licenses.bsd2;
+    homepage = "http://www.mega-nerd.com/SRC/index.html";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

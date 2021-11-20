@@ -12,7 +12,13 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.GitCommit=${version}" "-X main.GitBranch=${version}" "-X main.GitState=nixpkgs" "-X main.GitSummary=${version}" "-X main.Version=${version}"
+    "-s"
+    "-w"
+    "-X main.GitCommit=${version}"
+    "-X main.GitBranch=${version}"
+    "-X main.GitState=nixpkgs"
+    "-X main.GitSummary=${version}"
+    "-X main.Version=${version}"
   ];
 
   vendorSha256 = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";

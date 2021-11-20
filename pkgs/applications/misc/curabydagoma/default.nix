@@ -15,7 +15,8 @@
 
 let
   pythonPackages = python2Packages;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "curabydagoma";
   # Version is the date, UNIX format
   version = "1520506579";

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pandoc, pkg-config, zlib
-, Security, libiconv, installShellFiles
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pandoc
+, pkg-config
+, zlib
+, Security
+, libiconv
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {

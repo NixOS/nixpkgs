@@ -1,7 +1,15 @@
 { lib
-, buildPackages, pkgs, targetPackages
-, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, pkgsHostHost, pkgsTargetTarget
-, stdenv, splicePackages, newScope
+, buildPackages
+, pkgs
+, targetPackages
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, stdenv
+, splicePackages
+, newScope
 , preLibcCrossHeaders
 }:
 
@@ -11,7 +19,7 @@ let
     selfBuildHost = pkgsBuildHost.darwin;
     selfBuildTarget = pkgsBuildTarget.darwin;
     selfHostHost = pkgsHostHost.darwin;
-    selfTargetTarget = pkgsTargetTarget.darwin or {}; # might be missing
+    selfTargetTarget = pkgsTargetTarget.darwin or { }; # might be missing
   };
 
   # Prefix for binaries. Customarily ends with a dash separator.
@@ -19,10 +27,11 @@ let
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                                        (stdenv.targetPlatform.config + "-");
+    (stdenv.targetPlatform.config + "-");
 in
 
-lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: { }) (spliced: spliced.apple_sdk.frameworks) (self:
+let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -49,22 +58,21 @@ lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced:
   useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
 
   selectAttrs = attrs: names:
-    lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [(lib.nameValuePair n attrs."${n}")] else []) names);
+    lib.listToAttrs (lib.concatMap (n: if attrs ? "${n}" then [ (lib.nameValuePair n attrs."${n}") ] else [ ]) names);
 
   chooseLibs = (
     # There are differences in which libraries are exported. Avoid evaluation
     # errors when a package is not provided.
-    selectAttrs (
-      if useAppleSDKLibs
+    selectAttrs
+      (
+        if useAppleSDKLibs
         then apple_sdk
         else appleSourcePackages
-    ) ["Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit"]
+      ) [ "Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit" ]
   ) // {
-    inherit (
-      if useAppleSDKLibs
-        then apple_sdk.frameworks
-        else appleSourcePackages
-    ) Security;
+    inherit (if useAppleSDKLibs
+    then apple_sdk.frameworks
+    else appleSourcePackages) Security;
   };
 in
 
@@ -73,7 +81,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   inherit apple_sdk;
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ ];
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
@@ -109,9 +117,10 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
-  checkReexportsHook = pkgs.makeSetupHook {
-    deps = [ pkgs.darwin.print-reexports ];
-  } ../os-specific/darwin/print-reexports/setup-hook.sh;
+  checkReexportsHook = pkgs.makeSetupHook
+    {
+      deps = [ pkgs.darwin.print-reexports ];
+    } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
@@ -127,12 +136,12 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
-  autoSignDarwinBinariesHook = pkgs.makeSetupHook {
-    deps = [ self.signingUtils ];
-  } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
+  autoSignDarwinBinariesHook = pkgs.makeSetupHook
+    {
+      deps = [ self.signingUtils ];
+    } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-  };
+  maloader = callPackage ../os-specific/darwin/maloader { };
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
@@ -168,24 +177,26 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
   # TODO: make swift-corefoundation build with apple_sdk_11_0.Libsystem
-  CF = if useAppleSDKLibs
+  CF =
+    if useAppleSDKLibs
     then
-      # This attribute (CF) is included in extraBuildInputs in the stdenv. This
-      # is typically the open source project. When a project refers to
-      # "CoreFoundation" it has an extra setup hook to force impure system
-      # CoreFoundation into the link step.
-      #
-      # In this branch, we only have a single "CoreFoundation" to choose from.
-      # To be compatible with the existing convention, we define
-      # CoreFoundation with the setup hook, and CF as the same package but
-      # with the setup hook removed.
-      #
-      # This may seem unimportant, but without it packages (e.g., bacula) will
-      # fail with linker errors referring ___CFConstantStringClassReference.
-      # It's not clear to me why some packages need this extra setup.
-      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
-        setupHook = null;
-      })
+    # This attribute (CF) is included in extraBuildInputs in the stdenv. This
+    # is typically the open source project. When a project refers to
+    # "CoreFoundation" it has an extra setup hook to force impure system
+    # CoreFoundation into the link step.
+    #
+    # In this branch, we only have a single "CoreFoundation" to choose from.
+    # To be compatible with the existing convention, we define
+    # CoreFoundation with the setup hook, and CF as the same package but
+    # with the setup hook removed.
+    #
+    # This may seem unimportant, but without it packages (e.g., bacula) will
+    # fail with linker errors referring ___CFConstantStringClassReference.
+    # It's not clear to me why some packages need this extra setup.
+      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation
+        (drv: {
+          setupHook = null;
+        })
     else callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
@@ -193,9 +204,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
-  libtapi = callPackage ../os-specific/darwin/libtapi {};
+  libtapi = callPackage ../os-specific/darwin/libtapi { };
 
-  ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
+  ios-deploy = callPackage ../os-specific/darwin/ios-deploy { };
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 

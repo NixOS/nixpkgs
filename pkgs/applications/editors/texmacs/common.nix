@@ -27,24 +27,24 @@ rec {
 
   postPatch = (if tex == null then ''
     gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else if extraFonts then ''
+  '' else if extraFonts then ''
     gunzip < ${extraFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if chineseFonts then ''
+  '' else "") +
+  (if chineseFonts then ''
     gunzip < ${chineseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if japaneseFonts then ''
+  '' else "") +
+  (if japaneseFonts then ''
     gunzip < ${japaneseFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "") +
-   (if koreanFonts then ''
+  '' else "") +
+  (if koreanFonts then ''
     gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
-   '' else "");
+  '' else "");
 
 
   meta = {
     description = "WYSIWYW editing platform with special features for scientists";
     longDescription =
-    '' GNU TeXmacs is a free wysiwyw (what you see is what you want)
+      '' GNU TeXmacs is a free wysiwyw (what you see is what you want)
     editing platform with special features for scientists.  The software
     aims to provide a unified and user friendly framework for editing
     structured documents with different types of content (text,

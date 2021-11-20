@@ -1,5 +1,13 @@
-{ lib, stdenv, wlroots, pkg-config, wayland-scanner
-, libxkbcommon, pixman, udev, wayland, wayland-protocols
+{ lib
+, stdenv
+, wlroots
+, pkg-config
+, wayland-scanner
+, libxkbcommon
+, pixman
+, udev
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation {

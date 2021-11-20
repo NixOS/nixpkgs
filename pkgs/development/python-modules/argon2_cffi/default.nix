@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Secure Password Hashes for Python";
-    homepage    = "https://argon2-cffi.readthedocs.io/";
-    license     = licenses.mit;
+    homepage = "https://argon2-cffi.readthedocs.io/";
+    license = licenses.mit;
   };
 }

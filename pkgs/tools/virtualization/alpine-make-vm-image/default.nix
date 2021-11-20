@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, apk-tools, coreutils, e2fsprogs, findutils, gnugrep, gnused, kmod, qemu-utils
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, apk-tools
+, coreutils
+, e2fsprogs
+, findutils
+, gnugrep
+, gnused
+, kmod
+, qemu-utils
 , util-linux
 }:
 

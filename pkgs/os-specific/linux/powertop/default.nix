@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libnl, ncurses, pciutils
-, pkg-config, zlib, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gettext
+, libnl
+, ncurses
+, pciutils
+, pkg-config
+, zlib
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "powertop";

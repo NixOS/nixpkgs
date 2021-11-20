@@ -2,7 +2,8 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, jre }:
+, jre
+}:
 
 stdenv.mkDerivation rec {
   pname = "optifine";

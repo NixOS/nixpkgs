@@ -12,7 +12,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    argcomplete python-dateutil configobj feedparser bibtexparser pyyaml requests six
+    argcomplete
+    python-dateutil
+    configobj
+    feedparser
+    bibtexparser
+    pyyaml
+    requests
+    six
     beautifulsoup4
   ];
 
@@ -23,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/94663
   preCheck = ''
     rm tests/test_git.py
-    '';
+  '';
 
   meta = with lib; {
     description = "Command-line bibliography manager";

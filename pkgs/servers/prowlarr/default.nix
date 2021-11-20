@@ -21,7 +21,8 @@ let
     x64-osx_hash = "sha256-EUg3eC5QwGgCSi9qAPs6s8wenSXEmLvLHUTlvoLWAtc=";
   }."${arch}-${os}_hash";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "prowlarr";
   version = "0.1.2.1060";
 

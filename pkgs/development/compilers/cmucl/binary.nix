@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -6,15 +6,17 @@ let
   downloadUrl = arch:
     "http://common-lisp.net/project/cmucl/downloads/release/" +
     "${version}/cmucl-${version}-${arch}.tar.bz2";
-  fetchDist = {arch, sha256}: fetchurl {
+  fetchDist = { arch, sha256 }: fetchurl {
     url = downloadUrl arch;
     inherit sha256;
   };
   dist =
-    if system == "i686-linux" then fetchDist {
-        arch = "x86-linux";
-        sha256 = "13k3b5ygnbsq6n2i3r5i4ljw3r1qlskn2p5f4x9hrx6vfvbb3k7a";
-      }
+    if system == "i686-linux" then
+      fetchDist
+        {
+          arch = "x86-linux";
+          sha256 = "13k3b5ygnbsq6n2i3r5i4ljw3r1qlskn2p5f4x9hrx6vfvbb3k7a";
+        }
     else throw "Unsupported platform for cmucl.";
 in
 
@@ -36,9 +38,9 @@ stdenv.mkDerivation {
       which runs on most major Unix platforms.  It mainly conforms to the
       ANSI Common Lisp standard.
     '';
-    license = lib.licenses.free;		# public domain
+    license = lib.licenses.free; # public domain
     homepage = "http://www.cons.org/cmucl/";
-    maintainers = [lib.maintainers.tohl];
+    maintainers = [ lib.maintainers.tohl ];
     platforms = lib.platforms.linux;
   };
 }

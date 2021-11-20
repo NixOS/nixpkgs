@@ -8,7 +8,8 @@
 
 let
   linkType = if enableStatic then "static" else "dynamic";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mkl-test";
   version = mkl.version;
 

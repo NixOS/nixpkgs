@@ -1,8 +1,11 @@
-{ lib, stdenv, dockapps-sources
+{ lib
+, stdenv
+, dockapps-sources
 , libX11
 , libXpm
 , libXext
-, libdockapp }:
+, libdockapp
+}:
 
 stdenv.mkDerivation rec {
   pname = "wmsm.app";

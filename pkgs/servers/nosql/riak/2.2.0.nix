@@ -31,7 +31,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
-    which erlang pam
+    which
+    erlang
+    pam
   ];
 
   src = srcs.riak;
@@ -93,8 +95,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
-    platforms   = [ "x86_64-linux" ];
-    license     = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    license = licenses.asl20;
     knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };
 }

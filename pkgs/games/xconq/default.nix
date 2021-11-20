@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
-, libXext, fontconfig, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, cpio
+, xorgproto
+, libX11
+, libXmu
+, libXaw
+, libXt
+, tcl
+, tk
+, libXext
+, fontconfig
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
@@ -11,8 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
-  buildInputs = [ cpio xorgproto libX11 libXmu libXaw libXt tcl tk libXext
-    fontconfig makeWrapper ];
+  buildInputs = [
+    cpio
+    xorgproto
+    libX11
+    libXmu
+    libXaw
+    libXt
+    tcl
+    tk
+    libXext
+    fontconfig
+    makeWrapper
+  ];
 
   configureFlags = [
     "--enable-alternate-scoresdir=scores"

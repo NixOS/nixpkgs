@@ -17,7 +17,8 @@ let
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);
-in writers.writeBash "update-epgstation" ''
+in
+writers.writeBash "update-epgstation" ''
   set -euxo pipefail
 
   # bump the version

@@ -17,11 +17,11 @@ in
 
 listToAttrs (
   flip concatMap kernelVersionsToTest (version:
-    let
-      v' = replaceStrings [ "." ] [ "_" ] version;
-    in
-    flip mapAttrsToList tests (name: test:
-      nameValuePair "wireguard-${name}-linux-${v'}" (test { kernelPackages = pkgs."linuxPackages_${v'}"; })
-    )
+  let
+    v' = replaceStrings [ "." ] [ "_" ] version;
+  in
+  flip mapAttrsToList tests (name: test:
+  nameValuePair "wireguard-${name}-linux-${v'}" (test { kernelPackages = pkgs."linuxPackages_${v'}"; })
+  )
   )
 )

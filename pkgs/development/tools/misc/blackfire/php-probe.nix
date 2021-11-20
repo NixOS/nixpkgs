@@ -16,7 +16,8 @@ let
     "7.4" = "blackfire-20190902";
     "8.0" = "blackfire-20200930";
   }.${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "php-blackfire";
   version = "1.69.0";
 

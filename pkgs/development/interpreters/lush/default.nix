@@ -1,5 +1,22 @@
-{lib, stdenv, fetchurl, libX11, xorgproto, indent, readline, gsl, freeglut, libGLU, libGL, SDL
-, blas, libbfd, intltool, gettext, zlib, libSM}:
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, xorgproto
+, indent
+, readline
+, gsl
+, freeglut
+, libGLU
+, libGL
+, SDL
+, blas
+, libbfd
+, intltool
+, gettext
+, zlib
+, libSM
+}:
 
 stdenv.mkDerivation rec {
   baseName = "lush";
@@ -7,22 +24,35 @@ stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url="mirror://sourceforge/project/lush/lush2/lush-2.0.1.tar.gz";
+    url = "mirror://sourceforge/project/lush/lush2/lush-2.0.1.tar.gz";
     sha256 = "02pkfn3nqdkm9fm44911dbcz0v3r0l53vygj8xigl6id5g3iwi4k";
   };
 
   buildInputs = [
-    libX11 libSM xorgproto indent readline gsl freeglut libGLU libGL SDL blas libbfd
-    intltool gettext zlib
+    libX11
+    libSM
+    xorgproto
+    indent
+    readline
+    gsl
+    freeglut
+    libGLU
+    libGL
+    SDL
+    blas
+    libbfd
+    intltool
+    gettext
+    zlib
   ];
 
   hardeningDisable = [ "pic" ];
 
-  NIX_LDFLAGS=" -lz ";
+  NIX_LDFLAGS = " -lz ";
 
   meta = {
     description = "Lisp Universal SHell";
-    license = lib.licenses.gpl2Plus ;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };

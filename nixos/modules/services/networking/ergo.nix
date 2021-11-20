@@ -6,28 +6,29 @@ let
   inherit (lib) mkEnableOption mkIf mkOption optionalString types;
 
   configFile = pkgs.writeText "ergo.conf" (''
-ergo {
-  directory = "${cfg.dataDir}"
-  node {
-    mining = false
-  }
-  wallet.secretStorage.secretDir = "${cfg.dataDir}/wallet/keystore"
-}
+    ergo {
+      directory = "${cfg.dataDir}"
+      node {
+        mining = false
+      }
+      wallet.secretStorage.secretDir = "${cfg.dataDir}/wallet/keystore"
+    }
 
-scorex {
-  network {
-    bindAddress = "${cfg.listen.ip}:${toString cfg.listen.port}"
-  }
-'' + optionalString (cfg.api.keyHash != null) ''
- restApi {
-    apiKeyHash = "${cfg.api.keyHash}"
-    bindAddress = "${cfg.api.listen.ip}:${toString cfg.api.listen.port}"
- }
-'' + ''
-}
-'');
+    scorex {
+      network {
+        bindAddress = "${cfg.listen.ip}:${toString cfg.listen.port}"
+      }
+  '' + optionalString (cfg.api.keyHash != null) ''
+    restApi {
+       apiKeyHash = "${cfg.api.keyHash}"
+       bindAddress = "${cfg.api.listen.ip}:${toString cfg.api.listen.port}"
+    }
+  '' + ''
+    }
+  '');
 
-in {
+in
+{
 
   options = {
 
@@ -55,32 +56,32 @@ in {
       };
 
       api = {
-       keyHash = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "324dcf027dd4a30a932c441f365a25e86b173defa4b8e58948253471b81b72cf";
-        description = "Hex-encoded Blake2b256 hash of an API key as a 64-chars long Base16 string.";
-       };
+        keyHash = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "324dcf027dd4a30a932c441f365a25e86b173defa4b8e58948253471b81b72cf";
+          description = "Hex-encoded Blake2b256 hash of an API key as a 64-chars long Base16 string.";
+        };
 
-       listen = {
-        ip = mkOption {
-          type = types.str;
-          default = "0.0.0.0";
-          description = "IP address that the Ergo node API should listen on if <option>api.keyHash</option> is defined.";
+        listen = {
+          ip = mkOption {
+            type = types.str;
+            default = "0.0.0.0";
+            description = "IP address that the Ergo node API should listen on if <option>api.keyHash</option> is defined.";
           };
 
-        port = mkOption {
-          type = types.port;
-          default = 9052;
-          description = "Listen port for the API endpoint if <option>api.keyHash</option> is defined.";
+          port = mkOption {
+            type = types.port;
+            default = 9052;
+            description = "Listen port for the API endpoint if <option>api.keyHash</option> is defined.";
+          };
         };
-       };
       };
 
       testnet = mkOption {
-         type = types.bool;
-         default = false;
-         description = "Connect to testnet network instead of the default mainnet.";
+        type = types.bool;
+        default = false;
+        description = "Connect to testnet network instead of the default mainnet.";
       };
 
       user = mkOption {
@@ -135,7 +136,7 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
   };
 }

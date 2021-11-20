@@ -10,7 +10,8 @@ let
     rev = openbsd_version;
     sha256 = "sha256-vCVK5k4g6aW2z2fg7Kv0uvkX7f34aRc8K2myb3jjl6w=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "opengpd";
   version = "6.8p0";
 

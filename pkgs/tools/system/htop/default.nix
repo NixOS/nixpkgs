@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, stdenv, autoreconfHook
+{ lib
+, fetchFromGitHub
+, stdenv
+, autoreconfHook
 , ncurses
 , IOKit
-, sensorsSupport ? stdenv.isLinux, lm_sensors
-, systemdSupport ? stdenv.isLinux, systemd
+, sensorsSupport ? stdenv.isLinux
+, lm_sensors
+, systemdSupport ? stdenv.isLinux
+, systemd
 }:
 
 with lib;

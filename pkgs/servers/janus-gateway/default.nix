@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gengetopt
-, glib, libconfig, libnice, jansson, boringssl, zlib, srtp, libuv
-, libmicrohttpd, curl, libwebsockets, sofia_sip, libogg, libopus
-, usrsctp, ffmpeg
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gengetopt
+, glib
+, libconfig
+, libnice
+, jansson
+, boringssl
+, zlib
+, srtp
+, libuv
+, libmicrohttpd
+, curl
+, libwebsockets
+, sofia_sip
+, libogg
+, libopus
+, usrsctp
+, ffmpeg
 }:
 
 let
@@ -27,8 +45,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config gengetopt ];
 
   buildInputs = [
-    glib libconfig libnice jansson boringssl zlib srtp libuv libmicrohttpd
-    curl libwebsockets_janus sofia_sip libogg libopus usrsctp ffmpeg
+    glib
+    libconfig
+    libnice
+    jansson
+    boringssl
+    zlib
+    srtp
+    libuv
+    libmicrohttpd
+    curl
+    libwebsockets_janus
+    sofia_sip
+    libogg
+    libopus
+    usrsctp
+    ffmpeg
   ];
 
   enableParallelBuilding = true;

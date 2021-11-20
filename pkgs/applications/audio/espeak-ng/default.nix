@@ -1,8 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkg-config
-, ronn, substituteAll
-, mbrolaSupport ? true, mbrola
-, pcaudiolibSupport ? true, pcaudiolib
-, sonicSupport ? true, sonic }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, which
+, libtool
+, pkg-config
+, ronn
+, substituteAll
+, mbrolaSupport ? true
+, mbrola
+, pcaudiolibSupport ? true
+, pcaudiolib
+, sonicSupport ? true
+, sonic
+}:
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
@@ -26,8 +38,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
 
   buildInputs = lib.optional mbrolaSupport mbrola
-             ++ lib.optional pcaudiolibSupport pcaudiolib
-             ++ lib.optional sonicSupport sonic;
+    ++ lib.optional pcaudiolibSupport pcaudiolib
+    ++ lib.optional sonicSupport sonic;
 
   preConfigure = "./autogen.sh";
 

@@ -88,17 +88,17 @@ rec {
   /* bitwise “and” */
   bitAnd = builtins.bitAnd
     or (import ./zip-int-bits.nix
-        (a: b: if a==1 && b==1 then 1 else 0));
+    (a: b: if a == 1 && b == 1 then 1 else 0));
 
   /* bitwise “or” */
   bitOr = builtins.bitOr
     or (import ./zip-int-bits.nix
-        (a: b: if a==1 || b==1 then 1 else 0));
+    (a: b: if a == 1 || b == 1 then 1 else 0));
 
   /* bitwise “xor” */
   bitXor = builtins.bitXor
     or (import ./zip-int-bits.nix
-        (a: b: if a!=b then 1 else 0));
+    (a: b: if a != b then 1 else 0));
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -190,11 +190,12 @@ rec {
     default:
     let
       revisionFile = "${toString ./..}/.git-revision";
-      gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsGitRepo gitRepo
-       then lib.commitIdFromGitRepo gitRepo
-       else if lib.pathExists revisionFile then lib.fileContents revisionFile
-       else default;
+      gitRepo = "${toString ./..}/.git";
+    in
+    if lib.pathIsGitRepo gitRepo
+    then lib.commitIdFromGitRepo gitRepo
+    else if lib.pathExists revisionFile then lib.fileContents revisionFile
+    else default;
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
@@ -237,8 +238,8 @@ rec {
     if a < b
     then -1
     else if a > b
-         then 1
-         else 0;
+    then 1
+    else 0;
 
   /* Split type into two subtypes by predicate `p`, take all elements
      of the first subtype to be less than all the elements of the
@@ -314,7 +315,7 @@ rec {
     Type: string -> a -> a
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
+    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") [ "1" "true" "yes" ]
     then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
     else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
 
@@ -342,7 +343,8 @@ rec {
      like callPackage expect to be able to query expected arguments.
   */
   setFunctionArgs = f: args:
-    { # TODO: Should we add call-time "type" checking like built in?
+    {
+      # TODO: Should we add call-time "type" checking like built in?
       __functor = self: f;
       __functionArgs = args;
     };
@@ -388,7 +390,7 @@ rec {
             "15" = "F";
           }.${toString d};
     in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+    lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
@@ -403,15 +405,15 @@ rec {
     let
       go = i:
         if i < base
-        then [i]
+        then [ i ]
         else
           let
             r = i - ((i / base) * base);
             q = (i - r) / base;
           in
-            [r] ++ go q;
+          [ r ] ++ go q;
     in
-      assert (base >= 2);
-      assert (i >= 0);
-      lib.reverseList (go i);
+    assert (base >= 2);
+    assert (i >= 0);
+    lib.reverseList (go i);
 }

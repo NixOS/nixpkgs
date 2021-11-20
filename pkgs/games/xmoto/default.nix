@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gettext, makeWrapper, bzip2
-, curl, libjpeg, libxml2, xz, lua, ode, libGL, libpng, SDL, SDL_mixer, SDL_net
-, SDL_ttf, sqlite, libxdg_basedir, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gettext
+, makeWrapper
+, bzip2
+, curl
+, libjpeg
+, libxml2
+, xz
+, lua
+, ode
+, libGL
+, libpng
+, SDL
+, SDL_mixer
+, SDL_net
+, SDL_ttf
+, sqlite
+, libxdg_basedir
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmoto";

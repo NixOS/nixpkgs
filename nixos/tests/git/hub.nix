@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "hub";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ nequissimus ];

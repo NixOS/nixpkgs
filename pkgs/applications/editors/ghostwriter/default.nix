@@ -28,7 +28,10 @@ mkDerivation rec {
   buildInputs = [ qtwebengine hunspell ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ cmark multimarkdown pandoc ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ cmark multimarkdown pandoc ])
   ];
 
   meta = with lib; {

@@ -1,15 +1,80 @@
-{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gtk3, cairo
-, freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
-, alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
-, libdrm, libxkbcommon, mesa }:
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, atk
+, glib
+, pango
+, gdk-pixbuf
+, gtk3
+, cairo
+, freetype
+, fontconfig
+, dbus
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libX11
+, libXtst
+, libXScrnSaver
+, libxcb
+, nss
+, nspr
+, alsa-lib
+, cups
+, expat
+, udev
+, libpulseaudio
+, at-spi2-atk
+, at-spi2-core
+, libxshmfence
+, libdrm
+, libxkbcommon
+, mesa
+}:
 
 let
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
-    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver nss nspr alsa-lib cups expat udev libpulseaudio
-    at-spi2-atk at-spi2-core libxshmfence libdrm libxkbcommon mesa
+    stdenv.cc.cc
+    gtk3
+    atk
+    glib
+    pango
+    gdk-pixbuf
+    cairo
+    freetype
+    fontconfig
+    dbus
+    libXi
+    libXcursor
+    libXdamage
+    libXrandr
+    libXcomposite
+    libXext
+    libXfixes
+    libxcb
+    libXrender
+    libX11
+    libXtst
+    libXScrnSaver
+    nss
+    nspr
+    alsa-lib
+    cups
+    expat
+    udev
+    libpulseaudio
+    at-spi2-atk
+    at-spi2-core
+    libxshmfence
+    libdrm
+    libxkbcommon
+    mesa
   ];
 
 in
@@ -46,9 +111,9 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   meta = with lib; {
     description = "A terminal built on web technologies";
-    homepage    = "https://hyper.is/";
+    homepage = "https://hyper.is/";
     maintainers = with maintainers; [ puffnfresh ];
-    license     = licenses.mit;
-    platforms   = [ "x86_64-linux" ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
   };
 }

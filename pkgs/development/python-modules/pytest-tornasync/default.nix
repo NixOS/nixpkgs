@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, pytest, tornado }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytest
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "pytest-tornasync";

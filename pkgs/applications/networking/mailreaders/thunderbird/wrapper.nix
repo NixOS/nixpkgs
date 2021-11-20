@@ -5,9 +5,7 @@ args:
 
 (wrapFirefox browser ({
   libName = "thunderbird";
-} // args))
-
-.overrideAttrs (old: {
+} // args)).overrideAttrs (old: {
   # Thunderbird's native GPG support does not yet support smartcards.
   # The official upstream recommendation is to configure fall back to gnupg
   # using the Thunderbird config `mail.openpgp.allow_external_gnupg`

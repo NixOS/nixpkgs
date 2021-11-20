@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , hostname
 , pytest
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 buildPythonPackage rec {

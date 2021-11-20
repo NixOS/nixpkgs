@@ -1,4 +1,12 @@
-{ lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, fetch
+, libcxx
+, libunwind
+, llvm
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -41,7 +49,8 @@ stdenv.mkDerivation {
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

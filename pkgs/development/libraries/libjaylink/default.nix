@@ -1,5 +1,8 @@
-{ fetchFromGitLab, lib, stdenv
-, autoreconfHook, pkg-config
+{ fetchFromGitLab
+, lib
+, stdenv
+, autoreconfHook
+, pkg-config
 , libusb1
 }:
 

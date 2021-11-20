@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, pkg-config, openssl
-, dune-configurator }:
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, pkg-config
+, openssl
+, dune-configurator
+}:
 
 buildDunePackage rec {
   pname = "ssl";
@@ -15,7 +20,7 @@ buildDunePackage rec {
   useDune2 = true;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [openssl];
+  propagatedBuildInputs = [ openssl ];
 
   meta = {
     homepage = "http://savonet.rastageeks.org/";

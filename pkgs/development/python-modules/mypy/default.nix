@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, typed-ast
+, psutil
+, isPy3k
 , mypy-extensions
 , typing-extensions
 }:
@@ -34,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Optional static typing for Python";
-    homepage    = "http://www.mypy-lang.org";
-    license     = licenses.mit;
+    homepage = "http://www.mypy-lang.org";
+    license = licenses.mit;
     maintainers = with maintainers; [ martingms lnl7 ];
   };
 }

@@ -1,16 +1,59 @@
-{ pname, version, src, binaryName, desktopName
-, autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-, writeScript, common-updater-scripts
+{ pname
+, version
+, src
+, binaryName
+, desktopName
+, autoPatchelfHook
+, makeDesktopItem
+, lib
+, stdenv
+, wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libcxx
+, libdrm
+, libnotify
+, libpulseaudio
+, libuuid
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libxcb
+, libxshmfence
+, mesa
+, nspr
+, nss
+, pango
+, systemd
+, libappindicator-gtk3
+, libdbusmenu
+, writeScript
+, common-updater-scripts
 }:
 
 let
   inherit binaryName;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -33,13 +76,46 @@ in stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   libPath = lib.makeLibraryPath [
-    libcxx systemd libpulseaudio libdrm mesa
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
-    libappindicator-gtk3 libdbusmenu
-   ];
+    libcxx
+    systemd
+    libpulseaudio
+    libdrm
+    mesa
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libnotify
+    libX11
+    libXcomposite
+    libuuid
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    systemd
+    libXScrnSaver
+    libappindicator-gtk3
+    libdbusmenu
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}

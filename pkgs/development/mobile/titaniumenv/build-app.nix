@@ -1,11 +1,24 @@
-{stdenv, lib, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file}:
-{ name, src, preBuild ? "", target, tiVersion ? null
-, release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "12.1", iosBuildStore ? false
-, enableWirelessDistribution ? false, installURL ? null
+{ stdenv, lib, composeAndroidPackages, composeXcodeWrapper, titaniumsdk, titanium, alloy, jdk, python, nodejs, which, file }:
+{ name
+, src
+, preBuild ? ""
+, target
+, tiVersion ? null
+, release ? false
+, androidKeyStore ? null
+, androidKeyAlias ? null
+, androidKeyStorePassword ? null
+, iosMobileProvisioningProfile ? null
+, iosCertificateName ? null
+, iosCertificate ? null
+, iosCertificatePassword ? null
+, iosVersion ? "12.1"
+, iosBuildStore ? false
+, enableWirelessDistribution ? false
+, installURL ? null
 , xcodeBaseDir ? "/Applications/Xcode.app"
-, androidsdkArgs ? {}
-, xcodewrapperArgs ? {}
+, androidsdkArgs ? { }
+, xcodewrapperArgs ? { }
 , ...
 }@args:
 
@@ -34,7 +47,7 @@ let
   extraArgs = removeAttrs args [ "name" "preRebuild" "androidsdkArgs" "xcodewrapperArgs" ];
 in
 stdenv.mkDerivation ({
-  name = lib.replaceChars [" "] [""] name;
+  name = lib.replaceChars [ " " ] [ "" ] name;
 
   buildInputs = [ nodejs titanium alloy python which file jdk ];
 

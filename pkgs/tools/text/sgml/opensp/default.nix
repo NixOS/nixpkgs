@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412
-, libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, xmlto
+, docbook_xml_dtd_412
+, libxslt
+, docbook_xsl
+, autoconf
+, automake
+, gettext
+, libiconv
+, libtool
+}:
 
 stdenv.mkDerivation rec {
   pname = "opensp";
@@ -28,7 +40,7 @@ stdenv.mkDerivation rec {
     # Remove random ids in the release notes
     sed -i -e 's/href="#idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
     sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
-    '';
+  '';
 
   preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
 

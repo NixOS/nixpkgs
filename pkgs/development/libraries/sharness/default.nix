@@ -4,7 +4,8 @@
 , fetchurl
 , perl
 , perlPackages
-, sharnessExtensions ? {} }:
+, sharnessExtensions ? { }
+}:
 
 stdenv.mkDerivation rec {
   pname = "sharness";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   extensions = lib.mapAttrsToList (k: v: "${k}.sh ${v}") sharnessExtensions;
 
-  postInstall = lib.optionalString (sharnessExtensions != {}) ''
+  postInstall = lib.optionalString (sharnessExtensions != { }) ''
     extDir=$out/share/sharness/sharness.d
     mkdir -p "$extDir"
     linkExtensions() {

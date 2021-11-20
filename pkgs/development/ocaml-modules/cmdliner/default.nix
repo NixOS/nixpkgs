@@ -6,15 +6,17 @@ in
 
 assert lib.versionAtLeast ocaml.version "4.01.0";
 
-let param =
-  if lib.versionAtLeast ocaml.version "4.03" then {
-    version = "1.0.4";
-    sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
-  } else {
-    version = "1.0.2";
-    sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
-  }
-; in
+let
+  param =
+    if lib.versionAtLeast ocaml.version "4.03" then {
+      version = "1.0.4";
+      sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
+    } else {
+      version = "1.0.2";
+      sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
+    }
+  ;
+in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.vbgl ];
   };
 }

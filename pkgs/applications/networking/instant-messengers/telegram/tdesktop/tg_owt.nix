@@ -1,9 +1,36 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
-, openh264, usrsctp, libevent, libvpx
-, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
-, glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, ninja
+, yasm
+, libjpeg
+, openssl
+, libopus
+, ffmpeg
+, alsa-lib
+, libpulseaudio
+, protobuf
+, openh264
+, usrsctp
+, libevent
+, libvpx
+, libX11
+, libXtst
+, libXcomposite
+, libXdamage
+, libXext
+, libXrender
+, libXrandr
+, libXi
+, glib
+, abseil-cpp
+, pcre
+, util-linuxMinimal
+, libselinux
+, libsepol
+, pipewire
 }:
 
 stdenv.mkDerivation {
@@ -23,10 +50,32 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
-    libjpeg openssl libopus ffmpeg alsa-lib libpulseaudio protobuf
-    openh264 usrsctp libevent libvpx
-    libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
-    glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
+    libjpeg
+    openssl
+    libopus
+    ffmpeg
+    alsa-lib
+    libpulseaudio
+    protobuf
+    openh264
+    usrsctp
+    libevent
+    libvpx
+    libX11
+    libXtst
+    libXcomposite
+    libXdamage
+    libXext
+    libXrender
+    libXrandr
+    libXi
+    glib
+    abseil-cpp
+    pcre
+    util-linuxMinimal
+    libselinux
+    libsepol
+    pipewire
   ];
 
   cmakeFlags = [
@@ -36,7 +85,11 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx
+    abseil-cpp
+    openh264
+    usrsctp
+    libevent
+    libvpx
   ];
 
   meta = with lib; {

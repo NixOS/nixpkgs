@@ -16,7 +16,8 @@ buildGoPackage rec {
 
   # TODO: is there a way to get the commit ref so we can set main.buildCommit?
   ldflags = [
-    "-X main.buildDate=1970-01-01T00:00:00+0000" "-X main.buildVersion=${version}"
+    "-X main.buildDate=1970-01-01T00:00:00+0000"
+    "-X main.buildVersion=${version}"
   ];
 
   meta = {

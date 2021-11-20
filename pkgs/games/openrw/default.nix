@@ -14,7 +14,8 @@
 , boost
 , ffmpeg
 , Cocoa
-, OpenAL }:
+, OpenAL
+}:
 
 stdenv.mkDerivation {
   version = "unstable-2021-10-14";
@@ -31,7 +32,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml
+    libGLU
+    libGL
+    bullet
+    glm
+    libmad
+    xlibsWrapper
+    openal
+    SDL2
+    boost
+    ffmpeg
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {

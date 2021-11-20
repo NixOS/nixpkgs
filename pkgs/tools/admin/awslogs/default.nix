@@ -12,7 +12,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    boto3 termcolor python-dateutil docutils setuptools jmespath
+    boto3
+    termcolor
+    python-dateutil
+    docutils
+    setuptools
+    jmespath
   ];
 
   checkInputs = [ python3Packages.pytestCheckHook ];

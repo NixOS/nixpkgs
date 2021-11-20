@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.0.7";  # 2.0.6 breaks canonicaljson
+  version = "2.0.7"; # 2.0.6 breaks canonicaljson
   format = "setuptools";
 
   disabled = !isPy3k;

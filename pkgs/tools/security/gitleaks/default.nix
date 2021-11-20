@@ -17,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-86PspExE+T/IuCvpf6LAkWcCRlHPqP5VUbHAckEzALc=";
 
   ldflags = [
-    "-s" "-w" "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
   ];
 
   meta = with lib; {

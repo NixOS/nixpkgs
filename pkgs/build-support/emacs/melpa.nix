@@ -5,7 +5,8 @@
 
 with lib;
 
-{ /*
+{
+  /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.
   */
@@ -16,7 +17,7 @@ with lib;
 , ename ? null
 , version
 , recipe
-, meta ? {}
+, meta ? { }
 , ...
 }@args:
 
@@ -73,7 +74,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
         $ename $version $commit
 
     runHook postBuild
-    '';
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -94,4 +95,4 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
   meta = defaultMeta // meta;
 }
 
-// removeAttrs args [ "meta" ])
+  // removeAttrs args [ "meta" ])

@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchgit,
-  fetchHex, erlang, makeWrapper,
-  writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchgit
+, fetchHex
+, erlang
+, makeWrapper
+, writeScript
+, common-updater-scripts
+, coreutils
+, git
+, gnused
+, nix
+, rebar3-nix
+}:
 
 let
   version = "3.17.0";
@@ -61,7 +73,7 @@ let
         of build configuration work. rebar also provides dependency management,
         enabling application writers to easily re-use common libraries from a
         variety of locations (hex.pm, git, hg, and so on).
-        '';
+      '';
 
       platforms = lib.platforms.unix;
       maintainers = lib.teams.beam.members;
@@ -111,7 +123,8 @@ let
         # our patches cause the tests to fail
         doCheck = false;
       }));
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
       inherit (rebar3) version;
       nativeBuildInputs = [ erlang makeWrapper ];
@@ -136,4 +149,5 @@ let
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';
     };
-in { inherit rebar3 rebar3WithPlugins; }
+in
+{ inherit rebar3 rebar3WithPlugins; }

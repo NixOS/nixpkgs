@@ -51,7 +51,8 @@ let
     "zest" = "Zyn-Fusion";
   }.${guiModule};
   mruby-zest = callPackage ./mruby-zest { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zynaddsubfx";
   version = "3.0.5";
 

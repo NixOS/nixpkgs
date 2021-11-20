@@ -4,7 +4,7 @@
 , fetchPypi
 , pythonOlder
 , requests
- }:
+}:
 
 buildPythonPackage rec {
   pname = "stashy";

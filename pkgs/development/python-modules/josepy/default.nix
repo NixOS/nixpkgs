@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "JOSE protocol implementation in Python";
     homepage = "https://github.com/jezdez/josepy";
     license = licenses.asl20;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }
 

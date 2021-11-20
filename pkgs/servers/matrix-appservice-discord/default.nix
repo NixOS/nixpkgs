@@ -3,12 +3,13 @@
 assert lib.versionAtLeast nodejs.version "12.0.0";
 
 let
-  nodeSources = runCommand "node-sources" {} ''
+  nodeSources = runCommand "node-sources" { } ''
     tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
     mv node-* $out
   '';
 
-in mkYarnPackage rec {
+in
+mkYarnPackage rec {
   pname = "matrix-appservice-discord";
 
   # when updating, run `./generate.sh <git release tag>`
@@ -30,7 +31,7 @@ in mkYarnPackage rec {
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
-     '';
+      '';
     };
   };
 

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, boost, icu, libpng, librevenge, zlib, doxygen, pkg-config, cppunit}:
+{ lib, stdenv, fetchurl, boost, icu, libpng, librevenge, zlib, doxygen, pkg-config, cppunit }:
 
 stdenv.mkDerivation rec {
   pname = "libzmf";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A library that parses the file format of Zoner Callisto/Draw documents";
     license = lib.licenses.mpl20;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libzmf";
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";

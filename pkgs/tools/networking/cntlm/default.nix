@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which}:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
   pname = "cntlm";

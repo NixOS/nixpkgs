@@ -1,7 +1,11 @@
-{ lib, fetchFromGitHub, buildPythonPackage
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
 , numpy
-, scipySupport ? false, scipy
-, scikitSupport ? false, scikit-learn
+, scipySupport ? false
+, scipy
+, scikitSupport ? false
+, scikit-learn
 }:
 
 buildPythonPackage rec {
@@ -29,8 +33,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for creating and simulating large-scale brain models";
-    homepage    = "https://nengo.ai/";
-    license     = licenses.unfreeRedistributable;
+    homepage = "https://nengo.ai/";
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ arjix ];
   };
 }

@@ -3,12 +3,14 @@
 
 { name ? "rpm-build"
 , diskImage
-, src, vmTools
-, ... } @ args:
+, src
+, vmTools
+, ...
+} @ args:
 
 vmTools.buildRPM (
 
-  removeAttrs args ["vmTools"] //
+  removeAttrs args [ "vmTools" ] //
 
   {
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
@@ -46,7 +48,7 @@ vmTools.buildRPM (
       done
     '';
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (if args ? meta then args.meta else { }) // {
       description = "RPM package for ${diskImage.fullName}";
     };
   }

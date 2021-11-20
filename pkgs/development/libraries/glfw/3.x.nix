@@ -1,8 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake
-, libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
-, Cocoa, Kernel, fixDarwinDylibNames
-, waylandSupport ? false, extra-cmake-modules, wayland
-, wayland-protocols, libxkbcommon
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libGL
+, libXrandr
+, libXinerama
+, libXcursor
+, libX11
+, libXi
+, libXext
+, Cocoa
+, Kernel
+, fixDarwinDylibNames
+, waylandSupport ? false
+, extra-cmake-modules
+, wayland
+, wayland-protocols
+, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +42,7 @@ stdenv.mkDerivation rec {
     if waylandSupport
     then [ wayland wayland-protocols libxkbcommon ]
     else [ libX11 libXrandr libXinerama libXcursor libXi libXext ]
-         ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
+      ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

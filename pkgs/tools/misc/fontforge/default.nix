@@ -1,13 +1,36 @@
-{ stdenv, fetchpatch, fetchFromGitHub, lib
-, cmake, perl, uthash, pkg-config, gettext
-, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq, libuninameslist
-, withSpiro ? false, libspiro
-, withGTK ? false, gtk3
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, lib
+, cmake
+, perl
+, uthash
+, pkg-config
+, gettext
+, python
+, freetype
+, zlib
+, glib
+, giflib
+, libpng
+, libjpeg
+, libtiff
+, libxml2
+, cairo
+, pango
+, readline
+, woff2
+, zeromq
+, libuninameslist
+, withSpiro ? false
+, libspiro
+, withGTK ? false
+, gtk3
 , withGUI ? withGTK
 , withPython ? true
 , withExtras ? true
-, Carbon, Cocoa
+, Carbon
+, Cocoa
 }:
 
 assert withGTK -> withGUI;
@@ -52,12 +75,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
+    readline
+    uthash
+    woff2
+    zeromq
+    libuninameslist
+    python
+    freetype
+    zlib
+    glib
+    giflib
+    libpng
+    libjpeg
+    libtiff
+    libxml2
   ]
-    ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [ gtk3 cairo pango ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  ++ lib.optionals withSpiro [ libspiro ]
+  ++ lib.optionals withGUI [ gtk3 cairo pango ]
+  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"

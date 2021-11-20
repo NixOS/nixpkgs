@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, bison, flex }:
 
 let
-  baseVersion="3";
-  minorVersion="9";
+  baseVersion = "3";
+  minorVersion = "9";
 
   extraTools = "FLOTTER prolog2dfg dfg2otter dfg2dimacs dfg2tptp"
     + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Automated theorem prover for first-order logic";
     maintainers = with maintainers;
-    [
-      raskin
-    ];
+      [
+        raskin
+      ];
     platforms = platforms.unix;
     license = licenses.bsd2;
     downloadPage = "http://www.spass-prover.org/download/index.html";

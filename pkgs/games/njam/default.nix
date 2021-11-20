@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
 
 stdenv.mkDerivation rec {
   pname = "njam";

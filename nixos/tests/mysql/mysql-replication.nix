@@ -1,4 +1,4 @@
-import ./../make-test-python.nix ({ pkgs, ...} :
+import ./../make-test-python.nix ({ pkgs, ... }:
 
 let
   replicateUser = "replicate";
@@ -22,7 +22,7 @@ in
         services.mysql.replication.slaveHost = "%";
         services.mysql.replication.masterUser = replicateUser;
         services.mysql.replication.masterPassword = replicatePassword;
-        services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+        services.mysql.initialDatabases = [{ name = "testdb"; schema = ./testdb.sql; }];
         networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 

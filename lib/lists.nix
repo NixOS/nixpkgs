@@ -19,7 +19,7 @@ rec {
         singleton "foo"
         => [ "foo" ]
   */
-  singleton = x: [x];
+  singleton = x: [ x ];
 
   /*  Apply the function to each element in the list. Same as `map`, but arguments
       flipped.
@@ -56,7 +56,8 @@ rec {
         if n == len
         then nul
         else op (elemAt list n) (fold' (n + 1));
-    in fold' 0;
+    in
+    fold' 0;
 
   /* `fold` is an alias of `foldr` for historic reasons */
   # FIXME(Profpatsch): deprecate?
@@ -83,7 +84,8 @@ rec {
         if n == -1
         then nul
         else op (foldl' (n - 1)) (elemAt list n);
-    in foldl' (length list - 1);
+    in
+    foldl' (length list - 1);
 
   /* Strict version of `foldl`.
 
@@ -137,7 +139,7 @@ rec {
   flatten = x:
     if isList x
     then concatMap (y: flatten y) x
-    else [x];
+    else [ x ];
 
   /* Remove elements equal to 'e' from a list.  Useful for buildInputs.
 
@@ -176,8 +178,8 @@ rec {
     list:
     let found = filter pred list; len = length found;
     in if len == 0 then default
-      else if len != 1 then multiple
-      else head found;
+    else if len != 1 then multiple
+    else head found;
 
   /* Find the first element in the list matching the specified
      predicate or return `default` if no such element exists.
@@ -198,7 +200,7 @@ rec {
     # Input list
     list:
     let found = filter pred list;
-    in if found == [] then default else head found;
+    in if found == [ ] then default else head found;
 
   /* Return true if function `pred` returns true for at least one
      element of `list`.
@@ -251,7 +253,7 @@ rec {
        optional false "foo"
        => [ ]
   */
-  optional = cond: elem: if cond then [elem] else [];
+  optional = cond: elem: if cond then [ elem ] else [ ];
 
   /* Return a list or an empty list, depending on a boolean value.
 
@@ -267,7 +269,7 @@ rec {
     # Condition
     cond:
     # List to return if condition is true
-    elems: if cond then elems else [];
+    elems: if cond then elems else [ ];
 
 
   /* If argument is a list, return it; else, wrap it in a singleton
@@ -280,7 +282,7 @@ rec {
        toList "hi"
        => [ "hi "]
   */
-  toList = x: if isList x then x else [x];
+  toList = x: if isList x then x else [ x ];
 
   /* Return a list of integers from `first' up to and including `last'.
 
@@ -298,7 +300,7 @@ rec {
     # Last integer in the range
     last:
     if first > last then
-      []
+      [ ]
     else
       genList (n: first + n) (last - first + 1);
 
@@ -312,11 +314,13 @@ rec {
        => { right = [ 5 3 4 ]; wrong = [ 1 2 ]; }
   */
   partition = builtins.partition or (pred:
-    foldr (h: t:
-      if pred h
-      then { right = [h] ++ t.right; wrong = t.wrong; }
-      else { right = t.right; wrong = [h] ++ t.wrong; }
-    ) { right = []; wrong = []; });
+    foldr
+      (h: t:
+        if pred h
+        then { right = [ h ] ++ t.right; wrong = t.wrong; }
+        else { right = t.right; wrong = [ h ] ++ t.wrong; }
+      )
+      { right = [ ]; wrong = [ ]; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
      Predicate should return a string which becomes keys of attrset `groupBy' returns.
@@ -341,14 +345,17 @@ rec {
        => { true = 12; false = 3; }
   */
   groupBy' = op: nul: pred: lst:
-    foldl' (r: e:
-              let
-                key = pred e;
-              in
-                r // { ${key} = op (r.${key} or nul) e; }
-           ) {} lst;
+    foldl'
+      (r: e:
+        let
+          key = pred e;
+        in
+        r // { ${key} = op (r.${key} or nul) e; }
+      )
+      { }
+      lst;
 
-  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+  groupBy = groupBy' (sum: e: sum ++ [ e ]) [ ];
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -368,7 +375,8 @@ rec {
     # Second list
     snd:
     genList
-      (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd));
+      (n: f (elemAt fst n) (elemAt snd n))
+      (min (length fst) (length snd));
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
@@ -418,16 +426,18 @@ rec {
         let
           c = filter (x: before x us) visited;
           b = partition (x: before x us) rest;
-        in if stopOnCycles && (length c > 0)
-           then { cycle = us; loops = c; inherit visited rest; }
-           else if length b.right == 0
-                then # nothing is before us
-                     { minimal = us; inherit visited rest; }
-                else # grab the first one before us and continue
-                     dfs' (head b.right)
-                          ([ us ] ++ visited)
-                          (tail b.right ++ b.wrong);
-    in dfs' (head list) [] (tail list);
+        in
+        if stopOnCycles && (length c > 0)
+        then { cycle = us; loops = c; inherit visited rest; }
+        else if length b.right == 0
+        then # nothing is before us
+          { minimal = us; inherit visited rest; }
+        else # grab the first one before us and continue
+          dfs' (head b.right)
+            ([ us ] ++ visited)
+            (tail b.right ++ b.wrong);
+    in
+    dfs' (head list) [ ] (tail list);
 
   /* Sort a list based on a partial ordering using DFS. This
      implementation is O(N^2), if your ordering is linear, use `sort`
@@ -456,19 +466,21 @@ rec {
       dfsthis = listDfs true before list;
       toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
     in
-      if length list < 2
-      then # finish
-           { result =  list; }
-      else if dfsthis ? cycle
-           then # there's a cycle, starting from the current vertex, return it
-                { cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
-                  inherit (dfsthis) loops; }
-           else if toporest ? cycle
-                then # there's a cycle somewhere else in the graph, return it
-                     toporest
-                # Slow, but short. Can be made a bit faster with an explicit stack.
-                else # there are no cycles
-                     { result = [ dfsthis.minimal ] ++ toporest.result; };
+    if length list < 2
+    then # finish
+      { result = list; }
+    else if dfsthis ? cycle
+    then # there's a cycle, starting from the current vertex, return it
+      {
+        cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
+        inherit (dfsthis) loops;
+      }
+    else if toporest ? cycle
+    then # there's a cycle somewhere else in the graph, return it
+      toporest
+    # Slow, but short. Can be made a bit faster with an explicit stack.
+    else # there are no cycles
+      { result = [ dfsthis.minimal ] ++ toporest.result; };
 
   /* Sort a list based on a comparator function which compares two
      elements and returns true if the first argument is strictly below
@@ -481,20 +493,22 @@ rec {
   */
   sort = builtins.sort or (
     strictLess: list:
-    let
-      len = length list;
-      first = head list;
-      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (n + 1); in
-        if n == len
+      let
+        len = length list;
+        first = head list;
+        pivot' = n: acc@{ left, right }:
+          let el = elemAt list n; next = pivot' (n + 1); in
+          if n == len
           then acc
-        else if strictLess first el
+          else if strictLess first el
           then next { inherit left; right = [ el ] ++ right; }
-        else
-          next { left = [ el ] ++ left; inherit right; };
-      pivot = pivot' 1 { left = []; right = []; };
-    in
+          else
+            next { left = [ el ] ++ left; inherit right; };
+        pivot = pivot' 1 { left = [ ]; right = [ ]; };
+      in
       if len < 2 then list
-      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
+      else (sort strictLess pivot.left) ++ [ first ] ++ (sort strictLess pivot.right)
+  );
 
   /* Compare two lists element-by-element.
 
@@ -509,16 +523,17 @@ rec {
        => 1
   */
   compareLists = cmp: a: b:
-    if a == []
-    then if b == []
-         then 0
-         else -1
-    else if b == []
-         then 1
-         else let rel = cmp (head a) (head b); in
-              if rel == 0
-              then compareLists cmp (tail a) (tail b)
-              else rel;
+    if a == [ ]
+    then if b == [ ]
+    then 0
+    else -1
+    else if b == [ ]
+    then 1
+    else
+      let rel = cmp (head a) (head b); in
+      if rel == 0
+      then compareLists cmp (tail a) (tail b)
+      else rel;
 
   /* Sort list using "Natural sorting".
      Numeric portions of strings are sorted in numeric order.
@@ -537,7 +552,7 @@ rec {
       prepared = map (x: [ (vectorise x) x ]) lst; # remember vectorised version for O(n) regex splits
       less = a: b: (compareLists compare (head a) (head b)) < 0;
     in
-      map (x: elemAt x 1) (sort less prepared);
+    map (x: elemAt x 1) (sort less prepared);
 
   /* Return the first (at most) N elements of a list.
 
@@ -591,8 +606,8 @@ rec {
     genList
       (n: elemAt list (n + start))
       (if start >= len then 0
-       else if start + count > len then len - start
-       else count);
+      else if start + count > len then len - start
+      else count);
 
   /* Return the last element of a list.
 
@@ -605,7 +620,7 @@ rec {
        => 3
   */
   last = list:
-    assert lib.assertMsg (list != []) "lists.last: list must not be empty!";
+    assert lib.assertMsg (list != [ ]) "lists.last: list must not be empty!";
     elemAt list (length list - 1);
 
   /* Return all elements but the last.
@@ -619,7 +634,7 @@ rec {
        => [ 1 2 ]
   */
   init = list:
-    assert lib.assertMsg (list != []) "lists.init: list must not be empty!";
+    assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
     take (length list - 1) list;
 
 
@@ -631,7 +646,7 @@ rec {
   */
   crossLists = builtins.trace
     "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
-    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
 
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
@@ -642,7 +657,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
-  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [ ];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 

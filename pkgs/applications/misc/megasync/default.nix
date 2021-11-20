@@ -7,7 +7,7 @@
 , curl
 , doxygen
 , fetchFromGitHub
-#, ffmpeg
+  #, ffmpeg
 , libmediainfo
 , libraw
 , libsodium

@@ -19,7 +19,9 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags = [
-    "-w" "-s" "-X main.version=${version}"
+    "-w"
+    "-s"
+    "-X main.version=${version}"
   ];
 
   passthru.tests = { inherit (nixosTests) telegraf; };

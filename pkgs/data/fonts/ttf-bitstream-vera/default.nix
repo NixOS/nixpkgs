@@ -15,6 +15,5 @@ fetchzip rec {
 
   sha256 = "179hal4yi3367jg8rsvqx6h2w4s0kn9zzrv8c47sslyg28g39s4m";
 
-  meta = {
-  };
+  meta = { };
 }

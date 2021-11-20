@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, result
+, js_of_ocaml
 , jsooSupport ? true
 }:
 

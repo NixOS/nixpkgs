@@ -1,7 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, nose, numpy
-, bottle, pyyaml, redis, six
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, numpy
+, bottle
+, pyyaml
+, redis
+, six
 , zlib
-, pytestCheckHook }:
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "Jug";

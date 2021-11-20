@@ -43,8 +43,8 @@ in
         type = types.str;
         description = ''
           The IP address or hostname of the Zabbix server to connect to.
-          '';
-        };
+        '';
+      };
 
       package = mkOption {
         type = types.package;
@@ -69,7 +69,7 @@ in
       modules = mkOption {
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
@@ -172,7 +172,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int str (listOf str) ]);
-        default = {};
+        default = { };
         description = ''
           Zabbix Proxy configuration. Refer to
           <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy"/>
@@ -194,13 +194,16 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.zabbixServer.enable;
+      {
+        assertion = !config.services.zabbixServer.enable;
         message = "Please choose one of services.zabbixServer or services.zabbixProxy.";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.zabbixProxy.database.user must be set to ${user} if services.zabbixProxy.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zabbixProxy.database.createLocally is set to true";
       }
     ];
@@ -222,7 +225,7 @@ in
       (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })
       (mkIf (cfg.database.passwordFile != null) { Include = [ "${passwordFile}" ]; })
       (mkIf (mysqlLocal && cfg.database.socket != null) { DBSocket = cfg.database.socket; })
-      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
+      (mkIf (cfg.modules != { }) { LoadModulePath = "${moduleEnv}/lib"; })
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
@@ -245,7 +248,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
@@ -263,7 +267,8 @@ in
 
     security.wrappers = {
       fping =
-        { setuid = true;
+        {
+          setuid = true;
           owner = "root";
           group = "root";
           source = "${pkgs.fping}/bin/fping";

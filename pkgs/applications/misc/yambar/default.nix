@@ -17,7 +17,7 @@
 , wayland-scanner
 , wayland-protocols
 , waylandSupport ? false
-# Xorg backend
+  # Xorg backend
 , libxcb
 , xcbutil
 , xcbutilcursor

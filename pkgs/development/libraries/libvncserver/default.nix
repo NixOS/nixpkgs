@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchzip, fetchpatch, cmake
-, libjpeg, openssl, zlib, libgcrypt, libpng
-, systemd, Carbon
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, cmake
+, libjpeg
+, openssl
+, zlib
+, libgcrypt
+, libpng
+, systemd
+, Carbon
 }:
 
 let
   s = # Generated upstream information
-  rec {
-    pname = "libvncserver";
-    version = "0.9.13";
-    url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
-    sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
-  };
+    rec {
+      pname = "libvncserver";
+      version = "0.9.13";
+      url = "https://github.com/LibVNC/libvncserver/archive/LibVNCServer-${version}.tar.gz";
+      sha256 = "0zz0hslw8b1p3crnfy3xnmrljik359h83dpk64s697dqdcrzy141"; # unpacked archive checksum
+    };
 in
 stdenv.mkDerivation {
   inherit (s) pname version;
@@ -28,8 +37,8 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
 }

@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.services.jenkins;
   jenkinsUrl = "http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}";
-in {
+in
+{
   options = {
     services.jenkins = {
       enable = mkOption {
@@ -164,11 +165,11 @@ in {
         pkgs.dejavu_fonts
       ] ++ optional cfg.withCLI cfg.package;
 
-      variables = {}
+      variables = { }
         // optionalAttrs cfg.withCLI {
-          # Make it more convenient to use the `jenkins-cli`.
-          JENKINS_URL = jenkinsUrl;
-        };
+        # Make it more convenient to use the `jenkins-cli`.
+        JENKINS_URL = jenkinsUrl;
+      };
     };
 
     users.groups = optionalAttrs (cfg.group == "jenkins") {
@@ -198,30 +199,35 @@ in {
             lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
               config.environment.sessionVariables;
         in
-          selectedSessionVars //
-          { JENKINS_HOME = cfg.home;
-            NIX_REMOTE = "daemon";
-          } //
-          cfg.environment;
+        selectedSessionVars //
+        {
+          JENKINS_HOME = cfg.home;
+          NIX_REMOTE = "daemon";
+        } //
+        cfg.environment;
 
       path = cfg.packages;
 
       # Force .war (re)extraction, or else we might run stale Jenkins.
 
       preStart =
-        let replacePlugins =
-              if cfg.plugins == null
-              then ""
-              else
-                let pluginCmds = lib.attrsets.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
-                      cfg.plugins;
-                in ''
-                  rm -r ${cfg.home}/plugins || true
-                  mkdir -p ${cfg.home}/plugins
-                  ${lib.strings.concatStringsSep "\n" pluginCmds}
-                '';
-        in ''
+        let
+          replacePlugins =
+            if cfg.plugins == null
+            then ""
+            else
+              let
+                pluginCmds = lib.attrsets.mapAttrsToList
+                  (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
+                  cfg.plugins;
+              in
+              ''
+                rm -r ${cfg.home}/plugins || true
+                mkdir -p ${cfg.home}/plugins
+                ${lib.strings.concatStringsSep "\n" pluginCmds}
+              '';
+        in
+        ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}
         '';

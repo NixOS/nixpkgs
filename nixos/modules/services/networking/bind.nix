@@ -233,7 +233,7 @@ in
         description = "BIND daemon user";
         isSystemUser = true;
       };
-    users.groups.${bindUser} = {};
+    users.groups.${bindUser} = { };
 
     systemd.services.bind = {
       description = "BIND Domain Name Server";

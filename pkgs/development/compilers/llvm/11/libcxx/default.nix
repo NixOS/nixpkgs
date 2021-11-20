@@ -1,4 +1,14 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, llvm_meta
+, fetch
+, fetchpatch
+, cmake
+, python3
+, libcxxabi
+, llvm
+, fixDarwinDylibNames
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -41,24 +51,25 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
-      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
+  ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+  ++ lib.optional stdenv.hostPlatform.isWasm [
+    "-DLIBCXX_ENABLE_THREADS=OFF"
+    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
 
-    # TODO: this is a bit of a hack to cross compile to Apple Silicon.  libcxx
-    # starting with 11 enables CMAKE_BUILD_WITH_INSTALL_NAME_DIR which requires
-    # platform setup for rpaths. In cmake, this is enabled when macos is newer
-    # than 10.5. However CMAKE_SYSTEM_VERSION is set to empty (TODO: why?)
-    # which prevents the conditional configuration, and configure fails.  The
-    # value here corresponds to `uname -r`. If stdenv.hostPlatform.release is
-    # not null, then this property will be set via mkDerivation (TODO: how can
-    # we set this?).
-    ++ lib.optional (
+  # TODO: this is a bit of a hack to cross compile to Apple Silicon.  libcxx
+  # starting with 11 enables CMAKE_BUILD_WITH_INSTALL_NAME_DIR which requires
+  # platform setup for rpaths. In cmake, this is enabled when macos is newer
+  # than 10.5. However CMAKE_SYSTEM_VERSION is set to empty (TODO: why?)
+  # which prevents the conditional configuration, and configure fails.  The
+  # value here corresponds to `uname -r`. If stdenv.hostPlatform.release is
+  # not null, then this property will be set via mkDerivation (TODO: how can
+  # we set this?).
+  ++ lib.optional
+    (
       stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 &&
-      stdenv.hostPlatform != stdenv.buildPlatform
+        stdenv.hostPlatform != stdenv.buildPlatform
     ) "-DCMAKE_SYSTEM_VERSION=20.1.0";
 
   passthru = {

@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
-, sqlite, gtk3, webkitgtk, libgdata, libmspack }:
+{ lib
+, stdenv
+, fetchurl
+, gnome
+, cmake
+, gettext
+, intltool
+, pkg-config
+, evolution-data-server
+, evolution
+, sqlite
+, gtk3
+, webkitgtk
+, libgdata
+, libmspack
+}:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
@@ -13,9 +27,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
 
   buildInputs = [
-    evolution-data-server evolution
-    sqlite libgdata
-    gtk3 webkitgtk
+    evolution-data-server
+    evolution
+    sqlite
+    libgdata
+    gtk3
+    webkitgtk
     libmspack
   ];
 
@@ -26,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DFORCE_INSTALL_PREFIX=ON"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = gnome.updateScript {
       packageName = "evolution-ews";
       versionPolicy = "odd-unstable";

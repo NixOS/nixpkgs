@@ -5,7 +5,7 @@
 
 # To add a new version, run "prefetch.sh 'new-version'" to paste the generated file as follows.
 
-version : builtins.getAttr version {
+version: builtins.getAttr version {
   "0.11.1" = {
     x86_64-linux-37 = {
       name = "torchvision-0.11.1-cp37-cp37m-linux_x86_64.whl";

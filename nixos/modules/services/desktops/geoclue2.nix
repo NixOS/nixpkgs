@@ -35,7 +35,7 @@ let
 
       users = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of UIDs of all users for which this application is allowed location
           info access, Defaults to an empty string to allow it for all users.
@@ -159,7 +159,7 @@ in
 
       appConfig = mkOption {
         type = types.attrsOf appConfigModule;
-        default = {};
+        default = { };
         example = literalExpression ''
           "com.github.app" = {
             isAllowed = true;
@@ -196,7 +196,7 @@ in
         description = "Geoinformation service";
       };
 
-      groups.geoclue = {};
+      groups.geoclue = { };
     };
 
     systemd.services.geoclue = {
@@ -237,7 +237,7 @@ in
     };
 
     environment.etc."geoclue/geoclue.conf".text =
-      generators.toINI {} ({
+      generators.toINI { } ({
         agent = {
           whitelist = concatStringsSep ";"
             (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);

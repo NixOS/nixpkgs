@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, bison, flex}:
+{ lib, stdenv, fetchurl, autoreconfHook, bison, flex }:
 
 stdenv.mkDerivation rec {
   version = "2.4.2";

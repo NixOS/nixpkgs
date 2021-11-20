@@ -12,42 +12,44 @@ let
       overrideAttrs = f: mkTmuxPlugin (attrs // f attrs);
     };
 
-  mkTmuxPlugin = a@{
-    pluginName,
-    rtpFilePath ? (builtins.replaceStrings ["-"] ["_"] pluginName) + ".tmux",
-    namePrefix ? "tmuxplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? ":",
-    buildPhase ? ":",
-    addonInfo ? null,
-    preInstall ? "",
-    postInstall ? "",
-    path ? lib.getName pluginName,
-    ...
-  }:
+  mkTmuxPlugin =
+    a@{ pluginName
+    , rtpFilePath ? (builtins.replaceStrings [ "-" ] [ "_" ] pluginName) + ".tmux"
+    , namePrefix ? "tmuxplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , addonInfo ? null
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? lib.getName pluginName
+    , ...
+    }:
     if lib.hasAttr "dependencies" a then
       throw "dependencies attribute is obselete. see NixOS/nixpkgs#118034" # added 2021-04-01
-    else addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
-      pname = namePrefix + pluginName;
+    else
+      addRtp "${rtpPath}/${path}" rtpFilePath a (stdenv.mkDerivation (a // {
+        pname = namePrefix + pluginName;
 
-      inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+        inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
-        if [ -n "$addonInfo" ]; then
-          echo "$addonInfo" > $target/addon-info.json
-        fi
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
+          if [ -n "$addonInfo" ]; then
+            echo "$addonInfo" > $target/addon-info.json
+          fi
 
-        runHook postInstall
-      '';
-    }));
+          runHook postInstall
+        '';
+      }));
 
-in rec {
+in
+rec {
   inherit mkTmuxPlugin;
 
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
@@ -77,13 +79,13 @@ in rec {
       homepage = "https://github.com/NHDaly/tmux-better-mouse-mode";
       description = "better mouse support for tmux";
       longDescription =
-      ''
-        Features:
+        ''
+          Features:
 
-          * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
-          * Exit copy-mode and return to your prompt by scrolling back all the way down to the bottom.
-          * Adjust your scrolling speed.
-      '';
+            * Emulate mouse-support for full-screen programs like less that don't provide built in mouse support.
+            * Exit copy-mode and return to your prompt by scrolling back all the way down to the bottom.
+            * Adjust your scrolling speed.
+        '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ chrispickard ];
@@ -103,16 +105,16 @@ in rec {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
       description = "continous saving of tmux environment";
       longDescription =
-      ''
-        Features:
-        * continuous saving of tmux environment
-        * automatic tmux start when computer/server is turned on
-        * automatic restore when tmux is started
+        ''
+          Features:
+          * continuous saving of tmux environment
+          * automatic tmux start when computer/server is turned on
+          * automatic restore when tmux is started
 
-        Together, these features enable uninterrupted tmux usage. No matter the
-        computer or server restarts, if the machine is on, tmux will be there how
-        you left it off the last time it was used.
-      '';
+          Together, these features enable uninterrupted tmux usage. No matter the
+          computer or server restarts, if the machine is on, tmux will be there how
+          you left it off the last time it was used.
+        '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ronanmacf ];
@@ -181,12 +183,12 @@ in rec {
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
-    done
+      for f in extrakto.sh open.sh tmux-extrakto.sh; do
+        wrapProgram $target/scripts/$f \
+          --prefix PATH : ${with pkgs; lib.makeBinPath (
+          [ pkgs.fzf pkgs.python3 pkgs.xclip ]
+          )}
+      done
 
     '';
     meta = {
@@ -436,7 +438,7 @@ in rec {
           Optional:
           * restoring vim and neovim sessions
           * restoring pane contents
-      '';
+        '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ronanmacf ];
@@ -540,16 +542,16 @@ in rec {
       description = "Use fzf to manage your tmux work environment! ";
       longDescription =
         ''
-        Features:
-        * Manage sessions (attach, detach*, rename, kill*).
-        * Manage windows (switch, link, move, swap, rename, kill*).
-        * Manage panes (switch, break, join*, swap, layout, kill*, resize).
-        * Multiple selection (support for actions marked by *).
-        * Search commands and append to command prompt.
-        * Search key bindings and execute.
-        * User menu.
-        * Popup window support.
-      '';
+          Features:
+          * Manage sessions (attach, detach*, rename, kill*).
+          * Manage windows (switch, link, move, swap, rename, kill*).
+          * Manage panes (switch, break, join*, swap, layout, kill*, resize).
+          * Multiple selection (support for actions marked by *).
+          * Search commands and append to command prompt.
+          * Search key bindings and execute.
+          * User menu.
+          * Popup window support.
+        '';
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ kyleondy ];

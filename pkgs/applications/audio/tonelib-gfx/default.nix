@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
- '';
+  '';
 
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass.";

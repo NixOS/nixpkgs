@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg  = config.services.supybot;
+  cfg = config.services.supybot;
   isStateDirHome = hasPrefix "/home/" cfg.stateDir;
   isStateDirVar = cfg.stateDir == "/var/lib/supybot";
   pyEnv = pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
@@ -21,7 +21,8 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = if versionAtLeast config.system.stateVersion "20.09"
+        default =
+          if versionAtLeast config.system.stateVersion "20.09"
           then "/var/lib/supybot"
           else "/home/supybot";
         defaultText = literalExpression "/var/lib/supybot";
@@ -41,7 +42,7 @@ in
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = ''
           Attribute set of additional plugins that will be symlinked to the
           <filename>plugin</filename> subdirectory.
@@ -65,7 +66,7 @@ in
 
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = p: [];
+        default = p: [ ];
         defaultText = literalExpression "p: []";
         description = ''
           Extra Python packages available to supybot plugins. The
@@ -105,7 +106,7 @@ in
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
-      startLimitIntervalSec = 5 * 60;  # 5 min
+      startLimitIntervalSec = 5 * 60; # 5 min
       startLimitBurst = 1;
       serviceConfig = {
         ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";

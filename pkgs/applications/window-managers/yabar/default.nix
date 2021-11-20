@@ -1,4 +1,4 @@
-{ callPackage, attrs ? {}, fetchpatch }:
+{ callPackage, attrs ? { }, fetchpatch }:
 
 let
   overrides = rec {
@@ -15,4 +15,5 @@ let
     ];
 
   } // attrs;
-in callPackage ./build.nix overrides
+in
+callPackage ./build.nix overrides

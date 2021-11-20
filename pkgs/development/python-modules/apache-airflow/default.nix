@@ -209,15 +209,15 @@ buildPythonPackage rec {
   makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
 
   preCheck = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
 
-   airflow version
-   airflow db init
-   airflow db reset -y
+    airflow version
+    airflow db init
+    airflow db reset -y
   '';
 
   pytestFlagsArray = [
@@ -225,7 +225,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    "bash_operator_kill"  # psutil.AccessDenied
+    "bash_operator_kill" # psutil.AccessDenied
   ];
 
   postInstall = ''

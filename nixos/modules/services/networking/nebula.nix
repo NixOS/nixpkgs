@@ -7,7 +7,7 @@ let
   cfg = config.services.nebula;
   enabledNetworks = filterAttrs (n: v: v.enable) cfg.networks;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 
   nameToId = netName: "nebula-${netName}";
 in
@@ -18,7 +18,7 @@ in
     services.nebula = {
       networks = mkOption {
         description = "Nebula network definitions.";
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule {
           options = {
             enable = mkOption {
@@ -54,7 +54,7 @@ in
 
             staticHostMap = mkOption {
               type = types.attrsOf (types.listOf (types.str));
-              default = {};
+              default = { };
               description = ''
                 The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
                 A host can have multiple fixed IP addresses defined here, and nebula will try each when establishing a tunnel.
@@ -70,7 +70,7 @@ in
 
             lighthouses = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
                 nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
@@ -106,21 +106,21 @@ in
 
             firewall.outbound = mkOption {
               type = types.listOf types.attrs;
-              default = [];
+              default = [ ];
               description = "Firewall rules for outbound traffic.";
-              example = [ { port = "any"; proto = "any"; host = "any"; } ];
+              example = [{ port = "any"; proto = "any"; host = "any"; }];
             };
 
             firewall.inbound = mkOption {
               type = types.listOf types.attrs;
-              default = [];
+              default = [ ];
               description = "Firewall rules for inbound traffic.";
-              example = [ { port = "any"; proto = "any"; host = "any"; } ];
+              example = [{ port = "any"; proto = "any"; host = "any"; }];
             };
 
             settings = mkOption {
               type = format.type;
-              default = {};
+              default = { };
               description = ''
                 Nebula configuration. Refer to
                 <link xlink:href="https://github.com/slackhq/nebula/blob/master/examples/config.yml"/>
@@ -142,35 +142,38 @@ in
   };
 
   # Implementation
-  config = mkIf (enabledNetworks != {}) {
-    systemd.services = mkMerge (mapAttrsToList (netName: netCfg:
-      let
-        networkId = nameToId netName;
-        settings = recursiveUpdate {
-          pki = {
-            ca = netCfg.ca;
-            cert = netCfg.cert;
-            key = netCfg.key;
-          };
-          static_host_map = netCfg.staticHostMap;
-          lighthouse = {
-            am_lighthouse = netCfg.isLighthouse;
-            hosts = netCfg.lighthouses;
-          };
-          listen = {
-            host = netCfg.listen.host;
-            port = netCfg.listen.port;
-          };
-          tun = {
-            disabled = netCfg.tun.disable;
-            dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
-          };
-          firewall = {
-            inbound = netCfg.firewall.inbound;
-            outbound = netCfg.firewall.outbound;
-          };
-        } netCfg.settings;
-        configFile = format.generate "nebula-config-${netName}.yml" settings;
+  config = mkIf (enabledNetworks != { }) {
+    systemd.services = mkMerge (mapAttrsToList
+      (netName: netCfg:
+        let
+          networkId = nameToId netName;
+          settings = recursiveUpdate
+            {
+              pki = {
+                ca = netCfg.ca;
+                cert = netCfg.cert;
+                key = netCfg.key;
+              };
+              static_host_map = netCfg.staticHostMap;
+              lighthouse = {
+                am_lighthouse = netCfg.isLighthouse;
+                hosts = netCfg.lighthouses;
+              };
+              listen = {
+                host = netCfg.listen.host;
+                port = netCfg.listen.port;
+              };
+              tun = {
+                disabled = netCfg.tun.disable;
+                dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
+              };
+              firewall = {
+                inbound = netCfg.firewall.inbound;
+                outbound = netCfg.firewall.outbound;
+              };
+            }
+            netCfg.settings;
+          configFile = format.generate "nebula-config-${netName}.yml" settings;
         in
         {
           # Create systemd service for Nebula.
@@ -193,25 +196,30 @@ in
               })
             ];
           };
-        }) enabledNetworks);
+        })
+      enabledNetworks);
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
       unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
 
     # Create the service users and groups.
-    users.users = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
-        ${nameToId netName} = {
-          group = nameToId netName;
-          description = "Nebula service user for network ${netName}";
-          isSystemUser = true;
-        };
-      }) enabledNetworks);
+    users.users = mkMerge (mapAttrsToList
+      (netName: netCfg:
+        mkIf netCfg.tun.disable {
+          ${nameToId netName} = {
+            group = nameToId netName;
+            description = "Nebula service user for network ${netName}";
+            isSystemUser = true;
+          };
+        })
+      enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg:
-      mkIf netCfg.tun.disable {
-        ${nameToId netName} = {};
-      }) enabledNetworks);
+    users.groups = mkMerge (mapAttrsToList
+      (netName: netCfg:
+        mkIf netCfg.tun.disable {
+          ${nameToId netName} = { };
+        })
+      enabledNetworks);
   };
 }

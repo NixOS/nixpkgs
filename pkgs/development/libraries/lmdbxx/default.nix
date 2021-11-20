@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, lmdb }:
+, lmdb
+}:
 
 stdenv.mkDerivation rec {
   pname = "lmdbxx";

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, isPy27
 , git
 , importlib-metadata
 , intreehooks

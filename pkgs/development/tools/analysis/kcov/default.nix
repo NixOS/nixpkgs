@@ -35,7 +35,7 @@ let
       strictDeps = true;
 
       passthru.tests = {
-        works-on-c = runCommand "works-on-c" {} ''
+        works-on-c = runCommand "works-on-c" { } ''
           set -ex
           cat - > a.c <<EOF
           int main() {}
@@ -47,7 +47,7 @@ let
           set +x
         '';
 
-        works-on-rust = runCommand "works-on-rust" {} ''
+        works-on-rust = runCommand "works-on-rust" { } ''
           set -ex
           cat - > a.rs <<EOF
           fn main() {}

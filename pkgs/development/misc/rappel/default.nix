@@ -2,7 +2,8 @@
 , libedit
 , makeWrapper
 , nasm
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

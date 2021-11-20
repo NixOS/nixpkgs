@@ -23,23 +23,25 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] ({ }) rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] ({ }) rhs) pkgs;
     };
 
   configType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
     check = x:
-      let traceXIfNot = c:
-            if c x then true
-            else lib.traceSeqN 1 x false;
-      in traceXIfNot isConfig;
-    merge = args: foldr (def: mergeConfig def.value) {};
+      let
+        traceXIfNot = c:
+          if c x then true
+          else lib.traceSeqN 1 x false;
+      in
+      traceXIfNot isConfig;
+    merge = args: foldr (def: mergeConfig def.value) { };
   };
 
   overlayType = mkOptionType {
@@ -108,7 +110,7 @@ in
     };
 
     config = mkOption {
-      default = {};
+      default = { };
       example = literalExpression
         ''
           { allowBroken = true; allowUnfree = true; }
@@ -124,7 +126,7 @@ in
     };
 
     overlays = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression
         ''
           [
@@ -241,7 +243,8 @@ in
             then "nixpkgs.crossSystem"
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
-        in {
+        in
+        {
           assertion = nixosExpectedSystem == pkgsSystem;
           message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
         }

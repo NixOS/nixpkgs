@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook }:
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "brotli";

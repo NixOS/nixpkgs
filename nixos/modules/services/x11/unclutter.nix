@@ -41,14 +41,14 @@ in {
     excluded = mkOption {
       description = "Names of windows where unclutter should not apply";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "" ];
     };
 
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter command";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "noevent" "grab" ];
     };
   };
@@ -74,7 +74,7 @@ in {
 
   imports = [
     (mkRenamedOptionModule [ "services" "unclutter" "threeshold" ]
-                           [ "services"  "unclutter" "threshold" ])
+      [ "services" "unclutter" "threshold" ])
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

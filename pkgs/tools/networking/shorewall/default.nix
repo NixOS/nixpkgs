@@ -6,19 +6,21 @@
 , iptables
 , perl
 , perlPackages
-, lib, stdenv
+, lib
+, stdenv
 , tree
 , util-linux
 }:
 let
   PATH = lib.concatStringsSep ":"
-           [ "${coreutils}/bin"
-             "${iproute2}/bin"
-             "${iptables}/bin"
-             "${util-linux}/bin"
-             "${gnugrep}/bin"
-             "${gnused}/bin"
-           ];
+    [
+      "${coreutils}/bin"
+      "${iproute2}/bin"
+      "${iptables}/bin"
+      "${util-linux}/bin"
+      "${gnugrep}/bin"
+      "${gnused}/bin"
+    ];
 in
 stdenv.mkDerivation rec {
   pname = "shorewall";

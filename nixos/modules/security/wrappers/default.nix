@@ -16,32 +16,37 @@ let
       numeric = "[-+=]?[0-7]{0,4}";
       mode = "((${symbolic})(,${symbolic})*)|(${numeric})";
     in
-     lib.types.strMatching mode
-     // { description = "file mode string"; };
+    lib.types.strMatching mode
+    // { description = "file mode string"; };
 
   wrapperType = lib.types.submodule ({ name, config, ... }: {
     options.source = lib.mkOption
-      { type = lib.types.path;
+      {
+        type = lib.types.path;
         description = "The absolute path to the program to be wrapped.";
       };
     options.program = lib.mkOption
-      { type = with lib.types; nullOr str;
+      {
+        type = with lib.types; nullOr str;
         default = name;
         description = ''
           The name of the wrapper program. Defaults to the attribute name.
         '';
       };
     options.owner = lib.mkOption
-      { type = lib.types.str;
+      {
+        type = lib.types.str;
         description = "The owner of the wrapper program.";
       };
     options.group = lib.mkOption
-      { type = lib.types.str;
+      {
+        type = lib.types.str;
         description = "The group of the wrapper program.";
       };
     options.permissions = lib.mkOption
-      { type = fileModeType;
-        default  = "u+rx,g+x,o+x";
+      {
+        type = fileModeType;
+        default = "u+rx,g+x,o+x";
         example = "a+rx";
         description = ''
           The permissions of the wrapper program. The format is that of a
@@ -49,7 +54,8 @@ let
         '';
       };
     options.capabilities = lib.mkOption
-      { type = lib.types.commas;
+      {
+        type = lib.types.commas;
         default = "";
         description = ''
           A comma-separated list of capabilities to be given to the wrapper
@@ -71,12 +77,14 @@ let
         '';
       };
     options.setuid = lib.mkOption
-      { type = lib.types.bool;
+      {
+        type = lib.types.bool;
         default = false;
         description = "Whether to add the setuid bit the wrapper program.";
       };
     options.setgid = lib.mkOption
-      { type = lib.types.bool;
+      {
+        type = lib.types.bool;
         default = false;
         description = "Whether to add the setgid bit the wrapper program.";
       };
@@ -92,23 +100,23 @@ let
     , permissions
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
-    ''
-      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
-      echo -n "${source}" > "$wrapperDir/${program}.real"
+      assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
+      ''
+        cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+        echo -n "${source}" > "$wrapperDir/${program}.real"
 
-      # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+        # Prevent races
+        chmod 0000 "$wrapperDir/${program}"
+        chown ${owner}.${group} "$wrapperDir/${program}"
 
-      # Set desired capabilities on the file plus cap_setpcap so
-      # the wrapper program can elevate the capabilities set on
-      # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+        # Set desired capabilities on the file plus cap_setpcap so
+        # the wrapper program can elevate the capabilities set on
+        # its file into the Ambient set.
+        ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
 
-      # Set the executable bit
-      chmod ${permissions} "$wrapperDir/${program}"
-    '';
+        # Set the executable bit
+        chmod ${permissions} "$wrapperDir/${program}"
+      '';
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
@@ -138,7 +146,8 @@ let
         if opts.capabilities != ""
         then mkSetcapProgram opts
         else mkSetuidProgram opts
-      ) (lib.attrValues wrappers);
+      )
+      (lib.attrValues wrappers);
 in
 {
   imports = [
@@ -151,7 +160,7 @@ in
   options = {
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
-      default = {};
+      default = { };
       example = lib.literalExpression
         ''
           {
@@ -190,9 +199,9 @@ in
     };
 
     security.wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/run/wrappers/bin";
-      internal    = true;
+      type = lib.types.path;
+      default = "/run/wrappers/bin";
+      internal = true;
       description = ''
         This option defines the path to the wrapper programs. It
         should not be overriden.
@@ -205,27 +214,31 @@ in
 
     assertions = lib.mapAttrsToList
       (name: opts:
-        { assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+        {
+          assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
           message = ''
             The security.wrappers.${name} wrapper is not valid:
                 setuid/setgid and capabilities are mutually exclusive.
           '';
         }
-      ) wrappers;
+      )
+      wrappers;
 
     security.wrappers =
       let
         mkSetuidRoot = source:
-          { setuid = true;
+          {
+            setuid = true;
             owner = "root";
             group = "root";
             inherit source;
           };
       in
-      { # These are mount related wrappers that require the +s permission.
-        fusermount  = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
+      {
+        # These are mount related wrappers that require the +s permission.
+        fusermount = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
         fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
-        mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
+        mount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
 
@@ -279,7 +292,8 @@ in
 
     ###### wrappers consistency checks
     system.extraDependencies = lib.singleton (pkgs.runCommandLocal
-      "ensure-all-wrappers-paths-exist" { }
+      "ensure-all-wrappers-paths-exist"
+      { }
       ''
         # make sure we produce output
         mkdir -p $out

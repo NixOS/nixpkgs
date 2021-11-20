@@ -6,25 +6,25 @@
 }:
 ## User input
 { vscode ? vscodeDefault
-# extensions to be symlinked into the project's extensions folder
-, nixExtensions        ? []
-# extensions to be copied into the project's extensions folder
-, mutableExtensions    ? []
+  # extensions to be symlinked into the project's extensions folder
+, nixExtensions ? [ ]
+  # extensions to be copied into the project's extensions folder
+, mutableExtensions ? [ ]
 , vscodeExtsFolderName ? ".vscode-exts"
 , user-data-dir ? ''"''${TMP}vscodeWithConfiguration/vscode-data-dir"''
 }:
 let
   nixExtsDrvs = extensionsFromVscodeMarketplace nixExtensions;
   mutExtsDrvs = extensionsFromVscodeMarketplace mutableExtensions;
-  mutableExtsPaths = lib.forEach mutExtsDrvs ( e:
-  {
-    origin = "${e}/share/vscode/extensions/${e.vscodeExtUniqueId}";
-    target = ''${vscodeExtsFolderName}/${e.vscodeExtUniqueId}-${(lib.findSingle (ext: "${ext.publisher}.${ext.name}" == e.vscodeExtUniqueId) "" "m" mutableExtensions ).version}'';
-  }
+  mutableExtsPaths = lib.forEach mutExtsDrvs (e:
+    {
+      origin = "${e}/share/vscode/extensions/${e.vscodeExtUniqueId}";
+      target = ''${vscodeExtsFolderName}/${e.vscodeExtUniqueId}-${(lib.findSingle (ext: "${ext.publisher}.${ext.name}" == e.vscodeExtUniqueId) "" "m" mutableExtensions ).version}'';
+    }
   );
 
   #removed not defined extensions
-  rmExtensions =  lib.optionalString (nixExtensions++mutableExtensions != []) ''
+  rmExtensions = lib.optionalString (nixExtensions ++ mutableExtensions != [ ]) ''
     find ${vscodeExtsFolderName} -mindepth 1 -maxdepth 1 ${
         lib.concatMapStringsSep " " (e : "! -iname ${e.publisher}.${e.name} ") nixExtensions
         +
@@ -42,13 +42,13 @@ let
       '') mutableExtsPaths}
   '';
 in
-  writeShellScriptBin "code" ''
-    if ! [[ "$@" =~ "--list-extension" ]]; then
-      mkdir -p "${vscodeExtsFolderName}"
-      ${rmExtensions}
-      ${cpExtensions}
-    fi
-    ${vscode}/bin/code --extensions-dir "${vscodeExtsFolderName}" ${
-      lib.optionalString (user-data-dir != "") "--user-data-dir ${user-data-dir}"
-      } "$@"
-  ''
+writeShellScriptBin "code" ''
+  if ! [[ "$@" =~ "--list-extension" ]]; then
+    mkdir -p "${vscodeExtsFolderName}"
+    ${rmExtensions}
+    ${cpExtensions}
+  fi
+  ${vscode}/bin/code --extensions-dir "${vscodeExtsFolderName}" ${
+    lib.optionalString (user-data-dir != "") "--user-data-dir ${user-data-dir}"
+    } "$@"
+''

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, libpsm2
-, enablePsm2 ? (stdenv.isx86_64 && stdenv.isLinux) }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, libpsm2
+, enablePsm2 ? (stdenv.isx86_64 && stdenv.isLinux)
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfabric";

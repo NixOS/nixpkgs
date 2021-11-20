@@ -1,10 +1,10 @@
-{ lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  libspatialindex,
-  numpy,
-  pytestCheckHook
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, libspatialindex
+, numpy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtraceevent ];
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "doc"                       # build docs
+    "doc" # build docs
   ];
   installFlags = [
     "pkgconfig_dir=${placeholder "out"}/lib/pkgconfig"
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux kernel trace file system library";
-    homepage    = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/";
-    license     = licenses.lgpl21Only;
-    platforms   = platforms.linux;
+    homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wentasah ];
   };
 }

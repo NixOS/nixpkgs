@@ -16,25 +16,26 @@
 # See the NixOS manual for how to run this test:
 # https://nixos.org/nixos/manual/index.html#sec-running-nixos-tests-interactively
 
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   allowESP = "iptables --insert INPUT --protocol ESP --jump ACCEPT";
 
   # Shared VPN settings:
-  vlan0         = "192.168.0.0/24";
-  carolIp       = "192.168.1.2";
-  moonIp        = "192.168.1.3";
-  version       = 2;
-  secret        = "0sFpZAZqEN6Ti9sqt4ZP5EWcqx";
+  vlan0 = "192.168.0.0/24";
+  carolIp = "192.168.1.2";
+  moonIp = "192.168.1.3";
+  version = 2;
+  secret = "0sFpZAZqEN6Ti9sqt4ZP5EWcqx";
   esp_proposals = [ "aes128gcm128-x25519" ];
-  proposals     = [ "aes128-sha256-x25519" ];
-in {
+  proposals = [ "aes128-sha256-x25519" ];
+in
+{
   name = "strongswan-swanctl";
   meta.maintainers = with pkgs.lib.maintainers; [ basvandijk ];
   nodes = {
 
-    alice = { ... } : {
+    alice = { ... }: {
       virtualisation.vlans = [ 0 ];
       networking = {
         dhcpcd.enable = false;
@@ -42,7 +43,7 @@ in {
       };
     };
 
-    moon = { config, ...} :
+    moon = { config, ... }:
       let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 0 1 ];
@@ -53,11 +54,11 @@ in {
             extraCommands = allowESP;
           };
           nat = {
-            enable             = true;
-            internalIPs        = [ vlan0 ];
+            enable = true;
+            internalIPs = [ vlan0 ];
             internalInterfaces = [ "eth1" ];
-            externalIP         = moonIp;
-            externalInterface  = "eth2";
+            externalIP = moonIp;
+            externalInterface = "eth2";
           };
         };
         environment.systemPackages = [ strongswan ];
@@ -94,7 +95,7 @@ in {
         };
       };
 
-    carol = { config, ...} :
+    carol = { config, ... }:
       let strongswan = config.services.strongswan-swanctl.package;
       in {
         virtualisation.vlans = [ 1 ];

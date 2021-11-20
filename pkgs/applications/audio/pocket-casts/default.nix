@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, electron
+, alsa-lib
+, gtk3
+, libXScrnSaver
+, libXtst
+, mesa
+, nss
+}:
 
 stdenv.mkDerivation rec {
   pname = "pocket-casts";

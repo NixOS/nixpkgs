@@ -1,23 +1,36 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, gawk, gnused, gnugrep, coreutils, which
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, gawk
+, gnused
+, gnugrep
+, coreutils
+, which
 , perlPackages
-, withMySQL ? false, zlib, mysql57
-, withPgSQL ? false, postgresql
-, withSQLite ? false, sqlite
-, withDB ? false, db
+, withMySQL ? false
+, zlib
+, mysql57
+, withPgSQL ? false
+, postgresql
+, withSQLite ? false
+, sqlite
+, withDB ? false
+, db
 }:
 
 let
   drivers = lib.concatStringsSep ","
-            ([ "hash_drv" ]
-             ++ lib.optional withMySQL "mysql_drv"
-             ++ lib.optional withPgSQL "pgsql_drv"
-             ++ lib.optional withSQLite "sqlite3_drv"
-             ++ lib.optional withDB "libdb4_drv"
-            );
+    ([ "hash_drv" ]
+      ++ lib.optional withMySQL "mysql_drv"
+      ++ lib.optional withPgSQL "pgsql_drv"
+      ++ lib.optional withSQLite "sqlite3_drv"
+      ++ lib.optional withDB "libdb4_drv"
+    );
   maintenancePath = lib.makeBinPath [ gawk gnused gnugrep coreutils which ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dspam";
   version = "3.10.2";
 
@@ -27,10 +40,10 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perlPackages.perl ]
-                ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
-                ++ lib.optional withPgSQL postgresql
-                ++ lib.optional withSQLite sqlite
-                ++ lib.optional withDB db;
+    ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
+    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withDB db;
   nativeBuildInputs = [ makeWrapper ];
 
   configureFlags = [
@@ -51,7 +64,7 @@ in stdenv.mkDerivation rec {
     "--enable-long-usernames"
     "--enable-external-lookup"
   ] ++ lib.optional withMySQL "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
-    ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
+  ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
   # and fix directory structure manually after that.

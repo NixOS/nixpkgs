@@ -20,8 +20,8 @@ buildPythonApplication rec {
     # MIT + license headers in some files
     license = with licenses; [
       mit
-      zlib         # uefi_firmware/me.py
-      bsd2         # uefi_firmware/compression/Tiano/**/*
+      zlib # uefi_firmware/me.py
+      bsd2 # uefi_firmware/compression/Tiano/**/*
       publicDomain # uefi_firmware/compression/LZMA/SDK/C/*
     ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

@@ -1,4 +1,5 @@
-{ lib, buildDunePackage
+{ lib
+, buildDunePackage
 , fetchFromGitHub
 , ppx_assert
 , ppx_bench

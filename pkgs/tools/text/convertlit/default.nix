@@ -1,4 +1,4 @@
-{lib, stdenv, fetchzip, libtommath}:
+{ lib, stdenv, fetchzip, libtommath }:
 
 stdenv.mkDerivation rec {
   pname = "convertlit";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [libtommath];
+  buildInputs = [ libtommath ];
 
   hardeningDisable = [ "format" ];
 

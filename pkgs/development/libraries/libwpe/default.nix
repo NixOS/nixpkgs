@@ -6,7 +6,8 @@
 , libxkbcommon
 , libGL
 , ninja
-, libX11 }:
+, libX11
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwpe";

@@ -1,13 +1,35 @@
-{ stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+{ stdenv
+, lib
+, pkgs
+, fetchurl
+, buildEnv
+, coreutils
+, findutils
+, gnugrep
+, gnused
+, getopt
+, git
+, tree
+, gnupg
+, openssl
+, which
+, procps
+, qrencode
+, makeWrapper
+, pass
+, symlinkJoin
 
-, xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
-, waylandSupport ? false, wl-clipboard ? null
-, ydotool ? null, dmenu-wayland ? null
+, xclip ? null
+, xdotool ? null
+, dmenu ? null
+, x11Support ? !stdenv.isDarwin
+, dmenuSupport ? (x11Support || waylandSupport)
+, waylandSupport ? false
+, wl-clipboard ? null
+, ydotool ? null
+, dmenu-wayland ? null
 
-# For backwards-compatibility
+  # For backwards-compatibility
 , tombPluginSupport ? false
 }:
 
@@ -30,7 +52,8 @@ let
     let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
-    in buildEnv {
+    in
+    buildEnv {
       name = "pass-extensions-env";
       paths = selected;
       buildInputs = [ makeWrapper ] ++ concatMap (x: x.buildInputs) selected;
@@ -59,7 +82,7 @@ stdenv.mkDerivation rec {
   pname = "password-store";
 
   src = fetchurl {
-    url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
+    url = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
     sha256 = "1h4k6w7g8pr169p5w9n6mkdhxl3pw51zphx7www6pvgjb7vgmafg";
   };
 
@@ -94,10 +117,10 @@ stdenv.mkDerivation rec {
     qrencode
     procps
   ] ++ optional stdenv.isDarwin openssl
-    ++ optional x11Support xclip
-    ++ optional waylandSupport wl-clipboard
-    ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
-    ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
+  ++ optional x11Support xclip
+  ++ optional waylandSupport wl-clipboard
+  ++ optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
+  ++ optionals (x11Support && dmenuSupport) [ xdotool dmenu ]
   );
 
   postFixup = ''
@@ -152,10 +175,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = "https://www.passwordstore.org/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://www.passwordstore.org/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       pass is a very simple password store that keeps passwords inside gpg2

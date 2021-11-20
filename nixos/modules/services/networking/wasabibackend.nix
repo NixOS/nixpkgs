@@ -6,24 +6,25 @@ let
   inherit (lib) mkEnableOption mkIf mkOption optionalAttrs optionalString types;
 
   confOptions = {
-      BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
+    BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
   } // optionalAttrs (cfg.network == "mainnet") {
-      Network = "Main";
-      MainNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      MainNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "Main";
+    MainNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    MainNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   } // optionalAttrs (cfg.network == "testnet") {
-      Network = "TestNet";
-      TestNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      TestNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "TestNet";
+    TestNetBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    TestNetBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   } // optionalAttrs (cfg.network == "regtest") {
-      Network = "RegTest";
-      RegTestBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
-      RegTestBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
+    Network = "RegTest";
+    RegTestBitcoinP2pEndPoint = "${cfg.endpoint.ip}:${toString cfg.endpoint.port}";
+    RegTestBitcoinCoreRpcEndPoint = "${cfg.rpc.ip}:${toString cfg.rpc.port}";
   };
 
   configFile = pkgs.writeText "wasabibackend.conf" (builtins.toJSON confOptions);
 
-in {
+in
+{
 
   options = {
 
@@ -152,7 +153,7 @@ in {
       isSystemUser = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
   };
 }

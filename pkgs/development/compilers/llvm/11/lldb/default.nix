@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , fetch
 , cmake
 , zlib
@@ -31,13 +33,23 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake
+    python3
+    which
+    swig
+    lit
+    makeWrapper
   ] ++ lib.optionals enableManpages [
-    python3.pkgs.sphinx python3.pkgs.recommonmark
+    python3.pkgs.sphinx
+    python3.pkgs.recommonmark
   ];
 
   buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
+    ncurses
+    zlib
+    libedit
+    libxml2
+    libllvm
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
@@ -102,7 +114,7 @@ stdenv.mkDerivation (rec {
     make docs-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   # manually install lldb man page
   installPhase = ''

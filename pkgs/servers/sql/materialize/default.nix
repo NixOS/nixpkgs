@@ -10,28 +10,29 @@
 , libiconv
 , openssl
 , perl
-, pkg-config}:
+, pkg-config
+}:
 
 let
-  fetchNpmPackage = {name, version, hash, js_prod_file, js_dev_file, ...} @ args:
-  let
-    package = fetchzip {
-      url = "https://registry.npmjs.org/${name}/-/${baseNameOf name}-${version}.tgz";
-      inherit hash;
-    };
+  fetchNpmPackage = { name, version, hash, js_prod_file, js_dev_file, ... } @ args:
+    let
+      package = fetchzip {
+        url = "https://registry.npmjs.org/${name}/-/${baseNameOf name}-${version}.tgz";
+        inherit hash;
+      };
 
-    static = "./src/materialized/src/http/static";
-    cssVendor = "./src/materialized/src/http/static/css/vendor";
-    jsProdVendor = "./src/materialized/src/http/static/js/vendor";
-    jsDevVendor = "./src/materialized/src/http/static-dev/js/vendor";
+      static = "./src/materialized/src/http/static";
+      cssVendor = "./src/materialized/src/http/static/css/vendor";
+      jsProdVendor = "./src/materialized/src/http/static/js/vendor";
+      jsDevVendor = "./src/materialized/src/http/static-dev/js/vendor";
 
-    files = with args; [
-      { src = js_prod_file; dst = "${jsProdVendor}/${name}.js"; }
-      { src = js_dev_file;  dst = "${jsDevVendor}/${name}.js"; }
-    ] ++ lib.optional (args ? css_file) { src = css_file; dst = "${cssVendor}/${name}.css"; }
+      files = with args; [
+        { src = js_prod_file; dst = "${jsProdVendor}/${name}.js"; }
+        { src = js_dev_file; dst = "${jsDevVendor}/${name}.js"; }
+      ] ++ lib.optional (args ? css_file) { src = css_file; dst = "${cssVendor}/${name}.css"; }
       ++ lib.optional (args ? extra_file) { src = extra_file.src; dst = "${static}/${extra_file.dst}"; };
-  in
-    lib.concatStringsSep "\n" (lib.forEach files ({src, dst}: ''
+    in
+    lib.concatStringsSep "\n" (lib.forEach files ({ src, dst }: ''
       mkdir -p "${dirOf dst}"
       cp "${package}/${src}" "${dst}"
     ''));
@@ -86,10 +87,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://materialize.com";
+    homepage = "https://materialize.com";
     description = "A streaming SQL materialized view engine for real-time applications";
-    license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    license = licenses.bsl11;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = [ maintainers.petrosagg ];
   };
 }

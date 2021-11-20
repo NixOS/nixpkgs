@@ -5,7 +5,8 @@
 , hash
 , minimumOCamlVersion ? "4.08"
 , doCheck ? true
-, ...}@args:
+, ...
+}@args:
 
 buildDunePackage (args // {
   useDune2 = true;

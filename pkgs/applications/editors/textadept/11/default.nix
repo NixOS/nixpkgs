@@ -6,7 +6,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config unzip zip ];
   buildInputs = [
-    gtk2 ncurses glib
+    gtk2
+    ncurses
+    glib
   ];
 
   src = fetchFromGitHub {
@@ -18,9 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
-      "ln -s ${fetchurl params} $PWD/src/${name}"
-    ) (import ./deps.nix)) + ''
+    lib.concatStringsSep "\n"
+      (lib.mapAttrsToList
+        (name: params:
+          "ln -s ${fetchurl params} $PWD/src/${name}"
+        )
+        (import ./deps.nix)) + ''
 
     cd src
     make deps

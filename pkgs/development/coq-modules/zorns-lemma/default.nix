@@ -23,7 +23,8 @@ with lib;
     { case = "8.7"; out = "8.7.0"; }
     { case = "8.6"; out = "8.6.0"; }
     { case = "8.5"; out = "8.5.0"; }
-  ] null;
+  ]
+    null;
 
   useDune2ifVersion = versions.isGe "9.0";
 
@@ -37,4 +38,4 @@ with lib;
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl21Plus;
   };
-}).overrideAttrs({version, ...}: if versions.isGe "9.0" version then { repo =  "topology"; } else {})
+}).overrideAttrs ({ version, ... }: if versions.isGe "9.0" version then { repo = "topology"; } else { })

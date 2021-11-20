@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "pgpartman";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
+    owner = "pgpartman";
+    repo = pname;
+    rev = "refs/tags/v${version}";
     sha256 = "182yqvgcpgw99swn7w516f6d1bid2gnmf6dfsgmldx5viz0d6vi0";
   };
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Partition management extension for PostgreSQL";
-    homepage    = "https://github.com/pgpartman/pg_partman";
+    homepage = "https://github.com/pgpartman/pg_partman";
     maintainers = with maintainers; [ ggpeti ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
+    license = licenses.postgresql;
   };
 }

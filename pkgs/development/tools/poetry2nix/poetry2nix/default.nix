@@ -369,7 +369,7 @@ lib.makeScope pkgs.newScope (self: {
 
 
   /*
-  Create a new default set of overrides with the same structure as the built-in ones
+    Create a new default set of overrides with the same structure as the built-in ones
   */
   mkDefaultPoetryOverrides = defaults: {
     __functor = defaults;
@@ -393,26 +393,26 @@ lib.makeScope pkgs.newScope (self: {
   };
 
   /*
-  The default list of poetry2nix override overlays
+    The default list of poetry2nix override overlays
 
-  Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
+    Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
   defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides.nix { inherit pkgs lib; });
 
   /*
-  Convenience functions for specifying overlays with or without the poerty2nix default overrides
+    Convenience functions for specifying overlays with or without the poerty2nix default overrides
   */
   overrides = {
     /*
-    Returns the specified overlay in a list
+      Returns the specified overlay in a list
     */
     withoutDefaults = overlay: [
       overlay
     ];
 
     /*
-    Returns the specified overlay and returns a list
-    combining it with poetry2nix default overrides
+      Returns the specified overlay and returns a list
+      combining it with poetry2nix default overrides
     */
     withDefaults = overlay: [
       self.defaultPoetryOverrides

@@ -1,6 +1,6 @@
 { obs-studio, symlinkJoin, makeWrapper }:
 
-{ plugins ? [] }:
+{ plugins ? [ ] }:
 
 symlinkJoin {
   name = "wrapped-${obs-studio.name}";

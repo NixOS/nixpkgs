@@ -20,7 +20,8 @@ let
     gpg --batch --generate-key foo
     rm $out/S.gpg-agent $out/S.gpg-agent.*
   '');
-in {
+in
+{
   name = "hockeypuck";
   meta.maintainers = with lib.maintainers; [ etu ];
 

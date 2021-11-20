@@ -1,10 +1,50 @@
-{ autoPatchelfHook, makeDesktopItem, lib, stdenv, wrapGAppsHook
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
-, freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
-, fetchurl, fetchFromGitHub, imagemagick, copyDesktopItems
+{ autoPatchelfHook
+, makeDesktopItem
+, lib
+, stdenv
+, wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libcxx
+, libdrm
+, libnotify
+, libpulseaudio
+, libuuid
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libxcb
+, libxshmfence
+, mesa
+, nspr
+, nss
+, pango
+, systemd
+, libappindicator-gtk3
+, libdbusmenu
+, fetchurl
+, fetchFromGitHub
+, imagemagick
+, copyDesktopItems
 }:
 
 let
@@ -73,35 +113,68 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase =
-  let
-    libPath = lib.makeLibraryPath [
-      libcxx systemd libpulseaudio libdrm mesa
-      stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-      gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-      libXtst nspr nss libxcb pango systemd libXScrnSaver
-      libappindicator-gtk3 libdbusmenu
-    ];
-  in
-  ''
-    mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/512x512/apps}
-    mv * $out/opt/${binaryName}
+    let
+      libPath = lib.makeLibraryPath [
+        libcxx
+        systemd
+        libpulseaudio
+        libdrm
+        mesa
+        stdenv.cc.cc
+        alsa-lib
+        atk
+        at-spi2-atk
+        at-spi2-core
+        cairo
+        cups
+        dbus
+        expat
+        fontconfig
+        freetype
+        gdk-pixbuf
+        glib
+        gtk3
+        libnotify
+        libX11
+        libXcomposite
+        libuuid
+        libXcursor
+        libXdamage
+        libXext
+        libXfixes
+        libXi
+        libXrandr
+        libXrender
+        libXtst
+        nspr
+        nss
+        libxcb
+        pango
+        systemd
+        libXScrnSaver
+        libappindicator-gtk3
+        libdbusmenu
+      ];
+    in
+    ''
+      mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/512x512/apps}
+      mv * $out/opt/${binaryName}
 
-    chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
+      chmod +x $out/opt/${binaryName}/${binaryName}
+      patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+          $out/opt/${binaryName}/${binaryName}
 
-    wrapProgram $out/opt/${binaryName}/${binaryName} \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
-        --prefix LD_LIBRARY_PATH : ${libPath}
+      wrapProgram $out/opt/${binaryName}/${binaryName} \
+          "''${gappsWrapperArgs[@]}" \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+          --prefix LD_LIBRARY_PATH : ${libPath}
 
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
+      ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
 
-    ln -s $out/opt/${binaryName}/aether.png $out/share/icons/hicolor/512x512/apps/
+      ln -s $out/opt/${binaryName}/aether.png $out/share/icons/hicolor/512x512/apps/
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Peer-to-peer ephemeral public communities";

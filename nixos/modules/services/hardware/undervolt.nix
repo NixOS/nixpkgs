@@ -7,8 +7,8 @@ let
   mkPLimit = limit: window:
     if (isNull limit && isNull window) then null
     else assert asserts.assertMsg (!isNull limit && !isNull window) "Both power limit and window must be set";
-      "${toString limit} ${toString window}";
-  cliArgs = lib.cli.toGNUCommandLine {} {
+    "${toString limit} ${toString window}";
+  cliArgs = lib.cli.toGNUCommandLine { } {
     inherit (cfg)
       verbose
       temp
@@ -34,9 +34,9 @@ in
 {
   options.services.undervolt = {
     enable = mkEnableOption ''
-       Undervolting service for Intel CPUs.
+      Undervolting service for Intel CPUs.
 
-       Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
+      Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk!
     '';
 
     verbose = mkOption {

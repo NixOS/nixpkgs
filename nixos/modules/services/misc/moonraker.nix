@@ -6,11 +6,12 @@ let
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      if builtins.length l == 1 then generators.mkValueStringDefault { } (head l)
       else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
-    mkKeyValue = generators.mkKeyValueDefault {} ":";
+    mkKeyValue = generators.mkKeyValueDefault { } ":";
   };
-in {
+in
+{
   options = {
     services.moonraker = {
       enable = mkEnableOption "Moonraker, an API web server for Klipper";
@@ -94,18 +95,20 @@ in {
       moonraker.gid = config.ids.gids.moonraker;
     };
 
-    environment.etc."moonraker.cfg".source = let
-      forcedConfig = {
-        server = {
-          host = cfg.address;
-          port = cfg.port;
-          klippy_uds_address = cfg.klipperSocket;
-          config_path = cfg.configDir;
-          database_path = "${cfg.stateDir}/database";
+    environment.etc."moonraker.cfg".source =
+      let
+        forcedConfig = {
+          server = {
+            host = cfg.address;
+            port = cfg.port;
+            klippy_uds_address = cfg.klipperSocket;
+            config_path = cfg.configDir;
+            database_path = "${cfg.stateDir}/database";
+          };
         };
-      };
-      fullConfig = recursiveUpdate cfg.settings forcedConfig;
-    in format.generate "moonraker.cfg" fullConfig;
+        fullConfig = recursiveUpdate cfg.settings forcedConfig;
+      in
+      format.generate "moonraker.cfg" fullConfig;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"

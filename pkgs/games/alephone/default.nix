@@ -1,7 +1,31 @@
-{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
-, libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
-, SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
-, alephone }:
+{ lib
+, stdenv
+, fetchurl
+, boost
+, curl
+, ffmpeg
+, icoutils
+, libGLU
+, libmad
+, libogg
+, libpng
+, libsndfile
+, libvorbis
+, lua
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_net
+, SDL2_ttf
+, smpeg
+, speex
+, zziplib
+, zlib
+, makeWrapper
+, makeDesktopItem
+, unzip
+, alephone
+}:
 
 let
   self = stdenv.mkDerivation rec {
@@ -10,8 +34,9 @@ let
     version = "1.4";
 
     src = fetchurl {
-      url = let date = "20210408";
-      in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
+      url =
+        let date = "20210408";
+        in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
       sha256 = "sha256-tMwATUhUpo8W2oSWxGSZcAHVkj1PWEvUR/rpMZwWCWA=";
     };
 
@@ -62,9 +87,17 @@ let
     };
   };
 
-in self // {
-  makeWrapper = { pname, desktopName, version, zip, meta
-    , icon ? alephone.icons + "/alephone.png", ... }@extraArgs:
+in
+self // {
+  makeWrapper =
+    { pname
+    , desktopName
+    , version
+    , zip
+    , meta
+    , icon ? alephone.icons + "/alephone.png"
+    , ...
+    }@extraArgs:
     stdenv.mkDerivation ({
       inherit pname version;
 

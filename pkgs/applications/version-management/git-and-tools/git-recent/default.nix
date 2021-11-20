@@ -1,5 +1,10 @@
-{lib, stdenv, git, less, fetchFromGitHub, makeWrapper
-# util-linuxMinimal is included because we need the column command
+{ lib
+, stdenv
+, git
+, less
+, fetchFromGitHub
+, makeWrapper
+  # util-linuxMinimal is included because we need the column command
 , util-linux
 }:
 

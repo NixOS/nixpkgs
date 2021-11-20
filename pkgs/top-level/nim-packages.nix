@@ -1,94 +1,94 @@
 { lib, pkgs, stdenv, newScope, nim, fetchFromGitHub }:
 
 lib.makeScope newScope (self:
-  let callPackage = self.callPackage;
-  in {
-    inherit nim;
-    nim_builder = callPackage ../development/nim-packages/nim_builder { };
-    buildNimPackage =
-      callPackage ../development/nim-packages/build-nim-package { };
-    fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
+let callPackage = self.callPackage;
+in {
+  inherit nim;
+  nim_builder = callPackage ../development/nim-packages/nim_builder { };
+  buildNimPackage =
+    callPackage ../development/nim-packages/build-nim-package { };
+  fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
-    astpatternmatching =
-      callPackage ../development/nim-packages/astpatternmatching { };
+  astpatternmatching =
+    callPackage ../development/nim-packages/astpatternmatching { };
 
-    bumpy = callPackage ../development/nim-packages/bumpy { };
+  bumpy = callPackage ../development/nim-packages/bumpy { };
 
-    chroma = callPackage ../development/nim-packages/chroma { };
+  chroma = callPackage ../development/nim-packages/chroma { };
 
-    c2nim = callPackage ../development/nim-packages/c2nim { };
+  c2nim = callPackage ../development/nim-packages/c2nim { };
 
-    docopt = callPackage ../development/nim-packages/docopt { };
+  docopt = callPackage ../development/nim-packages/docopt { };
 
-    flatty = callPackage ../development/nim-packages/flatty { };
+  flatty = callPackage ../development/nim-packages/flatty { };
 
-    frosty = callPackage ../development/nim-packages/frosty { };
+  frosty = callPackage ../development/nim-packages/frosty { };
 
-    hts-nim = callPackage ../development/nim-packages/hts-nim { };
+  hts-nim = callPackage ../development/nim-packages/hts-nim { };
 
-    jester = callPackage ../development/nim-packages/jester { };
+  jester = callPackage ../development/nim-packages/jester { };
 
-    jsonschema = callPackage ../development/nim-packages/jsonschema { };
+  jsonschema = callPackage ../development/nim-packages/jsonschema { };
 
-    karax = callPackage ../development/nim-packages/karax { };
+  karax = callPackage ../development/nim-packages/karax { };
 
-    lscolors = callPackage ../development/nim-packages/lscolors { };
+  lscolors = callPackage ../development/nim-packages/lscolors { };
 
-    markdown = callPackage ../development/nim-packages/markdown { };
+  markdown = callPackage ../development/nim-packages/markdown { };
 
-    nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
+  nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
 
-    nimbox = callPackage ../development/nim-packages/nimbox { };
+  nimbox = callPackage ../development/nim-packages/nimbox { };
 
-    nimsimd = callPackage ../development/nim-packages/nimsimd { };
+  nimsimd = callPackage ../development/nim-packages/nimsimd { };
 
-    noise = callPackage ../development/nim-packages/noise { };
+  noise = callPackage ../development/nim-packages/noise { };
 
-    packedjson = callPackage ../development/nim-packages/packedjson { };
+  packedjson = callPackage ../development/nim-packages/packedjson { };
 
-    pixie = callPackage ../development/nim-packages/pixie { };
+  pixie = callPackage ../development/nim-packages/pixie { };
 
-    python = callPackage ../development/nim-packages/python { };
+  python = callPackage ../development/nim-packages/python { };
 
-    redis = callPackage ../development/nim-packages/redis { };
+  redis = callPackage ../development/nim-packages/redis { };
 
-    redpool = callPackage ../development/nim-packages/redpool { };
+  redpool = callPackage ../development/nim-packages/redpool { };
 
-    regex = callPackage ../development/nim-packages/regex { };
+  regex = callPackage ../development/nim-packages/regex { };
 
-    rocksdb = callPackage ../development/nim-packages/rocksdb {
-      inherit (pkgs) rocksdb;
-    };
+  rocksdb = callPackage ../development/nim-packages/rocksdb {
+    inherit (pkgs) rocksdb;
+  };
 
-    sass = callPackage ../development/nim-packages/sass { };
+  sass = callPackage ../development/nim-packages/sass { };
 
-    sdl2 = callPackage ../development/nim-packages/sdl2 { };
+  sdl2 = callPackage ../development/nim-packages/sdl2 { };
 
-    segmentation = callPackage ../development/nim-packages/segmentation { };
+  segmentation = callPackage ../development/nim-packages/segmentation { };
 
-    snappy =
-      callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
+  snappy =
+    callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
-    spry = callPackage ../development/nim-packages/spry { };
+  spry = callPackage ../development/nim-packages/spry { };
 
-    spryvm = callPackage ../development/nim-packages/spryvm { };
+  spryvm = callPackage ../development/nim-packages/spryvm { };
 
-    stew = callPackage ../development/nim-packages/stew { };
+  stew = callPackage ../development/nim-packages/stew { };
 
-    supersnappy = callPackage ../development/nim-packages/supersnappy { };
+  supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
-    tempfile = callPackage ../development/nim-packages/tempfile { };
+  tempfile = callPackage ../development/nim-packages/tempfile { };
 
-    typography = callPackage ../development/nim-packages/typography { };
+  typography = callPackage ../development/nim-packages/typography { };
 
-    ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
+  ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 
-    unicodedb = callPackage ../development/nim-packages/unicodedb { };
+  unicodedb = callPackage ../development/nim-packages/unicodedb { };
 
-    unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
+  unicodeplus = callPackage ../development/nim-packages/unicodeplus { };
 
-    vmath = callPackage ../development/nim-packages/vmath { };
+  vmath = callPackage ../development/nim-packages/vmath { };
 
-    zippy = callPackage ../development/nim-packages/zippy { };
+  zippy = callPackage ../development/nim-packages/zippy { };
 
-  })
+})

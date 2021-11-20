@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Near Field Communication manager";
-    homepage    = "https://01.org/linux-nfc";
-    license     = licenses.gpl2;
+    homepage = "https://01.org/linux-nfc";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ tstrobel ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

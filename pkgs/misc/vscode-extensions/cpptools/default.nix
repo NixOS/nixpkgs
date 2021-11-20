@@ -1,7 +1,13 @@
-{ lib, vscode-utils
-, fetchurl, mono, writeScript, runtimeShell
-, jq, clang-tools
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+{ lib
+, vscode-utils
+, fetchurl
+, mono
+, writeScript
+, runtimeShell
+, jq
+, clang-tools
+, gdbUseFixed ? true
+, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
 /*
@@ -89,11 +95,11 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     chmod a+x ./bin/cpptools{-srv,}
   '';
 
-    meta = with lib; {
-      license = licenses.unfree;
-      maintainers = [ maintainers.jraygauthier ];
-      # A 32 bit linux would also be possible with some effort (specific download of binaries +
-      # patching of the elf files with 32 bit interpreter).
-      platforms = [ "x86_64-linux" ];
-    };
+  meta = with lib; {
+    license = licenses.unfree;
+    maintainers = [ maintainers.jraygauthier ];
+    # A 32 bit linux would also be possible with some effort (specific download of binaries +
+    # patching of the elf files with 32 bit interpreter).
+    platforms = [ "x86_64-linux" ];
+  };
 }

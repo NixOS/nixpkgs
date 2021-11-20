@@ -1,10 +1,27 @@
-{ lib, fetchurl, python3Packages, intltool, file
-, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, libosinfo, gnome
-, gtksourceview4, docutils
-, spiceSupport ? true, spice-gtk ? null
-, cpio, e2fsprogs, findutils, gzip
+{ lib
+, fetchurl
+, python3Packages
+, intltool
+, file
+, wrapGAppsHook
+, gtk-vnc
+, vte
+, avahi
+, dconf
+, gobject-introspection
+, libvirt-glib
+, system-libvirt
+, gsettings-desktop-schemas
+, libosinfo
+, gnome
+, gtksourceview4
+, docutils
+, spiceSupport ? true
+, spice-gtk ? null
+, cpio
+, e2fsprogs
+, findutils
+, gzip
 , cdrtools
 }:
 
@@ -20,20 +37,33 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    intltool file
+    intltool
+    file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
   ];
 
   buildInputs = [
     wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
-    gsettings-desktop-schemas libosinfo gtksourceview4
+    libvirt-glib
+    vte
+    dconf
+    gtk-vnc
+    gnome.adwaita-icon-theme
+    avahi
+    gsettings-desktop-schemas
+    libosinfo
+    gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3Packages; [
-    pygobject3 ipaddress libvirt libxml2 requests cdrtools
+    pygobject3
+    ipaddress
+    libvirt
+    libxml2
+    requests
+    cdrtools
   ];
 
   patchPhase = ''

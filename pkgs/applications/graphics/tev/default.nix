@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, wrapGAppsHook
+, libX11
+, libzip
+, glfw
+, libpng
+, xorg
+, gnome
 }:
 
 stdenv.mkDerivation rec {

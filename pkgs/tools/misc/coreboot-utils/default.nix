@@ -32,7 +32,7 @@ let
     ];
 
     meta = commonMeta // args.meta;
-  } // (removeAttrs args ["meta"]));
+  } // (removeAttrs args [ "meta" ]));
 
   utils = {
     msrtool = generic {
@@ -102,13 +102,16 @@ let
 
         runHook postInstall
       '';
-      postFixup = let
-        binPath = [ coreutils acpica-tools gnugrep gnused file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
+      postFixup =
+        let
+          binPath = [ coreutils acpica-tools gnugrep gnused file ];
+        in
+        "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };
 
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = lib.attrValues utils;

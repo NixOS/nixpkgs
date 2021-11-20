@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, perl
+{ lib
+, stdenv
+, fetchurl
+, perl
 , buildsystem
 }:
 

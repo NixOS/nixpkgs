@@ -18,7 +18,7 @@ else
     }
     //
     attrs
-    //
+      //
     {
       name = "lua${lua.luaversion}-" + attrs.pname + "-" + attrs.version;
       propagatedBuildInputs = propagatedBuildInputs ++ [

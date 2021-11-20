@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python2, ruby, jre, nettools, bc
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, which
+, coreutils
+, rrdtool
+, perlPackages
+, python2
+, ruby
+, jre
+, nettools
+, bc
 }:
 
 stdenv.mkDerivation rec {
@@ -59,8 +70,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
-   LC_ALL=C make -j1 test
+    export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
+    LC_ALL=C make -j1 test
   '';
 
   patches = [

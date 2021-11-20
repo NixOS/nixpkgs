@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, dns-root-data, nixosTests } :
+{ lib, stdenv, fetchurl, glibc, dns-root-data, nixosTests }:
 
 let
   version = "1.05";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ocaml, camlp5}:
+{ lib, stdenv, fetchzip, ocaml, camlp5 }:
 
 stdenv.mkDerivation {
   pname = "ledit";

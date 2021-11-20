@@ -18,8 +18,10 @@ let
 in
 {
   options =
-    { services.toxBootstrapd =
-        { enable = mkOption {
+    {
+      services.toxBootstrapd =
+        {
+          enable = mkOption {
             type = types.bool;
             default = false;
             description =
@@ -48,9 +50,9 @@ in
                 Configuration for bootstrap daemon.
                 See <link xlink:href="https://github.com/irungentoo/toxcore/blob/master/other/bootstrap_daemon/tox-bootstrapd.conf"/>
                 and <link xlink:href="http://wiki.tox.im/Nodes"/>.
-             '';
+              '';
           };
-      };
+        };
 
     };
 
@@ -61,10 +63,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
-        { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
+        {
+          ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";
           inherit PIDFile WorkingDirectory;
-          AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           DynamicUser = true;
           StateDirectory = "tox-bootstrapd";
         };

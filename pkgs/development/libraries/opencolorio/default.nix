@@ -1,15 +1,30 @@
-{
-  stdenv, lib, fetchFromGitHub,
-  cmake, expat, libyamlcpp, ilmbase, pystring, # Base dependencies
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, expat
+, libyamlcpp
+, ilmbase
+, pystring
+, # Base dependencies
 
-  glew, freeglut, # Only required on Linux
-  Carbon, GLUT, Cocoa, # Only required on Darwin
+  glew
+, freeglut
+, # Only required on Linux
+  Carbon
+, GLUT
+, Cocoa
+, # Only required on Darwin
 
-  pythonBindings ? true, # Python bindings
-  python3Packages,
-
-  buildApps ? true, # Utility applications
-  lcms2, openimageio2, openexr,
+  pythonBindings ? true
+, # Python bindings
+  python3Packages
+, buildApps ? true
+, # Utility applications
+  lcms2
+, openimageio2
+, openexr
+,
 }:
 
 with lib;
@@ -32,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
     ++ lib.optionals buildApps [ lcms2 openimageio2 openexr ];
 
-    cmakeFlags = [ "-DOCIO_INSTALL_EXT_PACKAGES=NONE" ]
+  cmakeFlags = [ "-DOCIO_INSTALL_EXT_PACKAGES=NONE" ]
     ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 

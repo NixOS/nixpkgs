@@ -21,7 +21,7 @@
 
     meta = with lib; {
       description = "Official PostgreSQL ODBC Driver";
-      homepage =  "https://odbc.postgresql.org/";
+      homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
       platforms = platforms.linux;
     };
@@ -62,7 +62,7 @@
 
     meta = with lib; {
       description = "MariaDB ODBC database driver";
-      homepage =  "https://downloads.mariadb.org/connector-odbc/";
+      homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux ++ platforms.darwin;
     };

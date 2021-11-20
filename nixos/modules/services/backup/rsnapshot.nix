@@ -50,7 +50,7 @@ in
       };
 
       cronIntervals = mkOption {
-        default = {};
+        default = { };
         example = { hourly = "0 * * * *"; daily = "50 21 * * *"; };
         type = types.attrsOf types.str;
         description = ''

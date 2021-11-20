@@ -17,15 +17,15 @@ rec {
 
   packageName = "fiasco";
 
-  asdFilesToKeep = ["fiasco.asd"];
+  asdFilesToKeep = [ "fiasco.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fiasco DESCRIPTION
-    A Common Lisp test framework that treasures your failures, logical continuation of Stefil.
-    SHA256 1wb0ibw6ka9fbsb40zjipn7vh3jbzyfsvcc9gq19nqhbqa8gy9r4 URL
-    http://beta.quicklisp.org/archive/fiasco/2020-06-10/fiasco-20200610-git.tgz
-    MD5 c5a84e4a0a8afe45729cd6e39af772ac NAME fiasco FILENAME fiasco DEPS
-    ((NAME alexandria FILENAME alexandria)
-     (NAME trivial-gray-streams FILENAME trivial-gray-streams))
-    DEPENDENCIES (alexandria trivial-gray-streams) VERSION 20200610-git
+  A Common Lisp test framework that treasures your failures, logical continuation of Stefil.
+  SHA256 1wb0ibw6ka9fbsb40zjipn7vh3jbzyfsvcc9gq19nqhbqa8gy9r4 URL
+  http://beta.quicklisp.org/archive/fiasco/2020-06-10/fiasco-20200610-git.tgz
+  MD5 c5a84e4a0a8afe45729cd6e39af772ac NAME fiasco FILENAME fiasco DEPS
+  ((NAME alexandria FILENAME alexandria)
+   (NAME trivial-gray-streams FILENAME trivial-gray-streams))
+  DEPENDENCIES (alexandria trivial-gray-streams) VERSION 20200610-git
     SIBLINGS NIL PARASITES (fiasco-self-tests)) */

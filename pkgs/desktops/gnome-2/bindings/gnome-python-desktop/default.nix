@@ -2,7 +2,8 @@
 
 let
   inherit (python2.pkgs) python pygtk;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   ver_maj = "2.32";
   ver_min = "0";
   version = "${ver_maj}.${ver_min}";

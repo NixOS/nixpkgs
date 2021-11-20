@@ -5,7 +5,8 @@
 let
   pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
-in with pkgs; rec {
+in
+with pkgs; rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
@@ -90,7 +91,7 @@ in with pkgs; rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
-    '' else if (stdenv.hostPlatform.libc == "musl") then ''
+      '' else if (stdenv.hostPlatform.libc == "musl") then ''
         # Copy what we need from musl
         cp ${libc.out}/lib/* $out/lib
         cp -rL ${libc.dev}/include $out
@@ -100,8 +101,8 @@ in with pkgs; rec {
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-libc
-    '' else throw "unsupported libc for bootstrap tools")
-    + ''
+      '' else throw "unsupported libc for bootstrap tools")
+      + ''
         # Copy coreutils, bash, etc.
         cp -d ${coreutilsMinimal.out}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
@@ -199,7 +200,7 @@ in with pkgs; rec {
       # The result should not contain any references (store paths) so
       # that we can safely copy them out of the store and to other
       # locations in the store.
-      allowedReferences = [];
+      allowedReferences = [ ];
     };
 
   dist = stdenv.mkDerivation {
@@ -220,29 +221,32 @@ in with pkgs; rec {
 
   bootstrapFiles = {
     # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
-    busybox = runCommand "busybox" {} "cp ${build}/on-server/busybox $out";
-    bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
+    busybox = runCommand "busybox" { } "cp ${build}/on-server/busybox $out";
+    bootstrapTools = runCommand "bootstrap-tools.tar.xz" { } "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
   bootstrapTools =
-    let extraAttrs = lib.optionalAttrs
-      (config.contentAddressedByDefault or false)
-      {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      };
+    let
+      extraAttrs = lib.optionalAttrs
+        (config.contentAddressedByDefault or false)
+        {
+          __contentAddressed = true;
+          outputHashAlgo = "sha256";
+          outputHashMode = "recursive";
+        };
     in
     if (stdenv.hostPlatform.libc == "glibc") then
-    import ./bootstrap-tools {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
+      import ./bootstrap-tools
+        {
+          inherit (stdenv.buildPlatform) system; # Used to determine where to build
+          inherit bootstrapFiles extraAttrs;
+        }
     else if (stdenv.hostPlatform.libc == "musl") then
-    import ./bootstrap-tools-musl {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
+      import ./bootstrap-tools-musl
+        {
+          inherit (stdenv.buildPlatform) system; # Used to determine where to build
+          inherit bootstrapFiles extraAttrs;
+        }
     else throw "unsupported libc";
 
   test = derivation {

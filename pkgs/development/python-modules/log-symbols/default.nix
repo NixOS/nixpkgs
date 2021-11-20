@@ -2,7 +2,8 @@
 , colorama
 , fetchPypi
 , isPy27
-, lib }:
+, lib
+}:
 
 buildPythonPackage rec {
   pname = "log_symbols";

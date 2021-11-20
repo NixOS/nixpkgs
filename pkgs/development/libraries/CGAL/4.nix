@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Computational Geometry Algorithms Library";
     homepage = "http://cgal.org";
-    license = with licenses; [ gpl3Plus lgpl3Plus];
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.all;
     maintainers = [ maintainers.raskin ];
   };

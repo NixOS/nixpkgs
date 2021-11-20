@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "telegraf";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mic92 ];
@@ -6,9 +6,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine = { ... }: {
     services.telegraf.enable = true;
-    services.telegraf.environmentFiles = [(pkgs.writeText "secrets" ''
-      SECRET=example
-    '')];
+    services.telegraf.environmentFiles = [
+      (pkgs.writeText "secrets" ''
+        SECRET=example
+      '')
+    ];
     services.telegraf.extraConfig = {
       agent.interval = "1s";
       agent.flush_interval = "1s";
@@ -19,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         timeout = "5s";
         data_format = "influx";
       };
-      outputs.file.files = ["/tmp/metrics.out"];
+      outputs.file.files = [ "/tmp/metrics.out" ];
       outputs.file.data_format = "influx";
     };
   };

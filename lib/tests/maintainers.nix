@@ -1,6 +1,7 @@
 # to run these tests (and the others)
 # nix-build nixpkgs/lib/tests/release.nix
-{ # The pkgs used for dependencies for the testing itself
+{
+  # The pkgs used for dependencies for the testing itself
   pkgs
 , lib
 }:
@@ -33,13 +34,13 @@ let
           options.longkeyid = lib.mkOption { type = types.str; };
           options.fingerprint = lib.mkOption { type = types.str; };
         });
-        default = [];
+        default = [ ];
       };
     };
   };
 
   checkMaintainer = handle: uncheckedAttrs:
-  let
+    let
       prefix = [ "lib" "maintainers" handle ];
       checkedAttrs = (lib.modules.evalModules {
         inherit prefix;
@@ -61,20 +62,23 @@ let
         echo "The GitHub ID for GitHub user ${checkedAttrs.github} is $id:"
         echo -e "    githubId = $id;\n"
       '';
-    in lib.deepSeq checkedAttrs checkGithubId;
+    in
+    lib.deepSeq checkedAttrs checkGithubId;
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommand "checked-maintainers-success" {} ">$out";
+  success = pkgs.runCommand "checked-maintainers-success" { } ">$out";
 
-  failure = pkgs.runCommand "checked-maintainers-failure" {
-    nativeBuildInputs = [ pkgs.curl pkgs.jq ];
-    outputHash = "sha256:${lib.fakeSha256}";
-    outputHAlgo = "sha256";
-    outputHashMode = "flat";
-    SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-  } ''
+  failure = pkgs.runCommand "checked-maintainers-failure"
+    {
+      nativeBuildInputs = [ pkgs.curl pkgs.jq ];
+      outputHash = "sha256:${lib.fakeSha256}";
+      outputHAlgo = "sha256";
+      outputHashMode = "flat";
+      SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+    } ''
     ${lib.concatStringsSep "\n" missingGithubIds}
     exit 1
   '';
-in if missingGithubIds == [] then success else failure
+in
+if missingGithubIds == [ ] then success else failure

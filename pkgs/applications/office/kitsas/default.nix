@@ -26,15 +26,16 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "../kitsas/kitsas.pro" ];
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv kitsas.app $out/Applications
-  '' else ''
-    install -Dm755 kitsas -t $out/bin
-    install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
-    install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
-    install -Dm644 ../kitsas.desktop -t $out/share/applications
-  '';
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv kitsas.app $out/Applications
+    '' else ''
+      install -Dm755 kitsas -t $out/bin
+      install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
+      install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps
+      install -Dm644 ../kitsas.desktop -t $out/share/applications
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/artoh/kitupiikki";

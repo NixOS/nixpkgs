@@ -1,5 +1,11 @@
-{ lib, fetchurl, python27Packages, python3Packages, wmctrl,
-  qtbase, mkDerivationWith }:
+{ lib
+, fetchurl
+, python27Packages
+, python3Packages
+, wmctrl
+, qtbase
+, mkDerivationWith
+}:
 
 {
   stable = with python27Packages; buildPythonPackage rec {
@@ -9,18 +15,26 @@
     meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
 
     src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
       sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
     };
 
-    nativeBuildInputs     = [ setuptools-scm ];
-    buildInputs           = [ pytest mock ];
+    nativeBuildInputs = [ setuptools-scm ];
+    buildInputs = [ pytest mock ];
     propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
+      six
+      setuptools
+      pyserial
+      appdirs
+      hidapi
+      wxPython
+      xlib
+      wmctrl
+      dbus-python
     ];
   };
 
@@ -31,11 +45,11 @@
     meta = with lib; {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
+      license = licenses.gpl2;
     };
 
     src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
       sha256 = "sha256-Eun+ZgmOIjYw6FS/2OGoBvYh52U/Ue0+NtIqrvV2Tqc=";
     };
 
@@ -43,7 +57,7 @@
     # sed on many of the platforms Plover builds for
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
-    checkInputs           = [ pytest mock ];
+    checkInputs = [ pytest mock ];
     propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;

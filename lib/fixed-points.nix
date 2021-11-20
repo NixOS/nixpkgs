@@ -33,9 +33,9 @@ rec {
     let
       x' = f x;
     in
-      if x' == x
-      then x
-      else converge f x';
+    if x' == x
+    then x
+    else converge f x';
 
   # Modify the contents of an explicitly recursive attribute set in a way that
   # honors `self`-references. This is accomplished with a function
@@ -73,9 +73,11 @@ rec {
   # 'super' of the second
   composeExtensions =
     f: g: final: prev:
-      let fApplied = f final prev;
-          prev' = prev // fApplied;
-      in fApplied // g final prev';
+    let
+      fApplied = f final prev;
+      prev' = prev // fApplied;
+    in
+    fApplied // g final prev';
 
   # Compose several extending functions of the type expected by 'extends' into
   # one where changes made in preceding functions are made available to
@@ -84,7 +86,7 @@ rec {
   # composeManyExtensions : [packageSet -> packageSet -> packageSet] -> packageSet -> packageSet -> packageSet
   #                          ^final        ^prev         ^overrides     ^final        ^prev         ^overrides
   composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
+    lib.foldr (x: y: composeExtensions x y) (final: prev: { });
 
   # Create an overridable, recursive attribute set. For example:
   #
@@ -109,5 +111,5 @@ rec {
   makeExtensibleWithCustomName = extenderName: rattrs:
     fix' rattrs // {
       ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-   };
+    };
 }

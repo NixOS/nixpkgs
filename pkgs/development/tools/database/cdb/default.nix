@@ -15,7 +15,8 @@ let
     sha256 = "1y0ivviy58i0pmavhvrpznc4yjigjknff298gnw9rkg5wxm0gbbq";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "cdb";
   inherit version;
 

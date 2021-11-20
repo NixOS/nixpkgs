@@ -6,7 +6,8 @@
 
 let
   inherit (pythonPackages) buildPythonPackage isPy3k python sip_4 pyqt5;
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;

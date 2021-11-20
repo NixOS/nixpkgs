@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, openssl, libxml2, cmake, z3, substituteAll,
-  cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, makeWrapper
+, pcre2
+, coreutils
+, which
+, openssl
+, libxml2
+, cmake
+, z3
+, substituteAll
+, cc ? stdenv.cc
+, lto ? !stdenv.isDarwin
+}:
 
 stdenv.mkDerivation (rec {
   pname = "ponyc";
@@ -11,14 +25,14 @@ stdenv.mkDerivation (rec {
     rev = version;
     sha256 = "1s8glmzz0g5lj1fjwwy4m3n660smiq5wl9r1lg686wqh42hcgnsy";
 
-# Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
-# LLVM.  (The submodule is a specific tag in the LLVM source tree).
-#
-# The pony developers are currently working to get off 9.x as quickly
-# as possible so hopefully in a few revisions this package build will
-# become a lot simpler.
-#
-# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
+    # Due to a bug in LLVM 9.x, ponyc has to include its own vendored patched
+    # LLVM.  (The submodule is a specific tag in the LLVM source tree).
+    #
+    # The pony developers are currently working to get off 9.x as quickly
+    # as possible so hopefully in a few revisions this package build will
+    # become a lot simpler.
+    #
+    # https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
 
     fetchSubmodules = true;
   };
@@ -78,8 +92,8 @@ stdenv.mkDerivation (rec {
     "PONYC_VERSION=${version}"
     "prefix=${placeholder "out"}"
   ]
-    ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
-    ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
+  ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
+  ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   doCheck = true;
 

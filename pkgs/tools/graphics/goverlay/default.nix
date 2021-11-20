@@ -34,7 +34,8 @@ let
       fi
     done
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "goverlay";
   version = "0.6.4";
 

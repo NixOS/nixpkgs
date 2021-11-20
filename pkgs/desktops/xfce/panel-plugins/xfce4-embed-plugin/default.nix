@@ -12,8 +12,9 @@
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-embed-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-embed-plugin";
   version = "1.6.0";
 
   src = fetchurl {

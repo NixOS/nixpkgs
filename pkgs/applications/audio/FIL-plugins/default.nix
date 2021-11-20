@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, ladspaH
+{ lib
+, stdenv
+, fetchurl
+, ladspaH
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +20,7 @@ stdenv.mkDerivation rec {
     sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
   '';
 
-  preInstall="mkdir -p $out/lib/ladspa";
+  preInstall = "mkdir -p $out/lib/ladspa";
 
   meta = {
     description = "a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";

@@ -1,6 +1,18 @@
-{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
-, withDocumentation ? false, withClangPlugins ? true
+{ mkDerivation
+, lib
+, fetchurl
+, fetchgit
+, fetchpatch
+, qtbase
+, qtquickcontrols
+, qtscript
+, qtdeclarative
+, qmake
+, llvmPackages_8
+, elfutils
+, perf
+, withDocumentation ? false
+, withClangPlugins ? true
 }:
 
 with lib;
@@ -29,9 +41,11 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
-    optionals withClangPlugins [ llvmPackages_8.libclang
-                                 clang_qt_vendor
-                                 llvmPackages_8.llvm ];
+    optionals withClangPlugins [
+      llvmPackages_8.libclang
+      clang_qt_vendor
+      llvmPackages_8.llvm
+    ];
 
   nativeBuildInputs = [ qmake ];
 
@@ -40,8 +54,10 @@ mkDerivation rec {
   # like libc++-version, which is default name for libc++ folder in nixos.
   # ./0002-Dont-remove-clang-header-paths.patch is for forcing qtcreator to not
   # remove system clang include paths.
-  patches = [ ./0001-Fix-clang-libcpp-regexp.patch
-              ./0002-Dont-remove-clang-header-paths.patch ];
+  patches = [
+    ./0001-Fix-clang-libcpp-regexp.patch
+    ./0002-Dont-remove-clang-header-paths.patch
+  ];
 
   doCheck = true;
 
@@ -56,7 +72,7 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
     substituteInPlace src/libs/libs.pro \
       --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    '' + optionalString withClangPlugins ''
+  '' + optionalString withClangPlugins ''
     # Fix paths for llvm/clang includes directories.
     substituteInPlace src/shared/clang/clang_defines.pri \
       --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \

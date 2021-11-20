@@ -32,7 +32,7 @@ in
     };
     constLabels = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [
         "label1=value1"
         "label2=value2"
@@ -54,10 +54,12 @@ in
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
-  }] ++ [(mkIf config.services.nginx.enable {
-    after = [ "nginx.service" ];
-    requires = [ "nginx.service" ];
-  })]);
+  }] ++ [
+    (mkIf config.services.nginx.enable {
+      after = [ "nginx.service" ];
+      requires = [ "nginx.service" ];
+    })
+  ]);
   imports = [
     (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
     (mkRemovedOptionModule [ "insecure" ] ''

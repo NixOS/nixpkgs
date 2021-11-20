@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth
-, soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
-, game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, openal
+, fluidsynth
+, soundfont-fluid
+, libGL
+, SDL2
+, bzip2
+, zlib
+, libjpeg
+, libsndfile
+, mpg123
+, game-music-emu
+, pkg-config
+, copyDesktopItems
+, makeDesktopItem
+}:
 
 let
   zmusic-src = fetchFromGitHub {
@@ -93,4 +110,5 @@ let
     };
   };
 
-in gzdoom
+in
+gzdoom

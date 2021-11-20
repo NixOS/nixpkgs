@@ -59,36 +59,36 @@ stdenv.mkDerivation {
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      # Patch Meteor to dynamically fixup shebangs and ELF metadata where
-      # necessary.
-      pushd $out
-      patch -p1 < ${./main.patch}
-      popd
-      substituteInPlace $out/tools/cli/main.js \
-        --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
-        --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
+    # Patch Meteor to dynamically fixup shebangs and ELF metadata where
+    # necessary.
+    pushd $out
+    patch -p1 < ${./main.patch}
+    popd
+    substituteInPlace $out/tools/cli/main.js \
+      --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+      --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
-      # Patch node.
+    # Patch node.
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${stdenv.cc.cc.lib}/lib" \
+      $out/dev_bundle/bin/node
+
+    # Patch mongo.
+    for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $out/dev_bundle/bin/node):${stdenv.cc.cc.lib}/lib" \
-        $out/dev_bundle/bin/node
+        --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+        $p
+    done
 
-      # Patch mongo.
-      for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
-          $p
-      done
-
-      # Patch node dlls.
-      for p in $(find $out/packages -name '*.node'); do
-        patchelf \
-          --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
-          $p || true
-      done
+    # Patch node dlls.
+    for p in $(find $out/packages -name '*.node'); do
+      patchelf \
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
+        $p || true
+    done
   '';
 
   meta = with lib; {

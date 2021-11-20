@@ -39,8 +39,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/obfusk/kanjidraw";
     license = with licenses; [
-      agpl3Plus     # code
-      cc-by-sa-30   # data.json
+      agpl3Plus # code
+      cc-by-sa-30 # data.json
     ];
     maintainers = [ maintainers.obfusk ];
   };

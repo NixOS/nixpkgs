@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
 }:
@@ -9,7 +9,8 @@ let
   compose = f: g: x: f (g x);
   id = x: x;
   composeAll = builtins.foldl' compose id;
-in rec {
+in
+rec {
   # Export yarn again to make it easier to find out which yarn was used.
   inherit yarn;
 
@@ -28,7 +29,8 @@ in rec {
       parts = builtins.tail (builtins.match "^(@([^/]+)/)?([^/]+)$" pname);
       # if there is no organisation we need to filter out null values.
       non-null = builtins.filter (x: x != null) parts;
-    in builtins.concatStringsSep "-" non-null;
+    in
+    builtins.concatStringsSep "-" non-null;
 
   # https://docs.npmjs.com/files/package.json#license
   # TODO: support expression syntax (OR, AND, etc)
@@ -42,9 +44,9 @@ in rec {
         (builtins.attrValues lib.licenses);
 
   # Generates the yarn.nix from the yarn.lock file
-  mkYarnNix = { yarnLock, flags ? [] }:
-    pkgs.runCommand "yarn.nix" {}
-    "${yarn2nix}/bin/yarn2nix --lockfile ${yarnLock} --no-patch --builtin-fetchgit ${lib.escapeShellArgs flags} > $out";
+  mkYarnNix = { yarnLock, flags ? [ ] }:
+    pkgs.runCommand "yarn.nix" { }
+      "${yarn2nix}/bin/yarn2nix --lockfile ${yarnLock} --no-patch --builtin-fetchgit ${lib.escapeShellArgs flags} > $out";
 
   # Loads the generated offline cache. This will be used by yarn as
   # the package source.
@@ -52,7 +54,7 @@ in rec {
     let
       pkg = callPackage yarnNix { };
     in
-      pkg.offline_cache;
+    pkg.offline_cache;
 
   defaultYarnFlags = [
     "--offline"
@@ -61,39 +63,46 @@ in rec {
     "--ignore-scripts"
   ];
 
-  mkYarnModules = {
-    name ? "${pname}-${version}", # safe name and version, e.g. testcompany-one-modules-1.0.0
-    pname, # original name, e.g @testcompany/one
-    version,
-    packageJSON,
-    yarnLock,
-    yarnNix ? mkYarnNix { inherit yarnLock; },
-    offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
-    pkgConfig ? {},
-    preBuild ? "",
-    postBuild ? "",
-    workspaceDependencies ? [], # List of yarn packages
-  }:
+  mkYarnModules =
+    { name ? "${pname}-${version}"
+    , # safe name and version, e.g. testcompany-one-modules-1.0.0
+      pname
+    , # original name, e.g @testcompany/one
+      version
+    , packageJSON
+    , yarnLock
+    , yarnNix ? mkYarnNix { inherit yarnLock; }
+    , offlineCache ? importOfflineCache yarnNix
+    , yarnFlags ? defaultYarnFlags
+    , pkgConfig ? { }
+    , preBuild ? ""
+    , postBuild ? ""
+    , workspaceDependencies ? [ ]
+    , # List of yarn packages
+    }:
     let
-      extraBuildInputs = (lib.flatten (builtins.map (key:
-        pkgConfig.${key}.buildInputs or []
-      ) (builtins.attrNames pkgConfig)));
+      extraBuildInputs = (lib.flatten (builtins.map
+        (key:
+          pkgConfig.${key}.buildInputs or [ ]
+        )
+        (builtins.attrNames pkgConfig)));
 
-      postInstall = (builtins.map (key:
-        if (pkgConfig.${key} ? postInstall) then
-          ''
-            for f in $(find -L -path '*/node_modules/${key}' -type d); do
-              (cd "$f" && (${pkgConfig.${key}.postInstall}))
-            done
-          ''
-        else
-          ""
-      ) (builtins.attrNames pkgConfig));
+      postInstall = (builtins.map
+        (key:
+          if (pkgConfig.${key} ? postInstall) then
+            ''
+              for f in $(find -L -path '*/node_modules/${key}' -type d); do
+                (cd "$f" && (${pkgConfig.${key}.postInstall}))
+              done
+            ''
+          else
+            ""
+        )
+        (builtins.attrNames pkgConfig));
 
       workspaceJSON = pkgs.writeText
         "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; }); # scoped packages need second splat
+        (builtins.toJSON { private = true; workspaces = [ "deps/**" ]; }); # scoped packages need second splat
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''
@@ -102,7 +111,8 @@ in rec {
         '')
         workspaceDependencies;
 
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       inherit preBuild postBuild name;
       dontUnpack = true;
       dontInstall = true;
@@ -158,89 +168,95 @@ in rec {
     ln -s "$node_modules" node_modules
   '';
 
-  mkYarnWorkspace = {
-    src,
-    packageJSON ? src + "/package.json",
-    yarnLock ? src + "/yarn.lock",
-    packageOverrides ? {},
-    ...
-  }@attrs:
-  let
-    package = lib.importJSON packageJSON;
+  mkYarnWorkspace =
+    { src
+    , packageJSON ? src + "/package.json"
+    , yarnLock ? src + "/yarn.lock"
+    , packageOverrides ? { }
+    , ...
+    }@attrs:
+    let
+      package = lib.importJSON packageJSON;
 
-    packageGlobs = package.workspaces;
+      packageGlobs = package.workspaces;
 
-    globElemToRegex = lib.replaceStrings ["*"] [".*"];
+      globElemToRegex = lib.replaceStrings [ "*" ] [ ".*" ];
 
-    # PathGlob -> [PathGlobElem]
-    splitGlob = lib.splitString "/";
+      # PathGlob -> [PathGlobElem]
+      splitGlob = lib.splitString "/";
 
-    # Path -> [PathGlobElem] -> [Path]
-    # Note: Only directories are included, everything else is filtered out
-    expandGlobList = base: globElems:
-      let
-        elemRegex = globElemToRegex (lib.head globElems);
-        rest = lib.tail globElems;
-        children = lib.attrNames (lib.filterAttrs (name: type: type == "directory") (builtins.readDir base));
-        matchingChildren = lib.filter (child: builtins.match elemRegex child != null) children;
-      in if globElems == []
+      # Path -> [PathGlobElem] -> [Path]
+      # Note: Only directories are included, everything else is filtered out
+      expandGlobList = base: globElems:
+        let
+          elemRegex = globElemToRegex (lib.head globElems);
+          rest = lib.tail globElems;
+          children = lib.attrNames (lib.filterAttrs (name: type: type == "directory") (builtins.readDir base));
+          matchingChildren = lib.filter (child: builtins.match elemRegex child != null) children;
+        in
+        if globElems == [ ]
         then [ base ]
-        else lib.concatMap (child: expandGlobList (base+("/"+child)) rest) matchingChildren;
+        else lib.concatMap (child: expandGlobList (base + ("/" + child)) rest) matchingChildren;
 
-    # Path -> PathGlob -> [Path]
-    expandGlob = base: glob: expandGlobList base (splitGlob glob);
+      # Path -> PathGlob -> [Path]
+      expandGlob = base: glob: expandGlobList base (splitGlob glob);
 
-    packagePaths = lib.concatMap (expandGlob src) packageGlobs;
+      packagePaths = lib.concatMap (expandGlob src) packageGlobs;
 
-    packages = lib.listToAttrs (map (src:
-      let
-        packageJSON = src + "/package.json";
-
-        package = lib.importJSON packageJSON;
-
-        allDependencies = lib.foldl (a: b: a // b) {} (map (field: lib.attrByPath [field] {} package) ["dependencies" "devDependencies"]);
-
-        # { [name: String] : { pname : String, packageJSON : String, ... } } -> { [pname: String] : version } -> [{ pname : String, packageJSON : String, ... }]
-        getWorkspaceDependencies = packages: allDependencies:
+      packages = lib.listToAttrs (map
+        (src:
           let
-            packageList = lib.attrValues packages;
+            packageJSON = src + "/package.json";
+
+            package = lib.importJSON packageJSON;
+
+            allDependencies = lib.foldl (a: b: a // b) { } (map (field: lib.attrByPath [ field ] { } package) [ "dependencies" "devDependencies" ]);
+
+            # { [name: String] : { pname : String, packageJSON : String, ... } } -> { [pname: String] : version } -> [{ pname : String, packageJSON : String, ... }]
+            getWorkspaceDependencies = packages: allDependencies:
+              let
+                packageList = lib.attrValues packages;
+              in
+              composeAll [
+                (lib.filter (x: x != null))
+                (lib.mapAttrsToList (pname: _version: lib.findFirst (package: package.pname == pname) null packageList))
+              ]
+                allDependencies;
+
+            workspaceDependencies = getWorkspaceDependencies packages allDependencies;
+
+            name = reformatPackageName package.name;
           in
-            composeAll [
-              (lib.filter (x: x != null))
-              (lib.mapAttrsToList (pname: _version: lib.findFirst (package: package.pname == pname) null packageList))
-            ] allDependencies;
+          {
+            inherit name;
+            value = mkYarnPackage (
+              builtins.removeAttrs attrs [ "packageOverrides" ]
+              // { inherit src packageJSON yarnLock workspaceDependencies; }
+              // lib.attrByPath [ name ] { } packageOverrides
+            );
+          })
+        packagePaths
+      );
+    in
+    packages;
 
-        workspaceDependencies = getWorkspaceDependencies packages allDependencies;
-
-        name = reformatPackageName package.name;
-      in {
-        inherit name;
-        value = mkYarnPackage (
-          builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock workspaceDependencies; }
-          // lib.attrByPath [name] {} packageOverrides
-        );
-      })
-      packagePaths
-    );
-  in packages;
-
-  mkYarnPackage = {
-    name ? null,
-    src,
-    packageJSON ? src + "/package.json",
-    yarnLock ? src + "/yarn.lock",
-    yarnNix ? mkYarnNix { inherit yarnLock; },
-    offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
-    yarnPreBuild ? "",
-    yarnPostBuild ? "",
-    pkgConfig ? {},
-    extraBuildInputs ? [],
-    publishBinsFor ? null,
-    workspaceDependencies ? [], # List of yarnPackages
-    ...
-  }@attrs:
+  mkYarnPackage =
+    { name ? null
+    , src
+    , packageJSON ? src + "/package.json"
+    , yarnLock ? src + "/yarn.lock"
+    , yarnNix ? mkYarnNix { inherit yarnLock; }
+    , offlineCache ? importOfflineCache yarnNix
+    , yarnFlags ? defaultYarnFlags
+    , yarnPreBuild ? ""
+    , yarnPostBuild ? ""
+    , pkgConfig ? { }
+    , extraBuildInputs ? [ ]
+    , publishBinsFor ? null
+    , workspaceDependencies ? [ ]
+    , # List of yarnPackages
+      ...
+    }@attrs:
     let
       package = lib.importJSON packageJSON;
       pname = package.name;
@@ -261,7 +277,7 @@ in rec {
         inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig;
       };
 
-      publishBinsFor_ = unlessNull publishBinsFor [pname];
+      publishBinsFor_ = unlessNull publishBinsFor [ pname ];
 
       linkDirFunction = ''
         linkDirToDirLinks() {
@@ -292,7 +308,8 @@ in rec {
         '')
         workspaceDependenciesTransitive;
 
-    in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies"] // {
+    in
+    stdenv.mkDerivation (builtins.removeAttrs attrs [ "yarnNix" "pkgConfig" "workspaceDependencies" ] // {
       inherit src pname;
 
       name = baseName;
@@ -362,7 +379,7 @@ in rec {
       passthru = {
         inherit pname package packageJSON deps;
         workspaceDependencies = workspaceDependenciesTransitive;
-      } // (attrs.passthru or {});
+      } // (attrs.passthru or { });
 
       meta = {
         inherit (nodejs.meta) platforms;
@@ -370,7 +387,7 @@ in rec {
         homepage = packageJSON.homepage or "";
         version = packageJSON.version or "";
         license = if packageJSON ? license then spdxLicense packageJSON.license else "";
-      } // (attrs.meta or {});
+      } // (attrs.meta or { });
     });
 
   yarn2nix = mkYarnPackage {
@@ -384,15 +401,17 @@ in rec {
 
             subpath = elemAt (splitString "${toString root}/" path) 1;
             spdir = elemAt (splitString "/" subpath) 0;
-          in elem spdir dirsToInclude ||
-            (type == "regular" && elem subpath filesToInclude);
-      in builtins.filterSource
-          (mkFilter {
-            dirsToInclude = ["bin" "lib"];
-            filesToInclude = ["package.json" "yarn.lock"];
-            root = src;
-          })
-          src;
+          in
+          elem spdir dirsToInclude ||
+          (type == "regular" && elem subpath filesToInclude);
+      in
+      builtins.filterSource
+        (mkFilter {
+          dirsToInclude = [ "bin" "lib" ];
+          filesToInclude = [ "package.json" "yarn.lock" ];
+          root = src;
+        })
+        src;
 
     # yarn2nix is the only package that requires the yarnNix option.
     # All the other projects can auto-generate that file.
@@ -403,7 +422,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 

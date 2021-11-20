@@ -57,7 +57,8 @@ let
               ''}"}
         '';
 
-    in {
+    in
+    {
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
@@ -82,7 +83,7 @@ in
   options = {
 
     services.openvpn.servers = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
         {
@@ -206,7 +207,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.servers != {}) {
+  config = mkIf (cfg.servers != { }) {
 
     systemd.services = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 

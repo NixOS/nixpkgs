@@ -8,8 +8,8 @@ let
   configFile = pkgs.writeTextFile {
     name = "knot.conf";
     text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
-           cfg.extraConfig;
-    checkPhase = lib.optionalString (cfg.keyFiles == []) ''
+      cfg.extraConfig;
+    checkPhase = lib.optionalString (cfg.keyFiles == [ ]) ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
   };
@@ -34,14 +34,15 @@ let
       ln -s '${cfg.package}/share/man' "$out/share/"
     '';
   };
-in {
+in
+{
   options = {
     services.knot = {
       enable = mkEnableOption "Knot authoritative-only DNS server";
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of additional command line paramters for knotd
         '';
@@ -49,7 +50,7 @@ in {
 
       keyFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of files containing additional configuration
           to be included using the include directive. This option
@@ -92,7 +93,7 @@ in {
       description = cfg.package.meta.description;
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
-      after = ["network.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         Type = "notify";

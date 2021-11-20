@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, python3
-, bdftopcf, mkfontscale
+{ lib
+, stdenv
+, fetchurl
+, python3
+, bdftopcf
+, mkfontscale
 }:
 
 stdenv.mkDerivation rec {

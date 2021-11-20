@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, boost, zlib, botan2, libidn
-, lua, pcre, sqlite, perl, pkg-config, expect, less
-, bzip2, gmp, openssl
-, autoreconfHook, texinfo
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, boost
+, zlib
+, botan2
+, libidn
+, lua
+, pcre
+, sqlite
+, perl
+, pkg-config
+, expect
+, less
+, bzip2
+, gmp
+, openssl
+, autoreconfHook
+, texinfo
 }:
 
 let
@@ -40,8 +56,20 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook texinfo ];
-  buildInputs = [ boost zlib botan2 libidn lua pcre sqlite expect
-    openssl gmp bzip2 perl ];
+  buildInputs = [
+    boost
+    zlib
+    botan2
+    libidn
+    lua
+    pcre
+    sqlite
+    expect
+    openssl
+    gmp
+    bzip2
+    perl
+  ];
 
   postInstall = ''
     mkdir -p $out/share/${pname}-${version}

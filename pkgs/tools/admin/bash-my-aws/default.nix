@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , awscli
 , jq
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     ./stack-spec.sh
     popd
   '';
-  installPhase=''
+  installPhase = ''
     mkdir -p $out
     cp -r . $out
   '';

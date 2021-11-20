@@ -1,10 +1,26 @@
-{ lib, stdenv, fetchurl, substituteAll, meson, ninja, pkg-config, gettext, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, python3
-, glib, systemd, libusb1, vala, hwdata
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, meson
+, ninja
+, pkg-config
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_44
+, python3
+, glib
+, systemd
+, libusb1
+, vala
+, hwdata
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+  pythonEnv = python3.withPackages (ps: with ps; [
     setuptools
   ]);
 in
@@ -27,9 +43,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config gettext pythonEnv
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44
-    gobject-introspection vala
+    meson
+    ninja
+    pkg-config
+    gettext
+    pythonEnv
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+    docbook_xml_dtd_44
+    gobject-introspection
+    vala
   ];
   buildInputs = [ systemd glib ];
 

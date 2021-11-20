@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkg-config, pidgin, libwebp, libgcrypt, gettext } :
+{ lib, stdenv, fetchgit, pkg-config, pidgin, libwebp, libgcrypt, gettext }:
 
 let
   version = "1.3.1";

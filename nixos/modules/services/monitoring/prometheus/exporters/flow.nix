@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.flow;
-in {
+in
+{
   port = 9590;
   extraOpts = {
     brokers = mkOption {
@@ -21,7 +22,7 @@ in {
 
     partitions = mkOption {
       type = types.listOf types.int;
-      default = [];
+      default = [ ];
       description = ''
         The number of the partitions to consume, none means all.
       '';

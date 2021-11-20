@@ -50,14 +50,15 @@ in
       description = ''
         The package with qemu binaries for dom0 qemu and xendomains.
       '';
-      relatedPackages = [ "xen"
-                          { name = "qemu_xen-light"; comment = "For use with pkgs.xen-light."; }
-                        ];
+      relatedPackages = [
+        "xen"
+        { name = "qemu_xen-light"; comment = "For use with pkgs.xen-light."; }
+      ];
     };
 
     virtualisation.xen.bootParams =
       mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description =
           ''
@@ -78,44 +79,44 @@ in
       };
 
     virtualisation.xen.bridge = {
-        name = mkOption {
-          default = "xenbr0";
-          type = types.str;
-          description = ''
-              Name of bridge the Xen domUs connect to.
-            '';
-        };
-
-        address = mkOption {
-          type = types.str;
-          default = "172.16.0.1";
-          description = ''
-            IPv4 address of the bridge.
-          '';
-        };
-
-        prefixLength = mkOption {
-          type = types.addCheck types.int (n: n >= 0 && n <= 32);
-          default = 16;
-          description = ''
-            Subnet mask of the bridge interface, specified as the number of
-            bits in the prefix (<literal>24</literal>).
-            A DHCP server will provide IP addresses for the whole, remaining
-            subnet.
-          '';
-        };
-
-        forwardDns = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If set to <literal>true</literal>, the DNS queries from the
-            hosts connected to the bridge will be forwarded to the DNS
-            servers specified in /etc/resolv.conf .
-            '';
-        };
-
+      name = mkOption {
+        default = "xenbr0";
+        type = types.str;
+        description = ''
+          Name of bridge the Xen domUs connect to.
+        '';
       };
+
+      address = mkOption {
+        type = types.str;
+        default = "172.16.0.1";
+        description = ''
+          IPv4 address of the bridge.
+        '';
+      };
+
+      prefixLength = mkOption {
+        type = types.addCheck types.int (n: n >= 0 && n <= 32);
+        default = 16;
+        description = ''
+          Subnet mask of the bridge interface, specified as the number of
+          bits in the prefix (<literal>24</literal>).
+          A DHCP server will provide IP addresses for the whole, remaining
+          subnet.
+        '';
+      };
+
+      forwardDns = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to <literal>true</literal>, the DNS queries from the
+          hosts connected to the bridge will be forwarded to the DNS
+          servers specified in /etc/resolv.conf .
+        '';
+      };
+
+    };
 
     virtualisation.xen.stored =
       mkOption {
@@ -127,17 +128,17 @@ in
       };
 
     virtualisation.xen.domains = {
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description =
-            ''
-              Options defined here will override the defaults for xendomains.
-              The default options can be seen in the file included from
-              /etc/default/xendomains.
-            '';
-          };
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description =
+          ''
+            Options defined here will override the defaults for xendomains.
+            The default options can be seen in the file included from
+            /etc/default/xendomains.
+          '';
       };
+    };
 
     virtualisation.xen.trace = mkEnableOption "Xen tracing";
 
@@ -147,13 +148,14 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [ {
+    assertions = [{
       assertion = pkgs.stdenv.isx86_64;
       message = "Xen currently not supported on ${pkgs.stdenv.hostPlatform.system}";
-    } {
-      assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
-      message = "Xen currently does not support EFI boot";
-    } ];
+    }
+      {
+        assertion = config.boot.loader.grub.enable && (config.boot.loader.grub.efiSupport == false);
+        message = "Xen currently does not support EFI boot";
+      }];
 
     virtualisation.xen.package = mkDefault pkgs.xen;
     virtualisation.xen.package-qemu = mkDefault pkgs.xen;
@@ -162,10 +164,28 @@ in
     environment.systemPackages = [ cfg.package ];
 
     boot.kernelModules =
-      [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
-        "xen-pciback" "evtchn" "gntdev" "netbk" "blkbk" "xen-scsibk"
-        "usbbk" "pciback" "xen-acpi-processor" "blktap2" "tun" "netxen_nic"
-        "xen_wdt" "xen-acpi-processor" "xen-privcmd" "xen-scsiback"
+      [
+        "xen-evtchn"
+        "xen-gntdev"
+        "xen-gntalloc"
+        "xen-blkback"
+        "xen-netback"
+        "xen-pciback"
+        "evtchn"
+        "gntdev"
+        "netbk"
+        "blkbk"
+        "xen-scsibk"
+        "usbbk"
+        "pciback"
+        "xen-acpi-processor"
+        "blktap2"
+        "tun"
+        "netxen_nic"
+        "xen_wdt"
+        "xen-acpi-processor"
+        "xen-privcmd"
+        "xen-scsiback"
         "xenfs"
       ];
 
@@ -186,7 +206,7 @@ in
         options loop max_loop=64
       '';
 
-    virtualisation.xen.bootParams = [] ++
+    virtualisation.xen.bootParams = [ ] ++
       optionals cfg.trace [ "loglvl=all" "guest_loglvl=all" ] ++
       optional (cfg.domain0MemorySize != 0) "dom0_mem=${toString cfg.domain0MemorySize}M";
 
@@ -208,7 +228,8 @@ in
 
     # Domain 0 requires a pvops-enabled kernel.
     system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isYes "XEN")
+      [
+        (isYes "XEN")
         (isYes "X86_IO_APIC")
         (isYes "ACPI")
         (isYes "XEN_DOM0")
@@ -260,18 +281,20 @@ in
         mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
         mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
-        '';
-      serviceConfig = if (builtins.compareVersions cfg.package.version "4.8" < 0) then
-        { ExecStart = ''
-            ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
+      '';
+      serviceConfig =
+        if (builtins.compareVersions cfg.package.version "4.8" < 0) then
+          {
+            ExecStart = ''
+              ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
             '';
-        } else {
+          } else {
           ExecStart = ''
             ${cfg.package}/etc/xen/scripts/launch-xenstore
-            '';
-          Type            = "notify";
+          '';
+          Type = "notify";
           RemainAfterExit = true;
-          NotifyAccess    = "all";
+          NotifyAccess = "all";
         };
       postStart = ''
         ${optionalString (builtins.compareVersions cfg.package.version "4.8" < 0) ''
@@ -291,7 +314,7 @@ in
         ''}
         echo "executing xen-init-dom0"
         ${cfg.package}/lib/xen/bin/xen-init-dom0
-        '';
+      '';
     };
 
     systemd.sockets.xen-store = {
@@ -315,13 +338,13 @@ in
         mkdir -p /var/run/xen
         ${optionalString cfg.trace "mkdir -p /var/log/xen"}
         grep -q control_d /proc/xen/capabilities
-        '';
+      '';
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/xenconsoled\
             ${optionalString ((builtins.compareVersions cfg.package.version "4.8" >= 0)) " -i"}\
             ${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
-          '';
+        '';
       };
     };
 
@@ -335,7 +358,7 @@ in
         ${cfg.package-qemu}/${cfg.package-qemu.qemu-system-i386} \
            -xen-attach -xen-domid 0 -name dom0 -M xenpv \
            -nographic -monitor /dev/null -serial /dev/null -parallel /dev/null
-        '';
+      '';
     };
 
 

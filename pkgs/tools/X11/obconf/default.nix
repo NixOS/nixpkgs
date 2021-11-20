@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libglade, openbox,
-  imlib2, libstartup_notification, makeWrapper, libSM }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, libglade
+, openbox
+, imlib2
+, libstartup_notification
+, makeWrapper
+, libSM
+}:
 
 stdenv.mkDerivation rec {
   pname = "obconf";
@@ -12,7 +22,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk2 libglade libSM openbox imlib2 libstartup_notification
+    gtk2
+    libglade
+    libSM
+    openbox
+    imlib2
+    libstartup_notification
     makeWrapper
   ];
 

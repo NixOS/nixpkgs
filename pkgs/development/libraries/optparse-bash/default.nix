@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
       --replace sed "${gnused}/bin/sed" \
       --replace awk "${gawk}/bin/awk" \
       --replace printf "${coreutils}/bin/printf"
-'';
+  '';
 
   dontBuild = true;
 

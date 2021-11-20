@@ -194,93 +194,93 @@ rec {
     , postMount ? ""
     , postUmount ? ""
     }:
-      vmTools.runInLinuxVM (
-        runCommand name
-          {
-            preVM = vmTools.createEmptyImage {
-              size = diskSize;
-              fullName = "docker-run-disk";
-              destination = "./image";
-            };
-            inherit fromImage fromImageName fromImageTag;
+    vmTools.runInLinuxVM (
+      runCommand name
+        {
+          preVM = vmTools.createEmptyImage {
+            size = diskSize;
+            fullName = "docker-run-disk";
+            destination = "./image";
+          };
+          inherit fromImage fromImageName fromImageTag;
 
-            nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
-          } ''
-          mkdir disk
-          mkfs /dev/${vmTools.hd}
-          mount /dev/${vmTools.hd} disk
-          cd disk
+          nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
+        } ''
+        mkdir disk
+        mkfs /dev/${vmTools.hd}
+        mount /dev/${vmTools.hd} disk
+        cd disk
 
-          if [[ -n "$fromImage" ]]; then
-            echo "Unpacking base image..."
-            mkdir image
-            tar -C image -xpf "$fromImage"
+        if [[ -n "$fromImage" ]]; then
+          echo "Unpacking base image..."
+          mkdir image
+          tar -C image -xpf "$fromImage"
 
-            if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
-              parentID="$(
-                cat "image/manifest.json" |
-                  jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
-                    --arg desiredTag "$fromImageName:$fromImageTag"
-              )"
-            else
-              echo "From-image name or tag wasn't set. Reading the first ID."
-              parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
-            fi
-
-            cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+          if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
+            parentID="$(
+              cat "image/manifest.json" |
+                jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
+                  --arg desiredTag "$fromImageName:$fromImageTag"
+            )"
           else
-            touch layer-list
+            echo "From-image name or tag wasn't set. Reading the first ID."
+            parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
           fi
 
-          # Unpack all of the parent layers into the image.
-          lowerdir=""
-          extractionID=0
-          for layerTar in $(tac layer-list); do
-            echo "Unpacking layer $layerTar"
-            extractionID=$((extractionID + 1))
+          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+        else
+          touch layer-list
+        fi
 
-            mkdir -p image/$extractionID/layer
-            tar -C image/$extractionID/layer -xpf image/$layerTar
-            rm image/$layerTar
+        # Unpack all of the parent layers into the image.
+        lowerdir=""
+        extractionID=0
+        for layerTar in $(tac layer-list); do
+          echo "Unpacking layer $layerTar"
+          extractionID=$((extractionID + 1))
 
-            find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+          mkdir -p image/$extractionID/layer
+          tar -C image/$extractionID/layer -xpf image/$layerTar
+          rm image/$layerTar
 
-            # Get the next lower directory and continue the loop.
-            lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
-          done
+          find image/$extractionID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
-          mkdir work
-          mkdir layer
-          mkdir mnt
+          # Get the next lower directory and continue the loop.
+          lowerdir=image/$extractionID/layer''${lowerdir:+:}$lowerdir
+        done
 
-          ${lib.optionalString (preMount != "") ''
-            # Execute pre-mount steps
-            echo "Executing pre-mount steps..."
-            ${preMount}
-          ''}
+        mkdir work
+        mkdir layer
+        mkdir mnt
 
-          if [ -n "$lowerdir" ]; then
-            mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
-          else
-            mount --bind layer mnt
-          fi
+        ${lib.optionalString (preMount != "") ''
+          # Execute pre-mount steps
+          echo "Executing pre-mount steps..."
+          ${preMount}
+        ''}
 
-          ${lib.optionalString (postMount != "") ''
-            # Execute post-mount steps
-            echo "Executing post-mount steps..."
-            ${postMount}
-          ''}
+        if [ -n "$lowerdir" ]; then
+          mount -t overlay overlay -olowerdir=$lowerdir,workdir=work,upperdir=layer mnt
+        else
+          mount --bind layer mnt
+        fi
 
-          umount mnt
+        ${lib.optionalString (postMount != "") ''
+          # Execute post-mount steps
+          echo "Executing post-mount steps..."
+          ${postMount}
+        ''}
 
-          (
-            cd layer
-            cmd='name="$(basename {})"; touch "$(dirname {})/.wh.$name"; rm "{}"'
-            find . -type c -exec bash -c "$cmd" \;
-          )
+        umount mnt
 
-          ${postUmount}
-        '');
+        (
+          cd layer
+          cmd='name="$(basename {})"; touch "$(dirname {})/.wh.$name"; rm "{}"'
+          find . -type c -exec bash -c "$cmd" \;
+        )
+
+        ${postUmount}
+      '');
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
     runWithOverlay {

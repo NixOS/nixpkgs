@@ -5,7 +5,7 @@ let
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
+  }).overrideAttrs (attrs: {
     installPhase = attrs.installPhase + ''
       rm -R $out/storage $out/public/uploads
       ln -s ${dataDir}/.env $out/.env
@@ -14,7 +14,8 @@ let
     '';
   });
 
-in package.override rec {
+in
+package.override rec {
   pname = "bookstack";
   version = "21.10.3";
 

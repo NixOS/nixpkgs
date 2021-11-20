@@ -76,7 +76,8 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
+      [
+        "/run/current-system/sw/bin/xonsh"
         "${cfg.package}/bin/xonsh"
       ];
 

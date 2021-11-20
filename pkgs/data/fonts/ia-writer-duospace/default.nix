@@ -2,7 +2,8 @@
 
 let
   version = "20180721";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "ia-writer-duospace-${version}";
 
   owner = "iaolo";

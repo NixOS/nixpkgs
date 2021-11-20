@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, makeWrapper,
-electron, libsecret }:
+{ stdenv
+, lib
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, electron
+, libsecret
+}:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";

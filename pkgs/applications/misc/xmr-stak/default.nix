@@ -1,6 +1,14 @@
-{ stdenv, stdenvGcc6, lib
-, fetchFromGitHub, cmake, libmicrohttpd_0_9_70, openssl
-, opencl-headers, ocl-icd, hwloc, cudatoolkit
+{ stdenv
+, stdenvGcc6
+, lib
+, fetchFromGitHub
+, cmake
+, libmicrohttpd_0_9_70
+, openssl
+, opencl-headers
+, ocl-icd
+, hwloc
+, cudatoolkit
 , devDonationLevel ? "0.0"
 , cudaSupport ? false
 , openclSupport ? true

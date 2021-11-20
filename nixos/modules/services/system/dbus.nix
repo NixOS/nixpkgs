@@ -84,9 +84,9 @@ in
       let
         files = showFiles options.services.dbus.socketActivated.files;
       in
-        "The option 'services.dbus.socketActivated' in ${files} no longer has"
-        + " any effect and can be safely removed: the user D-Bus session is"
-        + " now always socket activated."
+      "The option 'services.dbus.socketActivated' in ${files} no longer has"
+      + " any effect and can be safely removed: the user D-Bus session is"
+      + " now always socket activated."
     );
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];

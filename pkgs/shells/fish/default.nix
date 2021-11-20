@@ -19,7 +19,7 @@
 , fishPlugins
 , procps
 
-# used to generate autocompletions from manpages and for configuration editing in the browser
+  # used to generate autocompletions from manpages and for configuration editing in the browser
 , usePython ? true
 
 , runCommand
@@ -287,28 +287,29 @@ let
         # Test the fish_config tool by checking the generated splash page.
         # Since the webserver requires a port to run, it is not started.
         fishConfig =
-          let fishScript = writeText "test.fish" ''
-            set -x __fish_bin_dir ${fish}/bin
-            echo $__fish_bin_dir
-            cp -r ${fish}/share/fish/tools/web_config/* .
-            chmod -R +w *
+          let
+            fishScript = writeText "test.fish" ''
+              set -x __fish_bin_dir ${fish}/bin
+              echo $__fish_bin_dir
+              cp -r ${fish}/share/fish/tools/web_config/* .
+              chmod -R +w *
 
-            # if we don't set `delete=False`, the file will get cleaned up
-            # automatically (leading the test to fail because there's no
-            # tempfile to check)
-            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
+              # if we don't set `delete=False`, the file will get cleaned up
+              # automatically (leading the test to fail because there's no
+              # tempfile to check)
+              sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
-            # we delete everything after the fileurl is assigned
-            sed -e '/fileurl =/q' -i webconfig.py
-            echo "print(fileurl)" >> webconfig.py
+              # we delete everything after the fileurl is assigned
+              sed -e '/fileurl =/q' -i webconfig.py
+              echo "print(fileurl)" >> webconfig.py
 
-            # and check whether the message appears on the page
-            cat (${python3}/bin/python ./webconfig.py \
-              | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
-            ) | grep 'a href="http://localhost.*Start the Fish Web config'
+              # and check whether the message appears on the page
+              cat (${python3}/bin/python ./webconfig.py \
+                | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
+              ) | grep 'a href="http://localhost.*Start the Fish Web config'
 
-            # cannot test the http server because it needs a localhost port
-          '';
+              # cannot test the http server because it needs a localhost port
+            '';
           in
           runCommand "test-web-config" { } ''
             HOME=$(mktemp -d)

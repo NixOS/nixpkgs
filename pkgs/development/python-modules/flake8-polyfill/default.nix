@@ -1,6 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib
+, fetchPypi
+, buildPythonPackage
 , flake8
-, mock, pep8, pytest }:
+, mock
+, pep8
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "flake8-polyfill";

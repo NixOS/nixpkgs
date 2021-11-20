@@ -47,7 +47,7 @@ in
       };
 
       thunarPlugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.xfce.thunar-archive-plugin ]";
         description = ''
@@ -107,22 +107,22 @@ in
 
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
-        pavucontrol
-        # volume up/down keys support:
-        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
-        # but can only be used with xfce4-panel, so for no-desktop usage we still include
-        # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
-        xfdesktop
-      ];
+    ++ optional config.networking.networkmanager.enable networkmanagerapplet
+    ++ optional config.powerManagement.enable xfce4-power-manager
+    ++ optionals config.hardware.pulseaudio.enable [
+      pavucontrol
+      # volume up/down keys support:
+      # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+      # but can only be used with xfce4-panel, so for no-desktop usage we still include
+      # xfce4-volumed-pulse
+      (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+    ] ++ optionals cfg.enableXfwm [
+      xfwm4
+      xfwm4-themes
+    ] ++ optionals (!cfg.noDesktop) [
+      xfce4-panel
+      xfdesktop
+    ];
 
     environment.pathsToLink = [
       "/share/xfce4"

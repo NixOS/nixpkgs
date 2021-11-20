@@ -2,12 +2,11 @@
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args @ {
-  name
+args @ { name
 , runScript ? "bash"
 , extraInstallCommands ? ""
-, meta ? {}
-, passthru ? {}
+, meta ? { }
+, passthru ? { }
 , unshareUser ? true
 , unshareIpc ? true
 , unsharePid ? true
@@ -23,54 +22,65 @@ let
   buildFHSEnv = callPackage ./env.nix { };
 
   env = buildFHSEnv (removeAttrs args [
-    "runScript" "extraInstallCommands" "meta" "passthru" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "runScript"
+    "extraInstallCommands"
+    "meta"
+    "passthru"
+    "dieWithParent"
+    "unshareUser"
+    "unshareCgroup"
+    "unshareUts"
+    "unshareNet"
+    "unsharePid"
+    "unshareIpc"
   ]);
 
-  etcBindFlags = let
-    files = [
-      # NixOS Compatibility
-      "static"
-      "nix" # mainly for nixUnstable users, but also for access to nix/netrc
-      # Shells
-      "bashrc"
-      "zshenv"
-      "zshrc"
-      "zinputrc"
-      "zprofile"
-      # Users, Groups, NSS
-      "passwd"
-      "group"
-      "shadow"
-      "hosts"
-      "resolv.conf"
-      "nsswitch.conf"
-      # User profiles
-      "profiles"
-      # Sudo & Su
-      "login.defs"
-      "sudoers"
-      "sudoers.d"
-      # Time
-      "localtime"
-      "zoneinfo"
-      # Other Core Stuff
-      "machine-id"
-      "os-release"
-      # PAM
-      "pam.d"
-      # Fonts
-      "fonts"
-      # ALSA
-      "alsa"
-      "asound.conf"
-      # SSL
-      "ssl/certs"
-      "ca-certificates"
-      "pki"
-    ];
-  in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
+  etcBindFlags =
+    let
+      files = [
+        # NixOS Compatibility
+        "static"
+        "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+        # Shells
+        "bashrc"
+        "zshenv"
+        "zshrc"
+        "zinputrc"
+        "zprofile"
+        # Users, Groups, NSS
+        "passwd"
+        "group"
+        "shadow"
+        "hosts"
+        "resolv.conf"
+        "nsswitch.conf"
+        # User profiles
+        "profiles"
+        # Sudo & Su
+        "login.defs"
+        "sudoers"
+        "sudoers.d"
+        # Time
+        "localtime"
+        "zoneinfo"
+        # Other Core Stuff
+        "machine-id"
+        "os-release"
+        # PAM
+        "pam.d"
+        # Fonts
+        "fonts"
+        # ALSA
+        "alsa"
+        "asound.conf"
+        # SSL
+        "ssl/certs"
+        "ca-certificates"
+        "pki"
+      ];
+    in
+    concatStringsSep "\n  "
+      (map (file: "--ro-bind-try /etc/${file} /etc/${file}") files);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
@@ -176,13 +186,16 @@ let
 
   bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
-in runCommandLocal name {
+in
+runCommandLocal name
+{
   inherit meta;
 
   passthru = passthru // {
-    env = runCommandLocal "${name}-shell-env" {
-      shellHook = bwrapCmd {};
-    } ''
+    env = runCommandLocal "${name}-shell-env"
+      {
+        shellHook = bwrapCmd { };
+      } ''
       echo >&2 ""
       echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
       echo >&2 ""

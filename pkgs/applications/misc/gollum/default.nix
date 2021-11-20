@@ -1,5 +1,13 @@
-{ lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git, docutils, perl }:
+{ lib
+, stdenv
+, bundlerEnv
+, ruby
+, makeWrapper
+, bundlerUpdateScript
+, git
+, docutils
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "gollum";
@@ -10,19 +18,21 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
-      inherit pname ruby;
-      gemdir = ./.;
-    };
-  in ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${lib.makeBinPath [ git docutils perl]}
-    makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
-      --prefix PATH ":" ${lib.makeBinPath [ git ]}
-  '';
+  installPhase =
+    let
+      env = bundlerEnv {
+        name = "${pname}-${version}-gems";
+        inherit pname ruby;
+        gemdir = ./.;
+      };
+    in
+    ''
+      mkdir -p $out/bin
+      makeWrapper ${env}/bin/gollum $out/bin/gollum \
+        --prefix PATH ":" ${lib.makeBinPath [ git docutils perl]}
+      makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
+        --prefix PATH ":" ${lib.makeBinPath [ git ]}
+    '';
 
   passthru.updateScript = bundlerUpdateScript "gollum";
 

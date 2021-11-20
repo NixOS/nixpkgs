@@ -4,7 +4,7 @@
 , pruviloj
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "derive";
   version = "2018-07-02";
 

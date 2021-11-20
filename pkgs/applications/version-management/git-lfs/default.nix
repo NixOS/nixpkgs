@@ -29,9 +29,9 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Git extension for versioning large files";
-    homepage    = "https://git-lfs.github.com/";
-    changelog   = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
-    license     = [ licenses.mit ];
+    homepage = "https://git-lfs.github.com/";
+    changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
+    license = [ licenses.mit ];
     maintainers = [ maintainers.twey maintainers.marsam ];
   };
 }

@@ -126,6 +126,6 @@ buildBazelPackage rec {
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Other platforms will generate different fetch hashes.
+    platforms = [ "x86_64-linux" ]; # Other platforms will generate different fetch hashes.
   };
 }

@@ -13,7 +13,9 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.Version=${version}"
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

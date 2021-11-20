@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
   buildInputs = [ perlPackages.perl perlPackages.LocaleGettext ];
 
-  doCheck = false;                                # target `check' is missing
+  doCheck = false; # target `check' is missing
 
   patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 

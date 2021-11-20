@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl
-, pkg-config, makeWrapper, autoreconfHook
-, openldap, python, pam
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, makeWrapper
+, autoreconfHook
+, openldap
+, python
+, pam
 }:
 
 stdenv.mkDerivation rec {

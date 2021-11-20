@@ -1,4 +1,10 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, fetchpatch
+{ lib
+, stdenv
+, llvm_meta
+, version
+, fetch
+, cmake
+, fetchpatch
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 

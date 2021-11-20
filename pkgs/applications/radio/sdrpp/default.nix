@@ -1,30 +1,53 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, libX11, glfw, glew, fftwFloat, volk, AppKit
-# Sources
-, airspy_source ? true, airspy
-, airspyhf_source ? true, airspyhf
-, bladerf_source ? false, libbladeRF
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libX11
+, glfw
+, glew
+, fftwFloat
+, volk
+, AppKit
+  # Sources
+, airspy_source ? true
+, airspy
+, airspyhf_source ? true
+, airspyhf
+, bladerf_source ? false
+, libbladeRF
 , file_source ? true
-, hackrf_source ? true, hackrf
-, limesdr_source ? false, limesuite
+, hackrf_source ? true
+, hackrf
+, limesdr_source ? false
+, limesuite
 , sddc_source ? false
-, rtl_sdr_source ? true, librtlsdr, libusb1
+, rtl_sdr_source ? true
+, librtlsdr
+, libusb1
 , rtl_tcp_source ? true
-, sdrplay_source ? false, sdrplay
-, soapy_source ? true, soapysdr
+, sdrplay_source ? false
+, sdrplay
+, soapy_source ? true
+, soapysdr
 , spyserver_source ? true
-, plutosdr_source ? stdenv.isLinux, libiio, libad9361
-# Sinks
-, audio_sink ? true, rtaudio
-, portaudio_sink ? false, portaudio
+, plutosdr_source ? stdenv.isLinux
+, libiio
+, libad9361
+  # Sinks
+, audio_sink ? true
+, rtaudio
+, portaudio_sink ? false
+, portaudio
 , network_sink ? true
-# Decoders
+  # Decoders
 , falcon9_decoder ? false
-, m17_decoder ? false, codec2
+, m17_decoder ? false
+, codec2
 , meteor_demodulator ? true
 , radio ? true
 , weather_sat_decoder ? true
-# Misc
+  # Misc
 , discord_presence ? true
 , frequency_manager ? true
 , recorder ? true

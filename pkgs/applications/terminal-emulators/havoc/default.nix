@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, libxkbcommon, wayland, wayland-protocols }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, wayland
+, wayland-protocols
+}:
 
 stdenv.mkDerivation rec {
 

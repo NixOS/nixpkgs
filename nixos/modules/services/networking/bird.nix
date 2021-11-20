@@ -10,11 +10,13 @@ let
       birdBin = if variant == "bird6" then "bird6" else "bird";
       birdc = if variant == "bird6" then "birdc6" else "birdc";
       descr =
-        { bird = "1.6.x with IPv4 support";
+        {
+          bird = "1.6.x with IPv4 support";
           bird6 = "1.6.x with IPv6 support";
           bird2 = "2.x";
         }.${variant};
-    in {
+    in
+    {
       ###### interface
       options = {
         services.${variant} = {
@@ -60,12 +62,21 @@ let
             ExecStart = "${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -u ${variant} -g ${variant}";
             ExecReload = "/bin/sh -c '${pkg}/bin/${birdBin} -c /etc/bird/${variant}.conf -p && ${pkg}/bin/${birdc} configure'";
             ExecStop = "${pkg}/bin/${birdc} down";
-            CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_FOWNER" "CAP_DAC_OVERRIDE" "CAP_SETUID" "CAP_SETGID"
-                                      # see bird/sysdep/linux/syspriv.h
-                                      "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+            CapabilityBoundingSet = [
+              "CAP_CHOWN"
+              "CAP_FOWNER"
+              "CAP_DAC_OVERRIDE"
+              "CAP_SETUID"
+              "CAP_SETGID"
+              # see bird/sysdep/linux/syspriv.h
+              "CAP_NET_BIND_SERVICE"
+              "CAP_NET_BROADCAST"
+              "CAP_NET_ADMIN"
+              "CAP_NET_RAW"
+            ];
             ProtectSystem = "full";
             ProtectHome = "yes";
-            SystemCallFilter="~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
+            SystemCallFilter = "~@cpu-emulation @debug @keyring @module @mount @obsolete @raw-io";
             MemoryDenyWriteExecute = "yes";
           };
         };
@@ -75,7 +86,7 @@ let
             group = variant;
             isSystemUser = true;
           };
-          groups.${variant} = {};
+          groups.${variant} = { };
         };
       };
     };

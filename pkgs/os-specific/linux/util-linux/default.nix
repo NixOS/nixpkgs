@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, zlib
+, shadow
+, libcap_ng
+, ncurses ? null
+, pam
+, systemd ? null
 , nlsSupport ? true
 }:
 
@@ -38,16 +46,17 @@ stdenv.mkDerivation rec {
     "--enable-mesg"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
-    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-makeinstall-setuid"
+    "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.enableFeature nlsSupport "nls")
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+      "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "scanf_cv_type_modifier=ms"
+    "scanf_cv_type_modifier=ms"
   ;
 
   makeFlags = [

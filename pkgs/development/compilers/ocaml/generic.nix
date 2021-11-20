@@ -1,13 +1,23 @@
-{ minor_version, major_version, patch_version
-, ...}@args:
+{ minor_version
+, major_version
+, patch_version
+, ...
+}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips || stdenv.hostPlatform.isStatic);
 in
 
-{ lib, stdenv, fetchurl, ncurses, buildEnv, libunwind
-, libX11, xorgproto, useX11 ? safeX11 stdenv && !lib.versionAtLeast version "4.09"
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, buildEnv
+, libunwind
+, libX11
+, xorgproto
+, useX11 ? safeX11 stdenv && !lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
 , spaceTimeSupport ? false
@@ -26,13 +36,13 @@ let
 in
 
 let
-   useNativeCompilers = !stdenv.isMips;
-   inherit (lib) optional optionals optionalString;
-   name = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}-${version}";
+  useNativeCompilers = !stdenv.isMips;
+  inherit (lib) optional optionals optionalString;
+  name = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
 let
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
+  x11env = buildEnv { name = "x11env"; paths = [ libX11 xorgproto ]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
 in
@@ -48,21 +58,24 @@ stdenv.mkDerivation (args // {
 
   prefixKey = "-prefix ";
   configureFlags =
-    let flags = new: old:
-      if lib.versionAtLeast version "4.08"
-      then new else old
-    ; in
-    optionals useX11 (flags
-      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
-      [ "-x11lib" x11lib "-x11include" x11inc ])
-  ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
-  ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
-  ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
-  ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
-  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
-    "-host ${stdenv.hostPlatform.config}"
-    "-target ${stdenv.targetPlatform.config}"
-  ];
+    let
+      flags = new: old:
+        if lib.versionAtLeast version "4.08"
+        then new else old
+      ;
+    in
+    optionals useX11
+      (flags
+        [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}" ]
+        [ "-x11lib" x11lib "-x11include" x11inc ])
+    ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
+    ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
+    ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
+    ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
+      "-host ${stdenv.hostPlatform.config}"
+      "-target ${stdenv.targetPlatform.config}"
+    ];
   dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
   configurePlatforms = lib.optionals (lib.versionAtLeast version "4.08") [ "host" "target" ];
   # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together

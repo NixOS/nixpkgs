@@ -1,7 +1,13 @@
-{ lib, fetchPypi, isPy27
+{ lib
+, fetchPypi
+, isPy27
 , buildPythonPackage
-, traits, apptools, pytestCheckHook
-, ipykernel, ipython, setuptools
+, traits
+, apptools
+, pytestCheckHook
+, ipykernel
+, ipython
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -22,7 +28,9 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
-    ipykernel ipython pytestCheckHook
+    ipykernel
+    ipython
+    pytestCheckHook
   ];
 
   meta = with lib; {

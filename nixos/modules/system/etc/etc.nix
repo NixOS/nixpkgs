@@ -8,10 +8,11 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.runCommandLocal "etc" {
-    # This is needed for the systemd module
-    passthru.targets = map (x: x.target) etc';
-  } /* sh */ ''
+  etc = pkgs.runCommandLocal "etc"
+    {
+      # This is needed for the systemd module
+      passthru.targets = map (x: x.target) etc';
+    } /* sh */ ''
     set -euo pipefail
 
     makeEtcEntry() {
@@ -71,7 +72,7 @@ in
   options = {
 
     environment.etc = mkOption {
-      default = {};
+      default = { };
       example = literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
@@ -86,7 +87,8 @@ in
 
       type = with types; attrsOf (submodule (
         { name, config, options, ... }:
-        { options = {
+        {
+          options = {
 
             enable = mkOption {
               type = types.bool;
@@ -134,7 +136,7 @@ in
               description = ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
-                '';
+              '';
             };
 
             gid = mkOption {
@@ -176,7 +178,8 @@ in
             );
           };
 
-        }));
+        }
+      ));
 
     };
 

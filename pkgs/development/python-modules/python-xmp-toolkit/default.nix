@@ -4,7 +4,8 @@
 , mock
 , pythonOlder
 , pytz
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 buildPythonPackage {

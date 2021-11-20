@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "tests/test_backend.py"  # django.core.exceptions.ImproperlyConfigured: Requested setting DJANGO_REDIS_SCAN_ITERSIZE, but settings are not configured.
+    "tests/test_backend.py" # django.core.exceptions.ImproperlyConfigured: Requested setting DJANGO_REDIS_SCAN_ITERSIZE, but settings are not configured.
   ];
 
   meta = with lib; {

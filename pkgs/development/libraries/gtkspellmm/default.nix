@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
-, gtk3, glib, glibmm, gtkmm3, gtkspell3
+, gtk3
+, glib
+, glibmm
+, gtkmm3
+, gtkspell3
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gtkspell/gtkspellmm/" +
-          "${pname}-${version}.tar.xz";
+      "${pname}-${version}.tar.xz";
     sha256 = "0i8mxwyfv5mskachafa4qlh315q0cfph7s66s1s34nffadbmm1sv";
   };
 
@@ -19,7 +25,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk3 glib glibmm gtkmm3
+    gtk3
+    glib
+    glibmm
+    gtkmm3
   ];
 
   meta = with lib; {

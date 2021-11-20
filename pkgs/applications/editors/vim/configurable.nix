@@ -1,30 +1,56 @@
-{ source ? "default", callPackage, lib, stdenv, ncurses, pkg-config, gettext
-, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
-, libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
+{ source ? "default"
+, callPackage
+, lib
+, stdenv
+, ncurses
+, pkg-config
+, gettext
+, writeText
+, config
+, glib
+, gtk2-x11
+, gtk3-x11
+, lua
+, python3
+, perl
+, tcl
+, ruby
+, libX11
+, libXext
+, libSM
+, libXpm
+, libXt
+, libXaw
+, libXau
+, libXmu
 , libICE
 , vimPlugins
 , makeWrapper
 , wrapGAppsHook
 , runtimeShell
 
-# apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc
+  # apple frameworks
+, CoreServices
+, CoreData
+, Cocoa
+, Foundation
+, libobjc
 
-, features          ? "huge" # One of tiny, small, normal, big or huge
-, wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
-, luaSupport        ? config.vim.lua or true
-, perlSupport       ? config.vim.perl or false      # Perl interpreter
-, pythonSupport     ? config.vim.python or true     # Python interpreter
-, rubySupport       ? config.vim.ruby or true       # Ruby interpreter
-, nlsSupport        ? config.vim.nls or false       # Enable NLS (gettext())
-, tclSupport        ? config.vim.tcl or false       # Include Tcl interpreter
-, multibyteSupport  ? config.vim.multibyte or false # Enable multibyte editing support
-, cscopeSupport     ? config.vim.cscope or true     # Enable cscope interface
-, netbeansSupport   ? config.netbeans or true       # Enable NetBeans integration support.
-, ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
-, darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
-, ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
+, features ? "huge" # One of tiny, small, normal, big or huge
+, wrapPythonDrv ? false
+, guiSupport ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
+, luaSupport ? config.vim.lua or true
+, perlSupport ? config.vim.perl or false      # Perl interpreter
+, pythonSupport ? config.vim.python or true     # Python interpreter
+, rubySupport ? config.vim.ruby or true       # Ruby interpreter
+, nlsSupport ? config.vim.nls or false       # Enable NLS (gettext())
+, tclSupport ? config.vim.tcl or false       # Include Tcl interpreter
+, multibyteSupport ? config.vim.multibyte or false # Enable multibyte editing support
+, cscopeSupport ? config.vim.cscope or true     # Enable cscope interface
+, netbeansSupport ? config.netbeans or true       # Enable NetBeans integration support.
+, ximSupport ? config.vim.xim or true        # less than 15KB, needed for deadkeys
+, darwinSupport ? config.vim.darwin or false    # Enable Darwin support
+, ftNixSupport ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
 , ...
 }:
 
@@ -60,9 +86,10 @@ let
     endif
   '';
 
-  common = callPackage ./common.nix {};
+  common = callPackage ./common.nix { };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "vim_configurable";
 
@@ -76,14 +103,14 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-features=${features}"
-    "--disable-xsmp"              # XSMP session management
-    "--disable-xsmp_interact"     # XSMP interaction
-    "--disable-workshop"          # Sun Visual Workshop support
-    "--disable-sniff"             # Sniff interface
-    "--disable-hangulinput"       # Hangul input support
-    "--disable-fontset"           # X fontset output support
-    "--disable-acl"               # ACL support
-    "--disable-gpm"               # GPM (Linux mouse daemon)
+    "--disable-xsmp" # XSMP session management
+    "--disable-xsmp_interact" # XSMP interaction
+    "--disable-workshop" # Sun Visual Workshop support
+    "--disable-sniff" # Sniff interface
+    "--disable-hangulinput" # Hangul input support
+    "--disable-fontset" # X fontset output support
+    "--disable-acl" # ACL support
+    "--disable-gpm" # GPM (Linux mouse daemon)
     "--disable-mzschemeinterp"
     "--disable-gtk_check"
     "--disable-gtk2_check"
@@ -104,9 +131,9 @@ in stdenv.mkDerivation rec {
     "vim_cv_stat_ignores_slash=yes"
     "vim_cv_memmove_handles_overlap=yes"
   ]
-    ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
+  ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
   ++ lib.optional stdenv.isDarwin
-     (if darwinSupport then "--enable-darwin" else "--disable-darwin")
+    (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
@@ -119,14 +146,14 @@ in stdenv.mkDerivation rec {
     # Disables Python 2
     "--disable-pythoninterp"
   ]
-  ++ lib.optional nlsSupport          "--enable-nls"
-  ++ lib.optional perlSupport         "--enable-perlinterp"
-  ++ lib.optional rubySupport         "--enable-rubyinterp"
-  ++ lib.optional tclSupport          "--enable-tclinterp"
-  ++ lib.optional multibyteSupport    "--enable-multibyte"
-  ++ lib.optional cscopeSupport       "--enable-cscope"
-  ++ lib.optional netbeansSupport     "--enable-netbeans"
-  ++ lib.optional ximSupport          "--enable-xim";
+  ++ lib.optional nlsSupport "--enable-nls"
+  ++ lib.optional perlSupport "--enable-perlinterp"
+  ++ lib.optional rubySupport "--enable-rubyinterp"
+  ++ lib.optional tclSupport "--enable-tclinterp"
+  ++ lib.optional multibyteSupport "--enable-multibyte"
+  ++ lib.optional cscopeSupport "--enable-cscope"
+  ++ lib.optional netbeansSupport "--enable-netbeans"
+  ++ lib.optional ximSupport "--enable-xim";
 
   nativeBuildInputs = [
     pkg-config
@@ -141,31 +168,31 @@ in stdenv.mkDerivation rec {
     ncurses
     glib
   ]
-    # All X related dependencies
-    ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
-      libSM
-      libICE
-      libX11
-      libXext
-      libXpm
-      libXt
-      libXaw
-      libXau
-      libXmu
-    ]
-    ++ lib.optional (guiSupport == "gtk2") gtk2-x11
-    ++ lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
-    ++ lib.optional luaSupport lua
-    ++ lib.optional pythonSupport python3
-    ++ lib.optional tclSupport tcl
-    ++ lib.optional rubySupport ruby;
+  # All X related dependencies
+  ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
+    libSM
+    libICE
+    libX11
+    libXext
+    libXpm
+    libXt
+    libXaw
+    libXau
+    libXmu
+  ]
+  ++ lib.optional (guiSupport == "gtk2") gtk2-x11
+  ++ lib.optional (guiSupport == "gtk3") gtk3-x11
+  ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
+  ++ lib.optional luaSupport lua
+  ++ lib.optional pythonSupport python3
+  ++ lib.optional tclSupport tcl
+  ++ lib.optional rubySupport ruby;
 
   preConfigure = "" + lib.optionalString ftNixSupport ''
-      cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
-      cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
-      cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
-    '';
+    cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
+    cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
+    cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
+  '';
 
   preInstall = ''
     mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps

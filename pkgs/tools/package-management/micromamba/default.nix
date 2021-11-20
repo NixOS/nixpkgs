@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, cli11
+, nlohmann_json
+, curl
+, libarchive
+, libyamlcpp
+, libsolv
+, reproc
 }:
 
 let

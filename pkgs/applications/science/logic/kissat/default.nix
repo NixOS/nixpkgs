@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, drat-trim, p7zip
+{ lib
+, stdenv
+, fetchFromGitHub
+, drat-trim
+, p7zip
 }:
 
 stdenv.mkDerivation rec {

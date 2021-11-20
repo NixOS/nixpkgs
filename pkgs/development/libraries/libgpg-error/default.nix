@@ -1,6 +1,11 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, gettext
 , genPosixLockObjOnly ? false
-}: let
+}:
+let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
     buildPhase = ''
       cd src
@@ -15,7 +20,8 @@
     outputs = [ "out" ];
     outputBin = "out";
   };
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = "libgpg-error";
   version = "1.42";
 
@@ -52,11 +58,11 @@ in stdenv.mkDerivation (rec {
 
   postConfigure =
     lib.optionalString stdenv.isSunOS
-    # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
-    # `config.status' run:
-    #   ./config.status[1401]: shift: (null): bad number
-    # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
-    # Thus, re-run it with Bash.
+      # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
+      # `config.status' run:
+      #   ./config.status[1401]: shift: (null): bad number
+      # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+      # Thus, re-run it with Bash.
       "${stdenv.shell} config.status";
 
   doCheck = true; # not cross

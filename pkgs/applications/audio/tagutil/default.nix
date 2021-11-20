@@ -1,6 +1,12 @@
-{ stdenv, lib, fetchFromGitHub
-, pkg-config, cmake, libyaml
-, jansson, libvorbis, taglib
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, libyaml
+, jansson
+, libvorbis
+, taglib
 , zlib
 }:
 

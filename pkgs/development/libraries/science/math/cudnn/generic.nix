@@ -26,12 +26,14 @@ stdenv.mkDerivation {
 
   inherit version;
 
-  src = let
-    hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
-  in fetchurl ({
-    # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
-    url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
-  } // hash_);
+  src =
+    let
+      hash_ = if hash != null then { inherit hash; } else { inherit sha256; };
+    in
+    fetchurl ({
+      # URL from NVIDIA docker containers: https://gitlab.com/nvidia/cuda/blob/centos7/7.0/runtime/cudnn4/Dockerfile
+      url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
+    } // hash_);
 
   nativeBuildInputs = [ addOpenGLRunpath ];
 

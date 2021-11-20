@@ -1,10 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, bash
+, gnugrep
 , fixDarwinDylibNames
 , file
 , fetchpatch
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
-# these need to be ran on the host, thus disable when cross-compiling
+  # these need to be ran on the host, thus disable when cross-compiling
 , buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
 , doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
@@ -47,7 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = lib.attrsets.mapAttrsToList
-    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+    (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}")
+    {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
       BUILD_CONTRIB = buildContrib;

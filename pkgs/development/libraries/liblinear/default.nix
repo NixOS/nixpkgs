@@ -2,7 +2,8 @@
 
 let
   soVersion = "4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "liblinear";
   version = "2.43";
 

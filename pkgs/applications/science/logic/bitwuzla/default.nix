@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
   checkInputs = [ python3 gtest ];
   # two tests fail on darwin and 3 on aarch64-linux
   doCheck = stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isAarch64);
-  preCheck = let
-    var = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-  in
+  preCheck =
+    let
+      var = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
     ''
       export ${var}=$(readlink -f lib)
       patchShebangs ..

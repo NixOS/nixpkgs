@@ -13,18 +13,18 @@ rec {
        addMetaAttrs {description = "Bla blah";} somePkg
   */
   addMetaAttrs = newAttrs: drv:
-    drv // { meta = (drv.meta or {}) // newAttrs; };
+    drv // { meta = (drv.meta or { }) // newAttrs; };
 
 
   /* Disable Hydra builds of given derivation.
   */
-  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
 
   /* Change the symbolic name of a package for presentation purposes
      (i.e., so that nix-env users can tell them apart).
   */
-  setName = name: drv: drv // {inherit name;};
+  setName = name: drv: drv // { inherit name; };
 
 
   /* Like `setName', but takes the previous name as an argument.
@@ -32,7 +32,7 @@ rec {
      Example:
        updateName (oldName: oldName + "-experimental") somePkg
   */
-  updateName = updater: drv: drv // {name = updater (drv.name);};
+  updateName = updater: drv: drv // { name = updater (drv.name); };
 
 
   /* Append a suffix to the name of a package (before the version
@@ -81,12 +81,14 @@ rec {
      We can inject these into a patten for the whole of a structured platform,
      and then match that.
   */
-  platformMatch = platform: elem: let
+  platformMatch = platform: elem:
+    let
       pattern =
         if builtins.isString elem
         then { system = elem; }
         else { parsed = elem; };
-    in lib.matchAttrs pattern platform;
+    in
+    lib.matchAttrs pattern platform;
 
   /* Check if a package is available on a given platform.
 
@@ -98,5 +100,5 @@ rec {
   */
   availableOn = platform: pkg:
     lib.any (platformMatch platform) pkg.meta.platforms &&
-    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    lib.all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
 }

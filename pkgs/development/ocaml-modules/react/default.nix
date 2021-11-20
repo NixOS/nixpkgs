@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     homepage = "https://erratique.ch/software/react";
     description = "Applicative events and signals for OCaml";
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ maggesi vbmithr gal_bolle];
+    platforms = ocaml.meta.platforms or [ ];
+    maintainers = with maintainers; [ maggesi vbmithr gal_bolle ];
   };
 }

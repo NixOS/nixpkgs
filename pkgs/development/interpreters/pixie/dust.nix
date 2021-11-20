@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, pixie, rlwrap
+{ lib
+, stdenv
+, fetchFromGitHub
+, pixie
+, rlwrap
 }:
 
 stdenv.mkDerivation rec {

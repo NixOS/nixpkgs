@@ -1,7 +1,36 @@
-{ lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
-  cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg_3, opencolorio_1, openimageio,
-  qmake4Hook, libpng, libGL, lndir, libraw, openjpeg, libwebp, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchurl
+, qt4
+, pkg-config
+, boost
+, expat
+, cairo
+, python2Packages
+, cmake
+, flex
+, bison
+, pango
+, librsvg
+, librevenge
+, libxml2
+, libcdr
+, libzip
+, poppler
+, imagemagick
+, openexr
+, ffmpeg_3
+, opencolorio_1
+, openimageio
+, qmake4Hook
+, libpng
+, libGL
+, lndir
+, libraw
+, openjpeg
+, libwebp
+, fetchFromGitHub
+}:
 
 let
   minorVersion = "2.3";
@@ -20,7 +49,7 @@ let
     nativeBuildInputs = [ cmake ];
     buildInputs = [ libpng flex bison ];
   };
-  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [], buildInputs ? [], preConfigure ? "", postPatch ? "" }:
+  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [ ], buildInputs ? [ ], preConfigure ? "", postPatch ? "" }:
     stdenv.mkDerivation {
       pname = "openfx-${pluginName}";
       version = version;
@@ -58,8 +87,15 @@ let
       sha256 = "tUb6myG03mRieUAfgRZfv5Ap+cLvbpNrLMYCGTiAq8c=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        pango librsvg librevenge libcdr opencolorio_1 libxml2 libzip
-        poppler imagemagick
+        pango
+        librsvg
+        librevenge
+        libcdr
+        opencolorio_1
+        libxml2
+        libzip
+        poppler
+        imagemagick
       ];
       preConfigure = ''
         sed -i 's|pkg-config poppler-glib|pkg-config poppler poppler-glib|g' Makefile.master
@@ -74,8 +110,17 @@ let
       sha256 = "OQg6a5wNy9TFFySjmgd1subvXRxY/ZnSOCkaoUo+ZaA=";
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
-        libpng ffmpeg_3 openexr opencolorio_1 openimageio boost libGL
-        seexpr libraw openjpeg libwebp
+        libpng
+        ffmpeg_3
+        openexr
+        opencolorio_1
+        openimageio
+        boost
+        libGL
+        seexpr
+        libraw
+        openjpeg
+        libwebp
       ];
     })
     ({
@@ -107,7 +152,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ qmake4Hook pkg-config python2Packages.wrapPython ];
 
   buildInputs = [
-    qt4 boost expat cairo python2Packages.pyside python2Packages.pysideShiboken
+    qt4
+    boost
+    expat
+    cairo
+    python2Packages.pyside
+    python2Packages.pysideShiboken
   ];
 
   preConfigure = ''

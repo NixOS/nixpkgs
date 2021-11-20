@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
 , llvmPackages
-, cmake, boehmgc, gmp, zlib, ncurses, boost, libelf
-, python3, git, sbcl
+, cmake
+, boehmgc
+, gmp
+, zlib
+, ncurses
+, boost
+, libelf
+, python3
+, git
+, sbcl
 , wafHook
 }:
 let
@@ -71,17 +82,22 @@ stdenv.mkDerivation rec {
     (with llvmPackages; [ llvm clang ]);
 
   buildInputs = with llvmPackages;
-  (
-   builtins.map (x: lib.overrideDerivation x
-           (x: {NIX_CFLAGS_COMPILE= (x.NIX_CFLAGS_COMPILE or "") + " -frtti"; }))
-   [ llvm clang clang-unwrapped clang ]) ++
-  [
-    gmp zlib ncurses
-    boost boehmgc libelf
-    (boost.override {enableStatic = true; enableShared = false;})
-    (lib.overrideDerivation boehmgc
-      (x: {configureFlags = (x.configureFlags or []) ++ ["--enable-static"];}))
-  ];
+    (
+      builtins.map
+        (x: lib.overrideDerivation x
+          (x: { NIX_CFLAGS_COMPILE = (x.NIX_CFLAGS_COMPILE or "") + " -frtti"; }))
+        [ llvm clang clang-unwrapped clang ]) ++
+    [
+      gmp
+      zlib
+      ncurses
+      boost
+      boehmgc
+      libelf
+      (boost.override { enableStatic = true; enableShared = false; })
+      (lib.overrideDerivation boehmgc
+        (x: { configureFlags = (x.configureFlags or [ ]) ++ [ "--enable-static" ]; }))
+    ];
 
   NIX_CXXSTDLIB_COMPILE = " -frtti ";
 
@@ -119,11 +135,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     # Large, long to build, a private build of clang is needed, a prerelease.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     homepage = "https://github.com/drmeister/clasp";
   };
 }

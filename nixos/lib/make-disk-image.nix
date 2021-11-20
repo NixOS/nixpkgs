@@ -27,7 +27,7 @@
   # user and group name that will be set as owner of the files.
   # `mode', `user', and `group' are optional.
   # When setting one of `user' or `group', the other needs to be set too.
-  contents ? []
+  contents ? [ ]
 
 , # Type of partition table to use; either "legacy", "efi", or "none".
   # For "efi" images, the GPT partition table is used and a mandatory ESP
@@ -77,7 +77,7 @@
   copyChannel ? true
 
 , # Additional store paths to copy to the image's store.
-  additionalPaths ? []
+  additionalPaths ? [ ]
 }:
 
 assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
@@ -85,10 +85,10 @@ assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || p
 assert partitionTableType != "none" -> fsType == "ext4";
 # Either both or none of {user,group} need to be set
 assert lib.all
-         (attrs: ((attrs.user  or null) == null)
-              == ((attrs.group or null) == null))
-         contents;
-assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
+  (attrs: ((attrs.user  or null) == null)
+    == ((attrs.group or null) == null))
+  contents;
+assert onlyNixStore -> contents == [ ] && configFile == null && !installBootLoader;
 
 with lib;
 
@@ -100,19 +100,21 @@ let format' = format; in let
 
   filename = "nixos." + {
     qcow2 = "qcow2";
-    vdi   = "vdi";
-    vpc   = "vhd";
-    raw   = "img";
+    vdi = "vdi";
+    vpc = "vhd";
+    raw = "img";
   }.${format} or format;
 
-  rootPartition = { # switch-case
+  rootPartition = {
+    # switch-case
     legacy = "1";
     "legacy+gpt" = "2";
     efi = "2";
     hybrid = "3";
   }.${partitionTableType};
 
-  partitionDiskScript = { # switch-case
+  partitionDiskScript = {
+    # switch-case
     legacy = ''
       parted --script $diskImage -- \
         mklabel msdos \
@@ -150,7 +152,7 @@ let format' = format; in let
   nixpkgs = cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
-  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
+  channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" { } ''
     mkdir -p $out
     cp -prd ${nixpkgs.outPath} $out/nixos
     chmod -R u+w $out/nixos
@@ -162,7 +164,8 @@ let format' = format; in let
   '';
 
   binPath = with pkgs; makeBinPath (
-    [ rsync
+    [
+      rsync
       util-linux
       parted
       e2fsprogs
@@ -170,16 +173,17 @@ let format' = format; in let
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
-    ] ++ stdenv.initialPath);
+    ] ++ stdenv.initialPath
+  );
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
   # !!! should use XML.
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
-  modes   = map (x: x.mode  or "''") contents;
-  users   = map (x: x.user  or "''") contents;
-  groups  = map (x: x.group or "''") contents;
+  modes = map (x: x.mode  or "''") contents;
+  users = map (x: x.user  or "''") contents;
+  groups = map (x: x.group or "''") contents;
 
   basePaths = [ config.system.build.toplevel ]
     ++ lib.optional copyChannel channelSources;
@@ -368,12 +372,13 @@ let format' = format; in let
   '';
 
   buildImage = pkgs.vmTools.runInLinuxVM (
-    pkgs.runCommand name {
-      preVM = prepareImage;
-      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = moveOrConvertImage + postVM;
-      memSize = 1024;
-    } ''
+    pkgs.runCommand name
+      {
+        preVM = prepareImage;
+        buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
+        postVM = moveOrConvertImage + postVM;
+        memSize = 1024;
+      } ''
       export PATH=${binPath}:$PATH
 
       rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
@@ -437,7 +442,7 @@ let format' = format; in let
     ''
   );
 in
-  if onlyNixStore then
-    pkgs.runCommand name {}
-      (prepareImage + moveOrConvertImage + postVM)
-  else buildImage
+if onlyNixStore then
+  pkgs.runCommand name { }
+    (prepareImage + moveOrConvertImage + postVM)
+else buildImage

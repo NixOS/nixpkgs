@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, ruby
+{ lib
+, stdenv
+, fetchFromGitHub
+, gcc-arm-embedded
+, binutils-arm-embedded
+, ruby
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
+    gcc-arm-embedded
+    binutils-arm-embedded
     ruby
   ];
 

@@ -1,7 +1,14 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  akonadi, kcompletion, ki18n, kitemmodels, kmime, kxmlgui
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, akonadi
+, kcompletion
+, ki18n
+, kitemmodels
+, kmime
+, kxmlgui
 }:
 
 mkDerivation {
@@ -12,7 +19,12 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    akonadi kcompletion ki18n kitemmodels kmime kxmlgui
+    akonadi
+    kcompletion
+    ki18n
+    kitemmodels
+    kmime
+    kxmlgui
   ];
   outputs = [ "out" "dev" ];
 }

@@ -5,9 +5,9 @@ let
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
+      if builtins.length l == 1 then generators.mkValueStringDefault { } (head l)
       else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
-    mkKeyValue = generators.mkKeyValueDefault {} ":";
+    mkKeyValue = generators.mkKeyValueDefault { } ":";
   };
 in
 {
@@ -92,26 +92,28 @@ in
       group = config.services.octoprint.group;
     };
 
-    systemd.services.klipper = let
-      klippyArgs = "--input-tty=${cfg.inputTTY}"
-        + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
-    in {
-      description = "Klipper 3D Printer Firmware";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+    systemd.services.klipper =
+      let
+        klippyArgs = "--input-tty=${cfg.inputTTY}"
+          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+      in
+      {
+        description = "Klipper 3D Printer Firmware";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
-        RuntimeDirectory = "klipper";
-        SupplementaryGroups = [ "dialout" ];
-        WorkingDirectory = "${cfg.package}/lib";
-      } // (if cfg.user != null then {
-        Group = cfg.group;
-        User = cfg.user;
-      } else {
-        DynamicUser = true;
-        User = "klipper";
-      });
-    };
+        serviceConfig = {
+          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} /etc/klipper.cfg";
+          RuntimeDirectory = "klipper";
+          SupplementaryGroups = [ "dialout" ];
+          WorkingDirectory = "${cfg.package}/lib";
+        } // (if cfg.user != null then {
+          Group = cfg.group;
+          User = cfg.user;
+        } else {
+          DynamicUser = true;
+          User = "klipper";
+        });
+      };
   };
 }

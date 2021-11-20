@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, cppo
-# De facto, option minimal seems to be the default. See the README.
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, cppo
+  # De facto, option minimal seems to be the default. See the README.
 , minimal ? true
 }:
 
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
     license = lib.licenses.lgpl21Only;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

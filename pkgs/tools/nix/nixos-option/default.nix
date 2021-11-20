@@ -1,4 +1,4 @@
-{lib, stdenv, boost, cmake, pkg-config, nix, ... }:
+{ lib, stdenv, boost, cmake, pkg-config, nix, ... }:
 
 stdenv.mkDerivation rec {
   name = "nixos-option";

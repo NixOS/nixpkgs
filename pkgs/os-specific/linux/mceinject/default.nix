@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "unstable-2013-01-19";
 
   src = fetchFromGitHub {
-    owner  = "andikleen";
-    repo   = "mce-inject";
-    rev    = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
+    owner = "andikleen";
+    repo = "mce-inject";
+    rev = "4cbe46321b4a81365ff3aafafe63967264dbfec5";
     sha256 = "0gjapg2hrlxp8ssrnhvc19i3r1xpcnql7xv0zjgbv09zyha08g6z";
   };
 

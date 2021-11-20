@@ -2,8 +2,9 @@
 
 # This derivation does not provide any Python module and should therefore be called via `all-packages.nix`.
 let
-  pythonEnv = python3.withPackages(ps: with ps; [  sphinx ]);
-in stdenv.mkDerivation {
+  pythonEnv = python3.withPackages (ps: with ps; [ sphinx ]);
+in
+stdenv.mkDerivation {
   name = "pyside-apiextractor-0.10.10";
 
   src = fetchurl {

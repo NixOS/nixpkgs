@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , extra-cmake-modules
 , botan2
@@ -17,7 +18,7 @@
 , qttools
 , qtxmlpatterns
 , wrapQtAppsHook
-} :
+}:
 
 stdenv.mkDerivation rec{
   pname = "corectrl";

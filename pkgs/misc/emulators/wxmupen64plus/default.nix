@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU, libGL
-, wafHook }:
+{ lib
+, stdenv
+, fetchurl
+, python
+, wxGTK29
+, mupen64plus
+, SDL
+, libX11
+, libGLU
+, libGL
+, wafHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "wxmupen64plus";

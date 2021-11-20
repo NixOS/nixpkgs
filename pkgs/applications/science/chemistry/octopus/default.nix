@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
-, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitLab
+, gfortran
+, perl
+, procps
+, libyaml
+, libxc
+, fftw
+, blas
+, lapack
+, gsl
+, netcdf
+, arpack
+, autoreconfHook
 , python3
 , enableFma ? stdenv.hostPlatform.fmaSupport
 , enableFma4 ? stdenv.hostPlatform.fma4Support
@@ -48,9 +61,9 @@ stdenv.mkDerivation rec {
     "--with-libxc-prefix=${libxc}"
     "--enable-openmp"
   ] ++ optional enableFma "--enable-fma3"
-    ++ optional enableFma4 "--enable-fma4"
-    ++ optional enableAvx "--enable-avx"
-    ++ optional enableAvx512 "--enable-avx512";
+  ++ optional enableFma4 "--enable-fma4"
+  ++ optional enableAvx "--enable-avx"
+  ++ optional enableAvx512 "--enable-avx512";
 
   doCheck = false;
   checkTarget = "check-short";

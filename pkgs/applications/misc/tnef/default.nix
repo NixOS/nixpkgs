@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   pname = "tnef";
 
   src = fetchFromGitHub {
-    owner  = "verdammelt";
-    repo   = "tnef";
-    rev    = version;
+    owner = "verdammelt";
+    repo = "tnef";
+    rev = version;
     sha256 = "104g48mcm00bgiyzas2vf86331w7bnw7h3bc11ib4lp7rz6zqfck";
   };
 

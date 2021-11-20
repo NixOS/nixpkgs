@@ -1,7 +1,9 @@
 { stdenv
 , lib
-, fetchurl, unzip
-, boost, pugixml
+, fetchurl
+, unzip
+, boost
+, pugixml
 , hidapi
 , libusb1 ? null
 }:
@@ -12,7 +14,8 @@ assert stdenv.isLinux -> libusb1 != null;
 let
   hidapiDriver = optionalString stdenv.isLinux "-libusb";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "msp-debug-stack";
   version = "3.15.1.1";
 

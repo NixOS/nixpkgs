@@ -4,11 +4,13 @@ with lib;
 
 let
   krb5 =
-    { enable = true;
-      domain_realm."nfs.test"   = "NFS.TEST";
+    {
+      enable = true;
+      domain_realm."nfs.test" = "NFS.TEST";
       libdefaults.default_realm = "NFS.TEST";
       realms."NFS.TEST" =
-        { admin_server = "server.nfs.test";
+        {
+          admin_server = "server.nfs.test";
           kdc = "server.nfs.test";
         };
     };
@@ -21,10 +23,10 @@ let
 
   users = {
     users.alice = {
-        isNormalUser = true;
-        name = "alice";
-        uid = 1000;
-      };
+      isNormalUser = true;
+      name = "alice";
+      uid = 1000;
+    };
   };
 
 in
@@ -34,39 +36,43 @@ in
 
   nodes = {
     client = { lib, ... }:
-      { inherit krb5 users;
+      {
+        inherit krb5 users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
         networking.hostName = "client";
 
         virtualisation.fileSystems =
-          { "/data" = {
-              device  = "server.nfs.test:/";
-              fsType  = "nfs";
+          {
+            "/data" = {
+              device = "server.nfs.test:/";
+              fsType = "nfs";
               options = [ "nfsvers=4" "sec=krb5p" "noauto" ];
             };
           };
       };
 
-    server = { lib, ...}:
-      { inherit krb5 users;
+    server = { lib, ... }:
+      {
+        inherit krb5 users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
         networking.hostName = "server";
 
         networking.firewall.allowedTCPPorts = [
-          111  # rpc
+          111 # rpc
           2049 # nfs
-          88   # kerberos
-          749  # kerberos admin
+          88 # kerberos
+          749 # kerberos admin
         ];
 
         services.kerberos_server.enable = true;
         services.kerberos_server.realms =
-          { "NFS.TEST".acl =
-            [ { access = "all"; principal = "admin/admin"; } ];
+          {
+            "NFS.TEST".acl =
+              [{ access = "all"; principal = "admin/admin"; }];
           };
 
         services.nfs.server.enable = true;

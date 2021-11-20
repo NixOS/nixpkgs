@@ -6,7 +6,8 @@ let
 
   cfg = config.services.novacomd;
 
-in {
+in
+{
 
   options = {
     services.novacomd = {

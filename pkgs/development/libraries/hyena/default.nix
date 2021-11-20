@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    mono gtk-sharp-2_0
+    mono
+    gtk-sharp-2_0
   ];
 
   postPatch = ''

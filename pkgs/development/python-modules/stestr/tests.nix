@@ -1,4 +1,4 @@
-{  buildPythonPackage
+{ buildPythonPackage
 , stestr
 }:
 

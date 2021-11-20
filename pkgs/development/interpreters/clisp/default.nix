@@ -3,12 +3,25 @@
 # - base (default): contains readline and i18n, regexp and syscalls modules
 #   by default
 # - full: contains base plus modules in withModules
-{ lib, stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
+{ lib
+, stdenv
+, fetchurl
+, libsigsegv
+, gettext
+, ncurses
+, readline
+, libX11
+, libXau
+, libXt
+, pcre
+, zlib
+, libXpm
+, xorgproto
+, libXext
 , libffi
 , libffcall
 , coreutils
-# build options
+  # build options
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
 , x11Support ? (stdenv.isi686 || stdenv.isx86_64)
 , dllSupport ? true
@@ -36,16 +49,21 @@ stdenv.mkDerivation rec {
 
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
 
-  buildInputs = [libsigsegv]
-  ++ lib.optional (gettext != null) gettext
-  ++ lib.optional (ncurses != null) ncurses
-  ++ lib.optional (pcre != null) pcre
-  ++ lib.optional (zlib != null) zlib
-  ++ lib.optional (readline != null) readline
-  ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
-  ++ lib.optional ffcallAvailable libffcall
-  ++ lib.optionals x11Support [
-    libX11 libXau libXt libXpm xorgproto libXext
+  buildInputs = [ libsigsegv ]
+    ++ lib.optional (gettext != null) gettext
+    ++ lib.optional (ncurses != null) ncurses
+    ++ lib.optional (pcre != null) pcre
+    ++ lib.optional (zlib != null) zlib
+    ++ lib.optional (readline != null) readline
+    ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
+    ++ lib.optional ffcallAvailable libffcall
+    ++ lib.optionals x11Support [
+    libX11
+    libXau
+    libXt
+    libXpm
+    xorgproto
+    libXext
   ];
 
   patches = [
@@ -68,14 +86,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "builddir" ]
-  ++ lib.optional (!dllSupport) "--without-dynamic-modules"
-  ++ lib.optional (readline != null) "--with-readline"
-  # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
-  ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
-  ++ lib.optional ffcallAvailable "--with-ffcall"
-  ++ lib.optional (!ffcallAvailable) "--without-ffcall"
-  ++ builtins.map (x: "--with-module=" + x) withModules
-  ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
+    ++ lib.optional (!dllSupport) "--without-dynamic-modules"
+    ++ lib.optional (readline != null) "--with-readline"
+    # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
+    ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
+    ++ lib.optional ffcallAvailable "--with-ffcall"
+    ++ lib.optional (!ffcallAvailable) "--without-ffcall"
+    ++ builtins.map (x: "--with-module=" + x) withModules
+    ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
@@ -87,9 +105,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   postInstall =
-    lib.optionalString (withModules != [])
+    lib.optionalString (withModules != [ ])
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
-      + lib.concatMapStrings (x: " " + x) withModules);
+        + lib.concatMapStrings (x: " " + x) withModules);
 
   NIX_CFLAGS_COMPILE = "-O0 ${lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
@@ -99,7 +117,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.cons.org";
-    maintainers = with lib.maintainers; [raskin tohl];
+    maintainers = with lib.maintainers; [ raskin tohl ];
     platforms = lib.platforms.unix;
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;

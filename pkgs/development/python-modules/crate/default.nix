@@ -44,6 +44,6 @@ buildPythonPackage rec {
     # And also re-enable tests in pythonPackages.agate-sql.
     # The version string below is intentionally split, so nixpkgs-update does
     # not change it. That would make this warning pretty useless.
-    broken = assert version == "0.2"+"6.0"; true;
+    broken = assert version == "0.2" + "6.0"; true;
   };
 }

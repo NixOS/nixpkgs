@@ -1,13 +1,47 @@
 { qtModule
-, qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+, qtdeclarative
+, qtquickcontrols
+, qtlocation
+, qtwebchannel
 
-, bison, coreutils, flex, git, gperf, ninja, pkg-config, python2, which
-, nodejs, qtbase, perl
+, bison
+, coreutils
+, flex
+, git
+, gperf
+, ninja
+, pkg-config
+, python2
+, which
+, nodejs
+, qtbase
+, perl
 
-, xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
-, fontconfig, freetype, harfbuzz, icu, dbus, libdrm
-, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
-, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
+, xorg
+, libXcursor
+, libXScrnSaver
+, libXrandr
+, libXtst
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, dbus
+, libdrm
+, zlib
+, minizip
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, libopus
+, jsoncpp
+, protobuf
+, libvpx
+, srtp
+, snappy
+, nss
+, libevent
 , alsa-lib
 , libcap
 , pciutils
@@ -15,12 +49,33 @@
 , pipewire_0_2
 , enableProprietaryCodecs ? true
 , gn
-, cctools, libobjc, libunwind, sandbox, xnu
-, ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
-, ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
-, cups, openbsm, runCommand, xcbuild, writeScriptBin
+, cctools
+, libobjc
+, libunwind
+, sandbox
+, xnu
+, ApplicationServices
+, AVFoundation
+, Foundation
+, ForceFeedback
+, GameController
+, AppKit
+, ImageCaptureCore
+, CoreBluetooth
+, IOBluetooth
+, CoreWLAN
+, Quartz
+, Cocoa
+, LocalAuthentication
+, cups
+, openbsm
+, runCommand
+, xcbuild
+, writeScriptBin
 , ffmpeg ? null
-, lib, stdenv, fetchpatch
+, lib
+, stdenv
+, fetchpatch
 , version ? null
 , qtCompatVersion
 }:
@@ -29,7 +84,17 @@ qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkg-config python2 which gn nodejs
+    bison
+    coreutils
+    flex
+    git
+    gperf
+    ninja
+    pkg-config
+    python2
+    which
+    gn
+    nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -79,29 +144,30 @@ qtModule {
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   '' + lib.optionalString stdenv.isDarwin (
-  (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
-    substituteInPlace src/buildtools/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '' else ''
-    substituteInPlace src/core/config/mac_osx.pri \
-      --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
-  '')
-   # Following is required to prevent a build error:
-   # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-  + ''
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${xnu}"
-  ''
-  # Apple has some secret stuff they don't share with OpenBSM
-  + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-    --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
-  substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-    --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-  '' else ''
-  substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-    --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-  ''));
+    (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+      substituteInPlace src/buildtools/config/mac_osx.pri \
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    '' else ''
+      substituteInPlace src/core/config/mac_osx.pri \
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    '')
+    # Following is required to prevent a build error:
+    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
+    + ''
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
+        --replace '$sysroot/usr' "${xnu}"
+    ''
+    # Apple has some secret stuff they don't share with OpenBSM
+    + (if (lib.versionAtLeast qtCompatVersion "5.14") then ''
+      substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
+        --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+        --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
+    '' else ''
+      substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
+        --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
+    '')
+  );
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
@@ -139,34 +205,54 @@ qtModule {
 
   propagatedBuildInputs = [
     # Image formats
-    libjpeg libpng libtiff libwebp
+    libjpeg
+    libpng
+    libtiff
+    libwebp
 
     # Video formats
-    srtp libvpx
+    srtp
+    libvpx
 
     # Audio formats
     libopus
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz
+    icu
 
     libevent
     ffmpeg
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    dbus zlib minizip snappy nss protobuf jsoncpp
+    dbus
+    zlib
+    minizip
+    snappy
+    nss
+    protobuf
+    jsoncpp
 
     # Audio formats
     alsa-lib
 
     # Text rendering
-    fontconfig freetype
+    fontconfig
+    freetype
 
     libcap
     pciutils
 
     # X11 libs
-    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm xorg.libxkbfile
+    xorg.xrandr
+    libXScrnSaver
+    libXcursor
+    libXrandr
+    xorg.libpciaccess
+    libXtst
+    xorg.libXcomposite
+    xorg.libXdamage
+    libdrm
+    xorg.libxkbfile
 
   ] ++ lib.optionals (stdenv.isLinux && (lib.versionAtLeast qtCompatVersion "5.15")) [
     # Pipewire

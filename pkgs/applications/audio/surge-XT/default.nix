@@ -1,4 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, cairo, libxkbcommon, xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor, alsa-lib, libjack2
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cairo
+, libxkbcommon
+, xcbutilcursor
+, xcbutilkeysyms
+, xcbutil
+, libXrandr
+, libXinerama
+, libXcursor
+, alsa-lib
+, libjack2
 }:
 
 stdenv.mkDerivation rec {

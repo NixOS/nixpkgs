@@ -21,7 +21,8 @@ let
       owner = "vincenthz";
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "boxfs";
   version = "2-20150109";
 

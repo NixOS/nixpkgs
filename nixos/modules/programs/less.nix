@@ -52,7 +52,7 @@ in
 
       commands = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = {
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";
@@ -72,7 +72,7 @@ in
 
       lineEditingKeys = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = {
           e = "abort";
         };
@@ -121,9 +121,10 @@ in
       LESSCLOSE = cfg.lessclose;
     };
 
-    warnings = optional (
-      cfg.clearDefaultCommands && (all (x: x != "quit") (attrValues cfg.commands))
-    ) ''
+    warnings = optional
+      (
+        cfg.clearDefaultCommands && (all (x: x != "quit") (attrValues cfg.commands))
+      ) ''
       config.programs.less.clearDefaultCommands clears all default commands of less but there is no alternative binding for exiting.
       Consider adding a binding for 'quit'.
     '';

@@ -38,7 +38,8 @@
 , xcbutil
 , xcbutilwm
 , xz
-, buildManPages ? true, ruby
+, buildManPages ? true
+, ruby
 , useBuiltinLua ? true
 , useStaticFreetype ? false
 , useStaticLibuvc ? false
@@ -110,10 +111,11 @@ stdenv.mkDerivation rec {
   ];
 
   # Emulate external/git/clone.sh
-  postUnpack = let
-    inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
-      letoram-openal-src freetype-src libuvc-src luajit-src;
-  in
+  postUnpack =
+    let
+      inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
+        letoram-openal-src freetype-src libuvc-src luajit-src;
+    in
     ''
       pushd $sourceRoot/external/git/
     ''

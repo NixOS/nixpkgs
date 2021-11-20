@@ -5,7 +5,9 @@
 , six
 , scipy
 , smart-open
-, scikit-learn, testfixtures, unittest2
+, scikit-learn
+, testfixtures
+, unittest2
 , isPy3k
 }:
 

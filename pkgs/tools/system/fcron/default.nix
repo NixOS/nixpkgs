@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
   patches = [ ./relative-fcronsighup.patch ];
 
   configureFlags =
-    [ "--with-sendmail=${busybox}/sbin/sendmail"
-      "--with-editor=${vim}/bin/vi"  # TODO customizable
+    [
+      "--with-sendmail=${busybox}/sbin/sendmail"
+      "--with-editor=${vim}/bin/vi" # TODO customizable
       "--with-bootinstall=no"
       "--localstatedir=/var"
       "--sysconfdir=/etc"
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description="A command scheduler with extended capabilities over cron and anacron";
+    description = "A command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
     license = licenses.gpl2;
     platforms = lib.platforms.all;

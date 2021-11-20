@@ -8,7 +8,8 @@ let
           platformio = self.callPackage ./core.nix { inherit version src; };
         };
       };
-    in (with pkgs; [
+    in
+    (with pkgs; [
       zlib
       git
     ]) ++ (with python.pkgs; [
@@ -19,7 +20,8 @@ let
       platformio
     ]);
 
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "platformio";
 
   targetPkgs = pio-pkgs;

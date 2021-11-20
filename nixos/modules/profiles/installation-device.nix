@@ -5,7 +5,8 @@ with lib;
 
 {
   imports =
-    [ # Enable devices which are usually scanned, because we don't know the
+    [
+      # Enable devices which are usually scanned, because we don't know the
       # target system.
       ../installer/scan/detected.nix
       ../installer/scan/not-detected.nix
@@ -77,7 +78,7 @@ with lib;
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = mkDefault true;
     networking.wireless.userControlled.enable = true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
+    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [ ];
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't

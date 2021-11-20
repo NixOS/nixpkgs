@@ -1,4 +1,3 @@
-
 # Qt packages set.
 #
 # Attributes in this file are packages requiring Qt and will be made available
@@ -11,47 +10,56 @@
 , qt5
 }:
 
-(lib.makeScope pkgs.newScope ( self:
+(lib.makeScope pkgs.newScope (self:
 
 let
   libsForQt5 = self;
   callPackage = self.callPackage;
 
-  kdeFrameworks = let
-    mkFrameworks = import ../development/libraries/kde-frameworks;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkFrameworks attrs);
+  kdeFrameworks =
+    let
+      mkFrameworks = import ../development/libraries/kde-frameworks;
+      attrs = {
+        inherit libsForQt5;
+        inherit (pkgs) lib fetchurl;
+      };
+    in
+    (lib.makeOverridable mkFrameworks attrs);
 
-  plasma5 = let
-    mkPlasma5 = import ../desktops/plasma-5;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) config lib fetchurl;
-      gconf = pkgs.gnome2.GConf;
-      inherit (pkgs) gsettings-desktop-schemas;
-    };
-  in (lib.makeOverridable mkPlasma5 attrs);
+  plasma5 =
+    let
+      mkPlasma5 = import ../desktops/plasma-5;
+      attrs = {
+        inherit libsForQt5;
+        inherit (pkgs) config lib fetchurl;
+        gconf = pkgs.gnome2.GConf;
+        inherit (pkgs) gsettings-desktop-schemas;
+      };
+    in
+    (lib.makeOverridable mkPlasma5 attrs);
 
-  kdeGear = let
-    mkGear = import ../applications/kde;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkGear attrs);
+  kdeGear =
+    let
+      mkGear = import ../applications/kde;
+      attrs = {
+        inherit libsForQt5;
+        inherit (pkgs) lib fetchurl;
+      };
+    in
+    (lib.makeOverridable mkGear attrs);
 
-  plasmaMobileGear = let
-    mkPlamoGear = import ../applications/plasma-mobile;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkPlamoGear attrs);
+  plasmaMobileGear =
+    let
+      mkPlamoGear = import ../applications/plasma-mobile;
+      attrs = {
+        inherit libsForQt5;
+        inherit (pkgs) lib fetchurl;
+      };
+    in
+    (lib.makeOverridable mkPlamoGear attrs);
 
-in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
+in
+(kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // qt5 // {
 
   inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear qt5;
 
@@ -68,7 +76,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
-  dxflib = callPackage ../development/libraries/dxflib {};
+  dxflib = callPackage ../development/libraries/dxflib { };
 
   drumstick = callPackage ../development/libraries/drumstick { };
 
@@ -80,7 +88,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   grantlee = callPackage ../development/libraries/grantlee/5 { };
 
-  qtcurve = callPackage ../data/themes/qtcurve {};
+  qtcurve = callPackage ../data/themes/qtcurve { };
 
   herqq = callPackage ../development/libraries/herqq { };
 
@@ -224,8 +232,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm { };
 
-  signond = callPackage ../development/libraries/signond {};
+  signond = callPackage ../development/libraries/signond { };
 
-  soundkonverter = callPackage ../applications/audio/soundkonverter {};
+  soundkonverter = callPackage ../applications/audio/soundkonverter { };
 
 })))

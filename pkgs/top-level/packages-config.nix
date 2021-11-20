@@ -29,7 +29,7 @@
       zabbix40
       zabbix50
       zeroadPackages
-    ;
+      ;
 
     # This is an alias which we disallow by default; explicitly allow it
     emacs27Packages = emacs27.pkgs;

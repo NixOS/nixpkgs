@@ -25,14 +25,16 @@ stdenv.mkDerivation rec {
   # The version must match that in vulkan-headers
   version = "1.2.189.1";
 
-  src = (assert version == vulkan-headers.version;
+  src = (
+    assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "LunarG";
       repo = "VulkanTools";
       rev = "sdk-${version}";
       sha256 = "0431dgplv5wiz8bj0ja91mbpc2qhjgdhqhrgaqarvyvjr1f7jw52";
       fetchSubmodules = true;
-    });
+    }
+  );
 
   nativeBuildInputs = [ cmake python3 jq ];
 

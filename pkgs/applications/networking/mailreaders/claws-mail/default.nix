@@ -1,11 +1,25 @@
-{ stdenv, lib, fetchgit, fetchpatch, wrapGAppsHook, autoreconfHook, bison, flex
-, curl, gtk2, gtk3, pkg-config, python2, python3, shared-mime-info
-, glib-networking, gsettings-desktop-schemas
+{ stdenv
+, lib
+, fetchgit
+, fetchpatch
+, wrapGAppsHook
+, autoreconfHook
+, bison
+, flex
+, curl
+, gtk2
+, gtk3
+, pkg-config
+, python2
+, python3
+, shared-mime-info
+, glib-networking
+, gsettings-desktop-schemas
 
-# Selector between the GTK+ 3 and GTK+ 2 releases.
+  # Selector between the GTK+ 3 and GTK+ 2 releases.
 , useGtk3
 
-# Package compatibility: old parameters whose name were not directly derived
+  # Package compatibility: old parameters whose name were not directly derived
 , enablePgp ? true
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
@@ -13,45 +27,69 @@
 , enablePluginRavatar ? true
 , enableSpellcheck ? true
 
-# Arguments to include external libraries
-, enableLibSM ? true, libSM
-, enableGnuTLS ? true, gnutls
-, enableEnchant ? enableSpellcheck, enchant
-, enableDbus ? true, dbus, dbus-glib
-, enableLdap ? true, openldap
-, enableNetworkManager ? true, networkmanager
-, enableLibetpan ? true, libetpan
-, enableValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind, valgrind
-, enableSvg ? true, librsvg
+  # Arguments to include external libraries
+, enableLibSM ? true
+, libSM
+, enableGnuTLS ? true
+, gnutls
+, enableEnchant ? enableSpellcheck
+, enchant
+, enableDbus ? true
+, dbus
+, dbus-glib
+, enableLdap ? true
+, openldap
+, enableNetworkManager ? true
+, networkmanager
+, enableLibetpan ? true
+, libetpan
+, enableValgrind ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind
+, enableSvg ? true
+, librsvg
 
-# Configure claws-mail's plugins
+  # Configure claws-mail's plugins
 , enablePluginAcpiNotifier ? true
 , enablePluginAddressKeeper ? true
-, enablePluginArchive ? true, libarchive
+, enablePluginArchive ? true
+, libarchive
 , enablePluginAttRemover ? true
 , enablePluginAttachWarner ? true
 , enablePluginBogofilter ? true
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
-, enablePluginFancy ? useGtk3, libsoup, webkitgtk
+, enablePluginFancy ? useGtk3
+, libsoup
+, webkitgtk
 , enablePluginFetchInfo ? true
 , enablePluginLibravatar ? enablePluginRavatar
-, enablePluginLitehtmlViewer ? true, gumbo
+, enablePluginLitehtmlViewer ? true
+, gumbo
 , enablePluginMailmbox ? true
 , enablePluginManageSieve ? true
 , enablePluginNewMail ? true
-, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds), libcanberra-gtk2, libcanberra-gtk3, libnotify
-, enablePluginPdfViewer ? enablePluginPdf, poppler
-, enablePluginPerl ? true, perl
+, enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds)
+, libcanberra-gtk2
+, libcanberra-gtk3
+, libnotify
+, enablePluginPdfViewer ? enablePluginPdf
+, poppler
+, enablePluginPerl ? true
+, perl
 , enablePluginPython ? true
-, enablePluginPgp ? enablePgp, gnupg, gpgme
-, enablePluginRssyl ? true, libxml2
+, enablePluginPgp ? enablePgp
+, gnupg
+, gpgme
+, enablePluginRssyl ? true
+, libxml2
 , enablePluginSmime ? true
 , enablePluginSpamassassin ? true
 , enablePluginSpamReport ? true
-, enablePluginTnefParse ? true, libytnef
-, enablePluginVcalendar ? true, libical
+, enablePluginTnefParse ? true
+, libytnef
+, enablePluginVcalendar ? true
+, libical
 }:
 
 with lib;
@@ -69,7 +107,8 @@ let
   };
 
   python = if useGtk3 then python3 else python2;
-  pythonPkgs = if useGtk3
+  pythonPkgs =
+    if useGtk3
     then
       with python.pkgs; [ python wrapPython pygobject3 ]
     else
@@ -99,7 +138,7 @@ let
     { flags = [ "managesieve-plugin" ]; enabled = enablePluginManageSieve; }
     { flags = [ "networkmanager" ]; enabled = enableNetworkManager; deps = [ networkmanager ]; }
     { flags = [ "newmail-plugin" ]; enabled = enablePluginNewMail; }
-    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [(if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2)]; }
+    { flags = [ "notification-plugin" ]; enabled = enablePluginNotification; deps = [ libnotify ] ++ [ (if useGtk3 then libcanberra-gtk3 else libcanberra-gtk2) ]; }
     { flags = [ "pdf_viewer-plugin" ]; enabled = enablePluginPdfViewer; deps = [ poppler ]; }
     { flags = [ "perl-plugin" ]; enabled = enablePluginPerl; deps = [ perl ]; }
     { flags = [ "pgpcore-plugin" "pgpinline-plugin" "pgpmime-plugin" ]; enabled = enablePluginPgp; deps = [ gnupg gpgme ]; }
@@ -113,7 +152,8 @@ let
     { flags = [ "valgrind" ]; enabled = enableValgrind; deps = [ valgrind ]; }
     { flags = [ "vcalendar-plugin" ]; enabled = enablePluginVcalendar; deps = [ libical ]; }
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "claws-mail";
   inherit version;
 
@@ -155,15 +195,15 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ curl gsettings-desktop-schemas glib-networking ]
-    ++ [(if useGtk3 then gtk3 else gtk2)]
+    ++ [ (if useGtk3 then gtk3 else gtk2) ]
     ++ concatMap (f: optionals f.enabled f.deps) (filter (f: f ? deps) features)
   ;
 
   configureFlags =
     [
-      "--disable-manual"   # Missing docbook-tools, e.g., docbook2html
+      "--disable-manual" # Missing docbook-tools, e.g., docbook2html
       "--disable-compface" # Missing compface library
-      "--disable-jpilot"   # Missing jpilot library
+      "--disable-jpilot" # Missing jpilot library
 
       "--disable-gdata-plugin" # Complains about missing libgdata, even when provided
     ] ++

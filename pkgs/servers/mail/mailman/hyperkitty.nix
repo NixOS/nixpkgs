@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , isPy3k
 
-# dependencies
+  # dependencies
 , defusedxml
 , django
 , django-gravatar2
@@ -21,7 +21,7 @@
 , python-dateutil
 , robot-detection
 
-# tests
+  # tests
 , beautifulsoup4
 , elasticsearch
 , mock

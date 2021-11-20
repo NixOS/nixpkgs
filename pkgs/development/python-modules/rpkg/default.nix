@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
-, koji, rpmfluff }:
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchurl
+, six
+, pycurl
+, cccolutils
+, koji
+, rpmfluff
+}:
 
 buildPythonPackage rec {
   pname = "rpkg";

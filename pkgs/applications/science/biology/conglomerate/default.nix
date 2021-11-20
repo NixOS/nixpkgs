@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
-  makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, coreutils
+, perlPackages
+, bicpl
+, libminc
+, zlib
+, minc_tools
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "conglomerate";
   version = "unstable-2017-09-10";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "7343238bc6215942c7ecc885a224f24433a291b0";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "7343238bc6215942c7ecc885a224f24433a291b0";
     sha256 = "1mlqgmy3jc13bv7d01rjwldxq0p4ayqic85xcl222hhifi3w2prr";
   };
 
@@ -32,6 +42,6 @@ stdenv.mkDerivation rec {
     description = "More command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

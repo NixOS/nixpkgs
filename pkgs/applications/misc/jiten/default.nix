@@ -96,9 +96,9 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/obfusk/jiten";
     license = with licenses; [
-      agpl3Plus               # code
-      cc-by-sa-30             # jmdict/kanjidic
-      unfreeRedistributable   # pitch data & audio are non-commercial
+      agpl3Plus # code
+      cc-by-sa-30 # jmdict/kanjidic
+      unfreeRedistributable # pitch data & audio are non-commercial
     ];
     maintainers = [ maintainers.obfusk ];
   };

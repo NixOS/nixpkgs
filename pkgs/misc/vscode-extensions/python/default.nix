@@ -1,12 +1,23 @@
-{ lib, stdenv, fetchurl, vscode-utils, extractNuGet
-, icu, curl, openssl, liburcu, lttng-ust, autoPatchelfHook
-, python3, musl
+{ lib
+, stdenv
+, fetchurl
+, vscode-utils
+, extractNuGet
+, icu
+, curl
+, openssl
+, liburcu
+, lttng-ust
+, autoPatchelfHook
+, python3
+, musl
 , pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
-                               # Use version from `PATH` for default setting otherwise.
-                               # Defaults to `false` as we expect it to be project specific most of the time.
-, ctagsUseFixed ? true, ctags  # When `true`, the ctags default setting will be fixed to specified.
-                               # Use version from `PATH` for default setting otherwise.
-                               # Defaults to `true` as usually not defined on a per projet basis.
+  # Use version from `PATH` for default setting otherwise.
+  # Defaults to `false` as we expect it to be project specific most of the time.
+, ctagsUseFixed ? true
+, ctags  # When `true`, the ctags default setting will be fixed to specified.
+  # Use version from `PATH` for default setting otherwise.
+  # Defaults to `true` as usually not defined on a per projet basis.
 }:
 
 assert ctagsUseFixed -> null != ctags;
@@ -55,7 +66,8 @@ let
       sha256 = languageServerSha256;
     };
   };
-in vscode-utils.buildVscodeMarketplaceExtension rec {
+in
+vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";

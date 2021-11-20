@@ -35,57 +35,58 @@ rec {
       Cmd = [ "/bin/redis-server" ];
       WorkingDir = "/data";
       Volumes = {
-        "/data" = {};
+        "/data" = { };
       };
     };
   };
 
   # 3. another service example
-  nginx = let
-    nginxPort = "80";
-    nginxConf = pkgs.writeText "nginx.conf" ''
-      user nobody nobody;
-      daemon off;
-      error_log /dev/stdout info;
-      pid /dev/null;
-      events {}
-      http {
-        access_log /dev/stdout;
-        server {
-          listen ${nginxPort};
-          index index.html;
-          location / {
-            root ${nginxWebRoot};
+  nginx =
+    let
+      nginxPort = "80";
+      nginxConf = pkgs.writeText "nginx.conf" ''
+        user nobody nobody;
+        daemon off;
+        error_log /dev/stdout info;
+        pid /dev/null;
+        events {}
+        http {
+          access_log /dev/stdout;
+          server {
+            listen ${nginxPort};
+            index index.html;
+            location / {
+              root ${nginxWebRoot};
+            }
           }
         }
-      }
-    '';
-    nginxWebRoot = pkgs.writeTextDir "index.html" ''
-      <html><body><h1>Hello from NGINX</h1></body></html>
-    '';
-  in
-  buildLayeredImage {
-    name = "nginx-container";
-    tag = "latest";
-    contents = [
-      fakeNss
-      pkgs.nginx
-    ];
+      '';
+      nginxWebRoot = pkgs.writeTextDir "index.html" ''
+        <html><body><h1>Hello from NGINX</h1></body></html>
+      '';
+    in
+    buildLayeredImage {
+      name = "nginx-container";
+      tag = "latest";
+      contents = [
+        fakeNss
+        pkgs.nginx
+      ];
 
-    extraCommands = ''
-      # nginx still tries to read this directory even if error_log
-      # directive is specifying another file :/
-      mkdir -p var/log/nginx
-      mkdir -p var/cache/nginx
-    '';
+      extraCommands = ''
+        # nginx still tries to read this directory even if error_log
+        # directive is specifying another file :/
+        mkdir -p var/log/nginx
+        mkdir -p var/cache/nginx
+      '';
 
-    config = {
-      Cmd = [ "nginx" "-c" nginxConf ];
-      ExposedPorts = {
-        "${nginxPort}/tcp" = {};
+      config = {
+        Cmd = [ "nginx" "-c" nginxConf ];
+        ExposedPorts = {
+          "${nginxPort}/tcp" = { };
+        };
       };
     };
-  };
 
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
@@ -192,7 +193,9 @@ rec {
       Env = [ "PATH=${pkgs.coreutils}/bin/" ];
       WorkingDir = "/example-output";
       Cmd = [
-        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+        "${pkgs.bash}/bin/bash"
+        "-c"
+        "echo hello > foo; cat foo"
       ];
     };
   };
@@ -210,7 +213,9 @@ rec {
       Env = [ "PATH=${pkgs.coreutils}/bin/" ];
       WorkingDir = "/example-output";
       Cmd = [
-        "${pkgs.bash}/bin/bash" "-c" "echo hello > foo; cat foo"
+        "${pkgs.bash}/bin/bash"
+        "-c"
+        "echo hello > foo; cat foo"
       ];
     };
   };
@@ -230,37 +235,39 @@ rec {
   # - the layer of parent are below
   # - the order of parent layer is preserved at image build time
   #   (this is why there are 3 images)
-  layersOrder = let
-    l1 = pkgs.dockerTools.buildImage {
-      name = "l1";
+  layersOrder =
+    let
+      l1 = pkgs.dockerTools.buildImage {
+        name = "l1";
+        tag = "latest";
+        extraCommands = ''
+          mkdir -p tmp
+          echo layer1 > tmp/layer1
+          echo layer1 > tmp/layer2
+          echo layer1 > tmp/layer3
+        '';
+      };
+      l2 = pkgs.dockerTools.buildImage {
+        name = "l2";
+        fromImage = l1;
+        tag = "latest";
+        extraCommands = ''
+          mkdir -p tmp
+          echo layer2 > tmp/layer2
+          echo layer2 > tmp/layer3
+        '';
+      };
+    in
+    pkgs.dockerTools.buildImage {
+      name = "l3";
+      fromImage = l2;
       tag = "latest";
+      contents = [ pkgs.coreutils ];
       extraCommands = ''
         mkdir -p tmp
-        echo layer1 > tmp/layer1
-        echo layer1 > tmp/layer2
-        echo layer1 > tmp/layer3
+        echo layer3 > tmp/layer3
       '';
     };
-    l2 = pkgs.dockerTools.buildImage {
-      name = "l2";
-      fromImage = l1;
-      tag = "latest";
-      extraCommands = ''
-        mkdir -p tmp
-        echo layer2 > tmp/layer2
-        echo layer2 > tmp/layer3
-      '';
-    };
-  in pkgs.dockerTools.buildImage {
-    name = "l3";
-    fromImage = l2;
-    tag = "latest";
-    contents = [ pkgs.coreutils ];
-    extraCommands = ''
-      mkdir -p tmp
-      echo layer3 > tmp/layer3
-    '';
-  };
 
   # 15. Environment variable inheritance.
   # Child image should inherit parents environment variables,
@@ -324,7 +331,8 @@ rec {
     name = "bulk-layer";
     tag = "latest";
     contents = with pkgs; [
-      coreutils hello
+      coreutils
+      hello
     ];
     maxLayers = 2;
   };
@@ -336,7 +344,8 @@ rec {
     tag = "latest";
     fromImage = two-layered-image;
     contents = with pkgs; [
-      coreutils hello
+      coreutils
+      hello
     ];
     maxLayers = 4;
   };
@@ -422,34 +431,34 @@ rec {
 
   # buildLayeredImage with non-root user
   bashLayeredWithUser =
-  let
-    nonRootShadowSetup = { user, uid, gid ? uid }: with pkgs; [
-      (
-      writeTextDir "etc/shadow" ''
-        root:!x:::::::
-        ${user}:!:::::::
-      ''
-      )
-      (
-      writeTextDir "etc/passwd" ''
-        root:x:0:0::/root:${runtimeShell}
-        ${user}:x:${toString uid}:${toString gid}::/home/${user}:
-      ''
-      )
-      (
-      writeTextDir "etc/group" ''
-        root:x:0:
-        ${user}:x:${toString gid}:
-      ''
-      )
-      (
-      writeTextDir "etc/gshadow" ''
-        root:x::
-        ${user}:x::
-      ''
-      )
-    ];
-  in
+    let
+      nonRootShadowSetup = { user, uid, gid ? uid }: with pkgs; [
+        (
+          writeTextDir "etc/shadow" ''
+            root:!x:::::::
+            ${user}:!:::::::
+          ''
+        )
+        (
+          writeTextDir "etc/passwd" ''
+            root:x:0:0::/root:${runtimeShell}
+            ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+          ''
+        )
+        (
+          writeTextDir "etc/group" ''
+            root:x:0:
+            ${user}:x:${toString gid}:
+          ''
+        )
+        (
+          writeTextDir "etc/gshadow" ''
+            root:x::
+            ${user}:x::
+          ''
+        )
+      ];
+    in
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
@@ -457,28 +466,31 @@ rec {
     };
 
   # basic example, with cross compilation
-  cross = let
-    # Cross compile for x86_64 if on aarch64
-    crossPkgs =
-      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
-      else pkgsCross.aarch64-multiplatform;
-  in crossPkgs.dockerTools.buildImage {
-    name = "hello-cross";
-    tag = "latest";
-    contents = crossPkgs.hello;
-  };
+  cross =
+    let
+      # Cross compile for x86_64 if on aarch64
+      crossPkgs =
+        if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+        else pkgsCross.aarch64-multiplatform;
+    in
+    crossPkgs.dockerTools.buildImage {
+      name = "hello-cross";
+      tag = "latest";
+      contents = crossPkgs.hello;
+    };
 
   # layered image where a store path is itself a symlink
   layeredStoreSymlink =
-  let
-    target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
-    symlink = pkgs.runCommand "symlink" {} "ln -s ${target} $out";
-  in
-    pkgs.dockerTools.buildLayeredImage {
-      name = "layeredstoresymlink";
-      tag = "latest";
-      contents = [ pkgs.bash symlink ];
-    } // { passthru = { inherit symlink; }; };
+    let
+      target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
+      symlink = pkgs.runCommand "symlink" { } "ln -s ${target} $out";
+    in
+    pkgs.dockerTools.buildLayeredImage
+      {
+        name = "layeredstoresymlink";
+        tag = "latest";
+        contents = [ pkgs.bash symlink ];
+      } // { passthru = { inherit symlink; }; };
 
   # image with registry/ prefix
   prefixedImage = pkgs.dockerTools.buildImage {

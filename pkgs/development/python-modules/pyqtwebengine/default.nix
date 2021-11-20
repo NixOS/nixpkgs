@@ -1,11 +1,17 @@
-{ lib, pythonPackages, pkg-config
-, qmake, qtbase, qtsvg, qtwebengine
+{ lib
+, pythonPackages
+, pkg-config
+, qmake
+, qtbase
+, qtsvg
+, qtwebengine
 , wrapQtAppsHook
 }:
 
 let
   inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "PyQtWebEngine";
   version = "5.15.4";
   format = "pyproject";
@@ -64,8 +70,8 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "http://www.riverbankcomputing.co.uk";
+    license = licenses.gpl3;
+    platforms = platforms.mesaPlatforms;
   };
 }

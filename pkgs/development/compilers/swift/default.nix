@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , coreutils
 , glibc
@@ -150,7 +151,7 @@ let
     swig
   ];
 
-  python = (python3.withPackages (ps: [ps.six]));
+  python = (python3.withPackages (ps: [ ps.six ]));
 
   cmakeFlags = [
     "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc.dev}/include"

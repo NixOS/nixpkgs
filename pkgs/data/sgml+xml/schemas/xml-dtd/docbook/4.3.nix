@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip, findXMLCatalogs}:
+{ lib, stdenv, fetchurl, unzip, findXMLCatalogs }:
 
 import ./generic.nix {
   inherit lib stdenv unzip findXMLCatalogs;

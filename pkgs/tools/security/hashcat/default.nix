@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeWrapper
 , opencl-headers
@@ -7,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "hashcat";
+  pname = "hashcat";
   version = "6.2.4";
 
   src = fetchurl {
@@ -40,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast password cracker";
-    homepage    = "https://hashcat.net/hashcat/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://hashcat.net/hashcat/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ kierdavis zimbatm ];
   };
 }

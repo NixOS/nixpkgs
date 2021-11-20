@@ -3,7 +3,8 @@
 let
   majorVersion = "0.63";
   minorVersion = "0";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "virtkey";
   version = "${majorVersion}.${minorVersion}";
 

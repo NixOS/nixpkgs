@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkg-config
-, SDL, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, jam
+, cctools
+, pkg-config
+, SDL
+, SDL_mixer
+, SDL_sound
+, gtk2
+, libvorbis
+, smpeg
+}:
 
 let
 
@@ -38,23 +50,23 @@ stdenv.mkDerivation rec {
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 
   installPhase =
-  if stdenv.isDarwin then
-  (substituteAll {
-    inherit (stdenv) shell;
-    isExecutable = true;
-    src = ./darwin.sh;
-  })
-  else jamenv + ''
-    jam -j$NIX_BUILD_CORES install
-    mkdir -p "$out/bin"
-    ln -s ../libexec/gargoyle/gargoyle "$out/bin"
-    mkdir -p "$out/etc"
-    cp garglk/garglk.ini "$out/etc"
-    mkdir -p "$out/share/applications"
-    cp garglk/gargoyle.desktop "$out/share/applications"
-    mkdir -p "$out/share/icons/hicolor/32x32/apps"
-    cp garglk/gargoyle-house.png "$out/share/icons/hicolor/32x32/apps"
-  '';
+    if stdenv.isDarwin then
+      (substituteAll {
+        inherit (stdenv) shell;
+        isExecutable = true;
+        src = ./darwin.sh;
+      })
+    else jamenv + ''
+      jam -j$NIX_BUILD_CORES install
+      mkdir -p "$out/bin"
+      ln -s ../libexec/gargoyle/gargoyle "$out/bin"
+      mkdir -p "$out/etc"
+      cp garglk/garglk.ini "$out/etc"
+      mkdir -p "$out/share/applications"
+      cp garglk/gargoyle.desktop "$out/share/applications"
+      mkdir -p "$out/share/icons/hicolor/32x32/apps"
+      cp garglk/gargoyle-house.png "$out/share/icons/hicolor/32x32/apps"
+    '';
 
   enableParallelBuilding = true;
 

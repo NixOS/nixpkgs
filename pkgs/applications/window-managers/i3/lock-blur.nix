@@ -1,6 +1,6 @@
 { i3lock-color, lib, fetchFromGitHub }:
 
-i3lock-color.overrideAttrs (oldAttrs : rec {
+i3lock-color.overrideAttrs (oldAttrs: rec {
   pname = "i3lock-blur";
   version = "2.10";
 

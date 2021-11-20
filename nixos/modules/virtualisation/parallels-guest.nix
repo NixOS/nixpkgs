@@ -121,7 +121,7 @@ in
           ExecStart = "${prl-tools}/bin/prldnd";
         };
       };
-      prl_wmouse_d  = {
+      prl_wmouse_d = {
         description = "Parallels Walking Mouse Daemon";
         wantedBy = [ "graphical-session.target" ];
         serviceConfig = {

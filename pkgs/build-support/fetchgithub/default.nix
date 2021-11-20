@@ -1,9 +1,16 @@
 { lib, fetchgit, fetchzip }:
 
-{ owner, repo, rev, name ? "source"
-, fetchSubmodules ? false, leaveDotGit ? null
-, deepClone ? false, private ? false, forceFetchGit ? false
-, githubBase ? "github.com", varPrefix ? null
+{ owner
+, repo
+, rev
+, name ? "source"
+, fetchSubmodules ? false
+, leaveDotGit ? null
+, deepClone ? false
+, private ? false
+, forceFetchGit ? false
+, githubBase ? "github.com"
+, varPrefix ? null
 , ... # For hash agility
 }@args:
 let
@@ -29,10 +36,10 @@ let
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
   fetcherArgs = (if useFetchGit
-    then {
-      inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
-    } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
-    else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
+  then {
+    inherit rev deepClone fetchSubmodules; url = "${baseUrl}.git";
+  } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
+  else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 

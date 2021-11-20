@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, automake, autoconf, xlibsWrapper}:
+{ lib, stdenv, fetchurl, automake, autoconf, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "libstroke";
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   # libstroke ships with an ancient config.sub that doesn't know about x86_64, so regenerate it.
   # Also, modern automake doesn't like things and returns error code 63.  But it generates the file.
   preConfigure = ''
-      rm config.sub
-      autoconf
-      automake -a || true
-    '';
+    rm config.sub
+    autoconf
+    automake -a || true
+  '';
 
   meta = {
     description = "A library for simple gesture recognition";

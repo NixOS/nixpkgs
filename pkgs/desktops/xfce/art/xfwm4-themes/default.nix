@@ -5,7 +5,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfwm4-themes";
+  pname = "xfwm4-themes";
   version = "4.10.0";
 
   src = fetchurl {

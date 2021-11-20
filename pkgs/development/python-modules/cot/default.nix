@@ -1,7 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
-, colorlog, pyvmomi, requests, verboselogs
-, psutil, pyopenssl, setuptools
-, mock, pytest-mock, pytestCheckHook, qemu
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy3k
+, colorlog
+, pyvmomi
+, requests
+, verboselogs
+, psutil
+, pyopenssl
+, setuptools
+, mock
+, pytest-mock
+, pytestCheckHook
+, qemu
 }:
 
 buildPythonPackage rec {
@@ -15,7 +28,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
-  ++ lib.optional (pythonOlder "3.3") psutil;
+    ++ lib.optional (pythonOlder "3.3") psutil;
 
   checkInputs = [ mock pytestCheckHook pytest-mock qemu ];
 

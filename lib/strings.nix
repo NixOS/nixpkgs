@@ -2,7 +2,7 @@
 { lib }:
 let
 
-inherit (builtins) length;
+  inherit (builtins) length;
 
 in
 
@@ -76,9 +76,9 @@ rec {
     separator:
     # Input list
     list:
-    if list == [] || length list == 1
+    if list == [ ] || length list == 1
     then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    else tail (lib.concatMap (x: [ separator x ]) list);
 
   /* Concatenate a list of strings with a separator between each element
 
@@ -235,8 +235,9 @@ rec {
     let
       lenContent = stringLength content;
       lenSuffix = stringLength suffix;
-    in lenContent >= lenSuffix &&
-       substring (lenContent - lenSuffix) lenContent content == suffix;
+    in
+    lenContent >= lenSuffix &&
+    substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /* Determine whether a string contains the given infix
 
@@ -255,8 +256,9 @@ rec {
   hasInfix = infix: content:
     let
       drop = x: substring 1 (stringLength x) x;
-    in hasPrefix infix content
-      || content != "" && hasInfix infix (drop content);
+    in
+    hasPrefix infix content
+    || content != "" && hasInfix infix (drop content);
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -335,7 +337,7 @@ rec {
        escapeNixString "hello\${}\n"
        => "\"hello\\\${}\\n\""
   */
-  escapeNixString = s: escape ["$"] (toJSON s);
+  escapeNixString = s: escape [ "$" ] (toJSON s);
 
   /* Turn a string into an exact regular expression
 
@@ -372,22 +374,23 @@ rec {
        => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
   */
   escapeXML = builtins.replaceStrings
-    ["\"" "'" "<" ">" "&"]
-    ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
+    [ "\"" "'" "<" ">" "&" ]
+    [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
   # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (
     del: new: s:
-    let
-      substList = lib.zipLists del new;
-      subst = c:
-        let found = lib.findFirst (sub: sub.fst == c) null substList; in
-        if found == null then
-          c
-        else
-          found.snd;
-    in
-      stringAsChars subst s);
+      let
+        substList = lib.zipLists del new;
+        subst = c:
+          let found = lib.findFirst (sub: sub.fst == c) null substList; in
+          if found == null then
+            c
+          else
+            found.snd;
+      in
+      stringAsChars subst s
+  );
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -443,7 +446,7 @@ rec {
       s = builtins.unsafeDiscardStringContext _s;
       splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
     in
-      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
+    map (v: addContextFrom _sep (addContextFrom _s v)) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
@@ -464,10 +467,10 @@ rec {
       preLen = stringLength prefix;
       sLen = stringLength str;
     in
-      if hasPrefix prefix str then
-        substring preLen (sLen - preLen) str
-      else
-        str;
+    if hasPrefix prefix str then
+      substring preLen (sLen - preLen) str
+    else
+      str;
 
   /* Return a string without the specified suffix, if the suffix matches.
 
@@ -488,10 +491,10 @@ rec {
       sufLen = stringLength suffix;
       sLen = stringLength str;
     in
-      if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
-        substring 0 (sLen - sufLen) str
-      else
-        str;
+    if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
+      substring 0 (sLen - sufLen) str
+    else
+      str;
 
   /* Return true if string v1 denotes a version older than v2.
 
@@ -526,11 +529,12 @@ rec {
        => "youtube-dl"
   */
   getName = x:
-   let
-     parse = drv: (parseDrvName drv).name;
-   in if isString x
-      then parse x
-      else x.pname or (parse x.name);
+    let
+      parse = drv: (parseDrvName drv).name;
+    in
+    if isString x
+    then parse x
+    else x.pname or (parse x.name);
 
   /* This function takes an argument that's either a derivation or a
      derivation's "name" attribute and extracts the version part from that
@@ -543,11 +547,12 @@ rec {
        => "2016.01.01"
   */
   getVersion = x:
-   let
-     parse = drv: (parseDrvName drv).version;
-   in if isString x
-      then parse x
-      else x.version or (parse x.name);
+    let
+      parse = drv: (parseDrvName drv).version;
+    in
+    if isString x
+    then parse x
+    else x.version or (parse x.name);
 
   /* Extract name with version from URL. Ask for separator which is
      supposed to start extension.
@@ -563,7 +568,8 @@ rec {
       components = splitString "/" url;
       filename = lib.last components;
       name = head (splitString sep filename);
-    in assert name != filename; name;
+    in
+    assert name != filename; name;
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
@@ -630,11 +636,11 @@ rec {
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
     in
-      assert lib.assertMsg (strw <= width)
-        "fixedWidthString: requested string length (${
+    assert lib.assertMsg (strw <= width)
+      "fixedWidthString: requested string length (${
           toString width}) must not be shorter than actual length (${
             toString strw})";
-      if strw == width then str else filler + fixedWidthString reqWidth filler str;
+    if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
   /* Format a number adding leading zeroes up to fixed width.
 
@@ -654,11 +660,13 @@ rec {
        => trace: warning: Imprecise conversion from float to string 0.000000
           "0.000000"
   */
-  floatToString = float: let
-    result = toString float;
-    precise = float == fromJSON result;
-  in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
-    result;
+  floatToString = float:
+    let
+      result = toString float;
+      precise = float == fromJSON result;
+    in
+    lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
+      result;
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:
@@ -729,7 +737,7 @@ rec {
         relativePaths = removeComments lines;
         absolutePaths = map (path: rootPath + "/${path}") relativePaths;
       in
-        absolutePaths);
+      absolutePaths);
 
   /* Read the contents of a file removing the trailing \n
 

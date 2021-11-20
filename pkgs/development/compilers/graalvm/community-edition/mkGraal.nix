@@ -1,13 +1,30 @@
 { version, javaVersion, platforms, hashes ? import ./hashes.nix }:
 
-{ stdenv, lib, fetchurl, autoPatchelfHook, setJavaClassPath, makeWrapper
-# minimum dependencies
-, Foundation, alsa-lib, fontconfig, freetype, glibc, openssl, perl, unzip, xorg
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, setJavaClassPath
+, makeWrapper
+  # minimum dependencies
+, Foundation
+, alsa-lib
+, fontconfig
+, freetype
+, glibc
+, openssl
+, perl
+, unzip
+, xorg
 , zlib
-# runtime dependencies
+  # runtime dependencies
 , cups
-# runtime dependencies for GTK+ Look and Feel
-, gtkSupport ? true, cairo, glib, gtk3 }:
+  # runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? true
+, cairo
+, glib
+, gtk3
+}:
 
 let
   platform = {
@@ -108,51 +125,53 @@ let
 
     outputs = [ "out" "lib" ];
 
-    installPhase = let
-      copyClibrariesToOut = basepath: ''
-        # provide libraries needed for static compilation
-        for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
-          ln -s $f ${basepath}/${platform}/$(basename $f)
-        done
-      '';
-      copyClibrariesToLib = ''
-        # add those libraries to $lib output too, so we can use them with
-        # `native-image -H:CLibraryPath=''${graalvm11-ce.lib}/lib ...` and reduce
-        # closure size by not depending on GraalVM $out (that is much bigger)
+    installPhase =
+      let
+        copyClibrariesToOut = basepath: ''
+          # provide libraries needed for static compilation
+          for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do
+            ln -s $f ${basepath}/${platform}/$(basename $f)
+          done
+        '';
+        copyClibrariesToLib = ''
+          # add those libraries to $lib output too, so we can use them with
+          # `native-image -H:CLibraryPath=''${graalvm11-ce.lib}/lib ...` and reduce
+          # closure size by not depending on GraalVM $out (that is much bigger)
+          mkdir -p $lib/lib
+          for f in ${glibc}/lib/*; do
+            ln -s $f $lib/lib/$(basename $f)
+          done
+        '';
+      in
+      {
+        "11-linux-amd64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "17-linux-amd64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "11-linux-aarch64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "17-linux-aarch64" = ''
+          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
+
+          ${copyClibrariesToLib}
+        '';
+        "11-darwin-amd64" = "";
+        "17-darwin-amd64" = "";
+      }.${javaVersionPlatform} + ''
+        # ensure that $lib/lib exists to avoid breaking builds
         mkdir -p $lib/lib
-        for f in ${glibc}/lib/*; do
-          ln -s $f $lib/lib/$(basename $f)
-        done
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -s $out/include/linux/*_md.h $out/include/
       '';
-    in {
-      "11-linux-amd64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "17-linux-amd64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "11-linux-aarch64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "17-linux-aarch64" = ''
-        ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-        ${copyClibrariesToLib}
-      '';
-      "11-darwin-amd64" = "";
-      "17-darwin-amd64" = "";
-    }.${javaVersionPlatform} + ''
-      # ensure that $lib/lib exists to avoid breaking builds
-      mkdir -p $lib/lib
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/linux/*_md.h $out/include/
-    '';
 
     dontStrip = true;
 
@@ -275,4 +294,5 @@ let
       ];
     };
   };
-in graalvmXXX-ce
+in
+graalvmXXX-ce

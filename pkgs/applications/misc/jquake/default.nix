@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, copyDesktopItems, makeDesktopItem, unzip, jre8
+{ lib
+, stdenv
+, fetchurl
+, copyDesktopItems
+, makeDesktopItem
+, unzip
+, jre8
 , logOutput ? false
 }:
 

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchgit, pkg-config, autoreconfHook
-, libX11, pam, libgcrypt, libXrender, imlib2 }:
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, autoreconfHook
+, libX11
+, pam
+, libgcrypt
+, libXrender
+, imlib2
+}:
 
 stdenv.mkDerivation rec {
   date = "20170720";
@@ -22,8 +31,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoreconfHook libX11
-    pam libgcrypt libXrender imlib2
+    autoreconfHook
+    libX11
+    pam
+    libgcrypt
+    libXrender
+    imlib2
   ];
 
   meta = with lib; {

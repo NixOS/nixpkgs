@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "keepassxc";
@@ -8,16 +8,16 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   machine = { ... }:
 
-  {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+    {
+      imports = [
+        ./common/user-account.nix
+        ./common/x11.nix
+      ];
 
-    services.xserver.enable = true;
-    test-support.displayManager.auto.user = "alice";
-    environment.systemPackages = [ pkgs.keepassxc ];
-  };
+      services.xserver.enable = true;
+      test-support.displayManager.auto.user = "alice";
+      environment.systemPackages = [ pkgs.keepassxc ];
+    };
 
   enableOCR = true;
 

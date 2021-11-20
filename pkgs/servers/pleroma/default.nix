@@ -1,7 +1,11 @@
-{ lib, beamPackages
-, fetchFromGitHub, fetchFromGitLab
-, file, cmake
-, nixosTests, writeText
+{ lib
+, beamPackages
+, fetchFromGitHub
+, fetchFromGitLab
+, file
+, cmake
+, nixosTests
+, writeText
 , ...
 }:
 
@@ -84,7 +88,7 @@ beamPackages.mixRelease rec {
 
         preBuild = ''
           touch config/prod.exs
-       '';
+        '';
         src = fetchFromGitLab {
           domain = "git.pleroma.social";
           group = "pleroma";
@@ -178,21 +182,23 @@ beamPackages.mixRelease rec {
       };
 
       mime = prev.mime.override {
-        patchPhase = let
-          cfgFile = writeText "config.exs" ''
-            use Mix.Config
-            config :mime, :types, %{
-              "application/activity+json" => ["activity+json"],
-              "application/jrd+json" => ["jrd+json"],
-              "application/ld+json" => ["activity+json"],
-              "application/xml" => ["xml"],
-              "application/xrd+xml" => ["xrd+xml"]
-            }
+        patchPhase =
+          let
+            cfgFile = writeText "config.exs" ''
+              use Mix.Config
+              config :mime, :types, %{
+                "application/activity+json" => ["activity+json"],
+                "application/jrd+json" => ["jrd+json"],
+                "application/ld+json" => ["activity+json"],
+                "application/xml" => ["xml"],
+                "application/xrd+xml" => ["xrd+xml"]
+              }
+            '';
+          in
+          ''
+            mkdir config
+            cp ${cfgFile} config/config.exs
           '';
-        in ''
-          mkdir config
-          cp ${cfgFile} config/config.exs
-        '';
       };
     });
   };

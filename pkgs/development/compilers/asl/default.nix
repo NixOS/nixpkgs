@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchzip
-, buildDocs ? false, tex
+, buildDocs ? false
+, tex
 }:
 
 stdenv.mkDerivation rec {

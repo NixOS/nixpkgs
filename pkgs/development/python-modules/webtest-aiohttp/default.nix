@@ -1,5 +1,14 @@
-{ buildPythonPackage, fetchFromGitHub, lib, isPy27, webtest, invoke, flake8
-, aiohttp, pytest-aiohttp, pytestCheckHook }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, isPy27
+, webtest
+, invoke
+, flake8
+, aiohttp
+, pytest-aiohttp
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "webtest-aiohttp";

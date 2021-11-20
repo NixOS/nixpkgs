@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook
-, libuuid, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libuuid
+, zlib
+}:
 
 let
   generic = version: sha256: stdenv.mkDerivation {
@@ -37,6 +42,7 @@ let
       platforms = platforms.unix;
     };
   };
-in {
+in
+{
   xapian_1_4 = generic "1.4.18" "sha256-GW3btK0QRQEA8JkaWZ5O2UTLrZLkpv6BO+bc4WAkS3c=";
 }

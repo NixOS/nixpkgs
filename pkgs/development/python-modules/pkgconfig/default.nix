@@ -10,7 +10,7 @@ buildPythonPackage rec {
     suffixSalt
     targetPrefix
     baseBinName
-  ;
+    ;
 
   src = fetchPypi {
     inherit pname version;

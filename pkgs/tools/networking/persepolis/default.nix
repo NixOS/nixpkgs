@@ -1,4 +1,7 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, makeWrapper
 , aria
 , libnotify
 , pulseaudio
@@ -26,7 +29,7 @@ buildPythonApplication rec {
   # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
   doCheck = false;
 
-  preBuild=''
+  preBuild = ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
   '';
 
@@ -36,8 +39,8 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
+    mkdir -p $out/share/applications
+    cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
   '';
 
   # prevent double wrapping

@@ -1,6 +1,13 @@
-{ lib, stdenv
-, fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libintl, zlib
+{ lib
+, stdenv
+, fetchpatch
+, gnu-config
+, autoreconfHook
+, bison
+, binutils-unwrapped
+, libiberty
+, libintl
+, zlib
 }:
 
 stdenv.mkDerivation {
@@ -36,7 +43,8 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--with-system-zlib"
   ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";

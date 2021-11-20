@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: let
+import ./make-test-python.nix ({ lib, pkgs, ... }:
+let
 
   v2rayUser = {
     # A random UUID.
@@ -20,7 +21,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
         port = 1081;
         listen = "127.0.0.1";
         protocol = "vmess";
-        settings.clients = [v2rayUser];
+        settings.clients = [ v2rayUser ];
       }
     ];
     outbounds = [
@@ -30,7 +31,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
         settings.vnext = [{
           address = "127.0.0.1";
           port = 1081;
-          users = [v2rayUser];
+          users = [ v2rayUser ];
         }];
       }
       {
@@ -52,7 +53,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
     ];
   };
 
-in {
+in
+{
   name = "v2ray";
   meta = with lib.maintainers; {
     maintainers = [ servalcatty ];

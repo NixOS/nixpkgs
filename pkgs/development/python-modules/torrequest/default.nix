@@ -10,7 +10,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pysocks requests stem
+    pysocks
+    requests
+    stem
   ];
 
   # This package does not contain any tests.

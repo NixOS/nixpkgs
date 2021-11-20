@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
   ];
 
-  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1

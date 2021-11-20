@@ -15,13 +15,13 @@ rec {
 
   packageName = "cl-geometry";
 
-  asdFilesToKeep = ["cl-geometry.asd"];
+  asdFilesToKeep = [ "cl-geometry.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-geometry DESCRIPTION Library for two dimensional geometry. SHA256
-    0v451w2dx9llvd2kgp3m5jn2n8n0xwynxf8zl436cngh63ag6s7p URL
-    http://beta.quicklisp.org/archive/cl-geometry/2016-05-31/cl-geometry-20160531-git.tgz
-    MD5 c0aaccbb4e2df6c504e6c1cd15155353 NAME cl-geometry FILENAME cl-geometry
-    DEPS ((NAME iterate FILENAME iterate) (NAME trees FILENAME trees))
-    DEPENDENCIES (iterate trees) VERSION 20160531-git SIBLINGS
+  0v451w2dx9llvd2kgp3m5jn2n8n0xwynxf8zl436cngh63ag6s7p URL
+  http://beta.quicklisp.org/archive/cl-geometry/2016-05-31/cl-geometry-20160531-git.tgz
+  MD5 c0aaccbb4e2df6c504e6c1cd15155353 NAME cl-geometry FILENAME cl-geometry
+  DEPS ((NAME iterate FILENAME iterate) (NAME trees FILENAME trees))
+  DEPENDENCIES (iterate trees) VERSION 20160531-git SIBLINGS
     (cl-geometry-tests) PARASITES NIL) */

@@ -1,6 +1,9 @@
 # Test for cntr tool
-{ system ? builtins.currentSystem, config ? { }
-, pkgs ? import ../.. { inherit system config; }, lib ? pkgs.lib }:
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, lib ? pkgs.lib
+}:
 
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
@@ -57,7 +60,8 @@ let
       machine.succeed("cntr attach test sh -- -c 'ping -c5 172.16.0.1'")
     '';
   };
-in {
+in
+{
   nixos-container = mkContainersTest;
 } // (lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; })
   { } [ "docker" "podman" ])

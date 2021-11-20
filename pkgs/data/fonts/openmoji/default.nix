@@ -10,11 +10,12 @@
 
 let
   filename = builtins.replaceStrings
-    [ "color"              "black"              ]
+    [ "color" "black" ]
     [ "OpenMoji-Color.ttf" "OpenMoji-Black.ttf" ]
     variant;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openmoji";
   version = "13.1.0";
 

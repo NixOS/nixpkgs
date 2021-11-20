@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, buildPackages
-, pkg-config, expat, gettext, libiconv, dbus, glib
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkg-config
+, expat
+, gettext
+, libiconv
+, dbus
+, glib
 }:
 
 stdenv.mkDerivation rec {

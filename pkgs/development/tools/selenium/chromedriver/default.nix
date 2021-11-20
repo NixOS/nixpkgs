@@ -1,8 +1,27 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper
-, cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, nspr, nss, pango, gconf
-, libxcb, libXi, libXrender, libXext, dbus
-, testVersion, chromedriver
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, cairo
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, glibc
+, gtk2
+, libX11
+, nspr
+, nss
+, pango
+, gconf
+, libxcb
+, libXi
+, libXrender
+, libXext
+, dbus
+, testVersion
+, chromedriver
 }:
 
 let
@@ -24,14 +43,27 @@ let
 
   libs = lib.makeLibraryPath [
     stdenv.cc.cc.lib
-    cairo fontconfig freetype
-    gdk-pixbuf glib gtk2 gconf
-    libX11 nspr nss pango libXrender
-    gconf libxcb libXext libXi
+    cairo
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk2
+    gconf
+    libX11
+    nspr
+    nss
+    pango
+    libXrender
+    gconf
+    libxcb
+    libXext
+    libXi
     dbus
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "chromedriver";
   version = upstream-info.version;
 

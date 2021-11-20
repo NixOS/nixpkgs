@@ -9,10 +9,11 @@ let
   podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
 
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
-    outputs = [ "out" "man" ];
-    inherit (podmanPackage) meta;
-  } ''
+  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
+    {
+      outputs = [ "out" "man" ];
+      inherit (podmanPackage) meta;
+    } ''
     mkdir -p $out/bin
     ln -s ${podmanPackage}/bin/podman $out/bin/docker
 
@@ -23,13 +24,14 @@ let
     done
   '';
 
-  net-conflist = pkgs.runCommand "87-podman-bridge.conflist" {
-    nativeBuildInputs = [ pkgs.jq ];
-    extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
-    jqScript = ''
-      . + { "plugins": (.plugins + $extraPlugins) }
-    '';
-  } ''
+  net-conflist = pkgs.runCommand "87-podman-bridge.conflist"
+    {
+      nativeBuildInputs = [ pkgs.jq ];
+      extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
+      jqScript = ''
+        . + { "plugins": (.plugins + $extraPlugins) }
+      '';
+    } ''
     jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
       --argjson extraPlugins "$extraPlugins" \
       "$jqScript" \
@@ -116,7 +118,7 @@ in
 
     defaultNetwork.extraPlugins = lib.mkOption {
       type = types.listOf json.type;
-      default = [];
+      default = [ ];
       description = ''
         Extra CNI plugin configurations to add to podman's default network.
       '';
@@ -158,14 +160,15 @@ in
           grep -v 'D! /run/podman 0700 root root' \
             <$package/lib/tmpfiles.d/podman.conf \
             >$out/lib/tmpfiles.d/podman.conf
-        '') ];
+        '')
+      ];
 
       systemd.tmpfiles.rules =
         lib.optionals cfg.dockerSocket.enable [
           "L! /run/docker.sock - - - - /run/podman/podman.sock"
         ];
 
-      users.groups.podman = {};
+      users.groups.podman = { };
 
       assertions = [
         {

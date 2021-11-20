@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libbfd, SDL2, obs-studio
-, looking-glass-client }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libbfd
+, SDL2
+, obs-studio
+, looking-glass-client
+}:
 
 stdenv.mkDerivation {
   pname = "looking-glass-obs";

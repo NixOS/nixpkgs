@@ -33,7 +33,8 @@ let
     contents = remoteCrossPkgs.hello;
   };
 
-in {
+in
+{
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ roberth ];

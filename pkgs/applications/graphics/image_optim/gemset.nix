@@ -1,7 +1,7 @@
 {
   exifr = {
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "0q2abhiyvgfv23i0izbskjxcqaxiw9bfg6s57qgn4li4yxqpwpfg";
       type = "gem";
     };
@@ -9,16 +9,16 @@
   };
   fspath = {
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "1vjn9sy4hklr2d5wxmj5x1ry31dfq3sjp779wyprb3nbbdmra1sc";
       type = "gem";
     };
     version = "3.1.0";
   };
   image_optim = {
-    dependencies = ["exifr" "fspath" "image_size" "in_threads" "progress"];
+    dependencies = [ "exifr" "fspath" "image_size" "in_threads" "progress" ];
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "082w9qcyy9j6m6s2pknfdcik7l2qch4j48axs13m06l4s1hz0dmg";
       type = "gem";
     };
@@ -26,7 +26,7 @@
   };
   image_size = {
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "0bcn7nc6qix3w4sf7xd557lnsgjniqa7qvz7nnznx70m8qfbc7ig";
       type = "gem";
     };
@@ -34,7 +34,7 @@
   };
   in_threads = {
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "14hqm59sgqi91ag187zwpgwi58xckjkk58m031ghkp0csl8l9mkx";
       type = "gem";
     };
@@ -42,7 +42,7 @@
   };
   progress = {
     source = {
-      remotes = ["https://rubygems.org"];
+      remotes = [ "https://rubygems.org" ];
       sha256 = "1yrzq4v5sp7cg4nbgqh11k3d1czcllfz98dcdrxrsjxwq5ziiw0p";
       type = "gem";
     };

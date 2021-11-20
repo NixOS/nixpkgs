@@ -18,16 +18,17 @@ rec {
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  pythonTestDriver = {
-      qemu_pkg ? pkgs.qemu_test
+  pythonTestDriver =
+    { qemu_pkg ? pkgs.qemu_test
     , enableOCR ? false
-  }:
+    }:
     let
       name = "nixos-test-driver";
       testDriverScript = ./test-driver/test-driver.py;
       ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
-    in stdenv.mkDerivation {
+    in
+    stdenv.mkDerivation {
       inherit name;
 
       nativeBuildInputs = [ makeWrapper ];
@@ -102,18 +103,18 @@ rec {
   # Generate convenience wrappers for running the test driver
   # has vlans, vms and test script defaulted through env variables
   # also instantiates test script with nodes, if it's a function (contract)
-  setupDriverForTest = {
-      testScript
+  setupDriverForTest =
+    { testScript
     , testName
     , nodes
     , qemu_pkg ? pkgs.qemu_test
     , enableOCR ? false
     , skipLint ? false
-    , passthru ? {}
-  }:
+    , passthru ? { }
+    }:
     let
       # FIXME: get this pkg from the module system
-      testDriver = pythonTestDriver { inherit qemu_pkg enableOCR;};
+      testDriver = pythonTestDriver { inherit qemu_pkg enableOCR; };
 
       testDriverName =
         let
@@ -123,20 +124,23 @@ rec {
           # This means $name can at most be 50 bytes long.
           maxTestNameLen = 50;
           testNameLen = builtins.stringLength testName;
-        in with builtins;
-          if testNameLen > maxTestNameLen then
-            abort
-              ("The name of the test '${testName}' must not be longer than ${toString maxTestNameLen} " +
-                "it's currently ${toString testNameLen} characters long.")
-          else
-            "nixos-test-driver-${testName}";
+        in
+        with builtins;
+        if testNameLen > maxTestNameLen then
+          abort
+            ("The name of the test '${testName}' must not be longer than ${toString maxTestNameLen} " +
+              "it's currently ${toString testNameLen} characters long.")
+        else
+          "nixos-test-driver-${testName}";
 
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      nodeHostNames = let
-        nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
-      in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
+      nodeHostNames =
+        let
+          nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
+        in
+        nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
 
       # TODO: This is an implementation error and needs fixing
       # the testing famework cannot legitimately restrict hostnames further
@@ -161,37 +165,38 @@ rec {
         This is an IMPLEMENTATION ERROR and needs to be fixed. Meanwhile,
         please stick to alphanumeric chars and underscores as separation.
       ''
-    else lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
-      {
-        inherit testName;
-        nativeBuildInputs = [ makeWrapper ];
-        testScript = testScript';
-        preferLocalBuild = true;
-        passthru = passthru // {
-          inherit nodes;
-        };
-      }
-      ''
-        mkdir -p $out/bin
+    else
+      lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
+        {
+          inherit testName;
+          nativeBuildInputs = [ makeWrapper ];
+          testScript = testScript';
+          preferLocalBuild = true;
+          passthru = passthru // {
+            inherit nodes;
+          };
+        }
+        ''
+          mkdir -p $out/bin
 
-        vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
-        echo -n "$testScript" > $out/test-script
-        ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
+          vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
+          echo -n "$testScript" > $out/test-script
+          ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
-        ${lib.optionalString (!skipLint) ''
-          PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
-            < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
-          )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
-        ''}
+          ${lib.optionalString (!skipLint) ''
+            PYFLAKES_BUILTINS="$(
+              echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+              < ${lib.escapeShellArg "${testDriver}/nix-support/driver-symbols"}
+            )" ${python3Packages.pyflakes}/bin/pyflakes $out/test-script
+          ''}
 
-        # set defaults through environment
-        # see: ./test-driver/test-driver.py argparse implementation
-        wrapProgram $out/bin/nixos-test-driver \
-          --set startScripts "''${vmStartScripts[*]}" \
-          --set testScript "$out/test-script" \
-          --set vlans '${toString vlans}'
-      '');
+          # set defaults through environment
+          # see: ./test-driver/test-driver.py argparse implementation
+          wrapProgram $out/bin/nixos-test-driver \
+            --set startScripts "''${vmStartScripts[*]}" \
+            --set testScript "$out/test-script" \
+            --set vlans '${toString vlans}'
+        '');
 
   # Make a full-blown test
   makeTest =
@@ -200,12 +205,12 @@ rec {
     , name ? "unnamed"
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
-    , passthru ? {}
+    , passthru ? { }
     , # For meta.position
       pos ? # position used in error messages and for meta.position
-        (if t.meta.description or null != null
-          then builtins.unsafeGetAttrPos "description" t.meta
-          else builtins.unsafeGetAttrPos "testScript" t)
+      (if t.meta.description or null != null
+      then builtins.unsafeGetAttrPos "description" t.meta
+      else builtins.unsafeGetAttrPos "testScript" t)
     , ...
     } @ t:
     let
@@ -219,43 +224,45 @@ rec {
 
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
-            extraConfigurations = extraConfigurations ++ [(
-              { config, ... }:
-              {
-                virtualisation.qemu.package = qemu_pkg;
+            extraConfigurations = extraConfigurations ++ [
+              (
+                { config, ... }:
+                {
+                  virtualisation.qemu.package = qemu_pkg;
 
-                # Make sure all derivations referenced by the test
-                # script are available on the nodes. When the store is
-                # accessed through 9p, this isn't important, since
-                # everything in the store is available to the guest,
-                # but when building a root image it is, as all paths
-                # that should be available to the guest has to be
-                # copied to the image.
-                virtualisation.additionalPaths =
-                  lib.optional
-                    # A testScript may evaluate nodes, which has caused
-                    # infinite recursions. The demand cycle involves:
-                    #   testScript -->
-                    #   nodes -->
-                    #   toplevel -->
-                    #   additionalPaths -->
-                    #   hasContext testScript' -->
-                    #   testScript (ad infinitum)
-                    # If we don't need to build an image, we can break this
-                    # cycle by short-circuiting when useNixStoreImage is false.
-                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
-                    (pkgs.writeStringReferencesToFile testScript');
+                  # Make sure all derivations referenced by the test
+                  # script are available on the nodes. When the store is
+                  # accessed through 9p, this isn't important, since
+                  # everything in the store is available to the guest,
+                  # but when building a root image it is, as all paths
+                  # that should be available to the guest has to be
+                  # copied to the image.
+                  virtualisation.additionalPaths =
+                    lib.optional
+                      # A testScript may evaluate nodes, which has caused
+                      # infinite recursions. The demand cycle involves:
+                      #   testScript -->
+                      #   nodes -->
+                      #   toplevel -->
+                      #   additionalPaths -->
+                      #   hasContext testScript' -->
+                      #   testScript (ad infinitum)
+                      # If we don't need to build an image, we can break this
+                      # cycle by short-circuiting when useNixStoreImage is false.
+                      (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                      (pkgs.writeStringReferencesToFile testScript');
 
-                # Ensure we do not use aliases. Ideally this is only set
-                # when the test framework is used by Nixpkgs NixOS tests.
-                nixpkgs.config.allowAliases = false;
-              }
-            )];
+                  # Ensure we do not use aliases. Ideally this is only set
+                  # when the test framework is used by Nixpkgs NixOS tests.
+                  nixpkgs.config.allowAliases = false;
+                }
+              )
+            ];
           };
         in
-          build-vms.buildVirtualNetwork (
-              t.nodes or (if t ? machine then { machine = t.machine; } else { })
-          );
+        build-vms.buildVirtualNetwork (
+          t.nodes or (if t ? machine then { machine = t.machine; } else { })
+        );
 
       driver = setupDriverForTest {
         inherit testScript enableOCR skipLint passthru;
@@ -275,12 +282,13 @@ rec {
           passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
             meta = (drv.meta or { }) // t.meta;
           };
-        in passMeta (runTests { inherit driver pos; });
+        in
+        passMeta (runTests { inherit driver pos; });
 
     in
-      test // {
-        inherit test driver driverInteractive nodes;
-      };
+    test // {
+      inherit test driver driverInteractive nodes;
+    };
 
   abortForFunction = functionName: abort ''The ${functionName} function was
     removed because it is not an essential part of the NixOS testing

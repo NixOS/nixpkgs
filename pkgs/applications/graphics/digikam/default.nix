@@ -1,7 +1,14 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, doxygen
+, extra-cmake-modules
+, wrapGAppsHook
 
-# For `digitaglinktree`
-, perl, sqlite
+  # For `digitaglinktree`
+, perl
+, sqlite
 
 , qtbase
 , qtxmlpatterns
@@ -44,7 +51,7 @@
 , threadweaver
 , x265
 
-# For panorama and focus stacking
+  # For panorama and focus stacking
 , enblend-enfuse
 , hugin
 , gnumake
@@ -54,7 +61,7 @@
 }:
 
 mkDerivation rec {
-  pname   = "digikam";
+  pname = "digikam";
   version = "7.3.0";
 
   src = fetchurl {

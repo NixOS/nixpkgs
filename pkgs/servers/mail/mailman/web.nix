@@ -1,5 +1,14 @@
-{ buildPythonPackage, lib, fetchgit, isPy3k
-, git, makeWrapper, sassc, hyperkitty, postorius, whoosh, setuptools-scm
+{ buildPythonPackage
+, lib
+, fetchgit
+, isPy3k
+, git
+, makeWrapper
+, sassc
+, hyperkitty
+, postorius
+, whoosh
+, setuptools-scm
 }:
 
 buildPythonPackage rec {

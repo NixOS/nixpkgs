@@ -12,7 +12,8 @@ buildGoPackage rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/tomcz/openldap_exporter.tag=v${version}"
     "-X github.com/tomcz/openldap_exporter.commit=unknown"
   ];

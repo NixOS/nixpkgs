@@ -6,7 +6,7 @@
 , pyyaml
 }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nunavut";
   version = "1.5.1";
 

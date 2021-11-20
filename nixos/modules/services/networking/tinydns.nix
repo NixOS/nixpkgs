@@ -36,7 +36,7 @@ with lib;
       isSystemUser = true;
       group = "tinydns";
     };
-    users.groups.tinydns = {};
+    users.groups.tinydns = { };
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";

@@ -1,8 +1,27 @@
-{ stdenv, lib, buildFHSUserEnv, dpkg, glibc, gcc-unwrapped, autoPatchelfHook, fetchurl, wrapGAppsHook
-, gnome2, xorg
-, libSM, libXxf86vm, libX11, glib, pango, cairo, gtk2-x11, zlib, openssl
+{ stdenv
+, lib
+, buildFHSUserEnv
+, dpkg
+, glibc
+, gcc-unwrapped
+, autoPatchelfHook
+, fetchurl
+, wrapGAppsHook
+, gnome2
+, xorg
+, libSM
+, libXxf86vm
+, libX11
+, glib
+, pango
+, cairo
+, gtk2-x11
+, zlib
+, openssl
 , libpulseaudio
-, SDL2, xorg_sys_opengl, libGL
+, SDL2
+, xorg_sys_opengl
+, libGL
 }:
 let
 
@@ -88,16 +107,28 @@ in
   * For that we need use a buildFHSUserEnv.
   * FHS simulates a classic linux shell
   */
-  buildFHSUserEnv {
-   name = "RuneScape";
-   targetPkgs = pkgs: [
-     runescape
-     dpkg glibc gcc-unwrapped
-     libSM libXxf86vm libX11 glib pango cairo gtk2-x11 zlib openssl
-     libpulseaudio
-     xorg.libX11
-     SDL2 xorg_sys_opengl libGL
-   ];
-   multiPkgs = pkgs: [ libGL ];
-   runScript = "runescape-launcher";
+buildFHSUserEnv {
+  name = "RuneScape";
+  targetPkgs = pkgs: [
+    runescape
+    dpkg
+    glibc
+    gcc-unwrapped
+    libSM
+    libXxf86vm
+    libX11
+    glib
+    pango
+    cairo
+    gtk2-x11
+    zlib
+    openssl
+    libpulseaudio
+    xorg.libX11
+    SDL2
+    xorg_sys_opengl
+    libGL
+  ];
+  multiPkgs = pkgs: [ libGL ];
+  runScript = "runescape-launcher";
 }

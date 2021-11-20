@@ -1,12 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, zlib
+, pcre
+, libxml2
+, libxslt
 
 , nixosTests
-, substituteAll, gd, geoip, perl
+, substituteAll
+, gd
+, geoip
+, perl
 , withDebug ? false
 , withStream ? true
 , withMail ? false
 , withPerl ? true
-, modules ? []
+, modules ? [ ]
 , ...
 }:
 
@@ -15,13 +26,13 @@
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
 , sha256 ? null # when not specifying src
-, configureFlags ? []
-, buildInputs ? []
+, configureFlags ? [ ]
+, buildInputs ? [ ]
 , fixPatch ? p: p
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
-, passthru ? { tests = {}; }
+, passthru ? { tests = { }; }
 }:
 
 with lib;
@@ -32,8 +43,8 @@ let
     (mod:
       let supports = mod.supports or (_: true);
       in
-        if supports nginxVersion then mod.${attrPath} or []
-        else throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!");
+      if supports nginxVersion then mod.${attrPath} or [ ]
+      else throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!");
 
 in
 
@@ -42,7 +53,8 @@ stdenv.mkDerivation {
   inherit version;
   inherit nginxVersion;
 
-  src = if src != null then src else fetchurl {
+  src = if src != null then src else
+  fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit sha256;
   };
@@ -93,19 +105,19 @@ stdenv.mkDerivation {
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
   ]
-    ++ optional (gd != null) "--with-http_image_filter_module"
-    ++ optional (geoip != null) "--with-http_geoip_module"
-    ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
-    ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
-    ++ configureFlags
-    ++ map (mod: "--add-module=${mod.src}") modules;
+  ++ optional (gd != null) "--with-http_image_filter_module"
+  ++ optional (geoip != null) "--with-http_geoip_module"
+  ++ optional (withStream && geoip != null) "--with-stream_geoip_module"
+  ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+  ++ configureFlags
+  ++ map (mod: "--add-module=${mod.src}") modules;
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
   ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   preConfigure = preConfigure
     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
@@ -152,9 +164,9 @@ stdenv.mkDerivation {
 
   meta = if meta != null then meta else {
     description = "A reverse proxy and lightweight webserver";
-    homepage    = "http://nginx.org";
-    license     = licenses.bsd2;
-    platforms   = platforms.all;
+    homepage = "http://nginx.org";
+    license = licenses.bsd2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
   };
 }

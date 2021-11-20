@@ -1,12 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
-, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
-, miniupnpc, enet, mbedtls, soundtouch, sfml
-, vulkan-loader ? null, libpulseaudio ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, wrapQtAppsHook
+, qtbase
+, bluez
+, ffmpeg
+, libao
+, libGLU
+, libGL
+, pcre
+, gettext
+, libXrandr
+, libusb1
+, lzo
+, libpthreadstubs
+, libXext
+, libXxf86vm
+, libXinerama
+, libSM
+, libXdmcp
+, readline
+, openal
+, udev
+, libevdev
+, portaudio
+, curl
+, alsa-lib
+, miniupnpc
+, enet
+, mbedtls
+, soundtouch
+, sfml
+, vulkan-loader ? null
+, libpulseaudio ? null
 
-# - Inputs used for Darwin
-, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+  # - Inputs used for Darwin
+, CoreBluetooth
+, ForceFeedback
+, IOKit
+, OpenGL
+, libpng
+, hidapi
+}:
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
@@ -21,17 +58,48 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
-  ++ lib.optional stdenv.isLinux wrapQtAppsHook;
+    ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
-    curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    curl
+    ffmpeg
+    libao
+    libGLU
+    libGL
+    pcre
+    gettext
+    libpthreadstubs
+    libpulseaudio
+    libXrandr
+    libXext
+    libXxf86vm
+    libXinerama
+    libSM
+    readline
+    openal
+    libXdmcp
+    lzo
+    portaudio
+    libusb1
+    libpng
+    hidapi
+    miniupnpc
+    enet
+    mbedtls
+    soundtouch
+    sfml
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
-    bluez udev libevdev alsa-lib vulkan-loader
+    bluez
+    udev
+    libevdev
+    alsa-lib
+    vulkan-loader
   ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth OpenGL ForceFeedback IOKit
+    CoreBluetooth
+    OpenGL
+    ForceFeedback
+    IOKit
   ];
 
   cmakeFlags = [

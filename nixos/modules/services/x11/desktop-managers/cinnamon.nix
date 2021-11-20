@@ -24,7 +24,7 @@ in
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
@@ -42,14 +42,14 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
@@ -60,7 +60,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
       services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-      })
+    })
 
     (mkIf cfg.enable {
       services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
@@ -114,7 +114,7 @@ in
 
       # Fix lockscreen
       security.pam.services = {
-        cinnamon-screensaver = {};
+        cinnamon-screensaver = { };
       };
 
       environment.systemPackages = with pkgs.cinnamon // pkgs; [
@@ -205,7 +205,8 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
-      ] config.environment.cinnamon.excludePackages);
+      ]
+        config.environment.cinnamon.excludePackages);
     })
   ];
 }

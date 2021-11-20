@@ -1,20 +1,21 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , pkg-config
 , file
 , glib
-# always required runtime dependencies
+  # always required runtime dependencies
 , dbus
 , libmnl
 , gnutls
 , readline
-# configureable options
+  # configureable options
 , firewallType ? "iptables" # or "nftables"
 , iptables ? null
 , libnftnl ? null # for nftables
 , dnsType ? "internal" # or "systemd-resolved"
-# optional features which are turned *on* by default
+  # optional features which are turned *on* by default
 , enableOpenconnect ? true
 , openconnect ? null
 , enableOpenvpn ? true
@@ -41,7 +42,7 @@
 , enableStats ? true
 , enableClient ? true
 , enableDatafiles ? true
-# optional features which are turned *off* by default
+  # optional features which are turned *off* by default
 , enableNetworkManager ? false
 , enableHh2serialGps ? false
 , enableL2tp ? false
@@ -77,10 +78,10 @@ stdenv.mkDerivation rec {
     gnutls
     readline
   ] ++ optionals (enableOpenconnect) [ openconnect ]
-    ++ optionals (firewallType == "iptables") [ iptables ]
-    ++ optionals (firewallType == "nftables") [ libnftnl ]
-    ++ optionals (enablePolkit) [ polkit ]
-    ++ optionals (enablePptp) [ pptp ppp ]
+  ++ optionals (firewallType == "iptables") [ iptables ]
+  ++ optionals (firewallType == "nftables") [ libnftnl ]
+  ++ optionals (enablePolkit) [ polkit ]
+  ++ optionals (enablePptp) [ pptp ppp ]
   ;
 
   nativeBuildInputs = [
@@ -110,62 +111,62 @@ stdenv.mkDerivation rec {
     # "--enable-tests" # installs the tests, we don't want that
     "--enable-tools"
   ]
-    ++ optionals (!enableLoopback) [ "--disable-loopback" ]
-    ++ optionals (!enableEthernet) [ "--disable-ethernet" ]
-    ++ optionals (!enableWireguard) [ "--disable-wireguard" ]
-    ++ optionals (!enableGadget) [ "--disable-gadget" ]
-    ++ optionals (!enableWifi) [ "--disable-wifi" ]
-    # enable IWD support for wifi as it doesn't require any new dependencies
-    # and it's easier for the NixOS module to use only one connman package when
-    # IWD is requested
-    ++ optionals (enableWifi) [ "--enable-iwd" ]
-    ++ optionals (!enableBluetooth) [ "--disable-bluetooth" ]
-    ++ optionals (!enableOfono) [ "--disable-ofono" ]
-    ++ optionals (!enableDundee) [ "--disable-dundee" ]
-    ++ optionals (!enablePacrunner) [ "--disable-pacrunner" ]
-    ++ optionals (!enableNeard) [ "--disable-neard" ]
-    ++ optionals (!enableWispr) [ "--disable-wispr" ]
-    ++ optionals (!enableTools) [ "--disable-tools" ]
-    ++ optionals (!enableStats) [ "--disable-stats" ]
-    ++ optionals (!enableClient) [ "--disable-client" ]
-    ++ optionals (!enableDatafiles) [ "--disable-datafiles" ]
-    ++ optionals (enableOpenconnect) [
-      "--enable-openconnect=builtin"
-      "--with-openconnect=${openconnect}/sbin/openconnect"
-    ]
-    ++ optionals (enableOpenvpn) [
-      "--enable-openvpn=builtin"
-      "--with-openvpn=${openvpn}/sbin/openvpn"
-    ]
-    ++ optionals (enableVpnc) [
-      "--enable-vpnc=builtin"
-      "--with-vpnc=${vpnc}/sbin/vpnc"
-    ]
-    ++ optionals (enablePolkit) [
-      "--enable-polkit"
-    ]
-    ++ optionals (enablePptp) [
-      "--enable-pptp"
-      "--with-pptp=${pptp}/sbin/pptp"
-    ]
-    ++ optionals (!enableWireguard) [
-      "--disable-wireguard"
-    ]
-    ++ optionals (enableNetworkManager) [
-      "--enable-nmcompat"
-    ]
-    ++ optionals (enableHh2serialGps) [
-      "--enable-hh2serial-gps"
-    ]
-    ++ optionals (enableL2tp) [
-      "--enable-l2tp"
-    ]
-    ++ optionals (enableIospm) [
-      "--enable-iospm"
-    ]
-    ++ optionals (enableTist) [
-      "--enable-tist"
-    ]
+  ++ optionals (!enableLoopback) [ "--disable-loopback" ]
+  ++ optionals (!enableEthernet) [ "--disable-ethernet" ]
+  ++ optionals (!enableWireguard) [ "--disable-wireguard" ]
+  ++ optionals (!enableGadget) [ "--disable-gadget" ]
+  ++ optionals (!enableWifi) [ "--disable-wifi" ]
+  # enable IWD support for wifi as it doesn't require any new dependencies
+  # and it's easier for the NixOS module to use only one connman package when
+  # IWD is requested
+  ++ optionals (enableWifi) [ "--enable-iwd" ]
+  ++ optionals (!enableBluetooth) [ "--disable-bluetooth" ]
+  ++ optionals (!enableOfono) [ "--disable-ofono" ]
+  ++ optionals (!enableDundee) [ "--disable-dundee" ]
+  ++ optionals (!enablePacrunner) [ "--disable-pacrunner" ]
+  ++ optionals (!enableNeard) [ "--disable-neard" ]
+  ++ optionals (!enableWispr) [ "--disable-wispr" ]
+  ++ optionals (!enableTools) [ "--disable-tools" ]
+  ++ optionals (!enableStats) [ "--disable-stats" ]
+  ++ optionals (!enableClient) [ "--disable-client" ]
+  ++ optionals (!enableDatafiles) [ "--disable-datafiles" ]
+  ++ optionals (enableOpenconnect) [
+    "--enable-openconnect=builtin"
+    "--with-openconnect=${openconnect}/sbin/openconnect"
+  ]
+  ++ optionals (enableOpenvpn) [
+    "--enable-openvpn=builtin"
+    "--with-openvpn=${openvpn}/sbin/openvpn"
+  ]
+  ++ optionals (enableVpnc) [
+    "--enable-vpnc=builtin"
+    "--with-vpnc=${vpnc}/sbin/vpnc"
+  ]
+  ++ optionals (enablePolkit) [
+    "--enable-polkit"
+  ]
+  ++ optionals (enablePptp) [
+    "--enable-pptp"
+    "--with-pptp=${pptp}/sbin/pptp"
+  ]
+  ++ optionals (!enableWireguard) [
+    "--disable-wireguard"
+  ]
+  ++ optionals (enableNetworkManager) [
+    "--enable-nmcompat"
+  ]
+  ++ optionals (enableHh2serialGps) [
+    "--enable-hh2serial-gps"
+  ]
+  ++ optionals (enableL2tp) [
+    "--enable-l2tp"
+  ]
+  ++ optionals (enableIospm) [
+    "--enable-iospm"
+  ]
+  ++ optionals (enableTist) [
+    "--enable-tist"
+  ]
   ;
 
   doCheck = true;

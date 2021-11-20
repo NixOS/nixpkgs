@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   '';
 
   phpConfig = writeText "LocalSettings.php" ''
-  <?php
-    return require(getenv('MEDIAWIKI_CONFIG'));
-  ?>
+    <?php
+      return require(getenv('MEDIAWIKI_CONFIG'));
+    ?>
   '';
 
   installPhase = ''

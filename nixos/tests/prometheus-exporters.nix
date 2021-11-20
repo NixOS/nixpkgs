@@ -182,17 +182,20 @@ let
         enable = true;
         extraFlags = [ "--web.collectd-push-path /collectd" ];
       };
-      exporterTest = let postData = replaceChars [ "\n" ] [ "" ] ''
-        [{
-          "values":[23],
-          "dstypes":["gauge"],
-          "type":"gauge",
-          "interval":1000,
-          "host":"testhost",
-          "plugin":"testplugin",
-          "time":DATE
-        }]
-      ''; in
+      exporterTest =
+        let
+          postData = replaceChars [ "\n" ] [ "" ] ''
+            [{
+              "values":[23],
+              "dstypes":["gauge"],
+              "type":"gauge",
+              "interval":1000,
+              "host":"testhost",
+              "plugin":"testplugin",
+              "time":DATE
+            }]
+          '';
+        in
         ''
           wait_for_unit("prometheus-collectd-exporter.service")
           wait_for_open_port(9103)
@@ -347,42 +350,43 @@ let
       '';
     };
 
-    kea = let
-      controlSocketPath = "/run/kea/dhcp6.sock";
-    in
-    {
-      exporterConfig = {
-        enable = true;
-        controlSocketPaths = [
-          controlSocketPath
-        ];
-      };
-      metricProvider = {
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
+    kea =
+      let
+        controlSocketPath = "/run/kea/dhcp6.sock";
+      in
+      {
+        exporterConfig = {
+          enable = true;
+          controlSocketPaths = [
+            controlSocketPath
+          ];
+        };
+        metricProvider = {
+          systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
-        services.kea = {
-          dhcp6 = {
-            enable = true;
-            settings = {
-              control-socket = {
-                socket-type = "unix";
-                socket-name = controlSocketPath;
+          services.kea = {
+            dhcp6 = {
+              enable = true;
+              settings = {
+                control-socket = {
+                  socket-type = "unix";
+                  socket-name = controlSocketPath;
+                };
               };
             };
           };
         };
-      };
 
-      exporterTest = ''
-        wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPath}")
-        wait_for_unit("prometheus-kea-exporter.service")
-        wait_for_open_port(9547)
-        succeed(
-            "curl --fail localhost:9547/metrics | grep 'packets_received_total'"
-        )
-      '';
-    };
+        exporterTest = ''
+          wait_for_unit("kea-dhcp6-server.service")
+          wait_for_file("${controlSocketPath}")
+          wait_for_unit("prometheus-kea-exporter.service")
+          wait_for_open_port(9547)
+          succeed(
+              "curl --fail localhost:9547/metrics | grep 'packets_received_total'"
+          )
+        '';
+      };
 
     knot = {
       exporterConfig = {
@@ -559,7 +563,7 @@ let
           isSystemUser = true;
           group = "mailexporter";
         };
-        users.groups.mailexporter = {};
+        users.groups.mailexporter = { };
       };
       exporterTest = ''
         wait_for_unit("postfix.service")

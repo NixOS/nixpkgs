@@ -1,25 +1,51 @@
-{ lib, stdenv, fetchurl, pkg-config
-, ncurses, db , popt, libtool
-# Sound sub-systems
-, alsaSupport ? true, alsa-lib
-, pulseSupport ? true, libpulseaudio, autoreconfHook
-, jackSupport ? true, libjack2
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, ncurses
+, db
+, popt
+, libtool
+  # Sound sub-systems
+, alsaSupport ? true
+, alsa-lib
+, pulseSupport ? true
+, libpulseaudio
+, autoreconfHook
+, jackSupport ? true
+, libjack2
 , ossSupport ? true
-# Audio formats
-, aacSupport ? true, faad2, libid3tag
-, flacSupport ? true, flac
-, midiSupport ? true, timidity
-, modplugSupport ? true, libmodplug
-, mp3Support ? true, libmad
-, musepackSupport ? true, libmpc, libmpcdec, taglib
-, vorbisSupport ? true, libvorbis
-, speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg
-, sndfileSupport ? true, libsndfile
-, wavpackSupport ? true, wavpack
-# Misc
-, curlSupport ? true, curl
-, samplerateSupport ? true, libsamplerate
+  # Audio formats
+, aacSupport ? true
+, faad2
+, libid3tag
+, flacSupport ? true
+, flac
+, midiSupport ? true
+, timidity
+, modplugSupport ? true
+, libmodplug
+, mp3Support ? true
+, libmad
+, musepackSupport ? true
+, libmpc
+, libmpcdec
+, taglib
+, vorbisSupport ? true
+, libvorbis
+, speexSupport ? true
+, speex
+, ffmpegSupport ? true
+, ffmpeg
+, sndfileSupport ? true
+, libsndfile
+, wavpackSupport ? true
+, wavpack
+  # Misc
+, curlSupport ? true
+, curl
+, samplerateSupport ? true
+, libsamplerate
 , withDebug ? false
 }:
 
@@ -27,7 +53,8 @@ let
   opt = lib.optional;
   mkFlag = c: f: if c then "--with-${f}" else "--without-${f}";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "moc";
   version = "2.5.2";
@@ -37,7 +64,7 @@ in stdenv.mkDerivation rec {
     sha256 = "026v977kwb0wbmlmf6mnik328plxg8wykfx9ryvqhirac0aq39pk";
   };
 
-  patches = []
+  patches = [ ]
     ++ opt ffmpegSupport ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 

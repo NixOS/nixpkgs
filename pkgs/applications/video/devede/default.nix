@@ -1,9 +1,22 @@
-{ lib, fetchFromGitLab, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
+{ lib
+, fetchFromGitLab
+, python3Packages
+, ffmpeg
+, mplayer
+, vcdimager
+, cdrkit
+, dvdauthor
+, gtk3
+, gettext
+, wrapGAppsHook
+, gdk-pixbuf
+, gobject-introspection
+}:
 
 let
   inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "devede";
   version = "4.16.0";
   namePrefix = "";
@@ -21,7 +34,8 @@ in buildPythonApplication rec {
   strictDeps = false;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext
+    wrapGAppsHook
 
     # Temporary fix
     # See https://github.com/NixOS/nixpkgs/issues/61578
@@ -34,7 +48,17 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
+    gtk3
+    pygobject3
+    gdk-pixbuf
+    dbus-python
+    ffmpeg
+    mplayer
+    dvdauthor
+    vcdimager
+    cdrkit
+    urllib3
+    setuptools
   ];
 
   postPatch = ''

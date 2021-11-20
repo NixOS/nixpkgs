@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, supportCompressedPackets ? true, zlib, bzip2
+{ lib
+, stdenv
+, fetchFromGitHub
+, supportCompressedPackets ? true
+, zlib
+, bzip2
 }:
 
 stdenv.mkDerivation rec {

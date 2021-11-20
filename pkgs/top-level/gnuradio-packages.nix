@@ -4,7 +4,7 @@
 , gnuradio # unwrapped gnuradio
 }:
 
-lib.makeScope newScope ( self:
+lib.makeScope newScope (self:
 
 let
   # Modeled after qt's
@@ -20,11 +20,12 @@ let
       boost
       uhd
       volk
-    ;
+      ;
     inherit mkDerivationWith mkDerivation;
   };
 
-in {
+in
+{
 
   inherit callPackage mkDerivation mkDerivationWith;
 

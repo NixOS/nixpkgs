@@ -1,4 +1,4 @@
-{ lib, python3, git, mercurial}:
+{ lib, python3, git, mercurial }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ pathlib2 click toml lexid colorama setuptools ];
 
-  checkInputs = [ python3.pkgs.pytestCheckHook git mercurial];
+  checkInputs = [ python3.pkgs.pytestCheckHook git mercurial ];
 
   meta = with lib; {
     description = "Bump version numbers in project files";

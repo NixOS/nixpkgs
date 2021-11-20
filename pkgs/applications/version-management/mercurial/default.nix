@@ -1,9 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python3Packages
+, makeWrapper
+, gettext
+, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux
+, rustPlatform
 , fullBuild ? false
 , gitSupport ? fullBuild
-, guiSupport ? fullBuild, tk
+, guiSupport ? fullBuild
+, tk
 , highlightSupport ? fullBuild
 , ApplicationServices
 }:
@@ -24,12 +33,15 @@ let
 
     passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
-    cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
-      sourceRoot = "${pname}-${version}/rust";
-    } else null;
+    cargoDeps =
+      if rustSupport then
+        rustPlatform.fetchCargoTarball
+          {
+            inherit src;
+            name = "${pname}-${version}";
+            sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
+            sourceRoot = "${pname}-${version}/rust";
+          } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
     propagatedBuildInputs = lib.optional re2Support fb-re2
@@ -37,10 +49,10 @@ let
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
       ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
@@ -74,7 +86,7 @@ let
         --zsh contrib/zsh_completion
     '';
 
-    passthru.tests = {};
+    passthru.tests = { };
 
     meta = with lib; {
       description = "A fast, lightweight SCM system for very large distributed projects";
@@ -87,13 +99,14 @@ let
     };
   };
 in
-  self.overridePythonAttrs (origAttrs: {
-    passthru = origAttrs.passthru // rec {
-      # withExtensions takes a function which takes the python packages set and
-      # returns a list of extensions to install.
-      #
-      # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
-      withExtensions = f: let
+self.overridePythonAttrs (origAttrs: {
+  passthru = origAttrs.passthru // rec {
+    # withExtensions takes a function which takes the python packages set and
+    # returns a list of extensions to install.
+    #
+    # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
+    withExtensions = f:
+      let
         python = self.python;
         mercurialHighPrio = ps: (ps.toPythonModule self).overrideAttrs (oldAttrs: {
           meta = oldAttrs.meta // {
@@ -102,7 +115,8 @@ in
         });
         plugins = (f python.pkgs) ++ [ (mercurialHighPrio python.pkgs) ];
         env = python.withPackages (ps: plugins);
-      in stdenv.mkDerivation {
+      in
+      stdenv.mkDerivation {
         pname = "${self.pname}-with-extensions";
 
         inherit (self) src version meta;
@@ -137,8 +151,8 @@ in
         '';
       };
 
-      tests = origAttrs.passthru.tests // {
-        withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
-      };
+    tests = origAttrs.passthru.tests // {
+      withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
     };
-  })
+  };
+})

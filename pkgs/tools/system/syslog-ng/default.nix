@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkg-config, glib, python, systemd, perl
-, riemann_c_client, protobufc, pcre, libnet
-, json_c, libuuid, libivykis, mongoc, rabbitmq-c
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, libcap
+, curl
+, which
+, eventlog
+, pkg-config
+, glib
+, python
+, systemd
+, perl
+, riemann_c_client
+, protobufc
+, pcre
+, libnet
+, json_c
+, libuuid
+, libivykis
+, mongoc
+, rabbitmq-c
 , libesmtp
 }:
 

@@ -1,20 +1,35 @@
-{ lib, stdenv, fetchurl, gfortran, perl, libnl
-, rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix, ucx
+{ lib
+, stdenv
+, fetchurl
+, gfortran
+, perl
+, libnl
+, rdma-core
+, zlib
+, numactl
+, libevent
+, hwloc
+, targetPackages
+, symlinkJoin
+, libpsm2
+, libfabric
+, pmix
+, ucx
 
-# Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+  # Enable CUDA support
+, cudaSupport ? false
+, cudatoolkit ? null
 
-# Enable the Sun Grid Engine bindings
+  # Enable the Sun Grid Engine bindings
 , enableSGE ? false
 
-# Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
+  # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
 , enablePrefix ? false
 
-# Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
+  # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
 
-# Enable Fortran support
+  # Enable Fortran support
 , fortranSupport ? true
 }:
 
@@ -25,7 +40,8 @@ let
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openmpi";
   version = "4.1.1";
 
@@ -57,19 +73,19 @@ in stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
-    ++ lib.optionals stdenv.isLinux  [
-      "--with-libnl=${libnl.dev}"
-      "--with-pmix=${pmix}"
-      "--with-pmix-libdir=${pmix}/lib"
-      "--enable-mpi-cxx"
-    ] ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optionals stdenv.isLinux [
+    "--with-libnl=${libnl.dev}"
+    "--with-pmix=${pmix}"
+    "--with-pmix-libdir=${pmix}/lib"
+    "--enable-mpi-cxx"
+  ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
     ++ lib.optionals fabricSupport [ "--with-psm2=${libpsm2}" "--with-libfabric=${libfabric}" ]
-    ;
+  ;
 
   enableParallelBuilding = true;
 
@@ -85,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f $out/lib/*.la
-   '';
+  '';
 
   postFixup = ''
     # default compilers should be indentical to the

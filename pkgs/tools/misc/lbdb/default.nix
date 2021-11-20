@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl, finger_bsd
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, perl
+, finger_bsd
 , abook ? null
 , gnupg ? null
 , goobook ? null
@@ -19,20 +24,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ goobook perl' ]
     ++ lib.optional (!stdenv.isDarwin) finger_bsd
-    ++ lib.optional   (abook != null) abook
-    ++ lib.optional   (gnupg != null) gnupg
+    ++ lib.optional (abook != null) abook
+    ++ lib.optional (gnupg != null) gnupg
     ++ lib.optional (goobook != null) goobook
-    ++ lib.optional   (khard != null) khard
-    ++ lib.optional      (mu != null) mu;
+    ++ lib.optional (khard != null) khard
+    ++ lib.optional (mu != null) mu;
 
   configureFlags = [ ]
-    ++ lib.optional   (abook != null) "--with-abook"
-    ++ lib.optional   (gnupg != null) "--with-gpg"
+    ++ lib.optional (abook != null) "--with-abook"
+    ++ lib.optional (gnupg != null) "--with-gpg"
     ++ lib.optional (goobook != null) "--with-goobook"
-    ++ lib.optional   (khard != null) "--with-khard"
-    ++ lib.optional      (mu != null) "--with-mu";
+    ++ lib.optional (khard != null) "--with-khard"
+    ++ lib.optional (mu != null) "--with-mu";
 
-  patches = [ ./add-methods-to-rc.patch
+  patches = [
+    ./add-methods-to-rc.patch
     # fix undefined exec_prefix. Remove with the next release
     (fetchpatch {
       url = "https://github.com/RolandRosenfeld/lbdb/commit/60b7bae255011f59212d96adfbded459d6a27129.patch";

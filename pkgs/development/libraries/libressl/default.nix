@@ -8,11 +8,12 @@
 }:
 
 let
-  ldLibPathEnvName = if stdenv.isDarwin
+  ldLibPathEnvName =
+    if stdenv.isDarwin
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
-  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  generic = { version, sha256, patches ? [ ] }: stdenv.mkDerivation rec {
     pname = "libressl";
     inherit version;
 
@@ -78,14 +79,15 @@ let
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";
-      homepage    = "https://www.libressl.org";
+      homepage = "https://www.libressl.org";
       license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
-      platforms   = platforms.all;
+      platforms = platforms.all;
       maintainers = with maintainers; [ thoughtpolice fpletz ];
     };
   };
 
-in {
+in
+{
   libressl_3_2 = generic {
     version = "3.2.7";
     sha256 = "112bjfrwwqlk0lak7fmfhcls18ydf62cp7gxghf4gklpfl1zyckw";

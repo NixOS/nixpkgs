@@ -1,20 +1,41 @@
-{ stdenv, lib, makeDesktopItem
-, unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook
-, gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
+{ stdenv
+, lib
+, makeDesktopItem
+, unzip
+, libsecret
+, libXScrnSaver
+, libxshmfence
+, wrapGAppsHook
+, gtk2
+, atomEnv
+, at-spi2-atk
+, autoPatchelfHook
+, systemd
+, fontconfig
+, libdbusmenu
+, glib
+, buildFHSUserEnvBubblewrap
 , writeShellScriptBin
 
-# Populate passthru.tests
+  # Populate passthru.tests
 , tests
 
-# needed to fix "Save as Root"
-, nodePackages, bash
+  # needed to fix "Save as Root"
+, nodePackages
+, bash
 
-# Attributes inherit from specific versions
-, version, src, meta, sourceRoot
-, executableName, longName, shortName, pname, updateScript
-# sourceExecutableName is the name of the binary in the source archive, over
-# which we have no control
+  # Attributes inherit from specific versions
+, version
+, src
+, meta
+, sourceRoot
+, executableName
+, longName
+, shortName
+, pname
+, updateScript
+  # sourceExecutableName is the name of the binary in the source archive, over
+  # which we have no control
 , sourceExecutableName ? executableName
 }:
 
@@ -26,7 +47,7 @@ let
 
     passthru = {
       inherit executableName longName tests updateScript;
-      fhs = fhs {};
+      fhs = fhs { };
       fhsWithPackages = f: fhs { additionalPkgs = f; };
     };
 
@@ -73,7 +94,7 @@ let
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = [unzip] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
+    nativeBuildInputs = [ unzip ] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -139,7 +160,7 @@ let
   #
   # buildFHSUserEnv allows for users to use the existing vscode
   # extension tooling without significant pain.
-  fhs = { additionalPkgs ? pkgs: [] }: buildFHSUserEnvBubblewrap {
+  fhs = { additionalPkgs ? pkgs: [ ] }: buildFHSUserEnvBubblewrap {
     # also determines the name of the wrapped command
     name = executableName;
 
@@ -187,4 +208,4 @@ let
     };
   };
 in
-  unwrapped
+unwrapped

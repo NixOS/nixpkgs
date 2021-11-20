@@ -16,7 +16,8 @@
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";

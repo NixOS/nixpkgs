@@ -6,7 +6,8 @@ let
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
   configFile = ini.generate "main.conf" cfg.settings;
-in {
+in
+{
   options.networking.wireless.iwd = {
     enable = mkEnableOption "iwd";
 
@@ -41,7 +42,7 @@ in {
     environment.etc."iwd/main.conf".source = configFile;
 
     # for iwctl
-    environment.systemPackages =  [ pkgs.iwd ];
+    environment.systemPackages = [ pkgs.iwd ];
 
     services.dbus.packages = [ pkgs.iwd ];
 

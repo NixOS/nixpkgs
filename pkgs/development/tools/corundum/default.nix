@@ -9,9 +9,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Tool and libraries for maintaining Ruby gems";
-    homepage    = "https://github.com/nyarly/corundum";
-    license     = licenses.mit;
+    homepage = "https://github.com/nyarly/corundum";
+    license = licenses.mit;
     maintainers = with maintainers; [ nyarly nicknovitski ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

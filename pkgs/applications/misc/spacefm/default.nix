@@ -1,6 +1,21 @@
-{ pkgs, fetchFromGitHub, lib, stdenv, gtk3, udev, desktop-file-utils
-, shared-mime-info, intltool, pkg-config, wrapGAppsHook, ffmpegthumbnailer
-, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
+{ pkgs
+, fetchFromGitHub
+, lib
+, stdenv
+, gtk3
+, udev
+, desktop-file-utils
+, shared-mime-info
+, intltool
+, pkg-config
+, wrapGAppsHook
+, ffmpegthumbnailer
+, jmtpfs
+, ifuseSupport ? false
+, ifuse ? null
+, lsof
+, udisks2
+}:
 
 stdenv.mkDerivation rec {
   pname = "spacefm";
@@ -40,9 +55,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk3 udev desktop-file-utils shared-mime-info intltool
-    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2
-  ] ++ (if ifuseSupport then [ ifuse ] else []);
+    gtk3
+    udev
+    desktop-file-utils
+    shared-mime-info
+    intltool
+    wrapGAppsHook
+    ffmpegthumbnailer
+    jmtpfs
+    lsof
+    udisks2
+  ] ++ (if ifuseSupport then [ ifuse ] else [ ]);
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 

@@ -12,7 +12,8 @@ let
     SubnetMax = cfg.subnetMax;
     Backend = cfg.backend;
   };
-in {
+in
+{
   options.services.flannel = {
     enable = mkEnableOption "flannel";
 
@@ -45,7 +46,7 @@ in {
       endpoints = mkOption {
         description = "Etcd endpoints";
         type = types.listOf types.str;
-        default = ["http://127.0.0.1:2379"];
+        default = [ "http://127.0.0.1:2379" ];
       };
 
       prefix = mkOption {
@@ -98,7 +99,7 @@ in {
 
     storageBackend = mkOption {
       description = "Determines where flannel stores its configuration at runtime";
-      type = types.enum ["etcd" "kubernetes"];
+      type = types.enum [ "etcd" "kubernetes" ];
       default = "etcd";
     };
 
@@ -178,7 +179,7 @@ in {
       };
     };
 
-    services.etcd.enable = mkDefault (cfg.storageBackend == "etcd" && cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
+    services.etcd.enable = mkDefault (cfg.storageBackend == "etcd" && cfg.etcd.endpoints == [ "http://127.0.0.1:2379" ]);
 
     # for some reason, flannel doesn't let you configure this path
     # see: https://github.com/coreos/flannel/blob/master/Documentation/configuration.md#configuration

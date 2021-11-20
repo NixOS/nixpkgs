@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, eigen, libGL, doxygen, spglib
-, mmtf-cpp, glew, python3, libarchive, libmsym, msgpack, qttools, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, eigen
+, libGL
+, doxygen
+, spglib
+, mmtf-cpp
+, glew
+, python3
+, libarchive
+, libmsym
+, msgpack
+, qttools
+, wrapQtAppsHook
 }:
 
 let
@@ -19,7 +34,8 @@ let
     sha256 = "sH/WuvLaYu6akOc3ssAKhnxD8KNoDxuafDSozHqJZC4=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadrolibs";
   version = "1.95.1";
 

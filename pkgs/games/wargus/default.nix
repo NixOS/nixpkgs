@@ -1,11 +1,20 @@
-{ stdenv, lib, callPackage, fetchFromGitHub
-, cmake, pkg-config, makeWrapper
-, zlib, bzip2, libpng
-, dialog, python3, cdparanoia
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, zlib
+, bzip2
+, libpng
+, dialog
+, python3
+, cdparanoia
 }:
 
 let
-  stratagus = callPackage ./stratagus.nix {};
+  stratagus = callPackage ./stratagus.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "wargus";

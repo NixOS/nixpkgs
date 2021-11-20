@@ -13,7 +13,7 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256:0dklq78bqfidcda8pwd6qwaycah3gndmq9s90h1pqx1isw4frckk";
 
-  subPackages = ["aliyun-openapi-meta" "main"];
+  subPackages = [ "aliyun-openapi-meta" "main" ];
 
   ldFlags = "-X 'github.com/aliyun/${pname}/cli.Version=${version}'";
 

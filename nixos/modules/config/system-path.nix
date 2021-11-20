@@ -8,7 +8,8 @@ with lib;
 let
 
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ pkgs.acl
+    [
+      pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -41,12 +42,13 @@ let
       pkgs.zstd
     ];
 
-    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      [ pkgs.nano
-        pkgs.perl
-        pkgs.rsync
-        pkgs.strace
-      ];
+  defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+    [
+      pkgs.nano
+      pkgs.perl
+      pkgs.rsync
+      pkgs.strace
+    ];
 
 in
 
@@ -57,7 +59,7 @@ in
 
       systemPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
@@ -73,7 +75,7 @@ in
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
-        example = [];
+        example = [ ];
         description = ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
@@ -97,8 +99,8 @@ in
         type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
-        default = [];
-        example = ["/"];
+        default = [ ];
+        example = [ "/" ];
         description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
 
@@ -135,7 +137,8 @@ in
     environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink =
-      [ "/bin"
+      [
+        "/bin"
         "/etc/xdg"
         "/etc/gtk-2.0"
         "/etc/gtk-3.0"

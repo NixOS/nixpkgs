@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cdepillabout";
-    repo  = "break-time";
+    repo = "break-time";
     rev = "v${version}";
     sha256 = "18p9gfp0inbnjsc7af38fghyklr7qnl2kkr25isfy9d5m8cpxqc6";
   };
@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Break timer that forces you to take a break";
-    homepage    = "https://github.com/cdepillabout/break-time";
-    license     = with licenses; [ mit ];
+    homepage = "https://github.com/cdepillabout/break-time";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ cdepillabout ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
 

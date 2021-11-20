@@ -5,14 +5,15 @@
 
 , wrapBintoolsWith
 , wrapCCWith
-, buildIosSdk, targetIosSdkPkgs
+, buildIosSdk
+, targetIosSdkPkgs
 , xcode
 , lib
 }:
 
 let
 
-minSdkVersion = targetPlatform.minSdkVersion or "9.0";
+  minSdkVersion = targetPlatform.minSdkVersion or "9.0";
 
 in
 
@@ -47,11 +48,12 @@ rec {
     inherit sdk;
   };
 
-  libraries = let sdk = buildIosSdk; in runCommand "libSystem-prebuilt" {
-    passthru = {
-      inherit sdk;
-    };
-  } ''
+  libraries = let sdk = buildIosSdk; in runCommand "libSystem-prebuilt"
+    {
+      passthru = {
+        inherit sdk;
+      };
+    } ''
     if ! [ -d ${sdk} ]; then
         echo "You must have version ${sdk.version} of the ${sdk.platform} sdk installed at ${sdk}" >&2
         exit 1

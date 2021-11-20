@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchurl, cmake
-, curl, openssl, zlib
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, curl
+, openssl
+, zlib
 , libiconv
-, version, sha256, ...
+, version
+, sha256
+, ...
 }:
 
 with lib;

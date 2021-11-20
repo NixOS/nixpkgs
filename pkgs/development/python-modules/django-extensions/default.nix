@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, django
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, django
 , factory_boy
 , glibcLocales
 , mock

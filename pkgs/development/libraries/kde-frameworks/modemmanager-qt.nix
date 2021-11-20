@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  modemmanager, qtbase
+{ mkDerivation
+, extra-cmake-modules
+, modemmanager
+, qtbase
 }:
 
 mkDerivation {

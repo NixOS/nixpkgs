@@ -1,9 +1,22 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  exiv2, lcms2,
-  baloo, kactivities, kio, kipi-plugins, kitemmodels, kparts, libkdcraw, libkipi,
-  phonon, qtimageformats, qtsvg, qtx11extras, kinit
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, exiv2
+, lcms2
+, baloo
+, kactivities
+, kio
+, kipi-plugins
+, kitemmodels
+, kparts
+, libkdcraw
+, libkipi
+, phonon
+, qtimageformats
+, qtsvg
+, qtx11extras
+, kinit
 }:
 
 mkDerivation {
@@ -16,9 +29,19 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    baloo kactivities kio kitemmodels kparts libkdcraw libkipi phonon
-    exiv2 lcms2
-    qtimageformats qtsvg qtx11extras
+    baloo
+    kactivities
+    kio
+    kitemmodels
+    kparts
+    libkdcraw
+    libkipi
+    phonon
+    exiv2
+    lcms2
+    qtimageformats
+    qtsvg
+    qtx11extras
   ];
   propagatedUserEnvPkgs = [ kipi-plugins libkipi (lib.getBin kinit) ];
 }

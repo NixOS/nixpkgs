@@ -40,7 +40,7 @@ assert stdenv.cc.isGNU;
 assert with lib.strings; (
   versionAtLeast stdenv.cc.version "4.9"
   && !hasPrefix "6" stdenv.cc.version
-  && versionOlder stdenv.cc.version "11"
+    && versionOlder stdenv.cc.version "11"
 );
 
 let

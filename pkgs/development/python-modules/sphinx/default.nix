@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-# propagatedBuildInputs
+  # propagatedBuildInputs
 , Babel
 , alabaster
 , docutils
@@ -20,7 +20,7 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
-# check phase
+  # check phase
 , html5lib
 , pytestCheckHook
 , typed-ast

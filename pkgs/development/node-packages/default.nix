@@ -167,7 +167,7 @@ let
     });
 
     insect = super.insect.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
+      nativeBuildInputs = drv.nativeBuildInputs or [ ] ++ [ pkgs.psc-package self.pulp ];
     });
 
     intelephense = super.intelephense.override {
@@ -187,7 +187,7 @@ let
       '';
     });
 
-    makam =  super.makam.override {
+    makam = super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
         wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}
@@ -260,18 +260,19 @@ let
     };
 
     mermaid-cli = super."@mermaid-js/mermaid-cli".override (
-    if stdenv.isDarwin
-    then {}
-    else {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/mmdc \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    });
+      if stdenv.isDarwin
+      then { }
+      else {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        prePatch = ''
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+        '';
+        postInstall = ''
+          wrapProgram $out/bin/mmdc \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+        '';
+      }
+    );
 
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -280,16 +281,18 @@ let
         sed 's/"link:/"file:/g' --in-place package.json
       '';
 
-      postInstall = let
-        pnpmLibPath = pkgs.lib.makeBinPath [
-          nodejs.passthru.python
-          nodejs
-        ];
-      in ''
-        for prog in $out/bin/*; do
-          wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-        done
-      '';
+      postInstall =
+        let
+          pnpmLibPath = pkgs.lib.makeBinPath [
+            nodejs.passthru.python
+            nodejs
+          ];
+        in
+        ''
+          for prog in $out/bin/*; do
+            wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
+          done
+        '';
     };
 
     postcss-cli = super.postcss-cli.override {
@@ -314,7 +317,7 @@ let
         url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
         sha512 = "sha512-WEYQ+H98O0yigG+lI0gfh4iyBChvnM6QTXPDtY9eFraLXAmyb6tf/T2mUdrUAU1AEvHLVzQA5A+RpONZlQozBg==";
       };
-      dependencies = [ rec {
+      dependencies = [rec {
         name = "_at_prisma_slash_engines";
         packageName = "@prisma/engines";
         version = "3.5.0-38.78a5df6def6943431f4c022e1428dbc3e833cf8e";
@@ -338,7 +341,7 @@ let
       npmFlags = "--ignore-scripts";
 
       nativeBuildInputs = [ pkgs.makeWrapper ];
-      postInstall =  ''
+      postInstall = ''
         wrapProgram "$out/bin/pulp" --suffix PATH : ${pkgs.lib.makeBinPath [
           pkgs.purescript
         ]}
@@ -407,19 +410,19 @@ let
     };
 
     vega-lite = super.vega-lite.override {
-        postInstall = ''
-          cd node_modules
-          for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
-            if [[ ! -d $dep ]]; then
-              ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
-            fi
-          done
-        '';
-        passthru.tests = {
-          simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
-            inherit (self) vega-lite;
-          };
+      postInstall = ''
+        cd node_modules
+        for dep in ${self.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+          if [[ ! -d $dep ]]; then
+            ln -s "${self.vega-cli}/lib/node_modules/vega-cli/node_modules/$dep"
+          fi
+        done
+      '';
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/vega-lite.nix {
+          inherit (self) vega-lite;
         };
+      };
     };
 
     webtorrent-cli = super.webtorrent-cli.override {
@@ -468,4 +471,5 @@ let
       ];
     };
   };
-in self
+in
+self

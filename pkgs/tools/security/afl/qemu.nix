@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchurl, afl, python2, zlib, pkg-config, glib, perl
-, texinfo, libuuid, flex, bison, pixman, autoconf
+{ lib
+, stdenv
+, fetchurl
+, afl
+, python2
+, zlib
+, pkg-config
+, glib
+, perl
+, texinfo
+, libuuid
+, flex
+, bison
+, pixman
+, autoconf
 }:
 
 with lib;
 
 let
   qemuName = "qemu-2.10.0";
-  cpuTarget = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
+  cpuTarget =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
     else if stdenv.hostPlatform.system == "i686-linux" then "i386-linux-user"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
@@ -34,11 +48,20 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    python2 perl pkg-config flex bison autoconf texinfo
+    python2
+    perl
+    pkg-config
+    flex
+    bison
+    autoconf
+    texinfo
   ];
 
   buildInputs = [
-    zlib glib pixman libuuid
+    zlib
+    glib
+    pixman
+    libuuid
   ];
 
   enableParallelBuilding = true;
@@ -57,7 +80,8 @@ stdenv.mkDerivation {
   ];
 
   configureFlags =
-    [ "--disable-system"
+    [
+      "--disable-system"
       "--enable-linux-user"
       "--disable-gtk"
       "--disable-sdl"

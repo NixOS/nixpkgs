@@ -15,22 +15,23 @@
 , libappindicator-gtk3
 , libnotify
 , nvidia_x11
- }:
+}:
 
 let
- pythonEnv = python3.withPackages (pypkgs: with pypkgs; [
-   injector
-   matplotlib
-   peewee
-   pynvml
-   pygobject3
-   xlib
-   pyxdg
-   requests
-   rx
-   gtk3
- ]);
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (pypkgs: with pypkgs; [
+    injector
+    matplotlib
+    peewee
+    pynvml
+    pygobject3
+    xlib
+    pyxdg
+    requests
+    rx
+    gtk3
+  ]);
+in
+stdenv.mkDerivation rec {
   pname = "gwe";
   version = "0.15.3";
 

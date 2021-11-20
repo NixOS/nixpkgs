@@ -1,26 +1,44 @@
-{ lib, stdenv, targetPackages
+{ lib
+, stdenv
+, targetPackages
 
-# Build time
-, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+  # Build time
+, fetchurl
+, pkg-config
+, perl
+, texinfo
+, setupDebugInfoDirs
+, buildPackages
 
-# Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
+  # Run time
+, ncurses
+, readline
+, gmp
+, mpfr
+, expat
+, libipt
+, zlib
+, dejagnu
+, sourceHighlight
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin
+, python3 ? null
+, enableDebuginfod ? false
+, elfutils
 , guile ? null
 , safePaths ? [
-   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
-   "$debugdir" "$datadir/auto-load"
-   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
+    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+    "$debugdir"
+    "$datadir/auto-load"
+    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+    targetPackages.stdenv.cc.cc.lib
   ]
 }:
 
 let
   basename = "gdb";
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                 "${stdenv.targetPlatform.config}-";
+    "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
@@ -34,10 +52,11 @@ stdenv.mkDerivation rec {
     sha256 = "151z6d0265hv9cgx9zqqa4bd6vbp20hrljhd6bxl7lr0gd0crkyc";
   };
 
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace gdb/darwin-nat.c \
-      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else null;
+  postPatch =
+    if stdenv.isDarwin then ''
+      substituteInPlace gdb/darwin-nat.c \
+        --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+    '' else null;
 
   patches = [
     ./debug-info-from-env.patch
@@ -80,19 +99,22 @@ stdenv.mkDerivation rec {
     # subset of the platform description.
     "--program-prefix=${targetPrefix}"
 
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-targets=all"
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
+    "--disable-shared"
+    "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
-    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-expat"
+    "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+  ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

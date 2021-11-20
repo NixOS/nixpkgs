@@ -7,7 +7,7 @@ in stdenv.mkDerivation {
   inherit version;
   meta = {
     homepage = "https://tamentis.com/projects/mdp/";
-    license = [lib.licenses.isc];
+    license = [ lib.licenses.isc ];
     description = "Manage your passwords with GnuPG and a text editor";
   };
   src = fetchurl {

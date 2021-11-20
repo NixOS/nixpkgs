@@ -10,10 +10,11 @@ let
     "--port ${toString cfg.port}"
     "--addr ${cfg.address}"
   ] ++ cfg.extraArgs
-    ++ optional cfg.hideServerId             "--no-server-id"
-    ++ optional config.networking.enableIPv6 "--ipv6");
+  ++ optional cfg.hideServerId "--no-server-id"
+  ++ optional config.networking.enableIPv6 "--ipv6");
 
-in {
+in
+{
   options.services.darkhttpd = with types; {
     enable = mkEnableOption "DarkHTTPd web server";
 
@@ -52,7 +53,7 @@ in {
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Additional configuration passed to the executable.
       '';

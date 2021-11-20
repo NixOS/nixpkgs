@@ -1,7 +1,8 @@
 # This test ensures that the nixOS lxd images builds and functions properly
 # It has been extracted from `lxd.nix` to seperate failures of just the image and the lxd software
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
   release = import ../release.nix {
     /* configuration = {
       environment.systemPackages = with pkgs; [ stdenv ]; # inject stdenv so rebuild test works
@@ -37,7 +38,8 @@ import ./make-test-python.nix ({ pkgs, ...} : let
             pool: default
             type: disk
   '';
-in {
+in
+{
   name = "lxd-image";
 
   meta = with pkgs.lib.maintainers; {

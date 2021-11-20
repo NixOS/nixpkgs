@@ -71,7 +71,7 @@ in
 
     extraModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "extra kernel modules to load";
       example = [ "i7core_edac" ];
     };
@@ -86,7 +86,7 @@ in
         enable = cfg.mainboard != "";
         text = cfg.mainboard;
       };
-    # TODO, handle multiple cfg.labels.brand = " ";
+      # TODO, handle multiple cfg.labels.brand = " ";
       "ras/dimm_labels.d/labels" = {
         enable = cfg.labels != "";
         text = cfg.labels;
@@ -98,21 +98,21 @@ in
     };
     environment.systemPackages = [ pkgs.rasdaemon ]
       ++ optionals (cfg.testing) (with pkgs.error-inject; [
-        edac-inject
-        mce-inject
-        aer-inject
-      ]);
+      edac-inject
+      mce-inject
+      aer-inject
+    ]);
 
     boot.initrd.kernelModules = cfg.extraModules
       ++ optionals (cfg.testing) [
-        # edac_core and amd64_edac should get loaded automatically
-        # i7core_edac may not be, and may not be required, but should load successfully
-        "edac_core"
-        "amd64_edac"
-        "i7core_edac"
-        "mce-inject"
-        "aer-inject"
-      ];
+      # edac_core and amd64_edac should get loaded automatically
+      # i7core_edac may not be, and may not be required, but should load successfully
+      "edac_core"
+      "amd64_edac"
+      "i7core_edac"
+      "mce-inject"
+      "aer-inject"
+    ];
 
     boot.kernelPatches = optionals (cfg.testing) [{
       name = "rasdaemon-tests";

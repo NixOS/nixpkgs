@@ -2,7 +2,8 @@
 
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
-in mkDerivation {
+in
+mkDerivation {
   pname = "qarte";
   version = "4.12.0";
 

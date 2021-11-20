@@ -4,7 +4,8 @@ let
   inherit (config.security) wrapperDir;
   cfg = config.services.kbfs;
 
-in {
+in
+{
 
   ###### interface
 
@@ -37,7 +38,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [
           "-label kbfs"
           "-mount-type normal"

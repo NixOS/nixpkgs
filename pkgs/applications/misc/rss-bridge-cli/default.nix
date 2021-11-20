@@ -13,7 +13,8 @@ let
     ])
   );
   phpBin = "${phpWithExts}/bin/php";
-in (writeShellScriptBin "rss-bridge-cli" ''
+in
+(writeShellScriptBin "rss-bridge-cli" ''
   ${phpBin} ${rss-bridge}/index.php "$@"
 '').overrideAttrs (oldAttrs: rec {
   version = rss-bridge.version;

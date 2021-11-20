@@ -1,4 +1,6 @@
-{ lib, fetchFromGitLab, buildDunePackage
+{ lib
+, fetchFromGitLab
+, buildDunePackage
 , menhirLib
 }:
 

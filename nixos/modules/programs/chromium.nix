@@ -32,7 +32,7 @@ in
           <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist">ExtensionInstallForcelist</link>
           for additional details.
         '';
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
@@ -74,7 +74,7 @@ in
           <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/">https://cloud.google.com/docs/chrome-enterprise/policies/</link>
           Make sure the selected policy is supported on Linux and your browser version.
         '';
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "BrowserSignin" = 0;

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   addrShared = "192.168.0.1";
@@ -27,7 +27,8 @@ let
       '';
     };
   };
-in {
+in
+{
   name = "ucarp";
   meta.maintainers = with lib.maintainers; [ oxzi ];
 

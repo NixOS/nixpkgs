@@ -5,11 +5,11 @@ with lib;
 {
   imports = [
     /*
-    This file defines some renaming/removing options for backwards compatibility
+      This file defines some renaming/removing options for backwards compatibility
 
-    It should ONLY be used when the relevant module can't define these imports
-    itself, such as when the module was removed completely.
-    See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
+      It should ONLY be used when the relevant module can't define these imports
+      itself, such as when the module was removed completely.
+      See https://github.com/NixOS/nixpkgs/pull/61570 for explanation
     */
 
     # This alias module can't be where _module.check is defined because it would
@@ -31,7 +31,7 @@ with lib;
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
-    (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "cgmanager" "enable" ] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
@@ -53,7 +53,7 @@ with lib;
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
-    (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
+    (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
       brightnessctl don't require the udev rules anymore (they can use the
       systemd-logind API). Instead of using the module you can now
@@ -61,11 +61,11 @@ with lib;
     '')
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
 
-    (mkRemovedOptionModule ["services" "prey" ] ''
+    (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
     '')
 
-    (mkRemovedOptionModule ["hardware" "u2f" ] ''
+    (mkRemovedOptionModule [ "hardware" "u2f" ] ''
       The U2F modules module was removed, as all it did was adding the
       udev rules from libu2f-host to the system. Udev gained native support
       to handle FIDO security tokens, so this isn't necessary anymore.
@@ -76,10 +76,10 @@ with lib;
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
 
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
-        The hidepid module was removed, since the underlying machinery
-        is broken when using cgroups-v2.
+      The hidepid module was removed, since the underlying machinery
+      is broken when using cgroups-v2.
     '')
-    (mkRemovedOptionModule ["services" "wakeonlan"] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule [ "services" "wakeonlan" ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
 
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
 

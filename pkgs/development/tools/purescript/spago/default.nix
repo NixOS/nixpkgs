@@ -2,7 +2,7 @@
 , haskellPackages
 , lib
 
-# The following are only needed for the passthru.tests:
+  # The following are only needed for the passthru.tests:
 , cacert
 , git
 , nodejs
@@ -13,17 +13,19 @@
 let
   spago =
     haskell.lib.compose.justStaticExecutables
-      (haskell.lib.compose.overrideCabal (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
-          lib.maintainers.cdepillabout
-        ];
-        changelog =
-          "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
-      }) haskellPackages.spago);
+      (haskell.lib.compose.overrideCabal
+        (oldAttrs: {
+          maintainers = (oldAttrs.maintainers or [ ]) ++ [
+            lib.maintainers.cdepillabout
+          ];
+          changelog =
+            "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
+        })
+        haskellPackages.spago);
 in
 
 spago.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+  passthru = (oldAttrs.passthru or { }) // {
     updateScript = ./update.sh;
 
     # These tests can be run with the following command.  The tests access the

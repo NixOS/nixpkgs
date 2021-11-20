@@ -25,18 +25,20 @@ buildGoModule rec {
     "cmd/pomerium-cli"
   ];
 
-  ldflags = let
-    # Set a variety of useful meta variables for stamping the build with.
-    setVars = {
-      Version = "v${version}";
-      BuildMeta = "nixpkgs";
-      ProjectName = "pomerium";
-      ProjectURL = "github.com/pomerium/pomerium";
-    };
-    varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
-  in [
-    "${varFlags}"
-  ];
+  ldflags =
+    let
+      # Set a variety of useful meta variables for stamping the build with.
+      setVars = {
+        Version = "v${version}";
+        BuildMeta = "nixpkgs";
+        ProjectName = "pomerium";
+        ProjectURL = "github.com/pomerium/pomerium";
+      };
+      varFlags = concatStringsSep " " (mapAttrsToList (name: value: "-X github.com/pomerium/pomerium/internal/version.${name}=${value}") setVars);
+    in
+    [
+      "${varFlags}"
+    ];
 
   nativeBuildInputs = [
     zip
@@ -75,6 +77,6 @@ buildGoModule rec {
     description = "Authenticating reverse proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Envoy derivation is x86_64-linux only.
+    platforms = [ "x86_64-linux" ]; # Envoy derivation is x86_64-linux only.
   };
 }

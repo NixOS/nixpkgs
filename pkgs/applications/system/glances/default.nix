@@ -1,7 +1,15 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, psutil, setuptools
-# Optional dependencies:
-, bottle, pysnmp
+{ stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, isPyPy
+, lib
+, defusedxml
+, future
+, psutil
+, setuptools
+  # Optional dependencies:
+, bottle
+, pysnmp
 , hddtemp
 , netifaces # IP module
 , py-cpuinfo
@@ -27,7 +35,9 @@ buildPythonApplication rec {
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
   makeWrapperArgs = lib.optionals stdenv.isDarwin [
-    "--set" "DYLD_FRAMEWORK_PATH" "/System/Library/Frameworks"
+    "--set"
+    "DYLD_FRAMEWORK_PATH"
+    "/System/Library/Frameworks"
   ];
 
   doCheck = true;

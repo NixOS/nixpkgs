@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       enable = true;
       services = [ "meta" ];
       originBase = "sourcehut";
-      settings."sr.ht".service-key =   "8888888888888888888888888888888888888888888888888888888888888888";
+      settings."sr.ht".service-key = "8888888888888888888888888888888888888888888888888888888888888888";
       settings."sr.ht".network-key = "0000000000000000000000000000000000000000000=";
       settings.webhooks.private-key = "0000000000000000000000000000000000000000000=";
     };

@@ -6,7 +6,7 @@ let
   jmxRoles = [{ username = "me"; password = "password"; }];
   jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
-  jmxPort = 7200;  # Non-standard port so it doesn't accidentally work
+  jmxPort = 7200; # Non-standard port so it doesn't accidentally work
   jmxPortStr = toString jmxPort;
 
   # Would usually be assigned to 512M.
@@ -21,7 +21,8 @@ let
   '';
 
   cassandraCfg = ipAddress:
-    { enable = true;
+    {
+      enable = true;
       inherit clusterName;
       listenAddress = ipAddress;
       rpcAddress = ipAddress;
@@ -31,7 +32,7 @@ let
       heapNewSize = "100M";
       inherit jmxPort;
     };
-  nodeCfg = ipAddress: extra: {pkgs, config, ...}: rec {
+  nodeCfg = ipAddress: extra: { pkgs, config, ... }: rec {
     environment.systemPackages = [ testPackage ];
     networking = {
       firewall.allowedTCPPorts = [ 7000 9042 services.cassandra.jmxPort ];
@@ -51,7 +52,7 @@ in
   };
 
   nodes = {
-    cass0 = nodeCfg "192.168.1.1" {};
+    cass0 = nodeCfg "192.168.1.1" { };
     cass1 = nodeCfg "192.168.1.2" (lib.optionalAttrs testRemoteAuth { inherit jmxRoles; remoteJmx = true; });
     cass2 = nodeCfg "192.168.1.3" { jvmOpts = [ "-Dcassandra.replace_address=cass1" ]; };
   };

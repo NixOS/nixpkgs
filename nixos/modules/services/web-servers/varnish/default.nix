@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   cfg = config.services.varnish;
 
   commandLine = "-f ${pkgs.writeText "default.vcl" cfg.config}" +
-      optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
+    optionalString (cfg.extraModules != [ ]) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([cfg.package] ++ cfg.extraModules)}' -r vmod_path";
 in
 {
   options = {
@@ -49,7 +49,7 @@ in
 
       extraModules = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.varnishPackages.geoip ]";
         description = "
           Varnish modules (except 'std').
@@ -99,7 +99,7 @@ in
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
     system.extraDependencies = mkIf cfg.enableConfigCheck [
-      (pkgs.runCommand "check-varnish-syntax" {} ''
+      (pkgs.runCommand "check-varnish-syntax" { } ''
         ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
       '')
     ];

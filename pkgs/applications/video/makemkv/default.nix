@@ -30,7 +30,8 @@ let
     sha256 = "131vdi4gyc996z77rrcqb9nfbd62j8314ai4ib1jnilmrsrk93p5";
   };
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "makemkv";
   inherit version;
 
@@ -45,7 +46,8 @@ in mkDerivation {
   qtWrapperArgs =
     let
       binPath = lib.makeBinPath [ jre_headless ];
-    in lib.optionals withJava [
+    in
+    lib.optionals withJava [
       "--prefix PATH : ${binPath}"
     ];
 

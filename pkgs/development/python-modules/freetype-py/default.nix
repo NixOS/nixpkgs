@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck =  [ "freetype" ];
+  pythonImportsCheck = [ "freetype" ];
 
   meta = with lib; {
     homepage = "https://github.com/rougier/freetype-py";

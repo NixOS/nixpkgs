@@ -1,6 +1,6 @@
 import ./make-test-python.nix {
   name = "specialisation";
-  nodes =  {
+  nodes = {
     inheritconf = { pkgs, ... }: {
       environment.systemPackages = [ pkgs.cowsay ];
       specialisation.inheritconf.configuration = { pkgs, ... }: {

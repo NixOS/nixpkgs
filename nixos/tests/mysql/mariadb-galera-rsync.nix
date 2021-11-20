@@ -1,20 +1,21 @@
-import ./../make-test-python.nix ({ pkgs, ...} :
+import ./../make-test-python.nix ({ pkgs, ... }:
 
 let
-  mysqlenv-common      = pkgs.buildEnv { name = "mysql-path-env-common";      pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
-  mysqlenv-rsync       = pkgs.buildEnv { name = "mysql-path-env-rsync";       pathsToLink = [ "/bin" ]; paths = with pkgs; [ lsof procps rsync stunnel ]; };
+  mysqlenv-common = pkgs.buildEnv { name = "mysql-path-env-common"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
+  mysqlenv-rsync = pkgs.buildEnv { name = "mysql-path-env-rsync"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ lsof procps rsync stunnel ]; };
 
   # Common user configuration
   users = { ... }:
-  {
-    users.users.testuser = {
-      isSystemUser = true;
-      group = "testusers";
+    {
+      users.users.testuser = {
+        isSystemUser = true;
+        group = "testusers";
+      };
+      users.groups.testusers = { };
     };
-    users.groups.testusers = { };
-  };
 
-in {
+in
+{
   name = "mariadb-galera-rsync";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ izorkin ];
@@ -27,147 +28,147 @@ in {
     galera_04 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.1"; prefixLength = 24; }
-          ];
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.2.1"; prefixLength = 24; }
+            ];
+          };
+          extraHosts = ''
+            192.168.2.1 galera_04
+            192.168.2.2 galera_05
+            192.168.2.3 galera_06
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
         };
-        extraHosts = ''
-          192.168.2.1 galera_04
-          192.168.2.2 galera_05
-          192.168.2.3 galera_06
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-rsync ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
-          };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://";
-            wsrep_cluster_name = "galera-rsync";
-            wsrep_node_address = "192.168.2.1";
-            wsrep_node_name = "galera_04";
-            wsrep_sst_method = "rsync";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-rsync ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          ensureDatabases = [ "testdb" ];
+          ensureUsers = [{
+            name = "testuser";
+            ensurePermissions = {
+              "testdb.*" = "ALL PRIVILEGES";
+            };
+          }];
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://";
+              wsrep_cluster_name = "galera-rsync";
+              wsrep_node_address = "192.168.2.1";
+              wsrep_node_name = "galera_04";
+              wsrep_sst_method = "rsync";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
 
     galera_05 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.2"; prefixLength = 24; }
-          ];
-        };
-        extraHosts = ''
-          192.168.2.1 galera_04
-          192.168.2.2 galera_05
-          192.168.2.3 galera_06
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-rsync ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.2.2"; prefixLength = 24; }
+            ];
           };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
-            wsrep_cluster_name = "galera-rsync";
-            wsrep_node_address = "192.168.2.2";
-            wsrep_node_name = "galera_05";
-            wsrep_sst_method = "rsync";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+          extraHosts = ''
+            192.168.2.1 galera_04
+            192.168.2.2 galera_05
+            192.168.2.3 galera_06
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
+        };
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-rsync ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
+              wsrep_cluster_name = "galera-rsync";
+              wsrep_node_address = "192.168.2.2";
+              wsrep_node_name = "galera_05";
+              wsrep_sst_method = "rsync";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
 
     galera_06 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.2.3"; prefixLength = 24; }
-          ];
-        };
-        extraHosts = ''
-          192.168.2.1 galera_04
-          192.168.2.2 galera_05
-          192.168.2.3 galera_06
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-rsync ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.2.3"; prefixLength = 24; }
+            ];
           };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
-            wsrep_cluster_name = "galera-rsync";
-            wsrep_node_address = "192.168.2.3";
-            wsrep_node_name = "galera_06";
-            wsrep_sst_method = "rsync";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+          extraHosts = ''
+            192.168.2.1 galera_04
+            192.168.2.2 galera_05
+            192.168.2.3 galera_06
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
+        };
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-rsync ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://galera_04,galera_05,galera_06";
+              wsrep_cluster_name = "galera-rsync";
+              wsrep_node_address = "192.168.2.3";
+              wsrep_node_name = "galera_06";
+              wsrep_sst_method = "rsync";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
   };
 
   testScript = ''

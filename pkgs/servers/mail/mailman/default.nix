@@ -1,4 +1,10 @@
-{ lib, python3, fetchPypi, fetchpatch, pythonOlder, postfix, lynx
+{ lib
+, python3
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, postfix
+, lynx
 }:
 
 let

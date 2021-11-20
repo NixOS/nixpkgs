@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, vala
-, gtk3, glib, gtk-layer-shell
-, dbus, dbus-glib, librsvg
-, gobject-introspection, gdk-pixbuf, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, glib
+, gtk-layer-shell
+, dbus
+, dbus-glib
+, librsvg
+, gobject-introspection
+, gdk-pixbuf
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation {

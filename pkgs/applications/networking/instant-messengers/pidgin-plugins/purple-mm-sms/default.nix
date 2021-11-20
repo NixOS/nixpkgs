@@ -1,4 +1,4 @@
-{ lib, stdenv, glibmm, pidgin, pkg-config, modemmanager, fetchFromGitLab } :
+{ lib, stdenv, glibmm, pidgin, pkg-config, modemmanager, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
   pname = "purple-mm-sms";

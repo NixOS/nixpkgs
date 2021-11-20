@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, fasteners
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fasteners
 , jinja2
 , pbr
 , python-jenkins

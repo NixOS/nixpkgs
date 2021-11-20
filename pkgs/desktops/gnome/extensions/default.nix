@@ -54,7 +54,8 @@ let
     builtins.listToAttrs
   ];
 
-in rec {
+in
+rec {
   inherit buildShellExtension;
 
   gnome38Extensions = mapUuidNames (produceExtensionsList "38");
@@ -63,9 +64,9 @@ in rec {
 
   gnomeExtensions = lib.trivial.pipe (gnome40Extensions // gnome41Extensions) [
     # Apply some custom patches for automatically packaged extensions
-    (callPackage ./extensionOverrides.nix {})
+    (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions
-    (extensions: extensions // (callPackages ./manuallyPackaged.nix {}))
+    (extensions: extensions // (callPackages ./manuallyPackaged.nix { }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
     (mapReadableNames)

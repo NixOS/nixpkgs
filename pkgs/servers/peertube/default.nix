@@ -1,6 +1,18 @@
-{ lib, stdenv, callPackage, fetchurl, fetchFromGitHub, buildGoModule, fetchYarnDeps, nixosTests
-, esbuild, fixup_yarn_lock, jq, nodejs, yarn
-, nodePackages, youtube-dl
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, fetchFromGitHub
+, buildGoModule
+, fetchYarnDeps
+, nixosTests
+, esbuild
+, fixup_yarn_lock
+, jq
+, nodejs
+, yarn
+, nodePackages
+, youtube-dl
 }:
 let
   arch =
@@ -56,7 +68,8 @@ let
     vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit version;
   pname = "peertube";
   src = source;

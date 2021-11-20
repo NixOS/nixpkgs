@@ -12,21 +12,24 @@ let
         #! ${stdenv.shell}
         echo "binwrap-install called: Doing nothing"
       '';
-    in targets: pkg:
+    in
+    targets: pkg:
       pkg.override (old: {
-        nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ binwrap binwrap-install ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ binwrap binwrap-install ];
 
         # Manually install targets
         # by symlinking binaries into `node_modules`
-        postInstall = let
-          binFile = module: lib.strings.removeSuffix ("-" + module.version) module.name;
-        in (old.postInstall or "") + ''
-          ${lib.concatStrings (map (module: ''
-              echo "linking ${binFile module}"
-              ln -sf ${module}/bin/${binFile module} \
-                  node_modules/${binFile module}/bin/${binFile module}
-          '') targets)}
-        '';
+        postInstall =
+          let
+            binFile = module: lib.strings.removeSuffix ("-" + module.version) module.name;
+          in
+          (old.postInstall or "") + ''
+            ${lib.concatStrings (map (module: ''
+                echo "linking ${binFile module}"
+                ln -sf ${module}/bin/${binFile module} \
+                    node_modules/${binFile module}/bin/${binFile module}
+            '') targets)}
+          '';
       });
 
   patchNpmElm = pkg:

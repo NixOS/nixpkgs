@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "0140h4l7licwdw0scnfzsbi5b2ncxi7fxhdab7c1i3sk01r4asp6";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION=version;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   patches = [
     (fetchpatch {

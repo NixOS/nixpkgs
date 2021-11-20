@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, pkg-config
+, libnl
 , nixosTests
-, withDbus ? true, dbus
-, withReadline ? true, readline
-, withPcsclite ? true, pcsclite
+, withDbus ? true
+, dbus
+, withReadline ? true
+, readline
+, withPcsclite ? true
+, pcsclite
 , readOnlyModeSSIDs ? false
 }:
 

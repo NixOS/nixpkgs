@@ -6,7 +6,8 @@ let
 
   cfg = config.virtualbox;
 
-in {
+in
+{
 
   options = {
     virtualbox = {
@@ -69,9 +70,12 @@ in {
       exportParams = mkOption {
         type = with types; listOf (oneOf [ str int bool (listOf str) ]);
         example = [
-          "--vsys" "0" "--vendor" "ACME Inc."
+          "--vsys"
+          "0"
+          "--vendor"
+          "ACME Inc."
         ];
-        default = [];
+        default = [ ];
         description = ''
           Parameters passed to the Virtualbox export command.
 

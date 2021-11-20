@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
-, glib, isocodes, gobject-introspection }:
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, gtk-doc
+, xkeyboard_config
+, libxml2
+, xorg
+, docbook_xsl
+, glib
+, isocodes
+, gobject-introspection
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxklavier";

@@ -1,10 +1,10 @@
 /*  This file defines all OpenRA packages under `openraPackages`,
-    e.g. the OpenRA release engine can be found at `openraPackages.engines.release` (see `engines.nix`),
-    or the out-of-tree mod "Combined Arms" can be found at `openraPackages.mods.ca` (see `mods.nix`).
-    The `openra` package is just an alias to `openraPackages.engines.release`,
-    and just provides the mods included in the source code of the engine.
-    Additional engines or mods can be added with `openraPackages.buildOpenRAEngine` (function around `engine.nix`)
-    and `openraPackages.buildOpenRAMod` (function around `mod.nix`), respectively.
+  e.g. the OpenRA release engine can be found at `openraPackages.engines.release` (see `engines.nix`),
+  or the out-of-tree mod "Combined Arms" can be found at `openraPackages.mods.ca` (see `mods.nix`).
+  The `openra` package is just an alias to `openraPackages.engines.release`,
+  and just provides the mods included in the source code of the engine.
+  Additional engines or mods can be added with `openraPackages.buildOpenRAEngine` (function around `engine.nix`)
+  and `openraPackages.buildOpenRAMod` (function around `mod.nix`), respectively.
 */
 pkgs:
 
@@ -49,21 +49,28 @@ let
     '';
   } // args)));
 
-in pkgs.recurseIntoAttrs rec {
+in
+pkgs.recurseIntoAttrs rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine = { name ? null, version, description, homepage, mods, src }@engine:
     # Allow specifying the name at a later point if no name has been given.
-    let builder = name: pkgs.callPackage ./engine.nix (common // {
-      engine = engine // { inherit name; };
-    }); in if name == null then builder else builder name;
+    let
+      builder = name: pkgs.callPackage ./engine.nix (common // {
+        engine = engine // { inherit name; };
+      });
+    in
+    if name == null then builder else builder name;
 
   # See `buildOpenRAEngine`.
-  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine, assetsError ? "" }@mod: ({ version, mods ? [], src }@engine:
-    let builder = name: pkgs.callPackage ./mod.nix (common // {
-      mod = mod // { inherit name assetsError; };
-      engine = engine // { inherit mods; };
-    }); in if name == null then builder else builder name) engine;
+  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine, assetsError ? "" }@mod: ({ version, mods ? [ ], src }@engine:
+    let
+      builder = name: pkgs.callPackage ./mod.nix (common // {
+        mod = mod // { inherit name assetsError; };
+        engine = engine // { inherit mods; };
+      });
+    in
+    if name == null then builder else builder name) engine;
 
   # See `buildOpenRASet`.
   engines = buildOpenRASet (import ./engines.nix) { inherit buildOpenRAEngine; };

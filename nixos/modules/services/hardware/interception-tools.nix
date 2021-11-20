@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.interception-tools;
-in {
+in
+{
   options.services.interception-tools = {
     enable = mkOption {
       type = types.bool;

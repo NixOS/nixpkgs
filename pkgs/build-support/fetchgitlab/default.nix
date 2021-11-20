@@ -1,8 +1,16 @@
 { fetchgit, fetchzip, lib }:
 
 # gitlab example
-{ owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
-, fetchSubmodules ? false, leaveDotGit ? false, deepClone ? false
+{ owner
+, repo
+, rev
+, protocol ? "https"
+, domain ? "gitlab.com"
+, name ? "source"
+, group ? null
+, fetchSubmodules ? false
+, leaveDotGit ? false
+, deepClone ? false
 , ... # For hash agility
 } @ args:
 

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, autoreconfHook, docbook_xsl, ffmpeg-full, glib, gtk3
-, intltool, libxslt, pkg-config, sox, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, docbook_xsl
+, ffmpeg-full
+, glib
+, gtk3
+, intltool
+, libxslt
+, pkg-config
+, sox
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "imagination";

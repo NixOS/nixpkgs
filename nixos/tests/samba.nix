@@ -6,10 +6,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta.maintainers = [ pkgs.lib.maintainers.eelco ];
 
   nodes =
-    { client =
+    {
+      client =
         { pkgs, ... }:
-        { virtualisation.fileSystems =
-            { "/public" = {
+        {
+          virtualisation.fileSystems =
+            {
+              "/public" = {
                 fsType = "cifs";
                 device = "//server/public";
                 options = [ "guest" ];
@@ -19,10 +22,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
       server =
         { ... }:
-        { services.samba.enable = true;
+        {
+          services.samba.enable = true;
           services.samba.openFirewall = true;
           services.samba.shares.public =
-            { path = "/public";
+            {
+              path = "/public";
               "read only" = true;
               browseable = "yes";
               "guest ok" = "yes";

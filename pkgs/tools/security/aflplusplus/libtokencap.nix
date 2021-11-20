@@ -1,4 +1,4 @@
-{ lib, stdenv, aflplusplus}:
+{ lib, stdenv, aflplusplus }:
 
 stdenv.mkDerivation {
   version = lib.getVersion aflplusplus;

@@ -1,8 +1,11 @@
-{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl }:
 
-{ pname, version ? "113.33.03", buildInputs ? [],
-  hash ? "",
-  minimumSupportedOcamlVersion ? "4.02", ...
+{ pname
+, version ? "113.33.03"
+, buildInputs ? [ ]
+, hash ? ""
+, minimumSupportedOcamlVersion ? "4.02"
+, ...
 }@args:
 
 buildOcaml (args // {
@@ -18,7 +21,7 @@ buildOcaml (args // {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   configurePhase = ''
     ./configure --prefix $out

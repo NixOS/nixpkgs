@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, pcre, windows ? null
+{ lib
+, stdenv
+, fetchurl
+, pcre
+, windows ? null
 , variant ? null
 }:
 
@@ -9,11 +12,13 @@ assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
   version = "8.44";
-  pname = if (variant == null) then "pcre"
-    else  if (variant == "cpp") then "pcre-cpp"
-    else  variant;
+  pname =
+    if (variant == null) then "pcre"
+    else if (variant == "cpp") then "pcre-cpp"
+    else variant;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -38,13 +43,13 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
-    # XXX: test failure on Cygwin
-    # we are running out of stack on both freeBSDs on Hydra
+  # XXX: test failure on Cygwin
+  # we are running out of stack on both freeBSDs on Hydra
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
   ''
-    + optionalString (variant != null) ''
+  + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 

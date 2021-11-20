@@ -4,7 +4,7 @@
 , requests
 , python
 
-# For tests/setup.py
+  # For tests/setup.py
 , pytest
 , pytest-runner
 , requests-mock
@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python client for the Packet API.";
-    homepage    = "https://github.com/packethost/packet-python";
-    license     = lib.licenses.lgpl3;
+    homepage = "https://github.com/packethost/packet-python";
+    license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ dipinhora ];
   };
 }

@@ -1,11 +1,27 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkg-config, lib, stdenv
-, enableLDAP ? false, openldap
-, enableMySQL ? false, libmysqlclient, zlib
-, enableAuthDovecot ? false, dovecot
-, enablePAM ? false, pam
-, enableSPF ? true, libspf2
-, enableDMARC ? true, opendmarc
-, enableRedis ? false, hiredis
+{ coreutils
+, db
+, fetchurl
+, openssl
+, pcre
+, perl
+, pkg-config
+, lib
+, stdenv
+, enableLDAP ? false
+, openldap
+, enableMySQL ? false
+, libmysqlclient
+, zlib
+, enableAuthDovecot ? false
+, dovecot
+, enablePAM ? false
+, pam
+, enableSPF ? true
+, libspf2
+, enableDMARC ? true
+, opendmarc
+, enableRedis ? false
+, hiredis
 }:
 
 stdenv.mkDerivation rec {

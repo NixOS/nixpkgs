@@ -14,9 +14,10 @@
 , pkg-config
 }:
 
-let rpathLibs = [
-  fftwFloat
-];
+let
+  rpathLibs = [
+    fftwFloat
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "distrho-ports";

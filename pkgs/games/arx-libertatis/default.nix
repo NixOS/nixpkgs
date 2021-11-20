@@ -1,11 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, boost
-, openal, glm, freetype, libGLU, SDL2, epoxy
-, dejavu_fonts, inkscape, optipng, imagemagick
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, boost
+, openal
+, glm
+, freetype
+, libGLU
+, SDL2
+, epoxy
+, dejavu_fonts
+, inkscape
+, optipng
+, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
-,   qtbase ? null
-,   wrapQtAppsHook ? null
-,   curl ? null
-,   gdb  ? null
+, qtbase ? null
+, wrapQtAppsHook ? null
+, curl ? null
+, gdb ? null
 }:
 
 with lib;
@@ -22,14 +35,23 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    cmake inkscape imagemagick optipng
+    cmake
+    inkscape
+    imagemagick
+    optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [
-    zlib boost openal glm
-    freetype libGLU SDL2 epoxy
+    zlib
+    boost
+    openal
+    glm
+    freetype
+    libGLU
+    SDL2
+    epoxy
   ] ++ optionals withCrashReporter [ qtbase curl ]
-    ++ optionals stdenv.isLinux    [ gdb ];
+  ++ optionals stdenv.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"

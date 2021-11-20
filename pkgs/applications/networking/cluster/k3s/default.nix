@@ -42,17 +42,17 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.22.3+k3s1";     # k3s git tag
+  k3sVersion = "1.22.3+k3s1"; # k3s git tag
   k3sCommit = "61a2aab25eeb97c26fa3f2b177e4355a7654c991"; # k3s git commit at the above version
   k3sRepoSha256 = "0lz5hr3c86gxm9w5jy3g26n6a26m8k0y559hv6220rsi709j7ma9";
 
   traefikChartVersion = "10.3.0"; # taken from ./manifests/traefik.yaml at spec.version
   traefikChartSha256 = "0y6wr64xp7bgx24kqil0x6myr3pnfrg8rw0d1h5zd2n5a8nfd73f";
 
-  k3sRootVersion = "0.9.1";       # taken from ./scripts/download at ROOT_VERSION
+  k3sRootVersion = "0.9.1"; # taken from ./scripts/download at ROOT_VERSION
   k3sRootSha256 = "0r2cj4l50cxkrvszpzxfk36lvbjf9vcmp6d5lvxg8qsah8lki3x8";
 
-  k3sCNIVersion = "0.9.1-k3s1";   # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
+  k3sCNIVersion = "0.9.1-k3s1"; # taken from ./scripts/version.sh at VERSION_CNIPLUGINS
   k3sCNISha256 = "1327vmfph7b8i14q05c2xdfzk60caflg1zhycx0mrf3d59f4zsz5";
 
   baseMeta = {

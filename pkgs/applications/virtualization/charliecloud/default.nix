@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: [ ps.lark-parser ps.requests ]))
   ];
 
-  configureFlags = let
-    pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
-  in [
-    "--with-python=${pythonEnv}/bin/python3"
-  ];
+  configureFlags =
+    let
+      pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
+    in
+    [
+      "--with-python=${pythonEnv}/bin/python3"
+    ];
 
   preConfigure = ''
     patchShebangs test/

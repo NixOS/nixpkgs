@@ -16,7 +16,8 @@
 , meson
 , ninja
 , glib
-, x11Support? !stdenv.isDarwin, libXft
+, x11Support ? !stdenv.isDarwin
+, libXft
 }:
 
 let
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja
+    meson
+    ninja
     glib # for glib-mkenum
     pkg-config
     gobject-introspection

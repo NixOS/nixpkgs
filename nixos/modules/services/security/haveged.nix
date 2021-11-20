@@ -45,7 +45,8 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.haveged =
-      { description = "Entropy Harvesting Daemon";
+      {
+        description = "Entropy Harvesting Daemon";
         unitConfig.Documentation = "man:haveged(8)";
         wantedBy = [ "multi-user.target" ];
 

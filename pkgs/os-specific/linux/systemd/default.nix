@@ -164,40 +164,43 @@ stdenv.mkDerivation {
     # all our root unit dirs if they are symlinks. This does exactly what we
     # need (AFAICT).
     ./0019-core-handle-lookup-paths-being-symlinks.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl (let
-    oe-core = fetchzip {
-      url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
-      sha256 = "1jixya4czkr5p5rdcw3d6ips8zzr82dvnanvzvgjh67730scflya";
-    };
-    musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
-  in [
-    (musl-patches + "/0002-don-t-use-glibc-specific-qsort_r.patch")
-    (musl-patches + "/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch")
-    (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
-    (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
-    (musl-patches + "/0006-Include-netinet-if_ether.h.patch")
-    (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-    (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
-    (musl-patches + "/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch")
-    (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
-    (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
-    (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-    (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-    (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-    (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-    (musl-patches + "/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch")
-    (musl-patches + "/0017-missing_type.h-add-__compar_d_fn_t-definition.patch")
-    (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
-    (musl-patches + "/0019-Handle-missing-LOCK_EX.patch")
-    (musl-patches + "/0021-test-json.c-define-M_PIl.patch")
-    (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
-    (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
-    (musl-patches + "/0026-Handle-missing-gshadow.patch")
-    (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+  ] ++ lib.optional stdenv.hostPlatform.isMusl (
+    let
+      oe-core = fetchzip {
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
+        sha256 = "1jixya4czkr5p5rdcw3d6ips8zzr82dvnanvzvgjh67730scflya";
+      };
+      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
+    in
+    [
+      (musl-patches + "/0002-don-t-use-glibc-specific-qsort_r.patch")
+      (musl-patches + "/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch")
+      (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
+      (musl-patches + "/0006-Include-netinet-if_ether.h.patch")
+      (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch")
+      (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+      (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch")
+      (musl-patches + "/0017-missing_type.h-add-__compar_d_fn_t-definition.patch")
+      (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0019-Handle-missing-LOCK_EX.patch")
+      (musl-patches + "/0021-test-json.c-define-M_PIl.patch")
+      (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0026-Handle-missing-gshadow.patch")
+      (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
 
-    # Being discussed upstream: https://lists.openembedded.org/g/openembedded-core/topic/86411771#157056
-    ./musl.diff
-  ]);
+      # Being discussed upstream: https://lists.openembedded.org/g/openembedded-core/topic/86411771#157056
+      ./musl.diff
+    ]
+  );
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"

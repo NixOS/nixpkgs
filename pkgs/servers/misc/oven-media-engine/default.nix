@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , srt
@@ -22,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "Airensoft";
       repo = "FFmpeg";
-      rev = "142b4bb64b64e337f80066e6af935a68627fedae";  # on branch ome/3.4
+      rev = "142b4bb64b64e337f80066e6af935a68627fedae"; # on branch ome/3.4
       sha256 = "0fla3940q3z0c0ik2xzkbvdfvrdg06ban7wi6y94y8mcipszpp11";
     };
   });
@@ -72,9 +73,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
-    homepage    = "https://ovenmediaengine.com";
-    license     = licenses.gpl2Only;
+    homepage = "https://ovenmediaengine.com";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ lukegb ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

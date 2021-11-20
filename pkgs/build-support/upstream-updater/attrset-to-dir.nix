@@ -1,4 +1,4 @@
-a :
+a:
 a.stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p "$out/attributes"

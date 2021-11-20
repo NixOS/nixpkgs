@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchurl
-, libasyncns, pkg-config }:
+{ lib
+, buildPythonPackage
+, fetchurl
+, libasyncns
+, pkg-config
+}:
 
 buildPythonPackage rec {
   pname = "libasyncns-python";

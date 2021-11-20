@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
-, atk, gtk2, libX11, gdk-pixbuf, busybox, python3, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, lazarus
+, fpc
+, pango
+, cairo
+, glib
+, atk
+, gtk2
+, libX11
+, gdk-pixbuf
+, busybox
+, python3
+, makeWrapper
+}:
 
 with stdenv;
 
@@ -16,7 +30,8 @@ let
     rev = "v7.0";
     sha256 = "0qz3cscrc9jvhrix1hbmzhdxv6mxk0mz9azr46canflsydda8fjy";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "lazpaint";
   version = "7.1.5";
 

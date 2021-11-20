@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, python-dateutil, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python-dateutil
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "bitcoin-price-api";

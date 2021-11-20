@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "1z4lqy9zlzymshzrcldsc9ipys2l7grqg4yff6ndl6dgbfb0g4jb";
   };
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     substituteInPlace libarchive/ffi.py --replace \

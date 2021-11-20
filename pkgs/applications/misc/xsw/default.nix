@@ -3,7 +3,8 @@
 let
   makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xsw";
   version = "0.1.2";
 
@@ -29,7 +30,7 @@ in stdenv.mkDerivation rec {
     description = "A slide show presentation tool";
 
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
   };
 }

@@ -49,7 +49,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
+    "--numprocesses"
+    "auto"
   ];
 
   preCheck = ''

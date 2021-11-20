@@ -1,31 +1,33 @@
 { lib, runCommand, fetchurl, file, texlive, writeShellScript }:
 
 {
-  chktex = runCommand "texlive-test-chktex" {
-    nativeBuildInputs = [
-      (with texlive; combine { inherit scheme-infraonly chktex; })
-    ];
-    input = builtins.toFile "chktex-sample.tex" ''
-      \documentclass{article}
-      \begin{document}
-        \LaTeX is great
-      \end{document}
-    '';
-  } ''
+  chktex = runCommand "texlive-test-chktex"
+    {
+      nativeBuildInputs = [
+        (with texlive; combine { inherit scheme-infraonly chktex; })
+      ];
+      input = builtins.toFile "chktex-sample.tex" ''
+        \documentclass{article}
+        \begin{document}
+          \LaTeX is great
+        \end{document}
+      '';
+    } ''
     chktex -v -nall -w1 "$input" 2>&1 | tee "$out"
     grep "One warning printed" "$out"
   '';
 
   dvipng = lib.recurseIntoAttrs {
     # https://github.com/NixOS/nixpkgs/issues/75605
-    basic = runCommand "texlive-test-dvipng-basic" {
-      nativeBuildInputs = [ file texlive.combined.scheme-medium ];
-      input = fetchurl {
-        name = "test_dvipng.tex";
-        url = "http://git.savannah.nongnu.org/cgit/dvipng.git/plain/test_dvipng.tex?id=b872753590a18605260078f56cbd6f28d39dc035";
-        sha256 = "1pjpf1jvwj2pv5crzdgcrzvbmn7kfmgxa39pcvskl4pa0c9hl88n";
-      };
-    } ''
+    basic = runCommand "texlive-test-dvipng-basic"
+      {
+        nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+        input = fetchurl {
+          name = "test_dvipng.tex";
+          url = "http://git.savannah.nongnu.org/cgit/dvipng.git/plain/test_dvipng.tex?id=b872753590a18605260078f56cbd6f28d39dc035";
+          sha256 = "1pjpf1jvwj2pv5crzdgcrzvbmn7kfmgxa39pcvskl4pa0c9hl88n";
+        };
+      } ''
       cp "$input" ./document.tex
 
       latex document.tex
@@ -40,27 +42,28 @@
     '';
 
     # test dvipng's limited capability to render postscript specials via GS
-    ghostscript = runCommand "texlive-test-ghostscript" {
-      nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
-      input = builtins.toFile "postscript-sample.tex" ''
-        \documentclass{minimal}
-        \begin{document}
-          Ni
-          \special{ps:
-            newpath
-            0 0 moveto
-            7 7 rlineto
-            0 7 moveto
-            7 -7 rlineto
-            stroke
-            showpage
-          }
-        \end{document}
-      '';
-      gs_trap = writeShellScript "gs_trap.sh" ''
-        exit 1
-      '';
-    } ''
+    ghostscript = runCommand "texlive-test-ghostscript"
+      {
+        nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+        input = builtins.toFile "postscript-sample.tex" ''
+          \documentclass{minimal}
+          \begin{document}
+            Ni
+            \special{ps:
+              newpath
+              0 0 moveto
+              7 7 rlineto
+              0 7 moveto
+              7 -7 rlineto
+              stroke
+              showpage
+            }
+          \end{document}
+        '';
+        gs_trap = writeShellScript "gs_trap.sh" ''
+          exit 1
+        '';
+      } ''
       cp "$gs_trap" ./gs
       export PATH=$PWD:$PATH
       # check that the trap works
@@ -81,15 +84,16 @@
   };
 
   # https://github.com/NixOS/nixpkgs/issues/75070
-  dvisvgm = runCommand "texlive-test-dvisvgm" {
-    nativeBuildInputs = [ file texlive.combined.scheme-medium ];
-    input = builtins.toFile "dvisvgm-sample.tex" ''
-      \documentclass{article}
-      \begin{document}
-        mwe
-      \end{document}
-    '';
-  } ''
+  dvisvgm = runCommand "texlive-test-dvisvgm"
+    {
+      nativeBuildInputs = [ file texlive.combined.scheme-medium ];
+      input = builtins.toFile "dvisvgm-sample.tex" ''
+        \documentclass{article}
+        \begin{document}
+          mwe
+        \end{document}
+      '';
+    } ''
     cp "$input" ./document.tex
 
     latex document.tex
@@ -106,14 +110,15 @@
     mv document*.svg "$out"/
   '';
 
-  texdoc = runCommand "texlive-test-texdoc" {
-    nativeBuildInputs = [
-      (with texlive; combine {
-        inherit scheme-infraonly luatex texdoc;
-        pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
-      })
-    ];
-  } ''
+  texdoc = runCommand "texlive-test-texdoc"
+    {
+      nativeBuildInputs = [
+        (with texlive; combine {
+          inherit scheme-infraonly luatex texdoc;
+          pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
+        })
+      ];
+    } ''
     texdoc --version
 
     texdoc --debug --list texdoc | tee "$out"
@@ -121,11 +126,12 @@
   '';
 
   # test that language files are generated as expected
-  hyphen-base = runCommand "texlive-test-hyphen-base" {
-    hyphenBase = lib.head texlive.hyphen-base.pkgs;
-    schemeFull = texlive.combined.scheme-full;
-    schemeInfraOnly = texlive.combined.scheme-infraonly;
-  } ''
+  hyphen-base = runCommand "texlive-test-hyphen-base"
+    {
+      hyphenBase = lib.head texlive.hyphen-base.pkgs;
+      schemeFull = texlive.combined.scheme-full;
+      schemeInfraOnly = texlive.combined.scheme-infraonly;
+    } ''
     mkdir -p "$out"/{scheme-infraonly,scheme-full}
 
     # create language files with no hyphenation patterns
@@ -154,10 +160,11 @@
   '';
 
   # test that fmtutil.cnf is fully regenerated on scheme-full
-  fmtutilCnf = runCommand "texlive-test-fmtutil.cnf" {
-    kpathsea = lib.head texlive.kpathsea.pkgs;
-    schemeFull = texlive.combined.scheme-full;
-  } ''
+  fmtutilCnf = runCommand "texlive-test-fmtutil.cnf"
+    {
+      kpathsea = lib.head texlive.kpathsea.pkgs;
+      schemeFull = texlive.combined.scheme-full;
+    } ''
     mkdir -p "$out"
 
     diff --ignore-matching-lines='^# Generated by ' -u \

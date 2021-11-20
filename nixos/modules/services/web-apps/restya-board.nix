@@ -206,7 +206,7 @@ in
 
     services.nginx.enable = true;
     services.nginx.virtualHosts.${cfg.virtualHost.serverName} = {
-      listen = [ { addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; } ];
+      listen = [{ addr = cfg.virtualHost.listenHost; port = cfg.virtualHost.listenPort; }];
       serverName = cfg.virtualHost.serverName;
       root = runDir;
       extraConfig = ''
@@ -358,9 +358,9 @@ in
       isSystemUser = true;
       createHome = false;
       home = runDir;
-      group  = "restya-board";
+      group = "restya-board";
     };
-    users.groups.restya-board = {};
+    users.groups.restya-board = { };
 
     services.postgresql.enable = mkIf (cfg.database.host == null) true;
 

@@ -4,7 +4,7 @@
 , pruviloj
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "js";
   version = "2018-11-27";
 

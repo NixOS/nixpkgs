@@ -3,7 +3,7 @@
 , makeDesktopItem
 , fetchFromGitLab
 , qmake
-# qt
+  # qt
 , qtbase
 , qtwebsockets
 }:
@@ -16,7 +16,8 @@ let
     exec = "Michabo";
   };
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "michabo";
   version = "0.1";
 

@@ -1,28 +1,56 @@
-{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
-, coreutils, findutils, gnugrep, gawk, icu, pcre, m4
-, buildPackages, nixosTests
-, withLDAP ? true, openldap
-, withPgSQL ? false, postgresql
-, withMySQL ? false, libmysqlclient
-, withSQLite ? false, sqlite
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, gnused
+, db
+, openssl
+, cyrus_sasl
+, libnsl
+, coreutils
+, findutils
+, gnugrep
+, gawk
+, icu
+, pcre
+, m4
+, buildPackages
+, nixosTests
+, withLDAP ? true
+, openldap
+, withPgSQL ? false
+, postgresql
+, withMySQL ? false
+, libmysqlclient
+, withSQLite ? false
+, sqlite
 }:
 
 let
   ccargs = lib.concatStringsSep " " ([
-    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
+    "-DUSE_TLS"
+    "-DUSE_SASL_AUTH"
+    "-DUSE_CYRUS_SASL"
+    "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
-   ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
-     ++ lib.optional withSQLite "-DHAS_SQLITE"
-     ++ lib.optionals withLDAP ["-DHAS_LDAP" "-DUSE_LDAP_SASL"]);
-   auxlibs = lib.concatStringsSep " " ([
-     "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
-   ] ++ lib.optional withPgSQL "-lpq"
-     ++ lib.optional withMySQL "-lmysqlclient"
-     ++ lib.optional withSQLite "-lsqlite3"
-     ++ lib.optional withLDAP "-lldap");
+  ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
+  ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
+  ++ lib.optional withSQLite "-DHAS_SQLITE"
+  ++ lib.optionals withLDAP [ "-DHAS_LDAP" "-DUSE_LDAP_SASL" ]);
+  auxlibs = lib.concatStringsSep " " ([
+    "-ldb"
+    "-lnsl"
+    "-lresolv"
+    "-lsasl2"
+    "-lcrypto"
+    "-lssl"
+  ] ++ lib.optional withPgSQL "-lpq"
+  ++ lib.optional withMySQL "-lmysqlclient"
+  ++ lib.optional withSQLite "-lsqlite3"
+  ++ lib.optional withLDAP "-lldap");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "postfix";
   version = "3.6.3";
 

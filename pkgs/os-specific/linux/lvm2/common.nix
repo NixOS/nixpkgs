@@ -1,6 +1,7 @@
 { version, sha256Hash }:
 
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , pkg-config

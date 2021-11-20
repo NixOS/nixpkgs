@@ -17,7 +17,9 @@ buildGoModule rec {
   vendorSha256 = "1psyx8nqzpx3p1ya9y3q9h0hhfx4iqmix089b2h6bp9lgqbj5zn8";
 
   ldflags = [
-    "-s" "-w" "-X github.com/tomwright/dasel/internal.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/tomwright/dasel/internal.Version=${version}"
   ];
 
   doInstallCheck = true;

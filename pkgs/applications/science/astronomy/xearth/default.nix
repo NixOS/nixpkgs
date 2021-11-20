@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [ libXt libXext ];
 
-  installFlags = [ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1"];
+  installFlags = [ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1" ];
   installTargets = [ "install" "install.man" ];
 
   meta = with lib; {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       '';
     maintainers = [ maintainers.mafo ];
     license = "xearth";
-    platforms=platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

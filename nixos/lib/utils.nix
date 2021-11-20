@@ -3,7 +3,7 @@ pkgs: with pkgs.lib;
 rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) { } ''
     cp ${filePath} $out
   '';
 
@@ -27,23 +27,25 @@ rec {
       # *not* a parent of b.device. If we add a slash at the end of each string,
       # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
       normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-      normalise = mount: mount // { device = normalisePath (toString mount.device);
-                                    mountPoint = normalisePath mount.mountPoint;
-                                    depends = map normalisePath mount.depends;
-                                  };
+      normalise = mount: mount // {
+        device = normalisePath (toString mount.device);
+        mountPoint = normalisePath mount.mountPoint;
+        depends = map normalisePath mount.depends;
+      };
 
       a' = normalise a;
       b' = normalise b;
 
-    in hasPrefix a'.mountPoint b'.device
+    in
+    hasPrefix a'.mountPoint b'.device
     || hasPrefix a'.mountPoint b'.mountPoint
     || any (hasPrefix a'.mountPoint) b'.depends;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+    replaceChars [ "/" "-" " " ] [ "-" "\\x2d" "\\x20" ]
+      (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:
@@ -86,8 +88,9 @@ rec {
         else if isList item then
           imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
-          [];
-    in listToAttrs (flatten (recurse "" item));
+          [ ];
+    in
+    listToAttrs (flatten (recurse "" item));
 
   /* Takes an attrset and a file path and generates a bash snippet that
      outputs a JSON file at the file path with all instances of
@@ -145,21 +148,22 @@ rec {
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
-    in ''
+    in
+    ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
       fi
     ''
     + concatStringsSep
-        "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
-               (attrNames secrets))
+      "\n"
+      (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' '"
     + concatStringsSep
       " | "
       (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
+        (attrNames secrets))
     + ''
       ' <<'EOF'
       ${builtins.toJSON set}

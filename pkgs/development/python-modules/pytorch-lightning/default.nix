@@ -7,7 +7,8 @@
 , pytorch
 , pyyaml
 , tensorflow-tensorboard
-, tqdm }:
+, tqdm
+}:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";

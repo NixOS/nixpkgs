@@ -52,15 +52,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    runHook preInstall
+     runHook preInstall
 
-    install -Dm755 -t "$out/bin" quickemu quickget macrecovery
+     install -Dm755 -t "$out/bin" quickemu quickget macrecovery
 
-   for f in quickget macrecovery quickemu; do
-    wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
-   done
+    for f in quickget macrecovery quickemu; do
+     wrapProgram $out/bin/$f --prefix PATH : "${lib.makeBinPath runtimePaths}"
+    done
 
-    runHook postInstall
+     runHook postInstall
   '';
 
   meta = with lib; {

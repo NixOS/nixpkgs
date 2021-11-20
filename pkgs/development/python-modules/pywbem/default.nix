@@ -1,7 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, libxml2
-, m2crypto, ply, pyyaml, six, pbr, pythonOlder, nocasedict, nocaselist, yamlloader, requests-mock
-, httpretty, lxml, mock, pytest, requests, decorator, unittest2
-, FormEncode, testfixtures, pytz
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libxml2
+, m2crypto
+, ply
+, pyyaml
+, six
+, pbr
+, pythonOlder
+, nocasedict
+, nocaselist
+, yamlloader
+, requests-mock
+, httpretty
+, lxml
+, mock
+, pytest
+, requests
+, decorator
+, unittest2
+, FormEncode
+, testfixtures
+, pytz
 }:
 
 buildPythonPackage rec {

@@ -8,14 +8,25 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, cc ? null
+, libc ? null
+, bintools
+, coreutils ? null
+, shell ? stdenvNoCC.shell
 , gccForLibs ? null
 , zlib ? null
-, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, nativeTools
+, noLibc ? false
+, nativeLibc
+, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
-, extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
-, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, buildPackages ? {}
+, extraTools ? [ ]
+, extraPackages ? [ ]
+, extraBuildCommands ? ""
+, isGNU ? false
+, isClang ? cc.isClang or false
+, gnugrep ? null
+, buildPackages ? { }
 , libcxx ? null
 }:
 
@@ -23,7 +34,7 @@ with lib;
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
-  cc != null && coreutils != null && gnugrep != null;
+cc != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
@@ -36,7 +47,7 @@ let
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                           (targetPlatform.config + "-");
+    (targetPlatform.config + "-");
 
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
@@ -55,7 +66,7 @@ let
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
   expand-response-params =
     if (buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null"
@@ -73,30 +84,32 @@ let
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
     if isGNU then
-      { # Intel
-        skylake        = versionAtLeast ccVersion "6.0";
+      {
+        # Intel
+        skylake = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
-        cannonlake     = versionAtLeast ccVersion "8.0";
+        cannonlake = versionAtLeast ccVersion "8.0";
         icelake-client = versionAtLeast ccVersion "8.0";
         icelake-server = versionAtLeast ccVersion "8.0";
-        cascadelake    = versionAtLeast ccVersion "9.0";
-        cooperlake     = versionAtLeast ccVersion "10.0";
-        tigerlake      = versionAtLeast ccVersion "10.0";
-        knm            = versionAtLeast ccVersion "8.0";
+        cascadelake = versionAtLeast ccVersion "9.0";
+        cooperlake = versionAtLeast ccVersion "10.0";
+        tigerlake = versionAtLeast ccVersion "10.0";
+        knm = versionAtLeast ccVersion "8.0";
         # AMD
-        znver1         = versionAtLeast ccVersion "6.0";
-        znver2         = versionAtLeast ccVersion "9.0";
-        znver3         = versionAtLeast ccVersion "11.0";
+        znver1 = versionAtLeast ccVersion "6.0";
+        znver2 = versionAtLeast ccVersion "9.0";
+        znver3 = versionAtLeast ccVersion "11.0";
       }.${arch} or true
     else if isClang then
-      { # Intel
-        cannonlake     = versionAtLeast ccVersion "5.0";
+      {
+        # Intel
+        cannonlake = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
-        knm            = versionAtLeast ccVersion "7.0";
+        knm = versionAtLeast ccVersion "7.0";
         # AMD
-        znver1         = versionAtLeast ccVersion "4.0";
-        znver2         = versionAtLeast ccVersion "9.0";
+        znver1 = versionAtLeast ccVersion "4.0";
+        znver2 = versionAtLeast ccVersion "9.0";
       }.${arch} or true
     else
       false;
@@ -269,7 +282,7 @@ stdenv.mkDerivation {
   setupHooks = [
     ../setup-hooks/role.bash
   ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
-    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
+  ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -318,11 +331,12 @@ stdenv.mkDerivation {
     # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
-    + optionalString (isClang
-                      && targetPlatform.isLinux
-                      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
-                      && !(stdenv.targetPlatform.useLLVM or false)
-                      && gccForLibs != null) ''
+    + optionalString
+      (isClang
+      && targetPlatform.isLinux
+      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+      && !(stdenv.targetPlatform.useLLVM or false)
+      && gccForLibs != null) ''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
@@ -439,8 +453,9 @@ stdenv.mkDerivation {
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
-                      isGccArchSupported targetPlatform.gcc.arch) ''
+    + optionalString
+      ((targetPlatform ? gcc.arch) && (isClang || !(stdenv.isDarwin && stdenv.isAarch64)) &&
+      isGccArchSupported targetPlatform.gcc.arch) ''
       echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -466,8 +481,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.thumb) ''
       echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? gcc.tune &&
-                      isGccArchSupported targetPlatform.gcc.tune) ''
+    + optionalString
+      (targetPlatform ? gcc.tune &&
+      isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
     ''
 
@@ -499,7 +515,7 @@ stdenv.mkDerivation {
     ''
 
     + optionalString stdenv.targetPlatform.isDarwin ''
-        echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
+      echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
     + optionalString targetPlatform.isAndroid ''
@@ -529,11 +545,12 @@ stdenv.mkDerivation {
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =
-    let cc_ = if cc != null then cc else {}; in
-    (if cc_ ? meta then removeAttrs cc.meta ["priority"] else {}) //
-    { description =
-        lib.attrByPath ["meta" "description"] "System C compiler" cc_
+    let cc_ = if cc != null then cc else { }; in
+    (if cc_ ? meta then removeAttrs cc.meta [ "priority" ] else { }) //
+    {
+      description =
+        lib.attrByPath [ "meta" "description" ] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
-  };
+    };
 }

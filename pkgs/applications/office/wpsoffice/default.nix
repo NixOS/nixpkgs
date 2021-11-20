@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchurl
 , dpkg
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mlatus th0rgal ];
   };
@@ -132,42 +133,45 @@ stdenv.mkDerivation rec {
     "png"
     # File saving breaks unless we are using vendored llvmPackages_8.libcxx
     #"c++"
-    "ssl" "crypto"
+    "ssl"
+    "crypto"
     "nspr"
     "nss"
     "odbc"
     "tcmalloc" # gperftools
   ];
 
-  installPhase = let
-    steam-run = (steam.override {
-      extraPkgs = p: buildInputs;
-      nativeOnly = true;
-    }).run;
-  in ''
-    prefix=$out/opt/kingsoft/wps-office
-    mkdir -p $out
-    cp -r opt $out
-    cp -r usr/* $out
-    for lib in $unvendoredLibraries; do
-      rm -v "$prefix/office6/lib$lib"*.so{,.*}
-    done
-    for i in wps wpp et wpspdf; do
-      substituteInPlace $out/bin/$i \
-        --replace /opt/kingsoft/wps-office $prefix
-    done
-    for i in $out/share/applications/*;do
-      substituteInPlace $i \
-        --replace /usr/bin $out/bin
-    done
+  installPhase =
+    let
+      steam-run = (steam.override {
+        extraPkgs = p: buildInputs;
+        nativeOnly = true;
+      }).run;
+    in
+    ''
+      prefix=$out/opt/kingsoft/wps-office
+      mkdir -p $out
+      cp -r opt $out
+      cp -r usr/* $out
+      for lib in $unvendoredLibraries; do
+        rm -v "$prefix/office6/lib$lib"*.so{,.*}
+      done
+      for i in wps wpp et wpspdf; do
+        substituteInPlace $out/bin/$i \
+          --replace /opt/kingsoft/wps-office $prefix
+      done
+      for i in $out/share/applications/*;do
+        substituteInPlace $i \
+          --replace /usr/bin $out/bin
+      done
 
-    for i in wps wpp et wpspdf; do
-      mv $out/bin/$i $out/bin/.$i-orig
-      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
-        --add-flags $out/bin/.$i-orig \
-        --argv0 $i
-    done
-  '';
+      for i in wps wpp et wpspdf; do
+        mv $out/bin/$i $out/bin/.$i-orig
+        makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
+          --add-flags $out/bin/.$i-orig \
+          --argv0 $i
+      done
+    '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;

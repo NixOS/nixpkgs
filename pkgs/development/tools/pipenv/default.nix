@@ -16,7 +16,8 @@ let
 
   pythonEnv = python3.withPackages runtimeDeps;
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "pipenv";
   version = "2021.11.9";
 

@@ -2,7 +2,8 @@
 
 let
   version = "20210225";
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   name = "iana-etc-${version}";
   src = fetchzip {
     url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";

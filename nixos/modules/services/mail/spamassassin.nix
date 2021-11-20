@@ -57,53 +57,53 @@ in
         description = "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
-        ''
-          #
-          # to update this list, run this command in the rules directory:
-          # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
-          #
+          ''
+            #
+            # to update this list, run this command in the rules directory:
+            # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
+            #
 
-          #loadplugin Mail::SpamAssassin::Plugin::AccessDB
-          #loadplugin Mail::SpamAssassin::Plugin::AntiVirus
-          loadplugin Mail::SpamAssassin::Plugin::AskDNS
-          # loadplugin Mail::SpamAssassin::Plugin::ASN
-          loadplugin Mail::SpamAssassin::Plugin::AutoLearnThreshold
-          #loadplugin Mail::SpamAssassin::Plugin::AWL
-          loadplugin Mail::SpamAssassin::Plugin::Bayes
-          loadplugin Mail::SpamAssassin::Plugin::BodyEval
-          loadplugin Mail::SpamAssassin::Plugin::Check
-          #loadplugin Mail::SpamAssassin::Plugin::DCC
-          loadplugin Mail::SpamAssassin::Plugin::DKIM
-          loadplugin Mail::SpamAssassin::Plugin::DNSEval
-          loadplugin Mail::SpamAssassin::Plugin::FreeMail
-          loadplugin Mail::SpamAssassin::Plugin::Hashcash
-          loadplugin Mail::SpamAssassin::Plugin::HeaderEval
-          loadplugin Mail::SpamAssassin::Plugin::HTMLEval
-          loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
-          loadplugin Mail::SpamAssassin::Plugin::ImageInfo
-          loadplugin Mail::SpamAssassin::Plugin::MIMEEval
-          loadplugin Mail::SpamAssassin::Plugin::MIMEHeader
-          # loadplugin Mail::SpamAssassin::Plugin::PDFInfo
-          #loadplugin Mail::SpamAssassin::Plugin::PhishTag
-          loadplugin Mail::SpamAssassin::Plugin::Pyzor
-          loadplugin Mail::SpamAssassin::Plugin::Razor2
-          # loadplugin Mail::SpamAssassin::Plugin::RelayCountry
-          loadplugin Mail::SpamAssassin::Plugin::RelayEval
-          loadplugin Mail::SpamAssassin::Plugin::ReplaceTags
-          # loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody
-          # loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
-          loadplugin Mail::SpamAssassin::Plugin::SpamCop
-          loadplugin Mail::SpamAssassin::Plugin::SPF
-          #loadplugin Mail::SpamAssassin::Plugin::TextCat
-          # loadplugin Mail::SpamAssassin::Plugin::TxRep
-          loadplugin Mail::SpamAssassin::Plugin::URIDetail
-          loadplugin Mail::SpamAssassin::Plugin::URIDNSBL
-          loadplugin Mail::SpamAssassin::Plugin::URIEval
-          # loadplugin Mail::SpamAssassin::Plugin::URILocalBL
-          loadplugin Mail::SpamAssassin::Plugin::VBounce
-          loadplugin Mail::SpamAssassin::Plugin::WhiteListSubject
-          loadplugin Mail::SpamAssassin::Plugin::WLBLEval
-        '';
+            #loadplugin Mail::SpamAssassin::Plugin::AccessDB
+            #loadplugin Mail::SpamAssassin::Plugin::AntiVirus
+            loadplugin Mail::SpamAssassin::Plugin::AskDNS
+            # loadplugin Mail::SpamAssassin::Plugin::ASN
+            loadplugin Mail::SpamAssassin::Plugin::AutoLearnThreshold
+            #loadplugin Mail::SpamAssassin::Plugin::AWL
+            loadplugin Mail::SpamAssassin::Plugin::Bayes
+            loadplugin Mail::SpamAssassin::Plugin::BodyEval
+            loadplugin Mail::SpamAssassin::Plugin::Check
+            #loadplugin Mail::SpamAssassin::Plugin::DCC
+            loadplugin Mail::SpamAssassin::Plugin::DKIM
+            loadplugin Mail::SpamAssassin::Plugin::DNSEval
+            loadplugin Mail::SpamAssassin::Plugin::FreeMail
+            loadplugin Mail::SpamAssassin::Plugin::Hashcash
+            loadplugin Mail::SpamAssassin::Plugin::HeaderEval
+            loadplugin Mail::SpamAssassin::Plugin::HTMLEval
+            loadplugin Mail::SpamAssassin::Plugin::HTTPSMismatch
+            loadplugin Mail::SpamAssassin::Plugin::ImageInfo
+            loadplugin Mail::SpamAssassin::Plugin::MIMEEval
+            loadplugin Mail::SpamAssassin::Plugin::MIMEHeader
+            # loadplugin Mail::SpamAssassin::Plugin::PDFInfo
+            #loadplugin Mail::SpamAssassin::Plugin::PhishTag
+            loadplugin Mail::SpamAssassin::Plugin::Pyzor
+            loadplugin Mail::SpamAssassin::Plugin::Razor2
+            # loadplugin Mail::SpamAssassin::Plugin::RelayCountry
+            loadplugin Mail::SpamAssassin::Plugin::RelayEval
+            loadplugin Mail::SpamAssassin::Plugin::ReplaceTags
+            # loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody
+            # loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
+            loadplugin Mail::SpamAssassin::Plugin::SpamCop
+            loadplugin Mail::SpamAssassin::Plugin::SPF
+            #loadplugin Mail::SpamAssassin::Plugin::TextCat
+            # loadplugin Mail::SpamAssassin::Plugin::TxRep
+            loadplugin Mail::SpamAssassin::Plugin::URIDetail
+            loadplugin Mail::SpamAssassin::Plugin::URIDNSBL
+            loadplugin Mail::SpamAssassin::Plugin::URIEval
+            # loadplugin Mail::SpamAssassin::Plugin::URILocalBL
+            loadplugin Mail::SpamAssassin::Plugin::VBounce
+            loadplugin Mail::SpamAssassin::Plugin::WhiteListSubject
+            loadplugin Mail::SpamAssassin::Plugin::WLBLEval
+          '';
       };
     };
   };
@@ -161,8 +161,8 @@ in
 
     systemd.timers.sa-update = {
       description = "sa-update-service";
-      partOf      = [ "sa-update.service" ];
-      wantedBy    = [ "timers.target" ];
+      partOf = [ "sa-update.service" ];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "1:*";
         Persistent = true;

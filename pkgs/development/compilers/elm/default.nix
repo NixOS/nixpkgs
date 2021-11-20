@@ -1,16 +1,29 @@
-{ lib, stdenv, pkgs
-, haskell, haskellPackages, nodejs
-, fetchurl, fetchpatch, makeWrapper, writeScriptBin
+{ lib
+, stdenv
+, pkgs
+, haskell
+, haskellPackages
+, nodejs
+, fetchurl
+, fetchpatch
+, makeWrapper
+, writeScriptBin
   # Rust dependecies
-, curl, rustPlatform, openssl, pkg-config, Security
+, curl
+, rustPlatform
+, openssl
+, pkg-config
+, Security
 }:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
   hsPkgs = haskellPackages.override {
     overrides = self: super: with haskell.lib.compose; with lib;
-      let elmPkgs = rec {
-            elm = overrideCabal (drv: {
+      let
+        elmPkgs = rec {
+          elm = overrideCabal
+            (drv: {
               # sadly with parallelism most of the time breaks compilation
               enableParallelBuilding = false;
               preConfigure = self.fetchElmDeps {
@@ -18,7 +31,7 @@ let
                 elmVersion = drv.version;
                 registryDat = ./registry.dat;
               };
-              buildTools = drv.buildTools or [] ++ [ makeWrapper ];
+              buildTools = drv.buildTools or [ ] ++ [ makeWrapper ];
               jailbreak = true;
               postInstall = ''
                 wrapProgram $out/bin/elm \
@@ -29,22 +42,26 @@ let
               homepage = "https://elm-lang.org/";
               license = licenses.bsd3;
               maintainers = with maintainers; [ domenkozar turbomack ];
-            }) (self.callPackage ./packages/elm.nix { });
+            })
+            (self.callPackage ./packages/elm.nix { });
 
-            /*
+          /*
             The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
             `package/nix/build.sh`
             */
-            elm-format = justStaticExecutables (overrideCabal (drv: {
+          elm-format = justStaticExecutables (overrideCabal
+            (drv: {
               jailbreak = true;
 
               description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
               homepage = "https://github.com/avh4/elm-format";
               license = licenses.bsd3;
               maintainers = with maintainers; [ avh4 turbomack ];
-            }) (self.callPackage ./packages/elm-format.nix {}));
+            })
+            (self.callPackage ./packages/elm-format.nix { }));
 
-            elmi-to-json = justStaticExecutables (overrideCabal (drv: {
+          elmi-to-json = justStaticExecutables (overrideCabal
+            (drv: {
               prePatch = ''
                 substituteInPlace package.yaml --replace "- -Werror" ""
                 hpack
@@ -55,9 +72,11 @@ let
               homepage = "https://github.com/stoeffel/elmi-to-json";
               license = licenses.bsd3;
               maintainers = [ maintainers.turbomack ];
-            }) (self.callPackage ./packages/elmi-to-json.nix {}));
+            })
+            (self.callPackage ./packages/elmi-to-json.nix { }));
 
-            elm-instrument = justStaticExecutables (overrideCabal (drv: {
+          elm-instrument = justStaticExecutables (overrideCabal
+            (drv: {
               prePatch = ''
                 sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
               '';
@@ -69,21 +88,23 @@ let
               homepage = "https://github.com/zwilias/elm-instrument";
               license = licenses.bsd3;
               maintainers = [ maintainers.turbomack ];
-            }) (self.callPackage ./packages/elm-instrument.nix {}));
+            })
+            (self.callPackage ./packages/elm-instrument.nix { }));
 
-            inherit fetchElmDeps;
-            elmVersion = elmPkgs.elm.version;
-          };
-      in elmPkgs // {
+          inherit fetchElmDeps;
+          elmVersion = elmPkgs.elm.version;
+        };
+      in
+      elmPkgs // {
         inherit elmPkgs;
 
         # Needed for elm-format
-        indents = self.callPackage ./packages/indents.nix {};
-        bimap = self.callPackage ./packages/bimap.nix {};
-        avh4-lib = doJailbreak (self.callPackage ./packages/avh4-lib.nix {});
-        elm-format-lib = doJailbreak (self.callPackage ./packages/elm-format-lib.nix {});
-        elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
-        elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
+        indents = self.callPackage ./packages/indents.nix { };
+        bimap = self.callPackage ./packages/bimap.nix { };
+        avh4-lib = doJailbreak (self.callPackage ./packages/avh4-lib.nix { });
+        elm-format-lib = doJailbreak (self.callPackage ./packages/elm-format-lib.nix { });
+        elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix { };
+        elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix { };
       };
   };
 
@@ -100,10 +121,11 @@ let
     inherit (hsPkgs.elmPkgs) elm;
   };
 
-  elmRustPackages =  {
-    elm-json = import ./packages/elm-json.nix {
-      inherit curl lib rustPlatform fetchurl openssl stdenv pkg-config Security;
-    } // {
+  elmRustPackages = {
+    elm-json = import ./packages/elm-json.nix
+      {
+        inherit curl lib rustPlatform fetchurl openssl stdenv pkg-config Security;
+      } // {
       meta = with lib; {
         description = "Install, upgrade and uninstall Elm dependencies";
         homepage = "https://github.com/zwilias/elm-json";
@@ -116,10 +138,11 @@ let
   elmNodePackages = with elmLib;
     let
       nodePkgs = import ./packages/node-composition.nix {
-          inherit nodejs pkgs;
-          inherit (stdenv.hostPlatform) system;
-        };
-    in with hsPkgs.elmPkgs; {
+        inherit nodejs pkgs;
+        inherit (stdenv.hostPlatform) system;
+      };
+    in
+    with hsPkgs.elmPkgs; {
 
       elm-test =
         nodePkgs.elm-test // {
@@ -131,18 +154,18 @@ let
           };
         };
 
-      elm-verify-examples = patchBinwrap [elmi-to-json]
+      elm-verify-examples = patchBinwrap [ elmi-to-json ]
         nodePkgs.elm-verify-examples // {
-          meta = with lib; {
-            description = "Verify examples in your docs";
-            homepage = "https://github.com/stoeffel/elm-verify-examples";
-            license = licenses.bsd3;
-            maintainers = [ maintainers.turbomack ];
-          };
+        meta = with lib; {
+          description = "Verify examples in your docs";
+          homepage = "https://github.com/stoeffel/elm-verify-examples";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.turbomack ];
         };
+      };
 
       elm-coverage =
-        let patched = patchNpmElm (patchBinwrap [elmi-to-json] nodePkgs.elm-coverage);
+        let patched = patchNpmElm (patchBinwrap [ elmi-to-json ] nodePkgs.elm-coverage);
         in patched.override (old: {
           # Symlink Elm instrument binary
           preRebuild = (old.preRebuild or "") + ''
@@ -168,13 +191,13 @@ let
 
       create-elm-app = patchNpmElm
         nodePkgs.create-elm-app // {
-          meta = with lib; {
-            description = "Create Elm apps with no build configuration";
-            homepage = "https://github.com/halfzebra/create-elm-app";
-            license = licenses.mit;
-            maintainers = [ maintainers.turbomack ];
-          };
+        meta = with lib; {
+          description = "Create Elm apps with no build configuration";
+          homepage = "https://github.com/halfzebra/create-elm-app";
+          license = licenses.mit;
+          maintainers = [ maintainers.turbomack ];
         };
+      };
 
       elm-review =
         nodePkgs.elm-review // {
@@ -207,6 +230,7 @@ let
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
 
-in hsPkgs.elmPkgs // elmNodePackages // elmRustPackages // {
+in
+hsPkgs.elmPkgs // elmNodePackages // elmRustPackages // {
   lib = elmLib;
 }

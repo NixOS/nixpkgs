@@ -42,11 +42,13 @@ let
       })
     ];
   });
-  electronExec = if stdenv.isDarwin then
-    "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron}/bin/electron";
-in nodePackages.deltachat-desktop.override rec {
+  electronExec =
+    if stdenv.isDarwin then
+      "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
+    else
+      "${electron}/bin/electron";
+in
+nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
   version = "1.22.2";
 
@@ -75,29 +77,37 @@ in nodePackages.deltachat-desktop.override rec {
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  postInstall = let
-    keep = lib.concatMapStringsSep " " (file: "! -name ${file}") [
-      "_locales" "build" "html-dist" "images" "index.js"
-      "node_modules" "themes" "tsc-dist"
-    ];
-  in ''
-    rm -r node_modules/deltachat-node/{deltachat-core-rust,prebuilds,src}
+  postInstall =
+    let
+      keep = lib.concatMapStringsSep " " (file: "! -name ${file}") [
+        "_locales"
+        "build"
+        "html-dist"
+        "images"
+        "index.js"
+        "node_modules"
+        "themes"
+        "tsc-dist"
+      ];
+    in
+    ''
+      rm -r node_modules/deltachat-node/{deltachat-core-rust,prebuilds,src}
 
-    patchShebangs node_modules/sass/sass.js
+      patchShebangs node_modules/sass/sass.js
 
-    npm run build
+      npm run build
 
-    npm prune --production
+      npm prune --production
 
-    find . -mindepth 1 -maxdepth 1 ${keep} -print0 | xargs -0 rm -r
+      find . -mindepth 1 -maxdepth 1 ${keep} -print0 | xargs -0 rm -r
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/lib/node_modules/deltachat-desktop/build/icon.png \
-      $out/share/icons/hicolor/scalable/apps/deltachat.png
+      mkdir -p $out/share/icons/hicolor/scalable/apps
+      ln -s $out/lib/node_modules/deltachat-desktop/build/icon.png \
+        $out/share/icons/hicolor/scalable/apps/deltachat.png
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
-      --add-flags $out/lib/node_modules/deltachat-desktop
-  '';
+      makeWrapper ${electronExec} $out/bin/deltachat \
+        --add-flags $out/lib/node_modules/deltachat-desktop
+    '';
 
   desktopItems = lib.singleton (makeDesktopItem {
     name = "deltachat";

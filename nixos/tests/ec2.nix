@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -31,7 +31,7 @@ let
 
         # Needed by nixos-rebuild due to the lack of network
         # access. Determined by trial and error.
-        system.extraDependencies = with pkgs; ( [
+        system.extraDependencies = with pkgs; ([
           # Needed for a nixos-rebuild.
           busybox
           cloud-utils
@@ -62,9 +62,10 @@ let
   snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
-in {
+in
+{
   boot-ec2-nixops = makeEc2Test {
-    name         = "nixops-userdata";
+    name = "nixops-userdata";
     inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
@@ -112,7 +113,7 @@ in {
   };
 
   boot-ec2-config = makeEc2Test {
-    name         = "config-userdata";
+    name = "config-userdata";
     meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;

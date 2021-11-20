@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      copy = arch: version: {input, output}: "mkdir -p $out/${arch}/${output}; cp ${input}/${version}/${arch}/* $out/${arch}/${output}/.";
-      virtio = [{input="Balloon"; output="vioballoon";}
-                {input="NetKVM"; output="vionet";}
-                {input="vioscsi"; output="vioscsi";}
-                {input="vioserial"; output="vioserial";}
-                {input="viostor"; output="viostor";}
-                {input="viorng"; output="viorng";}
-               ];
-    in ''
+      copy = arch: version: { input, output }: "mkdir -p $out/${arch}/${output}; cp ${input}/${version}/${arch}/* $out/${arch}/${output}/.";
+      virtio = [{ input = "Balloon"; output = "vioballoon"; }
+        { input = "NetKVM"; output = "vionet"; }
+        { input = "vioscsi"; output = "vioscsi"; }
+        { input = "vioserial"; output = "vioserial"; }
+        { input = "viostor"; output = "viostor"; }
+        { input = "viorng"; output = "viorng"; }];
+    in
+    ''
       runHook preInstall
       ${lib.concatStringsSep "\n" ((map (copy "amd64" "w10") virtio) ++ (map (copy "x86" "w10") virtio))}
       runHook postInstall

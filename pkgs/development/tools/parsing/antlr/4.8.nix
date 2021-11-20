@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkg-config, libuuid, darwin }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, libuuid
+, darwin
+}:
 
 let
   version = "4.8";
@@ -40,7 +49,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url ="https://www.antlr.org/download/antlr-${version}-complete.jar";
+      url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
       sha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
     };
 
@@ -81,4 +90,5 @@ let
       platforms = platforms.unix;
     };
   };
-in antlr
+in
+antlr

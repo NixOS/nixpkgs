@@ -12,8 +12,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    makeWrapper alsa-lib gtk3 gdk-pixbuf gnome.adwaita-icon-theme
-    librsvg wrapGAppsHook
+    makeWrapper
+    alsa-lib
+    gtk3
+    gdk-pixbuf
+    gnome.adwaita-icon-theme
+    librsvg
+    wrapGAppsHook
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -26,7 +26,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libxfce4util = callPackage ./core/libxfce4util { };
 
   thunar = callPackage ./core/thunar {
-    thunarPlugins = [];
+    thunarPlugins = [ ];
   };
 
   thunar-volman = callPackage ./core/thunar-volman { };
@@ -85,7 +85,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (pkgs.gnome) libsoup;
   };
 
-  xfdashboard = callPackage ./applications/xfdashboard {};
+  xfdashboard = callPackage ./applications/xfdashboard { };
 
   xfce4-volumed-pulse = callPackage ./applications/xfce4-volumed-pulse { };
 
@@ -218,7 +218,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs.gnome) vte gtksourceview;
   xfce4-mixer-pulse = xfce4-mixer;
   thunar-bare = thunar.override {
-    thunarPlugins = [];
+    thunarPlugins = [ ];
   };
 
   # added 2019-11-30

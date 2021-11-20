@@ -1,30 +1,67 @@
-{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg
-, aalibSupport ? true, aalib ? null
-, fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
-, fribidiSupport ? true, fribidi ? null
-, x11Support ? true, libX11 ? null, libXext ? null, libGLU, libGL ? null
-, xineramaSupport ? true, libXinerama ? null
-, xvSupport ? true, libXv ? null
-, alsaSupport ? stdenv.isLinux, alsa-lib ? null
-, screenSaverSupport ? true, libXScrnSaver ? null
-, vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
-, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
-, dvdreadSupport ? true, libdvdread ? null
-, bluraySupport ? true, libbluray ? null
-, amrSupport ? false, amrnb ? null, amrwb ? null
-, cacaSupport ? true, libcaca ? null
-, lameSupport ? true, lame ? null
-, speexSupport ? true, speex ? null
-, theoraSupport ? true, libtheora ? null
-, x264Support ? false, x264 ? null
-, jackaudioSupport ? false, libjack2 ? null
-, pulseSupport ? config.pulseaudio or false, libpulseaudio ? null
-, bs2bSupport ? false, libbs2b ? null
-, v4lSupport ? false, libv4l ? null
-# For screenshots
-, libpngSupport ? true, libpng ? null
-, libjpegSupport ? true, libjpeg ? null
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, freetype
+, yasm
+, ffmpeg
+, aalibSupport ? true
+, aalib ? null
+, fontconfigSupport ? true
+, fontconfig ? null
+, freefont_ttf ? null
+, fribidiSupport ? true
+, fribidi ? null
+, x11Support ? true
+, libX11 ? null
+, libXext ? null
+, libGLU
+, libGL ? null
+, xineramaSupport ? true
+, libXinerama ? null
+, xvSupport ? true
+, libXv ? null
+, alsaSupport ? stdenv.isLinux
+, alsa-lib ? null
+, screenSaverSupport ? true
+, libXScrnSaver ? null
+, vdpauSupport ? false
+, libvdpau ? null
+, cddaSupport ? !stdenv.isDarwin
+, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin
+, libdvdnav ? null
+, dvdreadSupport ? true
+, libdvdread ? null
+, bluraySupport ? true
+, libbluray ? null
+, amrSupport ? false
+, amrnb ? null
+, amrwb ? null
+, cacaSupport ? true
+, libcaca ? null
+, lameSupport ? true
+, lame ? null
+, speexSupport ? true
+, speex ? null
+, theoraSupport ? true
+, libtheora ? null
+, x264Support ? false
+, x264 ? null
+, jackaudioSupport ? false
+, libjack2 ? null
+, pulseSupport ? config.pulseaudio or false
+, libpulseaudio ? null
+, bs2bSupport ? false
+, libbs2b ? null
+, v4lSupport ? false
+, libv4l ? null
+  # For screenshots
+, libpngSupport ? true
+, libpng ? null
+, libjpegSupport ? true
+, libjpeg ? null
 , useUnfreeCodecs ? false
 , darwin ? null
 , buildPackages
@@ -63,29 +100,38 @@ let
       dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
       version = "20071007";
     in
-    if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-      url = "${dir}/essential-${version}.tar.bz2";
-      sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
-    } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-      url = "${dir}/essential-amd64-${version}.tar.bz2";
-      sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
-    } else if stdenv.hostPlatform.system == "powerpc-linux" then fetchurl {
-      url = "${dir}/essential-ppc-${version}.tar.bz2";
-      sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
-    } else null;
+    if stdenv.hostPlatform.system == "i686-linux" then
+      fetchurl
+        {
+          url = "${dir}/essential-${version}.tar.bz2";
+          sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
+        } else if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl
+        {
+          url = "${dir}/essential-amd64-${version}.tar.bz2";
+          sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
+        } else if stdenv.hostPlatform.system == "powerpc-linux" then
+      fetchurl
+        {
+          url = "${dir}/essential-ppc-${version}.tar.bz2";
+          sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
+        } else null;
 
-  codecs = if codecs_src != null then stdenv.mkDerivation {
-    pname = "MPlayer-codecs-essential";
+  codecs =
+    if codecs_src != null then
+      stdenv.mkDerivation
+        {
+          pname = "MPlayer-codecs-essential";
 
-    src = codecs_src;
+          src = codecs_src;
 
-    installPhase = ''
-      mkdir $out
-      cp -prv * $out
-    '';
+          installPhase = ''
+            mkdir $out
+            cp -prv * $out
+          '';
 
-    meta.license = lib.licenses.unfree;
-  } else null;
+          meta.license = lib.licenses.unfree;
+        } else null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
 
@@ -138,7 +184,7 @@ stdenv.mkDerivation rec {
     ++ optional bs2bSupport libbs2b
     ++ optional v4lSupport libv4l
     ++ (with darwin.apple_sdk.frameworks; optionals stdenv.isDarwin [ Cocoa OpenGL ])
-    ;
+  ;
 
   configurePlatforms = [ ];
   configureFlags = with lib; [
@@ -171,15 +217,15 @@ stdenv.mkDerivation rec {
     # Note, the `target` vs `host` confusion is intensional.
     "--target=${stdenv.hostPlatform.config}"
   ] ++ optional
-         (useUnfreeCodecs && codecs != null && !crossBuild)
-         "--codecsdir=${codecs}"
-    ++ optional
-         ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
-         "--enable-runtime-cpudetection"
-    ++ optional fribidiSupport "--enable-fribidi"
-    ++ optional stdenv.isLinux "--enable-vidix"
-    ++ optional stdenv.isLinux "--enable-fbdev"
-    ++ optionals (crossBuild) [
+    (useUnfreeCodecs && codecs != null && !crossBuild)
+    "--codecsdir=${codecs}"
+  ++ optional
+    ((stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) && !crossBuild)
+    "--enable-runtime-cpudetection"
+  ++ optional fribidiSupport "--enable-fribidi"
+  ++ optional stdenv.isLinux "--enable-vidix"
+  ++ optional stdenv.isLinux "--enable-fbdev"
+  ++ optionals (crossBuild) [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"
     "--with-vidix-drivers=no"
@@ -202,10 +248,10 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = with lib; toString (
-       optional  fontconfigSupport "-lfontconfig"
-    ++ optional  fribidiSupport "-lfribidi"
+    optional fontconfigSupport "-lfontconfig"
+    ++ optional fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
-    ++ optional  x264Support "-lx264"
+    ++ optional x264Support "-lx264"
     ++ [ "-lfreetype" ]
   );
 

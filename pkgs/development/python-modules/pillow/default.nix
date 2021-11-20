@@ -1,6 +1,26 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
-, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, isPy3k
+, defusedxml
+, olefile
+, freetype
+, libjpeg
+, zlib
+, libtiff
+, libwebp
+, tcl
+, lcms2
+, tk
+, libX11
+, libxcb
+, openjpeg
+, libimagequant
+, pyroma
+, numpy
+, pytestCheckHook
 }@args:
 
 import ./generic.nix (rec {
@@ -26,4 +46,4 @@ import ./generic.nix (rec {
     license = licenses.hpnd;
     maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
   };
-} // args )
+} // args)

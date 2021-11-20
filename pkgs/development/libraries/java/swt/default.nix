@@ -17,19 +17,26 @@
 let
   platformMap = {
     x86_64-linux =
-      { platform = "gtk-linux-x86_64";
-        sha256 = "17frac2nsx22hfa72264as31rn35hfh9gfgy0n6wvc3knl5d2716"; };
+      {
+        platform = "gtk-linux-x86_64";
+        sha256 = "17frac2nsx22hfa72264as31rn35hfh9gfgy0n6wvc3knl5d2716";
+      };
     i686-linux =
-      { platform = "gtk-linux-x86";
-        sha256 = "13ca17rga9yvdshqvh0sfzarmdcl4wv4pid0ls7v35v4844zbc8b"; };
+      {
+        platform = "gtk-linux-x86";
+        sha256 = "13ca17rga9yvdshqvh0sfzarmdcl4wv4pid0ls7v35v4844zbc8b";
+      };
     x86_64-darwin =
-      { platform = "cocoa-macosx-x86_64";
-        sha256 = "0wjyxlw7i9zd2m8syd6k1q85fj8pzhxlfsrl8fpgsj37p698bd0a"; };
+      {
+        platform = "cocoa-macosx-x86_64";
+        sha256 = "0wjyxlw7i9zd2m8syd6k1q85fj8pzhxlfsrl8fpgsj37p698bd0a";
+      };
   };
 
   metadata = assert platformMap ? ${stdenv.hostPlatform.system};
     platformMap.${stdenv.hostPlatform.system};
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "swt";
   version = "4.5";
   fullVersion = "${version}-201506032000";
@@ -82,38 +89,42 @@ in stdenv.mkDerivation rec {
     sed -i 's/ \+$//' ./*.mak
   '';
 
-  postPatch = let makefile-sed = builtins.toFile "swt-makefile.sed" (''
-    # fix pkg-config invocations in CFLAGS/LIBS pairs.
-    #
-    # change:
-    #     FOOCFLAGS = `pkg-config --cflags `foo bar`
-    #     FOOLIBS = `pkg-config --libs-only-L foo` -lbaz
-    # into:
-    #     FOOCFLAGS = `pkg-config --cflags foo bar`
-    #     FOOLIBS = `pkg-config --libs foo bar`
-    #
-    # the latter works more consistently.
-    /^[A-Z0-9_]\+CFLAGS = `pkg-config --cflags [^`]\+`$/ {
-      N
-      s'' +
-        "/" + ''
-          ^\([A-Z0-9_]\+\)CFLAGS = `pkg-config --cflags \(.\+\)`\
-          \1LIBS = `pkg-config --libs-only-L .\+$'' +
-        "/" + ''
-          \1CFLAGS = `pkg-config --cflags \2`\
-          \1LIBS = `pkg-config --libs \2`'' +
-        "/\n" + ''
-    }
-    # fix WebKit libs not being there
-    s/\$(WEBKIT_LIB) \$(WEBKIT_OBJECTS)$/\0 `pkg-config --libs glib-2.0`/g
-  ''); in ''
-    declare -a makefiles=(./*.mak)
-    sed -i -f ${makefile-sed} "''${makefiles[@]}"
-    # assign Makefile variables eagerly & change backticks to `$(shell …)`
-    sed -i -e 's/ = `\([^`]\+\)`/ := $(shell \1)/' \
-      -e 's/`\([^`]\+\)`/$(shell \1)/' \
-      "''${makefiles[@]}"
-  '';
+  postPatch =
+    let
+      makefile-sed = builtins.toFile "swt-makefile.sed" (''
+        # fix pkg-config invocations in CFLAGS/LIBS pairs.
+        #
+        # change:
+        #     FOOCFLAGS = `pkg-config --cflags `foo bar`
+        #     FOOLIBS = `pkg-config --libs-only-L foo` -lbaz
+        # into:
+        #     FOOCFLAGS = `pkg-config --cflags foo bar`
+        #     FOOLIBS = `pkg-config --libs foo bar`
+        #
+        # the latter works more consistently.
+        /^[A-Z0-9_]\+CFLAGS = `pkg-config --cflags [^`]\+`$/ {
+          N
+          s'' +
+      "/" + ''
+        ^\([A-Z0-9_]\+\)CFLAGS = `pkg-config --cflags \(.\+\)`\
+        \1LIBS = `pkg-config --libs-only-L .\+$'' +
+      "/" + ''
+        \1CFLAGS = `pkg-config --cflags \2`\
+        \1LIBS = `pkg-config --libs \2`'' +
+      "/\n" + ''
+        }
+        # fix WebKit libs not being there
+        s/\$(WEBKIT_LIB) \$(WEBKIT_OBJECTS)$/\0 `pkg-config --libs glib-2.0`/g
+      '');
+    in
+    ''
+      declare -a makefiles=(./*.mak)
+      sed -i -f ${makefile-sed} "''${makefiles[@]}"
+      # assign Makefile variables eagerly & change backticks to `$(shell …)`
+      sed -i -e 's/ = `\([^`]\+\)`/ := $(shell \1)/' \
+        -e 's/`\([^`]\+\)`/$(shell \1)/' \
+        "''${makefiles[@]}"
+    '';
 
   buildPhase = ''
     runHook preBuild

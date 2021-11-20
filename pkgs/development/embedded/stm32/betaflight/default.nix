@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, gcc-arm-embedded, binutils-arm-embedded, python2
+{ lib
+, stdenv
+, fetchFromGitHub
+, gcc-arm-embedded
+, binutils-arm-embedded
+, python2
 , skipTargets ? [
-  # These targets do not build, for the reasons listed, along with the last version checked.
-  # Probably all of the issues with these targets need to be addressed upstream.
-  "AG3X"       # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
-  "ALIENWHOOP" # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
-  "FURYF3"     # 3.4.0-rc4: flash region overflow
-  "OMNINXT"    # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
-]}:
+    # These targets do not build, for the reasons listed, along with the last version checked.
+    # Probably all of the issues with these targets need to be addressed upstream.
+    "AG3X" # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
+    "ALIENWHOOP" # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
+    "FURYF3" # 3.4.0-rc4: flash region overflow
+    "OMNINXT" # 3.4.0-rc4: has not specified a valid STM group, must be one of F1, F3, F405, F411 or F7x5. Have you prepared a valid target.mk?
+  ]
+}:
 
 stdenv.mkDerivation rec {
 
@@ -22,7 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded binutils-arm-embedded
+    gcc-arm-embedded
+    binutils-arm-embedded
     python2
   ];
 

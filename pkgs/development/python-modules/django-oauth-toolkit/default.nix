@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, django, requests, oauthlib
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, requests
+, oauthlib
 }:
 
 buildPythonPackage rec {

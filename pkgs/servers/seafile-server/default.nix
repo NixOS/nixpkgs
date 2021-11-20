@@ -1,6 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, python3Packages, autoreconfHook
-, libuuid, sqlite, glib, libevent, libsearpc, openssl, fuse, libarchive, which
-, vala, cmake, oniguruma }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, python3Packages
+, autoreconfHook
+, libuuid
+, sqlite
+, glib
+, libevent
+, libsearpc
+, openssl
+, fuse
+, libarchive
+, which
+, vala
+, cmake
+, oniguruma
+}:
 
 let
   # seafile-server relies on a specific version of libevhtp.
@@ -8,7 +24,8 @@ let
   libevhtp = import ./libevhtp.nix {
     inherit stdenv lib fetchFromGitHub cmake libevent;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "seafile-server";
   version = "8.0.7";
 

@@ -1,6 +1,22 @@
-{ lib, stdenv, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, buildFHSUserEnv, patchelf, autoPatchelfHook, makeWrapper, nix, unzip
-, glibc, c-ares, openssl_1_0_2, curl, expat, icu60, xercesc, zlib
+{ lib
+, stdenv
+, system ? builtins.currentSystem
+, ovftoolBundles ? { }
+, requireFile
+, buildFHSUserEnv
+, patchelf
+, autoPatchelfHook
+, makeWrapper
+, nix
+, unzip
+, glibc
+, c-ares
+, openssl_1_0_2
+, curl
+, expat
+, icu60
+, xercesc
+, zlib
 }:
 
 let
@@ -90,18 +106,20 @@ let
     };
   };
 
-  ovftoolSystem = if builtins.hasAttr system ovftoolSystems then
-                    ovftoolSystems.${system}
-                  else throw "System '${system}' is unsupported by ovftool";
+  ovftoolSystem =
+    if builtins.hasAttr system ovftoolSystems then
+      ovftoolSystems.${system}
+    else throw "System '${system}' is unsupported by ovftool";
 
-  ovftoolSource = if builtins.hasAttr system ovftoolBundles then
-                    ovftoolBundles.${system}
-                  else
-                    requireFile {
-                      name = ovftoolSystem.filename;
-                      url = "https://my.vmware.com/group/vmware/downloads/get-download?downloadGroup=OVFTOOL441";
-                      sha256 = ovftoolSystem.sha256;
-                    };
+  ovftoolSource =
+    if builtins.hasAttr system ovftoolBundles then
+      ovftoolBundles.${system}
+    else
+      requireFile {
+        name = ovftoolSystem.filename;
+        url = "https://my.vmware.com/group/vmware/downloads/get-download?downloadGroup=OVFTOOL441";
+        sha256 = ovftoolSystem.sha256;
+      };
 in
 stdenv.mkDerivation rec {
   pname = "ovftool";

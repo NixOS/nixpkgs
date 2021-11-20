@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, writeShellScriptBin, skawarePackages
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeShellScriptBin
+, skawarePackages
 }:
 
 let
   version = "1.2.2";
   sha256 = "sha256-PhxYiTMXg8qRqwbrZaw9UH7pdvXTEnrd09TiYPepzmk=";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "git-vendor";
   inherit version;
 

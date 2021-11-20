@@ -1,6 +1,9 @@
-{ lib, buildGoPackage, fetchgit
+{ lib
+, buildGoPackage
+, fetchgit
 , pkg-config
-, glib, libxml2
+, glib
+, libxml2
 }:
 
 buildGoPackage rec {

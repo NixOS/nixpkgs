@@ -1,17 +1,19 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
-  client = { pkgs, ... } : {
+  client = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.glusterfs ];
     virtualisation.fileSystems =
-      { "/gluster" =
-          { device = "server1:/gv0";
+      {
+        "/gluster" =
+          {
+            device = "server1:/gv0";
             fsType = "glusterfs";
           };
       };
   };
 
-  server = { pkgs, ... } : {
+  server = { pkgs, ... }: {
     networking.firewall.enable = false;
     services.glusterfs.enable = true;
 
@@ -23,13 +25,16 @@ let
     virtualisation.emptyDiskImages = [ 1024 ];
 
     virtualisation.fileSystems =
-      { "/data" =
-          { device = "/dev/disk/by-label/data";
+      {
+        "/data" =
+          {
+            device = "/dev/disk/by-label/data";
             fsType = "ext4";
           };
       };
   };
-in {
+in
+{
   name = "glusterfs";
 
   nodes = {

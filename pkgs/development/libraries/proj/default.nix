@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

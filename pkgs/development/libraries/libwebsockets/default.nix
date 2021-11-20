@@ -56,7 +56,8 @@ let
     };
   };
 
-in {
+in
+{
   libwebsockets_3_1 = generic {
     sha256 = "1w1wz6snf3cmcpa3f4dci2nz9za2f5rrylxl109id7bcb36xhbdl";
     version = "3.1.0";

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "CXX=${stdenv.cc.targetPrefix}c++"
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
-    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
+  ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = with lib; {
     homepage = "https://github.com/devttys0/sasquatch";

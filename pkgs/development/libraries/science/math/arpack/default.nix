@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, gfortran, blas, lapack, eigen }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gfortran
+, blas
+, lapack
+, eigen
+}:
 
 stdenv.mkDerivation rec {
   pname = "arpack";
@@ -36,14 +44,15 @@ stdenv.mkDerivation rec {
     "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
   ];
 
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib:${blas}/lib:${lapack}/lib
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
-  '' + ''
-    # Prevent tests from using all cores
-    export OMP_NUM_THREADS=2
-  '';
+  preCheck =
+    if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib:${blas}/lib:${lapack}/lib
+    '' else ''
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
+    '' + ''
+      # Prevent tests from using all cores
+      export OMP_NUM_THREADS=2
+    '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib

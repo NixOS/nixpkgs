@@ -1,7 +1,20 @@
-{ lib, stdenv, pkgsHostHost
-, file, curl, pkg-config, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, cacert, rustPlatform, rustc
-, CoreFoundation, Security
+{ lib
+, stdenv
+, pkgsHostHost
+, file
+, curl
+, pkg-config
+, python3
+, openssl
+, cmake
+, zlib
+, installShellFiles
+, makeWrapper
+, cacert
+, rustPlatform
+, rustc
+, CoreFoundation
+, Security
 }:
 
 rustPlatform.buildRustPackage {
@@ -18,7 +31,10 @@ rustPlatform.buildRustPackage {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [
-    pkg-config cmake installShellFiles makeWrapper
+    pkg-config
+    cmake
+    installShellFiles
+    makeWrapper
     (lib.getDev pkgsHostHost.curl)
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]

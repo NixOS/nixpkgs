@@ -3,7 +3,8 @@
 let
   inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify;
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "git-cola";
   version = "3.11.0";
 

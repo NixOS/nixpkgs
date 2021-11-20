@@ -59,7 +59,7 @@ in
       isSystemUser = true;
       group = "irkerd";
     };
-    users.groups.irkerd = {};
+    users.groups.irkerd = { };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openPorts ports;
     networking.firewall.allowedUDPPorts = mkIf cfg.openPorts ports;

@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 

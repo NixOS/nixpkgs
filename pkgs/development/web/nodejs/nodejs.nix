@@ -1,17 +1,35 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
-, pkg-config, which
-# for `.pkgs` attribute
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, python
+, zlib
+, libuv
+, util-linux
+, http-parser
+, pkg-config
+, which
+  # for `.pkgs` attribute
 , callPackage
-# Updater dependencies
-, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
+  # Updater dependencies
+, writeScript
+, coreutils
+, gnugrep
+, jq
+, curl
+, common-updater-scripts
+, nix
+, runtimeShell
 , gnupg
-, darwin, xcbuild
-, procps, icu
+, darwin
+, xcbuild
+, procps
+, icu
 }:
 
 with lib;
 
-{ enableNpm ? true, version, sha256, patches ? [] } @args:
+{ enableNpm ? true, version, sha256, patches ? [ ] } @args:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -25,14 +43,16 @@ let
 
   sharedLibDeps = { inherit openssl zlib libuv; } // (optionalAttrs useSharedHttpParser { inherit http-parser; });
 
-  sharedConfigureFlags = concatMap (name: [
-    "--shared-${name}"
-    "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
-    /** Closure notes: we explicitly avoid specifying --shared-*-includes,
-     *  as that would put the paths into bin/nodejs.
-     *  Including pkg-config in build inputs would also have the same effect!
-     */
-  ]) (builtins.attrNames sharedLibDeps) ++ [
+  sharedConfigureFlags = concatMap
+    (name: [
+      "--shared-${name}"
+      "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
+      /** Closure notes: we explicitly avoid specifying --shared-*-includes,
+       *  as that would put the paths into bin/nodejs.
+       *  Including pkg-config in build inputs would also have the same effect!
+       */
+    ])
+    (builtins.attrNames sharedLibDeps) ++ [
     "--with-intl=system-icu"
   ];
 
@@ -58,24 +78,26 @@ let
     nativeBuildInputs = [ which pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
-    configureFlags = let
-      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-      inherit (stdenv.hostPlatform) gcc isAarch32;
-    in sharedConfigureFlags ++ [
-      "--without-dtrace"
-    ] ++ (optionals isCross [
-      "--cross-compiling"
-      "--without-intl"
-      "--without-snapshot"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" gcc) [
-      "--with-arm-fpu=${gcc.fpu}"
-    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" gcc) [
-      "--with-arm-float-abi=${gcc.float-abi}"
-    ]) ++ (optionals (isCross && isAarch32) [
-      "--dest-cpu=arm"
-    ]) ++ extraConfigFlags;
+    configureFlags =
+      let
+        isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+        inherit (stdenv.hostPlatform) gcc isAarch32;
+      in
+      sharedConfigureFlags ++ [
+        "--without-dtrace"
+      ] ++ (optionals isCross [
+        "--cross-compiling"
+        "--without-intl"
+        "--without-snapshot"
+      ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" gcc) [
+        "--with-arm-fpu=${gcc.fpu}"
+      ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" gcc) [
+        "--with-arm-float-abi=${gcc.float-abi}"
+      ]) ++ (optionals (isCross && isAarch32) [
+        "--dest-cpu=arm"
+      ]) ++ extraConfigFlags;
 
-    configurePlatforms = [];
+    configurePlatforms = [ ];
 
     dontDisableStatic = true;
 
@@ -152,4 +174,5 @@ let
 
     passthru.python = python; # to ensure nodeEnv uses the same version
   };
-in self
+in
+self

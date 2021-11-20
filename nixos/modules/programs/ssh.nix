@@ -6,7 +6,7 @@ with lib;
 
 let
 
-  cfg  = config.programs.ssh;
+  cfg = config.programs.ssh;
 
   askPassword = cfg.askPassword;
 
@@ -20,8 +20,8 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
-    (h: assert h.hostNames != [];
-      optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
+    (h: assert h.hostNames != [ ];
+    optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     )) + "\n";
 
@@ -64,7 +64,7 @@ in
 
       pubkeyAcceptedKeyTypes = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the key types that will be used for public key authentication.
@@ -73,7 +73,7 @@ in
 
       hostKeyAlgorithms = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
@@ -131,7 +131,7 @@ in
       };
 
       knownHosts = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule ({ name, ... }: {
           options = {
             certAuthority = mkOption {
@@ -144,7 +144,7 @@ in
             };
             hostNames = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = ''
                 A list of host names and/or IP numbers used for accessing
                 the host's ssh service.
@@ -232,12 +232,12 @@ in
       mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
-      [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
+      [{
+        assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
         assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
+        (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
 
@@ -269,16 +269,18 @@ in
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
-      { description = "SSH Agent";
+      {
+        description = "SSH Agent";
         wantedBy = [ "default.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+          {
+            ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
-                optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
-                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
+              "${cfg.package}/bin/ssh-agent " +
+              optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
+              optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
+              "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";

@@ -5,7 +5,8 @@ let
   version = "0.5.3";
   sha256 = "1yx1hr8z4cvlb3yi24dwafs0nxq41k4q477jc9q24w61a0g662ps";
 
-in pythonPackages.buildPythonApplication {
+in
+pythonPackages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

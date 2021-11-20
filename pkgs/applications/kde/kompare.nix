@@ -1,8 +1,13 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kiconthemes, kparts, ktexteditor, kwidgetsaddons, libkomparediff2,
-  fetchpatch
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kiconthemes
+, kparts
+, ktexteditor
+, kwidgetsaddons
+, libkomparediff2
+, fetchpatch
 }:
 
 mkDerivation {
@@ -14,7 +19,11 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    kiconthemes kparts ktexteditor kwidgetsaddons libkomparediff2
+    kiconthemes
+    kparts
+    ktexteditor
+    kwidgetsaddons
+    libkomparediff2
   ];
   outputs = [ "out" "dev" ];
 }

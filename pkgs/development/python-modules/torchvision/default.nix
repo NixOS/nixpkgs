@@ -22,7 +22,8 @@ let
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
   cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "torchvision";
   version = "0.11.1";
 

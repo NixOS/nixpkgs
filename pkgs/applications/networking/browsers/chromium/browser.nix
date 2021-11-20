@@ -1,6 +1,9 @@
-{ lib, mkChromiumDerivation
-, channel, chromiumVersionAtLeast
-, enableWideVine, ungoogled
+{ lib
+, mkChromiumDerivation
+, channel
+, chromiumVersionAtLeast
+, enableWideVine
+, ungoogled
 }:
 
 with lib;
@@ -10,7 +13,7 @@ mkChromiumDerivation (base: rec {
   packageName = "chromium";
   buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
 
-  outputs = ["out" "sandbox"];
+  outputs = [ "out" "sandbox" ];
 
   sandboxExecutableName = "__chromium-suid-sandbox";
 
@@ -81,18 +84,20 @@ mkChromiumDerivation (base: rec {
       the web. It has a minimalist user interface and provides the vast majority
       of source code for Google Chrome (which has some additional features).
     '';
-    homepage = if ungoogled
+    homepage =
+      if ungoogled
       then "https://github.com/Eloston/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with maintainers; if ungoogled
-      then [ squalus primeos ]
-      else [ primeos thefloweringash ];
+    then [ squalus primeos ]
+    else [ primeos thefloweringash ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     mainProgram = "chromium";
-    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
-      then ["aarch64-linux" "x86_64-linux"]
-      else [];
+    hydraPlatforms =
+      if (channel == "stable" || channel == "ungoogled-chromium")
+      then [ "aarch64-linux" "x86_64-linux" ]
+      else [ ];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

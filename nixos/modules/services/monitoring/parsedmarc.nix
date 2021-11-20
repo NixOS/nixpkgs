@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.parsedmarc;
-  ini = pkgs.formats.ini {};
+  ini = pkgs.formats.ini { };
 in
 {
   options.services.parsedmarc = {
@@ -250,9 +250,9 @@ in
 
           elasticsearch = {
             hosts = lib.mkOption {
-              default = [];
+              default = [ ];
               type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x: if x == [ ] then null else lib.concatStringsSep "," x;
               description = ''
                 A list of Elasticsearch hosts to push parsed reports
                 to.
@@ -297,9 +297,9 @@ in
 
           kafka = {
             hosts = lib.mkOption {
-              default = [];
+              default = [ ];
               type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x: if x == [ ] then null else lib.concatStringsSep "," x;
               description = ''
                 A list of Apache Kafka hosts to publish parsed reports
                 to.
@@ -408,28 +408,28 @@ in
               else
                 throw "When provisioning parsedmarc grafana datasources: unknown Elasticsearch version.";
           in
-            lib.mkIf cfg.provision.grafana.datasource [
-              {
-                name = "dmarc-ag";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-              {
-                name = "dmarc-fo";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-            ];
+          lib.mkIf cfg.provision.grafana.datasource [
+            {
+              name = "dmarc-ag";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+            {
+              name = "dmarc-fo";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+          ];
         dashboards = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
           options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
@@ -462,19 +462,20 @@ in
         # lists, empty attrsets and null. This makes it possible to
         # list interesting options in `settings` without them always
         # ending up in the resulting config.
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! builtins.elem v [ null [] {} ])) cfg.settings;
+        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ])) cfg.settings;
         parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
         mkSecretReplacement = file:
           lib.optionalString (file != null) ''
             replace-secret '${file}' '${file}' /run/parsedmarc/parsedmarc.ini
           '';
       in
-        {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
-          path = with pkgs; [ replace-secret openssl shadow ];
-          serviceConfig = {
-            ExecStartPre = let
+      {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
+        path = with pkgs; [ replace-secret openssl shadow ];
+        serviceConfig = {
+          ExecStartPre =
+            let
               startPreFullPrivileges = ''
                 set -o errexit -o pipefail -o nounset -o errtrace
                 shopt -s inherit_errexit
@@ -493,36 +494,36 @@ in
                 cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
               '';
             in
-              "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
-            Type = "simple";
-            User = "parsedmarc";
-            Group = "parsedmarc";
-            DynamicUser = true;
-            RuntimeDirectory = "parsedmarc";
-            RuntimeDirectoryMode = 0700;
-            CapabilityBoundingSet = "";
-            PrivateDevices = true;
-            PrivateMounts = true;
-            PrivateUsers = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            ProcSubset = "pid";
-            SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-            RestrictRealtime = true;
-            RestrictNamespaces = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
-          };
+            "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
+          Type = "simple";
+          User = "parsedmarc";
+          Group = "parsedmarc";
+          DynamicUser = true;
+          RuntimeDirectory = "parsedmarc";
+          RuntimeDirectoryMode = 0700;
+          CapabilityBoundingSet = "";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+          RestrictRealtime = true;
+          RestrictNamespaces = true;
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
+          SystemCallArchitectures = "native";
+          ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
         };
+      };
 
     users.users.${cfg.provision.localMail.recipientName} = lib.mkIf cfg.provision.localMail.enable {
       isNormalUser = true;

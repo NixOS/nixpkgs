@@ -1,5 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgs, lib, nodejs, nodePackages, pkg-config, libjpeg
-, pixman, cairo, pango }:
+{ stdenv
+, fetchFromGitHub
+, pkgs
+, lib
+, nodejs
+, nodePackages
+, pkg-config
+, libjpeg
+, pixman
+, cairo
+, pango
+}:
 
 let
   # No official version ever released
@@ -15,7 +25,8 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 
-in myNodePackages.package.override {
+in
+myNodePackages.package.override {
   pname = "mx-puppet-discord";
 
   inherit src;

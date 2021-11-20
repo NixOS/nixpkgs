@@ -121,12 +121,12 @@ in
       }; # nslave.numprocs
 
       http = mkOption {
-        default = {};
+        default = { };
         description = ''
           Internal http server serving the content of the cache directory.
           You have to enable it, or use your own way for serving files
           and set the http.url option accordingly.
-          '';
+        '';
         type = types.submodule ({
           options = {
             enable = mkOption {
@@ -154,7 +154,7 @@ in
                 Specify URL for accessing generated files from cache.
                 The Collection extension of Mediawiki won't be able to
                 download files without it.
-                '';
+              '';
             }; # nslave.http.url
           };
         }); # types.submodule
@@ -168,91 +168,92 @@ in
   config = {
 
     systemd.services.mwlib-nserve = mkIf cfg.nserve.enable
-    {
-      description = "mwlib network interface";
+      {
+        description = "mwlib network interface";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "mwlib-qserve.service" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "mwlib-qserve.service" ];
 
-      serviceConfig = {
-        ExecStart = concatStringsSep " " (
-          [
-            "${mwlib}/bin/nserve"
-            "--port ${toString cfg.nserve.port}"
-            "--interface ${cfg.nserve.address}"
-          ] ++ cfg.nserve.qserve
-        );
-        User = cfg.nserve.user;
-      };
-    }; # systemd.services.mwlib-nserve
+        serviceConfig = {
+          ExecStart = concatStringsSep " " (
+            [
+              "${mwlib}/bin/nserve"
+              "--port ${toString cfg.nserve.port}"
+              "--interface ${cfg.nserve.address}"
+            ] ++ cfg.nserve.qserve
+          );
+          User = cfg.nserve.user;
+        };
+      }; # systemd.services.mwlib-nserve
 
     systemd.services.mwlib-qserve = mkIf cfg.qserve.enable
-    {
-      description = "mwlib job queue server";
+      {
+        description = "mwlib job queue server";
 
-      wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        mkdir -pv '${cfg.qserve.datadir}'
-        chown -Rc ${cfg.qserve.user}:`id -ng ${cfg.qserve.user}` '${cfg.qserve.datadir}'
-        chmod -Rc u=rwX,go= '${cfg.qserve.datadir}'
-      '';
+        preStart = ''
+          mkdir -pv '${cfg.qserve.datadir}'
+          chown -Rc ${cfg.qserve.user}:`id -ng ${cfg.qserve.user}` '${cfg.qserve.datadir}'
+          chmod -Rc u=rwX,go= '${cfg.qserve.datadir}'
+        '';
 
-      serviceConfig = {
-        ExecStart = concatStringsSep " " (
-          [
-            "${mwlib}/bin/mw-qserve"
-            "-p ${toString cfg.qserve.port}"
-            "-i ${cfg.qserve.address}"
-            "-d ${cfg.qserve.datadir}"
-          ] ++ map (a: "-a ${a}") cfg.qserve.allow
-        );
-        User = cfg.qserve.user;
-        PermissionsStartOnly = true;
-      };
-    }; # systemd.services.mwlib-qserve
+        serviceConfig = {
+          ExecStart = concatStringsSep " " (
+            [
+              "${mwlib}/bin/mw-qserve"
+              "-p ${toString cfg.qserve.port}"
+              "-i ${cfg.qserve.address}"
+              "-d ${cfg.qserve.datadir}"
+            ] ++ map (a: "-a ${a}") cfg.qserve.allow
+          );
+          User = cfg.qserve.user;
+          PermissionsStartOnly = true;
+        };
+      }; # systemd.services.mwlib-qserve
 
     systemd.services.mwlib-nslave = mkIf cfg.nslave.enable
-    {
-      description = "mwlib worker";
+      {
+        description = "mwlib worker";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -pv '${cfg.nslave.cachedir}'
-        chown -Rc ${cfg.nslave.user}:`id -ng ${cfg.nslave.user}` '${cfg.nslave.cachedir}'
-        chmod -Rc u=rwX,go= '${cfg.nslave.cachedir}'
-      '';
+        preStart = ''
+          mkdir -pv '${cfg.nslave.cachedir}'
+          chown -Rc ${cfg.nslave.user}:`id -ng ${cfg.nslave.user}` '${cfg.nslave.cachedir}'
+          chmod -Rc u=rwX,go= '${cfg.nslave.cachedir}'
+        '';
 
-      path = with pkgs; [ imagemagick pdftk ];
-      environment = {
-        PYTHONPATH = concatMapStringsSep ":"
-          (m: "${pypkgs.${m}}/lib/${python.libPrefix}/site-packages")
-          [ "mwlib-rl" "mwlib-ext" "pygments" "pyfribidi" ];
-      };
+        path = with pkgs; [ imagemagick pdftk ];
+        environment = {
+          PYTHONPATH = concatMapStringsSep ":"
+            (m: "${pypkgs.${m}}/lib/${python.libPrefix}/site-packages")
+            [ "mwlib-rl" "mwlib-ext" "pygments" "pyfribidi" ];
+        };
 
-      serviceConfig = {
-        ExecStart = concatStringsSep " " (
-          [
-            "${mwlib}/bin/nslave"
-            "--cachedir ${cfg.nslave.cachedir}"
-            "--numprocs ${toString cfg.nslave.numprocs}"
-            "--url ${cfg.nslave.http.url}"
-          ] ++ (
-            if cfg.nslave.http.enable then
+        serviceConfig = {
+          ExecStart = concatStringsSep " " (
             [
-              "--serve-files-port ${toString cfg.nslave.http.port}"
-              "--serve-files-address ${cfg.nslave.http.address}"
-            ] else
-            [
-              "--no-serve-files"
-            ]
-          ));
-        User = cfg.nslave.user;
-        PermissionsStartOnly = true;
-      };
-    }; # systemd.services.mwlib-nslave
+              "${mwlib}/bin/nslave"
+              "--cachedir ${cfg.nslave.cachedir}"
+              "--numprocs ${toString cfg.nslave.numprocs}"
+              "--url ${cfg.nslave.http.url}"
+            ] ++ (
+              if cfg.nslave.http.enable then
+                [
+                  "--serve-files-port ${toString cfg.nslave.http.port}"
+                  "--serve-files-address ${cfg.nslave.http.address}"
+                ] else
+                [
+                  "--no-serve-files"
+                ]
+            )
+          );
+          User = cfg.nslave.user;
+          PermissionsStartOnly = true;
+        };
+      }; # systemd.services.mwlib-nslave
 
   }; # config
 }

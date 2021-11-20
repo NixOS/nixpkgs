@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.globalprotect;
 
-  execStart = if cfg.csdWrapper == null then
+  execStart =
+    if cfg.csdWrapper == null then
       "${pkgs.globalprotect-openconnect}/bin/gpservice"
     else
       "${pkgs.globalprotect-openconnect}/bin/gpservice --csd-wrapper=${cfg.csdWrapper}";
@@ -32,9 +33,9 @@ in
     systemd.services.gpservice = {
       description = "GlobalProtect openconnect DBus service";
       serviceConfig = {
-        Type="dbus";
-        BusName="com.yuezk.qt.GPService";
-        ExecStart=execStart;
+        Type = "dbus";
+        BusName = "com.yuezk.qt.GPService";
+        ExecStart = execStart;
       };
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

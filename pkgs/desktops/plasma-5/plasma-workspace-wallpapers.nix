@@ -1,4 +1,4 @@
-{ mkDerivation , extra-cmake-modules }:
+{ mkDerivation, extra-cmake-modules }:
 
 mkDerivation {
   name = "plasma-workspace-wallpapers";

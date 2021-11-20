@@ -1,8 +1,9 @@
 { python3, runCommand, git }:
 
-runCommand "update-python-libraries" {
+runCommand "update-python-libraries"
+{
   buildInputs = [
-    (python3.withPackages(ps: with ps; [ packaging requests toolz ]))
+    (python3.withPackages (ps: with ps; [ packaging requests toolz ]))
     git
   ];
 } ''

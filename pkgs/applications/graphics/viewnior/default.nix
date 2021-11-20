@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, desktop-file-utils, gtk2, libpng, exiv2, lcms
-, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, desktop-file-utils
+, gtk2
+, libpng
+, exiv2
+, lcms
+, intltool
+, gettext
+, shared-mime-info
+, glib
+, gdk-pixbuf
+, perl
+}:
 
 stdenv.mkDerivation rec {
   pname = "viewnior";

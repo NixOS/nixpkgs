@@ -1,5 +1,11 @@
-{ lib, mkCoqDerivation, coq, mathcomp-algebra, mathcomp-finmap
-, hierarchy-builder, version ? null }:
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-algebra
+, mathcomp-finmap
+, hierarchy-builder
+, version ? null
+}:
 
 with lib;
 
@@ -13,7 +19,8 @@ mkCoqDerivation {
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
     { case = isGe "8.13"; out = "0.9"; }
-  ] null;
+  ]
+    null;
 
   propagatedBuildInputs = [ mathcomp-algebra mathcomp-finmap hierarchy-builder ];
 

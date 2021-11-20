@@ -15,16 +15,29 @@
 , gtk-layer-shell
 , howard-hinnant-date
 , libxkbcommon
-, traySupport     ? true,  libdbusmenu-gtk3
-, pulseSupport    ? true,  libpulseaudio
-, sndioSupport    ? true,  sndio
-, nlSupport       ? true,  libnl
-, udevSupport     ? true,  udev
-, evdevSupport    ? true,  libevdev
-, swaySupport     ? true,  sway
-, mpdSupport      ? true,  libmpdclient
-, rfkillSupport   ? true
-, withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
+, traySupport ? true
+, libdbusmenu-gtk3
+, pulseSupport ? true
+, libpulseaudio
+, sndioSupport ? true
+, sndio
+, nlSupport ? true
+, libnl
+, udevSupport ? true
+, udev
+, evdevSupport ? true
+, libevdev
+, swaySupport ? true
+, sway
+, mpdSupport ? true
+, libmpdclient
+, rfkillSupport ? true
+, withMediaPlayer ? false
+, glib
+, gobject-introspection
+, python3
+, python38Packages
+, playerctl
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +52,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config scdoc wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wrapGAppsHook
   ] ++ lib.optional withMediaPlayer gobject-introspection;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
@@ -51,14 +68,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = with lib;
     [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
-    ++ optional  traySupport  libdbusmenu-gtk3
-    ++ optional  pulseSupport libpulseaudio
-    ++ optional  sndioSupport sndio
-    ++ optional  nlSupport    libnl
-    ++ optional  udevSupport  udev
-    ++ optional  evdevSupport libevdev
-    ++ optional  swaySupport  sway
-    ++ optional  mpdSupport   libmpdclient;
+    ++ optional traySupport libdbusmenu-gtk3
+    ++ optional pulseSupport libpulseaudio
+    ++ optional sndioSupport sndio
+    ++ optional nlSupport libnl
+    ++ optional udevSupport udev
+    ++ optional evdevSupport libevdev
+    ++ optional swaySupport sway
+    ++ optional mpdSupport libmpdclient;
 
   mesonFlags = (lib.mapAttrsToList
     (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
@@ -78,11 +95,11 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = lib.optionalString withMediaPlayer ''
-      cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
+    cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
-      wrapProgram $out/bin/waybar-mediaplayer.py \
-        --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
-    '';
+    wrapProgram $out/bin/waybar-mediaplayer.py \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
+  '';
 
   meta = with lib; {
     description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";

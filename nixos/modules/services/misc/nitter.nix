@@ -23,7 +23,7 @@ let
   # Generate it on first launch, then copy configuration and replace
   # `@hmac@` with this value.
   # We are not using sed as it would leak the value in the command line.
-  preStart = pkgs.writers.writePython3 "nitter-prestart" {} ''
+  preStart = pkgs.writers.writePython3 "nitter-prestart" { } ''
     import os
     import secrets
 
@@ -51,7 +51,7 @@ in
 
       server = {
         address = mkOption {
-          type =  types.str;
+          type = types.str;
           default = "0.0.0.0";
           example = "127.0.0.1";
           description = "The address to listen on.";
@@ -265,7 +265,7 @@ in
 
       settings = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Add settings here to override NixOS module generated settings.
 
@@ -297,47 +297,47 @@ in
     ];
 
     systemd.services.nitter = {
-        description = "Nitter (An alternative Twitter front-end)";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "syslog.target" "network.target" ];
-        serviceConfig = {
-          DynamicUser = true;
-          StateDirectory = "nitter";
-          Environment = [ "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf" ];
-          # Some parts of Nitter expect `public` folder in working directory,
-          # see https://github.com/zedeus/nitter/issues/414
-          WorkingDirectory = "${pkgs.nitter}/share/nitter";
-          ExecStart = "${pkgs.nitter}/bin/nitter";
-          ExecStartPre = "${preStart}";
-          AmbientCapabilities = lib.mkIf (cfg.server.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-          Restart = "on-failure";
-          RestartSec = "5s";
-          # Hardening
-          CapabilityBoundingSet = if (cfg.server.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
-          DeviceAllow = [ "" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          PrivateDevices = true;
-          # A private user cannot have process capabilities on the host's user
-          # namespace and thus CAP_NET_BIND_SERVICE has no effect.
-          PrivateUsers = (cfg.server.port >= 1024);
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-          UMask = "0077";
-        };
+      description = "Nitter (An alternative Twitter front-end)";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "syslog.target" "network.target" ];
+      serviceConfig = {
+        DynamicUser = true;
+        StateDirectory = "nitter";
+        Environment = [ "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf" ];
+        # Some parts of Nitter expect `public` folder in working directory,
+        # see https://github.com/zedeus/nitter/issues/414
+        WorkingDirectory = "${pkgs.nitter}/share/nitter";
+        ExecStart = "${pkgs.nitter}/bin/nitter";
+        ExecStartPre = "${preStart}";
+        AmbientCapabilities = lib.mkIf (cfg.server.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        Restart = "on-failure";
+        RestartSec = "5s";
+        # Hardening
+        CapabilityBoundingSet = if (cfg.server.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        # A private user cannot have process capabilities on the host's user
+        # namespace and thus CAP_NET_BIND_SERVICE has no effect.
+        PrivateUsers = (cfg.server.port >= 1024);
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0077";
+      };
     };
 
     services.redis = lib.mkIf (cfg.redisCreateLocally) {

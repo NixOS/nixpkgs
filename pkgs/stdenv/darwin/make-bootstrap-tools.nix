@@ -1,22 +1,31 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath
-, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+{ pkgspath ? ../../..
+, test-pkgspath ? pkgspath
+, system ? builtins.currentSystem
+, crossSystem ? null
+, bootstrapFiles ? null
 }:
 
-let cross = if crossSystem != null
-      then { inherit crossSystem; }
-      else {};
-    custom-bootstrap = if bootstrapFiles != null
-      then { stdenvStages = args:
-              let args' = args // { bootstrapFiles = bootstrapFiles; };
-              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
-           }
-      else {};
-in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
+let
+  cross =
+    if crossSystem != null
+    then { inherit crossSystem; }
+    else { };
+  custom-bootstrap =
+    if bootstrapFiles != null
+    then {
+      stdenvStages = args:
+        let args' = args // { bootstrapFiles = bootstrapFiles; };
+        in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+    }
+    else { };
+in
+with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
   storePrefixLen = builtins.stringLength builtins.storeDir;
-in rec {
+in
+rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
@@ -34,10 +43,12 @@ in rec {
 
   # Avoid stdenv rebuild.
   Libsystem_ = (darwin.Libsystem.override (args:
-    { xnu = darwin.xnu.overrideAttrs (oldAttrs:
-      { patches = [ ./fixed-xnu-python3.patch ]; });
+    {
+      xnu = darwin.xnu.overrideAttrs (oldAttrs:
+        { patches = [ ./fixed-xnu-python3.patch ]; });
     })).overrideAttrs (oldAttrs:
-    { installPhase = oldAttrs.installPhase + ''
+    {
+      installPhase = oldAttrs.installPhase + ''
         cat <<EOF > $out/include/TargetConditionals.h
         #ifndef __TARGETCONDITIONALS__
         #define __TARGETCONDITIONALS__
@@ -234,7 +245,7 @@ in rec {
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
 
-    allowedReferences = [];
+    allowedReferences = [ ];
 
     meta = {
       maintainers = [ lib.maintainers.copumpkin ];
@@ -257,10 +268,10 @@ in rec {
   bootstrapLlvmVersion = llvmPackages.llvm.version;
 
   bootstrapFiles = {
-    sh      = "${build}/on-server/sh";
-    bzip2   = "${build}/on-server/bzip2";
-    mkdir   = "${build}/on-server/mkdir";
-    cpio    = "${build}/on-server/cpio";
+    sh = "${build}/on-server/sh";
+    bzip2 = "${build}/on-server/bzip2";
+    mkdir = "${build}/on-server/mkdir";
+    cpio = "${build}/on-server/cpio";
     tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
   };
 
@@ -409,8 +420,10 @@ in rec {
     # that platform.
     system = if crossSystem != null then crossSystem else system;
 
-    stdenvStages = args: let
+    stdenvStages = args:
+      let
         args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
+      in
+      (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };
 }

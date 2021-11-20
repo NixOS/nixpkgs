@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, libyamlcpp, systemd
-, python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
-, libxml2, docbook5
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libyamlcpp
+, systemd
+, python3Packages
+, asciidoc
+, libxslt
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, docbook5
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +27,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config asciidoc libxslt.bin docbook_xml_dtd_45 docbook_xsl
-    libxml2.bin docbook5 python3Packages.pytest python3Packages.pytest-timeout
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    libxslt.bin
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2.bin
+    docbook5
+    python3Packages.pytest
+    python3Packages.pytest-timeout
     systemd
   ];
 

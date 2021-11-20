@@ -134,7 +134,7 @@ in
       envVars = lib.mkOption {
         type = types.attrs;
         internal = true;
-        default = {};
+        default = { };
         description = ''
           Environment variables used for the network proxy.
         '';
@@ -155,42 +155,48 @@ in
 
     # These entries are required for "hostname -f" and to resolve both the
     # hostname and FQDN correctly:
-    networking.hosts = let
-      hostnames = # Note: The FQDN (canonical hostname) has to come first:
-        optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
-        ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
-    in {
-      "127.0.0.2" = hostnames;
-    } // optionalAttrs cfg.enableIPv6 {
-      "::1" = hostnames;
-    };
+    networking.hosts =
+      let
+        hostnames = # Note: The FQDN (canonical hostname) has to come first:
+          optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
+          ++ optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
+      in
+      {
+        "127.0.0.2" = hostnames;
+      } // optionalAttrs cfg.enableIPv6 {
+        "::1" = hostnames;
+      };
 
-    networking.hostFiles = let
-      # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
-      # resolves back to "localhost" (as some applications assume) instead of
-      # the FQDN! By default "networking.hosts" also contains entries for the
-      # FQDN so that e.g. "hostname -f" works correctly.
-      localhostHosts = pkgs.writeText "localhost-hosts" ''
-        127.0.0.1 localhost
-        ${optionalString cfg.enableIPv6 "::1 localhost"}
-      '';
-      stringHosts =
-        let
-          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
-          allToString = set: concatMapStrings (oneToString set) (attrNames set);
-        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
-      extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
-    in mkBefore [ localhostHosts stringHosts extraHosts ];
+    networking.hostFiles =
+      let
+        # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
+        # resolves back to "localhost" (as some applications assume) instead of
+        # the FQDN! By default "networking.hosts" also contains entries for the
+        # FQDN so that e.g. "hostname -f" works correctly.
+        localhostHosts = pkgs.writeText "localhost-hosts" ''
+          127.0.0.1 localhost
+          ${optionalString cfg.enableIPv6 "::1 localhost"}
+        '';
+        stringHosts =
+          let
+            oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
+            allToString = set: concatMapStrings (oneToString set) (attrNames set);
+          in
+          pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != [ ]) cfg.hosts));
+        extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
+      in
+      mkBefore [ localhostHosts stringHosts extraHosts ];
 
     environment.etc =
-      { # /etc/services: TCP/UDP port assignments.
+      {
+        # /etc/services: TCP/UDP port assignments.
         services.source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        protocols.source  = pkgs.iana-etc + "/etc/protocols";
+        protocols.source = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.runCommand "hosts" {} ''
+        hosts.source = pkgs.runCommand "hosts" { } ''
           cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
 
@@ -207,23 +213,24 @@ in
         rpc.source = pkgs.stdenv.cc.libc.out + "/etc/rpc";
       };
 
-      networking.proxy.envVars =
-        optionalAttrs (cfg.proxy.default != null) {
+    networking.proxy.envVars =
+      optionalAttrs (cfg.proxy.default != null)
+        {
           # other options already fallback to proxy.default
           no_proxy = "127.0.0.1,localhost";
         } // optionalAttrs (cfg.proxy.httpProxy != null) {
-          http_proxy  = cfg.proxy.httpProxy;
-        } // optionalAttrs (cfg.proxy.httpsProxy != null) {
-          https_proxy = cfg.proxy.httpsProxy;
-        } // optionalAttrs (cfg.proxy.rsyncProxy != null) {
-          rsync_proxy = cfg.proxy.rsyncProxy;
-        } // optionalAttrs (cfg.proxy.ftpProxy != null) {
-          ftp_proxy   = cfg.proxy.ftpProxy;
-        } // optionalAttrs (cfg.proxy.allProxy != null) {
-          all_proxy   = cfg.proxy.allProxy;
-        } // optionalAttrs (cfg.proxy.noProxy != null) {
-          no_proxy    = cfg.proxy.noProxy;
-        };
+        http_proxy = cfg.proxy.httpProxy;
+      } // optionalAttrs (cfg.proxy.httpsProxy != null) {
+        https_proxy = cfg.proxy.httpsProxy;
+      } // optionalAttrs (cfg.proxy.rsyncProxy != null) {
+        rsync_proxy = cfg.proxy.rsyncProxy;
+      } // optionalAttrs (cfg.proxy.ftpProxy != null) {
+        ftp_proxy = cfg.proxy.ftpProxy;
+      } // optionalAttrs (cfg.proxy.allProxy != null) {
+        all_proxy = cfg.proxy.allProxy;
+      } // optionalAttrs (cfg.proxy.noProxy != null) {
+        no_proxy = cfg.proxy.noProxy;
+      };
 
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;

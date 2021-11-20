@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   makeFlags = [
-    "PLATFORM=${platform}" "PREFIX=$(out)"
+    "PLATFORM=${platform}"
+    "PREFIX=$(out)"
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"

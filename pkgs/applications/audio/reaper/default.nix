@@ -1,4 +1,6 @@
-{ config, lib, stdenv
+{ config
+, lib
+, stdenv
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
@@ -11,8 +13,10 @@
 , xdg-utils
 , which
 
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+, jackSupport ? true
+, libjack2
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {

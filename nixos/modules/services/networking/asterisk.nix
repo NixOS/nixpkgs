@@ -16,75 +16,80 @@ let
   defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles =
     cfg.confFiles //
-    builtins.listToAttrs (map (x: { name = x;
-                                    value = builtins.readFile (cfg.package + "/etc/asterisk/" + x); })
-                              defaultConfFiles);
+    builtins.listToAttrs (map
+      (x: {
+        name = x;
+        value = builtins.readFile (cfg.package + "/etc/asterisk/" + x);
+      })
+      defaultConfFiles);
 
   asteriskEtc = pkgs.stdenv.mkDerivation
-  ((mapAttrs' (name: value: nameValuePair
+    ((mapAttrs'
+      (name: value: nameValuePair
         # Fudge the names to make bash happy
-        ((replaceChars ["."] ["_"] name) + "_")
+        ((replaceChars [ "." ] [ "_" ] name) + "_")
         (value)
-      ) allConfFiles) //
-  {
-    confFilesString = concatStringsSep " " (
-      attrNames allConfFiles
-    );
+      )
+      allConfFiles) //
+    {
+      confFilesString = concatStringsSep " " (
+        attrNames allConfFiles
+      );
 
-    name = "asterisk-etc";
+      name = "asterisk-etc";
 
-    # Default asterisk.conf file
-    # (Notice that astetcdir will be set to the path of this derivation)
-    asteriskConf = ''
-      [directories]
-      astetcdir => /etc/asterisk
-      astmoddir => ${cfg.package}/lib/asterisk/modules
-      astvarlibdir => /var/lib/asterisk
-      astdbdir => /var/lib/asterisk
-      astkeydir => /var/lib/asterisk
-      astdatadir => /var/lib/asterisk
-      astagidir => /var/lib/asterisk/agi-bin
-      astspooldir => /var/spool/asterisk
-      astrundir => /run/asterisk
-      astlogdir => /var/log/asterisk
-      astsbindir => ${cfg.package}/sbin
-    '';
-    extraConf = cfg.extraConfig;
+      # Default asterisk.conf file
+      # (Notice that astetcdir will be set to the path of this derivation)
+      asteriskConf = ''
+        [directories]
+        astetcdir => /etc/asterisk
+        astmoddir => ${cfg.package}/lib/asterisk/modules
+        astvarlibdir => /var/lib/asterisk
+        astdbdir => /var/lib/asterisk
+        astkeydir => /var/lib/asterisk
+        astdatadir => /var/lib/asterisk
+        astagidir => /var/lib/asterisk/agi-bin
+        astspooldir => /var/spool/asterisk
+        astrundir => /run/asterisk
+        astlogdir => /var/log/asterisk
+        astsbindir => ${cfg.package}/sbin
+      '';
+      extraConf = cfg.extraConfig;
 
-    # Loading all modules by default is considered sensible by the authors of
-    # "Asterisk: The Definitive Guide". Secure sites will likely want to
-    # specify their own "modules.conf" in the confFiles option.
-    modulesConf = ''
-      [modules]
-      autoload=yes
-    '';
+      # Loading all modules by default is considered sensible by the authors of
+      # "Asterisk: The Definitive Guide". Secure sites will likely want to
+      # specify their own "modules.conf" in the confFiles option.
+      modulesConf = ''
+        [modules]
+        autoload=yes
+      '';
 
-    # Use syslog for logging so logs can be viewed with journalctl
-    loggerConf = ''
-      [general]
+      # Use syslog for logging so logs can be viewed with journalctl
+      loggerConf = ''
+        [general]
 
-      [logfiles]
-      syslog.local0 => notice,warning,error
-    '';
+        [logfiles]
+        syslog.local0 => notice,warning,error
+      '';
 
-    buildCommand = ''
-      mkdir -p "$out"
+      buildCommand = ''
+        mkdir -p "$out"
 
-      # Create asterisk.conf, pointing astetcdir to the path of this derivation
-      echo "$asteriskConf" | sed "s|@out@|$out|g" > "$out"/asterisk.conf
-      echo "$extraConf" >> "$out"/asterisk.conf
+        # Create asterisk.conf, pointing astetcdir to the path of this derivation
+        echo "$asteriskConf" | sed "s|@out@|$out|g" > "$out"/asterisk.conf
+        echo "$extraConf" >> "$out"/asterisk.conf
 
-      echo "$modulesConf" > "$out"/modules.conf
+        echo "$modulesConf" > "$out"/modules.conf
 
-      echo "$loggerConf" > "$out"/logger.conf
+        echo "$loggerConf" > "$out"/logger.conf
 
-      # Config files specified in confFiles option override all other files
-      for i in $confFilesString; do
-        conf=$(echo "$i"_ | sed 's/\./_/g')
-        echo "''${!conf}" > "$out"/"$i"
-      done
-    '';
-  });
+        # Config files specified in confFiles option override all other files
+        for i in $confFilesString; do
+          conf=$(echo "$i"_ | sed 's/\./_/g')
+          echo "''${!conf}" > "$out"/"$i"
+        done
+      '';
+    });
 in
 
 {
@@ -113,7 +118,7 @@ in
       };
 
       confFiles = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf types.str;
         example = literalExpression
           ''
@@ -160,7 +165,7 @@ in
                 syslog.local0 => notice,warning,error,debug
               ''';
             }
-        '';
+          '';
         description = ''
           Sets the content of config files (typically ending with
           <literal>.conf</literal>) in the Asterisk configuration directory.
@@ -189,7 +194,7 @@ in
       };
 
       extraArguments = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         example =
           [ "-vvvddd" "-e" "1024" ];
@@ -212,7 +217,8 @@ in
     environment.etc.asterisk.source = asteriskEtc;
 
     users.users.asterisk =
-      { name = asteriskUser;
+      {
+        name = asteriskUser;
         group = asteriskGroup;
         uid = config.ids.uids.asterisk;
         description = "Asterisk daemon user";
@@ -220,7 +226,8 @@ in
       };
 
     users.groups.asterisk =
-      { name = asteriskGroup;
+      {
+        name = asteriskGroup;
         gid = config.ids.gids.asterisk;
       };
 

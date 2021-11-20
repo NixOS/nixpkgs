@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchurl, python
+{ lib
+, buildPythonPackage
+, fetchurl
+, python
 , sphinx
 , xapian
 }:

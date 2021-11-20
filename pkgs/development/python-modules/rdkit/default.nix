@@ -143,9 +143,9 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [
-     "rdkit"
-     "rdkit.Chem"
-     "rdkit.Chem.AllChem"
+    "rdkit"
+    "rdkit.Chem"
+    "rdkit.Chem.AllChem"
   ];
 
   meta = with lib; {

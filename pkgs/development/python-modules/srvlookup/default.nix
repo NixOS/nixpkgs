@@ -1,6 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib
+, fetchPypi
+, buildPythonPackage
 , dnspython
-, mock, nose
+, mock
+, nose
 }:
 
 buildPythonPackage rec {

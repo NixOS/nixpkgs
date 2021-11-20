@@ -8,7 +8,7 @@ let
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
 
-  settingsFmt = pkgs.formats.json {};
+  settingsFmt = pkgs.formats.json { };
   settingsTemplate = settingsFmt.generate "config.json" cfg.settings;
   preStartScript = pkgs.writeScript "epgstation-prestart" ''
     #!${pkgs.runtimeShell}
@@ -134,7 +134,7 @@ in
       };
     };
 
-    database =  {
+    database = {
       name = mkOption {
         type = types.str;
         default = "epgstation";
@@ -163,7 +163,7 @@ in
         <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/doc/conf-manual.md"/>
       '';
 
-      default = {};
+      default = { };
       example = {
         recPriority = 20;
         conflictPriority = 10;
@@ -178,14 +178,17 @@ in
           description = "Don't reload configuration files at runtime.";
         };
 
-        options.mirakurunPath = mkOption (let
-          sockPath = config.services.mirakurun.unixSocket;
-        in {
-          type = types.str;
-          default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
-          example = "http://localhost:40772";
-          description = "URL to connect to Mirakurun.";
-        });
+        options.mirakurunPath = mkOption (
+          let
+            sockPath = config.services.mirakurun.unixSocket;
+          in
+          {
+            type = types.str;
+            default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
+            example = "http://localhost:40772";
+            description = "URL to connect to Mirakurun.";
+          }
+        );
 
         options.encode = mkOption {
           type = with types; listOf attrs;
@@ -239,7 +242,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.epgstation = {};
+    users.groups.epgstation = { };
 
     services.mirakurun.enable = mkDefault true;
 
@@ -254,39 +257,40 @@ in
       # } ];
     };
 
-    services.epgstation.settings = let
-      defaultSettings = {
-        serverPort = cfg.port;
-        socketioPort = cfg.socketioPort;
-        clientSocketioPort = cfg.clientSocketioPort;
+    services.epgstation.settings =
+      let
+        defaultSettings = {
+          serverPort = cfg.port;
+          socketioPort = cfg.socketioPort;
+          clientSocketioPort = cfg.clientSocketioPort;
 
-        dbType = mkDefault "mysql";
-        mysql = {
-          user = username;
-          database = cfg.database.name;
-          socketPath = mkDefault "/run/mysqld/mysqld.sock";
-          password = mkDefault "@dbPassword@";
-          connectTimeout = mkDefault 1000;
-          connectionLimit = mkDefault 10;
+          dbType = mkDefault "mysql";
+          mysql = {
+            user = username;
+            database = cfg.database.name;
+            socketPath = mkDefault "/run/mysqld/mysqld.sock";
+            password = mkDefault "@dbPassword@";
+            connectTimeout = mkDefault 1000;
+            connectionLimit = mkDefault 10;
+          };
+
+          basicAuth = mkIf (cfg.basicAuth.user != null) {
+            user = mkDefault cfg.basicAuth.user;
+            password = mkDefault "@password@";
+          };
+
+          ffmpeg = mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
+          ffprobe = mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
+
+          fileExtension = mkDefault ".m2ts";
+          maxEncode = mkDefault 2;
+          maxStreaming = mkDefault 2;
         };
-
-        basicAuth = mkIf (cfg.basicAuth.user != null) {
-          user = mkDefault cfg.basicAuth.user;
-          password = mkDefault "@password@";
-        };
-
-        ffmpeg = mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
-        ffprobe = mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
-
-        fileExtension = mkDefault ".m2ts";
-        maxEncode = mkDefault 2;
-        maxStreaming = mkDefault 2;
-      };
-    in
-    mkMerge [
-      defaultSettings
-      (mkIf cfg.usePreconfiguredStreaming streamingConfig)
-    ];
+      in
+      mkMerge [
+        defaultSettings
+        (mkIf cfg.usePreconfiguredStreaming streamingConfig)
+      ];
 
     systemd.tmpfiles.rules = [
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
@@ -300,7 +304,7 @@ in
       after = [
         "network.target"
       ] ++ optional config.services.mirakurun.enable "mirakurun.service"
-        ++ optional config.services.mysql.enable "mysql.service";
+      ++ optional config.services.mysql.enable "mysql.service";
 
       serviceConfig = {
         ExecStart = "${pkgs.epgstation}/bin/epgstation start";

@@ -1,8 +1,21 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , setuptools-scm
-, cheroot, portend, more-itertools, zc_lockfile, routes
+, cheroot
+, portend
+, more-itertools
+, zc_lockfile
+, routes
 , jaraco_collections
-, objgraph, pytest, pytest-cov, pathpy, requests-toolbelt, pytest-services
+, objgraph
+, pytest
+, pytest-cov
+, pathpy
+, requests-toolbelt
+, pytest-services
 , fetchpatch
 }:
 
@@ -40,14 +53,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # required
-    cheroot portend more-itertools zc_lockfile
+    cheroot
+    portend
+    more-itertools
+    zc_lockfile
     jaraco_collections
     # optional
     routes
   ];
 
   checkInputs = [
-    objgraph pytest pytest-cov pathpy requests-toolbelt pytest-services
+    objgraph
+    pytest
+    pytest-cov
+    pathpy
+    requests-toolbelt
+    pytest-services
   ];
 
   # Keyboard interrupt ends test suite run

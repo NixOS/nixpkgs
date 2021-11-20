@@ -10,9 +10,15 @@
 , makeWrapper
 , pkg-config
 , python3
-, x11Support ? true, libxcb, libX11
-, waylandSupport ? true, wayland, wayland-protocols
-, useGbm ? true, mesa, udev
+, x11Support ? true
+, libxcb
+, libX11
+, waylandSupport ? true
+, wayland
+, wayland-protocols
+, useGbm ? true
+, mesa
+, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \

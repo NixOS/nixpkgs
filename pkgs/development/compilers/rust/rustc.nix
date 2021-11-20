@@ -1,21 +1,38 @@
-{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
-, fetchurl, file, python3
-, darwin, cmake, rust, rustPlatform
-, pkg-config, openssl
+{ lib
+, stdenv
+, removeReferencesTo
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, llvmShared
+, llvmSharedForBuild
+, llvmSharedForHost
+, llvmSharedForTarget
+, llvmPackagesForBuild
+, fetchurl
+, file
+, python3
+, darwin
+, cmake
+, rust
+, rustPlatform
+, pkg-config
+, openssl
 , libiconv
-, which, libffi
+, which
+, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
 , version
 , sha256
-, patches ? []
+, patches ? [ ]
 }:
 
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "rustc";
   inherit version;
 
@@ -39,68 +56,71 @@ in stdenv.mkDerivation rec {
   stripDebugList = [ "bin" ];
 
   NIX_LDFLAGS = toString (
-       # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+    # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
+    optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
-    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
+    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib"
+  );
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
-  configureFlags = let
-    setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
-    setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
-    setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
-    ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
-  in [
-    "--release-channel=stable"
-    "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
-    "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
-    "--enable-rpath"
-    "--enable-vendor"
-    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
-    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
-    # std is built for all platforms in --target. When building a cross-compiler
-    # we need to add the host platform as well so rustc can compile build.rs
-    # scripts.
-    "--target=${concatStringsSep "," ([
+  configureFlags =
+    let
+      setBuild = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
+      setHost = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
+      setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
+      ccForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
+      cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
+      ccForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
+      cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
+      ccForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
+      cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+    in
+    [
+      "--release-channel=stable"
+      "--set=build.rustc=${rustPlatform.rust.rustc}/bin/rustc"
+      "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
+      "--enable-rpath"
+      "--enable-vendor"
+      "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
+      "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+      # std is built for all platforms in --target. When building a cross-compiler
+      # we need to add the host platform as well so rustc can compile build.rs
+      # scripts.
+      "--target=${concatStringsSep "," ([
       (rust.toRustTargetSpec stdenv.targetPlatform)
     ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
       (rust.toRustTargetSpec stdenv.hostPlatform)
     ])}"
 
-    "${setBuild}.cc=${ccForBuild}"
-    "${setHost}.cc=${ccForHost}"
-    "${setTarget}.cc=${ccForTarget}"
+      "${setBuild}.cc=${ccForBuild}"
+      "${setHost}.cc=${ccForHost}"
+      "${setTarget}.cc=${ccForTarget}"
 
-    "${setBuild}.linker=${ccForBuild}"
-    "${setHost}.linker=${ccForHost}"
-    "${setTarget}.linker=${ccForTarget}"
+      "${setBuild}.linker=${ccForBuild}"
+      "${setHost}.linker=${ccForHost}"
+      "${setTarget}.linker=${ccForTarget}"
 
-    "${setBuild}.cxx=${cxxForBuild}"
-    "${setHost}.cxx=${cxxForHost}"
-    "${setTarget}.cxx=${cxxForTarget}"
-  ] ++ optionals (!withBundledLLVM) [
-    "--enable-llvm-link-shared"
-    "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
-    "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
-    "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
-  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
-    "--enable-profiler" # build libprofiler_builtins
-  ] ++ optionals stdenv.buildPlatform.isMusl [
-    "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals stdenv.hostPlatform.isMusl [
-    "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals stdenv.targetPlatform.isMusl [
-    "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
-  ];
+      "${setBuild}.cxx=${cxxForBuild}"
+      "${setHost}.cxx=${cxxForHost}"
+      "${setTarget}.cxx=${cxxForTarget}"
+    ] ++ optionals (!withBundledLLVM) [
+      "--enable-llvm-link-shared"
+      "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
+      "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
+      "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
+    ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
+      "--enable-profiler" # build libprofiler_builtins
+    ] ++ optionals stdenv.buildPlatform.isMusl [
+      "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
+    ] ++ optionals stdenv.hostPlatform.isMusl [
+      "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
+    ] ++ optionals stdenv.targetPlatform.isMusl [
+      "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+    ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
@@ -133,8 +153,14 @@ in stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
-    file python3 rustPlatform.rust.rustc cmake
-    which libffi removeReferencesTo pkg-config
+    file
+    python3
+    rustPlatform.rust.rustc
+    cmake
+    which
+    libffi
+    removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [ openssl ]
@@ -164,7 +190,7 @@ in stdenv.mkDerivation rec {
     rm $out/lib/rustlib/uninstall.sh
   '';
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

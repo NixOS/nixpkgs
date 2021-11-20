@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv}:
+{ lib, buildOcaml, fetchurl, type_conv }:
 
 buildOcaml rec {
   pname = "comparelib";

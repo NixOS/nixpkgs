@@ -1,8 +1,7 @@
-f: {
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; },
-  ...
-} @ args:
+f: { system ? builtins.currentSystem
+   , pkgs ? import ../.. { inherit system; }
+   , ...
+   } @ args:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 

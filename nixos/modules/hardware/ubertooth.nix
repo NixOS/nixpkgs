@@ -8,7 +8,8 @@ let
   ubertoothPkg = pkgs.ubertooth.override {
     udevGroup = cfg.group;
   };
-in {
+in
+{
   options.hardware.ubertooth = {
     enable = mkEnableOption "Enable the Ubertooth software and its udev rules.";
 
@@ -24,6 +25,6 @@ in {
     environment.systemPackages = [ ubertoothPkg ];
 
     services.udev.packages = [ ubertoothPkg ];
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
   };
 }

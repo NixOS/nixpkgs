@@ -36,7 +36,9 @@ python3Packages.buildPythonPackage rec {
     ];
 
   makeWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
     (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
   ];
 

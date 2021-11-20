@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool, dbus-glib, gtk2, libical, libnotify, tzdata
-, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true, wrapGAppsHook, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, intltool
+, dbus-glib
+, gtk2
+, libical
+, libnotify
+, tzdata
+, popt
+, libxfce4ui
+, xfce4-panel
+, withPanelPlugin ? true
+, wrapGAppsHook
+, xfce
+}:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
 

@@ -38,9 +38,9 @@ let
       namespace = "default";
     };
     rules = [{
-      apiGroups = [""];
-      resources = ["pods"];
-      verbs = ["get" "list" "watch"];
+      apiGroups = [ "" ];
+      resources = [ "pods" ];
+      verbs = [ "get" "list" "watch" ];
     }];
   });
 
@@ -54,7 +54,7 @@ let
     spec.containers = [{
       name = "kubectl";
       image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
+      command = [ "/bin/tail" "-f" ];
       imagePullPolicy = "Never";
       tty = true;
     }];
@@ -70,7 +70,7 @@ let
     spec.containers = [{
       name = "kubectl-2";
       image = "kubectl:latest";
-      command = ["/bin/tail" "-f"];
+      command = [ "/bin/tail" "-f" ];
       imagePullPolicy = "Never";
       tty = true;
     }];
@@ -85,7 +85,7 @@ let
     name = "kubectl";
     tag = "latest";
     contents = [ kubectl pkgs.busybox kubectlPod2 ];
-    config.Entrypoint = ["/bin/sh"];
+    config.Entrypoint = [ "/bin/sh" ];
   };
 
   base = {
@@ -158,7 +158,8 @@ let
     '';
   };
 
-in {
+in
+{
   singlenode = mkKubernetesSingleNodeTest singlenode;
   multinode = mkKubernetesMultiNodeTest multinode;
 }

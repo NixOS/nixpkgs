@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, perl
 , buildsystem
 , libparserutils
 }:
@@ -17,7 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perl
     libparserutils
-    buildsystem ];
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

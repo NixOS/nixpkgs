@@ -1,5 +1,20 @@
-{ lib, autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, glibc, pango, gtk2, kcoreaddons, ki18n, kio, kservice
-, stdenv, runtimeShell, unzip
+{ lib
+, autoPatchelfHook
+, bzip2
+, cairo
+, coreutils
+, fetchurl
+, gdk-pixbuf
+, glibc
+, pango
+, gtk2
+, kcoreaddons
+, ki18n
+, kio
+, kservice
+, stdenv
+, runtimeShell
+, unzip
 }:
 
 let

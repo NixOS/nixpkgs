@@ -20,7 +20,8 @@ let
         auto=add
       '';
     environment.etc."ipsec.d/tunnel.secrets" =
-      { text = ''@alice @bob : PSK "j1JbIi9WY07rxwcNQ6nbyThKCf9DGxWOyokXIQcAQUnafsNTUJxfsxwk9WYK8fHj"'';
+      {
+        text = ''@alice @bob : PSK "j1JbIi9WY07rxwcNQ6nbyThKCf9DGxWOyokXIQcAQUnafsNTUJxfsxwk9WYK8fHj"'';
         mode = "600";
       };
   };
@@ -35,8 +36,8 @@ let
     '';
     # remove all automatic addresses
     useDHCP = false;
-    interfaces.eth1.ipv4.addresses = lib.mkVMOverride [];
-    interfaces.eth2.ipv4.addresses = lib.mkVMOverride [];
+    interfaces.eth1.ipv4.addresses = lib.mkVMOverride [ ];
+    interfaces.eth2.ipv4.addresses = lib.mkVMOverride [ ];
     # open a port for testing
     firewall.allowedUDPPorts = [ 1234 ];
   };
@@ -44,9 +45,9 @@ let
   # Adds an address and route from a to b via Eve
   addRoute = a: b: {
     interfaces.eth1.ipv6.addresses =
-      [ { address = a; prefixLength = 64; } ];
+      [{ address = a; prefixLength = 64; }];
     interfaces.eth1.ipv6.routes =
-      [ { address = b; prefixLength = 128; via = "fd::e"; } ];
+      [{ address = b; prefixLength = 128; via = "fd::e"; }];
   };
 
 in
@@ -73,9 +74,11 @@ in
   nodes.eve = { ... }: {
     virtualisation.vlans = [ 1 2 ];
     networking = lib.mkMerge
-      [ baseNetwork
-        { interfaces.br0.ipv6.addresses =
-            [ { address = "fd::e"; prefixLength = 64; } ];
+      [
+        baseNetwork
+        {
+          interfaces.br0.ipv6.addresses =
+            [{ address = "fd::e"; prefixLength = 64; }];
           bridges.br0.interfaces = [ "eth1" "eth2" ];
         }
       ];

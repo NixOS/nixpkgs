@@ -2,18 +2,18 @@
 , lib
 , fetchurl
 
-# nativeBuildInputs
+  # nativeBuildInputs
 , scons
 , pkg-config
 
-# buildInputs
+  # buildInputs
 , dbus
 , libusb1
 , ncurses
 , pps-tools
 , python3Packages
 
-# optional deps for GUI packages
+  # optional deps for GUI packages
 , guiSupport ? true
 , dbus-glib
 , libX11
@@ -27,7 +27,8 @@
 , atk
 , wrapGAppsHook
 
-, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+, gpsdUser ? "gpsd"
+, gpsdGroup ? "dialout"
 }:
 
 stdenv.mkDerivation rec {

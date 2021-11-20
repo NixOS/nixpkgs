@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi,
-  flake8, py, pyflakes, six, tox
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, py
+, pyflakes
+, six
+, tox
 }:
 
 buildPythonPackage rec {

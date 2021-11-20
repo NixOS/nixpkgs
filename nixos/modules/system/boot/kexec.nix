@@ -5,7 +5,8 @@
     environment.systemPackages = [ pkgs.kexec-tools ];
 
     systemd.services.prepare-kexec =
-      { description = "Preparation for kexec";
+      {
+        description = "Preparation for kexec";
         wantedBy = [ "kexec.target" ];
         before = [ "systemd-kexec.service" ];
         unitConfig.DefaultDependencies = false;

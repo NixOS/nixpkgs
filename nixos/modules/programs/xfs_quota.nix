@@ -23,7 +23,7 @@ in
 
     programs.xfs_quota = {
       projects = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.submodule {
           options = {
             id = mkOption {
@@ -75,35 +75,39 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.projects != {}) {
+  config = mkIf (cfg.projects != { }) {
 
     environment.etc.projects.source = pkgs.writeText "etc-project"
       (concatStringsSep "\n" (mapAttrsToList
-        (name: opts: "${toString opts.id}:${opts.path}") cfg.projects));
+        (name: opts: "${toString opts.id}:${opts.path}")
+        cfg.projects));
 
     environment.etc.projid.source = pkgs.writeText "etc-projid"
       (concatStringsSep "\n" (mapAttrsToList
-        (name: opts: "${name}:${toString opts.id}") cfg.projects));
+        (name: opts: "${name}:${toString opts.id}")
+        cfg.projects));
 
-    systemd.services = mapAttrs' (name: opts:
-      nameValuePair "xfs_quota-${name}" {
-        description = "Setup xfs_quota for project ${name}";
-        script = ''
-          ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'project -s ${name}' ${opts.fileSystem}
-          ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'limit -p ${limitOptions opts} ${name}' ${opts.fileSystem}
-        '';
+    systemd.services = mapAttrs'
+      (name: opts:
+        nameValuePair "xfs_quota-${name}" {
+          description = "Setup xfs_quota for project ${name}";
+          script = ''
+            ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'project -s ${name}' ${opts.fileSystem}
+            ${pkgs.xfsprogs.bin}/bin/xfs_quota -x -c 'limit -p ${limitOptions opts} ${name}' ${opts.fileSystem}
+          '';
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ ((replaceChars [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
+          wantedBy = [ "multi-user.target" ];
+          after = [ ((replaceChars [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
 
-        restartTriggers = [ config.environment.etc.projects.source ];
+          restartTriggers = [ config.environment.etc.projects.source ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-      }
-    ) cfg.projects;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+        }
+      )
+      cfg.projects;
 
   };
 

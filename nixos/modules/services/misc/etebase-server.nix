@@ -8,7 +8,7 @@ let
   pythonEnv = pkgs.python3.withPackages (ps: with ps;
     [ etebase-server daphne ]);
 
-  iniFmt = pkgs.formats.ini {};
+  iniFmt = pkgs.formats.ini { };
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
 
@@ -132,7 +132,7 @@ in
             };
           };
         };
-        default = {};
+        default = { };
         description = ''
           Configuration for <package>etebase-server</package>. Refer to
           <link xlink:href="https://github.com/etesync/server/blob/master/etebase-server.ini.example" />
@@ -161,9 +161,10 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
-      (runCommand "etebase-server" {
-        buildInputs = [ makeWrapper ];
-      } ''
+      (runCommand "etebase-server"
+        {
+          buildInputs = [ makeWrapper ];
+        } ''
         makeWrapper ${pythonEnv}/bin/etebase-server \
           $out/bin/etebase-server \
           --run "cd ${cfg.dataDir}" \
@@ -199,10 +200,12 @@ in
       '';
       script =
         let
-          networking = if cfg.unixSocket != null
-          then "-u ${cfg.unixSocket}"
-          else "-b 0.0.0.0 -p ${toString cfg.port}";
-        in ''
+          networking =
+            if cfg.unixSocket != null
+            then "-u ${cfg.unixSocket}"
+            else "-b 0.0.0.0 -p ${toString cfg.port}";
+        in
+        ''
           cd "${pythonEnv}/lib/etebase-server";
           ${pythonEnv}/bin/daphne ${networking} \
             etebase_server.asgi:application
@@ -216,7 +219,7 @@ in
         home = cfg.dataDir;
       };
 
-      groups.${defaultUser} = {};
+      groups.${defaultUser} = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {

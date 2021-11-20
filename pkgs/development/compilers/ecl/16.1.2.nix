@@ -1,26 +1,41 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
-, gmp, mpfr, libffi, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, autoconf
+, automake
+, gmp
+, mpfr
+, libffi
+, makeWrapper
 , noUnicode ? false
 , gcc
 , threadSupport ? false
-, useBoehmgc ? true, boehmgc
+, useBoehmgc ? true
+, boehmgc
 }:
 
 let
   s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="16.1.2";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
-    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
-  };
+    rec {
+      baseName = "ecl";
+      version = "16.1.2";
+      name = "${baseName}-${version}";
+      url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
+      sha256 = "16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    };
   buildInputs = [
-    libtool autoconf automake makeWrapper
+    libtool
+    autoconf
+    automake
+    makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr gcc
+    libffi
+    gmp
+    mpfr
+    gcc
   ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
@@ -40,8 +55,8 @@ stdenv.mkDerivation {
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
     # -incdir, -libdir doesn't seem to be supported for libffi
     "--with-libffi-prefix=${lib.getDev libffi}"
-    ] ++ lib.optional (! noUnicode) "--enable-unicode"
-    ;
+  ] ++ lib.optional (! noUnicode) "--enable-unicode"
+  ;
 
   patches = [
     (fetchpatch {
@@ -80,16 +95,16 @@ stdenv.mkDerivation {
   # create the variables with suffixSalt (which seems to be necessary for
   # NIX_CFLAGS_COMPILE even).
   + lib.optionalString useBoehmgc ''
-      --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
-      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
+    --prefix NIX_CFLAGS_COMPILE_${gcc.suffixSalt} ' ' "-I${lib.getDev boehmgc}/include" \
+    --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib boehmgc}/lib" \
   '' + ''
-      --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
+    --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
 
   meta = with lib; {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = licenses.mit ;
+    license = licenses.mit;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
   };

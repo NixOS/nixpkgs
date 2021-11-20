@@ -1,7 +1,27 @@
-{ fetchFromGitHub, lib, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU, libGL, boost,
-  pkg-config, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
-  angelscript, ogrepaged, mysocketw, libxcb
-  }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, wxGTK30
+, freeimage
+, cmake
+, zziplib
+, libGLU
+, libGL
+, boost
+, pkg-config
+, libuuid
+, openal
+, ogre
+, ois
+, curl
+, gtk2
+, mygui
+, unzip
+, angelscript
+, ogrepaged
+, mysocketw
+, libxcb
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4.7.0";
@@ -24,9 +44,25 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
-  buildInputs = [ wxGTK30 freeimage zziplib libGLU libGL boost
-    libuuid openal ogre ois curl gtk2 mygui angelscript
-    ogrepaged mysocketw libxcb ];
+  buildInputs = [
+    wxGTK30
+    freeimage
+    zziplib
+    libGLU
+    libGL
+    boost
+    libuuid
+    openal
+    ogre
+    ois
+    curl
+    gtk2
+    mygui
+    angelscript
+    ogrepaged
+    mysocketw
+    libxcb
+  ];
 
   meta = with lib; {
     description = "3D simulator game where you can drive, fly and sail various vehicles";
@@ -34,6 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

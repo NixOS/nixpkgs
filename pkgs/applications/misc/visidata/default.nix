@@ -21,7 +21,9 @@
 , zstandard
 , setuptools
 , git
-, withPcap ? true, dpkt, dnslib
+, withPcap ? true
+, dpkt
+, dnslib
 }:
 buildPythonApplication rec {
   pname = "visidata";

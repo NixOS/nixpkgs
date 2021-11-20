@@ -4,11 +4,12 @@ import ./make-test-python.nix ({ lib, ... }: {
     maintainers = [ freezeboy ];
   };
 
-  machine = { pkgs, ... }: let
-  in {
-    services.plikd.enable = true;
-    environment.systemPackages = [ pkgs.plik ];
-  };
+  machine = { pkgs, ... }:
+    let
+    in {
+      services.plikd.enable = true;
+      environment.systemPackages = [ pkgs.plik ];
+    };
 
   testScript = ''
     # Service basic test

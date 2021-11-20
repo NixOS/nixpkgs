@@ -98,7 +98,7 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
-        default = [];
+        default = [ ];
       };
 
     };
@@ -118,15 +118,17 @@ in
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
     users.users.ntp =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
         group = "ntp";
         description = "NTP daemon user";
         home = stateDir;
       };
-    users.groups.ntp = {};
+    users.groups.ntp = { };
 
     systemd.services.ntpd =
-      { description = "NTP Daemon";
+      {
+        description = "NTP Daemon";
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "time-sync.target" ];

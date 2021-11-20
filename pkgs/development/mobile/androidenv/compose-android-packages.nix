@@ -1,4 +1,8 @@
-{ requireFile, autoPatchelfHook, pkgs, pkgsHostHost, pkgs_i686
+{ requireFile
+, autoPatchelfHook
+, pkgs
+, pkgsHostHost
+, pkgs_i686
 , licenseAccepted ? false
 }:
 
@@ -7,7 +11,7 @@
 , buildToolsVersions ? [ "31.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "30.6.3"
-, platformVersions ? []
+, platformVersions ? [ ]
 , includeSources ? false
 , includeSystemImages ? false
 , systemImageTypes ? [ "google_apis_playstore" ]
@@ -15,13 +19,13 @@
 , cmakeVersions ? [ ]
 , includeNDK ? false
 , ndkVersion ? "22.1.7171670"
-, ndkVersions ? [ndkVersion]
+, ndkVersions ? [ ndkVersion ]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
-, includeExtras ? []
+, includeExtras ? [ ]
 , repoJson ? ./repo.json
 , repoXmls ? null
-, extraLicenses ? []
+, extraLicenses ? [ ]
 }:
 
 let
@@ -29,44 +33,47 @@ let
   inherit (pkgs.buildPackages) makeWrapper unzip;
 
   # Determine the Android os identifier from Nix's system identifier
-  os = if stdenv.system == "x86_64-linux" then "linux"
+  os =
+    if stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
     else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Uses mkrepo.rb to create a repo spec.
-  mkRepoJson = { packages ? [], images ? [], addons ? [] }: let
-    mkRepoRuby = (pkgs.ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
-    mkRepoRubyArguments = lib.lists.flatten [
-      (builtins.map (package: ["--packages" "${package}"]) packages)
-      (builtins.map (image: ["--images" "${image}"]) images)
-      (builtins.map (addon: ["--addons" "${addon}"]) addons)
-    ];
-  in
-  stdenv.mkDerivation {
-    name = "androidenv-repo-json";
-    buildInputs = [ mkRepoRuby ];
-    preferLocalBuild = true;
-    unpackPhase = "true";
-    buildPhase = ''
-      ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
-    '';
-    installPhase = ''
-      mv repo.json $out
-    '';
-  };
+  mkRepoJson = { packages ? [ ], images ? [ ], addons ? [ ] }:
+    let
+      mkRepoRuby = (pkgs.ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
+      mkRepoRubyArguments = lib.lists.flatten [
+        (builtins.map (package: [ "--packages" "${package}" ]) packages)
+        (builtins.map (image: [ "--images" "${image}" ]) images)
+        (builtins.map (addon: [ "--addons" "${addon}" ]) addons)
+      ];
+    in
+    stdenv.mkDerivation {
+      name = "androidenv-repo-json";
+      buildInputs = [ mkRepoRuby ];
+      preferLocalBuild = true;
+      unpackPhase = "true";
+      buildPhase = ''
+        ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
+      '';
+      installPhase = ''
+        mv repo.json $out
+      '';
+    };
 
   # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
-  repo = if repoXmls != null then
-           let
-             repoXmlSpec = {
-               packages = repoXmls.packages or [];
-               images = repoXmls.images or [];
-               addons = repoXmls.addons or [];
-             };
-           in
-           lib.importJSON "${mkRepoJson repoXmlSpec}"
-         else
-           lib.importJSON repoJson;
+  repo =
+    if repoXmls != null then
+      let
+        repoXmlSpec = {
+          packages = repoXmls.packages or [ ];
+          images = repoXmls.images or [ ];
+          addons = repoXmls.addons or [ ];
+        };
+      in
+      lib.importJSON "${mkRepoJson repoXmlSpec}"
+    else
+      lib.importJSON repoJson;
 
   # Converts all 'archives' keys in a repo spec to fetchurl calls.
   fetchArchives = attrSet:
@@ -75,7 +82,8 @@ let
         if (builtins.elemAt path ((builtins.length path) - 1)) == "archives" then
           (builtins.listToAttrs
             (builtins.map
-              (archive: lib.attrsets.nameValuePair archive.os (fetchurl { inherit (archive) url sha1; })) value))
+              (archive: lib.attrsets.nameValuePair archive.os (fetchurl { inherit (archive) url sha1; }))
+              value))
         else value
       )
       attrSet;
@@ -100,7 +108,7 @@ let
           builtins.map
             (licenseText: "--- ${licenseName} ---\n${licenseText}")
             (mkLicenses licenseName))
-      licenseNames);
+        licenseNames);
 
   # Converts a license name to a list of license hashes.
   mkLicenseHashes = licenseName:
@@ -124,57 +132,72 @@ rec {
     package = packages.platform-tools.${platformToolsVersion};
   };
 
-  build-tools = map (version:
-    import ./build-tools.nix {
-      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
-      package = packages.build-tools.${version};
-    }
-  ) buildToolsVersions;
+  build-tools = map
+    (version:
+      import ./build-tools.nix {
+        inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
+        package = packages.build-tools.${version};
+      }
+    )
+    buildToolsVersions;
 
   emulator = import ./emulator.nix {
     inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgs_i686 lib;
     package = packages.emulator.${emulatorVersion};
   };
 
-  platforms = map (version:
-    deployAndroidPackage {
-      inherit os;
-      package = packages.platforms.${version};
-    }
-  ) platformVersions;
+  platforms = map
+    (version:
+      deployAndroidPackage {
+        inherit os;
+        package = packages.platforms.${version};
+      }
+    )
+    platformVersions;
 
-  sources = map (version:
-    deployAndroidPackage {
-      inherit os;
-      package = packages.sources.${version};
-    }
-  ) platformVersions;
+  sources = map
+    (version:
+      deployAndroidPackage {
+        inherit os;
+        package = packages.sources.${version};
+      }
+    )
+    platformVersions;
 
-  system-images = lib.flatten (map (apiVersion:
-    map (type:
-      map (abiVersion:
-        if lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages then
-          deployAndroidPackage {
-            inherit os;
-            package = system-images-packages.${apiVersion}.${type}.${abiVersion};
-            # Patch 'google_apis' system images so they're recognized by the sdk.
-            # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
-            # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
-            patchInstructions = lib.optionalString (lib.hasPrefix "google_apis" type) ''
-              sed -i '/^Addon.Vendor/d' source.properties
-            '';
-          }
-        else []
-      ) abiVersions
-    ) systemImageTypes
-  ) platformVersions);
+  system-images = lib.flatten (map
+    (apiVersion:
+      map
+        (type:
+          map
+            (abiVersion:
+              if lib.hasAttrByPath [ apiVersion type abiVersion ] system-images-packages then
+                deployAndroidPackage
+                  {
+                    inherit os;
+                    package = system-images-packages.${apiVersion}.${type}.${abiVersion};
+                    # Patch 'google_apis' system images so they're recognized by the sdk.
+                    # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
+                    # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
+                    patchInstructions = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+                      sed -i '/^Addon.Vendor/d' source.properties
+                    '';
+                  }
+              else [ ]
+            )
+            abiVersions
+        )
+        systemImageTypes
+    )
+    platformVersions);
 
-  cmake = map (version:
-    import ./cmake.nix {
-      inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
-      package = packages.cmake.${version};
-    }
-  ) cmakeVersions;
+  cmake = map
+    (version:
+      import ./cmake.nix {
+        inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
+        package = packages.cmake.${version};
+      }
+    )
+    cmakeVersions;
 
   # Creates a NDK bundle.
   makeNdkBundle = ndkVersion:
@@ -184,28 +207,32 @@ rec {
     };
 
   # All NDK bundles.
-  ndk-bundles = if includeNDK then map makeNdkBundle ndkVersions else [];
+  ndk-bundles = if includeNDK then map makeNdkBundle ndkVersions else [ ];
 
   # The "default" NDK bundle.
   ndk-bundle = if includeNDK then lib.findFirst (x: x != null) null ndk-bundles else null;
 
-  google-apis = map (version:
-    deployAndroidPackage {
-      inherit os;
-      package = addons.addons.${version}.google_apis;
-    }
-  ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
+  google-apis = map
+    (version:
+      deployAndroidPackage {
+        inherit os;
+        package = addons.addons.${version}.google_apis;
+      }
+    )
+    (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
 
-  google-tv-addons = map (version:
-    deployAndroidPackage {
-      inherit os;
-      package = addons.addons.${version}.google_tv_addon;
-    }
-  ) platformVersions;
+  google-tv-addons = map
+    (version:
+      deployAndroidPackage {
+        inherit os;
+        package = addons.addons.${version}.google_tv_addon;
+      }
+    )
+    platformVersions;
 
   # Function that automatically links all plugins for which multiple versions can coexist
-  linkPlugins = {name, plugins}:
-    lib.optionalString (plugins != []) ''
+  linkPlugins = { name, plugins }:
+    lib.optionalString (plugins != [ ]) ''
       mkdir -p ${name}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
@@ -213,8 +240,8 @@ rec {
     '';
 
   # Function that automatically links all NDK plugins.
-  linkNdkPlugins = {name, plugins, rootName ? name}:
-    lib.optionalString (plugins != []) ''
+  linkNdkPlugins = { name, plugins, rootName ? name }:
+    lib.optionalString (plugins != [ ]) ''
       mkdir -p ${rootName}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name} ${rootName}/${plugin.version}
@@ -222,13 +249,13 @@ rec {
     '';
 
   # Function that automatically links a plugin for which only one version exists
-  linkPlugin = {name, plugin, check ? true}:
+  linkPlugin = { name, plugin, check ? true }:
     lib.optionalString check ''
       ln -s ${plugin}/libexec/android-sdk/* ${name}
     '';
 
   # Links all plugins related to a requested platform
-  linkPlatformPlugins = {name, plugins, check}:
+  linkPlatformPlugins = { name, plugins, check }:
     lib.optionalString check ''
       mkdir -p ${name}
       ${lib.concatMapStrings (plugin: ''
@@ -239,82 +266,85 @@ rec {
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
-  androidsdk = if !licenseAccepted then throw ''
-    ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
+  androidsdk =
+    if !licenseAccepted then
+      throw ''
+        ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
 
-    You must accept the following licenses:
-    ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
+        You must accept the following licenses:
+        ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-    by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-  '' else import ./tools.nix {
-    inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686 lib;
+        by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+      '' else
+      import ./tools.nix {
+        inherit deployAndroidPackage requireFile packages toolsVersion autoPatchelfHook makeWrapper os pkgs pkgs_i686 lib;
 
-    postInstall = ''
-      # Symlink all requested plugins
-      ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
-      ${linkPlugins { name = "build-tools"; plugins = build-tools; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
-      ${linkPlugins { name = "platforms"; plugins = platforms; }}
-      ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
-      ${linkPlugins { name = "cmake"; plugins = cmake; }}
-      ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
-      ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
+        postInstall = ''
+          # Symlink all requested plugins
+          ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
+          ${linkPlugins { name = "build-tools"; plugins = build-tools; }}
+          ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
+          ${linkPlugins { name = "platforms"; plugins = platforms; }}
+          ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
+          ${linkPlugins { name = "cmake"; plugins = cmake; }}
+          ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
+          ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
 
-      ${lib.optionalString includeSystemImages ''
-        mkdir -p system-images
-        ${lib.concatMapStrings (system-image: ''
-          apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
-          type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
-          mkdir -p system-images/$apiVersion/$type
-          ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type/* system-images/$apiVersion/$type
-        '') system-images}
-      ''}
+          ${lib.optionalString includeSystemImages ''
+            mkdir -p system-images
+            ${lib.concatMapStrings (system-image: ''
+              apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
+              type=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*/*))
+              mkdir -p system-images/$apiVersion/$type
+              ln -s ${system-image}/libexec/android-sdk/system-images/$apiVersion/$type/* system-images/$apiVersion/$type
+            '') system-images}
+          ''}
 
-      ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleAPIs; }}
-      ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleTVAddOns; }}
+          ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleAPIs; }}
+          ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleTVAddOns; }}
 
-      # Link extras
-      ${lib.concatMapStrings (identifier:
-        let
-          path = addons.extras.${identifier}.path;
-          addon = deployAndroidPackage {
-            inherit os;
-            package = addons.extras.${identifier};
-          };
-        in
-        ''
-          targetDir=$(dirname ${path})
-          mkdir -p $targetDir
-          ln -s ${addon}/libexec/android-sdk/${path} $targetDir
-        '') includeExtras}
+          # Link extras
+          ${lib.concatMapStrings (identifier:
+            let
+              path = addons.extras.${identifier}.path;
+              addon = deployAndroidPackage {
+                inherit os;
+                package = addons.extras.${identifier};
+              };
+            in
+            ''
+              targetDir=$(dirname ${path})
+              mkdir -p $targetDir
+              ln -s ${addon}/libexec/android-sdk/${path} $targetDir
+            '') includeExtras}
 
-      # Expose common executables in bin/
-      mkdir -p $out/bin
-      find $PWD/tools -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
-      do
-          ln -s $i $out/bin
-      done
+          # Expose common executables in bin/
+          mkdir -p $out/bin
+          find $PWD/tools -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
+          do
+              ln -s $i $out/bin
+          done
 
-      find $PWD/tools/bin -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
-      do
-          ln -s $i $out/bin
-      done
+          find $PWD/tools/bin -not -path '*/\.*' -type f -executable -mindepth 1 -maxdepth 1 | while read i
+          do
+              ln -s $i $out/bin
+          done
 
-      for i in ${platform-tools}/bin/*
-      do
-          ln -s $i $out/bin
-      done
+          for i in ${platform-tools}/bin/*
+          do
+              ln -s $i $out/bin
+          done
 
-      # Write licenses
-      mkdir -p licenses
-      ${lib.concatMapStrings (licenseName:
-        let
-          licenseHashes = builtins.concatStringsSep "\n" (mkLicenseHashes licenseName);
-          licenseHashFile = pkgs.writeText "androidenv-${licenseName}" licenseHashes;
-        in
-        ''
-          ln -s ${licenseHashFile} licenses/${licenseName}
-        '') licenseNames}
-    '';
-  };
+          # Write licenses
+          mkdir -p licenses
+          ${lib.concatMapStrings (licenseName:
+            let
+              licenseHashes = builtins.concatStringsSep "\n" (mkLicenseHashes licenseName);
+              licenseHashFile = pkgs.writeText "androidenv-${licenseName}" licenseHashes;
+            in
+            ''
+              ln -s ${licenseHashFile} licenses/${licenseName}
+            '') licenseNames}
+        '';
+      };
 }

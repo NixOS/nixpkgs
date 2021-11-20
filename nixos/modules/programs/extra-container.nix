@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.programs.extra-container;
-in {
+in
+{
   options = {
     programs.extra-container.enable = mkEnableOption ''
       extra-container, a tool for running declarative NixOS containers

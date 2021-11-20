@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, numactl
+, rdma-core
+, libbfd
+, libiberty
+, perl
+, zlib
 }:
 
 stdenv.mkDerivation rec {

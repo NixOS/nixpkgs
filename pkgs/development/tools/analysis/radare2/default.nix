@@ -92,9 +92,9 @@ stdenv.mkDerivation rec {
     openssl
     libuv
   ] ++ lib.optional useX11 [ gtkdialog vte gtk2 ]
-    ++ lib.optional rubyBindings [ ruby ]
-    ++ lib.optional pythonBindings [ python3 ]
-    ++ lib.optional luaBindings [ lua ];
+  ++ lib.optional rubyBindings [ ruby ]
+  ++ lib.optional pythonBindings [ python3 ]
+  ++ lib.optional luaBindings [ lua ];
 
   propagatedBuildInputs = [
     # radare2 exposes r_lib which depends on these libraries

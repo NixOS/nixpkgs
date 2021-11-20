@@ -1,4 +1,14 @@
-{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib
+, stdenv
+, llvm_meta
+, fetch
+, substituteAll
+, cmake
+, libxml2
+, libllvm
+, version
+, clang-tools-extra_src
+, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -131,4 +141,5 @@ let
       description = "man page for Clang ${version}";
     };
   });
-in self
+in
+self

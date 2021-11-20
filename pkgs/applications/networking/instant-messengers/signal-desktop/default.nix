@@ -1,15 +1,53 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
-, dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
-, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
-# Runtime dependencies:
-, systemd, libnotify, libdbusmenu, libpulseaudio
-# Unfortunately this also overwrites the UI language (not just the spell
-# checking language!):
-, hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
-# For a full list of available languages:
-# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, wrapGAppsHook
+, nixosTests
+, gnome2
+, gtk3
+, atk
+, at-spi2-atk
+, cairo
+, pango
+, gdk-pixbuf
+, glib
+, freetype
+, fontconfig
+, dbus
+, libX11
+, xorg
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libXtst
+, libXScrnSaver
+, nss
+, nspr
+, alsa-lib
+, cups
+, expat
+, libuuid
+, at-spi2-core
+, libappindicator-gtk3
+, mesa
+  # Runtime dependencies:
+, systemd
+, libnotify
+, libdbusmenu
+, libpulseaudio
+  # Unfortunately this also overwrites the UI language (not just the spell
+  # checking language!):
+, hunspellDicts
+, spellcheckerLanguage ? null # E.g. "de_DE"
+  # For a full list of available languages:
+  # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 , sqlcipher
 }:
 
@@ -19,7 +57,8 @@ let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
       hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in lib.optionalString (spellcheckerLanguage != null) ''
+    in
+    lib.optionalString (spellcheckerLanguage != null) ''
       --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
       --set LC_MESSAGES "${spellcheckerLanguage}"'');
 
@@ -56,7 +95,8 @@ let
 
     LDFLAGS = [ "-lm" ];
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "signal-desktop";
   version = "5.23.1"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
@@ -174,10 +214,10 @@ in stdenv.mkDerivation rec {
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
     '';
-    homepage    = "https://signal.org/";
-    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license     = lib.licenses.agpl3Only;
+    homepage = "https://signal.org/";
+    changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

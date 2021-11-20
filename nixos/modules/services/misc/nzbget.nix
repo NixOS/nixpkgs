@@ -41,7 +41,7 @@ in
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        default = { };
         description = ''
           NZBGet configuration, passed via command line using switch -o. Refer to
           <link xlink:href="https://github.com/nzbget/nzbget/blob/master/nzbget.conf"/>

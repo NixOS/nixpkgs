@@ -28,7 +28,8 @@ let
     config.services.xserver.dpi != null;
 
   defaultFonts =
-    [ pkgs.dejavu_fonts
+    [
+      pkgs.dejavu_fonts
       pkgs.freefont_ttf
       pkgs.gyre-fonts # TrueType substitutes for standard PostScript fonts
       pkgs.liberation_ttf
@@ -37,14 +38,16 @@ let
     ];
 
   defaultXFonts =
-    [ (if hasHidpi then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
+    [
+      (if hasHidpi then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
       pkgs.xorg.fontmiscmisc
     ] ++ optionals (config.nixpkgs.config.allowUnfree or false)
-    [ # these are unfree, and will make usage with xserver fail
-      pkgs.xorg.fontbhlucidatypewriter100dpi
-      pkgs.xorg.fontbhlucidatypewriter75dpi
-      pkgs.xorg.fontbh100dpi
-    ];
+      [
+        # these are unfree, and will make usage with xserver fail
+        pkgs.xorg.fontbhlucidatypewriter100dpi
+        pkgs.xorg.fontbhlucidatypewriter75dpi
+        pkgs.xorg.fontbh100dpi
+      ];
 
 in
 
@@ -60,7 +63,7 @@ in
       # TODO: find another name for it.
       fonts = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.dejavu_fonts ]";
         description = "List of primary font paths.";
       };

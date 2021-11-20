@@ -1,9 +1,27 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config
-, opencl-clhpp, ocl-icd, fftw, fftwFloat
-, blas, lapack, boost, mesa, libGLU, libGL
-, freeimage, python3, clfft, clblas
-, doxygen, buildDocs ? false
-, cudaSupport ? false, cudatoolkit
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkg-config
+, opencl-clhpp
+, ocl-icd
+, fftw
+, fftwFloat
+, blas
+, lapack
+, boost
+, mesa
+, libGLU
+, libGL
+, freeimage
+, python3
+, clfft
+, clblas
+, doxygen
+, buildDocs ? false
+, cudaSupport ? false
+, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
@@ -45,14 +63,20 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    opencl-clhpp fftw fftwFloat
-    blas lapack
-    libGLU libGL
-    mesa freeimage
-    boost.out boost.dev
+    opencl-clhpp
+    fftw
+    fftwFloat
+    blas
+    lapack
+    libGLU
+    libGL
+    mesa
+    freeimage
+    boost.out
+    boost.dev
   ] ++ (lib.optional stdenv.isLinux ocl-icd)
-    ++ (lib.optional cudaSupport cudatoolkit)
-    ++ (lib.optional buildDocs doxygen);
+  ++ (lib.optional cudaSupport cudatoolkit)
+  ++ (lib.optional buildDocs doxygen);
 
   meta = with lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

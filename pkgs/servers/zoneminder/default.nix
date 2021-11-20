@@ -1,7 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
-, polkit, util-linuxMinimal, x264, zlib
-, coreutils, procps, psmisc, nixosTests }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, substituteAll
+, cmake
+, makeWrapper
+, pkg-config
+, curl
+, ffmpeg
+, glib
+, libjpeg
+, libselinux
+, libsepol
+, mp4v2
+, libmysqlclient
+, mariadb
+, pcre
+, perl
+, perlPackages
+, polkit
+, util-linuxMinimal
+, x264
+, zlib
+, coreutils
+, procps
+, psmisc
+, nixosTests
+}:
 
 # NOTES:
 #
@@ -72,18 +98,19 @@ let
     }
   ];
 
-  user    = "zoneminder";
+  user = "zoneminder";
   dirName = "zoneminder";
   perlBin = "${perl}/bin/perl";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoneminder";
   version = "1.36.10";
 
   src = fetchFromGitHub {
-    owner  = "ZoneMinder";
-    repo   = "zoneminder";
-    rev    = version;
+    owner = "ZoneMinder";
+    repo = "zoneminder";
+    rev = version;
     sha256 = "sha256-MmBnbVDitKOctPe2dNe1sMNNs/qEYGVq3UMJxAkLlCc=";
     fetchSubmodules = true;
   };
@@ -148,14 +175,40 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb.client
+    pcre
+    perl
+    polkit
+    x264
+    zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
-    DateManip DBI DBDmysql LWP SysMmap
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
-    CryptEksblowfish DataEntropy # zmupdate.pl
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];

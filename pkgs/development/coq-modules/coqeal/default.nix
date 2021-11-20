@@ -1,6 +1,14 @@
-{ coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
-  mathcomp-real-closed,
-  lib, which, version ? null }:
+{ coq
+, mkCoqDerivation
+, mathcomp
+, bignums
+, paramcoq
+, multinomials
+, mathcomp-real-closed
+, lib
+, which
+, version ? null
+}:
 
 with lib;
 
@@ -9,12 +17,13 @@ with lib;
   pname = "CoqEAL";
 
   inherit version;
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (isGe "8.10") (isGe "1.12.0") ]; out = "1.1.0"; }
-      { cases = [ (isGe "8.10") (range "1.11.0" "1.12.0") ]; out = "1.0.5"; }
-      { cases = [ (isGe "8.7") "1.11.0" ]; out = "1.0.4"; }
-      { cases = [ (isGe "8.7") "1.10.0" ]; out = "1.0.3"; }
-    ] null;
+  defaultVersion = with versions; switch [ coq.version mathcomp.version ] [
+    { cases = [ (isGe "8.10") (isGe "1.12.0") ]; out = "1.1.0"; }
+    { cases = [ (isGe "8.10") (range "1.11.0" "1.12.0") ]; out = "1.0.5"; }
+    { cases = [ (isGe "8.7") "1.11.0" ]; out = "1.0.4"; }
+    { cases = [ (isGe "8.7") "1.10.0" ]; out = "1.0.3"; }
+  ]
+    null;
 
   release."1.1.0".sha256 = "1vyhfna5frkkq2fl1fkg2mwzpg09k3sbzxxpyp14fjay81xajrxr";
   release."1.0.6".sha256 = "0lqkyfj4qbq8wr3yk8qgn7mclw582n3fjl9l19yp8cnchspzywx0";
@@ -31,5 +40,5 @@ with lib;
   };
 }).overrideAttrs (o: {
   propagatedBuildInputs = o.propagatedBuildInputs
-  ++ optional (versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
+    ++ optional (versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
 })

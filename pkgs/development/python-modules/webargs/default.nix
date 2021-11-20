@@ -1,6 +1,20 @@
-{ buildPythonPackage, fetchPypi, lib, isPy27, marshmallow, pytestCheckHook
-, pytest-aiohttp, webtest, webtest-aiohttp, flask, django, bottle, tornado
-, pyramid, falcon, aiohttp }:
+{ buildPythonPackage
+, fetchPypi
+, lib
+, isPy27
+, marshmallow
+, pytestCheckHook
+, pytest-aiohttp
+, webtest
+, webtest-aiohttp
+, flask
+, django
+, bottle
+, tornado
+, pyramid
+, falcon
+, aiohttp
+}:
 
 buildPythonPackage rec {
   pname = "webargs";

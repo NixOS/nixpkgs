@@ -1,10 +1,32 @@
-{ stdenv, lib, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3, mesa
-, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, alsa-lib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gnome2
+, pango
+, nspr
+, nss
+, gtk3
+, mesa
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
+, libappindicator
 }:
 
-let deps = [
+let
+  deps = [
     alsa-lib
     atk
     cairo

@@ -7,10 +7,10 @@
 # subset of files responsible for the vast majority of packaging tests, we can
 # think about moving this upstream.
 [
-	"src/sage/env.py" # [1]
-	"src/sage/misc/persist.pyx" # [1]
-	"src/sage/misc/inline_fortran.py" # [1]
-	"src/sage/repl/ipython_extension.py" # [1]
+  "src/sage/env.py" # [1]
+  "src/sage/misc/persist.pyx" # [1]
+  "src/sage/misc/inline_fortran.py" # [1]
+  "src/sage/repl/ipython_extension.py" # [1]
 ]
 
 # Numbered list of past failures to annotate files with

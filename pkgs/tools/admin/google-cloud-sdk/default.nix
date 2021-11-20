@@ -45,7 +45,8 @@ let
     };
   }.${system} or (throw "Unsupported system: ${system}");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   version = "362.0.0";
 

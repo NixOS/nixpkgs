@@ -1,4 +1,6 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib
+, buildPythonApplication
+, fetchPypi
 , cbor2
 , python-dateutil
 , pyyaml
@@ -16,7 +18,11 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pyyaml cbor2 python-dateutil tomlkit u-msgpack-python
+    pyyaml
+    cbor2
+    python-dateutil
+    tomlkit
+    u-msgpack-python
   ];
 
   meta = with lib; {

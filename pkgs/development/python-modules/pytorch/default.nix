@@ -1,37 +1,58 @@
-{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
-  cudaSupport ? false, cudatoolkit, cudnn, nccl, magma,
-  mklDnnSupport ? true, useSystemNccl ? true,
-  MPISupport ? false, mpi,
-  buildDocs ? false,
-  cudaArchList ? null,
-
-  # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11,
-
-  # Build inputs
-  numactl,
-
-  # Propagated build inputs
-  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
-
-  # Unit tests
-  hypothesis, psutil,
-
-  # virtual pkg that consistently instantiates blas across nixpkgs
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, cudaSupport ? false
+, cudatoolkit
+, cudnn
+, nccl
+, magma
+, mklDnnSupport ? true
+, useSystemNccl ? true
+, MPISupport ? false
+, mpi
+, buildDocs ? false
+, cudaArchList ? null
+, # Native build inputs
+  cmake
+, util-linux
+, linkFarm
+, symlinkJoin
+, which
+, pybind11
+, # Build inputs
+  numactl
+, # Propagated build inputs
+  dataclasses
+, numpy
+, pyyaml
+, cffi
+, click
+, typing-extensions
+, # Unit tests
+  hypothesis
+, psutil
+, # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
-  blas,
-
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
-
-  # dependencies for torch.utils.tensorboard
-  pillow, six, future, tensorflow-tensorboard, protobuf,
-
-  isPy3k, pythonOlder }:
+  blas
+, # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
+  ninja
+, # dependencies for torch.utils.tensorboard
+  pillow
+, six
+, future
+, tensorflow-tensorboard
+, protobuf
+, isPy3k
+, pythonOlder
+}:
 
 # assert that everything needed for cuda is present and that the correct cuda versions are used
-assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
+assert !cudaSupport || (
+  let majorIs = lib.versions.major cudatoolkit.version;
+  in majorIs == "9" || majorIs == "10" || majorIs == "11"
+);
 
 # confirm that cudatoolkits are sync'd across dependencies
 assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
@@ -82,20 +103,20 @@ let
       "6.0"
       "6.1"
       "7.0"
-      "7.0+PTX"  # I am getting a "undefined architecture compute_75" on cuda 9
-                 # which leads me to believe this is the final cuda-9-compatible architecture.
+      "7.0+PTX" # I am getting a "undefined architecture compute_75" on cuda 9
+      # which leads me to believe this is the final cuda-9-compatible architecture.
     ];
 
     cuda10 = cuda9 ++ [
       "7.5"
-      "7.5+PTX"  # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
+      "7.5+PTX" # < most recent architecture as of cudatoolkit_10_0 and pytorch-1.2.0
     ];
 
     cuda11 = cuda10 ++ [
       "8.0"
-      "8.0+PTX"  # < CUDA toolkit 11.0
+      "8.0+PTX" # < CUDA toolkit 11.0
       "8.6"
-      "8.6+PTX"  # < CUDA toolkit 11.1
+      "8.6+PTX" # < CUDA toolkit 11.1
     ];
   };
   final_cudaArchList =
@@ -114,7 +135,8 @@ let
   cudaStubEnv = lib.optionalString cudaSupport
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
   version = "1.9.0";
@@ -122,15 +144,15 @@ in buildPythonPackage rec {
   disabled = !isPy3k;
 
   outputs = [
-    "out"   # output standard python package
-    "dev"   # output libtorch headers
-    "lib"   # output libtorch libraries
+    "out" # output standard python package
+    "dev" # output libtorch headers
+    "lib" # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
-    owner  = "pytorch";
-    repo   = "pytorch";
-    rev    = "v${version}";
+    owner = "pytorch";
+    repo = "pytorch";
+    rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-gZmEhV1zzfr/5T2uNfS+8knzyJIxnv2COWVyiAzU9jM=";
   };
@@ -200,7 +222,7 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_SYSTEM_NCCL=setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
+  USE_SYSTEM_NCCL = setBool useSystemNccl; # don't build pytorch's third_party NCCL
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -230,9 +252,13 @@ in buildPythonPackage rec {
     pyyaml
     typing-extensions
     # the following are required for tensorboard support
-    pillow six future tensorflow-tensorboard protobuf
+    pillow
+    six
+    future
+    tensorflow-tensorboard
+    protobuf
   ] ++ lib.optionals MPISupport [ mpi ]
-    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
+  ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [ hypothesis ninja psutil ];
 
@@ -253,7 +279,7 @@ in buildPythonPackage rec {
       # ^^^^^^^^^^^^ NOTE: while test_dataloader does return errors, these are acceptable errors and do not interfere with the build
 
       # tensorboard has acceptable failures for pytorch 1.3.x due to dependencies on tensorboard-plugins
-      (optionalString (majorMinor version == "1.3" ) "tensorboard")
+      (optionalString (majorMinor version == "1.3") "tensorboard")
     ])
   ];
   postInstall = ''
@@ -310,9 +336,9 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source, prototype-to-production deep learning platform";
-    homepage    = "https://pytorch.org/";
-    license     = licenses.bsd3;
-    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    homepage = "https://pytorch.org/";
+    license = licenses.bsd3;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     # error: use of undeclared identifier 'noU'; did you mean 'no'?
     broken = stdenv.isDarwin;

@@ -34,7 +34,7 @@ in
     };
 
     logFormat = mkOption {
-      type = types.enum ["logfmt" "json"];
+      type = types.enum [ "logfmt" "json" ];
       default = "logfmt";
       description = ''
         Output format of log messages.
@@ -42,27 +42,30 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error"];
+      type = types.enum [ "debug" "info" "warn" "error" ];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
       '';
     };
   };
-  serviceOpts = let
-    configFile = if cfg.configurationPath != null
-                 then cfg.configurationPath
-                 else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
-    in {
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
-          --config.file=${escapeShellArg configFile} \
-          --log.format=${escapeShellArg cfg.logFormat} \
-          --log.level=${cfg.logLevel} \
-          --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
+  serviceOpts =
+    let
+      configFile =
+        if cfg.configurationPath != null
+        then cfg.configurationPath
+        else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
+    in
+    {
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
+            --config.file=${escapeShellArg configFile} \
+            --log.format=${escapeShellArg cfg.logFormat} \
+            --log.level=${cfg.logLevel} \
+            --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
+      };
     };
-  };
 }

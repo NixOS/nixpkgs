@@ -1,5 +1,14 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
-, pytest-runner, pytest, six, pyparsing, asn1ate }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, pytest-runner
+, pytest
+, six
+, pyparsing
+, asn1ate
+}:
 
 buildPythonApplication rec {
   pname = "asn2quickder";

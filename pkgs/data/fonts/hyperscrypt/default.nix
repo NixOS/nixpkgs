@@ -32,7 +32,7 @@ fetchzip {
       molted metal, Hyper Scrypt is based upon a rigorous grid,
       allowing some neat alignements between shapes in multi lines
       layouts.
-      '';
+    '';
     license = licenses.ofl;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;

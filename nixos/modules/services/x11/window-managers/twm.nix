@@ -22,7 +22,8 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton
-      { name = "twm";
+      {
+        name = "twm";
         start =
           ''
             ${pkgs.xorg.twm}/bin/twm &

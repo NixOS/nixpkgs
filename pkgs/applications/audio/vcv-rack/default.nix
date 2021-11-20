@@ -1,6 +1,24 @@
-{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
-, alsa-lib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex, libsamplerate }:
+{ lib
+, stdenv
+, makeWrapper
+, fetchzip
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, curl
+, glew
+, glfw
+, gtk2-x11
+, jansson
+, libjack2
+, libXext
+, libXi
+, libzip
+, rtaudio
+, rtmidi
+, speex
+, libsamplerate
+}:
 
 let
   # The package repo vendors some of the package dependencies as submodules.

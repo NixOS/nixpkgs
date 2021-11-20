@@ -115,4 +115,5 @@ let
       beamDeps = [ ];
     };
   };
-in self
+in
+self

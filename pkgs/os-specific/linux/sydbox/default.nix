@@ -9,8 +9,11 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , libseccomp
-, installTests ? true, gnumake, which
-, debugBuild ? false, libunwind
+, installTests ? true
+, gnumake
+, which
+, debugBuild ? false
+, libunwind
 }:
 
 stdenv.mkDerivation rec {
@@ -38,18 +41,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libseccomp
   ] ++ lib.optional debugBuild libunwind
-    ++ lib.optionals installTests [
-      gnumake
-      python3
-      perl
-      which
-    ];
+  ++ lib.optionals installTests [
+    gnumake
+    python3
+    perl
+    which
+  ];
 
   enableParallelBuilding = true;
 
   configureFlags = [ ]
-    ++ lib.optionals installTests [ "--enable-installed-tests"
-      "--libexecdir=${placeholder "installedTests"}/libexec" ]
+    ++ lib.optionals installTests [
+    "--enable-installed-tests"
+    "--libexecdir=${placeholder "installedTests"}/libexec"
+  ]
     ++ lib.optional debugBuild "--enable-debug";
 
   makeFlags = [ "SYD_INCLUDEDIR=${stdenv.cc.libc.dev}/include" ];
@@ -60,12 +65,13 @@ stdenv.mkDerivation rec {
     make -C syd check
   '';
 
-  postInstall = if installTests then ''
-    moveToOutput bin/syd-test $installedTests
-  '' else ''
-    # Tests are installed despite --disable-installed-tests
-    rm -r $out/bin/syd-test $out/libexec
-  '';
+  postInstall =
+    if installTests then ''
+      moveToOutput bin/syd-test $installedTests
+    '' else ''
+      # Tests are installed despite --disable-installed-tests
+      rm -r $out/bin/syd-test $out/libexec
+    '';
 
   meta = with lib; {
     homepage = "https://sydbox.exherbo.org/";

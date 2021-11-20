@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, substituteAll, buildPythonPackage, isPy3k, gnutls
-, twisted, pyopenssl, service-identity }:
+{ lib
+, fetchFromGitHub
+, substituteAll
+, buildPythonPackage
+, isPy3k
+, gnutls
+, twisted
+, pyopenssl
+, service-identity
+}:
 
 buildPythonPackage rec {
   pname = "python3-gnutls";
@@ -21,7 +29,7 @@ buildPythonPackage rec {
       src = ./libgnutls-path.patch;
       gnutlslib = "${lib.getLib gnutls}/lib";
     })
-   ];
+  ];
 
   pythonImportsCheck = [ "gnutls" ];
 

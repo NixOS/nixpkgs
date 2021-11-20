@@ -26,7 +26,7 @@ let
     sha256 = "1smcbyv6srrhnpl7ic9nqds9nz3g2dgqngmhzkrdlwmvcpvakp1v";
   };
 
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
+  iconvBin = if stdenv.isDarwin then libiconv else buildPackages.stdenv.cc.libc;
 in
 
 stdenv.mkDerivation {

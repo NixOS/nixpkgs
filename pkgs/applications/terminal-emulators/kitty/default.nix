@@ -1,21 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
-  libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
-  libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  lcms2,
-  installShellFiles,
-  dbus,
-  Cocoa,
-  CoreGraphics,
-  Foundation,
-  IOKit,
-  Kernel,
-  OpenGL,
-  libcanberra,
-  libicns,
-  libpng,
-  python3,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, libunistring
+, harfbuzz
+, fontconfig
+, pkg-config
+, ncurses
+, imagemagick
+, xsel
+, libstartup_notification
+, libGL
+, libX11
+, libXrandr
+, libXinerama
+, libXcursor
+, libxkbcommon
+, libXi
+, libXext
+, wayland-protocols
+, wayland
+, lcms2
+, installShellFiles
+, dbus
+, Cocoa
+, CoreGraphics
+, Foundation
+, IOKit
+, Kernel
+, OpenGL
+, libcanberra
+, libicns
+, libpng
+, python3
+, zlib
+,
 }:
 
 with python3Packages;
@@ -46,9 +65,19 @@ buildPythonApplication rec {
     python3
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    fontconfig libunistring libcanberra libX11
-    libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
   ];
 
   nativeBuildInputs = [
@@ -62,7 +91,7 @@ buildPythonApplication rec {
     sphinx-inline-tabs
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
-    libicns  # For the png2icns tool.
+    libicns # For the png2icns tool.
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
@@ -94,8 +123,9 @@ buildPythonApplication rec {
   checkInputs = [ pillow ];
 
   checkPhase =
-    let buildBinPath =
-      if stdenv.isDarwin
+    let
+      buildBinPath =
+        if stdenv.isDarwin
         then "kitty.app/Contents/MacOS"
         else "linux-package/bin";
     in

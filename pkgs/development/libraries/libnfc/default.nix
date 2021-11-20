@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     description = "Open source library libnfc for Near Field Communication";
     license = licenses.gpl3;
     homepage = "https://github.com/nfc-tools/libnfc";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
 }

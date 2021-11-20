@@ -37,5 +37,6 @@ let
 
   variants = [ "base" "full" "minimal" "staging" "unstable" ];
 
-in listToAttrs (map (makeWineTest "winePackages" [ hello32 ]) variants
-  ++ map (makeWineTest "wineWowPackages" [ hello32 hello64 ]) variants)
+in
+listToAttrs (map (makeWineTest "winePackages" [ hello32 ]) variants
+++ map (makeWineTest "wineWowPackages" [ hello32 hello64 ]) variants)

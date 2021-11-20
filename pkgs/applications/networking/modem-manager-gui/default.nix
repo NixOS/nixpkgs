@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkg-config
 , python3
 , fetchFromGitLab

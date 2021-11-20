@@ -1,38 +1,75 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf
+, cmake
+, pkg-config
+, unzip
+, zlib
+, pcre
+, hdf5
+, glog
+, boost
+, gflags
+, protobuf
 , config
 
-, enableJPEG      ? true, libjpeg
-, enablePNG       ? true, libpng
-, enableTIFF      ? true, libtiff
-, enableWebP      ? true, libwebp
-, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
-, enableEigen     ? true, eigen
-, enableOpenblas  ? true, openblas, blas, lapack
-, enableContrib   ? true
+, enableJPEG ? true
+, libjpeg
+, enablePNG ? true
+, libpng
+, enableTIFF ? true
+, libtiff
+, enableWebP ? true
+, libwebp
+, enableEXR ? !stdenv.isDarwin
+, openexr
+, ilmbase
+, enableEigen ? true
+, eigen
+, enableOpenblas ? true
+, openblas
+, blas
+, lapack
+, enableContrib ? true
 
-, enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
+, enableCuda ? (config.cudaSupport or false) &&
+    stdenv.hostPlatform.isx86_64
+, cudatoolkit
 
-, enableUnfree    ? false
-, enableIpp       ? false
-, enablePython    ? false, pythonPackages ? null
-, enableGtk2      ? false, gtk2
-, enableGtk3      ? false, gtk3
-, enableVtk       ? false, vtk
-, enableFfmpeg    ? false, ffmpeg
-, enableGStreamer ? false, gst_all_1
-, enableTesseract ? false, tesseract, leptonica
-, enableTbb       ? false, tbb
-, enableOvis      ? false, ogre
-, enableGPhoto2   ? false, libgphoto2
-, enableDC1394    ? false, libdc1394
-, enableDocs      ? false, doxygen, graphviz-nox
+, enableUnfree ? false
+, enableIpp ? false
+, enablePython ? false
+, pythonPackages ? null
+, enableGtk2 ? false
+, gtk2
+, enableGtk3 ? false
+, gtk3
+, enableVtk ? false
+, vtk
+, enableFfmpeg ? false
+, ffmpeg
+, enableGStreamer ? false
+, gst_all_1
+, enableTesseract ? false
+, tesseract
+, leptonica
+, enableTbb ? false
+, tbb
+, enableOvis ? false
+, ogre
+, enableGPhoto2 ? false
+, libgphoto2
+, enableDC1394 ? false
+, libdc1394
+, enableDocs ? false
+, doxygen
+, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation
+, Cocoa
+, VideoDecodeAcceleration
+, bzip2
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -43,17 +80,17 @@ let
   version = "3.4.15";
 
   src = fetchFromGitHub {
-    owner  = "opencv";
-    repo   = "opencv";
-    rev    = version;
-    hash   = "sha256-dLwQM2VhVlBV4xazS2rItTscKYeeNlNT0G8G1A1mOmc=";
+    owner = "opencv";
+    repo = "opencv";
+    rev = version;
+    hash = "sha256-dLwQM2VhVlBV4xazS2rItTscKYeeNlNT0G8G1A1mOmc=";
   };
 
   contribSrc = fetchFromGitHub {
-    owner  = "opencv";
-    repo   = "opencv_contrib";
-    rev    = version;
-    hash   = "sha256-FJDRMmSOT5jA+n2Ke0gEH7n5rgGvB1UzYpYZ1vmucjg=";
+    owner = "opencv";
+    repo = "opencv_contrib";
+    rev = version;
+    hash = "sha256-FJDRMmSOT5jA+n2Ke0gEH7n5rgGvB1UzYpYZ1vmucjg=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -63,36 +100,37 @@ let
 
   # See opencv/3rdparty/ippicv/ippicv.cmake
   ippicv = {
-    src = fetchFromGitHub {
-      owner  = "opencv";
-      repo   = "opencv_3rdparty";
-      rev    = "32e315a5b106a7b89dbed51c28f8120a48b368b4";
-      sha256 = "19w9f0r16072s59diqxsr5q6nmwyz9gnxjs49nglzhd66p3ddbkp";
-    } + "/ippicv";
-    files = let name = platform : "ippicv_2019_${platform}_general_20180723.tgz"; in
+    src = fetchFromGitHub
+      {
+        owner = "opencv";
+        repo = "opencv_3rdparty";
+        rev = "32e315a5b106a7b89dbed51c28f8120a48b368b4";
+        sha256 = "19w9f0r16072s59diqxsr5q6nmwyz9gnxjs49nglzhd66p3ddbkp";
+      } + "/ippicv";
+    files = let name = platform: "ippicv_2019_${platform}_general_20180723.tgz"; in
       if stdenv.hostPlatform.system == "x86_64-linux" then
-      { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }
+        { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }
       else if stdenv.hostPlatform.system == "i686-linux" then
-      { ${name "lnx_ia32"}    = "4f38432c30bfd6423164b7a24bbc98a0"; }
+        { ${name "lnx_ia32"} = "4f38432c30bfd6423164b7a24bbc98a0"; }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      { ${name "mac_intel64"} = "fe6b2bb75ae0e3f19ad3ae1a31dfa4a2"; }
+        { ${name "mac_intel64"} = "fe6b2bb75ae0e3f19ad3ae1a31dfa4a2"; }
       else
-      throw "ICV is not available for this platform (or not yet supported by this package)";
+        throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
   };
 
   # See opencv_contrib/modules/xfeatures2d/cmake/download_vgg.cmake
   vgg = {
     src = fetchFromGitHub {
-      owner  = "opencv";
-      repo   = "opencv_3rdparty";
-      rev    = "fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d";
+      owner = "opencv";
+      repo = "opencv_3rdparty";
+      rev = "fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d";
       sha256 = "0r9fam8dplyqqsd3qgpnnfgf9l7lj44di19rxwbm8mxiw0rlcdvy";
     };
     files = {
-      "vgg_generated_48.i"  = "e8d0dcd54d1bcfdc29203d011a797179";
-      "vgg_generated_64.i"  = "7126a5d9a8884ebca5aea5d63d677225";
-      "vgg_generated_80.i"  = "7cd47228edec52b6d82f46511af325c5";
+      "vgg_generated_48.i" = "e8d0dcd54d1bcfdc29203d011a797179";
+      "vgg_generated_64.i" = "7126a5d9a8884ebca5aea5d63d677225";
+      "vgg_generated_80.i" = "7cd47228edec52b6d82f46511af325c5";
       "vgg_generated_120.i" = "151805e03568c9f490a5e3a872777b75";
     };
     dst = ".cache/xfeatures2d/vgg";
@@ -101,19 +139,19 @@ let
   # See opencv_contrib/modules/xfeatures2d/cmake/download_boostdesc.cmake
   boostdesc = {
     src = fetchFromGitHub {
-      owner  = "opencv";
-      repo   = "opencv_3rdparty";
-      rev    = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
+      owner = "opencv";
+      repo = "opencv_3rdparty";
+      rev = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
       sha256 = "13yig1xhvgghvxspxmdidss5lqiikpjr0ddm83jsi0k85j92sn62";
     };
     files = {
-      "boostdesc_bgm.i"          = "0ea90e7a8f3f7876d450e4149c97c74f";
-      "boostdesc_bgm_bi.i"       = "232c966b13651bd0e46a1497b0852191";
-      "boostdesc_bgm_hd.i"       = "324426a24fa56ad9c5b8e3e0b3e5303e";
+      "boostdesc_bgm.i" = "0ea90e7a8f3f7876d450e4149c97c74f";
+      "boostdesc_bgm_bi.i" = "232c966b13651bd0e46a1497b0852191";
+      "boostdesc_bgm_hd.i" = "324426a24fa56ad9c5b8e3e0b3e5303e";
       "boostdesc_binboost_064.i" = "202e1b3e9fec871b04da31f7f016679f";
       "boostdesc_binboost_128.i" = "98ea99d399965c03d555cef3ea502a0b";
       "boostdesc_binboost_256.i" = "e6dcfa9f647779eb1ce446a8d759b6ea";
-      "boostdesc_lbgm.i"         = "0ae0675534aa318d9668f2a179c2a052";
+      "boostdesc_lbgm.i" = "0ae0675534aa318d9668f2a179c2a052";
     };
     dst = ".cache/xfeatures2d/boostdesc";
   };
@@ -121,9 +159,9 @@ let
   # See opencv_contrib/modules/face/CMakeLists.txt
   face = {
     src = fetchFromGitHub {
-      owner  = "opencv";
-      repo   = "opencv_3rdparty";
-      rev    = "8afa57abc8229d611c4937165d20e2a2d9fc5a12";
+      owner = "opencv";
+      repo = "opencv_3rdparty";
+      rev = "8afa57abc8229d611c4937165d20e2a2d9fc5a12";
       sha256 = "061lsvqdidq9xa2hwrcvwi9ixflr2c2lfpc8drr159g68zi8bp4v";
     };
     files = {
@@ -133,15 +171,17 @@ let
   };
 
   # See opencv/cmake/OpenCVDownload.cmake
-  installExtraFiles = extra : with lib; ''
+  installExtraFiles = extra: with lib; ''
     mkdir -p "${extra.dst}"
-  '' + concatStrings (mapAttrsToList (name : md5 : ''
-    ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
-  '') extra.files);
+  '' + concatStrings (mapAttrsToList
+    (name: md5: ''
+      ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
+    '')
+    extra.files);
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
-  printEnabled = enabled : if enabled then "ON" else "OFF";
+  printEnabled = enabled: if enabled then "ON" else "OFF";
 in
 
 stdenv.mkDerivation {
@@ -174,13 +214,14 @@ stdenv.mkDerivation {
 
   preConfigure =
     lib.optionalString enableIpp (installExtraFiles ippicv) + (
-    lib.optionalString buildContrib ''
-      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
+      lib.optionalString buildContrib ''
+        cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
 
-      ${installExtraFiles vgg}
-      ${installExtraFiles boostdesc}
-      ${installExtraFiles face}
-    '');
+        ${installExtraFiles vgg}
+        ${installExtraFiles boostdesc}
+        ${installExtraFiles face}
+      ''
+    );
 
   postConfigure = ''
     [ -e modules/core/version_string.inc ]
@@ -188,7 +229,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs =
-       [ zlib pcre hdf5 glog boost gflags ]
+    [ zlib pcre hdf5 glog boost gflags ]
     ++ lib.optional useSystemProtobuf protobuf
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
@@ -201,7 +242,7 @@ stdenv.mkDerivation {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
-                     [ VideoDecodeAcceleration bzip2 ]
+      [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableOvis ogre
     ++ lib.optional enableGPhoto2 libgphoto2
@@ -280,13 +321,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [mdaiter basvandijk];
+    maintainers = with maintainers; [ mdaiter basvandijk ];
     platforms = with platforms; linux ++ darwin;
   };
 }

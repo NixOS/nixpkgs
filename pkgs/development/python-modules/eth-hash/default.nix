@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, pytest
+, pysha3
+, pycrypto
 , pycryptodome
 }:
 

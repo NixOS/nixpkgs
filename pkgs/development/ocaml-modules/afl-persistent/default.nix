@@ -6,9 +6,9 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner  = "stedolan";
-    repo   = "ocaml-${pname}";
-    rev    = "v${version}";
+    owner = "stedolan";
+    repo = "ocaml-${pname}";
+    rev = "v${version}";
     sha256 = "06yyds2vcwlfr2nd3gvyrazlijjcrd1abnvkfpkaadgwdw3qam1i";
   };
 

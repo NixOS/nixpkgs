@@ -1,6 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, mcpp, bzip2, expat, openssl, db5
-, darwin, libiconv, Security
+{ stdenv
+, lib
+, fetchFromGitHub
+, mcpp
+, bzip2
+, expat
+, openssl
+, db5
+, darwin
+, libiconv
+, Security
 , zeroc-ice # to share meta
 , cpp11 ? false
 }:

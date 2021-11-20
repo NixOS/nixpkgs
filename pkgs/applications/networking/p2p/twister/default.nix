@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, python2
-, boost, db, openssl, geoip, libiconv, miniupnpc
-, srcOnly, fetchgit
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoconf
+, automake
+, libtool
+, pkg-config
+, python2
+, boost
+, db
+, openssl
+, geoip
+, libiconv
+, miniupnpc
+, srcOnly
+, fetchgit
 }:
 
 let
@@ -15,7 +29,8 @@ let
 
   boostPython = boost.override { enablePython = true; };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "twister";
   version = "2019-08-19";
 
@@ -37,8 +52,16 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoconf automake libtool python2
-    boostPython db openssl geoip miniupnpc libiconv
+    autoconf
+    automake
+    libtool
+    python2
+    boostPython
+    db
+    openssl
+    geoip
+    miniupnpc
+    libiconv
   ];
 
   postPatch = ''

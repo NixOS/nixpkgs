@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder,
-cython, numpy, pytest, requests-toolbelt }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, cython
+, numpy
+, pytest
+, requests-toolbelt
+}:
 
 buildPythonPackage rec {
   pname = "streaming-form-data";

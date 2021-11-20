@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
-, boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, graphviz, llvmPackages, z3
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, python3Packages
+, boost
+, rapidjson
+, qtbase
+, qtsvg
+, igraph
+, spdlog
+, wrapQtAppsHook
+, graphviz
+, llvmPackages
+, z3
 }:
 
 stdenv.mkDerivation rec {

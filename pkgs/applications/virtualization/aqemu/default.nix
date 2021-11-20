@@ -1,4 +1,10 @@
-{ mkDerivation, cmake, fetchFromGitHub, libvncserver, qemu, qtbase, lib
+{ mkDerivation
+, cmake
+, fetchFromGitHub
+, libvncserver
+, qemu
+, qtbase
+, lib
 }:
 
 mkDerivation rec {

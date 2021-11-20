@@ -79,6 +79,6 @@ buildPythonPackage rec {
     homepage = "http://pycurl.sourceforge.net/";
     description = "Python wrapper for libcurl";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

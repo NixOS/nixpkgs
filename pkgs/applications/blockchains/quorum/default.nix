@@ -36,6 +36,6 @@ buildGoPackage rec {
     homepage = "https://www.goquorum.com/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ mmahut ];
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = subtractLists [ "aarch64-linux" ] platforms.linux;
   };
 }

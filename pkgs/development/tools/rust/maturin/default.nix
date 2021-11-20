@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # Requires network access, fails in sandbox.
   doCheck = false;
 
-  passthru.tests.pyo3 = callPackage ./pyo3-test {};
+  passthru.tests.pyo3 = callPackage ./pyo3-test { };
 
   meta = with lib; {
     description = "Build and publish Rust crates Python packages";

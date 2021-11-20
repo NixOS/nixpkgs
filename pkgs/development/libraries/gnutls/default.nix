@@ -1,9 +1,33 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, util-linux
-, guileBindings ? config.gnutls.guile or false, guile
-, tpmSupport ? false, trousers, which, nettools, libunistring
-, withSecurity ? false, Security  # darwin Security.framework
+{ config
+, lib
+, stdenv
+, fetchurl
+, zlib
+, lzo
+, libtasn1
+, nettle
+, pkg-config
+, lzip
+, perl
+, gmp
+, autoconf
+, automake
+, libidn
+, p11-kit
+, libiconv
+, unbound
+, dns-root-data
+, gettext
+, util-linux
+, guileBindings ? config.gnutls.guile or false
+, guile
+, tpmSupport ? false
+, trousers
+, which
+, nettools
+, libunistring
+, withSecurity ? false
+, Security  # darwin Security.framework
 }:
 
 assert guileBindings -> guile != null;
@@ -12,7 +36,7 @@ let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin
-      && stdenv.buildPlatform == stdenv.hostPlatform;
+    && stdenv.buildPlatform == stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in
@@ -29,7 +53,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   # Not normally useful docs.
   outputInfo = "devdoc";
-  outputDoc  = "devdoc";
+  outputDoc = "devdoc";
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
@@ -52,16 +76,16 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
   configureFlags =
     lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
-  ++ [
-    "--disable-dependency-tracking"
-    "--enable-fast-install"
-    "--with-unbound-root-key-file=${dns-root-data}/root.key"
-  ] ++ lib.optional guileBindings [
-    "--enable-guile"
-    "--with-guile-site-dir=\${out}/share/guile/site"
-    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
-    "--with-guile-extension-dir=\${out}/share/guile/site"
-  ];
+    ++ [
+      "--disable-dependency-tracking"
+      "--enable-fast-install"
+      "--with-unbound-root-key-file=${dns-root-data}/root.key"
+    ] ++ lib.optional guileBindings [
+      "--enable-guile"
+      "--with-guile-site-dir=\${out}/share/guile/site"
+      "--with-guile-site-ccache-dir=\${out}/share/guile/site"
+      "--with-guile-extension-dir=\${out}/share/guile/site"
+    ];
 
   enableParallelBuilding = true;
 
@@ -98,17 +122,17 @@ stdenv.mkDerivation rec {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
-       GnuTLS is a project that aims to develop a library which
-       provides a secure layer, over a reliable transport
-       layer. Currently the GnuTLS library implements the proposed standards by
-       the IETF's TLS working group.
+      GnuTLS is a project that aims to develop a library which
+      provides a secure layer, over a reliable transport
+      layer. Currently the GnuTLS library implements the proposed standards by
+      the IETF's TLS working group.
 
-       Quoting from the TLS protocol specification:
+      Quoting from the TLS protocol specification:
 
-       "The TLS protocol provides communications privacy over the
-       Internet. The protocol allows client/server applications to
-       communicate in a way that is designed to prevent eavesdropping,
-       tampering, or message forgery."
+      "The TLS protocol provides communications privacy over the
+      Internet. The protocol allows client/server applications to
+      communicate in a way that is designed to prevent eavesdropping,
+      tampering, or message forgery."
     '';
 
     homepage = "https://gnutls.org/";

@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config copyDesktopItems ];
   buildInputs = [ SDL lua5_1 SDL_mixer SDL_image SDL_ttf ];
 
-  desktopItems = [ (makeDesktopItem {
-    name = "fish-fillets-ng";
-    exec = "fillets";
-    icon = "fish-fillets-ng";
-    desktopName = "Fish Fillets";
-    comment     = "Puzzle game about witty fish saving the world sokoban-style";
-    categories  = "Game;LogicGame;";
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "fish-fillets-ng";
+      exec = "fillets";
+      icon = "fish-fillets-ng";
+      desktopName = "Fish Fillets";
+      comment = "Puzzle game about witty fish saving the world sokoban-style";
+      categories = "Game;LogicGame;";
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/share/games/fillets-ng

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     luajit
     sqlite
     webkitgtk
-  ] ++ ( with gst_all_1; [
+  ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
     gst-plugins-good
@@ -63,15 +63,17 @@ stdenv.mkDerivation rec {
     "XDGPREFIX=${placeholder "out"}/etc/xdg"
   ];
 
-  preFixup = let
-    luaKitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
-  in ''
-    gappsWrapperArgs+=(
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-      --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
-      --prefix LUA_CPATH ';' "$LUA_CPATH"
-    )
-  '';
+  preFixup =
+    let
+      luaKitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
+        --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
+        --prefix LUA_CPATH ';' "$LUA_CPATH"
+      )
+    '';
 
   meta = with lib; {
     homepage = "https://luakit.github.io/";
@@ -83,8 +85,8 @@ stdenv.mkDerivation rec {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    license     = licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

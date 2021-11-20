@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitLab
+{ stdenv
+, lib
+, fetchFromGitLab
 }:
 
 stdenv.mkDerivation rec {

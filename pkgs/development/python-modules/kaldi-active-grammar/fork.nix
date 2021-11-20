@@ -21,7 +21,8 @@ let
       sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
     };
     buildInputs = [ zlib ];
-  }); in
+  });
+in
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 

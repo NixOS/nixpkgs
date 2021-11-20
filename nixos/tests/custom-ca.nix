@@ -7,64 +7,66 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   makeCert = { caName, domain }: pkgs.runCommand "example-cert"
-  { buildInputs = [ pkgs.gnutls ]; }
-  ''
-    mkdir $out
+    { buildInputs = [ pkgs.gnutls ]; }
+    ''
+      mkdir $out
 
-    # CA cert template
-    cat >ca.template <<EOF
-    organization = "${caName}"
-    cn = "${caName}"
-    expiration_days = 365
-    ca
-    cert_signing_key
-    crl_signing_key
-    EOF
+      # CA cert template
+      cat >ca.template <<EOF
+      organization = "${caName}"
+      cn = "${caName}"
+      expiration_days = 365
+      ca
+      cert_signing_key
+      crl_signing_key
+      EOF
 
-    # server cert template
-    cat >server.template <<EOF
-    organization = "An example company"
-    cn = "${domain}"
-    expiration_days = 30
-    dns_name = "${domain}"
-    encryption_key
-    signing_key
-    EOF
+      # server cert template
+      cat >server.template <<EOF
+      organization = "An example company"
+      cn = "${domain}"
+      expiration_days = 30
+      dns_name = "${domain}"
+      encryption_key
+      signing_key
+      EOF
 
-    # generate CA keypair
-    certtool                \
-      --generate-privkey    \
-      --key-type rsa        \
-      --sec-param High      \
-      --outfile $out/ca.key
-    certtool                     \
-      --generate-self-signed     \
-      --load-privkey $out/ca.key \
-      --template ca.template     \
-      --outfile $out/ca.crt
+      # generate CA keypair
+      certtool                \
+        --generate-privkey    \
+        --key-type rsa        \
+        --sec-param High      \
+        --outfile $out/ca.key
+      certtool                     \
+        --generate-self-signed     \
+        --load-privkey $out/ca.key \
+        --template ca.template     \
+        --outfile $out/ca.crt
 
-    # generate server keypair
-    certtool                    \
-      --generate-privkey        \
-      --key-type rsa            \
-      --sec-param High          \
-      --outfile $out/server.key
-    certtool                            \
-      --generate-certificate            \
-      --load-privkey $out/server.key    \
-      --load-ca-privkey $out/ca.key     \
-      --load-ca-certificate $out/ca.crt \
-      --template server.template        \
-      --outfile $out/server.crt
-  '';
+      # generate server keypair
+      certtool                    \
+        --generate-privkey        \
+        --key-type rsa            \
+        --sec-param High          \
+        --outfile $out/server.key
+      certtool                            \
+        --generate-certificate            \
+        --load-privkey $out/server.key    \
+        --load-ca-privkey $out/ca.key     \
+        --load-ca-certificate $out/ca.crt \
+        --template server.template        \
+        --outfile $out/server.crt
+    '';
 
   example-good-cert = makeCert
-    { caName = "Example good CA";
+    {
+      caName = "Example good CA";
       domain = "good.example.com";
     };
 
   example-bad-cert = makeCert
-    { caName = "Unknown CA";
+    {
+      caName = "Unknown CA";
       domain = "bad.example.com";
     };
 
@@ -77,7 +79,8 @@ in
   enableOCR = true;
 
   machine = { pkgs, ... }:
-    { imports = [ ./common/user-account.nix ./common/x11.nix ];
+    {
+      imports = [ ./common/user-account.nix ./common/x11.nix ];
 
       # chromium-based browsers refuse to run as root
       test-support.displayManager.auto.user = "alice";
@@ -89,7 +92,8 @@ in
 
       services.nginx.enable = true;
       services.nginx.virtualHosts."good.example.com" =
-        { onlySSL = true;
+        {
+          onlySSL = true;
           sslCertificate = "${example-good-cert}/server.crt";
           sslCertificateKey = "${example-good-cert}/server.key";
           locations."/".extraConfig = ''
@@ -98,7 +102,8 @@ in
           '';
         };
       services.nginx.virtualHosts."bad.example.com" =
-        { onlySSL = true;
+        {
+          onlySSL = true;
           sslCertificate = "${example-bad-cert}/server.crt";
           sslCertificateKey = "${example-bad-cert}/server.key";
           locations."/".extraConfig = ''

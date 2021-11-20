@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, dovecot, openssl }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
   version = "0.5.17";
 

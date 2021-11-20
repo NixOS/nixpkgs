@@ -1,8 +1,8 @@
 let
-  grpcPort   = 19090;
-  queryPort  =  9090;
-  minioPort  =  9000;
-  pushgwPort =  9091;
+  grpcPort = 19090;
+  queryPort = 9090;
+  minioPort = 9000;
+  pushgwPort = 9091;
 
   s3 = {
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
@@ -14,12 +14,12 @@ let
     config = {
       bucket = "thanos-bucket";
       endpoint = "s3:${toString minioPort}";
-      region =  "us-east-1";
+      region = "us-east-1";
       access_key = s3.accessKey;
       secret_key = s3.secretKey;
       insecure = true;
       signature_version2 = false;
-      put_user_metadata = {};
+      put_user_metadata = { };
       http_config = {
         idle_conn_timeout = "0s";
         insecure_skip_verify = false;
@@ -30,7 +30,8 @@ let
     };
   };
 
-in import ./make-test-python.nix {
+in
+import ./make-test-python.nix {
   name = "prometheus";
 
   nodes = {
@@ -184,7 +185,7 @@ in import ./make-test-python.nix {
       };
     };
 
-    s3 = { pkgs, ... } : {
+    s3 = { pkgs, ... }: {
       # Minio requires at least 1GiB of free disk space to run.
       virtualisation = {
         diskSize = 2 * 1024;
@@ -206,7 +207,7 @@ in import ./make-test-python.nix {
     };
   };
 
-  testScript = { nodes, ... } : ''
+  testScript = { nodes, ... }: ''
     import json
 
     # Before starting the other machines we first make sure that our S3 service is online

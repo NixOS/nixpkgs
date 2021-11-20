@@ -58,28 +58,28 @@ rec {
   */
   mkOption =
     {
-    # Default value used when no definition is given in the configuration.
-    default ? null,
-    # Textual representation of the default, for the manual.
-    defaultText ? null,
-    # Example value used in the manual.
-    example ? null,
-    # String describing the option.
-    description ? null,
-    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
-    relatedPackages ? null,
-    # Option type, providing type-checking and value merging.
-    type ? null,
-    # Function that converts the option value to something else.
-    apply ? null,
-    # Whether the option is for NixOS developers only.
-    internal ? null,
-    # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
-    visible ? null,
-    # Whether the option can be set only once
-    readOnly ? null,
-    # Deprecated, used by types.optionSet.
-    options ? null
+      # Default value used when no definition is given in the configuration.
+      default ? null
+    , # Textual representation of the default, for the manual.
+      defaultText ? null
+    , # Example value used in the manual.
+      example ? null
+    , # String describing the option.
+      description ? null
+    , # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
+      relatedPackages ? null
+    , # Option type, providing type-checking and value merging.
+      type ? null
+    , # Function that converts the option value to something else.
+      apply ? null
+    , # Whether the option is for NixOS developers only.
+      internal ? null
+    , # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
+      visible ? null
+    , # Whether the option can be set only once
+      readOnly ? null
+    , # Deprecated, used by types.optionSet.
+      options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -93,11 +93,11 @@ rec {
   mkEnableOption =
     # Name for the created option
     name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
-  };
+      default = false;
+      example = true;
+      description = "Whether to enable ${name}.";
+      type = lib.types.bool;
+    };
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -122,30 +122,33 @@ rec {
     if length list == 1 then head list
     else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
-    else if all isAttrs list then foldl' lib.mergeAttrs {} list
+    else if all isAttrs list then foldl' lib.mergeAttrs { } list
     else if all isBool list then foldl' lib.or false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
   mergeOneOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
+    if defs == [ ] then abort "This case should never happen."
     else if length defs != 1 then
       throw "The unique option `${showOption loc}' is defined multiple times. Definition values:${showDefs defs}"
     else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
+    if defs == [ ] then abort "This case should never happen."
     # Return early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then (head defs).value
-    else (foldl' (first: def:
-      if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
-      else
-        first) (head defs) (tail defs)).value;
+    else (foldl'
+      (first: def:
+        if def.value != first.value then
+          throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
+        else
+          first)
+      (head defs)
+      (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
@@ -169,35 +172,37 @@ rec {
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
-  optionAttrSetToDocList = optionAttrSetToDocList' [];
+  optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' = prefix: options:
-    concatMap (opt:
-      let
-        docOption = rec {
-          loc = opt.loc;
-          name = showOption opt.loc;
-          description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible =
-            if (opt?visible && opt.visible == "shallow")
-            then true
-            else opt.visible or true;
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
-        }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
+    concatMap
+      (opt:
+        let
+          docOption = rec {
+            loc = opt.loc;
+            name = showOption opt.loc;
+            description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
+            declarations = filter (x: x != unknownModule) opt.declarations;
+            internal = opt.internal or false;
+            visible =
+              if (opt?visible && opt.visible == "shallow")
+              then true
+              else opt.visible or true;
+            readOnly = opt.readOnly or false;
+            type = opt.type.description or null;
+          }
+          // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
+          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
+          // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
-        subOptions =
-          let ss = opt.type.getSubOptions opt.loc;
-          in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
-        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
-      in
-        [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
+          subOptions =
+            let ss = opt.type.getSubOptions opt.loc;
+            in if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
+          subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
+        in
+        [ docOption ] ++ optionals subOptionsVisible subOptions)
+      (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
@@ -212,7 +217,7 @@ rec {
     if isDerivation x then
       { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
-    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
+    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x [ "_args" ])
     else x;
 
 
@@ -252,34 +257,40 @@ rec {
      Unlike attributes, options can also start with numbers:
        (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.2bwm.enable"
   */
-  showOption = parts: let
-    escapeOptionPart = part:
-      let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
-         then part
-         else escaped;
-    in (concatStringsSep ".") (map escapeOptionPart parts);
+  showOption = parts:
+    let
+      escapeOptionPart = part:
+        let
+          escaped = lib.strings.escapeNixString part;
+        in
+        if escaped == "\"${part}\""
+        then part
+        else escaped;
+    in
+    (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
-  showDefs = defs: concatMapStrings (def:
-    let
-      # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval
-        (lib.generators.toPretty { }
-          (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
-      # Split it into its lines
-      lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
-      # Only display the first 5 lines, and indent them for better visibility
-      value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
-      result =
-        # Don't print any value if evaluating the value strictly fails
-        if ! prettyEval.success then ""
-        # Put it on a new line if it consists of multiple
-        else if length lines > 1 then ":\n    " + value
-        else ": " + value;
-    in "\n- In `${def.file}'${result}"
-  ) defs;
+  showDefs = defs: concatMapStrings
+    (def:
+      let
+        # Pretty print the value for display, if successful
+        prettyEval = builtins.tryEval
+          (lib.generators.toPretty { }
+            (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
+        # Split it into its lines
+        lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
+        # Only display the first 5 lines, and indent them for better visibility
+        value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
+        result =
+          # Don't print any value if evaluating the value strictly fails
+          if ! prettyEval.success then ""
+          # Put it on a new line if it consists of multiple
+          else if length lines > 1 then ":\n    " + value
+          else ": " + value;
+      in
+      "\n- In `${def.file}'${result}"
+    )
+    defs;
 
   unknownModule = "<unknown-file>";
 

@@ -26,7 +26,7 @@ let
       };
 
       event = mkOption {
-        type = types.enum ["press" "hold" "release"];
+        type = types.enum [ "press" "hold" "release" ];
         default = "press";
         description = "Event to match.";
       };
@@ -68,7 +68,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
         '';

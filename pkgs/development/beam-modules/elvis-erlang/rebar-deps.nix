@@ -165,4 +165,5 @@ let
       beamDeps = [ goldrush hackney jsx lager ];
     };
   };
-in self
+in
+self

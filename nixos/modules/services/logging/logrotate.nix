@@ -105,7 +105,7 @@ in
 
       paths = mkOption {
         type = with types; attrsOf (submodule pathOpts);
-        default = {};
+        default = { };
         description = ''
           Attribute set of paths to rotate. The order each block appears in the generated configuration file
           can be controlled by the <link linkend="opt-services.logrotate.paths._name_.priority">priority</link> option
@@ -144,13 +144,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = mapAttrsToList (name: pathOpts:
-      { assertion = (pathOpts.user != null) == (pathOpts.group != null);
-        message = ''
-          If either of `services.logrotate.paths.${name}.user` or `services.logrotate.paths.${name}.group` are specified then *both* must be specified.
-        '';
-      }
-    ) cfg.paths;
+    assertions = mapAttrsToList
+      (name: pathOpts:
+        {
+          assertion = (pathOpts.user != null) == (pathOpts.group != null);
+          message = ''
+            If either of `services.logrotate.paths.${name}.user` or `services.logrotate.paths.${name}.group` are specified then *both* must be specified.
+          '';
+        }
+      )
+      cfg.paths;
 
     systemd.services.logrotate = {
       description = "Logrotate Service";

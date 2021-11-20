@@ -7,7 +7,8 @@
 let
   inherit (python3.pkgs) certifi;
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "certifi";
   version = "2019.11.28";
 

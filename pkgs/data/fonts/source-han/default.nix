@@ -14,9 +14,10 @@ let
       ''
     , zip ? ""
     }:
-    let Family =
-      lib.toUpper (lib.substring 0 1 family) +
-      lib.substring 1 (lib.stringLength family) family;
+    let
+      Family =
+        lib.toUpper (lib.substring 0 1 family) +
+        lib.substring 1 (lib.stringLength family) family;
     in
     fetchzip {
       name = "source-han-${family}-${lib.removeSuffix "R" rev}";

@@ -1,8 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , python3Packages
 , fetchFromGitHub
 , systemd
-, xrandr }:
+, xrandr
+}:
 
 stdenv.mkDerivation rec {
   pname = "autorandr";

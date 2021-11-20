@@ -1,7 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy
-, pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
-, python-slugify }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, pytest
+, pytest-cov
+, pytest-mock
+, freezegun
+, jinja2
+, future
+, binaryornot
+, click
+, whichcraft
+, poyo
+, jinja2_time
+, requests
+, python-slugify
+}:
 
 buildPythonPackage rec {
   pname = "cookiecutter";
@@ -17,7 +31,15 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-cov pytest-mock freezegun ];
   propagatedBuildInputs = [
-    jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
+    jinja2
+    future
+    binaryornot
+    click
+    whichcraft
+    poyo
+    jinja2_time
+    requests
+    python-slugify
   ];
 
   # requires network access for cloning git repos

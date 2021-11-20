@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "libpsm2";
   version = "11.2.185";
 
-  preConfigure= ''
+  preConfigure = ''
     export UDEVDIR=$out/etc/udev
     substituteInPlace ./Makefile --replace "udevrulesdir}" "prefix}/etc/udev";
   '';

@@ -1,4 +1,7 @@
-{ lib, mkCoqDerivation, coq, version ? null
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
 , ssreflect
 }:
 with lib;
@@ -10,7 +13,8 @@ mkCoqDerivation {
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.11" "8.14"; out = "0.1.0"; }
-  ] null;
+  ]
+    null;
 
   releaseRev = v: "v${v}";
 

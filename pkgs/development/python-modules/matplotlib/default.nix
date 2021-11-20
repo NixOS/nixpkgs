@@ -1,14 +1,43 @@
-{ lib, stdenv, fetchPypi, writeText, buildPythonPackage, isPy3k, pycairo
-, which, cycler, python-dateutil, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, qhull, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
-, certifi, pillow
-, enableGhostscript ? true, ghostscript, gtk3
-, enableGtk3 ? false, cairo
-# darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter
-, enableQt ? false, pyqt5
-# required for headless detection
-, libX11, wayland
+{ lib
+, stdenv
+, fetchPypi
+, writeText
+, buildPythonPackage
+, isPy3k
+, pycairo
+, which
+, cycler
+, python-dateutil
+, numpy
+, pyparsing
+, sphinx
+, tornado
+, kiwisolver
+, freetype
+, qhull
+, libpng
+, pkg-config
+, mock
+, pytz
+, pygobject3
+, gobject-introspection
+, certifi
+, pillow
+, enableGhostscript ? true
+, ghostscript
+, gtk3
+, enableGtk3 ? false
+, cairo
+  # darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin
+, tcl
+, tk
+, tkinter
+, enableQt ? false
+, pyqt5
+  # required for headless detection
+, libX11
+, wayland
 , Cocoa
 }:
 
@@ -36,8 +65,21 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler python-dateutil numpy pyparsing tornado freetype qhull
-      kiwisolver certifi libpng mock pytz pillow ]
+    [
+      cycler
+      python-dateutil
+      numpy
+      pyparsing
+      tornado
+      freetype
+      qhull
+      kiwisolver
+      certifi
+      libpng
+      mock
+      pytz
+      pillow
+    ]
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ lib.optionals enableQt [ pyqt5 ];
@@ -52,7 +94,7 @@ buildPythonPackage rec {
       enable_lto = false;
     };
   };
-  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI { } passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
@@ -82,8 +124,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "https://matplotlib.org/";
-    license     = with licenses; [ psfl bsd0 ];
+    homepage = "https://matplotlib.org/";
+    license = with licenses; [ psfl bsd0 ];
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 

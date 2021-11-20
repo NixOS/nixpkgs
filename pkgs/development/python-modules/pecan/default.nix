@@ -3,13 +3,13 @@
 , fetchpatch
 , buildPythonPackage
 , isPy27
-# Python deps
+  # Python deps
 , logutils
 , Mako
 , singledispatch ? null
 , six
 , webtest
-# Test Inputs
+  # Test Inputs
 , pytestCheckHook
 , genshi
 , gunicorn

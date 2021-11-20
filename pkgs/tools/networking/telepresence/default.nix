@@ -1,12 +1,24 @@
-{ lib, pythonPackages, fetchFromGitHub, makeWrapper, git
-, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
-, iptables, bash }:
+{ lib
+, pythonPackages
+, fetchFromGitHub
+, makeWrapper
+, git
+, sshfs-fuse
+, torsocks
+, sshuttle
+, conntrack-tools
+, openssh
+, coreutils
+, iptables
+, bash
+}:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in pythonPackages.buildPythonPackage rec {
+in
+pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
 

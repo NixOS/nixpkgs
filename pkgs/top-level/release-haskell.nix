@@ -35,14 +35,16 @@ let
   # > accumulateDerivations [ drv1 "string" { foo = drv2; bar = { baz = drv3; }; } ]
   # [ drv1 drv2 drv3 ]
   accumulateDerivations = jobList:
-    lib.concatMap (
-      attrs:
+    lib.concatMap
+      (
+        attrs:
         if lib.isDerivation attrs
         then [ attrs ]
         else if lib.isAttrs attrs
         then accumulateDerivations (lib.attrValues attrs)
-        else []
-    ) jobList;
+        else [ ]
+      )
+      jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
@@ -65,13 +67,17 @@ let
   # combinations. See `jobs` below for an example.
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
-      (lib.mapAttrs (
-        ghc: jobs:
-        lib.filterAttrs (
-          jobName: platforms:
-          lib.elem ghc (config."${jobName}" or [])
-        ) jobs
-      ) compilerPlatforms);
+      (lib.mapAttrs
+        (
+          ghc: jobs:
+            lib.filterAttrs
+              (
+                jobName: platforms:
+                  lib.elem ghc (config."${jobName}" or [ ])
+              )
+              jobs
+        )
+        compilerPlatforms);
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
@@ -79,11 +85,13 @@ let
 
   # names of packages in an attribute set that are maintained
   maintainedPkgNames = set: builtins.attrNames
-    (lib.filterAttrs (
-      _: v: builtins.length (v.meta.maintainers or []) > 0
-    ) set);
+    (lib.filterAttrs
+      (
+        _: v: builtins.length (v.meta.maintainers or [ ]) > 0
+      )
+      set);
 
-  recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate {};
+  recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate { };
 
   # Remove multiple elements from a list at once.
   #
@@ -120,8 +128,8 @@ let
     lib.mapAttrsRecursive
       (_: val:
         if lib.isList val
-          then removeMany platformsToRemove val
-          else val
+        then removeMany platformsToRemove val
+        else val
       )
       packageSet;
 
@@ -250,13 +258,13 @@ let
           # remove musl ghc865Binary since it is known to be broken and
           # causes an evaluation error on darwin.
           # TODO: remove ghc865Binary altogether and use ghc8102Binary
-          ghc865Binary = {};
+          ghc865Binary = { };
 
-          ghcjs = {};
-          ghcjs810 = {};
+          ghcjs = { };
+          ghcjs810 = { };
 
           # Can't be built with musl, see meta.broken comment in the drv
-          integer-simple.ghc884 = {};
+          integer-simple.ghc884 = { };
         };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -411,4 +419,5 @@ let
     }
   ];
 
-in jobs
+in
+jobs

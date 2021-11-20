@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, makeWrapper, cmake, llvmPackages, kernel
-, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, llvmPackages
+, kernel
+, flex
+, bison
+, elfutils
+, python
+, luajit
+, netperf
+, iperf
+, libelf
+, systemtap
+, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -20,9 +33,17 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang kernel
-    elfutils luajit netperf iperf
-    systemtap.stapBuild flex bash
+    llvm
+    llvm.dev
+    libclang
+    kernel
+    elfutils
+    luajit
+    netperf
+    iperf
+    systemtap.stapBuild
+    flex
+    bash
   ];
 
   patches = [
@@ -73,8 +94,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };
 }

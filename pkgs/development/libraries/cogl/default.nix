@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
-, pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome
-, mesa, automake, autoconf
-, gstreamerSupport ? true, gst_all_1 }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libGL
+, glib
+, gdk-pixbuf
+, xorg
+, libintl
+, pangoSupport ? true
+, pango
+, cairo
+, gobject-introspection
+, wayland
+, gnome
+, mesa
+, automake
+, autoconf
+, gstreamerSupport ? true
+, gst_all_1
+}:
 
 stdenv.mkDerivation rec {
   pname = "cogl";
@@ -42,17 +60,26 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk-pixbuf gobject-introspection wayland mesa
-      libGL libXrandr libXfixes libXcomposite libXdamage
-    ]
-    ++ lib.optionals gstreamerSupport [ gst_all_1.gstreamer
-                                               gst_all_1.gst-plugins-base ];
+    glib
+    gdk-pixbuf
+    gobject-introspection
+    wayland
+    mesa
+    libGL
+    libXrandr
+    libXfixes
+    libXcomposite
+    libXdamage
+  ]
+  ++ lib.optionals gstreamerSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ];
 
   buildInputs = lib.optionals pangoSupport [ pango cairo ];
 
-  COGL_PANGO_DEP_CFLAGS
-    = lib.optionalString (stdenv.isDarwin && pangoSupport)
-      "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
+  COGL_PANGO_DEP_CFLAGS = lib.optionalString (stdenv.isDarwin && pangoSupport)
+    "-I${pango.dev}/include/pango-1.0 -I${cairo.dev}/include/cairo";
 
   #doCheck = true; # all tests fail (no idea why)
 

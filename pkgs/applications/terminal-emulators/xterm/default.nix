@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig
-, pkg-config, makeWrapper, nixosTests, writeScript, common-updater-scripts, git
-, nixfmt, nix, gnused, coreutils, enableDecLocator ? true }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, xorg
+, ncurses
+, freetype
+, fontconfig
+, pkg-config
+, makeWrapper
+, nixosTests
+, writeScript
+, common-updater-scripts
+, git
+, nixfmt
+, nix
+, gnused
+, coreutils
+, enableDecLocator ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "xterm";
@@ -34,11 +51,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./sixel-256.support.patch ]
     ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-      name = "posix-ptys.patch";
-      url =
-        "https://git.alpinelinux.org/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
-      sha256 = "0czgnsxkkmkrk1idw69qxbprh0jb4sw3c24zpnqq2v76jkl7zvlr";
-    });
+    name = "posix-ptys.patch";
+    url =
+      "https://git.alpinelinux.org/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
+    sha256 = "0czgnsxkkmkrk1idw69qxbprh0jb4sw3c24zpnqq2v76jkl7zvlr";
+  });
 
   configureFlags = [
     "--enable-wide-chars"
@@ -78,37 +95,39 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = { inherit (nixosTests) xterm; };
 
-    updateScript = let
-      # Tags that end in letters are unstable
-      suffixes = lib.concatStringsSep " "
-        (map (c: "-c versionsort.suffix='${c}'")
-          (lib.stringToCharacters "abcdefghijklmnopqrstuvwxyz"));
-    in writeScript "update.sh" ''
-      #!${stdenv.shell}
-      set -o errexit
-      PATH=${
-        lib.makeBinPath [
-          common-updater-scripts
-          git
-          nixfmt
-          nix
-          coreutils
-          gnused
-        ]
-      }
+    updateScript =
+      let
+        # Tags that end in letters are unstable
+        suffixes = lib.concatStringsSep " "
+          (map (c: "-c versionsort.suffix='${c}'")
+            (lib.stringToCharacters "abcdefghijklmnopqrstuvwxyz"));
+      in
+      writeScript "update.sh" ''
+        #!${stdenv.shell}
+        set -o errexit
+        PATH=${
+          lib.makeBinPath [
+            common-updater-scripts
+            git
+            nixfmt
+            nix
+            coreutils
+            gnused
+          ]
+        }
 
-      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
-      latestTag="$(git ${suffixes} ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:ThomasDickey/xterm-snapshots.git 'xterm-*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^xterm-||g')"
+        oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+        latestTag="$(git ${suffixes} ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:ThomasDickey/xterm-snapshots.git 'xterm-*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^xterm-||g')"
 
-      if [ ! "$oldVersion" = "$latestTag" ]; then
-        update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/applications/terminal-emulators/xterm/default.nix"
-        nixfmt "$default_nix"
-      else
-        echo "${pname} is already up-to-date"
-      fi
-    '';
+        if [ ! "$oldVersion" = "$latestTag" ]; then
+          update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+          nixpkgs="$(git rev-parse --show-toplevel)"
+          default_nix="$nixpkgs/pkgs/applications/terminal-emulators/xterm/default.nix"
+          nixfmt "$default_nix"
+        else
+          echo "${pname} is already up-to-date"
+        fi
+      '';
   };
 
   meta = {

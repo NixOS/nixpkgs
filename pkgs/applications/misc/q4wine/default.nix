@@ -1,7 +1,18 @@
-{ lib, fetchFromGitHub, mkDerivation, cmake, sqlite
-, qtbase, qtsvg, qttools, wrapQtAppsHook
+{ lib
+, fetchFromGitHub
+, mkDerivation
+, cmake
+, sqlite
+, qtbase
+, qtsvg
+, qttools
+, wrapQtAppsHook
 , icoutils # build and runtime deps.
-, wget, fuseiso, wine, sudo, which # runtime deps.
+, wget
+, fuseiso
+, wine
+, sudo
+, which # runtime deps.
 }:
 
 mkDerivation rec {
@@ -16,7 +27,11 @@ mkDerivation rec {
   };
 
   buildInputs = [
-     sqlite icoutils qtbase qtsvg qttools
+    sqlite
+    icoutils
+    qtbase
+    qtsvg
+    qttools
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

@@ -1,5 +1,11 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config
-, qttools, qtx11extras, drumstick
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, qttools
+, qtx11extras
+, drumstick
 , docbook-xsl-nons
 }:
 

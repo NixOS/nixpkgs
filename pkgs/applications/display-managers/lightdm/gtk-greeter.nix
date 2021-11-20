@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , lightdm_gtk_greeter
 , fetchurl
 , lightdm

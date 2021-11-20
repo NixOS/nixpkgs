@@ -28,7 +28,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
   ];
 

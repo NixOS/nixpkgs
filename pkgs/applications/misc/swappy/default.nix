@@ -29,7 +29,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook ];
 
   buildInputs = [
-    cairo pango gtk libnotify wayland glib hicolor-icon-theme
+    cairo
+    pango
+    gtk
+    libnotify
+    wayland
+    glib
+    hicolor-icon-theme
   ];
 
   strictDeps = true;

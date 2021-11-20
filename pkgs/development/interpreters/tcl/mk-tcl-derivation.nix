@@ -6,24 +6,25 @@
 , writeScript
 }:
 
-{ buildInputs ? []
-, nativeBuildInputs ? []
-, propagatedBuildInputs ? []
-, checkInputs ? []
+{ buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, propagatedBuildInputs ? [ ]
+, checkInputs ? [ ]
 
-# true if we should skip the configuration phase altogether
+  # true if we should skip the configuration phase altogether
 , dontConfigure ? false
 
-# Extra flags passed to configure step
-, configureFlags ? []
+  # Extra flags passed to configure step
+, configureFlags ? [ ]
 
-# Whether or not we should add common Tcl-related configure flags
+  # Whether or not we should add common Tcl-related configure flags
 , addTclConfigureFlags ? true
 
-, meta ? {}
-, passthru ? {}
+, meta ? { }
+, passthru ? { }
 , doCheck ? true
-, ... } @ attrs:
+, ...
+} @ attrs:
 
 let
   inherit (tcl) stdenv;
@@ -36,7 +37,10 @@ let
   ];
 
   self = (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "addTclConfigureFlags" "checkPhase" "checkInputs" "doCheck"
+    "addTclConfigureFlags"
+    "checkPhase"
+    "checkInputs"
+    "doCheck"
   ]) // {
 
     buildInputs = buildInputs ++ [ tcl.tclPackageHook ];
@@ -53,8 +57,8 @@ let
     # Add typical values expected by TEA for configureFlags
     configureFlags =
       if (!dontConfigure && addTclConfigureFlags)
-        then (configureFlags ++ defaultTclPkgConfigureFlags)
-        else configureFlags;
+      then (configureFlags ++ defaultTclPkgConfigureFlags)
+      else configureFlags;
 
     meta = {
       platforms = tcl.meta.platforms;
@@ -66,4 +70,5 @@ let
   }
   ));
 
-in lib.extendDerivation true passthru self
+in
+lib.extendDerivation true passthru self

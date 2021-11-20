@@ -13,112 +13,113 @@ let
     extraLibs = cfg.plugins;
   };
   configFile = pkgs.writeText "homeserver.yaml" ''
-${optionalString (cfg.tls_certificate_path != null) ''
-tls_certificate_path: "${cfg.tls_certificate_path}"
-''}
-${optionalString (cfg.tls_private_key_path != null) ''
-tls_private_key_path: "${cfg.tls_private_key_path}"
-''}
-${optionalString (cfg.tls_dh_params_path != null) ''
-tls_dh_params_path: "${cfg.tls_dh_params_path}"
-''}
-no_tls: ${boolToString cfg.no_tls}
-${optionalString (cfg.bind_port != null) ''
-bind_port: ${toString cfg.bind_port}
-''}
-${optionalString (cfg.unsecure_port != null) ''
-unsecure_port: ${toString cfg.unsecure_port}
-''}
-${optionalString (cfg.bind_host != null) ''
-bind_host: "${cfg.bind_host}"
-''}
-server_name: "${cfg.server_name}"
-pid_file: "/run/matrix-synapse.pid"
-${optionalString (cfg.public_baseurl != null) ''
-public_baseurl: "${cfg.public_baseurl}"
-''}
-listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
-database: {
-  name: "${cfg.database_type}",
-  args: {
-    ${concatStringsSep ",\n    " (
-      mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
-    )}
-  }
-}
-event_cache_size: "${cfg.event_cache_size}"
-verbose: ${cfg.verbose}
-log_config: "${logConfigFile}"
-rc_messages_per_second: ${cfg.rc_messages_per_second}
-rc_message_burst_count: ${cfg.rc_message_burst_count}
-federation_rc_window_size: ${cfg.federation_rc_window_size}
-federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
-federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
-federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
-federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "${cfg.dataDir}/media"
-uploads_path: "${cfg.dataDir}/uploads"
-max_upload_size: "${cfg.max_upload_size}"
-max_image_pixels: "${cfg.max_image_pixels}"
-dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
-url_preview_enabled: ${boolToString cfg.url_preview_enabled}
-${optionalString (cfg.url_preview_enabled == true) ''
-url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
-url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
-url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
-''}
-recaptcha_private_key: "${cfg.recaptcha_private_key}"
-recaptcha_public_key: "${cfg.recaptcha_public_key}"
-enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
-turn_uris: ${builtins.toJSON cfg.turn_uris}
-turn_shared_secret: "${cfg.turn_shared_secret}"
-enable_registration: ${boolToString cfg.enable_registration}
-${optionalString (cfg.registration_shared_secret != null) ''
-registration_shared_secret: "${cfg.registration_shared_secret}"
-''}
-recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
-turn_user_lifetime: "${cfg.turn_user_lifetime}"
-user_creation_max_duration: ${cfg.user_creation_max_duration}
-bcrypt_rounds: ${cfg.bcrypt_rounds}
-allow_guest_access: ${boolToString cfg.allow_guest_access}
+    ${optionalString (cfg.tls_certificate_path != null) ''
+    tls_certificate_path: "${cfg.tls_certificate_path}"
+    ''}
+    ${optionalString (cfg.tls_private_key_path != null) ''
+    tls_private_key_path: "${cfg.tls_private_key_path}"
+    ''}
+    ${optionalString (cfg.tls_dh_params_path != null) ''
+    tls_dh_params_path: "${cfg.tls_dh_params_path}"
+    ''}
+    no_tls: ${boolToString cfg.no_tls}
+    ${optionalString (cfg.bind_port != null) ''
+    bind_port: ${toString cfg.bind_port}
+    ''}
+    ${optionalString (cfg.unsecure_port != null) ''
+    unsecure_port: ${toString cfg.unsecure_port}
+    ''}
+    ${optionalString (cfg.bind_host != null) ''
+    bind_host: "${cfg.bind_host}"
+    ''}
+    server_name: "${cfg.server_name}"
+    pid_file: "/run/matrix-synapse.pid"
+    ${optionalString (cfg.public_baseurl != null) ''
+    public_baseurl: "${cfg.public_baseurl}"
+    ''}
+    listeners: [${concatStringsSep "," (map mkListener cfg.listeners)}]
+    database: {
+      name: "${cfg.database_type}",
+      args: {
+        ${concatStringsSep ",\n    " (
+          mapAttrsToList (n: v: "\"${n}\": ${builtins.toJSON v}") cfg.database_args
+        )}
+      }
+    }
+    event_cache_size: "${cfg.event_cache_size}"
+    verbose: ${cfg.verbose}
+    log_config: "${logConfigFile}"
+    rc_messages_per_second: ${cfg.rc_messages_per_second}
+    rc_message_burst_count: ${cfg.rc_message_burst_count}
+    federation_rc_window_size: ${cfg.federation_rc_window_size}
+    federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
+    federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
+    federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
+    federation_rc_concurrent: ${cfg.federation_rc_concurrent}
+    media_store_path: "${cfg.dataDir}/media"
+    uploads_path: "${cfg.dataDir}/uploads"
+    max_upload_size: "${cfg.max_upload_size}"
+    max_image_pixels: "${cfg.max_image_pixels}"
+    dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
+    url_preview_enabled: ${boolToString cfg.url_preview_enabled}
+    ${optionalString (cfg.url_preview_enabled == true) ''
+    url_preview_ip_range_blacklist: ${builtins.toJSON cfg.url_preview_ip_range_blacklist}
+    url_preview_ip_range_whitelist: ${builtins.toJSON cfg.url_preview_ip_range_whitelist}
+    url_preview_url_blacklist: ${builtins.toJSON cfg.url_preview_url_blacklist}
+    ''}
+    recaptcha_private_key: "${cfg.recaptcha_private_key}"
+    recaptcha_public_key: "${cfg.recaptcha_public_key}"
+    enable_registration_captcha: ${boolToString cfg.enable_registration_captcha}
+    turn_uris: ${builtins.toJSON cfg.turn_uris}
+    turn_shared_secret: "${cfg.turn_shared_secret}"
+    enable_registration: ${boolToString cfg.enable_registration}
+    ${optionalString (cfg.registration_shared_secret != null) ''
+    registration_shared_secret: "${cfg.registration_shared_secret}"
+    ''}
+    recaptcha_siteverify_api: "https://www.google.com/recaptcha/api/siteverify"
+    turn_user_lifetime: "${cfg.turn_user_lifetime}"
+    user_creation_max_duration: ${cfg.user_creation_max_duration}
+    bcrypt_rounds: ${cfg.bcrypt_rounds}
+    allow_guest_access: ${boolToString cfg.allow_guest_access}
 
-account_threepid_delegates:
-  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
-  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
+    account_threepid_delegates:
+      ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
+      ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
 
-room_prejoin_state:
-  disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
-  additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
-${optionalString (cfg.macaroon_secret_key != null) ''
-  macaroon_secret_key: "${cfg.macaroon_secret_key}"
-''}
-expire_access_token: ${boolToString cfg.expire_access_token}
-enable_metrics: ${boolToString cfg.enable_metrics}
-report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
-key_refresh_interval: "${cfg.key_refresh_interval}"
-perspectives:
-  servers: {
-    ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
-    "${n}": {
-      "verify_keys": {
+    room_prejoin_state:
+      disable_default_event_types: ${boolToString cfg.room_prejoin_state.disable_default_event_types}
+      additional_event_types: ${builtins.toJSON cfg.room_prejoin_state.additional_event_types}
+    ${optionalString (cfg.macaroon_secret_key != null) ''
+      macaroon_secret_key: "${cfg.macaroon_secret_key}"
+    ''}
+    expire_access_token: ${boolToString cfg.expire_access_token}
+    enable_metrics: ${boolToString cfg.enable_metrics}
+    report_stats: ${boolToString cfg.report_stats}
+    signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
+    key_refresh_interval: "${cfg.key_refresh_interval}"
+    perspectives:
+      servers: {
         ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
         "${n}": {
-          "key": "${v}"
-        }'') v)}
+          "verify_keys": {
+            ${concatStringsSep "},\n" (mapAttrsToList (n: v: ''
+            "${n}": {
+              "key": "${v}"
+            }'') v)}
+          }
+        '') cfg.servers)}
+        }
       }
-    '') cfg.servers)}
-    }
-  }
-redaction_retention_period: ${toString cfg.redaction_retention_period}
-app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
+    redaction_retention_period: ${toString cfg.redaction_retention_period}
+    app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
 
-${cfg.extraConfig}
-'';
+    ${cfg.extraConfig}
+  '';
 
   hasLocalPostgresDB = let args = cfg.database_args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
-in {
+in
+{
   options = {
     services.matrix-synapse = {
       enable = mkEnableOption "matrix.org synapse";
@@ -292,7 +293,7 @@ in {
                     description = ''
                       List of resources to host on this listener.
                     '';
-                    example = ["client" "webclient" "federation"];
+                    example = [ "client" "webclient" "federation" ];
                   };
                   compress = mkOption {
                     type = types.bool;
@@ -317,8 +318,8 @@ in {
           tls = true;
           x_forwarded = false;
           resources = [
-            { names = ["client" "webclient"]; compress = true; }
-            { names = ["federation"]; compress = false; }
+            { names = [ "client" "webclient" ]; compress = true; }
+            { names = [ "federation" ]; compress = false; }
           ];
         }];
         description = ''
@@ -376,7 +377,8 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.stateVersion "18.03"
+        default =
+          if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
         description = ''
@@ -440,7 +442,7 @@ in {
       };
       url_preview_ip_range_whitelist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of IP address CIDR ranges that the URL preview spider is allowed
           to access even if they are specified in
@@ -449,7 +451,7 @@ in {
       };
       url_preview_url_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Optional list of URL matches that the URL preview spider is
           denied from accessing.
@@ -480,7 +482,7 @@ in {
       };
       turn_uris = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           The public URIs of the TURN server to give to clients
         '';
@@ -596,7 +598,7 @@ in {
         '';
       };
       room_prejoin_state.additional_event_types = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Additional events to share with users who received an invite.
@@ -666,7 +668,7 @@ in {
       };
       extraConfigFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Extra config files to include.
 
@@ -696,7 +698,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+      {
+        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
         message = ''
           Cannot deploy matrix-synapse with a configuration for a local postgresql database
             and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
@@ -748,10 +751,12 @@ in {
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
-          chmod 0600 ${cfg.dataDir}/homeserver.signing.key
-        '')) ];
+        ExecStartPre = [
+          ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+            chown matrix-synapse:matrix-synapse ${cfg.dataDir}/homeserver.signing.key
+            chmod 0600 ${cfg.dataDir}/homeserver.signing.key
+          ''))
+        ];
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }

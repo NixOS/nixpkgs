@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "pysam";
+  pname = "pysam";
   version = "0.17.0";
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is

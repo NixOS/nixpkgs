@@ -1,5 +1,13 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
+{ lib
+, stdenv
+, appimageTools
+, autoPatchelfHook
+, desktop-file-utils
+, fetchurl
+, libsecret
+, gtk3
+, gsettings-desktop-schemas
+}:
 
 let
   version = "3.8.18";
@@ -27,7 +35,8 @@ let
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
 
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name src;
 
   profile = ''

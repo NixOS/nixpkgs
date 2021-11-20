@@ -1,21 +1,78 @@
-{ stdenv, lib
-, src, patches, version, qtCompatVersion
+{ stdenv
+, lib
+, src
+, patches
+, version
+, qtCompatVersion
 
-, coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
+, coreutils
+, bison
+, flex
+, gdb
+, gperf
+, lndir
+, perl
+, pkg-config
+, python3
 , which
   # darwin support
-, libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
-, CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
+, libiconv
+, libobjc
+, xcbuild
+, AGL
+, AppKit
+, ApplicationServices
+, Carbon
+, Cocoa
+, CoreAudio
+, CoreBluetooth
+, CoreLocation
+, CoreServices
+, DiskArbitration
+, Foundation
+, OpenGL
+, MetalKit
+, IOKit
 
-, dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
-, libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
-, xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib, at-spi2-core
+, dbus
+, fontconfig
+, freetype
+, glib
+, harfbuzz
+, icu
+, libX11
+, libXcomposite
+, libXcursor
+, libXext
+, libXi
+, libXrender
+, libinput
+, libjpeg
+, libpng
+, libxcb
+, libxkbcommon
+, libxml2
+, libxslt
+, openssl
+, pcre16
+, pcre2
+, sqlite
+, udev
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, zlib
+, at-spi2-core
 
   # optional dependencies
-, cups ? null, libmysqlclient ? null, postgresql ? null
-, withGtk3 ? false, dconf ? null, gtk3 ? null
+, cups ? null
+, libmysqlclient ? null
+, postgresql ? null
+, withGtk3 ? false
+, dconf ? null
+, gtk3 ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -42,29 +99,61 @@ stdenv.mkDerivation {
   debug = debugSymbols;
 
   propagatedBuildInputs = [
-    libxml2 libxslt openssl sqlite zlib
+    libxml2
+    libxslt
+    openssl
+    sqlite
+    zlib
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz
+    icu
 
     # Image formats
-    libjpeg libpng
+    libjpeg
+    libpng
     (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
   ] ++ (
     if stdenv.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
-      AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
-      CoreLocation CoreServices DiskArbitration Foundation OpenGL
-      libobjc libiconv MetalKit IOKit
+      AGL
+      AppKit
+      ApplicationServices
+      Carbon
+      Cocoa
+      CoreAudio
+      CoreBluetooth
+      CoreLocation
+      CoreServices
+      DiskArbitration
+      Foundation
+      OpenGL
+      libobjc
+      libiconv
+      MetalKit
+      IOKit
     ] else [
-      dbus glib udev
+      dbus
+      glib
+      udev
 
       # Text rendering
-      fontconfig freetype
+      fontconfig
+      freetype
 
       # X11 libs
-      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+      libX11
+      libXcomposite
+      libXext
+      libXi
+      libXrender
+      libxcb
+      libxkbcommon
+      xcbutil
+      xcbutilimage
+      xcbutilkeysyms
+      xcbutilrenderutil
+      xcbutilwm
     ] ++ lib.optional libGLSupported libGL
   );
 
@@ -72,7 +161,7 @@ stdenv.mkDerivation {
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
-      ++ lib.optional withGtk3 gtk3
+        ++ lib.optional withGtk3 gtk3
     )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
@@ -119,15 +208,15 @@ stdenv.mkDerivation {
     patchShebangs ./bin
   '' + (
     if stdenv.isDarwin then ''
-        sed -i \
-            -e 's|/usr/bin/xcode-select|xcode-select|' \
-            -e 's|/usr/bin/xcrun|xcrun|' \
-            -e 's|/usr/bin/xcodebuild|xcodebuild|' \
-            -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
-            ./configure
-            substituteInPlace ./mkspecs/common/mac.conf \
-                --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
-                --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
+      sed -i \
+          -e 's|/usr/bin/xcode-select|xcode-select|' \
+          -e 's|/usr/bin/xcrun|xcrun|' \
+          -e 's|/usr/bin/xcodebuild|xcodebuild|' \
+          -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
+          ./configure
+          substituteInPlace ./mkspecs/common/mac.conf \
+              --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
+              --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
@@ -183,12 +272,12 @@ stdenv.mkDerivation {
     ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
     ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
   ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
-    ++ lib.optional stdenv.isLinux "-DUSE_X11"
-    ++ lib.optionals withGtk3 [
-         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-       ]
-    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+  ++ lib.optional stdenv.isLinux "-DUSE_X11"
+  ++ lib.optionals withGtk3 [
+    ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+    ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+  ]
+  ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
 
   prefixKey = "-prefix ";
 
@@ -219,11 +308,13 @@ stdenv.mkDerivation {
     "-widgets"
     "-opengl desktop"
     "-icu"
-    "-L" "${icu.out}/lib"
-    "-I" "${icu.dev}/include"
+    "-L"
+    "${icu.out}/lib"
+    "-I"
+    "${icu.dev}/include"
     "-pch"
   ] ++ lib.optional debugSymbols "-debug"
-    ++ lib.optionals (compareVersion "5.11.0" < 0) [
+  ++ lib.optionals (compareVersion "5.11.0" < 0) [
     "-qml-debug"
   ] ++ lib.optionals (compareVersion "5.9.0" < 0) [
     "-c++11"
@@ -233,32 +324,41 @@ stdenv.mkDerivation {
     "-no-warnings-are-errors"
   ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
     "-no-sse2"
-  ] else lib.optionals (compareVersion "5.9.0" >= 0) [
-    "-sse2"
-    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
-    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
-    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
-    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
+  ] else
+    lib.optionals (compareVersion "5.9.0" >= 0) [
+      "-sse2"
+      "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
+      "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
+      "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
+      "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
+      "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
+      "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
     ]
   ) ++ [
     "-no-mips_dsp"
     "-no-mips_dspr2"
   ] ++ [
     "-system-zlib"
-    "-L" "${zlib.out}/lib"
-    "-I" "${zlib.dev}/include"
+    "-L"
+    "${zlib.out}/lib"
+    "-I"
+    "${zlib.dev}/include"
     "-system-libjpeg"
-    "-L" "${libjpeg.out}/lib"
-    "-I" "${libjpeg.dev}/include"
+    "-L"
+    "${libjpeg.out}/lib"
+    "-I"
+    "${libjpeg.dev}/include"
     "-system-harfbuzz"
-    "-L" "${harfbuzz.out}/lib"
-    "-I" "${harfbuzz.dev}/include"
+    "-L"
+    "${harfbuzz.out}/lib"
+    "-I"
+    "${harfbuzz.dev}/include"
     "-system-pcre"
     "-openssl-linked"
-    "-L" "${openssl.out}/lib"
-    "-I" "${openssl.dev}/include"
+    "-L"
+    "${openssl.out}/lib"
+    "-I"
+    "${openssl.dev}/include"
     "-system-sqlite"
     ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
@@ -268,8 +368,8 @@ stdenv.mkDerivation {
     ''-${lib.optionalString (!buildExamples) "no"}make examples''
     ''-${lib.optionalString (!buildTests) "no"}make tests''
   ] ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
-    ++ (
-      if stdenv.isDarwin then [
+  ++ (
+    if stdenv.isDarwin then [
       "-platform macx-clang"
       "-no-fontconfig"
       "-qt-freetype"
@@ -278,15 +378,21 @@ stdenv.mkDerivation {
     ] else [
       "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
     ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
-      ++ [
+    ++ [
       "-xcb"
       "-qpa xcb"
-      "-L" "${libX11.out}/lib"
-      "-I" "${libX11.out}/include"
-      "-L" "${libXext.out}/lib"
-      "-I" "${libXext.out}/include"
-      "-L" "${libXrender.out}/lib"
-      "-I" "${libXrender.out}/include"
+      "-L"
+      "${libX11.out}/lib"
+      "-I"
+      "${libX11.out}/include"
+      "-L"
+      "${libXext.out}/lib"
+      "-I"
+      "${libXext.out}/include"
+      "-L"
+      "${libXrender.out}/lib"
+      "-I"
+      "${libXrender.out}/include"
 
       "-libinput"
 
@@ -294,11 +400,11 @@ stdenv.mkDerivation {
       "-dbus-linked"
       "-glib"
     ] ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
-      ++ [
+    ++ [
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
-      ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
-      ++ lib.optionals (compareVersion "5.10.0" >= 0) [
+    ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
+    ++ lib.optionals (compareVersion "5.10.0" >= 0) [
       # Without these, Qt stops working on kernels < 3.17. See:
       # https://github.com/NixOS/nixpkgs/issues/38832
       "-no-feature-renameat2"
@@ -308,11 +414,15 @@ stdenv.mkDerivation {
       "-system-xkbcommon"
       "-xkbcommon-evdev"
     ] ++ lib.optionals (cups != null) [
-      "-L" "${cups.lib}/lib"
-      "-I" "${cups.dev}/include"
+      "-L"
+      "${cups.lib}/lib"
+      "-I"
+      "${cups.dev}/include"
     ] ++ lib.optionals (libmysqlclient != null) [
-      "-L" "${libmysqlclient}/lib"
-      "-I" "${libmysqlclient}/include"
+      "-L"
+      "${libmysqlclient}/lib"
+      "-I"
+      "${libmysqlclient}/include"
     ]
   );
 

@@ -4,7 +4,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "tmpmail";
   version = "1.1.4";
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "tmpmail";
     rev = "v${version}";
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq ]}
   '';
 
-   meta = with lib; {
+  meta = with lib; {
     homepage = "https://github.com/sdushantha/tmpmail";
     description = "A temporary email right from your terminal written in POSIX sh ";
     license = licenses.mit;

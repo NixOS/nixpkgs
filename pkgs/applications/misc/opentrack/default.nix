@@ -1,6 +1,22 @@
-{ mkDerivation, lib, callPackage, fetchzip, fetchFromGitHub, cmake, pkg-config
-, ninja, copyDesktopItems, qtbase, qttools, opencv4, procps, eigen, libXdmcp
-, libevdev, makeDesktopItem, fetchurl }:
+{ mkDerivation
+, lib
+, callPackage
+, fetchzip
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ninja
+, copyDesktopItems
+, qtbase
+, qttools
+, opencv4
+, procps
+, eigen
+, libXdmcp
+, libevdev
+, makeDesktopItem
+, fetchurl
+}:
 
 let
   version = "2.3.13";
@@ -13,7 +29,8 @@ let
     sha256 = "11wqjsr996c5qhiv2djsd55gc373a9qcq30dvc6rhzm0fys42zba";
   };
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "opentrack";
   inherit version;
 

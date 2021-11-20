@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
-, cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, automake
+, pkg-config
+, cairo
+, ghostscript
+, ngspice
+, tcl
+, tk
+, xorg
+, zlib
+}:
 
 let
   version = "3.10.12";
   name = "xcircuit-${version}";
   inherit (lib) getBin;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name version;
 
   src = fetchurl {

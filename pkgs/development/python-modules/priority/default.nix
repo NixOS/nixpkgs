@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [
-     "priority"
+    "priority"
   ];
 
   checkInputs = [

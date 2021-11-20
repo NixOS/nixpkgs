@@ -1,23 +1,23 @@
-{ stdenv, lib, brscan5, netDevices ? [] }:
+{ stdenv, lib, brscan5, netDevices ? [ ] }:
 
 /*
 
-Testing
--------
-From nixpkgs repo
+  Testing
+  -------
+  From nixpkgs repo
 
-No net devices:
+  No net devices:
 
-~~~
-nix-build -E 'let pkgs = import ./. {};
+  ~~~
+  nix-build -E 'let pkgs = import ./. {};
                   brscan5-etc-files = pkgs.callPackage (import ./nixos/modules/services/hardware/sane_extra_backends/brscan5_etc_files.nix) {};
               in brscan5-etc-files'
-~~~
+  ~~~
 
-Two net devices:
+  Two net devices:
 
-~~~
-nix-build -E 'let pkgs = import ./. {};
+  ~~~
+  nix-build -E 'let pkgs = import ./. {};
                   brscan5-etc-files = pkgs.callPackage (import ./nixos/modules/services/hardware/sane_extra_backends/brscan5_etc_files.nix) {};
               in brscan5-etc-files.override {
                    netDevices = [
@@ -25,7 +25,7 @@ nix-build -E 'let pkgs = import ./. {};
                      {name="b"; model="ADS-1200"; ip="192.168.1.2";}
                    ];
               }'
-~~~
+  ~~~
 
 */
 

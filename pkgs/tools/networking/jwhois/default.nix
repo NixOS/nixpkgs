@@ -1,4 +1,4 @@
-{lib, stdenv, lynx, fetchurl}:
+{ lib, stdenv, lynx, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "jwhois";

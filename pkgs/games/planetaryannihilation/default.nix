@@ -1,18 +1,39 @@
-{ lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
-, nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg }:
+{ lib
+, stdenv
+, config
+, fetchurl
+, patchelf
+, makeWrapper
+, gtk2
+, glib
+, udev
+, alsa-lib
+, atk
+, nspr
+, fontconfig
+, cairo
+, pango
+, nss
+, freetype
+, gnome2
+, gdk-pixbuf
+, curl
+, systemd
+, xorg
+}:
 
 # TODO: use dynamic attributes once Nix 1.7 is out
 assert ((config.planetary_annihilation or null).url or null) != null;
 assert ((config.planetary_annihilation or null).sha256 or null) != null;
 
 /* to setup:
- $ cat ~/.config/nixpkgs/config.nix
- {
+   $ cat ~/.config/nixpkgs/config.nix
+   {
   planetary_annihilation = {
-    url = "file:///home/user/PA_Linux_62857.tar.bz2";
-    sha256 = "0imi3k5144dsn3ka9khx3dj76klkw46ga7m6rddqjk4yslwabh3k";
+  url = "file:///home/user/PA_Linux_62857.tar.bz2";
+  sha256 = "0imi3k5144dsn3ka9khx3dj76klkw46ga7m6rddqjk4yslwabh3k";
   };
-}
+  }
 */
 
 stdenv.mkDerivation {

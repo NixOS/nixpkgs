@@ -23,8 +23,12 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, buildPackages
-, hoogle, writeText, ghc
+{ lib
+, stdenv
+, buildPackages
+, hoogle
+, writeText
+, ghc
 , packages
 }:
 
@@ -39,14 +43,15 @@ let
   ghcDocLibDir =
     if !isGhcjs
     then ghc.doc + "/share/doc/ghc*/html/libraries"
-    else ghc     + "/doc/lib";
+    else ghc + "/doc/lib";
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
     if !isGhcjs
     then "${ghcDocLibDir}/prologue.txt"
-    else writeText "ghcjs-prologue.txt" ''
-      This index includes documentation for many Haskell modules.
-    '';
+    else
+      writeText "ghcjs-prologue.txt" ''
+        This index includes documentation for many Haskell modules.
+      '';
 
   # TODO: closePropagation is deprecated; replace
   docPackages = lib.closePropagation
@@ -56,11 +61,11 @@ let
 in
 buildPackages.stdenv.mkDerivation {
   name = "hoogle-local-0.1";
-  buildInputs = [ghc hoogle];
+  buildInputs = [ ghc hoogle ];
 
   inherit docPackages;
 
-  passAsFile = ["buildCommand"];
+  passAsFile = [ "buildCommand" ];
 
   buildCommand = ''
     ${let # Filter out nulls here to work around https://github.com/NixOS/nixpkgs/issues/82245

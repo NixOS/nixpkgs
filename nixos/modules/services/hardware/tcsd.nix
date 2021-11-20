@@ -153,6 +153,6 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "tss") { tss = {}; };
+    users.groups = optionalAttrs (cfg.group == "tss") { tss = { }; };
   };
 }

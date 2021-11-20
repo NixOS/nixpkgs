@@ -1,7 +1,22 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkg-config, SDL2, SDL2_ttf, alsa-lib, which, qtbase, libXinerama
-, libpcap, CoreAudioKit, ForceFeedback
-, installShellFiles }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, python
+, pkg-config
+, SDL2
+, SDL2_ttf
+, alsa-lib
+, which
+, qtbase
+, libXinerama
+, libpcap
+, CoreAudioKit
+, ForceFeedback
+, installShellFiles
+}:
 
 let
   majorVersion = "0";
@@ -16,7 +31,8 @@ let
   };
 
   dest = "$out/opt/mame";
-in mkDerivation {
+in
+mkDerivation {
   pname = "mame";
   version = "${majorVersion}.${minorVersion}";
 
@@ -43,7 +59,7 @@ in mkDerivation {
     [ SDL2 SDL2_ttf qtbase libXinerama ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
-    ;
+  ;
   nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources

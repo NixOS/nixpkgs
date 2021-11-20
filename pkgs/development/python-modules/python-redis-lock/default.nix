@@ -6,7 +6,8 @@
 , pytestCheckHook
 , process-tests
 , pkgs
-, withDjango ? false, django-redis
+, withDjango ? false
+, django-redis
 }:
 
 buildPythonPackage rec {

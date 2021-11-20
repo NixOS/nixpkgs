@@ -1,14 +1,15 @@
 { buildOctavePackage
 , lib
 , fetchurl
-# Octave Dependencies
+  # Octave Dependencies
 , splines
-# Other Dependencies
+  # Other Dependencies
 , gmsh
 , gawk
 , pkg-config
 , dolfin
-, autoconf, automake
+, autoconf
+, automake
 }:
 
 buildOctavePackage rec {
@@ -22,7 +23,8 @@ buildOctavePackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf automake
+    autoconf
+    automake
     dolfin
   ];
 

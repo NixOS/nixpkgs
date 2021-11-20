@@ -37,6 +37,6 @@ buildGoPackage rec {
       * No Caching/Etag
       * Supports GET/POST forms and IFrames
       * Optional HMAC URL verifier key to prevent service abuse
-'';
-   };
+    '';
+  };
 }

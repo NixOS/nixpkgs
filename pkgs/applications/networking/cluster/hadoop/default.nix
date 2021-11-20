@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, jdk8_headless, jdk11_headless
-, bash, coreutils, which
-, bzip2, cyrus_sasl , protobuf3_7, snappy, zlib, zstd
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, jdk8_headless
+, jdk11_headless
+, bash
+, coreutils
+, which
+, bzip2
+, cyrus_sasl
+, protobuf3_7
+, snappy
+, zlib
+, zstd
 , openssl
 }:
 
@@ -17,7 +29,7 @@ let
       };
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (nativeLibs != [] || libPatches != "") [ autoPatchelfHook ];
+        ++ optional (nativeLibs != [ ] || libPatches != "") [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''

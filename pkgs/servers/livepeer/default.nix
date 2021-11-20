@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule
-, pkg-config, ffmpeg, gnutls
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, pkg-config
+, ffmpeg
+, gnutls
 }:
 
 buildGoModule rec {

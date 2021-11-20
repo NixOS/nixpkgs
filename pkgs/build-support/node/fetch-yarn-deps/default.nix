@@ -6,7 +6,8 @@ let
     sha512 = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
 
-in {
+in
+{
   prefetch-yarn-deps = stdenv.mkDerivation {
     name = "prefetch-yarn-deps";
 
@@ -39,36 +40,41 @@ in {
     '';
   };
 
-  fetchYarnDeps = let
-    f = {
-      name ? "offline",
-      yarnLock,
-      hash ? "",
-      sha256 ? "",
-    }: let
-      hash_ =
-        if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-        else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
-        else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
-    in stdenv.mkDerivation {
-      inherit name;
+  fetchYarnDeps =
+    let
+      f =
+        { name ? "offline"
+        , yarnLock
+        , hash ? ""
+        , sha256 ? ""
+        ,
+        }:
+        let
+          hash_ =
+            if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+            else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+            else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
+        in
+        stdenv.mkDerivation {
+          inherit name;
 
-      dontUnpack = true;
-      dontInstall = true;
+          dontUnpack = true;
+          dontInstall = true;
 
-      nativeBuildInputs = [ prefetch-yarn-deps ];
-      GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          nativeBuildInputs = [ prefetch-yarn-deps ];
+          GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-      buildPhase = ''
-        mkdir -p $out
-        (cd $out; prefetch-yarn-deps --verbose --builder ${yarnLock})
-      '';
+          buildPhase = ''
+            mkdir -p $out
+            (cd $out; prefetch-yarn-deps --verbose --builder ${yarnLock})
+          '';
 
-      outputHashMode = "recursive";
-      inherit (hash_) outputHashAlgo outputHash;
+          outputHashMode = "recursive";
+          inherit (hash_) outputHashAlgo outputHash;
+        };
+
+    in
+    lib.setFunctionArgs f (lib.functionArgs f) // {
+      tests = callPackage ./tests { };
     };
-
-  in lib.setFunctionArgs f (lib.functionArgs f) // {
-    tests = callPackage ./tests {};
-  };
 }

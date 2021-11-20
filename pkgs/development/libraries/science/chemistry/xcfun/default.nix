@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gfortran, python3 } :
+{ stdenv, lib, fetchFromGitHub, cmake, gfortran, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "xcfun";
   version = "2.1.1";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "dftlibs";
     repo = pname;
     rev = "v${version}";
-    sha256= "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
+    sha256 = "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
   };
 
   nativeBuildInputs = [

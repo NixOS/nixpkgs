@@ -67,16 +67,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
-    name = pname;
-    desktopName = "Snapdragon Profiler";
-    exec = "$out/bin/snapdragon-profiler";
-    icon = "snapdragon-profiler";
-    type = "Application";
-    comment = meta.description;
-    categories = "Development;Debugger;Graphics;3DGraphics";
-    terminal = "false";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Snapdragon Profiler";
+      exec = "$out/bin/snapdragon-profiler";
+      icon = "snapdragon-profiler";
+      type = "Application";
+      comment = meta.description;
+      categories = "Development;Debugger;Graphics;3DGraphics";
+      terminal = "false";
+    })
+  ];
 
   dontStrip = true; # Always needed on Mono
   dontPatchELF = true; # Certain libraries are to be deployed to the remote device, they should not be patched

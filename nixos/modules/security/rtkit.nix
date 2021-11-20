@@ -40,7 +40,7 @@ with lib;
         group = "rtkit";
         description = "RealtimeKit daemon";
       };
-    users.groups.rtkit = {};
+    users.groups.rtkit = { };
 
   };
 

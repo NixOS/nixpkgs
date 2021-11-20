@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
       by setting nixpkgs config option `xxe-pe.acceptLicense = true;`
       or by using `xxe-pe.override { acceptLicense = true; }` package.
     '';
-      fetchurl {
-        url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${builtins.replaceStrings [ "." ] [ "_" ] version}.zip";
-        sha256 = "FKPdf9cOpgm/WG2i8bFnR6MmEifpiq5ykw2zHA8HnT8=";
-      };
+    fetchurl {
+      url = "https://www.xmlmind.com/xmleditor/_download/xxe-perso-${builtins.replaceStrings [ "." ] [ "_" ] version}.zip";
+      sha256 = "FKPdf9cOpgm/WG2i8bFnR6MmEifpiq5ykw2zHA8HnT8=";
+    };
 
   nativeBuildInputs = [
     unzip

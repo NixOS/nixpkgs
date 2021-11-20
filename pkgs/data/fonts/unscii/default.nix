@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, perl, bdftopcf
-, fontforge, SDL, SDL_image, mkfontscale
+{ lib
+, stdenv
+, fetchurl
+, perl
+, bdftopcf
+, fontforge
+, SDL
+, SDL_image
+, mkfontscale
 }:
 
 let
@@ -17,8 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ perlenv
-      bdftopcf fontforge SDL SDL_image
+    [
+      perlenv
+      bdftopcf
+      fontforge
+      SDL
+      SDL_image
       mkfontscale
     ];
 

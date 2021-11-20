@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     substituteInPlace src/Makefile.am --replace 'root' '$(id -u)'
     substituteInPlace configure.ac --replace '/dev/input' '/tmp'
     sed -i '/chmod u+s/d' src/Makefile.am
- '';
+  '';
 
   preConfigure = "./autogen.sh";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     description = "A GNU/Linux keylogger that works!";
     license = licenses.gpl3;
     homepage = "https://github.com/kernc/logkeys";
-    maintainers = with maintainers; [mikoim offline];
+    maintainers = with maintainers; [ mikoim offline ];
     platforms = platforms.linux;
   };
 }

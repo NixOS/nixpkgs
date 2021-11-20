@@ -8,7 +8,8 @@ let
   streamService =
     name:
     let stream = builtins.getAttr name config.services.liquidsoap.streams; in
-    { inherit name;
+    {
+      inherit name;
       value = {
         after = [ "network-online.target" "sound.target" ];
         description = "${name} liquidsoap stream";
@@ -36,7 +37,7 @@ in
           one systemd service per stream.
         '';
 
-      default = {};
+      default = { };
 
       example = {
         myStream1 = "/etc/liquidsoap/myStream1.liq";
@@ -63,7 +64,7 @@ in
 
     users.groups.liquidsoap.gid = config.ids.gids.liquidsoap;
 
-    systemd.services = builtins.listToAttrs ( map streamService streams );
+    systemd.services = builtins.listToAttrs (map streamService streams);
   };
 
 }

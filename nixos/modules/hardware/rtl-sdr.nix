@@ -3,7 +3,8 @@
 let
   cfg = config.hardware.rtl-sdr;
 
-in {
+in
+{
   options.hardware.rtl-sdr = {
     enable = lib.mkEnableOption ''
       Enables rtl-sdr udev rules, ensures 'plugdev' group exists, and blacklists DVB kernel modules.
@@ -14,6 +15,6 @@ in {
   config = lib.mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" "e4000" "rtl2832" ];
     services.udev.packages = [ pkgs.rtl-sdr ];
-    users.groups.plugdev = {};
+    users.groups.plugdev = { };
   };
 }

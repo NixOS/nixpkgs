@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-,  nixosTests
+, nixosTests
 }:
 
 buildGoModule rec {

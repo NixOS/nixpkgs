@@ -9,8 +9,10 @@
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
+, notifySupport ? true
+, libnotify
+, networkSupport ? true
+, networkmanager
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,8 +37,8 @@ python3Packages.buildPythonApplication rec {
     gtk3
     pango
   ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager
   ;
 
   propagatedBuildInputs = with python3Packages; [
@@ -52,9 +54,9 @@ python3Packages.buildPythonApplication rec {
     requests
     semver
   ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
+  ++ lib.optional chromecastSupport PyChromecast
+  ++ lib.optional keyringSupport keyring
+  ++ lib.optional serverSupport bottle
   ;
 
   postPatch = ''

@@ -28,9 +28,9 @@ let
     ${cfg.extraConfig}
   '';
 
-  allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
+  allConfigPaths = [ configFile ] ++ cfg.extraSettingsPaths;
 
-  configOptions = escapeShellArgs (concatMap (p: ["-config" p]) allConfigPaths);
+  configOptions = escapeShellArgs (concatMap (p: [ "-config" p ]) allConfigPaths);
 
 in
 
@@ -113,7 +113,7 @@ in
 
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Configuration files to load besides the immutable one defined by the NixOS module.
           This can be used to avoid putting credentials in the Nix store, which can be read by any user.
@@ -145,10 +145,12 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
+      {
+        assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
         message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
       }
-      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
+      {
+        assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
         message = ''You must set services.vault.storagePath only when using the "file" backend'';
       }
     ];
@@ -167,9 +169,9 @@ in
     systemd.services.vault = {
       description = "Vault server daemon";
 
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ]
-           ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
+        ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 

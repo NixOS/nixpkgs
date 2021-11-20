@@ -13,42 +13,44 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  patches = let
-    mkURL = commit: patchName:
-      "https://salsa.debian.org/images-team/syslinux/raw/${commit}/debian/patches/"
-      + patchName;
-  in [
-    (fetchurl {
-      url = mkURL "fa1349f1" "0002-gfxboot-menu-label.patch";
-      sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
-    })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0005-gnu-efi-version-compatibility.patch";
-      name = "0005-gnu-efi-version-compatibility.patch";
-      sha256 = "1mz2idg8cwn0mvd3jixxynhkn7rhmi5fp8cc8zznh5f0ysfra446";
-    })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0025-reproducible-build.patch";
-      name = "0025-reproducible-build.patch";
-      sha256 = "0qk6wc6z3648828y3961pn4pi7xhd20a6fqn6z1mnj22bbvzcxls";
-    })
-    (fetchurl {
-      # mbr.bin: too big (452 > 440)
-      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
-      url = mkURL "7468ef0e38c43" "0016-strip-gnu-property.patch";
-      sha256 = "17n63b8wz6szv8npla1234g1ip7lqgzx2whrpv358ppf67lq8vwm";
-    })
-    (fetchurl {
-      # mbr.bin: too big (452 > 440)
-      url = mkURL "012e1dd312eb" "0017-single-load-segment.patch";
-      sha256 = "0azqzicsjw47b9ppyikhzaqmjl4lrvkxris1356bkmgcaiv6d98b";
-    })
-    (fetchurl {
-      url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
-      sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
-    })
-    ./gcc10.patch
-  ];
+  patches =
+    let
+      mkURL = commit: patchName:
+        "https://salsa.debian.org/images-team/syslinux/raw/${commit}/debian/patches/"
+        + patchName;
+    in
+    [
+      (fetchurl {
+        url = mkURL "fa1349f1" "0002-gfxboot-menu-label.patch";
+        sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
+      })
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0005-gnu-efi-version-compatibility.patch";
+        name = "0005-gnu-efi-version-compatibility.patch";
+        sha256 = "1mz2idg8cwn0mvd3jixxynhkn7rhmi5fp8cc8zznh5f0ysfra446";
+      })
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/821c3da473d1399d930d5b4a086e46a4179eaa45/trunk/0025-reproducible-build.patch";
+        name = "0025-reproducible-build.patch";
+        sha256 = "0qk6wc6z3648828y3961pn4pi7xhd20a6fqn6z1mnj22bbvzcxls";
+      })
+      (fetchurl {
+        # mbr.bin: too big (452 > 440)
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
+        url = mkURL "7468ef0e38c43" "0016-strip-gnu-property.patch";
+        sha256 = "17n63b8wz6szv8npla1234g1ip7lqgzx2whrpv358ppf67lq8vwm";
+      })
+      (fetchurl {
+        # mbr.bin: too big (452 > 440)
+        url = mkURL "012e1dd312eb" "0017-single-load-segment.patch";
+        sha256 = "0azqzicsjw47b9ppyikhzaqmjl4lrvkxris1356bkmgcaiv6d98b";
+      })
+      (fetchurl {
+        url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
+        sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
+      })
+      ./gcc10.patch
+    ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
@@ -79,7 +81,7 @@ stdenv.mkDerivation {
     "PERL=perl"
     "HEXDATE=0x00000000"
   ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+  ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 

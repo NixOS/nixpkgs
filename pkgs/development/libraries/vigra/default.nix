@@ -34,11 +34,13 @@ stdenv.mkDerivation rec {
 
   # Fixes compilation with clang (on darwin) see https://github.com/ukoethe/vigra/issues/414
   patches =
-    let clangPatch = fetchurl {
-      url = "https://github.com/ukoethe/vigra/commit/81958d302494e137f98a8b1d7869841532f90388.patch";
-      sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi";
-    };
-    in [ clangPatch ];
+    let
+      clangPatch = fetchurl {
+        url = "https://github.com/ukoethe/vigra/commit/81958d302494e137f98a8b1d7869841532f90388.patch";
+        sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi";
+      };
+    in
+    [ clangPatch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

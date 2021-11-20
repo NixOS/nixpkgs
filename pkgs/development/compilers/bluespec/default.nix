@@ -18,12 +18,14 @@
 , gmp-static
 , verilog
 , asciidoctor
-, tex }:
+, tex
+}:
 
 let
   ghcWithPackages = ghc.withPackages (g: (with g; [ old-time regex-compat syb split ]));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "bluespec";
   version = "2021.07";
 

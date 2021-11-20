@@ -1,6 +1,20 @@
-{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
-, aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
-, hcxdumptool, pyrit, which, bully, pixiewps }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3
+, wirelesstools
+, aircrack-ng
+, wireshark-cli
+, reaverwps-t6x
+, cowpatty
+, hashcat
+, hcxtools
+, hcxdumptool
+, pyrit
+, which
+, bully
+, pixiewps
+}:
 
 python3.pkgs.buildPythonApplication rec {
   version = "2.5.7";
@@ -39,11 +53,13 @@ python3.pkgs.buildPythonApplication rec {
     pixiewps
   ];
 
-  postFixup = let
-    sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
-  in ''
-    mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
-  '';
+  postFixup =
+    let
+      sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
+    in
+    ''
+      mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
+    '';
 
   checkInputs = propagatedBuildInputs;
   checkPhase = "python -m unittest discover tests -v";

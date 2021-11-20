@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.cc-by-sa-30;
     maintainers = with maintainers; [ chvp ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

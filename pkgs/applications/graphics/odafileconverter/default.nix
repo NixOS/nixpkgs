@@ -7,7 +7,8 @@ let
   version = "21.11.0.0";
   rpath = "$ORIGIN:${lib.makeLibraryPath [ stdenv.cc.cc qtbase ]}";
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "oda-file-converter";
   inherit version;
   nativeBuildInputs = [ dpkg ];

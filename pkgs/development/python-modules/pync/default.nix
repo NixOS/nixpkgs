@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , python-dateutil
@@ -8,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version  = "2.0.3";
+  version = "2.0.3";
   pname = "pync";
 
   src = fetchPypi {
@@ -26,9 +27,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Wrapper for Mac OS 10.8 Notification Center";
-    homepage    = "https://pypi.python.org/pypi/pync";
-    license     = licenses.mit;
-    platforms   = platforms.darwin;
+    homepage = "https://pypi.python.org/pypi/pync";
+    license = licenses.mit;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ lovek323 ];
   };
 

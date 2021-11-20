@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with perlPackages; [
-    makeWrapper perl
-    ImageMagick TermProgressBar ImageExifTool
-    FileType ClassMethodMaker
+    makeWrapper
+    perl
+    ImageMagick
+    TermProgressBar
+    ImageExifTool
+    FileType
+    ClassMethodMaker
   ];
 
   meta = with lib; {

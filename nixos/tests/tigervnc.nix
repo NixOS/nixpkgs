@@ -1,5 +1,5 @@
 { system ? builtins.currentSystem
-, config ? {}
+, config ? { }
 , pkgs ? import ../.. { inherit system config; }
 }:
 
@@ -11,7 +11,7 @@ makeTest {
   };
 
   nodes = {
-    server = { pkgs, ...}: {
+    server = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [
         tigervnc # for Xvnc
         xorg.xwininfo

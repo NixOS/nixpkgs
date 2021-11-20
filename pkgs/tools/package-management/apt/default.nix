@@ -22,8 +22,11 @@
 , xxHash
 , xz
 , zstd
-, withDocs ? true , w3m, doxygen
-, withNLS ? true , gettext
+, withDocs ? true
+, w3m
+, doxygen
+, withNLS ? true
+, gettext
 }:
 
 stdenv.mkDerivation rec {

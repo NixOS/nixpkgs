@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "A pure Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with lib.licenses; [ bsd3 ] ;
+    license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ wamserma ];
   };
 }

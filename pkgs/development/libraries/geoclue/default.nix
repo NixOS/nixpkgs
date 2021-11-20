@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     libsoup
     avahi
   ] ++ lib.optionals withDemoAgent [
-    libnotify gdk-pixbuf
+    libnotify
+    gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [
     modemmanager
   ];

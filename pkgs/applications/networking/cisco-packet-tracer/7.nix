@@ -65,7 +65,8 @@ let
       xorg.libXScrnSaver
     ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ciscoPacketTracer7";
   inherit version;
 

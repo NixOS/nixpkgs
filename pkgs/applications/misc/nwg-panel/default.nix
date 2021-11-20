@@ -1,7 +1,13 @@
-{ lib, fetchFromGitHub
-, python3Packages, wrapGAppsHook, gobject-introspection
-, gtk-layer-shell, pango, gdk-pixbuf, atk
-# Extra packages called by various internal nwg-panel modules
+{ lib
+, fetchFromGitHub
+, python3Packages
+, wrapGAppsHook
+, gobject-introspection
+, gtk-layer-shell
+, pango
+, gdk-pixbuf
+, atk
+  # Extra packages called by various internal nwg-panel modules
 , sway             # swaylock, swaymsg
 , systemd          # systemctl
 , wlr-randr        # wlr-randr

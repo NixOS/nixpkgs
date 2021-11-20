@@ -777,10 +777,10 @@ let
 
       kamikillerto.vscode-colorize = buildVscodeMarketplaceExtension {
         mktplcRef = {
-            name = "vscode-colorize";
-            publisher = "kamikillerto";
-            version = "0.11.1";
-            sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
+          name = "vscode-colorize";
+          publisher = "kamikillerto";
+          version = "0.11.1";
+          sha256 = "1h82b1jz86k2qznprng5066afinkrd7j3738a56idqr3vvvqnbsm";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -1190,7 +1190,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
+      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter { };
 
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -1617,9 +1617,9 @@ let
         };
 
         vsix = fetchurl {
-           name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
-           url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
-           sha256 = "6db4846dee4e394f7bcfb7e29520d45d6bc1534482ba73cf40cd5edf3f6ec266";
+          name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
+          url = "https://github.com/valentjn/vscode-ltex/releases/download/${mktplcRef.version}/vscode-ltex-${mktplcRef.version}-offline-linux-x64.vsix";
+          sha256 = "6db4846dee4e394f7bcfb7e29520d45d6bc1534482ba73cf40cd5edf3f6ec266";
         };
 
         nativeBuildInputs = [ jq moreutils ];

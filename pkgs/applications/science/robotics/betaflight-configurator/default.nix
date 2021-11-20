@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{ lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
       Various types of aircraft are supported by the tool and by Betaflight, e.g.
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
-    homepage    = "https://github.com/betaflight/betaflight/wiki";
-    license     = licenses.gpl3;
+    homepage = "https://github.com/betaflight/betaflight/wiki";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

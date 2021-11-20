@@ -6,7 +6,8 @@
 
 # defined in trivial-builders.nix
 # imported as wrapLua in lua-packages.nix and passed to build-lua-derivation to be used as buildInput
-makeSetupHook {
+makeSetupHook
+{
   deps = makeWrapper;
   substitutions.executable = lua.interpreter;
   substitutions.lua = lua;

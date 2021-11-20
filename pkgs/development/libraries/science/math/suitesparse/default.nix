@@ -1,7 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gfortran
-, blas, lapack
+, blas
+, lapack
 , metis
 , fixDarwinDylibNames
 , gmp
@@ -28,7 +30,8 @@ stdenv.mkDerivation rec {
 
   # Use compatible indexing for lapack and blas used
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    blas lapack
+    blas
+    lapack
     metis
     gfortran.cc.lib
     gmp

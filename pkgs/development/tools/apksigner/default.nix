@@ -6,7 +6,8 @@
 let
   tools = builtins.head build-tools;
 in
-runCommand "apksigner" {
+runCommand "apksigner"
+{
   nativeBuildInputs = [ makeWrapper ];
 } ''
   mkdir -p $out/bin

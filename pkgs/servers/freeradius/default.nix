@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, talloc
+, finger_bsd
+, perl
 , openssl
-, linkOpenssl? true
+, linkOpenssl ? true
 , openldap
 , withLdap ? true
 , sqlite

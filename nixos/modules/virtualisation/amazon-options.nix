@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 let
   inherit (lib) types;
-in {
+in
+{
   options = {
     ec2 = {
       zfs = {
@@ -22,7 +23,7 @@ in {
             on an existing system.
           '';
 
-          default = {};
+          default = { };
 
           type = types.attrsOf (types.submodule {
             options = {
@@ -35,7 +36,7 @@ in {
               properties = lib.mkOption {
                 description = "Properties to set on this dataset.";
                 type = types.attrsOf types.string;
-                default = {};
+                default = { };
               };
             };
           });
@@ -61,13 +62,15 @@ in {
   config = lib.mkIf config.ec2.zfs.enable {
     networking.hostId = lib.mkDefault "00000000";
 
-    fileSystems = let
-      mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.ec2.zfs.datasets;
-    in lib.mapAttrs'
-      (dataset: opts: lib.nameValuePair opts.mount {
-        device = dataset;
-        fsType = "zfs";
-      })
-      mountable;
+    fileSystems =
+      let
+        mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.ec2.zfs.datasets;
+      in
+      lib.mapAttrs'
+        (dataset: opts: lib.nameValuePair opts.mount {
+          device = dataset;
+          fsType = "zfs";
+        })
+        mountable;
   };
 }

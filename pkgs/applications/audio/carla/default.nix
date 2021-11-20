@@ -1,9 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, file, fluidsynth, jack2,
-  liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
-  which, withFrontend ? true,
-  withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
-  withGtk2 ? true, gtk2 ? null,
-  withGtk3 ? true, gtk3 ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, file
+, fluidsynth
+, jack2
+, liblo
+, libpulseaudio
+, libsndfile
+, pkg-config
+, python3Packages
+, which
+, withFrontend ? true
+, withQt ? true
+, qtbase ? null
+, wrapQtAppsHook ? null
+, withGtk2 ? true
+, gtk2 ? null
+, withGtk3 ? true
+, gtk3 ? null
+}:
 
 with lib;
 
@@ -25,18 +41,28 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.wrapPython pkg-config which wrapQtAppsHook
+    python3Packages.wrapPython
+    pkg-config
+    which
+    wrapQtAppsHook
   ];
 
   pythonPath = with python3Packages; [
-    rdflib pyliblo
+    rdflib
+    pyliblo
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsa-lib fluidsynth jack2 libpulseaudio libsndfile
+    file
+    liblo
+    alsa-lib
+    fluidsynth
+    jack2
+    libpulseaudio
+    libsndfile
   ] ++ optional withQt qtbase
-    ++ optional withGtk2 gtk2
-    ++ optional withGtk3 gtk3;
+  ++ optional withGtk2 gtk2
+  ++ optional withGtk3 gtk3;
 
   propagatedBuildInputs = pythonPath;
 

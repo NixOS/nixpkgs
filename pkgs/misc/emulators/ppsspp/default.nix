@@ -28,7 +28,7 @@ mkDerivation rec {
   };
 
   patches = [
-     # fix compability with ffmpeg 4.4, remove on next release after 1.11
+    # fix compability with ffmpeg 4.4, remove on next release after 1.11
     (fetchpatch {
       name = "fix_ffmpeg_4.4.patch";
       url = "https://patch-diff.githubusercontent.com/raw/hrydgard/ppsspp/pull/14176.patch";

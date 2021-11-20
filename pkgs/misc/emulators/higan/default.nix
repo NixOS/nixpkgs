@@ -15,7 +15,7 @@
 , pkg-config
 , runtimeShell
 , udev
-# Darwin dependencies
+  # Darwin dependencies
 , libicns
 , Carbon
 , Cocoa
@@ -116,20 +116,23 @@ stdenv.mkDerivation rec {
     # we create a first-run script to populate
     # $HOME with all the stuff needed at runtime
     let
-      dest = if stdenv.isDarwin
-           then "\\$HOME/Library/Application Support/higan"
-           else "\\$HOME/higan";
-    in ''
-    mkdir -p ${placeholder "out"}/bin
-    cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
-    #!${runtimeShell}
+      dest =
+        if stdenv.isDarwin
+        then "\\$HOME/Library/Application Support/higan"
+        else "\\$HOME/higan";
+    in
+    ''
+      mkdir -p ${placeholder "out"}/bin
+      cat <<EOF > ${placeholder "out"}/bin/higan-init.sh
+      #!${runtimeShell}
 
-    cp --recursive --update ${placeholder "out"}/share/higan/System/ "${dest}"/
+      cp --recursive --update ${placeholder "out"}/share/higan/System/ "${dest}"/
 
-    EOF
+      EOF
 
-    chmod +x ${placeholder "out"}/bin/higan-init.sh
-  '') + ''
+      chmod +x ${placeholder "out"}/bin/higan-init.sh
+    ''
+  ) + ''
 
     runHook postInstall
   '';

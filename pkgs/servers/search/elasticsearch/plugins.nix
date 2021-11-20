@@ -4,9 +4,8 @@ let
   esVersion = elasticsearch.version;
 
   esPlugin =
-    a@{
-      pluginName,
-      installPhase ? ''
+    a@{ pluginName
+    , installPhase ? ''
         mkdir -p $out/config
         mkdir -p $out/plugins
         ln -s ${elasticsearch}/lib ${elasticsearch}/modules $out
@@ -151,31 +150,35 @@ in
     };
   };
 
-  search-guard = let
-    majorVersion = lib.head (builtins.splitVersion esVersion);
-  in esPlugin rec {
-    pluginName = "search-guard";
-    version =
-      # https://docs.search-guard.com/latest/search-guard-versions
-      if esVersion == "7.11.1" then "${esVersion}-50.0.0"
-      else if esVersion == "6.8.3" then "${esVersion}-25.5"
-      else throw "unsupported version ${esVersion} for plugin ${pluginName}";
-    src =
-      if esVersion == "7.11.1" then
-        fetchurl {
-          url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-          sha256 = "1lippygiy0xcxxlakylhvj3bj2i681k6jcfjsprkfk7hlaqsqxkm";
-        }
-      else if esVersion == "6.8.3" then
-        fetchurl {
-          url = "mirror://maven/com/floragunn/${pluginName}-${majorVersion}/${version}/${pluginName}-${majorVersion}-${version}.zip";
-          sha256 = "0a7ys9qinc0fjyka03cx9rv0pm7wnvslk234zv5vrphkrj52s1cb";
-        }
-      else throw "unsupported version ${version} for plugin ${pluginName}";
-    meta = with lib; {
-      homepage = "https://search-guard.com";
-      description = "Elasticsearch plugin that offers encryption, authentication, and authorisation. ";
-      license = licenses.asl20;
+  search-guard =
+    let
+      majorVersion = lib.head (builtins.splitVersion esVersion);
+    in
+    esPlugin rec {
+      pluginName = "search-guard";
+      version =
+        # https://docs.search-guard.com/latest/search-guard-versions
+        if esVersion == "7.11.1" then "${esVersion}-50.0.0"
+        else if esVersion == "6.8.3" then "${esVersion}-25.5"
+        else throw "unsupported version ${esVersion} for plugin ${pluginName}";
+      src =
+        if esVersion == "7.11.1" then
+          fetchurl
+            {
+              url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
+              sha256 = "1lippygiy0xcxxlakylhvj3bj2i681k6jcfjsprkfk7hlaqsqxkm";
+            }
+        else if esVersion == "6.8.3" then
+          fetchurl
+            {
+              url = "mirror://maven/com/floragunn/${pluginName}-${majorVersion}/${version}/${pluginName}-${majorVersion}-${version}.zip";
+              sha256 = "0a7ys9qinc0fjyka03cx9rv0pm7wnvslk234zv5vrphkrj52s1cb";
+            }
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+      meta = with lib; {
+        homepage = "https://search-guard.com";
+        description = "Elasticsearch plugin that offers encryption, authentication, and authorisation. ";
+        license = licenses.asl20;
+      };
     };
-  };
 }

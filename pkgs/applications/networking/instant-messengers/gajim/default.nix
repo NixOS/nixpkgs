@@ -1,22 +1,40 @@
-{ lib, fetchurl, gettext, wrapGAppsHook
+{ lib
+, fetchurl
+, gettext
+, wrapGAppsHook
 
-# Native dependencies
-, python3, gtk3, gobject-introspection, gnome
+  # Native dependencies
+, python3
+, gtk3
+, gobject-introspection
+, gnome
 , glib-networking
 
-# Test dependencies
-, xvfb-run, dbus
+  # Test dependencies
+, xvfb-run
+, dbus
 
-# Optional dependencies
-, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
+  # Optional dependencies
+, enableJingle ? true
+, farstream
+, gstreamer
+, gst-plugins-base
+, gst-libav
+, gst-plugins-good
+, libnice
 , enableE2E ? true
-, enableSecrets ? true, libsecret
-, enableRST ? true, docutils
-, enableSpelling ? true, gspell
-, enableUPnP ? true, gupnp-igd
+, enableSecrets ? true
+, libsecret
+, enableRST ? true
+, docutils
+, enableSpelling ? true
+, gspell
+, enableUPnP ? true
+, gupnp-igd
 , enableOmemoPluginDependencies ? true
-, enableAppIndicator ? true, libappindicator-gtk3
-, extraPythonPackages ? ps: []
+, enableAppIndicator ? true
+, libappindicator-gtk3
+, extraPythonPackages ? ps: [ ]
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -29,16 +47,19 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gobject-introspection gtk3 gnome.adwaita-icon-theme
+    gobject-introspection
+    gtk3
+    gnome.adwaita-icon-theme
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
-    ++ lib.optional enableSecrets libsecret
-    ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd
-    ++ lib.optional enableAppIndicator libappindicator-gtk3;
+  ++ lib.optional enableSecrets libsecret
+  ++ lib.optional enableSpelling gspell
+  ++ lib.optional enableUPnP gupnp-igd
+  ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext
+    wrapGAppsHook
   ];
 
   dontWrapGApps = true;
@@ -48,11 +69,18 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
+    nbxmpp
+    pygobject3
+    dbus-python
+    pillow
+    css-parser
+    precis-i18n
+    keyring
+    setuptools
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
-    ++ lib.optional enableRST docutils
-    ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
-    ++ extraPythonPackages python3.pkgs;
+  ++ lib.optional enableRST docutils
+  ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
+  ++ extraPythonPackages python3.pkgs;
 
   checkInputs = [ xvfb-run dbus.daemon ];
 

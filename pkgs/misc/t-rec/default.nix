@@ -1,5 +1,13 @@
-{ lib, stdenv, imagemagick, ffmpeg, rustPlatform, fetchFromGitHub, makeWrapper
-, libiconv, Foundation }:
+{ lib
+, stdenv
+, imagemagick
+, ffmpeg
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, libiconv
+, Foundation
+}:
 
 let
   binPath = lib.makeBinPath [

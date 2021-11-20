@@ -22,7 +22,8 @@ let
   ]);
 
   version = "0.3.0";
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "weechat-matrix";
   inherit version;
 

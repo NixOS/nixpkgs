@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, isPy3k
-, bitcoinlib, GitPython, pysha3, git }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, isPy3k
+, bitcoinlib
+, GitPython
+, pysha3
+, git
+}:
 
 buildPythonPackage rec {
   pname = "opentimestamps";

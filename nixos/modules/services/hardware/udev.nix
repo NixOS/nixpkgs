@@ -31,7 +31,8 @@ let
 
   # Perform substitutions in all udev rules files.
   udevRules = pkgs.runCommand "udev-rules"
-    { preferLocalBuild = true;
+    {
+      preferLocalBuild = true;
       allowSubstitutes = false;
       packages = unique (map toString cfg.packages);
     }
@@ -129,9 +130,10 @@ let
     ''; # */
 
   hwdbBin = pkgs.runCommand "hwdb.bin"
-    { preferLocalBuild = true;
+    {
+      preferLocalBuild = true;
       allowSubstitutes = false;
-      packages = unique (map toString ([udev] ++ cfg.packages));
+      packages = unique (map toString ([ udev ] ++ cfg.packages));
     }
     ''
       mkdir -p etc/udev/hwdb.d
@@ -182,7 +184,7 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
@@ -195,7 +197,7 @@ in
 
       path = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages added to the <envar>PATH</envar> environment variable when
           executing programs from Udev rules.
@@ -248,7 +250,7 @@ in
 
     hardware.firmware = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       description = ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -333,7 +335,8 @@ in
       '';
 
     systemd.services.systemd-udevd =
-      { restartTriggers = cfg.packages;
+      {
+        restartTriggers = cfg.packages;
       };
 
   };

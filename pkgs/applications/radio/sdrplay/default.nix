@@ -1,9 +1,11 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, udev }:
 let
-  arch = if stdenv.isx86_64  then "x86_64"
-    else if stdenv.isi686    then "i686"
+  arch =
+    if stdenv.isx86_64 then "x86_64"
+    else if stdenv.isi686 then "i686"
     else throw "unsupported architecture";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "sdrplay";
   version = "3.07.1";
 

@@ -14,10 +14,12 @@ let
   nameSource = "${nameSourceBase}.zip";
   nameExecutable = "${nameCamel}.exe";
   owner = "mifi";
-  getSymlinkCommand = if (customSymlinkCommand != null) then customSymlinkCommand
+  getSymlinkCommand =
+    if (customSymlinkCommand != null) then customSymlinkCommand
     else if useMklink then (targetPath: linkPath: "mklink ${targetPath} ${linkPath}")
     else (targetPath: linkPath: "ln -s ${targetPath} ${linkPath}");
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   inherit pname version;
 
   src = fetchurl {

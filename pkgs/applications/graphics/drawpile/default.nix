@@ -4,10 +4,10 @@
 , fetchFromGitHub
 , extra-cmake-modules
 
-# common deps
+  # common deps
 , karchive
 
-# client deps
+  # client deps
 , qtbase
 , qtkeychain
 , qtmultimedia
@@ -15,20 +15,20 @@
 , qttools
 , libsecret
 
-# optional client deps
+  # optional client deps
 , giflib
 , kdnssd
 , libvpx
 , miniupnpc
 , qtx11extras # kis
 
-# optional server deps
+  # optional server deps
 , libmicrohttpd
 , libsodium
 , withSystemd ? stdenv.isLinux
 , systemd ? null
 
-# options
+  # options
 , buildClient ? true
 , buildServer ? true
 , buildServerGui ? true # if false builds a headless server
@@ -66,7 +66,8 @@ let
   boolToFlag = bool:
     if bool then "ON" else "OFF";
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "drawpile";
   version = "2.1.20";
 
@@ -82,9 +83,9 @@ in mkDerivation rec {
   buildInputs = [
     karchive
   ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
+  ++ optionals buildClient clientDeps
+  ++ optionals buildServer serverDeps
+  ++ optionals enableKisTablet kisDeps;
 
   cmakeFlags = [
     "-Wno-dev"

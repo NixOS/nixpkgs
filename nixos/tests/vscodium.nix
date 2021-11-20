@@ -66,4 +66,5 @@ let
       '';
     });
 
-in builtins.mapAttrs (k: v: mkTest k v { }) tests
+in
+builtins.mapAttrs (k: v: mkTest k v { }) tests

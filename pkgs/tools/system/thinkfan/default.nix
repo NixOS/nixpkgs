@@ -6,7 +6,8 @@
 , pkg-config
 , procps
 , coreutils
-, smartSupport ? false, libatasmart
+, smartSupport ? false
+, libatasmart
 }:
 
 stdenv.mkDerivation rec {

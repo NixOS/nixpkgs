@@ -6,7 +6,8 @@
 , gevent
 , mock
 , pytest
-, tornado }:
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "opentracing";

@@ -54,18 +54,20 @@ let
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
-in writeTextFile {
-  name = wrappedName;
-  text = ''
-    export VDRIFT_DATA_DIRECTORY="${data}"
-    exec ${bin}/bin/vdrift "$@"
-  '';
-  destination = "/bin/vdrift";
-  executable = true;
-  checkPhase = ''
-    ${stdenv.shell} -n $out/bin/vdrift
-  '';
-} // {
+in
+writeTextFile
+  {
+    name = wrappedName;
+    text = ''
+      export VDRIFT_DATA_DIRECTORY="${data}"
+      exec ${bin}/bin/vdrift "$@"
+    '';
+    destination = "/bin/vdrift";
+    executable = true;
+    checkPhase = ''
+      ${stdenv.shell} -n $out/bin/vdrift
+    '';
+  } // {
   meta = bin.meta // {
     hydraPlatforms = [ ];
   };

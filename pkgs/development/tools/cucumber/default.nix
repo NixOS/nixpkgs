@@ -9,9 +9,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "A tool for executable specifications";
-    homepage    = "https://cucumber.io/";
-    license     = with licenses; mit;
+    homepage = "https://cucumber.io/";
+    license = with licenses; mit;
     maintainers = with maintainers; [ manveru nicknovitski ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,6 +1,16 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
-, bigarray-compat, optint
-, fmt, rresult, bos, fpath, astring, alcotest
+{ lib
+, fetchurl
+, buildDunePackage
+, dune-configurator
+, pkg-config
+, bigarray-compat
+, optint
+, fmt
+, rresult
+, bos
+, fpath
+, astring
+, alcotest
 , withFreestanding ? false
 , ocaml-freestanding
 }:

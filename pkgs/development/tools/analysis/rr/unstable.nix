@@ -7,16 +7,16 @@
 { callPackage, fetchFromGitHub }:
 
 let
-  rr = callPackage ./. {};
+  rr = callPackage ./. { };
 in
 
-  rr.overrideAttrs (old: {
-    version = "unstable-2021-07-06";
+rr.overrideAttrs (old: {
+  version = "unstable-2021-07-06";
 
-    src = fetchFromGitHub {
-      owner = "mozilla";
-      repo = "rr";
-      rev = "0fc21a8d654dabc7fb1991d76343824cb7951ea0";
-      sha256 = "0s851rflxmvxcfw97zmplcwzhv86xmd3my78pi4c7gkj18d621i5";
-    };
-  })
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "rr";
+    rev = "0fc21a8d654dabc7fb1991d76343824cb7951ea0";
+    sha256 = "0s851rflxmvxcfw97zmplcwzhv86xmd3my78pi4c7gkj18d621i5";
+  };
+})

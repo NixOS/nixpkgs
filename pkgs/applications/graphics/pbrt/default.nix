@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib}:
+{ lib, stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib }:
 
 stdenv.mkDerivation {
   version = "2018-08-15";
@@ -6,8 +6,8 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     rev = "86b5821308088deea70b207bc8c22219d0103d65";
-    owner  = "mmp";
-    repo   = "pbrt-v3";
+    owner = "mmp";
+    repo = "pbrt-v3";
     sha256 = "0f7ivsczba6zfk5f0bba1js6dcwf6w6jrkiby147qp1sx5k35cv8";
     fetchSubmodules = true;
   };

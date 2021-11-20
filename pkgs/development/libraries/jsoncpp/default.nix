@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "jsoncpp";
   version = "1.9.4";
 
-  outputs = ["out" "dev"];
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "open-source-parsers";
@@ -32,11 +32,12 @@ stdenv.mkDerivation rec {
 
   # Hack to be able to run the test, broken because we use
   # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
+  preBuild =
+    if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+    '' else ''
+      export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    '';
 
   nativeBuildInputs = [ cmake python3 validatePkgConfig ];
 

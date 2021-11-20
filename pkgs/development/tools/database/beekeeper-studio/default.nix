@@ -7,14 +7,15 @@ let
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
     sha512 = "1aik88wi9axv66axjmmjmlna1sp0pz92z8i2x6pq3bs0gcs4i1q3qxxbrfc14ynbpa65knimfhwzrrshchnijgdazx3qjzh8jwzfiwl";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   multiPkgs = null; # no 32bit needed

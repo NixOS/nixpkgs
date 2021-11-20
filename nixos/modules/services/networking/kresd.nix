@@ -7,20 +7,22 @@ let
 
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
-  mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
-    al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
-    al_portOnly = builtins.match "([0-9]+)" addr;
-    al = findFirst (a: a != null)
-      (throw "services.kresd.*: incorrect address specification '${addr}'")
-      [ al_v4 al_v6 al_portOnly ];
-    port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
-    in # freebind is set for compatibility with earlier kresd services;
-       # it could be configurable, for example.
-      ''
-        net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
-      '';
+  mkListen = kind: addr:
+    let
+      al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
+      al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
+      al_portOnly = builtins.match "([0-9]+)" addr;
+      al = findFirst (a: a != null)
+        (throw "services.kresd.*: incorrect address specification '${addr}'")
+        [ al_v4 al_v6 al_portOnly ];
+      port = last al;
+      addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
+    in
+    # freebind is set for compatibility with earlier kresd services;
+      # it could be configurable, for example.
+    ''
+      net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
+    '';
 
   configFile = pkgs.writeText "kresd.conf" (
     ""
@@ -29,7 +31,8 @@ let
     + concatMapStrings (mkListen "doh2") cfg.listenDoH
     + cfg.extraConfig
   );
-in {
+in
+{
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
   imports = [
@@ -83,7 +86,7 @@ in {
     };
     listenTLS = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = [ ];
       example = [ "198.51.100.1:853" "[2001:db8::1]:853" "853" ];
       description = ''
         Addresses and ports on which kresd should provide DNS over TLS (see RFC 7858).
@@ -92,7 +95,7 @@ in {
     };
     listenDoH = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = [ ];
       example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
       description = ''
         Addresses and ports on which kresd should provide DNS over HTTPS/2 (see RFC 8484).
@@ -118,7 +121,8 @@ in {
     networking.resolvconf.useLocalResolver = mkDefault true;
 
     users.users.knot-resolver =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
         group = "knot-resolver";
         description = "Knot-resolver daemon user";
       };
@@ -126,7 +130,8 @@ in {
 
     systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
 
-    systemd.targets.kresd = { # configure units started by default
+    systemd.targets.kresd = {
+      # configure units started by default
       wantedBy = [ "multi-user.target" ];
       wants = [ "kres-cache-gc.service" ]
         ++ map (i: "kresd@${toString i}.service") (range 1 cfg.instances);

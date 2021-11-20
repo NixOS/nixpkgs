@@ -13,7 +13,7 @@ in
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         description = ''
           Content of /etc/target/saveconfig.json
           This file is normally read and written by targetcli

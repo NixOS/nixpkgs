@@ -114,7 +114,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Flaky tests
     "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
-    "test_cx_equivalence"  # Fails due to flaky test
+    "test_cx_equivalence" # Fails due to flaky test
     "test_two_qubit_synthesis_not_pulse_optimal" # test of random circuit, seems to randomly fail depending on seed
     "test_qv_natural" # fails due to sign error. Not sure why
   ] ++ lib.optionals (lib.versionAtLeast matplotlib.version "3.4.0") [

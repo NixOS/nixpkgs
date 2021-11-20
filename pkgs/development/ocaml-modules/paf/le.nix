@@ -18,7 +18,7 @@ buildDunePackage {
     src
     useDune2
     minimumOCamlVersion
-  ;
+    ;
 
   propagatedBuildInputs = [
     paf

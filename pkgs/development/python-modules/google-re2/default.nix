@@ -11,13 +11,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pybind11 re2 six
+    pybind11
+    re2
+    six
   ];
 
   meta = with lib; {
     description = "RE2 Python bindings";
-    homepage    = "https://github.com/google/re2";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/google/re2";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ alexbakker ];
   };
 }

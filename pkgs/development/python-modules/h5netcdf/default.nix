@@ -18,9 +18,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch{
+    (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/h5netcdf/h5netcdf/pull/82.patch";
-    sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
+      sha256 = "0x9bq9jl4kvw152adkpcyqslhpi7miv80hrnpl2w2y798mmbs0s4";
     })
   ];
 

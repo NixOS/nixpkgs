@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "47e6ac99e5b114b9abf2d1dd1bca06f22c028d025432512989f659142470810f";
   };
 
-  NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
+  NIX_CFLAGS_COMPILE = "-I${pkgs.poppler.dev}/include/poppler/";
   nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pkgs.poppler.dev ];
   propagatedBuildInputs = [ pycairo pygobject2 ];

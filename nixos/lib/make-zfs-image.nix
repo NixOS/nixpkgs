@@ -63,7 +63,7 @@
   # This is a list of attribute sets {source, target} where `source'
   # is the file system object (regular file or directory) to be
   # grafted in the file system at path `target'.
-  contents ? []
+  contents ? [ ]
 
 , # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix. This configuration will be embedded
@@ -100,20 +100,20 @@ let
     let
       nixpkgs = lib.cleanSource pkgs.path;
     in
-      pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
-        mkdir -p $out
-        cp -prd ${nixpkgs.outPath} $out/nixos
-        chmod -R u+w $out/nixos
-        if [ ! -e $out/nixos/nixpkgs ]; then
-          ln -s . $out/nixos/nixpkgs
-        fi
-        rm -rf $out/nixos/.git
-        echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
-      '';
+    pkgs.runCommand "nixos-${config.system.nixos.version}" { } ''
+      mkdir -p $out
+      cp -prd ${nixpkgs.outPath} $out/nixos
+      chmod -R u+w $out/nixos
+      if [ ! -e $out/nixos/nixpkgs ]; then
+        ln -s . $out/nixos/nixpkgs
+      fi
+      rm -rf $out/nixos/.git
+      echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
+    '';
 
   closureInfo = pkgs.closureInfo {
     rootPaths = [ config.system.build.toplevel ]
-    ++ (lib.optional includeChannel channelSources);
+      ++ (lib.optional includeChannel channelSources);
   };
 
   modulesTree = pkgs.aggregateModules
@@ -133,7 +133,7 @@ let
     ]
   );
 
-  hasDefinedMount  = disk: ((disk.mount or null) != null);
+  hasDefinedMount = disk: ((disk.mount or null) != null);
 
   stringifyProperties = prefix: properties: lib.concatStringsSep " \\\n" (
     lib.mapAttrsToList
@@ -145,10 +145,12 @@ let
 
   featuresToProperties = features:
     lib.listToAttrs
-      (builtins.map (feature: {
-        name = "feature@${feature}";
-        value = "enabled";
-      }) features);
+      (builtins.map
+        (feature: {
+          name = "feature@${feature}";
+          value = "enabled";
+        })
+        features);
 
   createDatasets =
     let
@@ -156,11 +158,11 @@ let
       sorted = lib.sort (left: right: (lib.stringLength left.name) < (lib.stringLength right.name)) datasetlist;
       cmd = { name, value }:
         let
-          properties = stringifyProperties "-o" (value.properties or {});
+          properties = stringifyProperties "-o" (value.properties or { });
         in
-          "zfs create -p ${properties} ${name}";
+        "zfs create -p ${properties} ${name}";
     in
-      lib.concatMapStringsSep "\n" cmd sorted;
+    lib.concatMapStringsSep "\n" cmd sorted;
 
   mountDatasets =
     let
@@ -173,7 +175,7 @@ let
           mount -t zfs ${name} /mnt${lib.escapeShellArg value.mount}
         '';
     in
-      lib.concatMapStringsSep "\n" cmd sorted;
+    lib.concatMapStringsSep "\n" cmd sorted;
 
   unmountDatasets =
     let
@@ -185,14 +187,15 @@ let
           umount /mnt${lib.escapeShellArg value.mount}
         '';
     in
-      lib.concatMapStringsSep "\n" cmd sorted;
+    lib.concatMapStringsSep "\n" cmd sorted;
 
 
   fileSystemsCfgFile =
     let
       mountable = lib.filterAttrs (_: value: hasDefinedMount value) datasets;
     in
-      pkgs.runCommand "filesystem-config.nix" {
+    pkgs.runCommand "filesystem-config.nix"
+      {
         buildInputs = with pkgs; [ jq nixpkgs-fmt ];
         filesystems = builtins.toJSON {
           fileSystems = lib.mapAttrs'
@@ -223,9 +226,10 @@ let
     if configFile == null
     then fileSystemsCfgFile
     else
-      pkgs.runCommand "configuration.nix" {
-        buildInputs = with pkgs; [ nixpkgs-fmt ];
-      }
+      pkgs.runCommand "configuration.nix"
+        {
+          buildInputs = with pkgs; [ nixpkgs-fmt ];
+        }
         ''
           (
             echo '{ imports = ['
@@ -241,14 +245,14 @@ let
     pkgs.vmTools.override {
       rootModules =
         [ "zfs" "9p" "9pnet_virtio" "virtio_pci" "virtio_blk" ] ++
-          (pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos");
+        (pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos");
       kernel = modulesTree;
     }
   ).runInLinuxVM (
     pkgs.runCommand name
       {
         QEMU_OPTS = "-drive file=$bootDiskImage,if=virtio,cache=unsafe,werror=report"
-         + " -drive file=$rootDiskImage,if=virtio,cache=unsafe,werror=report";
+          + " -drive file=$rootDiskImage,if=virtio,cache=unsafe,werror=report";
         preVM = ''
           PATH=$PATH:${pkgs.qemu_kvm}/bin
           mkdir $out
@@ -260,17 +264,17 @@ let
         '';
 
         postVM = ''
-          ${if formatOpt == "raw" then ''
-          mv $bootDiskImage $out/${bootFilename}
-          mv $rootDiskImage $out/${rootFilename}
-        '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
-        ''}
-          bootDiskImage=$out/${bootFilename}
-          rootDiskImage=$out/${rootFilename}
-          set -x
-          ${postVM}
+            ${if formatOpt == "raw" then ''
+            mv $bootDiskImage $out/${bootFilename}
+            mv $rootDiskImage $out/${rootFilename}
+          '' else ''
+            ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
+            ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+          ''}
+            bootDiskImage=$out/${bootFilename}
+            rootDiskImage=$out/${rootFilename}
+            set -x
+            ${postVM}
         '';
       } ''
       export PATH=${tools}:$PATH

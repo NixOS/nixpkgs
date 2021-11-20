@@ -1,8 +1,18 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, ninja, git, pandoc
-, libGL, libGLU, libXxf86vm, freeimage
-, qtbase, wrapQtAppsHook
-, copyDesktopItems, makeDesktopItem
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, git
+, pandoc
+, libGL
+, libGLU
+, libXxf86vm
+, freeimage
+, qtbase
+, wrapQtAppsHook
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {

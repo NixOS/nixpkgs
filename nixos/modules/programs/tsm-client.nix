@@ -17,7 +17,7 @@ let
     let
       lenUniq = l: length (lib.lists.unique l);
     in
-      lenUniq lst == lenUniq (map toLower lst);
+    lenUniq lst == lenUniq (map toLower lst);
 
   # TSM rejects servername strings longer than 64 chars.
   servernameType = strMatching ".{1,64}";
@@ -45,8 +45,8 @@ let
       '';
     };
     options.port = mkOption {
-      type = addCheck port (p: p<=32767);
-      default = 1500;  # official default
+      type = addCheck port (p: p <= 32767);
+      default = 1500; # official default
       description = ''
         TCP port of the IBM TSM server.
         The value will be used for the
@@ -111,7 +111,7 @@ let
       type = addCheck
         (attrsOf (nullOr str))
         (attrs: checkIUnique (attrNames attrs));
-      default = {};
+      default = { };
       example.compression = "yes";
       example.passwordaccess = null;
       description = ''
@@ -148,23 +148,23 @@ let
     config.extraConfig =
       mapAttrs (lib.trivial.const mkDefault) (
         {
-          commmethod = "v6tcpip";  # uses v4 or v6, based on dns lookup result
+          commmethod = "v6tcpip"; # uses v4 or v6, based on dns lookup result
           tcpserveraddress = config.server;
           tcpport = builtins.toString config.port;
           nodename = config.node;
           passwordaccess = if config.genPasswd then "generate" else "prompt";
           passworddir = ''"${config.passwdDir}"'';
-        } // optionalAttrs (config.includeExclude!="") {
+        } // optionalAttrs (config.includeExclude != "") {
           inclexcl = ''"${pkgs.writeText "inclexcl.dsm.sys" config.includeExclude}"'';
         }
       );
     config.text =
       let
-        attrset = filterAttrs (k: v: v!=null) config.extraConfig;
-        mkLine = k: v: k + optionalString (v!="") "  ${v}";
+        attrset = filterAttrs (k: v: v != null) config.extraConfig;
+        mkLine = k: v: k + optionalString (v != "") "  ${v}";
         lines = mapAttrsToList mkLine attrset;
       in
-        concatStringsSep "\n" lines;
+      concatStringsSep "\n" lines;
     config.stanza = ''
       server  ${config.name}
       ${config.text}
@@ -179,7 +179,7 @@ let
     '';
     servers = mkOption {
       type = attrsOf (submodule [ serverOptions ]);
-      default = {};
+      default = { };
       example.mainTsmServer = {
         server = "tsmserver.company.com";
         node = "MY-TSM-NODE";
@@ -250,7 +250,7 @@ let
       '';
     }
     {
-      assertion = (cfg.defaultServername!=null)->(hasAttr cfg.defaultServername cfg.servers);
+      assertion = (cfg.defaultServername != null) -> (hasAttr cfg.defaultServername cfg.servers);
       message = "TSM defaultServername not found in list of servers";
     }
   ];

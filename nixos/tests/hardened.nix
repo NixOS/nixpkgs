@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "hardened";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
@@ -6,28 +6,29 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
   machine =
     { lib, pkgs, config, ... }:
-    with lib;
-    { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
-      users.users.sybil = { isNormalUser = true; group = "wheel"; };
-      imports = [ ../modules/profiles/hardened.nix ];
-      environment.memoryAllocator.provider = "graphene-hardened";
-      nix.useSandbox = false;
-      virtualisation.emptyDiskImages = [ 4096 ];
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
-      '';
-      virtualisation.fileSystems = {
-        "/efi" = {
-          device = "/dev/disk/by-label/EFISYS";
-          fsType = "vfat";
-          options = [ "noauto" ];
+      with lib;
+      {
+        users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
+        users.users.sybil = { isNormalUser = true; group = "wheel"; };
+        imports = [ ../modules/profiles/hardened.nix ];
+        environment.memoryAllocator.provider = "graphene-hardened";
+        nix.useSandbox = false;
+        virtualisation.emptyDiskImages = [ 4096 ];
+        boot.initrd.postDeviceCommands = ''
+          ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
+        '';
+        virtualisation.fileSystems = {
+          "/efi" = {
+            device = "/dev/disk/by-label/EFISYS";
+            fsType = "vfat";
+            options = [ "noauto" ];
+          };
         };
+        boot.extraModulePackages =
+          optional (versionOlder config.boot.kernelPackages.kernel.version "5.6")
+            config.boot.kernelPackages.wireguard;
+        boot.kernelModules = [ "wireguard" ];
       };
-      boot.extraModulePackages =
-        optional (versionOlder config.boot.kernelPackages.kernel.version "5.6")
-          config.boot.kernelPackages.wireguard;
-      boot.kernelModules = [ "wireguard" ];
-    };
 
   testScript =
     let

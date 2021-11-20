@@ -1,5 +1,8 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_driver}:
+{ lib
+, buildOcamlJane
+, ppx_core
+, ppx_driver
+}:
 
 buildOcamlJane {
   pname = "ppx_here";

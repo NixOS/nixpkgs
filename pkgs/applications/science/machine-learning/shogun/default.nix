@@ -122,27 +122,29 @@ stdenv.mkDerivation rec {
     lp_solve
     colpack
   ] ++ lib.optionals pythonSupport (with pythonPackages; [ python numpy ])
-    ++ lib.optional opencvSupport opencv;
+  ++ lib.optional opencvSupport opencv;
 
-  cmakeFlags = let
-    enableIf = cond: if cond then "ON" else "OFF";
-  in [
-    "-DBUILD_META_EXAMPLES=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPACK=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPREC=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_CPLEX=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Mosek=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_TFLogger=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ViennaCL=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;TrainedModelSerialization'"  # Sporadic segfault
-    "-DENABLE_TESTING=${enableIf doCheck}"
-    "-DDISABLE_META_INTEGRATION_TESTS=ON"
-    "-DTRAVIS_DISABLE_META_CPP=ON"
-    "-DPythonModular=${enableIf pythonSupport}"
-    "-DOpenCV=${enableIf opencvSupport}"
-    "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
-  ];
+  cmakeFlags =
+    let
+      enableIf = cond: if cond then "ON" else "OFF";
+    in
+    [
+      "-DBUILD_META_EXAMPLES=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_ARPACK=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_ARPREC=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_CPLEX=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_Mosek=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_TFLogger=ON"
+      "-DCMAKE_DISABLE_FIND_PACKAGE_ViennaCL=ON"
+      "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+      "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;TrainedModelSerialization'" # Sporadic segfault
+      "-DENABLE_TESTING=${enableIf doCheck}"
+      "-DDISABLE_META_INTEGRATION_TESTS=ON"
+      "-DTRAVIS_DISABLE_META_CPP=ON"
+      "-DPythonModular=${enableIf pythonSupport}"
+      "-DOpenCV=${enableIf opencvSupport}"
+      "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
+    ];
 
   CXXFLAGS = "-faligned-new";
 

@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   # This dead code causes a duplicate symbol error in Clang so just remove it
-  postPatch = if stdenv.cc.isClang then ''
-    substituteInPlace jpeg/ejpeg.h --replace "int No_JPEG_Header_Flag" ""
-  '' else null;
+  postPatch =
+    if stdenv.cc.isClang then ''
+      substituteInPlace jpeg/ejpeg.h --replace "int No_JPEG_Header_Flag" ""
+    '' else null;
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org";

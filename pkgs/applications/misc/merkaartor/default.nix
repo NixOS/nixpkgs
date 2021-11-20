@@ -9,10 +9,14 @@
 , proj
 , qtsvg
 , qtwebengine
-, withGeoimage ? true, exiv2
-, withGpsdlib ? (!stdenv.isDarwin), gpsd
-, withLibproxy ? false, libproxy
-, withZbar ? false, zbar
+, withGeoimage ? true
+, exiv2
+, withGpsdlib ? (!stdenv.isDarwin)
+, gpsd
+, withLibproxy ? false
+, libproxy
+, withZbar ? false
+, zbar
 }:
 
 mkDerivation rec {
@@ -42,9 +46,9 @@ mkDerivation rec {
     "TRANSDIR_SYSTEM=${qttranslations}/translations"
     "USEWEBENGINE=1"
   ] ++ lib.optional withGeoimage "GEOIMAGE=1"
-    ++ lib.optional withGpsdlib "GPSDLIB=1"
-    ++ lib.optional withLibproxy "LIBPROXY=1"
-    ++ lib.optional withZbar "ZBAR=1";
+  ++ lib.optional withGpsdlib "GPSDLIB=1"
+  ++ lib.optional withLibproxy "LIBPROXY=1"
+  ++ lib.optional withZbar "ZBAR=1";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications

@@ -51,9 +51,11 @@ buildPythonPackage rec {
     python-crfsuite
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ (map (lang: callPackage ./language-pack.nix {
-    inherit lang version format src;
-  }) langPkgs);
+  ] ++ (map
+    (lang: callPackage ./language-pack.nix {
+      inherit lang version format src;
+    })
+    langPkgs);
 
   checkPhase = ''
     runHook preCheck

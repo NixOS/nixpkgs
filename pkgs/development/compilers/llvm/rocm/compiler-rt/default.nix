@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       url = "https://gist.github.com/lovesegfault/b255dcf2fa4e202411a6a04b61e6cc04/raw";
       sha256 = "sha256-PMMSLr2zHuNDn1OWqumqHwB74ktJSHxhJWkqEKB7Z64=";
       stripLen = 1;
-     })
-    ];
+    })
+  ];
 
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks

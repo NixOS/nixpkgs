@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    cpp-utilities zlib
+    cpp-utilities
+    zlib
   ];
 
   meta = with pkgs.lib; {

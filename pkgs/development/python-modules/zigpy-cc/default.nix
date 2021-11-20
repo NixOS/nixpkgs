@@ -7,7 +7,8 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, zigpy }:
+, zigpy
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-cc";

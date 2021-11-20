@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python2 ];
 
-  cmakeFlags = ["-DWITH_TESTS=ON"];
+  cmakeFlags = [ "-DWITH_TESTS=ON" ];
 
   strictDeps = true;
 

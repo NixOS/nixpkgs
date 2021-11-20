@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     services.syncthing.relay = {
       enable = true;
       providedBy = "nixos-test";
-      pools = [];  # Don't connect to any pool while testing.
+      pools = [ ]; # Don't connect to any pool while testing.
       port = 12345;
       statusPort = 12346;
     };

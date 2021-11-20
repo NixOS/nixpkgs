@@ -1,5 +1,4 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , distDir
 , extracted
@@ -13,7 +12,7 @@
 
 let
 
-  workspaceDir = runLocal "our_workspace" {} "mkdir $out";
+  workspaceDir = runLocal "our_workspace" { } "mkdir $out";
 
   testBazel = bazelTest {
     name = "bazel-test-shebangs";
@@ -46,4 +45,5 @@ let
     buildInputs = [ unzip ];
   };
 
-in testBazel
+in
+testBazel

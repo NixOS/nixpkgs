@@ -7,9 +7,9 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "sepandhaghighi";
-    repo   = pname;
-    rev    = "v${version}";
+    owner = "sepandhaghighi";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0i3qpb20mnc22qny1ar3yvxb1dac7njwi8bvi5sy5kywz10c5dkw";
   };
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "pycm.pycm_compare.Compare" ];  # output formatting error
+  disabledTests = [ "pycm.pycm_compare.Compare" ]; # output formatting error
   propagatedBuildInputs = [ matplotlib numpy seaborn ];
 
   meta = with lib; {

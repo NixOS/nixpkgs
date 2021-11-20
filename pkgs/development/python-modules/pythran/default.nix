@@ -20,7 +20,8 @@
 let
   inherit (python) stdenv;
 
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pythran";
   version = "0.9.12";
 

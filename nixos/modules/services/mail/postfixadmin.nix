@@ -125,9 +125,9 @@ in
 
     services.postgresql = mkIf localDB {
       enable = true;
-      ensureUsers = [ {
+      ensureUsers = [{
         name = cfg.database.username;
-      } ];
+      }];
     };
     # The postgresql module doesn't currently support concepts like
     # objects owners and extensions; for now we tack on what's needed
@@ -173,7 +173,7 @@ in
       isSystemUser = true;
       createHome = false;
     };
-    users.groups.${user} = mkIf localDB {};
+    users.groups.${user} = mkIf localDB { };
 
     services.phpfpm.pools.postfixadmin = {
       user = user;

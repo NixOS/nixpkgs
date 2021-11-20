@@ -1,11 +1,11 @@
 { buildPythonPackage
-# pkgs dependencies
+  # pkgs dependencies
 , check
 , cppunit
 , pkg-config
 , subunit
 
-# python dependencies
+  # python dependencies
 , fixtures
 , hypothesis
 , pytest

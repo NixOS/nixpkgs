@@ -1,6 +1,28 @@
-{ boost, cmake, fetchFromGitHub, freeglut, freetype, glew, libjpeg, libmypaint
-, libpng, libtiff, libusb1, lz4, xz, lzo, openblas, pkg-config, qtbase
-, qtmultimedia, qtscript, lib, stdenv, superlu, wrapQtAppsHook, }:
+{ boost
+, cmake
+, fetchFromGitHub
+, freeglut
+, freetype
+, glew
+, libjpeg
+, libmypaint
+, libpng
+, libtiff
+, libusb1
+, lz4
+, xz
+, lzo
+, openblas
+, pkg-config
+, qtbase
+, qtmultimedia
+, qtscript
+, lib
+, stdenv
+, superlu
+, wrapQtAppsHook
+,
+}:
 let source = import ./source.nix { inherit fetchFromGitHub; };
 in stdenv.mkDerivation rec {
   inherit (source) src;

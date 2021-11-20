@@ -15,7 +15,8 @@ let
     url = "https://imagej.net/media/icons/imagej.png";
     sha256 = "sha256-nU2nWI1wxZB/xlOKsZzdUjj+qiCTjO6GwEKYgZ5Risg=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "imagej";
   version = "153";
 

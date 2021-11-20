@@ -4,17 +4,17 @@
 with lib;
 
 let
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
-                           && pkgs.pkgsi686Linux.pipewire != null;
+    && pkgs.stdenv.isx86_64
+    && pkgs.pkgsi686Linux.pipewire != null;
 
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
   #
   # This doesn't work in general because of missing development information.
-  jack-libs = pkgs.runCommand "jack-libs" {} ''
+  jack-libs = pkgs.runCommand "jack-libs" { } ''
     mkdir -p "$out/lib"
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
@@ -36,7 +36,8 @@ let
     pipewire = recursiveUpdate defaults.pipewire cfg.config.pipewire;
     pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
   };
-in {
+in
+{
 
   meta = {
     maintainers = teams.freedesktop.members;
@@ -67,7 +68,7 @@ in {
       config = {
         client = mkOption {
           type = json.type;
-          default = {};
+          default = { };
           description = ''
             Configuration for pipewire clients. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client.conf.in
@@ -76,7 +77,7 @@ in {
 
         client-rt = mkOption {
           type = json.type;
-          default = {};
+          default = { };
           description = ''
             Configuration for realtime pipewire clients. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client-rt.conf.in
@@ -85,7 +86,7 @@ in {
 
         jack = mkOption {
           type = json.type;
-          default = {};
+          default = { };
           description = ''
             Configuration for the pipewire daemon's jack module. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/jack.conf.in
@@ -94,7 +95,7 @@ in {
 
         pipewire = mkOption {
           type = json.type;
-          default = {};
+          default = { };
           description = ''
             Configuration for the pipewire daemon. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire.conf.in
@@ -103,7 +104,7 @@ in {
 
         pipewire-pulse = mkOption {
           type = json.type;
-          default = {};
+          default = { };
           description = ''
             Configuration for the pipewire-pulse daemon. For details see
             https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire-pulse.conf.in
@@ -141,15 +142,15 @@ in {
     ];
 
     environment.systemPackages = [ cfg.package ]
-                                 ++ lib.optional cfg.jack.enable jack-libs;
+      ++ lib.optional cfg.jack.enable jack-libs;
 
     systemd.packages = [ cfg.package ]
-                       ++ lib.optional cfg.pulse.enable cfg.package.pulse;
+      ++ lib.optional cfg.pulse.enable cfg.package.pulse;
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
-    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
+    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) [ "sockets.target" ];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
     services.udev.packages = [ cfg.package ];
 

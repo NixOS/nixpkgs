@@ -1,12 +1,39 @@
-{ stdenv, pkgs, makeWrapper, runCommand, lib, writeShellScript
-, fetchFromGitHub, bundlerEnv, callPackage
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
 
-, ruby, replace, gzip, gnutar, git, cacert, util-linux, gawk
-, imagemagick, optipng, pngquant, libjpeg, jpegoptim, gifsicle, jhead
-, libpsl, redis, postgresql, which, brotli, procps, rsync
-, nodePackages, v8
+, ruby
+, replace
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, nodePackages
+, v8
 
-, plugins ? []
+, plugins ? [ ]
 }@args:
 
 let
@@ -30,8 +57,8 @@ let
 
     # Misc required system utils
     which
-    procps       # For ps and kill
-    util-linux   # For renice
+    procps # For ps and kill
+    util-linux # For renice
     gawk
 
     # Image optimization
@@ -56,7 +83,7 @@ let
     , pname ? null
     , version ? null
     , meta ? null
-    , bundlerEnvArgs ? {}
+    , bundlerEnvArgs ? { }
     , preserveGemsDir ? false
     , src
     , ...
@@ -66,33 +93,35 @@ let
         inherit name pname version ruby;
       });
     in
-      stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
-        pluginName = if name != null then name else "${pname}-${version}";
-        dontConfigure = true;
-        dontBuild = true;
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out
-          cp -r * $out/
-        '' + lib.optionalString (bundlerEnvArgs != {}) (
-          if preserveGemsDir then ''
-            cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
-          ''
-          else ''
-            if [[ -e $out/gems ]]; then
-              echo "Warning: The repo contains a 'gems' directory which will be removed!"
-              echo "         If you need to preserve it, set 'preserveGemsDir = true'."
-              rm -r $out/gems
-            fi
-            ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-          '' + ''
+    stdenv.mkDerivation (builtins.removeAttrs args [ "bundlerEnvArgs" ] // {
+      pluginName = if name != null then name else "${pname}-${version}";
+      dontConfigure = true;
+      dontBuild = true;
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out
+        cp -r * $out/
+      '' + lib.optionalString (bundlerEnvArgs != { }) (
+        if preserveGemsDir then ''
+          cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+        ''
+        else ''
+          if [[ -e $out/gems ]]; then
+            echo "Warning: The repo contains a 'gems' directory which will be removed!"
+            echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+            rm -r $out/gems
+          fi
+          ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+        '' + ''
           runHook postInstall
-        '');
-      });
+        ''
+      );
+    });
 
-  rake = runCommand "discourse-rake" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
+  rake = runCommand "discourse-rake"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+    } ''
     mkdir -p $out/bin
     makeWrapper ${rubyEnv}/bin/rake $out/bin/discourse-rake \
         ${lib.concatStrings (lib.mapAttrsToList (name: value: "--set ${name} '${value}' ") runtimeEnv)} \
@@ -109,45 +138,49 @@ let
       let
         gems = import ./rubyEnv/gemset.nix;
       in
-        gems // {
-          libv8-node =
-            let
-              noopScript = writeShellScript "noop" "exit 0";
-              linkFiles = writeShellScript "link-files" ''
-                cd ../..
+      gems // {
+        libv8-node =
+          let
+            noopScript = writeShellScript "noop" "exit 0";
+            linkFiles = writeShellScript "link-files" ''
+              cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+              mkdir -p vendor/v8/out.gn/libv8/obj/
+              ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
 
-                ln -s ${v8}/include vendor/v8/include
+              ln -s ${v8}/include vendor/v8/include
 
-                mkdir -p ext/libv8-node
-                echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
-              '';
-            in gems.libv8-node // {
-              dontBuild = false;
-              postPatch = ''
-                cp ${noopScript} libexec/build-libv8
-                cp ${noopScript} libexec/build-monolith
-                cp ${noopScript} libexec/download-node
-                cp ${noopScript} libexec/extract-node
-                cp ${linkFiles} libexec/inject-libv8
-              '';
-            };
-          mini_suffix = gems.mini_suffix // {
-            propagatedBuildInputs = [ libpsl ];
+              mkdir -p ext/libv8-node
+              echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
+            '';
+          in
+          gems.libv8-node // {
             dontBuild = false;
-            # Use our libpsl instead of the vendored one, which isn't
-            # available for aarch64. It has to be called
-            # libpsl.x86_64.so or it isn't found.
             postPatch = ''
-              cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+              cp ${noopScript} libexec/build-libv8
+              cp ${noopScript} libexec/build-monolith
+              cp ${noopScript} libexec/download-node
+              cp ${noopScript} libexec/extract-node
+              cp ${linkFiles} libexec/inject-libv8
             '';
           };
+        mini_suffix = gems.mini_suffix // {
+          propagatedBuildInputs = [ libpsl ];
+          dontBuild = false;
+          # Use our libpsl instead of the vendored one, which isn't
+          # available for aarch64. It has to be called
+          # libpsl.x86_64.so or it isn't found.
+          postPatch = ''
+            cp $(readlink -f ${libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+          '';
         };
+      };
 
     groups = [
-      "default" "assets" "development" "test"
+      "default"
+      "assets"
+      "development"
+      "test"
     ];
   };
 
@@ -234,7 +267,9 @@ let
     inherit version src;
 
     buildInputs = [
-      rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler
+      rubyEnv
+      rubyEnv.wrappedRuby
+      rubyEnv.bundler
     ];
 
     patches = [
@@ -323,4 +358,5 @@ let
       tests = import ../../../../nixos/tests/discourse.nix { package = pkgs.discourse.override args; };
     };
   };
-in discourse
+in
+discourse

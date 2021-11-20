@@ -6,8 +6,10 @@
 , gtest
 , libtorrent
 , ncurses
-, jsonRpcSupport ? true, nlohmann_json
-, xmlRpcSupport ? true, xmlrpc_c
+, jsonRpcSupport ? true
+, nlohmann_json
+, xmlRpcSupport ? true
+, xmlrpc_c
 }:
 
 stdenv.mkDerivation rec {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "tvraman";
     repo = pname;
     rev = version;
-    hash= "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
+    hash = "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
   };
 
   nativeBuildInputs = [

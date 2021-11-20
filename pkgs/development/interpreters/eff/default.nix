@@ -16,7 +16,12 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ which ] ++ (with ocamlPackages; [
-    ocaml findlib ocamlbuild menhir js_of_ocaml js_of_ocaml-ocamlbuild
+    ocaml
+    findlib
+    ocamlbuild
+    menhir
+    js_of_ocaml
+    js_of_ocaml-ocamlbuild
   ]);
 
   doCheck = true;

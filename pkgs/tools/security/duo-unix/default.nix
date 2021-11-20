@@ -5,13 +5,14 @@ stdenv.mkDerivation rec {
   version = "1.11.4";
 
   src = fetchurl {
-    url    = "https://dl.duosecurity.com/duo_unix-${version}.tar.gz";
+    url = "https://dl.duosecurity.com/duo_unix-${version}.tar.gz";
     sha256 = "1hqklf6jzrxn5hgh69bbl6962hwwgf06dlrb0ry7n5iy8w8imnsg";
   };
 
   buildInputs = [ pam openssl zlib ];
   configureFlags =
-    [ "--with-pam=$(out)/lib/security"
+    [
+      "--with-pam=$(out)/lib/security"
       "--prefix=$(out)"
       "--sysconfdir=$(out)/etc/duo"
       "--with-openssl=${openssl.dev}"
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Duo Security Unix login integration";
-    homepage    = "https://duosecurity.com";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.unix;
+    homepage = "https://duosecurity.com";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

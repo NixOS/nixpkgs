@@ -1,8 +1,27 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
-, qtquickcontrols2, qtscript, qtsvg, qttools
-, qtwebengine, qtxmlpatterns
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsa-lib
+, freetype
+, libjack2
+, lame
+, libogg
+, libpulseaudio
+, libsndfile
+, libvorbis
+, portaudio
+, portmidi
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtquickcontrols2
+, qtscript
+, qtsvg
+, qttools
+, qtwebengine
+, qtxmlpatterns
 , nixosTests
 }:
 
@@ -37,10 +56,25 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
-    portaudio portmidi # tesseract
-    qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
-    qtscript qtsvg qttools qtwebengine qtxmlpatterns
+    alsa-lib
+    libjack2
+    freetype
+    lame
+    libogg
+    libpulseaudio
+    libsndfile
+    libvorbis
+    portaudio
+    portmidi # tesseract
+    qtbase
+    qtdeclarative
+    qtgraphicaleffects
+    qtquickcontrols2
+    qtscript
+    qtsvg
+    qttools
+    qtwebengine
+    qtxmlpatterns
   ];
 
   passthru.tests = nixosTests.musescore;

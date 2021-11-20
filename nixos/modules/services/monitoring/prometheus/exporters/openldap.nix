@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.openldap;
-in {
+in
+{
   port = 9330;
   extraOpts = {
     ldapCredentialFile = mkOption {

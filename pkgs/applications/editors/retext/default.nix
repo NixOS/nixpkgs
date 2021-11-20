@@ -1,15 +1,27 @@
-{ lib, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
-# Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
-# available.
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+, buildEnv
+, aspellDicts
+  # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
+  # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]
 }:
 
 let
   version = "7.0.4";
   pythonEnv = python3.withPackages (ps: with ps; [
-    pyqt5 docutils pyenchant Markups markdown pygments chardet
+    pyqt5
+    docutils
+    pyenchant
+    Markups
+    markdown
+    pygments
+    chardet
   ]);
-in python3.pkgs.buildPythonApplication {
+in
+python3.pkgs.buildPythonApplication {
   inherit version;
   pname = "retext";
 

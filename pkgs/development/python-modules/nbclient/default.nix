@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder,
-  async_generator, traitlets, nbformat, nest-asyncio, jupyter-client,
-  pytest, xmltodict, nbconvert, ipywidgets
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, async_generator
+, traitlets
+, nbformat
+, nest-asyncio
+, jupyter-client
+, pytest
+, xmltodict
+, nbconvert
+, ipywidgets
 , doCheck ? true
 }:
 
@@ -18,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
   propagatedBuildInputs = [ async_generator traitlets nbformat nest-asyncio jupyter-client ];
 
-  postFixup =  ''
+  postFixup = ''
     # Remove until fixed by upstream
     # https://github.com/jupyter/nbclient/pull/173#issuecomment-968760082
     rm $out/bin/.jupyter-run-wrapped

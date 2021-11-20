@@ -51,10 +51,12 @@ let
   simpleCase = case:
     writeShellScript "test-trivial-overriding-${case}" extglobScript;
 
-  callPackageCase = case: callPackage (
-    { writeShellScript }:
-    writeShellScript "test-trivial-callpackage-overriding-${case}" extglobScript
-  ) { };
+  callPackageCase = case: callPackage
+    (
+      { writeShellScript }:
+      writeShellScript "test-trivial-callpackage-overriding-${case}" extglobScript
+    )
+    { };
 
   binCase = case:
     writeShellScriptBin "test-trivial-overriding-bin-${case}" extglobScript;
@@ -74,7 +76,8 @@ let
     let
       drv = (f type).overrideAttrs
         (if type == "succ" then allowExtglob else assertFail);
-    in if isBin then "${drv}/bin/${drv.name}" else drv;
+    in
+    if isBin then "${drv}/bin/${drv.name}" else drv;
 
   writeTextOverrides = {
     # Enabling globbing in checkPhase
@@ -101,7 +104,8 @@ let
   runTest = script:
     let
       name = script.name or (builtins.baseNameOf script);
-    in writeShellScript "run-${name}" ''
+    in
+    writeShellScript "run-${name}" ''
       if [ "$(${script})" != "success" ]; then
         echo "Failed in ${script}"
         exit 1
@@ -109,7 +113,8 @@ let
     '';
 in
 
-runCommand "test-writeShellScript-overriding" {
+runCommand "test-writeShellScript-overriding"
+{
   passthru = { inherit writeTextOverrides; };
 } ''
   ${lib.concatMapStrings (test: ''

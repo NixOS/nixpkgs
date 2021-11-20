@@ -1,5 +1,10 @@
 { enableX11 ? true
-,  lib, stdenv, fetchurl, pkg-config, xorg }:
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "frame";
@@ -10,8 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    stdenv pkg-config
-  ] ++ lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
+    stdenv
+    pkg-config
+  ] ++ lib.optionals enableX11 [ xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi ];
 
   configureFlags = lib.optional enableX11 "--with-x11";
 

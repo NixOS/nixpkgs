@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ipywidgets ];
 
-  doCheck = false;  # No tests in package or GitHub
+  doCheck = false; # No tests in package or GitHub
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromBitbucket, cmake, nasm, numactl
+{ lib
+, stdenv
+, fetchFromBitbucket
+, cmake
+, nasm
+, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
 , werrorSupport ? false # Warnings as errors
@@ -50,13 +55,13 @@ let
       "-DEXPORT_C_API=OFF"
       "-DHIGH_BIT_DEPTH=ON"
     ];
-    cmakeFlags = [(mkFlag has12Bit "MAIN12")] ++ cmakeLibFlags ++ cmakeFlagsAll;
+    cmakeFlags = [ (mkFlag has12Bit "MAIN12") ] ++ cmakeLibFlags ++ cmakeFlagsAll;
 
     preConfigure = ''
       cd source
     '';
 
-    nativeBuildInputs = [cmake nasm] ++ lib.optional numaSupport numactl;
+    nativeBuildInputs = [ cmake nasm ] ++ lib.optional numaSupport numactl;
   };
 
   libx265-10 = buildLib false;
@@ -96,9 +101,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for encoding h.265/HEVC video streams";
-    homepage    = "http://x265.org";
-    license     = licenses.gpl2;
+    homepage = "http://x265.org";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

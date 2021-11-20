@@ -19,23 +19,23 @@ let
     DB_USER = cfg.database.user;
 
     REDIS_HOST = cfg.redis.host;
-    REDIS_PORT = toString(cfg.redis.port);
+    REDIS_PORT = toString (cfg.redis.port);
     DB_HOST = cfg.database.host;
-    DB_PORT = toString(cfg.database.port);
+    DB_PORT = toString (cfg.database.port);
     DB_NAME = cfg.database.name;
     LOCAL_DOMAIN = cfg.localDomain;
     SMTP_SERVER = cfg.smtp.host;
-    SMTP_PORT = toString(cfg.smtp.port);
+    SMTP_PORT = toString (cfg.smtp.port);
     SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
     PAPERCLIP_ROOT_PATH = "/var/lib/mastodon/public-system";
     PAPERCLIP_ROOT_URL = "/system";
     ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
     ES_HOST = cfg.elasticsearch.host;
-    ES_PORT = toString(cfg.elasticsearch.port);
+    ES_PORT = toString (cfg.elasticsearch.port);
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
-  // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
+  // (if cfg.smtp.authenticate then { SMTP_LOGIN = cfg.smtp.user; } else { })
   // cfg.extraConfig;
 
   systemCallsList = [ "@cpu-emulation" "@debug" "@keyring" "@ipc" "@mount" "@obsolete" "@privileged" "@setuid" ];
@@ -84,11 +84,14 @@ let
   };
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
-    (lib.concatLists (lib.mapAttrsToList (name: value:
-      if value != null then [
-        "${name}=\"${toString value}\""
-      ] else []
-    ) env))));
+    (lib.concatLists (lib.mapAttrsToList
+      (name: value:
+        if value != null then [
+          "${name}=\"${toString value}\""
+        ] else [ ]
+      )
+      env))
+  ));
 
   mastodonEnv = pkgs.writeShellScriptBin "mastodon-env" ''
     set -a
@@ -97,7 +100,8 @@ let
     eval -- "\$@"
   '';
 
-in {
+in
+{
 
   options = {
     services.mastodon = {
@@ -409,7 +413,7 @@ in {
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra environment variables to pass to all mastodon services.
         '';
@@ -497,19 +501,19 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
+      after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [ ]);
       wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.mastodon-streaming = {
       after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
+        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [ ])
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon streaming";
       wantedBy = [ "multi-user.target" ];
       environment = env // (if cfg.enableUnixSocket
-        then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
-        else { PORT = toString(cfg.streamingPort); }
+      then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
+      else { PORT = toString (cfg.streamingPort); }
       );
       serviceConfig = {
         ExecStart = "${cfg.package}/run-streaming.sh";
@@ -527,13 +531,13 @@ in {
 
     systemd.services.mastodon-web = {
       after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
+        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [ ])
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon web";
       wantedBy = [ "multi-user.target" ];
       environment = env // (if cfg.enableUnixSocket
-        then { SOCKET = "/run/mastodon-web/web.socket"; }
-        else { PORT = toString(cfg.webPort); }
+      then { SOCKET = "/run/mastodon-web/web.socket"; }
+      else { PORT = toString (cfg.webPort); }
       );
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
@@ -552,12 +556,12 @@ in {
 
     systemd.services.mastodon-sidekiq = {
       after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
+        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [ ])
         ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
       description = "Mastodon sidekiq";
       wantedBy = [ "multi-user.target" ];
       environment = env // {
-        PORT = toString(cfg.sidekiqPort);
+        PORT = toString (cfg.sidekiqPort);
         DB_POOL = toString cfg.sidekiqThreads;
       };
       serviceConfig = {

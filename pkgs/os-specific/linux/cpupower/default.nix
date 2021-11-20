@@ -21,17 +21,18 @@ stdenv.mkDerivation {
   ];
 
   installFlags = lib.mapAttrsToList
-    (n: v: "${n}dir=${placeholder "out"}/${v}") {
-    bin = "bin";
-    sbin = "sbin";
-    man = "share/man";
-    include = "include";
-    lib = "lib";
-    locale = "share/locale";
-    doc = "share/doc/cpupower";
-    conf = "etc";
-    bash_completion_ = "share/bash-completion/completions";
-  };
+    (n: v: "${n}dir=${placeholder "out"}/${v}")
+    {
+      bin = "bin";
+      sbin = "sbin";
+      man = "share/man";
+      include = "include";
+      lib = "lib";
+      locale = "share/locale";
+      doc = "share/doc/cpupower";
+      conf = "etc";
+      bash_completion_ = "share/bash-completion/completions";
+    };
 
   enableParallelBuilding = true;
 

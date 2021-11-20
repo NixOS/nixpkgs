@@ -1,10 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, nose
+}:
 
 let
   pname = "crccheck";
   version = "1.0";
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit pname version;
 
   checkInputs = [ nose ];

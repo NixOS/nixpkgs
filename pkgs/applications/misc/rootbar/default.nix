@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchhg
 , pkg-config
 , meson
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [

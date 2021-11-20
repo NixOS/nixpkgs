@@ -16,12 +16,14 @@ let
 
   toCommandsString = commands:
     concatStringsSep ", " (
-      map (command:
-        if (isString command) then
-          command
-        else
-          "${toCommandOptionsString command.options}${command.command}"
-      ) commands
+      map
+        (command:
+          if (isString command) then
+            command
+          else
+            "${toCommandOptionsString command.options}${command.command}"
+        )
+        commands
     );
 
 in
@@ -59,7 +61,7 @@ in
           Whether users of the <code>wheel</code> group must
           provide a password to run commands as super user via <command>sudo</command>.
         '';
-      };
+    };
 
     security.sudo.execWheelOnly = mkOption {
       type = types.bool;
@@ -90,7 +92,7 @@ in
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
         this is the case when configuration options are merged.
       '';
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           # Allow execution of any command by all users in group sudo,
@@ -117,7 +119,7 @@ in
             description = ''
               The usernames / UIDs this rule should apply for.
             '';
-            default = [];
+            default = [ ];
           };
 
           groups = mkOption {
@@ -125,7 +127,7 @@ in
             description = ''
               The groups / GIDs this rule should apply for.
             '';
-            default = [];
+            default = [ ];
           };
 
           host = mkOption {
@@ -169,7 +171,7 @@ in
                   description = ''
                     Options for running the command. Refer to the <a href="https://www.sudo.ws/man/1.7.10/sudoers.man.html">sudo manual</a>.
                   '';
-                  default = [];
+                  default = [ ];
                 };
               };
 
@@ -196,8 +198,9 @@ in
     # We `mkOrder 600` so that the default rule shows up first, but there is
     # still enough room for a user to `mkBefore` it.
     security.sudo.extraRules = mkOrder 600 [
-      { groups = [ "wheel" ];
-        commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
+      {
+        groups = [ "wheel" ];
+        commands = [{ command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); }];
       }
     ];
 
@@ -227,36 +230,39 @@ in
         ${cfg.extraConfig}
       '';
 
-    security.wrappers = let
-      owner = "root";
-      group = if cfg.execWheelOnly then "wheel" else "root";
-      setuid = true;
-      permissions = if cfg.execWheelOnly then "u+rx,g+x" else "u+rx,g+x,o+x";
-    in {
-      sudo = {
-        source = "${cfg.package.out}/bin/sudo";
-        inherit owner group setuid permissions;
+    security.wrappers =
+      let
+        owner = "root";
+        group = if cfg.execWheelOnly then "wheel" else "root";
+        setuid = true;
+        permissions = if cfg.execWheelOnly then "u+rx,g+x" else "u+rx,g+x,o+x";
+      in
+      {
+        sudo = {
+          source = "${cfg.package.out}/bin/sudo";
+          inherit owner group setuid permissions;
+        };
+        sudoedit = {
+          source = "${cfg.package.out}/bin/sudoedit";
+          inherit owner group setuid permissions;
+        };
       };
-      sudoedit = {
-        source = "${cfg.package.out}/bin/sudoedit";
-        inherit owner group setuid permissions;
-      };
-    };
 
     environment.systemPackages = [ sudo ];
 
     security.pam.services.sudo = { sshAgentAuth = true; };
 
     environment.etc.sudoers =
-      { source =
+      {
+        source =
           pkgs.runCommand "sudoers"
-          {
-            src = pkgs.writeText "sudoers-in" cfg.configFile;
-            preferLocalBuild = true;
-          }
-          # Make sure that the sudoers file is syntactically valid.
-          # (currently disabled - NIXOS-66)
-          "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
+            {
+              src = pkgs.writeText "sudoers-in" cfg.configFile;
+              preferLocalBuild = true;
+            }
+            # Make sure that the sudoers file is syntactically valid.
+            # (currently disabled - NIXOS-66)
+            "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
         mode = "0440";
       };
 

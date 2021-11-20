@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 
-# for update script
-, writeShellScript, curl, nix-update
+  # for update script
+, writeShellScript
+, curl
+, nix-update
 }:
 
 stdenv.mkDerivation rec {

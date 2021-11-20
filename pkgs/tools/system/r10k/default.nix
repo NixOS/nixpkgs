@@ -15,8 +15,8 @@ bundlerApp {
 
   meta = with lib; {
     description = "Puppet environment and module deployment";
-    homepage    = "https://github.com/puppetlabs/r10k";
-    license     = licenses.asl20;
+    homepage = "https://github.com/puppetlabs/r10k";
+    license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm manveru nicknovitski ];
     platforms = platforms.unix;
   };

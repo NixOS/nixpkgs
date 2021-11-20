@@ -151,7 +151,7 @@
   cpan = [
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
-    "https://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/" # for old releases
   ];
 
   # CentOS.

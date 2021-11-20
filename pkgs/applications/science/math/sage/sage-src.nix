@@ -13,7 +13,7 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ... }@args: (
     fetchpatch ({
       inherit name sha256;
 
@@ -37,12 +37,13 @@ let
       # Item 3 could cover all use cases if the sagemath/sagetrack-mirror repo had
       # release tags, but it requires a sha instead of a release number in "base", which
       # is inconvenient.
-      urls = if squashed
-             then [
-               "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
-               "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
-             ]
-             else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
+      urls =
+        if squashed
+        then [
+          "https://github.com/sagemath/sage/compare/${base}...${rev}.diff"
+          "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
+        ]
+        else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
 
       # We don't care about sage's own build system (which builds all its dependencies).
       # Exclude build system changes to avoid conflicts.

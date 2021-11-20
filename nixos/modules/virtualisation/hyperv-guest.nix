@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.virtualisation.hypervGuest;
 
-in {
+in
+{
   options = {
     virtualisation.hypervGuest = {
       enable = mkEnableOption "Hyper-V Guest Support";
@@ -28,13 +29,18 @@ in {
   config = mkIf cfg.enable {
     boot = {
       initrd.kernelModules = [
-        "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
+        "hv_balloon"
+        "hv_netvsc"
+        "hv_storvsc"
+        "hv_utils"
+        "hv_vmbus"
       ];
 
       initrd.availableKernelModules = [ "hyperv_keyboard" ];
 
       kernelParams = [
-        "video=hyperv_fb:${cfg.videoMode}" "elevator=noop"
+        "video=hyperv_fb:${cfg.videoMode}"
+        "elevator=noop"
       ];
     };
 

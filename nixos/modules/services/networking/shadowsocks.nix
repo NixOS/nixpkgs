@@ -115,7 +115,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           nameserver = "8.8.8.8";
         };
@@ -137,7 +137,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton
-      { assertion = cfg.password == null || cfg.passwordFile == null;
+      {
+        assertion = cfg.password == null || cfg.passwordFile == null;
         message = "Cannot use both password and passwordFile for shadowsocks-libev";
       };
 

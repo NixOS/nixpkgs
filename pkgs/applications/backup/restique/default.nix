@@ -29,7 +29,10 @@ mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ restic ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ restic ])
   ];
 
   meta = with lib; {

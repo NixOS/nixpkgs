@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, cmake, eigen, zlib }:
 
 stdenv.mkDerivation rec {
-  pname   = "niftyseg";
+  pname = "niftyseg";
   version = "1.0";
   src = fetchurl {
-    url    = "https://github.com/KCL-BMEIS/NiftySeg/archive/v${version}.tar.gz";
+    url = "https://github.com/KCL-BMEIS/NiftySeg/archive/v${version}.tar.gz";
     sha256 = "11q6yldsxp3k6gfp94c0xhcan2y3finzv8lzizmrc79yps3wjkn0";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Software for medical image segmentation, bias field correction, and cortical thickness calculation";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.bsd3;
+    license = licenses.bsd3;
   };
 
 }

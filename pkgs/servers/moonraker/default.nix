@@ -13,7 +13,8 @@ let
     paho-mqtt
     pycurl
   ]);
-in stdenvNoCC.mkDerivation rec {
+in
+stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
   version = "unstable-2021-11-13";
 

@@ -1,20 +1,46 @@
-{ lib, stdenv, config, fetchurl, pkg-config
+{ lib
+, stdenv
+, config
+, fetchurl
+, pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
+, openglSupport ? libGLSupported
+, libGL
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, alsa-lib
 , x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
-, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
-, libXinerama, libXext, libXxf86vm, libXrandr
+, libX11
+, xorgproto
+, libICE
+, libXi
+, libXScrnSaver
+, libXcursor
+, libXinerama
+, libXext
+, libXxf86vm
+, libXrandr
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
-, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
-, udevSupport ? false, udev
-, ibusSupport ? false, ibus
-, fcitxSupport ? false, fcitx
+, wayland
+, wayland-protocols
+, libxkbcommon
+, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, dbus
+, udevSupport ? false
+, udev
+, ibusSupport ? false
+, ibus
+, fcitxSupport ? false
+, fcitx
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libpulseaudio
-, AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, libiconv
+, AudioUnit
+, Cocoa
+, CoreAudio
+, CoreServices
+, ForceFeedback
+, OpenGL
+, audiofile
+, libiconv
 , withStatic ? false
 }:
 
@@ -60,17 +86,17 @@ stdenv.mkDerivation rec {
     ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optionals  alsaSupport [ alsa-lib audiofile ]
-    ++ optional  dbusSupport dbus
-    ++ optional  pulseaudioSupport libpulseaudio
-    ++ optional  udevSupport udev
+    ++ optionals alsaSupport [ alsa-lib audiofile ]
+    ++ optional dbusSupport dbus
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
-    ++ optional  ibusSupport ibus
-    ++ optional  fcitxSupport fcitx
+    ++ optional ibusSupport ibus
+    ++ optional fcitxSupport fcitx
     ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
@@ -78,9 +104,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-oss"
   ] ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-    ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
-    ++ optional stdenv.isDarwin "--disable-sdltest";
+  ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+  ++ optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
+  ++ optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,
   # because they make the builds of downstream libs like `SDL_tff`
@@ -113,15 +139,17 @@ stdenv.mkDerivation rec {
   #
   # You can grep SDL sources with `grep -rE 'SDL_(NAME|.*_SYM)'` to
   # list the symbols used in this way.
-  postFixup = let
-    rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
-  in optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
-    for lib in $out/lib/*.so* ; do
-      if ! [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
-      fi
-    done
-  '';
+  postFixup =
+    let
+      rpath = makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+    in
+    optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
+      for lib in $out/lib/*.so* ; do
+        if ! [[ -L "$lib" ]]; then
+          patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
+        fi
+      done
+    '';
 
   setupHook = ./setup-hook.sh;
 

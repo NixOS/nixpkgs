@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
-, openssl, nss, lib, runCommandCC, writeText }:
+{ stdenv
+, fetchurl
+, libxml2
+, gnutls
+, libxslt
+, pkg-config
+, libgcrypt
+, libtool
+, openssl
+, nss
+, lib
+, runCommandCC
+, writeText
+}:
 
 lib.fix (self:
 stdenv.mkDerivation rec {
@@ -28,9 +40,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ nss.tools ];
   preCheck = ''
-  substituteInPlace tests/testrun.sh \
-    --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-    --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    substituteInPlace tests/testrun.sh \
+      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
   '';
 
   # enable deprecated soap headers required by lasso

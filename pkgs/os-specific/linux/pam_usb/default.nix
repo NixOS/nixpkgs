@@ -9,23 +9,24 @@ let
     let
       name = baseNameOf path;
       bin = "${drv}${path}";
-    in assert name != "";
-      writeScript "setUID-${name}" ''
-        #!${runtimeShell}
-        inode=$(stat -Lc %i ${bin})
-        for file in $(type -ap ${name}); do
-          case $(stat -Lc %a $file) in
-            ([2-7][0-7][0-7][0-7])
-              if test -r "$file".real; then
-                orig=$(cat "$file".real)
-                if test $inode = $(stat -Lc %i "$orig"); then
-                  exec "$file" "$@"
-                fi
-              fi;;
-          esac
-        done
-        exec ${bin} "$@"
-      '';
+    in
+    assert name != "";
+    writeScript "setUID-${name}" ''
+      #!${runtimeShell}
+      inode=$(stat -Lc %i ${bin})
+      for file in $(type -ap ${name}); do
+        case $(stat -Lc %a $file) in
+          ([2-7][0-7][0-7][0-7])
+            if test -r "$file".real; then
+              orig=$(cat "$file".real)
+              if test $inode = $(stat -Lc %i "$orig"); then
+                exec "$file" "$@"
+              fi
+            fi;;
+        esac
+      done
+      exec ${bin} "$@"
+    '';
 
   pmountBin = useSetUID pmount "/bin/pmount";
   pumountBin = useSetUID pmount "/bin/pumount";
@@ -44,7 +45,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     makeWrapper
     # pam_usb dependencies
-    dbus libxml2 pam pmount pkg-config
+    dbus
+    libxml2
+    pam
+    pmount
+    pkg-config
     # pam_usb's tools dependencies
     python
     # cElementTree is included with python 2.5 and later.

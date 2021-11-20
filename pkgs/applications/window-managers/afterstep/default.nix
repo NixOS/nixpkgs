@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
 , libtiff
-, fltk, gtk
-, libICE, libSM
+, fltk
+, gtk
+, libICE
+, libSM
 , dbus
 , fetchpatch
 }:
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
-     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   meta = with lib; {

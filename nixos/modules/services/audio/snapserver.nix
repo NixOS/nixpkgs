@@ -36,8 +36,8 @@ let
       flatten = key: value:
         "&${key}=${value}";
     in
-      "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
-        + concatStrings (mapAttrsToList flatten opt.query) + "\"";
+    "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
+    + concatStrings (mapAttrsToList flatten opt.query) + "\"";
 
   optionalNull = val: ret:
     optional (val != null) ret;
@@ -54,16 +54,18 @@ let
     # tcp json rpc
     ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
     ++ optionals cfg.tcp.enable [
-      "--tcp.address ${cfg.tcp.listenAddress}"
-      "--tcp.port ${toString cfg.tcp.port}" ]
-     # http json rpc
+    "--tcp.address ${cfg.tcp.listenAddress}"
+    "--tcp.port ${toString cfg.tcp.port}"
+  ]
+    # http json rpc
     ++ [ "--http.enabled ${toString cfg.http.enable}" ]
     ++ optionals cfg.http.enable [
-      "--http.address ${cfg.http.listenAddress}"
-      "--http.port ${toString cfg.http.port}"
-    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
+    "--http.address ${cfg.http.listenAddress}"
+    "--http.port ${toString cfg.http.port}"
+  ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
 
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
   ];
@@ -222,7 +224,7 @@ in {
             };
             query = mkOption {
               type = attrsOf str;
-              default = {};
+              default = { };
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
@@ -250,7 +252,7 @@ in {
             inherit codec;
           };
         });
-        default = { default = {}; };
+        default = { default = { }; };
         description = ''
           The definition for an input source.
         '';
@@ -274,9 +276,12 @@ in {
   config = mkIf cfg.enable {
 
     # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
-    warnings = filter (w: w != "") (mapAttrsToList (k: v: if v.type == "spotify" then ''
-      services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
-    '' else "") cfg.streams);
+    warnings = filter (w: w != "") (mapAttrsToList
+      (k: v:
+        if v.type == "spotify" then ''
+          services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
+        '' else "")
+      cfg.streams);
 
     systemd.services.snapserver = {
       after = [ "network.target" ];

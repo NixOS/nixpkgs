@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , qmake
 }:
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://qcad.org/en/90-dxflib";
-    maintainers = with lib.maintainers; [raskin];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
     description = "DXF file format library";
   };

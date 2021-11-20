@@ -10,10 +10,11 @@
 , fftwFloat
 , alsa-lib
 , libjack2
-# drivers (optional):
+  # drivers (optional):
 , rtl-sdr
 , hackrf
-, pulseaudioSupport ? true, libpulseaudio
+, pulseaudioSupport ? true
+, libpulseaudio
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -68,7 +69,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / macOS too
+    platforms = platforms.linux; # should work on Darwin / macOS too
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

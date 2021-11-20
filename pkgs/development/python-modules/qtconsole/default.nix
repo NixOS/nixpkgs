@@ -22,8 +22,8 @@ buildPythonPackage rec {
     sha256 = "bbc34bca14f65535afcb401bc74b752bac955e5313001ba640383f7e5857dc49";
   };
 
-  checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy];
+  checkInputs = [ nose ] ++ lib.optionals isPy27 [ mock ];
+  propagatedBuildInputs = [ traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy ];
 
   # : cannot connect to X server
   doCheck = false;

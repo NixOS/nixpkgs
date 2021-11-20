@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, popt, avahi, pkg-config, python3, gtk3, runCommand
-, gcc, autoconf, automake, which, procps, libiberty_static
+{ lib
+, stdenv
+, fetchFromGitHub
+, popt
+, avahi
+, pkg-config
+, python3
+, gtk3
+, runCommand
+, gcc
+, autoconf
+, automake
+, which
+, procps
+, libiberty_static
 , runtimeShell
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
 }:
 
 let
-  name    = "distcc";
+  name = "distcc";
   version = "2021-03-11";
   distcc = stdenv.mkDerivation {
     name = "${name}-${version}";
@@ -17,28 +30,28 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config ];
-    buildInputs = [popt avahi pkg-config python3 gtk3 autoconf automake which procps libiberty_static];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ popt avahi pkg-config python3 gtk3 autoconf automake which procps libiberty_static ];
     preConfigure =
-    ''
-      export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
+      ''
+        export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
 
-      configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
-                            CXXFLAGS="-O2 -fno-strict-aliasing"
-          --mandir=$out/share/man
-                            ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
-                            ${if static then "LDFLAGS=-static" else ""}
-                            --with${if static == true || popt == null then "" else "out"}-included-popt
-                            --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk3 != null then "" else "out"}-gtk
-                            --without-gnome
-                            --enable-rfc2553
-                            --disable-Werror   # a must on gcc 4.6
-                           )
-      installFlags="sysconfdir=$out/etc";
+        configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
+                              CXXFLAGS="-O2 -fno-strict-aliasing"
+            --mandir=$out/share/man
+                              ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
+                              ${if static then "LDFLAGS=-static" else ""}
+                              --with${if static == true || popt == null then "" else "out"}-included-popt
+                              --with${if avahi != null then "" else "out"}-avahi
+                              --with${if gtk3 != null then "" else "out"}-gtk
+                              --without-gnome
+                              --enable-rfc2553
+                              --disable-Werror   # a must on gcc 4.6
+                             )
+        installFlags="sysconfdir=$out/etc";
 
-      ./autogen.sh
-    '';
+        ./autogen.sh
+      '';
 
     # The test suite fails because it uses hard-coded paths, i.e. /usr/bin/gcc.
     doCheck = false;
@@ -81,4 +94,4 @@ let
     };
   };
 in
-  distcc
+distcc

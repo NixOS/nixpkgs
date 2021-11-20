@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests
-, file, libmnl, libnftnl, libnl
-, net-snmp, openssl, pkg-config
-, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, file
+, libmnl
+, libnftnl
+, libnl
+, net-snmp
+, openssl
+, pkg-config
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
@@ -32,7 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-sha1"
     "--enable-snmp"
- ];
+  ];
 
   meta = with lib; {
     homepage = "https://keepalived.org";

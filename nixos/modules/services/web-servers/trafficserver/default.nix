@@ -141,9 +141,10 @@ in
 
     records = mkOption {
       type = with types;
-        let valueType = (attrsOf (oneOf [ int float str valueType ])) // {
-          description = "Traffic Server records value";
-        };
+        let
+          valueType = (attrsOf (oneOf [ int float str valueType ])) // {
+            description = "Traffic Server records value";
+          };
         in
         valueType;
       default = { };

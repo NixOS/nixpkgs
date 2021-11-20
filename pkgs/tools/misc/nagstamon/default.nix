@@ -12,8 +12,17 @@ pythonPackages.buildPythonApplication rec {
   # Test assumes darwin
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [ configparser pyqt5 psutil requests
-     beautifulsoup4 keyring requests-kerberos kerberos lxml ];
+  propagatedBuildInputs = with pythonPackages; [
+    configparser
+    pyqt5
+    psutil
+    requests
+    beautifulsoup4
+    keyring
+    requests-kerberos
+    kerberos
+    lxml
+  ];
 
   meta = with lib; {
     description = "A status monitor for the desktop";

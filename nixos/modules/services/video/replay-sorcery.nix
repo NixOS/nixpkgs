@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.replay-sorcery;
-  configFile = generators.toKeyValue {} cfg.settings;
+  configFile = generators.toKeyValue { } cfg.settings;
 in
 {
   options = with types; {
@@ -24,7 +24,7 @@ in
 
       settings = mkOption {
         type = attrsOf (oneOf [ str int ]);
-        default = {};
+        default = { };
         description = "System-wide configuration for ReplaySorcery (/etc/replay-sorcery.conf).";
         example = literalExpression ''
           {

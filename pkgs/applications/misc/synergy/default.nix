@@ -23,7 +23,7 @@
 , xinput
 , avahi-compat
 
-# macOS / darwin
+  # macOS / darwin
 , ApplicationServices
 , Carbon
 , Cocoa

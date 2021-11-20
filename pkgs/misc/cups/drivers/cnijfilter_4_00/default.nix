@@ -1,17 +1,30 @@
-{ stdenv, lib, fetchzip,
-  autoconf, automake, libtool,
-  cups, popt, libtiff, libpng,
-  ghostscript, glib, libusb1, libxml2 }:
+{ stdenv
+, lib
+, fetchzip
+, autoconf
+, automake
+, libtool
+, cups
+, popt
+, libtiff
+, libpng
+, ghostscript
+, glib
+, libusb1
+, libxml2
+}:
 
 /* this derivation is basically just a transcription of the rpm .spec
    file included in the tarball */
 
-let arch =
-  if stdenv.hostPlatform.system == "x86_64-linux" then "64"
+let
+  arch =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "64"
     else if stdenv.hostPlatform.system == "i686-linux" then "32"
     else throw "Unsupported system ${stdenv.hostPlatform.system}";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "cnijfilter";
 
   /* important note about versions: cnijfilter packages seem to use
@@ -30,9 +43,19 @@ in stdenv.mkDerivation {
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
-  buildInputs = [ autoconf libtool automake
-                  cups popt libtiff libpng
-                  ghostscript glib libusb1 libxml2 ];
+  buildInputs = [
+    autoconf
+    libtool
+    automake
+    cups
+    popt
+    libtiff
+    libpng
+    ghostscript
+    glib
+    libusb1
+    libxml2
+  ];
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [

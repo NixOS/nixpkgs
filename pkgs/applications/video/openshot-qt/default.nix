@@ -52,11 +52,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   ''
   # Fix toolbar icons on Darwin
   + lib.optionalString stdenv.isDarwin ''
-      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
+    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
   ''
   + ''
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}"
+    "''${gappsWrapperArgs[@]}" \
+    "''${qtWrapperArgs[@]}"
   '';
 
   doCheck = false;

@@ -1,9 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchzip
 , alsa-lib
 , glib
 , gst_all_1
-, libGLU, libGL
+, libGLU
+, libGL
 , xorg
 }:
 
@@ -13,16 +15,16 @@ stdenv.mkDerivation rec {
 
   suffix = {
     aarch64-linux = "linux-arm64";
-    armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x86_64";
+    armv7l-linux = "linux-armhf";
+    x86_64-linux = "linux-x86_64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchzip {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.zip";
     sha256 = {
       aarch64-linux = "0ryjmpzpfqdqrvqpq851vvrjd8ld5g91gcigpv9rxp3z1b7qdand";
-      armv7l-linux  = "08nlwn8ixndqil4m7j6c8gjxmwx8zi3in86arnwf13shk6cds5nb";
-      x86_64-linux  = "0kbz7pvh4i4a3pj1vzbzzslha825i888isvsigcqsqvipjr4798q";
+      armv7l-linux = "08nlwn8ixndqil4m7j6c8gjxmwx8zi3in86arnwf13shk6cds5nb";
+      x86_64-linux = "0kbz7pvh4i4a3pj1vzbzzslha825i888isvsigcqsqvipjr4798q";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -39,22 +41,25 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      alsa-lib
-      glib
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      libGLU libGL
-      xorg.libX11
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/bin/KodeLife
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        stdenv.cc.cc.lib
+        alsa-lib
+        glib
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+        libGLU
+        libGL
+        xorg.libX11
+      ];
+    in
+    ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/bin/KodeLife
+    '';
 
   meta = with lib; {
     homepage = "https://hexler.net/products/kodelife";

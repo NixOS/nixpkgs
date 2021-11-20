@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
@@ -9,35 +10,36 @@
 , Nuget
 }:
 
-let deps = import ./deps.nix { inherit fetchurl; };
-    version = "2021-05-20";
+let
+  deps = import ./deps.nix { inherit fetchurl; };
+  version = "2021-05-20";
 
-    # Build the nuget source needed for the later build all by itself
-    # since it's a time-consuming step that only depends on ./deps.nix.
-    # This makes it easier to experiment with the main build.
-    nugetSource = stdenv.mkDerivation {
-      pname = "python-language-server-nuget-deps";
-      inherit version;
+  # Build the nuget source needed for the later build all by itself
+  # since it's a time-consuming step that only depends on ./deps.nix.
+  # This makes it easier to experiment with the main build.
+  nugetSource = stdenv.mkDerivation {
+    pname = "python-language-server-nuget-deps";
+    inherit version;
 
-      dontUnpack = true;
+    dontUnpack = true;
 
-      nativeBuildInputs = [ Nuget ];
+    nativeBuildInputs = [ Nuget ];
 
-      buildPhase = ''
-        export HOME=$(mktemp -d)
+    buildPhase = ''
+      export HOME=$(mktemp -d)
 
-        mkdir -p $out/lib
+      mkdir -p $out/lib
 
-        # disable default-source so nuget does not try to download from online-repo
-        nuget sources Disable -Name "nuget.org"
-        # add all dependencies to the source
-        for package in ${toString deps}; do
-          nuget add $package -Source $out/lib
-        done
-      '';
+      # disable default-source so nuget does not try to download from online-repo
+      nuget sources Disable -Name "nuget.org"
+      # add all dependencies to the source
+      for package in ${toString deps}; do
+        nuget add $package -Source $out/lib
+      done
+    '';
 
-      dontInstall = true;
-    };
+    dontInstall = true;
+  };
 
 in
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-izDE7Oil9g47Jf3eHPtW5coNixF71t9i0oYSuelakCo=";
   };
 
-  buildInputs = [dotnet-sdk_3 openssl icu];
+  buildInputs = [ dotnet-sdk_3 openssl icu ];
 
   nativeBuildInputs = [
     Nuget

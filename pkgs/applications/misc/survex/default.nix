@@ -20,7 +20,7 @@
 }:
 
 let
-  perlenv = perl532.withPackages (perlPackages: with perlPackages; [ LocalePO ] );
+  perlenv = perl532.withPackages (perlPackages: with perlPackages; [ LocalePO ]);
 in
 stdenv.mkDerivation rec {
   pname = "survex";
@@ -29,11 +29,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docbook5 docbook2x autoreconfHook pkg-config perlenv python ];
 
   buildInputs = [
-    libGL libGLU ffmpeg proj_7
+    libGL
+    libGLU
+    ffmpeg
+    proj_7
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    wxmac Carbon Cocoa
+    wxmac
+    Carbon
+    Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    wxGTK30-gtk3 xlibsWrapper
+    wxGTK30-gtk3
+    xlibsWrapper
   ];
 
   src = fetchgit {

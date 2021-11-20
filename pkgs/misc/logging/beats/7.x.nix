@@ -1,27 +1,28 @@
 { lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
 
-let beat = package: extraArgs: buildGoModule (rec {
-  pname = package;
-  version = elk7Version;
+let
+  beat = package: extraArgs: buildGoModule (rec {
+    pname = package;
+    version = elk7Version;
 
-  src = fetchFromGitHub {
-    owner = "elastic";
-    repo = "beats";
-    rev = "v${version}";
-    sha256 = "0gjyzprgj9nskvlkm2bf125b7qn3608llz4kh1fyzsvrw6zb7sm8";
-  };
+    src = fetchFromGitHub {
+      owner = "elastic";
+      repo = "beats";
+      rev = "v${version}";
+      sha256 = "0gjyzprgj9nskvlkm2bf125b7qn3608llz4kh1fyzsvrw6zb7sm8";
+    };
 
-  vendorSha256 = "04cwf96fh60ld3ndjzzssgirc9ssb53yq71j6ksx36m3y1x7fq9c";
+    vendorSha256 = "04cwf96fh60ld3ndjzzssgirc9ssb53yq71j6ksx36m3y1x7fq9c";
 
-  subPackages = [ package ];
+    subPackages = [ package ];
 
-  meta = with lib; {
-    homepage = "https://www.elastic.co/products/beats";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk ];
-    platforms = platforms.linux;
-  };
-} // extraArgs);
+    meta = with lib; {
+      homepage = "https://www.elastic.co/products/beats";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ fadenb basvandijk ];
+      platforms = platforms.linux;
+    };
+  } // extraArgs);
 in
 rec {
   filebeat7 = beat "filebeat" { meta.description = "Lightweight shipper for logfiles"; };

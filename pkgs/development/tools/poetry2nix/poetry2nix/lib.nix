@@ -174,11 +174,11 @@ let
     lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
 
   /*
-  Provides a source filtering mechanism that:
+    Provides a source filtering mechanism that:
 
-  - Filters gitignore's
-  - Filters pycache/pyc files
-  - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
+    - Filters gitignore's
+    - Filters pycache/pyc files
+    - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
   */
   cleanPythonSources = { src }:
     let

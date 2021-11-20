@@ -31,7 +31,7 @@ in
     listenOptions =
       mkOption {
         type = types.listOf types.str;
-        default = ["/run/docker.sock"];
+        default = [ "/run/docker.sock" ];
         description =
           ''
             A list of unix and tcp docker should listen to. The format follows
@@ -74,7 +74,7 @@ in
 
     storageDriver =
       mkOption {
-        type = types.nullOr (types.enum ["aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs"]);
+        type = types.nullOr (types.enum [ "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ]);
         default = null;
         description =
           ''
@@ -85,7 +85,7 @@ in
 
     logDriver =
       mkOption {
-        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
+        type = types.enum [ "none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs" ];
         default = "journald";
         description =
           ''
@@ -117,7 +117,7 @@ in
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "--all" ];
         description = ''
           Any additional flags passed to <command>docker system prune</command>.
@@ -150,80 +150,82 @@ in
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
-      boot.kernelModules = [ "bridge" "veth" ];
-      boot.kernel.sysctl = {
-        "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
-        "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
+    boot.kernelModules = [ "bridge" "veth" ];
+    boot.kernel.sysctl = {
+      "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
+      "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
+    };
+    environment.systemPackages = [ cfg.package ]
+      ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+    users.groups.docker.gid = config.ids.gids.docker;
+    systemd.packages = [ cfg.package ];
+
+    systemd.services.docker = {
+      wantedBy = optional cfg.enableOnBoot "multi-user.target";
+      after = [ "network.target" "docker.socket" ];
+      requires = [ "docker.socket" ];
+      environment = proxy_env;
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = [
+          ""
+          ''
+            ${cfg.package}/bin/dockerd \
+              --group=docker \
+              --host=fd:// \
+              --log-driver=${cfg.logDriver} \
+              ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
+              ${optionalString cfg.liveRestore "--live-restore" } \
+              ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
+              ${cfg.extraOptions}
+          ''
+        ];
+        ExecReload = [
+          ""
+          "${pkgs.procps}/bin/kill -s HUP $MAINPID"
+        ];
       };
-      environment.systemPackages = [ cfg.package ]
+
+      path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
-      users.groups.docker.gid = config.ids.gids.docker;
-      systemd.packages = [ cfg.package ];
+    };
 
-      systemd.services.docker = {
-        wantedBy = optional cfg.enableOnBoot "multi-user.target";
-        after = [ "network.target" "docker.socket" ];
-        requires = [ "docker.socket" ];
-        environment = proxy_env;
-        serviceConfig = {
-          Type = "notify";
-          ExecStart = [
-            ""
-            ''
-              ${cfg.package}/bin/dockerd \
-                --group=docker \
-                --host=fd:// \
-                --log-driver=${cfg.logDriver} \
-                ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
-                ${optionalString cfg.liveRestore "--live-restore" } \
-                ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
-                ${cfg.extraOptions}
-            ''];
-          ExecReload=[
-            ""
-            "${pkgs.procps}/bin/kill -s HUP $MAINPID"
-          ];
-        };
-
-        path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
-          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+    systemd.sockets.docker = {
+      description = "Docker Socket for the API";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = cfg.listenOptions;
+        SocketMode = "0660";
+        SocketUser = "root";
+        SocketGroup = "docker";
       };
+    };
 
-      systemd.sockets.docker = {
-        description = "Docker Socket for the API";
-        wantedBy = [ "sockets.target" ];
-        socketConfig = {
-          ListenStream = cfg.listenOptions;
-          SocketMode = "0660";
-          SocketUser = "root";
-          SocketGroup = "docker";
-        };
-      };
+    systemd.services.docker-prune = {
+      description = "Prune docker resources";
 
-      systemd.services.docker-prune = {
-        description = "Prune docker resources";
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
 
-        restartIfChanged = false;
-        unitConfig.X-StopOnRemoval = false;
+      serviceConfig.Type = "oneshot";
 
-        serviceConfig.Type = "oneshot";
+      script = ''
+        ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
+      '';
 
-        script = ''
-          ${cfg.package}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
-        '';
+      startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
+    };
 
-        startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
-      };
-
-      assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
-          message = "Option enableNvidia requires 32bit support libraries";
-        }];
-    }
-  ]);
+    assertions = [
+      {
+        assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+        message = "Option enableNvidia requires 32bit support libraries";
+      }
+    ];
+  }]);
 
   imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkRemovedOptionModule [ "virtualisation" "docker" "socketActivation" ] "This option was removed and socket activation is now always active")
   ];
 
 }

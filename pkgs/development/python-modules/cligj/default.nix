@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click, pytest, glibcLocales
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, pytest
+, glibcLocales
 }:
 
 buildPythonPackage rec {

@@ -7,7 +7,9 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchYarnDeps
-, yarn, nodejs, fixup_yarn_lock
+, yarn
+, nodejs
+, fixup_yarn_lock
 , electron
 , Security
 , AppKit
@@ -101,17 +103,17 @@ stdenv.mkDerivation rec {
   # https://github.com/schildichat/element-desktop/blob/sc/package.json
   desktopItems = [
     (makeDesktopItem {
-     name = "schildichat-desktop";
-     exec = "${executableName} %u";
-     icon = "schildichat";
-     desktopName = "SchildiChat";
-     genericName = "Matrix Client";
-     comment = meta.description;
-     categories = "Network;InstantMessaging;Chat;";
-     extraEntries = ''
-       StartupWMClass=schildichat
-       MimeType=x-scheme-handler/element;
-     '';
+      name = "schildichat-desktop";
+      exec = "${executableName} %u";
+      icon = "schildichat";
+      desktopName = "SchildiChat";
+      genericName = "Matrix Client";
+      comment = meta.description;
+      categories = "Network;InstantMessaging;Chat;";
+      extraEntries = ''
+        StartupWMClass=schildichat
+        MimeType=x-scheme-handler/element;
+      '';
     })
   ];
 

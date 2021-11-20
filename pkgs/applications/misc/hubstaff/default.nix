@@ -1,7 +1,28 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
-, libXext , freetype, libXrender, fontconfig, libXft, libXinerama
-, libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl, writeShellScript, common-updater-scripts }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, libX11
+, zlib
+, libSM
+, libICE
+, libXext
+, freetype
+, libXrender
+, fontconfig
+, libXft
+, libXinerama
+, libXfixes
+, libXScrnSaver
+, libnotify
+, glib
+, gtk3
+, libappindicator-gtk3
+, curl
+, writeShellScript
+, common-updater-scripts
+}:
 
 let
   url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.2-328c666b/Hubstaff-1.6.2-328c666b.sh";
@@ -9,9 +30,26 @@ let
   sha256 = "0fmlblw19qk9s9xsl0dl705cnns825wrlc7navii4bvbsn6ycl5v";
 
   rpath = lib.makeLibraryPath
-    [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
-      curl libXfixes libXScrnSaver ];
+    [
+      libX11
+      zlib
+      libSM
+      libICE
+      libXext
+      freetype
+      libXrender
+      fontconfig
+      libXft
+      libXinerama
+      stdenv.cc.cc.lib
+      libnotify
+      glib
+      gtk3
+      libappindicator-gtk3
+      curl
+      libXfixes
+      libXScrnSaver
+    ];
 
 in
 

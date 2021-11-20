@@ -1,14 +1,17 @@
 { fetchzip
 , libX11
-, libGLU, libGL
+, libGLU
+, libGL
 , makeWrapper
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 let
 
   libPath = lib.makeLibraryPath [
-    libGLU libGL
+    libGLU
+    libGL
     stdenv.cc.cc
     libX11
   ];
@@ -29,7 +32,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    libGLU libGL
+    libGLU
+    libGL
     libX11
   ];
 

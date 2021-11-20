@@ -14,7 +14,8 @@ let
     inherit name src;
   };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: with pkgs; [ at-spi2-core ];

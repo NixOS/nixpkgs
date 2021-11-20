@@ -66,7 +66,7 @@ in
 
     httpOrigins = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
@@ -77,7 +77,7 @@ in
 
     acceptProxyIP = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Allow the specified IPs to act as a proxy. Proxys have the ability to
         overwrite the remote and local connection addresses (via the X-Forwarded-\*

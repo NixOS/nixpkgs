@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , libiconv
 , openssl
 , pkg-config

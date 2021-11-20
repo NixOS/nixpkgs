@@ -14,7 +14,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pkgs; [
-    python3Packages.numpy flac vorbis-tools ffmpeg faad2 lame
+    python3Packages.numpy
+    flac
+    vorbis-tools
+    ffmpeg
+    faad2
+    lame
   ];
 
   # There are no tests

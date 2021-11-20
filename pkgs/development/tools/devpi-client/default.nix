@@ -1,16 +1,16 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-# buildInputs
+  # buildInputs
 , glibcLocales
 , pkginfo
 , check-manifest
-# propagatedBuildInputs
+  # propagatedBuildInputs
 , py
 , devpi-common
 , pluggy
 , setuptools
-# CheckInputs
+  # CheckInputs
 , pytest
 , pytest-flake8
 , webtest
@@ -43,9 +43,16 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
 
   checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+    pytest
+    pytest-flake8
+    webtest
+    mock
+    devpi-server
+    tox
+    sphinx
+    wheel
+    git
+    mercurial
   ];
 
   # --fast skips tests which try to start a devpi-server improperly

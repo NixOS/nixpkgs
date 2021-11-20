@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://ctx.graphics/";
     description = "Vector graphics terminal";
-    longDescription= ''
+    longDescription = ''
       ctx is an interactive 2D vector graphics, audio, text- canvas and
       terminal, with escape sequences that enable a 2D vector drawing API using
       a vector graphics protocol.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }

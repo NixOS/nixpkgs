@@ -2,7 +2,7 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
-#### PLATFORM
+  #### PLATFORM
 
   libIDL = callPackage ./platform/libIDL {
     gettext = if stdenv.isDarwin then pkgs.gettext else null;
@@ -53,7 +53,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtkglext = callPackage ./platform/gtkglext { };
 
-#### DESKTOP
+  #### DESKTOP
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
@@ -64,7 +64,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   vte = callPackage ./desktop/vte { };
 
-#### BINDINGS
+  #### BINDINGS
 
   libglademm = callPackage ./bindings/libglademm { };
 
@@ -76,8 +76,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     # Included for backwards compatibility
     libsoup libwnck2 gtk-doc gnome-doc-utils rarian
 
-    gvfs # added 2019-09-03
-  ;
+    gvfs# added 2019-09-03
+    ;
 
   gtk = pkgs.gtk2;
   gtkmm = pkgs.gtkmm2;

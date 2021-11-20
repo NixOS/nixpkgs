@@ -1,55 +1,57 @@
 { lib, stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
 
-let generic = { major, version, src }:
+let
+  generic = { major, version, src }:
 
-  stdenv.mkDerivation rec {
-    name = "${nameMajor}-${version}";
-    nameMajor = "alloy${major}";
+    stdenv.mkDerivation rec {
+      name = "${nameMajor}-${version}";
+      nameMajor = "alloy${major}";
 
-    desktopItem = makeDesktopItem rec {
-      name = nameMajor;
-      exec = name;
-      icon = name;
-      desktopName = "Alloy ${major}";
-      genericName = "Relational modelling tool";
-      comment = meta.description;
-      categories = "Development;IDE;Education;";
-    };
+      desktopItem = makeDesktopItem rec {
+        name = nameMajor;
+        exec = name;
+        icon = name;
+        desktopName = "Alloy ${major}";
+        genericName = "Relational modelling tool";
+        comment = meta.description;
+        categories = "Development;IDE;Education;";
+      };
 
-    nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
-    buildCommand = ''
-      jar=$out/share/alloy/${nameMajor}.jar
-      install -Dm644 ${src} $jar
+      buildCommand = ''
+        jar=$out/share/alloy/${nameMajor}.jar
+        install -Dm644 ${src} $jar
 
-      mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/${nameMajor} --add-flags \
-       "-jar $jar"
+        mkdir -p $out/bin
+        makeWrapper ${jre}/bin/java $out/bin/${nameMajor} --add-flags \
+         "-jar $jar"
 
-      install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png
-      cp -r ${desktopItem}/share/applications $out/share
-    '';
-
-    meta = with lib; {
-      description = "Language & tool for relational models";
-      longDescription = ''
-        Alloy is a language for describing structures and a tool for exploring
-        them. An Alloy model is a collection of constraints that describes a set
-        of structures, e.g. all the possible security configurations of a web
-        application, or all the possible topologies of a switching network. The
-        Alloy Analyzer is a solver that takes the constraints of a model and
-        finds structures that satisfy them. Structures are displayed graphically,
-        and their appearance can be customized for the domain at hand.
+        install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png
+        cp -r ${desktopItem}/share/applications $out/share
       '';
-      homepage = "http://alloytools.org/";
-      downloadPage = "http://alloytools.org/download.html";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ notbandali ];
-    };
-  };
 
-in rec {
+      meta = with lib; {
+        description = "Language & tool for relational models";
+        longDescription = ''
+          Alloy is a language for describing structures and a tool for exploring
+          them. An Alloy model is a collection of constraints that describes a set
+          of structures, e.g. all the possible security configurations of a web
+          application, or all the possible topologies of a switching network. The
+          Alloy Analyzer is a solver that takes the constraints of a model and
+          finds structures that satisfy them. Structures are displayed graphically,
+          and their appearance can be customized for the domain at hand.
+        '';
+        homepage = "http://alloytools.org/";
+        downloadPage = "http://alloytools.org/download.html";
+        license = licenses.mit;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ notbandali ];
+      };
+    };
+
+in
+rec {
   alloy4 = let version = "4.2_2015-02-22"; in generic {
     major = "4";
     inherit version;

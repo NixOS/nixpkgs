@@ -18,7 +18,7 @@ mkDerivation rec {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
     homepage = "https://github.com/juzzlin/Heimer";
     license = licenses.gpl3;
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "ndppd";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ fpletz ];
@@ -14,7 +14,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
             { address = "fd23::1"; prefixLength = 112; }
           ];
           ipv6.routes = [
-            { address = "fd42::";
+            {
+              address = "fd42::";
               prefixLength = 112;
             }
           ];
@@ -37,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       };
       services.ndppd = {
         enable = true;
-        proxies.eth1.rules."fd42::/112" = {};
+        proxies.eth1.rules."fd42::/112" = { };
       };
       containers.client = {
         autoStart = true;
@@ -46,7 +47,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         localAddress = "192.168.255.2";
         hostAddress6 = "fd42::1";
         localAddress6 = "fd42::2";
-        config = {};
+        config = { };
       };
     };
   };

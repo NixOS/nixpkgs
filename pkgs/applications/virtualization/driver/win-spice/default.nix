@@ -28,7 +28,7 @@ let
   };
 in
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   # use version number of qxlwddm as qxlwddm is the most important component
   pname = "win-spice";
   version = version_qxlwddm;
@@ -62,7 +62,8 @@ stdenv.mkDerivation  {
       #       That way it would never matter whether vioserial is installed from win-virtio or win-spice.
       copy_vioserial = arch: "mkdir -p $out/${arch}/vioserial; cp ${win-virtio}/${arch}/vioserial/* $out/${arch}/vioserial/. \n";
       copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch);
-    in ''
+    in
+    ''
       runHook preInstall
       ${(copy "amd64" "w10") + (copy "x86" "w10")}
       runHook postInstall

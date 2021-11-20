@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 }:
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jpcima/fverb";
     license = licenses.bsd2;
     maintainers = [ maintainers.magnetophon ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

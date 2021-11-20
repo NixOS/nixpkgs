@@ -9,7 +9,8 @@ let
   dataDir = cfg.dataDir;
   staticDir = cfg.dataDir + "/static";
 
-  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings" {
+  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings"
+    {
       inherit graphiteLocalSettings;
       preferLocalBuild = true;
     } ''
@@ -58,20 +59,23 @@ let
   '';
 
   carbonEnv = {
-    PYTHONPATH = let
-      cenv = pkgs.python3.buildEnv.override {
-        extraLibs = [ pkgs.python3Packages.carbon ];
-      };
-    in "${cenv}/${pkgs.python3.sitePackages}";
+    PYTHONPATH =
+      let
+        cenv = pkgs.python3.buildEnv.override {
+          extraLibs = [ pkgs.python3Packages.carbon ];
+        };
+      in
+      "${cenv}/${pkgs.python3.sitePackages}";
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
   };
 
-in {
+in
+{
 
   imports = [
-    (mkRemovedOptionModule ["services" "graphite" "pager"] "")
+    (mkRemovedOptionModule [ "services" "graphite" "pager" ] "")
   ];
 
   ###### interface
@@ -131,7 +135,7 @@ in {
 
       finders = mkOption {
         description = "List of finder plugins to load.";
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.python3Packages.influxgraph ]";
         type = types.listOf types.package;
       };
@@ -329,7 +333,7 @@ in {
       };
 
       extraConfig = mkOption {
-        default = {};
+        default = { };
         description = ''
           Extra seyren configuration. See
           <link xlink:href='https://github.com/scobal/seyren#config' />
@@ -349,7 +353,7 @@ in {
 
       config = mkOption {
         description = "Graphite beacon configuration.";
-        default = {};
+        default = { };
         type = types.attrs;
       };
     };
@@ -370,7 +374,7 @@ in {
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
         preStart = ''
           install -dm0700 -o graphite -g graphite ${cfg.dataDir}
@@ -391,7 +395,7 @@ in {
           ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
@@ -407,7 +411,7 @@ in {
           ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
         };
       };
     })
@@ -425,19 +429,21 @@ in {
         after = [ "network.target" ];
         path = [ pkgs.perl ];
         environment = {
-          PYTHONPATH = let
+          PYTHONPATH =
+            let
               penv = pkgs.python3.buildEnv.override {
                 extraLibs = [
                   pkgs.python3Packages.graphite-web
                 ];
               };
               penvPack = "${penv}/${pkgs.python3.sitePackages}";
-            in concatStringsSep ":" [
-                 "${graphiteLocalSettingsDir}"
-                 "${penvPack}"
-                 # explicitly adding pycairo in path because it cannot be imported via buildEnv
-                 "${pkgs.python3Packages.pycairo}/${pkgs.python3.sitePackages}"
-               ];
+            in
+            concatStringsSep ":" [
+              "${graphiteLocalSettingsDir}"
+              "${penvPack}"
+              # explicitly adding pycairo in path because it cannot be imported via buildEnv
+              "${pkgs.python3Packages.pycairo}/${pkgs.python3.sitePackages}"
+            ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_SETTINGS_MODULE = "graphite_local_settings";
           GRAPHITE_CONF_DIR = configDir;
@@ -484,11 +490,13 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment = {
-          PYTHONPATH = let
+          PYTHONPATH =
+            let
               aenv = pkgs.python3.buildEnv.override {
                 extraLibs = [ cfg.api.package pkgs.cairo pkgs.python3Packages.cffi ] ++ cfg.api.finders;
               };
-            in "${aenv}/${pkgs.python3.sitePackages}";
+            in
+            "${aenv}/${pkgs.python3.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
@@ -554,18 +562,20 @@ in {
       };
     })
 
-    (mkIf (
-      cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
-      cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.beacon.enable
-     ) {
-      users.users.graphite = {
-        uid = config.ids.uids.graphite;
-        group = "graphite";
-        description = "Graphite daemon user";
-        home = dataDir;
-      };
-      users.groups.graphite.gid = config.ids.gids.graphite;
-    })
+    (mkIf
+      (
+        cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
+        cfg.web.enable || cfg.api.enable ||
+        cfg.seyren.enable || cfg.beacon.enable
+      )
+      {
+        users.users.graphite = {
+          uid = config.ids.uids.graphite;
+          group = "graphite";
+          description = "Graphite daemon user";
+          home = dataDir;
+        };
+        users.groups.graphite.gid = config.ids.gids.graphite;
+      })
   ];
 }

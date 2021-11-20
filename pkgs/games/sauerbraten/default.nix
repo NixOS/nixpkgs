@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchzip, SDL2, SDL2_image, SDL2_mixer
-, zlib, makeWrapper
+{ lib
+, stdenv
+, fetchzip
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, zlib
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +22,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2 SDL2_mixer SDL2_image
+    SDL2
+    SDL2_mixer
+    SDL2_image
     zlib
   ];
 
@@ -42,9 +50,9 @@ stdenv.mkDerivation rec {
     hydraPlatforms =
       # raskin: tested amd64-linux;
       # not setting platforms because it is 0.5+ GiB of game data
-      [];
+      [ ];
     license = "freeware"; # as an aggregate - data files have different licenses
-                          # code is under zlib license
+    # code is under zlib license
     platforms = platforms.linux;
   };
 }

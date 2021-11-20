@@ -89,7 +89,7 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ndots:1" "rotate" ];
         description = ''
           Set the options in <filename>/etc/resolv.conf</filename>.
@@ -114,7 +114,7 @@ in
 
       environment.etc."resolvconf.conf".text =
         if !cfg.enable then
-          # Force-stop any attempts to use resolvconf
+        # Force-stop any attempts to use resolvconf
           ''
             echo "resolvconf is disabled on this system but was used anyway:" >&2
             echo "$0 $*" >&2

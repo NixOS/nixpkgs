@@ -18,42 +18,45 @@ let
   # TODO: Use proper privilege separation for wpa_supplicant
   supplicantService = iface: suppl:
     let
-      deps = (if (iface=="WLAN"||iface=="LAN") then ["sys-subsystem-net-devices-%i.device"] else (
-             if (iface=="DBUS") then ["dbus.service"]
-             else (map subsystemDevice (splitString " " iface))))
-             ++ optional (suppl.bridge!="") (subsystemDevice suppl.bridge);
+      deps = (if (iface == "WLAN" || iface == "LAN") then [ "sys-subsystem-net-devices-%i.device" ] else
+      (
+        if (iface == "DBUS") then [ "dbus.service" ]
+        else (map subsystemDevice (splitString " " iface))
+      ))
+      ++ optional (suppl.bridge != "") (subsystemDevice suppl.bridge);
 
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
-      bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
-      confFileArg = optionalString (suppl.configFile.path!=null) "-c${suppl.configFile.path}";
+      bridgeArg = optionalString (suppl.bridge != "") "-b${suppl.bridge}";
+      confFileArg = optionalString (suppl.configFile.path != null) "-c${suppl.configFile.path}";
       extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceChars [" "] ["-"] iface}" ''
         ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
         ${optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
       '';
     in
-      { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
-        wantedBy = [ "multi-user.target" ] ++ deps;
-        wants = [ "network.target" ];
-        bindsTo = deps;
-        after = deps;
-        before = [ "network.target" ];
+    {
+      description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
+      wantedBy = [ "multi-user.target" ] ++ deps;
+      wants = [ "network.target" ];
+      bindsTo = deps;
+      after = deps;
+      before = [ "network.target" ];
 
-        path = [ pkgs.coreutils ];
+      path = [ pkgs.coreutils ];
 
-        preStart = ''
-          ${optionalString (suppl.configFile.path!=null) ''
-            (umask 077 && touch -a "${suppl.configFile.path}")
-          ''}
-          ${optionalString suppl.userControlled.enable ''
-            install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
-          ''}
-        '';
+      preStart = ''
+        ${optionalString (suppl.configFile.path!=null) ''
+          (umask 077 && touch -a "${suppl.configFile.path}")
+        ''}
+        ${optionalString suppl.userControlled.enable ''
+          install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
+        ''}
+      '';
 
-        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confFileArg} -I${extraConfFile} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
+      serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confFileArg} -I${extraConfFile} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
 
-      };
+    };
 
 
 in
@@ -208,9 +211,9 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg != {}) {
+  config = mkIf (cfg != { }) {
 
-    environment.systemPackages =  [ pkgs.wpa_supplicant ];
+    environment.systemPackages = [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
@@ -232,7 +235,8 @@ in
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';
-      })];
+      })
+    ];
 
   };
 

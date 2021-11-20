@@ -1,11 +1,12 @@
 # Test ensures buildbot master comes up correctly and workers can connect
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
-import ./make-test-python.nix {
+import ./make-test-python.nix
+{
   name = "buildbot";
 
   nodes = {
@@ -39,9 +40,9 @@ import ./make-test-python.nix {
       networking.firewall.allowedTCPPorts = [ 22 9418 ];
       environment.systemPackages = with pkgs; [ git ];
       systemd.services.git-daemon = {
-        description   = "Git daemon for the test";
-        wantedBy      = [ "multi-user.target" ];
-        after         = [ "network.target" "sshd.service" ];
+        description = "Git daemon for the test";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "sshd.service" ];
 
         serviceConfig.Restart = "always";
         path = with pkgs; [ coreutils git openssh ];
@@ -110,4 +111,5 @@ import ./make-test-python.nix {
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ ];
-} {}
+}
+{ }

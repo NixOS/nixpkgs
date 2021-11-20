@@ -1,5 +1,12 @@
-{ stdenvNoCC, fetchurl, newScope, pkgs
-, xar, cpio, python3, pbzx }:
+{ stdenvNoCC
+, fetchurl
+, newScope
+, pkgs
+, xar
+, cpio
+, python3
+, pbzx
+}:
 
 let
   MacOSX-SDK = stdenvNoCC.mkDerivation rec {
@@ -38,21 +45,22 @@ let
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
 
   packages = {
-    inherit (callPackage ./apple_sdk.nix {}) frameworks libs;
+    inherit (callPackage ./apple_sdk.nix { }) frameworks libs;
 
     # TODO: this is nice to be private. is it worth the callPackage above?
     # Probably, I don't think that callPackage costs much at all.
     inherit MacOSX-SDK;
 
-    Libsystem = callPackage ./libSystem.nix {};
+    Libsystem = callPackage ./libSystem.nix { };
     LibsystemCross = pkgs.darwin.Libsystem;
-    libcharset = callPackage ./libcharset.nix {};
-    libunwind = callPackage ./libunwind.nix {};
-    libnetwork = callPackage ./libnetwork.nix {};
-    objc4 = callPackage ./libobjc.nix {};
+    libcharset = callPackage ./libcharset.nix { };
+    libunwind = callPackage ./libunwind.nix { };
+    libnetwork = callPackage ./libnetwork.nix { };
+    objc4 = callPackage ./libobjc.nix { };
 
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     IOKit = pkgs.darwin.apple_sdk.frameworks.IOKit;
   };
-in packages
+in
+packages

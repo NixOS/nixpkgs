@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-database-updates" ];
 
   nativeBuildInputs = [
-    intltool pkg-config
+    intltool
+    pkg-config
     wrapGAppsHook # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
   ];
   buildInputs = [ gdl libchamplain gnome.adwaita-icon-theme libxml2 ];

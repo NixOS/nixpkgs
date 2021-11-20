@@ -1,5 +1,11 @@
-{lib, buildOcamlJane,
- ppx_core, ppx_driver, ppx_here, ppx_sexp_conv, ppx_tools}:
+{ lib
+, buildOcamlJane
+, ppx_core
+, ppx_driver
+, ppx_here
+, ppx_sexp_conv
+, ppx_tools
+}:
 
 buildOcamlJane {
   pname = "ppx_sexp_value";

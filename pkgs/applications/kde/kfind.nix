@@ -1,7 +1,13 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  karchive, kcoreaddons, kfilemetadata, ktextwidgets, kwidgetsaddons, kio
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, karchive
+, kcoreaddons
+, kfilemetadata
+, ktextwidgets
+, kwidgetsaddons
+, kio
 }:
 
 mkDerivation {
@@ -14,6 +20,11 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    karchive kcoreaddons kfilemetadata ktextwidgets kwidgetsaddons kio
+    karchive
+    kcoreaddons
+    kfilemetadata
+    ktextwidgets
+    kwidgetsaddons
+    kio
   ];
 }

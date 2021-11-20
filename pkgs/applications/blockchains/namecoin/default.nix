@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, qt4, protobuf, qrencode, hexdump
-, withGui }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, boost
+, libevent
+, autoreconfHook
+, db4
+, miniupnpc
+, eject
+, pkg-config
+, qt4
+, protobuf
+, qrencode
+, hexdump
+, withGui
+}:
 
 with lib;
 stdenv.mkDerivation rec {

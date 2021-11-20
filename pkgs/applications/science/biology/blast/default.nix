@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
     "--without-makefile-auto-update"
-    "--with-dll"  # build dynamic libraries (static are default)
-    ];
+    "--with-dll" # build dynamic libraries (static are default)
+  ];
 
   makeFlags = [ "all_projects=app/" ];
 

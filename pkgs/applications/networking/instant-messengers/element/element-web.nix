@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? { } }:
 
 let
   pinData = lib.importJSON ./pin.json;
@@ -8,7 +8,8 @@ let
   };
   configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "element-web";
   inherit (pinData) version;
 
@@ -34,6 +35,6 @@ in stdenv.mkDerivation rec {
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

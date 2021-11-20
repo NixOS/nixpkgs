@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, heapdict, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, heapdict
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "zict";

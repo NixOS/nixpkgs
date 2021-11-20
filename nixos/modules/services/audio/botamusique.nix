@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.botamusique;
 
-  format = pkgs.formats.ini {};
+  format = pkgs.formats.ini { };
   configFile = format.generate "botamusique.ini" cfg.settings;
 in
 {
@@ -51,7 +51,7 @@ in
           };
         };
       };
-      default = {};
+      default = { };
       description = ''
         Your <filename>configuration.ini</filename> as a Nix attribute set. Look up
         possible options in the <link xlink:href="https://github.com/azlux/botamusique/blob/master/configuration.example.ini">configuration.example.ini</link>.

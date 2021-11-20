@@ -1,5 +1,17 @@
-{ stdenv, lib, fetchurl, alsa-lib, bison, flex, libsndfile, which
-, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+{ stdenv
+, lib
+, fetchurl
+, alsa-lib
+, bison
+, flex
+, libsndfile
+, which
+, AppKit
+, Carbon
+, CoreAudio
+, CoreMIDI
+, CoreServices
+, Kernel
 }:
 
 stdenv.mkDerivation rec {

@@ -15,12 +15,12 @@ rec {
 
   packageName = "cl-html-parse";
 
-  asdFilesToKeep = ["cl-html-parse.asd"];
+  asdFilesToKeep = [ "cl-html-parse.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-html-parse DESCRIPTION HTML Parser SHA256
-    14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f URL
-    http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz
-    MD5 3333eedf037a48900c663fceae3e4cfd NAME cl-html-parse FILENAME
-    cl-html-parse DEPS NIL DEPENDENCIES NIL VERSION 20200925-git SIBLINGS NIL
+  14pfd4gwjb8ywr79dqrcznw6h8a1il3g5b6cm5x9aiyr49zdv15f URL
+  http://beta.quicklisp.org/archive/cl-html-parse/2020-09-25/cl-html-parse-20200925-git.tgz
+  MD5 3333eedf037a48900c663fceae3e4cfd NAME cl-html-parse FILENAME
+  cl-html-parse DEPS NIL DEPENDENCIES NIL VERSION 20200925-git SIBLINGS NIL
     PARASITES NIL) */

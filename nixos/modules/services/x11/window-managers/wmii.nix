@@ -26,7 +26,8 @@ in
       # Another use case is kill -9 wmii; after rotating screen.
       # Note: we don't like kill for that purpose. But it works (->
       # subject "wmii and xrandr" on mailinglist)
-      { name = "wmii";
+      {
+        name = "wmii";
         start = ''
           while :; do
             ${wmii}/bin/wmii && break

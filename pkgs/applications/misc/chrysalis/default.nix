@@ -3,7 +3,8 @@
 let
   pname = "chrysalis";
   version = "0.8.6";
-in appimageTools.wrapAppImage rec {
+in
+appimageTools.wrapAppImage rec {
   name = "${pname}-${version}-binary";
 
   src = appimageTools.extract {

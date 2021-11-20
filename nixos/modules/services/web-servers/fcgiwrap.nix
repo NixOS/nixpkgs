@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.fcgiwrap;
-in {
+in
+{
 
   options = {
     services.fcgiwrap = {
@@ -59,14 +60,15 @@ in {
       } // (if cfg.user != null && cfg.group != null then {
         User = cfg.user;
         Group = cfg.group;
-      } else { } );
+      } else { });
     };
 
-    systemd.sockets = if (cfg.socketType == "unix") then {
-      fcgiwrap = {
-        wantedBy = [ "sockets.target" ];
-        socketConfig.ListenStream = cfg.socketAddress;
-      };
-    } else { };
+    systemd.sockets =
+      if (cfg.socketType == "unix") then {
+        fcgiwrap = {
+          wantedBy = [ "sockets.target" ];
+          socketConfig.ListenStream = cfg.socketAddress;
+        };
+      } else { };
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "devdoc" ];
-  outputMan= "devdoc";
+  outputMan = "devdoc";
 
   propagatedBuildInputs = [ zlib libpng libjpeg lcms2 ];
 

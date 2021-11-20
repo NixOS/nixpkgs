@@ -19,7 +19,8 @@ let
   vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
     inherit system;
     modules =
-      [ configuration
+      [
+        configuration
         ./modules/virtualisation/qemu-vm.nix
         { virtualisation.useBootLoader = true; }
         ({ config, ... }: {

@@ -18,7 +18,8 @@
 , Cocoa
 , AGL
 , OpenGL
-, withCuda ? false, cudatoolkit
+, withCuda ? false
+, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {

@@ -18,8 +18,8 @@ stdenv.mkDerivation {
 
   configurePhase = "ocaml setup.ml -configure --prefix $out"
     + lib.optionalString doCheck " --enable-tests";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  buildPhase = "ocaml setup.ml -build";
+  installPhase = "ocaml setup.ml -install";
 
   inherit doCheck;
   checkInputs = [ ounit ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
     description = "Generate OCaml modules from source files";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with lib.maintainers; [
       maggesi
     ];

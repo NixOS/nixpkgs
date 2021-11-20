@@ -1,6 +1,16 @@
 { buildDunePackage
-, conduit-lwt, ppx_sexp_conv, ocaml_lwt, uri, ipaddr, ipaddr-sexp, ca-certs, logs
-, lwt_ssl, tls, lwt_log, ssl
+, conduit-lwt
+, ppx_sexp_conv
+, ocaml_lwt
+, uri
+, ipaddr
+, ipaddr-sexp
+, ca-certs
+, logs
+, lwt_ssl
+, tls
+, lwt_log
+, ssl
 }:
 
 buildDunePackage {

@@ -1,8 +1,33 @@
-{ lib, stdenv, buildPackages
-, appleDerivation', cpio, xnu, Libc, Libm, libdispatch, Libinfo
-, dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
+{ lib
+, stdenv
+, buildPackages
+, appleDerivation'
+, cpio
+, xnu
+, Libc
+, Libm
+, libdispatch
+, Libinfo
+, dyld
+, Csu
+, architecture
+, libclosure
+, CarbonHeaders
+, ncurses
+, CommonCrypto
+, copyfile
+, removefile
+, libresolvHeaders
+, libresolv
+, Libnotify
+, libplatform
+, libpthread
+, mDNSResponder
+, launchd
+, libutilHeaders
+, hfsHeaders
+, darling
+, darwin-stubs
 , headersOnly ? false
 , withLibresolv ? !headersOnly
 }:
@@ -132,7 +157,7 @@ appleDerivation' stdenv {
   meta = with lib; {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

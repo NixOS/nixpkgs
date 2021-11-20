@@ -22,10 +22,12 @@ let
 
       [log]
       file = ${cfg.logFile}
-    '');
+    ''
+  );
   executable = "${cfg.package}/bin/couchdb";
 
-in {
+in
+{
 
   ###### interface
 
@@ -191,7 +193,7 @@ in {
         # 2. the module configuration
         # 3. the extraConfig from the module options
         # 4. the locally writable config file, which couchdb itself writes to
-        ERL_FLAGS= ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
+        ERL_FLAGS = ''-couch_ini ${cfg.package}/etc/default.ini ${configFile} ${pkgs.writeText "couchdb-extra.ini" cfg.extraConfig} ${cfg.configFile}'';
       };
 
       serviceConfig = {

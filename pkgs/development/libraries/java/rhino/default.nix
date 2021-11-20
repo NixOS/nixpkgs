@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, unzip, ant, javac, jvm }:
 
 let
-  xbeans  = fetchurl {
+  xbeans = fetchurl {
     url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ant javac jvm ];
 
   buildPhase = "ant jar";
-  doCheck    = false;
+  doCheck = false;
 
   # FIXME: Install javadoc as well.
   installPhase =

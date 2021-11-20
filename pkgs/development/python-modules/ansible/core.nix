@@ -17,7 +17,8 @@
 , requests
 , resolvelib
 , scp
-, windowsSupport ? false, pywinrm
+, windowsSupport ? false
+, pywinrm
 , xmltodict
 }:
 

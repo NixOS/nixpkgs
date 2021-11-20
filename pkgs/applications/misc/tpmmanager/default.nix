@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     Exec=$out/bin/tpmmanager
     Terminal=false
     EOF
-    '';
+  '';
 
   meta = {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";

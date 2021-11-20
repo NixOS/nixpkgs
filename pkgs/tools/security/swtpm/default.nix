@@ -1,11 +1,19 @@
 { lib
 , stdenv
-, fetchFromGitHub, fetchpatch
+, fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp, json-glib
+, libtasn1
+, openssl
+, fuse
+, glib
+, libseccomp
+, json-glib
 , libtpms
-, unixtools, expect, socat
+, unixtools
+, expect
+, socat
 , gnutls
 , perl
 }:
@@ -29,15 +37,22 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkg-config unixtools.netstat expect socat
+    pkg-config
+    unixtools.netstat
+    expect
+    socat
     perl # for pod2man
     autoreconfHook
   ];
 
   buildInputs = [
     libtpms
-    openssl libtasn1 libseccomp
-    fuse glib json-glib
+    openssl
+    libtasn1
+    libseccomp
+    fuse
+    glib
+    json-glib
     gnutls
   ];
 

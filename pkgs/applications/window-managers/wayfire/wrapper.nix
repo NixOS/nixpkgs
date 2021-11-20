@@ -17,7 +17,8 @@ let
   plugins = choosePlugins wayfirePlugins;
 in
 
-runCommand "${application.name}-wrapped" {
+runCommand "${application.name}-wrapped"
+{
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = application.passthru // {

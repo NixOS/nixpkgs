@@ -1,7 +1,15 @@
-{ lib, fetchgit
-  , buildPythonApplication, buildPythonPackage
-  , pygobject3, pytest-runner, requests, responses, pytest, python-olm
-  , canonicaljson, olm
+{ lib
+, fetchgit
+, buildPythonApplication
+, buildPythonPackage
+, pygobject3
+, pytest-runner
+, requests
+, responses
+, pytest
+, python-olm
+, canonicaljson
+, olm
 }:
 let
   mainsrc = fetchgit {
@@ -19,8 +27,13 @@ let
     src = "${mainsrc}/matrix-python-sdk/";
 
     propagatedBuildInputs = [
-      requests responses olm python-olm canonicaljson
-      pytest-runner pytest
+      requests
+      responses
+      olm
+      python-olm
+      canonicaljson
+      pytest-runner
+      pytest
     ];
 
     doCheck = false;
@@ -41,12 +54,12 @@ buildPythonApplication rec {
 
   src = mainsrc;
 
-  propagatedBuildInputs = [pygobject3 sdk];
+  propagatedBuildInputs = [ pygobject3 sdk ];
 
   meta = {
     description = "CLI client for Matrix";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/saadnpq/matrixcli";
   };

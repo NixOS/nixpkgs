@@ -20,7 +20,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jsonpickle wrapt requests future botocore
+    jsonpickle
+    wrapt
+    requests
+    future
+    botocore
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];

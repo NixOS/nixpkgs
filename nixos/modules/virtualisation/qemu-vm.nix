@@ -32,13 +32,13 @@ let
 
       driveExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to drive flag.";
       };
 
       deviceExtraOpts = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Extra options passed to device flag.";
       };
 
@@ -56,7 +56,7 @@ let
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
     let
       drvId = "drive${toString idx}";
-      mkKeyValue = generators.mkKeyValueDefault {} "=";
+      mkKeyValue = generators.mkKeyValueDefault { } "=";
       mkOpts = opts: concatStringsSep "," (mapAttrsToList mkKeyValue opts);
       driveOpts = mkOpts (driveExtraOpts // {
         index = idx;
@@ -73,7 +73,7 @@ let
         else
           "-device virtio-blk-pci,${deviceOpts}";
     in
-      "-drive ${driveOpts} ${device}";
+    "-drive ${driveOpts} ${device}";
 
   drivesCmdLine = drives: concatStringsSep "\\\n    " (imap1 driveCmdline drives);
 
@@ -91,7 +91,8 @@ let
   lookupDriveDeviceName = driveName: driveList:
     (findSingle (drive: drive.name == driveName)
       (throw "Drive ${driveName} not found")
-      (throw "Multiple drives named ${driveName}") driveList).device;
+      (throw "Multiple drives named ${driveName}")
+      driveList).device;
 
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
@@ -188,7 +189,8 @@ let
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "nixos-boot-disk"
-        { preVM =
+        {
+          preVM =
             ''
               mkdir $out
               diskImage=$out/disk.img
@@ -201,9 +203,10 @@ let
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"
-                      + lib.optionalString cfg.useEFIBoot (
-                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-                      + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
+            + lib.optionalString cfg.useEFIBoot (
+            " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+              + " -drive if=pflash,format=raw,unit=1,file=$efiVars"
+          );
         }
         ''
           # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
@@ -350,7 +353,7 @@ in
     virtualisation.emptyDiskImages =
       mkOption {
         type = types.listOf types.ints.positive;
-        default = [];
+        default = [ ];
         description =
           ''
             Additional disk images to provide to the VM. The value is
@@ -368,7 +371,7 @@ in
             Whether to run QEMU with a graphics window, or in nographic mode.
             Serial console will be enabled on both settings, but this will
             change the preferred console.
-            '';
+          '';
       };
 
     virtualisation.resolution =
@@ -421,7 +424,7 @@ in
     virtualisation.additionalPaths =
       mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description =
           ''
             A list of paths whose closure should be made available to
@@ -479,18 +482,18 @@ in
             description = "The guest port to be mapped.";
           };
         });
-      default = [];
+      default = [ ];
       example = lib.literalExpression
         ''
-        [ # forward local port 2222 -> 22, to ssh into the VM
-          { from = "host"; host.port = 2222; guest.port = 22; }
+          [ # forward local port 2222 -> 22, to ssh into the VM
+            { from = "host"; host.port = 2222; guest.port = 22; }
 
-          # forward local port 80 -> 10.0.2.10:80 in the VLAN
-          { from = "guest";
-            guest.address = "10.0.2.10"; guest.port = 80;
-            host.address = "127.0.0.1"; host.port = 80;
-          }
-        ]
+            # forward local port 80 -> 10.0.2.10:80 in the VLAN
+            { from = "guest";
+              guest.address = "10.0.2.10"; guest.port = 80;
+              host.address = "127.0.0.1"; host.port = 80;
+            }
+          ]
         '';
       description =
         ''
@@ -568,16 +571,18 @@ in
       options =
         mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
           example = [ "-vga std" ];
           description = "Options passed to QEMU.";
         };
 
       consoles = mkOption {
         type = types.listOf types.str;
-        default = let
-          consoles = [ "${qemu-common.qemuSerialDevice},115200n8" "tty0" ];
-        in if cfg.graphics then consoles else reverseList consoles;
+        default =
+          let
+            consoles = [ "${qemu-common.qemuSerialDevice},115200n8" "tty0" ];
+          in
+          if cfg.graphics then consoles else reverseList consoles;
         example = [ "console=tty1" ];
         description = ''
           The output console devices to pass to the kernel command line via the
@@ -704,14 +709,16 @@ in
     assertions =
       lib.concatLists (lib.flip lib.imap cfg.forwardPorts (i: rule:
         [
-          { assertion = rule.from == "guest" -> rule.proto == "tcp";
+          {
+            assertion = rule.from == "guest" -> rule.proto == "tcp";
             message =
               ''
                 Invalid virtualisation.forwardPorts.<entry ${toString i}>.proto:
                   Guest forwarding supports only TCP connections.
               '';
           }
-          { assertion = rule.from == "guest" -> lib.hasPrefix "10.0.2." rule.guest.address;
+          {
+            assertion = rule.from == "guest" -> lib.hasPrefix "10.0.2." rule.guest.address;
             message =
               ''
                 Invalid virtualisation.forwardPorts.<entry ${toString i}>.guest.address:
@@ -738,8 +745,8 @@ in
     # note [Disk layout with `useBootLoader`].
     boot.loader.grub.device = mkVMOverride (
       if cfg.useBootLoader
-        then driveDeviceName 2 # second disk
-        else cfg.bootDevice
+      then driveDeviceName 2 # second disk
+      else cfg.bootDevice
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
@@ -820,10 +827,10 @@ in
         forwardingOptions = flip concatMapStrings cfg.forwardPorts
           ({ proto, from, host, guest }:
             if from == "host"
-              then "hostfwd=${proto}:${host.address}:${toString host.port}-" +
-                   "${guest.address}:${toString guest.port},"
-              else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
-                   "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
+            then "hostfwd=${proto}:${host.address}:${toString host.port}-" +
+              "${guest.address}:${toString guest.port},"
+            else "'guestfwd=${proto}:${guest.address}:${toString guest.port}-" +
+              "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
           );
       in
       [
@@ -834,10 +841,14 @@ in
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
-        "-usb" "-device usb-tablet,bus=usb-bus.0"
+        "-usb"
+        "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
-        "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
+        "-device virtio-gpu-pci"
+        "-device usb-ehci,id=usb0"
+        "-device usb-kbd"
+        "-device usb-tablet"
       ])
       (mkIf (!cfg.useBootLoader) [
         "-kernel ${config.system.build.toplevel}/kernel"
@@ -878,10 +889,12 @@ in
           deviceExtraOpts.bootindex = "1";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0
+        (idx: _: {
+          file = "$(pwd)/empty${toString idx}.qcow2";
+          driveExtraOpts.werror = "report";
+        })
+        cfg.emptyDiskImages)
     ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
@@ -891,56 +904,60 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems =
-    let
-      mkSharedDir = tag: share:
-        {
-          name =
-            if tag == "nix-store" && cfg.writableStore
+      let
+        mkSharedDir = tag: share:
+          {
+            name =
+              if tag == "nix-store" && cfg.writableStore
               then "/nix/.ro-store"
               else share.target;
-          value.device = tag;
-          value.fsType = "9p";
-          value.neededForBoot = true;
-          value.options =
-            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
-            ++ lib.optional (tag == "nix-store") "cache=loose";
-        };
-    in
-      mkVMOverride (cfg.fileSystems //
-      {
-        "/".device = cfg.bootDevice;
-
-        "/tmp" = mkIf config.boot.tmpOnTmpfs
-          { device = "tmpfs";
-            fsType = "tmpfs";
-            neededForBoot = true;
-            # Sync with systemd's tmp.mount;
-            options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
+            value.device = tag;
+            value.fsType = "9p";
+            value.neededForBoot = true;
+            value.options =
+              [ "trans=virtio" "version=9p2000.L" "msize=${toString cfg.msize}" ]
+              ++ lib.optional (tag == "nix-store") "cache=loose";
           };
+      in
+      mkVMOverride (cfg.fileSystems //
+        {
+          "/".device = cfg.bootDevice;
 
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" =
-          mkIf cfg.useNixStoreImage
-            { device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+          "/tmp" = mkIf config.boot.tmpOnTmpfs
+            {
+              device = "tmpfs";
+              fsType = "tmpfs";
               neededForBoot = true;
-              options = [ "ro" ];
+              # Sync with systemd's tmp.mount;
+              options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
             };
 
-        "/nix/.rw-store" = mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs)
-          { fsType = "tmpfs";
-            options = [ "mode=0755" ];
-            neededForBoot = true;
-          };
+          "/nix/${if cfg.writableStore then ".ro-store" else "store"}" =
+            mkIf cfg.useNixStoreImage
+              {
+                device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+                neededForBoot = true;
+                options = [ "ro" ];
+              };
 
-        "/boot" = mkIf cfg.useBootLoader
-          # see note [Disk layout with `useBootLoader`]
-          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
-            fsType = "vfat";
-            noCheck = true; # fsck fails on a r/o filesystem
-          };
-      } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
+          "/nix/.rw-store" = mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs)
+            {
+              fsType = "tmpfs";
+              options = [ "mode=0755" ];
+              neededForBoot = true;
+            };
+
+          "/boot" = mkIf cfg.useBootLoader
+            # see note [Disk layout with `useBootLoader`]
+            {
+              device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
+              fsType = "vfat";
+              noCheck = true; # fsck fails on a r/o filesystem
+            };
+        } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
 
     swapDevices = mkVMOverride [ ];
-    boot.initrd.luks.devices = mkVMOverride {};
+    boot.initrd.luks.devices = mkVMOverride { };
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;
@@ -976,7 +993,8 @@ in
     networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
-      [ (isEnabled "VIRTIO_BLK")
+      [
+        (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
         (isEnabled "EXT4_FS")

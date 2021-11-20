@@ -3,7 +3,7 @@
 let
   cfg = config.services.peertube;
 
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   configFile = settingsFormat.generate "production.json" cfg.settings;
 
   env = {
@@ -49,11 +49,14 @@ let
   };
 
   envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") (
-    (lib.concatLists (lib.mapAttrsToList (name: value:
-      if value != null then [
-        "${name}=\"${toString value}\""
-      ] else []
-    ) env))));
+    (lib.concatLists (lib.mapAttrsToList
+      (name: value:
+        if value != null then [
+          "${name}=\"${toString value}\""
+        ] else [ ]
+      )
+      env))
+  ));
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
     set -a
@@ -65,7 +68,8 @@ let
     node ~/dist/server/tools/peertube.js $@
   '';
 
-in {
+in
+{
   options.services.peertube = {
     enable = lib.mkEnableOption "Enable Peertube’s service";
 
@@ -240,43 +244,49 @@ in {
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.serviceEnvironmentFile == null || !lib.hasPrefix builtins.storeDir cfg.serviceEnvironmentFile;
-          message = ''
-            <option>services.peertube.serviceEnvironmentFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
-      }
-      { assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
-          message = ''
-            <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.redis.host</option> or <option>services.peertube.redis.port</option>) enabled. Disable either of them.
+      {
+        assertion = cfg.serviceEnvironmentFile == null || !lib.hasPrefix builtins.storeDir cfg.serviceEnvironmentFile;
+        message = ''
+          <option>services.peertube.serviceEnvironmentFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
         '';
       }
-      { assertion = cfg.redis.enableUnixSocket || (cfg.redis.host != null && cfg.redis.port != null);
-          message = ''
-            <option>services.peertube.redis.host</option> and <option>services.peertube.redis.port</option> needs to be set if <option>services.peertube.redis.enableUnixSocket</option> is not enabled.
+      {
+        assertion = !(cfg.redis.enableUnixSocket && (cfg.redis.host != null || cfg.redis.port != null));
+        message = ''
+          <option>services.peertube.redis.createLocally</option> and redis network connection (<option>services.peertube.redis.host</option> or <option>services.peertube.redis.port</option>) enabled. Disable either of them.
         '';
       }
-      { assertion = cfg.redis.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.redis.passwordFile;
-          message = ''
-            <option>services.peertube.redis.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion = cfg.redis.enableUnixSocket || (cfg.redis.host != null && cfg.redis.port != null);
+        message = ''
+          <option>services.peertube.redis.host</option> and <option>services.peertube.redis.port</option> needs to be set if <option>services.peertube.redis.enableUnixSocket</option> is not enabled.
+        '';
       }
-      { assertion = cfg.database.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.database.passwordFile;
-          message = ''
-            <option>services.peertube.database.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion = cfg.redis.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.redis.passwordFile;
+        message = ''
+          <option>services.peertube.redis.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
       }
-      { assertion = cfg.smtp.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.smtp.passwordFile;
-          message = ''
-            <option>services.peertube.smtp.passwordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
+      {
+        assertion = cfg.database.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.database.passwordFile;
+        message = ''
+          <option>services.peertube.database.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
+      }
+      {
+        assertion = cfg.smtp.passwordFile == null || !lib.hasPrefix builtins.storeDir cfg.smtp.passwordFile;
+        message = ''
+          <option>services.peertube.smtp.passwordFile</option> points to
+          a file in the Nix store. You should use a quoted absolute path to
+          prevent this.
+        '';
       }
     ];
 
@@ -329,15 +339,17 @@ in {
       after = [ "network.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      script = let
-        psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
-          SELECT 'CREATE USER "${cfg.database.user}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.database.user}')\gexec
-          SELECT 'CREATE DATABASE "${cfg.database.name}" OWNER "${cfg.database.user}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.database.name}')\gexec
-          \c '${cfg.database.name}'
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
-          CREATE EXTENSION IF NOT EXISTS unaccent;
-        '';
-      in "${config.services.postgresql.package}/bin/psql -f ${psqlSetupCommands}";
+      script =
+        let
+          psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
+            SELECT 'CREATE USER "${cfg.database.user}"' WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${cfg.database.user}')\gexec
+            SELECT 'CREATE DATABASE "${cfg.database.name}" OWNER "${cfg.database.user}" TEMPLATE template0 ENCODING UTF8' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${cfg.database.name}')\gexec
+            \c '${cfg.database.name}'
+            CREATE EXTENSION IF NOT EXISTS pg_trgm;
+            CREATE EXTENSION IF NOT EXISTS unaccent;
+          '';
+        in
+        "${config.services.postgresql.package}/bin/psql -f ${psqlSetupCommands}";
 
       serviceConfig = {
         Type = "oneshot";
@@ -437,7 +449,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs-16_x pkgs.yarn ])
-      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis" ];})
+      (lib.mkIf cfg.redis.enableUnixSocket { ${config.services.peertube.user}.extraGroups = [ "redis" ]; })
     ];
 
     users.groups = lib.optionalAttrs (cfg.group == "peertube") {

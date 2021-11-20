@@ -29,7 +29,8 @@ let
     # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
     doCheck = false;
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.4";
   format = "pyproject";
@@ -55,10 +56,10 @@ in buildPythonPackage rec {
     qtdeclarative
     qtwebchannel
   ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
+  ++ lib.optional withConnectivity qtconnectivity
+  ++ lib.optional withMultimedia qtmultimedia
+  ++ lib.optional withWebKit qtwebkit
+  ++ lib.optional withWebSockets qtwebsockets
   ;
 
   buildInputs = with libsForQt5; [
@@ -68,9 +69,9 @@ in buildPythonPackage rec {
     qtdeclarative
     pyqt-builder
   ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
+  ++ lib.optional withConnectivity qtconnectivity
+  ++ lib.optional withWebKit qtwebkit
+  ++ lib.optional withWebSockets qtwebsockets
   ;
 
   propagatedBuildInputs = [
@@ -103,17 +104,17 @@ in buildPythonPackage rec {
     "PyQt5.QtWidgets"
     "PyQt5.QtGui"
   ]
-    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-    ++ lib.optional withWebKit "PyQt5.QtWebKit"
-    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+  ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+  ++ lib.optional withWebKit "PyQt5.QtWebKit"
+  ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+  ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
   ;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
-    platforms   = platforms.mesaPlatforms;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };
 }

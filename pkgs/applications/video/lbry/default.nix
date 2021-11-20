@@ -1,9 +1,10 @@
-{ lib, fetchurl, appimageTools}:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "lbry-desktop";
   version = "0.50.2";
-in appimageTools.wrapAppImage rec {
+in
+appimageTools.wrapAppImage rec {
   name = "${pname}-${version}";
 
   # Fetch from GitHub Releases and extract

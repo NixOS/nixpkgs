@@ -1,5 +1,9 @@
-{ lib, python3Packages
-, git, breezy, subversion }:
+{ lib
+, python3Packages
+, git
+, breezy
+, subversion
+}:
 
 with python3Packages;
 
@@ -14,7 +18,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml setuptools ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ git breezy subversion ])];
+  makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ git breezy subversion ]) ];
 
   doCheck = false; # requires network
 

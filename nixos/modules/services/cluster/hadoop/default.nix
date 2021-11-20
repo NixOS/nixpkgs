@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.hadoop;
 in
@@ -8,7 +8,7 @@ with lib;
 
   options.services.hadoop = {
     coreSite = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf types.anything;
       example = literalExpression ''
         {
@@ -108,9 +108,9 @@ with lib;
     containerExecutorCfg = mkOption {
       default = {
         # must be the same as yarn.nodemanager.linux-container-executor.group in yarnSite
-        "yarn.nodemanager.linux-container-executor.group"="hadoop";
-        "min.user.id"=1000;
-        "feature.terminal.enabled"=1;
+        "yarn.nodemanager.linux-container-executor.group" = "hadoop";
+        "min.user.id" = 1000;
+        "feature.terminal.enabled" = 1;
       };
       type = types.attrsOf types.anything;
       example = literalExpression ''
@@ -125,7 +125,7 @@ with lib;
     };
 
     extraConfDirs = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.path;
       example = literalExpression ''
         [
@@ -146,19 +146,23 @@ with lib;
 
 
   config = mkMerge [
-    (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users ||
-           builtins.hasAttr "httpfs" config.users.users) {
-      users.groups.hadoop = {
-        gid = config.ids.gids.hadoop;
-      };
-      environment = {
-        systemPackages = [ cfg.package ];
-        etc."hadoop-conf".source = let
-          hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-        in "${hadoopConf}";
-      };
-    })
+    (mkIf
+      (builtins.hasAttr "yarn" config.users.users ||
+        builtins.hasAttr "hdfs" config.users.users ||
+        builtins.hasAttr "httpfs" config.users.users)
+      {
+        users.groups.hadoop = {
+          gid = config.ids.gids.hadoop;
+        };
+        environment = {
+          systemPackages = [ cfg.package ];
+          etc."hadoop-conf".source =
+            let
+              hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
+            in
+            "${hadoopConf}";
+        };
+      })
 
   ];
 }

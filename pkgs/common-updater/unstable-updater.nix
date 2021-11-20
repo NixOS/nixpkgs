@@ -43,5 +43,6 @@ let
         --rev="$commit_sha"
   '';
 
-in [ updateScript url ]
+in
+[ updateScript url ]
 

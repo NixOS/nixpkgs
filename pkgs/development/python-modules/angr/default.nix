@@ -32,7 +32,7 @@ let
   unicorn' = unicorn.overridePythonAttrs (old: rec {
     pname = "unicorn";
     version = "1.0.2-rc4";
-    src =  fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "unicorn-engine";
       repo = pname;
       rev = version;

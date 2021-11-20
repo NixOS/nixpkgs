@@ -1,6 +1,23 @@
-{ stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
-, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib, ffmpeg, python2, ruby
-, openjdk11-bootstrap }:
+{ stdenv
+, lib
+, fetchurl
+, writeText
+, gradleGen
+, pkg-config
+, perl
+, cmake
+, gperf
+, gtk2
+, gtk3
+, libXtst
+, libXxf86vm
+, glib
+, alsa-lib
+, ffmpeg
+, python2
+, ruby
+, openjdk11-bootstrap
+}:
 
 let
   major = "11";
@@ -72,7 +89,8 @@ let
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
-in makePackage {
+in
+makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''

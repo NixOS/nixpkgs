@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, krb5, xfsprogs, jemalloc, dbus, libcap
-, ntirpc, liburcu, bison, flex, nfs-utils
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, krb5
+, xfsprogs
+, jemalloc
+, dbus
+, libcap
+, ntirpc
+, liburcu
+, bison
+, flex
+, nfs-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";

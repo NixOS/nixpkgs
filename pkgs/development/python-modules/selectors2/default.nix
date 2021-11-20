@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, psutil, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, psutil
+, mock
+}:
 
 buildPythonPackage rec {
   version = "2.0.2";

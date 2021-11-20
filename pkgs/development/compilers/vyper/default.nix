@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytest-runner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, writeText
+, asttokens
+, pycryptodome
+, pytest-xdist
+, pytest-cov
+, recommonmark
+, semantic-version
+, sphinx
+, sphinx_rtd_theme
+, pytest-runner
+}:
 
 let
   sample-contract = writeText "example.vy" ''

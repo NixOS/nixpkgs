@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , gtk3
@@ -9,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname  = "thunar-dropbox";
+  pname = "thunar-dropbox";
   version = "0.3.1";
 
   src = fetchFromGitHub {

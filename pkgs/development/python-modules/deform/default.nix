@@ -1,6 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi
-, chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
-, nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, chameleon
+, colander
+, iso8601
+, peppercorn
+, translationstring
+, zope_deprecation
+, nose
+, coverage
+, beautifulsoup4
+, flaky
+, pyramid
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "deform";

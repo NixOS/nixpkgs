@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
- pythonImportsCheck = [ "platformdirs" ];
+  pythonImportsCheck = [ "platformdirs" ];
 
   meta = with lib; {
     description = "Python module for determining appropriate platform-specific directories";

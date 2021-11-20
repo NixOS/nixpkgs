@@ -1,11 +1,12 @@
 { fetchpatch }:
 
 let
-  xsaPatch = { name , sha256 }: (fetchpatch {
+  xsaPatch = { name, sha256 }: (fetchpatch {
     url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
     inherit sha256;
   });
-in {
+in
+{
   # 4.5
   XSA_190 = (xsaPatch {
     name = "190-4.5";
@@ -464,7 +465,7 @@ in {
 
   # 4.5 .. 4.9
   XSA_249 = [
-   (xsaPatch {
+    (xsaPatch {
       name = "249";
       sha256 = "0v6ngzqhkz7yv4n83xlpxfbkr2qyg5b1cds7ikkinm86hiqy6agl";
     })
@@ -472,7 +473,7 @@ in {
 
   # 4.5
   XSA_250_45 = [
-   (xsaPatch {
+    (xsaPatch {
       name = "250-4.5";
       sha256 = "0pqldl6qnl834gvfp90z247q9xcjh3835s2iffnajz7jhjb2145d";
     })
@@ -480,7 +481,7 @@ in {
 
   # 4.5
   XSA_251_45 = [
-   (xsaPatch {
+    (xsaPatch {
       name = "251-4.5";
       sha256 = "0lc94cx271z09r0mhxaypyd9d4740051p28idf5calx5228dqjgm";
     })

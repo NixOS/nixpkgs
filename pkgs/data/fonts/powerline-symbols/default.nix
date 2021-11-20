@@ -2,7 +2,9 @@
 
 let
   inherit (powerline) version;
-in runCommand "powerline-symbols-${version}" {
+in
+runCommand "powerline-symbols-${version}"
+{
   meta = {
     inherit (powerline.meta) license;
     priority = (powerline.meta.priority or 0) + 1;

@@ -21,13 +21,15 @@ with lib;
   };
 
   config = mkIf config.security.lockKernelModules {
-    boot.kernelModules = concatMap (x:
-      if x.device != null
+    boot.kernelModules = concatMap
+      (x:
+        if x.device != null
         then
           if x.fsType == "vfat"
-            then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
-            else [ x.fsType ]
-        else []) config.system.build.fileSystems;
+          then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
+          else [ x.fsType ]
+        else [ ])
+      config.system.build.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
@@ -36,15 +38,17 @@ with lib;
       wantedBy = [ config.systemd.defaultUnit ];
 
       after =
-        [ "firewall.service"
+        [
+          "firewall.service"
           "systemd-modules-load.service"
-           config.systemd.defaultUnit
+          config.systemd.defaultUnit
         ];
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
       serviceConfig =
-        { Type = "oneshot";
+        {
+          Type = "oneshot";
           RemainAfterExit = true;
           TimeoutSec = 180;
         };

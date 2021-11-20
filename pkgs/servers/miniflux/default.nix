@@ -4,7 +4,8 @@ let
   pname = "miniflux";
   version = "2.0.33";
 
-in buildGoModule {
+in
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -23,7 +24,9 @@ in buildGoModule {
   ''; # skip client tests as they require network access
 
   ldflags = [
-    "-s" "-w" "-X miniflux.app/version.Version=${version}"
+    "-s"
+    "-w"
+    "-X miniflux.app/version.Version=${version}"
   ];
 
   postInstall = ''

@@ -107,10 +107,10 @@ rec {
     '';
 
     /*
-    We did convince oil to upstream an env for specifying
-    this to support a shell.nix. Would need a patch if they
-    later drop this support. See:
-    https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
+      We did convince oil to upstream an env for specifying
+      this to support a shell.nix. Would need a patch if they
+      later drop this support. See:
+      https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
     */
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 

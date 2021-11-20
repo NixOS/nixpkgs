@@ -33,7 +33,7 @@
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
 , libGL
-# experimental and can cause crashes in inspector
+  # experimental and can cause crashes in inspector
 , vulkanSupport ? false
 , vulkan-loader
 , vulkan-headers
@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
     for program in ''${demos[@]}; do

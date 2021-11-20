@@ -1,9 +1,13 @@
-{ lib, version, hostPlatform, targetPlatform
+{ lib
+, version
+, hostPlatform
+, targetPlatform
 , gnatboot ? null
 , langAda ? false
 , langJava ? false
 , langJit ? false
-, langGo }:
+, langGo
+}:
 
 assert langJava -> lib.versionOlder version "7";
 assert langAda -> gnatboot != null;
@@ -59,9 +63,9 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export STRIP='strip -x'
 ''
 
-# HACK: if host and target config are the same, but the platforms are
-# actually different we need to convince the configure script that it
-# is in fact building a cross compiler although it doesn't believe it.
-+ lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
+  # HACK: if host and target config are the same, but the platforms are
+  # actually different we need to convince the configure script that it
+  # is in fact building a cross compiler although it doesn't believe it.
+  + lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
   substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
 ''

@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.programs.tilp2;
 
-in {
+in
+{
   options.programs.tilp2 = {
     enable = mkOption {
       type = types.bool;

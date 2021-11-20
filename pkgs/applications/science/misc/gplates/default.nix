@@ -29,7 +29,8 @@ let
   cgal = cgal_5.override {
     boost = boost';
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "gplates";
   version = "2.3.0";
 

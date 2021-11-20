@@ -1,6 +1,14 @@
-{ buildGoPackage, fetchFromGitHub, lib
+{ buildGoPackage
+, fetchFromGitHub
+, lib
 , pkg-config
-, wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm, libheif
+, wayland
+, libX11
+, xbitmaps
+, libXcursor
+, libXmu
+, libXpm
+, libheif
 }:
 
 buildGoPackage rec {

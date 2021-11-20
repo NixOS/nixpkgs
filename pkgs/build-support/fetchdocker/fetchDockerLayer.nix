@@ -8,6 +8,6 @@ args@{ layerDigest, ... }:
 
 generic-fetcher ({
   fetcher = "hocker-layer";
-  name    = "docker-layer-${layerDigest}.tar.gz";
-  tag     = "unused";
+  name = "docker-layer-${layerDigest}.tar.gz";
+  tag = "unused";
 } // args)

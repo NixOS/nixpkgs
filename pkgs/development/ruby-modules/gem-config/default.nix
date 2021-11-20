@@ -17,16 +17,90 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
-, pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools
+{ lib
+, fetchurl
+, writeScript
+, ruby
+, libkrb5
+, libxml2
+, libxslt
+, python2
+, stdenv
+, which
+, libiconv
+, postgresql
+, v8
+, clang
+, sqlite
+, zlib
+, imagemagick
+, lasem
+, pkg-config
+, ncurses
+, xapian
+, gpgme
+, util-linux
+, tzdata
+, icu
+, libffi
+, cmake
+, libssh2
+, openssl
+, libmysqlclient
+, git
+, perl
+, pcre
+, gecode_3
+, curl
+, msgpack
+, libsodium
+, snappy
+, libossp_uuid
+, lxc
+, libpcap
+, xorg
+, gtk2
+, buildRubyGem
+, cairo
+, re2
+, rake
+, gobject-introspection
+, gdk-pixbuf
+, zeromq
+, czmq
+, graphicsmagick
+, libcxx
+, file
+, libvirt
+, glib
+, vips
+, taglib
+, libopus
+, linux-pam
+, libidn
+, protobuf
+, fribidi
+, harfbuzz
+, bison
+, flex
+, pango
+, python3
+, patchelf
+, binutils
+, freetds
+, wrapGAppsHook
+, atk
+, bundler
+, libsass
+, libexif
+, libselinux
+, libsepol
+, shared-mime-info
+, libthai
+, libdatrie
+, CoreServices
+, DarwinTools
+, cctools
 }@args:
 
 let
@@ -50,10 +124,11 @@ in
   bundler = attrs:
     let
       templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
-    in {
+    in
+    {
       # patching shebangs would fail on the templates/Executable file, so we
       # temporarily remove the executable flag.
-      preFixup  = "chmod -x $out/${templates}/Executable";
+      preFixup = "chmod -x $out/${templates}/Executable";
       postFixup = ''
         chmod +x $out/${templates}/Executable
 
@@ -65,7 +140,7 @@ in
   cairo = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [ gtk2 pcre xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   cairo-gobject = attrs: {
@@ -226,15 +301,16 @@ in
     '';
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
-    dontBuild = false;
-    postPatch = ''
-      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
-        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
-        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
-      }}';" ext/pg_query/extconf.rb
-    '';
-  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2")
+    {
+      dontBuild = false;
+      postPatch = ''
+        sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+          url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+          sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+        }}';" ext/pg_query/extconf.rb
+      '';
+    } // lib.optionalAttrs (attrs.version == "1.3.0") {
     # Needed for gitlab
     dontBuild = false;
     postPatch = ''
@@ -253,9 +329,12 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [
-      binutils pkg-config
+      binutils
+      pkg-config
     ] ++ lib.optionals stdenv.isLinux [
-      util-linux libselinux libsepol
+      util-linux
+      libselinux
+      libsepol
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
@@ -643,14 +722,15 @@ in
     dontBuild = false;
     postPatch =
       let
-        path = if lib.versionAtLeast attrs.version "2.0"
-               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
-               else "lib/tzinfo/zoneinfo_data_source.rb";
+        path =
+          if lib.versionAtLeast attrs.version "2.0"
+          then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+          else "lib/tzinfo/zoneinfo_data_source.rb";
       in
-        ''
-          substituteInPlace ${path} \
-            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-        '';
+      ''
+        substituteInPlace ${path} \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
   };
 
   uuid4r = attrs: {

@@ -1,4 +1,15 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
+{ lib
+, python3Packages
+, gobject-introspection
+, libappindicator-gtk3
+, libnotify
+, gtk3
+, gnome
+, xprintidle-ng
+, wrapGAppsHook
+, gdk-pixbuf
+, shared-mime-info
+, librsvg
 }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi croniter;

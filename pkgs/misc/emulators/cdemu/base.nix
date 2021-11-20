@@ -1,5 +1,5 @@
 { pkgName, version, pkgSha256 }:
-{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {} }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? { } }:
 let name = "${pkgName}-${version}";
 in stdenv.mkDerivation ({
   inherit name buildInputs;

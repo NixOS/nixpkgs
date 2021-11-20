@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, boost
-, zlib, libpng, libjpeg, libtiff, xlibsWrapper, SDL
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, boost
+, zlib
+, libpng
+, libjpeg
+, libtiff
+, xlibsWrapper
+, SDL
 }:
 
 stdenv.mkDerivation rec {

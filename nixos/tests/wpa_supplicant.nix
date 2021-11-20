@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "wpa_supplicant";
   meta = with lib.maintainers; {
@@ -33,9 +33,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
         nixos-test.psk = "@PSK_NIXOS_TEST@";
 
         # secrets substitution test cases
-        test1.psk = "@PSK_VALID@";              # should be replaced
-        test2.psk = "@PSK_SPECIAL@";            # should be replaced
-        test3.psk = "@PSK_MISSING@";            # should not be replaced
+        test1.psk = "@PSK_VALID@"; # should be replaced
+        test2.psk = "@PSK_SPECIAL@"; # should be replaced
+        test3.psk = "@PSK_MISSING@"; # should not be replaced
         test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
       };
 

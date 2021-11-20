@@ -9,15 +9,15 @@ let
   mongodb = cfg.package;
 
   mongoCnf = cfg: pkgs.writeText "mongodb.conf"
-  ''
-    net.bindIp: ${cfg.bind_ip}
-    ${optionalString cfg.quiet "systemLog.quiet: true"}
-    systemLog.destination: syslog
-    storage.dbPath: ${cfg.dbpath}
-    ${optionalString cfg.enableAuth "security.authorization: enabled"}
-    ${optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
-    ${cfg.extraConfig}
-  '';
+    ''
+      net.bindIp: ${cfg.bind_ip}
+      ${optionalString cfg.quiet "systemLog.quiet: true"}
+      systemLog.destination: syslog
+      storage.dbPath: ${cfg.dbpath}
+      ${optionalString cfg.enableAuth "security.authorization: enabled"}
+      ${optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
+      ${cfg.extraConfig}
+    '';
 
 in
 
@@ -116,23 +116,26 @@ in
 
   config = mkIf config.services.mongodb.enable {
     assertions = [
-      { assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
+      {
+        assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
         message = "`enableAuth` requires `initialRootPassword` to be set.";
       }
     ];
 
     users.users.mongodb = mkIf (cfg.user == "mongodb")
-      { name = "mongodb";
+      {
+        name = "mongodb";
         isSystemUser = true;
         group = "mongodb";
         description = "MongoDB server user";
       };
-    users.groups.mongodb = mkIf (cfg.user == "mongodb") {};
+    users.groups.mongodb = mkIf (cfg.user == "mongodb") { };
 
     environment.systemPackages = [ mongodb ];
 
     systemd.services.mongodb =
-      { description = "MongoDB server";
+      {
+        description = "MongoDB server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -142,22 +145,24 @@ in
           User = cfg.user;
           PIDFile = cfg.pidFile;
           Type = "forking";
-          TimeoutStartSec=120; # intial creating of journal can take some time
+          TimeoutStartSec = 120; # intial creating of journal can take some time
           PermissionsStartOnly = true;
         };
 
-        preStart = let
-          cfg_ = cfg // { enableAuth = false; bind_ip = "127.0.0.1"; };
-        in ''
-          rm ${cfg.dbpath}/mongod.lock || true
-          if ! test -e ${cfg.dbpath}; then
-              install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
-              # See postStart!
-              touch ${cfg.dbpath}/.first_startup
-          fi
-          if ! test -e ${cfg.pidFile}; then
-              install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
-          fi '' + lib.optionalString cfg.enableAuth ''
+        preStart =
+          let
+            cfg_ = cfg // { enableAuth = false; bind_ip = "127.0.0.1"; };
+          in
+          ''
+            rm ${cfg.dbpath}/mongod.lock || true
+            if ! test -e ${cfg.dbpath}; then
+                install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
+                # See postStart!
+                touch ${cfg.dbpath}/.first_startup
+            fi
+            if ! test -e ${cfg.pidFile}; then
+                install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
+            fi '' + lib.optionalString cfg.enableAuth ''
 
           if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
             systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
@@ -183,12 +188,12 @@ in
           fi
         '';
         postStart = ''
-            if test -e "${cfg.dbpath}/.first_startup"; then
-              ${optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo ${optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
-              ''}
-              rm -f "${cfg.dbpath}/.first_startup"
-            fi
+          if test -e "${cfg.dbpath}/.first_startup"; then
+            ${optionalString (cfg.initialScript != null) ''
+              ${mongodb}/bin/mongo ${optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
+            ''}
+            rm -f "${cfg.dbpath}/.first_startup"
+          fi
         '';
       };
 

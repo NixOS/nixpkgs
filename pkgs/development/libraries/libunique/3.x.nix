@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config
-, dbus, dbus-glib, gtk3, gobject-introspection
-, gtk-doc, docbook_xml_dtd_45, docbook_xsl
-, libxslt, libxml2 }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, dbus
+, dbus-glib
+, gtk3
+, gobject-introspection
+, gtk-doc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+, libxml2
+}:
 
 with lib;
 stdenv.mkDerivation rec {

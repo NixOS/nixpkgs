@@ -27,7 +27,7 @@ let cfg = config.services.victoriametrics; in
     };
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra options to pass to VictoriaMetrics. See the README: <link
         xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md" />

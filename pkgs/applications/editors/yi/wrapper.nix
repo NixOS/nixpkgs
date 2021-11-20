@@ -1,8 +1,10 @@
 # To use this for hacking of your Yi config file, drop into a shell
 # with env attribute.
-{ lib, stdenv, makeWrapper
+{ lib
+, stdenv
+, makeWrapper
 , haskellPackages
-, extraPackages ? (s: [])
+, extraPackages ? (s: [ ])
 }:
 let
   yiEnv = haskellPackages.ghcWithPackages

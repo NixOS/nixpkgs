@@ -8,7 +8,7 @@ let
 
   indentLines = n: str: concatStringsSep "\n" (
     map (line: "${fixedWidthString n " " " "}${line}") (
-      filter ( x: x != "" ) ( splitString "\n" str )
+      filter (x: x != "") (splitString "\n" str)
     )
   );
 
@@ -18,7 +18,8 @@ let
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
   hexStr = addCheckDesc "hexadecimal string" types.str isHexString;
 
-in {
+in
+{
 
   options.services.multipath = with types; {
 
@@ -134,8 +135,21 @@ in {
 
           prio = mkOption {
             type = nullOr (enum [
-              "none" "const" "sysfs" "emc" "alua" "ontap" "rdac" "hp_sw" "hds"
-              "random" "weightedpath" "path_latency" "ana" "datacore" "iet"
+              "none"
+              "const"
+              "sysfs"
+              "emc"
+              "alua"
+              "ontap"
+              "rdac"
+              "hp_sw"
+              "hds"
+              "random"
+              "weightedpath"
+              "path_latency"
+              "ana"
+              "datacore"
+              "iet"
             ]);
             default = null; # real default: "const"
             description = "The name of the path priority routine";
@@ -505,14 +519,16 @@ in {
       let
         inherit (cfg) defaults blacklist blacklist_exceptions overrides;
 
-        mkDeviceBlock = cfg: let
-          nonNullCfg = lib.filterAttrs (k: v: v != null) cfg;
-          attrs = lib.mapAttrsToList (name: value: "  ${name} ${toString value}") nonNullCfg;
-        in ''
-          device {
-          ${lib.concatStringsSep "\n" attrs}
-          }
-        '';
+        mkDeviceBlock = cfg:
+          let
+            nonNullCfg = lib.filterAttrs (k: v: v != null) cfg;
+            attrs = lib.mapAttrsToList (name: value: "  ${name} ${toString value}") nonNullCfg;
+          in
+          ''
+            device {
+            ${lib.concatStringsSep "\n" attrs}
+            }
+          '';
         devices = lib.concatMapStringsSep "\n" mkDeviceBlock cfg.devices;
 
         mkMultipathBlock = m: ''
@@ -523,7 +539,8 @@ in {
         '';
         multipaths = lib.concatMapStringsSep "\n" mkMultipathBlock cfg.pathGroups;
 
-      in ''
+      in
+      ''
         devices {
         ${indentLines 2 devices}
         }

@@ -1,5 +1,17 @@
-{ stdenv, lib, fetchurl, pkg-config, m4, perl, libarchive, openssl, zlib, bzip2,
-xz, curl, runtimeShell }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, m4
+, perl
+, libarchive
+, openssl
+, zlib
+, bzip2
+, xz
+, curl
+, runtimeShell
+}:
 
 stdenv.mkDerivation rec {
   pname = "pacman";

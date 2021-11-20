@@ -1,9 +1,17 @@
 { version, sha256 }:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, perl
+, xz
+, gettext
 
-# we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+  # we are a dependency of gcc, this simplifies bootstraping
+, interactive ? false
+, ncurses
+, procps
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

@@ -82,14 +82,14 @@ in
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional command line arguments to pass to Pixiecore";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups.pixiecore = {};
+    users.groups.pixiecore = { };
     users.users.pixiecore = {
       description = "Pixiecore daemon user";
       group = "pixiecore";
@@ -103,9 +103,9 @@ in
 
     systemd.services.pixiecore = {
       description = "Pixiecore server";
-      after = [ "network.target"];
-      wants = [ "network.target"];
-      wantedBy = [ "multi-user.target"];
+      after = [ "network.target" ];
+      wants = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "pixiecore";
         Restart = "always";
@@ -115,20 +115,20 @@ in
             argString =
               if cfg.mode == "boot"
               then [ "boot" cfg.kernel ]
-                   ++ optional (cfg.initrd != "") cfg.initrd
-                   ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
+                ++ optional (cfg.initrd != "") cfg.initrd
+                ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
               else [ "api" cfg.apiServer ];
           in
-            ''
-              ${pkgs.pixiecore}/bin/pixiecore \
-                ${lib.escapeShellArgs argString} \
-                ${optionalString cfg.debug "--debug"} \
-                ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
-                --listen-addr ${lib.escapeShellArg cfg.listen} \
-                --port ${toString cfg.port} \
-                --status-port ${toString cfg.statusPort} \
-                ${escapeShellArgs cfg.extraArguments}
-              '';
+          ''
+            ${pkgs.pixiecore}/bin/pixiecore \
+              ${lib.escapeShellArgs argString} \
+              ${optionalString cfg.debug "--debug"} \
+              ${optionalString cfg.dhcpNoBind "--dhcp-no-bind"} \
+              --listen-addr ${lib.escapeShellArg cfg.listen} \
+              --port ${toString cfg.port} \
+              --status-port ${toString cfg.statusPort} \
+              ${escapeShellArgs cfg.extraArguments}
+          '';
       };
     };
   };

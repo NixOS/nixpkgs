@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
   ];
 
@@ -119,7 +119,7 @@ buildPythonPackage rec {
     fixtures
     pytest-timeout
     qiskit-terra
-    setuptools  # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
+    setuptools # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
     testtools
   ];
   pytestFlagsArray = [

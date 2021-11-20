@@ -109,7 +109,8 @@ let
 
       # make config file readable by service
       chown -R --reference=$HOME $(dirname ${configPath})
-    '');
+    ''
+  );
   startScript = pkgs.writeShellScriptBin "gitlab-runner-start" ''
     export CONFIG_FILE=${configPath}
     exec gitlab-runner run --working-directory $HOME
@@ -569,13 +570,15 @@ in
       };
     };
     # Enable docker if `docker` executor is used in any service
-    virtualisation.docker.enable = mkIf (
-      any (s: s.executor == "docker") (attrValues cfg.services)
-    ) (mkDefault true);
+    virtualisation.docker.enable = mkIf
+      (
+        any (s: s.executor == "docker") (attrValues cfg.services)
+      )
+      (mkDefault true);
   };
   imports = [
-    (mkRenamedOptionModule [ "services" "gitlab-runner" "packages" ] [ "services" "gitlab-runner" "extraPackages" ] )
-    (mkRemovedOptionModule [ "services" "gitlab-runner" "configOptions" ] "Use services.gitlab-runner.services option instead" )
-    (mkRemovedOptionModule [ "services" "gitlab-runner" "workDir" ] "You should move contents of workDir (if any) to /var/lib/gitlab-runner" )
+    (mkRenamedOptionModule [ "services" "gitlab-runner" "packages" ] [ "services" "gitlab-runner" "extraPackages" ])
+    (mkRemovedOptionModule [ "services" "gitlab-runner" "configOptions" ] "Use services.gitlab-runner.services option instead")
+    (mkRemovedOptionModule [ "services" "gitlab-runner" "workDir" ] "You should move contents of workDir (if any) to /var/lib/gitlab-runner")
   ];
 }

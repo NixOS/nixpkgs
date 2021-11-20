@@ -3,7 +3,7 @@
 , pruviloj
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "descncrunch";
   version = "2017-11-15";
 

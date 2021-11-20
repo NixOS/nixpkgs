@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "asn1ate";
-  version= "0.6";
+  version = "0.6";
 
   src = fetchFromGitHub {
     sha256 = "1p8hv4gsyqsdr0gafcq497n52pybiqmc22di8ai4nsj60fv0km45";

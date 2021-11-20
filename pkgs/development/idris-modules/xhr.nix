@@ -3,7 +3,7 @@
 , idrisscript
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "xhr";
   version = "2017-04-22";
 

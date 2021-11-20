@@ -1,5 +1,13 @@
-{ fetchgit, lib, stdenv, pkg-config, libnsl, libtirpc, autoreconfHook
-, useSystemd ? true, systemd }:
+{ fetchgit
+, lib
+, stdenv
+, pkg-config
+, libnsl
+, libtirpc
+, autoreconfHook
+, useSystemd ? true
+, systemd
+}:
 
 stdenv.mkDerivation {
   pname = "rpcbind";
@@ -16,7 +24,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ libnsl libtirpc ]
-             ++ lib.optional useSystemd systemd;
+    ++ lib.optional useSystemd systemd;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"

@@ -20,7 +20,8 @@ let
     '';
   };
 
-in {
+in
+{
 
   options = {
     services.activemq = {

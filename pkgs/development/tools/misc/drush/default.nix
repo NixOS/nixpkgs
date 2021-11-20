@@ -6,21 +6,21 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";
-    homepage    = "https://github.com/drush-ops/drush";
-    license     = licenses.gpl2;
+    homepage = "https://github.com/drush-ops/drush";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 
   src = fetchFromGitHub {
     owner = "drush-ops";
-    repo  = pname;
+    repo = pname;
     rev = version;
     sha256 = "sha256-0nf/m+xJmfHsFLuordiMp8UyrGGXuS70+zFHkIxLWhU=";
   };
 
   consoleTable = fetchurl {
-    url    = "http://download.pear.php.net/package/Console_Table-1.1.3.tgz";
+    url = "http://download.pear.php.net/package/Console_Table-1.1.3.tgz";
     sha256 = "07gbjd7m1fj5dmavr0z20vkqwx1cz2522sj9022p257jifj1yl76";
   };
 

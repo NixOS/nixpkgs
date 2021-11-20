@@ -1,12 +1,21 @@
-{ stdenv, lib, fetchurl, pkg-config, makeWrapper
-, libusb1, tcl, util-linux, coreutils, bash }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, makeWrapper
+, libusb1
+, tcl
+, util-linux
+, coreutils
+, bash
+}:
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch";
   version = "2.6.0";
 
   src = fetchurl {
-    url    = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
     sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
   };
 

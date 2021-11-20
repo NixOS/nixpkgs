@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
-, xapian, glib, gmime3, texinfo, emacs, guile
-, gtk3, webkitgtk, libsoup, icu
+{ lib
+, stdenv
+, fetchFromGitHub
+, sqlite
+, pkg-config
+, autoreconfHook
+, pmccabe
+, xapian
+, glib
+, gmime3
+, texinfo
+, emacs
+, guile
+, gtk3
+, webkitgtk
+, libsoup
+, icu
 , makeWrapper
 , withMug ? false
-, batchSize ? null }:
+, batchSize ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "mu";
   version = "1.6.10";
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = version;
+    owner = "djcb";
+    repo = "mu";
+    rev = version;
     sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
   };
 
@@ -22,11 +37,18 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+    sqlite
+    xapian
+    glib
+    gmime3
+    texinfo
+    emacs
+    libsoup
+    icu
   ]
-    # Workaround for https://github.com/djcb/mu/issues/1641
-    ++ lib.optional (!stdenv.isDarwin) guile
-    ++ lib.optionals withMug [ gtk3 webkitgtk ];
+  # Workaround for https://github.com/djcb/mu/issues/1641
+  ++ lib.optional (!stdenv.isDarwin) guile
+  ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
 

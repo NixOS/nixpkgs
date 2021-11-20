@@ -1,7 +1,16 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, urllib3, certifi
-, gevent, geventhttpclient, mock, fastimport
-, git, glibcLocales }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, urllib3
+, certifi
+, gevent
+, geventhttpclient
+, mock
+, fastimport
+, git
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   version = "0.19.16";

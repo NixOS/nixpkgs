@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre-cpp
+, sqlite
+, ncurses
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+}:
 
 stdenv.mkDerivation rec {
   pname = "lnav";

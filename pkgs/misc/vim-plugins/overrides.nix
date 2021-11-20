@@ -39,7 +39,7 @@
 , ycmd
 , nodejs
 
-# test dependencies
+  # test dependencies
 , neovim-unwrapped
 
   # command-t dependencies
@@ -401,29 +401,31 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
-    # We only need its dependencies `node-modules`.
-    nodeDep = nodePackages."markdown-preview-nvim-../../misc/vim-plugins/markdown-preview-nvim".overrideAttrs (old: {
-      dontNpmInstall = true;
-    });
-  in {
-    patches = [
-      (substituteAll {
-        src = ./markdown-preview-nvim/fix-node-paths.patch;
-        node = "${nodejs}/bin/node";
-      })
-    ];
-    postInstall = ''
-      # The node package name is `*-vim` not `*-nvim`.
-      ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
-    '';
+  markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old:
+    let
+      # We only need its dependencies `node-modules`.
+      nodeDep = nodePackages."markdown-preview-nvim-../../misc/vim-plugins/markdown-preview-nvim".overrideAttrs (old: {
+        dontNpmInstall = true;
+      });
+    in
+    {
+      patches = [
+        (substituteAll {
+          src = ./markdown-preview-nvim/fix-node-paths.patch;
+          node = "${nodejs}/bin/node";
+        })
+      ];
+      postInstall = ''
+        # The node package name is `*-vim` not `*-nvim`.
+        ln -s ${nodeDep}/lib/node_modules/markdown-preview-vim/node_modules $out/app
+      '';
 
-    nativeBuildInputs = [ nodejs ];
-    doInstallCheck = true;
-    installCheckPhase = ''
-      node $out/app/index.js --version
-    '';
-  });
+      nativeBuildInputs = [ nodejs ];
+      doInstallCheck = true;
+      installCheckPhase = ''
+        node $out/app/index.js --version
+      '';
+    });
 
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
@@ -528,12 +530,14 @@ self: super: {
   });
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
-    postPatch = let
-      libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
-    in ''
-      substituteInPlace lua/sqlite/defs.lua \
-        --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
-    '';
+    postPatch =
+      let
+        libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
+      in
+      ''
+        substituteInPlace lua/sqlite/defs.lua \
+          --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
+      '';
   });
 
   statix = buildVimPluginFrom2Nix rec {

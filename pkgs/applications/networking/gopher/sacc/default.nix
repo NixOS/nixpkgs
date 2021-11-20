@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ncurses, libressl
-, patches ? [] # allow users to easily override config.def.h
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, libressl
+, patches ? [ ] # allow users to easily override config.def.h
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config.mk \
       --replace curses ncurses \
       --replace "/usr/local" "$out"
-    '';
+  '';
 
   meta = with lib; {
     description = "A terminal gopher client";

@@ -1,4 +1,6 @@
-{ lib, fetchurl, buildDunePackage
+{ lib
+, fetchurl
+, buildDunePackage
 , ppx_tools_versioned
 , ocaml-migrate-parsetree
 }:
@@ -17,7 +19,8 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    ppx_tools_versioned ocaml-migrate-parsetree
+    ppx_tools_versioned
+    ocaml-migrate-parsetree
   ];
 
   meta = {

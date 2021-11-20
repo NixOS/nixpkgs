@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, buildGoPackage}:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   pname = "ical2org";
-  version="1.1.5";
+  version = "1.1.5";
 
   goPackagePath = "github.com/rjhorniii/ical2org";
 

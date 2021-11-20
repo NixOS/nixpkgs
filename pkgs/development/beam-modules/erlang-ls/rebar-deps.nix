@@ -216,4 +216,5 @@ let
       beamDeps = [ jsx ];
     };
   };
-in self
+in
+self

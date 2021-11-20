@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numba" ];
 
-  meta =  with lib; {
+  meta = with lib; {
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     description = "Compiling Python code using LLVM";

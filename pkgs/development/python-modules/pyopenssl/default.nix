@@ -57,7 +57,7 @@ let
   );
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = lib.optionalString (disabledTests != [])
+  testExpression = lib.optionalString (disabledTests != [ ])
     "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
 
 in

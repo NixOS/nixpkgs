@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, gcc, makeWrapper
-, db, gmp, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, gcc
+, makeWrapper
+, db
+, gmp
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
@@ -14,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ db gmp ncurses ];
 
-  cflags  = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  cflags = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
   ldflags = lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
 
   cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";

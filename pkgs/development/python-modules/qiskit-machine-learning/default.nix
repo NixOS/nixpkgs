@@ -43,7 +43,7 @@ buildPythonPackage rec {
     sparse
   ] ++ lib.optional withTorch pytorch;
 
-  doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
+  doCheck = false; # TODO: enable. Tests fail on unstable due to some multithreading issue?
   checkInputs = [
     pytestCheckHook
     pytest-timeout
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     "--durations=10"
     "--showlocals"
     "-vv"
-    "--ignore=test/connectors/test_torch_connector.py"  # TODO: fix, get multithreading errors with python3.9, segfaults
+    "--ignore=test/connectors/test_torch_connector.py" # TODO: fix, get multithreading errors with python3.9, segfaults
   ];
   disabledTests = [
     # Slow tests >10 s

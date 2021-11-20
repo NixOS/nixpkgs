@@ -14,7 +14,8 @@ let
     };
   };
 
-in with py.pkgs;
+in
+with py.pkgs;
 buildPythonApplication rec {
   pname = "devpi-server";
   version = "6.2.0";

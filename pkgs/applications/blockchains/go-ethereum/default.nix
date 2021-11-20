@@ -7,7 +7,8 @@ let
     "clef"
   ];
 
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "go-ethereum";
   version = "1.10.8";
 

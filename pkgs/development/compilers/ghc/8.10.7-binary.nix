@@ -1,7 +1,13 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gcc
 , ncurses5
-, ncurses6, gmp, libiconv, numactl
+, ncurses6
+, gmp
+, libiconv
+, numactl
 , llvmPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
@@ -177,7 +183,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs =
     lib.optionals useLLVM [ llvmPackages.llvm ]
-    ;
+  ;
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -194,14 +200,17 @@ stdenv.mkDerivation rec {
       # Note the `*` glob because some GHCs have a suffix when unpacked, e.g.
       # the musl bindist has dir `ghc-VERSION-x86_64-unknown-linux/`.
       # As a result, don't shell-quote this glob when splicing the string.
-      (let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
+      (
+        let buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"''; in
         lib.concatStringsSep "\n" [
-          (''
-            echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
-            if ! test -e ${buildExeGlob}; then
-              echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
-            fi
-          '')
+          (
+            ''
+              echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
+              if ! test -e ${buildExeGlob}; then
+                echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
+              fi
+            ''
+          )
           (lib.concatMapStringsSep
             "\n"
             ({ fileToCheckFor, nixPackage }:
@@ -219,7 +228,8 @@ stdenv.mkDerivation rec {
             )
             binDistUsed.archSpecificLibraries
           )
-        ])
+        ]
+      )
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
     + lib.optionalString stdenv.isDarwin ''
@@ -271,8 +281,8 @@ stdenv.mkDerivation rec {
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
@@ -298,33 +308,33 @@ stdenv.mkDerivation rec {
   # find editline/gmp.
   postFixup = lib.optionalString stdenv.isLinux
     (if stdenv.hostPlatform.isAarch64 then
-      # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
-      # are 2 directories deep from $out/lib, so pooling symlinks there makes
-      # a short rpath.
+    # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
+    # are 2 directories deep from $out/lib, so pooling symlinks there makes
+    # a short rpath.
       ''
-      (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
-      (cd $out/lib; ln -s ${gmp.out}/lib/libgmp.so.10)
-      (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
-      for p in $(find "$out/lib" -type f -name "*\.so*"); do
-        (cd $out/lib; ln -s $p)
-      done
+        (cd $out/lib; ln -s ${ncurses6.out}/lib/libtinfo.so.6)
+        (cd $out/lib; ln -s ${gmp.out}/lib/libgmp.so.10)
+        (cd $out/lib; ln -s ${numactl.out}/lib/libnuma.so.1)
+        for p in $(find "$out/lib" -type f -name "*\.so*"); do
+          (cd $out/lib; ln -s $p)
+        done
 
-      for p in $(find "$out/lib" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
-        fi
-      done
+        for p in $(find "$out/lib" -type f -executable); do
+          if isELF "$p"; then
+            echo "Patchelfing $p"
+            patchelf --set-rpath "\$ORIGIN:\$ORIGIN/../.." $p
+          fi
+        done
       ''
     else
       ''
-      for p in $(find "$out" -type f -executable); do
-        if isELF "$p"; then
-          echo "Patchelfing $p"
-          patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
-        fi
-      done
-    '') + lib.optionalString stdenv.isDarwin ''
+        for p in $(find "$out" -type f -executable); do
+          if isELF "$p"; then
+            echo "Patchelfing $p"
+            patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
+          fi
+        done
+      '') + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue

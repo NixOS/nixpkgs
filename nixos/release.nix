@@ -3,7 +3,7 @@ with import ../lib;
 { nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
-, configuration ? {}
+, configuration ? { }
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
@@ -26,13 +26,14 @@ let
       };
     };
   allTests =
-    foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
+    foldAttrs recursiveUpdate { } (map allTestsForSystem supportedSystems);
 
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
-    { system.nixos.versionSuffix = versionSuffix;
+    {
+      system.nixos.versionSuffix = versionSuffix;
       system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
@@ -41,49 +42,54 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import ./.. { inherit system; };
+      with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules = makeModules module {
-        isoImage.isoBaseName = "nixos-${type}";
-      };
-    }).config.system.build.isoImage);
+      hydraJob (
+        (import lib/eval-config.nix {
+          inherit system;
+          modules = makeModules module {
+            isoImage.isoBaseName = "nixos-${type}";
+          };
+        }).config.system.build.isoImage
+      );
 
 
   makeSdImage =
     { module, system, ... }:
 
-    with import ./.. { inherit system; };
+      with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules = makeModules module {};
-    }).config.system.build.sdImage);
+      hydraJob (
+        (import lib/eval-config.nix {
+          inherit system;
+          modules = makeModules module { };
+        }).config.system.build.sdImage
+      );
 
 
   makeSystemTarball =
-    { module, maintainers ? ["viric"], system }:
+    { module, maintainers ? [ "viric" ], system }:
 
-    with import ./.. { inherit system; };
+      with import ./.. { inherit system; };
 
-    let
+      let
 
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules = makeModules module {};
-      }).config;
+        config = (import lib/eval-config.nix {
+          inherit system;
+          modules = makeModules module { };
+        }).config;
 
-      tarball = config.system.build.tarball;
+        tarball = config.system.build.tarball;
 
-    in
+      in
       tarball //
-        { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
-            maintainers = map (x: lib.maintainers.${x}) maintainers;
-          };
-          inherit config;
+      {
+        meta = {
+          description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
+          maintainers = map (x: lib.maintainers.${x}) maintainers;
         };
+        inherit config;
+      };
 
 
   makeClosure = module: buildFromConfig module (config: config.system.build.toplevel);
@@ -93,37 +99,39 @@ let
     inherit system;
     modules = makeModules module
       ({ ... }:
-      { fileSystems."/".device  = mkDefault "/dev/sda1";
-        boot.loader.grub.device = mkDefault "/dev/sda";
-      });
+        {
+          fileSystems."/".device = mkDefault "/dev/sda1";
+          boot.loader.grub.device = mkDefault "/dev/sda";
+        });
   }).config));
 
   makeNetboot = { module, system, ... }:
     let
       configEvaled = import lib/eval-config.nix {
         inherit system;
-        modules = makeModules module {};
+        modules = makeModules module { };
       };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
-      pkgs.symlinkJoin {
-        name = "netboot";
-        paths = [
-          build.netbootRamdisk
-          build.kernel
-          build.netbootIpxeScript
-        ];
-        postBuild = ''
-          mkdir -p $out/nix-support
-          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
-          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
-          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
-        '';
-        preferLocalBuild = true;
-      };
+    pkgs.symlinkJoin {
+      name = "netboot";
+      paths = [
+        build.netbootRamdisk
+        build.kernel
+        build.netbootIpxeScript
+      ];
+      postBuild = ''
+        mkdir -p $out/nix-support
+        echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+        echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+        echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
+      '';
+      preferLocalBuild = true;
+    };
 
-in rec {
+in
+rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
@@ -171,17 +179,17 @@ in rec {
 
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
     module = {
-        armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
-        armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
-        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
-      }.${system};
+      armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
+      armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
+      aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
+    }.${system};
     inherit system;
   });
 
   sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = {
-        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
-      }.${system};
+      aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
+    }.${system};
     type = "minimal-new-kernel";
     inherit system;
   });
@@ -191,13 +199,16 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ versionModule
-          ./modules/installer/virtualbox-demo.nix
-        ];
-    }).config.system.build.virtualBoxOVA)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            versionModule
+            ./modules/installer/virtualbox-demo.nix
+          ];
+      }).config.system.build.virtualBoxOVA
+    )
 
   );
 
@@ -207,28 +218,34 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-        ];
-    }).config.system.build.amazonImage)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            configuration
+            versionModule
+            ./maintainers/scripts/ec2/amazon-image.nix
+          ];
+      }).config.system.build.amazonImage
+    )
 
   );
   amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image-zfs.nix
-        ];
-    }).config.system.build.amazonImage)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            configuration
+            versionModule
+            ./maintainers/scripts/ec2/amazon-image-zfs.nix
+          ];
+      }).config.system.build.amazonImage
+    )
 
   );
 
@@ -239,15 +256,18 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
-        ];
-    }).config.system.build.amazonImage)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            configuration
+            versionModule
+            ./maintainers/scripts/ec2/amazon-image.nix
+            ({ ... }: { amazonImage.sizeMB = "auto"; })
+          ];
+      }).config.system.build.amazonImage
+    )
 
   );
 
@@ -256,14 +276,17 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
-        ];
-    }).config.system.build.tarball)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            configuration
+            versionModule
+            ./maintainers/scripts/lxd/lxd-image.nix
+          ];
+      }).config.system.build.tarball
+    )
 
   );
 
@@ -272,23 +295,28 @@ in rec {
 
     with import ./.. { inherit system; };
 
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/lxd/lxd-image.nix
-        ];
-    }).config.system.build.metadata)
+    hydraJob (
+      (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [
+            configuration
+            versionModule
+            ./maintainers/scripts/lxd/lxd-image.nix
+          ];
+      }).config.system.build.metadata
+    )
 
   );
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
-    { toplevel = (import lib/eval-config.nix {
+    {
+      toplevel = (import lib/eval-config.nix {
         inherit system;
         modules = singleton ({ ... }:
-          { fileSystems."/".device  = mkDefault "/dev/sda1";
+          {
+            fileSystems."/".device = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
             system.stateVersion = mkDefault "18.03";
           });
@@ -303,10 +331,10 @@ in rec {
   # The pc variant helps preparing the expression for the system tarball
   # in a machine faster than the sheevpalug
   /*
-  system_tarball_pc = forAllSystems (system: makeSystemTarball {
+    system_tarball_pc = forAllSystems (system: makeSystemTarball {
     module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     inherit system;
-  });
+    });
   */
 
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
@@ -316,14 +344,14 @@ in rec {
   });
 
   /*
-  system_tarball_fuloong2f =
+    system_tarball_fuloong2f =
     assert builtins.currentSystem == "mips64-linux";
     makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
       system = "mips64-linux";
     };
 
-  system_tarball_sheevaplug =
+    system_tarball_sheevaplug =
     assert builtins.currentSystem == "armv5tel-linux";
     makeSystemTarball {
       module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
@@ -339,44 +367,52 @@ in rec {
   closures = {
 
     smallContainer = makeClosure ({ ... }:
-      { boot.isContainer = true;
+      {
+        boot.isContainer = true;
         services.openssh.enable = true;
       });
 
     tinyContainer = makeClosure ({ ... }:
-      { boot.isContainer = true;
+      {
+        boot.isContainer = true;
         imports = [ modules/profiles/minimal.nix ];
       });
 
     ec2 = makeClosure ({ ... }:
-      { imports = [ modules/virtualisation/amazon-image.nix ];
+      {
+        imports = [ modules/virtualisation/amazon-image.nix ];
       });
 
     kde = makeClosure ({ ... }:
-      { services.xserver.enable = true;
+      {
+        services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 
     xfce = makeClosure ({ ... }:
-      { services.xserver.enable = true;
+      {
+        services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
       });
 
     gnome = makeClosure ({ ... }:
-      { services.xserver.enable = true;
+      {
+        services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
         services.xserver.desktopManager.gnome.enable = true;
       });
 
     pantheon = makeClosure ({ ... }:
-      { services.xserver.enable = true;
+      {
+        services.xserver.enable = true;
         services.xserver.desktopManager.pantheon.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
-      { services.httpd.enable = true;
+      {
+        services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.httpd.enablePHP = true;
         services.postgresql.enable = true;

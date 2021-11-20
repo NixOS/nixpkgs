@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl
+{ lib
+, buildDunePackage
+, fetchurl
 , ocaml
-, astring, ptime, rresult, qcheck
+, astring
+, ptime
+, rresult
+, qcheck
 }:
 
 buildDunePackage rec {

@@ -3,7 +3,8 @@
 let
   pname = "aldo";
   version = "0.7.8";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchgit {

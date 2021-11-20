@@ -2,7 +2,8 @@
 
 let
   version = "0.34.7";
-in fetchurl {
+in
+fetchurl {
   name = "sarasa-gothic-${version}";
 
   # Use the 'ttc' files here for a smaller closure size.

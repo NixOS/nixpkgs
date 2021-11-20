@@ -33,9 +33,9 @@ let
       # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
       firstDevice = head (splitString ":" fs.device);
     in
-      ''
-        tryUnlock ${name} ${firstDevice}
-      '';
+    ''
+      tryUnlock ${name} ${firstDevice}
+    '';
 
 in
 
@@ -48,7 +48,7 @@ in
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     }
 
-    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != { })) {
       # chacha20 and poly1305 are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];
 

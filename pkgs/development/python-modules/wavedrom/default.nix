@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_upstream"  # requires to clone a full git repository
+    "test_upstream" # requires to clone a full git repository
   ];
 
   pythonImportsCheck = [ "wavedrom" ];

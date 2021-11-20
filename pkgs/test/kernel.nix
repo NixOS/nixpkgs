@@ -18,7 +18,7 @@ let
     }).configfile.structuredConfig;
 
   mandatoryVsOptionalConfig = mkMerge [
-    { NIXOS_FAKE_USB_DEBUG = yes;}
+    { NIXOS_FAKE_USB_DEBUG = yes; }
     { NIXOS_FAKE_USB_DEBUG = option yes; }
   ];
 
@@ -29,24 +29,24 @@ let
 
   yesWinsOverNoConfig = mkMerge [
     # default for "NIXOS_TEST_BOOLEAN" is no
-    { "NIXOS_TEST_BOOLEAN"  = yes; } # yes wins over no by default
-    { "NIXOS_TEST_BOOLEAN"  = no; }
+    { "NIXOS_TEST_BOOLEAN" = yes; } # yes wins over no by default
+    { "NIXOS_TEST_BOOLEAN" = no; }
   ];
 
   optionalNoWins = mkMerge [
-    { NIXOS_FAKE_USB_DEBUG = option yes;}
-    { NIXOS_FAKE_USB_DEBUG = yes;}
+    { NIXOS_FAKE_USB_DEBUG = option yes; }
+    { NIXOS_FAKE_USB_DEBUG = yes; }
   ];
 
   allOptionalRemainOptional = mkMerge [
-    { NIXOS_FAKE_USB_DEBUG = option yes;}
-    { NIXOS_FAKE_USB_DEBUG = option yes;}
+    { NIXOS_FAKE_USB_DEBUG = option yes; }
+    { NIXOS_FAKE_USB_DEBUG = option yes; }
   ];
 
 in
 runTests {
   testEasy = {
-    expr = (getConfig { NIXOS_FAKE_USB_DEBUG = yes;}).NIXOS_FAKE_USB_DEBUG;
+    expr = (getConfig { NIXOS_FAKE_USB_DEBUG = yes; }).NIXOS_FAKE_USB_DEBUG;
     expected = { tristate = "y"; optional = false; freeform = null; };
   };
 
@@ -69,11 +69,13 @@ runTests {
   # check that freeform options are unique
   # Should trigger
   # > The option `settings.NIXOS_FAKE_MMC_BLOCK_MINORS.freeform' has conflicting definitions, in `<unknown-file>' and `<unknown-file>'
-  testTreeform = let
-    res = builtins.tryEval ( (getConfig freeformConfig).NIXOS_FAKE_MMC_BLOCK_MINORS.freeform);
-  in {
-    expr = res.success;
-    expected = false;
-  };
+  testTreeform =
+    let
+      res = builtins.tryEval ((getConfig freeformConfig).NIXOS_FAKE_MMC_BLOCK_MINORS.freeform);
+    in
+    {
+      expr = res.success;
+      expected = false;
+    };
 
 }

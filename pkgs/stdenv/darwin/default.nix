@@ -12,7 +12,8 @@
         url = "http://tarballs.nixos.org/stdenv-darwin/aarch64/20acd4c4f14040485f40e55c0a76c186aa8ca4f3/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
-      }; in
+      };
+    in
     {
       sh = fetch { file = "sh"; sha256 = "17m3xrlbl99j3vm7rzz3ghb47094dyddrbvs2a6jalczvmx7spnj"; };
       bzip2 = fetch { file = "bzip2"; sha256 = "1khs8s5klf76plhlvlc1ma838r8pc1qigk9f5bdycwgbn0nx240q"; };
@@ -26,7 +27,8 @@
         url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
-      }; in
+      };
+    in
     {
       sh = fetch { file = "sh"; sha256 = "sha256-igMAVEfumFv/LUNTGfNi2nSehgTNIP4Sg+f3L7u6SMA="; };
       bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
@@ -111,19 +113,22 @@ rec {
       '';
 
       mkCC = overrides: import ../../build-support/cc-wrapper (
-        let args = {
-          inherit lib shell;
-          inherit (last) stdenvNoCC;
+        let
+          args = {
+            inherit lib shell;
+            inherit (last) stdenvNoCC;
 
-          nativeTools = false;
-          nativeLibc = false;
-          inherit buildPackages libcxx;
-          inherit (last.pkgs) coreutils gnugrep;
-          bintools = last.pkgs.darwin.binutils;
-          libc = last.pkgs.darwin.Libsystem;
-          isClang = true;
-          cc = last.pkgs."${finalLlvmPackages}".clang-unwrapped;
-        }; in args // (overrides args)
+            nativeTools = false;
+            nativeLibc = false;
+            inherit buildPackages libcxx;
+            inherit (last.pkgs) coreutils gnugrep;
+            bintools = last.pkgs.darwin.binutils;
+            libc = last.pkgs.darwin.Libsystem;
+            isClang = true;
+            cc = last.pkgs."${finalLlvmPackages}".clang-unwrapped;
+          };
+        in
+        args // (overrides args)
       );
 
       cc = if last == null then "/dev/null" else

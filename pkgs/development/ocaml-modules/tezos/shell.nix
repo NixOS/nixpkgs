@@ -7,9 +7,9 @@
 , tezos-store
 , tezos-workers
 , tezos-test-services
-# , tezos-embedded-protocol-demo-noops
+  # , tezos-embedded-protocol-demo-noops
 , tezos-test-helpers
-# , tezos-protocol-plugin-alpha
+  # , tezos-protocol-plugin-alpha
 , alcotest-lwt
 , crowbar
 }:

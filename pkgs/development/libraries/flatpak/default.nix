@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , autoreconfHook
@@ -177,15 +178,17 @@ stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = let
-    vsc-py = python3.withPackages (pp: [
-      pp.pyparsing
-    ]);
-  in ''
-    patchShebangs buildutil
-    patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
-  '';
+  postPatch =
+    let
+      vsc-py = python3.withPackages (pp: [
+        pp.pyparsing
+      ]);
+    in
+    ''
+      patchShebangs buildutil
+      patchShebangs tests
+      PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+    '';
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    ant jdk
-    nettools  # "hostname" required
+    ant
+    jdk
+    nettools # "hostname" required
     copyDesktopItems
   ];
 

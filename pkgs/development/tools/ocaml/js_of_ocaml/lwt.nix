@@ -1,5 +1,9 @@
-{ buildDunePackage, js_of_ocaml-compiler, js_of_ocaml-ppx
-, js_of_ocaml, ocaml_lwt, lwt_log
+{ buildDunePackage
+, js_of_ocaml-compiler
+, js_of_ocaml-ppx
+, js_of_ocaml
+, ocaml_lwt
+, lwt_log
 }:
 
 buildDunePackage {

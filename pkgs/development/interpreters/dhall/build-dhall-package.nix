@@ -3,7 +3,7 @@
 { name
 
   # Expressions to add to the cache before interpreting the code
-, dependencies ? []
+, dependencies ? [ ]
 
   # A Dhall expression
   #
@@ -63,40 +63,40 @@ let
   sourceFile = "source.dhall";
 
 in
-  runCommand name { inherit dependencies; } ''
-    set -eu
+runCommand name { inherit dependencies; } ''
+  set -eu
 
-    mkdir -p ${cacheDhall}
+  mkdir -p ${cacheDhall}
 
-    for dependency in $dependencies; do
-      ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
-    done
+  for dependency in $dependencies; do
+    ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
+  done
 
-    export XDG_CACHE_HOME=$PWD/${cache}
+  export XDG_CACHE_HOME=$PWD/${cache}
 
-    mkdir -p $out/${cacheDhall}
+  mkdir -p $out/${cacheDhall}
 
-    ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
+  ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
 
-    SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
+  SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
 
-    HASH_FILE="''${SHA_HASH/sha256:/1220}"
+  HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
+  ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
 
-    echo "missing $SHA_HASH" > $out/binary.dhall
+  echo "missing $SHA_HASH" > $out/binary.dhall
 
-    ${lib.optionalString (!source) "rm $out/${sourceFile}"}
+  ${lib.optionalString (!source) "rm $out/${sourceFile}"}
 
-    ${lib.optionalString (documentationRoot != null) ''
-    mkdir -p $out/${dataDhall}
+  ${lib.optionalString (documentationRoot != null) ''
+  mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
-      base-import-url = baseImportUrl;
+  XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
+    base-import-url = baseImportUrl;
 
-      input = documentationRoot;
+    input = documentationRoot;
 
-      package-name = name;
-    }}
-    ''}
-  ''
+    package-name = name;
+  }}
+  ''}
+''

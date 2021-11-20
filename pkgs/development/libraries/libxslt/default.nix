@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
-, libxml2, findXMLCatalogs, gettext, python3, libgcrypt
+, libxml2
+, findXMLCatalogs
+, gettext
+, python3
+, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     "--without-mem-debug"
     "--without-debugger"
   ] ++ lib.optional pythonSupport "--with-python=${python3}"
-    ++ lib.optional (!cryptoSupport) "--without-crypto";
+  ++ lib.optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"

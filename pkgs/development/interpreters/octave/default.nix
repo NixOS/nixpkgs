@@ -1,8 +1,8 @@
 { stdenv
 , pkgs
 , lib
-# Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
-# with wrapQtAppsHook (comes from libsForQt5.callPackage)
+  # Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
+  # with wrapQtAppsHook (comes from libsForQt5.callPackage)
 , mkDerivation
 , fetchurl
 , gfortran
@@ -20,16 +20,19 @@
 , libGL
 , libGLU
 , fltk
-# Both are needed for discrete Fourier transform
+  # Both are needed for discrete Fourier transform
 , fftw
 , fftwSinglePrec
 , zlib
 , curl
-, blas, lapack
-# These two should use the same lapack and blas as the above
-, qrupdate, arpack, suitesparse ? null
-# If set to true, the above 5 deps are overriden to use the blas and lapack
-# with 64 bit indexes support. If all are not compatible, the build will fail.
+, blas
+, lapack
+  # These two should use the same lapack and blas as the above
+, qrupdate
+, arpack
+, suitesparse ? null
+  # If set to true, the above 5 deps are overriden to use the blas and lapack
+  # with 64 bit indexes support. If all are not compatible, the build will fail.
 , use64BitIdx ? false
 , libwebp
 , gl2ps
@@ -37,28 +40,28 @@
 , hdf5 ? null
 , glpk ? null
 , gnuplot ? null
-# - Include support for GNU readline:
+  # - Include support for GNU readline:
 , enableReadline ? true
 , readline ? null
-# - Build Java interface:
+  # - Build Java interface:
 , enableJava ? true
 , jdk ? null
 , python ? null
 , overridePlatforms ? null
 , sundials ? null
-# - Packages required for building extra packages.
+  # - Packages required for building extra packages.
 , newScope
 , callPackage
 , makeSetupHook
 , makeWrapper
-# - Build Octave Qt GUI:
+  # - Build Octave Qt GUI:
 , enableQt ? false
 , qtbase ? null
 , qtsvg ? null
 , qtscript ? null
 , qscintilla ? null
 , qttools ? null
-# - JIT compiler for loops:
+  # - JIT compiler for loops:
 , enableJIT ? false
 , llvm ? null
 , libiconv
@@ -68,19 +71,23 @@
 let
 
   # Not always evaluated
-  blas' = if use64BitIdx then
-    blas.override {
-      isILP64 = true;
-    }
-  else
-    blas
+  blas' =
+    if use64BitIdx then
+      blas.override
+        {
+          isILP64 = true;
+        }
+    else
+      blas
   ;
-  lapack' = if use64BitIdx then
-    lapack.override {
-      isILP64 = true;
-    }
-  else
-    lapack
+  lapack' =
+    if use64BitIdx then
+      lapack.override
+        {
+          isILP64 = true;
+        }
+    else
+      lapack
   ;
   qrupdate' = qrupdate.override {
     # If use64BitIdx is false, this override doesn't evaluate to a new
@@ -93,13 +100,15 @@ let
     lapack = lapack';
   };
   # Not always suitesparse is required at all
-  suitesparse' = if suitesparse != null then
-    suitesparse.override {
-      blas = blas';
-      lapack = lapack';
-    }
-  else
-    null
+  suitesparse' =
+    if suitesparse != null then
+      suitesparse.override
+        {
+          blas = blas';
+          lapack = lapack';
+        }
+    else
+      null
   ;
 
   octavePackages = import ../../../top-level/octave-packages.nix {
@@ -243,10 +252,12 @@ let
       description = "Scientific Pragramming Language";
       # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
       broken = enableJIT;
-      platforms = if overridePlatforms == null then
-        (lib.platforms.linux ++ lib.platforms.darwin)
-      else overridePlatforms;
+      platforms =
+        if overridePlatforms == null then
+          (lib.platforms.linux ++ lib.platforms.darwin)
+        else overridePlatforms;
     };
   };
 
-in self
+in
+self

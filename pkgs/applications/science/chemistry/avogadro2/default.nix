@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, eigen
+, avogadrolibs
+, molequeue
+, hdf5
+, openbabel
+, qttools
+, wrapQtAppsHook
 }:
 
 let
@@ -10,7 +19,8 @@ let
     sha256 = "9wLY7/EJyIZYnlUAMsViCwD5kGc1vCNbk8vUhb90LMQ=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadro2";
   version = "1.95.1";
 

@@ -1,12 +1,27 @@
 { version, ldcSha256 }:
-{ lib, stdenv, fetchurl, cmake, ninja, llvm_11, curl, tzdata
-, libconfig, lit, gdb, unzip, darwin, bash
-, callPackage, makeWrapper, runCommand, targetPackages
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, llvm_11
+, curl
+, tzdata
+, libconfig
+, lit
+, gdb
+, unzip
+, darwin
+, bash
+, callPackage
+, makeWrapper
+, runCommand
+, targetPackages
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
 }:
 
 let
-  pathConfig = runCommand "ldc-lib-paths" {} ''
+  pathConfig = runCommand "ldc-lib-paths" { } ''
     mkdir $out
     echo ${tzdata}/share/zoneinfo/ > $out/TZDatabaseDirFile
     echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > $out/LibcurlPathFile
@@ -30,16 +45,16 @@ stdenv.mkDerivation rec {
     patchShebangs .
   ''
   + ''
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
+    rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
+    rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
+    rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
 
-      # test depends on current year
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
+    # test depends on current year
+    rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # https://github.com/NixOS/nixpkgs/issues/34817
-      rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
+    # https://github.com/NixOS/nixpkgs/issues/34817
+    rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
   '';
 
   postPatch = ''
@@ -47,14 +62,21 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/d2/dmd-testsuite/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+    substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace runtime/phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
+    substituteInPlace runtime/phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_11.dev makeWrapper ninja unzip
+    cmake
+    ldcBootstrap
+    lit
+    lit.python
+    llvm_11.dev
+    makeWrapper
+    ninja
+    unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
@@ -77,7 +99,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DMD=$DMD" ];
 
-  fixNames = lib.optionalString stdenv.hostPlatform.isDarwin  ''
+  fixNames = lib.optionalString stdenv.hostPlatform.isDarwin ''
     fixDarwinDylibNames() {
       local flags=()
 
@@ -124,7 +146,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ldc2 \
         --prefix PATH ":" "${targetPackages.stdenv.cc}/bin" \
         --set-default CC "${targetPackages.stdenv.cc}/bin/cc"
-   '';
+  '';
 
   meta = with lib; {
     description = "The LLVM-based D compiler";

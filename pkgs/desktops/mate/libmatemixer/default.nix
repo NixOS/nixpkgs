@@ -1,6 +1,14 @@
-{ config, lib, stdenv, fetchurl, pkg-config, gettext, glib
-, alsaSupport ? stdenv.isLinux, alsa-lib
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, alsaSupport ? stdenv.isLinux
+, alsa-lib
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 , ossSupport ? false
 , mateUpdateScript
 }:

@@ -6,7 +6,8 @@ let
     url = "http://rowetel.com/downloads/deep/lpcnet_${dataVersion}.tgz";
     sha256 = "1j1695hm2pg6ri611f9kr3spm4yxvpikws55z9zxizai8y94152h";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "lpcnetfreedv";
   version = "unstable-2021-06-29";
 

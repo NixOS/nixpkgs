@@ -6,10 +6,11 @@ let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
-    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
   ];
 
   options.services.locate = with types; {
@@ -174,7 +175,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = mkIf isMLocate { mlocate = {}; };
+    users.groups = mkIf isMLocate { mlocate = { }; };
 
     security.wrappers = mkIf isMLocate {
       locate = {
@@ -192,7 +193,8 @@ in {
     environment.systemPackages = [ cfg.locate ];
 
     environment.variables = mkIf (!isMLocate)
-      { LOCATE_PATH = cfg.output;
+      {
+        LOCATE_PATH = cfg.output;
       };
 
     environment.etc = {
@@ -208,26 +210,30 @@ in {
     };
 
     warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
-            ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
-            ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
+      ++ optional (isFindutils && cfg.pruneNames != [ ]) "findutils locate does not support pruning by directory component"
+      ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
 
     systemd.services.update-locatedb =
-      { description = "Update Locate Database";
+      {
+        description = "Update Locate Database";
         path = mkIf (!isMLocate) [ pkgs.su ];
 
         # mlocate's updatedb takes flags via a configuration file or
         # on the command line, but not by environment variable.
         script =
           if isMLocate
-          then let toFlags = x: optional (cfg.${x} != [])
-                                         "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
-                   args = concatLists (map toFlags ["pruneFS" "pruneNames" "prunePaths"]);
-               in ''
-            exec ${cfg.locate}/bin/updatedb \
-              --output ${toString cfg.output} ${concatStringsSep " " args} \
-              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
-              ${concatStringsSep " " cfg.extraFlags}
-          ''
+          then
+            let
+              toFlags = x: optional (cfg.${x} != [ ])
+                "--${lib.toLower x} '${concatStringsSep " " cfg.${x}}'";
+              args = concatLists (map toFlags [ "pruneFS" "pruneNames" "prunePaths" ]);
+            in
+            ''
+              exec ${cfg.locate}/bin/updatedb \
+                --output ${toString cfg.output} ${concatStringsSep " " args} \
+                --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+                ${concatStringsSep " " cfg.extraFlags}
+            ''
           else ''
             exec ${cfg.locate}/bin/updatedb \
               ${optionalString (cfg.localuser != null && ! isMLocate) "--localuser=${cfg.localuser}"} \
@@ -254,9 +260,10 @@ in {
       };
 
     systemd.timers.update-locatedb = mkIf (cfg.interval != "never")
-      { description = "Update timer for locate database";
-        partOf      = [ "update-locatedb.service" ];
-        wantedBy    = [ "timers.target" ];
+      {
+        description = "Update timer for locate database";
+        partOf = [ "update-locatedb.service" ];
+        wantedBy = [ "timers.target" ];
         timerConfig.OnCalendar = cfg.interval;
       };
   };

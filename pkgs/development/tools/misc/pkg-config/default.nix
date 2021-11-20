@@ -28,13 +28,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-internal-glib" ]
     ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
-       # Can't run these tests while cross-compiling
+    # Can't run these tests while cross-compiling
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       [ "glib_cv_stack_grows=no"
-         "glib_cv_uscore=no"
-         "ac_cv_func_posix_getpwuid_r=yes"
-         "ac_cv_func_posix_getgrgid_r=yes"
-       ];
+    [
+      "glib_cv_stack_grows=no"
+      "glib_cv_uscore=no"
+      "ac_cv_func_posix_getpwuid_r=yes"
+      "ac_cv_func_posix_getgrgid_r=yes"
+    ];
 
   enableParallelBuilding = true;
   doCheck = true;

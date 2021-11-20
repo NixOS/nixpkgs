@@ -1,12 +1,43 @@
-{
-  mkDerivation, lib, fetchurl, fetchpatch,
-  gettext, pkg-config,
-  qtbase,
-  alsa-lib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
-  libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
-  libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
-  libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
-  wavpack, libopenmpt
+{ mkDerivation
+, lib
+, fetchurl
+, fetchpatch
+, gettext
+, pkg-config
+, qtbase
+, alsa-lib
+, curl
+, faad2
+, ffmpeg
+, flac
+, fluidsynth
+, gdk-pixbuf
+, lame
+, libbs2b
+, libcddb
+, libcdio
+, libcdio-paranoia
+, libcue
+, libjack2
+, libmad
+, libmms
+, libmodplug
+, libmowgli
+, libnotify
+, libogg
+, libpulseaudio
+, libsamplerate
+, libsidplayfp
+, libsndfile
+, libvorbis
+, libxml2
+, lirc
+, mpg123
+, neon
+, qtmultimedia
+, soxr
+, wavpack
+, libopenmpt
 }:
 
 mkDerivation rec {
@@ -29,10 +60,38 @@ mkDerivation rec {
     qtbase
 
     # Plugin dependencies
-    alsa-lib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
-    libcdio libcdio-paranoia libcue libjack2 libmad libmms libmodplug libmowgli
-    libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
-    libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
+    alsa-lib
+    curl
+    faad2
+    ffmpeg
+    flac
+    fluidsynth
+    gdk-pixbuf
+    lame
+    libbs2b
+    libcddb
+    libcdio
+    libcdio-paranoia
+    libcue
+    libjack2
+    libmad
+    libmms
+    libmodplug
+    libmowgli
+    libnotify
+    libogg
+    libpulseaudio
+    libsamplerate
+    libsidplayfp
+    libsndfile
+    libvorbis
+    libxml2
+    lirc
+    mpg123
+    neon
+    qtmultimedia
+    soxr
+    wavpack
     libopenmpt
   ];
 
@@ -61,8 +120,11 @@ mkDerivation rec {
     maintainers = with maintainers; [ eelco ramkromberg ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [
-      bsd2 bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
-      gpl2 gpl3 lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
+      bsd2
+      bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      gpl2
+      gpl3
+      lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
     ];
   };
 }

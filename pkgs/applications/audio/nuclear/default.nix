@@ -10,7 +10,8 @@ let
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands = ''

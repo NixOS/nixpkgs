@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchurl }:
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "intel2200BGFirmware";

@@ -53,8 +53,8 @@ buildPythonPackage rec {
     "test_env_accuracy"
     "test_large_stdout_blob" # times out on slower hardware
   ]
-    # test_process_isolation_settings is currently broken on Darwin Catalina
-    # https://github.com/ansible/ansible-runner/issues/413
+  # test_process_isolation_settings is currently broken on Darwin Catalina
+  # https://github.com/ansible/ansible-runner/issues/413
   ++ lib.optional stdenv.isDarwin "process_isolation_settings";
 
   disabledTestPaths = [

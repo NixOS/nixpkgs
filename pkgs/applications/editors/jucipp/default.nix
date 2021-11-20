@@ -1,7 +1,32 @@
-{ lib, stdenv, fetchgit, dconf, gtksourceview3, at-spi2-core, gtksourceviewmm,
-  boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkg-config, pcre,
-  libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
-  coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
+{ lib
+, stdenv
+, fetchgit
+, dconf
+, gtksourceview3
+, at-spi2-core
+, gtksourceviewmm
+, boost
+, epoxy
+, cmake
+, aspell
+, llvmPackages
+, libgit2
+, pkg-config
+, pcre
+, libXdmcp
+, libxkbcommon
+, libpthreadstubs
+, wrapGAppsHook
+, aspellDicts
+, gtkmm3
+, coreutils
+, glibc
+, dbus
+, openssl
+, libxml2
+, gnumake
+, ctags
+}:
 
 with lib;
 
@@ -51,14 +76,15 @@ stdenv.mkDerivation rec {
   ];
 
 
-  lintIncludes = let
-    p = "arguments.emplace_back(\"-I";
-    e = "\");";
-    v = lib.getVersion llvmPackages.clang;
-  in
-    p+llvmPackages.libcxx.dev+"/include/c++/v1"+e
-    +p+llvmPackages.clang-unwrapped.lib+"/lib/clang/"+v+"/include/"+e
-    +p+glibc.dev+"/include"+e;
+  lintIncludes =
+    let
+      p = "arguments.emplace_back(\"-I";
+      e = "\");";
+      v = lib.getVersion llvmPackages.clang;
+    in
+    p + llvmPackages.libcxx.dev + "/include/c++/v1" + e
+    + p + llvmPackages.clang-unwrapped.lib + "/lib/clang/" + v + "/include/" + e
+    + p + glibc.dev + "/include" + e;
 
   preConfigure = ''
     sed -i 's|liblldb LIBLLDB_LIBRARIES|liblldb LIBNOTHING|g' CMakeLists.txt

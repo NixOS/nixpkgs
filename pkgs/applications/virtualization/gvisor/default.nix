@@ -51,14 +51,15 @@ let
     '';
   };
 
-in buildBazelPackage rec {
+in
+buildBazelPackage rec {
   name = "gvisor-${version}";
   version = "20210518.0";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo  = "gvisor";
-    rev   = "release-${version}";
+    repo = "gvisor";
+    rev = "release-${version}";
     sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
   };
 

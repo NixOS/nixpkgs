@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "JLaoiINHpIFWSqsRl8wJ/NeBu7SCcPuT/BzY8szEu0o=";
   };
 
-  makeFlags = [ "DESTDIR=\${out}" "prefix="];
+  makeFlags = [ "DESTDIR=\${out}" "prefix=" ];
 
   meta = with lib; {
     description = "The advanced PC speaker beeper";

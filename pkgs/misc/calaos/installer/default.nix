@@ -16,13 +16,14 @@ mkDerivation rec {
 
   qmakeFlags = [ "REVISION=${version}" ];
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -a calaos_installer.app $out/Applications
-  '' else ''
-    mkdir -p $out/bin
-    cp -a calaos_installer $out/bin
-  '';
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -a calaos_installer.app $out/Applications
+    '' else ''
+      mkdir -p $out/bin
+      cp -a calaos_installer $out/bin
+    '';
 
   meta = with lib; {
     description = "Calaos Installer, a tool to create calaos configuration";

@@ -9,9 +9,10 @@ with lib;
 let
   cfg = config.networking.nat;
 
-  mkDest = externalIP: if externalIP == null
-                       then "-j MASQUERADE"
-                       else "-j SNAT --to-source ${externalIP}";
+  mkDest = externalIP:
+    if externalIP == null
+    then "-j MASQUERADE"
+    else "-j SNAT --to-source ${externalIP}";
   dest = mkDest cfg.externalIP;
   destIPv6 = mkDest cfg.externalIPv6;
 
@@ -152,7 +153,7 @@ in
 
     networking.nat.internalInterfaces = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "eth0" ];
       description =
         ''
@@ -164,7 +165,7 @@ in
 
     networking.nat.internalIPs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "192.168.1.0/24" ];
       description =
         ''
@@ -176,7 +177,7 @@ in
 
     networking.nat.internalIPv6s = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "fc00::/64" ];
       description =
         ''
@@ -246,13 +247,13 @@ in
 
           loopbackIPs = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = literalExpression ''[ "55.1.2.3" ]'';
             description = "Public IPs for NAT reflection; for connections to `loopbackip:sourcePort' from the host itself and from other hosts behind NAT";
           };
         };
       });
-      default = [];
+      default = [ ];
       example = [
         { sourcePort = 8080; destination = "10.0.0.1:80"; proto = "tcp"; }
         { sourcePort = 8080; destination = "[fc00::2]:80"; proto = "tcp"; }
@@ -308,13 +309,16 @@ in
     (mkIf config.networking.nat.enable {
 
       assertions = [
-        { assertion = cfg.enableIPv6           -> config.networking.enableIPv6;
+        {
+          assertion = cfg.enableIPv6 -> config.networking.enableIPv6;
           message = "networking.nat.enableIPv6 requires networking.enableIPv6";
         }
-        { assertion = (cfg.dmzHost != null)    -> (cfg.externalInterface != null);
+        {
+          assertion = (cfg.dmzHost != null) -> (cfg.externalInterface != null);
           message = "networking.nat.dmzHost requires networking.nat.externalInterface";
         }
-        { assertion = (cfg.forwardPorts != []) -> (cfg.externalInterface != null);
+        {
+          assertion = (cfg.forwardPorts != [ ]) -> (cfg.externalInterface != null);
           message = "networking.nat.forwardPorts requires networking.nat.externalInterface";
         }
       ];
@@ -343,22 +347,24 @@ in
         extraStopCommands = flushNat;
       };
 
-      systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
-        description = "Network Address Translation";
-        wantedBy = [ "network.target" ];
-        after = [ "network-pre.target" "systemd-modules-load.service" ];
-        path = [ pkgs.iptables ];
-        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+      systemd.services = mkIf (!config.networking.firewall.enable) {
+        nat = {
+          description = "Network Address Translation";
+          wantedBy = [ "network.target" ];
+          after = [ "network-pre.target" "systemd-modules-load.service" ];
+          path = [ pkgs.iptables ];
+          unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+
+          script = flushNat + setupNat;
+
+          postStop = flushNat;
         };
-
-        script = flushNat + setupNat;
-
-        postStop = flushNat;
-      }; };
+      };
     })
   ];
 }

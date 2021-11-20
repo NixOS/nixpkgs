@@ -1,8 +1,24 @@
-{ lib, fetchFromGitHub, cmake, pkg-config, mkDerivation
-, qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, libglvnd, xorg, python3, python3Packages
-, bison, pcre, automake, autoconf, addOpenGLRunpath
-, waylandSupport ? false, wayland
+{ lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, mkDerivation
+, qtbase
+, qtx11extras
+, qtsvg
+, makeWrapper
+, vulkan-loader
+, libglvnd
+, xorg
+, python3
+, python3Packages
+, bison
+, pcre
+, automake
+, autoconf
+, addOpenGLRunpath
+, waylandSupport ? false
+, wayland
 }:
 let
   custom_swig = fetchFromGitHub {
@@ -25,7 +41,13 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
+    qtbase
+    qtsvg
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    qtx11extras
+    vulkan-loader
+    python3
   ] # ++ (with python3Packages; [pyside2 pyside2-tools shiboken2])
   # TODO: figure out how to make cmake recognise pyside2
   ++ lib.optional waylandSupport wayland;

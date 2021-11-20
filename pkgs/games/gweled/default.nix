@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchbzr, gettext
-, gtk2, wrapGAppsHook, autoreconfHook, pkg-config
-, libmikmod, librsvg, libcanberra-gtk2, hicolor-icon-theme }:
+{ lib
+, stdenv
+, fetchbzr
+, gettext
+, gtk2
+, wrapGAppsHook
+, autoreconfHook
+, pkg-config
+, libmikmod
+, librsvg
+, libcanberra-gtk2
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "gweled";

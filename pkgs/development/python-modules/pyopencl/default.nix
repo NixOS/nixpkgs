@@ -19,7 +19,8 @@
 let
   os-specific-buildInputs =
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pyopencl";
   version = "2021.2.9";
 

@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-      description = "A program to visualize different juggling pattens";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ wnklmnn ];
-      platforms = platforms.all;
+    description = "A program to visualize different juggling pattens";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ wnklmnn ];
+    platforms = platforms.all;
   };
 }

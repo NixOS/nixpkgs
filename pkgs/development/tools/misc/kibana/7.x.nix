@@ -18,12 +18,13 @@ let
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux  = "19p9s4sir982bb1zcldrbphhwfs9i11p0q28vgc421iqg10kjlf1";
+      x86_64-linux = "19p9s4sir982bb1zcldrbphhwfs9i11p0q28vgc421iqg10kjlf1";
       x86_64-darwin = "0qq557ngwwakifidyrccga4cadj9k9pzhjwy4msmbcgf5pb86qyc";
       aarch64-linux = "183cp1h8d3n7xfcpcys4hf36palczxa409afyp62kzyzckngy0j8";
     };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kibana";
   version = elk7Version;
 

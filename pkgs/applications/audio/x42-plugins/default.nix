@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
-, libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libltc
+, libsndfile
+, libsamplerate
+, ftgl
+, freefont_ttf
+, libjack2
+, libGLU
+, lv2
+, gtk2
+, cairo
+, pango
+, fftwFloat
+, zita-convolver
+}:
 
 stdenv.mkDerivation rec {
   version = "20211016";
@@ -32,7 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib;
-    { description = "Collection of LV2 plugins by Robin Gareus";
+    {
+      description = "Collection of LV2 plugins by Robin Gareus";
       homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;

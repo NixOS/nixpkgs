@@ -1,14 +1,23 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub
-, pkg-config, taglib, alsa-lib
-, zlib, AudioToolbox, AppKit
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, taglib
+, alsa-lib
+, zlib
+, AudioToolbox
+, AppKit
 
-# Disable on-the-fly transcoding,
-# removing the dependency on ffmpeg.
-# The server will (as of 0.11.0) gracefully fall back
-# to the original file, but if transcoding is configured
-# that takes a while. So best to disable all transcoding
-# in the configuration if you disable transcodingSupport.
-, transcodingSupport ? true, ffmpeg }:
+  # Disable on-the-fly transcoding,
+  # removing the dependency on ffmpeg.
+  # The server will (as of 0.11.0) gracefully fall back
+  # to the original file, but if transcoding is configured
+  # that takes a while. So best to disable all transcoding
+  # in the configuration if you disable transcodingSupport.
+, transcodingSupport ? true
+, ffmpeg
+}:
 
 buildGoModule rec {
   pname = "gonic";

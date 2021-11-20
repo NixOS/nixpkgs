@@ -136,7 +136,7 @@ rec {
     (old: {
       buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
-      NIX_CFLAGS_COMPILE="";
+      NIX_CFLAGS_COMPILE = "";
       configurePhase = ''
         # FIXME: Some tests require writing at $HOME
         HOME=$TMPDIR

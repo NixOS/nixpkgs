@@ -1,5 +1,15 @@
-{ buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
-, graphviz, networkx, six, opt-einsum, tqdm, pyro-api }:
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pytorch
+, contextlib2
+, graphviz
+, networkx
+, six
+, opt-einsum
+, tqdm
+, pyro-api
+}:
 
 buildPythonPackage rec {
   version = "1.7.0";

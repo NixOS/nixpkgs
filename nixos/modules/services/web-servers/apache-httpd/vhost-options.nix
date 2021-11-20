@@ -13,8 +13,8 @@ in
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = ["www.example.org" "www.example.org:8080" "example.org"];
+      default = [ ];
+      example = [ "www.example.org" "www.example.org:8080" "example.org" ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
@@ -39,9 +39,9 @@ in
           };
         };
       }));
-      default = [];
+      default = [ ];
       example = [
-        { ip = "195.154.1.1"; port = 443; ssl = true;}
+        { ip = "195.154.1.1"; port = 443; ssl = true; }
         { ip = "192.154.1.1"; port = 80; }
         { ip = "*"; port = 8080; }
       ];
@@ -180,9 +180,10 @@ in
 
     servedDirs = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = [
-        { urlPath = "/nix";
+        {
+          urlPath = "/nix";
           dir = "/home/eelco/Dev/nix-homepage";
         }
       ];
@@ -193,9 +194,10 @@ in
 
     servedFiles = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = [
-        { urlPath = "/foo/bar.png";
+        {
+          urlPath = "/foo/bar.png";
           file = "/home/eelco/some-file.png";
         }
       ];
@@ -265,7 +267,7 @@ in
 
     locations = mkOption {
       type = with types; attrsOf (submodule (import ./location-options.nix));
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "/" = {

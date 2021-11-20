@@ -110,14 +110,14 @@ in {
     }];
 
     system.autoUpgrade.flags = (if cfg.flake == null then
-        [ "--no-build-output" ] ++ (if cfg.channel == null then
-          [ "--upgrade" ]
-        else [
-          "-I"
-          "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
-        ])
-      else
-        [ "--flake ${cfg.flake}" ]);
+      [ "--no-build-output" ] ++ (if cfg.channel == null then
+        [ "--upgrade" ]
+      else [
+        "-I"
+        "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
+      ])
+    else
+      [ "--flake ${cfg.flake}" ]);
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -142,21 +142,23 @@ in {
         config.programs.ssh.package
       ];
 
-      script = let
-        nixos-rebuild =
-          "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-      in if cfg.allowReboot then ''
-        ${nixos-rebuild} boot ${toString cfg.flags}
-        booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-        built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-        if [ "$booted" = "$built" ]; then
+      script =
+        let
+          nixos-rebuild =
+            "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+        in
+        if cfg.allowReboot then ''
+          ${nixos-rebuild} boot ${toString cfg.flags}
+          booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+          built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+          if [ "$booted" = "$built" ]; then
+            ${nixos-rebuild} switch ${toString cfg.flags}
+          else
+            /run/current-system/sw/bin/shutdown -r +1
+          fi
+        '' else ''
           ${nixos-rebuild} switch ${toString cfg.flags}
-        else
-          /run/current-system/sw/bin/shutdown -r +1
-        fi
-      '' else ''
-        ${nixos-rebuild} switch ${toString cfg.flags}
-      '';
+        '';
 
       startAt = cfg.dates;
     };

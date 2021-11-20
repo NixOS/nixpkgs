@@ -6,7 +6,7 @@ let
   cfg = config.services.xserver.gdk-pixbuf;
 
   # Get packages to generate the cache for. We always include gdk-pixbuf.
-  effectivePackages = unique ([pkgs.gdk-pixbuf] ++ cfg.modulePackages);
+  effectivePackages = unique ([ pkgs.gdk-pixbuf ] ++ cfg.modulePackages);
 
   # Generate the cache file by running gdk-pixbuf-query-loaders for each
   # package and concatenating the results.
@@ -37,7 +37,7 @@ in
   # If there is any package configured in modulePackages, we generate the
   # loaders.cache based on that and set the environment variable
   # GDK_PIXBUF_MODULE_FILE to point to it.
-  config = mkIf (cfg.modulePackages != []) {
+  config = mkIf (cfg.modulePackages != [ ]) {
     environment.variables = {
       GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
     };

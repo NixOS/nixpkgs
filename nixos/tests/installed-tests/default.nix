@@ -1,9 +1,9 @@
 # NixOS tests for gnome-desktop-testing-runner using software
 # See https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -14,11 +14,12 @@ let
   callInstalledTest = pkgs.newScope { inherit makeInstalledTest; };
 
   makeInstalledTest =
-    { # Package to test. Needs to have an installedTests output
+    {
+      # Package to test. Needs to have an installedTests output
       tested
 
       # Config to inject into machine
-    , testConfig ? {}
+    , testConfig ? { }
 
       # Test script snippet to inject before gnome-desktop-testing-runner begins.
       # This is useful for extra setup the environment may need before the runner begins.
@@ -84,26 +85,26 @@ let
 in
 
 {
-  colord = callInstalledTest ./colord.nix {};
-  flatpak = callInstalledTest ./flatpak.nix {};
-  flatpak-builder = callInstalledTest ./flatpak-builder.nix {};
-  fwupd = callInstalledTest ./fwupd.nix {};
-  gcab = callInstalledTest ./gcab.nix {};
-  gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
-  gjs = callInstalledTest ./gjs.nix {};
-  glib-networking = callInstalledTest ./glib-networking.nix {};
-  gnome-photos = callInstalledTest ./gnome-photos.nix {};
-  graphene = callInstalledTest ./graphene.nix {};
-  gsconnect = callInstalledTest ./gsconnect.nix {};
-  ibus = callInstalledTest ./ibus.nix {};
-  libgdata = callInstalledTest ./libgdata.nix {};
-  librsvg = callInstalledTest ./librsvg.nix {};
-  glib-testing = callInstalledTest ./glib-testing.nix {};
-  libjcat = callInstalledTest ./libjcat.nix {};
-  libxmlb = callInstalledTest ./libxmlb.nix {};
-  malcontent = callInstalledTest ./malcontent.nix {};
-  ostree = callInstalledTest ./ostree.nix {};
-  pipewire = callInstalledTest ./pipewire.nix {};
-  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
-  xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
+  colord = callInstalledTest ./colord.nix { };
+  flatpak = callInstalledTest ./flatpak.nix { };
+  flatpak-builder = callInstalledTest ./flatpak-builder.nix { };
+  fwupd = callInstalledTest ./fwupd.nix { };
+  gcab = callInstalledTest ./gcab.nix { };
+  gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix { };
+  gjs = callInstalledTest ./gjs.nix { };
+  glib-networking = callInstalledTest ./glib-networking.nix { };
+  gnome-photos = callInstalledTest ./gnome-photos.nix { };
+  graphene = callInstalledTest ./graphene.nix { };
+  gsconnect = callInstalledTest ./gsconnect.nix { };
+  ibus = callInstalledTest ./ibus.nix { };
+  libgdata = callInstalledTest ./libgdata.nix { };
+  librsvg = callInstalledTest ./librsvg.nix { };
+  glib-testing = callInstalledTest ./glib-testing.nix { };
+  libjcat = callInstalledTest ./libjcat.nix { };
+  libxmlb = callInstalledTest ./libxmlb.nix { };
+  malcontent = callInstalledTest ./malcontent.nix { };
+  ostree = callInstalledTest ./ostree.nix { };
+  pipewire = callInstalledTest ./pipewire.nix { };
+  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix { };
+  xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix { };
 }

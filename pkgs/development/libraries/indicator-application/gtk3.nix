@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchbzr
-, pkg-config, systemd, autoreconfHook
-, glib, dbus-glib, json-glib
-, gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
+{ lib
+, stdenv
+, fetchbzr
+, pkg-config
+, systemd
+, autoreconfHook
+, glib
+, dbus-glib
+, json-glib
+, gtk3
+, libindicator-gtk3
+, libdbusmenu-gtk3
+, libappindicator-gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "indicator-application";
@@ -18,8 +28,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    glib dbus-glib json-glib systemd
-    gtk3 libindicator-gtk3 libdbusmenu-gtk3 libappindicator-gtk3
+    glib
+    dbus-glib
+    json-glib
+    systemd
+    gtk3
+    libindicator-gtk3
+    libdbusmenu-gtk3
+    libappindicator-gtk3
   ];
 
   postPatch = ''

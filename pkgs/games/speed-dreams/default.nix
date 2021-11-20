@@ -1,6 +1,36 @@
-{ fetchurl, lib, stdenv, libGLU, libGL, freeglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
-libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, openscenegraph, expat,
-libpng, zlib, bash, SDL2, enet, libjpeg, cmake, pkg-config, libvorbis, runtimeShell, curl }:
+{ fetchurl
+, lib
+, stdenv
+, libGLU
+, libGL
+, freeglut
+, libX11
+, plib
+, openal
+, freealut
+, libXrandr
+, xorgproto
+, libXext
+, libSM
+, libICE
+, libXi
+, libXt
+, libXrender
+, libXxf86vm
+, openscenegraph
+, expat
+, libpng
+, zlib
+, bash
+, SDL2
+, enet
+, libjpeg
+, cmake
+, pkg-config
+, libvorbis
+, runtimeShell
+, curl
+}:
 
 let
   version = "2.2.2-r6553";
@@ -58,16 +88,41 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ libpng libGLU libGL freeglut libX11 plib openal freealut libXrandr xorgproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash expat
-    SDL2 enet libjpeg openscenegraph libvorbis curl ];
+  buildInputs = [
+    libpng
+    libGLU
+    libGL
+    freeglut
+    libX11
+    plib
+    openal
+    freealut
+    libXrandr
+    xorgproto
+    libXext
+    libSM
+    libICE
+    libXi
+    libXt
+    libXrender
+    libXxf86vm
+    zlib
+    bash
+    expat
+    SDL2
+    enet
+    libjpeg
+    openscenegraph
+    libvorbis
+    curl
+  ];
 
   meta = {
     description = "Car racing game - TORCS fork with more experimental approach";
     homepage = "http://speed-dreams.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [raskin];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

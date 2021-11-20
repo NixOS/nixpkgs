@@ -3,9 +3,8 @@
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
-, rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
+, rootModules ? [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
+    ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
 let
@@ -27,7 +26,8 @@ rec {
   hd = "vda"; # either "sda" or "vda"
 
   initrdUtils = runCommand "initrd-utils"
-    { nativeBuildInputs = [ buildPackages.nukeReferences ];
+    {
+      nativeBuildInputs = [ buildPackages.nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -142,7 +142,8 @@ rec {
 
   initrd = pkgs.makeInitrd {
     contents = [
-      { object = stage1Init;
+      {
+        object = stage1Init;
         symlink = "/init";
       }
     ];
@@ -263,21 +264,22 @@ rec {
   /*
     A bash script fragment that produces a disk image at `destination`.
    */
-  createEmptyImage = {
-    # Disk image size in MiB
-    size,
-    # Name that will be written to ${destination}/nix-support/full-name
-    fullName,
-    # Where to write the image files, defaulting to $out
-    destination ? "$out"
-  }: ''
-    mkdir -p ${destination}
-    diskImage=${destination}/disk-image.qcow2
-    ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
+  createEmptyImage =
+    {
+      # Disk image size in MiB
+      size
+    , # Name that will be written to ${destination}/nix-support/full-name
+      fullName
+    , # Where to write the image files, defaulting to $out
+      destination ? "$out"
+    }: ''
+      mkdir -p ${destination}
+      diskImage=${destination}/disk-image.qcow2
+      ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
-    mkdir ${destination}/nix-support
-    echo "${fullName}" > ${destination}/nix-support/full-name
-  '';
+      mkdir ${destination}/nix-support
+      echo "${fullName}" > ${destination}/nix-support/full-name
+    '';
 
 
   defaultCreateRootFS = ''
@@ -318,62 +320,62 @@ rec {
   runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
-    args = ["-e" (vmRunCommand qemuCommandLinux)];
+    args = [ "-e" (vmRunCommand qemuCommandLinux) ];
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
-    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
+    passAsFile = [ ]; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
-  extractFs = {file, fs ? null} :
+  extractFs = { file, fs ? null }:
     runInLinuxVM (
-    stdenv.mkDerivation {
-      name = "extract-file";
-      buildInputs = [ util-linux ];
-      buildCommand = ''
-        ln -s ${kernel}/lib /lib
-        ${kmod}/bin/modprobe loop
-        ${kmod}/bin/modprobe ext4
-        ${kmod}/bin/modprobe hfs
-        ${kmod}/bin/modprobe hfsplus
-        ${kmod}/bin/modprobe squashfs
-        ${kmod}/bin/modprobe iso9660
-        ${kmod}/bin/modprobe ufs
-        ${kmod}/bin/modprobe cramfs
+      stdenv.mkDerivation {
+        name = "extract-file";
+        buildInputs = [ util-linux ];
+        buildCommand = ''
+          ln -s ${kernel}/lib /lib
+          ${kmod}/bin/modprobe loop
+          ${kmod}/bin/modprobe ext4
+          ${kmod}/bin/modprobe hfs
+          ${kmod}/bin/modprobe hfsplus
+          ${kmod}/bin/modprobe squashfs
+          ${kmod}/bin/modprobe iso9660
+          ${kmod}/bin/modprobe ufs
+          ${kmod}/bin/modprobe cramfs
 
-        mkdir -p $out
-        mkdir -p tmp
-        mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
-          mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
-        cp -Rv tmp/* $out/ || exit 0
-      '';
-    });
+          mkdir -p $out
+          mkdir -p tmp
+          mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
+            mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+          cp -Rv tmp/* $out/ || exit 0
+        '';
+      });
 
 
-  extractMTDfs = {file, fs ? null} :
+  extractMTDfs = { file, fs ? null }:
     runInLinuxVM (
-    stdenv.mkDerivation {
-      name = "extract-file-mtd";
-      buildInputs = [ pkgs.util-linux pkgs.mtdutils ];
-      buildCommand = ''
-        ln -s ${kernel}/lib /lib
-        ${kmod}/bin/modprobe mtd
-        ${kmod}/bin/modprobe mtdram total_size=131072
-        ${kmod}/bin/modprobe mtdchar
-        ${kmod}/bin/modprobe mtdblock
-        ${kmod}/bin/modprobe jffs2
-        ${kmod}/bin/modprobe zlib
+      stdenv.mkDerivation {
+        name = "extract-file-mtd";
+        buildInputs = [ pkgs.util-linux pkgs.mtdutils ];
+        buildCommand = ''
+          ln -s ${kernel}/lib /lib
+          ${kmod}/bin/modprobe mtd
+          ${kmod}/bin/modprobe mtdram total_size=131072
+          ${kmod}/bin/modprobe mtdchar
+          ${kmod}/bin/modprobe mtdblock
+          ${kmod}/bin/modprobe jffs2
+          ${kmod}/bin/modprobe zlib
 
-        mkdir -p $out
-        mkdir -p tmp
+          mkdir -p $out
+          mkdir -p tmp
 
-        dd if=${file} of=/dev/mtd0
-        mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
+          dd if=${file} of=/dev/mtd0
+          mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
 
-        cp -R tmp/* $out/
-      '';
-    });
+          cp -R tmp/* $out/
+        '';
+      });
 
 
   /* Like runInLinuxVM, but run the build not using the stdenv from
@@ -413,15 +415,22 @@ rec {
      a set of RPM packages. */
 
   fillDiskWithRPMs =
-    { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512
+    { size ? 4096
+    , rpms
+    , name
+    , fullName
+    , preInstall ? ""
+    , postInstall ? ""
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
     , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms QEMU_OPTS memSize;
-      preVM = createEmptyImage {inherit size fullName;};
+      preVM = createEmptyImage { inherit size fullName; };
 
       buildCommand = ''
         ${createRootFS}
@@ -574,15 +583,22 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    { size ? 4096
+    , debs
+    , name
+    , fullName
+    , postInstall ? null
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    }:
 
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
 
-      preVM = createEmptyImage {inherit size fullName;};
+      preVM = createEmptyImage { inherit size fullName; };
 
       buildCommand = ''
         ${createRootFS}
@@ -665,19 +681,20 @@ rec {
      `primary.xml.gz' file of a Fedora or openSUSE distribution. */
 
   rpmClosureGenerator =
-    {name, packagesLists, urlPrefixes, packages, archs ? []}:
-    assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix" {
-      nativeBuildInputs = [ buildPackages.perl buildPackages.perlPackages.XMLSimple ];
-      inherit archs;
-    } ''
-      ${lib.concatImapStrings (i: pl: ''
-        gunzip < ${pl} > ./packages_${toString i}.xml
-      '') packagesLists}
-      perl -w ${rpm/rpm-closure.pl} \
-        ${lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} " ) (lib.zipLists packagesLists urlPrefixes)} \
-        ${toString packages} > $out
-    '';
+    { name, packagesLists, urlPrefixes, packages, archs ? [ ] }:
+      assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
+      runCommand "${name}.nix"
+        {
+          nativeBuildInputs = [ buildPackages.perl buildPackages.perlPackages.XMLSimple ];
+          inherit archs;
+        } ''
+        ${lib.concatImapStrings (i: pl: ''
+          gunzip < ${pl} > ./packages_${toString i}.xml
+        '') packagesLists}
+        perl -w ${rpm/rpm-closure.pl} \
+          ${lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} " ) (lib.zipLists packagesLists urlPrefixes)} \
+          ${toString packages} > $out
+      '';
 
 
   /* Helper function that combines rpmClosureGenerator and
@@ -685,21 +702,33 @@ rec {
      names. */
 
   makeImageFromRPMDist =
-    { name, fullName, size ? 4096
-    , urlPrefix ? "", urlPrefixes ? [urlPrefix]
-    , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? []
-    , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512
-    , unifiedSystemDir ? false }:
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix ? ""
+    , urlPrefixes ? [ urlPrefix ]
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , preInstall ? ""
+    , postInstall ? ""
+    , archs ? [ "noarch" "i386" ]
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , unifiedSystemDir ? false
+    }:
 
     fillDiskWithRPMs {
       inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir QEMU_OPTS memSize;
-      rpms = import (rpmClosureGenerator {
-        inherit name packagesLists urlPrefixes archs;
-        packages = packages ++ extraPackages;
-      }) { inherit fetchurl; };
+      rpms = import
+        (rpmClosureGenerator {
+          inherit name packagesLists urlPrefixes archs;
+          packages = packages ++ extraPackages;
+        })
+        { inherit fetchurl; };
     };
 
 
@@ -707,7 +736,7 @@ rec {
      (i.e. generate a closure from a Packages.bz2 file). */
 
   debClosureGenerator =
-    {name, packagesLists, urlPrefix, packages}:
+    { name, packagesLists, urlPrefix, packages }:
 
     runCommand "${name}.nix"
       { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
@@ -739,11 +768,20 @@ rec {
      names. */
 
   makeImageFromDebDist =
-    { name, fullName, size ? 4096, urlPrefix
-    , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? [], postInstall ? ""
-    , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , postInstall ? ""
+    , extraDebs ? [ ]
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    }:
 
     let
       expr = debClosureGenerator {
@@ -751,10 +789,10 @@ rec {
         packages = packages ++ extraPackages;
       };
     in
-      (fillDiskWithDebs {
-        inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
-        debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+    (fillDiskWithDebs {
+      inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
+      debs = import expr { inherit fetchurl; } ++ extraDebs;
+    }) // { inherit expr; };
 
 
   /* The set of supported RPM-based distributions. */
@@ -772,7 +810,7 @@ rec {
           sha256 = "880055a50c05b20641530d09b23f64501a000b2f92fe252417c530178730a95e";
         };
         urlPrefix = "mirror://fedora/linux/releases/${version}/Everything/x86_64/os";
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
         unifiedSystemDir = true;
       };
@@ -787,7 +825,7 @@ rec {
           sha256 = "48986ce4583cd09825c6d437150314446f0f49fa1a1bd62dcfa1085295030fe9";
         };
         urlPrefix = "mirror://fedora/linux/releases/${version}/Everything/x86_64/os";
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
         unifiedSystemDir = true;
       };
@@ -802,7 +840,7 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b826a45082ef68340325c0855f3d2e5d5a4d0f77d28ba3b871791d6f14a97aeb";
         };
-        archs = ["noarch" "i386"];
+        archs = [ "noarch" "i386" ];
         packages = commonCentOSPackages ++ [ "procps" ];
       };
 
@@ -816,7 +854,7 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "ed2b2d4ac98d774d4cd3e91467e1532f7e8b0275cfc91a0d214b532dcaf1e979";
         };
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonCentOSPackages ++ [ "procps" ];
       };
 
@@ -831,7 +869,7 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5";
         };
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonCentOSPackages ++ [ "procps-ng" ];
       };
   };
@@ -844,7 +882,8 @@ rec {
       name = "ubuntu-14.04-trusty-i386";
       fullName = "Ubuntu 14.04 Trusty (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2";
             sha256 = "1d5y3v3v079gdq45hc07ja0bjlmzqfwdwwlq0brwxi8m75k3iz7x";
           })
@@ -861,7 +900,8 @@ rec {
       name = "ubuntu-14.04-trusty-amd64";
       fullName = "Ubuntu 14.04 Trusty (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2";
             sha256 = "1hhzbyqfr5i0swahwnl5gfp5l9p9hspywb1vpihr3b74p1z935bh";
           })
@@ -878,7 +918,8 @@ rec {
       name = "ubuntu-16.04-xenial-i386";
       fullName = "Ubuntu 16.04 Xenial (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz";
             sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
           })
@@ -895,7 +936,8 @@ rec {
       name = "ubuntu-16.04-xenial-amd64";
       fullName = "Ubuntu 16.04 Xenial (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz";
             sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
           })
@@ -912,7 +954,8 @@ rec {
       name = "ubuntu-18.04-bionic-i386";
       fullName = "Ubuntu 18.04 Bionic (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz";
             sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
           })
@@ -929,7 +972,8 @@ rec {
       name = "ubuntu-18.04-bionic-amd64";
       fullName = "Ubuntu 18.04 Bionic (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz";
             sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
           })
@@ -946,7 +990,8 @@ rec {
       name = "ubuntu-20.04-focal-i386";
       fullName = "Ubuntu 20.04 Focal (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/focal/main/binary-i386/Packages.xz";
             sha256 = "sha256-7RAYURoN3RKYQAHpwBS9TIV6vCmpURpphyMJQmV4wLc=";
           })
@@ -963,7 +1008,8 @@ rec {
       name = "ubuntu-20.04-focal-amd64";
       fullName = "Ubuntu 20.04 Focal (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = "mirror://ubuntu/dists/focal/main/binary-amd64/Packages.xz";
             sha256 = "sha256-d1eSH/j+7Zw5NKDJk21EG6SiOL7j6myMHfXLzUP8mGE=";
           })
@@ -1172,7 +1218,7 @@ rec {
 
   /* Default disk images generated from the `rpmDistros' and
      `debDistros' sets. */
-  diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
+  diskImages = lib.mapAttrs (name: f: f { }) diskImageFuns;
 
   # The default 9P msize value is 8 KiB, which according to QEMU is
   # insufficient and would degrade performance.

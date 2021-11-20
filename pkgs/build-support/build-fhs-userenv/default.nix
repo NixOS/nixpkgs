@@ -2,12 +2,12 @@
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
+args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? { }, passthru ? { }, ... }:
 
 let
   env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  chrootenv = callPackage ./chrootenv {};
+  chrootenv = callPackage ./chrootenv { };
 
   init = run: writeScript "${name}-init" ''
     #! ${stdenv.shell}
@@ -23,15 +23,18 @@ let
     exec ${run} "$@"
   '';
 
-in runCommandLocal name {
+in
+runCommandLocal name
+{
   inherit meta;
 
   passthru = passthru // {
-    env = runCommandLocal "${name}-shell-env" {
-      shellHook = ''
-        exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
-      '';
-    } ''
+    env = runCommandLocal "${name}-shell-env"
+      {
+        shellHook = ''
+          exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
+        '';
+      } ''
       echo >&2 ""
       echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
       echo >&2 ""

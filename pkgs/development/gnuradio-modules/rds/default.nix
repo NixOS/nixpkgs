@@ -30,7 +30,8 @@ let
       "3.9" = null;
     }.${gnuradio.versionAttr.major};
   };
-in mkDerivation {
+in
+mkDerivation {
   pname = "gr-rds";
   inherit version src;
   disabledForGRafter = "3.9";

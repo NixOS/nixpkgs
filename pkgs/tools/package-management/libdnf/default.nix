@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, pkg-config
+, gpgme
+, libsolv
+, openssl
+, check
+, json_c
+, libmodulemd
+, libsmartcols
+, sqlite
+, librepo
+, libyaml
+, rpm
+, zchunk
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";

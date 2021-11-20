@@ -1,11 +1,29 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
-, which, readline, zlib, icu, cargo, rustc, llvmPackages }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf213
+, pkg-config
+, perl
+, python2
+, python3
+, zip
+, buildPackages
+, which
+, readline
+, zlib
+, icu
+, cargo
+, rustc
+, llvmPackages
+}:
 
 with lib;
 
 let
-  python3Env = buildPackages.python3.withPackages (p: [p.six]);
-in stdenv.mkDerivation rec {
+  python3Env = buildPackages.python3.withPackages (p: [ p.six ]);
+in
+stdenv.mkDerivation rec {
   pname = "spidermonkey";
   version = "68.12.0";
 
@@ -78,7 +96,7 @@ in stdenv.mkDerivation rec {
     "--target=${stdenv.hostPlatform.config}"
   ];
 
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

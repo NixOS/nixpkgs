@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , gfortran
-, pkg-config, libtool
-, m4, gnum4
+, pkg-config
+, libtool
+, m4
+, gnum4
 , file
-# Memory Hierarchy (End-user can provide this.)
+  # Memory Hierarchy (End-user can provide this.)
 , memHierarchy ? ""
-# Headers/Libraries
-, blas, zlib
-# RPC headers (rpc/xdr.h)
+  # Headers/Libraries
+, blas
+, zlib
+  # RPC headers (rpc/xdr.h)
 , openmpi
 , help2man
 , doxygen
@@ -46,10 +51,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gfortran
-    pkg-config libtool
-    m4 gnum4
+    pkg-config
+    libtool
+    m4
+    gnum4
     file
-    blas zlib
+    blas
+    zlib
     openmpi
     octave
     help2man # Turn "--help" into a man-page

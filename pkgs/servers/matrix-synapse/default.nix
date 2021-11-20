@@ -1,5 +1,9 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
+{ lib
+, stdenv
+, python3
+, openssl
+, enableSystemd ? stdenv.isLinux
+, nixosTests
 , enableRedis ? true
 , callPackage
 }:
@@ -59,7 +63,7 @@ buildPythonApplication rec {
     typing-extensions
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd
-    ++ lib.optionals enableRedis [ hiredis txredisapi ];
+  ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
   checkInputs = [ mock parameterized openssl ];
 

@@ -1,6 +1,26 @@
-{ fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, qemu, unzip, zip,
-  coreutils, gnugrep, which, gnused, e2fsprogs, autoPatchelfHook, gptfdisk,
-  python3Packages, qt5, runtimeShell, lib, util-linux, wrapQtAppsHook }:
+{ fetchFromGitHub
+, libxcb
+, mtools
+, p7zip
+, parted
+, procps
+, qemu
+, unzip
+, zip
+, coreutils
+, gnugrep
+, which
+, gnused
+, e2fsprogs
+, autoPatchelfHook
+, gptfdisk
+, python3Packages
+, qt5
+, runtimeShell
+, lib
+, util-linux
+, wrapQtAppsHook
+}:
 
 # Note: Multibootusb is tricky to maintain. It relies on the
 # $PYTHONPATH variable containing some of their code, so that
@@ -109,7 +129,7 @@ python3Packages.buildPythonApplication rec {
     description = "Multiboot USB creator for Linux live disks";
     homepage = "http://multibootusb.org/";
     license = licenses.gpl2;
-    maintainers = []; # Looking for a maintainer!
+    maintainers = [ ]; # Looking for a maintainer!
     broken = true; # "name 'config' is not defined", added 2021-02-06
   };
 }

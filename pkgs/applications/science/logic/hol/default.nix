@@ -1,5 +1,12 @@
-{lib, stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
- experimentalKernel ? true}:
+{ lib
+, stdenv
+, pkgs
+, fetchurl
+, graphviz
+, fontconfig
+, liberation_ttf
+, experimentalKernel ? true
+}:
 
 let
   pname = "hol4";
@@ -27,7 +34,7 @@ stdenv.mkDerivation {
     sha256 = "6Mc/qsEjzxGqzt6yP6x/1Tmqpwc1UDGlwV1Gl+4pMsY=";
   };
 
-  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
+  buildInputs = [ polymlEnableShared graphviz fontconfig liberation_ttf ];
 
   buildCommand = ''
 

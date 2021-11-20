@@ -1,22 +1,22 @@
 { lib, stdenv, fetchurl, fetchFromGitHub }:
 
 let
-    # The x86-64-modern may need to be refined further in the future
-    # but stdenv.hostPlatform CPU flags do not currently work on Darwin
-    # https://discourse.nixos.org/t/darwin-system-and-stdenv-hostplatform-features/9745
-    archDarwin = if stdenv.isx86_64 then "x86-64-modern" else "x86-64";
-    arch = if stdenv.isDarwin then archDarwin else
-           if stdenv.isx86_64 then "x86-64" else
-           if stdenv.isi686 then "x86-32" else
-           if stdenv.isAarch64 then "armv8" else
-           "unknown";
+  # The x86-64-modern may need to be refined further in the future
+  # but stdenv.hostPlatform CPU flags do not currently work on Darwin
+  # https://discourse.nixos.org/t/darwin-system-and-stdenv-hostplatform-features/9745
+  archDarwin = if stdenv.isx86_64 then "x86-64-modern" else "x86-64";
+  arch = if stdenv.isDarwin then archDarwin else
+  if stdenv.isx86_64 then "x86-64" else
+  if stdenv.isi686 then "x86-32" else
+  if stdenv.isAarch64 then "armv8" else
+  "unknown";
 
-    nnueFile = "nn-13406b1dcbe0.nnue";
-    nnue = fetchurl {
-      name = nnueFile;
-      url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-      sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
-    };
+  nnueFile = "nn-13406b1dcbe0.nnue";
+  nnue = fetchurl {
+    name = nnueFile;
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
-      '';
+    '';
     maintainers = with maintainers; [ luispedro siraben ];
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     license = licenses.gpl3Only;
   };
 

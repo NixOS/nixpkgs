@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gamin ];
 
-  patches = [./unused-variables.debian.patch];
+  patches = [ ./unused-variables.debian.patch ];
 
   doCheck = true;
 

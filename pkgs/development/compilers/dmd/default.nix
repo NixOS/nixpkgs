@@ -1,18 +1,30 @@
-{ stdenv, lib, fetchFromGitHub
-, makeWrapper, unzip, which, writeTextFile
-, curl, tzdata, gdb, Foundation, git, callPackage
-, targetPackages, fetchpatch, bash
-, HOST_DMD? "${callPackage ./bootstrap.nix { }}/bin/dmd"
-, version? "2.097.2"
-, dmdSha256? "16ldkk32y7ln82n7g2ym5d1xf3vly3i31hf8600cpvimf6yhr6kb"
-, druntimeSha256? "1sayg6ia85jln8g28vb4m124c27lgbkd6xzg9gblss8ardb8dsp1"
-, phobosSha256? "0czg13h65b6qwhk9ibya21z3iv3fpk3rsjr3zbcrpc2spqjknfw5"
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, unzip
+, which
+, writeTextFile
+, curl
+, tzdata
+, gdb
+, Foundation
+, git
+, callPackage
+, targetPackages
+, fetchpatch
+, bash
+, HOST_DMD ? "${callPackage ./bootstrap.nix { }}/bin/dmd"
+, version ? "2.097.2"
+, dmdSha256 ? "16ldkk32y7ln82n7g2ym5d1xf3vly3i31hf8600cpvimf6yhr6kb"
+, druntimeSha256 ? "1sayg6ia85jln8g28vb4m124c27lgbkd6xzg9gblss8ardb8dsp1"
+, phobosSha256 ? "0czg13h65b6qwhk9ibya21z3iv3fpk3rsjr3zbcrpc2spqjknfw5"
 }:
 
 let
   dmdConfFile = writeTextFile {
     name = "dmd.conf";
-    text = (lib.generators.toINI {} {
+    text = (lib.generators.toINI { } {
       Environment = {
         DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"}'';
       };
@@ -60,39 +72,39 @@ stdenv.mkDerivation rec {
   # Not using patches option to make it easy to patch, for example, dmd and
   # Phobos at same time if that's required
   patchPhase =
-  lib.optionalString (builtins.compareVersions version "2.092.1" <= 0) ''
-    patch -p1 -F3 --directory=druntime -i ${(fetchpatch {
-      url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
-      sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
-    })}
+    lib.optionalString (builtins.compareVersions version "2.092.1" <= 0) ''
+      patch -p1 -F3 --directory=druntime -i ${(fetchpatch {
+        url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
+        sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
+      })}
 
-  '' + postPatch;
+    '' + postPatch;
 
   postPatch =
-  ''
-    patchShebangs .
+    ''
+      patchShebangs .
 
-  '' + lib.optionalString (version == "2.092.1") ''
-    rm dmd/test/dshell/test6952.d
-  '' + lib.optionalString (builtins.compareVersions "2.092.1" version < 0) ''
-    substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+    '' + lib.optionalString (version == "2.092.1") ''
+      rm dmd/test/dshell/test6952.d
+    '' + lib.optionalString (builtins.compareVersions "2.092.1" version < 0) ''
+      substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
 
-  '' + ''
-    rm dmd/test/runnable/gdb1.d
-    rm dmd/test/runnable/gdb10311.d
-    rm dmd/test/runnable/gdb14225.d
-    rm dmd/test/runnable/gdb14276.d
-    rm dmd/test/runnable/gdb14313.d
-    rm dmd/test/runnable/gdb14330.d
-    rm dmd/test/runnable/gdb15729.sh
-    rm dmd/test/runnable/gdb4149.d
-    rm dmd/test/runnable/gdb4181.d
+    '' + ''
+      rm dmd/test/runnable/gdb1.d
+      rm dmd/test/runnable/gdb10311.d
+      rm dmd/test/runnable/gdb14225.d
+      rm dmd/test/runnable/gdb14276.d
+      rm dmd/test/runnable/gdb14313.d
+      rm dmd/test/runnable/gdb14330.d
+      rm dmd/test/runnable/gdb15729.sh
+      rm dmd/test/runnable/gdb4149.d
+      rm dmd/test/runnable/gdb4181.d
 
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
-  '';
+    '' + lib.optionalString stdenv.isLinux ''
+      substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+    '' + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace phobos/std/socket.d --replace "foreach (name; names)" "names = []; foreach (name; names)"
+    '';
 
   nativeBuildInputs = [ makeWrapper unzip which git ];
 
@@ -100,10 +112,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin [ Foundation gdb ];
 
 
-  osname = if stdenv.isDarwin then
-    "osx"
-  else
-    stdenv.hostPlatform.parsed.kernel.name;
+  osname =
+    if stdenv.isDarwin then
+      "osx"
+    else
+      stdenv.hostPlatform.parsed.kernel.name;
   top = "$NIX_BUILD_TOP";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 

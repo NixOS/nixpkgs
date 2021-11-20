@@ -28,7 +28,9 @@ buildGoModule rec {
   vendorSha256 = null;
 
   ldflags = [
-    "-s" "-w" "-X main.revision=${version}"
+    "-s"
+    "-w"
+    "-X main.revision=${version}"
   ];
 
   installPhase = ''

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "i3wm";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];

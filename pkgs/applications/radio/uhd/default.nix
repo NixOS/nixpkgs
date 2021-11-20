@@ -4,10 +4,10 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-# See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
+  # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
 , boost
 , enableLibuhd_C_api ? true
-# requires numpy
+  # requires numpy
 , enableLibuhd_Python_api ? false
 , python3
 , enableExamples ? false
@@ -17,7 +17,7 @@
 , libusb1
 , enableDpdk ? false
 , dpdk
-# Devices
+  # Devices
 , enableOctoClock ? true
 , enableMpmd ? true
 , enableB100 ? true
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_E300=${onOffBool enableE300}"
     "-DENABLE_E320=${onOffBool enableE320}"
   ]
-    # TODO: Check if this still needed
-    # ABI differences GCC 7.1
-    # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-    ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
+  # TODO: Check if this still needed
+  # ABI differences GCC 7.1
+  # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
+  ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
   # Python + Mako are always required for the build itself but not necessary for runtime.
@@ -95,21 +95,21 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ]
-    # If both enableLibuhd_Python_api and enableUtils are off, we don't need
-    # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime
-    # dependency
-    ++ optionals (!enableLibuhd_Python_api && !enableUtils) [ pythonEnv ]
+  # If both enableLibuhd_Python_api and enableUtils are off, we don't need
+  # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime
+  # dependency
+  ++ optionals (!enableLibuhd_Python_api && !enableUtils) [ pythonEnv ]
   ;
   buildInputs = [
     boost
     libusb1
   ]
-    # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
-    # pythonEnv for runtime as well. The utilities' runtime dependencies are
-    # handled at the environment
-    ++ optionals (enableLibuhd_Python_api || enableUtils) [ pythonEnv ]
-    ++ optionals (enableLiberio) [ liberio ]
-    ++ optionals (enableDpdk) [ dpdk ]
+  # However, if enableLibuhd_Python_api *or* enableUtils is on, we need
+  # pythonEnv for runtime as well. The utilities' runtime dependencies are
+  # handled at the environment
+  ++ optionals (enableLibuhd_Python_api || enableUtils) [ pythonEnv ]
+  ++ optionals (enableLiberio) [ liberio ]
+  ++ optionals (enableDpdk) [ dpdk ]
   ;
 
   doCheck = true;

@@ -1,7 +1,27 @@
-{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
-, cargo, pkg-config, curl, coreutils, boost175, db62, hexdump, libsodium
-, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
-, withUtils ? true, withWallet ? true, withZmq ? true, zeromq
+{ rust
+, rustPlatform
+, stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, makeWrapper
+, cargo
+, pkg-config
+, curl
+, coreutils
+, boost175
+, db62
+, hexdump
+, libsodium
+, libevent
+, utf8cpp
+, util-linux
+, withDaemon ? true
+, withMining ? true
+, withUtils ? true
+, withWallet ? true
+, withZmq ? true
+, zeromq
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
@@ -10,7 +30,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   src = fetchFromGitHub {
     owner = "zcash";
-    repo  = "zcash";
+    repo = "zcash";
     rev = "v${version}";
     sha256 = "0kyk3hv1y13b3vwg9kjcrpvz9v3l8lp0ikj977nykd5ms8b1rifa";
   };
@@ -41,9 +61,9 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
     "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
   ] ++ lib.optional (!withWallet) "--disable-wallet"
-    ++ lib.optional (!withDaemon) "--without-daemon"
-    ++ lib.optional (!withUtils) "--without-utils"
-    ++ lib.optional (!withMining) "--disable-mining";
+  ++ lib.optional (!withDaemon) "--without-daemon"
+  ++ lib.optional (!withUtils) "--without-utils"
+  ++ lib.optional (!withMining) "--disable-mining";
 
   enableParallelBuilding = true;
 

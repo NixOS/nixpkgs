@@ -30,7 +30,8 @@ let
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
 
-in {
+in
+{
   name = "dokuwiki";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [
@@ -40,7 +41,7 @@ in {
   };
 
   nodes = {
-    dokuwiki_nginx = {...}: {
+    dokuwiki_nginx = { ... }: {
       services.dokuwiki = {
         sites = {
           "site1.local" = {
@@ -60,7 +61,7 @@ in {
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
 
-    dokuwiki_caddy = {...}: {
+    dokuwiki_caddy = { ... }: {
       services.dokuwiki = {
         webserver = "caddy";
         sites = {

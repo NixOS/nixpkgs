@@ -1,5 +1,12 @@
-{ buildDunePackage, metrics, metrics-influx
-, cstruct, ipaddr, logs, lwt, mirage-clock, mirage-stack
+{ buildDunePackage
+, metrics
+, metrics-influx
+, cstruct
+, ipaddr
+, logs
+, lwt
+, mirage-clock
+, mirage-stack
 }:
 
 buildDunePackage {

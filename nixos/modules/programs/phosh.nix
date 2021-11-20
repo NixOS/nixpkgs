@@ -61,7 +61,7 @@ let
           One or more modelines.
         '';
         type = types.either types.str (types.listOf types.str);
-        default = [];
+        default = [ ];
         example = [
           "87.25 720 776 848  976 1440 1443 1453 1493 -hsync +vsync"
           "65.13 768 816 896 1024 1024 1025 1028 1060 -HSync +VSync"
@@ -88,7 +88,14 @@ let
           Screen transformation.
         '';
         type = types.enum [
-          "90" "180" "270" "flipped" "flipped-90" "flipped-180" "flipped-270" null
+          "90"
+          "180"
+          "270"
+          "flipped"
+          "flipped-90"
+          "flipped-180"
+          "flipped-270"
+          null
         ];
         default = null;
       };
@@ -97,29 +104,35 @@ let
 
   optionalKV = k: v: if v == null then "" else "${k} = ${builtins.toString v}";
 
-  renderPhocOutput = name: output: let
-    modelines = if builtins.isList output.modeline
-      then output.modeline
-      else [ output.modeline ];
-    renderModeline = l: "modeline = ${l}";
-  in ''
-    [output:${name}]
-    ${concatStringsSep "\n" (map renderModeline modelines)}
-    ${optionalKV "mode" output.mode}
-    ${optionalKV "scale" output.scale}
-    ${optionalKV "rotate" output.rotate}
-  '';
+  renderPhocOutput = name: output:
+    let
+      modelines =
+        if builtins.isList output.modeline
+        then output.modeline
+        else [ output.modeline ];
+      renderModeline = l: "modeline = ${l}";
+    in
+    ''
+      [output:${name}]
+      ${concatStringsSep "\n" (map renderModeline modelines)}
+      ${optionalKV "mode" output.mode}
+      ${optionalKV "scale" output.scale}
+      ${optionalKV "rotate" output.rotate}
+    '';
 
-  renderPhocConfig = phoc: let
-    outputs = mapAttrsToList renderPhocOutput phoc.outputs;
-  in ''
-    [core]
-    xwayland = ${phoc.xwayland}
-    ${concatStringsSep "\n" outputs}
-    [cursor]
-    theme = ${phoc.cursorTheme}
-  '';
-in {
+  renderPhocConfig = phoc:
+    let
+      outputs = mapAttrsToList renderPhocOutput phoc.outputs;
+    in
+    ''
+      [core]
+      xwayland = ${phoc.xwayland}
+      ${concatStringsSep "\n" outputs}
+      [cursor]
+      theme = ${phoc.cursorTheme}
+    '';
+in
+{
   options = {
     programs.phosh = {
       enable = mkEnableOption ''
@@ -130,7 +143,7 @@ in {
           Configurations for the Phoc compositor.
         '';
         type = types.oneOf [ types.lines types.path phocConfigType ];
-        default = {};
+        default = { };
       };
     };
   };
@@ -147,7 +160,7 @@ in {
 
     programs.feedbackd.enable = true;
 
-    security.pam.services.phosh = {};
+    security.pam.services.phosh = { };
 
     hardware.opengl.enable = mkDefault true;
 

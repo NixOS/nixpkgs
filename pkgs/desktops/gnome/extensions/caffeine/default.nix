@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-   extensionPortalSlug = "caffeine";
-   extensionUuid = "caffeine@patapon.info";
+    extensionPortalSlug = "caffeine";
+    extensionUuid = "caffeine@patapon.info";
   };
 
   nativeBuildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   buildPhase = ''

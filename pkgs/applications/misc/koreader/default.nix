@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeWrapper
 , dpkg
@@ -9,7 +10,8 @@
 , sdcv
 , SDL2
 , noto-fonts
-, nerdfonts }:
+, nerdfonts
+}:
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
 in stdenv.mkDerivation rec {
   pname = "koreader";
@@ -58,6 +60,6 @@ in stdenv.mkDerivation rec {
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     platforms = intersectLists platforms.x86_64 platforms.linux;
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ contrun neonfuz];
+    maintainers = with maintainers; [ contrun neonfuz ];
   };
 }

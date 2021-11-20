@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, unzip
-, opam, ocamlgraph, re, cppo }:
+{ lib
+, buildDunePackage
+, unzip
+, opam
+, ocamlgraph
+, re
+, cppo
+}:
 
 buildDunePackage rec {
   pname = "opam-core";

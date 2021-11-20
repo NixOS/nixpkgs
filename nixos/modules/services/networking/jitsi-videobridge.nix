@@ -12,7 +12,8 @@ let
   #
   # Substitution for environment variable FOO is represented as attribute set
   # { __hocon_envvar = "FOO"; }
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
+  toHOCON = x:
+    if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
     else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
     else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
     else builtins.toJSON x;
@@ -32,7 +33,7 @@ let
       };
       stats = {
         enabled = true;
-        transports = [ { type = "muc"; } ];
+        transports = [{ type = "muc"; }];
       };
       apis.xmpp-client.configs = flip mapAttrs cfg.xmppConfigs (name: xmppConfig: {
         hostname = xmppConfig.hostName;
@@ -198,70 +199,73 @@ in
         What is passed as --apis= parameter. If this is empty, "none" is passed.
         Needed for monitoring jitsi.
       '';
-      default = [];
+      default = [ ];
       example = literalExpression "[ \"colibri\" \"rest\" ]";
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
 
     services.jitsi-videobridge.extraProperties = optionalAttrs (cfg.nat.localAddress != null) {
       "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
       "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
     };
 
-    systemd.services.jitsi-videobridge2 = let
-      jvbProps = {
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
-        "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
-        "-Dconfig.file" = pkgs.writeText "jvb.conf" (toHOCON jvbConfig);
-      } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);
-    in
-    {
-      aliases = [ "jitsi-videobridge.service" ];
-      description = "Jitsi Videobridge";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.jitsi-videobridge2 =
+      let
+        jvbProps = {
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
+          "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
+          "-Dconfig.file" = pkgs.writeText "jvb.conf" (toHOCON jvbConfig);
+        } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);
+      in
+      {
+        aliases = [ "jitsi-videobridge.service" ];
+        description = "Jitsi Videobridge";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
+        environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
 
-      script = (concatStrings (mapAttrsToList (name: xmppConfig:
-        "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
-      ) cfg.xmppConfigs))
-      + ''
-        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
-      '';
+        script = (concatStrings (mapAttrsToList
+          (name: xmppConfig:
+            "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
+          )
+          cfg.xmppConfigs))
+        + ''
+          ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
+        '';
 
-      serviceConfig = {
-        Type = "exec";
+        serviceConfig = {
+          Type = "exec";
 
-        DynamicUser = true;
-        User = "jitsi-videobridge";
-        Group = "jitsi-meet";
+          DynamicUser = true;
+          User = "jitsi-videobridge";
+          Group = "jitsi-meet";
 
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
 
-        TasksMax = 65000;
-        LimitNPROC = 65000;
-        LimitNOFILE = 65000;
+          TasksMax = 65000;
+          LimitNPROC = 65000;
+          LimitNOFILE = 65000;
+        };
       };
-    };
 
     environment.etc."jitsi/videobridge/logging.properties".source =
       mkDefault "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";

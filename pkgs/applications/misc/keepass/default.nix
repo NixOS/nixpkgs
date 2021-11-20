@@ -1,5 +1,20 @@
-{ lib, fetchurl, buildDotnetPackage, substituteAll, makeWrapper, makeDesktopItem,
-  unzip, icoutils, gtk2, xorg, xdotool, xsel, coreutils, unixtools, glib, plugins ? [] }:
+{ lib
+, fetchurl
+, buildDotnetPackage
+, substituteAll
+, makeWrapper
+, makeDesktopItem
+, unzip
+, icoutils
+, gtk2
+, xorg
+, xdotool
+, xsel
+, coreutils
+, unixtools
+, glib
+, plugins ? [ ]
+}:
 
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
@@ -34,15 +49,17 @@ with builtins; buildDotnetPackage rec {
   # This derivation patches KeePass to search for plugins in specified
   # plugin derivations in the Nix store and nowhere else.
   pluginLoadPathsPatch =
-    let outputLc = toString (add 7 (length plugins));
-        patchTemplate = readFile ./keepass-plugins.patch;
-        loadTemplate  = readFile ./keepass-plugins-load.patch;
-        loads =
-          lib.concatStrings
-            (map
-              (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
-              plugins);
-    in replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
+    let
+      outputLc = toString (add 7 (length plugins));
+      patchTemplate = readFile ./keepass-plugins.patch;
+      loadTemplate = readFile ./keepass-plugins-load.patch;
+      loads =
+        lib.concatStrings
+          (map
+            (p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
+            plugins);
+    in
+    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
 
   passAsFile = [ "pluginLoadPathsPatch" ];
   postPatch = ''
@@ -89,25 +106,25 @@ with builtins; buildDotnetPackage rec {
   dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   postInstall =
-  let
-    extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
-  in
-  ''
-    mkdir -p "$out/share/applications"
-    cp ${desktopItem}/share/applications/* $out/share/applications
-    wrapProgram $out/bin/keepass \
-      --prefix PATH : "$binPaths" \
-      --prefix LD_LIBRARY_PATH : "$dynlibPath"
+    let
+      extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
+    in
+    ''
+      mkdir -p "$out/share/applications"
+      cp ${desktopItem}/share/applications/* $out/share/applications
+      wrapProgram $out/bin/keepass \
+        --prefix PATH : "$binPaths" \
+        --prefix LD_LIBRARY_PATH : "$dynlibPath"
 
-    ${extractFDeskIcons} \
-      "./Translation/TrlUtil/Resources/KeePass.ico" \
-      '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
-      '\1' \
-      '([^\.]+).+' \
-      'keepass' \
-      "$out" \
-      "./tmp"
-  '';
+      ${extractFDeskIcons} \
+        "./Translation/TrlUtil/Resources/KeePass.ico" \
+        '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
+        '\1' \
+        '([^\.]+).+' \
+        'keepass' \
+        "$out" \
+        "./tmp"
+    '';
 
   meta = {
     description = "GUI password manager with strong cryptography";

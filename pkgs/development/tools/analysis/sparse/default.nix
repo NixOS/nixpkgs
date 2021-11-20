@@ -2,7 +2,8 @@
 
 let
   GCC_BASE = "${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.uname.processor}-unknown-linux-gnu/${stdenv.cc.cc.version}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sparse";
   version = "0.6.4";
 
@@ -28,9 +29,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Semantic parser for C";
-    homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice jkarlson ];
   };
 }

@@ -86,23 +86,25 @@ in
   config = mkIf cfg.enable {
 
     users.users.polipo =
-      { uid = config.ids.uids.polipo;
+      {
+        uid = config.ids.uids.polipo;
         description = "Polipo caching proxy user";
         home = "/var/cache/polipo";
         createHome = true;
       };
 
     users.groups.polipo =
-      { gid = config.ids.gids.polipo;
+      {
+        gid = config.ids.gids.polipo;
         members = [ "polipo" ];
       };
 
     systemd.services.polipo = {
       description = "caching web proxy";
       after = [ "network.target" "nss-lookup.target" ];
-      wantedBy = [ "multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart  = "${pkgs.polipo}/bin/polipo -c ${polipoConfig}";
+        ExecStart = "${pkgs.polipo}/bin/polipo -c ${polipoConfig}";
         User = "polipo";
       };
     };

@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, enum34, functools32, typing ? null
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, enum34
+, functools32
+, typing ? null
 }:
 
 buildPythonPackage rec {

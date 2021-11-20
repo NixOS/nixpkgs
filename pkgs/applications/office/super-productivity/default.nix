@@ -1,4 +1,4 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron_11 }:
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_11 }:
 
 let
   electron = electron_11;

@@ -10,7 +10,8 @@ let
       click = self.callPackage ../../../development/python-modules/click/7.nix { };
     };
   };
-in with python.pkgs; buildPythonApplication rec {
+in
+with python.pkgs; buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.2";
   disabled = !isPy3k;

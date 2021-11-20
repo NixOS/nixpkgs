@@ -1,9 +1,12 @@
-{ stdenv, lib, python3
+{ stdenv
+, lib
+, python3
 , fetchFromGitHub
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
+, version
+, src
 }:
 
 let
@@ -37,7 +40,7 @@ let
           rev = version;
           sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
         };
-        disabledTestPaths = [];
+        disabledTestPaths = [ ];
       });
 
       uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {

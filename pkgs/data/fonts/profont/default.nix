@@ -6,17 +6,19 @@ stdenv.mkDerivation {
 
   # Note: stripRoot doesn't work because the archive
   # constains the metadata directory `__MACOSX`.
-  src = fetchzip {
-    url = "https://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
-    sha256 = "12dbm87wvcpmn7nzgzwlk45cybp091diara8blqm6129ps27z6kb";
-    stripRoot = false;
-  } + /profont-x11;
+  src = fetchzip
+    {
+      url = "https://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
+      sha256 = "12dbm87wvcpmn7nzgzwlk45cybp091diara8blqm6129ps27z6kb";
+      stripRoot = false;
+    } + /profont-x11;
 
-  srcOtb = fetchzip {
-    url = "https://tobiasjung.name/downloadfile.php?file=profont-otb.zip";
-    sha256 = "18rfhfqrsj3510by0w1a7ak5as6r2cxh8xv02xc1y30mfa6g24x6";
-    stripRoot = false;
-  } + /profont-otb;
+  srcOtb = fetchzip
+    {
+      url = "https://tobiasjung.name/downloadfile.php?file=profont-otb.zip";
+      sha256 = "18rfhfqrsj3510by0w1a7ak5as6r2cxh8xv02xc1y30mfa6g24x6";
+      stripRoot = false;
+    } + /profont-otb;
 
   dontBuild = true;
 

@@ -203,5 +203,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (preInstall != "") { inherit preInstall; }
 // optionalAttrs (fixupPhase != "") { inherit fixupPhase; }
 // optionalAttrs (preFixup != "") { inherit preFixup; }
-// optionalAttrs (postFixup != "") { inherit postFixup; }
+  // optionalAttrs (postFixup != "") { inherit postFixup; }
 )

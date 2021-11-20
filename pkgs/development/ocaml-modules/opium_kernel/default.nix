@@ -27,11 +27,15 @@ buildDunePackage rec {
   doCheck = true;
 
   buildInputs = [
-    ppx_sexp_conv ppx_fields_conv
+    ppx_sexp_conv
+    ppx_fields_conv
   ];
 
   propagatedBuildInputs = [
-    hmap cohttp-lwt ezjsonm sexplib
+    hmap
+    cohttp-lwt
+    ezjsonm
+    sexplib
   ];
 
   meta = {

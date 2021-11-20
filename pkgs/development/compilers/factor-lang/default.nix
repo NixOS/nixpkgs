@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchurl, glib, git,
-  rlwrap, curl, pkg-config, perl, makeWrapper, tzdata, ncurses,
-  pango, cairo, gtk2, gdk-pixbuf, gtkglext,
-  mesa, xorg, openssl, unzip }:
+{ lib
+, stdenv
+, fetchurl
+, glib
+, git
+, rlwrap
+, curl
+, pkg-config
+, perl
+, makeWrapper
+, tzdata
+, ncurses
+, pango
+, cairo
+, gtk2
+, gdk-pixbuf
+, gtkglext
+, mesa
+, xorg
+, openssl
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "factor-lang";
@@ -20,9 +38,25 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = with xorg; [ git rlwrap curl pkg-config perl
-    libX11 pango cairo gtk2 gdk-pixbuf gtkglext
-    mesa libXmu libXt libICE libSM openssl ];
+  buildInputs = with xorg; [
+    git
+    rlwrap
+    curl
+    pkg-config
+    perl
+    libX11
+    pango
+    cairo
+    gtk2
+    gdk-pixbuf
+    gtkglext
+    mesa
+    libXmu
+    libXt
+    libICE
+    libSM
+    openssl
+  ];
 
   buildPhase = ''
     sed -ie '4i GIT_LABEL = heads/master-${rev}' GNUmakefile

@@ -7,14 +7,15 @@ let
   configProvided = cfg.config != { };
   configFileProvided = cfg.configFile != null;
 
-in {
+in
+{
   options = with types; {
     services.yggdrasil = {
       enable = mkEnableOption "the yggdrasil system service";
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         example = {
           Peers = [
             "tcp://aa.bb.cc.dd:eeeee"
@@ -84,7 +85,7 @@ in {
 
       denyDhcpcdInterfaces = mkOption {
         type = listOf str;
-        default = [];
+        default = [ ];
         example = [ "tap*" ];
         description = ''
           Disable the DHCP client for any interface whose name matches
@@ -112,88 +113,90 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let binYggdrasil = cfg.package + "/bin/yggdrasil";
-  in {
-    assertions = [{
-      assertion = config.networking.enableIPv6;
-      message = "networking.enableIPv6 must be true for yggdrasil to work";
-    }];
+  config = mkIf cfg.enable (
+    let binYggdrasil = cfg.package + "/bin/yggdrasil";
+    in {
+      assertions = [{
+        assertion = config.networking.enableIPv6;
+        message = "networking.enableIPv6 must be true for yggdrasil to work";
+      }];
 
-    system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
-      if [ ! -e ${keysPath} ]
-      then
-        mkdir --mode=700 -p ${builtins.dirOf keysPath}
-        ${binYggdrasil} -genconf -json \
-          | ${pkgs.jq}/bin/jq \
-              'to_entries|map(select(.key|endswith("Key")))|from_entries' \
-          > ${keysPath}
-      fi
-    '';
+      system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
+        if [ ! -e ${keysPath} ]
+        then
+          mkdir --mode=700 -p ${builtins.dirOf keysPath}
+          ${binYggdrasil} -genconf -json \
+            | ${pkgs.jq}/bin/jq \
+                'to_entries|map(select(.key|endswith("Key")))|from_entries' \
+            > ${keysPath}
+        fi
+      '';
 
-    systemd.services.yggdrasil = {
-      description = "Yggdrasil Network Service";
-      bindsTo = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      systemd.services.yggdrasil = {
+        description = "Yggdrasil Network Service";
+        bindsTo = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        (if configProvided || configFileProvided || cfg.persistentKeys then
-          "echo "
+        preStart =
+          (if configProvided || configFileProvided || cfg.persistentKeys then
+            "echo "
 
-          + (lib.optionalString configProvided
-            "'${builtins.toJSON cfg.config}'")
-          + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
-          + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-          + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
-        else
-          "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
+            + (lib.optionalString configProvided
+              "'${builtins.toJSON cfg.config}'")
+            + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
+            + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
+            + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+          else
+            "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
 
-      serviceConfig = {
-        ExecStart =
-          "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        Restart = "always";
+        serviceConfig = {
+          ExecStart =
+            "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "always";
 
-        Group = cfg.group;
-        RuntimeDirectory = "yggdrasil";
-        RuntimeDirectoryMode = "0750";
-        BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
-          ++ lib.optional cfg.persistentKeys keysPath;
+          Group = cfg.group;
+          RuntimeDirectory = "yggdrasil";
+          RuntimeDirectoryMode = "0750";
+          BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
+            ++ lib.optional cfg.persistentKeys keysPath;
 
-        # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
-        # to set up the network adapter when DynamicUser is set.  See
-        # github.com/yggdrasil-network/yggdrasil-go/issues/557.  The
-        # following options are implied by DynamicUser according to
-        # the systemd.exec documentation, and can be removed if the
-        # upstream issue is fixed and DynamicUser is set to true:
-        PrivateTmp = true;
-        RemoveIPC = true;
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        RestrictSUIDSGID = true;
-        # End of list of options implied by DynamicUser.
+          # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
+          # to set up the network adapter when DynamicUser is set.  See
+          # github.com/yggdrasil-network/yggdrasil-go/issues/557.  The
+          # following options are implied by DynamicUser according to
+          # the systemd.exec documentation, and can be removed if the
+          # upstream issue is fixed and DynamicUser is set to true:
+          PrivateTmp = true;
+          RemoveIPC = true;
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          RestrictSUIDSGID = true;
+          # End of list of options implied by DynamicUser.
 
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
-        MemoryDenyWriteExecute = true;
-        ProtectControlGroups = true;
-        ProtectHome = "tmpfs";
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
+          AmbientCapabilities = "CAP_NET_ADMIN";
+          CapabilityBoundingSet = "CAP_NET_ADMIN";
+          MemoryDenyWriteExecute = true;
+          ProtectControlGroups = true;
+          ProtectHome = "tmpfs";
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
+        };
       };
-    };
 
-    networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
-    networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+      networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
+      networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
 
-    # Make yggdrasilctl available on the command line.
-    environment.systemPackages = [ cfg.package ];
-  });
+      # Make yggdrasilctl available on the command line.
+      environment.systemPackages = [ cfg.package ];
+    }
+  );
   meta = {
     doc = ./yggdrasil.xml;
     maintainers = with lib.maintainers; [ gazally ehmry ];

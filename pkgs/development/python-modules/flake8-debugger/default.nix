@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy27
 , flake8
 , pycodestyle
 , six

@@ -1,7 +1,13 @@
-{ lib, stdenv, python, makeWrapper, unzip
+{ lib
+, stdenv
+, python
+, makeWrapper
+, unzip
 , pipInstallHook
 , setuptoolsBuildHook
-, wheel, pip, setuptools
+, wheel
+, pip
+, setuptools
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +24,8 @@ stdenv.mkDerivation rec {
   # Should be propagatedNativeBuildInputs
   propagatedBuildInputs = [
     # Override to remove dependencies to prevent infinite recursion.
-    (pipInstallHook.override{pip=null;})
-    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+    (pipInstallHook.override { pip = null; })
+    (setuptoolsBuildHook.override { setuptools = null; wheel = null; })
   ];
 
   postPatch = ''

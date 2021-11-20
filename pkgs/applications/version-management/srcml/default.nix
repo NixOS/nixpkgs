@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr2,
-  curl
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libxml2
+, libxslt
+, boost
+, libarchive
+, python
+, antlr2
+, curl
 }:
 
 with lib;
@@ -16,7 +25,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     patchShebangs .
     substituteInPlace CMake/install.cmake --replace /usr/local $out
-    '';
+  '';
 
   patches = [
     ./gcc6.patch

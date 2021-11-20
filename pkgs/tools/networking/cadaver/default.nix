@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib}:
+{ lib, stdenv, fetchurl, fetchpatch, neon, pkg-config, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cadaver";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A command-line WebDAV client";
-    homepage    = "http://www.webdav.org/cadaver";
+    homepage = "http://www.webdav.org/cadaver";
     maintainers = with maintainers; [ ianwookim ];
-    license     = licenses.gpl2;
-    platforms   = with platforms; linux ++ freebsd ++ openbsd;
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
   };
 }

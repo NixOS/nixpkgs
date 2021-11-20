@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
-, jre, binaryen
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, nodejs
+, closurecompiler
+, jre
+, binaryen
 , llvmPackages
-, symlinkJoin, makeWrapper, substituteAll
+, symlinkJoin
+, makeWrapper
+, substituteAll
 , mkYarnModules
 }:
 

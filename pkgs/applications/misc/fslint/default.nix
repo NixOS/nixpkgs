@@ -1,19 +1,20 @@
 { lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
 
-let pythonEnv = python2.withPackages(ps: [ ps.pyGtkGlade]);
+let pythonEnv = python2.withPackages (ps: [ ps.pyGtkGlade ]);
 in stdenv.mkDerivation rec {
-  pname   = "fslint";
+  pname = "fslint";
   version = "2.46";
 
   src = fetchFromGitHub {
-    owner  = "pixelb";
-    repo   = "fslint";
-    rev    = version;
+    owner = "pixelb";
+    repo = "fslint";
+    rev = version;
     sha256 = "048pc1rsslbsrfchl2wmdd4hpa2gycglib7kdx8vqs947zcm0sfv";
   };
 
   buildInputs = [
-    pythonEnv makeWrapper
+    pythonEnv
+    makeWrapper
   ];
 
   prePatch = ''

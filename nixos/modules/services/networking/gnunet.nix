@@ -66,7 +66,7 @@ in
       udp = {
         port = mkOption {
           type = types.port;
-          default = 2086;  # assigned by IANA
+          default = 2086; # assigned by IANA
           description = ''
             The UDP port for use by GNUnet.
           '';
@@ -76,7 +76,7 @@ in
       tcp = {
         port = mkOption {
           type = types.port;
-          default = 2086;  # assigned by IANA
+          default = 2086; # assigned by IANA
           description = ''
             The TCP port for use by GNUnet.
           '';

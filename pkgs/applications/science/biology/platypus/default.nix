@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, python27, htslib, zlib, makeWrapper}:
+{ lib, stdenv, fetchFromGitHub, python27, htslib, zlib, makeWrapper }:
 
 let python = python27.withPackages (ps: with ps; [ cython ]);
 

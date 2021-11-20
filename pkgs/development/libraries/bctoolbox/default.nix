@@ -2,7 +2,8 @@
 , cmake
 , fetchFromGitLab
 , mbedtls
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

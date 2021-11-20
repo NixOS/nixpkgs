@@ -13,7 +13,7 @@
 , python3
 , xz
 , zlib
-# recommended dependencies
+  # recommended dependencies
 , withHwloc ? true
 , hwloc
 , withCurl ? true
@@ -24,7 +24,7 @@
 , libcap
 , withUnwind ? stdenv.isLinux
 , libunwind
-# optional dependencies
+  # optional dependencies
 , withBrotli ? false
 , brotli
 , withCjose ? false
@@ -43,7 +43,7 @@
 , luajit
 , withMaxmindDB ? false
 , libmaxminddb
-# optional features
+  # optional features
 , enableWCCP ? false
 }:
 
@@ -150,29 +150,31 @@ stdenv.mkDerivation rec {
     rmdir $out/.install-trafficserver
   '';
 
-  installCheckPhase = let
-    expected = ''
-      Via header is [uScMsEf p eC:t cCMp sF], Length is 22
-      Via Header Details:
-      Request headers received from client                   :simple request (not conditional)
-      Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
-      Response information received from origin server       :error in response
-      Result of document write-to-cache:                     :no cache write performed
-      Proxy operation result                                 :unknown
-      Error codes (if any)                                   :connection to server failed
-      Tunnel info                                            :no tunneling
-      Cache Type                                             :cache
-      Cache Lookup Result                                    :cache miss (url not in cache)
-      Parent proxy connection status                         :no parent proxy or unknown
-      Origin server connection status                        :connection open failed
+  installCheckPhase =
+    let
+      expected = ''
+        Via header is [uScMsEf p eC:t cCMp sF], Length is 22
+        Via Header Details:
+        Request headers received from client                   :simple request (not conditional)
+        Result of Traffic Server cache lookup for URL          :miss (a cache "MISS")
+        Response information received from origin server       :error in response
+        Result of document write-to-cache:                     :no cache write performed
+        Proxy operation result                                 :unknown
+        Error codes (if any)                                   :connection to server failed
+        Tunnel info                                            :no tunneling
+        Cache Type                                             :cache
+        Cache Lookup Result                                    :cache miss (url not in cache)
+        Parent proxy connection status                         :no parent proxy or unknown
+        Origin server connection status                        :connection open failed
+      '';
+    in
+    ''
+      runHook preInstallCheck
+      diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
+      ${lib.removeSuffix "\n" expected}
+      EOF
+      runHook postInstallCheck
     '';
-  in ''
-    runHook preInstallCheck
-    diff -Naur <($out/bin/traffic_via '[uScMsEf p eC:t cCMp sF]') - <<EOF
-    ${lib.removeSuffix "\n" expected}
-    EOF
-    runHook postInstallCheck
-  '';
 
   doCheck = true;
   doInstallCheck = true;

@@ -17,7 +17,9 @@ buildGoModule rec {
   excludedPackages = "itest";
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   preCheck = ''

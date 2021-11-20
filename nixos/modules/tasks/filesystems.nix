@@ -13,14 +13,15 @@ let
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
-  fileSystems = if fileSystems' ? result
-                then # use topologically sorted fileSystems everywhere
-                     fileSystems'.result
-                else # the assertion below will catch this,
-                     # but we fall back to the original order
-                     # anyway so that other modules could check
-                     # their assertions too
-                     (attrValues config.fileSystems);
+  fileSystems =
+    if fileSystems' ? result
+    then # use topologically sorted fileSystems everywhere
+      fileSystems'.result
+    else # the assertion below will catch this,
+    # but we fall back to the original order
+    # anyway so that other modules could check
+    # their assertions too
+      (attrValues config.fileSystems);
 
   specialFSTypes = [ "proc" "sysfs" "tmpfs" "ramfs" "devtmpfs" "devpts" ];
 
@@ -130,28 +131,32 @@ let
 
     };
 
-    config = let
-      defaultFormatOptions =
-        # -F needed to allow bare block device without partitions
-        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
-        # -q needed for non-interactive operations
-        else if config.fsType == "jfs" then "-q"
-        # (same here)
-        else if config.fsType == "reiserfs" then "-q"
-        else null;
-    in {
-      options = mkIf config.autoResize [ "x-nixos.autoresize" ];
-      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
-    };
+    config =
+      let
+        defaultFormatOptions =
+          # -F needed to allow bare block device without partitions
+          if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
+          # -q needed for non-interactive operations
+          else if config.fsType == "jfs" then "-q"
+          # (same here)
+          else if config.fsType == "reiserfs" then "-q"
+          else null;
+      in
+      {
+        options = mkIf config.autoResize [ "x-nixos.autoresize" ];
+        formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
+      };
 
   };
 
   # Makes sequence of `specialMount device mountPoint options fsType` commands.
   # `systemMount` should be defined in the sourcing script.
   makeSpecialMounts = mounts:
-    pkgs.writeText "mounts.sh" (concatMapStringsSep "\n" (mount: ''
-      specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
-    '') mounts);
+    pkgs.writeText "mounts.sh" (concatMapStringsSep "\n"
+      (mount: ''
+        specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
+      '')
+      mounts);
 
 in
 
@@ -162,7 +167,7 @@ in
   options = {
 
     fileSystems = mkOption {
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "/".device = "/dev/hda1";
@@ -174,7 +179,7 @@ in
           "/bigdisk".label = "bigdisk";
         }
       '';
-      type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      type = types.attrsOf (types.submodule [ coreFileSystemOpts fileSystemOpts ]);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = "/"</literal>).  Each
@@ -207,7 +212,7 @@ in
     };
 
     boot.specialFileSystems = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf (types.submodule coreFileSystemOpts);
       internal = true;
       description = ''
@@ -222,20 +227,25 @@ in
 
   config = {
 
-    assertions = let
-      ls = sep: concatMapStringsSep sep (x: x.mountPoint);
-      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
-    in [
-      { assertion = ! (fileSystems' ? cycle);
-        message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
-      }
-      { assertion = ! (any notAutoResizable fileSystems);
-        message = let
-          fs = head (filter notAutoResizable fileSystems);
-        in
-          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${if fs.fsType == "auto" then " fsType has to be explicitly set and" else ""} only the ext filesystems and f2fs support it.";
-      }
-    ];
+    assertions =
+      let
+        ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+        notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
+      in
+      [
+        {
+          assertion = ! (fileSystems' ? cycle);
+          message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
+        }
+        {
+          assertion = ! (any notAutoResizable fileSystems);
+          message =
+            let
+              fs = head (filter notAutoResizable fileSystems);
+            in
+            "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${if fs.fsType == "auto" then " fsType has to be explicitly set and" else ""} only the ext filesystems and f2fs support it.";
+        }
+      ];
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
@@ -259,7 +269,8 @@ in
           ++ optional (sw.priority != null) "pri=${toString sw.priority}"
           ++ optional (sw.discardPolicy != null) "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
         );
-      in ''
+      in
+      ''
         # This is a generated file.  Do not edit!
         #
         # To make changes, edit the fileSystems and swapDevices NixOS options
@@ -289,43 +300,47 @@ in
 
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =
-      { description = "All File Systems";
+      {
+        description = "All File Systems";
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
     systemd.services =
 
-    # Emit systemd services to format requested filesystems.
+      # Emit systemd services to format requested filesystems.
       let
         formatDevice = fs:
           let
             mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
-            device'  = escapeSystemdPath fs.device;
+            device' = escapeSystemdPath fs.device;
             device'' = "${device'}.device";
-          in nameValuePair "mkfs-${device'}"
-          { description = "Initialisation of Filesystem ${fs.device}";
-            wantedBy = [ mountPoint' ];
-            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
-            requires = [ device'' ];
-            after = [ device'' ];
-            path = [ pkgs.util-linux ] ++ config.system.fsPackages;
-            script =
-              ''
-                if ! [ -e "${fs.device}" ]; then exit 1; fi
-                # FIXME: this is scary.  The test could be more robust.
-                type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
-                if [ -z "$type" ]; then
-                  echo "creating ${fs.fsType} filesystem on ${fs.device}..."
-                  mkfs.${fs.fsType} ${fs.formatOptions} "${fs.device}"
-                fi
-              '';
-            unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
-            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
-            serviceConfig.Type = "oneshot";
-          };
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
-    # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
-    # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
+          in
+          nameValuePair "mkfs-${device'}"
+            {
+              description = "Initialisation of Filesystem ${fs.device}";
+              wantedBy = [ mountPoint' ];
+              before = [ mountPoint' "systemd-fsck@${device'}.service" ];
+              requires = [ device'' ];
+              after = [ device'' ];
+              path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+              script =
+                ''
+                  if ! [ -e "${fs.device}" ]; then exit 1; fi
+                  # FIXME: this is scary.  The test could be more robust.
+                  type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
+                  if [ -z "$type" ]; then
+                    echo "creating ${fs.fsType} filesystem on ${fs.device}..."
+                    mkfs.${fs.fsType} ${fs.formatOptions} "${fs.device}"
+                  fi
+                '';
+              unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
+              unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+              serviceConfig.Type = "oneshot";
+            };
+      in
+      listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
+        # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
+        # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
         "mount-pstore" = {
           serviceConfig = {
             Type = "oneshot";

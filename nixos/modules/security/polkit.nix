@@ -80,17 +80,19 @@ in
 
     services.dbus.packages = [ pkgs.polkit.out ];
 
-    security.pam.services.polkit-1 = {};
+    security.pam.services.polkit-1 = { };
 
     security.wrappers = {
       pkexec =
-        { setuid = true;
+        {
+          setuid = true;
           owner = "root";
           group = "root";
           source = "${pkgs.polkit.bin}/bin/pkexec";
         };
       polkit-agent-helper-1 =
-        { setuid = true;
+        {
+          setuid = true;
           owner = "root";
           group = "root";
           source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
@@ -109,7 +111,7 @@ in
       group = "polkituser";
     };
 
-    users.groups.polkituser = {};
+    users.groups.polkituser = { };
   };
 
 }

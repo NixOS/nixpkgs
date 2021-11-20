@@ -78,5 +78,5 @@ buildPythonPackage rec {
     description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.DamienCassou ];
- };
+  };
 }

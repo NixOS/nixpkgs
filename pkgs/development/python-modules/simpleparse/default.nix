@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "010szm4mbqgfdksa2n4l9avj617rb0gkwrryc70mfjmyww0bd1m6";
   };
 
-  doCheck = false;  # weird error
+  doCheck = false; # weird error
 
   meta = with lib; {
     description = "A Parser Generator for Python";

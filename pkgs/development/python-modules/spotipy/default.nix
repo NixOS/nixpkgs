@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, six }:
+, six
+}:
 
 buildPythonPackage rec {
   pname = "spotipy";

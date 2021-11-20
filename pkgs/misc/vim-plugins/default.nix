@@ -3,17 +3,17 @@
 
 let
 
-  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix vimGenDocHook;
+  inherit (vimUtils.override { inherit vim; }) buildVimPluginFrom2Nix vimGenDocHook;
 
   inherit (lib) extends;
 
   initialPackages = self: {
     # Convert derivation to a vim plugin.
     toVimPlugin = drv:
-      drv.overrideAttrs(oldAttrs: {
+      drv.overrideAttrs (oldAttrs: {
 
-        nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ vimGenDocHook ];
-        passthru = (oldAttrs.passthru or {}) // {
+        nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ vimGenDocHook ];
+        passthru = (oldAttrs.passthru or { }) // {
           vimPlugin = true;
         };
       });
@@ -35,7 +35,7 @@ let
     inherit llvmPackages luaPackages;
   };
 
-  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: {};
+  aliases = if (config.allowAliases or true) then (import ./aliases.nix lib) else final: prev: { };
 
   extensible-self = lib.makeExtensible
     (extends aliases
@@ -44,4 +44,4 @@ let
       )
     );
 in
-  extensible-self
+extensible-self

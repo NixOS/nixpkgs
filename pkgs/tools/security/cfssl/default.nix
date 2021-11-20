@@ -35,7 +35,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
   ];
 

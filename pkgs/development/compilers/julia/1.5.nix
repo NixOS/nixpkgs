@@ -1,14 +1,36 @@
-{ lib, stdenv, fetchzip
-# build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2, cmake
-# libjulia dependencies
-, libunwind, readline, utf8proc, zlib
-# standard library dependencies
-, curl, fftwSinglePrec, fftw, libgit2, mpfr, openlibm, openspecfun, pcre2
-# linear algebra
-, blas, lapack, arpack
-# Darwin frameworks
-, CoreServices, ApplicationServices
+{ lib
+, stdenv
+, fetchzip
+  # build tools
+, gfortran
+, m4
+, makeWrapper
+, patchelf
+, perl
+, which
+, python2
+, cmake
+  # libjulia dependencies
+, libunwind
+, readline
+, utf8proc
+, zlib
+  # standard library dependencies
+, curl
+, fftwSinglePrec
+, fftw
+, libgit2
+, mpfr
+, openlibm
+, openspecfun
+, pcre2
+  # linear algebra
+, blas
+, lapack
+, arpack
+  # Darwin frameworks
+, CoreServices
+, ApplicationServices
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -43,10 +65,21 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    arpack fftw fftwSinglePrec libgit2 libunwind mpfr
-    pcre2.dev blas lapack openlibm openspecfun readline utf8proc
+    arpack
+    fftw
+    fftwSinglePrec
+    libgit2
+    libunwind
+    mpfr
+    pcre2.dev
+    blas
+    lapack
+    openlibm
+    openspecfun
+    readline
+    utf8proc
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [CoreServices ApplicationServices];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which cmake ];
 
@@ -58,13 +91,14 @@ stdenv.mkDerivation rec {
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}
-              or (throw "unsupported architecture: ${arch}");
+        or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; aarch64 = "generic"; }.${arch}
-                  or (throw "unsupported architecture: ${arch}");
-    # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
-    # https://github.com/JuliaLang/julia/tree/master/deps/patches
-    in [
+        or (throw "unsupported architecture: ${arch}");
+      # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
+      # https://github.com/JuliaLang/julia/tree/master/deps/patches
+    in
+    [
       "ARCH=${arch}"
       "MARCH=${march}"
       "JULIA_CPU_TARGET=${cpuTarget}"
@@ -98,8 +132,16 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec libgit2 mpfr blas openlibm
-    openspecfun pcre2 lapack
+    arpack
+    fftw
+    fftwSinglePrec
+    libgit2
+    mpfr
+    blas
+    openlibm
+    openspecfun
+    pcre2
+    lapack
   ];
 
   preBuild = ''

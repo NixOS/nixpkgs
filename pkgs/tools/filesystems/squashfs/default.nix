@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd squashfs-tools
-  '' ;
+  '';
 
   installFlags = [ "INSTALL_DIR=${placeholder "out"}/bin" ];
 

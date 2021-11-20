@@ -1,27 +1,41 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib
+, stdenv
+, pkgsBuildTarget
+, targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
-, autoconf, autoreconfHook, automake, coreutils, fetchgit, perl, python3, m4, sphinx
-, xattr, autoSignDarwinBinariesHook
+, autoconf
+, autoreconfHook
+, automake
+, coreutils
+, fetchgit
+, perl
+, python3
+, m4
+, sphinx
+, xattr
+, autoSignDarwinBinariesHook
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
   # Libdw.c only supports x86_64, i686 and s390x
 , enableDwarf ? stdenv.targetPlatform.isx86 &&
-                !stdenv.targetPlatform.isDarwin &&
-                !stdenv.targetPlatform.isWindows
+    !stdenv.targetPlatform.isDarwin &&
+    !stdenv.targetPlatform.isWindows
 , elfutils # for DWARF support
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildLlvmPackages
+, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
@@ -57,9 +71,8 @@
     && !stdenv.hostPlatform.isMusl
   )
 
-, enableHaddockProgram ?
-    # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+, enableHaddockProgram ? # Disabled for cross; see note [HADDOCK_DOCS].
+  (stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -120,7 +133,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [ libffi ]
     ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ lib.optional enableDwarf elfutils;
@@ -207,21 +220,21 @@ stdenv.mkDerivation (rec {
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
-      echo "patching llvm-targets for musl targets..."
-      echo "Cloning these existing '*-linux-gnu*' targets:"
-      grep linux-gnu llvm-targets | sed 's/^/  /'
-      echo "(go go gadget sed)"
-      sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
-      echo "llvm-targets now contains these '*-linux-musl*' targets:"
-      grep linux-musl llvm-targets | sed 's/^/  /'
+    echo "patching llvm-targets for musl targets..."
+    echo "Cloning these existing '*-linux-gnu*' targets:"
+    grep linux-gnu llvm-targets | sed 's/^/  /'
+    echo "(go go gadget sed)"
+    sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
+    echo "llvm-targets now contains these '*-linux-musl*' targets:"
+    grep linux-musl llvm-targets | sed 's/^/  /'
 
-      echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
-        substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
-                    '*-android*|*-gnueabi*|*-musleabi*)'
-      done
+    echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
+    # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
+    for x in configure aclocal.m4; do
+      substituteInPlace $x \
+        --replace '*-android*|*-gnueabi*)' \
+                  '*-android*|*-gnueabi*|*-musleabi*)'
+    done
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
@@ -249,7 +262,7 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optional disableLargeAddressSpace "--disable-large-address-space"
-    ++ lib.optionals enableDwarf [
+  ++ lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
@@ -262,8 +275,16 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf autoreconfHook automake m4 python3
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl
+    autoconf
+    autoreconfHook
+    automake
+    m4
+    python3
+    ghc
+    bootPkgs.alex
+    bootPkgs.happy
+    bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -289,14 +310,14 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable =
     [ "format" ]
-    # In nixpkgs, musl based builds currently enable `pie` hardening by default
-    # (see `defaultHardeningFlags` in `make-derivation.nix`).
-    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+      # In nixpkgs, musl based builds currently enable `pie` hardening by default
+      # (see `defaultHardeningFlags` in `make-derivation.nix`).
+      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+      # See:
+      # * https://github.com/NixOS/nixpkgs/issues/129247
+      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   # big-parallel allows us to build with more than 2 cores on
   # Hydra which already warrants a significant speedup
@@ -338,7 +359,7 @@ stdenv.mkDerivation (rec {
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
 
-} // lib.optionalAttrs targetPlatform.useAndroidPrebuilt{
+} // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
   dontPatchELF = true;
   noAuditTmpdir = true;
 })

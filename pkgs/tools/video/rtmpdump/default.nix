@@ -36,10 +36,10 @@ stdenv.mkDerivation {
     "prefix=$(out)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
-    ++ optional gnutlsSupport "CRYPTO=GNUTLS"
-    ++ optional opensslSupport "CRYPTO=OPENSSL"
-    ++ optional stdenv.isDarwin "SYS=darwin"
-    ++ optional stdenv.cc.isClang "CC=clang";
+  ++ optional gnutlsSupport "CRYPTO=GNUTLS"
+  ++ optional opensslSupport "CRYPTO=OPENSSL"
+  ++ optional stdenv.isDarwin "SYS=darwin"
+  ++ optional stdenv.cc.isClang "CC=clang";
 
   propagatedBuildInputs = [ zlib ]
     ++ optionals gnutlsSupport [ gnutls nettle ]

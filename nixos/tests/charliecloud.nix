@@ -1,6 +1,7 @@
 # This test checks charliecloud image construction and run
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ pkgs, ... }:
+let
 
   dockerfile = pkgs.writeText "Dockerfile" ''
     FROM nix
@@ -9,7 +10,8 @@ import ./make-test-python.nix ({ pkgs, ...} : let
     CMD ["true"]
   '';
 
-in {
+in
+{
   name = "charliecloud";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ bzizou ];

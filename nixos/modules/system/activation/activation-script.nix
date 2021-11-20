@@ -17,19 +17,23 @@ let
     '';
   });
 
-  systemActivationScript = set: onlyDry: let
-    set' = mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set;
-    withHeadlines = addAttributeName set';
-    # When building a dry activation script, this replaces all activation scripts
-    # that do not support dry mode with a comment that does nothing. Filtering these
-    # activation scripts out so they don't get generated into the dry activation script
-    # does not work because when an activation script that supports dry mode depends on
-    # an activation script that does not, the dependency cannot be resolved and the eval
-    # fails.
-    withDrySnippets = mapAttrs (a: v: if onlyDry && !v.supportsDryActivation then v // {
-      text = "#### Activation script snippet ${a} does not support dry activation.";
-    } else v) withHeadlines;
-  in
+  systemActivationScript = set: onlyDry:
+    let
+      set' = mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set;
+      withHeadlines = addAttributeName set';
+      # When building a dry activation script, this replaces all activation scripts
+      # that do not support dry mode with a comment that does nothing. Filtering these
+      # activation scripts out so they don't get generated into the dry activation script
+      # does not work because when an activation script that supports dry mode depends on
+      # an activation script that does not, the dependency cannot be resolved and the eval
+      # fails.
+      withDrySnippets = mapAttrs
+        (a: v:
+          if onlyDry && !v.supportsDryActivation then v // {
+            text = "#### Activation script snippet ${a} does not support dry activation.";
+          } else v)
+        withHeadlines;
+    in
     ''
       #!${pkgs.runtimeShell}
 
@@ -62,7 +66,8 @@ let
     '';
 
   path = with pkgs; map getBin
-    [ coreutils
+    [
+      coreutils
       gnugrep
       findutils
       getent
@@ -73,31 +78,37 @@ let
     ];
 
   scriptType = withDry: with types;
-    let scriptOptions =
-      { deps = mkOption
-          { type = types.listOf types.str;
-            default = [ ];
-            description = "List of dependencies. The script will run after these.";
-          };
-        text = mkOption
-          { type = types.lines;
-            description = "The content of the script.";
-          };
-      } // optionalAttrs withDry {
-        supportsDryActivation = mkOption
-          { type = types.bool;
-            default = false;
-            description = ''
-              Whether this activation script supports being dry-activated.
-              These activation scripts will also be executed on dry-activate
-              activations with the environment variable
-              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate
-              </literal>.  it's important that these activation scripts  don't
-              modify anything about the system when the variable is set.
-            '';
-          };
-      };
-    in either str (submodule { options = scriptOptions; });
+    let
+      scriptOptions =
+        {
+          deps = mkOption
+            {
+              type = types.listOf types.str;
+              default = [ ];
+              description = "List of dependencies. The script will run after these.";
+            };
+          text = mkOption
+            {
+              type = types.lines;
+              description = "The content of the script.";
+            };
+        } // optionalAttrs withDry {
+          supportsDryActivation = mkOption
+            {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether this activation script supports being dry-activated.
+                These activation scripts will also be executed on dry-activate
+                activations with the environment variable
+                <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate
+                </literal>.  it's important that these activation scripts  don't
+                modify anything about the system when the variable is set.
+              '';
+            };
+        };
+    in
+    either str (submodule { options = scriptOptions; });
 
 in
 
@@ -108,7 +119,7 @@ in
   options = {
 
     system.activationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
         { stdio.text =
@@ -145,7 +156,7 @@ in
     };
 
     system.userActivationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
         { plasmaSetup = {
@@ -227,7 +238,8 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
-    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
+    system.activationScripts.usrbinenv =
+      if config.environment.usrbinenv != null
       then ''
         mkdir -m 0755 -p /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp

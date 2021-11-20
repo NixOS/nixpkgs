@@ -1,21 +1,38 @@
-{ pkgs, lib, stdenv, fetchFromGitHub
-, autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, nixosTests
+{ pkgs
+, lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook269
+, util-linux
+, nukeReferences
+, coreutils
+, perl
+, nixosTests
 , configFile ? "all"
 
-# Userspace dependencies
-, zlib, libuuid, python3, attr, openssl
+  # Userspace dependencies
+, zlib
+, libuuid
+, python3
+, attr
+, openssl
 , libtirpc
-, nfs-utils, samba
-, gawk, gnugrep, gnused, systemd
-, smartmontools, enableMail ? false
-, sysstat, pkg-config
+, nfs-utils
+, samba
+, gawk
+, gnugrep
+, gnused
+, systemd
+, smartmontools
+, enableMail ? false
+, sysstat
+, pkg-config
 
-# Kernel dependencies
+  # Kernel dependencies
 , kernel ? null
 , enablePython ? true
 
-# for determining the latest compatible linuxPackages
+  # for determining the latest compatible linuxPackages
 , linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
 }:
 
@@ -34,13 +51,15 @@ let
   # clang-built) kernels.
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
 
-  common = { version
+  common =
+    { version
     , sha256
-    , extraPatches ? []
+    , extraPatches ? [ ]
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , latestCompatibleLinuxPackages
-    , kernelCompatible ? null }:
+    , kernelCompatible ? null
+    }:
 
     stdenv'.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
@@ -144,7 +163,7 @@ let
       # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
       # Hence we strip modules prior to compression.
       postBuild = optionalString buildKernel ''
-         find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+        find . -name "*.ko" -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
       '';
 
       postInstall = optionalString buildKernel ''
@@ -169,13 +188,15 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
-      postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
-      in ''
-        for i in $out/libexec/zfs/zpool.d/*; do
-          sed -i '2i${path}' $i
-        done
-      '';
+      postFixup =
+        let
+          path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
+        in
+        ''
+          for i in $out/libexec/zfs/zpool.d/*; do
+            sed -i '2i${path}' $i
+          done
+        '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
@@ -209,7 +230,8 @@ let
         broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
       };
     };
-in {
+in
+{
   # also check if kernel version constraints in
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted

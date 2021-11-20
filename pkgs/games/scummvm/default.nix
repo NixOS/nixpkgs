@@ -1,6 +1,27 @@
-{ lib, stdenv, fetchurl, nasm
-, alsa-lib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
-, Cocoa, AudioToolbox, Carbon, CoreMIDI, AudioUnit, cctools
+{ lib
+, stdenv
+, fetchurl
+, nasm
+, alsa-lib
+, curl
+, flac
+, fluidsynth
+, freetype
+, libjpeg
+, libmad
+, libmpeg2
+, libogg
+, libvorbis
+, libGLU
+, libGL
+, SDL2
+, zlib
+, Cocoa
+, AudioToolbox
+, Carbon
+, CoreMIDI
+, AudioUnit
+, cctools
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +38,25 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
+    Cocoa
+    AudioToolbox
+    Carbon
+    CoreMIDI
+    AudioUnit
   ] ++ [
-    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU libGL SDL2 zlib
+    curl
+    freetype
+    flac
+    fluidsynth
+    libjpeg
+    libmad
+    libmpeg2
+    libogg
+    libvorbis
+    libGLU
+    libGL
+    SDL2
+    zlib
   ];
 
   dontDisableStatic = true;

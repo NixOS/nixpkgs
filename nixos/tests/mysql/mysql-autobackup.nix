@@ -9,7 +9,7 @@ import ./../make-test-python.nix ({ pkgs, lib, ... }:
     {
       services.mysql.enable = true;
       services.mysql.package = pkgs.mariadb;
-      services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+      services.mysql.initialDatabases = [{ name = "testdb"; schema = ./testdb.sql; }];
 
       services.automysqlbackup.enable = true;
     };
@@ -34,5 +34,5 @@ import ./../make-test-python.nix ({ pkgs, lib, ... }:
         machine.succeed(
             "${pkgs.gzip}/bin/zcat /var/backup/mysql/daily/testdb/daily_testdb_*.sql.gz | grep hello"
         )
-    '';
+  '';
 })

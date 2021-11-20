@@ -1,9 +1,21 @@
 /*  The reusable code, and package attributes, between OpenRA engine packages (engine.nix)
-    and out-of-tree mod packages (mod.nix).
+  and out-of-tree mod packages (mod.nix).
 */
-{ lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
-, lua, mono, dotnetPackages, python
-, libGL, freetype, openal, SDL2
+{ lib
+, makeSetupHook
+, curl
+, unzip
+, dos2unix
+, pkg-config
+, makeWrapper
+, lua
+, mono
+, dotnetPackages
+, python
+, libGL
+, freetype
+, openal
+, SDL2
 , zenity
 }:
 
@@ -14,7 +26,8 @@ let
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
   mkdirp = makeSetupHook { } ./mkdirp.sh;
 
-in {
+in
+{
   patchEngine = dir: version: ''
     sed -i \
       -e 's/^VERSION.*/VERSION = ${version}/g' \

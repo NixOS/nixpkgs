@@ -1,26 +1,42 @@
-{lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, autoconf
+, automake
 , texinfo
-, gmp, mpfr, libffi, makeWrapper
+, gmp
+, mpfr
+, libffi
+, makeWrapper
 , noUnicode ? false
 , gcc
 , threadSupport ? true
-, useBoehmgc ? false, boehmgc
+, useBoehmgc ? false
+, boehmgc
 }:
 let
   s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="21.2.1";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
-    sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
-  };
+    rec {
+      baseName = "ecl";
+      version = "21.2.1";
+      name = "${baseName}-${version}";
+      url = "https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
+      sha256 = "000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
+    };
   nativeBuildInputs = [
-    libtool autoconf automake texinfo makeWrapper
+    libtool
+    autoconf
+    automake
+    texinfo
+    makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr gcc
+    libffi
+    gmp
+    mpfr
+    gcc
     # replaces ecl's own gc which other packages can depend on, thus propagated
   ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
@@ -69,7 +85,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit ;
+    license = licenses.mit;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";

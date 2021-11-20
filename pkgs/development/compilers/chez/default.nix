@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, coreutils, cctools
-, ncurses, libiconv, libX11, libuuid
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, cctools
+, ncurses
+, libiconv
+, libX11
+, libuuid
 }:
 
 stdenv.mkDerivation rec {
@@ -8,9 +14,9 @@ stdenv.mkDerivation rec {
   version = "9.5.4";
 
   src = fetchFromGitHub {
-    owner  = "cisco";
-    repo   = "ChezScheme";
-    rev    = "refs/tags/v${version}";
+    owner = "cisco";
+    repo = "ChezScheme";
+    rev = "refs/tags/v${version}";
     sha256 = "065dir19cqpn0d1bk9w49wnwzn6qfrgvcqw8da2fdhkafhfcb1bj";
     fetchSubmodules = true;
   };
@@ -68,11 +74,11 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description  = "A powerful and incredibly fast R6RS Scheme compiler";
-    homepage     = "https://cisco.github.io/ChezScheme/";
-    license      = lib.licenses.asl20;
-    maintainers  = with lib.maintainers; [ thoughtpolice ];
-    platforms    = lib.platforms.unix;
+    description = "A powerful and incredibly fast R6RS Scheme compiler";
+    homepage = "https://cisco.github.io/ChezScheme/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
 }

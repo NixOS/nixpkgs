@@ -16,10 +16,11 @@ let
   allowsLogin = hash:
     hash == "" # login without password
     || !(lib.elem hash
-      [ null   # password login disabled
-        "!"    # password login disabled
-        "!!"   # a variant of "!"
-        "*"    # password unset
+      [
+        null # password login disabled
+        "!" # password login disabled
+        "!!" # a variant of "!"
+        "*" # password unset
       ]);
 
   passwordDescription = ''
@@ -129,7 +130,7 @@ let
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "The user's auxiliary groups.";
       };
 
@@ -150,7 +151,7 @@ let
 
       pamMount = mkOption {
         type = with types; attrsOf str;
-        default = {};
+        default = { };
         description = ''
           Attributes for user's entry in
           <filename>pam_mount.conf.xml</filename>.
@@ -178,7 +179,7 @@ let
 
       subUidRanges = mkOption {
         type = with types; listOf (submodule subordinateUidRange);
-        default = [];
+        default = [ ];
         example = [
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
@@ -192,7 +193,7 @@ let
 
       subGidRanges = mkOption {
         type = with types; listOf (submodule subordinateGidRange);
-        default = [];
+        default = [ ];
         example = [
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
@@ -290,7 +291,7 @@ let
 
       packages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
@@ -302,9 +303,10 @@ let
     };
 
     config = mkMerge
-      [ { name = mkDefault name;
-          shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
-        }
+      [{
+        name = mkDefault name;
+        shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
+      }
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
@@ -319,8 +321,7 @@ let
         })
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
-        })
-      ];
+        })];
 
   };
 
@@ -347,7 +348,7 @@ let
 
       members = mkOption {
         type = with types; listOf (passwdEntry str);
-        default = [];
+        default = [ ];
         description = ''
           The user names of the group members, added to the
           <literal>/etc/group</literal> file.
@@ -400,29 +401,36 @@ let
     };
   };
 
-  idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
-    let
-      id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
-      exists = builtins.hasAttr id acc;
-      newAcc = acc // (builtins.listToAttrs [ { name = id; value = true; } ]);
-    in if dup then args else if exists
+  idsAreUnique = set: idAttr: !(foldr
+    (name: args@{ dup, acc }:
+      let
+        id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
+        exists = builtins.hasAttr id acc;
+        newAcc = acc // (builtins.listToAttrs [{ name = id; value = true; }]);
+      in
+      if dup then args else if exists
       then builtins.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
       else { dup = false; acc = newAcc; }
-    ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
+    )
+    { dup = false; acc = { }; }
+    (builtins.attrNames set)).dup;
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
-    users = mapAttrsToList (_: u:
-      { inherit (u)
-          name uid group description home createHome isSystemUser
-          password passwordFile hashedPassword
-          isNormalUser subUidRanges subGidRanges
-          initialPassword initialHashedPassword;
-        shell = utils.toShellPath u.shell;
-      }) cfg.users;
+    users = mapAttrsToList
+      (_: u:
+        {
+          inherit (u)
+            name uid group description home createHome isSystemUser
+            password passwordFile hashedPassword
+            isNormalUser subUidRanges subGidRanges
+            initialPassword initialHashedPassword;
+          shell = utils.toShellPath u.shell;
+        })
+      cfg.users;
     groups = attrValues cfg.groups;
   });
 
@@ -430,18 +438,20 @@ let
     let
       shells = mapAttrsToList (_: u: u.shell) cfg.users;
     in
-      filter types.shellPackage.check shells;
+    filter types.shellPackage.check shells;
 
-in {
+in
+{
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkChangedOptionModule
       [ "security" "initialRootPassword" ]
       [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialRootPassword == "!"
-            then null
-            else cfg.security.initialRootPassword))
+      (cfg:
+        if cfg.security.initialRootPassword == "!"
+        then null
+        else cfg.security.initialRootPassword))
   ];
 
   ###### interface
@@ -482,7 +492,7 @@ in {
     };
 
     users.users = mkOption {
-      default = {};
+      default = { };
       type = with types; attrsOf (submodule userOpts);
       example = {
         alice = {
@@ -491,7 +501,7 @@ in {
           home = "/home/alice";
           createHome = true;
           group = "users";
-          extraGroups = ["wheel"];
+          extraGroups = [ "wheel" ];
           shell = "/bin/sh";
         };
       };
@@ -502,9 +512,10 @@ in {
     };
 
     users.groups = mkOption {
-      default = {};
+      default = { };
       example =
-        { students.gid = 1001;
+        {
+          students.gid = 1001;
           hackers = { };
         };
       type = with types; attrsOf (submodule groupOpts);
@@ -578,15 +589,17 @@ in {
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
-      name = "profiles/per-user/${name}";
-      value.source = pkgs.buildEnv {
-        name = "user-environment";
-        paths = packages;
-        inherit (config.environment) pathsToLink extraOutputsToInstall;
-        inherit (config.system.path) ignoreCollisions postBuild;
-      };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    environment.etc = (mapAttrs'
+      (_: { packages, name, ... }: {
+        name = "profiles/per-user/${name}";
+        value.source = pkgs.buildEnv {
+          name = "user-environment";
+          paths = packages;
+          inherit (config.environment) pathsToLink extraOutputsToInstall;
+          inherit (config.system.path) ignoreCollisions postBuild;
+        };
+      })
+      (filterAttrs (_: u: u.packages != [ ]) cfg.users));
 
     environment.profiles = [
       "$HOME/.nix-profile"
@@ -594,26 +607,30 @@ in {
     ];
 
     assertions = [
-      { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
+      {
+        assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
-      { # If mutableUsers is false, to prevent users creating a
+      {
+        # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
         assertion = !cfg.mutableUsers ->
-          any id ((mapAttrsToList (_: cfg:
-            (cfg.name == "root"
-             || cfg.group == "wheel"
-             || elem "wheel" cfg.extraGroups)
-            &&
-            (allowsLogin cfg.hashedPassword
-             || cfg.password != null
-             || cfg.passwordFile != null
-             || cfg.openssh.authorizedKeys.keys != []
-             || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
+          any id ((mapAttrsToList
+            (_: cfg:
+              (cfg.name == "root"
+                || cfg.group == "wheel"
+                || elem "wheel" cfg.extraGroups)
+              &&
+              (allowsLogin cfg.hashedPassword
+                || cfg.password != null
+                || cfg.passwordFile != null
+                || cfg.openssh.authorizedKeys.keys != [ ]
+                || cfg.openssh.authorizedKeys.keyFiles != [ ])
+            )
+            cfg.users) ++ [
             config.security.googleOsLogin.enable
           ]);
         message = ''
@@ -623,66 +640,69 @@ in {
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
         {
-        assertion = (user.hashedPassword != null)
-        -> (builtins.match ".*:.*" user.hashedPassword == null);
-        message = ''
+          assertion = (user.hashedPassword != null)
+            -> (builtins.match ".*:.*" user.hashedPassword == null);
+          message = ''
             The password hash of user "${user.name}" contains a ":" character.
             This is invalid and would break the login system because the fields
             of /etc/shadow (file where hashes are stored) are colon-separated.
             Please check the value of option `users.users."${user.name}".hashedPassword`.'';
-          }
-          {
-            assertion = let
+        }
+        {
+          assertion =
+            let
               xor = a: b: a && !b || b && !a;
               isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 500);
-            in xor isEffectivelySystemUser user.isNormalUser;
-            message = ''
-              Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
-            '';
-          }
-          {
-            assertion = user.group != "";
-            message = ''
-              users.users.${user.name}.group is unset. This used to default to
-              nogroup, but this is unsafe. For example you can create a group
-              for this user with:
-              users.users.${user.name}.group = "${user.name}";
-              users.groups.${user.name} = {};
-            '';
-          }
-        ]
+            in
+            xor isEffectivelySystemUser user.isNormalUser;
+          message = ''
+            Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+          '';
+        }
+        {
+          assertion = user.group != "";
+          message = ''
+            users.users.${user.name}.group is unset. This used to default to
+            nogroup, but this is unsafe. For example you can create a group
+            for this user with:
+            users.users.${user.name}.group = "${user.name}";
+            users.groups.${user.name} = {};
+          '';
+        }
+      ]
     ));
 
     warnings =
       builtins.filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
-        # This regex matches a subset of the Modular Crypto Format (MCF)[1]
-        # informal standard. Since this depends largely on the OS or the
-        # specific implementation of crypt(3) we only support the (sane)
-        # schemes implemented by glibc and BSDs. In particular the original
-        # DES hash is excluded since, having no structure, it would validate
-        # common mistakes like typing the plaintext password.
-        #
-        # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
-        let
-          sep = "\\$";
-          base64 = "[a-zA-Z0-9./]+";
-          id = "[a-z0-9-]+";
-          value = "[a-zA-Z0-9/+.-]+";
-          options = "${id}(=${value})?(,${id}=${value})*";
-          scheme  = "${id}(${sep}${options})?";
-          content = "${base64}${sep}${base64}";
-          mcf = "^${sep}${scheme}${sep}${content}$";
-        in
-        if (allowsLogin user.hashedPassword
+          # This regex matches a subset of the Modular Crypto Format (MCF)[1]
+          # informal standard. Since this depends largely on the OS or the
+          # specific implementation of crypt(3) we only support the (sane)
+          # schemes implemented by glibc and BSDs. In particular the original
+          # DES hash is excluded since, having no structure, it would validate
+          # common mistakes like typing the plaintext password.
+          #
+          # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
+          let
+            sep = "\\$";
+            base64 = "[a-zA-Z0-9./]+";
+            id = "[a-z0-9-]+";
+            value = "[a-zA-Z0-9/+.-]+";
+            options = "${id}(=${value})?(,${id}=${value})*";
+            scheme = "${id}(${sep}${options})?";
+            content = "${base64}${sep}${base64}";
+            mcf = "^${sep}${scheme}${sep}${content}$";
+          in
+          if (allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
             && builtins.match mcf user.hashedPassword == null)
-        then ''
-          The password hash of user "${user.name}" may be invalid. You must set a
-          valid hash or the user will be locked out of their account. Please
-          check the value of option `users.users."${user.name}".hashedPassword`.''
-        else null
-      ));
+          then ''
+            The password hash of user "${user.name}" may be invalid. You must set a
+            valid hash or the user will be locked out of their account. Please
+            check the value of option `users.users."${user.name}".hashedPassword`.''
+          else null
+        )
+      );
 
   };
 

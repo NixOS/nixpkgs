@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pkg-config, alsa-lib, libjack2, tox, flake8, alabaster
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pkg-config
+, alsa-lib
+, libjack2
+, tox
+, flake8
+, alabaster
 }:
 
 buildPythonPackage rec {

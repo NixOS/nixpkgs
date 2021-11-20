@@ -20,36 +20,37 @@
 , src
 
 , dontPatch ? false
-, patches ? []
+, patches ? [ ]
 , patchPhase ? ""
 
 , enableParallelBuilding ? true
-# Build-time dependencies for the package, which were compiled for the system compiling this.
-, nativeBuildInputs ? []
+  # Build-time dependencies for the package, which were compiled for the system compiling this.
+, nativeBuildInputs ? [ ]
 
-# Build-time dependencies for the package, which may not have been compiled for the system compiling this.
-, buildInputs ? []
+  # Build-time dependencies for the package, which may not have been compiled for the system compiling this.
+, buildInputs ? [ ]
 
-# Propagate build dependencies so in case we have A -> B -> C,
-# C can import package A propagated by B
-# Run-time dependencies for the package.
-, propagatedBuildInputs ? []
+  # Propagate build dependencies so in case we have A -> B -> C,
+  # C can import package A propagated by B
+  # Run-time dependencies for the package.
+, propagatedBuildInputs ? [ ]
 
-# Octave packages that are required at runtime for this one.
-# These behave similarly to propagatedBuildInputs, where if
-# package A is needed by B, and C needs B, then C also requires A.
-# The main difference between these and propagatedBuildInputs is
-# during the package's installation into octave, where all
-# requiredOctavePackages are ALSO installed into octave.
-, requiredOctavePackages ? []
+  # Octave packages that are required at runtime for this one.
+  # These behave similarly to propagatedBuildInputs, where if
+  # package A is needed by B, and C needs B, then C also requires A.
+  # The main difference between these and propagatedBuildInputs is
+  # during the package's installation into octave, where all
+  # requiredOctavePackages are ALSO installed into octave.
+, requiredOctavePackages ? [ ]
 
 , preBuild ? ""
 
-, meta ? {}
+, meta ? { }
 
-, passthru ? {}
+, passthru ? { }
 
-, ... } @ attrs:
+, ...
+} @ attrs:
 
 let
   requiredOctavePackages' = computeRequiredOctavePackages requiredOctavePackages;
@@ -70,7 +71,8 @@ let
   # itself, causing everything to fail.
   attrs' = builtins.removeAttrs attrs [ "nativeBuildInputs" ];
 
-in stdenv.mkDerivation ({
+in
+stdenv.mkDerivation ({
   packageName = "${fullLibName}";
   # The name of the octave package ends up being
   # "octave-version-package-version"
@@ -99,14 +101,15 @@ in stdenv.mkDerivation ({
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ texinfo ];
 
-  preBuild = if preBuild == "" then
-    ''
-      # This trickery is needed because Octave expects a single directory inside
-      # at the top-most level of the tarball.
-      tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
-    ''
-             else
-               preBuild;
+  preBuild =
+    if preBuild == "" then
+      ''
+        # This trickery is needed because Octave expects a single directory inside
+        # at the top-most level of the tarball.
+        tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
+      ''
+    else
+      preBuild;
 
   buildPhase = ''
     runHook preBuild

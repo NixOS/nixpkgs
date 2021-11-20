@@ -8,16 +8,22 @@
 , makeWrapper
 , boehmgc
 , readline
-, guiSupport ? false, tcl, tcllib, tk
-, miSupport ? true, json_c
-, nbdSupport ? !stdenv.isDarwin, libnbd
+, guiSupport ? false
+, tcl
+, tcllib
+, tk
+, miSupport ? true
+, json_c
+, nbdSupport ? !stdenv.isDarwin
+, libnbd
 , textStylingSupport ? true
 , dejagnu
 }:
 
 let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "poke";
   version = "1.3";
 
@@ -40,11 +46,11 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional guiSupport makeWrapper;
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
-  ++ lib.optional miSupport json_c
-  ++ lib.optional nbdSupport libnbd
-  ++ lib.optional textStylingSupport gettext
-  ++ lib.optional (!isCross) dejagnu;
+    ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
+    ++ lib.optional miSupport json_c
+    ++ lib.optional nbdSupport libnbd
+    ++ lib.optional textStylingSupport gettext
+    ++ lib.optional (!isCross) dejagnu;
 
   configureFlags = lib.optionals guiSupport [
     "--with-tcl=${tcl}/lib"

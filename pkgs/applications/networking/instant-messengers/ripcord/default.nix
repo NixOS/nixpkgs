@@ -1,22 +1,40 @@
-{ lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
-, qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
-, autoPatchelfHook, desktop-file-utils, imagemagick
-, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
+{ lib
+, mkDerivation
+, fetchurl
+, makeFontsConf
+, appimageTools
+, qtbase
+, qtsvg
+, qtmultimedia
+, qtwebsockets
+, qtimageformats
+, autoPatchelfHook
+, desktop-file-utils
+, imagemagick
+, twemoji-color-font
+, xorg
+, libsodium
+, libopus
+, libGL
+, alsa-lib
+}:
 
 mkDerivation rec {
   pname = "ripcord";
   version = "0.4.29";
 
-  src = let
-    appimage = fetchurl {
-      url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
-      name = "${pname}-${version}.AppImage";
+  src =
+    let
+      appimage = fetchurl {
+        url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
+        sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
+        name = "${pname}-${version}.AppImage";
+      };
+    in
+    appimageTools.extract {
+      name = "${pname}-${version}";
+      src = appimage;
     };
-  in appimageTools.extract {
-    name = "${pname}-${version}";
-    src = appimage;
-  };
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
   buildInputs = [ libsodium libopus libGL alsa-lib ]

@@ -5,13 +5,16 @@ let
   enableRDW = config.networking.networkmanager.enable;
   tlp = pkgs.tlp.override { inherit enableRDW; };
   # TODO: Use this for having proper parameters in the future
-  mkTlpConfig = tlpConfig: generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = val:
-        if isList val then "\"" + (toString val) + "\""
-        else toString val;
-    } "=";
-  } tlpConfig;
+  mkTlpConfig = tlpConfig: generators.toKeyValue
+    {
+      mkKeyValue = generators.mkKeyValueDefault
+        {
+          mkValueString = val:
+            if isList val then "\"" + (toString val) + "\""
+            else toString val;
+        } "=";
+    }
+    tlpConfig;
 in
 {
   ###### interface
@@ -23,8 +26,9 @@ in
         description = "Whether to enable the TLP power management daemon.";
       };
 
-      settings = mkOption {type = with types; attrsOf (oneOf [bool int float str (listOf str)]);
-        default = {};
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool int float str (listOf str) ]);
+        default = { };
         example = {
           SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
           USB_BLACKLIST_PHONE = 1;
@@ -71,17 +75,19 @@ in
     environment.systemPackages = [ tlp ];
 
 
-    services.tlp.settings = let
-      cfg = config.powerManagement;
-      maybeDefault = val: lib.mkIf (val != null) (lib.mkDefault val);
-    in {
-      CPU_SCALING_GOVERNOR_ON_AC = maybeDefault cfg.cpuFreqGovernor;
-      CPU_SCALING_GOVERNOR_ON_BAT = maybeDefault cfg.cpuFreqGovernor;
-      CPU_SCALING_MIN_FREQ_ON_AC = maybeDefault cfg.cpufreq.min;
-      CPU_SCALING_MAX_FREQ_ON_AC = maybeDefault cfg.cpufreq.max;
-      CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
-      CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
-    };
+    services.tlp.settings =
+      let
+        cfg = config.powerManagement;
+        maybeDefault = val: lib.mkIf (val != null) (lib.mkDefault val);
+      in
+      {
+        CPU_SCALING_GOVERNOR_ON_AC = maybeDefault cfg.cpuFreqGovernor;
+        CPU_SCALING_GOVERNOR_ON_BAT = maybeDefault cfg.cpuFreqGovernor;
+        CPU_SCALING_MIN_FREQ_ON_AC = maybeDefault cfg.cpufreq.min;
+        CPU_SCALING_MAX_FREQ_ON_AC = maybeDefault cfg.cpufreq.max;
+        CPU_SCALING_MIN_FREQ_ON_BAT = maybeDefault cfg.cpufreq.min;
+        CPU_SCALING_MAX_FREQ_ON_BAT = maybeDefault cfg.cpufreq.max;
+      };
 
     services.udev.packages = [ tlp ];
 

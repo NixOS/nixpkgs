@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
-, nettools, lsof, procps }:
+{ lib
+, stdenv
+, fetchurl
+, gperf
+, guile
+, gmp
+, zlib
+, liboop
+, readline
+, gnum4
+, pam
+, nettools
+, lsof
+, procps
+}:
 
 stdenv.mkDerivation rec {
   pname = "lsh";

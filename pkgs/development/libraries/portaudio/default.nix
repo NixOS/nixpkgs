@@ -7,11 +7,12 @@
 , AudioToolbox
 , CoreAudio
 , CoreServices
-, Carbon }:
+, Carbon
+}:
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
-  version =  "190700_20210406";
+  version = "190700_20210406";
 
   src = fetchurl {
     url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = "http://www.portaudio.com/";
+    homepage = "http://www.portaudio.com/";
     # Not exactly a bsd license, but alike
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
   passthru = {

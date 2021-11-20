@@ -43,7 +43,7 @@ in
       */
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -206,7 +206,8 @@ in
     ];
 
     environment.shells =
-      [ "/run/current-system/sw/bin/bash"
+      [
+        "/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"

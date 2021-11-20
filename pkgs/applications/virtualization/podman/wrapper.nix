@@ -2,7 +2,7 @@
 , runCommand
 , makeWrapper
 , lib
-, extraPackages ? []
+, extraPackages ? [ ]
 , podman # Docker compat
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
@@ -29,7 +29,9 @@ let
     iproute2
   ] ++ extraPackages);
 
-in runCommand podman.name {
+in
+runCommand podman.name
+{
   name = "${podman.pname}-wrapper-${podman.version}";
   inherit (podman) pname version passthru;
 

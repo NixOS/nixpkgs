@@ -1,25 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
-# Most packages depending on openblas expect integer width to match
-# pointer width, but some expect to use 32-bit integers always
-# (for compatibility with reference BLAS).
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, which
+  # Most packages depending on openblas expect integer width to match
+  # pointer width, but some expect to use 32-bit integers always
+  # (for compatibility with reference BLAS).
 , blas64 ? null
-# Multi-threaded applications must not call a threaded OpenBLAS
-# (the only exception is when an application uses OpenMP as its
-# *only* form of multi-threading). See
-#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
-#     https://github.com/xianyi/OpenBLAS/issues/2543
-# This flag builds a single-threaded OpenBLAS using the flags
-# stated in thre.
+  # Multi-threaded applications must not call a threaded OpenBLAS
+  # (the only exception is when an application uses OpenMP as its
+  # *only* form of multi-threading). See
+  #     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  #     https://github.com/xianyi/OpenBLAS/issues/2543
+  # This flag builds a single-threaded OpenBLAS using the flags
+  # stated in thre.
 , singleThreaded ? false
 , buildPackages
-# Select a specific optimization target (other than the default)
-# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+  # Select a specific optimization target (other than the default)
+  # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
-# Select whether DYNAMIC_ARCH is enabled or not.
+  # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
-# enable AVX512 optimized kernels.
-# These kernels have been a source of trouble in the past.
-# Use with caution.
+  # enable AVX512 optimized kernels.
+  # These kernels have been a source of trouble in the past.
+  # Use with caution.
 , enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -107,14 +111,14 @@ in
 let
   config =
     configs.${stdenv.hostPlatform.system}
-    or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
 
 let
   blas64 =
     if blas64_ != null
-      then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+    then blas64_
+    else hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -150,11 +154,13 @@ stdenv.mkDerivation rec {
   # be no objection to disabling these hardening measures.
   hardeningDisable = [
     # don't modify or move the stack
-    "stackprotector" "pic"
+    "stackprotector"
+    "pic"
     # don't alter index arithmetic
     "strictoverflow"
     # don't interfere with dynamic target detection
-    "relro" "bindnow"
+    "relro"
+    "bindnow"
   ];
 
   nativeBuildInputs = [
@@ -181,9 +187,10 @@ stdenv.mkDerivation rec {
     # This seems to be a bug in the openblas Makefile:
     # on x86_64 it expects NO_BINARY_MODE=
     # but on aarch64 it expects NO_BINARY_MODE=0
-    NO_BINARY_MODE = if stdenv.isx86_64
-        then toString (stdenv.hostPlatform != stdenv.buildPlatform)
-        else stdenv.hostPlatform != stdenv.buildPlatform;
+    NO_BINARY_MODE =
+      if stdenv.isx86_64
+      then toString (stdenv.hostPlatform != stdenv.buildPlatform)
+      else stdenv.hostPlatform != stdenv.buildPlatform;
   } // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
@@ -195,23 +202,23 @@ stdenv.mkDerivation rec {
   checkTarget = "tests";
 
   postInstall = ''
-    # Write pkgconfig aliases. Upstream report:
-    # https://github.com/xianyi/OpenBLAS/issues/1740
-    for alias in blas cblas lapack; do
-      cat <<EOF > $out/lib/pkgconfig/$alias.pc
-Name: $alias
-Version: ${version}
-Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
-Libs: -L$out/lib -lopenblas
-EOF
-    done
+        # Write pkgconfig aliases. Upstream report:
+        # https://github.com/xianyi/OpenBLAS/issues/1740
+        for alias in blas cblas lapack; do
+          cat <<EOF > $out/lib/pkgconfig/$alias.pc
+    Name: $alias
+    Version: ${version}
+    Description: $alias provided by the OpenBLAS package.
+    Cflags: -I$out/include
+    Libs: -L$out/lib -lopenblas
+    EOF
+        done
 
-    # Setup symlinks for blas / lapack
-    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
-    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
-    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
-    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+        # Setup symlinks for blas / lapack
+        ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+        ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+        ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+        ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3

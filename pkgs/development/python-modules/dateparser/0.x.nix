@@ -39,9 +39,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    python-dateutil pytz regex tzlocal
+    python-dateutil
+    pytz
+    regex
+    tzlocal
     # extra_requires
-    convertdate umalqurra jdatetime ruamel-yaml
+    convertdate
+    umalqurra
+    jdatetime
+    ruamel-yaml
   ];
 
   pythonImportsCheck = [ "dateparser" ];

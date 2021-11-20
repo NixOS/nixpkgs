@@ -11,7 +11,8 @@ mkCoqDerivation {
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.10" "8.14"; out = "1.1.2"; }
-  ] null;
+  ]
+    null;
 
 
   propagatedBuildInputs = [ ssreflect ];

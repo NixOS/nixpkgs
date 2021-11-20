@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_net
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, SDL_mixer
+, SDL_net
 , libGLU ? null
 , libGL ? null
 , useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform

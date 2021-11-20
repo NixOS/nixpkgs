@@ -3,7 +3,7 @@
 , pruviloj
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "software_foundations";
   version = "2017-11-04";
 

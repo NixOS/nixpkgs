@@ -18,15 +18,14 @@
 }:
 
 let
-  openscenegraph_openmw = (openscenegraph.override { colladaSupport = true; })
-    .overrideDerivation (self: {
-      src = fetchFromGitHub {
-        owner = "OpenMW";
-        repo = "osg";
-        rev = "bbe61c3bc510a4f5bb4aea21cce506519c2d24e6";
-        sha256 = "sha256-t3smLqstp7wWfi9HXJoBCek+3acqt/ySBYF8RJOG6Mo=";
-      };
-    });
+  openscenegraph_openmw = (openscenegraph.override { colladaSupport = true; }).overrideDerivation (self: {
+    src = fetchFromGitHub {
+      owner = "OpenMW";
+      repo = "osg";
+      rev = "bbe61c3bc510a4f5bb4aea21cce506519c2d24e6";
+      sha256 = "sha256-t3smLqstp7wWfi9HXJoBCek+3acqt/ySBYF8RJOG6Mo=";
+    };
+  });
 
   bullet_openmw = bullet.overrideDerivation (old: rec {
     version = "3.17";
@@ -36,8 +35,8 @@ let
       rev = version;
       sha256 = "sha256-uQ4X8F8nmagbcFh0KexrmnhHIXFSB3A1CCnjPVeHL3Q=";
     };
-    patches = [];
-    cmakeFlags = (old.cmakeFlags or []) ++ [
+    patches = [ ];
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
       "-DUSE_DOUBLE_PRECISION=ON"
       "-DBULLET2_MULTITHREADING=ON"
     ];

@@ -1,4 +1,6 @@
-{ lib, gccStdenv, fetchzip
+{ lib
+, gccStdenv
+, fetchzip
 , boost
 , cmake
 , coreutils
@@ -102,4 +104,4 @@ let
     };
   };
 in
-  solc
+solc

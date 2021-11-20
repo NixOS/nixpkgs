@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec  {
   pname = "kora-icon-theme";
   version = "1.4.7";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";

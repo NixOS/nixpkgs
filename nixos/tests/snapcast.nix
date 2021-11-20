@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   port = 10004;
@@ -6,7 +6,8 @@ let
   httpPort = 10080;
   tcpStreamPort = 10006;
   bufferSize = 742;
-in {
+in
+{
   name = "snapcast";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];

@@ -7,30 +7,32 @@ let
   certDirOpt = options.services.neo4j.directories.certificates;
   isDefaultPathOption = opt: isOption opt && opt.type == types.path && opt.highestPrio >= 1500;
 
-  sslPolicies = mapAttrsToList (
-    name: conf: ''
-      dbms.ssl.policy.${name}.allow_key_generation=${boolToString conf.allowKeyGeneration}
-      dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
-      ${optionalString (conf.ciphers != null) ''
-        dbms.ssl.policy.${name}.ciphers=${concatStringsSep "," conf.ciphers}
-      ''}
-      dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
-      ${if length (splitString "/" conf.privateKey) > 1 then
-        "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
-      else
-        "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
-      }
-      ${if length (splitString "/" conf.privateKey) > 1 then
-        "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
-      else
-        "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
-      }
-      dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
-      dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
-      dbms.ssl.policy.${name}.trust_all=${boolToString conf.trustAll}
-      dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
-    ''
-  ) cfg.ssl.policies;
+  sslPolicies = mapAttrsToList
+    (
+      name: conf: ''
+        dbms.ssl.policy.${name}.allow_key_generation=${boolToString conf.allowKeyGeneration}
+        dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
+        ${optionalString (conf.ciphers != null) ''
+          dbms.ssl.policy.${name}.ciphers=${concatStringsSep "," conf.ciphers}
+        ''}
+        dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
+        ${if length (splitString "/" conf.privateKey) > 1 then
+          "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
+        else
+          "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
+        }
+        ${if length (splitString "/" conf.privateKey) > 1 then
+          "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
+        else
+          "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
+        }
+        dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
+        dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
+        dbms.ssl.policy.${name}.trust_all=${boolToString conf.trustAll}
+        dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
+      ''
+    )
+    cfg.ssl.policies;
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
@@ -101,7 +103,8 @@ let
     ${cfg.extraServerConfig}
   '';
 
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
@@ -564,7 +567,7 @@ in {
           (map (opt: opt.value) (filter isDefaultPathOption (attrValues options)));
 
       }));
-      default = {};
+      default = { };
       description = ''
         Defines the SSL policies for use with Neo4j connectors. Each attribute
         of this set defines a policy, with the attribute name defining the name
@@ -606,12 +609,18 @@ in {
 
     mkIf cfg.enable {
       assertions = [
-        { assertion = !elem "legacy" policyNameList;
-          message = "The policy 'legacy' is special to Neo4j, and its name is reserved."; }
-        { assertion = elem cfg.bolt.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
-        { assertion = elem cfg.https.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
+        {
+          assertion = !elem "legacy" policyNameList;
+          message = "The policy 'legacy' is special to Neo4j, and its name is reserved.";
+        }
+        {
+          assertion = elem cfg.bolt.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
+        {
+          assertion = elem cfg.https.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
       ];
 
       systemd.services.neo4j = {
@@ -656,7 +665,7 @@ in {
         description = "Neo4j daemon user";
         home = cfg.directories.home;
       };
-      users.groups.neo4j = {};
+      users.groups.neo4j = { };
     };
 
   meta = {

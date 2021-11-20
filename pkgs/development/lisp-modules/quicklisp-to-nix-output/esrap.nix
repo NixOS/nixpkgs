@@ -17,16 +17,16 @@ rec {
 
   packageName = "esrap";
 
-  asdFilesToKeep = ["esrap.asd"];
+  asdFilesToKeep = [ "esrap.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM esrap DESCRIPTION
-    A Packrat / Parsing Grammar / TDPL parser for Common Lisp. SHA256
-    06cqvalqsid82an8c4acbf13y65gw8nb4pckm8gv8fknvh4k1x7h URL
-    http://beta.quicklisp.org/archive/esrap/2021-10-20/esrap-20211020-git.tgz
-    MD5 9657755b3fe896c1252dc7fdd22320b7 NAME esrap FILENAME esrap DEPS
-    ((NAME alexandria FILENAME alexandria) (NAME fiveam FILENAME fiveam)
-     (NAME trivial-with-current-source-form FILENAME
+  A Packrat / Parsing Grammar / TDPL parser for Common Lisp. SHA256
+  06cqvalqsid82an8c4acbf13y65gw8nb4pckm8gv8fknvh4k1x7h URL
+  http://beta.quicklisp.org/archive/esrap/2021-10-20/esrap-20211020-git.tgz
+  MD5 9657755b3fe896c1252dc7fdd22320b7 NAME esrap FILENAME esrap DEPS
+  ((NAME alexandria FILENAME alexandria) (NAME fiveam FILENAME fiveam)
+   (NAME trivial-with-current-source-form FILENAME
       trivial-with-current-source-form))
-    DEPENDENCIES (alexandria fiveam trivial-with-current-source-form) VERSION
+  DEPENDENCIES (alexandria fiveam trivial-with-current-source-form) VERSION
     20211020-git SIBLINGS NIL PARASITES (esrap/tests)) */

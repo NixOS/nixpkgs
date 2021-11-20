@@ -128,51 +128,53 @@ in
         $out/bin/iscsiadm --version
       '';
 
-      preLVMCommands = let
-        extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
-          if [ -f "${cfg.extraConfigFile}" ]; then
-            printf "\n# The following is from ${cfg.extraConfigFile}:\n"
-            cat "${cfg.extraConfigFile}"
-          else
-            echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
-          fi
+      preLVMCommands =
+        let
+          extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
+            if [ -f "${cfg.extraConfigFile}" ]; then
+              printf "\n# The following is from ${cfg.extraConfigFile}:\n"
+              cat "${cfg.extraConfigFile}"
+            else
+              echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
+            fi
+          '';
+        in
+        ''
+            ${optionalString (!config.boot.initrd.network.ssh.enable) ''
+            # stolen from initrd-ssh.nix
+            echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
+            echo 'passwd: files' > /etc/nsswitch.conf
+          ''}
+
+            cp -f $extraUtils/etc/hosts /etc/hosts
+
+            mkdir -p /etc/iscsi /run/lock/iscsi
+            echo "InitiatorName=${cfg.name}" > /etc/iscsi/initiatorname.iscsi
+
+            (
+              cat "$extraUtils/etc/iscsi/iscsid.fragment.conf"
+              printf "\n"
+              ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
+              ${extraCfgDumper}
+            ) > /etc/iscsi/iscsid.conf
+
+            iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
+            iscsiadm --mode discoverydb \
+              --type sendtargets \
+              --discover \
+              --portal ${escapeShellArg cfg.discoverPortal} \
+              --debug ${toString cfg.logLevel}
+
+            ${if cfg.loginAll then ''
+            iscsiadm --mode node --loginall all
+          '' else ''
+            iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
+          ''}
+
+            ${cfg.extraIscsiCommands}
+
+            pkill -9 iscsid
         '';
-      in ''
-        ${optionalString (!config.boot.initrd.network.ssh.enable) ''
-        # stolen from initrd-ssh.nix
-        echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
-      ''}
-
-        cp -f $extraUtils/etc/hosts /etc/hosts
-
-        mkdir -p /etc/iscsi /run/lock/iscsi
-        echo "InitiatorName=${cfg.name}" > /etc/iscsi/initiatorname.iscsi
-
-        (
-          cat "$extraUtils/etc/iscsi/iscsid.fragment.conf"
-          printf "\n"
-          ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
-          ${extraCfgDumper}
-        ) > /etc/iscsi/iscsid.conf
-
-        iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
-        iscsiadm --mode discoverydb \
-          --type sendtargets \
-          --discover \
-          --portal ${escapeShellArg cfg.discoverPortal} \
-          --debug ${toString cfg.logLevel}
-
-        ${if cfg.loginAll then ''
-        iscsiadm --mode node --loginall all
-      '' else ''
-        iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
-      ''}
-
-        ${cfg.extraIscsiCommands}
-
-        pkill -9 iscsid
-      '';
     };
 
     services.openiscsi = {

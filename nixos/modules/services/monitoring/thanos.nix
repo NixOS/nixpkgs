@@ -11,10 +11,10 @@ let
     inherit description;
   };
 
-  optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
-  flagToArgs   = opt: v  : optional v            "--${opt}";
-  listToArgs   = opt: vs : map               (v: ''--${opt}="${v}"'') vs;
-  attrsToArgs  = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
+  optionToArgs = opt: v: optional (v != null) ''--${opt}="${toString v}"'';
+  flagToArgs = opt: v: optional v "--${opt}";
+  listToArgs = opt: vs: map (v: ''--${opt}="${v}"'') vs;
+  attrsToArgs = opt: kvs: mapAttrsToList (k: v: ''--${opt}=${k}=\"${v}\"'') kvs;
 
   mkParamDef = type: default: description: mkParam type (description + ''
 
@@ -40,7 +40,7 @@ let
     toArgs = _opt: listToArgs opt;
     option = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       inherit description;
     };
   };
@@ -49,7 +49,7 @@ let
     toArgs = _opt: attrsToArgs opt;
     option = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       inherit description;
     };
   };
@@ -63,22 +63,27 @@ let
     };
   };
 
-  toYAML = name: attrs: pkgs.runCommand name {
-    preferLocalBuild = true;
-    json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
-    nativeBuildInputs = [ pkgs.remarshal ];
-  } "json2yaml -i $json -o $out";
+  toYAML = name: attrs: pkgs.runCommand name
+    {
+      preferLocalBuild = true;
+      json = builtins.toFile "${name}.json" (builtins.toJSON attrs);
+      nativeBuildInputs = [ pkgs.remarshal ];
+    } "json2yaml -i $json -o $out";
 
   thanos = cmd: "${cfg.package}/bin/thanos ${cmd}" +
-    (let args = cfg.${cmd}.arguments;
-     in optionalString (length args != 0) (" \\\n  " +
-         concatStringsSep " \\\n  " args));
+    (
+      let args = cfg.${cmd}.arguments;
+      in optionalString (length args != 0) (" \\\n  " +
+        concatStringsSep " \\\n  " args)
+    );
 
   argumentsOf = cmd: concatLists (collect isList
     (flip mapParamsRecursive params.${cmd} (path: param:
-      let opt = concatStringsSep "." path;
-          v = getAttrFromPath path cfg.${cmd};
-      in param.toArgs opt v)));
+      let
+        opt = concatStringsSep "." path;
+        v = getAttrFromPath path cfg.${cmd};
+      in
+      param.toArgs opt v)));
 
   mkArgumentsOption = cmd: mkOption {
     type = types.listOf types.str;
@@ -104,7 +109,7 @@ let
 
     log = {
 
-      log.level = mkParamDef (types.enum ["debug" "info" "warn" "error" "fatal"]) "info" ''
+      log.level = mkParamDef (types.enum [ "debug" "info" "warn" "error" "fatal" ]) "info" ''
         Log filtering level.
       '';
 
@@ -118,8 +123,9 @@ let
         toArgs = _opt: path: optionToArgs "tracing.config-file" path;
         option = mkOption {
           type = with types; nullOr str;
-          default = if cfg.tracing.config == null then null
-                    else toString (toYAML "tracing.yaml" cfg.tracing.config);
+          default =
+            if cfg.tracing.config == null then null
+            else toString (toYAML "tracing.yaml" cfg.tracing.config);
           defaultText = literalExpression ''
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
@@ -134,7 +140,7 @@ let
 
       tracing.config =
         {
-          toArgs = _opt: _attrs: [];
+          toArgs = _opt: _attrs: [ ];
           option = nullOpt types.attrs ''
             Tracing configuration.
 
@@ -183,8 +189,9 @@ let
         toArgs = _opt: path: optionToArgs "objstore.config-file" path;
         option = mkOption {
           type = with types; nullOr str;
-          default = if cfg.objstore.config == null then null
-                    else toString (toYAML "objstore.yaml" cfg.objstore.config);
+          default =
+            if cfg.objstore.config == null then null
+            else toString (toYAML "objstore.yaml" cfg.objstore.config);
           defaultText = literalExpression ''
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
@@ -199,7 +206,7 @@ let
 
       objstore.config =
         {
-          toArgs = _opt: _attrs: [];
+          toArgs = _opt: _attrs: [ ];
           option = nullOpt types.attrs ''
             Object store configuration.
 
@@ -649,7 +656,8 @@ let
     ];
   };
 
-in {
+in
+{
 
   options.services.thanos = {
 
@@ -677,14 +685,14 @@ in {
     query = paramsToOptions params.query // {
       enable = mkEnableOption
         ("the Thanos query node exposing PromQL enabled Query API " +
-         "with data retrieved from multiple store nodes");
+          "with data retrieved from multiple store nodes");
       arguments = mkArgumentsOption "query";
     };
 
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
         ("the Thanos ruler service which evaluates Prometheus rules against" +
-        " given Query nodes, exposing Store API and storing old blocks in bucket");
+          " given Query nodes, exposing Store API and storing old blocks in bucket");
       arguments = mkArgumentsOption "rule";
     };
 
@@ -703,7 +711,7 @@ in {
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
         ("the Thanos receiver which accept Prometheus remote write API requests " +
-         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)");
+          "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)");
       arguments = mkArgumentsOption "receive";
     };
   };
@@ -719,7 +727,7 @@ in {
         }
         {
           assertion = !(config.services.prometheus.globalConfig.external_labels == null ||
-                        config.services.prometheus.globalConfig.external_labels == {});
+            config.services.prometheus.globalConfig.external_labels == { });
           message =
             "services.thanos.sidecar requires uniquely identifying external labels " +
             "to be configured in the Prometheus server. " +
@@ -728,7 +736,7 @@ in {
       ];
       systemd.services.thanos-sidecar = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" "prometheus.service" ];
+        after = [ "network.target" "prometheus.service" ];
         serviceConfig = {
           User = "prometheus";
           Restart = "always";
@@ -742,7 +750,7 @@ in {
       {
         systemd.services.thanos-store = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.store.stateDir;
@@ -756,7 +764,7 @@ in {
     (mkIf cfg.query.enable {
       systemd.services.thanos-query = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
           Restart = "always";
@@ -770,7 +778,7 @@ in {
       {
         systemd.services.thanos-rule = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.rule.stateDir;
@@ -787,9 +795,9 @@ in {
         systemd.services.thanos-compact =
           let wait = cfg.compact.startAt == null; in {
             wantedBy = [ "multi-user.target" ];
-            after    = [ "network.target" ];
+            after = [ "network.target" ];
             serviceConfig = {
-              Type    = if wait then "simple" else "oneshot";
+              Type = if wait then "simple" else "oneshot";
               Restart = if wait then "always" else "no";
               DynamicUser = true;
               StateDirectory = cfg.compact.stateDir;
@@ -804,7 +812,7 @@ in {
       {
         systemd.services.thanos-downsample = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.downsample.stateDir;
@@ -820,7 +828,7 @@ in {
       {
         systemd.services.thanos-receive = {
           wantedBy = [ "multi-user.target" ];
-          after    = [ "network.target" ];
+          after = [ "network.target" ];
           serviceConfig = {
             DynamicUser = true;
             StateDirectory = cfg.receive.stateDir;

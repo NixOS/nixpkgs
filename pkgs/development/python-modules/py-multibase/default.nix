@@ -14,7 +14,7 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version ;
+    inherit pname version;
     sha256 = "d28a20efcbb61eec28f55827a0bf329c7cea80fffd933aecaea6ae8431267fe4";
   };
 

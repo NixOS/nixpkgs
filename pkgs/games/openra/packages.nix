@@ -38,21 +38,28 @@ let
     '';
   } // args));
 
-in rec {
+in
+rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine = { name ? null, version, description, homepage, mods, src, installExperimental ? "" }@engine:
     # Allow specifying the name at a later point if no name has been given.
-    let builder = name: pkgs.callPackage ./engine.nix (common // {
-      engine = engine // { inherit name installExperimental; };
-    }); in if name == null then builder else builder name;
+    let
+      builder = name: pkgs.callPackage ./engine.nix (common // {
+        engine = engine // { inherit name installExperimental; };
+      });
+    in
+    if name == null then builder else builder name;
 
   # See `buildOpenRAEngine`.
-  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine }@mod: ({ version, mods ? [], src }@engine:
-    let builder = name: pkgs.callPackage ./mod.nix (common // {
-      mod = mod // { inherit name; };
-      engine = engine // { inherit mods; };
-    }); in if name == null then builder else builder name) engine;
+  buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine }@mod: ({ version, mods ? [ ], src }@engine:
+    let
+      builder = name: pkgs.callPackage ./mod.nix (common // {
+        mod = mod // { inherit name; };
+        engine = engine // { inherit mods; };
+      });
+    in
+    if name == null then builder else builder name) engine;
 
   # See `buildOpenRASet`.
   engines = buildOpenRASet (import ./engines.nix) { inherit buildOpenRAEngine; };

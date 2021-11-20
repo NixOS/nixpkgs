@@ -24,7 +24,8 @@ let
     rev = "c9c5cc3a87271180d4fb5bb0b17040763d2cfe06"; # latest as of 0.9.8 release date
     sha256 = "057hn7cb1vy827gvim3b6vwgfdh2ckjy8h9yj1ry7lv6hw8ynx6n";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xidel";
   version = "0.9.8";
 

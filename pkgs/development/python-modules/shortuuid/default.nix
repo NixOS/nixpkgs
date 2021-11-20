@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "3c11d2007b915c43bee3e10625f068d8a349e04f0d81f08f5fa08507427ebf1f";
   };
 
-  buildInputs = [pep8];
+  buildInputs = [ pep8 ];
 
   meta = with lib; {
     description = "A generator library for concise, unambiguous and URL-safe UUIDs";

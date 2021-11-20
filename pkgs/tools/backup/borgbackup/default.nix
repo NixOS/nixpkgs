@@ -88,9 +88,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
+    "--numprocesses"
+    "auto"
     "--benchmark-skip"
-    "--pyargs" "borg.testsuite"
+    "--pyargs"
+    "borg.testsuite"
   ];
 
   disabledTests = [

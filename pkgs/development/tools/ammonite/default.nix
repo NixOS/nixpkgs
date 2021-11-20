@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
-, nix, coreutils, gnused, disableRemoteLogging ? true }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, writeScript
+, common-updater-scripts
+, git
+, nixfmt
+, nix
+, coreutils
+, gnused
+, disableRemoteLogging ? true
+}:
 
 with lib;
 
@@ -80,7 +91,8 @@ let
         maintainers = [ maintainers.nequissimus ];
       };
     };
-in {
+in
+{
   ammonite_2_12 = common {
     scalaVersion = "2.12";
     sha256 = "5n9q/7d/PwDJfBPITYyDua24+fci6bi1oG5dSw8A244=";

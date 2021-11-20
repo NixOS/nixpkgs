@@ -2,7 +2,8 @@
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.7.11";
   outputs = [ "bin" "man" "out" ];

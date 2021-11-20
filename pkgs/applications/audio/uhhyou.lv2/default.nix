@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , python3
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ryukau";
-    repo =  "LV2Plugins";
+    repo = "LV2Plugins";
     rev = "df67460fc344f94db4306d4ee21e4207e657bbee";
     fetchSubmodules = true;
     sha256 = "1a23av35cw26zgq93yzmmw35084hsj29cb7sb04j2silv5qisila";

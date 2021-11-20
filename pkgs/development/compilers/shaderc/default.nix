@@ -23,7 +23,8 @@ let
     rev = "0c28b6451d77774912e52949c1e57fa726edf113";
     sha256 = "sha256-KpCMceTV/BRaoJe1qeXhKYQNQqdGaM6Q9nklpJKzHFY=";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "shaderc";
   version = "2021.0";
 

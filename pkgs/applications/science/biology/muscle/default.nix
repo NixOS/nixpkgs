@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  _name   = "muscle";
-  name    = "${_name}-${version}";
+  _name = "muscle";
+  name = "${_name}-${version}";
   version = "3.8.31";
 
   src = fetchurl {
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A multiple sequence alignment method with reduced time and space complexity";
-    license     = licenses.publicDomain;
-    homepage    = "https://www.drive5.com/muscle/";
+    license = licenses.publicDomain;
+    homepage = "https://www.drive5.com/muscle/";
     maintainers = [ maintainers.unode ];
     # NOTE: Supposed to be compatible with darwin/intel & PPC but currently fails.
     # Anyone with access to these platforms is welcome to give it a try
-    platforms   = lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,34 +1,34 @@
 /*
 
-# Usage
+  # Usage
 
-`emacs.pkgs.withPackages` takes a single argument: a function from a package
-set to a list of packages (the packages that will be available in
-Emacs). For example,
-```
-emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
-```
-All the packages in the list should come from the provided package
-set. It is possible to add any package to the list, but the provided
-set is guaranteed to have consistent dependencies and be built with
-the correct version of Emacs.
+  `emacs.pkgs.withPackages` takes a single argument: a function from a package
+  set to a list of packages (the packages that will be available in
+  Emacs). For example,
+  ```
+  emacs.pkgs.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+  ```
+  All the packages in the list should come from the provided package
+  set. It is possible to add any package to the list, but the provided
+  set is guaranteed to have consistent dependencies and be built with
+  the correct version of Emacs.
 
-# Overriding
+  # Overriding
 
-`emacs.pkgs.withPackages` inherits the package set which contains it, so the
-correct way to override the provided package set is to override the
-set which contains `emacs.pkgs.withPackages`. For example, to override
-`emacs.pkgs.emacs.pkgs.withPackages`,
-```
-let customEmacsPackages =
+  `emacs.pkgs.withPackages` inherits the package set which contains it, so the
+  correct way to override the provided package set is to override the
+  set which contains `emacs.pkgs.withPackages`. For example, to override
+  `emacs.pkgs.emacs.pkgs.withPackages`,
+  ```
+  let customEmacsPackages =
       emacs.pkgs.overrideScope' (self: super: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
         magit = self.melpaPackages.magit;
       });
-in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
-```
+  in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
+  ```
 
 */
 
@@ -49,137 +49,137 @@ packagesFun: # packages explicitly requested by the user
 let
   explicitRequires =
     if lib.isFunction packagesFun
-      then packagesFun self
+    then packagesFun self
     else packagesFun;
 in
 
 runCommand
   (appendToName "with-packages" emacs).name
-  {
-    nativeBuildInputs = [ emacs lndir makeWrapper ];
-    inherit emacs explicitRequires;
+{
+  nativeBuildInputs = [ emacs lndir makeWrapper ];
+  inherit emacs explicitRequires;
 
-    preferLocalBuild = true;
-    allowSubstitutes = false;
+  preferLocalBuild = true;
+  allowSubstitutes = false;
 
-    # Store all paths we want to add to emacs here, so that we only need to add
-    # one path to the load lists
-    deps = runCommand "emacs-packages-deps"
-      {
-        inherit explicitRequires lndir emacs;
-        nativeBuildInputs = lib.optional nativeComp gcc;
+  # Store all paths we want to add to emacs here, so that we only need to add
+  # one path to the load lists
+  deps = runCommand "emacs-packages-deps"
+    {
+      inherit explicitRequires lndir emacs;
+      nativeBuildInputs = lib.optional nativeComp gcc;
+    }
+    ''
+      findInputsOld() {
+        local pkg="$1"; shift
+        local var="$1"; shift
+        local propagatedBuildInputsFiles=("$@")
+
+        # TODO(@Ericson2314): Restore using associative array once Darwin
+        # nix-shell doesn't use impure bash. This should replace the O(n)
+        # case with an O(1) hash map lookup, assuming bash is implemented
+        # well :D.
+        local varSlice="$var[*]"
+        # ''${..-} to hack around old bash empty array problem
+        case "''${!varSlice-}" in
+            *" $pkg "*) return 0 ;;
+        esac
+        unset -v varSlice
+
+        eval "$var"'+=("$pkg")'
+
+        if ! [ -e "$pkg" ]; then
+            echo "build input $pkg does not exist" >&2
+            exit 1
+        fi
+
+        local file
+        for file in "''${propagatedBuildInputsFiles[@]}"; do
+            file="$pkg/nix-support/$file"
+            [[ -f "$file" ]] || continue
+
+            local pkgNext
+            for pkgNext in $(< "$file"); do
+                findInputsOld "$pkgNext" "$var" "''${propagatedBuildInputsFiles[@]}"
+            done
+        done
       }
-      ''
-        findInputsOld() {
-          local pkg="$1"; shift
-          local var="$1"; shift
-          local propagatedBuildInputsFiles=("$@")
+      mkdir -p $out/bin
+      mkdir -p $out/share/emacs/site-lisp
+      ${optionalString nativeComp ''
+        mkdir -p $out/share/emacs/native-lisp
+      ''}
 
-          # TODO(@Ericson2314): Restore using associative array once Darwin
-          # nix-shell doesn't use impure bash. This should replace the O(n)
-          # case with an O(1) hash map lookup, assuming bash is implemented
-          # well :D.
-          local varSlice="$var[*]"
-          # ''${..-} to hack around old bash empty array problem
-          case "''${!varSlice-}" in
-              *" $pkg "*) return 0 ;;
-          esac
-          unset -v varSlice
+      local requires
+      for pkg in $explicitRequires; do
+        findInputsOld $pkg requires propagated-user-env-packages
+      done
+      # requires now holds all requested packages and their transitive dependencies
 
-          eval "$var"'+=("$pkg")'
+      linkPath() {
+        local pkg=$1
+        local origin_path=$2
+        local dest_path=$3
 
-          if ! [ -e "$pkg" ]; then
-              echo "build input $pkg does not exist" >&2
-              exit 1
-          fi
+        # Add the path to the search path list, but only if it exists
+        if [[ -d "$pkg/$origin_path" ]]; then
+          $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path"
+        fi
+      }
 
-          local file
-          for file in "''${propagatedBuildInputsFiles[@]}"; do
-              file="$pkg/nix-support/$file"
-              [[ -f "$file" ]] || continue
-
-              local pkgNext
-              for pkgNext in $(< "$file"); do
-                  findInputsOld "$pkgNext" "$var" "''${propagatedBuildInputsFiles[@]}"
-              done
-          done
-        }
-        mkdir -p $out/bin
-        mkdir -p $out/share/emacs/site-lisp
+      linkEmacsPackage() {
+        linkPath "$1" "bin" "bin"
+        linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
         ${optionalString nativeComp ''
-          mkdir -p $out/share/emacs/native-lisp
+          linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
         ''}
+      }
 
-        local requires
-        for pkg in $explicitRequires; do
-          findInputsOld $pkg requires propagated-user-env-packages
-        done
-        # requires now holds all requested packages and their transitive dependencies
+      # Iterate over the array of inputs (avoiding nix's own interpolation)
+      for pkg in "''${requires[@]}"; do
+        linkEmacsPackage $pkg
+      done
 
-        linkPath() {
-          local pkg=$1
-          local origin_path=$2
-          local dest_path=$3
+      siteStart="$out/share/emacs/site-lisp/site-start.el"
+      siteStartByteCompiled="$siteStart"c
+      subdirs="$out/share/emacs/site-lisp/subdirs.el"
+      subdirsByteCompiled="$subdirs"c
 
-          # Add the path to the search path list, but only if it exists
-          if [[ -d "$pkg/$origin_path" ]]; then
-            $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path"
-          fi
-        }
+      # A dependency may have brought the original siteStart or subdirs, delete
+      # it and create our own
+      # Begin the new site-start.el by loading the original, which sets some
+      # NixOS-specific paths. Paths are searched in the reverse of the order
+      # they are specified in, so user and system profile paths are searched last.
+      #
+      # NOTE: Avoid displaying messages early at startup by binding
+      # inhibit-message to t. This would prevent the Emacs GUI from showing up
+      # prematurely. The messages would still be logged to the *Messages*
+      # buffer.
+      rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
+      cat >"$siteStart" <<EOF
+      (let ((inhibit-message t))
+        (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
+      (add-to-list 'load-path "$out/share/emacs/site-lisp")
+      (add-to-list 'exec-path "$out/bin")
+      ${optionalString nativeComp ''
+        (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
+      ''}
+      EOF
+      # Link subdirs.el from the emacs distribution
+      ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
 
-        linkEmacsPackage() {
-          linkPath "$1" "bin" "bin"
-          linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
-          ${optionalString nativeComp ''
-            linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
-          ''}
-        }
+      # Byte-compiling improves start-up time only slightly, but costs nothing.
+      $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
 
-        # Iterate over the array of inputs (avoiding nix's own interpolation)
-        for pkg in "''${requires[@]}"; do
-          linkEmacsPackage $pkg
-        done
+      ${optionalString nativeComp ''
+        $emacs/bin/emacs --batch \
+          --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
+          -f batch-native-compile "$siteStart" "$subdirs"
+      ''}
+    '';
 
-        siteStart="$out/share/emacs/site-lisp/site-start.el"
-        siteStartByteCompiled="$siteStart"c
-        subdirs="$out/share/emacs/site-lisp/subdirs.el"
-        subdirsByteCompiled="$subdirs"c
-
-        # A dependency may have brought the original siteStart or subdirs, delete
-        # it and create our own
-        # Begin the new site-start.el by loading the original, which sets some
-        # NixOS-specific paths. Paths are searched in the reverse of the order
-        # they are specified in, so user and system profile paths are searched last.
-        #
-        # NOTE: Avoid displaying messages early at startup by binding
-        # inhibit-message to t. This would prevent the Emacs GUI from showing up
-        # prematurely. The messages would still be logged to the *Messages*
-        # buffer.
-        rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
-        cat >"$siteStart" <<EOF
-        (let ((inhibit-message t))
-          (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
-        (add-to-list 'load-path "$out/share/emacs/site-lisp")
-        (add-to-list 'exec-path "$out/bin")
-        ${optionalString nativeComp ''
-          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
-        ''}
-        EOF
-        # Link subdirs.el from the emacs distribution
-        ln -s $emacs/share/emacs/site-lisp/subdirs.el -T $subdirs
-
-        # Byte-compiling improves start-up time only slightly, but costs nothing.
-        $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
-
-        ${optionalString nativeComp ''
-          $emacs/bin/emacs --batch \
-            --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
-            -f batch-native-compile "$siteStart" "$subdirs"
-        ''}
-      '';
-
-    inherit (emacs) meta;
-  }
+  inherit (emacs) meta;
+}
   ''
     mkdir -p "$out/bin"
 

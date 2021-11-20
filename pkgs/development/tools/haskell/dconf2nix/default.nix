@@ -3,15 +3,17 @@
 let
   dconf2nix =
     haskell.lib.compose.justStaticExecutables
-      (haskell.lib.compose.overrideCabal (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
-          lib.maintainers.gvolpe
-        ];
-      }) haskellPackages.dconf2nix);
+      (haskell.lib.compose.overrideCabal
+        (oldAttrs: {
+          maintainers = (oldAttrs.maintainers or [ ]) ++ [
+            lib.maintainers.gvolpe
+          ];
+        })
+        haskellPackages.dconf2nix);
 in
 
 dconf2nix.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
+  passthru = (oldAttrs.passthru or { }) // {
     updateScript = ./update.sh;
 
     # These tests can be run with the following command.

@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, check, dbus, xvfb-run, glib, gtk, gettext, libiconv, json_c, libintl
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, check
+, dbus
+, xvfb-run
+, glib
+, gtk
+, gettext
+, libiconv
+, json_c
+, libintl
 }:
 
 stdenv.mkDerivation rec {

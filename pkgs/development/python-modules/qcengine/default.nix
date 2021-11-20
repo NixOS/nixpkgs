@@ -1,6 +1,15 @@
-{ buildPythonPackage, lib, fetchPypi, pyyaml, qcelemental, pydantic
-, py-cpuinfo, psutil, pytest-runner, pytest, pytest-cov
-} :
+{ buildPythonPackage
+, lib
+, fetchPypi
+, pyyaml
+, qcelemental
+, pydantic
+, py-cpuinfo
+, psutil
+, pytest-runner
+, pytest
+, pytest-cov
+}:
 
 buildPythonPackage rec {
   pname = "qcengine";

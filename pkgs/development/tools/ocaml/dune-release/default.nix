@@ -1,7 +1,29 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch
-, curly, fmt, bos, cmdliner, re, rresult, logs, fpath
-, odoc, opam-format, opam-core, opam-state, yojson, astring
-, opam, git, findlib, mercurial, bzip2, gnutar, coreutils
+{ lib
+, buildDunePackage
+, fetchurl
+, makeWrapper
+, fetchpatch
+, curly
+, fmt
+, bos
+, cmdliner
+, re
+, rresult
+, logs
+, fpath
+, odoc
+, opam-format
+, opam-core
+, opam-state
+, yojson
+, astring
+, opam
+, git
+, findlib
+, mercurial
+, bzip2
+, gnutar
+, coreutils
 , alcotest
 }:
 
@@ -20,8 +42,22 @@ in buildDunePackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson astring fpath ];
+  buildInputs = [
+    curly
+    fmt
+    cmdliner
+    re
+    opam-format
+    opam-state
+    opam-core
+    rresult
+    logs
+    odoc
+    bos
+    yojson
+    astring
+    fpath
+  ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 

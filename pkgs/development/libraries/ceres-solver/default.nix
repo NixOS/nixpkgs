@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional runTests gflags;
   propagatedBuildInputs = [ eigen glog ]
-  ++ lib.optionals withBlas [ blas suitesparse ];
+    ++ lib.optionals withBlas [ blas suitesparse ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}"

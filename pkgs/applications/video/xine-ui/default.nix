@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-readline=${readline.dev}" ];
 
-  LIRC_CFLAGS="-I${lirc}/include";
-  LIRC_LIBS="-L ${lirc}/lib -llirc_client";
+  LIRC_CFLAGS = "-I${lirc}/include";
+  LIRC_LIBS = "-L ${lirc}/lib -llirc_client";
 
   postInstall = ''
     substituteInPlace $out/share/applications/xine.desktop \

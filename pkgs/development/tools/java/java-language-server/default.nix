@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, jdk, maven
-, runtimeShell, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk
+, maven
+, runtimeShell
+, makeWrapper
 }:
 
 let

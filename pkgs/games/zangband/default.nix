@@ -10,7 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ncurses flex bison autoconf automake m4
+    ncurses
+    flex
+    bison
+    autoconf
+    automake
+    m4
   ];
 
   preConfigure = ''

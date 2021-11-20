@@ -9,7 +9,7 @@ in
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
-    default = [];
+    default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
     description = ''
@@ -48,9 +48,11 @@ in
         mkdir -p /var/lib/zerotier-one/networks.d
         chmod 700 /var/lib/zerotier-one
         chown -R root:root /var/lib/zerotier-one
-      '' + (concatMapStrings (netId: ''
-        touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks);
+      '' + (concatMapStrings
+        (netId: ''
+          touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
+        '')
+        cfg.joinNetworks);
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";

@@ -1,9 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
-, libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
-, gtk2, genericUpdater, common-updater-scripts, libebur128
-, jack2, ladspa-sdk, swig, which, ncurses
-, enablePython ? false, python3
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, SDL
+, ffmpeg
+, frei0r
+, libjack2
+, libdv
+, libsamplerate
+, libexif
+, libvorbis
+, libxml2
+, movit
+, pkg-config
+, sox
+, fftw
+, opencv4
+, SDL2
+, gtk2
+, genericUpdater
+, common-updater-scripts
+, libebur128
+, jack2
+, ladspa-sdk
+, swig
+, which
+, ncurses
+, enablePython ? false
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -18,20 +42,38 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2.dev
-    movit sox libexif gtk2 fftw libebur128 opencv4 SDL2 jack2
+    SDL
+    ffmpeg
+    frei0r
+    libjack2
+    libdv
+    libsamplerate
+    libvorbis
+    libxml2.dev
+    movit
+    sox
+    libexif
+    gtk2
+    fftw
+    libebur128
+    opencv4
+    SDL2
+    jack2
     ladspa-sdk
   ] ++ lib.optional enablePython ncurses;
 
   nativeBuildInputs = [ pkg-config makeWrapper which ]
-  ++ lib.optionals enablePython [ python3 swig ];
+    ++ lib.optionals enablePython [ python3 swig ];
 
   strictDeps = true;
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl3" "--enable-opengl"
+    "--avformat-swscale"
+    "--enable-gpl"
+    "--enable-gpl3"
+    "--enable-opengl"
   ] ++ lib.optional enablePython "--swig-languages=python";
 
   enableParallelBuilding = true;

@@ -1,7 +1,31 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
-, boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
-, webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
-, libdbiDrivers, guile, perl, perlPackages
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, pkg-config
+, makeWrapper
+, cmake
+, gtest
+, boost
+, icu
+, libxml2
+, libxslt
+, gettext
+, swig
+, isocodes
+, gtk3
+, glibcLocales
+, webkitgtk
+, dconf
+, hicolor-icon-theme
+, libofx
+, aqbanking
+, gwenhywfar
+, libdbi
+, libdbiDrivers
+, guile
+, perl
+, perlPackages
 }:
 
 let
@@ -45,10 +69,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
-    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
-    libdbiDrivers guile
-    perlWrapper perl
+    boost
+    icu
+    libxml2
+    libxslt
+    gettext
+    isocodes
+    gtk3
+    glibcLocales
+    webkitgtk
+    dconf
+    libofx
+    aqbanking
+    gwenhywfar
+    libdbi
+    libdbiDrivers
+    guile
+    perlWrapper
+    perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];

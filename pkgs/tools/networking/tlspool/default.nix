@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, arpa2cm
-, openldap, p11-kit, unbound, libtasn1, db, openssl, quickder, libkrb5, ldns, gnutls-kdh
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, arpa2cm
+, openldap
+, p11-kit
+, unbound
+, libtasn1
+, db
+, openssl
+, quickder
+, libkrb5
+, ldns
+, gnutls-kdh
 , softhsm
 }:
 
@@ -19,11 +32,22 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    cmake pkg-config arpa2cm
+    cmake
+    pkg-config
+    arpa2cm
   ];
 
   buildInputs = [
-    openldap p11-kit unbound libtasn1 db openssl quickder libkrb5 ldns gnutls-kdh
+    openldap
+    p11-kit
+    unbound
+    libtasn1
+    db
+    openssl
+    quickder
+    libkrb5
+    ldns
+    gnutls-kdh
   ];
 
   postPatch = ''

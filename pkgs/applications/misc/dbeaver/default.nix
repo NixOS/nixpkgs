@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       platformMap = {
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
-        x86_64-linux  = "x86_64";
+        x86_64-linux = "x86_64";
       };
 
       systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");

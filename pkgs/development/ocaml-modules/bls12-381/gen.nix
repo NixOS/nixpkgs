@@ -5,10 +5,10 @@ buildDunePackage rec {
   version = "0.4.2";
 
   src = fetchFromGitLab {
-      owner = "dannywillems";
-      repo = "ocaml-bls12-381";
-      rev = version;
-      sha256 = "0jxc8qrdn74brmzjns1xycv3cb257kx5pa3ripgl9ci4njkv87n2";
+    owner = "dannywillems";
+    repo = "ocaml-bls12-381";
+    rev = version;
+    sha256 = "0jxc8qrdn74brmzjns1xycv3cb257kx5pa3ripgl9ci4njkv87n2";
   };
   useDune2 = true;
 

@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoPatchelfHook
-, fuse, packer
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
+, fuse
+, packer
+, maven
+, jdk
+, jre
+, makeWrapper
+, glib
+, wrapGAppsHook
 }:
 
 let
@@ -47,7 +55,8 @@ let
     outputHash = "195ysv9l861y9d1lvmvi7wmk172ynlba9n233blpaigq88cjn208";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   buildPhase = ''

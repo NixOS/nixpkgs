@@ -79,7 +79,8 @@ in
 
     # Service executed before suspending/hibernating.
     systemd.services.pre-sleep =
-      { description = "Pre-Sleep Actions";
+      {
+        description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
         script =
@@ -90,7 +91,8 @@ in
       };
 
     systemd.services.post-resume =
-      { description = "Post-Resume Actions";
+      {
+        description = "Post-Resume Actions";
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''

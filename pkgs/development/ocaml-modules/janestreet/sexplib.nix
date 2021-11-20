@@ -1,4 +1,4 @@
-{lib, buildOcamlJane, type_conv}:
+{ lib, buildOcamlJane, type_conv }:
 
 buildOcamlJane {
   minimumSupportedOcamlVersion = "4.02";

@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi, setuptools-scm
-, six, jaraco_classes, jaraco_text
+{ buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, six
+, jaraco_classes
+, jaraco_text
 }:
 
 buildPythonPackage rec {

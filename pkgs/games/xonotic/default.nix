@@ -1,9 +1,26 @@
-{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
-, xonotic-data, copyDesktopItems
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, makeWrapper
+, runCommand
+, makeDesktopItem
+, xonotic-data
+, copyDesktopItems
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip
+, libjpeg
+, zlib
+, libvorbis
+, curl
 , # glx
-  libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
+  libX11
+, libGLU
+, libGL
+, libXpm
+, libXext
+, libXxf86vm
+, alsa-lib
 , # sdl
   SDL2
 , # blind
@@ -133,7 +150,8 @@ let
     '';
   };
 
-in rec {
+in
+rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
@@ -142,37 +160,39 @@ in rec {
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';
-    meta.hydraPlatforms = [];
+    meta.hydraPlatforms = [ ];
     passthru.version = version;
   };
 
-  xonotic = runCommand "xonotic${variant}-${version}" {
-    inherit xonotic-unwrapped;
-    nativeBuildInputs = [ makeWrapper copyDesktopItems ];
-    desktopItems = [ desktopItem ];
-    passthru = {
-      inherit version;
-      meta = meta // {
-        hydraPlatforms = [];
+  xonotic = runCommand "xonotic${variant}-${version}"
+    {
+      inherit xonotic-unwrapped;
+      nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+      desktopItems = [ desktopItem ];
+      passthru = {
+        inherit version;
+        meta = meta // {
+          hydraPlatforms = [ ];
+        };
       };
-    };
-  } (''
-    mkdir -p $out/bin
-  '' + lib.optionalString withDedicated ''
-    ln -s ${xonotic-unwrapped}/bin/xonotic-dedicated $out/bin/
-  '' + lib.optionalString withGLX ''
-    ln -s ${xonotic-unwrapped}/bin/xonotic-glx $out/bin/xonotic-glx
-    ln -s $out/bin/xonotic-glx $out/bin/xonotic
-  '' + lib.optionalString withSDL ''
-    ln -s ${xonotic-unwrapped}/bin/xonotic-sdl $out/bin/xonotic-sdl
-    ln -sf $out/bin/xonotic-sdl $out/bin/xonotic
-  '' + lib.optionalString (withSDL || withGLX) ''
-    mkdir -p $out/share
-    ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
-    copyDesktopItems
-  '' + ''
-    for binary in $out/bin/xonotic-*; do
-      wrapProgram $binary --add-flags "-basedir ${xonotic-data}" --prefix LD_LIBRARY_PATH : "${xonotic-unwrapped}/lib"
-    done
-  '');
+    }
+    (''
+      mkdir -p $out/bin
+    '' + lib.optionalString withDedicated ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-dedicated $out/bin/
+    '' + lib.optionalString withGLX ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-glx $out/bin/xonotic-glx
+      ln -s $out/bin/xonotic-glx $out/bin/xonotic
+    '' + lib.optionalString withSDL ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-sdl $out/bin/xonotic-sdl
+      ln -sf $out/bin/xonotic-sdl $out/bin/xonotic
+    '' + lib.optionalString (withSDL || withGLX) ''
+      mkdir -p $out/share
+      ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
+      copyDesktopItems
+    '' + ''
+      for binary in $out/bin/xonotic-*; do
+        wrapProgram $binary --add-flags "-basedir ${xonotic-data}" --prefix LD_LIBRARY_PATH : "${xonotic-unwrapped}/lib"
+      done
+    '');
 }

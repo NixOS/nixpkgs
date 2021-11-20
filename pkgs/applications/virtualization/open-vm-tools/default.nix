@@ -1,8 +1,37 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
-, bash, fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
-, libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
-, pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
-, libdrm, udev
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, autoreconfHook
+, bash
+, fuse
+, libmspack
+, openssl
+, pam
+, xercesc
+, icu
+, libdnet
+, procps
+, libtirpc
+, rpcsvc-proto
+, libX11
+, libXext
+, libXinerama
+, libXi
+, libXrender
+, libXrandr
+, libXtst
+, pkg-config
+, glib
+, gdk-pixbuf-xlib
+, gtk3
+, gtkmm3
+, iproute2
+, dbus
+, systemd
+, which
+, libdrm
+, udev
 , withX ? true
 }:
 
@@ -11,9 +40,9 @@ stdenv.mkDerivation rec {
   version = "11.3.5";
 
   src = fetchFromGitHub {
-    owner  = "vmware";
-    repo   = "open-vm-tools";
-    rev    = "stable-${version}";
+    owner = "vmware";
+    repo = "open-vm-tools";
+    rev = "stable-${version}";
     sha256 = "03fahljrijq4ij8a4v8d7806mpf22ppkgr61n5s974g3xfdvpl13";
   };
 
@@ -23,20 +52,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [ fuse glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
-      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+    ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   postPatch = ''
-     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
-     sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
-     sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
-     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
-     sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
+    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
+    sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+    sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
+    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
+    sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
 
-     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-     sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+    sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
 
-     # Make reboot work, shutdown is not in /sbin on NixOS
-     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+    # Make reboot work, shutdown is not in /sbin on NixOS
+    sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
   configureFlags = [
@@ -71,7 +100,7 @@ stdenv.mkDerivation rec {
       better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms =  [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ joamaki ];
   };
 }

@@ -1,7 +1,8 @@
 { branch ? "stable", pkgs }:
 let
   inherit (pkgs) callPackage fetchurl;
-in {
+in
+{
   stable = callPackage ./base.nix rec {
     pname = "discord";
     binaryName = "Discord";

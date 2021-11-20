@@ -40,7 +40,8 @@ in
       sslCertificate = "${certs}/server.crt";
       sslCertificateKey = "${certs}/server.key";
       locations."/".root = pkgs.writeTextFile
-        { name = "bad-day";
+        {
+          name = "bad-day";
           destination = "/how-are-you/index.html";
           text = "I've had a bad day!\n";
         };
@@ -54,7 +55,7 @@ in
       inspectHttps = true;
       settings = {
         ca-cert-file = "${certs}/ca.crt";
-        ca-key-file  = "${certs}/ca.key";
+        ca-key-file = "${certs}/ca.key";
         debug = 65536;
       };
       userActions = ''

@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license= licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
     # incompatible with nixpkgs scikit-learn version

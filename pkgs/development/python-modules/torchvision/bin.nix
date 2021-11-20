@@ -16,7 +16,8 @@ let
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
   version = "0.11.1";
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version;
 
   pname = "torchvision";
@@ -41,15 +42,17 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in ''
-    # Note: after patchelf'ing, libcudart can still not be found. However, this should
-    #       not be an issue, because PyTorch is loaded before torchvision and brings
-    #       in the necessary symbols.
-    patchelf --set-rpath "${rpath}:${pytorch-bin}/${python.sitePackages}/torch/lib:" \
-      "$out/${python.sitePackages}/torchvision/_C.so"
-  '';
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+    in
+    ''
+      # Note: after patchelf'ing, libcudart can still not be found. However, this should
+      #       not be an issue, because PyTorch is loaded before torchvision and brings
+      #       in the necessary symbols.
+      patchelf --set-rpath "${rpath}:${pytorch-bin}/${python.sitePackages}/torch/lib:" \
+        "$out/${python.sitePackages}/torchvision/_C.so"
+    '';
 
   meta = with lib; {
     description = "PyTorch vision library";

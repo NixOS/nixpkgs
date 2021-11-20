@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   cfg = {
@@ -64,19 +64,21 @@ let
     ];
     firewall = {
       allowedTCPPorts = [ 6789 3300 ];
-      allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
+      allowedTCPPortRanges = [{ from = 6800; to = 7300; }];
     };
   };
-  cephConfigMonA = generateCephConfig { daemonConfig = {
-    mon = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
+  cephConfigMonA = generateCephConfig {
+    daemonConfig = {
+      mon = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
+      mgr = {
+        enable = true;
+        daemons = [ cfg.monA.name ];
+      };
     };
-    mgr = {
-      enable = true;
-      daemons = [ cfg.monA.name ];
-    };
-  }; };
+  };
 
   networkOsd = osd: {
     dhcpcd.enable = false;
@@ -84,16 +86,18 @@ let
       { address = osd.ip; prefixLength = 24; }
     ];
     firewall = {
-      allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
+      allowedTCPPortRanges = [{ from = 6800; to = 7300; }];
     };
   };
 
-  cephConfigOsd = osd: generateCephConfig { daemonConfig = {
-    osd = {
-      enable = true;
-      daemons = [ osd.name ];
+  cephConfigOsd = osd: generateCephConfig {
+    daemonConfig = {
+      osd = {
+        enable = true;
+        daemons = [ osd.name ];
+      };
     };
-  }; };
+  };
 
   # Following deployment is based on the manual deployment described here:
   # https://docs.ceph.com/docs/master/install/manual-deployment/
@@ -217,7 +221,8 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
-in {
+in
+{
   name = "basic-multi-node-ceph-cluster";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lejonet ];

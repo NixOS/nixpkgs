@@ -1,6 +1,22 @@
-{ mkDerivation, lib, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
-, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
-, extra-cmake-modules, poppler, kimageformats, libarchive, libdevil
+{ mkDerivation
+, lib
+, fetchurl
+, cmake
+, exiv2
+, graphicsmagick
+, libraw
+, fetchpatch
+, qtbase
+, qtdeclarative
+, qtmultimedia
+, qtquickcontrols
+, qttools
+, qtgraphicaleffects
+, extra-cmake-modules
+, poppler
+, kimageformats
+, libarchive
+, libdevil
 }:
 
 mkDerivation rec {
@@ -23,9 +39,17 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
 
   buildInputs = [
-    qtbase qtquickcontrols exiv2 graphicsmagick poppler
-    qtmultimedia qtdeclarative libraw qtgraphicaleffects
-    kimageformats libarchive
+    qtbase
+    qtquickcontrols
+    exiv2
+    graphicsmagick
+    poppler
+    qtmultimedia
+    qtdeclarative
+    libraw
+    qtgraphicaleffects
+    kimageformats
+    libarchive
   ];
 
   cmakeFlags = [

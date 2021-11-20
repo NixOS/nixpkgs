@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv
-, IOKit ? null }:
+{ fetchurl
+, lib
+, stdenv
+, IOKit ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "cd-discid";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" "INSTALL=install" ];
 
-  buildInputs = []
+  buildInputs = [ ]
     ++ lib.optional stdenv.isDarwin IOKit;
 
   meta = with lib; {

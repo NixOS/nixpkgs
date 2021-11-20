@@ -1,12 +1,43 @@
-{ lib, stdenv, fetchPypi, writeText, python, buildPythonPackage, pycairo, backports_functools_lru_cache
-, which, cycler, python-dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
+{ lib
+, stdenv
+, fetchPypi
+, writeText
+, python
+, buildPythonPackage
+, pycairo
+, backports_functools_lru_cache
+, which
+, cycler
+, python-dateutil
+, nose
+, numpy
+, pyparsing
+, sphinx
+, tornado
+, kiwisolver
+, freetype
+, libpng
+, pkg-config
+, mock
+, pytz
+, pygobject3
+, gobject-introspection
+, functools32
+, subprocess32
 , fetchpatch
-, enableGhostscript ? false, ghostscript, gtk3
-, enableGtk3 ? false, cairo
-# darwin has its own "MacOSX" backend
-, enableTk ? !stdenv.isDarwin, tcl, tk, tkinter, libX11
-, enableQt ? false, pyqt4
+, enableGhostscript ? false
+, ghostscript
+, gtk3
+, enableGtk3 ? false
+, cairo
+  # darwin has its own "MacOSX" backend
+, enableTk ? !stdenv.isDarwin
+, tcl
+, tk
+, tkinter
+, libX11
+, enableQt ? false
+, pyqt4
 , Cocoa
 , pythonOlder
 }:
@@ -38,8 +69,19 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler python-dateutil nose numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz ]
+    [
+      cycler
+      python-dateutil
+      nose
+      numpy
+      pyparsing
+      tornado
+      freetype
+      kiwisolver
+      libpng
+      mock
+      pytz
+    ]
     ++ lib.optional (pythonOlder "3.3") backports_functools_lru_cache
     ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
@@ -49,7 +91,7 @@ buildPythonPackage rec {
   passthru.config = {
     directories = { basedirlist = "."; };
   };
-  setup_cfg = writeText "setup.cfg" (lib.generators.toINI {} passthru.config);
+  setup_cfg = writeText "setup.cfg" (lib.generators.toINI { } passthru.config);
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
@@ -73,7 +115,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
-    homepage    = "https://matplotlib.org/";
+    homepage = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 veprbl ];
   };
 

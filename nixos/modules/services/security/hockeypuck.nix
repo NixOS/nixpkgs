@@ -3,7 +3,8 @@
 let
   cfg = config.services.hockeypuck;
   settingsFormat = pkgs.formats.toml { };
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
@@ -85,7 +86,7 @@ in {
       group = "hockeypuck";
       description = "Hockeypuck user";
     };
-    users.groups.hockeypuck = {};
+    users.groups.hockeypuck = { };
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rixed/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.rixed ];
   };
 }

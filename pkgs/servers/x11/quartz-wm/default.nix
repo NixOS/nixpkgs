@@ -20,7 +20,9 @@ in stdenv.mkDerivation {
     xorg.libXext
     pixman
     pkg-config
-    AppKit Xplugin Foundation
+    AppKit
+    Xplugin
+    Foundation
   ];
   meta = with lib; {
     license = licenses.apsl20;

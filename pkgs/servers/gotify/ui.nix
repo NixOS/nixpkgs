@@ -1,5 +1,6 @@
 { yarn2nix-moretea
-, fetchFromGitHub, applyPatches
+, fetchFromGitHub
+, applyPatches
 }:
 
 yarn2nix-moretea.mkYarnPackage rec {

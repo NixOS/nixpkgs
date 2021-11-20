@@ -1,5 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
-  wrapQtAppsHook, poppler, zlib, pkg-config }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtscript
+, qtsvg
+, wrapQtAppsHook
+, poppler
+, zlib
+, pkg-config
+}:
 
 mkDerivation rec {
   pname = "texstudio";
@@ -19,7 +29,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       Fork of TeXMaker, this editor is a full fledged IDE for
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.

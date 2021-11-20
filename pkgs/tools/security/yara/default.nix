@@ -1,15 +1,19 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pcre
 , pkg-config
 , protobufc
-, withCrypto ? true, openssl
-, enableCuckoo ? true, jansson
+, withCrypto ? true
+, openssl
+, enableCuckoo ? true
+, jansson
 , enableDex ? true
 , enableDotNet ? true
 , enableMacho ? true
-, enableMagic ? true, file
+, enableMagic ? true
+, file
 , enableStatic ? false
 }:
 

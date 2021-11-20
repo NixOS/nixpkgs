@@ -62,7 +62,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   grub = linux;
   grub2 = linux;
   gsl = linux;
-  guile = linux;  # tests fail on Cygwin
+  guile = linux; # tests fail on Cygwin
   gzip = all;
   hddtemp = linux;
   hdparm = linux;
@@ -76,7 +76,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   jnettop = linux;
   jwhois = linux;
   kbd = linux;
-  keen4 = ["i686-linux"];
+  keen4 = [ "i686-linux" ];
   kvm = linux;
   qemu = linux;
   qemu_kvm = linux;
@@ -149,7 +149,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   su = linux;
   sudo = linux;
   sysklogd = linux;
-  syslinux = ["i686-linux"];
+  syslinux = [ "i686-linux" ];
   sysvinit = linux;
   sysvtools = linux;
   tcl = linux;
@@ -174,4 +174,4 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   zile = linux;
   zip = all;
 
-} ))
+}))

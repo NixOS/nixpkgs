@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
-, libxml2, nettle
-, withGTK3 ? true, gtk3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, libxml2
+, nettle
+, withGTK3 ? true
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "stoken";
@@ -22,8 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    autoconf automake libtool
-    libxml2 nettle
+    autoconf
+    automake
+    libtool
+    libxml2
+    nettle
   ] ++ lib.optional withGTK3 gtk3;
 
   meta = with lib; {

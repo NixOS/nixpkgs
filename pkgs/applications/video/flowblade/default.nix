@@ -1,6 +1,15 @@
-{ lib, fetchFromGitHub, stdenv
-, ffmpeg, frei0r, sox, gtk3, python3, ladspaPlugins
-, gobject-introspection, makeWrapper, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, stdenv
+, ffmpeg
+, frei0r
+, sox
+, gtk3
+, python3
+, ladspaPlugins
+, gobject-introspection
+, makeWrapper
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ffmpeg frei0r sox gtk3 gobject-introspection ladspaPlugins
+    ffmpeg
+    frei0r
+    sox
+    gtk3
+    gobject-introspection
+    ladspaPlugins
     (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
   ];
 

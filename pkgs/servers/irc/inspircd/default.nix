@@ -23,9 +23,9 @@ let
   # checking, only whitelist licenses used by notable
   # libcs in nixpkgs (musl and glibc).
   compatible = lib: drv:
-    lib.any (lic: lic == (drv.meta.license or {})) [
-      lib.licenses.mit        # musl
-      lib.licenses.lgpl2Plus  # glibc
+    lib.any (lic: lic == (drv.meta.license or { })) [
+      lib.licenses.mit # musl
+      lib.licenses.lgpl2Plus # glibc
     ];
 
   # compatible if libc is compatible
@@ -76,7 +76,7 @@ in
 , libmaxminddb
 , openssl
 , mbedtls
-# For a full list of module names, see https://docs.inspircd.org/packaging/
+  # For a full list of module names, see https://docs.inspircd.org/packaging/
 , extraModules ? compatibleModules lib stdenv
 }:
 
@@ -93,23 +93,23 @@ let
         };
       })
     ];
-    ldap            = [ openldap ];
-    mysql           = [ libmysqlclient ];
-    pgsql           = [ postgresql ];
-    regex_pcre      = [ pcre ];
-    regex_re2       = [ re2 ];
-    regex_tre       = [ tre ];
-    sqlite3         = [ sqlite ];
-    ssl_gnutls      = [ gnutls ];
+    ldap = [ openldap ];
+    mysql = [ libmysqlclient ];
+    pgsql = [ postgresql ];
+    regex_pcre = [ pcre ];
+    regex_re2 = [ re2 ];
+    regex_tre = [ tre ];
+    sqlite3 = [ sqlite ];
+    ssl_gnutls = [ gnutls ];
     # depends on stdenv.cc.libc
-    regex_posix     = [];
-    sslrehashsignal = [];
+    regex_posix = [ ];
+    sslrehashsignal = [ ];
     # depends on used libc++
-    regex_stdlib    = [];
+    regex_stdlib = [ ];
     # GPLv2 incompatible
-    geo_maxmind     = [ libmaxminddb ];
-    ssl_mbedtls     = [ mbedtls ];
-    ssl_openssl     = [ openssl ];
+    geo_maxmind = [ libmaxminddb ];
+    ssl_mbedtls = [ mbedtls ];
+    ssl_openssl = [ openssl ];
   };
 
   # buildInputs necessary for the enabled extraModules
@@ -128,11 +128,11 @@ let
   # return list of the license(s) of the given derivation
   getLicenses = drv:
     let
-      lics = drv.meta.license or [];
+      lics = drv.meta.license or [ ];
     in
-      if lib.isAttrs lics || lib.isString lics
-      then [ lics ]
-      else lics;
+    if lib.isAttrs lics || lib.isString lics
+    then [ lics ]
+    else lics;
 
   # Whether any member of list1 is also member of list2, i. e. set intersection.
   anyMembers = list1: list2:
@@ -220,6 +220,6 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs gpl2Conflict {
     # make sure we never distribute a GPLv2-violating module
     # in binary form. They can be built locally of course.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

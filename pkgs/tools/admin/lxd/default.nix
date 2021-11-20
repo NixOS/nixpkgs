@@ -1,8 +1,30 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
-, squashfsTools, iproute2, iptables, libcap
-, dqlite, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
+{ lib
+, hwdata
+, pkg-config
+, lxc
+, buildGoPackage
+, fetchurl
+, fetchpatch
+, makeWrapper
+, acl
+, rsync
+, gnutar
+, xz
+, btrfs-progs
+, gzip
+, dnsmasq
+, attr
+, squashfsTools
+, iproute2
+, iptables
+, libcap
+, dqlite
+, raft-canonical
+, sqlite-replication
+, udev
+, writeShellScriptBin
+, apparmor-profiles
+, apparmor-parser
 , criu
 , bash
 , installShellFiles
@@ -51,8 +73,15 @@ buildGoPackage rec {
   passthru.tests.lxd = nixosTests.lxd;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
-                  sqlite-replication udev.dev ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    dqlite.dev
+    raft-canonical.dev
+    sqlite-replication
+    udev.dev
+  ];
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

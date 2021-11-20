@@ -54,12 +54,13 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  postFixup = let
-    binPath = lib.makeBinPath [
-      ffmpeg
-      imagemagick
-    ];
-  in
+  postFixup =
+    let
+      binPath = lib.makeBinPath [
+        ffmpeg
+        imagemagick
+      ];
+    in
     ''
       wrapProgram $out/bin/com.github.robertsanseries.ciano \
          --prefix PATH : ${binPath} "''${gappsWrapperArgs[@]}"

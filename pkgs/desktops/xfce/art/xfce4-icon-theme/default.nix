@@ -5,7 +5,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-icon-theme";
+  pname = "xfce4-icon-theme";
   version = "4.4.3";
 
   src = fetchurl {

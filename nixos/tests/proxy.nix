@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   backend = { pkgs, ... }: {
@@ -9,7 +9,8 @@ let
     };
     networking.firewall.allowedTCPPorts = [ 80 ];
   };
-in {
+in
+{
   name = "proxy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco ];

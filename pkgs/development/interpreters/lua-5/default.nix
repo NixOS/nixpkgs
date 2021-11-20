@@ -9,7 +9,7 @@ rec {
     patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };
 
-  lua5_4_compat = lua5_4.override({
+  lua5_4_compat = lua5_4.override ({
     compat = true;
   });
 
@@ -21,7 +21,7 @@ rec {
       lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
   };
 
-  lua5_3_compat = lua5_3.override({
+  lua5_3_compat = lua5_3.override ({
     compat = true;
   });
 
@@ -32,7 +32,7 @@ rec {
     patches = lib.optional stdenv.isDarwin ./5.2.darwin.patch;
   };
 
-  lua5_2_compat = lua5_2.override({
+  lua5_2_compat = lua5_2.override ({
     compat = true;
   });
 

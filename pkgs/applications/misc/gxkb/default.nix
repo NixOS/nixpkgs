@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk3, libwnck, libxklavier
-, appindicatorSupport ? true, libayatana-appindicator-gtk3
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gtk3
+, libwnck
+, libxklavier
+, appindicatorSupport ? true
+, libayatana-appindicator-gtk3
 }:
 
 stdenv.mkDerivation rec {

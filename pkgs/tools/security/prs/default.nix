@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       lgpl3Only # lib
-      gpl3Only  # everything else
+      gpl3Only # everything else
     ];
     maintainers = with maintainers; [ dotlambda ];
   };

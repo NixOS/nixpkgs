@@ -1,15 +1,17 @@
 { buildDunePackage, atd, biniou, yojson }:
 
-let runtime =
-  buildDunePackage {
-    pname = "atdgen-runtime";
-    inherit (atd) version useDune2 src;
+let
+  runtime =
+    buildDunePackage {
+      pname = "atdgen-runtime";
+      inherit (atd) version useDune2 src;
 
-    propagatedBuildInputs = [ biniou yojson ];
+      propagatedBuildInputs = [ biniou yojson ];
 
-    meta = { inherit (atd.meta) license; };
-  }
-; in
+      meta = { inherit (atd.meta) license; };
+    }
+  ;
+in
 
 buildDunePackage {
   pname = "atdgen";

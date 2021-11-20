@@ -27,39 +27,39 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
-  install-shell-files = callPackage ./install-shell-files {};
+  install-shell-files = callPackage ./install-shell-files { };
 
-  kernel-config = callPackage ./kernel.nix {};
+  kernel-config = callPackage ./kernel.nix { };
 
-  ld-library-path = callPackage ./ld-library-path {};
+  ld-library-path = callPackage ./ld-library-path { };
 
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
+  macOSSierraShared = callPackage ./macos-sierra-shared { };
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross { };
 
-  php = recurseIntoAttrs (callPackages ./php {});
+  php = recurseIntoAttrs (callPackages ./php { });
 
-  rustCustomSysroot = callPackage ./rust-sysroot {};
+  rustCustomSysroot = callPackage ./rust-sysroot { };
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
 
-  vim = callPackage ./vim {};
+  vim = callPackage ./vim { };
 
-  nixos-functions = callPackage ./nixos-functions {};
+  nixos-functions = callPackage ./nixos-functions { };
 
-  patch-shebangs = callPackage ./patch-shebangs {};
+  patch-shebangs = callPackage ./patch-shebangs { };
 
-  texlive = callPackage ./texlive {};
+  texlive = callPackage ./texlive { };
 
   cuda = callPackage ./cuda { };
 
   trivial-builders = recurseIntoAttrs {
-    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
-    references = callPackage ../build-support/trivial-builders/test/references.nix {};
-    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix { };
+    references = callPackage ../build-support/trivial-builders/test/references.nix { };
+    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix { };
   };
 
-  writers = callPackage ../build-support/writers/test.nix {};
+  writers = callPackage ../build-support/writers/test.nix { };
 
   dhall = callPackage ./dhall { };
 }

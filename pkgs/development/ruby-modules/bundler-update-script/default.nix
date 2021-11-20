@@ -22,4 +22,5 @@ let
     bundler-audit check --update
     bundix
   '';
-in [ updateScript attrPath ]
+in
+[ updateScript attrPath ]

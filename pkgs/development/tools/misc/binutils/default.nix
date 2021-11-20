@@ -2,10 +2,18 @@ let
   execFormatIsELF = platform: platform.parsed.kernel.execFormat.name == "elf";
 in
 
-{ stdenv, lib, buildPackages
-, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
-# Enabling all targets increases output size to a multiple.
-, withAllTargets ? false, libbfd, libopcodes
+{ stdenv
+, lib
+, buildPackages
+, fetchFromGitHub
+, fetchurl
+, zlib
+, autoreconfHook
+, gettext
+  # Enabling all targets increases output size to a multiple.
+, withAllTargets ? false
+, libbfd
+, libopcodes
 , enableShared ? !stdenv.hostPlatform.isStatic
 , noSysDirs
 , gold ? execFormatIsELF stdenv.targetPlatform
@@ -32,7 +40,7 @@ let
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+    "${stdenv.targetPlatform.config}-";
   vc4-binutils-src = fetchFromGitHub {
     owner = "itszor";
     repo = "binutils-vc4";
@@ -86,14 +94,14 @@ stdenv.mkDerivation {
     ./CVE-2020-35448.patch
     ./CVE-2021-3487.patch
   ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
-    ++ # This patch was suggested by Nick Clifton to fix
-       # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-       # It can be removed when that 7-year-old bug is closed.
-       # This binutils bug causes GHC to emit broken binaries on armv7, and
-       # indeed GHC will refuse to compile with a binutils suffering from it. See
-       # this comment for more information:
-       # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-       lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
+  ++ # This patch was suggested by Nick Clifton to fix
+  # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+  # It can be removed when that 7-year-old bug is closed.
+  # This binutils bug causes GHC to emit broken binaries on armv7, and
+  # indeed GHC will refuse to compile with a binutils suffering from it. See
+  # this comment for more information:
+  # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
+  lib.optional (stdenv.targetPlatform.isAarch32 && stdenv.hostPlatform.system != stdenv.targetPlatform.system) ./R_ARM_COPY.patch;
 
   outputs = [ "out" "info" "man" ];
 
@@ -124,7 +132,8 @@ stdenv.mkDerivation {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin
+  NIX_CFLAGS_COMPILE =
+    if stdenv.hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
@@ -134,33 +143,33 @@ stdenv.mkDerivation {
 
   configureFlags =
     (if enableShared then [ "--enable-shared" "--disable-static" ]
-                     else [ "--disable-shared" "--enable-static" ])
-  ++ lib.optional withAllTargets "--enable-targets=all"
-  ++ [
-    "--enable-64-bit-bfd"
-    "--with-system-zlib"
+    else [ "--disable-shared" "--enable-static" ])
+    ++ lib.optional withAllTargets "--enable-targets=all"
+    ++ [
+      "--enable-64-bit-bfd"
+      "--with-system-zlib"
 
-    "--enable-deterministic-archives"
-    "--disable-werror"
-    "--enable-fix-loongson2f-nop"
+      "--enable-deterministic-archives"
+      "--disable-werror"
+      "--enable-fix-loongson2f-nop"
 
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    "--enable-new-dtags"
+      # Turn on --enable-new-dtags by default to make the linker set
+      # RUNPATH instead of RPATH on binaries.  This is important because
+      # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+      "--enable-new-dtags"
 
-    # force target prefix. Some versions of binutils will make it empty
-    # if `--host` and `--target` are too close, even if Nixpkgs thinks
-    # the platforms are different (e.g. because not all the info makes
-    # the `config`). Other versions of binutils will always prefix if
-    # `--target` is passed, even if `--host` and `--target` are the same.
-    # The easiest thing for us to do is not leave it to chance, and force
-    # the program prefix to be what we want it to be.
-    "--program-prefix=${targetPrefix}"
-  ] ++ lib.optionals gold [
-    "--enable-gold"
-    "--enable-plugins"
-  ];
+      # force target prefix. Some versions of binutils will make it empty
+      # if `--host` and `--target` are too close, even if Nixpkgs thinks
+      # the platforms are different (e.g. because not all the info makes
+      # the `config`). Other versions of binutils will always prefix if
+      # `--target` is passed, even if `--host` and `--target` are the same.
+      # The easiest thing for us to do is not leave it to chance, and force
+      # the program prefix to be what we want it to be.
+      "--program-prefix=${targetPrefix}"
+    ] ++ lib.optionals gold [
+      "--enable-gold"
+      "--enable-plugins"
+    ];
 
   doCheck = false; # fails
 

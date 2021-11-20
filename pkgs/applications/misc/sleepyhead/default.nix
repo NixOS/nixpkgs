@@ -3,7 +3,8 @@
 let
   name = "sleepyhead-${version}";
   version = "1.0.0-beta-git";
-in mkDerivation {
+in
+mkDerivation {
   inherit name;
 
   src = fetchgit {
@@ -13,7 +14,9 @@ in mkDerivation {
   };
 
   buildInputs = [
-    qtbase qtwebkit qtserialport
+    qtbase
+    qtwebkit
+    qtserialport
     zlib
     libGLU
     libX11
@@ -25,13 +28,14 @@ in mkDerivation {
     patchShebangs configure
   '';
 
-  installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -r sleepyhead/SleepyHead.app $out/Applications
-  '' else ''
-    mkdir -p $out/bin
-    cp sleepyhead/SleepyHead $out/bin
-  '';
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      cp -r sleepyhead/SleepyHead.app $out/Applications
+    '' else ''
+      mkdir -p $out/bin
+      cp sleepyhead/SleepyHead $out/bin
+    '';
 
   meta = with lib; {
     homepage = "https://sleepyhead.jedimark.net/";

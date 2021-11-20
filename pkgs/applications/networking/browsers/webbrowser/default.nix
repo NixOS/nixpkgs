@@ -1,18 +1,39 @@
-{ stdenv, lib, fetchgit, makeDesktopItem, pkg-config, makeWrapper
-# Build
-, python2, autoconf213, yasm, perl
-, unzip, gnome2, gnum4
+{ stdenv
+, lib
+, fetchgit
+, makeDesktopItem
+, pkg-config
+, makeWrapper
+  # Build
+, python2
+, autoconf213
+, yasm
+, perl
+, unzip
+, gnome2
+, gnum4
 
-# Runtime
-, xorg, zip, freetype, fontconfig, glibc, libffi
-, dbus, dbus-glib, gtk2, alsa-lib, jack2, ffmpeg
+  # Runtime
+, xorg
+, zip
+, freetype
+, fontconfig
+, glibc
+, libffi
+, dbus
+, dbus-glib
+, gtk2
+, alsa-lib
+, jack2
+, ffmpeg
 }:
 
 let
 
   libPath = lib.makeLibraryPath [ ffmpeg ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "webbrowser";
   version = "29.0.0rc1";
 
@@ -41,12 +62,27 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkg-config python2 unzip
+    gnum4
+    makeWrapper
+    perl
+    pkg-config
+    python2
+    unzip
   ];
 
   buildInputs = [
-    alsa-lib dbus dbus-glib ffmpeg fontconfig freetype yasm zip jack2 gtk2
-    gnome2.GConf xorg.libXt
+    alsa-lib
+    dbus
+    dbus-glib
+    ffmpeg
+    fontconfig
+    freetype
+    yasm
+    zip
+    jack2
+    gtk2
+    gnome2.GConf
+    xorg.libXt
   ];
 
   enableParallelBuilding = true;
@@ -100,10 +136,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generic web browser without trackers compatible with XUL plugins using UXP rendering engine";
-    homepage    = "https://git.nuegia.net/webbrowser.git/";
-    license     = [ licenses.mpl20 licenses.gpl3 ];
+    homepage = "https://git.nuegia.net/webbrowser.git/";
+    license = [ licenses.mpl20 licenses.gpl3 ];
     maintainers = with maintainers; [ TheBrainScrambler ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
-    broken      = true; # 2021-01-07
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = true; # 2021-01-07
   };
 }

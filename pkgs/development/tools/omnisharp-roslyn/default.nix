@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , mono6
@@ -13,44 +14,45 @@ let
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
 
-  deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+  deps = map
+    (package: stdenv.mkDerivation (with package; {
+      pname = name;
+      inherit version src;
 
-    buildInputs = [ unzip ];
-    unpackPhase = ''
-      unzip $src
-      chmod -R u+r .
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
+      buildInputs = [ unzip ];
+      unpackPhase = ''
+        unzip $src
+        chmod -R u+r .
+        function traverseRename () {
+          for e in *
+          do
+            t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
+            [ "$t" != "$e" ] && mv -vn "$e" "$t"
+            if [ -d "$t" ]
+            then
+              cd "$t"
+              traverseRename
+              cd ..
+            fi
+          done
+        }
 
-      traverseRename
-    '';
+        traverseRename
+      '';
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
-      mkdir -p $package
-      cp -r . $package
-      echo "{}" > $package/.nupkg.metadata
+        package=$out/lib/dotnet/${name}/${version}
+        mkdir -p $package
+        cp -r . $package
+        echo "{}" > $package/.nupkg.metadata
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    dontFixup = true;
-  }))
+      dontFixup = true;
+    }))
     (import ./deps.nix { inherit fetchurl; });
 
   nuget-config = writeText "NuGet.Config" ''
@@ -65,7 +67,8 @@ let
     </configuration>
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "omnisharp-roslyn";
   version = "1.37.15";

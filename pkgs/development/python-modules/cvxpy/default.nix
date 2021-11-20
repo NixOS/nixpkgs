@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "./cvxpy" ];
 
-   # Disable the slowest benchmarking tests, cuts test time in half
+  # Disable the slowest benchmarking tests, cuts test time in half
   disabledTests = [
     "test_tv_inpainting"
     "test_diffcp_sdp_example"

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ unidecode regex ];
 
   checkPhase = ''
-      ${python.interpreter} -m unittest discover
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

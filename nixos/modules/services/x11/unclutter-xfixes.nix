@@ -35,7 +35,7 @@ in {
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter-xfixes command.";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "exclude-root" "ignore-scrolling" "fork" ];
     };
   };

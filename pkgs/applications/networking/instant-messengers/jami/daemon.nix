@@ -68,7 +68,8 @@ let
     enablePushNotifications = true;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "jami-daemon";
   inherit src version;
   sourceRoot = "source/daemon";

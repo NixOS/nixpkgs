@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     backend = { pkgs, ... }: {
       services.nginx.enable = true;
-      services.nginx.virtualHosts."backend".root = pkgs.runCommand "webroot" {} ''
+      services.nginx.virtualHosts."backend".root = pkgs.runCommand "webroot" { } ''
         mkdir $out
         echo hi >$out/hi.txt
       '';
@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         key = "/root/service-key.pem";
         cacert = "/root/ca.pem";
         target = "backend:80";
-        allowCN = ["client"];
+        allowCN = [ "client" ];
         unsafeTarget = true;
       };
       networking.firewall.allowedTCPPorts = [ 443 1443 ];

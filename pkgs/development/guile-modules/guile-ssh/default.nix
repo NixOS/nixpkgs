@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config texinfo which
+    autoreconfHook
+    pkg-config
+    texinfo
+    which
   ];
   buildInputs = [
     guile

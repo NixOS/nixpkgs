@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest, pyjwt }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, cryptography
+, pybrowserid
+, hawkauthlib
+, six
+, grequests
+, mock
+, responses
+, pytest
+, pyjwt
+}:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -17,11 +28,19 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pyjwt requests cryptography pybrowserid hawkauthlib six
+    pyjwt
+    requests
+    cryptography
+    pybrowserid
+    hawkauthlib
+    six
   ];
 
   checkInputs = [
-    grequests mock responses pytest
+    grequests
+    mock
+    responses
+    pytest
   ];
 
   # test_oath is mostly network calls

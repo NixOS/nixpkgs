@@ -1,24 +1,30 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ./make-test-python.nix ({ pkgs, lib, ... }:
+let
 
-  customPkgs = pkgs.appendOverlays [ (self: super: {
-    hello = super.hello.overrideAttrs (old: {
-       name = "custom-hello";
-    });
-  }) ];
+  customPkgs = pkgs.appendOverlays [
+    (self: super: {
+      hello = super.hello.overrideAttrs (old: {
+        name = "custom-hello";
+      });
+    })
+  ];
 
-in {
+in
+{
   name = "containers-custom-pkgs";
   meta = {
     maintainers = with lib.maintainers; [ adisbladis earvstedt ];
   };
 
   machine = { config, ... }: {
-    assertions = let
-      helloName = (builtins.head config.containers.test.config.system.extraDependencies).name;
-    in [ {
-      assertion = helloName == "custom-hello";
-      message = "Unexpected value: ${helloName}";
-    } ];
+    assertions =
+      let
+        helloName = (builtins.head config.containers.test.config.system.extraDependencies).name;
+      in
+      [{
+        assertion = helloName == "custom-hello";
+        message = "Unexpected value: ${helloName}";
+      }];
 
     containers.test = {
       autoStart = true;

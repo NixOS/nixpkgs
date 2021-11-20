@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchsvn, linux
+{ stdenv
+, lib
+, fetchsvn
+, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
     rev = "18473";
@@ -15,11 +18,13 @@ let
   patch = lib.versions.patch linux.modDirVersion;
 
   # See http://linux-libre.fsfla.org/pub/linux-libre/releases
-  versionPrefix = if linux.kernelOlder "5.14" then
-    "gnu1"
-  else
-    "gnu";
-in linux.override {
+  versionPrefix =
+    if linux.kernelOlder "5.14" then
+      "gnu1"
+    else
+      "gnu";
+in
+linux.override {
   argsOverride = {
     modDirVersion = "${linux.modDirVersion}-${versionPrefix}";
     isLibre = true;

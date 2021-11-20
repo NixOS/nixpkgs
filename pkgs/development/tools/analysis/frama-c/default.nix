@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
-, ocamlPackages, ltl2ba, coq, why3
-, gdk-pixbuf, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, writeText
+, autoconf
+, ncurses
+, graphviz
+, doxygen
+, ocamlPackages
+, ltl2ba
+, coq
+, why3
+, gdk-pixbuf
+, wrapGAppsHook
 }:
 
 let
@@ -32,10 +43,10 @@ in
 stdenv.mkDerivation rec {
   pname = "frama-c";
   version = "23.1";
-  slang   = "Vanadium";
+  slang = "Vanadium";
 
   src = fetchurl {
-    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
     sha256 = "1rgkq9sg436smw005ag0j6y3xryhjn18a07m5wjfrfp0s1438nnj";
   };
 
@@ -44,15 +55,30 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    ncurses
+    ocaml
+    findlib
+    ltl2ba
+    ocamlgraph
+    ocamlgraph_gtk
+    yojson
+    menhirLib
+    camlzip
+    lablgtk
+    coq
+    graphviz
+    zarith
+    apron
+    why3
+    mlgmpidl
+    doxygen
     gdk-pixbuf
   ];
 
   enableParallelBuilding = true;
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
+    gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
   '';
 
   # Allow loading of external Frama-C plugins
@@ -79,9 +105,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = "http://frama-c.com/";
-    license     = lib.licenses.lgpl21;
+    homepage = "http://frama-c.com/";
+    license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

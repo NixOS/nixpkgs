@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config texinfo
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile

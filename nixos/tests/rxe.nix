@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ ... } :
+import ./make-test-python.nix ({ ... }:
 
 let
-  node = { pkgs, ... } : {
+  node = { pkgs, ... }: {
     networking = {
       firewall = {
         allowedUDPPorts = [ 4791 ]; # open RoCE port
@@ -16,7 +16,8 @@ let
     environment.systemPackages = with pkgs; [ rdma-core screen ];
   };
 
-in {
+in
+{
   name = "rxe";
 
   nodes = {

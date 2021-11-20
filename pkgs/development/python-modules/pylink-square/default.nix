@@ -17,7 +17,8 @@ let
       sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
     };
   });
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pylink-square";
   version = "0.8.1";
 

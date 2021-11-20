@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchzip, makeWrapper, jre, writeText, nixosTests
-, postgresql_jdbc ? null, mysql_jdbc ? null
+{ stdenv
+, lib
+, fetchzip
+, makeWrapper
+, jre
+, writeText
+, nixosTests
+, postgresql_jdbc ? null
+, mysql_jdbc ? null
 }:
 
 let
@@ -17,11 +24,11 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  pname   = "keycloak";
+  pname = "keycloak";
   version = "15.0.2";
 
   src = fetchzip {
-    url    = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
+    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
     sha256 = "sha256-GlnSsvAYBjRTtabMVrpWUH0EWEdLIe6ud+HIXJqTsqY=";
   };
 
@@ -58,10 +65,10 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.keycloak;
 
   meta = with lib; {
-    homepage    = "https://www.keycloak.org/";
+    homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
-    license     = licenses.asl20;
-    platforms   = jre.meta.platforms;
+    license = licenses.asl20;
+    platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];
   };
 

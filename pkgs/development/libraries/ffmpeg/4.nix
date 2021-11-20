@@ -1,7 +1,10 @@
 { callPackage
-# Darwin frameworks
-, Cocoa, CoreMedia, VideoToolbox
-, stdenv, lib
+  # Darwin frameworks
+, Cocoa
+, CoreMedia
+, VideoToolbox
+, stdenv
+, lib
 , ...
 }@args:
 

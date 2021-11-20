@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, SDL, SDL_mixer, makeDesktopItem, copyDesktopItems, runtimeShell, buildShareware ? false}:
+{ stdenv, lib, fetchurl, SDL, SDL_mixer, makeDesktopItem, copyDesktopItems, runtimeShell, buildShareware ? false }:
 
 stdenv.mkDerivation rec {
   pname = "rott";

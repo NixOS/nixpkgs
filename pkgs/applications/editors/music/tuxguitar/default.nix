@@ -1,11 +1,13 @@
 { lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
 
-let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
-  if stdenv.hostPlatform.system == "i686-linux" then
-    { arch = "x86"; sha256 = "afa4b1116aee18e3ddd93132467809d0bcf03715cf9ad55b895f021a13e1cb8a"; }
-  else
-    { arch = "x86_64"; sha256 = "55ab653c601727a2077080e7ea4d76fe7a897379934ed9a5b544e20d490f53f9"; };
-in stdenv.mkDerivation rec {
+let
+  metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
+    if stdenv.hostPlatform.system == "i686-linux" then
+      { arch = "x86"; sha256 = "afa4b1116aee18e3ddd93132467809d0bcf03715cf9ad55b895f021a13e1cb8a"; }
+    else
+      { arch = "x86_64"; sha256 = "55ab653c601727a2077080e7ea4d76fe7a897379934ed9a5b544e20d490f53f9"; };
+in
+stdenv.mkDerivation rec {
   version = "1.5.4";
   pname = "tuxguitar";
 

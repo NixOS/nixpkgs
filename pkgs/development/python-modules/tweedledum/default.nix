@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.1.1";
   format = "pyproject";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "boschmitt";
     repo = "tweedledum";
     rev = "v${version}";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
-    license = licenses.mit ;
+    license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };
 }

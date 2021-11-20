@@ -8,7 +8,8 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "grafana-image-renderer-config.json" cfg.settings;
-in {
+in
+{
   options.services.grafana-image-renderer = {
     enable = mkEnableOption "grafana-image-renderer";
 
@@ -87,7 +88,7 @@ in {
         };
       };
 
-      default = {};
+      default = { };
 
       description = ''
         Configuration attributes for <package>grafana-image-renderer</package>.
@@ -100,7 +101,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.provisionGrafana -> config.services.grafana.enable;
+      {
+        assertion = cfg.provisionGrafana -> config.services.grafana.enable;
         message = ''
           To provision a Grafana instance to use grafana-image-renderer,
           `services.grafana.enable` must be set to `true`!

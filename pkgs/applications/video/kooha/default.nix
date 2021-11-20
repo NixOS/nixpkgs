@@ -1,6 +1,19 @@
-{ lib, fetchFromGitHub, appstream-glib, desktop-file-utils, glib
-, gobject-introspection, gst_all_1, gtk4, libadwaita, librsvg, meson, ninja
-, pkg-config, python3, wrapGAppsHook }:
+{ lib
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk4
+, libadwaita
+, librsvg
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kooha";

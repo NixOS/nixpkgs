@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkg-config, cscope, ruby, tcl, perl, luajit
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, ncurses
+, gettext
+, pkg-config
+, cscope
+, ruby
+, tcl
+, perl
+, luajit
 , darwin
 
 , usePython27 ? false
-, python27 ? null, python37 ? null
+, python27 ? null
+, python37 ? null
 }:
 
 let
-  python = if usePython27
-           then { pkg = python27; name = "python"; }
-           else { pkg = python37; name = "python3"; };
+  python =
+    if usePython27
+    then { pkg = python27; name = "python"; }
+    else { pkg = python37; name = "python3"; };
 in
 assert python.pkg != null;
 
@@ -18,7 +30,7 @@ let
   # Some of these we could patch into the relevant source files (such as xcodebuild and
   # qlmanage) but some are used by Xcode itself and we have no choice but to put them in PATH.
   # Symlinking them in this way is better than just putting all of /usr/bin in there.
-  buildSymlinks = runCommand "macvim-build-symlinks" {} ''
+  buildSymlinks = runCommand "macvim-build-symlinks" { } ''
     mkdir -p $out/bin
     ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
   '';
@@ -40,32 +52,39 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python.pkg
+    gettext
+    ncurses
+    cscope
+    luajit
+    ruby
+    tcl
+    perl
+    python.pkg
   ];
 
   patches = [ ./macvim.patch ];
 
   configureFlags = [
-      "--enable-cscope"
-      "--enable-fail-if-missing"
-      "--with-features=huge"
-      "--enable-gui=macvim"
-      "--enable-multibyte"
-      "--enable-nls"
-      "--enable-luainterp=dynamic"
-      "--enable-${python.name}interp=dynamic"
-      "--enable-perlinterp=dynamic"
-      "--enable-rubyinterp=dynamic"
-      "--enable-tclinterp=yes"
-      "--without-local-dir"
-      "--with-luajit"
-      "--with-lua-prefix=${luajit}"
-      "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
-      "--with-ruby-command=${ruby}/bin/ruby"
-      "--with-tclsh=${tcl}/bin/tclsh"
-      "--with-tlib=ncurses"
-      "--with-compiledby=Nix"
-      "--disable-sparkle"
+    "--enable-cscope"
+    "--enable-fail-if-missing"
+    "--with-features=huge"
+    "--enable-gui=macvim"
+    "--enable-multibyte"
+    "--enable-nls"
+    "--enable-luainterp=dynamic"
+    "--enable-${python.name}interp=dynamic"
+    "--enable-perlinterp=dynamic"
+    "--enable-rubyinterp=dynamic"
+    "--enable-tclinterp=yes"
+    "--without-local-dir"
+    "--with-luajit"
+    "--with-lua-prefix=${luajit}"
+    "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
+    "--with-ruby-command=${ruby}/bin/ruby"
+    "--with-tclsh=${tcl}/bin/tclsh"
+    "--with-tlib=ncurses"
+    "--with-compiledby=Nix"
+    "--disable-sparkle"
   ];
 
   # Remove references to Sparkle.framework from the project.
@@ -177,10 +196,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Vim - the text editor - for macOS";
-    homepage    = "https://github.com/macvim-dev/macvim";
+    homepage = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
-    platforms   = platforms.darwin;
-    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
+    platforms = platforms.darwin;
+    hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

@@ -1,7 +1,16 @@
-{ stdenv, lib, fetchzip, which, ocsigen_server, ocaml,
-  lwt_react,
-  opaline, ppx_deriving, findlib
-, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+{ stdenv
+, lib
+, fetchzip
+, which
+, ocsigen_server
+, ocaml
+, lwt_react
+, opaline
+, ppx_deriving
+, findlib
+, js_of_ocaml-ocamlbuild
+, js_of_ocaml-ppx
+, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
@@ -18,8 +27,13 @@ stdenv.mkDerivation rec
     sha256 = "sha256:1b1vb3ilb54ffzb98mqa6zggqchsnjspbni8qxi6j42pbajp7p2l";
   };
 
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild
-    js_of_ocaml-ppx_deriving_json opaline
+  buildInputs = [
+    ocaml
+    which
+    findlib
+    js_of_ocaml-ocamlbuild
+    js_of_ocaml-ppx_deriving_json
+    opaline
     ocamlnet
   ];
 
@@ -41,7 +55,7 @@ stdenv.mkDerivation rec
     homepage = "http://ocsigen.org/eliom/";
     description = "OCaml Framework for programming Web sites and client/server Web applications";
 
-    longDescription =''Eliom is a framework for programming Web sites
+    longDescription = ''Eliom is a framework for programming Web sites
     and client/server Web applications. It introduces new concepts to
     simplify programming common behaviours and uses advanced static
     typing features of OCaml to check many properties of the Web site

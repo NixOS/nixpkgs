@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j7437rh4xxbfzmkjr22ry34xm266gijzj6mvrq193fcsfzipzdz";
   };
 
-  nativeBuildInputs = [ perl gfortran  ];
+  nativeBuildInputs = [ perl gfortran ];
 
   enableParallelBuilding = true;
 
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
-    license     = licenses.gpl2;
-    homepage    = "https://hoppet.hepforge.org";
-    platforms   = platforms.unix;
+    license = licenses.gpl2;
+    homepage = "https://hoppet.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

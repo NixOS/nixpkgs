@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    gtk2 lm_sensors
+    gtk2
+    lm_sensors
   ];
   patches = [
     ./remove-unused-variables.patch

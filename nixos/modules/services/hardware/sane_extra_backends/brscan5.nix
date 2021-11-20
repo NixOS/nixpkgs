@@ -58,7 +58,8 @@ let
 
 
     config =
-      { name = mkDefault name;
+      {
+        name = mkDefault name;
       };
   };
 
@@ -71,9 +72,10 @@ in
       mkEnableOption "the Brother brscan5 sane backend";
 
     hardware.sane.brscan5.netDevices = mkOption {
-      default = {};
+      default = { };
       example =
-        { office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
+        {
+          office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
           office2 = { model = "MFC-7860DW"; nodename = "BRW0080927AFBCE"; };
         };
       type = with types; attrsOf (submodule netDeviceOpts);
@@ -97,7 +99,8 @@ in
     environment.etc."sane.d/dll.d/brother5.conf".source = "${pkgs.brscan5}/etc/sane.d/dll.d/brother.conf";
 
     assertions = [
-      { assertion = all (x: !(null != x.ip && null != x.nodename)) netDeviceList;
+      {
+        assertion = all (x: !(null != x.ip && null != x.nodename)) netDeviceList;
         message = ''
           When describing a network device as part of the attribute list
           `hardware.sane.brscan5.netDevices`, only one of its `ip` or `nodename`

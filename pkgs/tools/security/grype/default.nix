@@ -20,7 +20,9 @@ buildGoModule rec {
   propagatedBuildInputs = [ docker ];
 
   ldflags = [
-    "-s" "-w" "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/anchore/grype/internal/version.version=${version}"
   ];
 
   # Tests require a running Docker instance

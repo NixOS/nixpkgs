@@ -18,7 +18,7 @@ let
     radeon = { modules = [ xorg.xf86videoati ]; driverName = "ati"; };
 
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
-    modesetting = {};
+    modesetting = { };
   };
 
   fontsForXServer =
@@ -29,7 +29,8 @@ let
     # Sans) than that horror.  But we do need the Adobe fonts for some
     # old non-fontconfig applications.  (Possibly this could be done
     # better using a fontconfig rule.)
-    [ pkgs.xorg.fontadobe100dpi
+    [
+      pkgs.xorg.fontadobe100dpi
       pkgs.xorg.fontadobe75dpi
     ];
 
@@ -70,72 +71,80 @@ let
   };
 
   # Just enumerate all heads without discarding XRandR output information.
-  xrandrHeads = let
-    mkHead = num: config: {
-      name = "multihead${toString num}";
-      inherit config;
-    };
-  in imap1 mkHead cfg.xrandrHeads;
+  xrandrHeads =
+    let
+      mkHead = num: config: {
+        name = "multihead${toString num}";
+        inherit config;
+      };
+    in
+    imap1 mkHead cfg.xrandrHeads;
 
-  xrandrDeviceSection = let
-    monitors = forEach xrandrHeads (h: ''
-      Option "monitor-${h.config.output}" "${h.name}"
-    '');
-  in concatStrings monitors;
+  xrandrDeviceSection =
+    let
+      monitors = forEach xrandrHeads (h: ''
+        Option "monitor-${h.config.output}" "${h.name}"
+      '');
+    in
+    concatStrings monitors;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
   # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
   #                                          `----^----^----^----'
-  xrandrMonitorSections = let
-    mkMonitor = previous: current: singleton {
-      inherit (current) name;
-      value = ''
-        Section "Monitor"
-          Identifier "${current.name}"
-          ${optionalString (current.config.primary) ''
-          Option "Primary" "true"
-          ''}
-          ${optionalString (previous != []) ''
-          Option "RightOf" "${(head previous).name}"
-          ''}
-          ${current.config.monitorConfig}
-        EndSection
-      '';
-    } ++ previous;
-    monitors = reverseList (foldl mkMonitor [] xrandrHeads);
-  in concatMapStrings (getAttr "value") monitors;
+  xrandrMonitorSections =
+    let
+      mkMonitor = previous: current: singleton
+        {
+          inherit (current) name;
+          value = ''
+            Section "Monitor"
+              Identifier "${current.name}"
+              ${optionalString (current.config.primary) ''
+              Option "Primary" "true"
+              ''}
+              ${optionalString (previous != []) ''
+              Option "RightOf" "${(head previous).name}"
+              ''}
+              ${current.config.monitorConfig}
+            EndSection
+          '';
+        } ++ previous;
+      monitors = reverseList (foldl mkMonitor [ ] xrandrHeads);
+    in
+    concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { fontpath = optionalString (cfg.fontPath != null)
+    {
+      fontpath = optionalString (cfg.fontPath != null)
         ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
     }
-      ''
-        echo 'Section "Files"' >> $out
-        echo $fontpath >> $out
+    ''
+      echo 'Section "Files"' >> $out
+      echo $fontpath >> $out
 
-        for i in ${toString fontsForXServer}; do
-          if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
-            for j in $(find $i -name fonts.dir); do
-              echo "  FontPath \"$(dirname $j)\"" >> $out
-            done
-          fi
-        done
+      for i in ${toString fontsForXServer}; do
+        if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
+          for j in $(find $i -name fonts.dir); do
+            echo "  FontPath \"$(dirname $j)\"" >> $out
+          done
+        fi
+      done
 
-        for i in $(find ${toString cfg.modules} -type d); do
-          if test $(echo $i/*.so* | wc -w) -ne 0; then
-            echo "  ModulePath \"$i\"" >> $out
-          fi
-        done
+      for i in $(find ${toString cfg.modules} -type d); do
+        if test $(echo $i/*.so* | wc -w) -ne 0; then
+          echo "  ModulePath \"$i\"" >> $out
+        fi
+      done
 
-        echo '${cfg.filesSection}' >> $out
-        echo 'EndSection' >> $out
-        echo >> $out
+      echo '${cfg.filesSection}' >> $out
+      echo 'EndSection' >> $out
+      echo >> $out
 
-        echo "$config" >> $out
-      ''; # */
+      echo "$config" >> $out
+    ''; # */
 
   prefixStringLines = prefix: str:
     concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
@@ -146,7 +155,8 @@ in
 {
 
   imports =
-    [ ./display-managers/default.nix
+    [
+      ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
@@ -154,7 +164,7 @@ in
       (mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
     ];
 
@@ -216,7 +226,7 @@ in
 
       inputClassSections = mkOption {
         type = types.listOf types.lines;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
@@ -232,15 +242,15 @@ in
 
       modules = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
       resolutions = mkOption {
         type = types.listOf types.attrs;
-        default = [];
-        example = [ { x = 1600; y = 1200; } { x = 1024; y = 786; } ];
+        default = [ ];
+        example = [{ x = 1600; y = 1200; } { x = 1024; y = 786; }];
         description = ''
           The screen resolutions for the X server.  The first element
           is the default resolution.  If this list is empty, the X
@@ -252,16 +262,21 @@ in
         type = types.listOf types.str;
         default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
         example = [
-          "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
+          "nvidia"
+          "nvidiaLegacy390"
+          "nvidiaLegacy340"
+          "nvidiaLegacy304"
           "amdgpu-pro"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
-          (mapAttrsToList (n: v:
-            optional (hasPrefix "xf86video" n) {
-              path  = [ "xorg" n ];
-              title = removePrefix "xf86video" n;
-            }) pkgs.xorg);
+          (mapAttrsToList
+            (n: v:
+              optional (hasPrefix "xf86video" n) {
+                path = [ "xorg" n ];
+                title = removePrefix "xf86video" n;
+              })
+            pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -409,22 +424,26 @@ in
       };
 
       xrandrHeads = mkOption {
-        default = [];
+        default = [ ];
         example = [
           "HDMI-0"
           { output = "DVI-0"; primary = true; }
           { output = "DVI-1"; monitorConfig = "Option \"Rotate\" \"left\""; }
         ];
-        type = with types; listOf (coercedTo str (output: {
-          inherit output;
-        }) (submodule { options = xrandrOptions; }));
+        type = with types; listOf (coercedTo str
+          (output: {
+            inherit output;
+          })
+          (submodule { options = xrandrOptions; }));
         # Set primary to true for the first head if no other has been set
         # primary already.
-        apply = heads: let
-          hasPrimary = any (x: x.primary) heads;
-          firstPrimary = head heads // { primary = true; };
-          newHeads = singleton firstPrimary ++ tail heads;
-        in if heads != [] && !hasPrimary then newHeads else heads;
+        apply = heads:
+          let
+            hasPrimary = any (x: x.primary) heads;
+            firstPrimary = head heads // { primary = true; };
+            newHeads = singleton firstPrimary ++ tail heads;
+          in
+          if heads != [ ] && !hasPrimary then newHeads else heads;
         description = ''
           Multiple monitor configuration, just specify a list of XRandR
           outputs. The individual elements should be either simple strings or
@@ -454,10 +473,10 @@ in
         type = types.lines;
         example =
           ''
-          Option "BlankTime" "0"
-          Option "StandbyTime" "0"
-          Option "SuspendTime" "0"
-          Option "OffTime" "0"
+            Option "BlankTime" "0"
+            Option "StandbyTime" "0"
+            Option "SuspendTime" "0"
+            Option "OffTime" "0"
           '';
         description = "Contents of the ServerFlags section of the X server configuration file.";
       };
@@ -588,22 +607,26 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.lightdm.enable =
-      let dmConf = cfg.displayManager;
-          default = !(dmConf.gdm.enable
-                    || dmConf.sddm.enable
-                    || dmConf.xpra.enable
-                    || dmConf.sx.enable
-                    || dmConf.startx.enable);
-      in mkIf (default) (mkDefault true);
+      let
+        dmConf = cfg.displayManager;
+        default = !(dmConf.gdm.enable
+          || dmConf.sddm.enable
+          || dmConf.xpra.enable
+          || dmConf.sx.enable
+          || dmConf.startx.enable);
+      in
+      mkIf (default) (mkDefault true);
 
     # so that the service won't be enabled when only startx is used
-    systemd.services.display-manager.enable  =
-      let dmConf = cfg.displayManager;
-          noDmUsed = !(dmConf.gdm.enable
-                    || dmConf.sddm.enable
-                    || dmConf.xpra.enable
-                    || dmConf.lightdm.enable);
-      in mkIf (noDmUsed) (mkDefault false);
+    systemd.services.display-manager.enable =
+      let
+        dmConf = cfg.displayManager;
+        noDmUsed = !(dmConf.gdm.enable
+          || dmConf.sddm.enable
+          || dmConf.xpra.enable
+          || dmConf.lightdm.enable);
+      in
+      mkIf (noDmUsed) (mkDefault false);
 
     hardware.opengl.enable = mkDefault true;
 
@@ -611,25 +634,30 @@ in
 
     # FIXME: somehow check for unknown driver names.
     services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
-      let driver =
-        attrByPath [name]
-          (if xorg ? ${"xf86video" + name}
-           then { modules = [xorg.${"xf86video" + name}]; }
-           else null)
-          knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
+      let
+        driver =
+          attrByPath [ name ]
+            (if xorg ? ${"xf86video" + name}
+            then { modules = [ xorg.${"xf86video" + name} ]; }
+            else null)
+            knownVideoDrivers;
+      in
+      optional (driver != null) ({ inherit name; modules = [ ]; driverName = name; display = true; } // driver));
 
     assertions = [
-      { assertion = config.security.polkit.enable;
+      {
+        assertion = config.security.polkit.enable;
         message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
       }
-      (let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
-        assertion = length primaryHeads < 2;
-        message = "Only one head is allowed to be primary in "
-                + "‘services.xserver.xrandrHeads’, but there are "
-                + "${toString (length primaryHeads)} heads set to primary: "
-                + concatMapStringsSep ", " (x: x.output) primaryHeads;
-      })
+      (
+        let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
+          assertion = length primaryHeads < 2;
+          message = "Only one head is allowed to be primary in "
+            + "‘services.xserver.xrandrHeads’, but there are "
+            + "${toString (length primaryHeads)} heads set to primary: "
+            + concatMapStringsSep ", " (x: x.output) primaryHeads;
+        }
+      )
     ];
 
     environment.etc =
@@ -640,26 +668,29 @@ in
           "X11/xkb".source = "${cfg.xkbDir}";
         })
       # localectl looks into 00-keyboard.conf
-      //{
-          "X11/xorg.conf.d/00-keyboard.conf".text = ''
-            Section "InputClass"
-              Identifier "Keyboard catchall"
-              MatchIsKeyboard "on"
-              Option "XkbModel" "${cfg.xkbModel}"
-              Option "XkbLayout" "${cfg.layout}"
-              Option "XkbOptions" "${cfg.xkbOptions}"
-              Option "XkbVariant" "${cfg.xkbVariant}"
-            EndSection
-          '';
-        }
+      // {
+        "X11/xorg.conf.d/00-keyboard.conf".text = ''
+          Section "InputClass"
+            Identifier "Keyboard catchall"
+            MatchIsKeyboard "on"
+            Option "XkbModel" "${cfg.xkbModel}"
+            Option "XkbLayout" "${cfg.layout}"
+            Option "XkbOptions" "${cfg.xkbOptions}"
+            Option "XkbVariant" "${cfg.xkbVariant}"
+          EndSection
+        '';
+      }
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      // (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+      // (
+        let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
         {
           ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
-        });
+        }
+      );
 
     environment.systemPackages =
-      [ xorg.xorgserver.out
+      [
+        xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
         xorg.setxkbmap
@@ -695,7 +726,8 @@ in
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =
-      { description = "X11 Server";
+      {
+        description = "X11 Server";
 
         after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
@@ -728,29 +760,33 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-config ${configFile}"
-        "-xkbdir" "${cfg.xkbDir}"
+      [
+        "-config ${configFile}"
+        "-xkbdir"
+        "${cfg.xkbDir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
-        ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
-        ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
-        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
-        ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
-        ++ optional (!cfg.enableTCP) "-nolisten tcp"
-        ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
-        ++ optional cfg.terminateOnReset "-terminate";
+      ++ optional (cfg.tty != null) "vt${toString cfg.tty}"
+      ++ optional (cfg.dpi != null) "-dpi ${toString cfg.dpi}"
+      ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
+      ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
+      ++ optional (!cfg.enableTCP) "-nolisten tcp"
+      ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
+      ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+      ++ optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
-      [ xorg.xorgserver.out
+      [
+        xorg.xorgserver.out
         xorg.xf86inputevdev.out
       ];
 
-    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg) xkbModel layout xkbVariant xkbOptions;
-      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
-      preferLocalBuild = true;
-    } ''
+    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated"
+      {
+        inherit (cfg) xkbModel layout xkbVariant xkbOptions;
+        nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
+        preferLocalBuild = true;
+      } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }

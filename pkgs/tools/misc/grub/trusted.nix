@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, fetchgit, fetchpatch, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2
+{ lib
+, stdenv
+, fetchurl
+, fetchgit
+, fetchpatch
+, autogen
+, flex
+, bison
+, python
+, autoconf
+, automake
+, gettext
+, ncurses
+, libusb-compat-0_1
+, freetype
+, qemu
+, lvm2
 , for_HP_laptop ? false
 }:
 
@@ -32,17 +47,21 @@ stdenv.mkDerivation rec {
   pname = "trustedGRUB2";
   inherit version;
 
-  src = if for_HP_laptop
-        then fetchgit {
+  src =
+    if for_HP_laptop
+    then
+      fetchgit
+        {
           url = "https://github.com/Sirrix-AG/TrustedGRUB2";
           rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
           sha256 = "1760d9hsnqkdvlag9nn8f613mqhnsxmidgvdkpmb37b0yi7p6lhz";
         }
-        else fetchgit {
-          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-          rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
-          sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
-        };
+    else
+      fetchgit {
+        url = "https://github.com/Sirrix-AG/TrustedGRUB2";
+        rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
+        sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
+      };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 ]
@@ -91,9 +110,10 @@ stdenv.mkDerivation rec {
   ];
 
   # save target that grub is compiled for
-  grubTarget = if inPCSystems
-               then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-               else "";
+  grubTarget =
+    if inPCSystems
+    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
+    else "";
 
   doCheck = false;
   # On -j16 races with early header creation:

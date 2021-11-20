@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
-, coreutils, gnused, openldap ? null
-, buildPackages, lib
+{ stdenv
+, fetchurl
+, fetchpatch
+, perl
+, file
+, nettools
+, iputils
+, iproute2
+, makeWrapper
+, coreutils
+, gnused
+, openldap ? null
+, buildPackages
+, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +54,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
@@ -87,7 +98,7 @@ stdenv.mkDerivation rec {
       provides a freely redistributable reference implementation of
       all aspects of DHCP, through a suite of DHCP tools: server,
       client, and relay agent.
-   '';
+    '';
 
     homepage = "https://www.isc.org/dhcp/";
     license = licenses.mpl20;

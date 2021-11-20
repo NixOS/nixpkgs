@@ -2,7 +2,8 @@
 
 let
   version = "2017-03-30";
-in (fetchgit {
+in
+(fetchgit {
   name = "go-font-${version}";
   url = "https://go.googlesource.com/image";
   rev = "f03a046406d4d7fbfd4ed29f554da8f6114049fc";
@@ -23,6 +24,6 @@ in (fetchgit {
     license = licenses.bsd3;
     maintainers = with maintainers; [ sternenseemann ];
     platforms = lib.platforms.all;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -7,7 +7,8 @@ let
   filesystem_folder = "/data/radicale";
 
   cli = "${pkgs.calendar-cli}/bin/calendar-cli --caldav-user ${user} --caldav-pass ${password}";
-in {
+in
+{
   name = "radicale3";
   meta.maintainers = with lib.maintainers; [ dotlambda ];
 
@@ -44,7 +45,7 @@ in {
     systemd.tmpfiles.rules = [ "d ${filesystem_folder} 0750 radicale radicale -" ];
     # WARNING: DON'T DO THIS IN PRODUCTION!
     # This puts unhashed secrets directly into the Nix store for ease of testing.
-    environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" {} ''
+    environment.etc."radicale/users".source = pkgs.runCommand "htpasswd" { } ''
       ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
     '';
   };

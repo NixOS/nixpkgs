@@ -1,7 +1,8 @@
 /* This file defines some basic smoke tests for cross compilation.
 */
 
-{ # The platforms *from* which we cross compile.
+{
+  # The platforms *from* which we cross compile.
   supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
@@ -84,40 +85,44 @@ in
   # identical to their vanilla equivalents --- none of these package should
   # observe the target platform which is the only difference between those
   # package sets.
-  ensureUnaffected = let
-    # Absurd values are fine here, as we are not building anything. In fact,
-    # there probably a good idea to try to be "more parametric" --- i.e. avoid
-    # any special casing.
-    crossSystem = {
-      config = "mips64el-apple-windows-gnu";
-      libc = "glibc";
+  ensureUnaffected =
+    let
+      # Absurd values are fine here, as we are not building anything. In fact,
+      # there probably a good idea to try to be "more parametric" --- i.e. avoid
+      # any special casing.
+      crossSystem = {
+        config = "mips64el-apple-windows-gnu";
+        libc = "glibc";
+      };
+
+      # Converting to a string (drv path) before checking equality is probably a
+      # good idea lest there be some irrelevant pass-through debug attrs that
+      # cause false negatives.
+      testEqualOne = path: system:
+        let
+          f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
+        in
+        assertTrue (
+          f path null system
+          ==
+          f ([ "buildPackages" ] ++ path) crossSystem system
+        );
+
+      testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
+
+      mapTestEqual = lib.mapAttrsRecursive testEqual;
+
+    in
+    mapTestEqual {
+      boehmgc = nativePlatforms;
+      libffi = nativePlatforms;
+      libiconv = nativePlatforms;
+      libtool = nativePlatforms;
+      zlib = nativePlatforms;
+      readline = nativePlatforms;
+      libxml2 = nativePlatforms;
+      guile = nativePlatforms;
     };
-
-    # Converting to a string (drv path) before checking equality is probably a
-    # good idea lest there be some irrelevant pass-through debug attrs that
-    # cause false negatives.
-    testEqualOne = path: system: let
-      f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
-    in assertTrue (
-        f path null system
-        ==
-        f (["buildPackages"] ++ path) crossSystem system
-      );
-
-    testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
-
-    mapTestEqual = lib.mapAttrsRecursive testEqual;
-
-  in mapTestEqual {
-    boehmgc = nativePlatforms;
-    libffi = nativePlatforms;
-    libiconv = nativePlatforms;
-    libtool = nativePlatforms;
-    zlib = nativePlatforms;
-    readline = nativePlatforms;
-    libxml2 = nativePlatforms;
-    guile = nativePlatforms;
-  };
 
   crossIphone64 = mapTestOnCross lib.systems.examples.iphone64 darwinCommon;
 
@@ -174,11 +179,13 @@ in
   x86_64-redox = mapTestOnCross lib.systems.examples.x86_64-unknown-redox embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
-  bootstrapTools = let
-    tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
-    maintainers = [ lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = drv:
-      assert lib.elem drv.system supportedSystems;
-      hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+  bootstrapTools =
+    let
+      tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+      maintainers = [ lib.maintainers.dezgeg ];
+      mkBootstrapToolsJob = drv:
+        assert lib.elem drv.system supportedSystems;
+        hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
+    in
+    lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

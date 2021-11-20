@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({pkgs, ...}:
+import ../make-test-python.nix ({ pkgs, ... }:
 {
   name = "peertube";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
@@ -6,7 +6,7 @@ import ../make-test-python.nix ({pkgs, ...}:
   nodes = {
     database = {
       networking = {
-       interfaces.eth1 = {
+        interfaces.eth1 = {
           ipv4.addresses = [
             { address = "192.168.2.10"; prefixLength = 24; }
           ];
@@ -92,7 +92,7 @@ import ../make-test-python.nix ({pkgs, ...}:
     client = {
       environment.systemPackages = [ pkgs.jq ];
       networking = {
-       interfaces.eth1 = {
+        interfaces.eth1 = {
           ipv4.addresses = [
             { address = "192.168.2.12"; prefixLength = 24; }
           ];

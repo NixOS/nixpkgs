@@ -1,5 +1,16 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, wrapQtAppsHook
-, pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, wrapQtAppsHook
+, pyface
+, pygments
+, numpy
+, vtk
+, traitsui
+, envisage
+, apptools
+, pyqt5
 }:
 
 buildPythonPackage rec {
@@ -27,7 +38,14 @@ buildPythonPackage rec {
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    pyface pygments numpy vtk traitsui envisage apptools pyqt5
+    pyface
+    pygments
+    numpy
+    vtk
+    traitsui
+    envisage
+    apptools
+    pyqt5
   ];
 
   doCheck = false; # Needs X server

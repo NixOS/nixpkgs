@@ -7,7 +7,7 @@ with lib;
 { pname
 , version
 , src
-, meta ? {}
+, meta ? { }
 , ...
 }@args:
 
@@ -36,6 +36,8 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
   meta = defaultMeta // meta;
 }
 
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+  // removeAttrs args [
+  "files"
+  "fileSpecs"
+  "meta"
+])

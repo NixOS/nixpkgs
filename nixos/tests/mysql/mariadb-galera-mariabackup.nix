@@ -1,20 +1,21 @@
-import ./../make-test-python.nix ({ pkgs, ...} :
+import ./../make-test-python.nix ({ pkgs, ... }:
 
 let
-  mysqlenv-common      = pkgs.buildEnv { name = "mysql-path-env-common";      pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
+  mysqlenv-common = pkgs.buildEnv { name = "mysql-path-env-common"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ bash gawk gnutar inetutils which ]; };
   mysqlenv-mariabackup = pkgs.buildEnv { name = "mysql-path-env-mariabackup"; pathsToLink = [ "/bin" ]; paths = with pkgs; [ gzip iproute2 netcat procps pv socat ]; };
 
   # Common user configuration
   users = { ... }:
-  {
-    users.users.testuser = {
-      isSystemUser = true;
-      group = "testusers";
+    {
+      users.users.testuser = {
+        isSystemUser = true;
+        group = "testusers";
+      };
+      users.groups.testusers = { };
     };
-    users.groups.testusers = { };
-  };
 
-in {
+in
+{
   name = "mariadb-galera-mariabackup";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ izorkin ];
@@ -27,154 +28,154 @@ in {
     galera_01 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.1.1"; prefixLength = 24; }
-          ];
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.1.1"; prefixLength = 24; }
+            ];
+          };
+          extraHosts = ''
+            192.168.1.1 galera_01
+            192.168.1.2 galera_02
+            192.168.1.3 galera_03
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
         };
-        extraHosts = ''
-          192.168.1.1 galera_01
-          192.168.1.2 galera_02
-          192.168.1.3 galera_03
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-mariabackup ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
-        initialScript = pkgs.writeText "mariadb-init.sql" ''
-          GRANT ALL PRIVILEGES ON *.* TO 'check_repl'@'localhost' IDENTIFIED BY 'check_pass' WITH GRANT OPTION;
-          FLUSH PRIVILEGES;
-        '';
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
-          };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://";
-            wsrep_cluster_name = "galera";
-            wsrep_node_address = "192.168.1.1";
-            wsrep_node_name = "galera_01";
-            wsrep_sst_method = "mariabackup";
-            wsrep_sst_auth = "check_repl:check_pass";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-mariabackup ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          ensureDatabases = [ "testdb" ];
+          ensureUsers = [{
+            name = "testuser";
+            ensurePermissions = {
+              "testdb.*" = "ALL PRIVILEGES";
+            };
+          }];
+          initialScript = pkgs.writeText "mariadb-init.sql" ''
+            GRANT ALL PRIVILEGES ON *.* TO 'check_repl'@'localhost' IDENTIFIED BY 'check_pass' WITH GRANT OPTION;
+            FLUSH PRIVILEGES;
+          '';
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://";
+              wsrep_cluster_name = "galera";
+              wsrep_node_address = "192.168.1.1";
+              wsrep_node_name = "galera_01";
+              wsrep_sst_method = "mariabackup";
+              wsrep_sst_auth = "check_repl:check_pass";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
 
     galera_02 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.1.2"; prefixLength = 24; }
-          ];
-        };
-        extraHosts = ''
-          192.168.1.1 galera_01
-          192.168.1.2 galera_02
-          192.168.1.3 galera_03
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-mariabackup ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.1.2"; prefixLength = 24; }
+            ];
           };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
-            wsrep_cluster_name = "galera";
-            wsrep_node_address = "192.168.1.2";
-            wsrep_node_name = "galera_02";
-            wsrep_sst_method = "mariabackup";
-            wsrep_sst_auth = "check_repl:check_pass";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+          extraHosts = ''
+            192.168.1.1 galera_01
+            192.168.1.2 galera_02
+            192.168.1.3 galera_03
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
+        };
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-mariabackup ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
+              wsrep_cluster_name = "galera";
+              wsrep_node_address = "192.168.1.2";
+              wsrep_node_name = "galera_02";
+              wsrep_sst_method = "mariabackup";
+              wsrep_sst_auth = "check_repl:check_pass";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
 
     galera_03 =
       { pkgs, ... }:
       {
-      imports = [ users ];
-      networking = {
-        interfaces.eth1 = {
-          ipv4.addresses = [
-            { address = "192.168.1.3"; prefixLength = 24; }
-          ];
-        };
-        extraHosts = ''
-          192.168.1.1 galera_01
-          192.168.1.2 galera_02
-          192.168.1.3 galera_03
-        '';
-        firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
-        firewall.allowedUDPPorts = [ 4567 ];
-      };
-      systemd.services.mysql = with pkgs; {
-        path = [ mysqlenv-common mysqlenv-mariabackup ];
-      };
-      services.mysql = {
-        enable = true;
-        package = pkgs.mariadb;
-        settings = {
-          mysqld = {
-            bind_address = "0.0.0.0";
+        imports = [ users ];
+        networking = {
+          interfaces.eth1 = {
+            ipv4.addresses = [
+              { address = "192.168.1.3"; prefixLength = 24; }
+            ];
           };
-          galera = {
-            wsrep_on = "ON";
-            wsrep_debug = "NONE";
-            wsrep_retry_autocommit = "3";
-            wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
-            wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
-            wsrep_cluster_name = "galera";
-            wsrep_node_address = "192.168.1.3";
-            wsrep_node_name = "galera_03";
-            wsrep_sst_method = "mariabackup";
-            wsrep_sst_auth = "check_repl:check_pass";
-            binlog_format = "ROW";
-            enforce_storage_engine = "InnoDB";
-            innodb_autoinc_lock_mode = "2";
+          extraHosts = ''
+            192.168.1.1 galera_01
+            192.168.1.2 galera_02
+            192.168.1.3 galera_03
+          '';
+          firewall.allowedTCPPorts = [ 3306 4444 4567 4568 ];
+          firewall.allowedUDPPorts = [ 4567 ];
+        };
+        systemd.services.mysql = with pkgs; {
+          path = [ mysqlenv-common mysqlenv-mariabackup ];
+        };
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          settings = {
+            mysqld = {
+              bind_address = "0.0.0.0";
+            };
+            galera = {
+              wsrep_on = "ON";
+              wsrep_debug = "NONE";
+              wsrep_retry_autocommit = "3";
+              wsrep_provider = "${pkgs.mariadb-galera}/lib/galera/libgalera_smm.so";
+              wsrep_cluster_address = "gcomm://galera_01,galera_02,galera_03";
+              wsrep_cluster_name = "galera";
+              wsrep_node_address = "192.168.1.3";
+              wsrep_node_name = "galera_03";
+              wsrep_sst_method = "mariabackup";
+              wsrep_sst_auth = "check_repl:check_pass";
+              binlog_format = "ROW";
+              enforce_storage_engine = "InnoDB";
+              innodb_autoinc_lock_mode = "2";
+            };
           };
         };
       };
-    };
   };
 
   testScript = ''

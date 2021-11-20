@@ -28,7 +28,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    future numpy pillow scipy scikit-learn scikitimage threadpoolctl
+    future
+    numpy
+    pillow
+    scipy
+    scikit-learn
+    scikitimage
+    threadpoolctl
   ];
 
   checkInputs = [ pytestCheckHook unittest2 ];

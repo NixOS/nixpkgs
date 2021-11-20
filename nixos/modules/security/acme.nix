@@ -97,319 +97,332 @@ let
   # Ensures that directories which are shared across all certs
   # exist and have the correct user and group, since group
   # is configurable on a per-cert basis.
-  userMigrationService = let
-    script = with builtins; ''
-      chown -R acme .lego/accounts
-    '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
-      for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
-        if [ -d "$fixpath" ]; then
-          chmod -R u=rwX,g=rX,o= "$fixpath"
-          chown -R acme:${data.group} "$fixpath"
-        fi
-      done
-    '') certConfigs));
-  in {
-    description = "Fix owner and group of all ACME certificates";
+  userMigrationService =
+    let
+      script = with builtins; ''
+        chown -R acme .lego/accounts
+      '' + (concatStringsSep "\n" (mapAttrsToList
+        (cert: data: ''
+          for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
+            if [ -d "$fixpath" ]; then
+              chmod -R u=rwX,g=rX,o= "$fixpath"
+              chown -R acme:${data.group} "$fixpath"
+            fi
+          done
+        '')
+        certConfigs));
+    in
+    {
+      description = "Fix owner and group of all ACME certificates";
 
-    serviceConfig = commonServiceConfig // {
-      # We don't want this to run every time a renewal happens
-      RemainAfterExit = true;
+      serviceConfig = commonServiceConfig // {
+        # We don't want this to run every time a renewal happens
+        RemainAfterExit = true;
 
-      # These StateDirectory entries negate the need for tmpfiles
-      StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
-      StateDirectoryMode = 755;
-      WorkingDirectory = "/var/lib/acme";
+        # These StateDirectory entries negate the need for tmpfiles
+        StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
+        StateDirectoryMode = 755;
+        WorkingDirectory = "/var/lib/acme";
 
-      # Run the start script as root
-      ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
+        # Run the start script as root
+        ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
+      };
     };
-  };
 
-  certToConfig = cert: data: let
-    acmeServer = if data.server != null then data.server else cfg.server;
-    useDns = data.dnsProvider != null;
-    destPath = "/var/lib/acme/${cert}";
-    selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
+  certToConfig = cert: data:
+    let
+      acmeServer = if data.server != null then data.server else cfg.server;
+      useDns = data.dnsProvider != null;
+      destPath = "/var/lib/acme/${cert}";
+      selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
-    # Minica and lego have a "feature" which replaces * with _. We need
-    # to make this substitution to reference the output files from both programs.
-    # End users never see this since we rename the certs.
-    keyName = builtins.replaceStrings ["*"] ["_"] data.domain;
+      # Minica and lego have a "feature" which replaces * with _. We need
+      # to make this substitution to reference the output files from both programs.
+      # End users never see this since we rename the certs.
+      keyName = builtins.replaceStrings [ "*" ] [ "_" ] data.domain;
 
-    # FIXME when mkChangedOptionModule supports submodules, change to that.
-    # This is a workaround
-    extraDomains = data.extraDomainNames ++ (
-      optionals
-      (data.extraDomains != "_mkMergedOptionModule")
-      (builtins.attrNames data.extraDomains)
-    );
+      # FIXME when mkChangedOptionModule supports submodules, change to that.
+      # This is a workaround
+      extraDomains = data.extraDomainNames ++ (
+        optionals
+          (data.extraDomains != "_mkMergedOptionModule")
+          (builtins.attrNames data.extraDomains)
+      );
 
-    # Create hashes for cert data directories based on configuration
-    # Flags are separated to avoid collisions
-    hashData = with builtins; ''
-      ${concatStringsSep " " data.extraLegoFlags} -
-      ${concatStringsSep " " data.extraLegoRunFlags} -
-      ${concatStringsSep " " data.extraLegoRenewFlags} -
-      ${toString acmeServer} ${toString data.dnsProvider}
-      ${toString data.ocspMustStaple} ${data.keyType}
-    '';
-    certDir = mkHash hashData;
-    domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    accountHash = (mkAccountHash acmeServer data);
-    accountDir = accountDirRoot + accountHash;
+      # Create hashes for cert data directories based on configuration
+      # Flags are separated to avoid collisions
+      hashData = with builtins; ''
+        ${concatStringsSep " " data.extraLegoFlags} -
+        ${concatStringsSep " " data.extraLegoRunFlags} -
+        ${concatStringsSep " " data.extraLegoRenewFlags} -
+        ${toString acmeServer} ${toString data.dnsProvider}
+        ${toString data.ocspMustStaple} ${data.keyType}
+      '';
+      certDir = mkHash hashData;
+      domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
+      accountHash = (mkAccountHash acmeServer data);
+      accountDir = accountDirRoot + accountHash;
 
-    protocolOpts = if useDns then (
-      [ "--dns" data.dnsProvider ]
-      ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
-      ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
-    ) else (
-      [ "--http" "--http.webroot" data.webroot ]
-    );
+      protocolOpts =
+        if useDns then
+          (
+            [ "--dns" data.dnsProvider ]
+            ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+            ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
+          ) else
+          (
+            [ "--http" "--http.webroot" data.webroot ]
+          );
 
-    commonOpts = [
-      "--accept-tos" # Checking the option is covered by the assertions
-      "--path" "."
-      "-d" data.domain
-      "--email" data.email
-      "--key-type" data.keyType
-    ] ++ protocolOpts
+      commonOpts = [
+        "--accept-tos" # Checking the option is covered by the assertions
+        "--path"
+        "."
+        "-d"
+        data.domain
+        "--email"
+        data.email
+        "--key-type"
+        data.keyType
+      ] ++ protocolOpts
       ++ optionals (acmeServer != null) [ "--server" acmeServer ]
       ++ concatMap (name: [ "-d" name ]) extraDomains
       ++ data.extraLegoFlags;
 
-    # Although --must-staple is common to both modes, it is not declared as a
-    # mode-agnostic argument in lego and thus must come after the mode.
-    runOpts = escapeShellArgs (
-      commonOpts
-      ++ [ "run" ]
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
-      ++ data.extraLegoRunFlags
-    );
-    renewOpts = escapeShellArgs (
-      commonOpts
-      ++ [ "renew" ]
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
-      ++ data.extraLegoRenewFlags
-    );
+      # Although --must-staple is common to both modes, it is not declared as a
+      # mode-agnostic argument in lego and thus must come after the mode.
+      runOpts = escapeShellArgs (
+        commonOpts
+        ++ [ "run" ]
+        ++ optionals data.ocspMustStaple [ "--must-staple" ]
+        ++ data.extraLegoRunFlags
+      );
+      renewOpts = escapeShellArgs (
+        commonOpts
+        ++ [ "renew" ]
+        ++ optionals data.ocspMustStaple [ "--must-staple" ]
+        ++ data.extraLegoRenewFlags
+      );
 
-    # We need to collect all the ACME webroots to grant them write
-    # access in the systemd service.
-    webroots =
-      lib.remove null
-        (lib.unique
+      # We need to collect all the ACME webroots to grant them write
+      # access in the systemd service.
+      webroots =
+        lib.remove null
+          (lib.unique
             (builtins.map
-            (certAttrs: certAttrs.webroot)
-            (lib.attrValues config.security.acme.certs)));
-  in {
-    inherit accountHash cert selfsignedDeps;
+              (certAttrs: certAttrs.webroot)
+              (lib.attrValues config.security.acme.certs)));
+    in
+    {
+      inherit accountHash cert selfsignedDeps;
 
-    group = data.group;
+      group = data.group;
 
-    renewTimer = {
-      description = "Renew ACME Certificate for ${cert}";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = cfg.renewInterval;
-        Unit = "acme-${cert}.service";
-        Persistent = "yes";
+      renewTimer = {
+        description = "Renew ACME Certificate for ${cert}";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = cfg.renewInterval;
+          Unit = "acme-${cert}.service";
+          Persistent = "yes";
 
-        # Allow systemd to pick a convenient time within the day
-        # to run the check.
-        # This allows the coalescing of multiple timer jobs.
-        # We divide by the number of certificates so that if you
-        # have many certificates, the renewals are distributed over
-        # the course of the day to avoid rate limits.
-        AccuracySec = "${toString (_24hSecs / numCerts)}s";
+          # Allow systemd to pick a convenient time within the day
+          # to run the check.
+          # This allows the coalescing of multiple timer jobs.
+          # We divide by the number of certificates so that if you
+          # have many certificates, the renewals are distributed over
+          # the course of the day to avoid rate limits.
+          AccuracySec = "${toString (_24hSecs / numCerts)}s";
 
-        # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
-        RandomizedDelaySec = "24h";
-      };
-    };
-
-    selfsignService = {
-      description = "Generate self-signed certificate for ${cert}";
-      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
-      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
-
-      path = with pkgs; [ minica ];
-
-      unitConfig = {
-        ConditionPathExists = "!/var/lib/acme/${cert}/key.pem";
+          # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
+          RandomizedDelaySec = "24h";
+        };
       };
 
-      serviceConfig = commonServiceConfig // {
-        Group = data.group;
-        UMask = 0027;
+      selfsignService = {
+        description = "Generate self-signed certificate for ${cert}";
+        after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
+        requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
 
-        StateDirectory = "acme/${cert}";
+        path = with pkgs; [ minica ];
 
-        BindPaths = [
-          "/var/lib/acme/.minica:/tmp/ca"
-          "/var/lib/acme/${cert}:/tmp/${keyName}"
-        ];
+        unitConfig = {
+          ConditionPathExists = "!/var/lib/acme/${cert}/key.pem";
+        };
+
+        serviceConfig = commonServiceConfig // {
+          Group = data.group;
+          UMask = 0027;
+
+          StateDirectory = "acme/${cert}";
+
+          BindPaths = [
+            "/var/lib/acme/.minica:/tmp/ca"
+            "/var/lib/acme/${cert}:/tmp/${keyName}"
+          ];
+        };
+
+        # Working directory will be /tmp
+        # minica will output to a folder sharing the name of the first domain
+        # in the list, which will be ${data.domain}
+        script = ''
+          minica \
+            --ca-key ca/key.pem \
+            --ca-cert ca/cert.pem \
+            --domains ${escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
+
+          # Create files to match directory layout for real certificates
+          cd '${keyName}'
+          cp ../ca/cert.pem chain.pem
+          cat cert.pem chain.pem > fullchain.pem
+          cat key.pem fullchain.pem > full.pem
+
+          # Group might change between runs, re-apply it
+          chown 'acme:${data.group}' *
+
+          # Default permissions make the files unreadable by group + anon
+          # Need to be readable by group
+          chmod 640 *
+        '';
       };
 
-      # Working directory will be /tmp
-      # minica will output to a folder sharing the name of the first domain
-      # in the list, which will be ${data.domain}
-      script = ''
-        minica \
-          --ca-key ca/key.pem \
-          --ca-cert ca/cert.pem \
-          --domains ${escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
+      renewService = {
+        description = "Renew ACME certificate for ${cert}";
+        after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
+        wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
 
-        # Create files to match directory layout for real certificates
-        cd '${keyName}'
-        cp ../ca/cert.pem chain.pem
-        cat cert.pem chain.pem > fullchain.pem
-        cat key.pem fullchain.pem > full.pem
+        # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
+        wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
 
-        # Group might change between runs, re-apply it
-        chown 'acme:${data.group}' *
+        path = with pkgs; [ lego coreutils diffutils openssl ];
 
-        # Default permissions make the files unreadable by group + anon
-        # Need to be readable by group
-        chmod 640 *
-      '';
-    };
+        serviceConfig = commonServiceConfig // {
+          Group = data.group;
 
-    renewService = {
-      description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
-      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+          # Keep in mind that these directories will be deleted if the user runs
+          # systemctl clean --what=state
+          # acme/.lego/${cert} is listed for this reason.
+          StateDirectory = [
+            "acme/${cert}"
+            "acme/.lego/${cert}"
+            "acme/.lego/${cert}/${certDir}"
+            "acme/.lego/accounts/${accountHash}"
+          ];
 
-      # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
-      wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
+          ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
 
-      path = with pkgs; [ lego coreutils diffutils openssl ];
+          # Needs to be space separated, but can't use a multiline string because that'll include newlines
+          BindPaths = [
+            "${accountDir}:/tmp/accounts"
+            "/var/lib/acme/${cert}:/tmp/out"
+            "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
+          ];
 
-      serviceConfig = commonServiceConfig // {
-        Group = data.group;
+          # Only try loading the credentialsFile if the dns challenge is enabled
+          EnvironmentFile = mkIf useDns data.credentialsFile;
 
-        # Keep in mind that these directories will be deleted if the user runs
-        # systemctl clean --what=state
-        # acme/.lego/${cert} is listed for this reason.
-        StateDirectory = [
-          "acme/${cert}"
-          "acme/.lego/${cert}"
-          "acme/.lego/${cert}/${certDir}"
-          "acme/.lego/accounts/${accountHash}"
-        ];
-
-        ReadWritePaths = commonServiceConfig.ReadWritePaths ++ webroots;
-
-        # Needs to be space separated, but can't use a multiline string because that'll include newlines
-        BindPaths = [
-          "${accountDir}:/tmp/accounts"
-          "/var/lib/acme/${cert}:/tmp/out"
-          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
-        ];
-
-        # Only try loading the credentialsFile if the dns challenge is enabled
-        EnvironmentFile = mkIf useDns data.credentialsFile;
-
-        # Run as root (Prefixed with +)
-        ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
-          cd /var/lib/acme/${escapeShellArg cert}
-          if [ -e renewed ]; then
-            rm renewed
-            ${data.postRun}
-          fi
-        '');
-      };
-
-      # Working directory will be /tmp
-      script = ''
-        set -euxo pipefail
-
-        # This reimplements the expiration date check, but without querying
-        # the acme server first. By doing this offline, we avoid errors
-        # when the network or DNS are unavailable, which can happen during
-        # nixos-rebuild switch.
-        is_expiration_skippable() {
-          pem=$1
-
-          # This function relies on set -e to exit early if any of the
-          # conditions or programs fail.
-
-          [[ -e $pem ]]
-
-          expiration_line="$(
-            set -euxo pipefail
-            openssl x509 -noout -enddate <$pem \
-                  | grep notAfter \
-                  | sed -e 's/^notAfter=//'
-          )"
-          [[ -n "$expiration_line" ]]
-
-          expiration_date="$(date -d "$expiration_line" +%s)"
-          now="$(date +%s)"
-          expiration_s=$[expiration_date - now]
-          expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
-
-          [[ $expiration_days -gt ${toString cfg.validMinDays} ]]
-        }
-
-        ${optionalString (data.webroot != null) ''
-          # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
-          # Lego will fail if the webroot does not exist at all.
-          (
-            mkdir -p '${data.webroot}/.well-known/acme-challenge' \
-            && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
-          ) || (
-            echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
-            && exit 1
-          )
-        ''}
-
-        echo '${domainHash}' > domainhash.txt
-
-        # Check if we can renew
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
-
-          # When domains are updated, there's no need to do a full
-          # Lego run, but it's likely renew won't work if days is too low.
-          if [ -e certificates/domainhash.txt ] && cmp -s domainhash.txt certificates/domainhash.txt; then
-            if is_expiration_skippable out/full.pem; then
-              echo 1>&2 "nixos-acme: skipping renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
-            else
-              echo 1>&2 "nixos-acme: renewing now, because certificate expires within the configured ${toString cfg.validMinDays} days"
-              lego ${renewOpts} --days ${toString cfg.validMinDays}
+          # Run as root (Prefixed with +)
+          ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
+            cd /var/lib/acme/${escapeShellArg cert}
+            if [ -e renewed ]; then
+              rm renewed
+              ${data.postRun}
             fi
+          '');
+        };
+
+        # Working directory will be /tmp
+        script = ''
+          set -euxo pipefail
+
+          # This reimplements the expiration date check, but without querying
+          # the acme server first. By doing this offline, we avoid errors
+          # when the network or DNS are unavailable, which can happen during
+          # nixos-rebuild switch.
+          is_expiration_skippable() {
+            pem=$1
+
+            # This function relies on set -e to exit early if any of the
+            # conditions or programs fail.
+
+            [[ -e $pem ]]
+
+            expiration_line="$(
+              set -euxo pipefail
+              openssl x509 -noout -enddate <$pem \
+                    | grep notAfter \
+                    | sed -e 's/^notAfter=//'
+            )"
+            [[ -n "$expiration_line" ]]
+
+            expiration_date="$(date -d "$expiration_line" +%s)"
+            now="$(date +%s)"
+            expiration_s=$[expiration_date - now]
+            expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
+
+            [[ $expiration_days -gt ${toString cfg.validMinDays} ]]
+          }
+
+          ${optionalString (data.webroot != null) ''
+            # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
+            # Lego will fail if the webroot does not exist at all.
+            (
+              mkdir -p '${data.webroot}/.well-known/acme-challenge' \
+              && chgrp '${data.group}' ${data.webroot}/.well-known/acme-challenge
+            ) || (
+              echo 'Please ensure ${data.webroot}/.well-known/acme-challenge exists and is writable by acme:${data.group}' \
+              && exit 1
+            )
+          ''}
+
+          echo '${domainHash}' > domainhash.txt
+
+          # Check if we can renew
+          if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
+
+            # When domains are updated, there's no need to do a full
+            # Lego run, but it's likely renew won't work if days is too low.
+            if [ -e certificates/domainhash.txt ] && cmp -s domainhash.txt certificates/domainhash.txt; then
+              if is_expiration_skippable out/full.pem; then
+                echo 1>&2 "nixos-acme: skipping renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
+              else
+                echo 1>&2 "nixos-acme: renewing now, because certificate expires within the configured ${toString cfg.validMinDays} days"
+                lego ${renewOpts} --days ${toString cfg.validMinDays}
+              fi
+            else
+              echo 1>&2 "certificate domain(s) have changed; will renew now"
+              # Any number > 90 works, but this one is over 9000 ;-)
+              lego ${renewOpts} --days 9001
+            fi
+
+          # Otherwise do a full run
           else
-            echo 1>&2 "certificate domain(s) have changed; will renew now"
-            # Any number > 90 works, but this one is over 9000 ;-)
-            lego ${renewOpts} --days 9001
+            lego ${runOpts}
           fi
 
-        # Otherwise do a full run
-        else
-          lego ${runOpts}
-        fi
+          mv domainhash.txt certificates/
 
-        mv domainhash.txt certificates/
+          # Group might change between runs, re-apply it
+          chown 'acme:${data.group}' certificates/*
 
-        # Group might change between runs, re-apply it
-        chown 'acme:${data.group}' certificates/*
+          # Copy all certs to the "real" certs directory
+          CERT='certificates/${keyName}.crt'
+          if [ -e "$CERT" ] && ! cmp -s "$CERT" out/fullchain.pem; then
+            touch out/renewed
+            echo Installing new certificate
+            cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
+            cp -vp 'certificates/${keyName}.key' out/key.pem
+            cp -vp 'certificates/${keyName}.issuer.crt' out/chain.pem
+            ln -sf fullchain.pem out/cert.pem
+            cat out/key.pem out/fullchain.pem > out/full.pem
+          fi
 
-        # Copy all certs to the "real" certs directory
-        CERT='certificates/${keyName}.crt'
-        if [ -e "$CERT" ] && ! cmp -s "$CERT" out/fullchain.pem; then
-          touch out/renewed
-          echo Installing new certificate
-          cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
-          cp -vp 'certificates/${keyName}.key' out/key.pem
-          cp -vp 'certificates/${keyName}.issuer.crt' out/chain.pem
-          ln -sf fullchain.pem out/cert.pem
-          cat out/key.pem out/fullchain.pem > out/full.pem
-        fi
-
-        # By default group will have no access to the cert files.
-        # This chmod will fix that.
-        chmod 640 out/*
-      '';
+          # By default group will have no access to the cert files.
+          # This chmod will fix that.
+          chmod 640 out/*
+        '';
+      };
     };
-  };
 
   certConfigs = mapAttrs certToConfig cfg.certs;
 
@@ -495,7 +508,7 @@ let
 
       extraDomainNames = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [
             "example.org"
@@ -573,7 +586,7 @@ let
 
       extraLegoFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional global flags to pass to all lego commands.
         '';
@@ -581,7 +594,7 @@ let
 
       extraLegoRenewFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional flags to pass to lego renew.
         '';
@@ -589,7 +602,7 @@ let
 
       extraLegoRunFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional flags to pass to lego run.
         '';
@@ -597,7 +610,8 @@ let
     };
   };
 
-in {
+in
+{
 
   options = {
     security.acme = {
@@ -702,69 +716,76 @@ in {
 
       # FIXME Most of these custom warnings and filters for security.acme.certs.* are required
       # because using mkRemovedOptionModule/mkChangedOptionModule with attrsets isn't possible.
-      warnings = filter (w: w != "") (mapAttrsToList (cert: data: if data.extraDomains != "_mkMergedOptionModule" then ''
-        The option definition `security.acme.certs.${cert}.extraDomains` has changed
-        to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
-        Setting a custom webroot for extra domains is not possible, instead use separate certs.
-      '' else "") cfg.certs);
+      warnings = filter (w: w != "") (mapAttrsToList
+        (cert: data:
+          if data.extraDomains != "_mkMergedOptionModule" then ''
+            The option definition `security.acme.certs.${cert}.extraDomains` has changed
+            to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
+            Setting a custom webroot for extra domains is not possible, instead use separate certs.
+          '' else "")
+        cfg.certs);
 
-      assertions = let
-        certs = attrValues cfg.certs;
-      in [
-        {
-          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
-          message = ''
-            You must define `security.acme.certs.<name>.email` or
-            `security.acme.email` to register with the CA. Note that using
-            many different addresses for certs may trigger account rate limits.
-          '';
-        }
-        {
-          assertion = cfg.acceptTerms;
-          message = ''
-            You must accept the CA's terms of service before using
-            the ACME module by setting `security.acme.acceptTerms`
-            to `true`. For Let's Encrypt's ToS see https://letsencrypt.org/repository/
-          '';
-        }
-      ] ++ (builtins.concatLists (mapAttrsToList (cert: data: [
-        {
-          assertion = data.user == "_mkRemovedOptionModule";
-          message = ''
-            The option definition `security.acme.certs.${cert}.user' no longer has any effect; Please remove it.
-            Certificate user is now hard coded to the "acme" user. If you would
-            like another user to have access, consider adding them to the
-            "acme" group or changing security.acme.certs.${cert}.group.
-          '';
-        }
-        {
-          assertion = data.allowKeysForGroup == "_mkRemovedOptionModule";
-          message = ''
-            The option definition `security.acme.certs.${cert}.allowKeysForGroup' no longer has any effect; Please remove it.
-            All certs are readable by the configured group. If this is undesired,
-            consider changing security.acme.certs.${cert}.group to an unused group.
-          '';
-        }
-        # * in the cert value breaks building of systemd services, and makes
-        # referencing them as a user quite weird too. Best practice is to use
-        # the domain option.
-        {
-          assertion = ! hasInfix "*" cert;
-          message = ''
-            The cert option path `security.acme.certs.${cert}.dnsProvider`
-            cannot contain a * character.
-            Instead, set `security.acme.certs.${cert}.domain = "${cert}";`
-            and remove the wildcard from the path.
-          '';
-        }
-        {
-          assertion = data.dnsProvider == null || data.webroot == null;
-          message = ''
-            Options `security.acme.certs.${cert}.dnsProvider` and
-            `security.acme.certs.${cert}.webroot` are mutually exclusive.
-          '';
-        }
-      ]) cfg.certs));
+      assertions =
+        let
+          certs = attrValues cfg.certs;
+        in
+        [
+          {
+            assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
+            message = ''
+              You must define `security.acme.certs.<name>.email` or
+              `security.acme.email` to register with the CA. Note that using
+              many different addresses for certs may trigger account rate limits.
+            '';
+          }
+          {
+            assertion = cfg.acceptTerms;
+            message = ''
+              You must accept the CA's terms of service before using
+              the ACME module by setting `security.acme.acceptTerms`
+              to `true`. For Let's Encrypt's ToS see https://letsencrypt.org/repository/
+            '';
+          }
+        ] ++ (builtins.concatLists (mapAttrsToList
+          (cert: data: [
+            {
+              assertion = data.user == "_mkRemovedOptionModule";
+              message = ''
+                The option definition `security.acme.certs.${cert}.user' no longer has any effect; Please remove it.
+                Certificate user is now hard coded to the "acme" user. If you would
+                like another user to have access, consider adding them to the
+                "acme" group or changing security.acme.certs.${cert}.group.
+              '';
+            }
+            {
+              assertion = data.allowKeysForGroup == "_mkRemovedOptionModule";
+              message = ''
+                The option definition `security.acme.certs.${cert}.allowKeysForGroup' no longer has any effect; Please remove it.
+                All certs are readable by the configured group. If this is undesired,
+                consider changing security.acme.certs.${cert}.group to an unused group.
+              '';
+            }
+            # * in the cert value breaks building of systemd services, and makes
+            # referencing them as a user quite weird too. Best practice is to use
+            # the domain option.
+            {
+              assertion = ! hasInfix "*" cert;
+              message = ''
+                The cert option path `security.acme.certs.${cert}.dnsProvider`
+                cannot contain a * character.
+                Instead, set `security.acme.certs.${cert}.domain = "${cert}";`
+                and remove the wildcard from the path.
+              '';
+            }
+            {
+              assertion = data.dnsProvider == null || data.webroot == null;
+              message = ''
+                Options `security.acme.certs.${cert}.dnsProvider` and
+                `security.acme.certs.${cert}.webroot` are mutually exclusive.
+              '';
+            }
+          ])
+          cfg.certs));
 
       users.users.acme = {
         home = "/var/lib/acme";
@@ -772,44 +793,52 @@ in {
         isSystemUser = true;
       };
 
-      users.groups.acme = {};
+      users.groups.acme = { };
 
       systemd.services = {
         "acme-fixperms" = userMigrationService;
       } // (mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs)
-        // (optionalAttrs (cfg.preliminarySelfsigned) ({
+      // (optionalAttrs (cfg.preliminarySelfsigned) ({
         "acme-selfsigned-ca" = selfsignCAService;
       } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 
-      systemd.targets = let
-        # Create some targets which can be depended on to be "active" after cert renewals
-        finishedTargets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
-          wantedBy = [ "default.target" ];
-          requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-          after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-        }) certConfigs;
+      systemd.targets =
+        let
+          # Create some targets which can be depended on to be "active" after cert renewals
+          finishedTargets = mapAttrs'
+            (cert: conf: nameValuePair "acme-finished-${cert}" {
+              wantedBy = [ "default.target" ];
+              requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+              after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+            })
+            certConfigs;
 
-        # Create targets to limit the number of simultaneous account creations
-        # How it works:
-        # - Pick a "leader" cert service, which will be in charge of creating the account,
-        #   and run first (requires + after)
-        # - Make all other cert services sharing the same account wait for the leader to
-        #   finish before starting (requiredBy + before).
-        # Using a target here is fine - account creation is a one time event. Even if
-        # systemd clean --what=state is used to delete the account, so long as the user
-        # then runs one of the cert services, there won't be any issues.
-        accountTargets = mapAttrs' (hash: confs: let
-          leader = "acme-${(builtins.head confs).cert}.service";
-          dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
-        in nameValuePair "acme-account-${hash}" {
-          requiredBy = dependantServices;
-          before = dependantServices;
-          requires = [ leader ];
-          after = [ leader ];
-        }) (groupBy (conf: conf.accountHash) (attrValues certConfigs));
-      in finishedTargets // accountTargets;
+          # Create targets to limit the number of simultaneous account creations
+          # How it works:
+          # - Pick a "leader" cert service, which will be in charge of creating the account,
+          #   and run first (requires + after)
+          # - Make all other cert services sharing the same account wait for the leader to
+          #   finish before starting (requiredBy + before).
+          # Using a target here is fine - account creation is a one time event. Even if
+          # systemd clean --what=state is used to delete the account, so long as the user
+          # then runs one of the cert services, there won't be any issues.
+          accountTargets = mapAttrs'
+            (hash: confs:
+              let
+                leader = "acme-${(builtins.head confs).cert}.service";
+                dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
+              in
+              nameValuePair "acme-account-${hash}" {
+                requiredBy = dependantServices;
+                before = dependantServices;
+                requires = [ leader ];
+                after = [ leader ];
+              })
+            (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+        in
+        finishedTargets // accountTargets;
     })
   ];
 

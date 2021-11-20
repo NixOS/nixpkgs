@@ -4,7 +4,8 @@ let
   linkNodeDeps = ({ pkg, deps, name ? "" }:
     let
       targetModule = if name != "" then name else lib.getName pkg;
-    in nodePackages.${pkg}.override (oldAttrs: {
+    in
+    nodePackages.${pkg}.override (oldAttrs: {
       postInstall = ''
         mkdir -p $out/lib/node_modules/${targetModule}/node_modules
         ${lib.concatStringsSep "\n" (map (dep: ''
@@ -14,11 +15,12 @@ let
         )}
       '';
     })
-);
-in linkNodeDeps {
- pkg = "@antora/cli";
- name = "@antora/cli";
- deps = [
-   "@antora/site-generator-default"
- ];
+  );
+in
+linkNodeDeps {
+  pkg = "@antora/cli";
+  name = "@antora/cli";
+  deps = [
+    "@antora/site-generator-default"
+  ];
 }

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   libName = "libredirect" + stdenv.targetPlatform.extensions.sharedLibrary;
 
-  outputs = ["out" "hook"];
+  outputs = [ "out" "hook" ];
 
   buildPhase = ''
     runHook preBuild

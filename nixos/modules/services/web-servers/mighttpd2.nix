@@ -6,7 +6,8 @@ let
   cfg = config.services.mighttpd2;
   configFile = pkgs.writeText "mighty-config" cfg.config;
   routingFile = pkgs.writeText "mighty-routing" cfg.routing;
-in {
+in
+{
   options.services.mighttpd2 = {
     enable = mkEnableOption "Mighttpd2 web server";
 
@@ -95,10 +96,10 @@ in {
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion = cfg.routing != "";
-          message = "You need at least one rule in mighttpd2.routing";
-        }
-      ];
+      [{
+        assertion = cfg.routing != "";
+        message = "You need at least one rule in mighttpd2.routing";
+      }];
     systemd.services.mighttpd2 = {
       description = "Mighttpd2 web server";
       after = [ "network-online.target" ];

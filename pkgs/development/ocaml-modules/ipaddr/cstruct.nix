@@ -1,5 +1,7 @@
-{ lib, buildDunePackage
-, ipaddr, cstruct
+{ lib
+, buildDunePackage
+, ipaddr
+, cstruct
 }:
 
 buildDunePackage rec {

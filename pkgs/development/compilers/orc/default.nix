@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchurl, meson, ninja
-, gtk-doc ? null, file, docbook_xsl
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gtk-doc ? null
+, file
+, docbook_xsl
 , buildDevDoc ? gtk-doc != null
-}: let
+}:
+let
   inherit (lib) optional optionals;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "orc";
   version = "0.4.32";
 
@@ -18,7 +26,7 @@ in stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" ]
-     ++ optional buildDevDoc "devdoc"
+    ++ optional buildDevDoc "devdoc"
   ;
   outputBin = "dev"; # compilation tools
 

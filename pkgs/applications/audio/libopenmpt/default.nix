@@ -1,5 +1,18 @@
-{ config, lib, stdenv, fetchurl, zlib, pkg-config, mpg123, libogg, libvorbis, portaudio, libsndfile, flac
-, usePulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
+{ config
+, lib
+, stdenv
+, fetchurl
+, zlib
+, pkg-config
+, mpg123
+, libogg
+, libvorbis
+, portaudio
+, libsndfile
+, flac
+, usePulseAudio ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio
+}:
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
@@ -16,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
-  ++ lib.optional usePulseAudio libpulseaudio;
+    ++ lib.optional usePulseAudio libpulseaudio;
 
   configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 

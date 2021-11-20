@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, unzip, jre8
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, jre8
 , copyDesktopItems
 , makeDesktopItem
 , iconConvTools

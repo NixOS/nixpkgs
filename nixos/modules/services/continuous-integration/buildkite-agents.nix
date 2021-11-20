@@ -7,27 +7,30 @@ let
 
   mkHookOption = { name, description, example ? null }: {
     inherit name;
-    value = mkOption {
-      default = null;
-      inherit description;
-      type = types.nullOr types.lines;
-    } // (if example == null then {} else { inherit example; });
+    value = mkOption
+      {
+        default = null;
+        inherit description;
+        type = types.nullOr types.lines;
+      } // (if example == null then { } else { inherit example; });
   };
   mkHookOptions = hooks: listToAttrs (map mkHookOption hooks);
 
-  hooksDir = cfg: let
-    mkHookEntry = name: value: ''
-      cat > $out/${name} <<'EOF'
-      #! ${pkgs.runtimeShell}
-      set -e
-      ${value}
-      EOF
-      chmod 755 $out/${name}
+  hooksDir = cfg:
+    let
+      mkHookEntry = name: value: ''
+        cat > $out/${name} <<'EOF'
+        #! ${pkgs.runtimeShell}
+        set -e
+        ${value}
+        EOF
+        chmod 755 $out/${name}
+      '';
+    in
+    pkgs.runCommand "buildkite-agent-hooks" { preferLocalBuild = true; } ''
+      mkdir $out
+      ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
     '';
-  in pkgs.runCommand "buildkite-agent-hooks" { preferLocalBuild = true; } ''
-    mkdir $out
-    ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
-  '';
 
   buildkiteOptions = { name ? "", config, ... }: {
     options = {
@@ -77,8 +80,8 @@ let
 
       tags = mkOption {
         type = types.attrsOf (types.either types.str (types.listOf types.str));
-        default = {};
-        example = { queue = "default"; docker = "true"; ruby2 ="true"; };
+        default = { };
+        example = { queue = "default"; docker = "true"; ruby2 = "true"; };
         description = ''
           Tags for the agent.
         '';
@@ -109,18 +112,23 @@ let
       };
 
       hooks = mkHookOptions [
-        { name = "checkout";
+        {
+          name = "checkout";
           description = ''
             The `checkout` hook script will replace the default checkout routine of the
             bootstrap.sh script. You can use this hook to do your own SCM checkout
             behaviour
-          ''; }
-        { name = "command";
+          '';
+        }
+        {
+          name = "command";
           description = ''
             The `command` hook script will replace the default implementation of running
             the build command.
-          ''; }
-        { name = "environment";
+          '';
+        }
+        {
+          name = "environment";
           description = ''
             The `environment` hook will run before all other commands, and can be used
             to set up secrets, data, etc. Anything exported in hooks will be available
@@ -131,38 +139,53 @@ let
           '';
           example = ''
             export SECRET_VAR=`head -1 /run/keys/secret`
-          ''; }
-        { name = "post-artifact";
+          '';
+        }
+        {
+          name = "post-artifact";
           description = ''
             The `post-artifact` hook will run just after artifacts are uploaded
-          ''; }
-        { name = "post-checkout";
+          '';
+        }
+        {
+          name = "post-checkout";
           description = ''
             The `post-checkout` hook will run after the bootstrap script has checked out
             your projects source code.
-          ''; }
-        { name = "post-command";
+          '';
+        }
+        {
+          name = "post-command";
           description = ''
             The `post-command` hook will run after the bootstrap script has run your
             build commands
-          ''; }
-        { name = "pre-artifact";
+          '';
+        }
+        {
+          name = "pre-artifact";
           description = ''
             The `pre-artifact` hook will run just before artifacts are uploaded
-          ''; }
-        { name = "pre-checkout";
+          '';
+        }
+        {
+          name = "pre-checkout";
           description = ''
             The `pre-checkout` hook will run just before your projects source code is
             checked out from your SCM provider
-          ''; }
-        { name = "pre-command";
+          '';
+        }
+        {
+          name = "pre-command";
           description = ''
             The `pre-command` hook will run just before your build command runs
-          ''; }
-        { name = "pre-exit";
+          '';
+        }
+        {
+          name = "pre-exit";
           description = ''
             The `pre-exit` hook will run just before your build job finishes
-          ''; }
+          '';
+        }
       ];
 
       hooksPath = mkOption {
@@ -192,7 +215,7 @@ in
 {
   options.services.buildkite-agents = mkOption {
     type = types.attrsOf (types.submodule buildkiteOptions);
-    default = {};
+    default = { };
     description = ''
       Attribute set of buildkite agents.
       The attribute key is combined with the hostname and a unique integer to
@@ -213,12 +236,13 @@ in
     };
   });
   config.users.groups = mapAgents (name: cfg: {
-    "buildkite-agent-${name}" = {};
+    "buildkite-agent-${name}" = { };
   });
 
   config.systemd.services = mapAgents (name: cfg: {
     "buildkite-agent-${name}" =
-      { description = "Buildkite Agent";
+      {
+        description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
@@ -229,14 +253,15 @@ in
 
         ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
         ##     don't end up in the Nix store.
-        preStart = let
-          sshDir = "${cfg.dataDir}/.ssh";
-          tagStr = name: value:
-            if lib.isList value
-            then lib.concatStringsSep "," (builtins.map (v: "${name}=${v}") value)
-            else "${name}=${value}";
-          tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);
-        in
+        preStart =
+          let
+            sshDir = "${cfg.dataDir}/.ssh";
+            tagStr = name: value:
+              if lib.isList value
+              then lib.concatStringsSep "," (builtins.map (v: "${name}=${v}") value)
+              else "${name}=${value}";
+            tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);
+          in
           optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
             install -m600 "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
@@ -253,7 +278,8 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
+          {
+            ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
             User = "buildkite-agent-${name}";
             RestartSec = 5;
             Restart = "on-failure";
@@ -266,15 +292,16 @@ in
   });
 
   config.assertions = mapAgents (name: cfg: [
-      { assertion = cfg.hooksPath == (hooksDir cfg) || all (v: v == null) (attrValues cfg.hooks);
-        message = ''
-          Options `services.buildkite-agents.${name}.hooksPath' and
-          `services.buildkite-agents.${name}.hooks.<name>' are mutually exclusive.
-        '';
-      }
+    {
+      assertion = cfg.hooksPath == (hooksDir cfg) || all (v: v == null) (attrValues cfg.hooks);
+      message = ''
+        Options `services.buildkite-agents.${name}.hooksPath' and
+        `services.buildkite-agents.${name}.hooks.<name>' are mutually exclusive.
+      '';
+    }
   ]);
 
   imports = [
-    (mkRemovedOptionModule [ "services" "buildkite-agent"] "services.buildkite-agent has been upgraded from version 2 to version 3 and moved to an attribute set at services.buildkite-agents. Please consult the 20.03 release notes for more information.")
+    (mkRemovedOptionModule [ "services" "buildkite-agent" ] "services.buildkite-agent has been upgraded from version 2 to version 3 and moved to an attribute set at services.buildkite-agents. Please consult the 20.03 release notes for more information.")
   ];
 }

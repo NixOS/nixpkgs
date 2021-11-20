@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go, python3
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, perl
+, go
+, python3
+, protobuf
+, zlib
+, gtest
+, brotli
+, lz4
+, zstd
+, libusb1
+, pcre2
+, fmt_7
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+  pythonEnv = python3.withPackages (ps: [ ps.protobuf ]);
 in
 
 stdenv.mkDerivation rec {

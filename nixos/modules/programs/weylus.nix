@@ -17,7 +17,7 @@ in
       '';
     };
 
-     users = mkOption {
+    users = mkOption {
       type = listOf str;
       default = [ ];
       description = ''

@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.icecream.scheduler;
-in {
+in
+{
 
   ###### interface
 
@@ -63,7 +64,7 @@ in {
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Additional command line parameters";
         example = [ "-v" ];
       };
@@ -86,7 +87,8 @@ in {
       serviceConfig = {
         ExecStart = escapeShellArgs ([
           "${getBin cfg.package}/bin/icecc-scheduler"
-          "-p" (toString cfg.port)
+          "-p"
+          (toString cfg.port)
         ]
         ++ optionals (cfg.netName != null) [ "-n" (toString cfg.netName) ]
         ++ optional cfg.persistentClientConnection "-r"

@@ -32,53 +32,53 @@ if !lib.hasAttr version hashes
 then builtins.throw "merlin ${merlinVersion} is not available for OCaml ${ocaml.version}"
 else
 
-buildDunePackage {
-  pname = "merlin";
-  inherit version;
+  buildDunePackage {
+    pname = "merlin";
+    inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
-    sha256 = hashes."${version}";
-  };
+    src = fetchurl {
+      url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
+      sha256 = hashes."${version}";
+    };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_2}/bin/dune";
-    })
-    # This fixes the test-suite on macOS
-    # See https://github.com/ocaml/merlin/pull/1399
-    ./test.patch
-  ];
+    patches = [
+      (substituteAll {
+        src = ./fix-paths.patch;
+        dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+        dune = "${dune_2}/bin/dune";
+      })
+      # This fixes the test-suite on macOS
+      # See https://github.com/ocaml/merlin/pull/1399
+      ./test.patch
+    ];
 
-  useDune2 = true;
+    useDune2 = true;
 
-  buildInputs = [
-    dot-merlin-reader
-    yojson
-    csexp
-    result
-  ];
+    buildInputs = [
+      dot-merlin-reader
+      yojson
+      csexp
+      result
+    ];
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    patchShebangs tests/merlin-wrapper
-    dune runtest # filtering with -p disables tests
-    runHook postCheck
-  '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      patchShebangs tests/merlin-wrapper
+      dune runtest # filtering with -p disables tests
+      runHook postCheck
+    '';
+    checkInputs = [
+      jq
+      menhir
+      menhirLib
+      menhirSdk
+    ];
 
-  meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
-    homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
-  };
-}
+    meta = with lib; {
+      description = "An editor-independent tool to ease the development of programs in OCaml";
+      homepage = "https://github.com/ocaml/merlin";
+      license = licenses.mit;
+      maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
+    };
+  }

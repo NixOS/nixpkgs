@@ -1,11 +1,23 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib
+, stdenv
+, pkgsBuildTarget
+, targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
+, autoconf
+, automake
+, coreutils
+, fetchpatch
+, fetchurl
+, perl
+, python3
+, m4
+, sphinx
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
@@ -14,11 +26,13 @@
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildLlvmPackages
+, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
+  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -48,9 +62,8 @@
     && !stdenv.hostPlatform.isMusl
   )
 
-, enableHaddockProgram ?
-    # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+, enableHaddockProgram ? # Disabled for cross; see note [HADDOCK_DOCS].
+  (stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -96,12 +109,12 @@ let
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   ''
-    # We only need to build stage1 on most cross-compilation because
-    # we will be running the compiler on the native system. In some
-    # situations, like native Musl compilation, we need the compiler
-    # to actually link to our new Libc. The iOS simulator is a special
-    # exception because we can’t actually run simulators binaries
-    # ourselves.
+  # We only need to build stage1 on most cross-compilation because
+  # we will be running the compiler on the native system. In some
+  # situations, like native Musl compilation, we need the compiler
+  # to actually link to our new Libc. The iOS simulator is a special
+  # exception because we can’t actually run simulators binaries
+  # ourselves.
   + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if (targetPlatform.system == hostPlatform.system && !targetPlatform.isiOS) then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -124,7 +137,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [ libffi ]
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -183,7 +196,7 @@ stdenv.mkDerivation (rec {
     # cabal passes incorrect --host= when cross-compiling
     # https://github.com/haskell/cabal/issues/5887
     (fetchpatch {
-            url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
+      url = "https://raw.githubusercontent.com/input-output-hk/haskell.nix/122bd81150386867da07fdc9ad5096db6719545a/overlays/patches/ghc/cabal-host.patch";
       sha256 = "sha256:0yd0sajgi24sc1w5m55lkg2lp6kfkgpp3lgija2c8y3cmkwfpdc1";
     })
 
@@ -204,32 +217,32 @@ stdenv.mkDerivation (rec {
       find . -name \*\.cabal\* -exec sed -i -e 's/\(base.*\)4.14/\14.16/' {} \; \
         -exec sed -i -e 's/\(prim.*\)0.6/\10.8/' {} \;
     ''
-  + ''
-    for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
-      export "''${env#TARGET_}=''${!env}"
-    done
-    # GHC is a bit confused on its cross terminology, as these would normally be
-    # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
-    # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+    + ''
+      for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
+        export "''${env#TARGET_}=''${!env}"
+      done
+      # GHC is a bit confused on its cross terminology, as these would normally be
+      # the *host* tools.
+      export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
+      export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+      # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+      export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
+      export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
+      export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
+      export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
+      export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
+      export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
+      export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
-    echo -n "${buildMK dontStrip}" > mk/build.mk
-    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
-    export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
-    sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
-  '' + lib.optionalString targetPlatform.isMusl ''
+      echo -n "${buildMK dontStrip}" > mk/build.mk
+      sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+    '' + lib.optionalString (!stdenv.isDarwin) ''
+      export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
+    '' + lib.optionalString stdenv.isDarwin ''
+      export NIX_LDFLAGS+=" -no_dtrace_dof"
+    '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
+      sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
+    '' + lib.optionalString targetPlatform.isMusl ''
       echo "patching llvm-targets for musl targets..."
       echo "Cloning these existing '*-linux-gnu*' targets:"
       grep linux-gnu llvm-targets | sed 's/^/  /'
@@ -245,7 +258,7 @@ stdenv.mkDerivation (rec {
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-  '';
+    '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
@@ -254,7 +267,8 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include"
+    "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
@@ -282,8 +296,15 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl
+    autoconf
+    automake
+    m4
+    python3
+    ghc
+    bootPkgs.alex
+    bootPkgs.happy
+    bootPkgs.hscolour
   ] ++ lib.optionals enableDocs [
     sphinx
   ];
@@ -307,14 +328,14 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable =
     [ "format" ]
-    # In nixpkgs, musl based builds currently enable `pie` hardening by default
-    # (see `defaultHardeningFlags` in `make-derivation.nix`).
-    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+      # In nixpkgs, musl based builds currently enable `pie` hardening by default
+      # (see `defaultHardeningFlags` in `make-derivation.nix`).
+      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+      # See:
+      # * https://github.com/NixOS/nixpkgs/issues/129247
+      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
     # Install the bash completion file.
@@ -355,7 +376,7 @@ stdenv.mkDerivation (rec {
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
 
-} // lib.optionalAttrs targetPlatform.useAndroidPrebuilt{
+} // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
   dontPatchELF = true;
   noAuditTmpdir = true;
 })

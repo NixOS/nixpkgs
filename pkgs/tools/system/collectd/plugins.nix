@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , curl
 , darwin
 , hiredis
@@ -8,18 +9,22 @@
 , libdbi
 , libesmtp
 , libgcrypt
-, libmemcached, cyrus_sasl
+, libmemcached
+, cyrus_sasl
 , libmodbus
 , libmicrohttpd
 , libmnl
 , libmysqlclient
-, libnotify, gdk-pixbuf
+, libnotify
+, gdk-pixbuf
 , liboping
 , libpcap
 , libsigrok
 , libvirt
 , libxml2
-, libapparmor, libcap_ng, numactl
+, libapparmor
+, libcap_ng
+, numactl
 , lua
 , lvm2
 , lm_sensors
@@ -41,8 +46,8 @@
 , xen
 , yajl
 , IOKit
-# Defaults to `null` for all supported plugins,
-# list of plugin names for a custom build
+  # Defaults to `null` for all supported plugins,
+  # list of plugin names for a custom build
 , enabledPlugins ? null
 , ...
 }:
@@ -75,7 +80,8 @@ let
     iptables.buildInputs = [
       libpcap
     ] ++ lib.optionals stdenv.isLinux [
-      iptables libmnl
+      iptables
+      libmnl
     ];
     java.buildInputs = [ jdk libgcrypt libxml2 ];
     log_logstash.buildInputs = [ yajl ];
@@ -113,7 +119,9 @@ let
     snmp_agent.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
     varnish.buildInputs = [ curl varnish ];
     virt.buildInputs = [
-      libvirt libxml2 yajl
+      libvirt
+      libxml2
+      yajl
     ] ++ lib.optionals stdenv.isLinux [ lvm2 udev ];
     write_http.buildInputs = [ curl yajl ];
     write_kafka.buildInputs = [ yajl rdkafka ];
@@ -127,17 +135,20 @@ let
 
   configureFlags = lib.optionals (enabledPlugins != null) (
     [ "--disable-all-plugins" ]
-    ++ (map (plugin: "--enable-${plugin}") enabledPlugins));
+    ++ (map (plugin: "--enable-${plugin}") enabledPlugins)
+  );
 
   pluginBuildInputs = plugin:
     lib.optionals (plugins ? ${plugin} && plugins.${plugin} ? buildInputs)
-    plugins.${plugin}.buildInputs;
+      plugins.${plugin}.buildInputs;
 
   buildInputs =
     if enabledPlugins == null
-    then builtins.concatMap pluginBuildInputs
-      (builtins.attrNames plugins)
+    then
+      builtins.concatMap pluginBuildInputs
+        (builtins.attrNames plugins)
     else builtins.concatMap pluginBuildInputs enabledPlugins;
-in {
+in
+{
   inherit configureFlags buildInputs;
 }

@@ -27,7 +27,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/openfaas/faas-cli/version.GitCommit=${rev}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"

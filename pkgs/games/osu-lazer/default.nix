@@ -1,11 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, linkFarmFromDrvs
+, dotnetCorePackages
+, dotnetPackages
+, cacert
+, ffmpeg_4
+, alsa-lib
+, SDL2
+, lttng-ust
+, numactl
+, alsa-plugins
 }:
 
 let
   runtimeDeps = [
-    ffmpeg_4 alsa-lib SDL2 lttng-ust numactl
+    ffmpeg_4
+    alsa-lib
+    SDL2
+    lttng-ust
+    numactl
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
@@ -14,7 +31,8 @@ let
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "linux-x64";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "osu-lazer";
   version = "2021.1113.0";
 
@@ -26,7 +44,9 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    dotnet-sdk dotnetPackages.Nuget makeWrapper
+    dotnet-sdk
+    dotnetPackages.Nuget
+    makeWrapper
     # FIXME: Without `cacert`, we will suffer from https://github.com/NuGet/Announcements/issues/49
     cacert
   ];

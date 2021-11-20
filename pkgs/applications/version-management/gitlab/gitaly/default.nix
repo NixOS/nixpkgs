@@ -1,7 +1,17 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
-# libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
+{ lib
+, fetchFromGitLab
+, fetchFromGitHub
+, buildGoModule
+, ruby
+, bundlerEnv
+, pkg-config
+  # libgit2 + dependencies
+, libgit2
+, openssl
+, zlib
+, pcre
+, http-parser
+}:
 
 let
   rubyEnv = bundlerEnv rec {

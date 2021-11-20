@@ -1,6 +1,6 @@
 # Test printing via CUPS.
 
-import ./make-test-python.nix ({pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 let
   printingServer = startWhenNeeded: {
     services.printing.enable = true;
@@ -33,7 +33,8 @@ let
     hardware.printers.ensureDefaultPrinter = "DeskjetRemote";
   };
 
-in {
+in
+{
   name = "printing";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ domenkozar eelco matthewbauer ];

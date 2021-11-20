@@ -1,9 +1,22 @@
-{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python3, makeWrapper, autoreconfHook
-, rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, sbcl
+, texinfo
+, perl
+, python3
+, makeWrapper
+, autoreconfHook
+, rlwrap ? null
+, tk ? null
+, gnuplot ? null
+, ecl ? null
+, ecl-fasl ? false
 }:
 
 let
-  name    = "maxima";
+  name = "maxima";
   version = "5.45.0";
 
   lisp-compiler = if ecl-fasl then ecl else sbcl;
@@ -49,9 +62,9 @@ stdenv.mkDerivation ({
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (lib.optionalString ecl-fasl ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
-   '')
+  + (lib.optionalString ecl-fasl ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
+  '')
   ;
 
   patches = [
@@ -92,7 +105,7 @@ stdenv.mkDerivation ({
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = false; # try to re-enable after next version update
 
   enableParallelBuilding = true;
 

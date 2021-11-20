@@ -10,13 +10,20 @@ python3Packages.buildPythonApplication rec {
   };
 
   checkInputs = with python3Packages; [
-    pytestCheckHook pytest-xdist responses
+    pytestCheckHook
+    pytest-xdist
+    responses
   ];
 
   nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3Packages; [
-    colorama imagesize lxml requests setuptools six
+    colorama
+    imagesize
+    lxml
+    requests
+    setuptools
+    six
   ];
 
   disabled = python3Packages.pythonOlder "3.3";

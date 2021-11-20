@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [
-    "LIBDIR=$(out)/lib" "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man"
-    "ETCDIR=$(out)/etc" "INITDIR=$(TMPDIR)" "SYSCONFIGDIR=$(out)/etc/sysconfig"
+    "LIBDIR=$(out)/lib"
+    "BINDIR=$(out)/sbin"
+    "MANDIR=$(out)/share/man"
+    "ETCDIR=$(out)/etc"
+    "INITDIR=$(TMPDIR)"
+    "SYSCONFIGDIR=$(out)/etc/sysconfig"
     "LOCALSTATEDIR=/var"
   ];
 

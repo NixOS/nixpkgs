@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, makeDesktopItem
-, ncurses, libtermkey, lua
-, acl ? null, libselinux ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, makeDesktopItem
+, ncurses
+, libtermkey
+, lua
+, acl ? null
+, libselinux ? null
 }:
 
 let
-  luaEnv = lua.withPackages(ps: [ ps.lpeg ]);
+  luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.7";
+  version = "0.7";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -51,10 +59,13 @@ stdenv.mkDerivation rec {
     desktopName = "vis";
     genericName = "Text editor";
     categories = lib.concatStringsSep ";" [
-      "Application" "Development" "IDE"
+      "Application"
+      "Development"
+      "IDE"
     ];
     mimeType = lib.concatStringsSep ";" [
-      "text/plain" "application/octet-stream"
+      "text/plain"
+      "application/octet-stream"
     ];
     startupNotify = "false";
     terminal = "true";

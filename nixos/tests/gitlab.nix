@@ -3,7 +3,7 @@
 let
   initialRootPassword = "notproduction";
 in
-import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
+import ./make-test-python.nix ({ pkgs, lib, ... }: with lib; {
   name = "gitlab";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ globin ];
@@ -63,7 +63,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
           secretFile = pkgs.writeText "secret" "Aig5zaic";
           otpFile = pkgs.writeText "otpsecret" "Riew9mue";
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
-          jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+          jwsFile = pkgs.runCommand "oidcKeyBase" { } "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
       };
     };
@@ -132,7 +132,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
         gitlab.succeed("test -s /tmp/archive.tar.bz2")
       '';
 
-  in ''
+    in
+    ''
       gitlab.start()
     ''
     + waitForServices

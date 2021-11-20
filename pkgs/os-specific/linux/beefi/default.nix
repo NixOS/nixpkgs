@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , installShellFiles
 , binutils-unwrapped
-, systemd }:
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "beefi";

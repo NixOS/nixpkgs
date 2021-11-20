@@ -8,7 +8,8 @@
 , pkg-config
 , pulseaudio
 , python3
-, lib, stdenv
+, lib
+, stdenv
 , xkeyboard_config
 , xorg
 , wrapGAppsHook

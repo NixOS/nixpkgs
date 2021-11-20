@@ -7,14 +7,15 @@ let
 
   ruby = cfg.packages.gitlab.ruby;
 
-  postgresqlPackage = if config.services.postgresql.enable then
-                        config.services.postgresql.package
-                      else
-                        pkgs.postgresql_12;
+  postgresqlPackage =
+    if config.services.postgresql.enable then
+      config.services.postgresql.package
+    else
+      pkgs.postgresql_12;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
-  pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
+  pathUrlQuote = url: replaceStrings [ "/" ] [ "%2F" ] url;
 
   databaseConfig = {
     production = {
@@ -80,8 +81,10 @@ let
   redisConfig.production.url = cfg.redisUrl;
 
   pagesArgs = [
-    "-pages-domain" gitlabConfig.production.pages.host
-    "-pages-root" "${gitlabConfig.production.shared.path}/pages"
+    "-pages-domain"
+    gitlabConfig.production.pages.host
+    "-pages-root"
+    "${gitlabConfig.production.shared.path}/pages"
   ] ++ cfg.pagesExtraArgs;
 
   gitlabConfig = {
@@ -120,7 +123,7 @@ let
         gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
         path = cfg.backup.path;
         keep_time = cfg.backup.keepTime;
-      } // (optionalAttrs (cfg.backup.uploadOptions != {}) {
+      } // (optionalAttrs (cfg.backup.uploadOptions != { }) {
         upload = cfg.backup.uploadOptions;
       });
       gitlab_shell = {
@@ -149,7 +152,7 @@ let
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = "gitlab-issuer";
       };
-      extra = {};
+      extra = { };
       uploads.storage_path = cfg.statePath;
     };
   };
@@ -179,7 +182,7 @@ let
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-     '';
+    '';
   };
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
@@ -193,7 +196,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-     '';
+    '';
   };
 
   extraGitlabRb = pkgs.writeText "extra-gitlab.rb" cfg.extraGitlabRb;
@@ -218,7 +221,8 @@ let
     end
   '';
 
-in {
+in
+{
 
   imports = [
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
@@ -288,7 +292,7 @@ in {
 
       extraEnv = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = ''
           Additional environment variables for the GitLab environment.
         '';
@@ -296,7 +300,7 @@ in {
 
       backup.startAt = mkOption {
         type = with types; either str (listOf str);
-        default = [];
+        default = [ ];
         example = "03:00";
         description = ''
           The time(s) to run automatic backup of GitLab
@@ -326,20 +330,21 @@ in {
 
       backup.skip = mkOption {
         type = with types;
-          let value = enum [
-                "db"
-                "uploads"
-                "builds"
-                "artifacts"
-                "lfs"
-                "registry"
-                "pages"
-                "repositories"
-                "tar"
-              ];
+          let
+            value = enum [
+              "db"
+              "uploads"
+              "builds"
+              "artifacts"
+              "lfs"
+              "registry"
+              "pages"
+              "repositories"
+              "tar"
+            ];
           in
-            either value (listOf value);
-        default = [];
+          either value (listOf value);
+        default = [ ];
         example = [ "artifacts" "lfs" ];
         apply = x: if isString x then x else concatStringsSep "," x;
         description = ''
@@ -355,7 +360,7 @@ in {
 
       backup.uploadOptions = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             # Fog storage connection settings, see http://fog.io/storage/
@@ -442,7 +447,7 @@ in {
 
       extraDatabaseConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra configuration in config/database.yml.";
       };
 
@@ -716,7 +721,7 @@ in {
 
       extraShellConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Extra configuration to merge into shell-config.yml";
       };
 
@@ -855,7 +860,7 @@ in {
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             gitlab = {
@@ -1063,7 +1068,8 @@ in {
     services.postfix.enable = mkDefault (cfg.smtp.enable && cfg.smtp.address == "localhost");
 
     users.users.${cfg.user} =
-      { group = cfg.group;
+      {
+        group = cfg.group;
         home = "${cfg.statePath}/home";
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.gitlab;
@@ -1122,17 +1128,19 @@ in {
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         RemainAfterExit = true;
 
-        ExecStartPre = let
-          preStartFullPrivileges = ''
-            shopt -s dotglob nullglob
-            set -eu
+        ExecStartPre =
+          let
+            preStartFullPrivileges = ''
+              shopt -s dotglob nullglob
+              set -eu
 
-            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
-            if [[ -n "$(ls -A '${cfg.statePath}'/config/)" ]]; then
-              chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
-            fi
-          '';
-        in "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}";
+              chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
+              if [[ -n "$(ls -A '${cfg.statePath}'/config/)" ]]; then
+                chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+              fi
+            '';
+          in
+          "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}";
 
         ExecStart = pkgs.writeShellScript "gitlab-config" ''
           set -eu
@@ -1212,7 +1220,7 @@ in {
       bindsTo = [
         "gitlab-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       serviceConfig = {
@@ -1276,7 +1284,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
       };
     };
 
@@ -1287,7 +1295,7 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         openssh
-        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
+        procps # See https://gitlab.com/gitlab-org/gitaly/issues/1562
         git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby

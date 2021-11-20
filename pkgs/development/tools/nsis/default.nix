@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   CPPPATH = symlinkJoin {
-     name = "nsis-includes";
-     paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    name = "nsis-includes";
+    paths = [ zlib.dev ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   };
 
   LIBPATH = symlinkJoin {

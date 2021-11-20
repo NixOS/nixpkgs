@@ -2,18 +2,18 @@
 
    Minimal example:
 
-    { pkgs,  }:
+  { pkgs,  }:
 
-    let
+  let
       eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
         baseModules = [
           ../module.nix
         ];
         modules = [];
       };
-    in pkgs.nixosOptionsDoc {
+  in pkgs.nixosOptionsDoc {
       options = eval.options;
-    }
+  }
 
 */
 { pkgs
@@ -32,12 +32,12 @@ let
     else x;
 
   optionsListDesc = lib.flip map optionsListVisible
-   (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
-   );
+    (opt: transformOptions opt
+      // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
+      // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
+      // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+      // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != [ ]) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
+    );
 
   # Generate DocBook documentation for a list of packages. This is
   # what `relatedPackages` option of `mkOption` from
@@ -50,16 +50,18 @@ let
   #   (either of `name`, `path` is required, the rest are optional).
   genRelatedPackages = packages: optName:
     let
-      unpack = p: if lib.isString p then { name = p; }
-                  else if lib.isList p then { path = p; }
-                  else p;
+      unpack = p:
+        if lib.isString p then { name = p; }
+        else if lib.isList p then { path = p; }
+        else p;
       describe = args:
         let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
           package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}' found while evaluating `relatedPackages' of option `${optName}'") pkgs);
-        in "<listitem>"
+        in
+        "<listitem>"
         + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
         + ": ${package.meta.description or "???"}.</para>"
@@ -67,7 +69,8 @@ let
         # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
         + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
         + "</listitem>";
-    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+    in
+    "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
 
   # Custom "less" that pushes up all the things ending in ".enable*"
   # and ".package*"
@@ -76,8 +79,9 @@ let
       ise = lib.hasPrefix "enable";
       isp = lib.hasPrefix "package";
       cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
-    in lib.compareLists cmp a.loc b.loc < 0;
+        (lib.splitByAndCompare isp lib.compare lib.compare);
+    in
+    lib.compareLists cmp a.loc b.loc < 0;
 
   # Remove invisible and internal options.
   optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
@@ -91,7 +95,7 @@ let
   # and the manpage depend on it and thus we evaluate this on every system rebuild.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsListDesc);
 
-  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
+  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o [ "name" "visible" "internal" ]; }) optionsList);
 
   # TODO: declarations: link to github
   singleAsciiDoc = name: value: ''
@@ -153,7 +157,8 @@ let
     ''}
   '';
 
-in {
+in
+{
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
@@ -161,7 +166,8 @@ in {
   optionsMDDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleMDDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
-    { meta.description = "List of NixOS options in JSON format";
+    {
+      meta.description = "List of NixOS options in JSON format";
       buildInputs = [ pkgs.brotli ];
     }
     ''
@@ -178,7 +184,7 @@ in {
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     ''; # */
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" { } ''
     optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"

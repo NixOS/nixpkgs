@@ -25,7 +25,8 @@ let
   '';
 
 
-in {
+in
+{
   options.services.bookstack = {
 
     enable = mkEnableOption "BookStack";
@@ -184,9 +185,10 @@ in {
     nginx = mkOption {
       type = types.submodule (
         recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+          { }
       );
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           serverAliases = [
@@ -220,10 +222,12 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = db.createLocally -> db.user == user;
+      {
+        assertion = db.createLocally -> db.user == user;
         message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
-      { assertion = db.createLocally -> db.passwordFile == null;
+      {
+        assertion = db.createLocally -> db.passwordFile == null;
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
@@ -235,7 +239,8 @@ in {
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
-        { name = db.user;
+        {
+          name = db.user;
           ensurePermissions = { "${db.name}.*" = "ALL PRIVILEGES"; };
         }
       ];
@@ -258,29 +263,32 @@ in {
 
     services.nginx = {
       enable = mkDefault true;
-      virtualHosts.bookstack = mkMerge [ cfg.nginx {
-        root = mkForce "${bookstack}/public";
-        extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
-        locations = {
-          "/" = {
-            index = "index.php";
-            extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+      virtualHosts.bookstack = mkMerge [
+        cfg.nginx
+        {
+          root = mkForce "${bookstack}/public";
+          extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
+          locations = {
+            "/" = {
+              index = "index.php";
+              extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+            };
+            "~ \.php$" = {
+              extraConfig = ''
+                try_files $uri $uri/ /index.php?$query_string;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param REDIRECT_STATUS 200;
+                fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
+                ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
+              '';
+            };
+            "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+              extraConfig = "expires 365d;";
+            };
           };
-          "~ \.php$" = {
-            extraConfig = ''
-              try_files $uri $uri/ /index.php?$query_string;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
-              ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
-            '';
-          };
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
-            extraConfig = "expires 365d;";
-          };
-        };
-      }];
+        }
+      ];
     };
 
     systemd.services.bookstack-setup = {
@@ -360,7 +368,7 @@ in {
         "${config.services.nginx.user}".extraGroups = [ group ];
       };
       groups = mkIf (group == "bookstack") {
-        bookstack = {};
+        bookstack = { };
       };
     };
 

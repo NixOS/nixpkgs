@@ -142,20 +142,24 @@ let
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
-  keyConfigFile = concatStrings (mapAttrsToList (keyName: keyOptions: ''
-    key:
-      name:      "${keyName}"
-      algorithm: "${keyOptions.algorithm}"
-      include:   "${stateDir}/private/${keyName}"
-  '') cfg.keys);
+  keyConfigFile = concatStrings (mapAttrsToList
+    (keyName: keyOptions: ''
+      key:
+        name:      "${keyName}"
+        algorithm: "${keyOptions.algorithm}"
+        include:   "${stateDir}/private/${keyName}"
+    '')
+    cfg.keys);
 
-  copyKeys = concatStrings (mapAttrsToList (keyName: keyOptions: ''
-    secret=$(cat "${keyOptions.keyFile}")
-    dest="${stateDir}/private/${keyName}"
-    echo "  secret: \"$secret\"" > "$dest"
-    chown ${username}:${username} "$dest"
-    chmod 0400 "$dest"
-  '') cfg.keys);
+  copyKeys = concatStrings (mapAttrsToList
+    (keyName: keyOptions: ''
+      secret=$(cat "${keyOptions.keyFile}")
+      dest="${stateDir}/private/${keyName}"
+      echo "  secret: \"$secret\"" > "$dest"
+      chown ${username}:${username} "$dest"
+      chmod 0400 "$dest"
+    '')
+    cfg.keys);
 
 
   # options are ordered alphanumerically by the nixos option name
@@ -181,17 +185,18 @@ let
     ${forEach     "  provide-xfr: "        zone.provideXFR}
   '';
 
-  zoneConfigs = zoneConfigs' {} "" { children = cfg.zones; };
+  zoneConfigs = zoneConfigs' { } "" { children = cfg.zones; };
 
   zoneConfigs' = parent: name: zone:
     if !(zone ? children) || zone.children == null || zone.children == { }
-      # leaf -> actual zone
-      then listToAttrs [ (nameValuePair name (parent // zone)) ]
+    # leaf -> actual zone
+    then listToAttrs [ (nameValuePair name (parent // zone)) ]
 
-      # fork -> pattern
-      else zipAttrsWith (name: head) (
-        mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = {}; }) name child)
-                       zone.children
+    # fork -> pattern
+    else
+      zipAttrsWith (name: head) (
+        mapAttrsToList (name: child: zoneConfigs' (parent // zone // { children = { }; }) name child)
+          zone.children
       );
 
   # fighting infinite recursion
@@ -201,7 +206,7 @@ let
   zoneOptions3 = zoneOptionsRaw // childConfig zoneOptions4 false;
   zoneOptions4 = zoneOptionsRaw // childConfig zoneOptions5 false;
   zoneOptions5 = zoneOptionsRaw // childConfig zoneOptions6 false;
-  zoneOptions6 = zoneOptionsRaw // childConfig null         false;
+  zoneOptions6 = zoneOptionsRaw // childConfig null false;
 
   childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
 
@@ -221,9 +226,11 @@ let
       allowNotify = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "192.0.2.0/24 NOKEY" "10.0.0.1-10.0.0.5 my_tsig_key_name"
-                    "10.0.3.4&255.255.0.0 BLOCKED"
-                  ];
+        example = [
+          "192.0.2.0/24 NOKEY"
+          "10.0.0.1-10.0.0.5 my_tsig_key_name"
+          "10.0.3.4&255.255.0.0 BLOCKED"
+        ];
         description = ''
           Listed primary servers are allowed to notify this secondary server.
           <screen><![CDATA[
@@ -246,7 +253,7 @@ let
       };
 
       children = mkOption {
-        default = {};
+        default = { };
         description = ''
           Children zones inherit all options of their parents. Attributes
           defined in a child will overwrite the ones of its parent. Only
@@ -288,20 +295,22 @@ let
         };
         zsk = mkOption {
           type = keyPolicy;
-          default = { keySize = 2048;
-                      prePublish = "1w";
-                      postPublish = "1w";
-                      rollPeriod = "1mo";
-                    };
+          default = {
+            keySize = 2048;
+            prePublish = "1w";
+            postPublish = "1w";
+            rollPeriod = "1mo";
+          };
           description = "Key policy for zone signing keys";
         };
         ksk = mkOption {
           type = keyPolicy;
-          default = { keySize = 4096;
-                      prePublish = "1mo";
-                      postPublish = "1mo";
-                      rollPeriod = "0";
-                    };
+          default = {
+            keySize = 4096;
+            prePublish = "1mo";
+            postPublish = "1mo";
+            rollPeriod = "0";
+          };
           description = "Key policy for key signing keys";
         };
       };
@@ -346,7 +355,7 @@ let
 
       notify = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "10.0.0.1@3721 my_key" "::5 NOKEY" ];
         description = ''
           This primary server will notify all given secondary servers about
@@ -385,7 +394,7 @@ let
 
       provideXFR = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "192.0.2.0/24 NOKEY" "192.0.2.0/24 my_tsig_key_name" ];
         description = ''
           Allow these IPs and TSIG to transfer zones, addr TSIG|NOKEY|BLOCKED
@@ -395,7 +404,7 @@ let
 
       requestXFR = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
         '';
@@ -403,7 +412,7 @@ let
 
       rrlWhitelist = mkOption {
         type = with types; listOf (enum [ "nxdomain" "error" "referral" "any" "rrsig" "wildcard" "nodata" "dnskey" "positive" "all" ]);
-        default = [];
+        default = [ ];
         description = ''
           Whitelists the given rrl-types.
         '';
@@ -447,7 +456,7 @@ let
 
   dnssecZones = (filterAttrs (n: v: if v ? dnssec then v.dnssec else false) zoneConfigs);
 
-  dnssec = dnssecZones != {};
+  dnssec = dnssecZones != { };
 
   dnssecTools = pkgs.bind.override { enablePython = true; };
 
@@ -723,7 +732,7 @@ in
 
         };
       });
-      default = {};
+      default = { };
       example = literalExpression ''
         { "tsig.example.org" = {
             algorithm = "hmac-md5";
@@ -858,7 +867,7 @@ in
 
     zones = mkOption {
       type = types.attrsOf zoneOptions;
-      default = {};
+      default = { };
       example = literalExpression ''
         { "serverGroup1" = {
             provideXFR = [ "10.1.2.3 NOKEY" ];
@@ -906,7 +915,7 @@ in
     assertions = singleton {
       assertion = zoneConfigs ? "." -> cfg.rootServer;
       message = "You have a root zone configured. If this is really what you "
-              + "want, please enable 'services.nsd.rootServer'.";
+        + "want, please enable 'services.nsd.rootServer'.";
     };
 
     environment = {
@@ -919,7 +928,7 @@ in
     users.users.${username} = {
       description = "NSD service user";
       home = stateDir;
-      createHome  = true;
+      createHome = true;
       uid = config.ids.uids.nsd;
       group = username;
     };
@@ -931,7 +940,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       startLimitBurst = 4;
-      startLimitIntervalSec = 5 * 60;  # 5 mins
+      startLimitIntervalSec = 5 * 60; # 5 mins
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
         StandardError = "null";

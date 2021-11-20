@@ -1,15 +1,20 @@
-{ stdenv, lib, fetchurl, perl, gfortran
-, openssh, hwloc
-# either libfabric or ucx work for ch4backend on linux. On darwin, neither of
-# these libraries currently build so this argument is ignored on Darwin.
+{ stdenv
+, lib
+, fetchurl
+, perl
+, gfortran
+, openssh
+, hwloc
+  # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
+  # these libraries currently build so this argument is ignored on Darwin.
 , ch4backend
-# Process manager to build
+  # Process manager to build
 , withPm ? "hydra:gforker"
-} :
+}:
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "mpich";
   version = "3.4.2";
 

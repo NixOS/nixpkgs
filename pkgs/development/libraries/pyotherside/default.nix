@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, python3, qmake, qtbase, qtquickcontrols, qtsvg, ncurses }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, qmake
+, qtbase
+, qtquickcontrols
+, qtsvg
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "pyotherside";
@@ -14,7 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [
-    python3 qtbase qtquickcontrols qtsvg ncurses
+    python3
+    qtbase
+    qtquickcontrols
+    qtsvg
+    ncurses
   ];
 
   dontWrapQtApps = true;

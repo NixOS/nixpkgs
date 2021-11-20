@@ -21,7 +21,8 @@ let
       };
     };
   };
-in {
+in
+{
   mkFlutter = mkFlutter;
   stable = mkFlutter rec {
     inherit version;

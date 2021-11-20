@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "-C" "src"
+    "-C"
+    "src"
     "CHECK_WHITESPACE=true"
 
     # Disable blanket -Werror. Triggers failues on minor gcc-11 warnings.

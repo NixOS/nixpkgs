@@ -1,4 +1,7 @@
-{ fetchFromGitHub, makeWrapper, chromium, mkYarnPackage
+{ fetchFromGitHub
+, makeWrapper
+, chromium
+, mkYarnPackage
 }:
 
 mkYarnPackage rec {

@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, llvmPackages_latest, rustfmt, writeTextFile
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, clang
+, llvmPackages_latest
+, rustfmt
+, writeTextFile
 , runtimeShell
 , bash
 }:
@@ -38,22 +44,24 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
   checkInputs =
-    let fakeRustup = writeTextFile {
-      name = "fake-rustup";
-      executable = true;
-      destination = "/bin/rustup";
-      text = ''
-        #!${runtimeShell}
-        shift
-        shift
-        exec "$@"
-      '';
-    };
-  in [
-    rustfmt
-    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
-    clang
-  ];
+    let
+      fakeRustup = writeTextFile {
+        name = "fake-rustup";
+        executable = true;
+        destination = "/bin/rustup";
+        text = ''
+          #!${runtimeShell}
+          shift
+          shift
+          exec "$@"
+        '';
+      };
+    in
+    [
+      rustfmt
+      fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
+      clang
+    ];
   preCheck = ''
     # for the ci folder, notably
     patchShebangs .

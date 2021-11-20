@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook
-, importlib-resources, omegaconf, jre_headless, antlr4-python3-runtime }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, importlib-resources
+, omegaconf
+, jre_headless
+, antlr4-python3-runtime
+}:
 
 buildPythonPackage rec {
   pname = "hydra";

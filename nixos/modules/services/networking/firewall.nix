@@ -7,26 +7,26 @@
    - ‘nixos-fw’ is the main chain for input packet processing.
 
    - ‘nixos-fw-accept’ is called for accepted packets.  If you want
-     additional logging, or want to reject certain packets anyway, you
-     can insert rules at the start of this chain.
+   additional logging, or want to reject certain packets anyway, you
+   can insert rules at the start of this chain.
 
    - ‘nixos-fw-log-refuse’ and ‘nixos-fw-refuse’ are called for
-     refused packets.  (The former jumps to the latter after logging
-     the packet.)  If you want additional logging, or want to accept
-     certain packets anyway, you can insert rules at the start of
-     this chain.
+   refused packets.  (The former jumps to the latter after logging
+   the packet.)  If you want additional logging, or want to accept
+   certain packets anyway, you can insert rules at the start of
+   this chain.
 
    - ‘nixos-fw-rpfilter’ is used as the main chain in the raw table,
-     called from the built-in ‘PREROUTING’ chain.  If the kernel
-     supports it and `cfg.checkReversePath` is set this chain will
-     perform a reverse path filter test.
+   called from the built-in ‘PREROUTING’ chain.  If the kernel
+   supports it and `cfg.checkReversePath` is set this chain will
+   perform a reverse path filter test.
 
    - ‘nixos-drop’ is used while reloading the firewall in order to drop
-     all traffic.  Since reloading isn't implemented in an atomic way
-     this'll prevent any traffic from leaking through while reloading
-     the firewall.  However, if the reloading fails, the ‘firewall-stop’
-     script will be called which in return will effectively disable the
-     complete firewall (in the default configuration).
+   all traffic.  Since reloading isn't implemented in an atomic way
+   this'll prevent any traffic from leaking through while reloading
+   the firewall.  However, if the reloading fails, the ‘firewall-stop’
+   script will be called which in return will effectively disable the
+   complete firewall (in the default configuration).
 
 */
 
@@ -44,10 +44,14 @@ let
 
   helpers = import ./helpers.nix { inherit config lib; };
 
-  writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
-    #! ${pkgs.runtimeShell} -e
-    ${text}
-  ''; in "${dir}/bin/${name}";
+  writeShScript = name: text:
+    let
+      dir = pkgs.writeScriptBin name ''
+        #! ${pkgs.runtimeShell} -e
+        ${text}
+      '';
+    in
+    "${dir}/bin/${name}";
 
   defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
   allInterfaces = defaultInterface // cfg.interfaces;
@@ -271,7 +275,7 @@ let
     allowedTCPPortRanges = mkOption {
       type = types.listOf (types.attrsOf types.port);
       default = [ ];
-      example = [ { from = 8999; to = 9003; } ];
+      example = [{ from = 8999; to = 9003; }];
       description =
         ''
           A range of TCP ports on which incoming connections are
@@ -293,7 +297,7 @@ let
     allowedUDPPortRanges = mkOption {
       type = types.listOf (types.attrsOf types.port);
       default = [ ];
-      example = [ { from = 60000; to = 61000; } ];
+      example = [{ from = 60000; to = 61000; }];
       description =
         ''
           Range of open UDP ports.
@@ -419,7 +423,7 @@ in
       };
 
       checkReversePath = mkOption {
-        type = types.either types.bool (types.enum ["strict" "loose"]);
+        type = types.either types.bool (types.enum [ "strict" "loose" ]);
         default = kernelHasRPFilter;
         example = "loose";
         description =
@@ -523,7 +527,7 @@ in
 
       interfaces = mkOption {
         default = { };
-        type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with types; attrsOf (submodule [{ options = commonOptions; }]);
         description =
           ''
             Interface-specific open ports.
@@ -554,8 +558,10 @@ in
       # This is approximately "checkReversePath -> kernelHasRPFilter",
       # but the checkReversePath option can include non-boolean
       # values.
-      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
-        message = "This kernel does not support rpfilter"; }
+      {
+        assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter";
+      }
     ];
 
     systemd.services.firewall = {

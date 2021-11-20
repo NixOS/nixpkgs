@@ -30,7 +30,8 @@ with lib;
       cfg = config.virtualisation.digitalOcean;
       hostName = config.networking.hostName;
       doMetadataFile = "/run/do-metadata/v1.json";
-    in mkMerge [{
+    in
+    mkMerge [{
       fileSystems."/" = {
         device = "/dev/disk/by-label/nixos";
         autoResize = true;
@@ -75,7 +76,7 @@ with lib;
             sleep 1
           done
           chmod 600 $RUNTIME_DIRECTORY/v1.json
-          '';
+        '';
         environment = {
           DO_DELAY_ATTEMPTS_MAX = "10";
         };
@@ -105,7 +106,7 @@ with lib;
           ROOT_PASSWORD=$(jq -er '.auth_key' ${doMetadataFile})
           echo "root:$ROOT_PASSWORD" | chpasswd
           mkdir -p /etc/do-metadata/set-root-password
-          '';
+        '';
         unitConfig = {
           ConditionPathExists = "!/etc/do-metadata/set-root-password";
           Before = optional config.services.openssh.enable "sshd.service";
@@ -179,7 +180,7 @@ with lib;
           ENTROPY_SEED=$(grep -rl "DigitalOcean Entropy Seed script" $TEMPDIR)
           ${pkgs.runtimeShell} $ENTROPY_SEED
           rm -rf $TEMPDIR
-          '';
+        '';
         unitConfig = {
           Before = [ "network.target" ];
           After = [ "digitalocean-metadata.service" ];
@@ -190,8 +191,7 @@ with lib;
         };
       };
 
-    }
-  ];
+    }];
   meta.maintainers = with maintainers; [ arianvp eamsden ];
 }
 

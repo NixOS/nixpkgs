@@ -1,10 +1,19 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkg-config, which
-, flex, bison
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, makeWrapper
+, autoreconfHook
+, pkg-config
+, which
+, flex
+, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl
+, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python
+, python
 , swig
 , ncurses
 , pam
@@ -79,7 +88,7 @@ let
       perl
     ];
 
-    buildInputs = []
+    buildInputs = [ ]
       ++ lib.optional withPerl perl
       ++ lib.optional withPython python;
 
@@ -211,7 +220,9 @@ let
     inherit patches;
     postPatch = "cd ./parser";
     makeFlags = [
-      "LANGS=" "USE_SYSTEM=1" "INCLUDEDIR=${libapparmor}/include"
+      "LANGS="
+      "USE_SYSTEM=1"
+      "INCLUDEDIR=${libapparmor}/include"
       "AR=${stdenv.cc.bintools.targetPrefix}ar"
     ];
     installFlags = [ "DESTDIR=$(out)" "DISTRO=unknown" ];
@@ -273,8 +284,9 @@ let
   # To be included in an AppArmor profile like so:
   # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
   apparmorRulesFromClosure =
-    { # The store path of the derivation is given in $path
-      additionalRules ? []
+    {
+      # The store path of the derivation is given in $path
+      additionalRules ? [ ]
       # TODO: factorize here some other common paths
       # that may emerge from use cases.
     , baseRules ? [
@@ -289,13 +301,14 @@ let
       ]
     , name ? ""
     }: rootPaths: runCommand
-      ( "apparmor-closure-rules"
-      + lib.optionalString (name != "") "-${name}" ) {} ''
-    touch $out
-    while read -r path
-    do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
-    done <${closureInfo {inherit rootPaths;}}/store-paths
-  '';
+      ("apparmor-closure-rules"
+        + lib.optionalString (name != "") "-${name}")
+      { } ''
+      touch $out
+      while read -r path
+      do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
+      done <${closureInfo {inherit rootPaths;}}/store-paths
+    '';
 in
 {
   inherit

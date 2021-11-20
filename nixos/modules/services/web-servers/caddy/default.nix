@@ -34,19 +34,20 @@ let
   # merge the TLS config options we expose with the ones originating in the Caddyfile
   configJSON =
     if cfg.ca != null then
-      let tlsConfigMerge = ''
-        {"apps":
-          {"tls":
-            {"automation":
-              {"policies":
-                (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
-                 then .[0].apps.tls.automation.policies
-                 else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
-                 end)
+      let
+        tlsConfigMerge = ''
+          {"apps":
+            {"tls":
+              {"automation":
+                {"policies":
+                  (if .[0].apps.tls.automation.policies == .[1]?.apps.tls.automation.policies
+                   then .[0].apps.tls.automation.policies
+                   else (.[0].apps.tls.automation.policies + .[1]?.apps.tls.automation.policies)
+                   end)
+                }
               }
             }
-          }
-        }'';
+          }'';
       in
       pkgs.runCommand "caddy-config.json" { } ''
         ${pkgs.jq}/bin/jq -s '.[0] * ${tlsConfigMerge}' ${adaptedConfig} ${tlsJSON} > $out

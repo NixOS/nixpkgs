@@ -1,5 +1,17 @@
-{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
+{ lib
+, stdenv
+, runtimeShell
+, pkg-config
+, gettext
+, ncurses
+, CoreFoundation
+, tiles
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, freetype
+, Cocoa
 , debug
 , useXdgDir
 }:
@@ -49,12 +61,14 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
-    "PREFIX=$(out)" "LANGUAGES=all"
+    "PREFIX=$(out)"
+    "LANGUAGES=all"
     (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
   ] ++ optionals (!debug) [
     "RELEASE=1"
   ] ++ optionals tiles [
-    "TILES=1" "SOUND=1"
+    "TILES=1"
+    "SOUND=1"
   ] ++ optionals stdenv.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
@@ -62,10 +76,10 @@ stdenv.mkDerivation {
   ];
 
   postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
+    (if !stdenv.isDarwin
     then patchDesktopFile
     else installMacOSAppLauncher
-  );
+    );
 
   dontStrip = debug;
 

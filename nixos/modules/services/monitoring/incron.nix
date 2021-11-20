@@ -1,4 +1,3 @@
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -55,7 +54,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
@@ -72,11 +71,12 @@ in
     environment.systemPackages = [ pkgs.incron ];
 
     security.wrappers.incrontab =
-    { setuid = true;
-      owner = "root";
-      group = "root";
-      source = "${pkgs.incron}/bin/incrontab";
-    };
+      {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.incron}/bin/incrontab";
+      };
 
     # incron won't read symlinks
     environment.etc."incron.d/system" = {

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, zlib, jansson, openssl
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, zlib
+, jansson
+, openssl
 }:
 
 stdenv.mkDerivation rec {

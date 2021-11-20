@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
+{ lib
+, stdenv
+, fetchurl
+, zlibSupport ? true
+, zlib ? null
+, sslSupport ? true
+, openssl ? null
+, idnSupport ? true
+, libidn ? null
 }:
 
 assert zlibSupport -> zlib != null;

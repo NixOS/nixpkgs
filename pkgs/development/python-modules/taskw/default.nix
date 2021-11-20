@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
 
   meta = with lib; {
-    homepage =  "https://github.com/ralphbean/taskw";
+    homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pierron ];

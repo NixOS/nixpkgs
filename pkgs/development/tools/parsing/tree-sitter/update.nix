@@ -1,6 +1,12 @@
-{ writeShellScript, nix-prefetch-git, formats, lib
-, curl, jq, xe
-, src }:
+{ writeShellScript
+, nix-prefetch-git
+, formats
+, lib
+, curl
+, jq
+, xe
+, src
+}:
 
 # Grammar list:
 # https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
@@ -155,33 +161,35 @@ let
   allGrammars =
     let
       treeSitterOrgaGrammars =
-        lib.listToAttrs (map (repo:
-          { name = repo;
-            value = {
-              orga = "tree-sitter";
-              inherit repo;
-            };
-          })
-        knownTreeSitterOrgGrammarRepos);
+        lib.listToAttrs (map
+          (repo:
+            {
+              name = repo;
+              value = {
+                orga = "tree-sitter";
+                inherit repo;
+              };
+            })
+          knownTreeSitterOrgGrammarRepos);
 
     in
-      mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
+    mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
 
   # TODO: move to lib
   mergeAttrsUnique = left: right:
     let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
     assert
-      lib.assertMsg (intersect == [])
-        (lib.concatStringsSep "\n" [
-          "mergeAttrsUnique: keys in attrset overlapping:"
-          "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-          "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-        ]);
+    lib.assertMsg (intersect == [ ])
+      (lib.concatStringsSep "\n" [
+        "mergeAttrsUnique: keys in attrset overlapping:"
+        "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
+        "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
+      ]);
     left // right;
 
 
 
-  jsonFile = name: val: (formats.json {}).generate name val;
+  jsonFile = name: val: (formats.json { }).generate name val;
 
   # check the tree-sitter orga repos
   checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
@@ -244,11 +252,11 @@ let
       --no-deepClone \
       --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
       --rev "$latest"
-    '';
+  '';
 
   foreachSh = attrs: f:
     lib.concatMapStringsSep "\n" f
-    (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
+      (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
@@ -270,4 +278,5 @@ let
       > "$outputDir/default.nix"
   '';
 
-in update-all-grammars
+in
+update-all-grammars

@@ -1,6 +1,15 @@
-{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, fuse
-, util-linux, makeWrapper
-, enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, help2man
+, fuse
+, util-linux
+, makeWrapper
+, enableDebugBuild ? config.lxcfs.enableDebugBuild or false
+}:
 
 with lib;
 stdenv.mkDerivation rec {

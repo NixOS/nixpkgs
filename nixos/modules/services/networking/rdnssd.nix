@@ -75,7 +75,7 @@ in
       isSystemUser = true;
       group = "rdnssd";
     };
-    users.groups.rdnssd = {};
+    users.groups.rdnssd = { };
 
   };
 

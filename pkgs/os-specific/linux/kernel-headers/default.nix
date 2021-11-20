@@ -1,12 +1,20 @@
-{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
-, bison ? null, flex ? null, python ? null, rsync ? null
+{ stdenvNoCC
+, lib
+, buildPackages
+, fetchurl
+, perl
+, elf-header
+, bison ? null
+, flex ? null
+, python ? null
+, rsync ? null
 }:
 
 assert stdenvNoCC.hostPlatform.isAndroid ->
-  (flex != null && bison != null && python != null && rsync != null);
+(flex != null && bison != null && python != null && rsync != null);
 
 let
-  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+  makeLinuxHeaders = { src, version, patches ? [ ] }: stdenvNoCC.mkDerivation {
     inherit src;
 
     pname = "linux-headers";
@@ -19,12 +27,16 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
     nativeBuildInputs = [
-      perl elf-header
+      perl
+      elf-header
     ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-      flex bison python rsync
+      flex
+      bison
+      python
+      rsync
     ];
 
-    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC [ "ppc" ];
 
     inherit patches;
 
@@ -78,7 +90,8 @@ let
       platforms = platforms.linux;
     };
   };
-in {
+in
+{
   inherit makeLinuxHeaders;
 
   linuxHeaders = let version = "5.14"; in
@@ -89,7 +102,7 @@ in {
         sha256 = "sha256-fgaLXg0mpisQ5TILJdzldYjLvG94HAkEQhOMnJwycbI=";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
     };
 }

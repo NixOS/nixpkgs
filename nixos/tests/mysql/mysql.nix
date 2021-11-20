@@ -1,22 +1,22 @@
-import ./../make-test-python.nix ({ pkgs, ...}:
+import ./../make-test-python.nix ({ pkgs, ... }:
 
 
 let
   # Setup common users
   users = { ... }:
-  {
-    users.groups.testusers = { };
+    {
+      users.groups.testusers = { };
 
-    users.users.testuser = {
-      isSystemUser = true;
-      group = "testusers";
-    };
+      users.users.testuser = {
+        isSystemUser = true;
+        group = "testusers";
+      };
 
-    users.users.testuser2 = {
-      isSystemUser = true;
-      group = "testusers";
+      users.users.testuser2 = {
+        isSystemUser = true;
+        group = "testusers";
+      };
     };
-  };
 
 in
 
@@ -49,12 +49,13 @@ in
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.package = pkgs.mysql57;
       };
 
@@ -84,12 +85,13 @@ in
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.package = pkgs.mysql80;
       };
 
@@ -112,12 +114,13 @@ in
           ensurePermissions = {
             "testdb.*" = "ALL PRIVILEGES";
           };
-        } {
-          name = "testuser2";
-          ensurePermissions = {
-            "testdb2.*" = "ALL PRIVILEGES";
-          };
-        }];
+        }
+          {
+            name = "testuser2";
+            ensurePermissions = {
+              "testdb2.*" = "ALL PRIVILEGES";
+            };
+          }];
         services.mysql.settings = {
           mysqld = {
             plugin-load-add = [ "ha_mroonga.so" "ha_rocksdb.so" ];

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 

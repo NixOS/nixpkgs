@@ -1,9 +1,20 @@
-{ stdenv, lib, fetchFromGitea, pkg-config, meson, ninja, scdoc
-, freetype, fontconfig, pixman, tllist, check
-# Text shaping methods to enable, empty list disables all text shaping.
-# See `availableShapingTypes` or upstream meson_options.txt for available types.
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, scdoc
+, freetype
+, fontconfig
+, pixman
+, tllist
+, check
+  # Text shaping methods to enable, empty list disables all text shaping.
+  # See `availableShapingTypes` or upstream meson_options.txt for available types.
 , withShapingTypes ? [ "grapheme" "run" ]
-, harfbuzz, utf8proc
+, harfbuzz
+, utf8proc
 , fcft # for passthru.tests
 }:
 
@@ -33,19 +44,21 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [ freetype fontconfig pixman tllist ]
-    ++ lib.optionals (withShapingTypes != []) [ harfbuzz ]
+    ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
     ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
   checkInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags = builtins.map (t:
-    mesonFeatureFlag "${t}-shaping" (lib.elem t withShapingTypes)
-  ) availableShapingTypes;
+  mesonFlags = builtins.map
+    (t:
+      mesonFeatureFlag "${t}-shaping" (lib.elem t withShapingTypes)
+    )
+    availableShapingTypes;
 
   doCheck = true;
 
   passthru.tests = {
-    noShaping = fcft.override { withShapingTypes = []; };
+    noShaping = fcft.override { withShapingTypes = [ ]; };
     onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
   };
 

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, python2Packages, pkg-config, SDL2
-, libpng, ffmpeg, freetype, glew, libGL, libGLU, fribidi, zlib
+{ lib
+, stdenv
+, fetchurl
+, python2Packages
+, pkg-config
+, SDL2
+, libpng
+, ffmpeg
+, freetype
+, glew
+, libGL
+, libGLU
+, fribidi
+, zlib
 , glib
 }:
 
@@ -31,14 +43,38 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    python cython wrapPython tkinter
-    SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib pygame_sdl2 glib
+    python
+    cython
+    wrapPython
+    tkinter
+    SDL2
+    libpng
+    ffmpeg
+    freetype
+    glew
+    libGLU
+    libGL
+    fribidi
+    zlib
+    pygame_sdl2
+    glib
   ];
 
   pythonPath = [ pygame_sdl2 tkinter ];
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU libGL fribidi zlib
+    SDL2
+    SDL2.dev
+    libpng
+    ffmpeg
+    ffmpeg.out
+    freetype
+    glew.dev
+    glew.out
+    libGLU
+    libGL
+    fribidi
+    zlib
   ]);
 
   buildPhase = ''

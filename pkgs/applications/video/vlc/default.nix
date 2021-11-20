@@ -1,20 +1,82 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchpatch
-, libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsa-lib
-, pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpg-error, libupnp
-, libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
-, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
-, ncurses, srt
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, fetchpatch
+, libarchive
+, perl
+, xorg
+, libdvdnav
+, libbluray
+, zlib
+, a52dec
+, libmad
+, faad2
+, ffmpeg
+, alsa-lib
+, pkg-config
+, dbus
+, fribidi
+, freefont_ttf
+, libebml
+, libmatroska
+, libvorbis
+, libtheora
+, speex
+, lua5
+, libgcrypt
+, libgpg-error
+, libupnp
+, libcaca
+, libpulseaudio
+, flac
+, schroedinger
+, libxml2
+, librsvg
+, mpeg2dec
+, systemd
+, gnutls
+, avahi
+, libcddb
+, libjack2
+, SDL
+, SDL_image
+, libmtp
+, unzip
+, taglib
+, libkate
+, libtiger
+, libv4l
+, samba
+, libssh2
+, liboggz
+, libass
+, libva
+, libdvbpsi
+, libdc1394
+, libraw1394
+, libopus
+, libvdpau
+, libsamplerate
+, live555
+, fluidsynth
+, wayland
+, wayland-protocols
+, ncurses
+, srt
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
+, withQt5 ? true
+, qtbase
+, qtsvg
+, qtx11extras
+, wrapQtAppsHook
 , jackSupport ? false
-, skins2Support ? !onlyLibVLC, freetype
+, skins2Support ? !onlyLibVLC
+, freetype
 , removeReferencesTo
-, chromecastSupport ? true, protobuf, libmicrodns
+, chromecastSupport ? true
+, protobuf
+, libmicrodns
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -36,19 +98,71 @@ stdenv.mkDerivation rec {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsa-lib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpg-error
-    libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-    systemd gnutls avahi libcddb SDL SDL_image libmtp taglib libarchive
-    libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
-    xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols ncurses srt
+    zlib
+    a52dec
+    libmad
+    faad2
+    ffmpeg
+    alsa-lib
+    libdvdnav
+    libdvdnav.libdvdread
+    libbluray
+    dbus
+    fribidi
+    libvorbis
+    libtheora
+    speex
+    lua5
+    libgcrypt
+    libgpg-error
+    libupnp
+    libcaca
+    libpulseaudio
+    flac
+    schroedinger
+    libxml2
+    librsvg
+    mpeg2dec
+    systemd
+    gnutls
+    avahi
+    libcddb
+    SDL
+    SDL_image
+    libmtp
+    taglib
+    libarchive
+    libkate
+    libtiger
+    libv4l
+    samba
+    libssh2
+    liboggz
+    libass
+    libdvbpsi
+    libva
+    xorg.xlibsWrapper
+    xorg.libXv
+    xorg.libXvMC
+    xorg.libXpm
+    xorg.xcbutilkeysyms
+    libdc1394
+    libraw1394
+    libopus
+    libebml
+    libmatroska
+    libvdpau
+    libsamplerate
+    fluidsynth
+    wayland
+    wayland-protocols
+    ncurses
+    srt
   ] ++ optional (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isAarch32) live555
-    ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
-    ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
-    ++ optional jackSupport libjack2
-    ++ optionals chromecastSupport [ protobuf libmicrodns ];
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
+  ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
+  ++ optional jackSupport libjack2
+  ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config removeReferencesTo unzip ]
     ++ optionals withQt5 [ wrapQtAppsHook ];
@@ -89,8 +203,8 @@ stdenv.mkDerivation rec {
     "--with-kde-solid=$out/share/apps/solid/actions"
     "--enable-srt" # Explicit enable srt to ensure the patch is applied.
   ] ++ optional onlyLibVLC "--disable-vlc"
-    ++ optional skins2Support "--enable-skins2"
-    ++ optionals chromecastSupport [
+  ++ optional skins2Support "--enable-skins2"
+  ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
     "--enable-microdns"

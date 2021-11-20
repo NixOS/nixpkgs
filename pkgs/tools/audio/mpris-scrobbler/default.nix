@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , curl
@@ -18,9 +19,9 @@ stdenv.mkDerivation rec {
   version = "0.4.0.1";
 
   src = fetchFromGitHub {
-    owner  = "mariusor";
-    repo   = "mpris-scrobbler";
-    rev    = "v${version}";
+    owner = "mariusor";
+    repo = "mpris-scrobbler";
+    rev = "v${version}";
     sha256 = "0jzmgcb9a19hl8y7iwy8l3cc2vgzi0scw7r5q72kszfyxn0yk2gs";
   };
 
@@ -52,9 +53,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Minimalistic scrobbler for libre.fm & last.fm";
-    homepage    = "https://github.com/mariusor/mpris-scrobbler";
-    license     = licenses.mit;
+    homepage = "https://github.com/mariusor/mpris-scrobbler";
+    license = licenses.mit;
     maintainers = with maintainers; [ emantor ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

@@ -3,48 +3,49 @@
 { name ? "${args.pname}-${args.version}"
 , enableParallelBuilding ? true
 , doCheck ? false
-# Flags to pass to `makeWrapper`. This is done to avoid double wrapping.
-, makeWrapperArgs ? []
+  # Flags to pass to `makeWrapper`. This is done to avoid double wrapping.
+, makeWrapperArgs ? [ ]
 
-# Flags to pass to `dotnet restore`.
-, dotnetRestoreFlags ? []
-# Flags to pass to `dotnet build`.
-, dotnetBuildFlags ? []
-# Flags to pass to `dotnet test`, if running tests is enabled.
-, dotnetTestFlags ? []
-# Flags to pass to `dotnet install`.
-, dotnetInstallFlags ? []
-# Flags to pass to dotnet in all phases.
-, dotnetFlags ? []
+  # Flags to pass to `dotnet restore`.
+, dotnetRestoreFlags ? [ ]
+  # Flags to pass to `dotnet build`.
+, dotnetBuildFlags ? [ ]
+  # Flags to pass to `dotnet test`, if running tests is enabled.
+, dotnetTestFlags ? [ ]
+  # Flags to pass to `dotnet install`.
+, dotnetInstallFlags ? [ ]
+  # Flags to pass to dotnet in all phases.
+, dotnetFlags ? [ ]
 
-# The binaries that should get installed to `$out/bin`, relative to `$out/lib/$pname/`. These get wrapped accordingly.
-# Unfortunately, dotnet has no method for doing this automatically.
-# If unset, all executables in the projects root will get installed. This may cause bloat!
+  # The binaries that should get installed to `$out/bin`, relative to `$out/lib/$pname/`. These get wrapped accordingly.
+  # Unfortunately, dotnet has no method for doing this automatically.
+  # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null
-# The packages project file, which contains instructions on how to compile it.
+  # The packages project file, which contains instructions on how to compile it.
 , projectFile ? null
-# The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
-# This can be generated using the `nuget-to-nix` tool.
+  # The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
+  # This can be generated using the `nuget-to-nix` tool.
 , nugetDeps ? null
-# Libraries that need to be available at runtime should be passed through this.
-# These get wrapped into `LD_LIBRARY_PATH`.
-, runtimeDeps ? []
+  # Libraries that need to be available at runtime should be passed through this.
+  # These get wrapped into `LD_LIBRARY_PATH`.
+, runtimeDeps ? [ ]
 
-# Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
-# See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
-, disabledTests ? []
-# The project file to run unit tests against. This is usually the regular project file, but sometimes it needs to be manually set.
+  # Tests to disable. This gets passed to `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all frameworks.
+  # See https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details for more details.
+, disabledTests ? [ ]
+  # The project file to run unit tests against. This is usually the regular project file, but sometimes it needs to be manually set.
 , testProjectFile ? projectFile
 
-# The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
+  # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
-# The dotnet SDK to use.
+  # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_5_0
-# The dotnet runtime to use.
+  # The dotnet runtime to use.
 , dotnet-runtime ? dotnetCorePackages.runtime_5_0
-# The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
+  # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
 , dotnet-test-sdk ? dotnet-sdk
-, ... } @ args:
+, ...
+} @ args:
 
 assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
 
@@ -61,35 +62,39 @@ let
     };
   });
 
-  nuget-source = stdenvNoCC.mkDerivation rec {
-    name = "${args.pname}-nuget-source";
-    meta.description = "A Nuget source with the dependencies for ${args.pname}";
+  nuget-source = stdenvNoCC.mkDerivation
+    rec {
+      name = "${args.pname}-nuget-source";
+      meta.description = "A Nuget source with the dependencies for ${args.pname}";
 
-    nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
-    buildCommand = ''
-      export HOME=$(mktemp -d)
-      mkdir -p $out/{lib,share}
+      nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
+      buildCommand = ''
+        export HOME=$(mktemp -d)
+        mkdir -p $out/{lib,share}
 
-      nuget sources Add -Name nixos -Source "$out/lib"
-      nuget init "${_nugetDeps}" "$out/lib"
+        nuget sources Add -Name nixos -Source "$out/lib"
+        nuget init "${_nugetDeps}" "$out/lib"
 
-      # Generates a list of all unique licenses' spdx ids.
-      find "$out/lib" -name "*.nuspec" -exec sh -c \
-        "xml2 < {} | grep "license=" | cut -d'=' -f2" \; | sort -u > $out/share/licenses
-    '';
-  } // { # This is done because we need data from `$out` for `meta`. We have to use overrides as to not hit infinite recursion.
-    meta.licence = let
-      depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
-      getLicence = spdx: lib.filter (license: license.spdxId or null == spdx) (builtins.attrValues lib.licenses);
-    in (lib.flatten (lib.forEach depLicenses (spdx:
-      if (getLicence spdx) != [] then (getLicence spdx) else [] ++ lib.optional (spdx != "") spdx
-    )));
+        # Generates a list of all unique licenses' spdx ids.
+        find "$out/lib" -name "*.nuspec" -exec sh -c \
+          "xml2 < {} | grep "license=" | cut -d'=' -f2" \; | sort -u > $out/share/licenses
+      '';
+    } // {
+    # This is done because we need data from `$out` for `meta`. We have to use overrides as to not hit infinite recursion.
+    meta.licence =
+      let
+        depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
+        getLicence = spdx: lib.filter (license: license.spdxId or null == spdx) (builtins.attrValues lib.licenses);
+      in
+      (lib.flatten (lib.forEach depLicenses (spdx:
+        if (getLicence spdx) != [ ] then (getLicence spdx) else [ ] ++ lib.optional (spdx != "") spdx
+      )));
   };
 
   package = stdenvNoCC.mkDerivation (args // {
     inherit buildType;
 
-    nativeBuildInputs = args.nativeBuildInputs or [] ++ [ dotnet-sdk cacert makeWrapper ];
+    nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ dotnet-sdk cacert makeWrapper ];
 
     # Stripping breaks the executable
     dontStrip = true;
@@ -189,4 +194,4 @@ let
     '';
   });
 in
-  package
+package

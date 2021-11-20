@@ -1,14 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, runCommand
-, cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs-14_x, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+, cacert
+, moreutils
+, jq
+, git
+, pkg-config
+, yarn
+, python3
+, esbuild
+, nodejs-14_x
+, libsecret
+, xorg
+, ripgrep
+, AppKit
+, Cocoa
+, Security
+, cctools
+}:
 
 let
   system = stdenv.hostPlatform.system;
 
   nodejs = nodejs-14_x;
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
 
   vsBuildTarget = {
     x86_64-linux = "linux-x64";
@@ -17,14 +35,15 @@ let
   }.${system} or (throw "Unsupported system ${system}");
 
   # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path : version : ''
+  patchEsbuild = path: version: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openvscode-server";
   version = "1.62.0";
 
@@ -60,19 +79,29 @@ in stdenv.mkDerivation rec {
 
   # Extract the Node.js source code which is used to compile packages with
   # native bindings
-  nodeSources = runCommand "node-sources" {} ''
+  nodeSources = runCommand "node-sources" { } ''
     tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv node-* $out
   '';
 
   nativeBuildInputs = [
-    nodejs yarn' python3 pkg-config makeWrapper git jq moreutils
+    nodejs
+    yarn'
+    python3
+    pkg-config
+    makeWrapper
+    git
+    jq
+    moreutils
   ];
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa Security cctools
-    ];
+    AppKit
+    Cocoa
+    Security
+    cctools
+  ];
 
   patches = [
     # Patch out remote download of nodejs from build script

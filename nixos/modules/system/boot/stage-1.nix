@@ -88,7 +88,8 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommandCC "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
+    {
+      nativeBuildInputs = [ pkgs.buildPackages.nukeReferences ];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -220,62 +221,65 @@ let
   # Networkd link files are used early by udev to set up interfaces early.
   # This must be done in stage 1 to avoid race conditions between udev and
   # network daemons.
-  linkUnits = pkgs.runCommand "link-units" {
+  linkUnits = pkgs.runCommand "link-units"
+    {
       allowedReferences = [ extraUtils ];
       preferLocalBuild = true;
-    } (''
+    }
+    (''
       mkdir -p $out
       cp -v ${udev}/lib/systemd/network/*.link $out/
-      '' + (
+    '' + (
       let
         links = filterAttrs (n: v: hasSuffix ".link" n) config.systemd.network.units;
         files = mapAttrsToList (n: v: "${v.unit}/${n}") links;
       in
-        concatMapStringsSep "\n" (file: "cp -v ${file} $out/") files
-      ));
+      concatMapStringsSep "\n" (file: "cp -v ${file} $out/") files
+    ));
 
-  udevRules = pkgs.runCommand "udev-rules" {
+  udevRules = pkgs.runCommand "udev-rules"
+    {
       allowedReferences = [ extraUtils ];
       preferLocalBuild = true;
     } ''
-      mkdir -p $out
+    mkdir -p $out
 
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
+    echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
-      cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
-      cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
-      ${config.boot.initrd.extraUdevRulesCommands}
+    cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+    cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
+    cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
+    ${config.boot.initrd.extraUdevRulesCommands}
 
-      for i in $out/*.rules; do
-          substituteInPlace $i \
-            --replace ata_id ${extraUtils}/bin/ata_id \
-            --replace scsi_id ${extraUtils}/bin/scsi_id \
-            --replace cdrom_id ${extraUtils}/bin/cdrom_id \
-            --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
-            --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
-            --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
-            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace ${udev} ${extraUtils}
-      done
+    for i in $out/*.rules; do
+        substituteInPlace $i \
+          --replace ata_id ${extraUtils}/bin/ata_id \
+          --replace scsi_id ${extraUtils}/bin/scsi_id \
+          --replace cdrom_id ${extraUtils}/bin/cdrom_id \
+          --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
+          --replace ${pkgs.util-linux}/bin/blkid ${extraUtils}/bin/blkid \
+          --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
+          --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
+          --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
+          --replace ${udev} ${extraUtils}
+    done
 
-      # Work around a bug in QEMU, which doesn't implement the "READ
-      # DISC INFORMATION" SCSI command:
-      #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
-      # As a result, `cdrom_id' doesn't print
-      # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
-      # /dev/disk/by-label symlinks from being created.  We need these
-      # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
-      # corresponding udev rules for now.  This was the behaviour in
-      # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
-      substituteInPlace $out/60-persistent-storage.rules \
-        --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
-    ''; # */
+    # Work around a bug in QEMU, which doesn't implement the "READ
+    # DISC INFORMATION" SCSI command:
+    #   https://bugzilla.redhat.com/show_bug.cgi?id=609049
+    # As a result, `cdrom_id' doesn't print
+    # ID_CDROM_MEDIA_TRACK_COUNT_DATA, which in turn prevents the
+    # /dev/disk/by-label symlinks from being created.  We need these
+    # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
+    # corresponding udev rules for now.  This was the behaviour in
+    # udev <= 154.  See also
+    #   http://www.spinics.net/lists/hotplug/msg03935.html
+    substituteInPlace $out/60-persistent-storage.rules \
+      --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
+  ''; # */
 
 
   # The init script of boot stage 1 (loading kernel modules for
@@ -305,10 +309,12 @@ let
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
+      (filter
+        (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+          # Don't include zram devices
+          && !(hasPrefix "/dev/zram" sd.device)
+        )
+        config.swapDevices);
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
@@ -332,34 +338,40 @@ let
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
     contents =
-      [ { object = bootStage1;
-          symlink = "/init";
-        }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+      [{
+        object = bootStage1;
+        symlink = "/init";
+      }
+        {
+          object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
+        {
+          object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
+            {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
               preferLocalBuild = true;
             } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+            target=$out
+            ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
+          '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
-        { object = pkgs.kmod-debian-aliases;
+        {
+          object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
-        }
-      ] ++ lib.optionals config.services.multipath.enable [
-        { object = pkgs.runCommand "multipath.conf" {
+        }] ++ lib.optionals config.services.multipath.enable [
+        {
+          object = pkgs.runCommand "multipath.conf"
+            {
               src = config.environment.etc."multipath.conf".text;
               preferLocalBuild = true;
             } ''
-              target=$out
-              printf "$src" > $out
-              substituteInPlace $out \
-                --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
-            '';
+            target=$out
+            printf "$src" > $out
+            substituteInPlace $out \
+              --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
+          '';
           symlink = "/etc/multipath.conf";
         }
       ] ++ (lib.mapAttrsToList
@@ -376,7 +388,8 @@ let
   initialRamdiskSecretAppender =
     let
       compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
-    in pkgs.writeScriptBin "append-initrd-secrets"
+    in
+    pkgs.writeScriptBin "append-initrd-secrets"
       ''
         #!${pkgs.bash}/bin/bash -e
         function usage {
@@ -597,7 +610,8 @@ in
     };
 
     boot.initrd.secrets = mkOption
-      { default = {};
+      {
+        default = { };
         type = types.attrsOf (types.nullOr types.path);
         description =
           ''
@@ -639,7 +653,8 @@ in
     };
 
     boot.loader.supportsInitrdSecrets = mkOption
-      { internal = true;
+      {
+        internal = true;
         default = false;
         type = types.bool;
         description =
@@ -671,20 +686,24 @@ in
 
   config = mkIf config.boot.initrd.enable {
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
+      {
+        assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
-      { assertion = let inherit (config.boot) resumeDevice; in
+      {
+        assertion = let inherit (config.boot) resumeDevice; in
           resumeDevice == "" || builtins.substring 0 1 resumeDevice == "/";
         message = "boot.resumeDevice has to be an absolute path."
           + " Old \"x:y\" style is no longer supported.";
       }
       # TODO: remove when #85000 is fixed
-      { assertion = !config.boot.loader.supportsInitrdSecrets ->
-          all (source:
-            builtins.isPath source ||
-            (builtins.isString source && hasPrefix builtins.storeDir source))
-          (attrValues config.boot.initrd.secrets);
+      {
+        assertion = !config.boot.loader.supportsInitrdSecrets ->
+          all
+            (source:
+              builtins.isPath source ||
+                (builtins.isString source && hasPrefix builtins.storeDir source))
+            (attrValues config.boot.initrd.secrets);
         message = ''
           boot.loader.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd

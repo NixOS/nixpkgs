@@ -2,55 +2,56 @@
 
 { name ? "${args'.pname}-${args'.version}"
 , src
-, buildInputs ? []
-, nativeBuildInputs ? []
-, passthru ? {}
-, patches ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, passthru ? { }
+, patches ? [ ]
 
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
+  # Go linker flags, passed to go via -ldflags
+, ldflags ? [ ]
 
-# Go tags, passed to go via -tag
-, tags ? []
+  # Go tags, passed to go via -tag
+, tags ? [ ]
 
-# A function to override the go-modules derivation
-, overrideModAttrs ? (_oldAttrs : {})
+  # A function to override the go-modules derivation
+, overrideModAttrs ? (_oldAttrs: { })
 
-# path to go.mod and go.sum directory
+  # path to go.mod and go.sum directory
 , modRoot ? "./"
 
-# vendorSha256 is the sha256 of the vendored dependencies
-#
-# if vendorSha256 is null, then we won't fetch any dependencies and
-# rely on the vendor folder within the source.
+  # vendorSha256 is the sha256 of the vendored dependencies
+  #
+  # if vendorSha256 is null, then we won't fetch any dependencies and
+  # rely on the vendor folder within the source.
 , vendorSha256
-# Whether to delete the vendor folder supplied with the source.
+  # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
-# Whether to run the vend tool to regenerate the vendor directory.
-# This is useful if any dependency contain C files.
+  # Whether to run the vend tool to regenerate the vendor directory.
+  # This is useful if any dependency contain C files.
 , runVend ? false
-# Whether to fetch (go mod download) and proxy the vendor directory.
-# This is useful if any dependency has case-insensitive conflicts
-# which will produce platform dependant `vendorSha256` checksums.
+  # Whether to fetch (go mod download) and proxy the vendor directory.
+  # This is useful if any dependency has case-insensitive conflicts
+  # which will produce platform dependant `vendorSha256` checksums.
 , proxyVendor ? false
 
-# We want parallel builds by default
+  # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Do not enable this without good reason
-# IE: programs coupled with the compiler
+  # Do not enable this without good reason
+  # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}
+, meta ? { }
 
-# Not needed with buildGoModule
+  # Not needed with buildGoModule
 , goPackagePath ? ""
 
-# needed for buildFlags{,Array} warning
+  # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
 
-, ... }@args':
+, ...
+}@args':
 
 with builtins;
 
@@ -61,85 +62,94 @@ assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGo
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
 
-  go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
+  go-modules =
+    if vendorSha256 != null then
+      stdenv.mkDerivation
+        (
+          let
+            modArgs = {
 
-    name = "${name}-go-modules";
+              name = "${name}-go-modules";
 
-    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
+              nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
-    inherit (args) src;
-    inherit (go) GOOS GOARCH;
+              inherit (args) src;
+              inherit (go) GOOS GOARCH;
 
-    patches = args.patches or [];
-    preBuild = args.preBuild or "";
-    sourceRoot = args.sourceRoot or "";
+              patches = args.patches or [ ];
+              preBuild = args.preBuild or "";
+              sourceRoot = args.sourceRoot or "";
 
-    GO111MODULE = "on";
+              GO111MODULE = "on";
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
-    ];
+              impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+                "GIT_PROXY_COMMAND"
+                "SOCKS_SERVER"
+              ];
 
-    configurePhase = args.modConfigurePhase or ''
-      runHook preConfigure
+              configurePhase = args.modConfigurePhase or ''
+                runHook preConfigure
 
-      export GOCACHE=$TMPDIR/go-cache
-      export GOPATH="$TMPDIR/go"
-      cd "${modRoot}"
-      runHook postConfigure
-    '';
+                export GOCACHE=$TMPDIR/go-cache
+                export GOPATH="$TMPDIR/go"
+                cd "${modRoot}"
+                runHook postConfigure
+              '';
 
-    buildPhase = args.modBuildPhase or ''
-      runHook preBuild
-    '' + lib.optionalString (deleteVendor == true) ''
-      if [ ! -d vendor ]; then
-        echo "vendor folder does not exist, 'deleteVendor' is not needed"
-        exit 10
-      else
-        rm -rf vendor
-      fi
-    '' + ''
-      if [ -d vendor ]; then
-        echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
-        exit 10
-      fi
+              buildPhase = args.modBuildPhase or ''
+                runHook preBuild
+              '' + lib.optionalString (deleteVendor == true) ''
+                if [ ! -d vendor ]; then
+                  echo "vendor folder does not exist, 'deleteVendor' is not needed"
+                  exit 10
+                else
+                  rm -rf vendor
+                fi
+              '' + ''
+                  if [ -d vendor ]; then
+                    echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
+                    exit 10
+                  fi
 
-    ${if runVend then ''
-      echo "running 'vend' to rewrite vendor folder"
-      ${vend}/bin/vend
-    '' else if proxyVendor then ''
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-      go mod download
-    '' else ''
-      go mod vendor
-    ''}
+                ${if runVend then ''
+                  echo "running 'vend' to rewrite vendor folder"
+                  ${vend}/bin/vend
+                '' else if proxyVendor then ''
+                  mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+                  go mod download
+                '' else ''
+                  go mod vendor
+                ''}
 
-      mkdir -p vendor
+                  mkdir -p vendor
 
-      runHook postBuild
-    '';
+                  runHook postBuild
+              '';
 
-    installPhase = args.modInstallPhase or ''
-      runHook preInstall
+              installPhase = args.modInstallPhase or ''
+                  runHook preInstall
 
-    ${if proxyVendor then ''
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
-    '' else ''
-      cp -r --reflink=auto vendor $out
-    ''}
+                ${if proxyVendor then ''
+                  rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+                  cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+                '' else ''
+                  cp -r --reflink=auto vendor $out
+                ''}
 
-      runHook postInstall
-    '';
+                  runHook postInstall
+              '';
 
-    dontFixup = true;
-  }; in modArgs // (
-      {
-        outputHashMode = "recursive";
-        outputHashAlgo = "sha256";
-        outputHash = vendorSha256;
-      }
-  ) // overrideModAttrs modArgs) else "";
+              dontFixup = true;
+            };
+          in
+          modArgs // (
+            {
+              outputHashMode = "recursive";
+              outputHashAlgo = "sha256";
+              outputHash = vendorSha256;
+            }
+          ) // overrideModAttrs modArgs
+        ) else "";
 
   package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
@@ -258,7 +268,7 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules vendorSha256 ; };
+    passthru = passthru // { inherit go go-modules vendorSha256; };
 
     enableParallelBuilding = enableParallelBuilding;
 
@@ -267,8 +277,8 @@ let
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta // {
       # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit ];
+      maintainers = (meta.maintainers or [ ]) ++
+        [ lib.maintainers.kalbasit ];
     };
   });
 in

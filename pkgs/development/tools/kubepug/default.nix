@@ -14,7 +14,9 @@ buildGoModule rec {
   vendorSha256 = "sha256-P5HoU9AAGFrSrp9iymjW+r8w5L90KUOrmaXM8p+Wn44=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/rikatz/kubepug/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/kubepug.go" ];

@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.samba-wsdd;
 
-in {
+in
+{
   options = {
     services.samba-wsdd = {
       enable = mkEnableOption ''

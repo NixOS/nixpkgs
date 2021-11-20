@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , nasm
@@ -29,10 +30,14 @@
 , lame
 , mpg123
 , twolame
-, gtkSupport ? false, gtk3
-, qt5Support ? false, qt5
-, raspiCameraSupport ? false, libraspberrypi
-, enableJack ? true, libjack2
+, gtkSupport ? false
+, gtk3
+, qt5Support ? false
+, qt5
+, raspiCameraSupport ? false
+, libraspberrypi
+, enableJack ? true
+, libjack2
 , libXdamage
 , libXext
 , libXfixes

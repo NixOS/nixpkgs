@@ -39,5 +39,5 @@ else
       }
 
       traverseRename
-   '';
+    '';
   } // attrs)

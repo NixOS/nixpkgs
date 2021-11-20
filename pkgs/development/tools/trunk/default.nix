@@ -1,5 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config
-, openssl, libiconv, CoreServices, Security }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, libiconv
+, CoreServices
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
@@ -13,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs =
+    if stdenv.isDarwin
     then [ libiconv CoreServices Security ]
     else [ openssl ];
 

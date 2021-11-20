@@ -13,10 +13,11 @@ let
   # underneath the final stdenv argument it yields to the continuation to do
   # whatever it wants with old `mkDerivation` (old `mkDerivationFromStdenv`
   # applied to the *new, final* stdenv) provided for convenience.
-  withOldMkDerivation = stdenvSuperArgs: k: stdenvSelf: let
-    mkDerivationFromStdenv-super = stdenvSuperArgs.mkDerivationFromStdenv or defaultMkDerivationFromStdenv;
-    mkDerivationSuper = mkDerivationFromStdenv-super stdenvSelf;
-  in
+  withOldMkDerivation = stdenvSuperArgs: k: stdenvSelf:
+    let
+      mkDerivationFromStdenv-super = stdenvSuperArgs.mkDerivationFromStdenv or defaultMkDerivationFromStdenv;
+      mkDerivationSuper = mkDerivationFromStdenv-super stdenvSelf;
+    in
     k stdenvSelf mkDerivationSuper;
 
   # Wrap the original `mkDerivation` providing extra args to it.
@@ -39,7 +40,7 @@ rec {
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or [ ]) ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -58,17 +59,18 @@ rec {
   makeStaticBinaries = stdenv0:
     stdenv0.override (old: {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
-      if stdenv.hostPlatform.isDarwin
-      then throw "Cannot build fully static binaries on Darwin/macOS"
-      else mkDerivationSuper (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (args.configureFlags or []) ++ [
-            "--disable-shared" # brrr...
-          ];
-      }));
+        if stdenv.hostPlatform.isDarwin
+        then throw "Cannot build fully static binaries on Darwin/macOS"
+        else
+          mkDerivationSuper (args // {
+            NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+          } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+            configureFlags = (args.configureFlags or [ ]) ++ [
+              "--disable-shared" # brrr...
+            ];
+          }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
-      extraBuildInputs = (old.extraBuildInputs or []) ++ [
+      extraBuildInputs = (old.extraBuildInputs or [ ]) ++ [
         stdenv0.glibc.static
       ];
     });
@@ -81,12 +83,12 @@ rec {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontDisableStatic = true;
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (args.configureFlags or []) ++ [
+        configureFlags = (args.configureFlags or [ ]) ++ [
           "--enable-static"
           "--disable-shared"
         ];
-        cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
+        mesonFlags = (args.mesonFlags or [ ]) ++ [ "-Ddefault_library=static" ];
       });
     });
 
@@ -98,12 +100,13 @@ rec {
     mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
-        (pkgs.buildPackages.makeSetupHook {
-          substitutions = {
-            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-          };
-        } ./darwin/portable-libsystem.sh)
+      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        (pkgs.buildPackages.makeSetupHook
+          {
+            substitutions = {
+              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+            };
+          } ./darwin/portable-libsystem.sh)
       ];
     });
   });
@@ -129,8 +132,8 @@ rec {
   propagateBuildInputs = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
-        buildInputs = [];
+        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ (args.buildInputs or [ ]);
+        buildInputs = [ ];
       });
     });
 
@@ -181,12 +184,14 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = overrideMkDerivationResult (pkg:
         let
-          printDrvPath = val: let
-            drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
-            license = pkg.meta.license or null;
-          in
+          printDrvPath = val:
+            let
+              drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
+              license = pkg.meta.license or null;
+            in
             builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@" val;
-        in pkg // {
+        in
+        pkg // {
           outPath = printDrvPath pkg.outPath;
           drvPath = printDrvPath pkg.drvPath;
         });
@@ -217,18 +222,23 @@ rec {
             pkg.meta.license or
               # Fixed-output derivations such as source tarballs usually
               # don't have licensing information, but that's OK.
-              (pkg.outputHash or
-                (builtins.trace
-                  "warning: ${drv} lacks licensing information" null));
+              (
+                pkg.outputHash or
+                  (builtins.trace
+                    "warning: ${drv} lacks licensing information"
+                    null)
+              );
 
           validate = arg:
             if licensePred license then arg
-            else abort ''
-              while building ${drv}:
-              license `${builtins.toString license}' does not pass the predicate.
-            '';
+            else
+              abort ''
+                while building ${drv}:
+                license `${builtins.toString license}' does not pass the predicate.
+              '';
 
-        in pkg // {
+        in
+        pkg // {
           outPath = validate pkg.outPath;
           drvPath = validate pkg.drvPath;
         });

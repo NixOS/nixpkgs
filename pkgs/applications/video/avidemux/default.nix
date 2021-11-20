@@ -1,18 +1,45 @@
-{ stdenv, lib, fetchurl, cmake, pkg-config
-, zlib, gettext, libvdpau, libva, libXv, sqlite
-, yasm, freetype, fontconfig, fribidi
-, makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, zlib
+, gettext
+, libvdpau
+, libva
+, libXv
+, sqlite
+, yasm
+, freetype
+, fontconfig
+, fribidi
+, makeWrapper
+, libXext
+, libGLU
+, qttools
+, qtbase
+, wrapQtAppsHook
 , alsa-lib
-, withX265 ? true, x265
-, withX264 ? true, x264
-, withXvid ? true, xvidcore
-, withLAME ? true, lame
-, withFAAC ? false, faac
-, withVorbis ? true, libvorbis
-, withPulse ? true, libpulseaudio
-, withFAAD ? true, faad2
-, withOpus ? true, libopus
-, withVPX ? true, libvpx
+, withX265 ? true
+, x265
+, withX264 ? true
+, x264
+, withXvid ? true
+, xvidcore
+, withLAME ? true
+, lame
+, withFAAC ? false
+, faac
+, withVorbis ? true
+, libvorbis
+, withPulse ? true
+, libpulseaudio
+, withFAAD ? true
+, faad2
+, withOpus ? true
+, libopus
+, withVPX ? true
+, libvpx
 , withQT ? true
 , withCLI ? true
 , default ? "qt5"
@@ -41,52 +68,65 @@ stdenv.mkDerivation rec {
     [ yasm cmake pkg-config ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
-    zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsa-lib libXext libGLU makeWrapper
+    zlib
+    gettext
+    libvdpau
+    libva
+    libXv
+    sqlite
+    fribidi
+    fontconfig
+    freetype
+    alsa-lib
+    libXext
+    libGLU
+    makeWrapper
   ] ++ lib.optional withX264 x264
-    ++ lib.optional withX265 x265
-    ++ lib.optional withXvid xvidcore
-    ++ lib.optional withLAME lame
-    ++ lib.optional withFAAC faac
-    ++ lib.optional withVorbis libvorbis
-    ++ lib.optional withPulse libpulseaudio
-    ++ lib.optional withFAAD faad2
-    ++ lib.optional withOpus libopus
-    ++ lib.optionals withQT [ qttools qtbase ]
-    ++ lib.optional withVPX libvpx;
+  ++ lib.optional withX265 x265
+  ++ lib.optional withXvid xvidcore
+  ++ lib.optional withLAME lame
+  ++ lib.optional withFAAC faac
+  ++ lib.optional withVorbis libvorbis
+  ++ lib.optional withPulse libpulseaudio
+  ++ lib.optional withFAAD faad2
+  ++ lib.optional withOpus libopus
+  ++ lib.optionals withQT [ qttools qtbase ]
+  ++ lib.optional withVPX libvpx;
 
-  buildCommand = let
-    qtVersion = "5.${lib.versions.minor qtbase.version}";
-    wrapWith = makeWrapper: filename:
-      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
-    wrapQtApp = wrapWith "wrapQtApp";
-    wrapProgram = wrapWith "wrapProgram";
-  in ''
-    unpackPhase
-    cd "$sourceRoot"
-    patchPhase
+  buildCommand =
+    let
+      qtVersion = "5.${lib.versions.minor qtbase.version}";
+      wrapWith = makeWrapper: filename:
+        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+      wrapQtApp = wrapWith "wrapQtApp";
+      wrapProgram = wrapWith "wrapProgram";
+    in
+    ''
+      unpackPhase
+      cd "$sourceRoot"
+      patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
-    ${stdenv.shell} bootStrap.bash \
-      --with-core \
-      ${if withQT then "--with-qt" else "--without-qt"} \
-      ${if withCLI then "--with-cli" else "--without-cli"} \
-      ${if withPlugins then "--with-plugins" else "--without-plugins"}
+      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
+      ${stdenv.shell} bootStrap.bash \
+        --with-core \
+        ${if withQT then "--with-qt" else "--without-qt"} \
+        ${if withCLI then "--with-cli" else "--without-cli"} \
+        ${if withPlugins then "--with-plugins" else "--without-plugins"}
 
-    mkdir $out
-    cp -R install/usr/* $out
+      mkdir $out
+      cp -R install/usr/* $out
 
-    ${wrapProgram "$out/bin/avidemux3_cli"}
+      ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ${lib.optionalString withQT ''
-      ${wrapQtApp "$out/bin/avidemux3_qt5"}
-      ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
-    ''}
+      ${lib.optionalString withQT ''
+        ${wrapQtApp "$out/bin/avidemux3_qt5"}
+        ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
+      ''}
 
-    ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
+      ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
 
-    fixupPhase
-  '';
+      fixupPhase
+    '';
 
   meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
+{ lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl }:
 
 stdenv.mkDerivation rec {
   pname = "cdrkit";

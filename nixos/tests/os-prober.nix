@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   # A filesystem image with a (presumably) bootable debian
   debianImage = pkgs.vmTools.diskImageFuns.debian9i386 {
@@ -22,7 +22,8 @@ let
       # /etc/os-release
       "base-files"
       # make the disk bootable-looking
-      "grub2" "linux-image-686"
+      "grub2"
+      "linux-image-686"
     ];
     # install grub
     postInstall = ''
@@ -52,7 +53,7 @@ let
     documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
-  configFile = pkgs.writeText "configuration.nix"  ''
+  configFile = pkgs.writeText "configuration.nix" ''
     {config, pkgs, ...}: ({
     imports =
           [ ./hardware-configuration.nix
@@ -62,39 +63,43 @@ let
       pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
     })
   '';
-in {
+in
+{
   name = "os-prober";
 
   machine = { config, pkgs, ... }: (simpleConfig // {
-      imports = [ ../modules/profiles/installation-device.nix
-                  ../modules/profiles/base.nix ];
-      virtualisation.memorySize = 1300;
-      # To add the secondary disk:
-      virtualisation.qemu.options = [ "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio" ];
+    imports = [
+      ../modules/profiles/installation-device.nix
+      ../modules/profiles/base.nix
+    ];
+    virtualisation.memorySize = 1300;
+    # To add the secondary disk:
+    virtualisation.qemu.options = [ "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio" ];
 
-      # The test cannot access the network, so any packages
-      # nixos-rebuild needs must be included in the VM.
-      system.extraDependencies = with pkgs;
-        [ sudo
-          libxml2.bin
-          libxslt.bin
-          desktop-file-utils
-          docbook5
-          docbook_xsl_ns
-          unionfs-fuse
-          ntp
-          nixos-artwork.wallpapers.simple-dark-gray-bottom
-          perlPackages.XMLLibXML
-          perlPackages.ListCompare
-          shared-mime-info
-          texinfo
-          xorg.lndir
-          grub2
+    # The test cannot access the network, so any packages
+    # nixos-rebuild needs must be included in the VM.
+    system.extraDependencies = with pkgs;
+      [
+        sudo
+        libxml2.bin
+        libxslt.bin
+        desktop-file-utils
+        docbook5
+        docbook_xsl_ns
+        unionfs-fuse
+        ntp
+        nixos-artwork.wallpapers.simple-dark-gray-bottom
+        perlPackages.XMLLibXML
+        perlPackages.ListCompare
+        shared-mime-info
+        texinfo
+        xorg.lndir
+        grub2
 
-          # add curl so that rather than seeing the test attempt to download
-          # curl's tarball, we see what it's trying to download
-          curl
-        ];
+        # add curl so that rather than seeing the test attempt to download
+        # curl's tarball, we see what it's trying to download
+        curl
+      ];
   });
 
   testScript = ''

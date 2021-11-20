@@ -13,9 +13,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ fcitx libskk skk-dicts ];
 
-  cmakeFlags = [ "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.combined"
-                 "-DENABLE_QT=FALSE"
-               ];
+  cmakeFlags = [
+    "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.combined"
+    "-DENABLE_QT=FALSE"
+  ];
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
       --replace ${fcitx} $out
@@ -27,16 +28,16 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     isFcitxEngine = true;
-    description   = "A SKK style input method engine for fcitx";
+    description = "A SKK style input method engine for fcitx";
     longDescription = ''
       Fcitx-skk is an input method engine for fcitx. It is based on libskk and thus
       provides basic features of SKK Japanese input method such as kana-to-kanji conversion,
       new word registration, completion, numeric conversion, abbrev mode, kuten input,
       hankaku-katakana input, and re-conversion.
     '';
-    license       = licenses.gpl3Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ yuriaisaka ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ yuriaisaka ];
   };
 
 }

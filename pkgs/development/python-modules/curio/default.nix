@@ -25,13 +25,13 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-     "test_aside_basic" # times out
-     "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
-     "test_ssl_outgoing" # touches network
-   ] ++ lib.optionals (stdenv.isDarwin) [
-     "test_unix_echo" # socket bind error on hydra when built with other packages
-     "test_unix_ssl_server" # socket bind error on hydra when built with other packages
-   ];
+    "test_aside_basic" # times out
+    "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
+    "test_ssl_outgoing" # touches network
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    "test_unix_echo" # socket bind error on hydra when built with other packages
+    "test_unix_ssl_server" # socket bind error on hydra when built with other packages
+  ];
 
   pythonImportsCheck = [ "curio" ];
 

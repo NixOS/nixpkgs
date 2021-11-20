@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python ? null, swig, libyaml
+{ stdenv
+, lib
+, fetchgit
+, flex
+, bison
+, pkg-config
+, which
+, pythonSupport ? false
+, python ? null
+, swig
+, libyaml
 }:
 
 stdenv.mkDerivation rec {

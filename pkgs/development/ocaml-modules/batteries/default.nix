@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, qtest, num
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, qtest
+, num
 , doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
 }:
 
@@ -30,7 +37,7 @@ stdenv.mkDerivation {
       language.
     '';
     license = lib.licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [
       lib.maintainers.maggesi
     ];

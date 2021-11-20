@@ -20,7 +20,8 @@ mkCoqDerivation rec {
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }
     { case = "8.6"; out = "8.6.0"; }
-  ] null;
+  ]
+    null;
 
   mlPlugin = true;
   extraBuildInputs = (with coq.ocamlPackages; [ num ocamlbuild ]);

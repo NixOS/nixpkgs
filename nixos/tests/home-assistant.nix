@@ -4,7 +4,8 @@ let
   configDir = "/var/lib/foobar";
   mqttUsername = "homeassistant";
   mqttPassword = "secret";
-in {
+in
+{
   name = "home-assistant";
   meta.maintainers = lib.teams.home-assistant.members;
 
@@ -12,14 +13,14 @@ in {
     environment.systemPackages = with pkgs; [ mosquitto ];
     services.mosquitto = {
       enable = true;
-      listeners = [ {
+      listeners = [{
         users = {
           "${mqttUsername}" = {
             acl = [ "readwrite #" ];
             password = mqttPassword;
           };
         };
-      } ];
+      }];
     };
     services.home-assistant = {
       inherit configDir;
@@ -32,7 +33,7 @@ in {
           longitude = "0.0";
           elevation = 0;
         };
-        frontend = {};
+        frontend = { };
         mqtt = {
           broker = "127.0.0.1";
           username = mqttUsername;

@@ -20,7 +20,8 @@ let
         --prefix PYTHONPATH : $out/${mopidyPackages.python.sitePackages}
     '';
   };
-in {
+in
+{
 
   options = {
 
@@ -37,7 +38,7 @@ in {
       };
 
       extensionPackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.mopidy-spotify ]";
         description = ''
@@ -54,7 +55,7 @@ in {
       };
 
       extraConfigFiles = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Extra config file read by Mopidy when the service starts.

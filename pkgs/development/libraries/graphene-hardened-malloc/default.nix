@@ -57,12 +57,12 @@ lib.fix (self: stdenv.mkDerivation rec {
       '';
     };
     tests = {
-      ld-preload = runCommand "ld-preload-test-run" {} ''
+      ld-preload = runCommand "ld-preload-test-run" { } ''
         ${self}/bin/preload-hardened-malloc ${self.ld-preload-tests}/bin/run-tests
         touch $out
       '';
       # to compensate for the lack of tests of correct normal malloc operation
-      stress = runCommand "stress-test-run" {} ''
+      stress = runCommand "stress-test-run" { } ''
         ${self}/bin/preload-hardened-malloc ${stress-ng}/bin/stress-ng \
           --no-rand-seed \
           --malloc 8 \

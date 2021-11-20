@@ -11,7 +11,8 @@ let
 in
 
 args@
-{ # Example: "org.apache.httpcomponents"
+{
+  # Example: "org.apache.httpcomponents"
   groupId
 , # Example: "httpclient"
   artifactId
@@ -26,51 +27,53 @@ args@
   # file and will take precedence over the `repos` parameter. Only one of `url`
   # and `urls` can be specified, not both.
 , url ? ""
-, urls ? []
+, urls ? [ ]
 , # The rest of the arguments are just forwarded to `fetchurl`.
   ...
 }:
 
 # only one of url and urls can be specified at a time.
-assert (url == "") || (urls == []);
+assert (url == "") || (urls == [ ]);
 # if repos is empty, then url or urls must be specified.
-assert (repos != []) || (url != "") || (urls != []);
+assert (repos != [ ]) || (url != "") || (urls != [ ]);
 
 let
   name_ =
     lib.concatStrings [
-      (lib.replaceChars ["."] ["_"] groupId) "_"
-      (lib.replaceChars ["."] ["_"] artifactId) "-"
+      (lib.replaceChars [ "." ] [ "_" ] groupId)
+      "_"
+      (lib.replaceChars [ "." ] [ "_" ] artifactId)
+      "-"
       version
     ];
   mkJarUrl = repoUrl:
     lib.concatStringsSep "/" [
       (lib.removeSuffix "/" repoUrl)
-      (lib.replaceChars ["."] ["/"] groupId)
+      (lib.replaceChars [ "." ] [ "/" ] groupId)
       artifactId
       version
       "${artifactId}-${version}${lib.optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
-    if url != "" then [url]
-    else if urls != [] then urls
+    if url != "" then [ url ]
+    else if urls != [ ] then urls
     else map mkJarUrl repos;
   jar =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
-        // { urls = urls_; name = "${name_}.jar"; }
+      builtins.removeAttrs args [ "groupId" "artifactId" "version" "classifier" "repos" "url" ]
+      // { urls = urls_; name = "${name_}.jar"; }
     );
 in
-  stdenv.mkDerivation {
-    name = name_;
-    phases = "installPhase fixupPhase";
-    # By moving the jar to $out/share/java we make it discoverable by java
-    # packages packages that mention this derivation in their buildInputs.
-    installPhase = ''
-      mkdir -p $out/share/java
-      ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
-    '';
-    # We also add a `jar` attribute that can be used to easily obtain the path
-    # to the downloaded jar file.
-    passthru.jar = jar;
-  }
+stdenv.mkDerivation {
+  name = name_;
+  phases = "installPhase fixupPhase";
+  # By moving the jar to $out/share/java we make it discoverable by java
+  # packages packages that mention this derivation in their buildInputs.
+  installPhase = ''
+    mkdir -p $out/share/java
+    ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+  '';
+  # We also add a `jar` attribute that can be used to easily obtain the path
+  # to the downloaded jar file.
+  passthru.jar = jar;
+}

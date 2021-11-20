@@ -1,5 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub, libcint, libxc, xcfun, blas
-, numpy, scipy, h5py
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, libcint
+, libxc
+, xcfun
+, blas
+, numpy
+, scipy
+, h5py
 }:
 
 buildPythonPackage rec {
@@ -10,7 +18,7 @@ buildPythonPackage rec {
     owner = "pyscf";
     repo = pname;
     rev = "f6c9c6654dd9609c5e467a1edd5c2c076f793acc";
-    sha256  = "0xbwkjxxysfpqz72qn6n4a0zr2h6sprbcal8j7kzymh7swjy117w";
+    sha256 = "0xbwkjxxysfpqz72qn6n4a0zr2h6sprbcal8j7kzymh7swjy117w";
   };
 
   # Backport from the 2.0.0 alpha releases of PySCF.
@@ -30,7 +38,7 @@ buildPythonPackage rec {
     h5py
   ];
 
-  PYSCF_INC_DIR="${libcint}:${libxc}:${xcfun}";
+  PYSCF_INC_DIR = "${libcint}:${libxc}:${xcfun}";
 
   doCheck = false;
   pythonImportsCheck = [ "pyscf" ];

@@ -16,7 +16,8 @@ let
   sha256 = "sha256-8GGPd0+qdw7s4cr0RgLoS0Cu4C+RAuuboZzTyYN/kq8=";
   vendorSha256 = "sha256-fpO2sGM+VUKLmdfJ9CQfTFnCfxVTK2m9Sirj9oerD/I=";
   version = "0.6.11";
-in buildGoModule {
+in
+buildGoModule {
   inherit version;
   inherit vendorSha256;
 
@@ -41,7 +42,7 @@ in buildGoModule {
   # Terraform allow checking the provider versions, but this breaks
   # if the versions are not provided via file paths.
   postBuild = "mv $GOPATH/bin/terraform-provider-libvirt{,_v${version}}";
-  
+
   ldflags = [ "-X main.version=${version}" ];
   passthru.provider-source-address = "registry.terraform.io/dmacvicar/libvirt";
 

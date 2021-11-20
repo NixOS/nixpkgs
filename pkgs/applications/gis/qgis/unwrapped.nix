@@ -55,7 +55,8 @@ let
     owslib
     six
   ];
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "3.16.13";
   pname = "qgis-unwrapped";
 
@@ -97,8 +98,8 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
   ] ++ lib.optional withGrass grass
-    ++ lib.optional withWebKit qtwebkit
-    ++ pythonBuildInputs;
+  ++ lib.optional withWebKit qtwebkit
+  ++ pythonBuildInputs;
 
   nativeBuildInputs = [ cmake flex bison ninja ];
 
@@ -116,7 +117,7 @@ in mkDerivation rec {
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+  ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
   meta = {
     description = "A Free and Open Source Geographic Information System";

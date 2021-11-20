@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
+  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems ];
   desktopItems = [
     (makeDesktopItem {
       name = "stm32CubeMX";
