@@ -1,14 +1,15 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , substituteAll
+, wrapQtAppsHook
 , qmake
 , qtsvg
 , qtx11extras
 , graphviz
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qvge";
   version = "0.6.3";
 
@@ -26,7 +27,7 @@ mkDerivation rec {
     inherit graphviz;
   });
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ wrapQtAppsHook qmake ];
 
   buildInputs = if stdenv.isDarwin then [ qtsvg ] else [ qtx11extras ];
 
