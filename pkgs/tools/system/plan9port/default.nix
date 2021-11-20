@@ -101,7 +101,8 @@ stdenv.mkDerivation {
       kovirobi
     ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    # TODO: revisit this when the sdk situation on x86_64-darwin changes
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch
