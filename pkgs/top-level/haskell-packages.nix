@@ -111,8 +111,8 @@ in {
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      buildLlvmPackages = buildPackages.llvmPackages_9;
+      llvmPackages = pkgs.llvmPackages_9;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
       bootPkgs =
