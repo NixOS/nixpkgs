@@ -2,6 +2,7 @@
 , urls
 , sha256
 , configureFlags ? []
+, patches ? []
 }:
 
 { lib, stdenv, fetchurl, gmp
@@ -13,6 +14,8 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit urls sha256;
   };
+
+  inherit patches;
 
   buildInputs = [ gmp ];
 
