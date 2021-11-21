@@ -2434,6 +2434,8 @@ in {
 
   eliot = callPackage ../development/python-modules/eliot { };
 
+  eliqonline = callPackage ../development/python-modules/eliqonline { };
+
   elmax = callPackage ../development/python-modules/elmax { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
