@@ -29627,7 +29627,12 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots { miniupnpc = miniupnpc_2; };
+  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
+    boost = boost17x;
+    miniupnpc = miniupnpc_2;
+    withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
