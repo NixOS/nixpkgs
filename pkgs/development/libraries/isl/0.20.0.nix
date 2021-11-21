@@ -1,4 +1,4 @@
-{ callPackage, lib, stdenv, fetchurl, gmp }:
+{ callPackage }:
 
 callPackage ./generic.nix rec {
   version = "0.20";
@@ -13,4 +13,3 @@ callPackage ./generic.nix rec {
     "--with-gcc-arch=generic" # don't guess -march=/mtune=
   ];
 }
-
