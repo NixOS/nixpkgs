@@ -2,7 +2,7 @@
 , version
 , urls
 , sha256
-, homepage }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "isl";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    inherit homepage;
+    homepage = "https://libisl.sourceforge.io/";
     license = lib.licenses.lgpl21;
     description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
     platforms = lib.platforms.all;

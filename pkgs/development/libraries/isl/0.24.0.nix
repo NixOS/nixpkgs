@@ -7,7 +7,6 @@ callPackage ./generic.nix rec {
     "https://libisl.sourceforge.io/isl-${version}.tar.xz"
   ];
   sha256 = "1ak1gq0rbqbah5517blg2zlnfvjxfcl9cjrfc75nbcx5p2gnlnd5";
-  homepage = "https://sourceforge.net/projects/libisl/";
 } // {
   configureFlags = [
     "--with-gcc-arch=generic" # don't guess -march=/mtune=

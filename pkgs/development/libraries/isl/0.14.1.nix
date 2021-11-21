@@ -7,5 +7,4 @@ callPackage ./generic.nix rec {
     "https://libisl.sourceforge.io/isl-${version}.tar.xz"
   ];
   sha256 = "0xa6xagah5rywkywn19rzvbvhfvkmylhcxr6z9z7bz29cpiwk0l8";
-  homepage = "https://www.kotnet.org/~skimo/isl/";
 }
