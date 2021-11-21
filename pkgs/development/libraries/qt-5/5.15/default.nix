@@ -58,14 +58,7 @@ let
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = [
-      # Fix invisible fonts with glibc 2.33: https://github.com/NixOS/nixpkgs/issues/131074
-      (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-%231904652.patch";
-        name = "qtwebengine-everywhere-src-5.15.5-_1904652.patch";
-        sha256 = "01q7hagq0ysii1jnrh5adm97vdm9cis592xr6im7accyw6hgcn7b";
-      })
-    ] ++ lib.optionals stdenv.isDarwin [
+    qtwebengine = lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
     ];
