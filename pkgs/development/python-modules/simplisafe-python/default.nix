@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2021.11.0";
+  version = "2021.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,10 +28,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0SPUgdIU6zTUrvQucPHl8JGhXqFtNwwXc9GXlnarjBY=";
+    sha256 = "sha256-5X2qvrACV9OTVYSZYxFncFOgrgywKvVDbC6IVFnJBtw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
