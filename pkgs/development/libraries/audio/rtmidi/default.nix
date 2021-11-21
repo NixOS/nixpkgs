@@ -15,42 +15,30 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
   pname = "rtmidi";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
     rev = version;
-    sha256 = "1g31p6a96djlbk9jh5r4pjly3x76lhccva9hrw6xzdma8dsjzgyq";
+    sha256 = "1r1sqmdi499zfh6z6kjkab6d4a7kz3il5kkcdfz9saa6ry992211";
   };
 
   patches = [
-    # PR #230, fix CMake problems
+    # Remove when https://github.com/thestk/rtmidi/pull/278 merged
     (fetchpatch {
-      name = "RtMidi-Fix-JACK_HAS_PORT_RENAME-define.patch";
-      url = "https://github.com/thestk/rtmidi/pull/230/commits/768a30a61b60240b66cc2d43bc27a544ff9f1622.patch";
-      sha256 = "1sym4f7nb2qyyxfhi1l0xsm2hfh6gddn81y36qvfq4mcs33vvid0";
+      name = "0001-rtmidi-Use-posix-sched_yield-instead-of-pthread_yield.patch";
+      url = "https://github.com/thestk/rtmidi/pull/278/commits/cfe34c02112c256235b62b45895fc2c401fd874d.patch";
+      sha256 = "0yzq7zbdkl5r4i0r6vy2kq986cqdxz2cpzb7s977mvh09kdikrw1";
     })
+    # Remove when https://github.com/thestk/rtmidi/pull/277 merged
     (fetchpatch {
-      name = "RtMidi-Add-prefix-define-for-pkgconfig.patch";
-      url = "https://github.com/thestk/rtmidi/pull/230/commits/7a32e23e3f6cb43c0d2d58443ce205d438e76f44.patch";
-      sha256 = "06im8mb05wah6bnkadw2gpkhmilxb8p84pxqr50b205cchpq304w";
+      name = "0002-rtmidi-include-TargetConditionals.h-on-Apple-platforms.patch";
+      url = "https://github.com/thestk/rtmidi/pull/277/commits/9d863beb28f03ec53f3e4c22cc0d3c34a1e1789b.patch";
+      sha256 = "1hlrg23c1ycnwdvxpic8wvypiril04rlph0g820qn1naf92imfjg";
     })
-    (fetchpatch {
-      name = "RtMidi-Adjust-public-header-installs-to-match-autotools.patch";
-      url = "https://github.com/thestk/rtmidi/pull/230/commits/892fe5492f0e787484fa4a37027b08c265ce001f.patch";
-      sha256 = "0ca9m42xa3gmycimzvzvl67wa266xq9pfp1b4v555rh2fp52kbcj";
-    })
-
-    # https://github.com/thestk/rtmidi/pull/277
-    ./macos_include_targetconditionals.patch
   ];
-
-  postPatch = ''
-    substituteInPlace rtmidi.pc.in \
-      --replace 'Requires:' 'Requires.private:'
-  '';
 
   nativeBuildInputs = [ cmake pkg-config ];
 
