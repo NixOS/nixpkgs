@@ -1,6 +1,4 @@
-{ callPackage }:
-
-callPackage ./generic.nix rec {
+import ./generic.nix rec {
   version = "0.20";
   urls = [
     "mirror://sourceforge/libisl/isl-${version}.tar.xz"

@@ -1,8 +1,10 @@
-{ lib, stdenv, fetchurl, gmp
-, version
+{ version
 , urls
 , sha256
 , configureFlags ? []
+}:
+
+{ lib, stdenv, fetchurl, gmp
 }:
 
 stdenv.mkDerivation rec {
