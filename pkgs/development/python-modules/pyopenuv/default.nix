@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2021.10.0";
+  version = "2021.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3zTyW3eXOA9frSAy4g7iWhymc1hBo0hrxIgPLMqrLTs=";
+    sha256 = "sha256-J0YIq00/GcWEL23UHmN98Jp/imOAz8NLzhMdk8WFozk=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
   disabledTestPaths = [
     # Ignore the examples as they are prefixed with test_
     "examples/"
