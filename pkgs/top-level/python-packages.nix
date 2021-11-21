@@ -8509,6 +8509,8 @@ in {
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
 
+  setupmeta = callPackage ../development/python-modules/setupmeta { };
+
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
