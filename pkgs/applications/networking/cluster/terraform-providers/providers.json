@@ -996,6 +996,7 @@
   },
   "sops": {
     "owner": "carlpett",
+    "provider-source-address": "registry.terraform.io/carlpett/sops",
     "repo": "terraform-provider-sops",
     "rev": "v0.5.1",
     "sha256": "1x32w1qw46rwa8bjhkfn6ybr1dkbdqk0prlm0bnwn3gvvj0hc7kh",
