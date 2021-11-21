@@ -14319,7 +14319,7 @@ with pkgs;
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
-    inherit (llvmPackages_7) llvm libclang;
+    inherit (llvmPackages_8) llvm libclang;
   };
 
   cscope = callPackage ../development/tools/misc/cscope { };
@@ -21639,9 +21639,7 @@ with pkgs;
 
   xinetd = callPackage ../servers/xinetd { };
 
-  zookeeper = callPackage ../servers/zookeeper {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  zookeeper = callPackage ../servers/zookeeper { };
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 

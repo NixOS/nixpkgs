@@ -1177,6 +1177,8 @@ rec {
   # The default 9P msize value is 8 KiB, which according to QEMU is
   # insufficient and would degrade performance.
   # See: https://wiki.qemu.org/Documentation/9psetup#msize
-  # Use 500 KiB as a conservative default, see also https://github.com/NixOS/nixpkgs/pull/142577#issuecomment-953848731
-  default9PMsizeBytes = 512000;
+  # Use 128KiB which is the default in linux 5.15+
+  # https://github.com/torvalds/linux/commit/9c4d94dc9a64426d2fa0255097a3a84f6ff2eebe
+  # TODO: actually set it to 128KiB, it was causing failures in many tests due to memory usage
+  default9PMsizeBytes = 16 * 1024;
 }

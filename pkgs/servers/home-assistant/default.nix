@@ -536,8 +536,10 @@ in with py.pkgs; buildPythonApplication rec {
     "nam"
     "namecheapdns"
     "neato"
+    "ness_alarm"
     "netatmo"
     "nexia"
+    "nightscout"
     "no_ip"
     "notify"
     "notion"
@@ -723,6 +725,7 @@ in with py.pkgs; buildPythonApplication rec {
     "vesync"
     "vilfo"
     "vizio"
+    "vlc_telnet"
     "voicerss"
     "volumio"
     # disabled, becaused AttributeError: <class 'vultr.vultr.Vultr'> does not have the attribute 'server_list'
