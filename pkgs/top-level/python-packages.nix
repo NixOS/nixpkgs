@@ -5608,6 +5608,8 @@ in {
 
   pep257 = callPackage ../development/python-modules/pep257 { };
 
+  pep440 = callPackage ../development/python-modules/pep440 { };
+
   pep517 = callPackage ../development/python-modules/pep517 { };
 
   pep8 = callPackage ../development/python-modules/pep8 { };
