@@ -87,6 +87,9 @@ self: super: {
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
+  # https://github.com/haskell-game/dear-imgui.hs/issues/116
+  dear-imgui = doJailbreak super.dear-imgui;
+
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
   resolv = doJailbreak super.resolv;
