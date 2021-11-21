@@ -1365,6 +1365,17 @@ Superuser created successfully.
           <literal>gnat11</literal> instead of <literal>gnat9</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>retroArchCores</literal> has been removed. This means
+          that using <literal>nixpkgs.config.retroarch</literal> to
+          customize RetroArch cores is not supported anymore. Instead,
+          use package overrides, for example:
+          <literal>retroarch.override { cores = with libretro; [ citra snes9x ]; };</literal>.
+          Also, <literal>retroarchFull</literal> derivation is available
+          for those who want to have all RetroArch cores available.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
@@ -1964,6 +1975,16 @@ Superuser created successfully.
           <literal>julia-lts</literal>. In practice this means it has
           been upgraded from <literal>1.0.4</literal> to
           <literal>1.5.4</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          RetroArch has been upgraded from version
+          <literal>1.8.5</literal> to <literal>1.9.13.2</literal>. Since
+          the previous release was quite old, if you’re having issues
+          after the upgrade, please delete your
+          <literal>$XDG_CONFIG_HOME/retroarch/retroarch.cfg</literal>
+          file.
         </para>
       </listitem>
     </itemizedlist>
