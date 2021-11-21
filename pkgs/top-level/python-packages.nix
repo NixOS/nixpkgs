@@ -6396,6 +6396,8 @@ in {
 
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
+  pyephember = callPackage ../development/python-modules/pyephember { };
+
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
