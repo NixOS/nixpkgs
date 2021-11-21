@@ -118,6 +118,7 @@ let
 
       # symlink ALSA stuff
       ln -s /host/etc/asound.conf asound.conf
+      ln -s /host/etc/alsa alsa
 
       # symlink SSL certs
       mkdir -p ssl
