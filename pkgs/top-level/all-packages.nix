@@ -3543,6 +3543,8 @@ with pkgs;
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
+  stacs = callPackage ../tools/security/stacs { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   starboard = callPackage ../applications/networking/cluster/starboard { };
