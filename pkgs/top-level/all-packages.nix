@@ -3266,9 +3266,7 @@ with pkgs;
 
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
-  masscan = callPackage ../tools/security/masscan {
-    stdenv = gccStdenv;
-  };
+  masscan = callPackage ../tools/security/masscan { };
 
   massren = callPackage ../tools/misc/massren { };
 
@@ -8834,9 +8832,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
   };
 
-  rig = callPackage ../tools/misc/rig {
-    stdenv = gccStdenv;
-  };
+  rig = callPackage ../tools/misc/rig { };
 
   riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "riseup";
@@ -9627,7 +9623,7 @@ with pkgs;
 
   synapse-admin = callPackage ../tools/admin/synapse-admin {};
 
-  sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
+  sl = callPackage ../tools/misc/sl { };
 
   socat = callPackage ../tools/networking/socat { };
 
