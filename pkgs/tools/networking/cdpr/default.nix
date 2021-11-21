@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1idyvyafkk0ifcbi7mc65b60qia6hpsdb6s66j4ggqp7if6vblrj";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace 'gcc' '"$$CC"'
+  '';
+
   buildInputs = [ libpcap ];
 
   installPhase = ''
