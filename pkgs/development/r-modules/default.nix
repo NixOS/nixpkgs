@@ -1276,6 +1276,8 @@ let
         patchShebangs configure
       '';
     });
+
+    ChIPXpress = old.ChIPXpress.override { hydraPlatforms = []; };
   };
 in
   self
