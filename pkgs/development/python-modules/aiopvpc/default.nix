@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "2.2.2";
+  version = "2.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "azogue";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wNMHzeKJ1kG0jnoI5fO3d5CBXE0cyoK92BkGunXK3pI=";
+    sha256 = "sha256-39cGDbaBS5we+WbqvABe6tKwTmbgd+NYLssKQCOuBsc=";
   };
 
   nativeBuildInputs = [
