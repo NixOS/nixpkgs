@@ -537,6 +537,7 @@
   ./services/misc/airsonic.nix
   ./services/misc/ankisyncd.nix
   ./services/misc/apache-kafka.nix
+  ./services/misc/asusd.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
   ./services/misc/bazarr.nix
