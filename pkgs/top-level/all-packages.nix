@@ -28491,6 +28491,8 @@ with pkgs;
 
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
+  tetrio-desktop = callPackage ../games/tetrio-desktop { };
+
   tev = callPackage ../applications/graphics/tev { };
 
   themechanger = callPackage ../applications/misc/themechanger { };
