@@ -467,7 +467,7 @@ let
       throw "Unsupported architecture";
 
   # Syslinux (and isolinux) only supports x86-based architectures.
-  canx86BiosBoot = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+  canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
 
 in
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
   # when SSE not detected
-  postPatch = lib.optionalString (!(stdenv.isi686 || stdenv.isx86_64)) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
     sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
   '';
 

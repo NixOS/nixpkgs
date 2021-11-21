@@ -53,7 +53,7 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontsConf}
   '';
 
-  disabledTests = lib.optionals (!(stdenv.isi686 || stdenv.isx86_64)) [
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
     # small precision-related differences on other architectures,
     # upstream doesn't consider it serious.
     # https://github.com/pyqtgraph/pyqtgraph/issues/2110

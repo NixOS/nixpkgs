@@ -4,7 +4,7 @@
 }:
 
 let
-   useX11 = stdenv.isi686 || stdenv.isx86_64;
+   useX11 = stdenv.hostPlatform.isx86;
    x11deps = [ libX11 xorgproto ];
    inherit (lib) optionals;
 

@@ -31,7 +31,7 @@ let
   # source behind __linux__ check assumes system is also x86 and
   # tries to disable x86/x87-specific extended precision mode
   # https://github.com/sambayless/monosat/issues/33
-  commonPostPatch = lib.optionalString (!(stdenv.isi686 || stdenv.isx86_64)) ''
+  commonPostPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
     substituteInPlace src/monosat/Main.cc \
       --replace 'defined(__linux__)' '0'
   '';
