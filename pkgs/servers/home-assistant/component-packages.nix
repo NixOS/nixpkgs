@@ -238,7 +238,7 @@
     "environment_canada" = ps: with ps; [ env-canada ];
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
-    "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
+    "ephember" = ps: with ps; [ pyephember ];
     "epson" = ps: with ps; [ epson-projector ];
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [ construct ]; # missing inputs: python-eq3bt
