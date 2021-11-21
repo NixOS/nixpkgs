@@ -4276,6 +4276,8 @@ in {
 
   leveldb = callPackage ../development/python-modules/leveldb { };
 
+  levenshtein = callPackage ../development/python-modules/levenshtein { };
+
   lexid = callPackage ../development/python-modules/lexid { };
 
   lhapdf = toPythonModule (pkgs.lhapdf.override {
