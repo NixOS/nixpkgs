@@ -559,7 +559,7 @@
     "nanoleaf" = ps: with ps; [ aionanoleaf ];
     "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ nsapi ];
-    "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
+    "ness_alarm" = ps: with ps; [ nessclient ];
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ pyturbojpeg aiohttp-cors hass-nabucasa pyatmo ];
     "netdata" = ps: with ps; [ netdata ];
@@ -572,7 +572,7 @@
     "nextbus" = ps: with ps; [ ]; # missing inputs: py_nextbusnext
     "nextcloud" = ps: with ps; [ nextcloudmonitor ];
     "nfandroidtv" = ps: with ps; [ ]; # missing inputs: notifications-android-tv
-    "nightscout" = ps: with ps; [ ]; # missing inputs: py-nightscout
+    "nightscout" = ps: with ps; [ py-nightscout ];
     "niko_home_control" = ps: with ps; [ niko-home-control ];
     "nilu" = ps: with ps; [ niluclient ];
     "nissan_leaf" = ps: with ps; [ pycarwings2 ];
@@ -945,7 +945,7 @@
     "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
-    "vlc_telnet" = ps: with ps; [ ]; # missing inputs: aiovlc
+    "vlc_telnet" = ps: with ps; [ aiovlc ];
     "voicerss" = ps: with ps; [ ];
     "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ pyvolumio ];

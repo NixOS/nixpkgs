@@ -399,6 +399,8 @@ in {
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
+  aiovlc = callPackage ../development/python-modules/aiovlc { };
+
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
@@ -2299,8 +2301,6 @@ in {
 
   dogpile-cache = callPackage ../development/python-modules/dogpile-cache { };
 
-  dogpile-core = callPackage ../development/python-modules/dogpile-core { };
-
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   doit = callPackage ../development/python-modules/doit { };
@@ -4107,6 +4107,8 @@ in {
 
   jupytext = callPackage ../development/python-modules/jupytext { };
 
+  justbackoff = callPackage ../development/python-modules/justbackoff { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
@@ -4974,6 +4976,8 @@ in {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mujson = callPackage ../development/python-modules/mujson { };
+
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
@@ -5071,6 +5075,8 @@ in {
   nengo = callPackage ../development/python-modules/nengo { };
 
   neo = callPackage ../development/python-modules/neo { };
+
+  nessclient = callPackage ../development/python-modules/nessclient { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
@@ -6124,6 +6130,8 @@ in {
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
 
   py-dmidecode = callPackage ../development/python-modules/py-dmidecode { };
+
+  py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
