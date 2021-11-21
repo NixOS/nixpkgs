@@ -103,5 +103,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ pengmeiyu ];
+  meta.maintainers = with maintainers; [ pmy ];
 }
