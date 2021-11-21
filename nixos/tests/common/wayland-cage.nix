@@ -8,7 +8,6 @@
   };
 
   virtualisation = {
-    memorySize = 1024;
     qemu.options = [ "-vga virtio" ];
   };
 }
