@@ -1,0 +1,7 @@
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
+excludes = [
+  "pkgs/development/r-modules/*.nix",
+  "pkgs/development/haskell-modules/hackage-packages.nix",
+]
