@@ -10515,6 +10515,12 @@
     githubId = 251028;
     name = "Shell Turner";
   };
+  shikanime = {
+    name = "William Phetsinorath";
+    email = "deva.shikanime@protonmail.com";
+    github = "shikanime";
+    githubId = 22115108;
+  };
   shlevy = {
     email = "shea@shealevy.com";
     github = "shlevy";
