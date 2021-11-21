@@ -195,11 +195,6 @@ self: super: {
   # Upper bound on `hashable` is too restrictive
   semigroupoids = overrideCabal (drv: { postPatch = "sed -i -e 's,hashable >= 1.2.7.0  && < 1.4,hashable >= 1.2.7.0  \\&\\& < 1.5,' semigroupoids.cabal";}) super.semigroupoids;
 
-  streaming-commons = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/streaming-commons-0.2.2.1.patch";
-    sha256 = "04wi1jskr3j8ayh88kkx4irvhhgz0i7aj6fblzijy0fygikvidpy";
-  }) super.streaming-commons;
-
   # Tests have a circular dependency on quickcheck-instances
   text-short = dontCheck super.text-short_0_1_4;
 
