@@ -99,6 +99,7 @@ self: super: {
   # Similar RTS issue in test suite:
   # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 
 
   # https://github.com/ekmett/half/issues/35
