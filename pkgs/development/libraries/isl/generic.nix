@@ -7,9 +7,8 @@
 { lib, stdenv, fetchurl, gmp
 }:
 
-stdenv.mkDerivation rec {
-  pname = "isl";
-  inherit version;
+stdenv.mkDerivation {
+  name = "isl-${version}";
 
   src = fetchurl {
     inherit urls sha256;
