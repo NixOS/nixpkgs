@@ -298,7 +298,7 @@
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
     "fronius" = ps: with ps; [ pyfronius ];
     "frontend" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
-    "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
+    "frontier_silicon" = ps: with ps; [ afsapi ];
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
