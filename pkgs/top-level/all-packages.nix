@@ -1281,7 +1281,9 @@ with pkgs;
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
-  arj = callPackage ../tools/archivers/arj { };
+  arj = callPackage ../tools/archivers/arj {
+    stdenv = gccStdenv;
+  };
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
