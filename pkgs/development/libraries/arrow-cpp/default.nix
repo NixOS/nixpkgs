@@ -53,8 +53,8 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "a60b715263d9bbf7e744527fb0c084b693f58043";
-    hash = "sha256-Dz1dCV0m5Y24qzXdVaqrZ7hK3MRSb4GF0PXrjMAsjZU=";
+    rev = "1d8525e109a12a8c67c489eba48715a199609153";
+    hash = "sha256-tesDW/1yRyhZtpLbPvCVEsocs6KtstYofxB5GiSMEFM=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -67,12 +67,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-adJo+egtPr71la0b3IPUywKyDBgZRqaGMfZkXXwfepA=";
+    hash = "sha256-N4az0t+VTQeLPmj5jS5a7Lqj+irM8HXXo6E8GHucUpQ=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
