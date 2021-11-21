@@ -23,6 +23,7 @@
 , OpenCL
 
 , callPackage
+, nixosTests
 }:
 
 # cmake 3.21 inserts invalid `ldd` and `-Wl,--no-as-needed` calls, apparently
@@ -97,6 +98,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests = {
     voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    run-voxedit = nixosTests.vengi-tools;
   };
 
   meta = with lib; {
