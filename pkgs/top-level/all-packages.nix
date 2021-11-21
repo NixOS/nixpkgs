@@ -28763,6 +28763,10 @@ with pkgs;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
+  vengi-tools = callPackage ../applications/graphics/vengi-tools {
+    inherit (darwin.apple_sdk.frameworks) Carbon OpenCL;
+  };
+
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;
   };
