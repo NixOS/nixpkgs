@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , nix-update-script
 , pkg-config
+, rustup
 , openssl
 , stdenv
 , libiconv
 , Security
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +37,12 @@ rustPlatform.buildRustPackage rec {
     then [ libiconv Security ]
     else [ openssl ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+
+  # Depends at run-time on having rustup in PATH
+  postInstall = ''
+    wrapProgram $out/bin/cargo-msrv --prefix PATH : ${lib.makeBinPath [ rustup ]};
+  '';
 
   meta = with lib; {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";

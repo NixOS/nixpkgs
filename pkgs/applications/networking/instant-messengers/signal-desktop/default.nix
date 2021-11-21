@@ -10,7 +10,6 @@
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
 # For a full list of available languages:
 # $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
-, sqlcipher
 }:
 
 let
@@ -23,42 +22,9 @@ let
       --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
       --set LC_MESSAGES "${spellcheckerLanguage}"'');
 
-  sqlcipher-signal = sqlcipher.overrideAttrs (_: {
-    # Using the same features as the upstream signal sqlcipher build
-    # https://github.com/signalapp/better-sqlite3/blob/2fa02d2484e9f9a10df5ac7ea4617fb2dff30006/deps/defines.gypi
-    CFLAGS = [
-      "-DSQLITE_LIKE_DOESNT_MATCH_BLOBS"
-      "-DSQLITE_THREADSAFE=2"
-      "-DSQLITE_USE_URI=0"
-      "-DSQLITE_DEFAULT_MEMSTATUS=0"
-      "-DSQLITE_OMIT_DEPRECATED"
-      "-DSQLITE_OMIT_GET_TABLE"
-      "-DSQLITE_OMIT_TCL_VARIABLE"
-      "-DSQLITE_OMIT_PROGRESS_CALLBACK"
-      "-DSQLITE_OMIT_SHARED_CACHE"
-      "-DSQLITE_TRACE_SIZE_LIMIT=32"
-      "-DSQLITE_DEFAULT_CACHE_SIZE=-16000"
-      "-DSQLITE_DEFAULT_FOREIGN_KEYS=1"
-      "-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1"
-      "-DSQLITE_ENABLE_COLUMN_METADATA"
-      "-DSQLITE_ENABLE_UPDATE_DELETE_LIMIT"
-      "-DSQLITE_ENABLE_STAT4"
-      "-DSQLITE_ENABLE_FTS5"
-      "-DSQLITE_ENABLE_JSON1"
-      "-DSQLITE_ENABLE_RTREE"
-      "-DSQLITE_INTROSPECTION_PRAGMAS"
-
-      # SQLCipher-specific options
-      "-DSQLITE_HAS_CODEC"
-      "-DSQLITE_TEMP_STORE=2"
-      "-DSQLITE_SECURE_DELETE"
-    ];
-
-    LDFLAGS = [ "-lm" ];
-  });
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.23.1"; # Please backport all updates to the stable channel.
+  version = "5.24.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -68,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0scbnkkbaqyqiz6bfvhdrc0yqnccjsf66iggjpa7kjyk3cy61s6c";
+    sha256 = "1p19vs4wxlghv8cbsq5k4bl8h9fzr9izp4k4qs5fcnqiy1z92ycy";
   };
 
   nativeBuildInputs = [
@@ -153,7 +119,6 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      --prefix LD_PRELOAD : "${sqlcipher-signal}/lib/libsqlcipher.so"
       ${customLanguageWrapperArgs}
     )
 

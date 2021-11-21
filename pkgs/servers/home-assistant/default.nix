@@ -152,7 +152,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.11.4";
+  hassVersion = "2021.11.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -169,7 +169,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "sha256-411oqzC8VTD7CM9vM/M3m4zW0Ygf2g2hoAXAxGBv7iw=";
+    sha256 = "sha256-5MxArJLzOg9dU4Q2c6BDjvEzR2u7UVumNZjwE84+br8=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -536,8 +536,10 @@ in with py.pkgs; buildPythonApplication rec {
     "nam"
     "namecheapdns"
     "neato"
+    "ness_alarm"
     "netatmo"
     "nexia"
+    "nightscout"
     "no_ip"
     "notify"
     "notion"
@@ -723,6 +725,7 @@ in with py.pkgs; buildPythonApplication rec {
     "vesync"
     "vilfo"
     "vizio"
+    "vlc_telnet"
     "voicerss"
     "volumio"
     # disabled, becaused AttributeError: <class 'vultr.vultr.Vultr'> does not have the attribute 'server_list'

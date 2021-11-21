@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils }:
-
+{ lib, stdenv, fetchurl, jdk11_headless, makeWrapper, nixosTests, bash, coreutils }:
+let
+  # Latest supported LTS JDK for Zookeeper 3.6:
+  # https://zookeeper.apache.org/doc/r3.6.3/zookeeperAdmin.html#sc_requiredSoftware
+  jre = jdk11_headless;
+in
 stdenv.mkDerivation rec {
   pname = "zookeeper";
   version = "3.6.3";
@@ -32,6 +36,10 @@ stdenv.mkDerivation rec {
     chmod -x $out/bin/zkEnv.sh
     runHook postInstall
   '';
+
+  passthru.tests = {
+    nixos = nixosTests.zookeeper;
+  };
 
   meta = with lib; {
     homepage = "https://zookeeper.apache.org";
