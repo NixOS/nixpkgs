@@ -296,7 +296,7 @@ in
     virtualisation.memorySize =
       mkOption {
         type = types.ints.positive;
-        default = 384;
+        default = 1024;
         description =
           ''
             The memory size in megabytes of the virtual machine.

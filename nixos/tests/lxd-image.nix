@@ -46,8 +46,6 @@ in {
 
   machine = { lib, ... }: {
     virtualisation = {
-      # OOMs otherwise
-      memorySize = 1024;
       # disk full otherwise
       diskSize = 2048;
 

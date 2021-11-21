@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
       networking.useDHCP = false;

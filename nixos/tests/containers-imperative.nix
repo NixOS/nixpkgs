@@ -14,7 +14,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       nix.binaryCaches = []; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.additionalPaths = let

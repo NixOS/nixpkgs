@@ -464,7 +464,6 @@ let
         extraFlags = [ "--lnd.network=regtest" ];
       };
       metricProvider = {
-        virtualisation.memorySize = 1024;
         systemd.services.prometheus-lnd-exporter.serviceConfig.RestartSec = 15;
         systemd.services.prometheus-lnd-exporter.after = [ "lnd.service" ];
         services.bitcoind.regtest = {
@@ -953,7 +952,6 @@ let
       };
       metricProvider = {
         services.rspamd.enable = true;
-        virtualisation.memorySize = 1024;
       };
       exporterTest = ''
         wait_for_unit("rspamd.service")
