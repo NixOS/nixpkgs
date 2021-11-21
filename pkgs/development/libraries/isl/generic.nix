@@ -2,6 +2,7 @@
 , version
 , urls
 , sha256
+, configureFlags ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp ];
+
+  inherit configureFlags;
 
   enableParallelBuilding = true;
 
