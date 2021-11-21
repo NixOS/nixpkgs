@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
+{ lib, stdenv, fetchFromGitHub, buildPackages
+, autoreconfHook, pkg-config, gettext
 , libusb1
 , libtool
 , libexif
+, libgphoto2
 , libjpeg
 }:
 
@@ -16,17 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c7fBl6GBLAU+RL5WFC4PL+n/nEHZUfqIJ9qq1+qNNCg=";
   };
 
-  patches = [];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     gettext
     libtool
   ];
 
   buildInputs = [
     libjpeg
+    libtool # for libltdl
     libusb1
   ];
 
@@ -35,9 +37,16 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
+  postInstall = let
+    executablePrefix = if stdenv.buildPlatform == stdenv.hostPlatform then
+      "$out"
+    else
+      buildPackages.libgphoto2;
+  in ''
     mkdir -p $out/lib/udev/rules.d
-    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
+    ${executablePrefix}/lib/libgphoto2/print-camera-list \
+        udev-rules version 175 group camera \
+        >$out/lib/udev/rules.d/40-gphoto2.rules
   '';
 
   meta = {

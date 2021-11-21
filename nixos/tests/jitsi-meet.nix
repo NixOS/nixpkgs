@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client = { nodes, pkgs, ... }: {
     };
     server = { config, pkgs, ... }: {
-      virtualisation.memorySize = 512;
       services.jitsi-meet = {
         enable = true;
         hostName = "server";

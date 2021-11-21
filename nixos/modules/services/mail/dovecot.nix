@@ -103,11 +103,12 @@ let
 
         plugin {
           quota_rule = *:storage=${cfg.quotaGlobalPerUser}
-          quota = maildir:User quota # per virtual mail user quota # BUG/FIXME broken, we couldn't get this working
+          quota = count:User quota # per virtual mail user quota
           quota_status_success = DUNNO
           quota_status_nouser = DUNNO
           quota_status_overquota = "552 5.2.2 Mailbox is full"
           quota_grace = 10%%
+          quota_vsizes = yes
         }
       ''
     )

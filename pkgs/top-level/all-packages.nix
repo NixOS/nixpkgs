@@ -1281,7 +1281,9 @@ with pkgs;
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
-  arj = callPackage ../tools/archivers/arj { };
+  arj = callPackage ../tools/archivers/arj {
+    stdenv = gccStdenv;
+  };
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
@@ -3266,9 +3268,7 @@ with pkgs;
 
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
-  masscan = callPackage ../tools/security/masscan {
-    stdenv = gccStdenv;
-  };
+  masscan = callPackage ../tools/security/masscan { };
 
   massren = callPackage ../tools/misc/massren { };
 
@@ -5161,9 +5161,7 @@ with pkgs;
     icu = icu63;
   };
 
-  fluent-bit = callPackage ../tools/misc/fluent-bit {
-    stdenv = gccStdenv;
-  };
+  fluent-bit = callPackage ../tools/misc/fluent-bit { };
 
   flux = callPackage ../development/compilers/flux { };
 
@@ -5307,9 +5305,7 @@ with pkgs;
 
   fprintd = callPackage ../tools/security/fprintd { };
 
-  fprintd-tod = callPackage ../tools/security/fprintd {
-    libfprint = libfprint-tod;
-  };
+  fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
 
   ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
@@ -6539,6 +6535,7 @@ with pkgs;
   isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
   isl_0_17 = callPackage ../development/libraries/isl/0.17.1.nix { };
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
+  isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
@@ -7818,6 +7815,8 @@ with pkgs;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
 
+  netdiscover = callPackage ../tools/networking/netdiscover { };
+
   nethogs = callPackage ../tools/networking/nethogs { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
@@ -8834,9 +8833,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa IOKit;
   };
 
-  rig = callPackage ../tools/misc/rig {
-    stdenv = gccStdenv;
-  };
+  rig = callPackage ../tools/misc/rig { };
 
   riseup-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "riseup";
@@ -9627,7 +9624,7 @@ with pkgs;
 
   synapse-admin = callPackage ../tools/admin/synapse-admin {};
 
-  sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
+  sl = callPackage ../tools/misc/sl { };
 
   socat = callPackage ../tools/networking/socat { };
 
@@ -11607,7 +11604,7 @@ with pkgs;
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       cc = old.cc.override {
         reproducibleBuild = false;
-        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+        profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
       };
     }) else ccWrapper;
 
@@ -12061,6 +12058,8 @@ with pkgs;
   psc-package = callPackage ../development/compilers/purescript/psc-package { };
 
   purescript-psa = nodePackages.purescript-psa;
+
+  purenix = haskell.lib.compose.justStaticExecutables haskellPackages.purenix;
 
   spago = callPackage ../development/tools/purescript/spago { };
 
@@ -13612,6 +13611,10 @@ with pkgs;
     # racket 6.11 doesn't build with gcc6 + recent glibc:
     # https://github.com/racket/racket/pull/1886
     # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
+    stdenv = if stdenv.isDarwin then stdenv else gcc7Stdenv;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
+  racket_7_9 = callPackage ../development/interpreters/racket/racket_7_9.nix {
     stdenv = if stdenv.isDarwin then stdenv else gcc7Stdenv;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
@@ -29124,94 +29127,6 @@ with pkgs;
 
   wp-cli = callPackage ../development/tools/wp-cli { };
 
-  retroArchCores =
-    let
-      cfg = config.retroarch or {};
-      inherit (lib) optional;
-    in with libretro;
-      ([ ]
-      ++ optional (cfg.enableAtari800 or false) atari800
-      ++ optional (cfg.enableBeetleGBA or false) beetle-gba
-      ++ optional (cfg.enableBeetleLynx or false) beetle-lynx
-      ++ optional (cfg.enableBeetleNGP or false) beetle-ngp
-      ++ optional (cfg.enableBeetlePCEFast or false) beetle-pce-fast
-      ++ optional (cfg.enableBeetlePCFX or false) beetle-pcfx
-      ++ optional (cfg.enableBeetlePSX or false) beetle-psx
-      ++ optional (cfg.enableBeetlePSXHW or false) beetle-psx-hw
-      ++ optional (cfg.enableBeetleSaturn or false) beetle-saturn
-      ++ optional (cfg.enableBeetleSaturnHW or false) beetle-saturn-hw
-      ++ optional (cfg.enableBeetleSNES or false) beetle-snes
-      ++ optional (cfg.enableBeetleSuperGrafx or false) beetle-supergrafx
-      ++ optional (cfg.enableBeetleWswan or false) beetle-wswan
-      ++ optional (cfg.enableBeetleVB or false) beetle-vb
-      ++ optional (cfg.enableBlueMSX or false) bluemsx
-      ++ optional (cfg.enableBsnesMercury or false) bsnes-mercury
-      ++ optional (cfg.enableCitra or false) citra
-      ++ optional (cfg.enableDesmume or false) desmume
-      ++ optional (cfg.enableDesmume2015 or false) desmume2015
-      ++ optional (cfg.enableDolphin or false) dolphin
-      ++ optional (cfg.enableDOSBox or false) dosbox
-      ++ optional (cfg.enableEightyOne or false) eightyone
-      ++ optional (cfg.enableFBAlpha2012 or false) fbalpha2012
-      ++ optional (cfg.enableFBNeo or false) fbneo
-      ++ optional (cfg.enableFceumm or false) fceumm
-      ++ optional (cfg.enableFlycast or false) flycast
-      ++ optional (cfg.enableFMSX or false) fmsx
-      ++ optional (cfg.enableFreeIntv or false) freeintv
-      ++ optional (cfg.enableGambatte or false) gambatte
-      ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
-      ++ optional (cfg.enableGpsp or false) gpsp
-      ++ optional (cfg.enableGW or false) gw
-      ++ optional (cfg.enableHandy or false) handy
-      ++ optional (cfg.enableHatari or false) hatari
-      ++ optional (cfg.enableMAME or false) mame
-      ++ optional (cfg.enableMAME2000 or false) mame2000
-      ++ optional (cfg.enableMAME2003 or false) mame2003
-      ++ optional (cfg.enableMAME2003Plus or false) mame2003-plus
-      ++ optional (cfg.enableMAME2010 or false) mame2010
-      ++ optional (cfg.enableMAME2015 or false) mame2015
-      ++ optional (cfg.enableMAME2016 or false) mame2016
-      ++ optional (cfg.enableMesen or false) mesen
-      ++ optional (cfg.enableMeteor or false) meteor
-      ++ optional (cfg.enableMGBA or false) mgba
-      ++ optional (cfg.enableMupen64Plus or false) mupen64plus
-      ++ optional (cfg.enableNeoCD or false) neocd
-      ++ optional (cfg.enableNestopia or false) nestopia
-      ++ optional (cfg.enableNP2kai or false) np2kai
-      ++ optional (cfg.enableO2EM or false) o2em
-      ++ optional (cfg.enableOpera or false) opera
-      ++ optional (cfg.enableParallelN64 or false) parallel-n64
-      ++ optional (cfg.enablePCSXRearmed or false) pcsx_rearmed
-      ++ optional (cfg.enablePicodrive or false) picodrive
-      ++ optional (cfg.enablePlay or false) play
-      ++ optional (cfg.enablePPSSPP or false) ppsspp
-      ++ optional (cfg.enablePrboom or false) prboom
-      ++ optional (cfg.enableProSystem or false) prosystem
-      ++ optional (cfg.enableQuickNES or false) quicknes
-      ++ optional (cfg.enableSameBoy or false) sameboy
-      ++ optional (cfg.enableScummVM or false) scummvm
-      ++ optional (cfg.enableSMSPlusGX or false) smsplus-gx
-      ++ optional (cfg.enableSnes9x or false) snes9x
-      ++ optional (cfg.enableSnes9x2002 or false) snes9x2002
-      ++ optional (cfg.enableSnes9x2005 or false) snes9x2005
-      ++ optional (cfg.enableSnes9x2010 or false) snes9x2010
-      ++ optional (cfg.enableStella or false) stella
-      ++ optional (cfg.enableStella2014 or false) stella2014
-      ++ optional (cfg.enableTGBDual or false) tgbdual
-      ++ optional (cfg.enableThePowderToy or false) the-powder-toy
-      ++ optional (cfg.enableTIC80 or false) tic80
-      ++ optional (cfg.enableVbaNext or false) vba-next
-      ++ optional (cfg.enableVbaM or false) vba-m
-      ++ optional (cfg.enableVecx or false) vecx
-      ++ optional (cfg.enableVirtualJaguar or false) virtualjaguar
-      ++ optional (cfg.enableYabause or false) yabause
-      );
-
-  wrapRetroArch = { retroarch }: callPackage ../misc/emulators/retroarch/wrapper.nix {
-    inherit retroarch;
-    cores = retroArchCores;
-  };
-
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
@@ -29291,10 +29206,7 @@ with pkgs;
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
 
   kodi-retroarch-advanced-launchers =
-    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix {
-      cores = retroArchCores;
-  };
-  xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
+    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix { };
 
   xca = libsForQt5.callPackage ../applications/misc/xca { };
 
@@ -29654,7 +29566,12 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots { miniupnpc = miniupnpc_2; };
+  bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
+    boost = boost17x;
+    miniupnpc = miniupnpc_2;
+    withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
@@ -32867,7 +32784,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
   };
 
+  wrapRetroArch = { retroarch }: callPackage ../misc/emulators/retroarch/wrapper.nix {
+    inherit retroarch;
+  };
+
   retroarch = wrapRetroArch { retroarch = retroarchBare; };
+
+  retroarchFull = retroarch.override {
+    cores = builtins.filter (c: c ? libretroCore) (builtins.attrValues libretro);
+  };
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;

@@ -1,16 +1,12 @@
-{ lib, python3, fetchpatch, writeText }:
+{ lib
+, python3
+}:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-  setuppy = writeText "setup.py" ''
-    from setuptools import setup
-    setup()
-  '';
-in buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
   version = "1.0.0";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
   };
@@ -36,8 +32,12 @@ in buildPythonApplication rec {
     pyusb
   ];
 
+  # buildPythonApplication requires setup.py; the setup.py file crafted below
+  # acts as a wrapper to setup.cfg
   postConfigure = ''
-    cp ${setuppy} setup.py
+    touch setup.py
+    echo "from setuptools import setup" >> setup.py
+    echo "setup()" >> setup.py
   '';
 
   # no tests implemented

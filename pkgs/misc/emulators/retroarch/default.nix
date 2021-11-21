@@ -55,21 +55,21 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # FIXME: The `retroarch.cfg` file is created once in the first run and only
-    # updated when needed. However, the file may have out-of-date paths
-    # In case of issues (e.g.: cores are not loading), please delete the
-    # `$XDG_CONFIG_HOME/retroarch/retroarch.cfg` file
-    # See: https://github.com/libretro/RetroArch/issues/13251
-    ./fix-config.patch
+    ./0001-Disable-menu_show_core_updater.patch
+    ./0002-Use-fixed-paths-on-libretro_info_path.patch
   ];
 
   postPatch = ''
-    substituteInPlace retroarch.cfg \
+    substituteInPlace "frontend/drivers/platform_unix.c" \
       --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
+    substituteInPlace "frontend/drivers/platform_darwin.m" \
+      --replace "@libretro_directory@" "$out/lib" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
   '';
 
-  nativeBuildInputs = [ pkg-config wayland ] ++
+  nativeBuildInputs = [ pkg-config ] ++
+    optional stdenv.isLinux wayland ++
     optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
@@ -110,5 +110,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    # FIXME: exits with error on macOS:
+    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
+    broken = stdenv.isDarwin;
   };
 }

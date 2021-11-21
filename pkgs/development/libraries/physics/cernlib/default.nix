@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
     substituteInPlace 2006/src/config/lnxLib.rules \
       --replace "# lib" "// lib"
+    # binutils 2.37 fix
+    substituteInPlace 2006/src/config/Imake.tmpl --replace "clq" "cq"
   '';
 
   configurePhase = ''
@@ -39,12 +41,12 @@ stdenv.mkDerivation rec {
 
     cd $CERN_ROOT/build
     $CVSCOSRC/config/imake_boot
-    make bin/kuipc
-    make scripts/Makefile
+    make -j $NIX_BUILD_CORES bin/kuipc
+    make -j $NIX_BUILD_CORES scripts/Makefile
     pushd scripts
-    make install.bin
+    make -j $NIX_BUILD_CORES install.bin
     popd
-    make
+    make -j $NIX_BUILD_CORES
   '';
 
   installPhase = ''

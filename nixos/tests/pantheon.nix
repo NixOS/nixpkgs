@@ -15,7 +15,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
-    virtualisation.memorySize = 1024;
   };
 
   enableOCR = true;

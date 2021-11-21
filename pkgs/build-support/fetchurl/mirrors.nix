@@ -151,6 +151,7 @@
   cpan = [
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
+    "https://mirrors.kernel.org/CPAN/"
     "https://backpan.perl.org/"  # for old releases
   ];
 
@@ -171,6 +172,7 @@
   debian = [
     "https://httpredir.debian.org/debian/"
     "https://ftp.debian.org/debian/"
+    "https://mirrors.edge.kernel.org/debian/"
     "ftp://ftp.de.debian.org/debian/"
     "ftp://ftp.fr.debian.org/debian/"
     "ftp://ftp.nl.debian.org/debian/"
@@ -183,6 +185,7 @@
   ubuntu = [
     "https://nl.archive.ubuntu.com/ubuntu/"
     "https://old-releases.ubuntu.com/ubuntu/"
+    "https://mirrors.edge.kernel.org/ubuntu/"
     "http://de.archive.ubuntu.com/ubuntu/"
     "http://archive.ubuntu.com/ubuntu/"
   ];
@@ -206,6 +209,7 @@
     "https://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/"
     "https://ftp.opensuse.org/pub/opensuse/distribution/"
     "https://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/"
+    "https://mirrors.edge.kernel.org/opensuse/distribution/"
     "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/"
   ];
 

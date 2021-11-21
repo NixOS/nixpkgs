@@ -70,14 +70,14 @@ let
     let iface = if grubVersion == 1 then "ide" else "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
         bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !(pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
           flags = "-cpu max"
           ${if (system == "x86_64-linux" || system == "i686-linux")
-            then ''flags += " -m 1024"''
-            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
+            then ''flags += " -m 1500"''
+            else ''flags += " -m 1000 -enable-kvm -machine virt,gic-version=host"''
           }
           return flags
 
@@ -288,7 +288,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
+          virtualisation.memorySize = 3096;
 
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is

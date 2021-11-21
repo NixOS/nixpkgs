@@ -2,7 +2,6 @@
 import ../make-test-python.nix ({...}: {
   nodes = {
     namenode = {pkgs, ...}: {
-      virtualisation.memorySize = 1024;
       services.hadoop = {
         package = pkgs.hadoop;
         hdfs = {

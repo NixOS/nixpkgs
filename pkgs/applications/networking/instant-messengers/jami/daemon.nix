@@ -3,6 +3,7 @@
 , jami-meta
 , stdenv
 , lib
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , perl # for pod2man
@@ -57,9 +58,15 @@ let
 
   pjsip-jami = pjsip.overrideAttrs (old:
     let
+      src-args = import ./pjproject-src.nix;
+      version = lib.concatStrings (lib.lists.take 7 (lib.stringToCharacters src-args.rev));
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     {
+      inherit version;
+
+      src = fetchFromGitHub src-args;
+
       patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
     });
 
@@ -68,7 +75,8 @@ let
     enablePushNotifications = true;
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "jami-daemon";
   inherit src version;
   sourceRoot = "source/daemon";

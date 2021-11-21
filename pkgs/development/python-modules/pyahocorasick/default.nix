@@ -15,6 +15,11 @@ buildPythonPackage rec {
     sha256 = "13x3718if28l50474xrz1b9709kvnvdg3nzm6y8bh7mc9a4zyss5";
   };
 
+  postPatch = ''
+    substituteInPlace unittests.py \
+        --replace '(tmp, "test.dat")' "(\"$TMPDIR\", \"test.dat\")"
+  '';
+
   checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "unittests.py" ];

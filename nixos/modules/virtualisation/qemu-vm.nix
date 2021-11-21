@@ -97,7 +97,7 @@ let
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
   efiPrefix =
-    if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then "${pkgs.OVMF.fd}/FV/OVMF"
+    if pkgs.stdenv.hostPlatform.isx86 then "${pkgs.OVMF.fd}/FV/OVMF"
     else if pkgs.stdenv.isAarch64 then "${pkgs.OVMF.fd}/FV/AAVMF"
     else throw "No EFI firmware available for platform";
   efiFirmware = "${efiPrefix}_CODE.fd";
@@ -296,7 +296,7 @@ in
     virtualisation.memorySize =
       mkOption {
         type = types.ints.positive;
-        default = 384;
+        default = 1024;
         description =
           ''
             The memory size in megabytes of the virtual machine.
@@ -833,7 +833,7 @@ in
 
     # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
-      (mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+      (mkIf pkgs.stdenv.hostPlatform.isx86 [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
