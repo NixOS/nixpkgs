@@ -773,7 +773,7 @@
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "siren" = ps: with ps; [ ];
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
-    "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
+    "sky_hub" = ps: with ps; [ pyskyqhub ];
     "skybeacon" = ps: with ps; [ pygatt ];
     "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ slackclient ];
