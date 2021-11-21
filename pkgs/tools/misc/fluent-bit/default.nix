@@ -11,13 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-b+MZuZQB/sl0HcioU1KCxH3TNiXYSPBfC9dBKqCVeXk=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [
+    ./fix-cmetrics-darwin.patch
+    ./fix-luajit-darwin.patch
+  ];
+
   nativeBuildInputs = [ cmake flex bison ];
 
   buildInputs = lib.optionals stdenv.isLinux [ systemd ];
 
   cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
-
-  patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
