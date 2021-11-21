@@ -91,6 +91,8 @@ let
             --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
         '';
 
+        enableParallelBuilding = true;
+
         passthru = {
           inherit core;
           libretroCore = "/lib/retroarch/cores";
@@ -427,7 +429,6 @@ in
     core = "mame";
     description = "Port of MAME to libretro";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
-
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
@@ -443,6 +444,7 @@ in
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
+    enableParallelBuilding = false;
   };
 
   mame2003 = mkLibRetroCore {
@@ -450,6 +452,7 @@ in
     description = "Port of MAME ~2003 to libretro";
     license = "MAME";
     makefile = "Makefile";
+    enableParallelBuilding = false;
   };
 
   mame2003-plus = mkLibRetroCore {
@@ -457,6 +460,7 @@ in
     description = "Port of MAME ~2003+ to libretro";
     license = "MAME";
     makefile = "Makefile";
+    enableParallelBuilding = false;
   };
 
   mame2010 = mkLibRetroCore {
@@ -465,6 +469,7 @@ in
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    enableParallelBuilding = false;
   };
 
   mame2015 = mkLibRetroCore {
@@ -474,6 +479,7 @@ in
     extraNativeBuildInputs = [ python27 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
+    enableParallelBuilding = false;
   };
 
   mame2016 = mkLibRetroCore {
@@ -494,6 +500,7 @@ in
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
     '';
+    enableParallelBuilding = false;
   };
 
   mesen = mkLibRetroCore {
@@ -523,7 +530,6 @@ in
     src = getCoreSrc "mupen64plus";
     description = "Libretro port of Mupen64 Plus, GL only";
     license = lib.licenses.gpl3Only;
-
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
   };
