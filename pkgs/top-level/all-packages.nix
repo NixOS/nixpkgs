@@ -11607,7 +11607,7 @@ with pkgs;
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       cc = old.cc.override {
         reproducibleBuild = false;
-        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+        profiledCompiler = with stdenv; (!isDarwin && hostPlatform.isx86);
       };
     }) else ccWrapper;
 

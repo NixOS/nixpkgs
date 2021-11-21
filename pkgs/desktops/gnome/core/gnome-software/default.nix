@@ -37,7 +37,7 @@
 }:
 
 let
-  withFwupd = stdenv.isx86_64 || stdenv.isi686;
+  withFwupd = stdenv.hostPlatform.isx86;
 in
 
 stdenv.mkDerivation rec {
