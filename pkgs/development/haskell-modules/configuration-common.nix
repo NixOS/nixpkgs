@@ -77,14 +77,6 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-    patches = [
-      # Allows compilation with git-lfs 1.2.0
-      (pkgs.fetchpatch {
-        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=f3326b8b5ae4d1caa5c6e3e192c58c6e064c425a";
-        sha256 = "1nzg4mna462ndylisyy3nfih49aznhzzf7b3krb4p9p0j1zrcy2s";
-        excludes = [ "doc/**" "CHANGELOG" ];
-      })
-    ] ++ (drv.patches or []);
   }) super.git-annex;
 
   # Fix test trying to access /home directory
