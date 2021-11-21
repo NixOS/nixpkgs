@@ -4,7 +4,7 @@ import ./generic.nix rec {
     "mirror://sourceforge/libisl/isl-${version}.tar.xz"
     "https://libisl.sourceforge.io/isl-${version}.tar.xz"
   ];
-  sha256 = "1ak1gq0rbqbah5517blg2zlnfvjxfcl9cjrfc75nbcx5p2gnlnd5";
+  sha256 = "1bgbk6n93qqn7w8v21kxf4x6dc3z0ypqrzvgfd46nhagak60ac84";
   configureFlags = [
     "--with-gcc-arch=generic" # don't guess -march=/mtune=
   ];
