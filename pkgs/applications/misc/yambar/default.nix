@@ -16,7 +16,7 @@
 , wayland
 , wayland-scanner
 , wayland-protocols
-, waylandSupport ? false
+, waylandSupport ? true
 # Xorg backend
 , x11Support ? true
 , libxcb
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     pixman
     tllist
     udev
+  ] ++ lib.optionals (waylandSupport) [
     wayland
     wayland-protocols
   ] ++ lib.optionals (x11Support) [
