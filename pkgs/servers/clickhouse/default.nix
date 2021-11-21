@@ -3,6 +3,7 @@
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
 , xxHash, zstd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru.tests.clickhouse = nixosTests.clickhouse;
 
   meta = with lib; {
     homepage = "https://clickhouse.tech/";
