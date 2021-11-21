@@ -732,6 +732,9 @@ with pkgs;
 
   makeInitrd = callPackage ../build-support/kernel/make-initrd.nix; # Args intentionally left out
 
+  makeInitrdNG = callPackage ../build-support/kernel/make-initrd-ng.nix;
+  makeInitrdNGTool = callPackage ../build-support/kernel/make-initrd-ng-tool.nix {};
+
   makeWrapper = makeSetupHook
     { deps = [ dieHook ];
       substitutions = {
