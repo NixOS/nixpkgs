@@ -87,13 +87,12 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
 
-  # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
-  broken = stdenv.isDarwin && stdenv.isAarch64;
-
   meta = with lib; {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ payas ];
+    # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
