@@ -21697,6 +21697,8 @@ with pkgs;
 
   webdav = callPackage ../servers/webdav { };
 
+  webdav-server-rs = callPackage ../servers/webdav-server-rs { };
+
   webmetro = callPackage ../servers/webmetro { };
 
   wsdd = callPackage ../servers/wsdd { };
