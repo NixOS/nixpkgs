@@ -1,4 +1,4 @@
-{ lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab }:
 
 buildPythonApplication rec {
@@ -86,6 +86,9 @@ buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
+
+  # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
+  broken = stdenv.isDarwin && stdenv.isAarch64;
 
   meta = with lib; {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
