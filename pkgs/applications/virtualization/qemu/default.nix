@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, autoPatchelfHook
+, makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [ zlib glib perl pixman
@@ -84,6 +83,7 @@ stdenv.mkDerivation rec {
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
+  separateDebugInfo = true;
 
   patches = [
     ./fix-qemu-ga.patch
@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--audio-drv-list=${audio}"
+    "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
     "--enable-guest-agent"
