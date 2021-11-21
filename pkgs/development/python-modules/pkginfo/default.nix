@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,13 @@ buildPythonPackage rec {
     sha256 = "sha256-ZRdf+iyAciBnOkHDcVc6yaHqGxn/1e75FiePQoMZk08=";
   };
 
-  doCheck = false; # I don't know why, but with doCheck = true it fails.
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pkginfo"
+  ];
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
