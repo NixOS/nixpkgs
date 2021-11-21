@@ -5,7 +5,7 @@
 }:
 
 let
-  openrct2-version = "0.3.5";
+  openrct2-version = "0.3.5.1";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
@@ -16,7 +16,7 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "0xmj0qs49d1xlc8lbspr1vg66i0jdjlhcfxci72x6knjvd0vcgz0";
+    sha256 = "01v9nsabqjq8hjmyshcp7f5liagfq8sxx9i3yqqab7zk4iixag1h";
   };
 
   objects-src = fetchFromGitHub {
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = ''
-    # Verify that the correct version of the third party repositories is used.
+    # Verify that the correct version of each third party repository is used.
 
     grep -q '^set(OBJECTS_VERSION "${objects-version}")$' CMakeLists.txt \
       || (echo "OBJECTS_VERSION differs!"; exit 1)
@@ -87,6 +87,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
+    downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];
