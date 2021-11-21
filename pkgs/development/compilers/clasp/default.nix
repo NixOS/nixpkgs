@@ -86,6 +86,12 @@ stdenv.mkDerivation rec {
   NIX_CXXSTDLIB_COMPILE = " -frtti ";
 
   postPatch = ''
+    # fix "TabError: inconsistent use of tabs and spaces in indentation"
+    # Sources are space-indented with occasional tabs present.
+    sed -i -e 's@^\t@        @g' \
+        wscript \
+        tools-for-build/wscript_utils.py
+
     echo "
       PREFIX = '$out'
     " | sed -e 's/^ *//' > wscript.config
@@ -116,6 +122,9 @@ stdenv.mkDerivation rec {
   installTargets = "install_cboehm";
 
   CLASP_SRC_DONTTOUCH = "true";
+
+  # The build system is waf. Avoid using cmake hook.
+  dontUseCmakeConfigure = true;
 
   meta = {
     description = "A Common Lisp implementation based on LLVM with C++ integration";
