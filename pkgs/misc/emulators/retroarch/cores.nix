@@ -184,18 +184,6 @@ in
     description = "Port of Mednafen's Saturn core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    makeFlags = [ "HAVE_HW=0" ];
-    meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
-  };
-
-  beetle-saturn-hw = mkLibRetroCore {
-    core = "mednafen-saturn-hw";
-    src = getCoreSrc "beetle-saturn";
-    description = "Port of Mednafen's Saturn core to libretro";
-    license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libGL libGLU ];
-    makefile = "Makefile";
-    makeFlags = [ "HAVE_OPENGL=1" "HAVE_HW=1" ];
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
