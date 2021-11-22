@@ -1,26 +1,26 @@
 { lib, stdenv, fetchurl, unzip, setJavaClassPath }:
 let
-  # Details from https://www.azul.com/downloads/?version=java-16-sts&os=macos&package=jdk
+  # Details from https://www.azul.com/downloads/?version=java-17-lts&os=macos&package=jdk
   # Note that the latest build may differ by platform
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "16.30.15";
-      jdkVersion = "16.0.1";
-      sha256 = "1jihn125dmxr9y5h9jq89zywm3z6rbwv5q7msfzsf2wzrr13jh0z";
+      zuluVersion = "17.30.15";
+      jdkVersion = "17.0.1";
+      sha256 = "sha256-CdZP5XY3O0MUQigRvIQC+7dwAXaCKw4eK/L/imytEOs=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "16.30.19";
-      jdkVersion = "16.0.1";
-      sha256 = "1i0bcjx3acb5dhslf6cabdcnd6mrz9728vxw9hb4al5y3f5fll4w";
+      zuluVersion = "17.30.15";
+      jdkVersion = "17.0.1";
+      sha256 = "sha256-zhBCXOnO/fsj6+q+vAlEz7QVMRFKLVvYnjwZzFz6mRM=";
     };
   }."${stdenv.hostPlatform.system}";
 
   jce-policies = fetchurl {
     # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
-    url    = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    url = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
@@ -77,4 +77,5 @@ let
 
     meta = import ./meta.nix lib;
   };
-in jdk
+in
+jdk
