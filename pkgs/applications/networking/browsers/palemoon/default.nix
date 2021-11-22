@@ -112,50 +112,14 @@ stdenv.mkDerivation rec {
     export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
-    # Keep this similar to the official .mozconfig file,
-    # only minor changes for portability are permitted with branding.
-    # https://developer.palemoon.org/build/linux/
-    echo > $MOZCONFIG '
-    # Clear this if not a 64bit build
-    _BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
+    export build64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
+    export gtkversion=${if withGTK3 then "3" else "2"}
+    export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
+    export prefix=$out
+    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export autoconf=${autoconf213}/bin/autoconf
 
-    # Set GTK Version
-    _GTK_VERSION=${if withGTK3 then "3" else "2"}
-
-    # Standard build options for Pale Moon
-    ac_add_options --enable-application=palemoon
-    ac_add_options --enable-optimize="-O2 -w"
-    ac_add_options --enable-default-toolkit=cairo-gtk$_GTK_VERSION
-    ac_add_options --enable-jemalloc
-    ac_add_options --enable-strip
-    ac_add_options --enable-devtools
-    ac_add_options --enable-av1
-
-    ac_add_options --disable-eme
-    ac_add_options --disable-webrtc
-    ac_add_options --disable-gamepad
-    ac_add_options --disable-tests
-    ac_add_options --disable-debug
-    ac_add_options --disable-necko-wifi
-    ac_add_options --disable-updater
-
-    ac_add_options --with-pthreads
-
-    # Please see https://www.palemoon.org/redist.shtml for restrictions when using the official branding.
-    ac_add_options --enable-official-branding
-    export MOZILLA_OFFICIAL=1
-
-    ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
-
-    #
-    # NixOS-specific adjustments
-    #
-
-    ac_add_options --prefix=$out
-
-    mk_add_options MOZ_MAKE_FLAGS="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
-    mk_add_options AUTOCONF=${autoconf213}/bin/autoconf
-    '
+    substituteAll ${./mozconfig} $MOZCONFIG
 
     runHook postConfigure
   '';
