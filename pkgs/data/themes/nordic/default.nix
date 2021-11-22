@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nordic";
-  version = "unstable-2021-11-19";
+  version = "2.1.0";
 
   srcs = [
     (fetchFromGitHub {
