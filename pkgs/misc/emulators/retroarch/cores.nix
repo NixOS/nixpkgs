@@ -83,13 +83,18 @@ let
           }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name}"
         ] ++ (args.makeFlags or [ ]);
 
+        coreDir = "${placeholder "out"}/lib/retroarch/cores";
+
         installPhase = ''
-          COREDIR="$out/lib/retroarch/cores"
+          runHook preInstall
+
           mkdir -p $out/bin
-          mkdir -p $COREDIR
-          mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $COREDIR
+          mkdir -p $coreDir
+          mv ${d2u args.core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $coreDir
           makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch-${core} \
-            --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+            --add-flags "-L $coreDir/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
+
+          runHook postInstall
         '';
 
         enableParallelBuilding = true;
@@ -528,6 +533,21 @@ in
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
     preBuild = "cd Libretro";
+  };
+
+  mesen-s = mkLibRetroCore {
+    core = "mesens";
+    src = getCoreSrc "mesen-s";
+    version = "unstable-2021-11-22";
+    description = "Port of Mesen-S to libretro";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
+    preBuild = "cd Libretro";
+    postInstall = ''
+      # fix library name to match libretro-core-info
+      mv $coreDir/mesens_libretro${stdenv.hostPlatform.extensions.sharedLibrary} \
+        $coreDir/mesen-s_libretro${stdenv.hostPlatform.extensions.sharedLibrary}
+    '';
   };
 
   meteor = mkLibRetroCore {
