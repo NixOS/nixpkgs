@@ -1,14 +1,15 @@
 { stdenv, fetchzip, lib, wrapGAppsHook, alsa-lib, atk, cairo, gdk-pixbuf
-, glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
+, glib, gst_all_1,  gtk3, libSM, libX11, libXtst, libpng12, pango, zlib
+, fontconfig }:
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.00";
+  version = "9.10";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchzip {
-      url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.00.0.tar.gz";
-      sha256 = "0mgjx0hnps3jmc2d9hkskxbmwcqf7f9jx595j5sc501br1l84sdf";
+      url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.10.0.tar.gz";
+      sha256 = "0y4g5xwncylw148lvs3ddvqnxs0vkrnc683nmpq2rg7jv2lzdqzb";
     }
   else throw "Platform not supported";
 
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
 
   libPath = with gst_all_1; lib.makeLibraryPath [
     stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsa-lib
-    libX11 libSM libpng12 gstreamer gst-plugins-base zlib
+    libX11 libXtst libSM libpng12 gstreamer gst-plugins-base zlib
+    fontconfig
   ];
 
   installPhase = ''
