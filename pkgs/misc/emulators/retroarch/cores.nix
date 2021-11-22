@@ -50,6 +50,7 @@ let
   mkLibRetroCore =
     { core
     , description
+      # Check https://github.com/libretro/libretro-super for license information
     , license
     , src ? null
     , broken ? false
@@ -114,14 +115,6 @@ in
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     makeFlags = [ "GIT_VERSION=" ];
-  };
-
-  beetle-snes = mkLibRetroCore {
-    core = "mednafen-snes";
-    src = getCoreSrc "beetle-snes";
-    description = "Port of Mednafen's SNES core to libretro";
-    license = lib.licenses.gpl2Only;
-    makefile = "Makefile";
   };
 
   beetle-gba = mkLibRetroCore {
@@ -204,6 +197,14 @@ in
     meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
+  beetle-snes = mkLibRetroCore {
+    core = "mednafen-snes";
+    src = getCoreSrc "beetle-snes";
+    description = "Port of Mednafen's SNES core to libretro";
+    license = lib.licenses.gpl2Only;
+    makefile = "Makefile";
+  };
+
   beetle-supergrafx = mkLibRetroCore {
     core = "mednafen-supergrafx";
     src = getCoreSrc "beetle-supergrafx";
@@ -212,18 +213,18 @@ in
     makefile = "Makefile";
   };
 
-  beetle-wswan = mkLibRetroCore {
-    core = "mednafen-wswan";
-    src = getCoreSrc "beetle-wswan";
-    description = "Port of Mednafen's WonderSwan core to libretro";
-    license = lib.licenses.gpl2Only;
-    makefile = "Makefile";
-  };
-
   beetle-vb = mkLibRetroCore {
     core = "mednafen-vb";
     src = getCoreSrc "beetle-vb";
     description = "Port of Mednafen's VirtualBoy core to libretro";
+    license = lib.licenses.gpl2Only;
+    makefile = "Makefile";
+  };
+
+  beetle-wswan = mkLibRetroCore {
+    core = "mednafen-wswan";
+    src = getCoreSrc "beetle-wswan";
+    description = "Port of Mednafen's WonderSwan core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
   };
@@ -724,6 +725,20 @@ in
     makefile = "Makefile";
   };
 
+  swanstation = mkLibRetroCore {
+    core = "swanstation";
+    version = "unstable-2021-11-21";
+    description = "Port of SwanStation (a fork of DuckStation) to libretro";
+    license = lib.licenses.gpl3Only;
+    extraNativeBuildInputs = [ cmake ];
+    makefile = "Makefile";
+    cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DBUILD_LIBRETRO_CORE=ON"
+    ];
+    postPatch = "mkdir -p src/duckstation-libretro";
+  };
+
   tgbdual = mkLibRetroCore {
     core = "tgbdual";
     description = "Port of TGBDual to libretro";
@@ -757,12 +772,6 @@ in
     postBuild = "cd lib";
   };
 
-  vba-next = mkLibRetroCore {
-    core = "vba-next";
-    description = "VBA-M libretro port with modifications for speed";
-    license = lib.licenses.gpl2Only;
-  };
-
   vba-m = mkLibRetroCore {
     core = "vbam";
     src = getCoreSrc "vba-m";
@@ -770,6 +779,12 @@ in
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     preBuild = "cd src/libretro";
+  };
+
+  vba-next = mkLibRetroCore {
+    core = "vba-next";
+    description = "VBA-M libretro port with modifications for speed";
+    license = lib.licenses.gpl2Only;
   };
 
   vecx = mkLibRetroCore {
