@@ -7865,6 +7865,8 @@ in {
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
 
+  pyversasense = callPackage ../development/python-modules/pyversasense { };
+
   pyvesync = callPackage ../development/python-modules/pyvesync { };
 
   pyvex = callPackage ../development/python-modules/pyvex { };

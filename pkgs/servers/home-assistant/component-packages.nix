@@ -936,7 +936,7 @@
     "venstar" = ps: with ps; [ venstarcolortouch ];
     "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ vsure ];
-    "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
+    "versasense" = ps: with ps; [ pyversasense ];
     "version" = ps: with ps; [ pyhaversion ];
     "vesync" = ps: with ps; [ pyvesync ];
     "viaggiatreno" = ps: with ps; [ ];
