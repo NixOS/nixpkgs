@@ -25801,6 +25801,8 @@ with pkgs;
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
+  pixeluvo = callPackage ../applications/graphics/pixeluvo { };
+
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
