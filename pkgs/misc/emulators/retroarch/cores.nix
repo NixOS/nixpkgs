@@ -246,6 +246,24 @@ in
     makeFlags = [ "PROFILE=accuracy" ];
   };
 
+  bsnes-mercury-balanced = mkLibRetroCore {
+    core = "bsnes-mercury-balanced";
+    src = getCoreSrc "bsnes-mercury";
+    description = "Fork of bsnes with HLE DSP emulation restored";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
+    makeFlags = [ "PROFILE=balanced" ];
+  };
+
+  bsnes-mercury-performance = mkLibRetroCore {
+    core = "bsnes-mercury-performance";
+    src = getCoreSrc "bsnes-mercury";
+    description = "Fork of bsnes with HLE DSP emulation restored";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
+    makeFlags = [ "PROFILE=performance" ];
+  };
+
   citra = mkLibRetroCore {
     core = "citra";
     # `nix-prefetch-github` doesn't support `deepClone`, necessary for citra
