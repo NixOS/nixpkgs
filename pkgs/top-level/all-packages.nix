@@ -4436,7 +4436,7 @@ with pkgs;
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
-  debugedit-unstable = callPackage ../development/tools/misc/debugedit { };
+  debugedit = callPackage ../development/tools/misc/debugedit { };
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
