@@ -8143,6 +8143,8 @@ in {
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
+  pytest-pydocstyle = callPackage ../development/python-modules/pytest-pydocstyle { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
