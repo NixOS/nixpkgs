@@ -1,22 +1,23 @@
 { lib
 , buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, xmlsec
 , cryptography
 , defusedxml
-, pyopenssl
-, python-dateutil
-, pytz, requests
-, six
+, fetchFromGitHub
+, importlib-resources
 , mock
 , pyasn1
 , pymongo
-, pytest
+, pyopenssl
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, requests
 , responses
+, six
+, substituteAll
 , xmlschema
-, importlib-resources
+, xmlsec
 }:
 
 buildPythonPackage rec {
@@ -32,18 +33,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-3Yl6j6KAlw7QQYnwU7+naY6D97IqX766zguekKAuic8=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./hardcode-xmlsec1-path.patch;
-      inherit xmlsec;
-    })
-  ];
-
-  postPatch = ''
-    # fix failing tests on systems with 32bit time_t
-    sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
-  '';
 
   propagatedBuildInputs = [
     cryptography
@@ -62,17 +51,33 @@ buildPythonPackage rec {
     mock
     pyasn1
     pymongo
-    pytest
+    pytestCheckHook
     responses
   ];
 
-  # Disabled tests try to access the network
-  checkPhase = ''
-    py.test -k "not test_load_extern_incommon \
-            and not test_load_remote_encoding \
-            and not test_load_external \
-            and not test_conf_syslog"
+  patches = [
+    (substituteAll {
+      src = ./hardcode-xmlsec1-path.patch;
+      inherit xmlsec;
+    })
+  ];
+
+  postPatch = ''
+    # fix failing tests on systems with 32bit time_t
+    sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
+
+  disabledTests = [
+    # Disabled tests try to access the network
+    "test_load_extern_incommon"
+    "test_load_remote_encoding"
+    "test_load_external"
+    "test_conf_syslog"
+  ];
+
+  pythonImportsCheck = [
+    "saml2"
+  ];
 
   meta = with lib; {
     description = "Python implementation of SAML Version 2 Standard";
