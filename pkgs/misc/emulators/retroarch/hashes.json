@@ -286,6 +286,13 @@
         "sha256": "9+AqZRv8lugNNa+ZZzIPJNO87J1aBUEiOggL8aYno1M=",
         "fetchSubmodules": false
     },
+    "mesen-s": {
+        "owner": "libretro",
+        "repo": "mesen-s",
+        "rev": "42eb0e8ad346608dae86feb8a04833d16ad21541",
+        "sha256": "q6zeoNiZtFy8ZYls9/E+O7o9BYTcVcmYjbJA48qiraU=",
+        "fetchSubmodules": false
+    },
     "meteor": {
         "owner": "libretro",
         "repo": "meteor-libretro",
