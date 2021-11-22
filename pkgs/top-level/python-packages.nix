@@ -3460,6 +3460,8 @@ in {
 
   halo = callPackage ../development/python-modules/halo { };
 
+  halohome = callPackage ../development/python-modules/halohome { };
+
   handout = callPackage ../development/python-modules/handout { };
 
   hangups = callPackage ../development/python-modules/hangups { };
