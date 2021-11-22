@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
     cp -a Nordic* $out/share/themes
     rm -r $out/share/themes/*/.gitignore
@@ -88,13 +89,23 @@ stdenv.mkDerivation rec {
     rm -r $out/share/themes/*/gnome-shell/{extensions,*.scss}
     rm -r $out/share/themes/*/gtk-2.0/{assets.svg,assets.txt,links.fish,render-assets.sh}
     rm -r $out/share/themes/*/gtk-3.0/{apps,widgets,*.scss}
-    rm -r $out/share/themes/*/kde
     rm -r $out/share/themes/*/xfwm4/{assets,render_assets.fish}
+
+    # move kde related contents to appropriate directories
+    mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,sddm/themes/Nordic}
+    mv -v $out/share/themes/Nordic/kde/aurorae/* $out/share/aurorae/themes/
+    mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
+    mv -v $out/share/themes/Nordic/kde/konsole $out/share/
+    mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
+    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
+    mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/Nordic/
+    rm -rf $out/share/themes/Nordic/kde
+
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Gtk themes using the Nord color pallete";
+    description = "Gtk and KDE themes using the Nord color pallete";
     homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3Only;
     platforms = platforms.all;
