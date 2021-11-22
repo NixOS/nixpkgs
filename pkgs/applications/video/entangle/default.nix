@@ -12,7 +12,7 @@
 , at-spi2-core
 , dbus
 , elfutils
-, epoxy
+, libepoxy
 , gexiv2
 , glib
 , gobject-introspection
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     dbus
-    epoxy
+    libepoxy
     elfutils
     gexiv2
     glib

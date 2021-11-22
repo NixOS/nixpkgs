@@ -425,7 +425,7 @@ with self; with super; {
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
   pycairo = callPackage ../development/python-modules/pycairo/1.18.nix {
-    inherit (pkgs) meson;
+    inherit (pkgs.buildPackages) meson;
   };
 
   pycangjie = disabled pycangjie;

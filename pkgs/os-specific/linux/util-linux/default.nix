@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
-  version = "2.36.2";
+  version = "2.37.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0psc0asjp1rmfx1j7468zfnk9nphlphybw2n8dcl74v8v2lnnlgp";
+    sha256 = "sha256-agdkwarn+2B++KbdLA9sR9Xl/SeqCIIKuq2ewU4o6dk=";
   };
 
   patches = [
@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--enable-write"
-    "--enable-last"
-    "--enable-mesg"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"

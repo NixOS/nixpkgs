@@ -5948,7 +5948,7 @@ with pkgs;
   };
 
   graphviz-nox = graphviz.override {
-    xorg = null;
+    withXorg = false;
     libdevil = libdevil-nox;
   };
 
@@ -16110,7 +16110,7 @@ with pkgs;
 
   entt = callPackage ../development/libraries/entt { };
 
-  epoxy = callPackage ../development/libraries/epoxy {};
+  libepoxy = callPackage ../development/libraries/libepoxy {};
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
@@ -21762,7 +21762,7 @@ with pkgs;
 
   iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
+  inherit (callPackages ../os-specific/linux/apparmor { })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches apparmorRulesFromClosure;
 

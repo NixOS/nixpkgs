@@ -297,9 +297,7 @@ in {
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
-  aiohttp = callPackage ../development/python-modules/aiohttp {
-    pytestCheckHook = self.pytestCheckHook_6_1;
-  };
+  aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
@@ -6252,7 +6250,7 @@ in {
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo {
-    inherit (pkgs) meson;
+    inherit (pkgs.buildPackages) meson;
   };
 
   pycallgraph = callPackage ../development/python-modules/pycallgraph { };

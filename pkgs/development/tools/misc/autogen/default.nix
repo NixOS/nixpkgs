@@ -53,25 +53,23 @@ stdenv.mkDerivation rec {
     export MAN_PAGE_DATE=$(date '+%Y-%m-%d' -d "@$SOURCE_DATE_EPOCH")
   '';
 
-  configureFlags =
-    [
-      # Make sure to use a static value for the timeout. If we do not set a value
-      # here autogen will select one based on the execution time of the configure
-      # phase which is not really reproducible.
-      #
-      # If you are curious about the number 78, it has been cargo-culted from
-      # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
-      "--enable-timeout=78"
-    ]
-    ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--with-libxml2=${libxml2.dev}"
-      "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
-      # the configure check for regcomp wants to run a host program
-      "libopts_cv_with_libregex=yes"
-      #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
-    ])
-    # See: https://sourceforge.net/p/autogen/bugs/187/
-    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
+  configureFlags = [
+    "--with-libxml2=${libxml2.dev}"
+    "--with-libxml2-cflags=-I${libxml2.dev}/include/libxml2"
+    # Make sure to use a static value for the timeout. If we do not set a value
+    # here autogen will select one based on the execution time of the configure
+    # phase which is not really reproducible.
+    #
+    # If you are curious about the number 78, it has been cargo-culted from
+    # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
+    "--enable-timeout=78"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # the configure check for regcomp wants to run a host program
+    "libopts_cv_with_libregex=yes"
+    #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
+  ]
+  # See: https://sourceforge.net/p/autogen/bugs/187/
+  ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
 
   #doCheck = true; # not reliable
 
