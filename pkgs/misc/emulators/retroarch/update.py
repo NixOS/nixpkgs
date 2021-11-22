@@ -24,6 +24,7 @@ CORES = {
     "beetle-wswan": {"repo": "beetle-wswan-libretro"},
     "bluemsx": {"repo": "bluemsx-libretro"},
     "bsnes": {"repo": "bsnes-libretro"},
+    "bsnes-hd": {"repo": "bsnes-hd", "owner": "DerKoun"},
     "bsnes-mercury": {"repo": "bsnes-mercury"},
     "citra": {"repo": "citra", "fetch_submodules": True},
     "desmume": {"repo": "desmume"},
