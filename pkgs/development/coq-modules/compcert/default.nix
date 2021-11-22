@@ -16,12 +16,13 @@ let compcert = mkCoqDerivation rec {
 
   defaultVersion =  with versions; switch coq.version [
       { case = range "8.8" "8.11"; out = "3.8"; }
-      { case = range "8.12" "8.13"; out = "3.9"; }
+      { case = range "8.12" "8.14"; out = "3.10"; }
     ] null;
 
   release = {
     "3.8".sha256 = "1gzlyxvw64ca12qql3wnq3bidcx9ygsklv9grjma3ib4hvg7vnr7";
     "3.9".sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
+    "3.10".sha256 = "sha256:19rmx8r8v46101ij5myfrz60arqjy7q3ra3fb8mxqqi3c8c4l4j6";
   };
 
   nativeBuildInputs = [ makeWrapper ];
