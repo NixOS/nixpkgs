@@ -230,6 +230,22 @@ in
     license = lib.licenses.gpl2Only;
   };
 
+  bsnes = mkLibRetroCore {
+    core = "bsnes";
+    version = "unstable-2021-11-22";
+    description = "Port of bsnes to libretro";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
+    # https://github.com/libretro/bsnes-libretro/issues/10
+    patches = [
+      (fetchpatch {
+        name = "added-missing-GB_VERSION-define.patch";
+        url = "https://github.com/nE0sIghT/bsnes-libretro/commit/97fd8b486f9a9046277a580b238b6673a98f7f72.patch";
+        sha256 = "sha256-gCiy6sqc9sixT6Appr5ZCfHyBE2jYhPb0KvI63nfmEc=";
+      })
+    ];
+  };
+
   bsnes-mercury = mkLibRetroCore {
     core = "bsnes-mercury-accuracy";
     src = getCoreSrc "bsnes-mercury";
