@@ -26985,9 +26985,7 @@ with pkgs;
     i3GapsSupport = false;
   };
 
-  yambar = callPackage ../applications/misc/yambar { x11Support = true; waylandSupport = false; };
-
-  yambar-wayland = callPackage ../applications/misc/yambar { x11Support = false; waylandSupport = true; };
+  yambar = callPackage ../applications/misc/yambar { x11Support = true; waylandSupport = true; };
 
   polyphone = libsForQt514.callPackage ../applications/audio/polyphone { };
 
