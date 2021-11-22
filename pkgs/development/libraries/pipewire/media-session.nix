@@ -20,14 +20,14 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire-media-session";
-    version = "0.4.0";
+    version = "0.4.1";
 
     src = fetchFromGitLab {
       domain = "gitlab.freedesktop.org";
       owner = "pipewire";
       repo = "media-session";
       rev = version;
-      sha256 = "sha256-zhOvBlG7DuQkJ+ZZBhBhfKwk+bbLljpt3w4JlK3cJLk=";
+      sha256 = "sha256-e537gTkiNYMz2YJrOff/MXYWVDgHZDkqkSn8Qh+7Wr4=";
     };
 
     nativeBuildInputs = [
@@ -67,6 +67,7 @@ let
     '';
 
     passthru = {
+      updateScript = ./update-media-session.sh;
       tests = {
         test-paths = callPackage ./test-paths.nix { package = self; } {
           paths-out = [
