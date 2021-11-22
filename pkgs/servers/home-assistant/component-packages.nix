@@ -597,7 +597,7 @@
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
     "obihai" = ps: with ps; [ pyobihai ];
     "octoprint" = ps: with ps; [ ]; # missing inputs: pyoctoprintapi
-    "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
+    "oem" = ps: with ps; [ oemthermostat ];
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ pyombi ];
     "omnilogic" = ps: with ps; [ omnilogic ];
