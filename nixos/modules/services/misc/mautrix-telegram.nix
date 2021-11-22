@@ -128,7 +128,7 @@ in {
         # https://github.com/tulir/mautrix-telegram/issues/584
         [ -f ${settingsFile} ] && rm -f ${settingsFile}
         old_umask=$(umask)
-        umask 0277
+        umask 0177
         ${pkgs.envsubst}/bin/envsubst \
           -o ${settingsFile} \
           -i ${settingsFileUnsubstituted}
