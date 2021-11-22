@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitea
 , alsa-lib
 , fcft
