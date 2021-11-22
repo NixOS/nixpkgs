@@ -194,6 +194,12 @@ in
         description = "Whether to use socket activation to start IPFS when needed.";
       };
 
+      pinContentIDList = mkOption {
+        type = with types; listOf str;
+        default = [];
+        description = "List of Content Address IDs to pin at startup of the IPFS service.";
+      };
+
     };
   };
 
@@ -236,7 +242,18 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    systemd.services.ipfs = {
+    systemd.services.ipfs =
+    {
+      # This postStart is a function that generates a multiline string like this:
+      #
+      # ipfs pin add x &
+      # ipfs pin add y &
+      #
+      # Where x and y are the elements of the user's pinContentIDList. This is
+      # then used in the postStart script for IPFS. This means content is pinned
+      # declaratively when IPFS starts, rather than having to execute the
+      # command `ipfs pin x` manually as a user.
+      postStart = lib.concatMapStringsSep "\n" (x: "ipfs pin add ${x} &") cfgpinContentIDList;
       path = [ "/run/wrappers" cfg.package ];
       environment.IPFS_PATH = cfg.dataDir;
 
