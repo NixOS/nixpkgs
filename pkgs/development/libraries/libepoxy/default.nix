@@ -5,12 +5,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  pname = "epoxy";
+  pname = "libepoxy";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "anholt";
-    repo = "libepoxy";
+    repo = pname;
     rev = version;
     sha256 = "0rmg0qlswn250h0arx434jh3hwzsr95lawanpmh1czsfvrcx59l6";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu erictapen ];
     platforms = platforms.unix;
   };
 }

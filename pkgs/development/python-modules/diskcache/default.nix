@@ -32,6 +32,15 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
   pythonImportsCheck = [ "diskcache" ];
 
+  disabledTests = [
+    # very time sensitive, can fail on over subscribed machines
+    "test_incr_update_keyerror"
+  ];
+
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+  ];
+
   meta = with lib; {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";

@@ -77,7 +77,7 @@ in buildFHSUserEnv {
     nasm sndio
 
     # Snes9x
-    epoxy minizip
+    libepoxy minizip
 
     # Vice
     bison flex

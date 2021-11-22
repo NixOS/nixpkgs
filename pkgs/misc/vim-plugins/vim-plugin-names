@@ -12,6 +12,7 @@ aklt/plantuml-syntax
 allendang/nvim-expand-expr@main
 altercation/vim-colors-solarized
 alvan/vim-closetag
+alvarosevilla95/luatab.nvim
 alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
@@ -344,6 +345,7 @@ kbenzie/vim-spirv
 kchmck/vim-coffee-script
 kdheepak/cmp-latex-symbols@main
 kdheepak/lazygit.nvim
+kdheepak/tabline.nvim@main
 KeitaNakamura/neodark.vim
 keith/investigate.vim
 keith/rspec.vim

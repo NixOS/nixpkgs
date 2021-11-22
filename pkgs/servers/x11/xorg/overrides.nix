@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkg-config, llvm, libxslt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -650,7 +650,7 @@ self: super:
           ./dont-create-logdir-during-build.patch
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''

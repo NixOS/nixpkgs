@@ -1841,6 +1841,8 @@ with pkgs;
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
+  parquet-tools = callPackage ../tools/misc/parquet-tools { };
+
   pass = callPackage ../tools/security/pass { };
 
   passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
@@ -4638,6 +4640,8 @@ with pkgs;
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
+  driftctl = callPackage ../applications/networking/cluster/driftctl { };
+
   drill = callPackage ../tools/networking/drill {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5944,7 +5948,7 @@ with pkgs;
   };
 
   graphviz-nox = graphviz.override {
-    xorg = null;
+    withXorg = false;
     libdevil = libdevil-nox;
   };
 
@@ -9608,6 +9612,8 @@ with pkgs;
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  stderred = callPackage ../tools/misc/stderred { };
+
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
   stenc = callPackage ../tools/backup/stenc { };
@@ -9958,6 +9964,10 @@ with pkgs;
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
+
+  thedesk = callPackage ../applications/misc/thedesk {
+    electron = electron_12;
+  };
 
   theharvester = callPackage ../tools/security/theharvester { };
 
@@ -16100,7 +16110,7 @@ with pkgs;
 
   entt = callPackage ../development/libraries/entt { };
 
-  epoxy = callPackage ../development/libraries/epoxy {};
+  libepoxy = callPackage ../development/libraries/libepoxy {};
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
@@ -21541,6 +21551,8 @@ with pkgs;
 
   squid = callPackage ../servers/squid { };
 
+  duckling-proxy = callPackage ../servers/duckling-proxy { };
+
   sslh = callPackage ../servers/sslh { };
 
   thttpd = callPackage ../servers/http/thttpd { };
@@ -21750,7 +21762,7 @@ with pkgs;
 
   iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
+  inherit (callPackages ../os-specific/linux/apparmor { })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches apparmorRulesFromClosure;
 
@@ -23991,6 +24003,8 @@ with pkgs;
 
   arion = callPackage ../applications/virtualization/arion { };
 
+  arkade = callPackage ../applications/networking/cluster/arkade { };
+
   asuka = callPackage ../applications/networking/browsers/asuka {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -25771,6 +25785,8 @@ with pkgs;
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
+  indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
+
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_08;
   };
@@ -25794,6 +25810,8 @@ with pkgs;
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
+
+  pixeluvo = callPackage ../applications/graphics/pixeluvo { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
@@ -31999,7 +32017,7 @@ with pkgs;
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
-  antimicroX = libsForQt5.callPackage ../tools/misc/antimicroX { };
+  antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
   atari800 = callPackage ../misc/emulators/atari800 { };
 
