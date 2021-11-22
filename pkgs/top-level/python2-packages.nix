@@ -539,6 +539,8 @@ with self; with super; {
 
   robotframework-ride = callPackage ../development/python-modules/robotframework-ride { };
 
+  ruamel-base = callPackage ../development/python-modules/ruamel-base/2.nix { };
+
   ruamel-ordereddict = callPackage ../development/python-modules/ruamel-ordereddict { };
 
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
