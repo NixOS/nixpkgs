@@ -15727,7 +15727,7 @@ with pkgs;
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
-  bicgl = callPackage ../development/libraries/science/biology/bicgl { };
+  bicgl = callPackage ../development/libraries/science/biology/bicgl { inherit (darwin.apple_sdk.frameworks) GLUT; };
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
