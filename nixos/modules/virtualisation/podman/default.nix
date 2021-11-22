@@ -127,6 +127,7 @@ in
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       environment.systemPackages = [ cfg.package ]
+        ++ lib.optional config.security.apparmor.enable pkgs.apparmor-parser
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
       environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
@@ -140,6 +141,10 @@ in
           };
         };
       };
+
+      security.apparmor.includes."tunables/global" = ''
+        include "${pkgs.apparmor-profiles}/etc/apparmor.d/tunables/global"
+      '';
 
       systemd.packages = [ cfg.package ];
 
