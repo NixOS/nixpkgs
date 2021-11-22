@@ -272,6 +272,13 @@
         "sha256": "GQ4Sdg/1nZRT4Z1Aqq1zPo96duqIGyt6sjghf9ap2Jg=",
         "fetchSubmodules": false
     },
+    "melonds": {
+        "owner": "libretro",
+        "repo": "melonds",
+        "rev": "1ad65728476d7b9594c4ff91a1ba60460a0a30e7",
+        "sha256": "EBV8F2MCmWuxWKMOXipTZKRGHqp8sb/ojK3JpGZe818=",
+        "fetchSubmodules": false
+    },
     "mesen": {
         "owner": "SourMesen",
         "repo": "mesen",

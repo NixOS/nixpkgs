@@ -512,6 +512,15 @@ in
     enableParallelBuilding = false;
   };
 
+  melonds = mkLibRetroCore {
+    core = "melonds";
+    version = "unstable-2021-11-22";
+    description = "Port of MelonDS to libretro";
+    license = lib.licenses.gpl3Only;
+    extraBuildInputs = [ libGL libGLU ];
+    makefile = "Makefile";
+  };
+
   mesen = mkLibRetroCore {
     core = "mesen";
     description = "Port of Mesen to libretro";

@@ -49,6 +49,7 @@ CORES = {
     "mame2010": {"repo": "mame2010-libretro"},
     "mame2015": {"repo": "mame2015-libretro"},
     "mame2016": {"repo": "mame2016-libretro"},
+    "melonds": {"repo": "melonds"},
     "mesen": {"repo": "mesen", "owner": "SourMesen"},
     "meteor": {"repo": "meteor-libretro"},
     "mgba": {"repo": "mgba"},
