@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lheckemann ma27 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "wdisplays";
   };
 }
