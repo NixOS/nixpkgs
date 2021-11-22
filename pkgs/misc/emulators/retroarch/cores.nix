@@ -54,7 +54,7 @@ let
     , license
     , src ? null
     , broken ? false
-    , version ? "unstable-2021-11-16"
+    , version ? "unstable-2021-11-22"
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation (
@@ -232,7 +232,6 @@ in
 
   bsnes = mkLibRetroCore {
     core = "bsnes";
-    version = "unstable-2021-11-22";
     description = "Port of bsnes to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
@@ -255,7 +254,6 @@ in
     mkLibRetroCore {
       core = "bsnes-hd-beta";
       src = getCoreSrc "bsnes-hd";
-      version = "unstable-2021-11-22";
       description = "Port of bsnes-hd to libretro";
       license = lib.licenses.gpl3Only;
       makefile = "GNUmakefile";
@@ -558,7 +556,6 @@ in
 
   melonds = mkLibRetroCore {
     core = "melonds";
-    version = "unstable-2021-11-22";
     description = "Port of MelonDS to libretro";
     license = lib.licenses.gpl3Only;
     extraBuildInputs = [ libGL libGLU ];
@@ -567,7 +564,6 @@ in
 
   mesen = mkLibRetroCore {
     core = "mesen";
-    version = "unstable-2021-11-22";
     description = "Port of Mesen to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
@@ -577,7 +573,6 @@ in
   mesen-s = mkLibRetroCore {
     core = "mesens";
     src = getCoreSrc "mesen-s";
-    version = "unstable-2021-11-22";
     description = "Port of Mesen-S to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
@@ -804,7 +799,6 @@ in
 
   swanstation = mkLibRetroCore {
     core = "swanstation";
-    version = "unstable-2021-11-21";
     description = "Port of SwanStation (a fork of DuckStation) to libretro";
     license = lib.licenses.gpl3Only;
     extraNativeBuildInputs = [ cmake ];
