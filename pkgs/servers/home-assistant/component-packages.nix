@@ -999,7 +999,7 @@
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
     "yi" = ps: with ps; [ aioftp ha-ffmpeg ];
     "youless" = ps: with ps; [ youless-api ];
-    "zabbix" = ps: with ps; [ ]; # missing inputs: py-zabbix
+    "zabbix" = ps: with ps; [ py-zabbix ];
     "zamg" = ps: with ps; [ ];
     "zengge" = ps: with ps; [ ]; # missing inputs: zengge
     "zeroconf" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];
