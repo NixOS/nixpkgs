@@ -39,27 +39,12 @@ buildPythonPackage {
     cd python
   '';
 
-  preConfigure = lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-    export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-  '';
+  setupPyGlobalFlags = lib.optional (lib.versionAtLeast protobuf.version "2.6.0")
+    "--cpp_implementation";
 
-  preBuild = ''
-    # Workaround for https://github.com/google/protobuf/issues/2895
-    ${python.pythonForBuild.interpreter} setup.py build
-  '' + lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext --cpp_implementation
-  '';
-
-  installFlags = lib.optional (lib.versionAtLeast protobuf.version "2.6.0")
-    "--install-option='--cpp_implementation'";
-
-  # the _message.so isn't installed, so we'll do that manually.
-  # if someone can figure out a less hacky way to get the _message.so to
-  # install, please do replace this.
-  postInstall = lib.optionalString (lib.versionAtLeast protobuf.version "2.6.0") ''
-    cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
-  '';
+  pythonImportsCheck = lib.optionals (lib.versionAtLeast protobuf.version "2.6.0") [
+    "google.protobuf.internal._api_implementation" # Verify that --cpp_implementation worked
+  ];
 
   meta = with lib; {
     description = "Protocol Buffers are Google's data interchange format";
