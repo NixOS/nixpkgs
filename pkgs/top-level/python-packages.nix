@@ -5931,6 +5931,8 @@ in {
 
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
+  polarizationsolver = callPackage ../development/python-modules/polarizationsolver { };
+
   polib = callPackage ../development/python-modules/polib { };
 
   policy-sentry = callPackage ../development/python-modules/policy-sentry { };
