@@ -71,7 +71,7 @@ with py.pkgs; buildPythonApplication rec {
     typing-extensions
     unpaddedbase64
   ] ++ lib.optional enableSystemd systemd
-    ++ lib.optional enableRedis hiredis;
+    ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
   checkInputs = [ mock parameterized openssl ];
 
