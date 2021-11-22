@@ -8145,6 +8145,8 @@ in {
 
   pytest-pydocstyle = callPackage ../development/python-modules/pytest-pydocstyle { };
 
+  pytest-pycodestyle = callPackage ../development/python-modules/pytest-pycodestyle { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
