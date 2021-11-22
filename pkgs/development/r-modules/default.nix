@@ -788,7 +788,6 @@ let
     "RcmdrPlugin_UCA"
     "recluster"
     "relimp"
-    "rgl"
     "RHRV"
     "rich"
     "RNCEP"
@@ -886,7 +885,6 @@ let
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
     "av"
-    "rgl"
     "NetLogoR"
     "x13binary"
     "valse"
@@ -1278,6 +1276,10 @@ let
     });
 
     ChIPXpress = old.ChIPXpress.override { hydraPlatforms = []; };
+
+    rgl = old.rgl.overrideDerivation (attrs: {
+      RGL_USE_NULL = "true";
+    });
   };
 in
   self
