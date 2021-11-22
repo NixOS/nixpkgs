@@ -8242,6 +8242,8 @@ in {
 
   rising = callPackage ../development/python-modules/rising { };
 
+  ritassist = callPackage ../development/python-modules/ritassist { };
+
   rivet = toPythonModule (pkgs.rivet.override {
     python3 = python;
   });

@@ -270,7 +270,7 @@
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
     "fjaraskupan" = ps: with ps; [ fjaraskupan ];
-    "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
+    "fleetgo" = ps: with ps; [ ritassist ];
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
