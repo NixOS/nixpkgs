@@ -221,6 +221,8 @@ in {
 
   affine = callPackage ../development/python-modules/affine { };
 
+  afsapi = callPackage ../development/python-modules/afsapi { };
+
   agate = callPackage ../development/python-modules/agate { };
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
@@ -2436,6 +2438,8 @@ in {
 
   eliot = callPackage ../development/python-modules/eliot { };
 
+  eliqonline = callPackage ../development/python-modules/eliqonline { };
+
   elmax = callPackage ../development/python-modules/elmax { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
@@ -3154,6 +3158,8 @@ in {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
+  goodwe = callPackage ../development/python-modules/goodwe { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
@@ -3457,6 +3463,8 @@ in {
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
   halo = callPackage ../development/python-modules/halo { };
+
+  halohome = callPackage ../development/python-modules/halohome { };
 
   handout = callPackage ../development/python-modules/handout { };
 
@@ -4282,6 +4290,8 @@ in {
 
   leveldb = callPackage ../development/python-modules/leveldb { };
 
+  levenshtein = callPackage ../development/python-modules/levenshtein { };
+
   lexid = callPackage ../development/python-modules/lexid { };
 
   lhapdf = toPythonModule (pkgs.lhapdf.override {
@@ -4360,6 +4370,8 @@ in {
 
   libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
+  libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
@@ -4435,6 +4447,8 @@ in {
   lief = (toPythonModule (pkgs.lief.override {
     inherit python;
   })).py;
+
+  life360 = callPackage ../development/python-modules/life360 { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
@@ -5301,6 +5315,8 @@ in {
 
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
+  oemthermostat = callPackage ../development/python-modules/oemthermostat { };
+
   olefile = callPackage ../development/python-modules/olefile { };
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
@@ -5801,6 +5817,8 @@ in {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
+
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
@@ -6137,6 +6155,8 @@ in {
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
+  py-zabbix = callPackage ../development/python-modules/py-zabbix { };
+
   py17track = callPackage ../development/python-modules/py17track { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
@@ -6411,6 +6431,8 @@ in {
   };
 
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
+
+  pyephember = callPackage ../development/python-modules/pyephember { };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
@@ -6806,6 +6828,8 @@ in {
 
   pynetdicom = callPackage ../development/python-modules/pynetdicom { };
 
+  pynina = callPackage ../development/python-modules/pynina { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
@@ -7086,6 +7110,8 @@ in {
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
 
   pysearpc = toPythonModule pkgs.libsearpc;
+
+  pysecuritas = callPackage ../development/python-modules/pysecuritas { };
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
 
@@ -7855,6 +7881,8 @@ in {
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
 
+  pyversasense = callPackage ../development/python-modules/pyversasense { };
+
   pyvesync = callPackage ../development/python-modules/pyvesync { };
 
   pyvex = callPackage ../development/python-modules/pyvex { };
@@ -7976,6 +8004,8 @@ in {
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
+
+  qnap-qsw = callPackage ../development/python-modules/qnap-qsw{ };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
 
@@ -8221,6 +8251,8 @@ in {
   ripser = callPackage ../development/python-modules/ripser { };
 
   rising = callPackage ../development/python-modules/rising { };
+
+  ritassist = callPackage ../development/python-modules/ritassist { };
 
   rivet = toPythonModule (pkgs.rivet.override {
     python3 = python;
