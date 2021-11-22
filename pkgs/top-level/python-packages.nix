@@ -1973,6 +1973,8 @@ in {
 
   csvw = callPackage ../development/python-modules/csvw { };
 
+  csv-diff = callPackage ../development/python-modules/csv-diff { };
+
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };

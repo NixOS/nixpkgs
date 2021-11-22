@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "pytest plugin to run pydocstyle";
     homepage = "https://github.com/henry0312/pytest-pydocstyle";
     license = licenses.mit;
-    maintainer = with maintainers; [ turion ];
+    maintainers = with maintainers; [ turion ];
   };
 }
