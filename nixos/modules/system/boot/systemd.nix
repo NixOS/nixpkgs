@@ -67,6 +67,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.import1.service"
       "dbus-org.freedesktop.machine1.service"
+      "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
 
