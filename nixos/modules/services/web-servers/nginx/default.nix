@@ -316,6 +316,9 @@ let
           ${optionalString vhost.rejectSSL ''
             ssl_reject_handshake on;
           ''}
+          ${optionalString (hasSSL && vhost.kTLS) ''
+            ssl_conf_command Options KTLS;
+          ''}
 
           ${mkBasicAuth vhostName vhost}
 
@@ -817,6 +820,14 @@ in
         message = ''
           services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
           1.19.4 or above; see the documentation for services.nginx.package.
+        '';
+      }
+
+      {
+        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
+        message = ''
+          services.nginx.virtualHosts.<name>.kTLS requires nginx version
+          1.21.4 or above; see the documentation for services.nginx.package.
         '';
       }
 
