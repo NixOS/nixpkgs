@@ -3160,6 +3160,8 @@ in {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
+  goodwe = callPackage ../development/python-modules/goodwe { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
