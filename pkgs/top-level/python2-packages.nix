@@ -436,6 +436,8 @@ with self; with super; {
 
   pycassa = callPackage ../development/python-modules/pycassa { };
 
+  pycodestyle = callPackage ../development/python-modules/pycodestyle/2.7.nix { };
+
   pycryptopp = callPackage ../development/python-modules/pycryptopp { };
 
   pycurl2 = callPackage ../development/python-modules/pycurl2 { };
