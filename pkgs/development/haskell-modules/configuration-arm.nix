@@ -100,6 +100,7 @@ self: super: {
   # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
 
 
   # https://github.com/ekmett/half/issues/35
