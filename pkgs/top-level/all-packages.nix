@@ -9492,6 +9492,8 @@ with pkgs;
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
+  slowlorust = callPackage ../tools/networking/slowlorust { };
+
   slsnif = callPackage ../tools/misc/slsnif { };
 
   slstatus = callPackage ../applications/misc/slstatus {
