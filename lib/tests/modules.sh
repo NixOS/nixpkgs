@@ -281,6 +281,11 @@ checkConfigError 'A definition for option .fun.\[function body\]. is not of type
 checkConfigOutput "b a" config.result ./functionTo/list-order.nix
 checkConfigOutput "a c" config.result ./functionTo/merging-attrs.nix
 
+# moduleType
+checkConfigOutput "a b" config.resultFoo ./declare-variants.nix ./define-variant.nix
+checkConfigOutput "a y z" config.resultFooBar ./declare-variants.nix ./define-variant.nix
+checkConfigOutput "a b c" config.resultFooFoo ./declare-variants.nix ./define-variant.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

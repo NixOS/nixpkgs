@@ -62,6 +62,8 @@ rec {
       ‘type’: A module system type representing the module set as a submodule,
             to be extended by configuration from the containing module set.
 
+            This is also available as the module argument ‘moduleType’.
+
       ‘extendModules’: A function similar to ‘evalModules’ but building on top
             of the module set. Its arguments, ‘modules’ and ‘specialArgs’ are
             added to the existing values.
@@ -148,6 +150,7 @@ rec {
         config = {
           _module.args = {
             inherit extendModules;
+            moduleType = type;
           } // args;
         };
       };
