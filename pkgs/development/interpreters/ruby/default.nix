@@ -128,22 +128,24 @@ let
           sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
-          ++ op useBaseRuby "--with-baseruby=${baseRuby}/bin/ruby"
-          ++ op (!jitSupport) "--disable-jit-support"
-          ++ op (!docSupport) "--disable-install-doc"
-          ++ op jemallocSupport "--with-jemalloc"
-          ++ ops stdenv.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ];
+        configureFlags = [
+          (lib.enableFeature (!stdenv.hostPlatform.isStatic) "shared")
+          (lib.enableFeature true "pthread")
+          (lib.withFeatureAs true "soname" "ruby-${version}")
+          (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+          (lib.enableFeature jitSupport "jit-support")
+          (lib.enableFeature docSupport "install-doc")
+          (lib.withFeature jemallocSupport "jemalloc")
+          (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+        ] ++ ops stdenv.isDarwin [
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          "--with-out-ext=tk"
+          # on yosemite, "generating encdb.h" will hang for a very long time without this flag
+          "--with-setjmp-type=setjmp"
+        ];
 
         preConfigure = opString docSupport ''
-          configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
-
           # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
           # it's not going to be used.
           export HOME=$TMPDIR
