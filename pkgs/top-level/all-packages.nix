@@ -21547,6 +21547,8 @@ with pkgs;
 
   squid = callPackage ../servers/squid { };
 
+  duckling-proxy = callPackage ../servers/duckling-proxy { };
+
   sslh = callPackage ../servers/sslh { };
 
   thttpd = callPackage ../servers/http/thttpd { };
