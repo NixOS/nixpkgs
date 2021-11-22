@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KDE media player";
-    homepage = "http://kaffeine.kde.org/";
+    homepage = "https://apps.kde.org/kaffeine/";
     license = licenses.gpl2;
     maintainers = [ maintainers.pasqui23 ];
     platforms = platforms.all;
