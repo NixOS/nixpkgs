@@ -74,6 +74,8 @@ rec {
             override existing configuration fundamentally requires a new
             fixpoint to be constructed.
 
+            This is also available as a module argument.
+
       ‘_module’: A portion of the configuration tree which is elided from
             ‘config’. It contains some values that are mostly internal to the
             module system implementation.
