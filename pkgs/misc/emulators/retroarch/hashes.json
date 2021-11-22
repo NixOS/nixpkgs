@@ -97,6 +97,13 @@
         "sha256": "VNSeTRryrX2/V38GGXTRLuDEQqDUmX2DUOHAKLxJezU=",
         "fetchSubmodules": false
     },
+    "bsnes-hd": {
+        "owner": "DerKoun",
+        "repo": "bsnes-hd",
+        "rev": "65f24e56c37f46bb752190024bd4058e64ad77d1",
+        "sha256": "1dk2i71NOLeTTOZjVll8wrkr5dIH5bGSGUeeHqWjZHE=",
+        "fetchSubmodules": false
+    },
     "bsnes-mercury": {
         "owner": "libretro",
         "repo": "bsnes-mercury",

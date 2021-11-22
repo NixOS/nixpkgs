@@ -246,6 +246,29 @@ in
     ];
   };
 
+  bsnes-hd =
+    let
+      # linux = bsd
+      # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
+      platform = if stdenv.isDarwin then "macos" else "linux";
+    in
+    mkLibRetroCore {
+      core = "bsnes-hd-beta";
+      src = getCoreSrc "bsnes-hd";
+      version = "unstable-2021-11-22";
+      description = "Port of bsnes-hd to libretro";
+      license = lib.licenses.gpl3Only;
+      makefile = "GNUmakefile";
+      makeFlags = [
+        "-C"
+        "bsnes"
+        "target=libretro"
+        "platform=${platform}"
+      ];
+      extraBuildInputs = [ xorg.libX11 xorg.libXext ];
+      postBuild = "cd bsnes/out";
+    };
+
   bsnes-mercury = mkLibRetroCore {
     core = "bsnes-mercury-accuracy";
     src = getCoreSrc "bsnes-mercury";
