@@ -11,7 +11,6 @@ SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 CORES = {
     "atari800": {"repo": "libretro-atari800"},
-    "beetle-snes": {"repo": "beetle-bsnes-libretro"},
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
     "beetle-ngp": {"repo": "beetle-ngp-libretro"},
@@ -19,9 +18,10 @@ CORES = {
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},
     "beetle-saturn": {"repo": "beetle-saturn-libretro"},
+    "beetle-snes": {"repo": "beetle-bsnes-libretro"},
     "beetle-supergrafx": {"repo": "beetle-supergrafx-libretro"},
-    "beetle-wswan": {"repo": "beetle-wswan-libretro"},
     "beetle-vb": {"repo": "beetle-vb-libretro"},
+    "beetle-wswan": {"repo": "beetle-wswan-libretro"},
     "bluemsx": {"repo": "bluemsx-libretro"},
     "bsnes-mercury": {"repo": "bsnes-mercury"},
     "citra": {"repo": "citra", "fetch_submodules": True},
@@ -78,8 +78,8 @@ CORES = {
     "tgbdual": {"repo": "tgbdual-libretro"},
     "thepowdertoy": {"repo": "ThePowderToy"},
     "tic80": {"repo": "tic-80", "fetch_submodules": True},
-    "vba-next": {"repo": "vba-next"},
     "vba-m": {"repo": "vbam-libretro"},
+    "vba-next": {"repo": "vba-next"},
     "vecx": {"repo": "libretro-vecx"},
     "virtualjaguar": {"repo": "virtualjaguar-libretro"},
     "yabause": {"repo": "yabause"},
@@ -112,21 +112,33 @@ def get_repo_hash(fetcher="fetchFromGitHub", **kwargs):
         raise ValueError(f"Unsupported fetcher: {fetcher}")
 
 
-def get_repo_hashes():
-    repo_hashes = {}
+def get_repo_hashes(cores_to_update=[]):
+    with open(HASHES_PATH) as f:
+        repo_hashes = json.loads(f.read())
 
     for core, repo in CORES.items():
-        info(f"Getting repo hash for '{core}'...")
-        repo_hashes[core] = get_repo_hash(**repo)
+        if core in cores_to_update:
+            info(f"Getting repo hash for '{core}'...")
+            repo_hashes[core] = get_repo_hash(**repo)
+        else:
+            info(f"Skipping '{core}'...")
 
     return repo_hashes
 
 
 def main():
-    repo_hashes = get_repo_hashes()
+    # If you don't want to update all cores, pass the name of the cores you
+    # want to update on the command line. E.g.:
+    # $ ./update.py citra snes9x
+    if len(sys.argv) > 1:
+        cores_to_update = sys.argv[1:]
+    else:
+        cores_to_update = CORES.keys()
+
+    repo_hashes = get_repo_hashes(cores_to_update)
     info(f"Generating '{HASHES_PATH}'...")
     with open(HASHES_PATH, "w") as f:
-        f.write(json.dumps(repo_hashes, indent=4))
+        f.write(json.dumps(dict(sorted(repo_hashes.items())), indent=4))
         f.write("\n")
     info("Finished!")
 
