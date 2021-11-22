@@ -221,6 +221,8 @@ in {
 
   affine = callPackage ../development/python-modules/affine { };
 
+  afsapi = callPackage ../development/python-modules/afsapi { };
+
   agate = callPackage ../development/python-modules/agate { };
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
