@@ -18,8 +18,6 @@ buildPythonPackage {
   inherit disabled;
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
-  outputs = [ "out" "dev" ];
-
   propagatedBuildInputs = [ six ] ++ lib.optionals isPy27 [ google-apputils ];
   propagatedNativeBuildInputs = [ buildPackages.protobuf ]; # For protoc.
   nativeBuildInputs = [ pyext ] ++ lib.optionals isPy27 [ google-apputils ];
