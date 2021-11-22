@@ -142,6 +142,9 @@ let
 
       # Tests detect fwupd is installed when prefix is /usr.
       ./fix-install-detection.patch
+
+      # EFI capsule is located in fwupd-efi now.
+      ./efi-app-path.patch
     ];
 
     nativeBuildInputs = [
