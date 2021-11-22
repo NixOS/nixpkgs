@@ -9,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "4.2.0";
-  disabled = isPyPy || pythonOlder "3.5";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = isPyPy || pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fffe509f556861c7343c6cba57ed05fe7bcf4b48a934a5b946ccb45428cf8883";
+    sha256 = "sha256-uu5W7KNctfvgLCi9nAk2vkGpb6XAgS2dS37etcPVaKA=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +27,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ujson" ];
+  pythonImportsCheck = [
+    "ujson"
+  ];
 
   meta = with lib; {
     description = "Ultra fast JSON encoder and decoder for Python";
