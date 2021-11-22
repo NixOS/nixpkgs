@@ -90,6 +90,13 @@
         "sha256": "ix/AyYNer1R73ZJW1reXyj7geBr3ThrqXf5Ki5yrz9A=",
         "fetchSubmodules": false
     },
+    "bsnes": {
+        "owner": "libretro",
+        "repo": "bsnes-libretro",
+        "rev": "44d97b17d06a10ae17d97a91a48e5acd10ec6db4",
+        "sha256": "VNSeTRryrX2/V38GGXTRLuDEQqDUmX2DUOHAKLxJezU=",
+        "fetchSubmodules": false
+    },
     "bsnes-mercury": {
         "owner": "libretro",
         "repo": "bsnes-mercury",
