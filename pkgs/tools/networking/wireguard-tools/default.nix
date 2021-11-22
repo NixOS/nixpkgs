@@ -37,11 +37,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/wg-quick@.service \
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
-    # we want to allow users to provide their own resolvconf implementation, i.e. the one provided by systemd-resolved
     for f in $out/bin/*; do
-      wrapProgram $f \
-       --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables ]} \
-       --suffix PATH : ${lib.makeBinPath [ openresolv ]}
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
     done
   '' + lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
