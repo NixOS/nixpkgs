@@ -38,6 +38,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
+, enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ARROW_JEMALLOC_URL = jemalloc.src;
+  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = jemalloc.src;
 
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     # From
@@ -155,6 +156,7 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
+    "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
