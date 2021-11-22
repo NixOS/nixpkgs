@@ -112,6 +112,8 @@ with self; with super; {
 
   filelock =  callPackage ../development/python-modules/filelock/3.2.nix { };
 
+  flake8 = callPackage ../development/python-modules/flake8/3.nix { };
+
   flask = callPackage ../development/python-modules/flask/1.nix { };
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
