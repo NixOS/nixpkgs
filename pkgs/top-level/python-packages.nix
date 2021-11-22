@@ -2115,6 +2115,18 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbt = callPackage ../development/python-modules/dbt { };
+
+  dbt-core = callPackage ../development/python-modules/dbt-core { };
+
+  dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
+
+  dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
+
+  dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
+
+  dbt-snowflake = callPackage ../development/python-modules/dbt-snowflake { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
