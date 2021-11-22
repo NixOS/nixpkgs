@@ -23369,6 +23369,8 @@ with pkgs;
 
   material-icons = callPackage ../data/fonts/material-icons { };
 
+  material-kwin-decoration = libsForQt5.callPackage ../data/themes/material-kwin-decoration { };
+
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   meslo-lgs-nf = callPackage ../data/fonts/meslo-lgs-nf {};
