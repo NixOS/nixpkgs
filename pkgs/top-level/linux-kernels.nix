@@ -173,12 +173,17 @@ in {
       ];
     };
 
-    linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    linux_testing = let
+      testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
+        kernelPatches = [
+          kernelPatches.bridge_stp_helper
+          kernelPatches.request_key_helper
+        ];
+      };
+      latest = packageAliases.linux_latest.kernel;
+    in if latest.kernelAtLeast testing.baseVersion
+       then latest
+       else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
       kernel = linux_5_15;

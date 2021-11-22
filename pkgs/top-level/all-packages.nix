@@ -1841,6 +1841,8 @@ with pkgs;
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
+  parquet-tools = callPackage ../tools/misc/parquet-tools { };
+
   pass = callPackage ../tools/security/pass { };
 
   passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
