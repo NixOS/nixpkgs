@@ -1,36 +1,34 @@
 { stdenv
 , lib
 , fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, scdoc
 , alsa-lib
 , fcft
 , json_c
 , libmpdclient
+, libxcb
 , libyaml
+, meson
+, ninja
 , pixman
+, pkg-config
+, scdoc
 , tllist
 , udev
 , wayland
-, wayland-scanner
 , wayland-protocols
-, waylandSupport ? true
-# Xorg backend
-, x11Support ? true
-, libxcb
+, wayland-scanner
 , xcbutil
 , xcbutilcursor
 , xcbutilerrors
 , xcbutilwm
+, waylandSupport ? true
+, x11Support ? true
 }:
 
 let
-  # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
+  # Courtesy of sternenseemann and FRidh
   mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
 in
-
 stdenv.mkDerivation rec {
   pname = "yambar";
   version = "1.7.0";
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "backend-x11" (x11Support))
+    (mesonFeatureFlag "backend-x11" x11Support)
     (mesonFeatureFlag "backend-wayland" waylandSupport)
   ];
 
@@ -86,9 +84,9 @@ stdenv.mkDerivation rec {
       X11 and Wayland, that goes to great lengths to be both CPU and battery
       efficient - polling is only done when absolutely necessary.
 
-      It has a number of modules that provide information in the form of
-      tags. For example, the clock module has a date tag that contains the
-      current date.
+      It has a number of modules that provide information in the form of tags.
+      For example, the clock module has a date tag that contains the current
+      date.
 
       The modules do not know how to present the information though. This is
       instead done by particles. And the user, you, decides which particles (and
