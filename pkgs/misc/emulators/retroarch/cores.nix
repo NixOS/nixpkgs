@@ -50,7 +50,7 @@ let
   mkLibRetroCore =
     { core
     , description
-      # Check https://github.com/libretro/libretro-super for license information
+      # Check https://github.com/libretro/libretro-core-info for license information
     , license
     , src ? null
     , broken ? false
