@@ -545,6 +545,8 @@ with self; with super; {
 
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml/0.16.nix { };
 
+  ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib/2.0.nix { };
+
   runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   rpm = disabled super.rpm;
