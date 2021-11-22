@@ -1,13 +1,12 @@
 { lib, stdenv, fetchFromGitHub, inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
+  pname = "numix-cursor-theme";
   version = "1.2";
-  package-name = "numix-cursor-theme";
-  name = "${package-name}-${version}";
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = package-name;
+    repo = pname;
     rev = "v${version}";
     sha256 = "1q3w5i0h3ly6i7s9pqjdrb14kp89i78s0havri7lhiqyxizjvcvh";
   };
