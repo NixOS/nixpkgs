@@ -75,6 +75,7 @@ CORES = {
     "snes9x2010": {"repo": "snes9x2010"},
     "stella": {"repo": "stella", "owner": "stella-emu"},
     "stella2014": {"repo": "stella2014-libretro"},
+    "swanstation": {"repo": "swanstation"},
     "tgbdual": {"repo": "tgbdual-libretro"},
     "thepowdertoy": {"repo": "ThePowderToy"},
     "tic80": {"repo": "tic-80", "fetch_submodules": True},
