@@ -280,10 +280,10 @@
         "fetchSubmodules": false
     },
     "mesen": {
-        "owner": "SourMesen",
+        "owner": "libretro",
         "repo": "mesen",
-        "rev": "86326e832974d984846ae078e568c023a5f76f1f",
-        "sha256": "At5rhlJ6rAnXaQrmRA1NtCCi+Ff/ytlt5dwsaXZhxXg=",
+        "rev": "094d82bf724448426acbaad45e83bc38994e32f6",
+        "sha256": "9+AqZRv8lugNNa+ZZzIPJNO87J1aBUEiOggL8aYno1M=",
         "fetchSubmodules": false
     },
     "meteor": {

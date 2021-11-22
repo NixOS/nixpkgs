@@ -523,6 +523,7 @@ in
 
   mesen = mkLibRetroCore {
     core = "mesen";
+    version = "unstable-2021-11-22";
     description = "Port of Mesen to libretro";
     license = lib.licenses.gpl3Only;
     makefile = "Makefile";
