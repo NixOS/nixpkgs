@@ -109,6 +109,8 @@ let
     );
 in
 {
+  inherit mkLibRetroCore;
+
   atari800 = mkLibRetroCore {
     core = "atari800";
     description = "Port of Atari800 to libretro";
