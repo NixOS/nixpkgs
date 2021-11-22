@@ -13,7 +13,10 @@ let
     "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
     # FreeBSD
-    "i686-freebsd" "x86_64-freebsd"
+    "aarch64-freebsd" "armv5tel-freebsd" "armv6l-freebsd"
+    "armv7l-freebsd" "i686-freebsd" "mipsel-freebsd"
+    "powerpc64-freebsd" "riscv64-freebsd" "sparc64-freebsd"
+    "x86_64-freebsd"
 
     # Genode
     "aarch64-genode" "i686-genode" "x86_64-genode"
@@ -28,7 +31,8 @@ let
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
     "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
     "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
-    "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
+    "riscv64-linux" "s390-linux" "s390x-linux" "sparc64-linux"
+    "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"
@@ -36,16 +40,17 @@ let
     # NetBSD
     "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd"
     "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd"
-    "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd"
+    "riscv32-netbsd" "riscv64-netbsd" "sparc64-netbsd" "x86_64-netbsd"
 
     # none
     "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
     "msp430-none" "or1k-none" "m68k-none" "powerpc-none"
-    "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "vc4-none"
-    "x86_64-none"
+    "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "sparc64-none"
+    "vc4-none" "x86_64-none"
 
     # OpenBSD
-    "i686-openbsd" "x86_64-openbsd"
+    "aarch64-openbsd" "armv7l-openbsd" "i686-openbsd" "powerpc64-openbsd"
+    "riscv64-openbsd" "sparc64-openbsd" "x86_64-openbsd"
 
     # Redox
     "x86_64-redox"
@@ -54,7 +59,7 @@ let
     "wasm64-wasi" "wasm32-wasi"
 
     # Windows
-    "x86_64-windows" "i686-windows"
+    "x86_64-windows" "i686-windows" "aarch64-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -78,6 +83,8 @@ in {
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
+  sparc         = filterDoubles predicates.isSparc;
+  sparc64       = filterDoubles predicates.isSparc64;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;
