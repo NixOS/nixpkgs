@@ -237,6 +237,10 @@
 /pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
 
+# GNOME
+/pkgs/desktops/gnome                              @NixOS/GNOME @jtojnar @hedning
+/pkgs/desktops/gnome/extensions       @piegamesde @NixOS/GNOME @jtojnar @hedning
+
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
 
