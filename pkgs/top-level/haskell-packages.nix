@@ -50,7 +50,9 @@ in {
 
   compiler = {
 
-    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
+    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
+      llvmPackages = pkgs.llvmPackages_6;
+    };
 
     ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
       llvmPackages = pkgs.llvmPackages_9;
