@@ -3826,6 +3826,8 @@ with pkgs;
 
   bomutils = callPackage ../tools/archivers/bomutils { };
 
+  boofuzz= callPackage ../tools/security/boofuzz { };
+
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
