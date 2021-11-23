@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 remove-path-dependencies-hook() {
     if ! test -f pyproject.toml; then
         return

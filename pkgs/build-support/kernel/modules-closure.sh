@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 # When no modules are built, the $out/lib/modules directory will not

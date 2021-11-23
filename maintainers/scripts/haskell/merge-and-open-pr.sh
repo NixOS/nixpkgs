@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p git gh -I nixpkgs=.
+# shellcheck shell=bash
 #
 # Script to merge the currently open haskell-updates PR into master, bump the
 # Stackage version and Hackage versions, and open the next haskell-updates PR.

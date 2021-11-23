@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook, for each output, moves everything in $output/lib64
 # to $output/lib, and replaces $output/lib64 with a symlink to
 # $output/lib. The rationale is that lib64 directories are unnecessary

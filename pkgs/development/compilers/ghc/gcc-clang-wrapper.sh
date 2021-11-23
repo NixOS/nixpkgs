@@ -1,4 +1,5 @@
 #!@shell@
+# shellcheck shell=bash
 
 inPreprocessorMode () {
     hasE=0

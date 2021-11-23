@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodejs yarn yarn2nix jq rsync common-updater-scripts moreutils
+# shellcheck shell=bash
 
 set -exuo pipefail
 

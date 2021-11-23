@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook modifies a Perl script so that any "-I" flags in its shebang
 # line are rewritten into a "use lib ..." statement on the next line. This gets
 # around a limitation in Darwin, which will not properly handle a script whose

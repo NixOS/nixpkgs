@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p git mercurial common-updater-scripts
+# shellcheck shell=bash
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../../..

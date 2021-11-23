@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p python3 python3.pkgs.toml cargo
+# shellcheck shell=bash
 
 set -e
 
@@ -17,5 +18,3 @@ RUSTC_BOOTSTRAP=1 cargo build || echo "Build failure is expected. All that's nee
 cp Cargo.lock "$HERE"
 
 rm -rf "$tempdir"
-
-

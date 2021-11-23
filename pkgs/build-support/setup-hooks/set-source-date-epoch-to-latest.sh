@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 updateSourceDateEpoch() {
     local path="$1"
 

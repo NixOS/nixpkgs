@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix-prefetch jq
+# shellcheck shell=bash
 
 latest_release=$(curl --silent https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest)
 version=$(jq -r '.tag_name' <<<"$latest_release")

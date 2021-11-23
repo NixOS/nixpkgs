@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Replace strange default value for the nobody account.
 if test -n "@maxuid@"
 then

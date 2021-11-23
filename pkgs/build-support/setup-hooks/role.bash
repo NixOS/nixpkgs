@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Since the same derivation can be depend on in multiple ways, we need to
 # accumulate *each* role (i.e. host and target platforms relative the depending
 # derivation) in which the derivation is used.

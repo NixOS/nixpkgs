@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p wget yarn2nix-moretea.yarn2nix nix-prefetch-git jq
+# shellcheck shell=bash
 
 set -euo pipefail
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell ./regen-nix.nix
 #!nix-shell -i bash
+# shellcheck shell=bash
 
 node2nix \
   --nodejs-12 \

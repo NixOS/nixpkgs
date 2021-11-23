@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=../../../.. -i bash -p nix-prefetch git gnused gnugrep nix curl
+# shellcheck shell=bash
 set -euo pipefail -x
 
 nixpkgs="$(git rev-parse --show-toplevel)"

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 set -e
 set -o nounset
 set -o pipefail

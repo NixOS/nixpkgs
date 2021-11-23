@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nuget-to-nix dotnet-sdk_5
+# shellcheck shell=bash
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 

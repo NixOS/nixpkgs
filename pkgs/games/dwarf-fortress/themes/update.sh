@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p jq nix coreutils curl nix-prefetch-git
+# shellcheck shell=bash
 
 curl "https://api.github.com/users/dfgraphics/repos" | jq -r '.[].name | ascii_downcase' | while read repo; do
     version="$(curl "https://api.github.com/repos/DFgraphics/${repo}/releases/latest" | jq -r .tag_name)"

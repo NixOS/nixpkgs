@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq gnused
+# shellcheck shell=bash
 
 # Update script for the vscode versions and hashes.
 # Usually doesn't need to be called by hand,

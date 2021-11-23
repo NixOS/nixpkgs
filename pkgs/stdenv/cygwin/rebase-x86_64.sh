@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 fixupOutputHooks+=(_cygwinFixAutoImageBase)
 
 _cygwinFixAutoImageBase() {

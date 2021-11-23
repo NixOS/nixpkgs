@@ -1,4 +1,5 @@
 #! /usr/bin/env nix-shell
 #! nix-shell --show-trace ./emacs2nix.nix -i bash
+# shellcheck shell=bash
 
 exec org-packages.sh --names $EMACS2NIX/names.nix -o org-generated.nix

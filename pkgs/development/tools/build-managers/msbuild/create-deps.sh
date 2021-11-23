@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p jq -p xmlstarlet -p curl
+# shellcheck shell=bash
 set -euo pipefail
 
 cat << EOL

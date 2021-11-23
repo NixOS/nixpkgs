@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 poetry2nix-fixup-hook() {
     # Including tests in the output is a common mistake
     if [ -z "${dontFixupTests-}" ]; then

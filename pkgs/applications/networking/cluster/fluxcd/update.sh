@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused jq
+# shellcheck shell=bash
 
 set -x -eu -o pipefail
 
@@ -35,4 +36,3 @@ else
     echo "Update failed. VENDOR_SHA256 is empty."
     exit 1
 fi
-

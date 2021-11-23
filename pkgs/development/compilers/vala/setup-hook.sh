@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 make_vala_find_vapi_files() {
     # XDG_DATA_DIRS: required for finding .vapi files
     if [ -d "$1/share/vala/vapi" -o -d "$1/share/vala-@apiVersion@/vapi" ]; then

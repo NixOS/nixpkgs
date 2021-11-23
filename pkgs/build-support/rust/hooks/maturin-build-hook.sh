@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 maturinBuildHook() {
     echo "Executing maturinBuildHook"
 

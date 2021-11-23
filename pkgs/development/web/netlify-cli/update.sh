@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash
+# shellcheck shell=bash
 set -euo pipefail
 mv netlify-cli.json{,.old}
 nix-prefetch-github-latest-release netlify cli >netlify-cli.json

@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 if grep datadir ~/.abuse/abuserc &>/dev/null; then
   if [ ! -d "$(grep datadir ~/.abuse/abuserc | cut -d= -f2)" ]; then

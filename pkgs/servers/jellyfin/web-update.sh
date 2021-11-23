@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl common-updater-scripts nodePackages.node2nix gnused nix coreutils jq
+# shellcheck shell=bash
 
 set -euo pipefail
 

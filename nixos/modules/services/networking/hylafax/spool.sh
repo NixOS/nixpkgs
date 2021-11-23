@@ -1,4 +1,5 @@
 #! @runtimeShell@ -e
+# shellcheck shell=bash
 
 # The following lines create/update the HylaFAX spool directory:
 # Subdirectories/files with persistent data are kept,

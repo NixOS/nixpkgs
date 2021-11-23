@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 _elementaryCMakeEnvHook() {
   cmakeFlagsArray+=(-DCMAKE_MODULE_PATH=@out@/lib/cmake)
 }

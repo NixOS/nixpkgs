@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bundix zlib
+# shellcheck shell=bash
 
 set -o errexit
 set -o nounset

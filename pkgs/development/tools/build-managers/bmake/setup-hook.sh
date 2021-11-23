@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addMakeFlags() {
     export prefix="$out"
     export MANDIR="${!outputMan}/share/man"

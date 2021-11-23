@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # libiconv must be listed in load flags on non-Glibc
 # it doesn't hurt to have it in Glibc either though
 

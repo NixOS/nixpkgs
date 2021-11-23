@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source "$stdenv/setup" || exit 1
 
 # XXX: Eventually we could consider building the PDF/PS files as well.

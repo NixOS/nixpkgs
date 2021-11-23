@@ -1,4 +1,5 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 

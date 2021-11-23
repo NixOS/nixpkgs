@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 preConfigurePhases+=" updateAutotoolsGnuConfigScriptsPhase"
 
 updateAutotoolsGnuConfigScriptsPhase() {

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-prefetch-git -p jq
+# shellcheck shell=bash
 
 imlist=(
     array

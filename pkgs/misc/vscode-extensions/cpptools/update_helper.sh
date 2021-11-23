@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -p coreutils -p jq -p unzip -i bash
+# shellcheck shell=bash
 set -euo pipefail
 
 #
@@ -165,4 +166,3 @@ print_nix_version_clangtools
 echo
 echo "------------- Nix mono ---------------"
 print_nix_version_mono
-

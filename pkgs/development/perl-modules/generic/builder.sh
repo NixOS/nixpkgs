@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"

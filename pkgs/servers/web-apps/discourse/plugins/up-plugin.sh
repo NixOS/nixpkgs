@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bash curl ruby.devEnv git sqlite libpcap postgresql libxml2 libxslt pkg-config bundix gnumake
+# shellcheck shell=bash
 # src https://nixos.wiki/wiki/Packaging/Ruby
 
 # This script should be ran afte rupdating a plugin that has a gemset.nix
@@ -36,4 +37,3 @@ source "https://rubygems.org"' > Gemfile
   bundix
   cp Gemfile Gemfile.lock gemset.nix "$PL_DIR"
 fi
-

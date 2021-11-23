@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p dotnet-sdk_5 jq xmlstarlet curl nixpkgs-fmt
+# shellcheck shell=bash
 set -euo pipefail
 
 # Run this script to generate deps.nix

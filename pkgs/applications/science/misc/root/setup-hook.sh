@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 thisroot () {
     # Workaround thisroot.sh dependency on man
     if [ -z "${MANPATH-}" ]; then

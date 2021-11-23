@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 $unzip/bin/unzip $src

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils ripgrep git cargo
+# shellcheck shell=bash
 
 # Ref: https://github.com/NixOS/nixpkgs/blob/nixos-21.05/pkgs/applications/audio/netease-music-tui/update-cargo-lock.sh
 

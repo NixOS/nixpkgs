@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 unpackCmdHooks+=(_tryUnrar)
 _tryUnrar() {
     if ! [[ "$curSrc" =~ \.rar$ ]]; then return 1; fi

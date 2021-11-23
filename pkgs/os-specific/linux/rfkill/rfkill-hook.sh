@@ -1,4 +1,5 @@
 #!@shell@
+# shellcheck shell=bash
 
 # Executes a hook in case of a change to the
 # rfkill state. The hook can be passed as

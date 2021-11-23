@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # PaX-mark binaries.
 paxmark() {
     local flags="$1"

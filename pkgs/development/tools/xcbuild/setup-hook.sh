@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 xcbuildBuildPhase() {
     export DSTROOT=$out
 

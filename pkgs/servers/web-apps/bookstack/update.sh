@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix curl jq nix-update
+# shellcheck shell=bash
 
 # check if composer2nix is installed
 if ! command -v composer2nix &> /dev/null; then

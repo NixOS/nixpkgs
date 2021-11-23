@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../ -i bash -p wget yarn2nix
+# shellcheck shell=bash
 
 set -euo pipefail
 

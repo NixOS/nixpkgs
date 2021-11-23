@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addPythonPath() {
     addToSearchPathWithCustomDelimiter : PYTHONPATH $1/@sitePackages@
 }

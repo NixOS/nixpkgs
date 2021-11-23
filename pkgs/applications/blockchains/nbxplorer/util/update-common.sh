@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_3 git gnupg nix
+# shellcheck shell=bash
 set -euo pipefail
 
 # This script uses the following env vars:

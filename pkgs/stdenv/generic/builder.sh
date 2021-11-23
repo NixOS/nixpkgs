@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 export PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi

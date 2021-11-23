@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for pytest
 echo "Sourcing pytest-check-hook"
 

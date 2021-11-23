@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github
+# shellcheck shell=bash
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the element packages."

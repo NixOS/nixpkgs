@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p jq nix coreutils curl
+# shellcheck shell=bash
 
 # systems to generate hashes for
 systems='linux linux32 osx osx32

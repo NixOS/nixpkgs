@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nix-update
+# shellcheck shell=bash
 set -eu -o pipefail
 
 nix-update python3Packages.buildbot

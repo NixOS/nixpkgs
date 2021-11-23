@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils curl jq git gnupg common-updater-scripts
+# shellcheck shell=bash
 set -euo pipefail
 
 # Fetch latest release, GPG-verify the tag, update derivation

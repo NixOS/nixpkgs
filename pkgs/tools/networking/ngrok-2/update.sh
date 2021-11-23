@@ -2,6 +2,7 @@
 #!nix-shell -p httpie
 #!nix-shell -p jq
 #!nix-shell -i bash
+# shellcheck shell=bash
 
 set -eu -o pipefail
 

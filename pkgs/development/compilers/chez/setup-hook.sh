@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addChezLibraryPath() {
   addToSearchPath CHEZSCHEMELIBDIRS "$1/lib/csv-site"
 }

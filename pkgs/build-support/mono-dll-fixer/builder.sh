@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 substitute $dllFixer $out --subst-var-by perl $perl/bin/perl

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 export NIX_SSL_CERT_FILE=@out@/etc/ssl/certs/ca-bundle.crt
 
 # compatibility

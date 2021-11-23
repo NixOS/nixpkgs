@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq
+# shellcheck shell=bash
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 

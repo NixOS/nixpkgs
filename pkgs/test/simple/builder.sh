@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 set -x
 
 export NIX_DEBUG=1

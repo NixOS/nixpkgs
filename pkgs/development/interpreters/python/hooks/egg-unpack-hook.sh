@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook to use in case an egg is fetched
 echo "Sourcing egg setup hook"
 

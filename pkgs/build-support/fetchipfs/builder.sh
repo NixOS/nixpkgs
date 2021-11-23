@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for

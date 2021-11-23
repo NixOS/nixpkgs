@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused coreutils common-updater-scripts
+# shellcheck shell=bash
 
 set -x
 

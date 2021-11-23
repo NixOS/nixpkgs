@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 test -d ~/.blobby || {
   mkdir ~/.blobby

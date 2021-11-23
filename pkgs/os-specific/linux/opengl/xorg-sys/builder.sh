@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 mkdir -p $out/lib
@@ -11,6 +12,3 @@ ln -s /usr/lib/tls/libnvidia-tls.so.1 $out/lib/
 for i in $neededLibs; do
     ln -s $i/lib/*.so* $out/lib/
 done
-
-
-

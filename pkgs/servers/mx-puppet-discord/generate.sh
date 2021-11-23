@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix
+# shellcheck shell=bash
 
 # No official release
 rev=c17384a6a12a42a528e0b1259f8073e8db89b8f4

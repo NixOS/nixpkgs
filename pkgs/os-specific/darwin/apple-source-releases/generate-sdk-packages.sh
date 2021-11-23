@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl
+# shellcheck shell=bash
 
 # usage:
 #   generate-sdk-packages.sh macos 11.0.1

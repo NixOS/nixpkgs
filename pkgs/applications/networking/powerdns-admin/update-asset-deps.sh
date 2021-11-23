@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../.. -i bash -p wget yarn2nix-moretea.yarn2nix jq
+# shellcheck shell=bash
 
 # This script is based upon:
 # pkgs/applications/networking/instant-messengers/riot/update-riot-desktop.sh

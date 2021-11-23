@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for eggs
 echo "Sourcing egg-install-hook"
 

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 tzdataHook() {
     export TZDIR=@out@/share/zoneinfo
 }

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addYosysPluginPath() {
   addToSearchPath NIX_YOSYS_PLUGIN_DIRS "$1/share/yosys/plugins"
 }

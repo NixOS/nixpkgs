@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p common-updater-scripts curl jq
+# shellcheck shell=bash
 
 set -euo pipefail
 

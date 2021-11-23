@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # See cc-wrapper for comments.
 var_templates_list=(
     PKG_CONFIG_PATH

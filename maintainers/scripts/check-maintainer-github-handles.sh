@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p jq parallel
+# shellcheck shell=bash
 
 # Example how to work with the `lib.maintainers` attrset.
 # Can be used to check whether all user handles are still valid.

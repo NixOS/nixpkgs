@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 _cb-yank() {
   AA=$(clippaste 2>/dev/null) && CUTBUFFER="$AA"
   zle yank

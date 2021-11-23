@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 automakeAddFlags() {
     local file="$1"
     local target="$2"

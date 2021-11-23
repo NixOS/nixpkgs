@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnused nix-prefetch jq
+# shellcheck shell=bash
 
 set -eou pipefail
 

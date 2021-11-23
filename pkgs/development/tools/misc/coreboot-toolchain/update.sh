@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell --pure -i bash -p nix cacert git getopt
+# shellcheck shell=bash
 
 if [ ! -d .git ]; then
   echo "This script needs to be run from the root directory of nixpkgs. Exiting."

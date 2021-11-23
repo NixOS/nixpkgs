@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 header "exporting egg ${eggName} (version $version) into $out"

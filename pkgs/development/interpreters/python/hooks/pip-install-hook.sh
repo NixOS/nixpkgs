@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for pip.
 echo "Sourcing pip-install-hook"
 

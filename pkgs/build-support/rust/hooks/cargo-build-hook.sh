@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 declare -a cargoBuildFlags
 
 cargoBuildHook() {

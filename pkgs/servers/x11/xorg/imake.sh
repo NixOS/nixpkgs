@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 preInstall() {
     mkdir -p $out/lib/X11/config
     ln -s $xorgcffiles/lib/X11/config/* $out/lib/X11/config

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nodePackages.node2nix nodejs-12_x curl jq nix-update
+# shellcheck shell=bash
 
 CURRENT_VERSION=$(nix eval --raw '(with import ../../.. {}; zigbee2mqtt.version)')
 TARGET_VERSION=$(curl https://api.github.com/repos/Koenkk/zigbee2mqtt/releases/latest | jq -r ".tag_name")

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 
 mkdir -p $out
@@ -17,4 +18,3 @@ for i in $dotGraph; do
         dot2pdf $i
     fi
 done
-

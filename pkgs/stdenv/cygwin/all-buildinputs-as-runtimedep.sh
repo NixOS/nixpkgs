@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # On cygwin, automatic runtime dependency detection does not work
 # because the binaries do not contain absolute references to store
 # locations (yet)

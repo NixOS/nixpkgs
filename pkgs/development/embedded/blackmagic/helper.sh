@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 ################################################################################
 # Build all of the platforms manually since the `all_platforms' target
 # doesn't preserve all of the build outputs and overrides CFLAGS.

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Clean up top-level tests directory in site-package installation.
 echo "Sourcing python-remove-tests-dir-hook"
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p jq nix-prefetch
+# shellcheck shell=bash
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ $# -ne 1 ]]; then

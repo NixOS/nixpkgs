@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addNetBSDInstallMakeFlags() {
   export INSTALL_FILE="install -U -c"
   export INSTALL_DIR="install -U -d"

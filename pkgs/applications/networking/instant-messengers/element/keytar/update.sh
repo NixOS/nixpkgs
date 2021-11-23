@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-yarn-deps yarn
+# shellcheck shell=bash
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the seshat package."

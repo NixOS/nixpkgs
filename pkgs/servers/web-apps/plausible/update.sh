@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p jq nix-prefetch-github yarn yarn2nix-moretea.yarn2nix moreutils
+# shellcheck shell=bash
 
 # NOTE: please check on new releases which steps aren't necessary anymore!
 # Currently the following things are done:

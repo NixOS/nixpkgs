@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 xdtEnvHook() {
     addToSearchPath ACLOCAL_PATH $1/share/aclocal
 }

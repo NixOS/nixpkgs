@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 source $stdenv/setup
 header "Cloning Fossil $url [$rev] into $out"
 
