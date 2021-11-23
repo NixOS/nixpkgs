@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec{
     gobject-introspection
   ];
   format = "other";
-  patchPhase = ''
+  postPatch = ''
     sed -i "s:/usr/lib/plasma-hud:$out/bin:" etc/xdg/autostart/plasma-hud.desktop
   '';
 
