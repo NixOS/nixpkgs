@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "httpdirfs";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IR+keGTEr1bPW6NIa7msH8DhwXrO6k1oGKdhe9Zl/pI=";
+    sha256 = "sha256-rdeBlAV3t/si9x488tirUGLZRYAxh13zdRIQe0OPd+A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
