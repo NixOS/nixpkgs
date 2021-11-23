@@ -6,6 +6,15 @@
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
 , dontUnpack ? (jar == args.src)
+  # Default native-image arguments. You probably don't want to set this,
+  # except in special cases. In most cases, use extraNativeBuildArgs instead
+, nativeImageBuildArgs ? [
+    "-jar" jar
+    "-H:CLibraryPath=${lib.getLib graalvm}/lib"
+    (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
+    "-H:Name=${executable}"
+    "--verbose"
+  ]
   # Extra arguments to be passed to the native-image
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
@@ -20,16 +29,7 @@ stdenv.mkDerivation (args // {
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvm glibcLocales ];
 
-  nativeImageBuildArgs = lib.flatten ([
-    "-jar"
-    jar
-    "-H:CLibraryPath=${lib.getLib graalvm}/lib"
-    "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
-    "-H:Name=${executable}"
-    "--verbose"
-    extraNativeImageBuildArgs
-    graalvmXmx
-  ]);
+  nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
   buildPhase = args.buildPhase or ''
     runHook preBuild
