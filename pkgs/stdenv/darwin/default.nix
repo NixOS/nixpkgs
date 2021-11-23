@@ -469,7 +469,7 @@ rec {
               };
               libcxxabi = libSuper.libcxxabi.override ({
                 stdenv = overrideCC self.stdenv self.ccNoLibcxx;
-              } // lib.optionalAttrs (finalLlvmVersion == "7") {
+              } // lib.optionalAttrs (builtins.any (v: finalLlvmVersion == v) [ 7 11 12 13 ]) {
                 # TODO: the bootstrapping of llvm packages isn't consistent.
                 # `standalone` may be redundant if darwin behaves like useLLVM (or
                 # has useLLVM = true).
