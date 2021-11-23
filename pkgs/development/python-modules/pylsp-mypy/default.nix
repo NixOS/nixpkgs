@@ -20,9 +20,15 @@ buildPythonPackage rec {
     sha256 = "1d119csj1k5m9j0f7wdvpvnd02h548css6ybxqah92nk2v0rjscr";
   };
 
+  disabledTests = [
+    "test_multiple_workspaces"
+  ];
+
   checkInputs = [ pytestCheckHook mock ];
 
   propagatedBuildInputs = [ mypy python-lsp-server ];
+
+  pythonImportsCheck = [ "pylsp_mypy" ];
 
   meta = with lib; {
     homepage = "https://github.com/Richardk2n/pylsp-mypy";
