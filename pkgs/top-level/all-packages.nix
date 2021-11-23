@@ -6697,6 +6697,8 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
+  kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
+
   kak-lsp = callPackage ../tools/misc/kak-lsp {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -9843,6 +9845,8 @@ with pkgs;
   sx = callPackage ../tools/X11/sx {
     inherit (xorg) xauth xorgserver;
   };
+
+  systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
 
   t = callPackage ../tools/misc/t { };
 
@@ -13869,8 +13873,8 @@ with pkgs;
   inherit (callPackage ../development/tools/alloy {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   })
-    alloy4
     alloy5
+    alloy6
     alloy;
 
   altair = callPackage ../development/tools/altair-graphql-client { };

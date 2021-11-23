@@ -18,6 +18,8 @@ rec {
       sha512 = "4938f676ddeeba37da1f2086d76a2ef2c870738169f7e10b35b83e4ed772df634825ee25c28232df1ac1e3a18a9466e97dc7ee318abbf43f1f4ce6479a13975b";
     };
     patches = [
+      # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+      ./no-buildconfig.patch
     ];
 
     meta = with lib; {
