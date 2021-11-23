@@ -313,7 +313,7 @@ let
           ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
-          ${optionalString vhost.rejectSSL ''
+          ${optionalString (hasSSL && vhost.rejectSSL) ''
             ssl_reject_handshake on;
           ''}
           ${optionalString (hasSSL && vhost.kTLS) ''
