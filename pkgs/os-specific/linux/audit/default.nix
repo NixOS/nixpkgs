@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optional enablePython python;
 
   configureFlags = [
