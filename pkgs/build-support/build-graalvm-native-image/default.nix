@@ -26,6 +26,7 @@ stdenv.mkDerivation (args // {
     "-H:CLibraryPath=${lib.getLib graalvm}/lib"
     "${lib.optionalString stdenv.isDarwin "-H:-CheckToolchain"}"
     "-H:Name=${executable}"
+    "--verbose"
     extraNativeImageBuildArgs
     graalvmXmx
   ]);
@@ -46,8 +47,6 @@ stdenv.mkDerivation (args // {
     runHook postInstall
   '';
 
-  meta = {
-    platforms = lib.attrByPath [ "meta" "platforms" ] graalvm.meta.platforms args;
-    mainProgram = lib.attrByPath [ "meta" "mainProgram" ] executable args;
-  };
+  meta.platforms = lib.attrByPath [ "meta" "platforms" ] graalvm.meta.platforms args;
+  meta.mainProgram = lib.attrByPath [ "meta" "mainProgram" ] executable args;
 })

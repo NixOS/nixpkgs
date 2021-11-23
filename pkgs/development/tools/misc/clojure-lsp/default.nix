@@ -21,7 +21,6 @@ buildGraalvmNativeImage rec {
 
   extraNativeImageBuildArgs = [
     "-H:CLibraryPath=${DTLV_LIB_EXTRACT_DIR}"
-    "--verbose"
     "--no-fallback"
     "--native-image-info"
   ];

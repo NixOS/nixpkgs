@@ -13,7 +13,6 @@ buildGraalvmNativeImage rec {
 
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
-    "--verbose"
     "--no-fallback"
     "--native-image-info"
   ];
