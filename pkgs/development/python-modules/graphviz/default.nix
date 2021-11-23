@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.18";
+  version = "0.18.1";
 
   disabled = pythonOlder "3.6";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-K98CwG+V+EFwzyawVjRwVhbX2FVfoX7dCAD5PXAWTq8=";
+    sha256 = "sha256-Y3w9btjYvKfcEQGuAzV+o6edJ9VmVcWhc+ICOqy87uM=";
   };
 
   patches = [
