@@ -29474,6 +29474,8 @@ with pkgs;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
+  zammad = callPackage ../applications/networking/misc/zammad { };
+
   zanshin = libsForQt5.callPackage ../applications/office/zanshin { };
 
   zathura = callPackage ../applications/misc/zathura { };
