@@ -2296,6 +2296,8 @@ with pkgs;
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
+  bwbasic = callPackage ../development/interpreters/bwbasic { };
+
   byobu = callPackage ../tools/misc/byobu {
     # Choices: [ tmux screen ];
     textual-window-manager = tmux;
@@ -2518,6 +2520,8 @@ with pkgs;
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
   chntpw = callPackage ../tools/security/chntpw { };
+
+  chopchop = callPackage ../tools/security/chopchop { };
 
   cliphist = callPackage ../tools/wayland/cliphist { };
 
@@ -3547,6 +3551,8 @@ with pkgs;
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
+  stacs = callPackage ../tools/security/stacs { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   starboard = callPackage ../applications/networking/cluster/starboard { };
@@ -3821,6 +3827,8 @@ with pkgs;
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
   bomutils = callPackage ../tools/archivers/bomutils { };
+
+  boofuzz= callPackage ../tools/security/boofuzz { };
 
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
@@ -9493,6 +9501,8 @@ with pkgs;
   slides = callPackage ../applications/misc/slides { };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
+
+  slowlorust = callPackage ../tools/networking/slowlorust { };
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
