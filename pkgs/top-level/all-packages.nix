@@ -9846,6 +9846,8 @@ with pkgs;
     inherit (xorg) xauth xorgserver;
   };
 
+  systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
+
   t = callPackage ../tools/misc/t { };
 
   tabnine = callPackage ../development/tools/tabnine { };
