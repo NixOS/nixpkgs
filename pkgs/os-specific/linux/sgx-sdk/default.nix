@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${concatStringsSep "." (take 2 (splitVersion version))}";
-    sha256 = "1cr2mkk459s270ng0yddgcryi0zc3dfmg9rmdrdh9mhy2mc1kx0g";
+    hash = "sha256-D/QZWBUe1gRbbjWnV10b7IPoM3utefAsOEKnQuasIrM=";
     fetchSubmodules = true;
   };
 
