@@ -64,11 +64,11 @@ in {
     };
 
     ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-      llvmPackages = pkgs.llvmPackages_11;
+      llvmPackages = pkgs.llvmPackages_12;
     };
 
     ghc8107BinaryMinimal = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-      llvmPackages = pkgs.llvmPackages_11;
+      llvmPackages = pkgs.llvmPackages_12;
       minimal = true;
     };
 
@@ -98,8 +98,8 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
+      buildLlvmPackages = buildPackages.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
       bootPkgs =
@@ -126,8 +126,8 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      buildLlvmPackages = buildPackages.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc8107Binary;
@@ -136,8 +136,8 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
+      buildLlvmPackages = buildPackages.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
       libffi = pkgs.libffi;
     };
 
