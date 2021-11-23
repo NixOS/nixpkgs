@@ -8062,6 +8062,12 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  n0emis = {
+    email = "nixpkgs@n0emis.network";
+    github = "n0emis";
+    githubId = 22817873;
+    name = "Ember Keske";
+  };
   nadrieril = {
     email = "nadrieril@gmail.com";
     github = "nadrieril";
