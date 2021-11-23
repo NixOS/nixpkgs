@@ -2963,6 +2963,8 @@ with pkgs;
 
   inherit (nodePackages) fx;
 
+  tlclient = callPackage ../applications/networking/remote/tlclient { };
+
   tllist = callPackage ../development/libraries/tllist { };
 
   fcft = callPackage ../development/libraries/fcft { };
