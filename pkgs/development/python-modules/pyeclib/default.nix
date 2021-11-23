@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, liberasurecode, six }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, liberasurecode, six }:
 
 buildPythonPackage rec {
   pname = "pyeclib";
@@ -13,11 +13,16 @@ buildPythonPackage rec {
     # patch dlopen call
     substituteInPlace src/c/pyeclib_c/pyeclib_c.c \
       --replace "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
+    # python's platform.platform() doesn't return "Darwin" (anymore?)
+    substituteInPlace setup.py \
+      --replace '"Darwin"' '"macOS"'
   '';
 
-  preBuild = ''
-    # required for the custom find_library function in setup.py
-    export LD_LIBRARY_PATH="${lib.makeLibraryPath [ liberasurecode ]}"
+  preBuild = let
+    ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    # required for the custom _find_library function in setup.py
+    export ${ldLibraryPathEnvName}="${lib.makeLibraryPath [ liberasurecode ]}"
   '';
 
   buildInputs = [ liberasurecode ];
