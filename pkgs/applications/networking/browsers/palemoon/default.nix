@@ -1,37 +1,36 @@
-{ stdenv
-, lib
-, fetchzip
-, writeScript
+{ lib
+, stdenv
 , alsa-lib
 , autoconf213
 , cairo
-, desktop-file-utils
 , dbus
 , dbus-glib
+, desktop-file-utils
+, fetchzip
 , ffmpeg
 , fontconfig
 , freetype
 , gnome2
 , gnum4
-, gtk2
-, libevent
 , libGL
 , libGLU
+, libevent
 , libnotify
 , libpulseaudio
 , libstartup_notification
+, pango
 , perl
 , pkg-config
 , python2
 , unzip
 , which
 , wrapGAppsHook
+, writeScript
 , xorg
 , yasm
 , zip
 , zlib
-, withGTK3 ? true
-, gtk3
+, withGTK3 ? true, gtk3, gtk2
 }:
 
 # Only specific GCC versions are supported with branding
@@ -43,37 +42,15 @@ assert with lib.strings; (
   && versionOlder stdenv.cc.version "11"
 );
 
-let
-  libPath = lib.makeLibraryPath [
-    ffmpeg
-    libpulseaudio
-  ];
-  gtkVersion = if withGTK3 then "3" else "2";
-in
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.1";
+  version = "29.4.2.1";
 
   src = fetchzip {
-    url = "http://archive.palemoon.org/source/palemoon-${version}-source.tar.xz";
-    stripRoot = false;
-    sha256 = "0kb9yn1q8rrmnlsyvxvv2gdgyyf12g6rxlyh82lmc0gysvd4qd2c";
+    name = "${pname}-${version}";
+    url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
+    sha256 = "sha256-iTn1jbbsw7u+rVe/1J9yJbS0wi5Rlkcy4rO8nWcXu2I=";
   };
-
-  passthru.updateScript = writeScript "update-${pname}" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl libxml2
-
-    set -eu -o pipefail
-
-    # Only release note announcement == finalized release
-    version="$(
-      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
-      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
-      sed 's/v\(\S*\).*/\1/'
-    )"
-    update-source-version ${pname} "$version"
-  '';
 
   nativeBuildInputs = [
     autoconf213
@@ -99,12 +76,13 @@ stdenv.mkDerivation rec {
     freetype
     gnome2.GConf
     gtk2
-    libevent
     libGL
     libGLU
+    libevent
     libnotify
     libpulseaudio
     libstartup_notification
+    pango
     zlib
   ]
   ++ (with xorg; [
@@ -118,9 +96,15 @@ stdenv.mkDerivation rec {
     pixman
     xorgproto
   ])
-  ++ lib.optional withGTK3 gtk3;
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs ./mach
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -128,50 +112,14 @@ stdenv.mkDerivation rec {
     export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
-    # Keep this similar to the official .mozconfig file,
-    # only minor changes for portability are permitted with branding.
-    # https://developer.palemoon.org/build/linux/
-    echo > $MOZCONFIG '
-    # Clear this if not a 64bit build
-    _BUILD_64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
+    export build64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
+    export gtkversion=${if withGTK3 then "3" else "2"}
+    export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
+    export prefix=$out
+    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export autoconf=${autoconf213}/bin/autoconf
 
-    # Set GTK Version to 2 or 3
-    _GTK_VERSION=${gtkVersion}
-
-    # Standard build options for Pale Moon
-    ac_add_options --enable-application=palemoon
-    ac_add_options --enable-optimize="-O2 -w"
-    ac_add_options --enable-default-toolkit=cairo-gtk$_GTK_VERSION
-    ac_add_options --enable-jemalloc
-    ac_add_options --enable-strip
-    ac_add_options --enable-devtools
-    ac_add_options --enable-av1
-
-    ac_add_options --disable-eme
-    ac_add_options --disable-webrtc
-    ac_add_options --disable-gamepad
-    ac_add_options --disable-tests
-    ac_add_options --disable-debug
-    ac_add_options --disable-necko-wifi
-    ac_add_options --disable-updater
-
-    ac_add_options --with-pthreads
-
-    # Please see https://www.palemoon.org/redist.shtml for restrictions when using the official branding.
-    ac_add_options --enable-official-branding
-    export MOZILLA_OFFICIAL=1
-
-    ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
-
-    #
-    # NixOS-specific adjustments
-    #
-
-    ac_add_options --prefix=$out
-
-    mk_add_options MOZ_MAKE_FLAGS="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
-    mk_add_options AUTOCONF=${autoconf213}/bin/autoconf
-    '
+    substituteAll ${./mozconfig} $MOZCONFIG
 
     runHook postConfigure
   '';
@@ -212,14 +160,22 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${libPath}"
-    )
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        ffmpeg
+        libpulseaudio
+      ];
+    in
+      ''
+        gappsWrapperArgs+=(
+          --prefix LD_LIBRARY_PATH : "${libPath}"
+        )
     wrapGApp $out/lib/palemoon-${version}/palemoon
   '';
 
   meta = with lib; {
+    homepage = "https://www.palemoon.org/";
     description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
@@ -232,10 +188,24 @@ stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage = "https://www.palemoon.org/";
     changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
     license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
+
+  passthru.updateScript = writeScript "update-${pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+    set -eu -o pipefail
+
+    # Only release note announcement == finalized release
+    version="$(
+      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+      sed 's/v\(\S*\).*/\1/'
+    )"
+    update-source-version ${pname} "$version"
+  '';
 }

@@ -216,6 +216,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk";
+      versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
   };
