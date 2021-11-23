@@ -5,6 +5,8 @@
 , openssl
 , zlib
 , libuv
+# External poll is required for e.g. mosquitto, but discouraged by the maintainer.
+, withExternalPoll ? false
 }:
 
 let
@@ -29,7 +31,8 @@ let
       "-DLWS_WITH_SOCKS5=ON"
       # Required since v4.2.0
       "-DLWS_BUILD_HASH=no_hash"
-    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON";
+    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
+      ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON";
 
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
