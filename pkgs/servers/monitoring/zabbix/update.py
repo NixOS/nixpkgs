@@ -12,12 +12,9 @@ from urllib.parse import urljoin
 from urllib.request import urlopen
 
 
-def run(*args, check=True, **kwargs):
+def run(*args, **kwargs):
     print('$', *map(shlex.quote, args), file=sys.stderr)
-    p = subprocess.run(args, **kwargs)
-    if check:
-        p.check_returncode()
-    return p
+    return subprocess.run(args, **kwargs)
 
 
 def respect_numbers(x):
@@ -68,7 +65,7 @@ mapAttrs (_: attrs:
 ) (
   import ./versions.nix (x: x)
 )
-''', stdout=subprocess.PIPE, encoding='utf-8').stdout)
+''', check=True, stdout=subprocess.PIPE, encoding='utf-8').stdout)
 
 for attr, info in info.items():
     if attr == 'latest':
@@ -80,7 +77,7 @@ for attr, info in info.items():
     m = re.search(r'(?<=-).*?(?=\.tar\.[^.]*$)', url)
     version = m[0]
     sha256 = run('nix-prefetch-url', '--type', 'sha256', url,
-                 stdout=subprocess.PIPE, encoding='utf-8').stdout.strip()
+                 check=True, stdout=subprocess.PIPE, encoding='utf-8').stdout.strip()
 
     replace(info, version=version)
     replace(info, sha256=sha256)
@@ -102,4 +99,4 @@ for attr, info in info.items():
 
     run('git', 'commit',
         '-m', 'zabbix: %s -> %s' % (info['version']['value'], version),
-        'versions.nix', check=False)
+        'versions.nix')
