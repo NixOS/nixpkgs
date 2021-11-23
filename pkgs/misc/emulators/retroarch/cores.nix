@@ -224,6 +224,12 @@ in
     makefile = "Makefile";
   };
 
+  blastem = mkLibRetroCore {
+    core = "blastem";
+    description = "Port of BlastEm to libretro";
+    license = lib.licenses.gpl3Only;
+  };
+
   bluemsx = mkLibRetroCore {
     core = "bluemsx";
     description = "Port of BlueMSX to libretro";
