@@ -1,23 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, file, openssl, makeWrapper, which, curl, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, file, openssl, makeWrapper, which, curl }:
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "1.80.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "v${version}";
-    sha256 = "1jkwii45hynil1jail9gmz4bak066rdi8zfcczicjsa6npbz50w4";
+    sha256 = "sha256-Y7NLCooMP78EesG9zivyuaHwl9qHY2GSOTKuHzYWj6c=";
   };
-
-  patches = [
-    # https://github.com/matteocorti/check_ssl_cert/pull/114
-    (fetchpatch {
-      url = "https://github.com/matteocorti/check_ssl_cert/commit/2b7aad583d507a70605dd44d918739a65b267bfd.patch";
-      sha256 = "1jk872jgm6k3qc1ks1h3v6p804spjlnxcj2wc8v0hkmwfwiwd2k4";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
