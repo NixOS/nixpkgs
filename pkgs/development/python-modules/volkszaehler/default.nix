@@ -1,17 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , aiohttp
 , async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "volkszaehler";
-  version = "0.2.2";
+  version = "0.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1oqzhC3Yq2V30F3ilr80vKFnTmI/CdIVLuzMlIr40xI=";
+    sha256 = "sha256-eIHL4o6PxSHRnhdT8XV2YsV57B2c6xQSuOKm0VXrb0M=";
   };
 
   propagatedBuildInputs = [
@@ -22,10 +26,12 @@ buildPythonPackage rec {
   # no tests are present
   doCheck = false;
 
-  pythonImportsCheck = [ "volkszaehler" ];
+  pythonImportsCheck = [
+    "volkszaehler"
+  ];
 
   meta = with lib; {
-    description = "Python Wrapper for interacting with the Volkszahler API";
+    description = "Python module for interacting with the Volkszahler API";
     homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
