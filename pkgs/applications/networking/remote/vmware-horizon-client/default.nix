@@ -16,9 +16,11 @@
 , harfbuzz
 , liberation_ttf
 , libjpeg
+, libpulseaudio
 , libtiff
 , libudev0-shim
 , libuuid
+, libv4l
 , libX11
 , libXcursor
 , libXext
@@ -99,9 +101,11 @@ let
       harfbuzz
       liberation_ttf
       libjpeg
+      libpulseaudio
       libtiff
       libudev0-shim
       libuuid
+      libv4l
       libX11
       libXcursor
       libXext
