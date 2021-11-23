@@ -163,8 +163,14 @@ buildStdenv.mkDerivation ({
       sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
     })
 
-  ++ patches;
+  # This fixes a race condition causing deadlock.
+  # https://phabricator.services.mozilla.com/D128657
+  ++ lib.optional (lib.versionAtLeast ffversion "94") (fetchpatch {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/9c7f25d45bb1dd6b1a865780bc249cdaa619aa83/trunk/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch";
+    sha256 = "l4bMK/YDXcDpIjPy9DPuUSFyDpzVQca201A4h9eav5g=";
+  })
 
+  ++ patches;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
