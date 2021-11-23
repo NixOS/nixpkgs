@@ -73,6 +73,6 @@ python3.pkgs.buildPythonApplication rec  {
     description = "Share files across the LAN";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
