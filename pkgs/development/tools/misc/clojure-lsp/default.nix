@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGraalvmNativeImage, graalvm11-ce, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
+{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
@@ -16,26 +16,25 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-k0mzibcLAspklCPE6f2qsUm9bwSvcJRgWecMBq7mpF0=";
   };
 
+  executable = "clojure-lsp";
+
+  # https://github.com/clojure-lsp/clojure-lsp/blob/2021.11.02-15.24.47/graalvm/native-unix-compile.sh#L18-L27
+  DTLV_LIB_EXTRACT_DIR = "/tmp";
+
   extraNativeImageBuildArgs = [
-    "-H:CLibraryPath=$DTLV_LIB_EXTRACT_DIR"
+    "-H:CLibraryPath=${DTLV_LIB_EXTRACT_DIR}"
     "--verbose"
     "--no-fallback"
     "--native-image-info"
   ];
-
-  preBuild = ''
-    # https://github.com/clojure-lsp/clojure-lsp/blob/2021.11.02-15.24.47/graalvm/native-unix-compile.sh#L18-L27
-    DTLV_LIB_EXTRACT_DIR=$(mktemp -d)
-    export DTLV_LIB_EXTRACT_DIR=$DTLV_LIB_EXTRACT_DIR
-  '';
 
   doCheck = true;
   checkPhase = ''
     runHook preCheck
 
     export HOME="$(mktemp -d)"
-    ./clojure-lsp --version | fgrep -q '${version}'
-    ${babashka}/bin/bb integration-test ./clojure-lsp
+    ./${executable} --version | fgrep -q '${version}'
+    ${babashka}/bin/bb integration-test ./${executable}
 
     runHook postCheck
   '';
