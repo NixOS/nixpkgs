@@ -51,7 +51,6 @@ in makeTest {
         connect-timeout = 1
       '';
 
-      virtualisation.memorySize = 2048;
       virtualisation.diskSize = 8 * 1024;
       virtualisation.emptyDiskImages = [
         # Small root disk for installer
