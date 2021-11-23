@@ -213,6 +213,10 @@ let
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
       INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
+
+      # Kernel TLS
+      TLS         = whenAtLeast "4.13" module;
+      TLS_DEVICE  = whenAtLeast "4.18" yes;
     };
 
     wireless = {

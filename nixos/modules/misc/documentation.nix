@@ -80,6 +80,10 @@ let
       ];
     };
 
+  # list of man outputs currently active intended for use as default values
+  # for man-related options, thus "man" is included unconditionally.
+  activeManOutputs = [ "man" ] ++ lib.optionals cfg.dev.enable [ "devman" ];
+
 in
 
 {
@@ -130,7 +134,7 @@ in
           name = "man-paths";
           paths = config.environment.systemPackages;
           pathsToLink = [ "/share/man" ];
-          extraOutputsToInstall = ["man"];
+          extraOutputsToInstall = activeManOutputs;
           ignoreCollisions = true;
         };
         defaultText = literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
@@ -226,7 +230,7 @@ in
     (mkIf cfg.man.enable {
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
-      environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
+      environment.extraOutputsToInstall = activeManOutputs;
       environment.etc."man_db.conf".text =
         let
           manualCache = pkgs.runCommandLocal "man-cache" { } ''
