@@ -7,10 +7,9 @@ let
   cfg = config.boot.initrd.network;
 
   dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
-  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
-  dhcpIfShellExpr = if config.networking.useDHCP
-                      then "$(ls /sys/class/net/ | grep -v ^lo$)"
-                      else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
+  dhcpIfShellExpr = if (config.networking.useDHCP || config.networking.networkmanager.enable)
+    then "$(ls /sys/class/net/ | grep -v ^lo$)"
+    else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
   udhcpcScript = pkgs.writeScript "udhcp-script"
     ''
@@ -55,7 +54,7 @@ in
         configured using the `ip` kernel parameter,
         as described in [the kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt).
         Otherwise, if
-        {option}`networking.useDHCP` is enabled, an IP address
+        {option}`boot.initrd.network.udhcpc.enable` is enabled, an IP address
         is acquired using DHCP.
 
         You should add the module(s) required for your network card to
@@ -75,13 +74,27 @@ in
       '';
     };
 
+    boot.initrd.network.udhcpc.enable = mkOption {
+      type = types.bool;
+      default = config.networking.useDHCP || dhcpInterfaces != [];
+      defaultText = "config.networking.useDHCP || dhcpInterfaces != []";
+      description = lib.mdDoc ''
+        Whether or not to enable using udhcpc to configure one or more network
+        interface(s) using DHCP.
+
+        Defaults to true if {option}`networking.useDHCP` or any
+        {option}`networking.interfaces.<name>.useDHCP` options are
+        enabled.
+      '';
+    };
+
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
       description = lib.mdDoc ''
         Additional command-line arguments passed verbatim to udhcpc if
-        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
-        are enabled.
+        {option}`boot.initrd.network.enable` and
+        {option}`boot.initrd.network.udhcpc.enable` are enabled.
       '';
     };
 
@@ -119,7 +132,7 @@ in
       ''
 
       # Otherwise, use DHCP.
-      + optionalString doDhcp ''
+      + optionalString cfg.udhcpc.enable ''
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
