@@ -2,7 +2,7 @@
 
 { name ? "${args.pname}-${args.version}"
   # Final executable name
-, executable
+, executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
 , dontUnpack ? (jar == args.src)
