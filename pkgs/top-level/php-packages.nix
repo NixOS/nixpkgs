@@ -173,6 +173,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     event = callPackage ../development/php-packages/event { };
 
+    gnupg = callPackage ../development/php-packages/gnupg { };
+
     igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = callPackage ../development/php-packages/imagick { };
