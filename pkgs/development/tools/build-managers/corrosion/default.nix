@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , rustPlatform
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     sha256 = "1fsq8zzzq28fj2fh92wmg8kmdj4y10mcpdmlgxsygy5lbh4xs13f";
   };
+
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake
