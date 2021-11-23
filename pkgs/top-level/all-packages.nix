@@ -30294,6 +30294,7 @@ with pkgs;
   mindustry-wayland = callPackage ../games/mindustry { jdk = adoptopenjdk-hotspot-bin-15; glew = glew-egl; };
 
   mindustry-server = callPackage ../games/mindustry {
+    jdk = adoptopenjdk-hotspot-bin-15;
     enableClient = false;
     enableServer = true;
   };
