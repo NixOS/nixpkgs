@@ -113,6 +113,7 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF $cmakeFlags"
     cmakeFlags="-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF $cmakeFlags"
 
+    # This value is set by the Ninja setup hook
     if [ "${buildPhase-}" = ninjaBuildPhase ]; then
         cmakeFlags="-GNinja $cmakeFlags"
     fi

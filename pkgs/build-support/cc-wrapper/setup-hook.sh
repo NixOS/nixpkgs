@@ -37,7 +37,7 @@
 #    with the wrapped binaries.
 #
 #  - The wrapped binaries will exclusively *read* cc-wrapper-derivation-specific
-#    environment variables distinguished with with `suffixSalt`, like
+#    environment variables distinguished with `suffixSalt`, like
 #    `NIX_CFLAGS_COMPILE_@suffixSalt@`.
 #
 #  - `add-flags`, beyond its old task of reading extra flags stuck inside the
