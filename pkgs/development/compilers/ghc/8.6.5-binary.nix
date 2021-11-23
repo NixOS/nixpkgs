@@ -181,6 +181,8 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
     enableShared = true;
 
+    inherit llvmPackages;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
   };
