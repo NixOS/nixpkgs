@@ -2,20 +2,22 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "volkszaehler";
-  version = "0.3.0";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-eIHL4o6PxSHRnhdT8XV2YsV57B2c6xQSuOKm0VXrb0M=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-volkszaehler";
+    rev = version;
+    sha256 = "sha256-EiruMlhXvbUhCaDtHc3qCLbpp/KHp9rVpk2FmbR4A/k=";
   };
 
   propagatedBuildInputs = [
