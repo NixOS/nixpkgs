@@ -12,6 +12,10 @@ buildPythonPackage rec {
     sha256 = "0pfqfr5xqgsqkxzrmj8xl2glyl4nbq0irs0k6ik7iy3gd3mxf5g1";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace '"pytest-runner"' ""
+  '';
+
   buildInputs = [ keyutils ];
   checkInputs = [ pytest pytest-runner ];
 

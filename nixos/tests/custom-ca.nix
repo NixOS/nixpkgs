@@ -81,6 +81,7 @@ in
 
       # chromium-based browsers refuse to run as root
       test-support.displayManager.auto.user = "alice";
+
       # browsers may hang with the default memory
       virtualisation.memorySize = 600;
 

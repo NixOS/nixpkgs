@@ -13,9 +13,6 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
         pkgs.xdotool
       ];
 
-      # Need some more memory to record audio.
-      virtualisation.memorySize = 500;
-
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
       boot.kernelModules = [ "snd-aloop" ];

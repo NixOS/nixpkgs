@@ -220,7 +220,7 @@
     "egardia" = ps: with ps; [ pythonegardia ];
     "eight_sleep" = ps: with ps; [ pyeight ];
     "elgato" = ps: with ps; [ elgato ];
-    "eliqonline" = ps: with ps; [ ]; # missing inputs: eliqonline
+    "eliqonline" = ps: with ps; [ eliqonline ];
     "elkm1" = ps: with ps; [ elkm1-lib ];
     "elv" = ps: with ps; [ pypca ];
     "emby" = ps: with ps; [ pyemby ];
@@ -238,7 +238,7 @@
     "environment_canada" = ps: with ps; [ env-canada ];
     "envirophat" = ps: with ps; [ smbus-cffi ]; # missing inputs: envirophat
     "envisalink" = ps: with ps; [ pyenvisalink ];
-    "ephember" = ps: with ps; [ ]; # missing inputs: pyephember
+    "ephember" = ps: with ps; [ pyephember ];
     "epson" = ps: with ps; [ epson-projector ];
     "epsonworkforce" = ps: with ps; [ ]; # missing inputs: epsonprinter
     "eq3btsmart" = ps: with ps; [ construct ]; # missing inputs: python-eq3bt
@@ -270,7 +270,7 @@
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
     "fjaraskupan" = ps: with ps; [ fjaraskupan ];
-    "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
+    "fleetgo" = ps: with ps; [ ritassist ];
     "flexit" = ps: with ps; [ pymodbus ];
     "flic" = ps: with ps; [ pyflic ];
     "flick_electric" = ps: with ps; [ pyflick ];
@@ -298,7 +298,7 @@
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
     "fronius" = ps: with ps; [ pyfronius ];
     "frontend" = ps: with ps; [ aiohttp-cors home-assistant-frontend pillow sqlalchemy ];
-    "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
+    "frontier_silicon" = ps: with ps; [ afsapi ];
     "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garages_amsterdam" = ps: with ps; [ garages-amsterdam ];
@@ -452,7 +452,7 @@
     "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ pylgnetcast ];
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
-    "life360" = ps: with ps; [ ]; # missing inputs: life360
+    "life360" = ps: with ps; [ life360 ];
     "lifx" = ps: with ps; [ aiolifx aiolifx-effects ];
     "lifx_cloud" = ps: with ps; [ ];
     "light" = ps: with ps; [ ];
@@ -597,7 +597,7 @@
     "oasa_telematics" = ps: with ps; [ ]; # missing inputs: oasatelematics
     "obihai" = ps: with ps; [ pyobihai ];
     "octoprint" = ps: with ps; [ ]; # missing inputs: pyoctoprintapi
-    "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
+    "oem" = ps: with ps; [ oemthermostat ];
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ pyombi ];
     "omnilogic" = ps: with ps; [ omnilogic ];
@@ -773,7 +773,7 @@
     "sinch" = ps: with ps; [ ]; # missing inputs: clx-sdk-xms
     "siren" = ps: with ps; [ ];
     "sisyphus" = ps: with ps; [ ]; # missing inputs: sisyphus-control
-    "sky_hub" = ps: with ps; [ ]; # missing inputs: pyskyqhub
+    "sky_hub" = ps: with ps; [ pyskyqhub ];
     "skybeacon" = ps: with ps; [ pygatt ];
     "skybell" = ps: with ps; [ skybellpy ];
     "slack" = ps: with ps; [ slackclient ];
@@ -936,13 +936,13 @@
     "venstar" = ps: with ps; [ venstarcolortouch ];
     "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ vsure ];
-    "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
+    "versasense" = ps: with ps; [ pyversasense ];
     "version" = ps: with ps; [ pyhaversion ];
     "vesync" = ps: with ps; [ pyvesync ];
     "viaggiatreno" = ps: with ps; [ ];
     "vicare" = ps: with ps; [ pyvicare ];
     "vilfo" = ps: with ps; [ vilfo-api-client ];
-    "vivotek" = ps: with ps; [ ]; # missing inputs: libpyvivotek
+    "vivotek" = ps: with ps; [ libpyvivotek ];
     "vizio" = ps: with ps; [ pyvizio ];
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ aiovlc ];
@@ -999,7 +999,7 @@
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
     "yi" = ps: with ps; [ aioftp ha-ffmpeg ];
     "youless" = ps: with ps; [ youless-api ];
-    "zabbix" = ps: with ps; [ ]; # missing inputs: py-zabbix
+    "zabbix" = ps: with ps; [ py-zabbix ];
     "zamg" = ps: with ps; [ ];
     "zengge" = ps: with ps; [ ]; # missing inputs: zengge
     "zeroconf" = ps: with ps; [ aiohttp-cors ifaddr zeroconf ];

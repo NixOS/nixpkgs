@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
     services.vault.enable = true;
-    virtualisation.memorySize = 512;
   };
 
   testScript =

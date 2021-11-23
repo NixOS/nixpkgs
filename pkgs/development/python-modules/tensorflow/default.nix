@@ -344,6 +344,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
+      timeout = 86400; # 24 hours, needed for darwin
       broken = !(xlaSupport -> cudaSupport);
     };
   };

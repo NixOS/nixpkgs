@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 ];
 
+  postPatch = ''
+    sed -i '/# --enable-new-dtags:/,/--enable-new-dtags is required/ d' configure.ac
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/clusterlabs/libqb";
     description = "A library providing high performance logging, tracing, ipc, and poll";

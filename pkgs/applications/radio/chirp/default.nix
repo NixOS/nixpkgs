@@ -4,11 +4,11 @@
 }:
 python2.pkgs.buildPythonApplication rec {
   pname = "chirp-daily";
-  version = "20210724";
+  version = "20211016";
 
   src = fetchurl {
     url = "https://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0wddzls7r0l5b8vvljnmrj5lmmp7zkzl4h73pyigyf9nbhaklybb";
+    sha256 = "13xzqnhvnw6yipv4izkq0s9ykyl9pc5ifpr1ii8xfp28ch706qyw";
   };
 
   propagatedBuildInputs = with python2.pkgs; [
