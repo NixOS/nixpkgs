@@ -22,7 +22,6 @@ buildGraalvmNativeImage rec {
     "-H:ReflectionConfigurationFiles=${reflectionJson}"
     "--initialize-at-build-time"
     "-H:Log=registerResource:"
-    "--verbose"
     "--no-fallback"
     "--no-server"
   ];
