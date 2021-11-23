@@ -79,7 +79,7 @@ def _call_nix_update(pkg, version):
 def _nix_eval(expr: str):
     nixpkgs_path = Path(__file__).parent / '../../../../'
     try:
-        output = subprocess.check_output(['nix', 'eval', '--json', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True)
+        output = subprocess.check_output(['nix-instantiate', '--strict', '--json', '--eval', '-E', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True)
     except subprocess.CalledProcessError:
         return None
     return json.loads(output)
