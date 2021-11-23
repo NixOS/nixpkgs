@@ -2,7 +2,7 @@
 , wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
-, miniupnpc, enet, mbedtls, soundtouch, sfml
+, miniupnpc, enet, mbedtls, soundtouch, sfml, writeScript
 , vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
@@ -62,6 +62,17 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+  '';
+
+
+  passthru.updateScript = writeScript "dolphin-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    set -eou pipefail
+    json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
+    version="$(jq -r '.shortrev' <<< "$json")"
+    rev="$(jq -r '.hash' <<< "$json")"
+    update-source-version dolphin-emu-beta "$version" --rev="$rev"
   '';
 
   meta = with lib; {
