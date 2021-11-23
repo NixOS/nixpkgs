@@ -2,7 +2,7 @@
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, fontforge
+, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
 , openssl, gperf, cppunit, poppler, util-linux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
@@ -24,6 +24,10 @@
 assert builtins.elem variant [ "fresh" "still" ];
 
 let
+  jre' = jre_minimal.override {
+    modules = [ "java.base" "java.desktop" ];
+  };
+
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
   primary-src = importVariant "primary.nix" { inherit fetchurl; };
@@ -318,7 +322,6 @@ in (mkDrv rec {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-jdk-home=${jdk.home}"
     "--with-ant-home=${ant}/lib/ant"
     "--with-system-cairo"
     "--with-system-libs"
@@ -379,7 +382,7 @@ in (mkDrv rec {
   '';
 
   nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkg-config libtool
+    gdb fontforge autoconf automake bison pkg-config libtool jdk
   ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
@@ -387,7 +390,7 @@ in (mkDrv rec {
     [ ant ArchiveZip boost box2d cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
+      hunspell icu jre' lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes
@@ -407,7 +410,8 @@ in (mkDrv rec {
     ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
-    inherit srcs jdk;
+    inherit srcs;
+    jdk = jre';
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
