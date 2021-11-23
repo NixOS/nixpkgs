@@ -3103,6 +3103,8 @@ in {
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
+  hg-git = callPackage ../development/python-modules/hg-git { };
+
   hglib = callPackage ../development/python-modules/hglib { };
 
   hickle = callPackage ../development/python-modules/hickle { };
@@ -8456,6 +8458,8 @@ in {
   txdbus = callPackage ../development/python-modules/txdbus { };
 
   txgithub = callPackage ../development/python-modules/txgithub { };
+
+  txredisapi = callPackage ../development/python-modules/txredisapi { };
 
   txrequests = callPackage ../development/python-modules/txrequests { };
 
