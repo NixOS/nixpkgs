@@ -398,15 +398,13 @@ qtbaseDrv = stdenv.mkDerivation rec {
     ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    "-make libs"
-    "-make tools"
+    "-make" "libs"
+    "-make" "tools"
     # TODO maybe remove examples + tests
     # FIXME? write examples + tests to qtbase-everywhere-src-6.2.0/build/
     # currently in
     # qtbase-everywhere-src-6.2.0/examples
     # qtbase-everywhere-src-6.2.0/tests
-    "-make examples"
-    "-make tests"
     /*
     FIXME tests are not working / missing
     qtbase-everywhere-src-6.2.0/build/CMakeCache.txt
@@ -414,8 +412,8 @@ qtbaseDrv = stdenv.mkDerivation rec {
     FEATURE_testlib:BOOL=ON
     QT_BUILD_TESTS_BY_DEFAULT:BOOL=ON
     */
-    ''-${lib.optionalString (!buildExamples) "no"}make examples''
-    ''-${lib.optionalString (!buildTests) "no"}make tests''
+    ''-${lib.optionalString (!buildExamples) "no"}make'' "examples"
+    ''-${lib.optionalString (!buildTests) "no"}make'' "tests"
   ] ++ (
     if stdenv.isDarwin then [
       "-platform macx-clang"
