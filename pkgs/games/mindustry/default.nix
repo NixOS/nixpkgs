@@ -4,7 +4,7 @@
 , copyDesktopItems
 , fetchFromGitHub
 , gradle_6
-, jdk11
+, jdk
 , perl
 
 # for arc
@@ -87,8 +87,7 @@ let
     popd
   '';
 
-  jdk = jdk11;
-  gradle = (gradle_6.override (old: { java = jdk11; }));
+  gradle = (gradle_6.override (old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
