@@ -1,17 +1,24 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi, aiohttp, async-timeout }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, httpx }:
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.6.5";
+  version = "0.7.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5SFb+psULyg9UKVY3oJPNLF3TGS/W+Bxoj79iTzReL4=";
+    sha256 = "sha256-D1eMZ8lvqgW0u9DvzSR2wkoMu1aXUchbckhfTTAwH1I=";
   };
 
-  propagatedBuildInputs = [ aiohttp async-timeout ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "httpx>=0.20.0,<0.21.0" "httpx"
+  '';
+
+  propagatedBuildInputs = [
+    httpx
+  ];
 
   # No tests implemented
   doCheck = false;
