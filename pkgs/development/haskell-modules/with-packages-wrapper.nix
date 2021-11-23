@@ -1,7 +1,7 @@
 { lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
 # Include LLVM by default if GHC doesn't have native code generation support
 # See https://gitlab.haskell.org/ghc/ghc/-/wikis/platforms
-, withLLVM ? !(lib.any lib.id ([
+, useLLVM ? !(lib.any lib.id ([
     stdenv.targetPlatform.isx86
     stdenv.targetPlatform.isPowerPC
     stdenv.targetPlatform.isSparc
@@ -59,7 +59,7 @@ let
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
-if paths == [] && !withLLVM then ghc else
+if paths == [] && !useLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
@@ -82,7 +82,7 @@ symlinkJoin {
           ${lib.optionalString (ghc.isGhcjs or false)
             ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
           } \
-          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+          ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
     done
 
