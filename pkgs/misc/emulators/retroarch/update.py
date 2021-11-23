@@ -22,6 +22,7 @@ CORES = {
     "beetle-supergrafx": {"repo": "beetle-supergrafx-libretro"},
     "beetle-vb": {"repo": "beetle-vb-libretro"},
     "beetle-wswan": {"repo": "beetle-wswan-libretro"},
+    "blastem": {"repo": "blastem"},
     "bluemsx": {"repo": "bluemsx-libretro"},
     "bsnes": {"repo": "bsnes-libretro"},
     "bsnes-hd": {"repo": "bsnes-hd", "owner": "DerKoun"},

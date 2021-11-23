@@ -83,6 +83,13 @@
         "sha256": "XHTzXlTt8op0bDLNn833Unt57zclXowlLhG3qvWwjXQ=",
         "fetchSubmodules": false
     },
+    "blastem": {
+        "owner": "libretro",
+        "repo": "blastem",
+        "rev": "0786858437ed71996f43b7af0fbe627eb88152fc",
+        "sha256": "uEP5hSgLAle1cLv/EM7D11TJMAggu7pqWxfrUt3rhEg=",
+        "fetchSubmodules": false
+    },
     "bluemsx": {
         "owner": "libretro",
         "repo": "bluemsx-libretro",
