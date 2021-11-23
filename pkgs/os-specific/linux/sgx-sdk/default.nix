@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
       # Make sure we use the correct version to build IPP Crypto
       grep -q 'optlib_name=${optlibName}' "$src/download_prebuilt.sh" \
-        || (echo "Could not find expected optimized libs ${optlibName} in in linux-sgx source" >&2 && exit 1)
+        || (echo "Could not find expected optimized libs ${optlibName} in linux-sgx source" >&2 && exit 1)
 
       # Add missing sgx_ippcp.h: https://github.com/intel/linux-sgx/pull/752
       ln -s ${sgxIPPCryptoHeader} "$sourceRoot/external/ippcp_internal/inc/sgx_ippcp.h"
