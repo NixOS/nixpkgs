@@ -8,7 +8,7 @@ let
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jcouyang ];
+    maintainers = with maintainers; [ jcouyang MoritzBoehme ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 
