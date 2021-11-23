@@ -3,23 +3,24 @@
 , buildPythonPackage
 , curio
 , fetchFromGitHub
-, fetchpatch
 , flask
 , httpcore
 , httpx
+, hypercorn
 , pytest-asyncio
 , pytest-trio
 , pytestCheckHook
 , python-socks
 , pythonOlder
 , sniffio
+, starlette
 , trio
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rzegOwOKFSj5FOfaGnOZVsDf/Q8iq4v+wOaASGR9DyI=";
+    sha256 = "sha256-sxloLK8Fqd4Rh2fO4xn8XBHJUGPHFV7A0ZA3/jgNe/U=";
   };
 
   propagatedBuildInputs = [
@@ -43,19 +44,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     flask
+    hypercorn
     pytest-asyncio
     pytest-trio
     pytestCheckHook
+    starlette
     yarl
-  ];
-
-  patches = [
-    # Certificate for tests was expired
-    (fetchpatch {
-      name = "certificate.patch";
-      url = "https://github.com/romis2012/httpx-socks/commit/e12a0522ae667adf93483654206d4c09c3ae48ee.patch";
-      sha256 = "1mqykbii0r3by75bd2grppajyd4cbyhc6vp65fh0cgyp1x2gf00c";
-    })
   ];
 
   pythonImportsCheck = [
