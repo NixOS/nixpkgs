@@ -164,7 +164,8 @@ server = stdenv.mkDerivation (common // {
     bzip2 lz4 lzo snappy xz zstd
     cracklib judy libevent libxml2
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
-    ++ optionals stdenv.hostPlatform.isLinux [ linux-pam pmdk.dev ]
+    ++ optionals stdenv.hostPlatform.isLinux [ linux-pam ]
+    ++ optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv
     ++ optionals withStorageMroonga [ kytea libsodium msgpack zeromq ];
 
