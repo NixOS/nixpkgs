@@ -5,7 +5,7 @@
     stdenv.targetPlatform.isx86
     stdenv.targetPlatform.isPowerPC
     stdenv.targetPlatform.isSparc
-  ] ++ lib.optionals (lib.versionAtLeast ghc.version "9.2" || ghc.version == "8.10.7") [
+  ] ++ lib.optionals (lib.versionAtLeast ghc.version "9.2") [
     (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
     # TODO(@sternenseemann): Is armv7a supported for iOS?
   ]))
