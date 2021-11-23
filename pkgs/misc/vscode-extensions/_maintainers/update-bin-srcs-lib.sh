@@ -105,11 +105,15 @@ formatExtRuntimeDeps() {
   jsonStorePath="$(echo "$jsonShaWStorePath" | tail -n1)"
   1>&2 echo "jsonStorePath='$jsonStorePath'"
 
+  # Assume packages without an architectures are for x86_64 and remap arm64 to aarch64.
   declare jqQuery
   jqQuery=$(cat <<'EOF'
 .runtimeDependencies
-| map(select(.platforms[] | in({"linux": null})))
-| map(select(.architectures[] | in({"x86_64": null})))
+| map(select(.platforms[] | in({"linux": null, "darwin": null})))
+| map(select(.architectures == null).architectures |= ["x86_64"])
+| map(del(.architectures[] | select(. | in({"x86_64": null, "arm64": null}) | not)))
+| map((.architectures[] | select(. == "arm64")) |= "aarch64")
+| map(select(.architectures != []))
 | .[] | {
   (.id + "__" + (.architectures[0]) + "-" + (.platforms[0])):
     {installPath, binaries, urls: [.url, .fallbackUrl] | map(select(. != null))}
