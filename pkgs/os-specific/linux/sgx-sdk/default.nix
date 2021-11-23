@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchzip
 , fetchFromGitHub
 , callPackage
 , autoconf
@@ -23,32 +24,46 @@
 , writeText
 }:
 with lib;
-
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   version = "2.14.100.2";
 
+  versionTag = concatStringsSep "." (take 2 (splitVersion version));
+
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
-    rev = "sgx_${concatStringsSep "." (take 2 (splitVersion version))}";
+    rev = "sgx_${versionTag}";
     hash = "sha256-D/QZWBUe1gRbbjWnV10b7IPoM3utefAsOEKnQuasIrM=";
     fetchSubmodules = true;
   };
 
-  postUnpack = ''
-    # Make sure this is the right version
-    grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-      || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
-  '';
+  postUnpack =
+    let
+      optlibName = "optimized_libs_${versionTag}.tar.gz";
+      optimizedLibs = fetchzip {
+        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/${optlibName}";
+        hash = "sha256-FjNhNV9+KDMvBYdWXZbua6qYOc3Z1/jtcF4j52TSxQY=";
+        stripRoot = false;
+      };
+      sgxIPPCryptoHeader = "${optimizedLibs}/external/ippcp_internal/inc/sgx_ippcp.h";
+    in
+    ''
+      # Make sure this is the right version of linux-sgx
+      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
+        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+
+      # Make sure we use the correct version to build IPP Crypto
+      grep -q 'optlib_name=${optlibName}' "$src/download_prebuilt.sh" \
+        || (echo "Could not find expected optimized libs ${optlibName} in in linux-sgx source" >&2 && exit 1)
+
+      # Add missing sgx_ippcp.h: https://github.com/intel/linux-sgx/pull/752
+      ln -s ${sgxIPPCryptoHeader} "$sourceRoot/external/ippcp_internal/inc/sgx_ippcp.h"
+    '';
 
   postPatch = ''
     # https://github.com/intel/linux-sgx/pull/730
     substituteInPlace buildenv.mk --replace '/bin/cp' 'cp'
-
-    # https://github.com/intel/linux-sgx/pull/752
-    ln -s "$src/external/epid-sdk/ext/ipp/include/sgx_ippcp.h" \
-          'external/ippcp_internal/inc/sgx_ippcp.h'
 
     patchShebangs linux/installer/bin/build-installpkg.sh \
       linux/installer/common/sdk/createTarball.sh \
