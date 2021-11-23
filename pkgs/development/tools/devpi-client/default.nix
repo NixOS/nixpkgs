@@ -32,12 +32,6 @@ buildPythonApplication rec {
     sha256 = "362eb26e95136a792491861cc2728d14a6309a9d4c4f13a7b9c3e6fd39de58ec";
   };
 
-  postPatch = ''
-    # can be removed after 5.2.2, updated upstream
-    substituteInPlace setup.py \
-      --replace "pluggy>=0.6.0,<1.0" "pluggy"
-  '';
-
   buildInputs = [ glibcLocales ];
 
   propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
