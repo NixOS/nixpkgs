@@ -14,8 +14,6 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-mOUiKEM5tYhtpBpm7KtslyPYFsJ+Wr+4ul6Zi4aS09Q=";
   };
 
-  executable = "jet";
-
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "-J-Dclojure.spec.skip-macros=true"

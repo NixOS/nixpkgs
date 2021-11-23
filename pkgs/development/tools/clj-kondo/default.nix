@@ -9,8 +9,6 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-i0OeQPZfQPUeXC/Bs84I91IahBKK6W1mFix97s8/lVA=";
   };
 
-  executable = "clj-kondo";
-
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "--verbose"
