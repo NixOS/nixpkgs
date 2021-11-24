@@ -178,6 +178,9 @@ stdenv.mkDerivation rec {
     "--enable-guest-agent"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    # Always use our Meson, not the bundled version, which doesn't
+    # have our patches and will be subtly broken because of that.
+    "--meson=meson"
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
