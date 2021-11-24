@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , python3
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "6.1.2";
+  version = "6.2.0";
 
   outputs = [ "out" "dev" ];
 
@@ -26,13 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d48KQH8uwkSZWQEFSq1BD+TVUi9PWVVtMjKYmleRW58=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WM0Wo9giVP5pkMFaPCHsMfnAP6xD71zg6QLCYV6lmkY=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +52,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "An extension to GTK used by elementary OS";
