@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -8,8 +8,10 @@
 , ninja
 , pkg-config
 , vala
+, elementary-settings-daemon
 , libgee
 , granite
+, gsettings-desktop-schemas
 , gala
 , gtk3
 , glib
@@ -20,28 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.5";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1ydr1xpbyxjcnd36c9j7a64srbz6gpbshwhcqj6591kmiqhmvknk";
-  };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-security-privacy/pull/130
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-security-privacy/commit/18fe438baba651670d7f0534856c3b2433e3d75d.patch";
-      sha256 = "19qwm725k6h41kgg4a98i4rxx45s4bb1wxx0fzkh75gz9syfi58w";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-pkpS7BR/eXA0rWV1C5AR+FdF5OkDnV8YDBAt1ZkaVPo=";
   };
 
   nativeBuildInputs = [
@@ -53,9 +40,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # settings schema
     gala
     glib
     granite
+    gsettings-desktop-schemas
     gtk3
     libgee
     polkit
@@ -67,6 +56,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Security & Privacy Plug";
