@@ -9934,6 +9934,8 @@ in {
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
+  webargs = callPackage ../development/python-modules/webargs { };
+
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
@@ -9951,8 +9953,6 @@ in {
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
-
-  webargs = callPackage ../development/python-modules/webargs { };
 
   webob = callPackage ../development/python-modules/webob { };
 
