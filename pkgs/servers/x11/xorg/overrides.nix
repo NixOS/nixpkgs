@@ -452,6 +452,16 @@ self: super:
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
+    postPatch = ''
+      patch -p1 <<EOF
+      --- a/src/qxl_option_helpers.c
+      +++ b/src/qxl_option_helpers.c
+      @@ -37 +37 @@
+      -        return options[option_index].value.bool;
+      +        return options[option_index].value.boolean;
+      EOF
+    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
