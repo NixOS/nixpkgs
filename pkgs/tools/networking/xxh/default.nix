@@ -14,7 +14,6 @@ buildPythonApplication rec{
     homepage = "https://github.com/xxh/xxh";
     license = licenses.bsd2;
     maintainers = [ maintainers.pasqui23 ];
-    platforms = platforms.all;
   };
 
 }
