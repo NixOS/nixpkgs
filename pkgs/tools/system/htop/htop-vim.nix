@@ -17,5 +17,6 @@ htop.overrideAttrs (oldAttrs: rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ thiagokokada ];
+    mainProgram = "htop";
   };
 })
