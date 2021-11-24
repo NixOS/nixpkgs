@@ -18,19 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xr1ZihWK8fU8M/rXRKk5dOjoQNe3aJO8ouKC/iVZ7Sk=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-4Fg8/Gm9mUqaL3wEc8h+/pMvOfD75ILjo7LhLz6LQmo=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +42,12 @@ stdenv.mkDerivation rec {
     libnma
     wingpanel
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Network Indicator for Wingpanel";
