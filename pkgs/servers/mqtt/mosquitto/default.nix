@@ -8,13 +8,19 @@
 , cjson
 , libuuid
 , libuv
-, libwebsockets_3_1
+, libwebsockets
 , openssl
 , withSystemd ? stdenv.isLinux
 , systemd
 , fetchpatch
 }:
 
+let
+  # Mosquitto needs external poll enabled in libwebsockets.
+  libwebsockets' = libwebsockets.override {
+    withExternalPoll = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
   version = "2.0.12";
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     cjson
     libuuid
     libuv
-    libwebsockets_3_1
+    libwebsockets'
     openssl
   ] ++ lib.optional withSystemd systemd;
 
