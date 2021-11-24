@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "4.8.6";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-4DMXQYH1/RjLhgrn55I7Vkk6+gGsR+OVmiwxVHUIyro=";
+    hash = "sha256-B2Du2zis0xWeeyh3kSyz1doWImk9Fuk4qQ8HNZZdqdw=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro ]))
+    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests ]))
     atk
     cacert
     cinnamon-control-center
