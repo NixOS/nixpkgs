@@ -1,37 +1,34 @@
-{ lib, stdenv, fetchurl, atomEnv, libXScrnSaver, gtk2 }:
+{ lib, stdenv, fetchurl  }:
 
 stdenv.mkDerivation rec {
   pname = "marp";
-  version = "0.0.14";
+  version = "1.4.2";
 
   src = fetchurl {
-    url = "https://github.com/yhatt/marp/releases/download/v${version}/${version}-Marp-linux-x64.tar.gz";
-    sha256 = "0nklzxwdx5llzfwz1hl2jpp2kwz78w4y63h5l00fh6fv6zisw6j4";
+    url = "https://github.com/marp-team/marp-cli/releases/download/v${version}/marp-cli-v${version}-linux.tar.gz";
+    sha256 = "sha256-URdpmuveb9xEyeHLABeyObZjT6XaXv9tPgrxH9XdBZk=";
   };
 
   unpackPhase = ''
-    mkdir {locales,resources}
-    tar --delay-directory-restore -xf $src
-    chmod u+x {locales,resources}
+    tar -xf $src
   '';
 
   installPhase = ''
-    mkdir -p $out/lib/marp $out/bin
-    cp -r ./* $out/lib/marp
-    ln -s $out/lib/marp/Marp $out/bin
+    mkdir -p $out/bin/
+    cp -r ./marp $out/bin/
   '';
 
   postFixup = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${atomEnv.libPath}:${lib.makeLibraryPath [ libXScrnSaver gtk2 ]}:$out/lib/marp" \
-      $out/bin/Marp
+      --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      $out/bin/marp
   '';
 
   meta = with lib; {
-    description = "Markdown presentation writer, powered by Electron";
-    homepage = "https://yhatt.github.io/marp/";
+    description = "CLI interface for Marp and Marpit based converters";
+    homepage = "https://marp.app/";
     license = licenses.mit;
-    maintainers = [ maintainers.puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh kvark ];
     platforms = [ "x86_64-linux" ];
   };
 }
