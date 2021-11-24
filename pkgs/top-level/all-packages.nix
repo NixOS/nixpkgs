@@ -1087,6 +1087,8 @@ with pkgs;
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
+  notion-app-enhanced = callPackage ../applications/office/notion-app-enhanced { };
+
   pikchr = callPackage ../tools/graphics/pikchr { };
 
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
