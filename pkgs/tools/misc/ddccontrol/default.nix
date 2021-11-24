@@ -39,10 +39,17 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    oldPath="\$""{datadir}/ddccontrol-db"
-    newPath="${ddccontrol-db}/share/ddccontrol-db"
-    sed -i -e "s|$oldPath|$newPath|" configure.ac
-    sed -i -e "s/chmod 4711/chmod 0711/" src/ddcpci/Makefile*
+    substituteInPlace configure.ac              \
+      --replace                                 \
+      "\$""{datadir}/ddccontrol-db"             \
+      "${ddccontrol-db}/share/ddccontrol-db"
+
+    substituteInPlace src/ddcpci/Makefile.am    \
+       --replace "chmod 4711" "chmod 0711"
+  '' + lib.optionalString (lib.versionAtLeast "0.6.0" version) ''
+    # Upstream PR: https://github.com/ddccontrol/ddccontrol/pull/115
+    substituteInPlace src/lib/Makefile.am       \
+      --replace "/etc/" "\$""{sysconfdir}/"
   '';
 
   preConfigure = ''
