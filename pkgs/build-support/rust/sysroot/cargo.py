@@ -6,7 +6,7 @@ orig_cargo = os.environ['ORIG_CARGO'] if 'ORIG_CARGO' in os.environ else None
 
 base = {
   'package': {
-    'name': 'alloc',
+    'name': 'nixpkgs-sysroot-stub-crate',
     'version': '0.0.0',
     'authors': ['The Rust Project Developers'],
     'edition': '2018',
@@ -17,17 +17,19 @@ base = {
       'features': ['rustc-dep-of-std', 'mem'],
     },
     'core': {
-      'path': os.path.join(rust_src, 'libcore'),
+      'path': os.path.join(rust_src, 'core'),
     },
-  },
-  'lib': {
-    'name': 'alloc',
-    'path': os.path.join(rust_src, 'liballoc/lib.rs'),
+    'alloc': {
+      'path': os.path.join(rust_src, 'alloc'),
+    },
   },
   'patch': {
     'crates-io': {
       'rustc-std-workspace-core': {
-        'path': os.path.join(rust_src, 'tools/rustc-std-workspace-core'),
+        'path': os.path.join(rust_src, 'rustc-std-workspace-core'),
+      },
+      'rustc-std-workspace-alloc': {
+        'path': os.path.join(rust_src, 'rustc-std-workspace-alloc'),
       },
     },
   },
