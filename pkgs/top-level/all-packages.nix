@@ -1294,6 +1294,7 @@ with pkgs;
   aptly = callPackage ../tools/misc/aptly { };
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+  ASF-ui = callPackage ../applications/misc/ArchiSteamFarm/web-ui { };
 
   archivebox = python3Packages.callPackage ../applications/misc/archivebox { };
 
