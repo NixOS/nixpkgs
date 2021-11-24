@@ -24884,13 +24884,19 @@ with pkgs;
 
   keepass = callPackage ../applications/misc/keepass { };
 
+  keepass-charactercopy = callPackage ../applications/misc/keepass-plugins/charactercopy { };
+
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
 
+  keepass-keetraytotp = callPackage ../applications/misc/keepass-plugins/keetraytotp { };
+
   keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
+
+  keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
 
   kerbrute = callPackage ../tools/security/kerbrute { };
 

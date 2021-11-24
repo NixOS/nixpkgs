@@ -8166,6 +8166,17 @@
     githubId = 56316606;
     name = "Amneesh Singh";
   };
+  nazarewk = {
+    name = "Krzysztof Nazarewski";
+    email = "3494992+nazarewk@users.noreply.github.com";
+    matrix = "@nazarewk:matrix.org";
+    github = "nazarewk";
+    githubId = 3494992;
+    keys = [{
+      longkeyid = "rsa4096/0x916D8B67241892AE";
+      fingerprint = "4BFF 0614 03A2 47F0 AA0B 4BC4 916D 8B67 2418 92AE";
+    }];
+  };
   nbren12 = {
     email = "nbren12@gmail.com";
     github = "nbren12";
