@@ -347,8 +347,15 @@ stdenv.mkDerivation (rec {
     timeout = 24 * 3600;
     inherit (ghc.meta) license;
     # hardcode platforms because the bootstrap GHC differs depending on the platform,
-    # with differing platforms available for each of them
-    platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
+    # with differing platforms available for each of them; See HACK comment in
+    # 8.10.2-binary.nix for an explanation of the musl special casing.
+    platforms = [
+      "x86_64-linux"
+    ] ++ lib.optionals (!hostPlatform.isMusl) [
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
     # integer-simple builds are broken with musl when bootstrapping using
     # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
     # GHC 8.8.4 with GHC 8.10.7.
