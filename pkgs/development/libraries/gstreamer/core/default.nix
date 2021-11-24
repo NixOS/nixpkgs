@@ -12,7 +12,6 @@
 , makeWrapper
 , libcap
 , libunwind
-, darwin
 , elfutils # for libdw
 , bash-completion
 , lib
