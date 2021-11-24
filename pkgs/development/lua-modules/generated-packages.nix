@@ -2138,15 +2138,12 @@ buildLuarocksPackage {
 }) {};
 
 moonscript = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
-, fetchgit, lua, lpeg, alt-getopt, luafilesystem
+, fetchgit, lua, lpeg, argparse, luafilesystem
 }:
 buildLuarocksPackage {
   pname = "moonscript";
-  version = "0.5.0-1";
-  knownRockspec = (fetchurl {
-    url    = "https://luarocks.org/moonscript-0.5.0-1.rockspec";
-    sha256 = "06ykvmzndkcmbwn85a4l1cl8v8jw38g0isdyhwwbgv0m5a306j6d";
-  }).outPath;
+  version = "dev-1";
+
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/leafo/moonscript.git",
   "rev": "b7efcd131046ed921ae1075d7c0f6a3b64a570f7",
@@ -2161,7 +2158,7 @@ buildLuarocksPackage {
  '') ["date" "path"]) ;
 
   disabled = with lua; (luaOlder "5.1");
-  propagatedBuildInputs = [ lua lpeg alt-getopt luafilesystem ];
+  propagatedBuildInputs = [ lua lpeg argparse luafilesystem ];
 
   meta = {
     homepage = "http://moonscript.org";

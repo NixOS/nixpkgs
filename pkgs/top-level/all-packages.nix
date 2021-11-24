@@ -2296,6 +2296,8 @@ with pkgs;
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
+  bwbasic = callPackage ../development/interpreters/bwbasic { };
+
   byobu = callPackage ../tools/misc/byobu {
     # Choices: [ tmux screen ];
     textual-window-manager = tmux;
@@ -2518,6 +2520,8 @@ with pkgs;
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
   chntpw = callPackage ../tools/security/chntpw { };
+
+  chopchop = callPackage ../tools/security/chopchop { };
 
   cliphist = callPackage ../tools/wayland/cliphist { };
 
@@ -3547,6 +3551,8 @@ with pkgs;
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
+  stacs = callPackage ../tools/security/stacs { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   starboard = callPackage ../applications/networking/cluster/starboard { };
@@ -3821,6 +3827,8 @@ with pkgs;
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
   bomutils = callPackage ../tools/archivers/bomutils { };
+
+  boofuzz= callPackage ../tools/security/boofuzz { };
 
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
@@ -4436,7 +4444,7 @@ with pkgs;
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
-  debugedit-unstable = callPackage ../development/tools/misc/debugedit { };
+  debugedit = callPackage ../development/tools/misc/debugedit { };
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
@@ -6696,6 +6704,8 @@ with pkgs;
     plugins = [ ];  # override with the list of desired plugins
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
+
+  kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
@@ -9492,6 +9502,8 @@ with pkgs;
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
+  slowlorust = callPackage ../tools/networking/slowlorust { };
+
   slsnif = callPackage ../tools/misc/slsnif { };
 
   slstatus = callPackage ../applications/misc/slstatus {
@@ -9843,6 +9855,8 @@ with pkgs;
   sx = callPackage ../tools/X11/sx {
     inherit (xorg) xauth xorgserver;
   };
+
+  systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
 
   t = callPackage ../tools/misc/t { };
 
@@ -12077,7 +12091,7 @@ with pkgs;
 
   pscid = nodePackages.pscid;
 
-  coreboot-toolchain = callPackages ../development/tools/misc/coreboot-toolchain { };
+  coreboot-toolchain = recurseIntoAttrs (callPackage ../development/tools/misc/coreboot-toolchain { });
 
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
@@ -12975,6 +12989,7 @@ with pkgs;
   sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.1.1.nix {};
   sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
   sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.1.9.nix {};
+  sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.1.10.nix {};
   sbcl = sbcl_2_1_9;
 
   roswell = callPackage ../development/tools/roswell { };
@@ -13869,8 +13884,8 @@ with pkgs;
   inherit (callPackage ../development/tools/alloy {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   })
-    alloy4
     alloy5
+    alloy6
     alloy;
 
   altair = callPackage ../development/tools/altair-graphql-client { };
@@ -30899,7 +30914,9 @@ with pkgs;
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
     gnome38Extensions
-    gnome40Extensions;
+    gnome40Extensions
+    gnome41Extensions
+  ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
 
@@ -32120,6 +32137,8 @@ with pkgs;
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
+
+  cups-brother-hll2350dw = callPackage  ../misc/cups/drivers/hll2350dw { };
 
   cups-drv-rastertosag-gdi = callPackage ../misc/cups/drivers/cups-drv-rastertosag-gdi { };
 

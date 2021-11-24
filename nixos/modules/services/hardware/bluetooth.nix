@@ -11,12 +11,8 @@ let
 
   cfgFmt = pkgs.formats.ini { };
 
-  # bluez will complain if some of the sections are not found, so just make them
-  # empty (but present in the file) for now
   defaults = {
     General.ControllerMode = "dual";
-    Controller = { };
-    GATT = { };
     Policy.AutoEnable = cfg.powerOnBoot;
   };
 

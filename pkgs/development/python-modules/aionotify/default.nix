@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Simple, asyncio-based inotify library for Python";
     license = with lib.licenses; [ bsd2 ];
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

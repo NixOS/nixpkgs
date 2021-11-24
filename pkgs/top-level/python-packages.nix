@@ -267,6 +267,8 @@ in {
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
 
+  aiocurrencylayer = callPackage ../development/python-modules/aiocurrencylayer { };
+
   aiodiscover = callPackage ../development/python-modules/aiodiscover { };
 
   aiodns = callPackage ../development/python-modules/aiodns { };
@@ -2657,6 +2659,8 @@ in {
     withPython = true;
     inherit python;
   });
+
+  fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastpair = callPackage ../development/python-modules/fastpair { };
 
@@ -5636,6 +5640,8 @@ in {
 
   pep257 = callPackage ../development/python-modules/pep257 { };
 
+  pep440 = callPackage ../development/python-modules/pep440 { };
+
   pep517 = callPackage ../development/python-modules/pep517 { };
 
   pep8 = callPackage ../development/python-modules/pep8 { };
@@ -8556,6 +8562,8 @@ in {
   service-identity = callPackage ../development/python-modules/service_identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
+
+  setupmeta = callPackage ../development/python-modules/setupmeta { };
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
