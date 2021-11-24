@@ -68,7 +68,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1dj93291kh3wm46ardacpbblisarw5pmv683pdiqcngfhlp1m91a";
+      sha256 = "06njg44840na3ps3s29kjhjba0962vdr2zpd12yvqf16rwgf4zmq";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -77,14 +77,6 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
-    patches = [
-      # Allows compilation with git-lfs 1.2.0
-      (pkgs.fetchpatch {
-        url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=f3326b8b5ae4d1caa5c6e3e192c58c6e064c425a";
-        sha256 = "1nzg4mna462ndylisyy3nfih49aznhzzf7b3krb4p9p0j1zrcy2s";
-        excludes = [ "doc/**" "CHANGELOG" ];
-      })
-    ] ++ (drv.patches or []);
   }) super.git-annex;
 
   # Fix test trying to access /home directory
@@ -94,6 +86,9 @@ self: super: {
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
+
+  # https://github.com/haskell-game/dear-imgui.hs/issues/116
+  dear-imgui = doJailbreak super.dear-imgui;
 
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
@@ -114,6 +109,10 @@ self: super: {
   qtah-cpp-qt5 = overrideCabal (drv: {
     buildDepends = [ pkgs.qt5.wrapQtAppsHook ];
   }) super.qtah-cpp-qt5;
+
+  # Missing test data
+  # https://github.com/aleksey-makarov/melf/issues/1
+  melf = dontCheck super.melf;
 
   # The Haddock phase fails for one reason or another.
   deepseq-magic = dontHaddock super.deepseq-magic;
@@ -1345,21 +1344,21 @@ self: super: {
     resource-pool = self.hasura-resource-pool;
     ekg-core = self.hasura-ekg-core;
     ekg-json = self.hasura-ekg-json;
-    hspec = dontCheck self.hspec_2_8_4;
-    hspec-core = dontCheck self.hspec-core_2_8_4;
-    hspec-discover = dontCheck super.hspec-discover_2_8_4;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
     tasty-hspec = self.tasty-hspec_1_2;
   }));
-  hasura-ekg-core = super.hasura-ekg-core.overrideScope (self: super: {
-    hspec = dontCheck self.hspec_2_8_4;
-    hspec-core = dontCheck self.hspec-core_2_8_4;
-    hspec-discover = dontCheck super.hspec-discover_2_8_4;
-  });
+  hasura-ekg-core = doJailbreak (super.hasura-ekg-core.overrideScope (self: super: {
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
+  }));
   hasura-ekg-json = super.hasura-ekg-json.overrideScope (self: super: {
     ekg-core = self.hasura-ekg-core;
-    hspec = dontCheck self.hspec_2_8_4;
-    hspec-core = dontCheck self.hspec-core_2_8_4;
-    hspec-discover = dontCheck super.hspec-discover_2_8_4;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck super.hspec-discover_2_9_1;
   });
   pg-client = overrideCabal (drv: {
     librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
@@ -1433,6 +1432,20 @@ self: super: {
 
   # 2021-09-14: Tests are broken because of undeterministic variable names
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
+  hls-explicit-imports-plugin = dontCheck super.hls-explicit-imports-plugin;
+
+  # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+
+  # 2021-11-20: Testsuite hangs.
+  # https://github.com/haskell/haskell-language-server/issues/2375
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+
+  # 2021-11-23: Too strict bounds on ghcide, pending new release
+  hls-rename-plugin = assert super.hls-rename-plugin.version == "1.0.0.0";
+    doJailbreak super.hls-rename-plugin;
 
   # 2021-03-21: Test hangs
   # https://github.com/haskell/haskell-language-server/issues/1562
@@ -2081,9 +2094,9 @@ EOT
   # Jailbreak isn't sufficient, but this is ok as it's a leaf package.
   hadolint = super.hadolint.overrideScope (self: super: {
     language-docker = self.language-docker_10_3_0;
-    hspec = dontCheck self.hspec_2_8_4;
-    hspec-core = dontCheck self.hspec-core_2_8_4;
-    hspec-discover = dontCheck self.hspec-discover_2_8_4;
+    hspec = dontCheck self.hspec_2_9_1;
+    hspec-core = dontCheck self.hspec-core_2_9_1;
+    hspec-discover = dontCheck self.hspec-discover_2_9_1;
     colourista = doJailbreak super.colourista;
   });
 
@@ -2095,6 +2108,11 @@ EOT
   # Needs brick > 0.64
   nix-tree = super.nix-tree.override {
     brick = self.brick_0_64_2;
+  };
+
+  # Needs matching xmonad version
+  xmonad-contrib_0_17_0 = super.xmonad-contrib_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
   };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
