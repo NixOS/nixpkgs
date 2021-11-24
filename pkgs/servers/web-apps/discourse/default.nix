@@ -10,13 +10,13 @@
 }@args:
 
 let
-  version = "2.7.9";
+  version = "2.8.0.beta8";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-SOERjFbG4l/tUfOl51XEW0nVbza3L4adjiPhz4Hj0YU=";
+    sha256 = "sha256-YDPlCspb4T69ofWM74OguSqwsx4X+DGI8axmlPrbGl8=";
   };
 
   runtimeDeps = [
@@ -116,8 +116,8 @@ let
               linkFiles = writeShellScript "link-files" ''
                 cd ../..
 
-                mkdir -p vendor/v8/out.gn/libv8/obj/
-                ln -s "${v8}/lib/libv8.a" vendor/v8/out.gn/libv8/obj/libv8_monolith.a
+                mkdir -p vendor/v8/x86_64-linux/libv8/obj/
+                ln -s "${v8}/lib/libv8.a" vendor/v8/x86_64-linux/libv8/obj/libv8_monolith.a
 
                 ln -s ${v8}/include vendor/v8/include
 
