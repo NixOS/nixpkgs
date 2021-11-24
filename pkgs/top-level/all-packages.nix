@@ -22015,6 +22015,8 @@ with pkgs;
     inherit (darwin) IOKit;
   };
 
+  htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
+
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
   };
