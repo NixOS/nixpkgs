@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , vala
 , atk
@@ -28,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2021-07-16";
+  version = "unstable-2021-11-08";
 
   outputs = [ "out" "dev" ];
 
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "05fd6fccdf1a769f6737a0d7e57e092825348660";
-    sha256 = "0lqqq5cx0kk8y7qyjx7z2k3v1kw2xxzns968ianarcji19wzcns4";
+    rev = "51e8d3ddfbed0dfce3158d80f997ab183e92567b";
+    sha256 = "sha256-w6HGxEAXNod/uMEEfSz9nRNTRrCbcEqJCP9EFkVbX1U=";
   };
 
   nativeBuildInputs = [
