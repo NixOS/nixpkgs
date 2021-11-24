@@ -173,6 +173,8 @@ let
         };
       } ../hooks/qmake-hook.sh;
 
+      qmake2cmake = callPackage ../modules/qmake2cmake.nix { inherit srcs; };
+
       wrapQtAppsHook = makeSetupHook {
         deps = [ self.qtbase.dev makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
