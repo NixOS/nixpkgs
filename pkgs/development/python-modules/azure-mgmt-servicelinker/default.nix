@@ -3,34 +3,34 @@
 , fetchPypi
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
-, msrestazure
+, msrest
 }:
 
 buildPythonPackage rec {
-  pname = "azure-mgmt-cognitiveservices";
-  version = "13.0.0";
+  pname = "azure-mgmt-servicelinker";
+  version = "1.0.0b1";
 
   src = fetchPypi {
     inherit pname version;
+    sha256 = "4f70d3bcd98ba539bfef870e3c497ebdc5efed3200c2627a61718baa9ab21a61";
     extension = "zip";
-    sha256 = "dc6116e8394d45312c7ad5a9098ce0dd2370bd92d43afd33d8b3bfab724fa498";
   };
 
   propagatedBuildInputs = [
-    msrestazure
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
+    msrest
   ];
 
-  # has no tests
+  pythonImportsCheck = [ "azure.mgmt.servicelinker" ];
+
+  # no tests with sdist
   doCheck = false;
 
   meta = with lib; {
-    description = "This is the Microsoft Azure Cognitive Services Management Client Library";
+    description = "Microsoft Azure Servicelinker Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }
