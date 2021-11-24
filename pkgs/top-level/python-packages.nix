@@ -2979,6 +2979,8 @@ in {
 
   future-fstrings = callPackage ../development/python-modules/future-fstrings { };
 
+  future-typing = callPackage ../development/python-modules/future-typing { };
+
   fuzzyfinder = callPackage ../development/python-modules/fuzzyfinder { };
 
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
@@ -9605,6 +9607,8 @@ in {
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };
+
+  typical = callPackage ../development/python-modules/typical { };
 
   typing = null;
 
