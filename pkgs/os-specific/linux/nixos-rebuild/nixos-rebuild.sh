@@ -9,6 +9,13 @@ shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
 
+# save all output to systemd journal
+# 'journalctl -t nixos-rebuild' to inspect
+# tee is used so we still get output to the terminal
+# check if systemd-cat exists and if systemctl exits with 0. if it does not
+# then systemd isn't running(chroot) and cannot use systemd-cat.
+command -v systemd-cat &>/dev/null && systemctl &>/dev/null && exec > >(tee >(systemd-cat -t nixos-rebuild)) 2>&1
+
 showSyntax() {
     exec man nixos-rebuild
     exit 1

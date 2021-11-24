@@ -180,6 +180,8 @@
    stop and (re)starts any system services if needed. Please note that
    user services need to be started manually as they aren't detected
    by the activation script at the moment.
+
+   output is logged to the systemd journal and can be viewed with <command>journalctl -t nixos-rebuild</command>.
   </para>
 
   <para>
