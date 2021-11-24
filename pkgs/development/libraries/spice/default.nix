@@ -74,7 +74,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgstreamer=1.0"
-    "-Dcelt051=disabled"
   ];
 
   postInstall = ''
