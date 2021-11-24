@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.9.1";
+  version = "2.10.1";
 
   repoName = "applications-menu";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-Q0ee8S8wWhK0Y16SWfE79Us6QD/oRE5Pxm3o//eb/po=";
+    sha256 = "sha256-e9InWx5b2DAFK7m7z/oCW7Mw/ymBNz1Sc7vT65kkZ9o=";
   };
 
   patches = [
