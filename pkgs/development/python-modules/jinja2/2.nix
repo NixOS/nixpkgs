@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.is32bit || isPy3k;
 
   checkPhase = ''
-    pytest -v tests
+    pytest -v tests -W ignore::ResourceWarning -W ignore::DeprecationWarning
   '';
 
   meta = with lib; {
