@@ -5004,6 +5004,12 @@
     githubId = 4085046;
     name = "Imuli";
   };
+  ineol = {
+    email = "leo.stefanesco@gmail.com";
+    github = "ineol";
+    githubId = 37965;
+    name = "Léo Stefanesco";
+  };
   infinisil = {
     email = "contact@infinisil.com";
     matrix = "@infinisil:matrix.org";
