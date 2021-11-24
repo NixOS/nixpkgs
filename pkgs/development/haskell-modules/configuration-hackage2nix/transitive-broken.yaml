@@ -992,6 +992,7 @@ dont-distribute-packages:
  - domain-core
  - domain-optics
  - dormouse-client
+ - dovetail-aeson
  - dow
  - download-media-content
  - dph-examples
@@ -1228,9 +1229,11 @@ dont-distribute-packages:
  - ghcjs-hplay
  - ght
  - gi-cairo-again
+ - gi-clutter
+ - gi-coglpango
  - gi-gsk
  - gi-gstpbutils
- - gi-gtk_4_0_4
+ - gi-gtk_4_0_5
  - git-fmt
  - git-gpush
  - git-object
@@ -2381,10 +2384,14 @@ dont-distribute-packages:
  - polydata
  - polysemy-RandomFu
  - polysemy-check
+ - polysemy-conc
  - polysemy-http
+ - polysemy-log
  - polysemy-log-co
+ - polysemy-log-di
  - polysemy-methodology-co-log
  - polysemy-optics
+ - polysemy-process
  - polysemy-readline
  - polysemy-resume
  - polysemy-webserver

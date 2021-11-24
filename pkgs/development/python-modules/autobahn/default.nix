@@ -23,12 +23,14 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "21.3.1";
+  version = "21.11.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00wf9dkfgakg80gy62prg650lb8zz9y9fdlxwxcznwp8hgsw29p1";
+    sha256 = "sha256-vW9GMVQZygpb5BCfc3QQIIrV8ZcY9nympKZ0zGbKmxg=";
   };
 
   propagatedBuildInputs = [
@@ -64,9 +66,13 @@ buildPythonPackage rec {
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [ "--pyargs autobahn" ];
+  pytestFlagsArray = [
+    "--pyargs autobahn"
+  ];
 
-  pythonImportsCheck = [ "autobahn" ];
+  pythonImportsCheck = [
+    "autobahn"
+  ];
 
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
