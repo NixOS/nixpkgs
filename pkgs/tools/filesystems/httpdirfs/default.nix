@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A FUSE filesystem for HTTP directory listings";
     homepage = "https://github.com/fangfufu/httpdirfs";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sbruder ];
+    maintainers = with maintainers; [ sbruder schnusch ];
     platforms = platforms.unix;
   };
 }
