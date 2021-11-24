@@ -74,7 +74,4 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Fix build with ghc 8.6.x.
-  git-annex = appendPatch ./patches/git-annex-fix-ghc-8.6.x-build.patch super.git-annex;
-
 }

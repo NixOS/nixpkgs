@@ -854,6 +854,12 @@ self: super: builtins.intersectAttrs super {
       export HOME=$TMPDIR/home
     '';
   }) super.hls-pragmas-plugin;
+  hls-hlint-plugin = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  }) super.hls-hlint-plugin;
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH
