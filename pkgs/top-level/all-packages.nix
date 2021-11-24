@@ -24890,6 +24890,8 @@ with pkgs;
 
   keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
 
+  keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
+
   kerbrute = callPackage ../tools/security/kerbrute { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
