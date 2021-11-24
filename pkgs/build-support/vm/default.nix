@@ -110,7 +110,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=${toString default9PMsizeBytes}
+    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -119,7 +119,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=${toString default9PMsizeBytes}
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -1174,11 +1174,4 @@ rec {
      `debDistros' sets. */
   diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
 
-  # The default 9P msize value is 8 KiB, which according to QEMU is
-  # insufficient and would degrade performance.
-  # See: https://wiki.qemu.org/Documentation/9psetup#msize
-  # Use 128KiB which is the default in linux 5.15+
-  # https://github.com/torvalds/linux/commit/9c4d94dc9a64426d2fa0255097a3a84f6ff2eebe
-  # TODO: actually set it to 128KiB, it was causing failures in many tests due to memory usage
-  default9PMsizeBytes = 16 * 1024;
 }
