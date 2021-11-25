@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "hyperopt";
-  version = "0.2.5";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc6047d50f956ae64eebcb34b1fd40f186a93e214957f20e87af2f10195295cc";
+    sha256 = "1bf89ae58050bbd32c7307199046117feee245c2fd9ab6255c7308522b7ca149";
   };
 
   propagatedBuildInputs = [ future cloudpickle numpy networkx six tqdm scipy pymongo ];
