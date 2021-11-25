@@ -291,9 +291,9 @@ stdenv.mkDerivation (rec {
 
     # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' $i
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
   '';
 
