@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # This script is used to test that the module system is working as expected.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
