@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.39.0";
+  version = "0.40.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "065c40k6g8sy6ynzk4k8k7iddl18g2b6kb9kg4m6g7npclmn5wvp";
+    sha256 = "0ra0dp319qj13wxaqh2vz4xhn59m9h3bfg1m6wf3cxsix737b1k4";
   };
 
   propagatedBuildInputs = [
