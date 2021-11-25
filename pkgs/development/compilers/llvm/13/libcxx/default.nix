@@ -2,22 +2,22 @@
 , libcxxabi
 , enableShared ? !stdenv.hostPlatform.isStatic
 
-# If isCxxHeaders is true, the resulting package would only include the headers.
+# If headersOnly is true, the resulting package would only include the headers.
 # Use this to break the circular dependency between libcxx and libcxxabi.
 #
 # Some context:
 # https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
-, isCxxHeaders ? false
+, headersOnly ? false
 }:
 
 stdenv.mkDerivation rec {
-  pname = if isCxxHeaders then "cxx-headers" else "libcxx";
+  pname = if headersOnly then "cxx-headers" else "libcxx";
   inherit version;
 
   inherit src;
   sourceRoot = "source/libcxx";
 
-  outputs = [ "out" ] ++ lib.optional (!isCxxHeaders) "dev";
+  outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!isCxxHeaders) [ libcxxabi ];
+  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
 
   cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
-  buildFlags = lib.optional isCxxHeaders "generate-cxx-headers";
-  installTargets = lib.optional isCxxHeaders "install-cxx-headers";
+  buildFlags = lib.optional headersOnly "generate-cxx-headers";
+  installTargets = lib.optional headersOnly "install-cxx-headers";
 
   # At this point, cxxabi headers would be installed in the dev output, which
   # prevents moveToOutput from doing its job later in the build process.
-  postInstall = lib.optionalString (!isCxxHeaders) ''
+  postInstall = lib.optionalString (!headersOnly) ''
     mv "$dev/include/c++/v1/"* "$out/include/c++/v1/"
     pushd "$dev"
     rmdir -p include/c++/v1

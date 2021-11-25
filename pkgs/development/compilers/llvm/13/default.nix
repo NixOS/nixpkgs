@@ -254,7 +254,7 @@ let
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
         stdenv = stdenv_;
-        isCxxHeaders = true;
+        headersOnly = true;
       };
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
