@@ -13,14 +13,14 @@ fail=0
 
 evalConfig() {
     local attr=$1
-    shift;
+    shift
     local script="import ./default.nix { modules = [ $@ ];}"
     nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
 }
 
 reportFailure() {
     local attr=$1
-    shift;
+    shift
     local script="import ./default.nix { modules = [ $@ ];}"
     echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only"
     evalConfig "$attr" "$@"
@@ -29,10 +29,10 @@ reportFailure() {
 
 checkConfigOutput() {
     local outputContains=$1
-    shift;
+    shift
     if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
         pass=$((pass + 1))
-        return 0;
+        return 0
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
@@ -43,7 +43,7 @@ checkConfigOutput() {
 checkConfigError() {
     local errorContains=$1
     local err=""
-    shift;
+    shift
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
         echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
@@ -51,7 +51,7 @@ checkConfigError() {
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             pass=$((pass + 1))
-            return 0;
+            return 0
         else
             echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
