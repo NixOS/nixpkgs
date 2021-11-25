@@ -7,9 +7,6 @@
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
-# nixpkgs='<nixpkgs>'
-# if [ -n "$1" ]; then
-
 function checkCommits {
     local ret status tmp user
     user="$1"
