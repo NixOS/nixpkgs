@@ -290,7 +290,7 @@ $pass Pass
 $fail Fail
 EOF
 
-if test $fail -ne 0; then
+if [ "$fail" -ne 0 ]; then
     exit 1
 fi
 exit 0
