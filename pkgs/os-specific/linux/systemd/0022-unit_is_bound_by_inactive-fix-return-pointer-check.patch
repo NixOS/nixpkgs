@@ -1,0 +1,33 @@
+From b0b4622a8917cf86bcbee881b8b68aeea166ecbb Mon Sep 17 00:00:00 2001
+From: Dominique Martinet <asmadeus@codewreck.org>
+Date: Wed, 24 Nov 2021 22:27:22 +0900
+Subject: [PATCH] unit_is_bound_by_inactive: fix return pointer check
+
+*ret_culprit should be set if ret_culprit has been passed a non-null value,
+checking the previous *ret_culprit value does not make sense.
+
+This would cause the culprit to not properly be assigned, leading to
+pid1 crash when a unit could not be stopped.
+
+Fixes: #21476
+(cherry picked from commit 3da361064bf550d1818c7cd800a514326058e5f2)
+---
+ src/core/unit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/unit.c b/src/core/unit.c
+index 69ed43578e34..b0a8e7bc3d1d 100644
+--- a/src/core/unit.c
++++ b/src/core/unit.c
+@@ -2125,7 +2125,7 @@ bool unit_is_bound_by_inactive(Unit *u, Unit **ret_culprit) {
+                         continue;
+ 
+                 if (UNIT_IS_INACTIVE_OR_FAILED(unit_active_state(other))) {
+-                        if (*ret_culprit)
++                        if (ret_culprit)
+                                 *ret_culprit = other;
+ 
+                         return true;
+-- 
+2.31.1
+

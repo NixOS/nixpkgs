@@ -172,6 +172,10 @@ stdenv.mkDerivation {
     # systemd-stable
     ./0020-sd-boot-Unify-error-handling.patch
     ./0021-sd-boot-Rework-console-input-handling.patch
+
+    # Fix pid1 segfault encountered on nixos-rebuild switch
+    # https://github.com/systemd/systemd/issues/21476
+    ./0022-unit_is_bound_by_inactive-fix-return-pointer-check.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (let
     oe-core = fetchzip {
       url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
