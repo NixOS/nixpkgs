@@ -44,7 +44,7 @@ checkConfigError() {
     local errorContains=$1
     local err=""
     shift;
-    if err==$(evalConfig "$@" 2>&1 >/dev/null); then
+    if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
         echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
         return 1
