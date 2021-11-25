@@ -3908,6 +3908,12 @@
     githubId = 183879;
     name = "Florian Klink";
   };
+  florentc = {
+    email = "florentc@users.noreply.github.com";
+    github = "florentc";
+    githubId = 1149048;
+    name = "Florent Ch.";
+  };
   FlorianFranzen = {
     email = "Florian.Franzen@gmail.com";
     github = "FlorianFranzen";
