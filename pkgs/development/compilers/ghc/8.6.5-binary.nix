@@ -2,6 +2,8 @@
 , fetchurl, perl, gcc
 , ncurses5, ncurses6, gmp, glibc, libiconv
 , llvmPackages
+, coreutils
+, targetPackages
 }:
 
 # Prebuilt only does native
@@ -30,8 +32,17 @@ let
 
   downloadsUrl = "https://downloads.haskell.org/ghc";
 
-  runtimeDeps = lib.optionals useLLVM [
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
     (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
   ];
 
 in
@@ -175,7 +186,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -184,7 +194,7 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    env -i $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';

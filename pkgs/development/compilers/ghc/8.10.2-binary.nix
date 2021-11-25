@@ -3,6 +3,8 @@
 , ncurses5
 , ncurses6, gmp, libiconv, numactl
 , llvmPackages
+, coreutils
+, targetPackages
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -140,8 +142,17 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
-  runtimeDeps = lib.optionals useLLVM [
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
     (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
   ];
 
 in
@@ -372,7 +383,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -381,7 +391,9 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    # can't use env -i here because otherwise we don't find -lgmp on musl
+    env ${libEnvVar}= PATH= \
+      $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
