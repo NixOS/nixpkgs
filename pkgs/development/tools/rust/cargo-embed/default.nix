@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-embed";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "151zdnv4i0dgkk4w3j2a1sdklcxw07bgqjs7sv6lvkylrx8dfrxa";
+    sha256 = "1is58n8y5lvnvzkbnh3gfk3r3f2r1w4l2qjdp2k8373apxzjxdvr";
   };
 
-  cargoSha256 = "00p2rwqrax99kwadc8bfq8pbcijals2nzpx43wb03kwxl4955wn9";
+  cargoSha256 = "0kalwigck9lf734zdpzg01sf2zzyrgdgq2rg3qj7hy94gfxlsk63";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
   buildInputs = [ libusb1 libftdi1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo extension for working with microcontrollers";
     homepage = "https://probe.rs/";
+    changelog = "https://github.com/probe-rs/cargo-embed/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ fooker ];
   };
