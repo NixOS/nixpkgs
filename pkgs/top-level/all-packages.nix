@@ -25635,10 +25635,6 @@ with pkgs;
 
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
-  guitone = callPackage ../applications/version-management/guitone {
-    graphviz = graphviz_2_32;
-  };
-
   gv = callPackage ../applications/misc/gv { };
 
   gvisor = callPackage ../applications/virtualization/gvisor {
