@@ -32,11 +32,9 @@ checkConfigOutput() {
     shift
     if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
         pass=$((pass + 1))
-        return 0
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
-        return 1
     fi
 }
 
@@ -47,15 +45,12 @@ checkConfigError() {
     if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
         echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
         reportFailure "$@"
-        return 1
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             pass=$((pass + 1))
-            return 0
         else
             echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
-            return 1
         fi
     fi
 }
