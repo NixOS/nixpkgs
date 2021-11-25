@@ -11,7 +11,7 @@ export PATH=@path@:$PATH
 
 
 # open a new file descriptor called 3
-# save all >&3 to systemd journal
+# save all '1>&3 2>&3' to systemd journal
 # 'journalctl -t nixos-rebuild' to inspect
 # tee is used so we still get output to the terminal
 # check if systemd-cat exists and if systemctl exits with 0. if it does not
@@ -54,7 +54,7 @@ while [ "$#" -gt 0 ]; do
         action="$i"
         ;;
       --install-grub)
-        echo "$0: --install-grub deprecated, use --install-bootloader instead" >&2
+        echo "$0: --install-grub deprecated, use --install-bootloader instead" 1>&3 2>&3
         export NIXOS_INSTALL_BOOTLOADER=1
         ;;
       --install-bootloader)
@@ -94,7 +94,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --profile-name|-p)
         if [ -z "$1" ]; then
-            echo "$0: ‘--profile-name’ requires an argument"
+            echo "$0: ‘--profile-name’ requires an argument" 1>&3 2>&3
             exit 1
         fi
         if [ "$1" != system ]; then
@@ -132,7 +132,7 @@ while [ "$#" -gt 0 ]; do
         lockFlags+=("$i" "$j" "$k")
         ;;
       *)
-        echo "$0: unknown option \`$i'"
+        echo "$0: unknown option \`$i'" 1>&3 2>&3
         exit 1
         ;;
     esac
@@ -220,7 +220,7 @@ nixBuild() {
             NIX_SSHOPTS=$SSHOPTS nix-copy-closure --to "$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
-            echo "nix-instantiate failed"
+            echo "nix-instantiate failed" 1>&3 2>&3
             exit 1
         fi
   fi
@@ -267,7 +267,7 @@ nixFlakeBuild() {
             NIX_SSHOPTS=$SSHOPTS nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
-            echo "nix eval failed"
+            echo "nix eval failed" 1>&3 2>&3
             exit 1
         fi
     fi
@@ -407,13 +407,13 @@ prebuiltNix() {
     elif [[ "$machine" = aarch64 ]]; then
         echo @nix_aarch64_linux@
     else
-        echo "$0: unsupported platform"
+        echo "$0: unsupported platform" 1>&3 2>&3
         exit 1
     fi
 }
 
 if [[ -n $buildNix && -z $flake ]]; then
-    echo "building Nix..." >&2
+    echo "building Nix..." 1>&3 2>&3
     nixDrv=
     if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
         if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then
@@ -422,7 +422,7 @@ if [[ -n $buildNix && -z $flake ]]; then
             fi
             if ! nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
-                echo "warning: don't know how to get latest Nix" >&2
+                echo "warning: don't know how to get latest Nix" 1>&3 2>&3
             fi
             # Older version of nix-store -r don't support --add-root.
             [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
@@ -432,7 +432,7 @@ if [[ -n $buildNix && -z $flake ]]; then
                 if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
                   --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
                     remoteNix=
-                    echo "warning: don't know how to get latest Nix" >&2
+                    echo "warning: don't know how to get latest Nix" 1>&3 2>&3
                 fi
             fi
         fi
@@ -472,7 +472,7 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
-    echo "building the system configuration..." >&2
+    echo "building the system configuration..." 1>&3 2>&3
     if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
@@ -480,7 +480,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
+        targetHostCmd nix-env -p "$profile" --set "$pathToConfig" 1>&3 2>&3
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
@@ -529,14 +529,14 @@ fi
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
     if ! $(targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action" 1>&3 2>&3); then
-        echo "warning: error(s) occurred while switching to the new configuration" >&2
+        echo "warning: error(s) occurred while switching to the new configuration" 1>&3 2>&3
         exit 1
     fi
 fi
 
 
 if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
-    cat >&2 <<EOF
+    cat 1>&3 2>&3 <<EOF
 
 Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
