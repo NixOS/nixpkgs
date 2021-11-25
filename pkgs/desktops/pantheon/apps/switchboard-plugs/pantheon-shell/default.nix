@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -25,28 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0349150kxdv14ald79pzn7lasiqipyc37fgchygbc8hsy62d9a32";
-  };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-pantheon-shell/pull/286
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-pantheon-shell/commit/0c3207ffaeaa82ca3c743bc9ec772185fbd7e8cf.patch";
-      sha256 = "11ymzqx6has4zf8y0xy7pfhymcl128hzzjcgp46inshjf99v5kiv";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-rwneQ1bqpWDyTHULMtGqhPdpSDa4ObnVortmL0E+gHA=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +57,12 @@ stdenv.mkDerivation rec {
     switchboard
     wingpanel
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Desktop Plug";
