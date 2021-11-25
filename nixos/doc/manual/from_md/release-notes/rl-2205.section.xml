@@ -14,8 +14,13 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
-    <para>
-    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          PHP 8.1 is now available
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.05-new-services">
     <title>New Services</title>
