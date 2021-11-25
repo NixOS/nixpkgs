@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "Smalltalk programming language and environment";
+    description = "Classic Smalltalk virtual machine";
     longDescription = ''
       Squeak is a full-featured implementation of the Smalltalk programming
       language and environment based on (and largely compatible with) the

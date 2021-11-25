@@ -2023,6 +2023,13 @@ Superuser created successfully.
           hydrus manual</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The classic Squeak virtual machine has been replaced by the
+          OpenSmalltalk VM. Unlike the former, the latter is compatible
+          with contemporary Squeak v5 images.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

@@ -13089,8 +13089,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation Security;
   };
 
+  squeakvm = callPackage ../development/compilers/squeak { };
   opensmalltalk-vm-squeak = callPackage ../development/compilers/opensmalltalk-vm-squeak { };
-  squeak = callPackage ../development/compilers/squeak { };
+  squeak = opensmalltalk-vm-squeak;
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
     drivers = [ mssql_jdbc mysql_jdbc postgresql_jdbc ];
