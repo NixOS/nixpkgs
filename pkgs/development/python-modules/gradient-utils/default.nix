@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "gradient-utils";
-  version = "0.3.2";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Paperspace";
     repo = pname;
     rev = "v${version}";
-    sha256 = "083hnkv19mhvdc8nx28f1nph50c903gxh9g9q8531abv0w8m0744";
+    sha256 = "19plkgwwfs6298vjplgsvhirixi3jbngq5y07x9c0fjxk39fa2dk";
   };
 
   postPatch = ''
