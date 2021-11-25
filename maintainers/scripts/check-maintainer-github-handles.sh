@@ -10,14 +10,15 @@ set -e
 # if [ -n "$1" ]; then
 
 function checkCommits {
-    local user="$1"
-    local tmp=$(mktemp)
+    local ret status tmp user
+    user="$1"
+    tmp=$(mktemp)
     curl --silent -w "%{http_code}" \
          "https://github.com/NixOS/nixpkgs/commits?author=$user" \
          > "$tmp"
     # the last line of tmp contains the http status
-    local status=$(tail -n1 "$tmp")
-    local ret=
+    status=$(tail -n1 "$tmp")
+    ret=
     case $status in
         200) if <"$tmp" grep -i "no commits found" > /dev/null; then
                  ret=1
