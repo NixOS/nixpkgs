@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.0.18";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "v${version}";
-    sha256 = "sha256-SxA7rAdKuSrSYFIuxG81lblPJOL69Yx4rBccVrbQa/g=";
+    sha256 = "1pmi76vinwwn0bcxy5hj8pxhzqxdbzp0y3hsd631yyys01s0n6xd";
   };
 
   nativeBuildInputs = [ packaging ];
