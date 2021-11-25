@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef5d21820ed88a8bd6efddb884c333d0eaea7f2f7d4b3054e6d386b07a36dd9d";
+    sha256 = "9b84adbad8c1a6993bfbac4f08396eb851dd4171eb0b632f2840a838dd104810";
   };
 
   propagatedBuildInputs = [ ipywidgets matplotlib jupyter-packaging ];
