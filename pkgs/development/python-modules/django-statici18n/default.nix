@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cqwfirzjbanibq3mfz9lcwqnc8655zpysf9hk9g3lbwj2m478sp";
+    sha256 = "5c85192fa95e3ef3727517ac104add8959fc0a54be3d13440a8a3319fddbc778";
   };
 
   propagatedBuildInputs = [ django django_appconf ];
