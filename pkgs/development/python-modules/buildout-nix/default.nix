@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "zc.buildout";
-  version = "2.13.4";
+  version = "2.13.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b978b2f9317b317ee4191f78fcc4f05b1ac41bdaaae47f0956f14c8285feef63";
+    sha256 = "ac6edd48b1d7b1fba383dd0840fd49c53266f6bd426111a0195bcc640f4aff0f";
   };
 
   patches = [ ./nix.patch ];
