@@ -3908,6 +3908,12 @@
     githubId = 183879;
     name = "Florian Klink";
   };
+  florentc = {
+    email = "florentc@users.noreply.github.com";
+    github = "florentc";
+    githubId = 1149048;
+    name = "Florent Ch.";
+  };
   FlorianFranzen = {
     email = "Florian.Franzen@gmail.com";
     github = "FlorianFranzen";
@@ -5003,6 +5009,12 @@
     github = "imuli";
     githubId = 4085046;
     name = "Imuli";
+  };
+  ineol = {
+    email = "leo.stefanesco@gmail.com";
+    github = "ineol";
+    githubId = 37965;
+    name = "Léo Stefanesco";
   };
   infinisil = {
     email = "contact@infinisil.com";
