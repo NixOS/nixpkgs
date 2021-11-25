@@ -13,6 +13,8 @@
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isSparc
               || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
