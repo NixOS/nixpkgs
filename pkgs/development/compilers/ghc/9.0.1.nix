@@ -129,7 +129,7 @@ let
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
-    coreutils
+    coreutils # for cat
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -286,11 +286,11 @@ stdenv.mkDerivation (rec {
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
+    # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' $i
     done
   '';
 
