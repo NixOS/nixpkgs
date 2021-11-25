@@ -218,8 +218,6 @@ with self; with super; {
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console/5.nix { };
 
-  keyring = callPackage ../development/python-modules/keyring/2.nix { };
-
   koji = callPackage ../development/python-modules/koji { };
 
   konfig = callPackage ../development/python-modules/konfig { };
