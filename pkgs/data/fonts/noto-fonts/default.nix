@@ -110,19 +110,24 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2020-09-16-unicode13_1";
+    version = "2.034";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    version = builtins.replaceStrings [ "_" ] [ "." ] version;
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
+      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
     };
+
+    makeFlags = [
+      # TODO(@sternenseemann): remove if afdko is new enough to know about Unicode 14.0
+      "BYPASS_SEQUENCE_CHECK=True"
+    ];
 
     nativeBuildInputs = [
       cairo
@@ -141,6 +146,14 @@ in
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
 
+      # Remove check for missing zopfli, it doesn't
+      # work and we guarantee its presence already.
+      sed -i '/ifdef MISSING_ZOPFLI/,+2d' Makefile
+      sed -i '/ifeq (,$(shell which $(ZOPFLIPNG)))/,+4d' Makefile
+
+      sed -i '/ZOPFLIPNG = zopflipng/d' Makefile
+      echo "ZOPFLIPNG = ${zopfli}/bin/zopflipng" >> Makefile
+
       # Make the build verbose so it won't get culled by Hydra thinking that
       # it somehow got stuck doing nothing.
       sed -i 's;\t@;\t;' Makefile
@@ -154,36 +167,36 @@ in
     '';
 
     meta = with lib; {
-      inherit version;
       description = "Color and Black-and-White emoji fonts";
       homepage = "https://github.com/googlefonts/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 sternenseemann ];
     };
   };
 
-  noto-fonts-emoji-blob-bin = stdenv.mkDerivation rec {
-    pname = "noto-fonts-emoji-blob-bin";
-    version = "2019-06-14-Emoji-12";
-
-    src = fetchurl {
+  noto-fonts-emoji-blob-bin =
+    let
+      pname = "noto-fonts-emoji-blob-bin";
+      version = "14.0.1";
+    in
+    fetchurl {
+      name = "${pname}-${version}";
       url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-      sha256 = "0snvymglmvpnfgsriw2cnnqm0f4llav0jvzir6mpd17mqqhhabbh";
+      sha256 = "sha256-wSH9kRJ8y2i5ZDqzeT96dJcEJnHDSpU8bOhmxaT+UCg=";
+
+      downloadToTemp = true;
+      recursiveHash = true;
+      postFetch = ''
+        install -Dm 444 $downloadedFile $out/share/fonts/blobmoji/Blobmoji.ttf
+      '';
+
+      meta = with lib; {
+        description = "Noto Emoji with extended Blob support";
+        homepage = "https://github.com/C1710/blobmoji";
+        license = with licenses; [ ofl asl20 ];
+        platforms = platforms.all;
+        maintainers = with maintainers; [ rileyinman jk ];
+      };
     };
-
-    dontUnpack = true;
-
-    installPhase = ''
-      install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
-    '';
-
-    meta = with lib; {
-      description = "Noto Emoji with extended Blob support";
-      homepage = "https://github.com/C1710/blobmoji";
-      license = with licenses; [ ofl asl20 ];
-      platforms = platforms.all;
-      maintainers = with maintainers; [ rileyinman ];
-    };
-  };
 }

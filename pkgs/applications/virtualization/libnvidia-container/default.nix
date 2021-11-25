@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.3.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rr6ngkzqgw250nilv36fz7fhsqxcgl4nhld2hnr0sr4ngirqcjp";
+    sha256 = "sha256-b9yQ1mEo1EkjXMguV0t98OvFEQO4h76EVu154MsB2II=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e 's/^REVISION :=.*/REVISION = ${src.rev}/' \
+      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
       -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
       mk/common.mk
 

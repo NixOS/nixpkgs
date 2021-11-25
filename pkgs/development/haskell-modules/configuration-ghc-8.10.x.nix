@@ -5,7 +5,7 @@ with haskellLib;
 self: super: {
 
   # This compiler version needs llvm 9.x.
-  llvmPackages = pkgs.llvmPackages_9;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_9;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
@@ -42,17 +42,18 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # cabal-install needs more recent versions of Cabal and random, but an older
-  # version of base16-bytestring.
+  # cabal-install needs more recent versions of Cabal and base16-bytestring.
   cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_4_0_0;
-    base16-bytestring = self.base16-bytestring_0_1_1_7;
-    random = dontCheck super.random_1_2_0;  # break infinite recursion
-    hashable = doJailbreak super.hashable;  # allow random 1.2.x
+    Cabal = self.Cabal_3_6_2_0;
   });
 
-  # cabal-install-parsers is written for Cabal 3.4
-  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_4_0_0; };
+  # cabal-install-parsers is written for Cabal 3.6
+  cabal-install-parsers = super.cabal-install-parsers.override { Cabal = super.Cabal_3_6_2_0; };
+
+  # older version of cabal-install-parsers for reverse dependencies that use Cabal 3.4
+  cabal-install-parsers_0_4_2 = super.cabal-install-parsers_0_4_2.override {
+    Cabal = self.Cabal_3_4_1_0;
+  };
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
@@ -71,23 +72,22 @@ self: super: {
   shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
-  csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
+  csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
   # Apply patch from https://github.com/finnsson/template-helper/issues/12#issuecomment-611795375 to fix the build.
-  language-haskell-extract = appendPatch (doJailbreak super.language-haskell-extract) (pkgs.fetchpatch {
+  language-haskell-extract = appendPatch (pkgs.fetchpatch {
     name = "language-haskell-extract-0.2.4.patch";
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/e48738ee1be774507887a90a0d67ad1319456afc/patches/language-haskell-extract-0.2.4.patch?inline=false";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
-  });
+  }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
-    (overrideCabal super.hnix (drv: {
+    (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }));
+    }) super.hnix);
 
-  # Break out of "Cabal < 3.2" constraint.
-  stylish-haskell = doJailbreak super.stylish-haskell;
+  mime-string = disableOptimization super.mime-string;
 
 }

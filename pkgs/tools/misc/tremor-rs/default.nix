@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tremor";
-  version = "0.11.1";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-runtime";
     rev = "v${version}";
-    sha256 = "0aw6m5gklpgv1frrviv1v1ky898dwbcc1crd65d3gldcmnhvg6ap";
+    sha256 = "1ldqa4q7q9afrbjh7adinav21zsh26pqqvrd6q9542r90mxnygmx";
   };
 
-  cargoSha256 = "1lks3xgnzcccv3hiqgxjpfm4v4g97an8yzfnb2kakw7jkfli6kvi";
+  cargoSha256 = "0ivxd5mhvcpzv9wf859vwyiq1s0bbd9vdk6fy6m81bn5ykihx7ar";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

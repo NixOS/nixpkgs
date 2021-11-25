@@ -1,32 +1,57 @@
-{ lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection
-, gtksourceview3, libappindicator-gtk3, libnotify }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook
+, gobject-introspection
+, gtksourceview3
+, libappindicator-gtk3
+, libnotify
+}:
 
 python3Packages.buildPythonApplication rec {
-  name = "autokey-${version}";
-  version = "0.94.1";
+  pname = "autokey";
+  version = "0.95.10";
 
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
     rev = "v${version}";
-    sha256 = "1syxyciyxzs0khbfs9wjgj03q967p948kipw27j1031q0b5z3jxr";
+    sha256 = "0f0cqfnb49wwdy7zl2f2ypcnd5pc8r8n7z7ssxkq20d4xfxlgamr";
   };
-
-  # Arch requires a similar work around—see
-  # https://aur.archlinux.org/packages/autokey-py3/?comments=all
-  patches = [ ./remove-requires-dbus-python.patch ];
 
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  # Note: no dependencies included for Qt GUI because Qt ui is poorly
-  # maintained—see https://github.com/autokey/autokey/issues/51
+  nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ wrapGAppsHook gobject-introspection gtksourceview3
-    libappindicator-gtk3 libnotify ];
+  buildInputs = [
+    gobject-introspection
+    gtksourceview3
+    libappindicator-gtk3
+    libnotify
+  ];
 
   propagatedBuildInputs = with python3Packages; [
-    dbus-python pyinotify xlib pygobject3 ];
+    dbus-python
+    pyinotify
+    xlib
+    pygobject3
+  ];
+
+  dontWrapGapps = true;
+
+  pythonPath = with python3Packages; requiredPythonModules [ dbus-python xlib pygobject3 ];
+
+  postInstall = ''
+    rm $out/bin/autokey-qt
+    buildPythonPath "$out $pythonPath"
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      # for autokey-shell ModuleNotFoundError: No module named 'autokey'
+      --prefix "PYTHONPATH" ":" "$out/lib/${python3Packages.python.libPrefix}/site-packages"
+      --prefix "PYTHONPATH" ":" "$program_PYTHONPATH"
+    )
+  '';
 
   meta = {
     homepage = "https://github.com/autokey/autokey";

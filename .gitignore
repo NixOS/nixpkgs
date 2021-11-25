@@ -2,6 +2,7 @@
 ,*
 .*.swp
 .*.swo
+.idea/
 result
 result-*
 /doc/NEWS.html

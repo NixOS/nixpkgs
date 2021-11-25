@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "0.2.1";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jk5y099g6ggaq5lwp0jlg4asyhcdxnl3him3ibmzc1k9nnknp30";
+    sha256 = "fbf4e2cb11d60d3bafca5bb7c01c254d08a5541ed7ddfe00ef975eb173fb75a4";
   };
 
   propagatedBuildInputs = [
@@ -19,6 +19,7 @@ buildPythonPackage rec {
 
   # Project has no test
   doCheck = false;
+
   pythonImportsCheck = [ "fountains" ];
 
   meta = with lib; {

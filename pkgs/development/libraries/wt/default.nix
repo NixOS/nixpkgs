@@ -21,7 +21,7 @@ let
       buildInputs = [
         boost doxygen qt48Full libharu
         pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre
+        openssl pcre harfbuzz
       ];
 
       cmakeFlags = [
@@ -32,8 +32,6 @@ let
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DGM_PREFIX=${graphicsmagick}"
       ]
-      ++ lib.optional (harfbuzz != null)
-        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
       ++ lib.optional (libmysqlclient != null)
         "-DMYSQL_PREFIX=${libmysqlclient}";
 
@@ -52,7 +50,7 @@ in {
   };
 
   wt4 = generic {
-    version = "4.2.0";
-    sha256 = "0zrrdjz0sa8hrmybjp4aap1lcqcqvsicd7dj49zj1m5k8gnfpm4v";
+    version = "4.5.0";
+    sha256 = "16svzdma2mc2ggnpy5z7m1ggzhd5nrccmmj8xnc7bd1dd3486xwv";
   };
 }

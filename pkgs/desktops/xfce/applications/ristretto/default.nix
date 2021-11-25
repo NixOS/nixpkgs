@@ -4,16 +4,13 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.10.0";
+  version = "0.12.0";
 
-  sha256 = "07h7wbq3xh2ac6q4kp2ai1incfn0zfxxngap7hzqx47a5xw2mrm8";
+  sha256 = "sha256-vf9OczDHG6iAd10BgbwfFG7uHBn3JnNT6AB/WGk40C8=";
 
   buildInputs = [ glib gtk3 libexif libxfce4ui libxfce4util xfconf ];
 
-  postPatch = ''
-    # exo-csource has been dropped from exo
-    substituteInPlace src/Makefile.am --replace exo-csource xdt-csource
-  '';
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = {
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";

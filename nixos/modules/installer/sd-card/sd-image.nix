@@ -49,9 +49,25 @@ in
 
     storePaths = mkOption {
       type = with types; listOf package;
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
+      '';
+    };
+
+    firmwarePartitionOffset = mkOption {
+      type = types.int;
+      default = 8;
+      description = ''
+        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
+        bytes).
+        Can be increased to make more space for boards requiring to dd u-boot
+        SPL before actual partitions.
+
+        Unless you are building your own images pre-configured with an
+        installed U-Boot, you can instead opt to delete the existing `FIRMWARE`
+        partition, which is used **only** for the Raspberry Pi family of
+        hardware.
       '';
     };
 
@@ -91,7 +107,7 @@ in
     };
 
     populateFirmwareCommands = mkOption {
-      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
       description = ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
@@ -100,7 +116,7 @@ in
     };
 
     populateRootCommands = mkOption {
-      example = literalExample "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
+      example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
@@ -110,7 +126,7 @@ in
     };
 
     postBuildCommands = mkOption {
-      example = literalExample "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+      example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
         Shell commands to run after the image is built.
@@ -177,7 +193,7 @@ in
         zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
 
         # Gap in front of the first partition, in MiB
-        gap=8
+        gap=${toString config.sdImage.firmwarePartitionOffset}
 
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
         rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')

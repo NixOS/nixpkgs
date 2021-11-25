@@ -2,6 +2,7 @@
 , aiodns
 , aiohttp
 , async-timeout
+, attrs
 , brotlipy
 , buildPythonPackage
 , cchardet
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.6.0";
+  version = "0.7.2";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
@@ -25,15 +26,24 @@ buildPythonPackage rec {
     owner = "benleb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XoYiZPBc9SybyKocui1HqSA+YPiPpbupJWMCfmQT5RU=";
+    sha256 = "sha256-yc+jXA4ndFhRZmFPz11HbVs9qaPFNa6WdwXj6hRyjw4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'click = "^7.1.2"' 'click = "*"' \
+      --replace 'attrs = "^20.3.0"' 'attrs = "*"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiodns
     aiohttp
     async-timeout
+    attrs
     brotlipy
     cchardet
     click
@@ -45,6 +55,7 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "surepy" ];
 
   meta = with lib; {

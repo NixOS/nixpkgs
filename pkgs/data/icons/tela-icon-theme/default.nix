@@ -1,14 +1,14 @@
-{ fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes, lib, stdenvNoCC }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, jdupes, hicolor-icon-theme }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2021-01-21";
+  version = "2021-11-05";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0gphy4aq2qjcg79k6rc0q5901mn3q76qhckn5vxvmypn9n3lb9ph";
+    sha256 = "sha256-mvkgHBdZm6vF+/DS3CRLl1m14U0Lj4Xtz4J/vpJUTQM=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -36,7 +36,8 @@ stdenvNoCC.mkDerivation rec {
     description = "A flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
     license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    # darwin systems use case-insensitive filesystems that cause hash mismatches
+    platforms = subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -8,17 +8,18 @@
 , pkg-config
 , swaylock
 , makeWrapper
+, gtk-layer-shell
 }:
 
 stdenv.mkDerivation rec {
   pname = "nwg-launchers";
-  version = "0.4.4";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-krhFtFQZSwfKPHmVxPGNySPL2Y9+kA0fxjZ/D+mNks4=";
+    sha256 = "sha256-QWDYy0TBxoYxfRAOtAEVM8wsPUi2SnzMXsu38guAURU=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtkmm3
     nlohmann_json
+    gtk-layer-shell
   ];
 
   postInstall = ''

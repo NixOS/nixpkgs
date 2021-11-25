@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption types optionalString;
+  inherit (lib) mkOption types optionalString stringAfter;
 
   cfg = config.boot.binfmt;
 
@@ -248,6 +248,7 @@ in {
         description = ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
+          Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
         type = types.listOf types.str;
       };
@@ -270,7 +271,7 @@ in {
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
-    system.activationScripts.binfmt = ''
+    system.activationScripts.binfmt = stringAfter [ "specialfs" ] ''
       mkdir -p -m 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';

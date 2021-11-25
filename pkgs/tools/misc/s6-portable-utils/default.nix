@@ -2,13 +2,10 @@
 
 with skawarePackages;
 
-let
+buildPackage {
   pname = "s6-portable-utils";
-
-in buildPackage {
-  pname = pname;
-  version = "2.2.3.1";
-  sha256 = "1ks1ch5v3p2z8y8wp5fmzzgjrqn2l5sj1sgfp8vv6wy8psd8mrj3";
+  version = "2.2.3.3";
+  sha256 = "132jj5qk8x40kw6lrrn7jiqhvqj9d2h6g6mhl8zma1sp37bg0i84";
 
   description = "A set of tiny general Unix utilities optimized for simplicity and small size";
 
@@ -28,7 +25,7 @@ in buildPackage {
     rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
     rm seekablepipe
 
-    mv doc $doc/share/doc/${pname}/html
+    mv doc $doc/share/doc/s6-portable-utils/html
   '';
 
 

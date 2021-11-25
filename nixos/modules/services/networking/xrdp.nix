@@ -47,7 +47,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.xrdp;
-        defaultText = "pkgs.xrdp";
+        defaultText = literalExpression "pkgs.xrdp";
         description = ''
           The package to use for the xrdp daemon's binary.
         '';
@@ -59,6 +59,12 @@ in
         description = ''
           Specifies on which port the xrdp daemon listens.
         '';
+      };
+
+      openFirewall = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to open the firewall for the specified RDP port.";
       };
 
       sslKey = mkOption {
@@ -98,6 +104,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     # xrdp can run X11 program even if "services.xserver.enable = false"
     xdg = {

@@ -1,13 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, openssl, async_generator, rsa, pyaes, pythonOlder }:
+{ lib, buildPythonPackage, fetchPypi, openssl, rsa, pyaes, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.17.5";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit version;
     pname = "Telethon";
-    sha256 = "1v1rgr030z8s1ldv5lm1811znyd568c22pmlrzzf3ls972xk514m";
+    sha256 = "sha256-unVRzkR+lUqtZ/PuukurdXTMoHosb0HlvmmQTm4OwxM=";
   };
 
   patchPhase = ''

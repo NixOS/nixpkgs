@@ -8,6 +8,7 @@
 , libGL
 , libGLU
 , libjpeg
+, xorg
 , ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -47,7 +48,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.0"; # always change at once with ./minimal.nix
+  version = "8.3"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "0lqqpa88v0br93qw7450a4blyi3pwn7sq2k04h0ikbsqrdnfj7lj";
+    sha256 = "sha256-M90MIIRsfF/fhK8twlD3ZRBO0ztQkb4VKp9o8eJUFFc=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -70,6 +71,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ncurses ];
+
+  patches = [
+    # Hardcode variant detection because we wrap the Racket binary making it
+    # fail to detect its variant at runtime.
+    # See: https://github.com/NixOS/nixpkgs/issues/114993#issuecomment-812951247
+    ./force-cs-variant.patch
+  ];
 
   preConfigure = ''
     unset AR
@@ -96,7 +104,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-
   meta = with lib; {
     description = "A programmable programming language";
     longDescription = ''
@@ -112,6 +119,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" ];
-    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }

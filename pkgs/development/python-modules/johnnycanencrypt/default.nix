@@ -13,6 +13,7 @@
 , pytestCheckHook
 , pythonOlder
 , PCSC
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
 
   patches = [ ./Cargo.lock.patch ];
 
-  cargoSha256 = "0ifvpdizcdp2c5x2x2j1bhhy5a75q0pk7a63dmh52mlpmh45fy6r";
-
-  LIBCLANG_PATH = llvmPackages.libclang + "/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   propagatedBuildInputs = [
     requests
@@ -57,7 +56,10 @@ buildPythonPackage rec {
   buildInputs = [
     pcsclite
     nettle
-  ] ++ lib.optionals stdenv.isDarwin [ PCSC ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    PCSC
+    libiconv
+  ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
@@ -72,6 +74,8 @@ buildPythonPackage rec {
   # for compatibility with maturin 0.9.0.
   postPatch = ''
     sed '/project-url = /d' -i Cargo.toml
+    substituteInPlace pyproject.toml \
+      --replace 'manylinux = "off"' 'skip-auditwheel = true'
   '';
 
   preCheck = ''

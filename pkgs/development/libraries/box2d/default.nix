@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://github.com/erincatto/Box2D/archive/v${version}.tar.gz";
-    sha256 = "0llpcifl8zbjbpxdwz87drd01m3lwnv82xb4av6kca1xn4w2gmkm";
+    url = "https://github.com/erincatto/box2d/archive/v${version}.tar.gz";
+    sha256 = "0p03ngsmyz0r5kbpiaq10ns4fxwkjvvawi8k6pfall46b93wizsq";
   };
 
-  sourceRoot = "Box2D-${version}/Box2D";
+  sourceRoot = "box2d-${version}/Box2D";
 
   nativeBuildInputs = [ cmake unzip pkg-config ];
   buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
   };
 }

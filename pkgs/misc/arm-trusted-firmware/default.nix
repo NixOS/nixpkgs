@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages }:
 
 let
   buildArmTrustedFirmware = { filesToInstall
@@ -6,7 +6,7 @@ let
             , platform ? null
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.4"
+            , version ? "2.5"
             , ... } @ args:
            stdenv.mkDerivation ({
 
@@ -17,7 +17,7 @@ let
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "12k0n79j156bdzqws18kpbli04kn00nh6dy42pjv6gakqrkx9px3";
+      sha256 = "0w3blkqgmyb5bahlp04hmh8abrflbzy0qg83kmj1x9nv4mw66f3b";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -76,6 +76,12 @@ in {
 
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
     platform = "sun50i_a64";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
+  armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h616";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };

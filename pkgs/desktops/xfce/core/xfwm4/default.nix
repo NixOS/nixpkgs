@@ -1,5 +1,5 @@
-{ mkXfceDerivation, exo, librsvg, dbus-glib, epoxy, gtk3, libXdamage
-, libstartup_notification, libxfce4ui, libxfce4util, libwnck3
+{ mkXfceDerivation, exo, librsvg, dbus-glib, libepoxy, gtk3, libXdamage
+, libstartup_notification, libxfce4ui, libxfce4util, libwnck
 , libXpresent, xfconf }:
 
 mkXfceDerivation {
@@ -7,19 +7,19 @@ mkXfceDerivation {
   pname = "xfwm4";
   version = "4.16.1";
 
-  sha256 = "1lhxm9ifkrnvn1vq3aak3kd695i1ishpryjnw617ifzawy9lj10b";
+  sha256 = "sha256-CwRJk+fqu3iC4Vb6fKGOIZZk2hxTqYF3sNvm6WKqHdI=";
 
   nativeBuildInputs = [ exo librsvg ];
 
   buildInputs = [
     dbus-glib
-    epoxy
+    libepoxy
     gtk3
     libXdamage
     libstartup_notification
     libxfce4ui
     libxfce4util
-    libwnck3
+    libwnck
     libXpresent
     xfconf
   ];

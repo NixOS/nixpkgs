@@ -2,40 +2,40 @@
 , aiohttp
 , aresponses
 , asynctest
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
-, python-engineio
-, python-socketio
 , pythonOlder
 , pytz
+, types-pytz
 , voluptuous
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "9.6.10";
+  version = "2021.10.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0cc5kxxishxhkg1nqmgbh36yxs8yjfynmimzjnaqkqfrs9iq46mr";
+    sha256 = "sha256-J0uMlczR7y5wDchaOjp5d3Vf36WfRmt7d51koGiNHBk=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
-    python-engineio
-    python-socketio
+    backoff
     pytz
+    types-pytz
     voluptuous
     websockets
   ];
@@ -43,14 +43,22 @@ buildPythonPackage rec {
   checkInputs = [
     aresponses
     asynctest
+    pytest-aiohttp
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # simplipy/api.py:253: InvalidCredentialsError
+    "test_request_error_failed_retry"
+    "test_update_error"
   ];
 
   disabledTestPaths = [ "examples/" ];
 
   pythonImportsCheck = [ "simplipy" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python library the SimpliSafe API";

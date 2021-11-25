@@ -21,7 +21,7 @@ in
 
       package = mkOption {
         default = pkgs.pgpkeyserver-lite;
-        defaultText = "pkgs.pgpkeyserver-lite";
+        defaultText = literalExpression "pkgs.pgpkeyserver-lite";
         type = types.package;
         description = "
           Which webgui derivation to use.

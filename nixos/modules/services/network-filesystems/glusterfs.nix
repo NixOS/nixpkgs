@@ -113,19 +113,16 @@ in
         type = types.nullOr (types.submodule {
           options = {
             tlsKeyPath = mkOption {
-              default = null;
               type = types.str;
               description = "Path to the private key used for TLS.";
             };
 
             tlsPem = mkOption {
-              default = null;
               type = types.path;
               description = "Path to the certificate used for TLS.";
             };
 
             caCert = mkOption {
-              default = null;
               type = types.path;
               description = "Path certificate authority used to sign the cluster certificates.";
             };

@@ -5,7 +5,7 @@
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
 # Optional Dependencies
-, dbus ? null, libffado ? null, alsaLib ? null
+, dbus ? null, libffado ? null, alsa-lib ? null
 , libopus ? null
 
 # Extra options
@@ -22,18 +22,18 @@ let
   optDbus = if stdenv.isDarwin then null else shouldUsePkg dbus;
   optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
-  optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
+  optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
   optLibopus = shouldUsePkg libopus;
 in
 stdenv.mkDerivation rec {
-  name = "${prefix}jack2-${version}";
-  version = "1.9.17";
+  pname = "${prefix}jack2";
+  version = "1.9.19";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "sha256-T6UJpLsXrsIL3HaChfVP52w0v9DCs/sJqty2/kAWNfE=";
+    sha256 = "01s8i64qczxqawgrzrw19asaqmcspf5l2h3203xzg56wnnhhzcw7";
   };
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];

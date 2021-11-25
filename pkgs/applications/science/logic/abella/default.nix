@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "abella";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchurl {
     url = "http://abella-prover.org/distributions/${pname}-${version}.tar.gz";
-    sha256 = "164q9gngckg6q69k13lwx2pq3cnc9ckw1qi8dnpxqfjgwfqr7xyi";
+    sha256 = "sha256-/eOiebMFHgrurtrSHPlgZO3xmmxBOUmyAzswXZLd3Yc=";
   };
 
   buildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml ocamlbuild findlib ]);

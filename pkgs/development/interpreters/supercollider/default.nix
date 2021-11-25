@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, alsaLib
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, alsa-lib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
@@ -9,11 +9,11 @@ let
 in
 mkDerivation rec {
   pname = "supercollider";
-  version = "3.11.2";
+  version = "3.12.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "wiwyxrxIJnHU+49RZy33Etl6amJ3I1xNojEpEDA6BQY=";
+    sha256 = "sha256-neYId2hJRAMx4+ZFm+5TzYuUbMRfa9icyqm2UYac/Cs=";
   };
 
   hardeningDisable = [ "stackprotector" ];
@@ -27,7 +27,7 @@ mkDerivation rec {
 
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
-      ++ optional (!stdenv.isDarwin) alsaLib
+      ++ optional (!stdenv.isDarwin) alsa-lib
       ++ optional useSCEL emacs;
 
   meta = with lib; {
@@ -35,6 +35,6 @@ mkDerivation rec {
     homepage = "https://supercollider.github.io";
     maintainers = with maintainers; [ mrmebelman ];
     license = licenses.gpl3Plus;
-    platforms = [ "x686-linux" "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

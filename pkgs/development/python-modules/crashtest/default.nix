@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pythonAtLeast, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "crashtest";

@@ -7,8 +7,6 @@
 , contextlib2
 , configparser
 , isPy3k
-, importlib-resources
-, packaging
 }:
 
 buildPythonPackage rec {

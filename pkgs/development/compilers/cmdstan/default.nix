@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, python3, runtimeShell }:
 
-stdenv.mkDerivation {
-  name = "cmdstan-2.17.1";
+stdenv.mkDerivation rec {
+  pname = "cmdstan";
+  version = "2.17.1";
 
   src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v2.17.1/cmdstan-2.17.1.tar.gz";
+    url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 

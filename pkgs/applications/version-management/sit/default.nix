@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  cargoSha256 = "092yfpr2svp1qy7xis1q0sdkbsjmmswmdwb0rklrc0yhydcsghp9";
+  cargoSha256 = "1ghr01jcq12ddna5qadvjy6zbgqgma5nf0qv06ayxnra37d2l92l";
 
   meta = with lib; {
     description = "Serverless Information Tracker";

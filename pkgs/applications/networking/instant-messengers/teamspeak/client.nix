@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
-, alsaLib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
+, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
 let
@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
       qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
       mv * $out/lib/teamspeak/
 
       # Make a desktop item
-      mkdir -p $out/share/applications/ $out/share/icons/
+      mkdir -p $out/share/applications/ $out/share/icons/hicolor/64x64/apps/
       unzip ${pluginsdk}
-      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/teamspeak.png
+      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
       cp ${desktopItem}/share/applications/* $out/share/applications/
 
       # Make a symlink to the binary from bin.

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, lndir, bash, cpio, file, which, unzip, zip
-, cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
+, cups, freetype, alsa-lib, cacert, perl, liberation_ttf, fontconfig, zlib
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , openjdk8-bootstrap
@@ -85,7 +85,7 @@ let
 
     nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsaLib
+      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -106,6 +106,7 @@ let
       ./fix-java-home-jdk8.patch
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
+      ./fix-library-path-jdk8.patch
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk8.patch
     ];
@@ -153,6 +154,12 @@ let
     ] ++ lib.optionals (!headless && enableGnome2) [
       "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ]);
+
+    # -j flag is explicitly rejected by the build system:
+    #     Error: 'make -jN' is not supported, use 'make JOBS=N'
+    # Note: it does not make build sequential. Build system
+    # still runs in parallel.
+    enableParallelBuilding = false;
 
     buildFlags = [ "all" ];
 

@@ -32,7 +32,7 @@ in
       package = mkOption {
         default = pkgs.gitea;
         type = types.package;
-        defaultText = "pkgs.gitea";
+        defaultText = literalExpression "pkgs.gitea";
         description = "gitea derivation to use";
       };
 
@@ -55,7 +55,7 @@ in
           description = "Root path for log files.";
         };
         level = mkOption {
-          default = "Trace";
+          default = "Info";
           type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
           description = "General log level.";
         };
@@ -82,7 +82,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = (if !usePostgresql then 3306 else pg.port);
           description = "Database host port.";
         };
@@ -122,7 +122,7 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "null";
+          defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
@@ -255,8 +255,9 @@ in
       };
 
       staticRootPath = mkOption {
-        type = types.str;
-        default = "${gitea.data}";
+        type = types.either types.str types.path;
+        default = gitea.data;
+        defaultText = literalExpression "package.data";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
       };
@@ -287,7 +288,7 @@ in
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "cron.sync_external_users" = {
               RUN_AT_START = true;
@@ -348,7 +349,7 @@ in
       server = mkMerge [
         {
           DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = cfg.staticRootPath;
+          STATIC_ROOT_PATH = toString cfg.staticRootPath;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }
@@ -522,20 +523,16 @@ in
           (umask 027; gitea_setup)
         ''}
 
+        # run migrations/init the database
+        ${gitea}/bin/gitea migrate
+
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
-        if [ "$HOOKS" ]
-        then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/env,${pkgs.coreutils}/bin/env,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
-        fi
+        ${gitea}/bin/gitea admin regenerate hooks
 
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          ${gitea}/bin/gitea admin regenerate keys
         fi
       '';
 

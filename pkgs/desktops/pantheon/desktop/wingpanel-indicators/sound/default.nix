@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -19,19 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "2.1.6";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WGkxLsbdJ7Z7kolymYpggsVy4cN4CicNKdfCbunklSI=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-FHZ4YhGLqGTz5Po2XFJvnWuAi1eHKcT9zzgJFHic02E=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +53,17 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Sound Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-sound";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

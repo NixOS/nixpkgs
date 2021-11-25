@@ -1,21 +1,24 @@
-{ lib, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
+{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.7.1";
+  payloadVersion = "4.78.0";
   python = pythonPackages.python;
-
-in buildGoPackage rec {
-  pname = "datadog-agent";
-  version = "6.11.2";
   owner   = "DataDog";
   repo    = "datadog-agent";
+  goPackagePath = "github.com/${owner}/${repo}";
+
+in buildGoModule rec {
+  pname = "datadog-agent";
+  version = "7.31.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = version;
-    sha256 = "1dwdiaf357l9c6b2cps5mdyfma3c1mp96zzxg1826fvz3x8ix68z";
+    rev = version;
+    sha256 = "sha256-APwR3/bvCHNnJWxRPSLLe4lHYv39wfw3WhGDEkxAku8=";
   };
+
+  vendorSha256 = "sha256-CNQJvnNnB29duALEXPguEJsoRHdieAiPFbwXa89jxUk=";
 
   subPackages = [
     "cmd/agent"
@@ -24,14 +27,11 @@ in buildGoPackage rec {
     "cmd/py-launcher"
     "cmd/trace-agent"
   ];
-  goDeps = ./datadog-agent-deps.nix;
-  goPackagePath = "github.com/${owner}/${repo}";
 
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
-
 
   preBuild = let
     ldFlags = lib.concatStringsSep " " [
@@ -43,6 +43,8 @@ in buildGoPackage rec {
     ];
   in ''
     buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
+    # Keep directories to generate in sync with tasks/go.py
+    go generate ./pkg/status ./cmd/agent/gui
   '';
 
   # DataDog use paths relative to the agent binary, so fix these.
@@ -61,7 +63,7 @@ in buildGoPackage rec {
     cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
-    cp -R $src/pkg/status/dist/templates $out/share/datadog-agent
+    cp -R $src/pkg/status/templates $out/share/datadog-agent
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}" \

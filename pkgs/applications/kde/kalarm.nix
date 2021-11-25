@@ -4,7 +4,7 @@
 
   kauth, kcodecs, kcompletion, kconfig, kconfigwidgets, kdbusaddons, kdoctools,
   kguiaddons, ki18n, kiconthemes, kidletime, kjobwidgets, kcmutils,
-  kdelibs4support, kio, knotifications, knotifyconfig, kservice, kwidgetsaddons,
+  kio, knotifications, knotifyconfig, kservice, kwidgetsaddons,
   kwindowsystem, kxmlgui, phonon,
 
   kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
@@ -19,13 +19,15 @@
 mkDerivation {
   pname = "kalarm";
   meta = {
+    homepage = "https://apps.kde.org/kalarm/";
+    description = "Personal alarm scheduler";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.rittelle ];
+    maintainers = [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kauth kcodecs kcompletion kconfig kconfigwidgets kdbusaddons kdoctools
-    kguiaddons ki18n kiconthemes kidletime kjobwidgets kcmutils kdelibs4support
+    kguiaddons ki18n kiconthemes kidletime kjobwidgets kcmutils
     kio knotifications knotifyconfig kservice kwidgetsaddons kwindowsystem
     kxmlgui phonon
 

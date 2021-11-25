@@ -58,6 +58,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
   };
 }

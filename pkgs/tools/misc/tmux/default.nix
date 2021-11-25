@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.2";
+  version = "3.2a";
 
   outputs = [ "out" "man" ];
 
@@ -29,15 +29,14 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0alq81h1rz1f0zsy8qb2dvsl47axpa86j4bplngwkph0ksqqgr3p";
+    sha256 = "0143ylfk7zsl3xmiasb768238gr582cfhsgv3p0h0f13bp8d6q09";
   };
 
   patches = [
-    # Fix cross-compilation
-    # https://github.com/tmux/tmux/pull/2651
+    # See https://github.com/tmux/tmux/pull/2755
     (fetchpatch {
-      url = "https://github.com/tmux/tmux/commit/bb6242675ad0c7447daef148fffced882e5b4a61.patch";
-      sha256 = "1acr3xv3gqpq7qa2f8hw7c4f42hi444lfm1bz6wqj8f3yi320zjr";
+      url = "https://github.com/tmux/tmux/commit/d0a2683120ec5a33163a14b0e1b39d208745968f.patch";
+      sha256 = "070knpncxfxi6k4q64jwi14ns5vm3606cf402h1c11cwnaa84n1g";
     })
   ];
 

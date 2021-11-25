@@ -1,42 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, git
-, poetry-core
-, attrs
-, future
+, Logbook
+, aiofiles
 , aiohttp
 , aiohttp-socks
-, aiofiles
+, aioresponses
+, atomicwrites
+, attrs
+, cachetools
+, faker
+, future
+, git
 , h11
 , h2
-, Logbook
-, jsonschema
-, unpaddedbase64
-, pycryptodome
-, python-olm
-, peewee
-, cachetools
-, atomicwrites
-, pytestCheckHook
-, faker
-, aioresponses
 , hypothesis
+, jsonschema
+, peewee
+, poetry-core
+, pycryptodome
 , pytest-aiohttp
 , pytest-benchmark
+, pytestCheckHook
+, python-olm
+, unpaddedbase64
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.18.0";
+  version = "0.18.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "1rn5lz81y4bvgjhxzd57qhr0lmkm5xljl4bj9w10lnm4f7ls0xdi";
+    hash = "sha256-eti9kvfv3y7m+mJzcxftyn8OyVSd2Ehqd3eU2ezMV5Q=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"'
+  '';
 
   nativeBuildInputs = [
     git
@@ -45,26 +50,26 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
-    future
+    Logbook
+    aiofiles
     aiohttp
     aiohttp-socks
-    aiofiles
+    atomicwrites
+    attrs
+    cachetools
+    future
     h11
     h2
-    Logbook
     jsonschema
-    unpaddedbase64
+    peewee
     pycryptodome
     python-olm
-    peewee
-    cachetools
-    atomicwrites
+    unpaddedbase64
   ];
 
   checkInputs = [
-    faker
     aioresponses
+    faker
     hypothesis
     pytest-aiohttp
     pytest-benchmark
@@ -78,8 +83,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python Matrix client library, designed according to sans I/O principles";
     homepage = "https://github.com/poljar/matrix-nio";
+    description = "A Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
     maintainers = with maintainers; [ tilpner emily symphorien ];
   };

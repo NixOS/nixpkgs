@@ -11,7 +11,8 @@ let
     name = perl.name + "-wrapper-for-gnucash";
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ perl ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
-    phases = [ "installPhase" ];
+    dontUnpack = true;
+
     installPhase = ''
       mkdir -p $out/bin
       for script in ${perl}/bin/*; do
@@ -25,25 +26,26 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-vB9IqEU0iKLp9rg7aGE6pVyuvk0pg0YL2sfghLRs/9w=";
+    sha256 = "0csp8iddhc901vv09gl5lj970g6ili696vwj4vdpkiprp7gh26r5";
   };
 
   patches = [
-    # Fix build with GLib 2.68.
+    # Fixes a warning about an initialized variable that kills enableDebugging gnucash builds on nix.
+    # This will most likely be part of the 4.7 release, it will be safe to remove then.
     (fetchpatch {
-      url = "https://github.com/Gnucash/gnucash/commit/bbb4113a5a996dcd7bb3494e0be900b275b49a4f.patch";
-      sha256 = "Pnvwoq5zutFw7ByduEEANiLM2J50WiXpm2aZ8B2MDMQ=";
+      url = "https://github.com/Gnucash/gnucash/commit/b42052464ba9701a3d1834fc58fa0deb32ab9afe.patch";
+      sha256 = "092957c8jqj4v70fv0ia1wpgl6x34hbwjrichxfbk5ja8l6535gc";
     })
   ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest swig ];
 
   buildInputs = [
-    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
+    boost icu libxml2 libxslt gettext isocodes gtk3 glibcLocales
     webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://www.gnucash.org/";
 
-    maintainers = [ lib.maintainers.peti lib.maintainers.domenkozar ];
+    maintainers = [ lib.maintainers.domenkozar ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

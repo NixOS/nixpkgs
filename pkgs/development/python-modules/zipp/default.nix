@@ -1,31 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
-, pytest
-, pytest-flake8
+, setuptools-scm
 , more-itertools
-, toml
 }:
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "3.4.1";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3607921face881ba3e026887d8150cca609d517579abe052ac81fc5aeffdbd76";
+    sha256 = "71c644c5369f4a6e07636f0aa966270449561fcea2e3d6747b8d23efaa9d7832";
   };
 
-  nativeBuildInputs = [ setuptools_scm toml ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools ];
-
-  checkInputs = [ pytest pytest-flake8 ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   # Prevent infinite recursion with pytest
   doCheck = false;
@@ -34,5 +25,6 @@ buildPythonPackage rec {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

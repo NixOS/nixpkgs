@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "contractor";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FHLecRxTE8v3M7cV6rkQKNhPhKFhuhvkzB5C+u7Z+Ms=";
+    sha256 = "1sqww7zlzl086pjww3d21ah1g78lfrc9aagrqhmsnnbji9gwb8ab";
   };
 
   passthru = {
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/contractor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "contractor";
   };
 }

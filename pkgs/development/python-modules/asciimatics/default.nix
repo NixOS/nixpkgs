@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pyfiglet
 , pillow
 , wcwidth
@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "asciimatics";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4120461a3fb345638dee4fe0f8a3d3f9b6d2d2e003f95c5f914523f94463158d";
+    sha256 = "a041826ec5add03fb882d8981c1debf9b9e98274f4f2d52ec21ef30de70c2c6e";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

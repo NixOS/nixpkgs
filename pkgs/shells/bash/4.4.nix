@@ -132,7 +132,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
 
-    maintainers = [ maintainers.peti ];
   };
 
   passthru = {

@@ -62,8 +62,8 @@ in {
         knot-resolver package to use.
       ";
       default = pkgs.knot-resolver;
-      defaultText = "pkgs.knot-resolver";
-      example = literalExample "pkgs.knot-resolver.override { extraFeatures = true; }";
+      defaultText = literalExpression "pkgs.knot-resolver";
+      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;
@@ -114,6 +114,8 @@ in {
   ###### implementation
   config = mkIf cfg.enable {
     environment.etc."knot-resolver/kresd.conf".source = configFile; # not required
+
+    networking.resolvconf.useLocalResolver = mkDefault true;
 
     users.users.knot-resolver =
       { isSystemUser = true;

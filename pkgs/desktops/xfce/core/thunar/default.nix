@@ -10,6 +10,7 @@
 , libxfce4ui
 , libxfce4util
 , libxslt
+, pcre
 , xfconf
 , gobject-introspection
 , makeWrapper
@@ -20,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.16.8";
+  version = "4.16.10";
 
-  sha256 = "1r7qkd6l0mgf97m1xnnizm7fkvl4a52r3hsds5z68y6myvb78p18";
+  sha256 = "sha256-BeEy8+zEsJ5fJAbvP37tfekqF5LTHil0RDcE5RY0f64=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -39,6 +40,7 @@ let unwrapped = mkXfceDerivation {
     libnotify
     libxfce4ui
     libxfce4util
+    pcre
     xfconf
   ];
 

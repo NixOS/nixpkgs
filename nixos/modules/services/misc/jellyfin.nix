@@ -19,7 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.jellyfin;
-        example = literalExample "pkgs.jellyfin";
+        defaultText = literalExpression "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
         '';
@@ -92,9 +92,7 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-
-          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module"
-          "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
         ];
       };
     };

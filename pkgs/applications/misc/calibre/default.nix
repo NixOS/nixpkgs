@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , poppler_utils
 , pkg-config
 , libpng
@@ -21,31 +22,33 @@
 , libmtp
 , xdg-utils
 , removeReferencesTo
+, libstemmer
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.17.0";
+  version = "5.31.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-rdiBL3Y3q/0wFfWGE4jGkWakgV8hA9HjDcKXso6tVrs=";
+    sha256 = "sha256-3LGEWuHms54ji9GWSyLl8cFWIRBqHY1Jf/CNPJOywrU=";
   };
 
+  # https://sources.debian.org/patches/calibre/5.31.1+dfsg-1
   patches = [
-    # Plugin installation (very insecure) disabled (from Debian)
-    ./disable_plugins.patch
-    # Automatic version update disabled by default (from Debian)
-    ./no_updates_dialog.patch
+    #  allow for plugin update check, but no calibre version check
+    (fetchpatch {
+      name = "0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      sha256 = "sha256-dLzO1TWP7Q4nw2a3oN7qlhGCmcA0NKJrZidUnD6hUMA=";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
-  escaped_pyqt5_dir = builtins.replaceStrings ["/"] ["\\/"] (toString python3Packages.pyqt5);
-
   prePatch = ''
-    sed -i "s/\[tool.sip.project\]/[tool.sip.project]\nsip-include-dirs = [\"${escaped_pyqt5_dir}\/share\/sip\/PyQt5\"]/g" \
+    sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings\"]@g" \
       setup/build.py
-    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip_5.platform_tag}\"]/g" \
+    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
       setup/build.py
 
     # Remove unneeded files and libs
@@ -66,6 +69,7 @@ mkDerivation rec {
     libjpeg
     libmtp
     libpng
+    libstemmer
     libusb1
     podofo
     poppler_utils
@@ -74,16 +78,19 @@ mkDerivation rec {
     xdg-utils
   ] ++ (
     with python3Packages; [
-      apsw
+      (apsw.overrideAttrs (oldAttrs: rec {
+        setupPyBuildFlags = [ "--enable=load_extension" ];
+      }))
       beautifulsoup4
       cchardet
       css-parser
       cssselect
-      dateutil
+      python-dateutil
       dnspython
       feedparser
       html2text
       html5-parser
+      jeepney
       lxml
       markdown
       mechanize
@@ -95,8 +102,9 @@ mkDerivation rec {
       pyqtwebengine
       python
       regex
-      sip_5
+      sip
       zeroconf
+      jeepney
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optional (unrarSupport) unrardll

@@ -1,56 +1,55 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, gnome
 , meson
 , ninja
-, vala
 , pkg-config
+, vala
+, gettext
+, itstool
+, python3
+, appstream-glib
+, desktop-file-utils
+, wrapGAppsHook
 , glib
 , gtk3
-, python3
+, libhandy
 , libxml2
 , gtk-vnc
-, gettext
-, desktop-file-utils
-, appstream-glib
-, gobject-introspection
-, freerdp
-, wrapGAppsHook
+, gtk-frdp
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "3.38.1";
+  version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/connections/${lib.versions.majorMinor version}/connections-${version}.tar.xz";
-    hash = "sha256-5c7uBFkh9Vsw6bWWUDjNTMDrrFqI5JEgYlsWpfyuTpA=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-ia9eWM2D6mLl+abwMadKOFUIW6KS8OqFgGQIs6+DTug=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
-    gettext
-    glib # glib-compile-resources
     meson
-    appstream-glib
     ninja
     pkg-config
-    python3
     vala
+    gettext
+    itstool
+    python3
+    appstream-glib
+    desktop-file-utils
+    glib # glib-compile-resources
     wrapGAppsHook
-
-    # for gtk-frdp subproject
-    gobject-introspection
   ];
 
   buildInputs = [
     glib
     gtk-vnc
     gtk3
+    libhandy
     libxml2
-
-    # for gtk-frdp subproject
-    freerdp
+    gtk-frdp
   ];
 
   postPatch = ''
@@ -60,8 +59,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "connections";
-      attrPath = "gnome-connections";
+      packageName = pname;
     };
   };
 

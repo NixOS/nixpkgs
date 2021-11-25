@@ -6,15 +6,16 @@
 
 import ../pillow/generic.nix (rec {
   pname = "Pillow-SIMD";
-  version = "8.1.2";
-
+  # check for release version on https://pypi.org/project/Pillow-SIMD/#history
+  # does not match the latest pillow release version!
+  version = "7.0.0.post3";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "uploadcare";
     repo = "pillow-simd";
-    rev = version;
-    sha256 = "1z0c1qpx7l1bhj71ww7za7kl29j5wdraqr2pdhv4dp1q74kgrr0m";
+    rev = "v${version}";
+    sha256 = "1h832xp1bzf951hr4dmjmxqfsv28sx9lr2cq96qdz1c72k40zj1h";
   };
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, qttools, alsaLib, drumstick, qtbase, qtsvg }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, qttools, alsa-lib, drumstick, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
-  buildInputs = [ alsaLib drumstick qtbase qtsvg ];
+  buildInputs = [ alsa-lib drumstick qtbase qtsvg ];
 
   dontWrapQtApps = true;
 

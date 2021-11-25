@@ -10,23 +10,21 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.8.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Lu1LJ57jF4lMIfQn/zyT2cc/mkc3RPPlu4gI7qv8blI=";
+    sha256 = "sha256-uyLY2yH/6J0rtra0brBATadPqrNyyuCcaGfOrng9h4Y=";
   };
 
-  vendorSha256 = "sha256-fEzA/+iKye8lzH4JoXLPqnwjrXPPNuL8gPPbkYJ1glw=";
+  vendorSha256 = "sha256-r7xzvntTIJocdYMQpFXunI2XV65eRG+piEEzS5N2xsY=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  preBuild = let t = "github.com/containerd/nerdctl/pkg/version"; in
-    ''
-      buildFlagsArray+=("-ldflags" "-s -w -X ${t}.Version=v${version} -X ${t}.Revision=<unknown>")
-    '';
+  ldflags = let t = "github.com/containerd/nerdctl/pkg/version"; in
+    [ "-s" "-w" "-X ${t}.Version=v${version}" "-X ${t}.Revision=<unknown>" ];
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
@@ -37,7 +35,9 @@ buildGoModule rec {
       --prefix CNI_PATH : "${cni-plugins}/bin"
 
     installShellCompletion --cmd nerdctl \
-      --bash <($out/bin/nerdctl completion bash)
+      --bash <($out/bin/nerdctl completion bash) \
+      --fish <($out/bin/nerdctl completion fish) \
+      --zsh <($out/bin/nerdctl completion zsh)
   '';
 
   doInstallCheck = true;

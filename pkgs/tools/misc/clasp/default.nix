@@ -1,12 +1,8 @@
 { lib, stdenv, fetchurl }:
 
-let
-  version = "3.1.4";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "clasp";
-  inherit version;
+  version = "3.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/clasp/${version}/clasp-${version}-source.tar.gz";

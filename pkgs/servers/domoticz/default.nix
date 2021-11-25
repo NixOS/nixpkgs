@@ -1,5 +1,5 @@
 { lib, stdenv,
-  fetchzip,
+  fetchFromGitHub,
   makeWrapper,
   cmake,
   python3,
@@ -17,29 +17,17 @@
   cereal
 }:
 
-let
-  version = "2020.2";
-  minizip = "f5282643091dc1b33546bb8d8b3c23d78fdba231";
-
-  domoticz-src = fetchzip {
-    url = "https://github.com/domoticz/domoticz/archive/${version}.tar.gz";
-    sha256 = "1b4pkw9qp7f5r995vm4xdnpbwi9vxjyzbnk63bmy1xkvbhshm0g3";
-  };
-
-  minizip-src = fetchzip {
-    url = "https://github.com/domoticz/minizip/archive/${minizip}.tar.gz";
-    sha256 = "1vddrzm4pwl14bms91fs3mbqqjhcxrmpx9a68b6nfbs20xmpnsny";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "domoticz";
-  inherit version;
+  pname = "domoticz";
+  version = "2021.1";
 
-  src = domoticz-src;
-
-  postUnpack = ''
-    cp -r ${minizip-src}/* $sourceRoot/extern/minizip
-  '';
+  src = fetchFromGitHub {
+    owner = "domoticz";
+    repo = pname;
+    rev = version;
+    sha256 = "03s1fx2ilhiq47p99c6iln1fi0rhdcxxsrv1zaww7f7bc744vzbk";
+    fetchSubmodules = true;
+  };
 
   buildInputs = [
     openssl

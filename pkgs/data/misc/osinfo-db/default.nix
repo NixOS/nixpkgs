@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ osinfo-db-tools gettext libxml2 ];
 
-  phases = [ "installPhase" ];
-
   installPhase = ''
     osinfo-db-import --dir "$out/share/osinfo" "${src}"
   '';

@@ -18,7 +18,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ result ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.07";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ mdx.bin qtest ];
 
   meta = {

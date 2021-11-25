@@ -1,14 +1,15 @@
-{ fetchurl, lib, stdenv, bzip2 }:
+{ stdenv, lib, fetchurl, bzip2, zlib }:
+
 stdenv.mkDerivation rec {
   pname = "cfitsio";
-  version = "3.49";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
-    sha256 = "1cyl1qksnkl3cq1fzl4dmjvkd6329b57y9iqyv44wjakbh6s4rav";
+    sha256 = "sha256-sqjvugufhtPhvWGfZipHbsGBErTyfMRBzGgKTjd3Ql4=";
   };
 
-  buildInputs = [ bzip2 ];
+  buildInputs = [ bzip2 zlib ];
 
   patches = [ ./darwin-rpath-universal.patch ];
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
          advanced features for manipulating and filtering the information in
          FITS files.
       '';
+    changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = licenses.mit;
     maintainers = [ maintainers.xbreak ];
     platforms = with platforms; linux ++ darwin;

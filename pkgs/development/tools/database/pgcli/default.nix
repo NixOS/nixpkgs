@@ -6,7 +6,7 @@
 , click
 , configobj
 , humanize
-, prompt_toolkit
+, prompt-toolkit
 , psycopg2
 , pygments
 , sqlparse
@@ -20,13 +20,13 @@
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.1.0";
+  version = "3.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d5b2d803f7e4e7fe679306a000bde5d14d15ec590ddd108f3dc4c0ecad169d2b";
+    sha256 = "6cde97e71996bf910a40b579e5285483c10ea04962a08def01c12433d5f7c6b7";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     click
     configobj
     humanize
-    prompt_toolkit
+    prompt-toolkit
     psycopg2
     pygments
     sqlparse
@@ -46,7 +46,11 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = [
+    # tests that expect output from an older version of cli-helpers
+    "test_format_output"
+    "test_format_output_auto_expand"
+  ] ++ lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
@@ -55,7 +59,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "https://pgcli.com";
-    changelog = "https://github.com/dbcli/pgcli/blob/v${version}/changelog.rst";
+    changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dywedir ];
   };

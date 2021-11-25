@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, lib, stdenv, pyside2
+{ python, lib, stdenv, pyside2
 , cmake, qt5, llvmPackages }:
 
 stdenv.mkDerivation {

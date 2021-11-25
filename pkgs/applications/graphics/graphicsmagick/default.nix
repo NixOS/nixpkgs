@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences }:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
@@ -27,8 +27,14 @@ stdenv.mkDerivation rec {
       zlib libtool libwebp
     ];
 
-  nativeBuildInputs = [ xz ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ xz nukeReferences ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  # Remove CFLAGS from the binaries to avoid closure bloat.
+  # In the past we have had -dev packages in the closure of the binaries soley due to the string references.
+  postConfigure = ''
+    nuke-refs ./magick/magick_config.h
+  '';
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
@@ -39,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "Swiss army knife of image processing";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    mainProgram = "gm";
   };
 }

@@ -1,4 +1,4 @@
-#! @shell@ -e
+#! @runtimeShell@ -e
 
 # The following lines create/update the HylaFAX spool directory:
 # Subdirectories/files with persistent data are kept,
@@ -80,7 +80,7 @@ touch clientlog faxcron.lastrun xferfaxlog
 chown @faxuser@:@faxgroup@ clientlog faxcron.lastrun xferfaxlog
 
 # create symlinks for frozen directories/files
-lnsym --target-directory=. "@hylafax@"/spool/{COPYRIGHT,bin,config}
+lnsym --target-directory=. "@hylafaxplus@"/spool/{COPYRIGHT,bin,config}
 
 # create empty temporary directories
 update --mode=0700 -d client dev status
@@ -93,7 +93,7 @@ install -d "@spoolAreaPath@/etc"
 cd "@spoolAreaPath@/etc"
 
 # create symlinks to all files in template's etc
-lnsym --target-directory=. "@hylafax@/spool/etc"/*
+lnsym --target-directory=. "@hylafaxplus@/spool/etc"/*
 
 # set LOCKDIR in setup.cache
 sed --regexp-extended 's|^(UUCP_LOCKDIR=).*$|\1'"'@lockPath@'|g" --in-place setup.cache

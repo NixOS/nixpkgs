@@ -22,7 +22,7 @@ with lib;
       auto_add_peers = mkOption {
         type        = types.listOf types.str;
         default     = [];
-        example     = ''[ "toxid1" "toxid2" ]'';
+        example     = [ "toxid1" "toxid2" ];
         description = "peers to automatically connect to on startup";
       };
     };
@@ -59,10 +59,12 @@ with lib;
 
     users.users = {
       toxvpn = {
-        uid        = config.ids.uids.toxvpn;
+        isSystemUser = true;
+        group = "toxvpn";
         home       = "/var/lib/toxvpn";
         createHome = true;
       };
     };
+    users.groups.toxvpn = {};
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk2, atk
+{ lib, stdenv, fetchurl, buildEnv, makeWrapper, glib, alsa-lib , dbus, gtk2, atk
 , pango, freetype, fontconfig, gdk-pixbuf , cairo, cups, expat, nspr, gconf, nss
 , xorg, libcap, unzip
 }:
@@ -8,7 +8,7 @@ let
     name = "env-thrust";
     paths = [
       stdenv.cc.cc glib dbus gtk2 atk pango freetype fontconfig gdk-pixbuf
-      cairo cups expat alsaLib nspr gconf nss xorg.libXrender xorg.libX11
+      cairo cups expat alsa-lib nspr gconf nss xorg.libXrender xorg.libX11
       xorg.libXext xorg.libXdamage xorg.libXtst xorg.libXcomposite
       xorg.libXi xorg.libXfixes xorg.libXrandr xorg.libXcursor libcap
     ];
@@ -24,8 +24,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ thrustEnv ];
-
-  phases = [ "installPhase" "fixupPhase" ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -183,7 +183,7 @@ in with pkgs; rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
         nuke-refs $out/lib/gcc/*/*/*
-        nuke-refs $out/lib/gcc/*/*/include-fixed/*/*
+        nuke-refs $out/lib/gcc/*/*/include-fixed/*{,/*}
 
         mkdir $out/.pack
         mv $out/* $out/.pack

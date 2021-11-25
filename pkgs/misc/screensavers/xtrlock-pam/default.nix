@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, python, pkg-config, xlibsWrapper, pam }:
 
 stdenv.mkDerivation {
-  name = "xtrlock-pam-3.4-post-20150909";
+  pname = "xtrlock-pam";
+  version = "3.4-post-20150909";
 
   src = fetchgit {
     url = "https://github.com/aanatoly/xtrlock-pam";

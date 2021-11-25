@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installPhase = ''
     runHook preInstall
     install -D $pname $out/bin/$pname

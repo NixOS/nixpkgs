@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, autoreconfHook, scheme48 }:
 
 stdenv.mkDerivation {
-  name = "scsh-0.7pre";
+  pname = "scsh";
+  version = "0.7pre";
 
   src = fetchgit {
     url = "git://github.com/scheme/scsh.git";

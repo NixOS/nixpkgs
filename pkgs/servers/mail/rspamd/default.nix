@@ -11,14 +11,16 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "2.7";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "sha256-LMLRDnKfGpApVsIvPNY2nxl+H5+qeVvwvwr3wdyyhjs=";
+    sha256 = "sha256-w3pvjU6b4IAl27QvY16UdBi1v1iJnnkLRUC54eXdH9I=";
   };
+
+  hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://rspamd.com";
     license = licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [ avnik fpletz globin ];
+    maintainers = with maintainers; [ avnik fpletz globin lewo ];
     platforms = with platforms; linux;
   };
 }

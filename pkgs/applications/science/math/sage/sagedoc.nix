@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     networkx
     ipykernel
     ipywidgets
-    jupyter_client
+    jupyter-client
   ]);
 
   unpackPhase = ''
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     mv html/en/_static{,.tmp}
     for _dir in `find -name _static` ; do
           rm -r $_dir
-          ln -s /share/doc/sage/html/en/_static $_dir
+          ln -rs html/en/_static $_dir
     done
     mv html/en/_static{.tmp,}
   '';

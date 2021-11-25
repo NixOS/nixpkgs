@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeDesktopItem
 , stdenv
-, alsaLib
+, alsa-lib
 , gcc-unwrapped
 , git
 , godot-export-templates
@@ -20,6 +20,7 @@
 , libglvnd
 , libpulseaudio
 , zlib
+, udev # for libudev
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     gcc-unwrapped.lib
     git
     libGLU
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libglvnd
     libpulseaudio
     zlib
+    udev
   ];
 
   desktopItems = [

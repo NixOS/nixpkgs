@@ -1,25 +1,31 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.11.2";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2qNQpILtWLVyREPGUUMhkem5ewyDdDh50JExccaigIU=";
+    sha256 = "4d0e90ca3fdbdeb6a4a0891e2da7d4b8e80386e19e6db91ce29b8aa5c876ecfe";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
+  '';
 
-  # Disabling tests for now due to various (transitive) dependencies on modules
-  # from @smarie which are, as of yet, not part of nixpkgs. Also introduces
-  # a tricky dependency: makefun tests depend on pytest-cases, installing
-  # pytest-cases depends on makefun.
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "makefun" ];
 

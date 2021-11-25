@@ -15,24 +15,25 @@
 , webkitgtk
 , glib-networking
 , librsvg
+, xdg-utils
 , gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "newsflash";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    hash = "sha256-EInI5Unaz9m8/gJ7vAzJVyMynJGq0KZh12dNK8r1wnY=";
+    hash = "sha256-fLG7oYt+gdl3Lwnu6c7VLJWSHCFY5LyNeDKoUNGg3Yw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-xrWZhjfYnO6M3LMTP6l3+oZOusvUWuRBDesIlsiEJ6s=";
+    hash = "sha256-dQlbK3SfY6p1xinroXz5wcaBbq2LuDM9sMlfJ6ueTTg=";
   };
 
   patches = [
@@ -77,6 +78,9 @@ stdenv.mkDerivation rec {
 
     # SVG support for gdk-pixbuf
     librsvg
+
+    # Open links in browser
+    xdg-utils
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -89,6 +93,7 @@ stdenv.mkDerivation rec {
     description = "A modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
+    platforms = platforms.unix;
   };
 }

@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q2.2";
+  version = "2021.Q3.7";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "4k9ZkBxJGuNUO44F9D+u54eUREl5/8zxjxhaShhzGv0=";
+    sha256 = "sha256-0Q6c10lQSxgqOB6X6F8LyeF2aoyicmp0tZlknuZjQHE=";
   };
 
   buildInputs = [
@@ -65,9 +65,6 @@ in stdenv.mkDerivation rec {
 
   cmakeDir = "../drivers/xgl";
 
-  # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
-
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
     install -Dm644 -t $out/share/vulkan/icd.d icd/amd_icd${suffix}.json
@@ -85,6 +82,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ danieldk Flakebi ];
+    maintainers = with maintainers; [ Flakebi ];
   };
 }

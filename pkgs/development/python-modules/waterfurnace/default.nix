@@ -6,7 +6,7 @@
 , pytest-runner
 , pytestCheckHook
 , requests
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     click
     pytest-runner
     requests
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [

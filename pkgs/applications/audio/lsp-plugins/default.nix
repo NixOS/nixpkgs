@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.26";
+  version = "1.1.30";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "1apw8zh3a3il4smkjji6bih4vbsymj0hjs10fgkrd4nazqkjvgyd";
+    rev = version;
+    sha256 = "0g0nx05dyjwz2149v3pj6sa9divr26jyqvg2kk1qk48s2n4najkz";
   };
 
   nativeBuildInputs = [ pkg-config php makeWrapper ];
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildFlags = [ "release" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib;
     { description = "Collection of open-source audio plugins";
@@ -84,6 +86,8 @@ stdenv.mkDerivation rec {
         - Compressor MidSide - Kompressor MidSide
         - Compressor Mono - Kompressor Mono
         - Compressor Stereo - Kompressor Stereo
+        - Artistic Delay Mono - Künstlerische Verzögerung
+        - Artistic Delay Stereo - Künstlerische Verzögerung
         - Latency Meter - Latenzmessgerät
         - Loudness Compensator Mono - Lautstärke Kompensator Mono
         - Loudness Compensator Stereo - Lautstärke Kompensator Stereo
@@ -99,6 +103,9 @@ stdenv.mkDerivation rec {
         - Multiband Compressor MidSide x8 - Multi-band Kompressor MidSide x8
         - Multiband Compressor Mono x8 - Multi-band Kompressor Mono x8
         - Multiband Compressor Stereo x8 - Multi-band Kompressor Stereo x8
+        - Oscilloscope x1 - Oscilloscope x1
+        - Oscilloscope x2 - Oscilloscope x2
+        - Oscilloscope x4 - Oscilloscope x4
         - Oscillator Mono - Oszillator Mono
         - Parametric Equalizer x16 LeftRight - Parametrischer Entzerrer x16 LeftRight
         - Parametric Equalizer x16 MidSide - Parametrischer Entzerrer x16 MidSide

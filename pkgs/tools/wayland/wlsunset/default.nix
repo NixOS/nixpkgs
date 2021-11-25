@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromSourcehut, meson, pkg-config, ninja, wayland, scdoc
-, wayland-protocols
+{ lib, stdenv, fetchFromSourcehut
+, meson, pkg-config, ninja, wayland-scanner, scdoc
+, wayland, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland scdoc ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner scdoc ];
   buildInputs = [ wayland wayland-protocols ];
 
   meta = with lib; {

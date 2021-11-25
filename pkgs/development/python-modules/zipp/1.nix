@@ -1,11 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytest
 , pytest-flake8
 , more-itertools
-, toml
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0v3qayhqv7vyzydpydwcp51bqciw8p2ajddw68x5k8zppc0vx3yk";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools ];
 

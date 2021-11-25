@@ -2,20 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "catatonit";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = pname;
     rev = "v${version}";
-    sha256 = "ciJ1MI7jr5P2PgxIykQ+BiwNUO8lQHGt0+U8CNbc5bI=";
+    sha256 = "sha256-jX4fYC/rpfd3ro2UZ6OEu4kU5wpusOwmEVPWEjxwlW4=";
   };
 
   patches = [
-    # Fix compilation with musl
+    # Pull the fix pending upstream inclusion to support automake-1.16.5:
+    #  https://github.com/openSUSE/catatonit/pull/18
     (fetchpatch {
-      url = "https://github.com/openSUSE/catatonit/commit/75014b1c3099245b7d0f44f24d7f6dc4888a45fd.patch";
-      sha256 = "sha256-9VMNUT1U90ocjvE7EXYfLxuodDwTXXHYg89qqa5Jq0g=";
+      name = "automake-1.16.5.patch";
+      url = "https://github.com/openSUSE/catatonit/commit/99bb9048f532257f3a2c3856cfa19fe957ab6cec.patch";
+      sha256 = "sha256-ooxVjtWXJddQiBvO9I5aRyLeL8y3ecxW/Kvtfg/bpRA=";
     })
   ];
 

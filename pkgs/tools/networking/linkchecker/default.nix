@@ -16,7 +16,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = [
-    ConfigArgParse
+    configargparse
     argcomplete
     beautifulsoup4
     pyopenssl

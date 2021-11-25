@@ -2,31 +2,33 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, argh
 , pathtools
 , pyyaml
+, flaky
+, pytest-timeout
 , pytestCheckHook
 , CoreServices
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.0";
+  version = "2.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VTFu+rUvZZuLe1lzBoC/snrAA1IvJMRPa81gxONzbM0=";
+    sha256 = "sha256-o25132x2fL9G9hqRxws7pxgR36CspKMk2UB6Bqi3ouc=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   propagatedBuildInputs = [
-    argh
     pathtools
     pyyaml
   ];
 
   checkInputs = [
+    flaky
+    pytest-timeout
     pytestCheckHook
   ];
 
@@ -44,6 +46,7 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
     # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
-    broken = stdenv.isDarwin;
+    # builds fine on aarch64-darwin
+    broken = stdenv.isDarwin && !stdenv.isAarch64;
   };
 }

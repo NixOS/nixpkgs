@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/nfstrace/raw/debian/0.4.3.1-3/debian/patches/reproducible_build.patch";
       sha256 = "0fd96r8xi142kjwibqkd46s6jwsg5kfc5v28bqsj9rdlc2aqmay5";
     })
+    # Fixes build failure with gcc-10
+    # Related PR https://github.com/epam/nfstrace/pull/42/commits/4562a895ed3ac0e811bdd489068ad3ebe4d7b501
+    (fetchpatch {
+      url = "https://github.com/epam/nfstrace/commit/4562a895ed3ac0e811bdd489068ad3ebe4d7b501.patch";
+      sha256 = "1fbicbllyykjknik7asa81x0ixxmbwqwkiz74cnznagv10jlkj3p";
+    })
   ];
 
   postPatch = ''

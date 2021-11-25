@@ -9,7 +9,7 @@
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? true
-, glib, gnome, wrapGAppsHook
+, glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
 , version, coq-version ? null,
 }@args:
@@ -44,6 +44,7 @@ let
    "8.13.0".sha256     = "0sjbqmz6qcvnz0hv87xha80qbhvmmyd675wyc5z4rgr34j2l1ymd";
    "8.13.1".sha256     = "0xx2ns84mlip9bg2mkahy3pmc5zfcgrjxsviq9yijbzy1r95wf0n";
    "8.13.2".sha256     = "1884vbmwmqwn9ngibax6dhnqh4cc02l0s2ajc6jb1xgr0i60whjk";
+   "8.14.0".sha256     = "04y2z0qyvag66zanfyc3f9agvmzbn4lsr0p1l7ck6yjhqx7vbm17";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -124,19 +125,22 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  nativeBuildInputs = [ pkg-config ] ++ optional (!versionAtLeast "8.6") gnumake42;
+  nativeBuildInputs = [ pkg-config ]
+    ++ optional buildIde copyDesktopItems
+    ++ optional (!versionAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme wrapGAppsHook ]
-       else [ ocamlPackages.lablgtk ]);
+       else [ ocamlPackages.lablgtk ])
+    ++ optional (versionAtLeast "8.14") ocamlPackages.dune_2
+  ;
 
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
-    substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace '"md5 -q"' '"md5sum"'
+    ${if !versionAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
     ${csdpPatch}
   '';
 
@@ -160,16 +164,31 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
+  buildFlags = [ "revision" "coq" "coqide" ] ++ optional (!versionAtLeast "8.14") "bin/votour";
+  enableParallelBuilding = true;
 
   createFindlibDestdir = true;
 
-  postInstall = ''
+  desktopItems = optional buildIde (makeDesktopItem {
+    name = "coqide";
+    exec = "coqide";
+    icon = "coq";
+    desktopName = "CoqIDE";
+    comment = "Graphical interface for the Coq proof assistant";
+    categories = "Development;Science;Math;IDE;GTK";
+  });
+
+  postInstall = let suffix = if versionAtLeast "8.14" then "-core" else ""; in ''
     cp bin/votour $out/bin/
-    ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
+    ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
+  '' + optionalString (versionAtLeast "8.14") ''
+    ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
+  '' + optionalString buildIde ''
+    mkdir -p "$out/share/pixmaps"
+    ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language

@@ -164,7 +164,7 @@ in
         };
       };
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { # Listen on IPv6 only
           listen-address = "[::]:8118";
 

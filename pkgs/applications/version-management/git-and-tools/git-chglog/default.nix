@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "git-chglog";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "git-chglog";
     repo = "git-chglog";
     rev = "v${version}";
-    sha256 = "124bqywkj37gv61fswgrg528bf3rjqms1664x22lkn0sqh22zyv1";
+    sha256 = "sha256-BiTnPCgymfpPxuy0i8u7JbpbEBeaSIJaikjwsPSA3qc=";
   };
 
-  vendorSha256 = "09zjypmcc3ra7sw81q1pbbrlpxxp4k00p1cfkrrih8wvb25z89h5";
+  vendorSha256 = "sha256-jIq+oacyT71m78iMZwWOBsBVAY/WxgyH9zRr8GiMGTU=";
 
-  buildFlagsArray = [ "-ldflags= -s -w -X=main.Version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Version=v${version}" ];
 
   subPackages = [ "cmd/git-chglog" ];
 
@@ -24,4 +24,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ ldenefle ];
   };
 }
-

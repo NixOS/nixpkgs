@@ -15,23 +15,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.6.2";
+  version = "alpha-0.7.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = version;
-    sha256 = "0ycyksrrp4llwklzx3ipac8hmpfxa1pa7dqsm82wic0f6p5d1dp6";
+    sha256 = "sha256-cbigEJhX6vL+gHa40cxplmPsDhsqujkzQxe0Dr6+SK0=";
   };
 
-  cargoSha256 = "sha256:0lxwhb2c16w5z7rqzch0ij8n8hxb5xcin31w9i28mzv1xm7sg8ks";
-
-  cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
+  cargoSha256 = "sha256-ZE653OtXyZ9454bKPApmuL2kVko/hGBWEAya1L1KIoc=";
 
   nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 
   checkInputs = [ file ];
+
+  buildFeatures = lib.optional withNotmuch [ "notmuch" ];
 
   postInstall = ''
     mkdir -p $out/share/man/man1

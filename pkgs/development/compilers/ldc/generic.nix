@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_11 makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_11.dev makeWrapper ninja unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
@@ -132,6 +132,6 @@ stdenv.mkDerivation rec {
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
     maintainers = with maintainers; [ ThomasMader lionello ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

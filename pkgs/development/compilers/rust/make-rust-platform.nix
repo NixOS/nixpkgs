@@ -1,31 +1,35 @@
-{ buildPackages, callPackage }:
+{ buildPackages, callPackage, stdenv }@prev:
 
-{ rustc, cargo, ... }:
+{ rustc, cargo, stdenv ? prev.stdenv, ... }:
 
 rec {
   rust = {
     inherit rustc cargo;
   };
 
-  fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetchCargoTarball.nix {
+  fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {
+    git = buildPackages.gitMinimal;
     inherit cargo;
   };
 
-  buildRustPackage = callPackage ../../../build-support/rust {
-    inherit cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
-      fetchCargoTarball rustc;
+  buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
+    git = buildPackages.gitMinimal;
+    inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook
+      fetchCargoTarball importCargoLock rustc;
   };
 
+  importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {};
+
   rustcSrc = callPackage ./rust-src.nix {
-    inherit rustc;
+    inherit stdenv rustc;
   };
 
   rustLibSrc = callPackage ./rust-lib-src.nix {
-    inherit rustc;
+    inherit stdenv rustc;
   };
 
   # Hooks
   inherit (callPackage ../../../build-support/rust/hooks {
-    inherit cargo;
+    inherit stdenv cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoSetupHook maturinBuildHook;
 }

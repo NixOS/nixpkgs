@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , coreutils
 , patchelf
 , requireFile
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , gcc
@@ -22,11 +23,11 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-
-  name = "mathematica-9.0.0";
+  pname = "mathematica";
+  version = "9.0.0";
 
   src = requireFile {
-    name = "Mathematica_9.0.0_LINUX.sh";
+    name = "Mathematica_${version}_LINUX.sh";
     message = ''
       This nix expression requires that Mathematica_9.0.0_LINUX.sh is
       already part of the store. Find the file on your Mathematica CD
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     fontconfig
     freetype
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
 
   ldpath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+    (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 

@@ -14,7 +14,7 @@ in {
 
     settings = mkOption {
       type = settingsFormat.type;
-      example = literalExample ''
+      example = literalExpression ''
         {
           interfaces = [
             # eth0 is an upstream interface monitoring for IPv6 router advertisements.
@@ -37,20 +37,20 @@ in {
         }
       '';
       description = ''
-        Configuration for CoreRAD, see <link xlink:href="https://github.com/mdlayher/corerad/blob/master/internal/config/default.toml"/>
+        Configuration for CoreRAD, see <link xlink:href="https://github.com/mdlayher/corerad/blob/main/internal/config/reference.toml"/>
         for supported values. Ignored if configFile is set.
       '';
     };
 
     configFile = mkOption {
       type = types.path;
-      example = literalExample "\"\${pkgs.corerad}/etc/corerad/corerad.toml\"";
+      example = literalExpression ''"''${pkgs.corerad}/etc/corerad/corerad.toml"'';
       description = "Path to CoreRAD TOML configuration file.";
     };
 
     package = mkOption {
       default = pkgs.corerad;
-      defaultText = literalExample "pkgs.corerad";
+      defaultText = literalExpression "pkgs.corerad";
       type = types.package;
       description = "CoreRAD package to use.";
     };

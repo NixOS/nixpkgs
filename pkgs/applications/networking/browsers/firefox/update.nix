@@ -6,6 +6,7 @@
 , gnused
 , gnugrep
 , curl
+, gnupg
 , attrPath
 , runtimeShell
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
@@ -15,7 +16,12 @@
 
 writeScript "update-${attrPath}" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused xidel ]}
+  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused xidel ]}
+
+  set -eux
+  HOME=`mktemp -d`
+  export GNUPGHOME=`mktemp -d`
+  gpg --receive-keys 14F26682D0916CDD81E37B6D61B7B526D98F0353
 
   url=${baseUrl}
 
@@ -31,5 +37,11 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  update-source-version ${attrPath} "$version" "" "" --version-key=${versionKey}
+  curl --silent --show-error -o "$HOME"/shasums "$url$version/SHA512SUMS"
+  curl --silent --show-error -o "$HOME"/shasums.asc "$url$version/SHA512SUMS.asc"
+  gpgv --keyring="$GNUPGHOME"/pubring.kbx "$HOME"/shasums.asc "$HOME"/shasums
+
+  hash=$(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o)
+
+  update-source-version ${attrPath} "$version" "$hash" "" --version-key=${versionKey}
 ''

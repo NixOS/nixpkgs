@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.13";
+  version = "4.14";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ petabyteboy felixsinger ];
+    license = with licenses; [ gpl2Only gpl2Plus ];
+    maintainers = with maintainers; [ petabyteboy felixsinger yuka ];
     platforms = platforms.linux;
   };
 
@@ -16,13 +16,14 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "0sl50aajnah4a138sr3jjm3ydc8gfh5vvlhviz3ypp95b9jdlya7";
+      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
     };
 
     enableParallelBuilding = true;
 
     postPatch = ''
       cd ${path}
+      patchShebangs .
     '';
 
     makeFlags = [
@@ -42,7 +43,7 @@ let
     };
     cbmem = generic {
       pname = "cbmem";
-      meta.description = "Coreboot console log reader";
+      meta.description = "coreboot console log reader";
     };
     ifdtool = generic {
       pname = "ifdtool";
@@ -80,7 +81,13 @@ let
     amdfwtool = generic {
       pname = "amdfwtool";
       meta.description = "Create AMD firmware combination";
-      installPhase = "install -Dm755 amdfwtool $out/bin/amdfwtool";
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 amdfwtool $out/bin/amdfwtool
+
+        runHook postInstall
+      '';
     };
     acpidump-all = generic {
       pname = "acpidump-all";
@@ -88,9 +95,15 @@ let
       meta.description = "Walk through all ACPI tables with their addresses";
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
-      installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm755 acpidump-all $out/bin/acpidump-all
+
+        runHook postInstall
+      '';
       postFixup = let
-        binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
+        binPath = [ coreutils acpica-tools gnugrep gnused file ];
       in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };

@@ -38,7 +38,7 @@ let
   }
   // attrs
   // {
-      name = "${gimp.name}-plugin-${name}";
+      name = "${gimp.pname}-plugin-${name}";
       buildInputs = [
         gimp
         gimp.gtk
@@ -53,8 +53,13 @@ let
   );
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    phases = [ "extraLib" "installPhase" ];
-    installPhase = "installScripts ${src}";
+    prePhases = "extraLib";
+    dontUnpack = true;
+    installPhase = ''
+      runHook preInstall
+      installScripts ${src}
+      runHook postInstall
+    '';
   } // attrs);
 in
 {
@@ -120,6 +125,8 @@ in
     buildInputs = with pkgs; [ fftw ];
 
     postPatch = ''
+      substituteInPlace Makefile --replace '$(GCC)' '$(CC)'
+
       # The tarball contains a prebuilt binary.
       make clean
     '';

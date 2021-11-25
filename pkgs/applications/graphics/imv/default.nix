@@ -5,7 +5,6 @@
 , cmocka
 , docbook_xsl
 , libxslt
-, fontconfig
 , meson
 , ninja
 , pkg-config
@@ -57,13 +56,13 @@ assert builtins.all
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "eXeC64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
+    sha256 = "sha256-HP9W9US9e3YAXwCqiHV8NVqrO20SfQKcW3a6+r1XrIs=";
   };
 
   mesonFlags = [
@@ -90,6 +89,12 @@ stdenv.mkDerivation rec {
   ] ++ windowSystems."${withWindowSystem}"
     ++ builtins.map (b: backends."${b}") withBackends;
 
+  postInstall = ''
+    # fix the executable path and install the desktop item
+    substituteInPlace ../files/imv.desktop --replace "imv %F" "$out/bin/imv %F"
+    install -Dm644 ../files/imv.desktop $out/share/applications/
+  '';
+
   postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
@@ -104,7 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A command line image viewer for tiling window managers";
     homepage = "https://github.com/eXeC64/imv";
-    license = licenses.gpl2;
+    license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
     platforms = platforms.all;
   };

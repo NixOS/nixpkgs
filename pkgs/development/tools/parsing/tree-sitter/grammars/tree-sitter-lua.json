@@ -1,9 +1,10 @@
 {
-  "url": "https://github.com/Azganoth/tree-sitter-lua",
-  "rev": "a943944ec09c5e96f455bb166079de4ef3534457",
-  "date": "2020-12-27T00:15:24-03:00",
-  "path": "/nix/store/6glr8p3x58pva0nn586dk5jwb3bpgqrj-tree-sitter-lua",
-  "sha256": "0pm6wwb3kv73bfvvshdmvazcb1is5x1z6jwr31gz0niln18nqvpb",
+  "url": "https://github.com/nvim-treesitter/tree-sitter-lua",
+  "rev": "6f5d40190ec8a0aa8c8410699353d820f4f7d7a6",
+  "date": "2021-08-02T15:13:28+02:00",
+  "path": "/nix/store/h1bhl291jac001w2c8fxi9w7dsqxq5q0-tree-sitter-lua",
+  "sha256": "05ash0l46s66q9yamzzh6ghk8yv0vas13c7dmz0c9xljbjk5ab1d",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

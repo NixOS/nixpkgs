@@ -10,6 +10,8 @@
 mkDerivation {
   pname = "k3b";
   meta = with lib; {
+    homepage = "https://apps.kde.org/k3b/";
+    description = "Disk burning application";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;

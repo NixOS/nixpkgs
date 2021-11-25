@@ -1,4 +1,5 @@
-{ lib, imagemagick, ffmpeg, rustPlatform, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, imagemagick, ffmpeg, rustPlatform, fetchFromGitHub, makeWrapper
+, libiconv, Foundation }:
 
 let
   binPath = lib.makeBinPath [
@@ -17,8 +18,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "InArrBqfhDrsonjmCIPTBVOA/s2vYml9Ay6cdrKLd7c=";
   };
 
-  buildInputs = [ imagemagick ];
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ imagemagick ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
+
   postInstall = ''
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${binPath}"
   '';

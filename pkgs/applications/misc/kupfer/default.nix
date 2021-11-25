@@ -5,7 +5,7 @@
 , gobject-introspection
 , gtk3
 , itstool
-, libwnck3
+, libwnck
 , keybinder3
 , desktop-file-utils
 , shared-mime-info
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     desktop-file-utils # for update-desktop-database
     shared-mime-info   # for update-mime-info
   ];
-  buildInputs = [ docutils libwnck3 keybinder3 ];
+  buildInputs = [ docutils libwnck keybinder3 ];
   propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
   # without strictDeps kupfer fails to build: Could not find the python module 'gi.repository.Gtk'

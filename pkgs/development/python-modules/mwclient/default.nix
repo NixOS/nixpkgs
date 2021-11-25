@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , requests, requests_oauthlib, six
-, pytest, pytestcache, pytestcov, responses, mock
+, pytest, pytestcache, pytest-cov, responses, mock
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "120snnsh9n5svfwkyj1w9jrxf99jnqm0jk282yypd3lpyca1l9hj";
   };
 
-  checkInputs = [ pytest pytestcache pytestcov responses mock ];
+  checkInputs = [ pytest pytestcache pytest-cov responses mock ];
 
   propagatedBuildInputs = [ requests requests_oauthlib six ];
 

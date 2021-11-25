@@ -55,6 +55,7 @@
 , opencv4
 , openexr
 , openh264
+, libopenmpt
 , pango
 , rtmpdump
 , sbc
@@ -143,6 +144,7 @@ stdenv.mkDerivation rec {
     mpeg2dec
     libmicrodns
     openjpeg
+    libopenmpt
     libopus
     librsvg
     curl.dev
@@ -231,6 +233,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
     "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
@@ -250,7 +253,6 @@ stdenv.mkDerivation rec {
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
     "-Dmusepack=disabled"
-    "-Dopenmpt=disabled" # `libopenmpt` not packaged in nixpkgs as of writing
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
@@ -292,6 +294,8 @@ stdenv.mkDerivation rec {
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   # Argument list too long

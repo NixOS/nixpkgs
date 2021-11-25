@@ -1,40 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , defusedxml
-, requests
-, pytest
-, requests-mock
+, fetchFromGitHub
 , mock
-, pytestcov
+, pytest-asyncio
 , pytest-timeout
-, testtools
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "rxv";
-  version = "0.6.0";
+  version = "0.7.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wuub";
     repo = pname;
-    # Releases are not tagged
-    rev = "9b586203665031f93960543a272bb1a8f541ed37";
-    sha256 = "1dw3ayrzknai2279bhkgzcapzw06rhijlny33rymlbp7irp0gvnj";
+    rev = "v${version}";
+    sha256 = "0jldnlzbfg5jm1nbgv91mlvcqkswd9f2n3qj9aqlbmj1cxq19yz8";
   };
 
-  propagatedBuildInputs = [ defusedxml requests ];
+  propagatedBuildInputs = [
+    defusedxml
+    requests
+  ];
 
-  checkInputs = [ pytest requests-mock mock pytestcov pytest-timeout testtools ];
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytest-timeout
+    pytest-vcr
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [ "rxv" ];
 
   meta = with lib; {
-    description = "Automation Library for Yamaha RX-V473, RX-V573, RX-V673, RX-V773 receivers";
+    description = "Python library for communicate with Yamaha RX-Vxxx receivers";
     homepage = "https://github.com/wuub/rxv";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

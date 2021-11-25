@@ -9,7 +9,7 @@
 , mock
 , requests
 , uritemplate
-, dateutil
+, python-dateutil
 , jwcrypto
 , pyopenssl
 , ndg-httpsclient
@@ -18,17 +18,17 @@
 
 buildPythonPackage rec {
   pname = "github3.py";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8dd4ac612fd60cb277eaf6e2ce02f68dda54aba06870ca6fa2b28369bf39aa14";
+    sha256 = "a9134cb9efd334b1644ad7c5ee3ff3ff488317c4549ffc0e8d82e4d63383a1a4";
   };
 
   checkInputs = [ betamax pytest betamax-matchers ]
     ++ lib.optional (pythonOlder "3") unittest2
     ++ lib.optional (pythonOlder "3.3") mock;
-  propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
+  propagatedBuildInputs = [ requests uritemplate python-dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
 
   postPatch = ''
     sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py

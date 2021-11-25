@@ -4,8 +4,8 @@
 
 let
   pname = "MyCrypto";
-  version = "1.7.13";
-  sha256 = "15m21n68lxnz6fxwf1bb3cxg5qi6nrwcnqymiw8s9wizvv575vj7";
+  version = "1.7.17";
+  sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
   name = "${pname}-${version}";
 
   src = fetchurl {

@@ -1,22 +1,22 @@
-{ lib, callPackage, python3Packages, fetchFromGitLab, cacert,
-  rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip,
-  jre, makeWrapper, tr-patcher, tes3cmd }:
+{ lib, callPackage, python3Packages, fetchFromGitLab, cacert
+, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip
+, jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
 
 let
-  version = "2.0_beta9";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    sha256 = "0a598rb0z6gsdyr4n0lc0yc583njjii07p6vxw75xsh7292vxksc";
+    sha256 = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoSha256 = "14p1aywwbkf2pk85sir5g9ni08zam2hid0kaz111718b006nrxh7";
+    cargoHash = "sha256-3EfMMpSWSYsB3nXaoGGDuKQ9duyCKzbrT6oeATnzqLE=";
 
     nativeBuildInputs = [ python3Packages.python ];
 
@@ -30,6 +30,7 @@ let
     tr-patcher
     tes3cmd
     imagemagick
+    openmw
   ];
 
 in
@@ -44,11 +45,11 @@ python3Packages.buildPythonApplication rec {
   prePatch = ''
     substituteInPlace setup.py \
       --replace "from setuptools_rust import Binding, RustExtension" "" \
-      --replace "RustExtension(\"portmod.portmod\", binding=Binding.PyO3, strip=True)" ""
+      --replace "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=True)" ""
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    setuptools_scm
+    setuptools-scm
     setuptools
     requests
     chardet
@@ -61,6 +62,7 @@ python3Packages.buildPythonApplication rec {
     redbaron
     patool
     packaging
+    fasteners
   ];
 
   checkInputs = with python3Packages; [
@@ -68,7 +70,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ bin-programs;
 
   preCheck = ''
-    cp ${portmod-rust}/lib/libportmod.so portmod/portmod.so
+    cp ${portmod-rust}/lib/libportmod.so portmodlib/portmod.so
     export HOME=$(mktemp -d)
   '';
 
@@ -79,11 +81,14 @@ python3Packages.buildPythonApplication rec {
     "test_execute_network_permissions"
     "test_execute_permissions_bleed"
     "test_git"
+    "test_sync"
+    "test_manifest"
+    "test_add_repo"
   ];
 
   # for some reason, installPhase doesn't copy the compiled binary
   postInstall = ''
-    cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmod/portmod.so
+    cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")

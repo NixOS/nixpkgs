@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, mariadb, mailutils, pbzip2, pigz, bzip2, gzip }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, mariadb, mailutils, pbzip2, pigz, bzip2, gzip }:
 
 stdenv.mkDerivation rec {
   pname = "automysqlbackup";
-  version = "3.0_rc6";
+  version = "3.0.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/automysqlbackup/AutoMySQLBackup/AutoMySQLBackup%20VER%203.0/automysqlbackup-v${version}.tar.gz";
-    sha256 = "1h1wq86q6my1a682nr8pjagjhai4lxz967m17lhpw1vb116hd7l8";
+  src = fetchFromGitHub {
+    owner = "sixhop";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A script to run daily, weekly and monthly backups for your MySQL database";
-    homepage = "https://sourceforge.net/projects/automysqlbackup/";
+    homepage = "https://github.com/sixhop/AutoMySQLBackup";
     platforms = platforms.linux;
     maintainers = [ maintainers.aanderse ];
     license = licenses.gpl2Plus;

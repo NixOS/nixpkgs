@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
 , appstream-glib
@@ -7,7 +8,6 @@
 , elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
-, fetchpatch
 , flatpak
 , gettext
 , glib
@@ -15,6 +15,7 @@
 , gtk3
 , json-glib
 , libgee
+, libhandy
 , libsoup
 , libxml2
 , meson
@@ -25,29 +26,19 @@
 , python3
 , vala
 , polkit
-, libhandy_0
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.5.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "MsaXdmL+M+NYAJrrwluleeNxqQg0soFbO/G/FqibBFI=";
+    sha256 = "sha256-+r19n42FPoBArZNDF4ZAdUBZqsSxpLwpeBoyaRJBCrg=";
   };
-
-  patches = [
-    # Allow build with appstream 0.14.x
-    # https://github.com/elementary/appcenter/pull/1493
-    (fetchpatch {
-      url = "https://github.com/elementary/appcenter/commit/5807dd13fe3c715f26225aed8d7a0abdea0c2a64.patch";
-      sha256 = "BvEahG9lU9ZdgooFDFhm5evRvnKVcmcHLdmZPb85gbo=";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -78,7 +69,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
-    libhandy_0 # doesn't support libhandy-1 yet
+    libhandy
     libsoup
     libxml2
     packagekit
@@ -86,7 +77,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -101,6 +91,7 @@ stdenv.mkDerivation rec {
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

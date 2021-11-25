@@ -1,18 +1,18 @@
-{ buildPythonPackage, fetchPypi, isPy27, lib, dateutil, lxml, requests
+{ buildPythonPackage, fetchPypi, isPy27, lib, python-dateutil, lxml, requests
 , pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "webdavclient3";
-  version = "3.14.5";
+  version = "3.14.6";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yw3n5m70ysjn1ch48znpn4zr4a1bd0lsm7q2grqz7q5hfjzjwk0";
+    sha256 = "bcd22586bb0d58abc26ca56054fd04228e704bd36073c3080f4597c1556c880d";
   };
 
-  propagatedBuildInputs = [ dateutil lxml requests ];
+  propagatedBuildInputs = [ python-dateutil lxml requests ];
 
   checkInputs = [ pytestCheckHook ];
 

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, shhmsg, shhopt, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "snake4-1.0.14";
+  pname = "snake4";
+  version = "1.0.14";
 
   src = fetchurl {
-    url = "https://shh.thathost.com/pub-unix/files/${name}.tar.gz";
+    url = "https://shh.thathost.com/pub-unix/files/snake4-${version}.tar.gz";
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 

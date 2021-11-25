@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/myint/perceptualdiff";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ uri-canva ];
-    platforms = platforms.x86;
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.system == "aarch64-darwin";
   };
 }

@@ -10,6 +10,7 @@
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
+, fetchpatch
 }:
 
 let
@@ -27,12 +28,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.1";
+      version = "3.3";
       pname = "weechat";
+
+      hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "06w147wzrzp6xbqiz6s5nq5xdjy7jn3f18xajxy50pynjd6vmfh5";
+        sha256 = "sha256-GnSi7uMxiyWSQau75q07NlX1ikaBeWOdrzOf9f0jnBM=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -66,6 +69,11 @@ let
           mkdir -p $(dirname $to)
           mv $from $to
         done
+      '';
+
+      doInstallCheck = true;
+      installCheckPhase = ''
+        $out/bin/weechat --version
       '';
 
       meta = {

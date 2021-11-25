@@ -34,7 +34,6 @@ let
 
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
-      memorySize = 1024;
       emptyDiskImages = [ 20480 20480 20480 ];
       vlans = [ 1 ];
     };

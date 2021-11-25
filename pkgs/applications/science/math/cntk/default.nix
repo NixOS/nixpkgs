@@ -1,4 +1,5 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, cmake
+, fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
@@ -28,10 +29,33 @@ in stdenv.mkDerivation rec {
     sha256 = "18l9k7s966a26ywcf7flqyhm61788pcb9fj3wk61jrmgkhy2pcns";
   };
 
+  patches = [
+    # Fix build with protobuf 3.18+
+    # Remove with onnx submodule bump to 1.9+
+    (fetchpatch {
+      url = "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
+      extraPrefix = "Source/CNTKv2LibraryDll/proto/onnx/onnx_repo/";
+      stripLen = 1;
+      sha256 = "00raqj8wx30b06ky6cdp5vvc1mrzs7hglyi6h58hchw5lhrwkzxp";
+    })
+  ];
+
+  postPatch = ''
+    # Fix build with protobuf 3.18+
+    substituteInPlace Source/CNTKv2LibraryDll/Serialization.cpp \
+      --replace 'SetTotalBytesLimit(INT_MAX, INT_MAX)' \
+                'SetTotalBytesLimit(INT_MAX)' \
+      --replace 'SetTotalBytesLimit(limit, limit)' \
+                'SetTotalBytesLimit(limit)'
+  '';
+
   nativeBuildInputs = [ cmake ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
   # Force OpenMPI to use g++ in PATH.
   OMPI_CXX = "g++";
+
+  # Uses some deprecated tensorflow functions
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit
@@ -40,7 +64,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-opencv=${opencv3}"
     "--with-libzip=${libzip.dev}"
-    "--with-openblas=${openblas}"
+    "--with-openblas=${openblas.dev}"
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
     "--with-mpi=${mpi}"

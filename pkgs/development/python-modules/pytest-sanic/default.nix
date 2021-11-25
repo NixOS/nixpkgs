@@ -2,7 +2,6 @@
 , aiohttp
 , async_generator
 , buildPythonPackage
-, doCheck ? true
 , fetchFromGitHub
 , httpx
 , pytest
@@ -13,16 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pytest-sanic";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "yunstanford";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zpgnw1lqbll59chv4hgcn31mdql1nv4gw9crbihky3ly3d3ncqi";
+    sha256 = "sha256-82Xq/jyxTXyZVHqn7G+S9K++InDdORCO9oFqgaIgY7s=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -37,18 +38,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  inherit doCheck;
-
-  pythonImportsCheck = [ "pytest_sanic" ];
+  pythonImportsCheck = [
+    "pytest_sanic"
+  ];
 
   meta = with lib; {
     description = "A pytest plugin for Sanic";
     homepage = "https://github.com/yunstanford/pytest-sanic/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
-    # pytest-sanic is incompatible with Sanic 21.3, see
-    # https://github.com/sanic-org/sanic/issues/2095 and
-    # https://github.com/yunstanford/pytest-sanic/issues/50.
-    broken = lib.versionAtLeast sanic.version "21.3.0";
+    maintainers = with maintainers; [ costrouc ];
+    broken = true; # 2021-11-04
   };
 }

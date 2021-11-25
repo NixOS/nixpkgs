@@ -5,8 +5,8 @@
 , pyblake2
 , readme_renderer
 , requests
-, requests_toolbelt
-, setuptools_scm
+, requests-toolbelt
+, setuptools-scm
 , tqdm
 , colorama
 , rfc3986
@@ -14,15 +14,16 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "3.4.1";
+  version = "3.4.2";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a56c985264b991dc8a8f4234eb80c5af87fa8080d0c224ad8f2cd05a2c22e83b";
+    sha256 = "4caec0f1ed78dc4c9b83ad537e453d03ce485725f2aea57f1bb3fdde78dae936";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [
     importlib-metadata
     keyring
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     pyblake2
     readme_renderer
     requests
-    requests_toolbelt
+    requests-toolbelt
     tqdm
     colorama
     rfc3986

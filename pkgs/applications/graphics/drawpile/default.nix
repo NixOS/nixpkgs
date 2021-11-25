@@ -2,7 +2,6 @@
 , lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , extra-cmake-modules
 
 # common deps
@@ -69,22 +68,14 @@ let
 
 in mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.17";
+  version = "2.1.20";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-AFFY+FcY9ExAur13OoWR9285RZtBe6jnRIrwi5raiCM=";
+    sha256 = "sha256-HjGsaa2BYRNxaQP9e8Z7BkVlIKByC/ta92boGbYHRWQ=";
   };
-
-  patches = [
-    # fix for libmicrohttpd 0.9.71
-    (fetchpatch {
-      url = "https://github.com/drawpile/Drawpile/commit/ed1a75deb113da2d1df91a28f557509c4897130e.diff";
-      sha256 = "sha256-54wabH5F3Hf+6vv9rpCwCRdhjSaUFtuF/mE1/U+CpOA=";
-      name = "mhdfix.patch"; })
-  ];
 
   nativeBuildInputs = [ extra-cmake-modules ];
 

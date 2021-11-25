@@ -52,6 +52,5 @@ buildPythonPackage rec {
     description = "An Etebase (EteSync 2.0) server so you can run your own.";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ felschr ];
-    broken = stdenv.isDarwin;
   };
 }

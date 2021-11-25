@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
-libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
-hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
+libXScrnSaver, nss, nspr, alsa-lib, cups, expat, udev, wrapGAppsHook,
+hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk, libappindicator-gtk3 }:
 
 let
   rpath = lib.makeLibraryPath [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk
@@ -21,6 +21,7 @@ let
     gnome2.GConf
     gtk3
     pango
+    libappindicator-gtk3
     libuuid
     libX11
     libXScrnSaver

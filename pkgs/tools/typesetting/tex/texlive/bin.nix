@@ -103,7 +103,9 @@ core = stdenv.mkDerivation rec {
   installTargets = [ "install" "texlinks" ];
 
   # TODO: perhaps improve texmf.cnf search locations
-  postInstall = /* a few texmf-dist files are useful; take the rest from pkgs */ ''
+  postInstall = /* links format -> engine will be regenerated in texlive.combine */ ''
+    PATH="$out/bin:$PATH" ${texlinks} --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
+  '' + /* a few texmf-dist files are useful; take the rest from pkgs */ ''
     mv "$out/share/texmf-dist/web2c/texmf.cnf" .
     rm -r "$out/share/texmf-dist"
     mkdir -p "$out"/share/texmf-dist/{web2c,scripts/texlive/TeXLive}
@@ -309,7 +311,7 @@ latexindent = perlPackages.buildPerlPackage rec {
   preConfigure = ''
     touch Makefile.PL
   '';
-  buildPhase = ":";
+  dontBuild = true;
   installPhase = ''
     install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
     mkdir -p "$out"/${perl.libPrefix}

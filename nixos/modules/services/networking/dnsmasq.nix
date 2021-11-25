@@ -87,9 +87,11 @@ in
     services.dbus.packages = [ dnsmasq ];
 
     users.users.dnsmasq = {
-      uid = config.ids.uids.dnsmasq;
+      isSystemUser = true;
+      group = "dnsmasq";
       description = "Dnsmasq daemon user";
     };
+    users.groups.dnsmasq = {};
 
     networking.resolvconf = mkIf cfg.resolveLocalQueries {
       useLocalResolver = mkDefault true;

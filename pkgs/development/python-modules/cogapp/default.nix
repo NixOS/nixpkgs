@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cogapp";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e5da2bcfc4e4750c66cecb80ea4eaed1ef4fddd3787c989d4f5bfffb1152d6a";
+    sha256 = "09a6e82a55af45f5e946d7002ed997869abf6f57d28fdc79f128132b5da18bf8";
   };
 
   # there are no tests

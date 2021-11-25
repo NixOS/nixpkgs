@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.10";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "1aklicpgwc88578k03i5d5cm5h8mfm7hmx8vfprchbmaa2p8f4z0";
+    sha256 = "sha256-mqtlxQDIFee93wpdn8oNWmMPDyjYTCmVqF6IJvJbRBM=";
   };
 
   patches = [
@@ -16,14 +16,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl libsamplerate ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''
     export LD=$CC
-  '' # Fixed on master, remove with 2.11
-     + lib.optionalString stdenv.isDarwin ''
-    NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 
   postInstall = ''

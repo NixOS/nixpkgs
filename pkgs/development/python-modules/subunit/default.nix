@@ -27,7 +27,7 @@ buildPythonPackage {
       --ignore=python/subunit/tests/test_{output_filter,test_protocol{,2}}.py
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/version=VERSION/version="${subunit.version}"/' setup.py
   '';
 }

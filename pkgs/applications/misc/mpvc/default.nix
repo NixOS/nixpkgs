@@ -1,7 +1,8 @@
 { lib, stdenv, socat, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "mpvc-unstable-2017-03-18";
+  pname = "mpvc";
+  version = "unstable-2017-03-18";
 
   src = fetchFromGitHub {
     owner = "wildefyr";

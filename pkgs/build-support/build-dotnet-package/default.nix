@@ -3,7 +3,7 @@
 attrsOrig @
 { baseName
 , version
-, buildInputs ? []
+, nativeBuildInputs ? []
 , xBuildFiles ? [ ]
 , xBuildFlags ? [ "/p:Configuration=Release" ]
 , outputFiles ? [ "bin/Release/*" ]
@@ -19,12 +19,12 @@ attrsOrig @
     attrs = {
       name = "${baseName}-${version}";
 
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        mono
-        dotnetbuildhelpers
+      nativeBuildInputs = [
+        pkg-config
         makeWrapper
-      ] ++ buildInputs;
+        dotnetbuildhelpers
+        mono
+      ] ++ nativeBuildInputs;
 
       configurePhase = ''
         runHook preConfigure
@@ -87,7 +87,7 @@ attrsOrig @
             then
               echo "$dll already exported by a buildInputs, not re-exporting"
             else
-              ${dotnetbuildhelpers}/bin/create-pkg-config-for-dll.sh "$out/lib/pkgconfig" "$dll"
+              create-pkg-config-for-dll.sh "$out/lib/pkgconfig" "$dll"
             fi
           done
         done
@@ -113,4 +113,4 @@ attrsOrig @
       '';
     };
   in
-    stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "buildInputs" ] ))
+    stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "nativeBuildInputs" ] ))

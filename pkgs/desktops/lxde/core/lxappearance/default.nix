@@ -5,6 +5,7 @@
 , libX11
 , gtk2
 , gtk3
+, wrapGAppsHook
 , withGtk3 ? true
 }:
 
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [

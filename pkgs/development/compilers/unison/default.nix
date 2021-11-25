@@ -6,18 +6,18 @@
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M1m";
+  milestone_id = "M2j";
   version = "1.0.${milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "06pxvp753j8pr0pn02l7cswmmas5pk1vlkw83yd04h3f2rx1s61v";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
+      sha256 = "0lrj37mfqzwg9n757ymjb440jx51kj1s8g6qv9vis9pxckmy0m08";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "1qspvfq805d34kz031pf9sqw8kzz7h637kc8lnbjlgvwixxkxc7c";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
+      sha256 = "0qvin1rlkjwijchsijq3vbnn4injawchh2w97kyq7i3idh8ccl59";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
-    wrapProgram $out/bin/ucm --prefix PATH ":" "${lib.makeBinPath [ less ]}";
+    mv ui $out/ui
+    wrapProgram $out/bin/ucm \
+      --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
+      --set UCM_WEB_UI "$out/ui"
   '';
 
   meta = with lib; {

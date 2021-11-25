@@ -91,7 +91,7 @@ in {
       user = mkOption {
         type = types.str;
         default = user;
-        defaultText = "\${user}";
+        defaultText = literalExpression "user";
         description = "Database username.";
       };
       passwordFile = mkOption {
@@ -187,14 +187,16 @@ in {
           (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
       );
       default = {};
-      example = {
-        serverAliases = [
-          "bookstack.\${config.networking.domain}"
-        ];
-        # To enable encryption and let let's encrypt take care of certificate
-        forceSSL = true;
-        enableACME = true;
-      };
+      example = literalExpression ''
+        {
+          serverAliases = [
+            "bookstack.''${config.networking.domain}"
+          ];
+          # To enable encryption and let let's encrypt take care of certificate
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
       description = ''
         With this option, you can customize the nginx virtualHost settings.
       '';
@@ -219,7 +221,7 @@ in {
 
     assertions = [
       { assertion = db.createLocally -> db.user == user;
-        message = "services.bookstack.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true.";
+        message = "services.bookstack.database.user must be set to ${user} if services.bookstack.database.createLocally is set true.";
       }
       { assertion = db.createLocally -> db.passwordFile == null;
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";

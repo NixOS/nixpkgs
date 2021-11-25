@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "sipvicious";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17f6w7qh33zvlhqwf22y9y7skha0xjs46yk66q8xm4brsv4lfxxa";
+    sha256 = "sha256-O8/9Vz/u8BoF1dfGceOJdzPPYLfkdBp2DkwA5WQ3dgo=";
   };
 
   # Project has no tests

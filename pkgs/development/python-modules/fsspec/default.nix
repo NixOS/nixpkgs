@@ -1,32 +1,43 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
 , numpy
-, stdenv
 , aiohttp
 , pytest-vcr
 , requests
+, paramiko
+, smbprotocol
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2021.04.0";
-  disabled = pythonOlder "3.5";
+  version = "2021.10.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-9072kb1VEQ0xg9hB8yEzJMD2Ttd3UGjBmTuhE+Uya1k=";
+    sha256 = "sha256-LgrOHBXKs2bEgtgrdHb1OEhOeQ5Rbgr6X5YtgiqiCH0=";
   };
 
-  checkInputs = [ pytestCheckHook numpy pytest-vcr ];
+  propagatedBuildInputs = [
+    aiohttp
+    paramiko
+    requests
+    smbprotocol
+  ];
+
+  checkInputs = [
+    numpy
+    pytest-vcr
+    pytestCheckHook
+  ];
 
   __darwinAllowLocalNetworking = true;
-
-  propagatedBuildInputs = [ aiohttp requests ];
 
   disabledTests = [
     # Test assumes user name is part of $HOME
@@ -43,9 +54,11 @@ buildPythonPackage rec {
     "test_touch"
   ];
 
+  pythonImportsCheck = [ "fsspec" ];
+
   meta = with lib; {
-    description = "A specification that python filesystems should adhere to";
     homepage = "https://github.com/intake/filesystem_spec";
+    description = "A specification that Python filesystems should adhere to";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

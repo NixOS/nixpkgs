@@ -9,21 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "findutils";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
-    sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
+    sha256 = "0r3i72hnw0a30khlczi9k2c51aamaj6kfmp5mk3844nrjxz7n4jp";
   };
 
   postPatch = ''
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
   '';
 
-  patches = [ ./no-install-statedir.patch ]
-    # fix gnulib tests on 32-bit ARM. Included on findutils master.
-    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
+  patches = [ ./no-install-statedir.patch ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
@@ -41,6 +38,12 @@ stdenv.mkDerivation rec {
     # configure where it is. Covers the cross and native case alike.
     "SORT=${coreutils}/bin/sort"
     "--localstatedir=/var/cache"
+  ];
+
+  CFLAGS = [
+    # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
+    # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
+    "-D__nonnull\\(params\\)="
   ];
 
   enableParallelBuilding = true;

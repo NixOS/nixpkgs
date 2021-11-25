@@ -1,23 +1,18 @@
 self: super: {
 
-    age = super.callPackage ./ext/age.nix {
-      bison = self.bison_3_5;
-    };
+    age = super.callPackage ./ext/age.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
 
-    postgis = super.callPackage ./ext/postgis.nix {
-        gdal = self.gdal.override {
-            postgresql = self.postgresql;
-            poppler = self.poppler_0_61;
-        };
-    };
+    postgis = super.callPackage ./ext/postgis.nix { };
 
     pg_auto_failover = super.callPackage ./ext/pg_auto_failover.nix { };
 
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
+
+    pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 

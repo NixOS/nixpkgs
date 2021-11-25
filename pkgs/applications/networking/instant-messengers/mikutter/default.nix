@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , bundlerEnv
-, alsaUtils
+, alsa-utils
 , atk
 , copyDesktopItems
 , gobject-introspection
@@ -87,11 +87,11 @@ with mikutterPaths; stdenv.mkDerivation rec {
     libnotify
     which # some plugins use it at runtime
     wrappedRuby
-  ] ++ lib.optionals stdenv.isLinux [ alsaUtils ];
+  ] ++ lib.optionals stdenv.isLinux [ alsa-utils ];
 
   scriptPath = lib.makeBinPath (
     [ wrappedRuby libnotify which ]
-    ++ lib.optionals stdenv.isLinux [ alsaUtils ]
+    ++ lib.optionals stdenv.isLinux [ alsa-utils ]
   );
 
   postUnpack = ''

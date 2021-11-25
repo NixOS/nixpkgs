@@ -2,15 +2,18 @@
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
-  version = "0.5.2+matrix.1";
+  version = "0.5.8+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "18lkksljfa57w69yklbldf7dgyykrm84pd10mdjdqdm88fdiiijk";
+    sha256 = "xdsUzmz8ji9JcYLEUFWwvXq0Oig5i08VPQD93K8R9hk=";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.inputstreamhelper";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.inputstreamhelper";
+    };
   };
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
 
 # Dynamic libraries
-, alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
+, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
 , gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
 , libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "14.5.1";
+  version = "15.8.4";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
-    hash = "sha256-ZrEoeeEhHQOLm/L3KA43Ru5fruIPK35CCUsllwpPB58=";
+    sha256 = "4708c727b51c85a6b77a1b72a4075a1b24628aae42302203e66f704203692616";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
   };
 }

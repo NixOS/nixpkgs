@@ -15,7 +15,7 @@ let
       };
     in drv' // { meta = meta' // overrideFn meta'; };
 
-  bin = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
+  bin = haskell.lib.compose.justStaticExecutables haskellPackages.ShellCheck;
 
   shellcheck = stdenv.mkDerivation {
     pname = "shellcheck";
@@ -26,8 +26,6 @@ let
     nativeBuildInputs = [ pandoc ];
 
     outputs = [ "bin" "man" "doc" "out" ];
-
-    phases = [ "unpackPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
     buildPhase = ''
       pandoc -s -f markdown-smart -t man shellcheck.1.md -o shellcheck.1

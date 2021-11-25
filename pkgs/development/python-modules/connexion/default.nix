@@ -7,6 +7,7 @@
 , clickclick
 , decorator
 , fetchFromGitHub
+, fetchpatch
 , flask
 , inflection
 , jsonschema
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.7.0";
+  version = "2.9.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = version;
-    sha256 = "15iflq5403diwda6n6qrpq67wkdcvl3vs0gsg0fapxqnq3a2m7jj";
+    sha256 = "13smcg2w24zr2sv1968g9p9m6f18nqx688c96qdlmldnszgzf5ik";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +53,15 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
     testfixtures
+  ];
+
+  patches = [
+    # No minor release for later versions, https://github.com/zalando/connexion/pull/1402
+    (fetchpatch {
+      name = "allow-later-flask-and-werkzeug-releases.patch";
+      url = "https://github.com/zalando/connexion/commit/4a225d554d915fca17829652b7cb8fe119e14b37.patch";
+      sha256 = "0dys6ymvicpqa3p8269m4yv6nfp58prq3fk1gcx1z61h9kv84g1k";
+    })
   ];
 
   pythonImportsCheck = [ "connexion" ];

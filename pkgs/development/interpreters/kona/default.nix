@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "kona";
-  version = "3.21";
-  src = fetchurl {
-    url = "https://github.com/kevinlawler/kona/archive/Win.${version}-64.tar.gz";
-    sha256 = "0c1yf3idqkfq593xgqb25r2ykmfmp83zzh3q7kb8095a069gvri3";
+  version = "20201009";
+
+  src = fetchFromGitHub {
+    owner = "kevinlawler";
+    repo = "kona";
+    rev = "Win64-${version}";
+    sha256 = "0v252zds61y01cf29hxznz1zc1724vxmzy059k9jiri4r73k679v";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

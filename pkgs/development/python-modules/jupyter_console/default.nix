@@ -2,10 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, jupyter_client
+, jupyter-client
 , ipython
 , ipykernel
-, prompt_toolkit
+, prompt-toolkit
 , pygments
 , pythonOlder
 }:
@@ -21,10 +21,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jupyter_client
+    jupyter-client
     ipython
     ipykernel
-    prompt_toolkit
+    prompt-toolkit
     pygments
   ];
   checkInputs = [ nose ];

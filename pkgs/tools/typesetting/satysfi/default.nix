@@ -53,7 +53,7 @@ in
     nativeBuildInputs = [ ruby dune_2 ];
 
     buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
-      ocaml findlib menhir
+      ocaml findlib menhir menhirLib
       batteries camlimages core_kernel ppx_deriving uutf omd cppo re
     ]);
 

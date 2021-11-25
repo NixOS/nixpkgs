@@ -2,26 +2,26 @@
 
 buildGoModule rec {
   pname = "writefreely";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "writeas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6LpRfDu3xvE1eIRLfZliKnzsrrG5pjjf2ydxn9HQJJU=";
+    sha256 = "sha256-qYceijC/u8G9vr7uhApWWyWD9P65pLJCTjePEvh+oXA=";
   };
 
-  vendorSha256 = "sha256-U17AkMJQr/OIMED0i2ThcNVw3+aOvRLbpLNP/wEv6k8=";
+  vendorSha256 = "sha256-CBPvtc3K9hr1oEmC+yUe3kPSWx20k6eMRqoxsf3NfCE=";
 
   nativeBuildInputs = [ go-bindata ];
 
   preBuild = ''
     make assets
-    export buildFlagsArray=(
-      "-ldflags=-s -w -X github.com/writeas/writefreely.softwareVer=${version}"
-      "-tags='sqlite'"
-    )
   '';
+
+  ldflags = [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
+
+  tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
 

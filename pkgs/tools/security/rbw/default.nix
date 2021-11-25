@@ -9,27 +9,32 @@
 , Security
 , libiconv
 
-# rbw-fzf
-, withFzf ? false, fzf, perl
+  # rbw-fzf
+, withFzf ? false
+, fzf
+, perl
 
-# rbw-rofi
-, withRofi ? false, rofi, xclip
+  # rbw-rofi
+, withRofi ? false
+, rofi
+, xclip
 
-# pass-import
-, withPass ? false, pass
+  # pass-import
+, withPass ? false
+, pass
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.2.0";
+  version = "1.4.1";
 
   src = fetchCrate {
     inherit version;
     crateName = pname;
-    sha256 = "14cnqc5cf6qm2g9ypv2pbqbvymawyrqn3fc778labgqg24khqcyq";
+    sha256 = "sha256-RNdxAp3Q/xNrK1XcKZPMfuqxWzDtdhwT+nqG25SjJhI=";
   };
 
-  cargoSha256 = "0izn5bcvk1rx69sjwyfc49nmvw7k0jysqb0bpdpwdliaa06ggl86";
+  cargoSha256 = "sha256-I0KwHCmfYxgSF5IMHiPooaf2bypd6eYCOPSB+qnEBJY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +44,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  postPatch = lib.optionalString withFzf ''
+  postPatch = ''
+    patchShebangs bin/git-credential-rbw
+    substituteInPlace bin/git-credential-rbw \
+        --replace rbw $out/bin/rbw
+  '' + lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
         --replace fzf ${fzf}/bin/fzf \
@@ -65,6 +74,7 @@ rustPlatform.buildRustPackage rec {
       $out/bin/rbw gen-completions $shell > rbw.$shell
       installShellCompletion rbw.$shell
     done
+    cp bin/git-credential-rbw $out/bin
   '' + lib.optionalString withFzf ''
     cp bin/rbw-fzf $out/bin
   '' + lib.optionalString withRofi ''

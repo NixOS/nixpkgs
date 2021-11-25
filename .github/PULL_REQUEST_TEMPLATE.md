@@ -15,14 +15,22 @@ Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-- [ ] Tested using sandboxing ([nix.useSandbox](https://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](https://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
 - Built on platform(s)
-   - [ ] NixOS
-   - [ ] macOS
-   - [ ] other Linux distributions
-- [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
-- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
-- [ ] Tested execution of all binary files (usually in `./result/bin/`)
-- [ ] Determined the impact on package closure size (by running `nix path-info -S` before and after)
-- [ ] Ensured that relevant documentation is up to date
-- [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+  - [ ] x86_64-linux
+  - [ ] aarch64-linux
+  - [ ] x86_64-darwin
+  - [ ] aarch64-darwin
+- [ ] For non-Linux: Is `sandbox = true` set in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
+- [ ] Tested, as applicable:
+  - [NixOS test(s)](https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests) (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
+  - and/or [package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests)
+  - or, for functions and "core" functionality, tests in [lib/tests](https://github.com/NixOS/nixpkgs/blob/master/lib/tests) or [pkgs/test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/test)
+  - made sure NixOS tests are [linked](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking) to the relevant packages
+- [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
+- [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
+- [21.11 Release Notes (or backporting 21.05 Release notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2111-release-notes)
+  - [ ] (Package updates) Added a release notes entry if the change is major or breaking
+  - [ ] (Module updates) Added a release notes entry if the change is significant
+  - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
+  - [ ] (Release notes changes) Ran `nixos/doc/manual/md-to-db.sh` to update generated release notes
+- [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.69";
+  pname = "autoconf";
+  version = "2.69";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/${name}.tar.xz";
+    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
     sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
   };
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Make the Autotest test suite run in parallel.
-  preCheck =''
+  preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
   '';
 

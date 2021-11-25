@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, buildDunePackage, qcheck }:
+{ lib, fetchurl, fetchpatch, buildDunePackage, ocaml, qcheck }:
 
 buildDunePackage rec {
   pname = "stdint";
@@ -35,7 +35,7 @@ buildDunePackage rec {
                 'let pos_int = QCheck.int_range 0 maxi'
   '';
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ qcheck ];
 
   meta = {

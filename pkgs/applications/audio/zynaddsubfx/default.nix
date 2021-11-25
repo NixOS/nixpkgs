@@ -16,7 +16,7 @@
 
   # Optional dependencies
 , alsaSupport ? true
-, alsaLib
+, alsa-lib
 , dssiSupport ? false
 , dssi
 , ladspaH
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   buildInputs = [ fftw liblo minixml zlib ]
-    ++ lib.optionals alsaSupport [ alsaLib ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals dssiSupport [ dssi ladspaH ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals lashSupport [ lash ]
@@ -89,9 +89,22 @@ in stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ cxxtest ];
 
+  # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
+  checkPhase = let
+    # Tests fail on aarch64
+    disabledTests = lib.optionals stdenv.isAarch64 [
+      "MessageTest"
+      "UnisonTest"
+    ];
+  in ''
+    runHook preCheck
+    ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
+    runHook postCheck
+  '';
+
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest
-  postFixup = lib.optional (guiModule == "zest") ''
+  postFixup = lib.optionalString (guiModule == "zest") ''
     patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so")" \
       "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so"
 
@@ -111,7 +124,7 @@ in stdenv.mkDerivation rec {
       else "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2;
-    maintainers = with maintainers; [ goibhniu metadark ];
+    maintainers = with maintainers; [ goibhniu kira-bruneau ];
     platforms = platforms.linux;
   };
 }

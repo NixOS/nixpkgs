@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.12.0";
+  version = "0.13.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c95c3b8ee00211a5aa4ef5e46006d25bf35009a66e406b7ea9b25b327fb9516";
+    sha256 = "685dc994aa770ee1b23f2d5392819c8429f27958771f8dceb2c4fb80210d5915";
   };
 
   propagatedBuildInputs = [

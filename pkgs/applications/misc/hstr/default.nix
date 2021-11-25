@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, readline, ncurses
+{ lib, stdenv, fetchFromGitHub, fetchpatch, readline, ncurses
 , autoreconfHook, pkg-config, gettext }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,16 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "1chmfdi1dwg3sarzd01nqa82g65q7wdr6hrnj96l75vikwsg986y";
   };
+
+  patches = [
+    # pull pending upstream inclusion fix for ncurses-6.3:
+    #  https://github.com/dvorka/hstr/pull/435
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/dvorka/hstr/commit/7fbd852c464ae3cfcd2f4fed9c62a21fb84c5439.patch";
+      sha256 = "15f0ja4bsh4jnchcg0ray8ijpdraag7k07ss87a6ymfs1rg6i0jr";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ readline ncurses gettext ];

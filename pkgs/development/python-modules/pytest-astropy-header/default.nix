@@ -3,7 +3,7 @@
 , fetchPypi
 , fetchpatch
 , pytest
-, pytestcov
+, pytest-cov
 , pytestCheckHook
 , numpy
 , astropy
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
     numpy
     scipy
     h5py

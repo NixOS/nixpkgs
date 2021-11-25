@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "passff-host";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "passff";
     repo = pname;
     rev = version;
-    sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
+    sha256 = "sha256-9q4onU/e/pzLp5lGQjf/ScOOCVMiMQRaLGEm8K8flX4=";
   };
 
   buildInputs = [ python3 ];

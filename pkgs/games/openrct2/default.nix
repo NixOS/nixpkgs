@@ -5,32 +5,37 @@
 }:
 
 let
-  version = "0.3.3";
+  openrct2-version = "0.3.5";
+
+  # Those versions MUST match the pinned versions within the CMakeLists.txt
+  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
+  objects-version = "1.0.21";
+  title-sequences-version = "0.1.2c";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
-    rev = "v${version}";
-    sha256 = "01nanpbz5ycdhkyd46fjfvj18sw729l4vk7xg12600f9rjngjk76";
+    rev = "v${openrct2-version}";
+    sha256 = "0xmj0qs49d1xlc8lbspr1vg66i0jdjlhcfxci72x6knjvd0vcgz0";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.21";
+    rev = "v${objects-version}";
     sha256 = "0r2vp2y67jc1mpfl4j83sx5khvvaddx7xs26ppkigmr2d1xpxgr7";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
-    rev = "v0.1.2c";
+    rev = "v${title-sequences-version}";
     sha256 = "1qdrm4q75bznmgdrpjdaiqvbf3q4vwbkkmls45izxvyg1djrpsdf";
   };
 in
 stdenv.mkDerivation {
-  inherit version;
   pname = "openrct2";
+  version = openrct2-version;
 
   src = openrct2-src;
 
@@ -58,22 +63,31 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  postUnpack = ''
-    cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${title-sequences-src} $sourceRoot/data/sequence
-  '';
-
   cmakeFlags = [
     "-DDOWNLOAD_OBJECTS=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
+  postUnpack = ''
+    cp -r ${objects-src}         $sourceRoot/data/object
+    cp -r ${title-sequences-src} $sourceRoot/data/sequence
+  '';
+
+  preConfigure = ''
+    # Verify that the correct version of the third party repositories is used.
+
+    grep -q '^set(OBJECTS_VERSION "${objects-version}")$' CMakeLists.txt \
+      || (echo "OBJECTS_VERSION differs!"; exit 1)
+    grep -q '^set(TITLE_SEQUENCE_VERSION "${title-sequences-version}")$' CMakeLists.txt \
+      || (echo "TITLE_SEQUENCE_VERSION differs!"; exit 1)
+  '';
+
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with lib; {
-    description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
+    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];
   };

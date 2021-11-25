@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestrunner
-, dateutil
+, pytest-runner
+, python-dateutil
 , babelfish
 , rebulk
 }:
@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   # Tests require more packages.
   doCheck = false;
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
   propagatedBuildInputs = [
-    dateutil babelfish rebulk
+    python-dateutil babelfish rebulk
   ];
 
   meta = {

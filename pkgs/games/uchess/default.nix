@@ -18,7 +18,7 @@ buildGoModule rec {
   # package does not contain any tests as of v0.2.1
   doCheck = false;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/uchess --suffix PATH : ${stockfish}/bin
   '';

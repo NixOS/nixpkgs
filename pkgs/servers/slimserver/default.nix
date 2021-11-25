@@ -1,13 +1,24 @@
-{ lib, fetchurl, makeWrapper
-, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
+, flac
+, faad2
+, sox
+, lame
+, monkeysAudio
+, wavpack
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
   version = "7.9.2";
 
-  src = fetchurl {
-    url = "https://github.com/Logitech/slimserver/archive/${version}.tar.gz";
-    sha256 = "1rn9y7xvg5aqmgcbfpi7lcqy8d7hgwqx8b2llzpzrv7854zm1wcw";
+  src = fetchFromGitHub {
+    owner = "Logitech";
+    repo = "slimserver";
+    rev = version;
+    hash = "sha256-P4CSu/ff6i48uWV5gXsJgayZ1S1s0RAqa5O5y3Y0g9Y=";
   };
 
   buildInputs = [
@@ -73,7 +84,7 @@ perlPackages.buildPerlPackage rec {
     # relax audio scan version constraints
     substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
     substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
-    '';
+  '';
 
   preConfigurePhase = "";
 

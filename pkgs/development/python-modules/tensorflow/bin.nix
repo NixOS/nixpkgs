@@ -2,8 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, isPy38
-, astor
+, isPy3k, pythonOlder, pythonAtLeast, astor
 , gast
 , google-pasta
 , wrapt
@@ -21,40 +20,36 @@
 , tensorflow-estimator_2
 , tensorflow-tensorboard_2
 , cudaSupport ? false
-, cudatoolkit ? null
-, cudnn ? null
-, nvidia_x11 ? null
+, cudatoolkit
+, cudnn
 , zlib
 , python
-, symlinkJoin
 , keras-applications
 , keras-preprocessing
 , addOpenGLRunpath
+, astunparse
+, flatbuffers
+, h5py
+, typing-extensions
 }:
 
 # We keep this binary build for two reasons:
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
 
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null
-                   && nvidia_x11 != null;
-
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-
-  variant = if cudaSupport then "-gpu" else "";
-  pname = "tensorflow${variant}";
-
+  metadataPatch = ./relax-dependencies-metadata.patch;
+  patch = ./relax-dependencies.patch;
 in buildPythonPackage {
-  inherit pname;
+  pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
-  disabled = pythonAtLeast "3.8";
+  disabled = pythonAtLeast "3.9";
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
@@ -64,6 +59,9 @@ in buildPythonPackage {
   in fetchurl packages.${key};
 
   propagatedBuildInputs = [
+    astunparse
+    flatbuffers
+    typing-extensions
     protobuf
     numpy
     scipy
@@ -80,6 +78,7 @@ in buildPythonPackage {
     tensorflow-tensorboard_2
     keras-applications
     keras-preprocessing
+    h5py
   ] ++ lib.optional (!isPy3k) mock
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
@@ -93,24 +92,15 @@ in buildPythonPackage {
 
     pushd dist
 
-    # Unpack the wheel file.
     wheel unpack --dest unpacked ./*.whl
-
-    # Tensorflow wheels tightly constrain the versions of gast, tensorflow-estimator and scipy.
-    # This code relaxes these requirements:
-    substituteInPlace ./unpacked/tensorflow*/tensorflow_core/tools/pip_package/setup.py \
-      --replace "tensorflow_estimator >= 2.1.0rc0, < 2.2.0" "tensorflow_estimator" \
-      --replace "tensorboard >= 2.1.0, < 2.2.0" "tensorboard" \
-      --replace "gast == 0.2.2" "gast"  \
-      --replace "scipy == 1.2.2" "scipy"
-
-    substituteInPlace ./unpacked/tensorflow*/tensorflow*.dist-info/METADATA  \
-      --replace "gast (==0.2.2)" "gast" \
-      --replace "tensorflow-estimator (<2.2.0,>=2.1.0rc0)" "tensorflow_estimator" \
-      --replace "tensorboard (<2.2.0,>=2.1.0)" "tensorboard" \
-      --replace "scipy (==1.4.1)" "scipy"
-
-    # Pack the wheel file back up.
+    (
+      cd unpacked/tensorflow*
+      # relax too strict versions in setup.py
+      patch -p 1 < ${patch}
+      cd *.dist-info
+      # relax too strict versions in *.dist-info/METADATA
+      patch -p 3 < ${metadataPatch}
+    )
     wheel pack ./unpacked/tensorflow*
 
     popd
@@ -126,7 +116,6 @@ in buildPythonPackage {
         cudatoolkit.out
         cudatoolkit.lib
         cudnn
-        nvidia_x11
       ];
 
       libpaths = [
@@ -143,14 +132,19 @@ in buildPythonPackage {
       # TODO: Create this list programmatically, and remove paths that aren't
       # actually needed.
       rrPathArr=(
-        "$out/${python.sitePackages}/tensorflow_core/"
-        "$out/${python.sitePackages}/tensorflow_core/compiler/tf2tensorrt/"
-        "$out/${python.sitePackages}/tensorflow_core/compiler/tf2xla/ops/"
-        "$out/${python.sitePackages}/tensorflow_core/lite/experimental/microfrontend/python/ops/"
-        "$out/${python.sitePackages}/tensorflow_core/lite/python/interpreter_wrapper/"
-        "$out/${python.sitePackages}/tensorflow_core/lite/python/optimize/"
-        "$out/${python.sitePackages}/tensorflow_core/python/"
-        "$out/${python.sitePackages}/tensorflow_core/python/framework/"
+        "$out/${python.sitePackages}/tensorflow/"
+        "$out/${python.sitePackages}/tensorflow/core/kernels"
+        "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
+        "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
+        "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
+        "$out/${python.sitePackages}/tensorflow/python/"
+        "$out/${python.sitePackages}/tensorflow/python/framework/"
+        "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
+        "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
+        "$out/${python.sitePackages}/tensorflow/python/framework"
+        "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
         "${rpath}"
       )
 
@@ -189,8 +183,5 @@ in buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    # Python 2.7 build uses different string encoding.
-    # See https://github.com/NixOS/nixpkgs/pull/37044#issuecomment-373452253
-    broken = stdenv.isDarwin && !isPy3k;
   };
 }

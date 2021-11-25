@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-werror" ];
 
   meta = {
-    inherit version;
     description = "A library that parses the file format of Zoner Callisto/Draw documents";
     license = lib.licenses.mpl20;
     maintainers = [lib.maintainers.raskin];

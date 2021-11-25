@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
-, pytestcov
+, pytest-cov
 , numpy
 , scipy
 , cython
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sha256 = "0qmkxl5sbgh0j73n667vyi7ywzh09iaync91yp1j5rrcmwsn0qfs";
   };
 
-  checkInputs = [ pytest pytestcov ];
+  checkInputs = [ pytest pytest-cov ];
   propagatedBuildInputs = [ numpy scipy cython numba six ];
 
   checkPhase = ''

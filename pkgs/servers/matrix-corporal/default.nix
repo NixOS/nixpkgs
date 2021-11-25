@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "matrix-corporal";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "devture";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u1ppwy+t2ewAH0/+R6e0Ja5A3PQG/lUy2b6kgcMVj8E=";
+    sha256 = "sha256-KSKPTbF1hhzLyD+iL4+hW9EuV+xFYzSzHu1DSGXWm90=";
   };
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.GitCommit=${version} -X main.GitBranch=${version} -X main.GitState=nixpkgs -X main.GitSummary=${version} -X main.Version=${version}"
+  ldflags = [
+    "-s" "-w" "-X main.GitCommit=${version}" "-X main.GitBranch=${version}" "-X main.GitState=nixpkgs" "-X main.GitSummary=${version}" "-X main.Version=${version}"
   ];
 
-  vendorSha256 = "sha256-YmUiGsg2UZfV6SHEPwnbmWPhGQ5teV+we9MBaJyrJr4=";
+  vendorSha256 = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";
 
   meta = with lib; {
     homepage = "https://github.com/devture/matrix-corporal";

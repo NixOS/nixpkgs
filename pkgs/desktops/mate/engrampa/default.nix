@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "engrampa";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0x26djz73g3fjwzcpr7k60xb6qx5izhw7lf2ggn34iwpihl0sa7f";
+    sha256 = "1qsy0ynhj1v0kyn3g3yf62g31rwxmpglfh9xh0w5lc9j5k1b5kcp";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

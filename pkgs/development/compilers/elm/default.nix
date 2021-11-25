@@ -8,9 +8,9 @@ let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
   hsPkgs = haskellPackages.override {
-    overrides = self: super: with haskell.lib; with lib;
+    overrides = self: super: with haskell.lib.compose; with lib;
       let elmPkgs = rec {
-            elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
+            elm = overrideCabal (drv: {
               # sadly with parallelism most of the time breaks compilation
               enableParallelBuilding = false;
               preConfigure = self.fetchElmDeps {
@@ -29,22 +29,22 @@ let
               homepage = "https://elm-lang.org/";
               license = licenses.bsd3;
               maintainers = with maintainers; [ domenkozar turbomack ];
-            });
+            }) (self.callPackage ./packages/elm.nix { });
 
             /*
             The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
             `package/nix/build.sh`
             */
-            elm-format = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-format.nix {}) (drv: {
+            elm-format = justStaticExecutables (overrideCabal (drv: {
               jailbreak = true;
 
               description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
               homepage = "https://github.com/avh4/elm-format";
               license = licenses.bsd3;
               maintainers = with maintainers; [ avh4 turbomack ];
-            }));
+            }) (self.callPackage ./packages/elm-format.nix {}));
 
-            elmi-to-json = justStaticExecutables (overrideCabal (self.callPackage ./packages/elmi-to-json.nix {}) (drv: {
+            elmi-to-json = justStaticExecutables (overrideCabal (drv: {
               prePatch = ''
                 substituteInPlace package.yaml --replace "- -Werror" ""
                 hpack
@@ -55,9 +55,9 @@ let
               homepage = "https://github.com/stoeffel/elmi-to-json";
               license = licenses.bsd3;
               maintainers = [ maintainers.turbomack ];
-            }));
+            }) (self.callPackage ./packages/elmi-to-json.nix {}));
 
-            elm-instrument = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-instrument.nix {}) (drv: {
+            elm-instrument = justStaticExecutables (overrideCabal (drv: {
               prePatch = ''
                 sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
               '';
@@ -69,7 +69,7 @@ let
               homepage = "https://github.com/zwilias/elm-instrument";
               license = licenses.bsd3;
               maintainers = [ maintainers.turbomack ];
-            }));
+            }) (self.callPackage ./packages/elm-instrument.nix {}));
 
             inherit fetchElmDeps;
             elmVersion = elmPkgs.elm.version;

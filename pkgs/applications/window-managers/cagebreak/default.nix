@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cairo
 , fontconfig
+, libevdev
+, libinput
 , libxkbcommon
 , makeWrapper
 , mesa
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-1IztedN5/I/4TDKHLJ26fSrDsvJ5QAr+cbzS2PQITDE=";
+    hash = "sha256-tWfHJajAOYZJ73GckZWWTdVz75YmHA7t/qDhM7+tJgk=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fontconfig
+    libevdev
+    libinput
     libxkbcommon
     mesa # for libEGL headers
     pango
@@ -70,7 +74,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString withXwayland ''
-    wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
+    wrapProgram $out/bin/cagebreak \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
   meta = with lib; {

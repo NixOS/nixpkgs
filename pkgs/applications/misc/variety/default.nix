@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, python37Packages
+, python3Packages
 , fehSupport ? false, feh
 , imagemagickSupport ? true, imagemagick
 , intltool
@@ -10,9 +10,10 @@
 , hicolor-icon-theme
 , librsvg
 , wrapGAppsHook
+, makeWrapper
 }:
 
-with python37Packages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "variety";
@@ -25,11 +26,15 @@ buildPythonApplication rec {
     sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
-  nativeBuildInputs = [ intltool wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper intltool wrapGAppsHook ];
 
   buildInputs = [ distutils_extra ];
 
   doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  '';
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
@@ -76,7 +81,7 @@ buildPythonApplication rec {
       blur, as well as options to layer quotes and a clock onto the background.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ AndersonTorres zfnmxt ];
+    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
     platforms = with platforms; linux;
   };
 }

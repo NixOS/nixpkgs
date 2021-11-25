@@ -1,5 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, cmake, flex
-, clang-unwrapped, llvm, unifdef
+{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
+, libclang, llvm, unifdef
 , pebble, psutil, pytestCheckHook, pytest-flake8
 }:
 
@@ -19,10 +19,16 @@ buildPythonApplication rec {
     ./unifdef.patch
   ];
 
-  nativeBuildInputs = [ cmake flex ];
-  buildInputs = [ clang-unwrapped llvm unifdef ];
+  nativeBuildInputs = [ cmake flex llvm.dev ];
+  buildInputs = [ bash libclang llvm llvm.dev unifdef ];
   propagatedBuildInputs = [ pebble psutil ];
   checkInputs = [ pytestCheckHook pytest-flake8 unifdef ];
+
+  # 'cvise --command=...' generates a script with hardcoded shebang.
+  postPatch = ''
+    substituteInPlace cvise.py \
+      --replace "#!/bin/bash" "#!${bash}/bin/bash"
+  '';
 
   preCheck = ''
     patchShebangs cvise.py

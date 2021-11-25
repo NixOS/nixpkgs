@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 , pytest-randomly
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ scikitlearn ];
+  propagatedBuildInputs = [ scikit-learn ];
   checkInputs = [ pytest-randomly pytestCheckHook ];
 
   postPatch = ''

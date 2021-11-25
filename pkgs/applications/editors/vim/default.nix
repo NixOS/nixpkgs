@@ -2,7 +2,7 @@
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
-    url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/archlinux.vim?id=68f6d131750aa778807119e03eed70286a17b1cb";
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/68f6d131750aa778807119e03eed70286a17b1cb/trunk/archlinux.vim";
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   }
 # apple frameworks
@@ -33,8 +33,6 @@ stdenv.mkDerivation {
     "vim_cv_tty_mode=0660"
     "vim_cv_getcwd_broken=no"
     "vim_cv_stat_ignores_slash=yes"
-    "ac_cv_sizeof_int=4"
-    "vim_cv_memmove_handles_overlap=yes"
     "vim_cv_memmove_handles_overlap=yes"
   ];
 

@@ -4,25 +4,25 @@
 , isPy27
 , pytest
 , pytest-asyncio
-, pytestcov
+, pytest-cov
 , trustme
 , async-timeout
 }:
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.18.1";
+  version = "0.19.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5a412c748722dd679c4c2e30dd40d70a7c8879636f6eb4489fdbca72965b125";
+    sha256 = "d1c2571764c48e6de1b02952022c3c3b3da1f10806cb342ec7b1fa9b109e9902";
   };
 
   checkInputs = [
     pytest
     pytest-asyncio
-    pytestcov
+    pytest-cov
     trustme
     async-timeout
   ];

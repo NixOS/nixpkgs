@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , cachetools
@@ -10,28 +9,28 @@
 , mock
 , oauth2client
 , pyasn1-modules
+, pyu2f
 , pytest-localserver
 , responses
 , rsa
-, six
 , pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.28.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9bd436d19ab047001a1340720d2b629eb96dd503258c524921ec2af3ee88a80e";
+    sha256 = "sha256-KAD2360pxs7V+vnKDDjqi6Hr4lWbEMApvQIePeMwFic=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    six
     pyopenssl
+    pyu2f
   ];
 
   checkInputs = [

@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome
+{ lib, stdenv, fetchurl, intltool, gettext, coreutils, gnused, gnome
 , gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
 , gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
+, mtools, dosfstools
 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-1.2.0";
+  pname = "gparted";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/${name}.tar.gz";
-    sha256 = "sha256-bJBxXSVNen7AIIspAHtkFg3Z+330xKp/jsLJ0jEUxxk=";
+    url = "mirror://sourceforge/gparted/${pname}-${version}.tar.gz";
+    sha256 = "sha256-Xu4ubXSxXvlrE7OiMQyGjtIpjgM0ECHn0SpamKHR4Qk=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep ]}"
+       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep mtools dosfstools ]}"
     )
   '';
 

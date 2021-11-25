@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -12,6 +11,7 @@
 , libaccounts-glib
 , libexif
 , libgee
+, libhandy
 , geocode-glib
 , gexiv2
 , libgphoto2
@@ -28,14 +28,13 @@
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.0";
+  version = "2.7.3";
 
   repoName = "photos";
 
@@ -43,21 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-bTk4shryAWWMrKX3mza6xQ05qpBPf80Ey7fmYgKLUiY=";
-  };
-
-  patches = [
-    # Fix build with latest Vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/27e529fc96da828982563e2e19a6f0cef883a29e.patch";
-      sha256 = "w39wh45VHggCs62TN6wpUEyz/hJ1y7qL1Ox+sp0Pt2s=";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-ja4ElW0FNm9oNyn+00SdI2Cxep6LyWTYM8Blc6bnuiY=";
   };
 
   nativeBuildInputs = [
@@ -88,10 +73,10 @@ stdenv.mkDerivation rec {
     libgee
     libgphoto2
     libgudev
+    libhandy
     libraw
     librest
     libsoup
-    libunity
     libwebp
     scour
     sqlite
@@ -107,11 +92,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta =  with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

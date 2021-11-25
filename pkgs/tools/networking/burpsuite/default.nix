@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "burpsuite";
-  version = "2021.4.2";
+  version = "2021.8.1";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar"
     ];
-    sha256 = "034c9d0a7e0b5e7b1b286949c6b31b475ff2a15e75f1230ccc07e236fc61d2aa";
+    sha256 = "sha256-R1WV3oaweW4nfszUOtmrfBlbKJm8HDNjwtbj97dFzB0=";
   };
 
   dontUnpack = true;

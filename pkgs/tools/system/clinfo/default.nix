@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocl-icd, opencl-headers }:
+{ lib, stdenv, fetchFromGitHub, ocl-icd, opencl-headers, OpenCL }:
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0ijfbfv1F6mnt1uFH/A4yOADJoAFrPMa3yAOFJW53ek=";
   };
 
-  buildInputs = [ ocl-icd opencl-headers ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=stringop-overflow"
-    "-Wno-error=stringop-truncation"
+  buildInputs = lib.optionals (!stdenv.isDarwin) [
+    ocl-icd
+    opencl-headers
+  ] ++ lib.optionals stdenv.isDarwin [
+    OpenCL
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Print all known information about all available OpenCL platforms and devices in the system";
     homepage = "https://github.com/Oblomov/clinfo";
     license = licenses.cc0;
-    maintainers = with maintainers; [ athas ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ athas r-burns ];
+    platforms = platforms.unix;
   };
 }

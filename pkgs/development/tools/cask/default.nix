@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, emacs }:
+{ lib, stdenv, python3, emacs, bash }:
 
 stdenv.mkDerivation rec {
   pname = "cask";
@@ -13,15 +13,19 @@ stdenv.mkDerivation rec {
     noflet ert-async shell-split-string git package-build
   ] ++ [
     python3
+    bash
   ];
 
   strictDeps = true;
 
   buildPhase = ''
+    runHook preBuild
     emacs --batch -L . -f batch-byte-compile cask.el cask-cli.el
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/templates
     mkdir -p $out/share/emacs/site-lisp/cask/bin
@@ -30,6 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm644 templates/* $out/templates/
     touch $out/.no-upgrade
     ln -s $out/share/emacs/site-lisp/cask/bin/cask $out/bin/cask
+    runHook postInstall
   '';
 
   meta = with lib; {

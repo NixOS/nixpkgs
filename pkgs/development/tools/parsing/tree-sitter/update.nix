@@ -35,6 +35,7 @@ let
     "tree-sitter-jsdoc"
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
+    "tree-sitter-tsq"
   ];
   knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
@@ -60,6 +61,8 @@ let
     "tree-sitter.github.io"
     # not maintained
     "tree-sitter-razor"
+    # rust library for constructing arbitrary graph structures from source code
+    "tree-sitter-graph"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -67,29 +70,85 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-beancount" = {
+      orga = "polarmutex";
+      repo = "tree-sitter-beancount";
+    };
+    "tree-sitter-clojure" = {
+      orga = "sogaiu";
+      repo = "tree-sitter-clojure";
+    };
+    "tree-sitter-comment" = {
+      orga = "stsewd";
+      repo = "tree-sitter-comment";
+    };
+    "tree-sitter-dart" = {
+      orga = "usernobody14";
+      repo = "tree-sitter-dart";
+    };
+    "tree-sitter-elisp" = {
+      orga = "wilfred";
+      repo = "tree-sitter-elisp";
+    };
     "tree-sitter-nix" = {
       orga = "cstrahan";
       repo = "tree-sitter-nix";
     };
+    "tree-sitter-latex" = {
+      orga = "latex-lsp";
+      repo = "tree-sitter-latex";
+    };
     "tree-sitter-lua" = {
-      orga = "Azganoth";
+      orga = "nvim-treesitter";
       repo = "tree-sitter-lua";
     };
     "tree-sitter-fennel" = {
       orga = "travonted";
       repo = "tree-sitter-fennel";
     };
+    "tree-sitter-make" = {
+      orga = "alemuller";
+      repo = "tree-sitter-make";
+    };
     "tree-sitter-markdown" = {
       orga = "ikatyang";
       repo = "tree-sitter-markdown";
+    };
+    "tree-sitter-rst" = {
+      orga = "stsewd";
+      repo = "tree-sitter-rst";
     };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
     };
+    "tree-sitter-vim" = {
+      orga = "vigoux";
+      repo = "tree-sitter-viml";
+    };
     "tree-sitter-yaml" = {
       orga = "ikatyang";
       repo = "tree-sitter-yaml";
+    };
+    "tree-sitter-toml" = {
+      orga = "ikatyang";
+      repo = "tree-sitter-toml";
+    };
+    "tree-sitter-zig" = {
+      orga = "maxxnino";
+      repo = "tree-sitter-zig";
+    };
+    "tree-sitter-fish" = {
+      orga = "ram02z";
+      repo = "tree-sitter-fish";
+    };
+    "tree-sitter-dot" = {
+      orga = "rydesun";
+      repo = "tree-sitter-dot";
+    };
+    "tree-sitter-norg" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg";
     };
   };
 
@@ -206,7 +265,7 @@ let
       ${foreachSh allGrammars
         ({name, ...}: ''
            # indentation hack
-             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${name}" "${name}"'')}
+             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
       echo "}" ) \
       > "$outputDir/default.nix"
   '';

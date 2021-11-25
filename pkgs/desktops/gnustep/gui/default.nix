@@ -1,22 +1,19 @@
-{ gsmakeDerivation, fetchurl, fetchpatch, base }:
-let
-  version = "0.28.0";
-in
-gsmakeDerivation {
-  name = "gnustep-gui-${version}";
-  src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${version}.tar.gz";
-    sha256 = "05wk8kbl75qj0jgawgyv9sp98wsgz5vl1s0d51sads0p0kk2sv8z";
+{ gsmakeDerivation, fetchzip, base }:
+
+gsmakeDerivation rec {
+  version = "0.29.0";
+  pname = "gnustep-gui";
+
+  src = fetchzip {
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
+    sha256 = "0x6n48p178r4zd8f4sqjfqd6rp49w00wr59w19lpwlmrdv7bn538";
   };
   buildInputs = [ base ];
   patches = [
     ./fixup-all.patch
-    (fetchpatch {  # for icu68 compatibility, remove with next update(?)
-      url = "https://github.com/gnustep/libs-gui/commit/05572b2d01713f5caf07f334f17ab639be8a1cff.patch";
-      sha256 = "04z287dk8jf3hdwzk8bpnv49qai2dcdlh824yc9bczq291pjy2xc";
-    })
   ];
   meta = {
     description = "A GUI class library of GNUstep";
+    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${builtins.replaceStrings [ "." ] [ "_" ] version}";
   };
 }

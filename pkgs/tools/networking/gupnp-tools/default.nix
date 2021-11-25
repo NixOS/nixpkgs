@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -16,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13d1qr1avz9r76989nvgxhhclmqzr025xjk4rfnja94fpbspznj1";
+    sha256 = "beSe9LN1uKFk90t2YWixGE4NKBlrawek9TQfCN/YXWw=";
   };
 
   nativeBuildInputs = [

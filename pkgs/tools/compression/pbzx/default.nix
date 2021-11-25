@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ xz xar ];
   buildPhase = ''
-    cc pbzx.c -llzma -lxar -o pbzx
+    ${stdenv.cc.targetPrefix}cc pbzx.c -llzma -lxar -o pbzx
   '';
   installPhase = ''
     mkdir -p $out/bin

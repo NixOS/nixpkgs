@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "7.0.2";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${version}";
-    sha256 = "sha256-2V3LbgnJfTIO71quZ+hfLnw/lNLYxXt19jw2Od6BVvM=";
+    sha256 = "sha256-hpUoXqblhHreDZg8fDD5S4UG+ltptIbzP9LKyQ/WbX0=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

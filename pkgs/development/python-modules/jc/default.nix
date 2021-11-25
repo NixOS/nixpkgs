@@ -1,28 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, ruamel_yaml
+, ruamel-yaml
 , xmltodict
 , pygments
-, isPy27
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.14.4";
-  disabled = isPy27;
+  version = "1.17.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
-    repo = "jc";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RJiJByORpdMWZkA7q7A+WoV4S/UcOP/VZ5TVxFMLYSg=";
+    sha256 = "sha256-ISggj6oOF0B7TKIQAlZtauRrDAWP88OOFezLJK6edjI=";
   };
 
-  propagatedBuildInputs = [ ruamel_yaml xmltodict pygments ];
+  propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
 
   checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "jc" ];
+
+  # tests require timezone to set America/Los_Angeles
+  doCheck = false;
 
   meta = with lib; {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";

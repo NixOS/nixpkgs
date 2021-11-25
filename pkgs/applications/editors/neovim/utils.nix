@@ -28,7 +28,14 @@ let
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
     , withRuby ? true
+    /* the function you would have passed to lua.withPackages */
+    , extraLuaPackages ? (_: [ ])
 
+    # expects a list of plugin configuration
+    # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
+    , plugins ? []
+    # forwarded to configure.customRC
+    , customRC ? ""
     # same values as in vimUtils.vimrcContent
     , configure ? { }
 
@@ -44,7 +51,25 @@ let
         '';
       };
 
-      requiredPlugins = vimUtils.requiredPlugins configure;
+      # transform all plugins into an attrset
+      pluginsNormalized = map (x: if x ? plugin then { optional = false; } // x else { plugin = x; optional = false;}) plugins;
+
+
+      configurePatched = configure // {
+        customRC = pluginRc + customRC + (configure.customRC or "");
+      };
+
+      # A function to get the configuration string (if any) from an element of 'plugins'
+      pluginConfig = p:
+        if (p.config or "") != "" then ''
+          " ${p.plugin.pname or p.plugin.name} {{{
+          ${p.config}
+          " }}}
+        '' else "";
+
+      pluginRc = lib.concatMapStrings pluginConfig pluginsNormalized;
+
+      requiredPlugins = vimUtils.requiredPlugins configurePatched;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
@@ -53,6 +78,7 @@ let
         ++ (extraPython3Packages ps)
         ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
+      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
 
       # Mapping a boolean argument to a key that tells us whether to add or not to
       # add to nvim's 'embedded rc' this:
@@ -87,18 +113,23 @@ let
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
+        ] ++ lib.optionals (luaEnv != null) [
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
         ];
 
-      manifestRc = vimUtils.vimrcContent (configure // { customRC = ""; });
-      neovimRcContent = vimUtils.vimrcContent configure;
+
+      manifestRc = vimUtils.vimrcContent (configurePatched // { customRC = ""; }) ;
+      neovimRcContent = vimUtils.vimrcContent configurePatched;
     in
     assert withPython2 -> throw "Python2 support has been removed from neovim, please remove withPython2 and extraPython2Packages.";
 
-    args // {
+    builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
       inherit neovimRcContent;
       inherit manifestRc;
       inherit python3Env;
+      inherit luaEnv;
       inherit withNodeJs;
     } // lib.optionalAttrs withRuby {
       inherit rubyEnv;
@@ -119,11 +150,14 @@ let
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: [])
+    /* the function you would have passed to lua.withPackages */
+    , extraLuaPackages ? (_: [])
     , withNodeJs ? false
     , withRuby ? true
     , vimAlias ? false
     , viAlias ? false
     , configure ? {}
+    , extraName ? ""
   }:
     let
       /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
@@ -134,18 +168,17 @@ let
       res = makeNeovimConfig {
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
+        inherit extraLuaPackages;
         inherit withNodeJs withRuby viAlias vimAlias;
         inherit configure;
+        inherit extraName;
       };
     in
     assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
 
     wrapNeovimUnstable neovim (res // {
-      wrapperArgs = lib.escapeShellArgs (
-        res.wrapperArgs ++ lib.optionals (configure != {}) [
-          "--add-flags" "-u ${writeText "init.vim" res.neovimRcContent}"
-        ]) + " " + extraMakeWrapperArgs
-      ;
+      wrapperArgs = lib.escapeShellArgs res.wrapperArgs + extraMakeWrapperArgs;
+      wrapRc = (configure != {});
   });
 in
 {

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, opencflite, clang, libcxx }:
 
 stdenv.mkDerivation {
-  name = "maloader-0git";
+  pname = "maloader";
+  version = "unstable-2014-02-25";
 
   src = fetchgit {
     url = "git://github.com/shinh/maloader.git";
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
       ld-mac.cc
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   buildInputs = [ clang libcxx ];
   buildFlags = [ "USE_LIBCXX=1" "release" ];
 

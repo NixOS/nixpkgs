@@ -12,14 +12,16 @@ assert trackerSearch -> (python3 != null);
 with lib;
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.3.3";
+  version = "4.3.9";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
-    repo = "qbittorrent";
+    repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "0y8vrvfv8n6zg6pgg5a9hmvxi2z9rrfd9k8zv04nv5js91b99ncq";
+    sha256 = "sha256-pFHeozx72qVjA3cmW6GK058IIAOWmyNm1UQVCQ1v5EU=";
   };
+
+  enableParallelBuilding = true;
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
   nativeBuildInputs = [ makeWrapper pkg-config ];
@@ -47,7 +49,8 @@ mkDerivation rec {
   meta = {
     description = "Featureful free software BitTorrent client";
     homepage    = "https://www.qbittorrent.org/";
-    license     = licenses.gpl2;
+    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ Anton-Latukha ];
   };

@@ -1,8 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
-, pytestrunner
+, pytest-runner
 , pytestCheckHook
 , numpy
 , pillow
@@ -35,7 +36,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ numpy pillow ];
 
-  checkInputs = [ pytestrunner pytestCheckHook ];
+  checkInputs = [ pytest-runner pytestCheckHook ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
@@ -49,6 +50,12 @@ buildPythonPackage {
   # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
   disabledTests = [
     "test_fetch_data_files"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # https://github.com/pydicom/pydicom/issues/1386
+    "test_array"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # flaky, hard to reproduce failure outside hydra
+    "test_time_check"
   ];
 
   meta = with lib; {

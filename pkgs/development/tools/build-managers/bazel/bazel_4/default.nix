@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
+{ stdenv, callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -27,12 +27,12 @@
 }:
 
 let
-  version = "4.0.0";
+  version = "4.2.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1lfdx54dpzwrqysg5ngqhq7a0i01xk981crd4pdk4jb5f07ghl6k";
+    sha256 = "Eup6oR4r2xLeHc65k5oi6W9aSAQ3yxfBIzedjg/fXoI=";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -40,7 +40,7 @@ let
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
-      srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
+      srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
         urls = d.urls;
         sha256 = d.sha256;
@@ -52,11 +52,11 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v10.5.zip"
-       else srcs."java_tools_javac11_linux-v10.5.zip")
+       then srcs."java_tools_javac11_darwin-v10.6.zip"
+       else srcs."java_tools_javac11_linux-v10.6.zip")
       srcs."coverage_output_generator-v2.5.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.19.0rc3.tar.gz"
+      srcs."android_tools_pkg-0.23.0.tar.gz"
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -120,7 +120,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v10.5.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v10.6.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -128,12 +128,20 @@ let
     sourceRoot = ".";
 
     buildPhase = ''
+      runHook preBuild
+
       mkdir $out;
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -Ra * $out/
       touch $out/WORKSPACE
+
+      runHook postInstall
     '';
   };
 
@@ -205,6 +213,14 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
+    })
+
+    # On macOS Monterey, protoc segfaults.
+    # Issue: https://github.com/bazelbuild/bazel/issues/14216
+    # Fix: https://github.com/bazelbuild/bazel/pull/14275
+    (fetchpatch {
+      url = "https://github.com/bazelbuild/bazel/commit/ae0a6c98d4f94abedbedb2d51c27de5febd7df67.patch";
+      sha256 = "sha256-YcdxqjTMGI86k1wgFqxJqghv0kknAjlFQFpt4VccCTE=";
     })
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
@@ -318,7 +334,11 @@ stdenv.mkDerivation rec {
     nativeBuildInputs = [ unzip ];
     inherit sourceRoot;
     installPhase = ''
+      runHook preInstall
+
       cp -r . "$out"
+
+      runHook postInstall
     '';
   };
   # update the list of workspace dependencies
@@ -388,7 +408,7 @@ stdenv.mkDerivation rec {
 
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -422,15 +442,15 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
-      sed -i 's|/sbin/md5|md5sum|' \
-        src/BUILD
+      sed -i 's|/sbin/md5|md5sum|g' \
+        src/BUILD third_party/ijar/test/testenv.sh tools/objc/libtool.sh
 
       # replace initial value of pythonShebang variable in BazelPythonSemantics.java
       substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/BazelPythonSemantics.java \
         --replace '"#!/usr/bin/env " + pythonExecutableName' "\"#!${python3}/bin/python\""
 
       # substituteInPlace is rather slow, so prefilter the files with grep
-      grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
+      grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         # We default to python3 where possible. See also `postFixup` where
@@ -540,6 +560,8 @@ stdenv.mkDerivation rec {
   # Needed to build fish completion
   propagatedBuildInputs = [ python3.pkgs.absl-py ];
   buildPhase = ''
+    runHook preBuild
+
     # Increasing memory during compilation might be necessary.
     # export BAZEL_JAVAC_OPTS="-J-Xmx2g -J-Xms200m"
 
@@ -567,9 +589,13 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     ./output/bazel build  src/tools/execlog:parser_deploy.jar
     cd -
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
@@ -599,7 +625,9 @@ stdenv.mkDerivation rec {
       ./bazel_src/output/bazel-complete.fish
   '';
 
-  doInstallCheck = true;
+  # Install check fails on `aarch64-darwin`
+  # https://github.com/NixOS/nixpkgs/issues/145587
+  doInstallCheck = stdenv.hostPlatform.system != "aarch64-darwin";
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
@@ -632,6 +660,8 @@ stdenv.mkDerivation rec {
 
     # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
+
+    runHook postInstall
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.

@@ -7,7 +7,7 @@
 , glib
 , gnome
 , gtk3
-, libwnck3
+, libwnck
 , libX11
 , libXfixes
 , libXi
@@ -23,7 +23,6 @@
 , libgee
 , wrapGAppsHook
 , autoreconfHook
-, pantheon
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     libXi
     libdbusmenu-gtk3
     libgee
-    libwnck3
+    libwnck
     pango
   ];
 
@@ -84,6 +83,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

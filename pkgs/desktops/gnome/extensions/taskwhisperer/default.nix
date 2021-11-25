@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
     taskwarrior
   ];
 
-  uuid = "taskwhisperer-extension@infinicode.de";
+  passthru = {
+    extensionUuid = "taskwhisperer-extension@infinicode.de";
+    extensionPortalSlug = "taskwhisperer";
+  };
 
   makeFlags = [
     "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"

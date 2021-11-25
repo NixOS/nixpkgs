@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "timezonemap";
-  version = "0.4.5";
+  version = "0.4.5.1";
 
   src = fetchbzr {
     url = "lp:timezonemap";
     rev = "58";
-    sha256 = "1qdp5f9zd8c02bf0mq4w15rlhz2g51phml5qg9asdyfd1715f8n0";
+    sha256 = "sha256-wCJXwgnN+aZVerjQCm8oT3xIcwmc4ArcEoCh9pMrt+E=";
   };
 
   nativeBuildInputs = [

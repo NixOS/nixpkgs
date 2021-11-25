@@ -12,7 +12,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };

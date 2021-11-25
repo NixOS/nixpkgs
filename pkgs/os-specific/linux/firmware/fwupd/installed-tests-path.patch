@@ -1,13 +1,3 @@
-diff --git a/data/device-tests/hardware.py b/data/device-tests/hardware.py
-index 7f1e1907..10fee1b8 100755
---- a/data/device-tests/hardware.py
-+++ b/data/device-tests/hardware.py
-@@ -1,4 +1,4 @@
--#!/usr/bin/python3
-+#!@installedTestsPython@/bin/python3
- # pylint: disable=wrong-import-position,too-many-locals,unused-argument,wrong-import-order
- #
- # Copyright (C) 2017 Richard Hughes <richard@hughsie.com>
 diff --git a/data/installed-tests/meson.build b/data/installed-tests/meson.build
 index adadbcdd..1b51bb9c 100644
 --- a/data/installed-tests/meson.build

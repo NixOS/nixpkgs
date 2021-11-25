@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, onigurumaSupport ? true, oniguruma }:
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
+, onigurumaSupport ? true
+, oniguruma
+}:
 
 stdenv.mkDerivation rec {
   pname = "jq";
@@ -46,8 +52,8 @@ stdenv.mkDerivation rec {
     "--datadir=\${doc}/share"
     "--mandir=\${man}/share/man"
   ] ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
-    # jq is linked to libjq:
-    ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  # jq is linked to libjq:
+  ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
   doInstallCheck = true;
   installCheckTarget = "check";
@@ -61,11 +67,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";
+    homepage = "https://stedolan.github.io/jq/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin globin ];
-    platforms = with platforms; linux ++ darwin;
-    downloadPage = "http://stedolan.github.io/jq/download/";
+    platforms = platforms.unix;
+    downloadPage = "https://stedolan.github.io/jq/download/";
     updateWalker = true;
-    inherit version;
   };
 }

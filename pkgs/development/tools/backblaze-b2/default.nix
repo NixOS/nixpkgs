@@ -12,22 +12,23 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.4.0";
+  version = "3.0.3";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-nNQDdSjUolj3PjWRn1fPBAEtPlgeent2PxzHqwH1Z6s=";
+    sha256 = "sha256-asrhinANGlTsSBbtGToOxTRGGSCf+1c4VWnoE3ezoIA=";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'docutils==0.16' 'docutils'
     substituteInPlace setup.py \
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
 
   propagatedBuildInputs = with python3Packages; [
     b2sdk
-    class-registry
     phx-class-registry
     setuptools
     docutils
@@ -38,11 +39,14 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_files_headers"
     "test_integration"
+    "test_get_account_info"
   ];
 
   postInstall = ''

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "5.0.1";
+  version = "6.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8XwBOgaWKwL0RJ7gfP2+ayh98p78LJoVFbSjdvTliOo=";
+    sha256 = "sha256-NE9zIEAJ5Mg8W2vrALPEXccPza48gNuRngpBcdAG/eg=";
   };
 
   checkInputs = [ pytestCheckHook ];

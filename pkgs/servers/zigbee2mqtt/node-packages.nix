@@ -10076,7 +10076,7 @@ let
     buildInputs = globalBuildInputs;
     meta = {
       description = "Zigbee to MQTT bridge using Zigbee-herdsman";
-      homepage = https://koenkk.github.io/zigbee2mqtt;
+      homepage = "https://koenkk.github.io/zigbee2mqtt";
       license = "GPL-3.0";
     };
     production = true;

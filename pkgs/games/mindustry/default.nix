@@ -3,8 +3,8 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradleGen
-, jdk
+, gradle_6
+, jdk11
 , perl
 
 # for arc
@@ -12,7 +12,7 @@
 , pkg-config
 , stb
 , ant
-, alsaLib
+, alsa-lib
 , glew
 
 # Make the build version easily overridable.
@@ -87,8 +87,8 @@ let
     popd
   '';
 
-  # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
+  jdk = jdk11;
+  gradle = (gradle_6.override (old: { java = jdk11; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -96,7 +96,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -132,11 +132,11 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
-    alsaLib
+    alsa-lib
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle_6
+    gradle
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gnome, gmime3, webkitgtk, ronn
-, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
+, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
-, vim ? vim_configurable.override { features = "normal"; gui = "auto"; }
+, vim
 
 # additional python3 packages to be available within plugins
 , extraPythonPackages ? []
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "astroid";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "11cxbva9ni98gii59xmbxh4c6idcg3mg0pgdsp1c3j0yg7ix0lj3";
+    sha256 = "sha256-6xQniOLNUk8tDkooDN3Tp6sb43GqoynO6+fN9yhNqZ4=";
   };
 
   nativeBuildInputs = [

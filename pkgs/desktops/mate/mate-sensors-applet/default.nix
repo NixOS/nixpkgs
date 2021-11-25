@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-sensors-applet";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nb4fy3mcymv7pmnc0czpxgp1sqvs533jwnqv1b5cqby415ljb16";
+    sha256 = "0s19r30fsicqvvcnz57lv158pi35w9zn5i7h5hz59224y0zpqhsc";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "MATE panel applet for hardware sensors";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

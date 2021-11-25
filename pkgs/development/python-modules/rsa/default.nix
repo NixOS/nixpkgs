@@ -6,7 +6,6 @@
 , mock
 , isPy3k
 , pythonOlder
-, poetry
 }:
 
 buildPythonPackage rec {

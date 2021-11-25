@@ -1,46 +1,36 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll
+, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
-, open-watcom-bin ? null
+, open-watcom-bin
 , makeself, perl
-, javaBindings ? true, jdk ? null # Almost doesn't affect closure size
-, pythonBindings ? false, python3 ? null
-, extensionPack ? null, fakeroot ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, javaBindings ? true, jdk # Almost doesn't affect closure size
+, pythonBindings ? false, python3
+, extensionPack ? null, fakeroot
+, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
+, enableWebService ? false
 }:
 
 with lib;
 
 let
-  python = python3;
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.18";
-
-  iasl' = iasl.overrideAttrs (old: rec {
-    inherit (old) pname;
-    version = "20190108";
-    src = fetchurl {
-      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
-    };
-    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
-  });
+  version = "6.1.28";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "108d42b9b391b7a332a33df1662cf7b0e9d9a80f3079d16288d8b9487f427d40";
+    sha256 = "8d34993d8e9c0cf35e7bd44dd26c8c757f17a3b7d5a64052f945d00fd798ebfe";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -51,22 +41,23 @@ in stdenv.mkDerivation {
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
-  buildInputs =
-    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
-      libcap glib lvm2 alsaLib curl libvpx pam makeself perl
-      libXmu libpng libopus python ]
+  buildInputs = [
+    acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
+    libXmu libpng libopus python3 ]
     ++ optional javaBindings jdk
-    ++ optional pythonBindings python # Python is needed even when not building bindings
+    ++ optional pythonBindings python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
-    ++ optionals (headless) [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
+    ++ optionals headless [ libXrandr libGL ]
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
   prePatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
-        -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
+        -e 's@PYTHONDIR=.*@PYTHONDIR=${lib.optionalString pythonBindings python3}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
@@ -82,7 +73,7 @@ in stdenv.mkDerivation {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+      s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
     export USER=nix
     set +x
@@ -103,9 +94,9 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
-    # NOTE: the patch for linux 5.11 can be removed when the next version of VirtualBox is released
-    ./linux-5-11.patch
     ./qtx11extras.patch
+    # https://github.com/NixOS/nixpkgs/issues/123851
+    ./fix-audio-driver-loading.patch
   ];
 
   postPatch = ''
@@ -143,6 +134,10 @@ in stdenv.mkDerivation {
     PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
     TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     ''}
+    ${optionalString enableWebService ''
+    # fix gsoap missing zlib include and produce errors with --as-needed
+    VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
+    ''}
     LOCAL_CONFIG
 
     ./configure \
@@ -152,6 +147,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
@@ -178,7 +174,7 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
@@ -186,14 +182,14 @@ in stdenv.mkDerivation {
 
     ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
-      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
+      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EOF
       "$libexec/VBoxExtPackHelperApp" install \
         --base-dir "$share/ExtensionPacks" \
         --cert-dir "$share/ExtPackCertificates" \
         --name "Oracle VM VirtualBox Extension Pack" \
         --tarball "${extensionPack}" \
         --sha-256 "${extensionPack.outputHash}"
-      EXTHELPER
+      EOF
     ''}
 
     ${optionalString (!headless) ''

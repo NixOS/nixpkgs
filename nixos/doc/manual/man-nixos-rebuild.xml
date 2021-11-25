@@ -91,6 +91,10 @@
     <option>--flake</option> <replaceable>flake-uri</replaceable>
    </arg>
 
+   <arg>
+    <option>--override-input</option> <replaceable>input-name</replaceable> <replaceable>flake-uri</replaceable>
+   </arg>
+
    <sbr />
 
    <arg>
@@ -104,7 +108,23 @@
     </arg>
      </group> <replaceable>name</replaceable>
    </arg>
+
    <sbr />
+
+   <arg>
+    <option>--build-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--target-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--use-remote-sudo</option>
+   </arg>
+
+   <sbr />
+
    <arg>
     <option>--show-trace</option>
    </arg>
@@ -402,10 +422,9 @@
     </term>
     <listitem>
      <para>
-      Equivalent to <option>--no-build-nix</option>
-      <option>--show-trace</option>. This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re hacking on
-      a NixOS module).
+      Equivalent to <option>--no-build-nix</option>. This option is
+      useful if you call <command>nixos-rebuild</command> frequently
+      (e.g. if you’re hacking on a NixOS module).
      </para>
     </listitem>
    </varlistentry>
@@ -528,6 +547,22 @@
       You can include a remote user name in the host name
       (<replaceable>user@host</replaceable>). You can also set ssh options by
       defining the <envar>NIX_SSHOPTS</envar> environment variable.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--use-substitutes</option>
+    </term>
+    <listitem>
+     <para>
+       When set, nixos-rebuild will add <option>--use-substitutes</option>
+       to each invocation of nix-copy-closure. This will only affect the
+       behavior of nixos-rebuild if <option>--target-host</option> or
+       <option>--build-host</option> is also set. This is useful when
+       the target-host connection to cache.nixos.org is faster than the
+       connection between hosts.
      </para>
     </listitem>
    </varlistentry>

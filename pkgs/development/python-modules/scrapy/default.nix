@@ -1,64 +1,87 @@
 { lib
 , stdenv
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, testfixtures
-, pillow
-, twisted
-, cryptography
-, w3lib
-, lxml
-, queuelib
-, pyopenssl
-, service-identity
-, parsel
-, pydispatcher
-, cssselect
-, zope_interface
-, protego
-, jmespath
-, sybil
-, pytest-twisted
 , botocore
+, buildPythonPackage
+, cryptography
+, cssselect
+, fetchPypi
+, fetchpatch
+, glibcLocales
+, installShellFiles
 , itemadapter
 , itemloaders
+, jmespath
+, lxml
+, parsel
+, protego
+, pydispatcher
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, queuelib
+, service-identity
+, sybil
+, testfixtures
+, twisted
+, w3lib
+, zope_interface
 }:
 
 buildPythonPackage rec {
-  version = "2.4.1";
-  pname = "Scrapy";
+  pname = "scrapy";
+  version = "2.5.1";
+  disabled = pythonOlder "3.6";
 
-  disabled = isPy27;
+  src = fetchPypi {
+    inherit version;
+    pname = "Scrapy";
+    sha256 = "13af6032476ab4256158220e530411290b3b934dd602bb6dacacbf6d16141f49";
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
+    cssselect
+    itemadapter
+    itemloaders
+    lxml
+    parsel
+    protego
+    pydispatcher
+    pyopenssl
+    queuelib
+    service-identity
+    twisted
+    w3lib
+    zope_interface
+  ];
 
   checkInputs = [
+    botocore
     glibcLocales
     jmespath
     pytestCheckHook
     sybil
     testfixtures
-    pillow
-    pytest-twisted
-    botocore
   ];
 
-  propagatedBuildInputs = [
-    twisted
-    cryptography
-    cssselect
-    lxml
-    parsel
-    pydispatcher
-    pyopenssl
-    queuelib
-    service-identity
-    w3lib
-    zope_interface
-    protego
-    itemadapter
-    itemloaders
+  patches = [
+    # Require setuptools, https://github.com/scrapy/scrapy/pull/5122
+    (fetchpatch {
+      name = "add-setuptools.patch";
+      url = "https://github.com/scrapy/scrapy/commit/4f500342c8ad4674b191e1fab0d1b2ac944d7d3e.patch";
+      sha256 = "14030sfv1cf7dy4yww02b49mg39cfcg4bv7ys1iwycfqag3xcjda";
+    })
+    # Make Twisted[http2] installation optional, https://github.com/scrapy/scrapy/pull/5113
+    (fetchpatch {
+      name = "remove-h2.patch";
+      url = "https://github.com/scrapy/scrapy/commit/c5b1ee810167266fcd259f263dbfc0fe0204761a.patch";
+      sha256 = "0sa39yx9my4nqww8a12bk9zagx7b56vwy7xpxm4xgjapjl6mcc0k";
+      excludes = [ "tox.ini" ];
+    })
   ];
 
   LC_ALL = "en_US.UTF-8";
@@ -68,39 +91,54 @@ buildPythonPackage rec {
     substituteInPlace pytest.ini --replace "--doctest-modules" ""
   '';
 
-  pytestFlagsArray = [
-    "--ignore=tests/test_proxy_connect.py"
-    "--ignore=tests/test_utils_display.py"
-    "--ignore=tests/test_command_check.py"
+  disabledTestPaths = [
+    "tests/test_proxy_connect.py"
+    "tests/test_utils_display.py"
+    "tests/test_command_check.py"
+    # Don't test the documentation
+    "docs"
   ];
 
   disabledTests = [
+    # It's unclear if the failures are related to libxml2, https://github.com/NixOS/nixpkgs/pull/123890
+    "test_nested_css"
+    "test_nested_xpath"
+    "test_flavor_detection"
+    # Requires network access
     "FTPFeedStorageTest"
-    "test_noconnect"
-    "test_retry_dns_error"
+    "FeedExportTest"
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
+    "test_custom_loop_asyncio_deferred_signal"
+    "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    # Fails with AssertionError
+    "test_peek_fifo"
+    "test_peek_one_element"
+    "test_peek_lifo"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
   ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "68c48f01a58636bdf0f6fcd5035a19ecf277b58af24bd70c36dc6e556df3e005";
-  };
-
   postInstall = ''
-    install -m 644 -D extras/scrapy.1 $out/share/man/man1/scrapy.1
+    installManPage extras/scrapy.1
     install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
 
+  pythonImportsCheck = [ "scrapy" ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
+    description = "High-level web crawling and web scraping framework";
+    longDescription = ''
+      Scrapy is a fast high-level web crawling and web scraping framework, used to crawl
+      websites and extract structured data from their pages. It can be used for a wide
+      range of purposes, from data mining to monitoring and automated testing.
+    '';
     homepage = "https://scrapy.org/";
+    changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ drewkett marsam ];
     platforms = platforms.unix;

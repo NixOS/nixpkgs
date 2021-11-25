@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1kygk7ilv7la36kv4jdn1ird7f3896wgr88kyqf0iagfqkzb2vsb";
   };
 
-  cargoSha256 = "1cfdwf00jgwsv0f72427asid1xr57s56jk5xj489dgppvgy7wdbj";
-
-  cargoBuildFlags = lib.optionals (!stdenv.isDarwin) [ "--features=dist-client,dist-server" ];
+  cargoSha256 = "1f42cqaqnjwi9k4ihqil6z2dqh5dnf76x54gk7mndzkrfg3rl573";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+
+  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "dist-client" "dist-server" ];
 
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460

@@ -1,24 +1,40 @@
-{ lib, stdenv, autoreconfHook, pkg-config, fetchFromGitHub, dbus, dleyna-core, glib }:
+{ stdenv
+, lib
+, meson
+, ninja
+, pkg-config
+, fetchFromGitHub
+, dleyna-core
+, glib
+}:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-connector-dbus";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "phako";
     repo = pname;
-    rev = version;
-    sha256 = "0vziq5gwjm79yl2swch2mz6ias20nvfddf5cqgk9zbg25cb9m117";
+    rev = "v${version}";
+    sha256 = "WDmymia9MD3BRU6BOCzCIMrz9V0ACRzmEGqjbbuUmlA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ dbus dleyna-core glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    dleyna-core
+    glib
+  ];
 
   meta = with lib; {
     description = "A D-Bus API for the dLeyna services";
-    homepage = "https://01.org/dleyna";
-    maintainers = [ maintainers.jtojnar ];
+    homepage = "https://github.com/phako/dleyna-connector-dbus";
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
   };
 }

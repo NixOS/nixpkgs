@@ -2,11 +2,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
-    sha256 = "0qsl18p2swdbq4zizvs9ahl2bkilpcyzq817lk16jj5g4rqzivb7";
+    sha256 = "044ng2aazqy8g0m17q0a4939ck1ca4x230q2q7q7jndvwkrpaj5w";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,6 +38,6 @@ perlPackages.buildPerlPackage rec {
     description = "Open-Source Spam Filter";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ peti qknight qyliss ];
+    maintainers = with lib.maintainers; [ qknight qyliss ];
   };
 }

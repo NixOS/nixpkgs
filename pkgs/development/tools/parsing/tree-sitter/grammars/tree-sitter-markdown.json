@@ -4,6 +4,7 @@
   "date": "2021-04-18T20:49:21+08:00",
   "path": "/nix/store/4z2k0q6rwqmb7vbqr4vgc26w28szlan3-tree-sitter-markdown",
   "sha256": "1a2899x7i6dgbsrf13qzmh133hgfrlvmjsr3bbpffi1ixw1h7azk",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

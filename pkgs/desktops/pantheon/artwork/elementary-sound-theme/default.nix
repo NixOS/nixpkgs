@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-sound-theme";
-  version = "1.0";
+  version = "1.1.0";
 
   repoName = "sound-theme";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-v8ludbPCJaMHCxuzjZchTJwpGiF6UJlVMIMFg+lAhbU=";
+    sha256 = "sha256-fR6gtKx9J6o2R1vQZ5yx4kEX3Ak+q8I6hRVMZzyB2E8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/sound-theme";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

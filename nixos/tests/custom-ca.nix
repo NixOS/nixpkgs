@@ -81,8 +81,6 @@ in
 
       # chromium-based browsers refuse to run as root
       test-support.displayManager.auto.user = "alice";
-      # browsers may hang with the default memory
-      virtualisation.memorySize = "500";
 
       networking.hosts."127.0.0.1" = [ "good.example.com" "bad.example.com" ];
       security.pki.certificateFiles = [ "${example-good-cert}/ca.crt" ];
@@ -107,8 +105,13 @@ in
           '';
         };
 
-      environment.systemPackages = with pkgs;
-        [ xdotool firefox chromium falkon midori ];
+      environment.systemPackages = with pkgs; [
+        xdotool
+        firefox
+        chromium
+        qutebrowser
+        midori
+      ];
     };
 
   testScript = ''
@@ -145,14 +148,19 @@ in
     with subtest("Unknown CA is untrusted in curl"):
         machine.fail("curl -fv https://bad.example.com")
 
-    browsers = ["firefox", "chromium", "falkon", "midori"]
-    errors = ["Security Risk", "not private", "Certificate Error", "Security"]
+    browsers = {
+      "firefox": "Security Risk",
+      "chromium": "not private",
+      "qutebrowser -T": "Certificate error",
+      "midori": "Security"
+    }
 
     machine.wait_for_x()
-    for browser, error in zip(browsers, errors):
+    for command, error in browsers.items():
+        browser = command.split()[0]
         with subtest("Good certificate is trusted in " + browser):
             execute_as(
-                "alice", f"env P11_KIT_DEBUG=trust {browser} https://good.example.com & >&2"
+                "alice", f"env P11_KIT_DEBUG=trust {command} https://good.example.com & >&2"
             )
             wait_for_window_as("alice", browser)
             machine.wait_for_text("It works!")
@@ -160,7 +168,7 @@ in
             execute_as("alice", "xdotool key ctrl+w")  # close tab
 
         with subtest("Unknown CA is untrusted in " + browser):
-            execute_as("alice", f"{browser} https://bad.example.com & >&2")
+            execute_as("alice", f"{command} https://bad.example.com & >&2")
             machine.wait_for_text(error)
             machine.screenshot("bad" + browser)
             machine.succeed("pkill " + browser)

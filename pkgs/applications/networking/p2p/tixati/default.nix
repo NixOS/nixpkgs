@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tixati";
-  version = "2.81";
+  version = "2.85";
 
   src = fetchurl {
     url = "https://download2.tixati.com/download/tixati-${version}-1.x86_64.manualinstall.tar.gz";
-    sha256 = "sha256-qwKxlmE59V+rXtuYWBMwD1O7OO4gb36lN8syFyQ6uLc=";
+    sha256 = "sha256-grmJ52x2NcsgXw5BWrEGF9+7TYS/45HgHUXuZB+hVK4=";
   };
 
   installPhase = ''

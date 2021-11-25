@@ -83,8 +83,8 @@ let
       };
 
       syncmode = mkOption {
-        type = types.enum [ "fast" "full" "light" ];
-        default = "fast";
+        type = types.enum [ "snap" "fast" "full" "light" ];
+        default = "snap";
         description = "Blockchain sync mode.";
       };
 
@@ -108,6 +108,7 @@ let
 
       package = mkOption {
         default = pkgs.go-ethereum.geth;
+        defaultText = literalExpression "pkgs.go-ethereum.geth";
         type = types.package;
         description = "Package to use as Go Ethereum node.";
       };

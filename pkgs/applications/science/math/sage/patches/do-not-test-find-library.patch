@@ -1,8 +1,8 @@
 diff --git a/src/sage/env.py b/src/sage/env.py
-index 2908f5d04f..81dfd75c0d 100644
+index 95980cc2df..37107a30e1 100644
 --- a/src/sage/env.py
 +++ b/src/sage/env.py
-@@ -218,93 +218,12 @@ NTL_LIBDIR = var("NTL_LIBDIR")
+@@ -227,93 +227,12 @@ OPENMP_CXXFLAGS = var("OPENMP_CXXFLAGS", "")
  SAGE_BANNER = var("SAGE_BANNER", "")
  SAGE_IMPORTALL = var("SAGE_IMPORTALL", "yes")
  
@@ -51,10 +51,9 @@ index 2908f5d04f..81dfd75c0d 100644
 -        if sys.platform == 'cygwin':
 -            # Later down we take the first matching DLL found, so search
 -            # SAGE_LOCAL first so that it takes precedence
--            search_directories = [
--                Path(SAGE_LOCAL) / 'bin',
--                Path(sysconfig.get_config_var('BINDIR')),
--            ]
+-            if SAGE_LOCAL:
+-                search_directories.append(Path(SAGE_LOCAL) / 'bin')
+-            search_directories.append(Path(sysconfig.get_config_var('BINDIR')))
 -            # Note: The following is not very robust, since if there are multible
 -            # versions for the same library this just selects one more or less
 -            # at arbitrary. However, practically speaking, on Cygwin, there
@@ -66,14 +65,15 @@ index 2908f5d04f..81dfd75c0d 100644
 -            else:
 -                ext = 'so'
 -
--            search_directories = [Path(SAGE_LOCAL) / 'lib']
+-            if SAGE_LOCAL:
+-                search_directories.append(Path(SAGE_LOCAL) / 'lib')
 -            libdir = sysconfig.get_config_var('LIBDIR')
 -            if libdir is not None:
 -                libdir = Path(libdir)
 -                search_directories.append(libdir)
 -
 -                multiarchlib = sysconfig.get_config_var('MULTIARCH')
--                if multiarchlib is not None: 
+-                if multiarchlib is not None:
 -                    search_directories.append(libdir / multiarchlib),
 -
 -            patterns = [f'lib{libname}.{ext}']
@@ -97,4 +97,4 @@ index 2908f5d04f..81dfd75c0d 100644
 +GAP_SO = var("GAP_SO", '/default')
  
  # post process
- if ' ' in DOT_SAGE:
+ if DOT_SAGE is not None and ' ' in DOT_SAGE:

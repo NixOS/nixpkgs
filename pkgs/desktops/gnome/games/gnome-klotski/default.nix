@@ -3,14 +3,12 @@
 , meson, ninja, python3
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-klotski";
   version = "3.38.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-klotski/${lib.versions.majorMinor version}/gnome-klotski-${version}.tar.xz";
     sha256 = "1qm01hdd5yp8chig62bj10912vclbdvywwczs84sfg4zci2phqwi";
   };
 

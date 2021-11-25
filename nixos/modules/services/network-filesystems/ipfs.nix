@@ -5,36 +5,46 @@ let
   opt = options.services.ipfs;
 
   ipfsFlags = toString ([
-    (optionalString  cfg.autoMount                   "--mount")
-    (optionalString  cfg.enableGC                    "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline")   "--offline")
+    (optionalString cfg.autoMount "--mount")
+    (optionalString cfg.enableGC "--enable-gc")
+    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
+    (optionalString (cfg.defaultMode == "offline") "--offline")
     (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
+  profile =
+    if cfg.localDiscovery
+    then "local-discovery"
+    else "server";
+
   splitMulitaddr = addrRaw: lib.tail (lib.splitString "/" addrRaw);
 
-  multiaddrToListenStream = addrRaw: let
+  multiaddrToListenStream = addrRaw:
+    let
       addr = splitMulitaddr addrRaw;
       s = builtins.elemAt addr;
-    in if s 0 == "ip4" && s 2 == "tcp"
-      then "${s 1}:${s 3}"
+    in
+    if s 0 == "ip4" && s 2 == "tcp"
+    then "${s 1}:${s 3}"
     else if s 0 == "ip6" && s 2 == "tcp"
-      then "[${s 1}]:${s 3}"
+    then "[${s 1}]:${s 3}"
     else if s 0 == "unix"
-      then "/${lib.concatStringsSep "/" (lib.tail addr)}"
+    then "/${lib.concatStringsSep "/" (lib.tail addr)}"
     else null; # not valid for listen stream, skip
 
-  multiaddrToListenDatagram = addrRaw: let
+  multiaddrToListenDatagram = addrRaw:
+    let
       addr = splitMulitaddr addrRaw;
       s = builtins.elemAt addr;
-    in if s 0 == "ip4" && s 2 == "udp"
-      then "${s 1}:${s 3}"
+    in
+    if s 0 == "ip4" && s 2 == "udp"
+    then "${s 1}:${s 3}"
     else if s 0 == "ip6" && s 2 == "udp"
-      then "[${s 1}]:${s 3}"
+    then "[${s 1}]:${s 3}"
     else null; # not valid for listen datagram, skip
 
-in {
+in
+{
 
   ###### interface
 
@@ -47,7 +57,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.ipfs;
-        defaultText = "pkgs.ipfs";
+        defaultText = literalExpression "pkgs.ipfs";
         description = "Which IPFS package to use.";
       };
 
@@ -65,9 +75,10 @@ in {
 
       dataDir = mkOption {
         type = types.str;
-        default = if versionAtLeast config.system.stateVersion "17.09"
-                  then "/var/lib/ipfs"
-                  else "/var/lib/ipfs/.ipfs";
+        default =
+          if versionAtLeast config.system.stateVersion "17.09"
+          then "/var/lib/ipfs"
+          else "/var/lib/ipfs/.ipfs";
         description = "The data dir for IPFS";
       };
 
@@ -81,6 +92,12 @@ in {
         type = types.bool;
         default = false;
         description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+      };
+
+      autoMigrate = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether IPFS should try to run the fs-repo-migration at startup.";
       };
 
       ipfsMountDir = mkOption {
@@ -137,7 +154,7 @@ in {
           These are applied last, so may override configuration set by other options in this module.
           Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
         '';
-        default = {};
+        default = { };
         example = {
           Datastore.StorageMax = "100GB";
           Discovery.MDNS.Enabled = false;
@@ -153,7 +170,7 @@ in {
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
-        default = [];
+        default = [ ];
       };
 
       localDiscovery = mkOption {
@@ -161,14 +178,14 @@ in {
         description = ''Whether to enable local discovery for the ipfs daemon.
           This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
         '';
-        default = true;
+        default = false;
       };
 
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
         description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
-        example = 64*1024;
+        example = 64 * 1024;
       };
 
       startWhenNeeded = mkOption {
@@ -185,6 +202,9 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     environment.variables.IPFS_PATH = cfg.dataDir;
+
+    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
 
     programs.fuse = mkIf cfg.autoMount {
       userAllowOther = true;
@@ -221,38 +241,40 @@ in {
       environment.IPFS_PATH = cfg.dataDir;
 
       preStart = ''
-        if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"} \
-            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        if [[ ! -f "$IPFS_PATH/config" ]]; then
+          ipfs init ${optionalString cfg.emptyRepo "-e"} --profile=${profile}
         else
-          ${if cfg.localDiscovery
-            then "ipfs config profile apply local-discovery"
-            else "ipfs config profile apply server"
-          }
+          # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
+          rm -vf "$IPFS_PATH/api"
+
+          ipfs --offline config profile apply ${profile}
         fi
       '' + optionalString cfg.autoMount ''
-        ipfs --local config Mounts.FuseAllowOther --json true
-        ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
-        ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
+        ipfs --offline config Mounts.FuseAllowOther --json true
+        ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
+        ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
+      '' + optionalString cfg.autoMigrate ''
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
       '' + concatStringsSep "\n" (collect
-            isString
-            (mapAttrsRecursive
-              (path: value:
-              # Using heredoc below so that the value is never improperly quoted
-              ''
-                read value <<EOF
-                ${builtins.toJSON value}
-                EOF
-                ipfs --local config --json "${concatStringsSep "." path}" "$value"
-              '')
-              ({ Addresses.API = cfg.apiAddress;
-                 Addresses.Gateway = cfg.gatewayAddress;
-                 Addresses.Swarm = cfg.swarmAddress;
-              } //
-              cfg.extraConfig))
-          );
+        isString
+        (mapAttrsRecursive
+          (path: value:
+            # Using heredoc below so that the value is never improperly quoted
+            ''
+              read value <<EOF
+              ${builtins.toJSON value}
+              EOF
+              ipfs --offline config --json "${concatStringsSep "." path}" "$value"
+            '')
+          ({
+            Addresses.API = cfg.apiAddress;
+            Addresses.Gateway = cfg.gatewayAddress;
+            Addresses.Swarm = cfg.swarmAddress;
+          } //
+          cfg.extraConfig))
+      );
       serviceConfig = {
-        ExecStart = ["" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}"];
+        ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;
         Group = cfg.group;
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
@@ -263,12 +285,16 @@ in {
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = let
+        ListenStream =
+          let
             fromCfg = multiaddrToListenStream cfg.gatewayAddress;
-          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
-        ListenDatagram = let
+          in
+          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+        ListenDatagram =
+          let
             fromCfg = multiaddrToListenDatagram cfg.gatewayAddress;
-          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+          in
+          [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
       };
     };
 
@@ -276,9 +302,11 @@ in {
       wantedBy = [ "sockets.target" ];
       # We also include "%t/ipfs.sock" because there is no way to put the "%t"
       # in the multiaddr.
-      socketConfig.ListenStream = let
+      socketConfig.ListenStream =
+        let
           fromCfg = multiaddrToListenStream cfg.apiAddress;
-        in [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
+        in
+        [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
 
   };

@@ -4,11 +4,9 @@
 , buildPackages
 }:
 
-let
-  version = "0.3.11";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "volume_key";
-  inherit version;
+  version = "0.3.11";
 
   src = fetchgit {
     url = "https://pagure.io/volume_key.git";

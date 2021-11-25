@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
 
-  inherit (lib) mkEnableOption mkIf mkOption literalExample types optionalString;
+  inherit (lib) mkEnableOption mkIf mkOption literalExpression types optionalString;
 
   cfg = config.services.quorum;
   dataDir = "/var/lib/quorum";
@@ -130,7 +130,7 @@ in {
       genesis = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        example = literalExample '' {
+        example = literalExpression '' {
           alloc = {
             a47385db68718bdcbddc2d2bb7c54018066ec111 = {
               balance = "1000000000000000000000000000";

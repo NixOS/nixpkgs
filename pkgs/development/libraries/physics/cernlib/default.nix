@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       --replace "# define MakeCmd gmake" "# define MakeCmd make"
     substituteInPlace 2006/src/config/lnxLib.rules \
       --replace "# lib" "// lib"
+    # binutils 2.37 fix
+    substituteInPlace 2006/src/config/Imake.tmpl --replace "clq" "cq"
   '';
 
   configurePhase = ''
@@ -33,18 +35,30 @@ stdenv.mkDerivation rec {
     export PATH=$PATH:$CERN_ROOT/bin
   '';
 
+  FFLAGS = lib.optionals (lib.versionAtLeast gfortran.version "10.0.0") [
+    # Fix https://github.com/vmc-project/geant3/issues/17
+    "-fallow-invalid-boz"
+
+    # Fix for gfortran 10
+    "-fallow-argument-mismatch"
+  ];
+
+  makeFlags = [
+    "FORTRANOPTIONS=$(FFLAGS)"
+  ];
+
   buildPhase = ''
     cd $CERN_ROOT
     mkdir -p build bin lib
 
     cd $CERN_ROOT/build
     $CVSCOSRC/config/imake_boot
-    make bin/kuipc
-    make scripts/Makefile
+    make -j $NIX_BUILD_CORES $makeFlags bin/kuipc
+    make -j $NIX_BUILD_CORES $makeFlags scripts/Makefile
     pushd scripts
-    make install.bin
+    make -j $NIX_BUILD_CORES $makeFlags install.bin
     popd
-    make
+    make -j $NIX_BUILD_CORES $makeFlags
   '';
 
   installPhase = ''

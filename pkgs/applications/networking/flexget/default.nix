@@ -1,15 +1,22 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "FlexGet";
-  version = "3.1.121";
+  pname = "flexget";
+  version = "3.1.153";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "91270a51ed29e4a578c7549ebd01665f4bcf49bf7773a15db27f4ccb13659e00";
+  # Fetch from GitHub in order to use `requirements.in`
+  src = fetchFromGitHub {
+    owner = "flexget";
+    repo = "flexget";
+    rev = "v${version}";
+    sha256 = "sha256-xGGSm6IXTh89wSt0/DNgbe1mFBNuG9x3YLerJcBYMmI=";
   };
 
   postPatch = ''
+    # Symlink requirements.in because upstream uses `pip-compile` which yields
+    # python-version dependent requirements
+    ln -sf requirements.in requirements.txt
+
     # remove dependency constraints
     sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
 
@@ -25,45 +32,43 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
-    cherrypy
-    colorama
-    colorclass
     feedparser
-    flask-compress
-    flask-cors
-    flask_login
-    flask-restful
-    flask-restx
-    flask
-    greenlet
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
     more-itertools
-    progressbar
+    psutil
     pynzb
-    pyparsing
     PyRSS2Gen
-    dateutil
+    python-dateutil
     pyyaml
     rebulk
     requests
+    rich
     rpyc
-    sgmllib3k
     sqlalchemy
-    terminaltables
+
+    # WebUI requirements
+    cherrypy
+    flask-compress
+    flask-cors
+    flask_login
+    flask-restful
+    flask-restx
+    flask
+    pyparsing
     zxcvbn
-    psutil
-    # plugins
+
+    # Plugins requirements
     transmission-rpc
   ];
 
   meta = with lib; {
-    homepage    = "https://flexget.com/";
+    homepage = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };
 }

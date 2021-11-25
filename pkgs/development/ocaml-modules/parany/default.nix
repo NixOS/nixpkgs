@@ -2,15 +2,16 @@
 
 buildDunePackage rec {
   pname = "parany";
-  version = "8.0.0";
+  version = "12.1.1";
 
   useDune2 = true;
+  minimumOCamlVersion = "4.03.0";
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "19yz1yqyqx6gawy93jlh3x6vji2p9qsy6nsbj65q5pii8p1fjlsm";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0s2sbmywy4yyh69dcrcqd85hd8jcd7qgfczy79nam4bvn87bjm72";
   };
 
   propagatedBuildInputs = [ ocamlnet cpu ];

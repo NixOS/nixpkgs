@@ -9,18 +9,19 @@
 , smbus-cffi
 , i2c-tools
 , pytestCheckHook
+, colorlog
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.6.1";
+  version = "1.7.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-FYpr1mYzPc0rOE75fUNjxe/57EWl+zcbIbkqFseDhzI=";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-fPSvxdr329SxAe4N7lTa7hddFp1WVUplkhYD1oDQXAI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,6 +32,11 @@ buildPythonPackage rec {
     pyusb
     smbus-cffi
     i2c-tools
+    colorlog
+  ];
+
+  propagatedNativeBuildInputs = [
+    smbus-cffi
   ];
 
   outputs = [ "out" "man" ];
@@ -54,9 +60,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
-    homepage    = "https://github.com/liquidctl/liquidctl";
-    changelog   = "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/liquidctl/liquidctl";
+    changelog = "https://github.com/liquidctl/liquidctl/blob/master/CHANGELOG.md";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ arturcygan evils ];
   };
 }

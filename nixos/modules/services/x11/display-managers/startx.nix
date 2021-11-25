@@ -35,10 +35,7 @@ in
   config = mkIf cfg.enable {
     services.xserver = {
       exportConfiguration = true;
-      displayManager.job.execCmd = "";
-      displayManager.lightdm.enable = lib.mkForce false;
     };
-    systemd.services.display-manager.enable = false;
 
     # Other displayManagers log to /dev/null because they're services and put
     # Xorg's stdout in the journal

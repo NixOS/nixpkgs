@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   find = ''find ${concatStringsSep " " (map (x: x + "/m2") flatDeps)} -type d -printf '%P\n' | xargs -I {} mkdir -p $out/m2/{}'';
   copy = ''cp -rsfu ${concatStringsSep " " (map (x: x + "/m2/*") flatDeps)} $out/m2'';
 
-  phases = [ "unpackPhase" "buildPhase" ];
+  dontInstall = true;
 
   buildPhase = ''
     mkdir -p $out/target

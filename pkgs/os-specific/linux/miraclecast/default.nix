@@ -16,8 +16,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib pcre readline systemd udev ];
 
-  enableParallelBuilding = true;
-
   mesonFlags = [
     "-Drely-udev=true"
     "-Dbuild-tests=true"

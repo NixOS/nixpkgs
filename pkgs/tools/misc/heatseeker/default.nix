@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1x7mdyf1m17s55f6yjdr1j510kb7a8f3zkd7lb2kzdc7nd3vgaxg";
   };
 
-  cargoSha256 = "0jnlcm7v29m4nc318qgf7r7jvs80s7n04fw83imm506vwr9rxbx9";
+  cargoSha256 = "0qs2s1bi93sdmmmfmkcnf55fm2blj9f095k95m210fyv5fpizdfm";
 
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple

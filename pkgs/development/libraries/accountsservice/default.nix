@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -89,6 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

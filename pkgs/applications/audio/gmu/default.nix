@@ -5,10 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gmu-0.10.1";
+  pname = "gmu";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "http://wejp.k.vu/files/${name}.tar.gz";
+    url = "https://wej.k.vu/files/${pname}-${version}.tar.gz";
     sha256 = "03x0mc0xw2if0bpf0a15yprcyx1xccki039zvl2099dagwk6xskv";
   };
 

@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.7.0";
+  version = "6.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "sendgrid-python";
     rev = version;
-    sha256 = "sha256-Y0h5Aiu85/EWCmSc+eCtK6ZaPuu/LYZiwhXOx0XhfwQ=";
+    sha256 = "sha256-u7qakmJ9pKV1zonILEvMHxzMF6EaY+ZJUfh5s3TTH5w=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +39,9 @@ buildPythonPackage rec {
     "--ignore live_test.py"
   ];
 
-  pythonImportsCheck = [ "sendgrid" ];
+  pythonImportsCheck = [
+    "sendgrid"
+  ];
 
   meta = with lib; {
     description = "Python client for SendGrid";

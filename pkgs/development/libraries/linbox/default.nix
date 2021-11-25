@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    inherit version;
     description = "C++ library for exact, high-performance linear algebra";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;

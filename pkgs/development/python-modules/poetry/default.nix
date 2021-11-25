@@ -13,7 +13,7 @@
 , pkginfo
 , poetry-core
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-mock
 , requests
 , requests-toolbelt
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.1.6";
+  version = "1.1.11";
   format = "pyproject";
   disabled = isPy27;
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3Nx9xuQMIho+oRjqskHL9eQGKDAWntEGZcWe7evnmNU=";
+    sha256 = "1f3y3gav2snvcf2h9mbkinvnlcyl9kndf6bh6j0vxkxzlmb4zilx";
   };
 
   postPatch = ''
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
   '';
 
-  checkInputs = [ pytestCheckHook httpretty pytest-mock pytestcov ];
+  checkInputs = [ pytestCheckHook httpretty pytest-mock pytest-cov ];
   preCheck = "export HOME=$TMPDIR";
   disabledTests = [
     # touches network
@@ -98,6 +98,9 @@ buildPythonPackage rec {
       sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
     })
   ];
+
+  # allow for package to use pep420's native namespaces
+  pythonNamespaces = [ "poetry" ];
 
   meta = with lib; {
     homepage = "https://python-poetry.org/";

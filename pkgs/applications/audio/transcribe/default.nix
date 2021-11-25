@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, lib, wrapGAppsHook, alsaLib, atk, cairo, gdk-pixbuf
+{ stdenv, fetchzip, lib, wrapGAppsHook, alsa-lib, atk, cairo, gdk-pixbuf
 , glib, gst_all_1,  gtk3, libSM, libX11, libpng12, pango, zlib }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   libPath = with gst_all_1; lib.makeLibraryPath [
-    stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsaLib
+    stdenv.cc.cc glib gtk3 atk pango cairo gdk-pixbuf alsa-lib
     libX11 libSM libpng12 gstreamer gst-plugins-base zlib
   ];
 

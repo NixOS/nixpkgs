@@ -55,7 +55,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     psutil
     pyxdg
     arrow
-    dateutil
+    python-dateutil
     easygui
     colour
     pymediainfo

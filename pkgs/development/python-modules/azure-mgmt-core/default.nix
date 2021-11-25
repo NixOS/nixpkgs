@@ -1,19 +1,17 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-core
-, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
+  version = "1.3.0";
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "4246810996107f72482a9351cf918d380c257e90942144ec9c0c2abda1d0a312";
+    sha256 = "3ffb7352b39e5495dccc2d2b47254f4d82747aff4735e8bf3267c335b0c9bb40";
   };
 
   propagatedBuildInputs = [

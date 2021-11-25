@@ -1,25 +1,40 @@
-{ fetchFromGitHub, fetchHex, stdenv, rebar3WithPlugins, lib }:
+{ fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
+, stdenv, writeScript, lib }:
 let
-  version = "0.15.0";
+  version = "0.20.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
-  deps = import ./rebar-deps.nix { inherit fetchHex fetchFromGitHub; };
-in stdenv.mkDerivation {
-  inherit version;
+  deps = import ./rebar-deps.nix {
+    inherit fetchHex fetchFromGitHub fetchgit;
+    builder = buildRebar3;
+    overrides = (self: super: {
+      proper = super.proper.overrideAttrs (_: {
+        configurePhase = "true";
+      });
+    });
+  };
+in
+rebar3Relx {
   pname = "erlang-ls";
-  buildInputs = [ (rebar3WithPlugins { }) ];
+  inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "1s6zk8r5plm7ajifz17mvfrnk5mzbhj7alayink9phqbmzrypnfg";
+    sha256 = "sha256-XBCauvPalIPjVOYlMfWC+5mKku28b/qqKhp9NgSkoyA=";
     rev = version;
   };
-  buildPhase = ''
-    mkdir _checkouts
-    ${toString (lib.mapAttrsToList (k: v: ''
-      cp -R ${v} _checkouts/${k}
-    '') deps)}
-    make
+  releaseType = "escript";
+  beamDeps = builtins.attrValues deps;
+  buildPlugins = [ rebar3-proper ];
+  buildPhase = "HOME=. make";
+  # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml
+  # these tests are excessively long and we should probably skip them
+  checkPhase = ''
+    HOME=. epmd -daemon
+    HOME=. rebar3 ct
+    HOME=. rebar3 proper --constraint_tries 100
   '';
+  # tests seem to be a bit flaky on darwin, skip them for now
+  doCheck = !stdenv.isDarwin;
   installPhase = ''
     mkdir -p $out/bin
     cp _build/default/bin/erlang_ls $out/bin/
@@ -31,4 +46,22 @@ in stdenv.mkDerivation {
     platforms = platforms.unix;
     license = licenses.asl20;
   };
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
+
+    set -ox errexit
+    latest=$(list-git-tags https://github.com/${owner}/${repo}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+    if [[ "$latest" != "${version}" ]]; then
+      nixpkgs="$(git rev-parse --show-toplevel)"
+      nix_path="$nixpkgs/pkgs/development/beam-modules/erlang-ls"
+      update-source-version erlang-ls "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
+      tmpdir=$(mktemp -d)
+      cp -R $(nix-build $nixpkgs --no-out-link -A erlang-ls.src)/* "$tmpdir"
+      DEBUG=1
+      (cd "$tmpdir" && HOME=. rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
+    else
+      echo "erlang-ls is already up-to-date"
+    fi
+  '';
 }

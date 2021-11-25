@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-netload-plugin";
-  version = "1.3.2";
-  rev-prefix = "version-";
+  version = "1.4.0";
+  rev-prefix = "xfce4-netload-plugin-";
   odd-unstable = false;
-  sha256 = "1py1l4z5ah4nlq8l2912k47ffsa5z7p1gbvlk7nw6b9r1x4ykdfl";
+  sha256 = "sha256-HasaMymMCPidYkaAUK4gvD+Ka7NJdFOTeq43gJ1G3jo=";
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 

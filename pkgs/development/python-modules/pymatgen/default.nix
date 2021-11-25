@@ -10,7 +10,7 @@
 , plotly
 , pydispatcher
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , scipy
 , six
 , spglib
@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.0.5";
+  version = "2022.0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69c370ebd2ff9aceb15bb6efd364473609ffb23d2b2f02a3eb64fd537df69de0";
+    sha256 = "fb4db7d547f062266a1a113d898fb0626ded5a1f9101ef79681e171b7e45fad0";
   };
 
   nativeBuildInputs = [ glibcLocales ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     plotly
     pydispatcher
     requests
-    ruamel_yaml
+    ruamel-yaml
     scipy
     six
     spglib

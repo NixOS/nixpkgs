@@ -4,19 +4,21 @@
 , pytestCheckHook
 , google-cloud-core
 , google-api-core
+, grpc-google-iam-v1
+, proto-plus
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "0.30.3";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1la643vkf6fm2gapz57cm92xzvmhzgpzv3bb6112yz1cizrvnxrm";
+    sha256 = "b99e11360668ed0c034c8cf3a34caf6fd4a52efaf62d54dd85407c3ad20b715c";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core ];
+  propagatedBuildInputs = [ google-api-core google-cloud-core grpc-google-iam-v1 proto-plus ];
 
   checkInputs = [ mock pytestCheckHook ];
 
@@ -25,7 +27,10 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pythonImportsCheck = [ "google.cloud.resource_manager" ];
+  pythonImportsCheck = [
+    "google.cloud.resourcemanager"
+    "google.cloud.resourcemanager_v3"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Resource Manager API client library";

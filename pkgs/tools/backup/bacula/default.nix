@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bacula";
-  version = "11.0.2";
+  version = "11.0.5";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ooaKsNhUIxubAlGt6fUAkbD+PDMfkq+6lnK4G9lp4C8=";
+    sha256 = "sha256-71s7Z4EEQiAbgNwdR8zvd7XtN4/hKFQG86c0AbboERo=";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]

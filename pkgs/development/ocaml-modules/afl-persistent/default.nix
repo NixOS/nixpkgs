@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "06yyds2vcwlfr2nd3gvyrazlijjcrd1abnvkfpkaadgwdw3qam1i";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   # don't run tests in buildPhase
   # don't overwrite test binary

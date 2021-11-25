@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "qps";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0fihhnb7vp6x072spg1fnxaip4sq9mbvhrfqdwnzph5dlyvs54nj";
+    sha256 = "11mbzn4syfghb3zvdrw2011njagcw206ng6c8l9z9h3zlhmhcd57";
   };
 
   nativeBuildInputs = [

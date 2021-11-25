@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "libcxx";
   inherit version;
 
-  src = fetch "libcxx" "1wf3ww29xkx7prs7pdwicy5qqfapib26110jgmkjrbka9z57bjvx";
+  src = fetch "libcxx" "05cx39ldlxchck454lgfly1xj0c7x65iyx4hqhiihrlg6p6qj854";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -15,7 +15,13 @@ stdenv.mkDerivation {
     mv llvm-* llvm
   '';
 
-  patches = lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
+  outputs = [ "out" "dev" ];
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    ../../libcxx-0001-musl-hacks.patch
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py

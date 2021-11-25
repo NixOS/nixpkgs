@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "stumpwm";
-  version = "20210411-git";
+  version = "20210807-git";
 
   description = "A tiling, keyboard driven window manager";
 
   deps = [ args."alexandria" args."cl-ppcre" args."clx" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/stumpwm/2021-04-11/stumpwm-20210411-git.tgz";
-    sha256 = "0rrhmryfgbjrl04ww107pvm4lzm620xp7a5kwhqbh5d7hpbdk49j";
+    url = "http://beta.quicklisp.org/archive/stumpwm/2021-08-07/stumpwm-20210807-git.tgz";
+    sha256 = "0j9wb6djsyf2r2a4paj2s1f2sbw70wnr999abrsrkljxpayyma82";
   };
 
   packageName = "stumpwm";
@@ -19,10 +19,10 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256
-    0rrhmryfgbjrl04ww107pvm4lzm620xp7a5kwhqbh5d7hpbdk49j URL
-    http://beta.quicklisp.org/archive/stumpwm/2021-04-11/stumpwm-20210411-git.tgz
-    MD5 4497670e2aac3038ed5fb87121ff1b7a NAME stumpwm FILENAME stumpwm DEPS
+    0j9wb6djsyf2r2a4paj2s1f2sbw70wnr999abrsrkljxpayyma82 URL
+    http://beta.quicklisp.org/archive/stumpwm/2021-08-07/stumpwm-20210807-git.tgz
+    MD5 ec6d05208e0899fc929d2ea4ba61de9d NAME stumpwm FILENAME stumpwm DEPS
     ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME clx FILENAME clx))
-    DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20210411-git SIBLINGS
+    DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20210807-git SIBLINGS
     (stumpwm-tests) PARASITES NIL) */

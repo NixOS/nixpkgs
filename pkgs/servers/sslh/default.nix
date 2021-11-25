@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, libcap, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "1.21c";
+  version = "1.22c";
 
-  src = fetchurl {
-    url = "https://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
-    sha256 = "01p7w74ppszxgz6n41lqd6xqvc7bjk2dsc769dd1yb7q4qvpiziv";
+  src = fetchFromGitHub {
+    owner = "yrutschle";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-A+nUWiOPoz/T5afZUzt5In01e049TgHisTF8P5Vj180=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libconfig perl tcp_wrappers pcre ];
+  buildInputs = [ libcap libconfig perl tcp_wrappers pcre2 ];
 
   makeFlags = [ "USELIBCAP=1" "USELIBWRAP=1" ];
 

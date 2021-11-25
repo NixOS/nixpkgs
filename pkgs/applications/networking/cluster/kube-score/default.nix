@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-score";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O0RtlFkyo01kcxWSzrkhh7vvV76B7I5V19dSzaxvv4Y=";
+    sha256 = "sha256-QAtsXNmR+Sg9xmvP7x6b2jAJkUcL/sMYk8i5CSzjVos=";
   };
 
-  vendorSha256 = "sha256-qFS+N0tOf3zxqs1tN6Z1EnR3qLR1FfZNfJ21NoRXek0=";
+  vendorSha256 = "sha256-kPYvkovzQDmoB67TZHCKZ5jtW6pN3gHxBPKAU8prbgo=";
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";

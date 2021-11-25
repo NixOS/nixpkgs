@@ -1,9 +1,41 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
-, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
-, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
-, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
-, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
-with lib;
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, ninja
+, flex
+, bison
+, proj
+, geos
+, xlibsWrapper
+, sqlite
+, gsl
+, qwt
+, fcgi
+, python3Packages
+, libspatialindex
+, libspatialite
+, postgresql
+, txt2tags
+, openssl
+, libzip
+, hdf5
+, netcdf
+, exiv2
+, protobuf
+, qtbase
+, qtsensors
+, qca-qt5
+, qtkeychain
+, qscintilla
+, qtserialport
+, qtxmlpatterns
+, withGrass ? true
+, grass
+, withWebKit ? true
+, qtwebkit
+}:
+
 let
   pythonBuildInputs = with python3Packages; [
     qscintilla-qt5
@@ -12,27 +44,26 @@ let
     numpy
     psycopg2
     chardet
-    dateutil
+    python-dateutil
     pyyaml
     pytz
     requests
     urllib3
     pygments
     pyqt5
-    sip
+    sip_4
     owslib
     six
   ];
 in mkDerivation rec {
-  version = "3.16.6";
-  pname = "qgis";
-  name = "${pname}-unwrapped-${version}";
+  version = "3.16.13";
+  pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1vnz5kiyjircmhn4vq3fa5j2kvkxpwcsry7jc6nxl0w0dqx1zay1";
+    sha256 = "13irzs89lknfxf2y7j931bh0zmqgiwifdbbzvwn8yxxr21gd68ac";
   };
 
   passthru = {
@@ -77,12 +108,12 @@ in mkDerivation rec {
   # build to use PYQT5_SIP_DIR consistently.
   postPatch = ''
     substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/share/sip/PyQt5"'
+      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"'
   '';
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
+    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";

@@ -1,5 +1,5 @@
-{ lib, stdenv
-, nixosTests
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -12,16 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.18.0";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "113i11sgna82i4c4zk66qmbypmnmzh0lzp4kkgqnxxcdvyj00rb8";
+    sha256 = "sha256-3XwnlSPlyEE4oznXK59/rooZLtj1+VbozprXU2W0J5I=";
   };
-
-  cargoSha256 = "12z7y303fmga91daf2w356qiqdqa7b8dz6nrrpnjdf0slyz0w3x4";
+  cargoSha256 = "sha256-g5yfE/s1N6EgI2ikiJbypI4iQbXPu6zGNoSVC6ldoWo=";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
-    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{bash,fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
@@ -41,13 +40,24 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
 
-  passthru.tests = { inherit (nixosTests) bat; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/bat-test.XXXX)
+    echo -ne 'Foobar\n\n\n42' > $testFile
+    $out/bin/bat -p $testFile | grep "Foobar"
+    $out/bin/bat -p $testFile -r 4:4 | grep 42
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir lilyball zowoq ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

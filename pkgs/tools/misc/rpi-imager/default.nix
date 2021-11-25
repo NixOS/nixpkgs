@@ -16,20 +16,20 @@
 
 mkDerivation rec {
   pname = "rpi-imager";
-  version = "1.6";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wX9EO5hgEM2ftOov0AERloH6GxrwptWltBYWLFXkPUw=";
+    sha256 = "sha256-ITn31ENEf2bysgJgV3u+NNPXk1pfIkUyJWIvS2DOrzY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake util-linux ];
+
   buildInputs = [
     curl
     libarchive
-    util-linux
     qtbase
     qtdeclarative
     qtsvg
@@ -46,6 +46,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
     homepage = "https://www.raspberrypi.org/software/";
+    downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ymarkus ];
     platforms = platforms.all;

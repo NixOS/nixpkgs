@@ -1,12 +1,21 @@
-{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, attrs, atpublic }:
+{ lib
+, atpublic
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
   version = "1.4.2";
-  disabled = !isPy3k;
+  format = "setuptools";
 
-  # Release not published to Pypi
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
@@ -15,19 +24,34 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    atpublic attrs
+    atpublic
+    attrs
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # Tests need network access
-  doCheck = false;
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Requires git
+    "test_ge_master"
+    # Seems to be a sandbox issue
+    "test_byclient"
+  ];
+
+  pythonImportsCheck = [
+    "aiosmtpd"
+  ];
 
   meta = with lib; {
-    homepage = "https://aiosmtpd.readthedocs.io/en/latest/";
     description = "Asyncio based SMTP server";
+    homepage = "https://aiosmtpd.readthedocs.io/";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the
-      standard library's smtpd.py module, but rewritten to be based on asyncio for
-      Python 3.
+      standard library's smtpd.py module.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ eadwu ];

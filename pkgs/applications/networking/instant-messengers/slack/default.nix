@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , dpkg
 , undmg
 , makeWrapper
 , nodePackages
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -19,6 +20,7 @@
 , glib
 , gnome2
 , gtk3
+, libGL
 , libappindicator-gtk3
 , libdrm
 , libnotify
@@ -31,6 +33,7 @@
 , nspr
 , nss
 , pango
+, pipewire
 , systemd
 , xdg-utils
 , xorg
@@ -42,36 +45,46 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.15.0";
-  x86_64-darwin-sha256 = "12mfha0f7nciszsv7fb0zk4y10p63mh7kaw8gbk3q2fmyp8aij6l";
+  x86_64-darwin-version = "4.22.0";
+  x86_64-darwin-sha256 = "094p9vyv56m5qfp9jh2205ijfqcp0dr6bkmiv0wxihy2rg20b5zp";
 
-  x86_64-linux-version = "4.15.0";
-  x86_64-linux-sha256 = "1xzp7ql4i3n3fqfwk0400hkg4xn0pi66sy5jzqn68z33zzf7raii";
+  x86_64-linux-version = "4.22.0";
+  x86_64-linux-sha256 = "0k84glxp653lxgfv5b65zvvysax7fr3lhsjgq76safk7g7cjc86i";
+
+  aarch64-darwin-version = "4.22.0";
+  aarch64-darwin-sha256 = "1z2pcgva9ixjx702c1535b4k0xr9fdnfzi5m08xgvabk9x66hqx4";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
+    aarch64-darwin = aarch64-darwin-version;
     x86_64-linux = x86_64-linux-version;
   }.${system} or throwSystem;
 
-  src = let
-    base = "https://downloads.slack-edge.com";
-  in {
-    x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = x86_64-darwin-sha256;
-    };
-    x86_64-linux = fetchurl {
-      url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = x86_64-linux-sha256;
-    };
-  }.${system} or throwSystem;
+  src =
+    let
+      base = "https://downloads.slack-edge.com";
+    in
+      {
+        x86_64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+          sha256 = x86_64-darwin-sha256;
+        };
+        aarch64-darwin = fetchurl {
+          url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+          sha256 = aarch64-darwin-sha256;
+        };
+        x86_64-linux = fetchurl {
+          url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+          sha256 = x86_64-linux-sha256;
+        };
+      }.${system} or throwSystem;
 
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin"];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -80,7 +93,7 @@ let
     passthru.updateScript = ./update.sh;
 
     rpath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       at-spi2-atk
       at-spi2-core
       atk
@@ -95,6 +108,7 @@ let
       glib
       gnome2.GConf
       gtk3
+      libGL
       libappindicator-gtk3
       libdrm
       libnotify
@@ -106,6 +120,7 @@ let
       nspr
       nss
       pango
+      pipewire
       stdenv.cc.cc
       systemd
       xorg.libX11
@@ -118,13 +133,13 @@ let
       xorg.libXi
       xorg.libXrandr
       xorg.libXrender
-      xorg.libxshmfence
       xorg.libXtst
       xorg.libxkbfile
+      xorg.libxshmfence
     ] + ":${stdenv.cc.cc.lib}/lib64";
 
     buildInputs = [
-      gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+      gtk3 # needed for GSETTINGS_SCHEMAS_PATH
     ];
 
     nativeBuildInputs = [ dpkg makeWrapper nodePackages.asar ];
@@ -134,6 +149,8 @@ let
     dontPatchELF = true;
 
     installPhase = ''
+      runHook preInstall
+
       # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
       dpkg --fsys-tarfile $src | tar --extract
       rm -rf usr/share/lintian
@@ -153,12 +170,14 @@ let
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${xdg-utils}/bin
+        --prefix PATH : ${lib.makeBinPath [xdg-utils]}
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
         --replace /usr/bin/ $out/bin/ \
         --replace /usr/share/ $out/share/
+
+      runHook postInstall
     '';
   };
 
@@ -172,11 +191,14 @@ let
     sourceRoot = "Slack.app";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
       /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      runHook postInstall
     '';
   };
-in if stdenv.isDarwin
-  then darwin
-  else linux
+in
+if stdenv.isDarwin
+then darwin
+else linux

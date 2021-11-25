@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, libcap, openssl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "vsftpd-3.0.3";
+  pname = "vsftpd";
+  version = "3.0.5";
 
   src = fetchurl {
-    url = "https://security.appspot.com/downloads/${name}.tar.gz";
-    sha256 = "1xsyjn68k3fgm2incpb3lz2nikffl9by2safp994i272wvv2nkcx";
+    url = "https://security.appspot.com/downloads/vsftpd-${version}.tar.gz";
+    sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
   buildInputs = [ libcap openssl pam ];
@@ -18,17 +19,18 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace -dirafter "" \
       --replace /usr $out \
-      --replace /etc $out/etc
+      --replace /etc $out/etc \
+      --replace "-Werror" ""
+
 
     mkdir -p $out/sbin $out/man/man{5,8}
   '';
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
-  # On gcc9, this would produce
-  #   error: '-Werror=enum-conversion': no option -Wenum-conversion
-  NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast stdenv.cc.version "10")
-    "-Wno-error=enum-conversion";
+  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
 
   enableParallelBuilding = true;
 

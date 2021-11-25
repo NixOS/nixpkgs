@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sd-switch";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "rycee";
     repo = pname;
     rev = version;
-    sha256 = "0sg1y8lb2pnll3408fbqp65acys31mrlzsqfrwm4nvbkayf0jcv3";
+    sha256 = "12h2d7v7pdz7b0hrna64561kf35nbpwb2kzxa791xk8raxc2b72k";
   };
 
-  cargoSha256 = "16yb61wihg06i2h9vjqcsjqkjjpmxyv4df22i25034gkcgb20xcn";
+  cargoSha256 = "12ny3cir2nxzrmf4vwq6sgc35dbpq88hav53xqdp44rigdf4vzbs";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];

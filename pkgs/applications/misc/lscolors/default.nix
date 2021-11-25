@@ -1,26 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
-  version = "0.7.1";
+  version = "0.8.1";
 
-  src = fetchFromGitHub {
-    owner = "sharkdp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0av3v31fvanvn59bdm9d0v9zh5lzrq0f4vqhg6xlvabkgsa8jk04";
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-74KNnERhyiZamVyS9yzDNVf33KMqDiSfPb5BCTKFuHA=";
   };
 
-  cargoPatches = [
-    ./cargo.lock.patch
-  ];
+  cargoSha256 = "sha256-mjGZ/q9BByndwfnFGk6k5KD9ctY0X0/oaEugiOJY8Ms=";
 
-  cargoSha256 = "02k23idwy0sb4lnjrwnyah3qp22zj161ilbc13p75k0hdijfaxl5";
+  # setid is not allowed in the sandbox
+  checkFlags = [ "--skip=tests::style_for_setid" ];
 
   meta = with lib; {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

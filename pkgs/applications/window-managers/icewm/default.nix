@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
-, pkg-config
+, fetchpatch
 , asciidoc
+, cmake
 , expat
 , fontconfig
 , freetype
@@ -11,6 +11,7 @@
 , gdk-pixbuf
 , gdk-pixbuf-xlib
 , gettext
+, giflib
 , glib
 , imlib2
 , libICE
@@ -30,23 +31,32 @@
 , libpthreadstubs
 , libsndfile
 , libtiff
-, libungif
 , libxcb
 , mkfontdir
 , pcre
 , perl
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "2.2.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner  = "bbidulock";
+    owner  = "ice-wm";
     repo = pname;
     rev = version;
-    hash = "sha256-STM8t311lf0xIqs2Onmwg48xgE7V9VZrUfJrUzYRxL4=";
+    hash = "sha256-R06tiWS9z6K5Nbi+vvk7DyozpcFdrHleMeh7Iq/FfHQ=";
   };
+
+  patches = [
+    # https://github.com/ice-wm/icewm/pull/57
+    # Fix trailing -I that leads to "to generate dependencies you must specify either '-M' or '-MM'"
+    (fetchpatch {
+      url = "https://github.com/ice-wm/icewm/pull/57/commits/ebd2c45341cc31755758a423392a0f78a64d2d37.patch";
+      sha256 = "16m9znd3ijcfl7la3l27ac3clx8l9qng3fprkpxqcifd89ny1ml5";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -62,6 +72,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gdk-pixbuf-xlib
     gettext
+    giflib
     glib
     imlib2
     libICE
@@ -81,13 +92,15 @@ stdenv.mkDerivation rec {
     libpthreadstubs
     libsndfile
     libtiff
-    libungif
     libxcb
     mkfontdir
     pcre
   ];
 
-  cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];
+  cmakeFlags = [
+    "-DPREFIX=$out"
+    "-DCFGDIR=/etc/icewm"
+  ];
 
   # install legacy themes
   postInstall = ''

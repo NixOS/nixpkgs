@@ -37,5 +37,7 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-youtube = callPackage ./youtube.nix { };
 
+  mopidy-ytmusic = callPackage ./ytmusic.nix { };
+
   mopidy-subidy = callPackage ./subidy.nix { };
 })

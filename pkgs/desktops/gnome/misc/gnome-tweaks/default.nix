@@ -56,12 +56,22 @@ python3Packages.buildPythonApplication rec {
     libsoup
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonPath = with python3Packages; [
     pygobject3
   ];
 
   postPatch = ''
     patchShebangs meson-postinstall.py
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
   passthru = {

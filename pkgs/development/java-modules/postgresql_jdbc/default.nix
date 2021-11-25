@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     inherit version;
   };
 
-  phases = [ "installPhase" ];
-
   installPhase = ''
     runHook preInstall
     install -m444 -D $src/share/java/*postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar

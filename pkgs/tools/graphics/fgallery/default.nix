@@ -9,10 +9,11 @@
 # }
 
 stdenv.mkDerivation rec {
-  name = "fgallery-1.8.2";
+  pname = "fgallery";
+  version = "1.8.2";
 
   src = fetchurl {
-    url = "https://www.thregr.org/~wavexx/software/fgallery/releases/${name}.zip";
+    url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${version}.zip";
     sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
   };
 

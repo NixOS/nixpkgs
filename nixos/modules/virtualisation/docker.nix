@@ -138,8 +138,9 @@ in
 
     package = mkOption {
       default = pkgs.docker;
+      defaultText = literalExpression "pkgs.docker";
       type = types.package;
-      example = pkgs.docker-edge;
+      example = literalExpression "pkgs.docker-edge";
       description = ''
         Docker package to be used in the module.
       '';
@@ -151,8 +152,8 @@ in
   config = mkIf cfg.enable (mkMerge [{
       boot.kernelModules = [ "bridge" "veth" ];
       boot.kernel.sysctl = {
-        "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
-        "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
+        "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
+        "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
       };
       environment.systemPackages = [ cfg.package ]
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;

@@ -1,51 +1,41 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 let
-  generic = { pname, subPackages, description, postInstall }:
+  generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.1.1";
+      version = "0.3.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "1hvkfvc747g5r4h8vb1d8ikqxmlyxsycnlh78agmmjpxlasspmbk";
+        sha256 = "sha256-FaVZm9C1pewJCZlYgNyD/ZYr/UIRvhqVTUhFTmysxeg=";
       };
 
-      vendorSha256 = "0vdir9ia3hv27rkm6jnvhsfc3mxw36xfvwqnfd34rgzmzcfxlrbv";
+      vendorSha256 = "sha256-EBKj/+ruE88qvlbOme4GBfAqt3/1jHcqhY0IHxh6Y5U=";
 
-      inherit subPackages postInstall;
+      subPackages = [ packageToBuild ];
+
+      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.gitVersion=v${version}" ];
 
       meta = with lib; {
         inherit description;
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = licenses.asl20;
-        maintainers = with maintainers; [ lesuisse ];
+        maintainers = with maintainers; [ lesuisse jk ];
       };
     };
 in {
   rekor-cli = generic {
     pname = "rekor-cli";
-    subPackages = [ "cmd/cli" ];
-    # Will not be needed with the next version, the package as been renamed upstream
-    postInstall = ''
-      if [ -f "$out/bin/cli" ]; then
-        mv "$out/bin/cli" "$out/bin/rekor-client"
-      fi
-    '';
+    packageToBuild = "cmd/rekor-cli";
     description = "CLI client for Sigstore, the Signature Transparency Log";
   };
   rekor-server = generic {
     pname = "rekor-server";
-    subPackages = [ "cmd/server" ];
-    # Will not be needed with the next version, the package as been renamed upstream
-    postInstall = ''
-      if [ -f "$out/bin/server" ]; then
-        mv "$out/bin/server" "$out/bin/rekor-server"
-      fi
-    '';
+    packageToBuild = "cmd/rekor-server";
     description = "Sigstore server, the Signature Transparency Log";
   };
 }

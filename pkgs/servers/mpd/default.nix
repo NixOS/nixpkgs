@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt
+# Darwin inputs
+, AudioToolbox, AudioUnit
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -9,7 +11,7 @@
 # Filters
 , libsamplerate
 # Outputs
-, alsaLib, libjack2, libpulseaudio, libshout
+, alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
 , icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
 # Services
@@ -61,8 +63,9 @@ let
     # Filter plugins
     libsamplerate = [ libsamplerate ];
     # Output plugins
-    alsa          = [ alsaLib ];
+    alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
+    pipewire      = [ pipewire ];
     pulse         = [ libpulseaudio ];
     shout         = [ libshout ];
     # Commercial services
@@ -95,7 +98,7 @@ let
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "io_uring" "systemd" "syslog" ];
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
@@ -114,18 +117,19 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.6";
+      version = "0.23.4";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-Xu+MxMxR5u++R3lZHe6UQ+mEmRnWbN6173ZX39KS1A8=";
+        sha256 = "sha256-siMFLV1fKdRt8To6AhLXmAAsgqZCA/bbvmlhbb6hLic=";
       };
 
       buildInputs = [
         glib
         boost
+        fmt
         # According to the configurePhase of meson, gtest is considered a
         # runtime dependency. Quoting:
         #
@@ -133,7 +137,7 @@ let
         gtest
       ]
         ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
+        ++ lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit ];
 
       nativeBuildInputs = [
         meson

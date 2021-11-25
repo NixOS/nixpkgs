@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.5.3";
+  version = "2.6.2";
   rev-prefix = "v";
   odd-unstable = false;
-  sha256 = "15kcph35pji3l1y81snrmpqzhhpdc9h4nk6cjsjyla51a1s2y3hz";
+  sha256 = "sha256-Tg6jK2yvODvNykTRePmHWu3safgyKAd3tCMWGXuMhPM=";
 
   nativeBuildInputs = [ cmake ];
 

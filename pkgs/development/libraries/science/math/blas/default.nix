@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "blas";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
-    sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
+    sha256 = "sha256-LjYNmcm9yEB6YYiMQKqFP7QhlCDruCZNtIbLiGBGirM=";
   };
 
-  buildInputs = [ gfortran ];
+  nativeBuildInputs = [ gfortran ];
 
   configurePhase = ''
     echo >make.inc  "SHELL = ${stdenv.shell}"
@@ -20,17 +20,17 @@ stdenv.mkDerivation rec {
     echo >>make.inc "NOOPT = -O0 -fPIC"
     echo >>make.inc "LOADER = gfortran"
     echo >>make.inc "LOADOPTS ="
-    echo >>make.inc "ARCH = gfortran"
-    echo >>make.inc "ARCHFLAGS = -shared -o"
+    echo >>make.inc "AR = gfortran"
+    echo >>make.inc "ARFLAGS = -shared -o"
     echo >>make.inc "RANLIB = echo"
     echo >>make.inc "BLASLIB = libblas.so.${version}"
   '';
 
   buildPhase = ''
     make
-    echo >>make.inc "ARCHFLAGS = "
+    echo >>make.inc "ARFLAGS = "
     echo >>make.inc "BLASLIB = libblas.a"
-    echo >>make.inc "ARCH = ar rcs"
+    echo >>make.inc "AR = ar rcs"
     echo >>make.inc "RANLIB = ranlib"
     make
   '';

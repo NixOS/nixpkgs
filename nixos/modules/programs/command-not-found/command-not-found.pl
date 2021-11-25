@@ -25,14 +25,7 @@ if (!defined $res || scalar @$res == 0) {
     print STDERR "$program: command not found\n";
 } elsif (scalar @$res == 1) {
     my $package = @$res[0]->{package};
-    if ($ENV{"NIX_AUTO_INSTALL"} // "") {
-        print STDERR <<EOF;
-The program '$program' is currently not installed. It is provided by
-the package '$package', which I will now install for you.
-EOF
-        ;
-        exit 126 if system("nix-env", "-iA", "nixos.$package") == 0;
-    } elsif ($ENV{"NIX_AUTO_RUN"} // "") {
+    if ($ENV{"NIX_AUTO_RUN"} // "") {
         exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
     } else {
         print STDERR <<EOF;

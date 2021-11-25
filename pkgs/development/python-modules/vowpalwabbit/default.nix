@@ -6,20 +6,19 @@
 , python
 , zlib
 , ncurses
-, pytest
 , docutils
 , pygments
 , numpy
 , scipy
-, scikitlearn }:
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "8.9.0";
+  version = "8.11.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "37fb7a400f3a7923a04df9921b3eef1bbe96117424ef083dcfed0e4eea77fa08";
+    sha256 = "cfde0515a3fa4d224aad5461135372f3441ae1a64717ae6bff5e23509d70b0bd";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitlearn
+    scikit-learn
     scipy
   ];
 

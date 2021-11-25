@@ -2,15 +2,15 @@
 , acme
 , certbot
 , cloudflare
-, isPy3k
-, pytest
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  inherit (certbot) src version;
-
   pname = "certbot-dns-cloudflare";
+
+  inherit (certbot) src version;
+  disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [
     acme
@@ -19,15 +19,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
     pytestCheckHook
   ];
 
-  disabled = !isPy3k;
-
   pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "source/certbot-dns-cloudflare";
 
   meta = certbot.meta // {
     description = "Cloudflare DNS Authenticator plugin for Certbot";

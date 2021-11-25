@@ -48,6 +48,10 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , # The platform which build tools (especially compilers) build for in this stage,
   targetPlatform
+
+, # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
+  # This is convient to have as a parameter so the stdenv "adapters" work better
+  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
 }:
 
 let
@@ -155,16 +159,7 @@ let
       # to correct type of machine.
       inherit (hostPlatform) system;
 
-      inherit (import ./make-derivation.nix {
-        inherit lib config stdenv;
-      }) mkDerivation;
-
-      # Slated for removal in 21.11
-      lib = if config.allowAliases or true then builtins.trace
-        ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
-         + " Please use `lib` instead."
-         + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
-        lib else throw "`stdenv.lib` is a deprecated alias for `lib`";
+      mkDerivation = mkDerivationFromStdenv stdenv;
 
       inherit fetchurlBoot;
 

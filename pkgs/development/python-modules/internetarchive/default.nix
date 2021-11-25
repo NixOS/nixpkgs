@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "515e6646a2b917c15f2241670d21f14a014b9c67dc509aef4d4aca5a59cdda65";
+    sha256 = "72094f05df39bb1463f61f928f3a7fa0dd236cab185cb8b7e8eb6c85e09acdc4";
   };
 
   propagatedBuildInputs = [

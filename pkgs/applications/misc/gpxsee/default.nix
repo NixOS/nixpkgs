@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "9.0";
+  version = "9.12";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-4MzRXpxvJcj5KptTBH6rSr2ZyQ13nV7Yq96ti+CMytw=";
+    sha256 = "sha256-hIDphwmS4UNSTvE+Icupipo6AmT2fiPdaufT/I3EeJ4=";
   };
 
   patches = (substituteAll {
@@ -23,10 +23,9 @@ mkDerivation rec {
     lrelease gpxsee.pro
   '';
 
-  postInstall = with stdenv; lib.optionalString isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
-    wrapQtApp $out/Applications/GPXSee.app/Contents/MacOS/GPXSee
   '';
 
   meta = with lib; {
@@ -39,6 +38,6 @@ mkDerivation rec {
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ womfoo sikmir ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.unix;
   };
 }

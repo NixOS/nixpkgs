@@ -1,4 +1,4 @@
-CFLAGS=-Os
+CFLAGS ?= -Os
 
 all: redo links
 

@@ -1,12 +1,12 @@
 { self, callPackage, lib }:
 callPackage ./default.nix {
   inherit self;
-  version = "2.0.5-2020-12-28";
-  rev = "56c04accf975bff2519c34721dccbbdb7b8e6963";
+  version = "2.0.5-2021-10-02";
+  rev = "d3294fa63b344173db68dd612c6d3801631e28d4";
   isStable = true;
-  sha256 = "0mmx7dy843iqdpyxxdfks860np0311gg58gi4zczx10h62y6jacm";
+  sha256 = "0ja6x7bv3iqnf6m8xk6qp1dgan2b7mys0ff86dw671fqqrfw28fn";
   extraMeta = { # this isn't precise but it at least stops the useless Hydra build
-    platforms = with lib; filter (p: p != "aarch64-linux")
+    platforms = with lib; filter (p: !hasPrefix "aarch64-" p)
       (platforms.linux ++ platforms.darwin);
   };
 }

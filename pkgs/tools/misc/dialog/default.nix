@@ -12,11 +12,11 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20210324";
+  version = "1.3-20210621";
 
   src = fetchurl {
     url = "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz";
-    hash = "sha256-AcLR4umvmwg+ogDKrQhP39pVF41bv05Cyf/0STUVFlM=";
+    hash = "sha256-w68izPzZuso4QGIQjdk1ToaZCSnuJwwjnu9pUYxdp8g=";
   };
 
   buildInputs = [
@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
     "--with-libtool-opts=${lib.optionalString enableShared "-shared"}"
   ];
 
-  installTargets = [ "install${lib.optionalString withLibrary "-full"}" ];
+  installTargets = [
+    "install${lib.optionalString withLibrary "-full"}"
+  ];
 
   meta = with lib; {
     homepage = "https://invisible-island.net/dialog/dialog.html";

@@ -62,6 +62,7 @@ in
 
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
+        defaultText = literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
         type = types.path;
         description = ''
           Font file made available for displaying text on the splash screen.
@@ -88,7 +89,7 @@ in
         type = types.path;
         # Dimensions are 48x48 to match GDM logo
         default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
-        defaultText = ''pkgs.fetchurl {
+        defaultText = literalExpression ''pkgs.fetchurl {
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
         }'';

@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.1";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
     rev = "v${version}";
-    sha256 = "1palz91y0b39pcmwg6wdmqfal38hai99dd6r88i3imqxdbmjghih";
+    sha256 = "1kcw062bcqvqva5kag9j7q72wk3vdqgf5cnn0lxmsvhlmq5sjdfn";
   };
 
   # apparently torch API changed a bit at 1.6

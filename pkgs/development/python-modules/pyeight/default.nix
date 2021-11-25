@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyeight";
-  version = "0.1.5";
+  version = "0.1.9";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyEight";
     rev = version;
-    sha256 = "1wzmjqs8zx611b71ip7a0phyas96vxpq8xpnhrirfi9l09kdjgsw";
+    sha256 = "1ybhs09wyzzaryghd6ijxhajp3677x63c4qzqsgln1mmxhj8wm5k";
   };
 
   propagatedBuildInputs = [

@@ -1,6 +1,6 @@
-{ appleDerivation }:
+{ appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   installPhase = ''
     mkdir -p $out/include
     cp notify.h      $out/include

@@ -30,7 +30,7 @@
 , openal ? null
 
 , alsaSupport ? stdenv.isLinux
-, alsaLib ? null
+, alsa-lib ? null
 
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio ? null
@@ -42,7 +42,7 @@
 assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
-assert alsaSupport -> (alsaLib != null);
+assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     wxGTK
     zlib
   ]
-  ++ optional alsaSupport alsaLib
+  ++ optional alsaSupport alsa-lib
   ++ optional automationSupport lua
   ++ optional openalSupport openal
   ++ optional portaudioSupport portaudio

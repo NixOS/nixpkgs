@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, cmake, zlib }:
 
-stdenv.mkDerivation {
-  name = "diamond-0.8.36";
+stdenv.mkDerivation rec {
+  pname = "diamond";
+  version = "0.8.36";
 
   src = fetchurl {
-    url = "https://github.com/bbuchfink/diamond/archive/v0.8.36.tar.gz";
+    url = "https://github.com/bbuchfink/diamond/archive/v${version}.tar.gz";
     sha256 = "092smzzjcg51n3x4h84k52ijpz9m40ri838j9k2i463ribc3c8rh";
   };
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
       B. Buchfink, Xie C., D. Huson,
       "Fast and sensitive protein alignment using DIAMOND",
       Nature Methods 12, 59-60 (2015).
-        '';
+    '';
     homepage = "https://github.com/bbuchfink/diamond";
     license = {
       fullName = "University of Tuebingen, Benjamin Buchfink";

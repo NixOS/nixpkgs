@@ -1,5 +1,4 @@
 { lib
-, nixosTests
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -16,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-r/Rllu+tgKqz+vkxA8BSN+3V0lUUd6dEATfickQp4+s=";
   };
 
-  cargoSha256 = "sha256-ZK4kKdW+TqT0NXzB1wtQwJA78cVRxvEoqImOIqLldvM=";
+  cargoSha256 = "sha256-O8P29eYlHgmmAADZ/DgTBmj0ZOa+4u/Oee+TMF+/4Ro=";
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
@@ -26,7 +25,18 @@ rustPlatform.buildRustPackage rec {
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests) lsd; };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/lsd-test.XXXX)
+    echo 'abc' > $testFile
+    $out/bin/lsd --classic --blocks "size,name" -l $testFile | grep "4 B $testFile"
+    $out/bin/lsd --version | grep "${version}"
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Peltoche/lsd";

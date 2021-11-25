@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.0.5";
+  version = "5.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "affdd263d8b8eb3c98170b78bf83867cdb6a14901d586e00ddb65bfe2f0c4e60";
+    sha256 = "03e16e94f2b34c31f8bf1206d8ddd3ccaa4c315f7f6a1879b7b1210d229568c2";
   };
 
   propagatedBuildInputs = [ vine ];

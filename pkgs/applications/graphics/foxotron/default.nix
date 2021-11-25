@@ -13,7 +13,7 @@
 , libXi
 , libXext
 , libGLU
-, alsaLib
+, alsa-lib
 , fontconfig
 , AVFoundation
 , Carbon
@@ -25,20 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
-  version = "2021-04-19";
+  version = "2021-08-13";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-YTCnWHXBNqvJmhRqRQRFCVvBcqbjKzcc3AKVXS0jvno=";
+    sha256 = "sha256-0cnLHTZMeh8ilP0iXaMpFgKQAkizy/FimxXFDbH0b2w=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsaLib fontconfig libGLU ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsa-lib fontconfig libGLU ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL ];
 
   installPhase = ''

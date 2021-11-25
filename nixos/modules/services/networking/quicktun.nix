@@ -87,7 +87,7 @@ with lib;
   };
 
   config = mkIf (cfg != []) {
-    systemd.services = fold (a: b: a // b) {} (
+    systemd.services = foldr (a: b: a // b) {} (
       mapAttrsToList (name: qtcfg: {
         "quicktun-${name}" = {
           wantedBy = [ "multi-user.target" ];

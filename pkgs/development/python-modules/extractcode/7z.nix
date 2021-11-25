@@ -4,15 +4,16 @@
 , plugincode
 , p7zip
 }:
+
 buildPythonPackage rec {
   pname = "extractcode-7z";
-  version = "21.4.4";
+  version = "21.5.31";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "scancode-plugins";
     rev = "v${version}";
-    sha256 = "xnUGDMS34iMVMGo/nZwRarGzzbj3X4Rt+YHvvKpmy6A=";
+    sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
   };
 
   sourceRoot = "source/builtins/extractcode_7z-linux";

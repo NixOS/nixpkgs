@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , libpng
+, libjpeg
+, freetype
 , xorg
 , python3
 , imagemagick
@@ -11,18 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "numworks-epsilon";
-  version = "15.3.2";
+  version = "15.5.0";
 
   src = fetchFromGitHub {
     owner = "numworks";
     repo = "epsilon";
     rev = version;
-    sha256 = "1q34dilyypiggjs16486jm122yf20wcigqxvspc77ig9albaxgh5";
+    sha256 = "fPBO3FzZ4k5OxG+Ifc6R/au4Te974HNKAEdHz+aFdSg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpng
+    libjpeg
+    freetype
     xorg.libXext
     python3
     imagemagick
@@ -31,6 +35,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PLATFORM=simulator"
+  ];
+
+  patches = [
+    # Remove make rule Introduced in cba596dde7
+    # which causes it to not build with nix
+    ./0001-ion-linux-makerules.patch
   ];
 
   installPhase = ''
@@ -44,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Emulator for Epsilon, a High-performance graphing calculator operating system";
+    description = "Simulator for Epsilon, a High-performance graphing calculator operating system";
     homepage = "https://numworks.com/";
     license = licenses.cc-by-nc-sa-40;
     maintainers = with maintainers; [ erikbackman ];

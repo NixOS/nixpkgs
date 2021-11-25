@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , isPy27
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , jinja2
 , pyyaml
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
+    pytest-cov
   ];
 
   disabledTests = [

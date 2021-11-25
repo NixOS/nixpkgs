@@ -3,7 +3,6 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
-, fetchpatch
 , pytestCheckHook
 , pycodestyle
 , pyyaml
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tinydb";
-  version = "4.4.0";
+  version = "4.5.2";
   disabled = pythonOlder "3.5";
   format = "pyproject";
 
@@ -19,20 +18,11 @@ buildPythonPackage rec {
     owner = "msiemens";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3FbsnLU7G4VVhI5NYRqCEQgo51zDeAkEhH69H52zr/w=";
+    sha256 = "0gyc9rk1adw4gynwnv4kfas0hxv1cql0sm5b3fsms39088ha894l";
   };
 
   nativeBuildInputs = [
     poetry-core
-  ];
-
-  patches = [
-    # Switch to poetry-core, https://github.com/msiemens/tinydb/pull/391
-    (fetchpatch {
-      name = "switch-to-peotry-core.patch";
-      url = "https://github.com/msiemens/tinydb/commit/5b547c18e7ce9f5925d5943dfa47d408435a0da5.patch";
-      sha256 = "19ma9ib020b82sn1mcr7sfysqbj8h6nbb365bih1x1wn3ym8xlbc";
-    })
   ];
 
   postPatch = ''

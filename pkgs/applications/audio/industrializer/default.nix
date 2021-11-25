@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, alsaLib
+, alsa-lib
 , audiofile
 , autoconf
 , automake
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     audiofile
     autoconf
     automake

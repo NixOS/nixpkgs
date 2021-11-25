@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsaLib, libjack2
+{ lib, stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsa-lib, libjack2
 , libclxclient, libX11, libXft, readline
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libclthreads zita-alsa-pcmi alsaLib libjack2 libclxclient
+    libclthreads zita-alsa-pcmi alsa-lib libjack2 libclxclient
     libX11 libXft readline
   ];
 

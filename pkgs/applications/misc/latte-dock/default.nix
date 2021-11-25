@@ -3,11 +3,11 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.9.11";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0x7a93a7axsa0fzpbkkv1z722k9za4p51xcpzdpnh5ih1zij0csi";
+    sha256 = "04kq86qmrjbzidrkknj000pv1b5z0r7nfidhy2zv67ks8fdi4zln";
     name = "${pname}-${version}.tar.xz";
   };
 
@@ -16,7 +16,13 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
     qtx11extras kcrash knewstuff ];
 
-
+  patches = [
+    ./0001-close-user-autostart.patch
+  ];
+  fixupPhase = ''
+    mkdir -p $out/etc/xdg/autostart
+    cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
+  '';
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";

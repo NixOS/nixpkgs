@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, dconf, gtksourceview3, at-spi2-core, gtksourceviewmm,
-  boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkg-config, pcre,
+  boost, libepoxy, cmake, aspell, llvmPackages, libgit2, pkg-config, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
   coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gtksourceview3
     at-spi2-core
     pcre
-    epoxy
+    libepoxy
     boost
     libXdmcp
     cmake
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
     e = "\");";
     v = lib.getVersion llvmPackages.clang;
   in
-    p+llvmPackages.libcxx+"/include/c++/v1"+e
-    +p+llvmPackages.clang-unwrapped+"/lib/clang/"+v+"/include/"+e
+    p+llvmPackages.libcxx.dev+"/include/c++/v1"+e
+    +p+llvmPackages.clang-unwrapped.lib+"/lib/clang/"+v+"/include/"+e
     +p+glibc.dev+"/include"+e;
 
   preConfigure = ''

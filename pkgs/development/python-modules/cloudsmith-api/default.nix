@@ -3,7 +3,7 @@
 , fetchPypi
 , certifi
 , six
-, dateutil
+, python-dateutil
 , urllib3
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     certifi
     six
-    dateutil
+    python-dateutil
     urllib3
   ];
 

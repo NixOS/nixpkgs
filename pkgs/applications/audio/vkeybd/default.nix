@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, libX11, makeWrapper, tcl, tk }:
+{ lib, stdenv, fetchurl, alsa-lib, libX11, makeWrapper, tcl, tk }:
 
 stdenv.mkDerivation  rec {
   pname = "vkeybd";
@@ -10,7 +10,7 @@ stdenv.mkDerivation  rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ alsaLib libX11 tcl tk ];
+  buildInputs = [ alsa-lib libX11 tcl tk ];
 
   configurePhase = ''
     mkdir -p $out/bin

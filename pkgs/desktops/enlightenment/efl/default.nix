@@ -4,7 +4,7 @@
 , ninja
 , pkg-config
 , SDL2
-, alsaLib
+, alsa-lib
 , bullet
 , check
 , curl
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     SDL2
-    alsaLib
+    alsa-lib
     bullet
     curl
     dbus

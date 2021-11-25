@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
-, curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
 , polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
@@ -78,13 +78,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.34.22";
+  version = "1.36.10";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "1144j9crm0q5pwxnkmy3ahw1vbkddpbk2ys2m2pxxxiqifdhll83";
+    sha256 = "sha256-MmBnbVDitKOctPe2dNe1sMNNs/qEYGVq3UMJxAkLlCc=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -130,7 +131,7 @@ in stdenv.mkDerivation rec {
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
-             src/zm_config.h.in \
+             src/zm_config_data.h.in \
              web/api/app/Config/bootstrap.php.in \
              web/includes/config.php.in ; do
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
@@ -138,7 +139,7 @@ in stdenv.mkDerivation rec {
 
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg_3}/bin/ffmpeg "
+        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
     done
 
     substituteInPlace web/includes/functions.php \
@@ -147,7 +148,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb.client pcre perl polkit x264 zlib
     util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

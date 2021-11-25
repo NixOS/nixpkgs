@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, alsa-lib }:
 
 stdenv.mkDerivation rec {
    version = "0.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
    hardeningDisable = [ "format" ];
 
-   buildInputs = [ alsaLib ];
+   buildInputs = [ alsa-lib ];
 
    prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

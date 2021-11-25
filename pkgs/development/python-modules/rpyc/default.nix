@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
 , plumbum
 , pytestCheckHook
 }:

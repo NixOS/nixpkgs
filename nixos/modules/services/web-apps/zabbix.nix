@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExample mapAttrs optionalString versionAtLeast;
+  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
@@ -21,7 +21,8 @@ let
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
     $DB['USER'] = '${cfg.database.user}';
-    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "file_get_contents('${cfg.database.passwordFile}')" else "''"};
+    # NOTE: file_get_contents adds newline at the end of returned string
+    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")" else "''"};
     // Schema name. Used for IBM DB2 and PostgreSQL.
     $DB['SCHEMA'] = ''';
     $ZBX_SERVER = '${cfg.server.address}';
@@ -43,7 +44,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.web;
-        defaultText = "zabbix.web";
+        defaultText = literalExpression "zabbix.web";
         description = "Which Zabbix package to use.";
       };
 
@@ -116,7 +117,7 @@ in
 
       virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExample ''
+        example = literalExpression ''
           {
             hostName = "zabbix.example.org";
             adminAddr = "webmaster@example.org";

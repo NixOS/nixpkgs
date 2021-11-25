@@ -1,10 +1,16 @@
-{ stdenv, lib, fetchurl
-, SDL, dwarf-fortress-unfuck
+{ stdenv
+, lib
+, fetchurl
+, SDL
+, dwarf-fortress-unfuck
 
-# Our own "unfuck" libs for macOS
-, ncurses, fmodex, gcc
+  # Our own "unfuck" libs for macOS
+, ncurses
+, fmodex
+, gcc
 
-, dfVersion, df-hashes
+, dfVersion
+, df-hashes
 }:
 
 with lib;
@@ -30,20 +36,24 @@ let
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 
-  game = if hasAttr dfVersion df-hashes
-         then getAttr dfVersion df-hashes
-         else throw "Unknown Dwarf Fortress version: ${dfVersion}";
-  dfPlatform = if hasAttr stdenv.hostPlatform.system platforms
-               then getAttr stdenv.hostPlatform.system platforms
-               else throw "Unsupported system: ${stdenv.hostPlatform.system}";
-  sha256 = if hasAttr dfPlatform game
-           then getAttr dfPlatform game
-           else throw "Unsupported dfPlatform: ${dfPlatform}";
+  game =
+    if hasAttr dfVersion df-hashes
+    then getAttr dfVersion df-hashes
+    else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dfPlatform =
+    if hasAttr stdenv.hostPlatform.system platforms
+    then getAttr stdenv.hostPlatform.system platforms
+    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  sha256 =
+    if hasAttr dfPlatform game
+    then getAttr dfPlatform game
+    else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-${dfVersion}";
+  pname = "dwarf-fortress";
+  version = dfVersion;
 
   src = fetchurl {
     url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";

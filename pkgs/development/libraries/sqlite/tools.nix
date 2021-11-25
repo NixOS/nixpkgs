@@ -4,11 +4,11 @@ let
   archiveVersion = import ./archive-version.nix lib;
   mkTool = { pname, makeTarget, description, homepage }: stdenv.mkDerivation rec {
     inherit pname;
-    version = "3.35.2";
+    version = "3.36.0";
 
     src = assert version == sqlite.version; fetchurl {
       url = "https://sqlite.org/2021/sqlite-src-${archiveVersion version}.zip";
-      sha256 = "00w7qggrdxpcrs4rfpqkjhcghi8pcx6zzjim9wlz6vsrxlr9dwva";
+      sha256 = "092khwfm0m0i80sjb4fc5569jj0kilm6pa867w0akcv6h38bk8r5";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -20,9 +20,9 @@ let
 
     meta = with lib; {
       inherit description homepage;
-      downloadPage = http://sqlite.org/download.html;
+      downloadPage = "http://sqlite.org/download.html";
       license = licenses.publicDomain;
-      maintainers = with maintainers; [ pesterhazy johnazoidberg ];
+      maintainers = with maintainers; [ johnazoidberg ];
       platforms = platforms.unix;
     };
   };

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tzxVZeUX8kti3qilzqwXjGYcQwnTqgw+QghWwHLEEbQ=";
+    sha256 = "8f694f3ba9cc92cab508b152dcfe322153975c29bda272e2fd7f3f00f36e47c5";
   };
 
   checkInputs = [ pytestCheckHook ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Distributed Python deployment and communication";
     license = licenses.mit;
     homepage = "https://execnet.readthedocs.io/";
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 
 }

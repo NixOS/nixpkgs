@@ -5,7 +5,7 @@
 }:
 
 buildDunePackage rec {
-  version = "3.0.1";
+  version = "3.4";
   pname = "containers";
 
   useDune2 = true;
@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "v${version}";
-    sha256 = "1m19cfcwks3xcj16nqldfb49dg0vdc7by1q1j8bpac3z2mjvks0l";
+    sha256 = "0ixpy81p6rc3lq71djfndb2sg2hfj20j1jbzzrrmgqsysqdjsgzz";
   };
 
   buildInputs = [ dune-configurator ];
@@ -22,7 +22,7 @@ buildDunePackage rec {
 
   checkInputs = [ gen iter ounit qcheck uutf ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://github.com/c-cube/ocaml-containers";

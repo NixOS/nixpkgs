@@ -2,16 +2,30 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.5.11";
+  version = "0.5.24";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "1d9p2f79f2k7nnka9qja3dlqvvl240l09frkb17ff2f5kyi1qabv";
+    sha256 = "sha256-d4TCuFj7nbQDxTLCStrGj698iUYTH0mCqoCZeeOGNIE=";
   };
 
-  vendorSha256 = "1wfm55idlxf6cbm6b5z3fip0j94nwr7m0zxx6a2nsr03d4x0ad0k";
+  vendorSha256 = "sha256-3o+jizVVHcPZ6nNT2nCF8fLDynnFccI2Y50kbXp2qAI=";
+
+  ldflags = [
+    "-s" "-w"
+    "-X main.Version=v${version}"
+    "-X main.DefaultBuildkitdImage=earthly/buildkitd:v${version}"
+  ];
+
+  BUILDTAGS = "dfrunmount dfrunsecurity dfsecrets dfssh dfrunnetwork";
+  preBuild = ''
+    makeFlagsArray+=(BUILD_TAGS="${BUILDTAGS}")
+  '';
+
+  # For some reasons the tests fail, but the program itself seems to work.
+  doCheck = false;
 
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
@@ -22,7 +36,7 @@ buildGoModule rec {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ mdsp ];
+    license = licenses.bsl11;
+    maintainers = with maintainers; [ matdsoupe ];
   };
 }

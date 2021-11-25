@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.9.6";
+  version = "0.9.10";
 
   src = fetchurl {
-    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "sha256-cAhcTmSPkV5z5ryuCNrpxy9/1iWvvminiVYul9c/DwM=";
+    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+    sha256 = "sha256-JbZorHeBznBb+R9JjPQBNKlTdNNzg1G82OxWvBtNg5Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+
+  # this is mostly downloading a pre-built artifact
+  preferLocal = true;
 
   installPhase = ''
     runHook preInstall
@@ -23,6 +26,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${jre}/bin" \
       --set JAVA_HOME "${jre}"
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  # The default release is a script which will do an impure download
+  # just ensure that the application can run without network
+  installCheckPhase = ''
+    $out/bin/mill --help > /dev/null
   '';
 
   meta = with lib; {

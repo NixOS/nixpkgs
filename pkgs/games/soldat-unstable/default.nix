@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub, fpc, zip, makeWrapper
 , SDL2, freetype, physfs, openal, gamenetworkingsockets
-, xorg, autoPatchelfHook
+, xorg, autoPatchelfHook, cmake
 }:
 
 let
   base = stdenv.mkDerivation rec {
     pname = "soldat-base";
-    version = "unstable-2020-11-26";
+    version = "unstable-2021-09-05";
 
     src = fetchFromGitHub {
       name = "base";
       owner = "Soldat";
       repo = "base";
-      rev = "e5f9c35ec12562595b248a7a921dd3458b36b605";
-      sha256 = "0qg0p2adb5v6di44iqczswldhypdqvn1nl96vxkfkxdg9i8x90w3";
+      rev = "6c74d768d511663e026e015dde788006c74406b5";
+      sha256 = "175gmkdccy8rnkd95h2zqldqfydyji1hfby8b1qbnl8wz4dh08mz";
     };
 
     nativeBuildInputs = [ zip ];
@@ -39,55 +39,37 @@ in
 
 stdenv.mkDerivation rec {
   pname = "soldat";
-  version = "unstable-2021-04-27";
+  version = "unstable-2021-11-01";
 
   src = fetchFromGitHub {
     name = "soldat";
     owner = "Soldat";
     repo = "soldat";
-    rev = "4d17667c316ff08934e97448b7f290a8dc434e81";
-    sha256 = "1pf557psmhfaagblfwdn36cw80j7bgs0lgjq8hmjbv58dysw3jdb";
+    rev = "7780d2948b724970af9f2aaf4fb4e4350d5438d9";
+    sha256 = "0r39d1394q7kabsgq6vpdlzwsajxafsg23i0r273nggfvs3m805z";
   };
 
-  nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook ];
+  patches = [
+    # Don't build GameNetworkingSockets as an ExternalProject,
+    # see https://github.com/Soldat/soldat/issues/73
+    ./gamenetworkingsockets-no-external.patch
+  ];
+
+  nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook cmake ];
+
+  cmakeFlags = [
+    "-DADD_ASSETS=OFF" # We provide base's smods via nix
+  ];
 
   buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];
+  # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
   runtimeDependencies = [ xorg.libX11 ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    mkdir -p client/build server/build
-
-    # build .so from stb headers
-    pushd client/libs/stb
-    make
-    popd
-
-    # build client
-    pushd client
-    make mode=release
-    popd
-
-    # build server
-    pushd server
-    make mode=release
-    popd
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 client/libs/stb/libstb.so -t $out/lib
-    install -Dm755 client/build/soldat_* $out/bin/soldat
-    install -Dm755 server/build/soldatserver_* $out/bin/soldatserver
-
-    # make sure soldat{,server} find their game archive,
-    # let them write their state and configuration files
-    # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
-    # the user specifies otherwise.
+  # make sure soldat{,server} find their game archive,
+  # let them write their state and configuration files
+  # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
+  # the user specifies otherwise.
+  postInstall = ''
     for p in $out/bin/soldatserver $out/bin/soldat; do
       configDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/soldat/$(basename "$p")"
 
@@ -97,8 +79,6 @@ stdenv.mkDerivation rec {
         --add-flags "-fs_userpath \"$configDir\"" \
         --add-flags "-fs_basepath \"${base}/share/soldat\""
     done
-
-    runHook postInstall
   '';
 
   meta = with lib; {
@@ -106,7 +86,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit base.meta.license ];
     inherit (src.meta) homepage;
     maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.x86_64 ++ platforms.i686;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     # portability currently mainly limited by fpc
     # in nixpkgs which doesn't work on darwin,
     # aarch64 and arm support should be possible:

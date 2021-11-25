@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "primesieve";
   version = "7.6";
 
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
-  src = fetchurl {
-    url = "https://github.com/kimwalisch/primesieve/archive/v${version}.tar.gz";
-    sha256 = "sha256-SFZp6Pmmx05SiUfSdN9wXxPKrydtRg0PA3uNvAycCpk=";
+  src = fetchFromGitHub {
+    owner = "kimwalisch";
+    repo = "primesieve";
+    rev = "v${version}";
+    sha256 = "sha256-rSNYoWBy80BgPi1c+BSKbWTyGGb7/fxmu+mq1DXakHY=";
   };
 
   meta = with lib; {

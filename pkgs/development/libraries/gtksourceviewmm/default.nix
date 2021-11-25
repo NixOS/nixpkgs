@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = "gtksourceviewmm";
       versionPolicy = "none";
+      freeze = true;
     };
   };
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glibmm gtkmm3 gtksourceview3 ];
 
   meta = with lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = "https://developer.gnome.org/gtksourceviewmm/";
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;

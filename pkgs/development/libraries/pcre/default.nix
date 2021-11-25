@@ -17,13 +17,14 @@ in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
     sha256 = "0v9nk51wh55pcbnf2jr36yarz8ayajn6d7ywiq2wagivn9c8c40r";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]

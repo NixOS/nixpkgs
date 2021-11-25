@@ -16,7 +16,6 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    inherit version;
     description = "Read & write wireless card capabilities using the Linux Wireless Extensions";
     homepage = "http://pythonwifi.tuxfamily.org/";
     # From the README: "pythonwifi is licensed under LGPLv2+, however, the

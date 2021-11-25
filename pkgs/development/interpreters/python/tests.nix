@@ -94,12 +94,18 @@ let
 
   # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
-  integrationTests = lib.optionalAttrs (python.pythonAtLeast "3.7"  && (!python.isPyPy)) rec {
-    # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
-    nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
-      interpreter = python;
-    };
-  };
+  integrationTests = lib.optionalAttrs (!python.isPyPy) (
+    lib.optionalAttrs (python.isPy3k && !stdenv.isDarwin) { # darwin has no split-debug
+      cpython-gdb = callPackage ./tests/test_cpython_gdb {
+        interpreter = python;
+      };
+    } // lib.optionalAttrs (python.pythonAtLeast "3.7") rec {
+      # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
+      nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
+        interpreter = python;
+      };
+    }
+  );
 
   # Tests to ensure overriding works as expected.
   overrideTests = let
@@ -121,4 +127,37 @@ let
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
   };
 
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests)
+  condaTests = let
+    requests = callPackage ({
+        autoPatchelfHook,
+        fetchurl,
+        pythonCondaPackages,
+      }:
+      python.pkgs.buildPythonPackage {
+        pname = "requests";
+        version = "2.24.0";
+        format = "other";
+        src = fetchurl {
+          url = "https://repo.anaconda.com/pkgs/main/noarch/requests-2.24.0-py_0.tar.bz2";
+          sha256 = "02qzaf6gwsqbcs69pix1fnjxzgnngwzvrsy65h1d521g750mjvvp";
+        };
+        nativeBuildInputs = [ autoPatchelfHook ] ++ (with python.pkgs; [
+          condaUnpackHook condaInstallHook
+        ]);
+        buildInputs = [
+          pythonCondaPackages.condaPatchelfLibs
+        ];
+        propagatedBuildInputs = with python.pkgs; [
+          chardet idna urllib3 certifi
+        ];
+      }
+    ) {};
+    pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
+    in
+    {
+      condaExamplePackage = runCommand "import-requests" {} ''
+        ${pythonWithRequests.interpreter} -c "import requests" > $out
+      '';
+    };
+
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests)

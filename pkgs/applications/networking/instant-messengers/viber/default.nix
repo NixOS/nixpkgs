@@ -1,16 +1,17 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
+ alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
  nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "13.3.1.22";
+  version = "16.1.0.37";
 
   src = fetchurl {
-    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
+    # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
+    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   libPath = lib.makeLibraryPath [
-      alsaLib
+      alsa-lib
       cups
       curl
       dbus
@@ -81,7 +82,8 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/viber/Viber \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QML2_IMPORT_PATH "$out/opt/viber/qml"
     ln -s $out/opt/viber/Viber $out/bin/viber
 
     mv $out/usr/share $out/share

@@ -1,39 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
-, fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
-, libXi, libXext, wayland, wayland-protocols, libffi, libGLU, libXScrnSaver
-, expat, libbfd
+
+{ stdenv, lib, fetchFromGitHub, fetchpatch, makeDesktopItem, cmake, pkg-config
+, SDL, SDL2_ttf, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig
+, libXi, libXScrnSaver, libXinerama
+, wayland, wayland-protocols
 }:
 
+let
+  desktopItem = makeDesktopItem {
+    name = "looking-glass-client";
+    desktopName = "Looking Glass Client";
+    type = "Application";
+    exec = "looking-glass-client";
+    icon = "lg-logo";
+    terminal = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B3";
+  version = "B4";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "1vmabjzn85p0brdian9lbpjq39agzn8k0limn8zjm713lh3n3c0f";
+    sha256 = "0fwmz0l1dcfwklgvxmv0galgj2q3nss90kc3jwgf6n80x27rsnhf";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle
-    libpthreadstubs libXau libXdmcp libXi libXext wayland wayland-protocols
-    libffi libGLU libXScrnSaver expat libbfd
+    SDL SDL2_ttf freefont_ttf spice-protocol
+    libbfd nettle fontconfig
+    libXi libXScrnSaver libXinerama
+    wayland wayland-protocols
   ];
 
-  patches = [
-    # error: ‘h’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-    # Fixed upstream in master in 8771103abbfd04da9787dea760405364af0d82de, but not in B3.
-    # Including our own patch here since upstream commit patch doesnt apply cleanly on B3
-    ./0001-client-all-fix-more-maybe-uninitialized-when-O3-is-i.patch
-  ];
-  patchFlags = "-p2";
-
-  sourceRoot = "source/client";
   NIX_CFLAGS_COMPILE = "-mavx"; # Fix some sort of AVX compiler problem.
+
+  postUnpack = ''
+    echo $version > source/VERSION
+    export sourceRoot="source/client"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    ln -s ${desktopItem}/share/applications $out/share/
+    cp $src/resources/lg-logo.png $out/share/pixmaps
+  '';
 
   meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
@@ -46,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexbakker ];
+    maintainers = with maintainers; [ alexbakker babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

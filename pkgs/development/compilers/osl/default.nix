@@ -1,6 +1,6 @@
 { clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
-util-linux, python
+util-linux, python3
 }:
 
 let boost_static = boost165.override { enableStatic = true; };
@@ -17,7 +17,15 @@ in clangStdenv.mkDerivation rec {
     sha256 = "1dwf10f2fpxc55pymwkapql20nc462mq61hv21c527994c2qp1ll";
   };
 
-  cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
+  cmakeFlags = [
+    "-DUSE_BOOST_WAVE=ON"
+    "-DENABLERTTI=ON"
+
+    # Build system implies llvm-config and llvm-as are in the same directory.
+    # Override defaults.
+    "-DLLVM_DIRECTORY=${llvm}"
+    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+  ];
 
   preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
 
@@ -26,7 +34,7 @@ in clangStdenv.mkDerivation rec {
      zlib openexr openimageio llvm
      partio pugixml
      util-linux # needed just for hexdump
-     python # CMake doesn't check this?
+     python3 # CMake doesn't check this?
   ];
   # TODO: How important is partio? CMake doesn't seem to find it
   meta = with lib; {

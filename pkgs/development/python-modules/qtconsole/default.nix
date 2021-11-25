@@ -6,7 +6,7 @@
 , mock
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , pygments
 , ipykernel
 , pyqt5
@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.0.3";
+  version = "5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c091a35607d2a2432e004c4a112d241ce908086570cf68594176dd52ccaa212d";
+    sha256 = "bbc34bca14f65535afcb401bc74b752bac955e5313001ba640383f7e5857dc49";
   };
 
   checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5 qtpy];
+  propagatedBuildInputs = [traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy];
 
   # : cannot connect to X server
   doCheck = false;

@@ -27,7 +27,7 @@ updateVersion()
 
 currentVersion=$(cd $dirname && nix eval --raw '(with import ../../.. {}; ombi.version)')
 
-latestTag=$(curl https://api.github.com/repos/Ombi-App/Ombi/tags | jq -r '.[] | .name' | sort --version-sort | tail -1)
+latestTag=$(curl https://api.github.com/repos/Ombi-App/Ombi/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr $latestTag : 'v\(.*\)')"
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then

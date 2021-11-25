@@ -2,16 +2,15 @@
 , attrs
 , buildPythonPackage
 , defusedxml
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
 , isPy3k
+, jbig2dec
 , lxml
+, mupdf
 , pillow
 , psutil
 , pybind11
-, pytest-cov
-, pytest-helpers-namespace
-, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 , python-dateutil
@@ -20,17 +19,36 @@
 , setuptools
 , setuptools-scm
 , setuptools-scm-git-archive
+, substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "2.11.1";
+  version = "4.0.1.post1";
   disabled = ! isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0vs7qa3s4scfhyldfw99hhxpna6rj49rsbr2k0j6b4qx1bw8h141";
+  src = fetchFromGitHub {
+    owner = "pikepdf";
+    repo = "pikepdf";
+    rev = "v${version}";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    extraPostFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    sha256 = "sha256-s7eS7jYGohYt75/r++4v9K6BRfiQ3drdG5wbIL3WoiU=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
+      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+    })
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pybind11
@@ -45,11 +63,8 @@ buildPythonPackage rec {
   checkInputs = [
     attrs
     hypothesis
-    pytest-helpers-namespace
-    pytest-timeout
     pytest-xdist
     psutil
-    pytest-cov
     pytestCheckHook
     python-dateutil
     python-xmp-toolkit
@@ -62,17 +77,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  preBuild = ''
-    HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "pikepdf" ];
 
   meta = with lib; {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
   };
 }

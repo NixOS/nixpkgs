@@ -3,7 +3,7 @@
 , patchelf
 , requireFile
 , callPackage
-, alsaLib
+, alsa-lib
 , dbus
 , fontconfig
 , freetype
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     dbus
     fontconfig

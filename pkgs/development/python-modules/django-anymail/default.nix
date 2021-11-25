@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "8.2";
+  version = "8.4";
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zd4w707az36pp8wimlz6sfxwy9w190qp93brl78pva3rhnx5p97";
+    sha256 = "08ac24hrafkk1jg3milfjky3qni1cz5qggp1rgzq9r7ina4akjma";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Django email backends and webhooks for Mailgun";
     homepage = "https://github.com/anymail/django-anymail";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
   };
 }

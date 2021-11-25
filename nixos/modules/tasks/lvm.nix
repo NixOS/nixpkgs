@@ -9,7 +9,7 @@ in {
       type = types.package;
       default = if cfg.dmeventd.enable then pkgs.lvm2_dmeventd else pkgs.lvm2;
       internal = true;
-      defaultText = "pkgs.lvm2";
+      defaultText = literalExpression "pkgs.lvm2";
       description = ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).
@@ -46,22 +46,32 @@ in {
         kernelModules = [ "dm-snapshot" "dm-thin-pool" ];
 
         extraUtilsCommands = ''
-          copy_bin_and_libs ${pkgs.thin-provisioning-tools}/bin/pdata_tools
-          copy_bin_and_libs ${pkgs.thin-provisioning-tools}/bin/thin_check
+          for BIN in ${pkgs.thin-provisioning-tools}/bin/*; do
+            copy_bin_and_libs $BIN
+          done
+        '';
+
+        extraUtilsCommandsTest = ''
+          ls ${pkgs.thin-provisioning-tools}/bin/ | grep -v pdata_tools | while read BIN; do
+            $out/bin/$(basename $BIN) --help > /dev/null
+          done
         '';
       };
 
-      environment.etc."lvm/lvm.conf".text = ''
-        global/thin_check_executable = "${pkgs.thin-provisioning-tools}/bin/thin_check"
-      '';
+      environment.etc."lvm/lvm.conf".text = concatMapStringsSep "\n"
+        (bin: "global/${bin}_executable = ${pkgs.thin-provisioning-tools}/bin/${bin}")
+        [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ];
     })
     (mkIf (cfg.dmeventd.enable || cfg.boot.thin.enable) {
       boot.initrd.preLVMCommands = ''
           mkdir -p /etc/lvm
           cat << EOF >> /etc/lvm/lvm.conf
-          ${optionalString cfg.boot.thin.enable ''
-            global/thin_check_executable = "$(command -v thin_check)"
-          ''}
+          ${optionalString cfg.boot.thin.enable (
+            concatMapStringsSep "\n"
+              (bin: "global/${bin}_executable = $(command -v ${bin})")
+              [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
+            )
+          }
           ${optionalString cfg.dmeventd.enable ''
             dmeventd/executable = "$(command -v false)"
             activation/monitoring = 0

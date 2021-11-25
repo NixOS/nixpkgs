@@ -15,21 +15,22 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     rev = "v${version}";
-    sha256 = "1fbrmh6qa3dm3q3zdxaa0fls94wardbcvnjgwxk686wpjgs1xrs4";
+    sha256 = "1cg63qhf823nf785kyl96r7vyxfl6dlbwsmhcpny8vb65pl9gng5";
   };
 
   postPatch = ''
     # https://github.com/alandtse/auth_capture_proxy/issues/14
-    substituteInPlace pyproject.toml --replace \
-      "poetry.masonry.api" \
-      "poetry.core.masonry.api"
+    # https://github.com/alandtse/auth_capture_proxy/issues/15
+    substituteInPlace pyproject.toml \
+       --replace "poetry.masonry.api" "poetry.core.masonry.api" \
+       --replace 'importlib-metadata = "^3.4.0"' 'importlib-metadata = "*"'
   '';
 
   nativeBuildInputs = [

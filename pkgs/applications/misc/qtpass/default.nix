@@ -24,8 +24,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
 
-  enableParallelBuilding = true;
-
   patches = [
     # Fix path to pass-otp plugin `/usr/lib/password-store/extensions/otp.bash` being hardcoded.
     # TODO: Remove when https://github.com/IJHack/QtPass/pull/499 is merged and available.

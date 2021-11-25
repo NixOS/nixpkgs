@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "${appname}-${version}";
 
   src = fetchzip {
-    url = "http://getpopfile.org/downloads/${appname}-${version}.zip";
+    url = "https://getpopfile.org/downloads/${appname}-${version}.zip";
     sha256 = "0gcib9j7zxk8r2vb5dbdz836djnyfza36vi8215nxcdfx1xc7l63";
     stripRoot = false;
   };
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = (with perlPackages; [
     ## These are all taken from the popfile documentation as applicable to Linux
-    ## http://getpopfile.org/docs/howtos:allplatformsrequireperl
+    ## https://getpopfile.org/docs/howtos:allplatformsrequireperl
     perl
     DBI
     DBDSQLite
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
     # Should work on macOS, but havent tested it.
     # Windows support is more complicated.
-    # http://getpopfile.org/docs/faq:systemrequirements
+    # https://getpopfile.org/docs/faq:systemrequirements
     platforms = lib.platforms.linux;
   };
 }

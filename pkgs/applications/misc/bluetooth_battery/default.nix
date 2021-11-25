@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "bluetooth_battery";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "TheWeirdDev";
     repo = "Bluetooth_Headset_Battery_Level";
     rev = "v${version}";
-    sha256 = "121pkaq9z8p2i35cqs32aygjvf82r961w0axirpmsrbmrwq2hh6g";
+    sha256 = "067qfxh228cy1x95bnjp88dx4k00ajj7ay7fz5vr1gkj2yfa203s";
   };
 
   propagatedBuildInputs = [ pybluez ];

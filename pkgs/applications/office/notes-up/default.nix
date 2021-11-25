@@ -1,9 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , pkg-config
-, vala_0_46
+, vala
 , cmake
 , ninja
 , gtk3
@@ -12,27 +13,28 @@
 , gtkspell3
 , glib
 , libgee
+, pcre
 , sqlite
 , discount
 , wrapGAppsHook
-, withPantheon ? false }:
+, withPantheon ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
-  version = "2.0.2";
+  version = "unstable-2020-12-29";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Notes-up";
-    rev = version;
-    sha256 = "0bklgp8qrrj9y5m77xqbpy1ld2d9ya3rlxklgzx3alffq5312i4s";
+    rev = "2ea9f35f588769758f5d2d4436d71c4059141a6f";
+    sha256 = "sha256-lKOM9+s34xYB9bF9pgip9DFu+6AaxSE4HjFVhoWtttk=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    # fails with newer vala: https://github.com/Philip-Scott/Notes-up/issues/349
-    vala_0_46
+    vala
     pkg-config
     wrapGAppsHook
   ];
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
     gtkspell3
     libgee
     pantheon.granite
+    pcre
     sqlite
     webkitgtk
   ];
@@ -60,10 +63,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
-    + lib.optionalString withPantheon " - built with Contractor support";
+      + lib.optionalString withPantheon " - built with Contractor support";
     homepage = "https://github.com/Philip-Scott/Notes-up";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.philip-scott.notes-up";
   };
 }

@@ -42,12 +42,16 @@ let
       ${cfg.postInit}
     fi
   '' + ''
-    borg create $extraArgs \
-      --compression ${cfg.compression} \
-      --exclude-from ${mkExcludeFile cfg} \
-      $extraCreateArgs \
-      "::$archiveName$archiveSuffix" \
-      ${escapeShellArgs cfg.paths}
+    (
+      set -o pipefail
+      ${optionalString (cfg.dumpCommand != null) ''${escapeShellArg cfg.dumpCommand} | \''}
+      borg create $extraArgs \
+        --compression ${cfg.compression} \
+        --exclude-from ${mkExcludeFile cfg} \
+        $extraCreateArgs \
+        "::$archiveName$archiveSuffix" \
+        ${if cfg.paths == null then "-" else escapeShellArgs cfg.paths}
+    )
   '' + optionalString cfg.appendFailedSuffix ''
     borg rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
@@ -102,7 +106,7 @@ let
   mkWrapperDrv = {
       original, name, set ? {}
     }:
-    pkgs.runCommandNoCC "${name}-wrapper" {
+    pkgs.runCommand "${name}-wrapper" {
       buildInputs = [ pkgs.makeWrapper ];
     } (with lib; ''
       makeWrapper "${original}" "$out/bin/${name}" \
@@ -148,6 +152,7 @@ let
       serviceConfig = {
         # The service's only task is to ensure that the specified path exists
         Type = "oneshot";
+        WorkingDirectory = cfg.path;
       };
       wantedBy = [ "multi-user.target" ];
     };
@@ -169,6 +174,7 @@ let
         (map (mkAuthorizedKey cfg false) cfg.authorizedKeys
         ++ map (mkAuthorizedKey cfg true) cfg.authorizedKeysAppendOnly);
       useDefaultShell = true;
+      group = cfg.group;
       isSystemUser = true;
     };
     groups.${cfg.group} = { };
@@ -179,6 +185,14 @@ let
     message =
       "borgbackup.repos.${name} does not make sense"
       + " without at least one public key";
+  };
+
+  mkSourceAssertions = name: cfg: {
+    assertion = count isNull [ cfg.dumpCommand cfg.paths ] == 1;
+    message = ''
+      Exactly one of borgbackup.jobs.${name}.paths or borgbackup.jobs.${name}.dumpCommand
+      must be set.
+    '';
   };
 
   mkRemovableDeviceAssertions = name: cfg: {
@@ -202,7 +216,7 @@ in {
       See also the chapter about BorgBackup in the NixOS manual.
     '';
     default = { };
-    example = literalExample ''
+    example = literalExpression ''
       { # for a local backup
         rootBackup = {
           paths = "/";
@@ -239,9 +253,23 @@ in {
         options = {
 
           paths = mkOption {
-            type = with types; coercedTo str lib.singleton (listOf str);
-            description = "Path(s) to back up.";
+            type = with types; nullOr (coercedTo str lib.singleton (listOf str));
+            default = null;
+            description = ''
+              Path(s) to back up.
+              Mutually exclusive with <option>dumpCommand</option>.
+            '';
             example = "/home/user";
+          };
+
+          dumpCommand = mkOption {
+            type = with types; nullOr path;
+            default = null;
+            description = ''
+              Backup the stdout of this program instead of filesystem paths.
+              Mutually exclusive with <option>paths</option>.
+            '';
+            example = "/path/to/createZFSsend.sh";
           };
 
           repo = mkOption {
@@ -259,7 +287,7 @@ in {
           archiveBaseName = mkOption {
             type = types.strMatching "[^/{}]+";
             default = "${globalConfig.networking.hostName}-${name}";
-            defaultText = "\${config.networking.hostName}-<name>";
+            defaultText = literalExpression ''"''${config.networking.hostName}-<name>"'';
             description = ''
               How to name the created archives. A timestamp, whose format is
               determined by <option>dateFormat</option>, will be appended. The full
@@ -325,10 +353,7 @@ in {
               you to specify a <option>passCommand</option>
               or a <option>passphrase</option>.
             '';
-            example = ''
-              encryption.mode = "repokey-blake2" ;
-              encryption.passphrase = "mySecretPassphrase" ;
-            '';
+            example = "repokey-blake2";
           };
 
           encryption.passCommand = mkOption {
@@ -436,7 +461,7 @@ in {
               for the available options.
             '';
             default = { };
-            example = literalExample ''
+            example = literalExpression ''
               {
                 within = "1d"; # Keep all archives from the last day
                 daily = 7;
@@ -454,7 +479,7 @@ in {
               Use <literal>""</literal> to consider all archives.
             '';
             default = config.archiveBaseName;
-            defaultText = "\${archiveBaseName}";
+            defaultText = literalExpression "archiveBaseName";
           };
 
           environment = mkOption {
@@ -659,6 +684,7 @@ in {
       assertions =
         mapAttrsToList mkPassAssertion jobs
         ++ mapAttrsToList mkKeysAssertion repos
+        ++ mapAttrsToList mkSourceAssertions jobs
         ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;

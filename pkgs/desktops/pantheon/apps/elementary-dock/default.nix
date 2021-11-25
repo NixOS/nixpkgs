@@ -1,13 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , vala
 , atk
 , cairo
 , dconf
 , glib
 , gtk3
-, libwnck3
+, libwnck
 , libX11
 , libXfixes
 , libXi
@@ -24,11 +24,12 @@
 , pantheon
 , meson
 , ninja
+, granite
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2020-06-11";
+  version = "unstable-2021-11-08";
 
   outputs = [ "out" "dev" ];
 
@@ -37,17 +38,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "0a389ee58939d8c91c340df4e5340fc4b23d0b80";
-    sha256 = "01vinik73s0vmk56samgf49zr2bl4wjv44x15sz2cmh744llckja";
+    rev = "51e8d3ddfbed0dfce3158d80f997ab183e92567b";
+    sha256 = "sha256-w6HGxEAXNod/uMEEfSz9nRNTRrCbcEqJCP9EFkVbX1U=";
   };
-
-  patches = [
-    # Fix double includedir path in plank.pc
-    (fetchpatch {
-      url = "https://github.com/elementary/dock/commit/3bc368e2c4fafcd5b8baca2711c773b0e2441c7c.patch";
-      sha256 = "0gg35phi1cg7ixljc388i0h70w323r1gqzjhanccnsbjpqsgvs3k";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -67,13 +60,14 @@ stdenv.mkDerivation rec {
     glib
     gnome-menus
     dconf
+    granite
     gtk3
     libX11
     libXfixes
     libXi
     libdbusmenu-gtk3
     libgee
-    libwnck3
+    libwnck
     pango
   ];
 
@@ -82,6 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/dock";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    mainProgram = "plank";
   };
 }

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , isPy27
 , fetchFromGitHub
 , noise

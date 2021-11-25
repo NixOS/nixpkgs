@@ -24,12 +24,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "9.2.3";
-  versiondate = "20210325";
+  version = "10.0";
+  versiondate = "20210621";
 
   src = fetchzip {
-    url = "https://www.ghidra-sre.org/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    sha256 = "sha256-/rQ3JeOR/D+HxzkJ+nV+pd/7V81+tCyTOndwpXI05hg=";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "0m1ksng2fkmcg7m22lqil10qn95s06gxnxdz7ih9qpbx67pmmq9x";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,9 @@ in stdenv.mkDerivation rec {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    makeWrapper "${pkg_path}/ghidraRun" "$out/bin/ghidra" \
+    ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+
+    wrapProgram "${pkg_path}/support/launch.sh" \
       --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
   '';
 

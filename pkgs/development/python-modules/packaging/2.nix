@@ -5,7 +5,6 @@
 , six
 , pytestCheckHook
 , pretend
-, flit-core
 }:
 
 # We keep 20.4 because it uses setuptools instead of flit-core

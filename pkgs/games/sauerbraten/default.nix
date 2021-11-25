@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     maintainers = with maintainers; [ raskin ajs124 ];
+    mainProgram = "sauerbraten_client";
     hydraPlatforms =
       # raskin: tested amd64-linux;
       # not setting platforms because it is 0.5+ GiB of game data

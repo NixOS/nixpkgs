@@ -15,11 +15,14 @@ let script = writeText "script" ''
   fi
 ''; in
 stdenv.mkDerivation {
-  name = "system-sendmail-1.0";
+  pname = "system-sendmail";
+  version = "1.0";
 
   src = script;
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
+
   buildPhase = ''
     mkdir -p $out/bin
     < $src sed "s#{{MYPATH}}#$out/bin/sendmail#" > $out/bin/sendmail

@@ -5,7 +5,6 @@
 , CommonMark
 , colorama
 , dataclasses
-, ipywidgets
 , poetry-core
 , pygments
 , typing-extensions
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "10.1.0";
+  version = "10.12.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "willmcgugan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HH+k9uiK34yoqu83rknCIe2DpoqJRHkcqABuj8zjzqs=";
+    sha256 = "1qq4k0pxq3r0463z4h65i9rb8cvilpnqmparklj5y5qk6svz0y2n";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     CommonMark
     colorama
-    ipywidgets
     pygments
     typing-extensions
   ] ++ lib.optional (pythonOlder "3.7") [

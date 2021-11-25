@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "TUI display manager";
     license = licenses.wtfpl;
     homepage = "https://github.com/cylgom/ly";
-    maintainers = [ maintainers.spacekookie ];
+    maintainers = [ maintainers.vidister ];
   };
 }

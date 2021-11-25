@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
-  nativeBuildInputs = [ bison flex pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ bison flex pkg-config ] ++ optional enablePython swig;
   buildInputs = [ libsepol libselinux bzip2 audit ]
-    ++ optionals enablePython [ swig python ];
+    ++ optional enablePython python;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "PYTHON=python"
+    "PYPREFIX=python"
     "PYTHONLIBDIR=$(py)/${python.sitePackages}"
     "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
   ];
@@ -41,6 +44,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=clobbered" ];
 
   installTargets = [ "install" ] ++ optionals enablePython [ "install-pywrap" ];
+
+  enableParallelBuilding = true;
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "Policy management tools for SELinux";

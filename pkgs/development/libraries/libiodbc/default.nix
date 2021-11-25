@@ -2,10 +2,11 @@
 , useGTK ? config.libiodbc.gtk or false }:
 
 stdenv.mkDerivation rec {
-  name = "libiodbc-3.52.12";
+  pname = "libiodbc";
+  version = "3.52.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/iodbc/${name}.tar.gz";
+    url = "mirror://sourceforge/iodbc/${pname}-${version}.tar.gz";
     sha256 = "0qpvklgr1lcn5g8xbz7fbc9rldqf9r8s6xybhqj20m4sglxgziai";
   };
 

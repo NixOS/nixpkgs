@@ -1,15 +1,18 @@
-{ lib, stdenv, fetchzip, ocaml, perl }:
+{ lib, stdenv, fetchFromGitHub, ocaml, perl }:
 
 if lib.versionOlder ocaml.version "4.02"
 then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "camlp5-7.14";
+  pname = "camlp5";
+  version = "7.14";
 
-  src = fetchzip {
-    url = "https://github.com/camlp5/camlp5/archive/rel714.tar.gz";
+  src = fetchFromGitHub {
+    owner = "camlp5";
+    repo = "camlp5";
+    rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
     sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
   };
 

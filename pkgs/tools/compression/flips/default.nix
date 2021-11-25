@@ -2,20 +2,24 @@
 
 stdenv.mkDerivation {
   pname = "flips";
-  version = "unstable-2020-10-02";
+  version = "unstable-2021-10-28";
 
   src = fetchFromGitHub {
     owner = "Alcaro";
     repo = "Flips";
-    rev = "5a3d2012b8ea53ae777c24b8ac4edb9a6bdb9761";
-    sha256 = "1ksh9j1n5z8b78yd7gjxswndsqnb1azp84xk4rc0p7zq127l0fyy";
+    rev = "3a8733e74c9bdbb6b89da2b45913a0be3d0e1866";
+    sha256 = "1jik580mz2spik5mgh60h93ryaj5x8dffncnr1lwija0v803xld7";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ gtk3 libdivsufsort ];
   patches = [ ./use-system-libdivsufsort.patch ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildPhase = "./make.sh";
+  buildPhase = ''
+    runHook preBuild
+    ./make.sh
+    runHook postBuild
+  '';
 
   meta = with lib; {
     description = "A patcher for IPS and BPS files";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iptstate";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "https://github.com/jaymzh/iptstate/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "bef8eb67a4533e53079f397b71e91dd34da23f8cbd65cb2d5b67cb907b00c068";
+    sha256 = "sha256-iW3wYCiFRWomMfeV1jT8ITEeUF+MkQNI5jEoYPIJeVU=";
   };
 
   buildInputs = [ libnetfilter_conntrack ncurses ];

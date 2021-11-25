@@ -24,11 +24,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "atril";
-  version = "1.24.1";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06nyicj96dqcv035yqnzmm6pk3m35glxj0ny6lk1vwqkk2l750xl";
+    sha256 = "0pz44k3axhjhhwfrfvnwvxak1dmjkwqs63rhrbcaagyymrp7cpki";
   };
 
   nativeBuildInputs = [
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

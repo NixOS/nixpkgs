@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl,
-  alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib,
+  alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib,
   gnome2, pango, gtk2-x11, nspr, nss,
   libX11, libxcb, libXcomposite, libXcursor, libXdamage, libXext, libXfixes,
   libXi, libXrandr, libXrender, libXScrnSaver, libXtst,
@@ -21,7 +21,7 @@
       ar p "$src" data.tar.xz | tar xJ
     '';
 
-    buildPhase = ":";
+    dontBuild = true;
 
     installPhase = ''
       mkdir -p $out/bin $out/share/sweep-visualizer
@@ -32,7 +32,7 @@
 
     preFixup = let
       libPath = lib.makeLibraryPath [
-        alsaLib atk cairo cups.lib dbus.lib expat fontconfig.lib freetype
+        alsa-lib atk cairo cups.lib dbus.lib expat fontconfig.lib freetype
         gdk-pixbuf glib gnome2.GConf pango gtk2-x11 nspr nss stdenv.cc.cc.lib
         libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes
         libXi libXrandr libXrender libXScrnSaver libXtst

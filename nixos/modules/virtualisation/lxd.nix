@@ -34,8 +34,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.lxd.override { nftablesSupport = config.networking.nftables.enable; };
-        defaultText = "pkgs.lxd";
+        default = pkgs.lxd;
+        defaultText = literalExpression "pkgs.lxd";
         description = ''
           The LXD package to use.
         '';
@@ -44,7 +44,7 @@ in {
       lxcPackage = mkOption {
         type = types.package;
         default = pkgs.lxc;
-        defaultText = "pkgs.lxc";
+        defaultText = literalExpression "pkgs.lxc";
         description = ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
@@ -53,7 +53,7 @@ in {
       zfsSupport = mkOption {
         type = types.bool;
         default = config.boot.zfs.enabled;
-        defaultText = "config.boot.zfs.enabled";
+        defaultText = literalExpression "config.boot.zfs.enabled";
         description = ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -97,11 +97,17 @@ in {
     # does a bunch of unrelated things.
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
-    security.apparmor.packages = [ cfg.lxcPackage ];
-    security.apparmor.profiles = [
-      "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
-      "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
-    ];
+    security.apparmor = {
+      packages = [ cfg.lxcPackage ];
+      policies = {
+        "bin.lxc-start".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start
+        '';
+        "lxc-containers".profile = ''
+          include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
+        '';
+      };
+    };
 
     # TODO: remove once LXD gets proper support for cgroupsv2
     # (currently most of the e.g. CPU accounting stuff doesn't work)
@@ -152,7 +158,7 @@ in {
       };
     };
 
-    users.groups.lxd.gid = config.ids.gids.lxd;
+    users.groups.lxd = {};
 
     users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];
@@ -169,5 +175,8 @@ in {
       "net.ipv6.neigh.default.gc_thresh3" = 8192;
       "kernel.keys.maxkeys" = 2000;
     };
+
+    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
+      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }

@@ -40,7 +40,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.certmgr;
-      defaultText = "pkgs.certmgr";
+      defaultText = literalExpression "pkgs.certmgr";
       description = "Which certmgr package to use in the service.";
     };
 
@@ -76,7 +76,7 @@ in
 
     specs = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
       {
         exampleCert =
         let

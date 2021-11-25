@@ -1,37 +1,45 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
+, fetchFromGitHub
+, python
 , pythonOlder
-, pytest
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "8.1";
+  version = "10.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
     rev = version;
-    sha256 = "05jbqcbjg50ydwl0fijhdlqcq7fl6v99kjva66kmmzzza7vwa872";
+    sha256 = "sha256-F10C8ukjYfbn2X2PMzrdSDqvs51/A9lx8Y3kv8YJ8Cw=";
   };
-
-  disabled = pythonOlder "3.3";
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
   doCheck = !stdenv.isDarwin;
 
   # Disable all tests that need to terminate within a predetermined amount of
-  # time.  This is nondeterministic.
+  # time. This is nondeterministic.
   patchPhase = ''
     sed -i 's/with self.assertCompletesWithin.*:/if True:/' \
-      tests/test_protocol.py
+      tests/legacy/test_protocol.py
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "websockets" ];
+
   meta = with lib; {
-    description = "WebSocket implementation in Python 3";
-    homepage = "https://github.com/aaugustin/websockets";
+    description = "WebSocket implementation in Python";
+    homepage = "https://websockets.readthedocs.io/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

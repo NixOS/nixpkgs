@@ -5,6 +5,7 @@
 , pkg-config
 , libdmtx
 , imagemagick
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ libdmtx imagemagick ];
+  buildInputs = [ libdmtx imagemagick ]
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   meta = {
     description = "Data matrix command-line utilities";

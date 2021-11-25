@@ -19,18 +19,18 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "460.73.01";
-      sha256_64bit = "120ymf59l6nipczszf82lrm2p4ihhqyv2pfwwfg9wy96vqcckc8i";
-      settingsSha256 = "08jh7g34p9yxv5fh1cw0r2pjx65ryiv3w2lk1qg0gxn2r7xypkx0";
-      persistencedSha256 = "040gx4wqp3hxcfb4aba4sl7b01ixr5slhzw0xldwcqlmhpwqphi5";
+      version = "495.44";
+      sha256_64bit = "0j4agxfdswadxkd9hz9j5cq4q3jmhwdnvqclxxkhl5jvh5knm1zi";
+      settingsSha256 = "0v8gqbhjsjjsc83cqacikj9bvs10bq6i34ca8l07zvsf8hfr2ziz";
+      persistencedSha256 = "19rv7vskv61q4gh59nyrfyqyqi565wzjbcfddp8wfvng4dcy18ld";
     }
     else legacy_390;
 
   beta = generic {
-    version = "465.27";
-    sha256_64bit = "fmn/qFve5qqqa26n4dsoOwGZ+ash5Bon3JBI8kncMXE=";
-    settingsSha256 = "3BFLCx0dcrQY4Mv1joMsiVPwTPyufgsNT5pFgp1Mk/A=";
-    persistencedSha256 = "HtoFGTiBnAeQyRTOMlve5poaQh63LHRD+DHJxZO+c90=";
+    version = "495.29.05";
+    sha256_64bit = "sha256-9yVLl9QAxpJQR5ZJb059j2TpOx4xxCeGCk8hmhhvEl4=";
+    settingsSha256 = "sha256-dcEI+3bxSTwVbHcR6IgvIUFt4vWtK5T4NMGVhmmeVJ0=";
+    persistencedSha256 = "sha256-OT/hOXEPatc6pAKrxDe0jsmaDFCtVXAbdW4elKe6xE8=";
   };
 
   # Vulkan developer beta driver
@@ -43,6 +43,18 @@ rec {
     settingsSha256 = "09v86y2c8xas9ql0bqr7vrjxx3if6javccwjzyly11dzffm02h7g";
     persistencedSha256 = "13s4b73il0lq2hs81q03176n16mng737bfsp3bxnxgnrv3whrayz";
     url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+  };
+
+  # Update note:
+  # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
+  # adding to the `nvidia_x11_legacy*` entries.
+
+  # Last one supporting Kepler architecture
+  legacy_470 = generic {
+      version = "470.86";
+      sha256_64bit = "sha256:0krwcxc0j19vjnk8sv6mx1lin2rm8hcfhc2hg266846jvcws1dsg";
+      settingsSha256 = "sha256:1lnj5hwmfkzs664fxlhljqy323394s1i7qzlpsjyrpm07sa93bky";
+      persistencedSha256 = "sha256:0apj764zc81ayb8nm9bf7cdicfinarv0gfijy2dxynbwz2xdlyvq";
   };
 
   # Last one supporting x86

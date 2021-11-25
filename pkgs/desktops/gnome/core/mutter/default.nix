@@ -1,8 +1,8 @@
 { fetchurl
-, fetchpatch
 , substituteAll
 , runCommand
-, lib, stdenv
+, lib
+, stdenv
 , pkg-config
 , gnome
 , gettext
@@ -14,6 +14,7 @@
 , zenity
 , libcanberra
 , ninja
+, xvfb-run
 , xkeyboard_config
 , libxkbfile
 , libXdamage
@@ -45,13 +46,13 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "40.0";
+  version = "41.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-enGzEuWmZ8U3SJUYilBqP2tnF2i8s2K2jv3FYnc9GY4=";
+    sha256 = "WOY/0LxD81E08hMTr/Suv5LIKdbfTcmaBEoeN2aR4/M=";
   };
 
   patches = [
@@ -62,13 +63,6 @@ let self = stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
-    })
-
-    # Fix non-deterministic build failure:
-    # https://gitlab.gnome.org/GNOME/mutter/-/issues/1682
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/commit/91117bb052ed0d69c8ea4159c1df15c814d90627.patch";
-      sha256 = "ek8hEoPP4S2TGOm6SGGOhUVIp4OT68nz0SQzZrceFUU=";
     })
   ];
 
@@ -97,6 +91,7 @@ let self = stdenv.mkDerivation rec {
     mesa # needed for gbm
     meson
     ninja
+    xvfb-run
     pkg-config
     python3
     wrapGAppsHook
@@ -141,7 +136,7 @@ let self = stdenv.mkDerivation rec {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    libdir = "${self}/lib/mutter-7";
+    libdir = "${self}/lib/mutter-8";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

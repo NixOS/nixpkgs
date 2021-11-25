@@ -4,7 +4,8 @@
 # both mingw32 and mingw64.
 
 stdenv.mkDerivation {
-  name = "jom-1.0.11";
+  pname = "jom";
+  version = "1.0.11";
 
   src = fetchgit {
     url = "git://gitorious.org/qt-labs/jom.git";
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://qt-project.org/wiki/jom";
+    homepage = "https://qt-project.org/wiki/jom";
     description = "Clone of nmake supporting multiple independent commands in parallel";
     license = lib.licenses.gpl2Plus; # Explicitly, GPLv2 or GPLv3, but not later.
   };

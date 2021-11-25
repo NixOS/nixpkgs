@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
     platforms   = with platforms; linux ++ darwin;
-    inherit version;
+    mainProgram = "apl";
 
     longDescription = ''
       GNU APL is a free interpreter for the programming language APL, with an

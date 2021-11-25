@@ -15,33 +15,27 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2021-04-22T15-44-28Z";
+  version = "2021-10-27T16-29-42Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "147a4vgf2hdpbndska443axzvxx56bmc0011m3cq4ca1vm783k8q";
+    sha256 = "sha256-U/1NuWyNX0OUrtysV3ShvbyxiSiYzMFNK3lmAVs6D3Y=";
   };
 
-  vendorSha256 = "0qj1zab97q8s5gy7a304wqi832y8m083cnk8hllz8lz9yjcw6q92";
+  vendorSha256 = "sha256-GLooogUglKxEk7X9UI4VZvj+mJ9LXLZEjFsxCpzm61I=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  patchPhase = ''
-    sed -i "s/Version.*/Version = \"${versionToTimestamp version}\"/g" cmd/build-constants.go
-    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
-    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
-  '';
+  CGO_ENABLED = 0;
 
-  postConfigure = ''
-    export CGO_ENABLED=0
-  '';
+  tags = [ "kqueue" ];
 
-  buildFlagsArray = [
-    "-tags=kqueue"
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
   ];
 
   passthru.tests.minio = nixosTests.minio;
@@ -49,8 +43,9 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.minio.io/";
     description = "An S3-compatible object storage server";
+    changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.agpl3Plus;
   };
 }

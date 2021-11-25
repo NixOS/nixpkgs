@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , inflection
-, ruamel_yaml
-, setuptools_scm
+, ruamel-yaml
+, setuptools-scm
 , six
 , coreapi
 , djangorestframework
@@ -27,13 +27,13 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     six
     inflection
-    ruamel_yaml
+    ruamel-yaml
     coreapi
     djangorestframework
   ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
-    maintainers = with maintainers; [ ivegotasthma ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

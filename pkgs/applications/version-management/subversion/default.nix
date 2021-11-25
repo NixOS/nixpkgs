@@ -6,6 +6,7 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
+, autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
 , sasl ? null, serf ? null
 }:
@@ -16,6 +17,8 @@ assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
+  # Update libtool for macOS 11 support
+  needsAutogen = stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11";
 
   common = { version, sha256, extraPatches ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
@@ -29,6 +32,8 @@ let
     # Can't do separate $lib and $bin, as libs reference bins
     outputs = [ "out" "dev" "man" ];
 
+    nativeBuildInputs = lib.optionals needsAutogen [ autoconf libtool python3 ];
+
     buildInputs = [ zlib apr aprutil sqlite openssl lz4 utf8proc ]
       ++ lib.optional httpSupport serf
       ++ lib.optionals pythonBindings [ python3 py3c ]
@@ -41,6 +46,10 @@ let
     # -> https://issues.apache.org/jira/browse/SVN-4813
     # "-P" CPPFLAG is needed to build Python bindings and subversionClient
     CPPFLAGS = [ "-P" ];
+
+    preConfigure = lib.optionalString needsAutogen ''
+      ./autogen.sh
+    '';
 
     configureFlags = [
       (lib.withFeature bdbSupport "berkeley-db")

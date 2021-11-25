@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xhyve";
-  version = "20191001";
+  version = "20210203";
 
   src = fetchFromGitHub {
     owner = "machyve";
     repo = "xhyve";
-    rev = "1f46a3d0bbeb6c90883f302425844fcc3800a776";
-    sha256 = "0mm9xa0v6n7xl2qypnppq5abdncd31vffiklrhcrlni5ymyh9ia5";
+    rev = "83516a009c692ea5d2993d1071e68d05d359b11e";
+    sha256 = "1pjdg4ppy6qh3vr1ls5zyw3jzcvwny9wydnmfpadwij1hvns7lj3";
   };
 
   buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];

@@ -56,7 +56,7 @@ in {
 
     package = mkOption {
       default = pkgs.skydns;
-      defaultText = "pkgs.skydns";
+      defaultText = literalExpression "pkgs.skydns";
       type = types.package;
       description = "Skydns package to use.";
     };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
 
   preConfigure = ''
-    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl")
+    cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -labsl_synchronization")
 
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''

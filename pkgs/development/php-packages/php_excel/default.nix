@@ -1,4 +1,4 @@
-{ buildPecl, fetchurl, lib, libxl }:
+{ buildPecl, fetchurl, lib, libxl, php }:
 let
   pname = "php_excel";
   phpVersion = "php7";
@@ -20,5 +20,11 @@ buildPecl {
     "--with-libxl-libdir=${libxl}/lib"
   ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = with lib; {
+    description = "PHP Extension interface to the Excel writing/reading library";
+    license = licenses.php301;
+    homepage = "https://github.com/iliaal/php_excel";
+    maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.0";
+  };
 }

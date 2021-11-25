@@ -1,21 +1,21 @@
 { lib, fetchzip }:
 
 let
-  version = "2.030";
+  version = "2.038";
 in fetchzip {
   name = "source-code-pro-${version}";
 
-  url = "https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip";
+  url = "https://github.com/adobe-fonts/source-code-pro/releases/download/${version}R-ro%2F1.058R-it%2F1.018R-VAR/OTF-source-code-pro-${version}R-ro-1.058R-it.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0d8qwzjgnz264wlm4qim048z3236z4hbblvc6yplw13f6b65j6fv";
+  sha256 = "027cf62zj27q7l3d4sqzdfgz423lzysihdg8cvmkk6z910a1v368";
 
   meta = {
-    description = "A set of monospaced OpenType fonts designed for coding environments";
+    description = "Monospaced font family for user interface and coding environments";
     maintainers = with lib.maintainers; [ relrod ];
     platforms = with lib.platforms; all;
     homepage = "https://adobe-fonts.github.io/source-code-pro/";

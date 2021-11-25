@@ -25,21 +25,20 @@ let
 in
 buildGoPackage rec {
   pname = "nvidia-container-runtime";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "095mks0r4079vawi50pk4zb5jk0g6s9idg2s1w55a0d27jkknldr";
+    sha256 = "sha256-+LZjsN/tKqsPJamoI8xo9LFv14c3e9vVlSP4NJhElcs=";
   };
 
-  goPackagePath = "github.com/${pname}/src";
-  buildFlagsArray = [ "-ldflags=" "-s -w" ];
+  goPackagePath = "github.com/nvidia/nvidia-container-runtime";
+  ldflags = [ "-s" "-w" ];
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    mv $out/bin/{src,nvidia-container-runtime}
     mkdir -p $out/etc/nvidia-container-runtime
 
     # nvidia-container-runtime invokes docker-runc or runc if that isn't

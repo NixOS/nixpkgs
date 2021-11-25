@@ -1,11 +1,21 @@
-{lib, stdenv, fetchurl, ncurses, pkg-config, glib, libviper, libpseudo, gpm,
-libvterm}:
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, pkg-config
+, glib
+, libviper
+, libpseudo
+, gpm
+, libvterm
+}:
 
 stdenv.mkDerivation rec {
-  name = "vwm-2.1.3";
+  pname = "vwm";
+  version = "2.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/vwm/${name}.tar.gz";
+    url = "mirror://sourceforge/vwm/vwm-${version}.tar.gz";
     sha256 = "1r5wiqyfqwnyx7dfihixlnavbvg8rni36i4gq169aisjcg7laxaf";
   };
 

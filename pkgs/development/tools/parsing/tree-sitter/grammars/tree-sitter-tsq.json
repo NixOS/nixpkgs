@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-tsq",
+  "rev": "b665659d3238e6036e22ed0e24935e60efb39415",
+  "date": "2021-05-18T15:57:40-04:00",
+  "path": "/nix/store/j59y4s3bsv6d5nbmhhdgb043hmk8157k-tree-sitter-tsq",
+  "sha256": "03bch2wp2jwxk69zjplvm0gbyw06qqdy7il9qkiafvhrbh03ayd9",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

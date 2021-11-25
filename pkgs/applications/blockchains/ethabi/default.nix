@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ethabi";
@@ -15,11 +15,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./add-Cargo-lock.patch ];
 
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
+
   meta = with lib; {
     description = "Ethereum function call encoding (ABI) utility";
     homepage = "https://github.com/rust-ethereum/ethabi";
     maintainers = [ maintainers.dbrock ];
     license = licenses.asl20;
-    inherit version;
   };
 }

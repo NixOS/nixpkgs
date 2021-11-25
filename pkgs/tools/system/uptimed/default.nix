@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "uptimed";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-X/LnH+EWjXlw8RktfL4ckAUmP2DPV1qlb6Ii4N985cU=";
+    sha256 = "sha256-jvdodclZhN7WF7bsR3DHaLb8fAEABap8OAfmTZF1804=";
     rev = "v${version}";
     repo = "uptimed";
     owner = "rpodgorny";
@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   patches = [ ./no-var-spool-install.patch ];
+
+  postPatch = ''
+    substituteInPlace libuptimed/urec.h \
+      --replace /var/spool /var/lib
+  '';
 
   meta = with lib; {
     description = "Uptime record daemon";

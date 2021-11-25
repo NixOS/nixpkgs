@@ -30,6 +30,7 @@
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
+, pantheon
 , python3
 , texlive
 , t1lib
@@ -40,18 +41,26 @@
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
+, withPantheon ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "40.1";
+  version = "41.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0bfg7prmjk3z8irx1nfkkqph3igg3cy4pwd7pcxjxbshqdin6rks";
+    sha256 = "M0awH5vcjy1f/qkvEQoJDGSjYklCtbVDqtRZKp3jO7A=";
   };
+
+  patches = lib.optionals withPantheon [
+    # Make this respect dark mode settings from Pantheon
+    # https://github.com/elementary/evince
+    # The patch currently differs from upstream (updated for evince 41).
+    ./pantheon-dark-style.patch
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -96,9 +105,18 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optional supportXPS libgxps
-    ++ lib.optionals supportMultimedia (with gst_all_1; [
-      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
+  ] ++ lib.optionals supportXPS [
+    libgxps
+  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]) ++ lib.optionals withPantheon [
+    pantheon.granite
+  ];
 
   mesonFlags = [
     "-Dnautilus=false"
@@ -128,8 +146,8 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

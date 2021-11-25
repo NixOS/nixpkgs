@@ -10,7 +10,7 @@ let
 
   jsonType = (pkgs.formats.json {}).type;
 
-  configFile = pkgs.runCommandNoCC "matrix-appservice-irc.yml" {
+  configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
     # Because this program will be run at build time, we need `nativeBuildInputs`
     nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
     preferLocalBuild = true;

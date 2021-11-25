@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchzip, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-twt-0.94.0";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-twt";
+  version = "0.94.0";
 
-  src = fetchzip {
-    url = "https://github.com/mlin/twt/archive/v0.94.0.tar.gz";
-    sha256 = "0298gdgzl4cifxnc1d8sbrvz1lkiq5r5ifkq1fparm6gvqywpf65";
+  src = fetchFromGitHub {
+    owner = "mlin";
+    repo = "twt";
+    rev = "v${version}";
+    sha256 = "sha256-xbjLPd7P1KyuC3i6WHLBcdLwd14atcBsd5ER+l97KAk=";
   };
 
   buildInputs = [ ocaml findlib ];
 
-  createFindlibDestdir = true;
-
-  configurePhase = ''
-    mkdir $out/bin
+  preInstall = ''
+    mkdir -p $out/bin
+    mkdir -p $OCAMLFIND_DESTDIR
   '';
 
   dontBuild = true;
@@ -27,6 +29,6 @@ stdenv.mkDerivation {
     description = "“The Whitespace Thing” for OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

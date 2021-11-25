@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fluxbox
 , libarchive
+, linux-pam
 , numlockx
 , qmake
 , qtbase
@@ -17,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lumina";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bvs12c9pkc6fnkfcr7rrxc8jfbzbslch4nlfjrzwi203fcv4avw";
+    sha256 = "0wc8frhw1yv07n05r33c4zilq5lgn5gw07a9n37g6nyn5sgrbp4f";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ mkDerivation rec {
   buildInputs = [
     fluxbox # window manager for Lumina DE
     libarchive # make `bsdtar` available for lumina-archiver
+    linux-pam
     numlockx # required for changing state of numlock at login
     qtbase
     qtmultimedia
@@ -49,7 +51,6 @@ mkDerivation rec {
   ];
 
   patches = [
-    ./avoid-absolute-path-on-sessdir.patch
     ./LuminaOS-NixOS.cpp.patch
   ];
 
@@ -60,6 +61,14 @@ mkDerivation rec {
   '';
 
   postPatch = ''
+    # Avoid absolute path on sessdir
+    substituteInPlace src-qt5/OS-detect.pri \
+      --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
+
+    # Do not set special permission
+    substituteInPlace src-qt5/core/lumina-checkpass/lumina-checkpass.pro \
+      --replace "chmod 4555" "chmod 555"
+
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"

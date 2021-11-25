@@ -12,7 +12,7 @@ buildGoPackage rec {
     sha256 = "sha256-RmLDlTK+JO2KRLuLvO927W3WYdDlteBIpgTgDXh8lC8=";
   };
 
-  buildFlagsArray = [ "-ldflags=-X github.com/git-town/git-town/src/cmd.version=v${version} -X github.com/git-town/git-town/src/cmd.buildDate=nix" ];
+  ldflags = [ "-X github.com/git-town/git-town/src/cmd.version=v${version}" "-X github.com/git-town/git-town/src/cmd.buildDate=nix" ];
 
   meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
@@ -21,4 +21,3 @@ buildGoPackage rec {
     license = licenses.mit;
   };
 }
-

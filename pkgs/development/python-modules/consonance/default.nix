@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchFromGitHub, pytest, dissononce, python-axolotl-curve25519
+{ buildPythonPackage, lib, fetchFromGitHub, dissononce, python-axolotl-curve25519
 , transitions, protobuf, nose
 }:
 

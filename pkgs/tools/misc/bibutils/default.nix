@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "bibutils";
@@ -9,11 +13,23 @@ stdenv.mkDerivation rec {
     sha256 = "15p4av74ihsg03j854dkdqihpspwnp58p9g1lhx48w8kz91c0ml6";
   };
 
-  configureFlags = [ "--dynamic" "--install-dir" "$(out)/bin" "--install-lib" "$(out)/lib" ];
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace lib/Makefile.dynamic \
+      --replace '-Wl,-soname,$(SONAME)' ""
+  '';
+
+  configureFlags = [
+    (if static then "--static" else "--dynamic")
+    "--install-dir" "$(out)/bin"
+    "--install-lib" "$(out)/lib"
+  ];
   dontAddPrefix = true;
 
   doCheck = true;
   checkTarget = "test";
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH=`pwd`/lib
+  '';
 
   meta = with lib; {
     description = "Bibliography format interconversion";
@@ -21,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/p/bibutils/home/Bibutils/";
     license = licenses.gpl2;
     maintainers = [ maintainers.garrison ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

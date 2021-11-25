@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hp3qkyhidxkdf8qgkwrnqq5bpahink55mf0yz23rjd7rpbbdswc";
   };
 
+  configureFlags = lib.optional stdenv.isAarch64 "--with-atomictype=pthread";
+
   enableParallelBuilding = true;
 
   meta = {

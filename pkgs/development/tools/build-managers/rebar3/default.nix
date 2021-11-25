@@ -1,10 +1,11 @@
-{ lib, stdenv, fetchFromGitHub,
-  fetchHex, erlang, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fetchgit,
+  fetchHex, erlang, makeWrapper,
+  writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.15.1";
+  version = "3.17.0";
   owner = "erlang";
-  deps = import ./rebar-deps.nix { inherit fetchHex; };
+  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
@@ -15,10 +16,8 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "1pcy5m79g0l9l3d8lkbx6cq1w87z1g3sa6wwvgbgraj2v3wkyy5g";
+      sha256 = "02sk3whrbprzlih4pgcsd6ngmassfjfmkz21gwvb7mq64pib40k6";
     };
-
-    bootstrapper = ./rebar3-nix-bootstrap;
 
     buildInputs = [ erlang ];
 
@@ -39,6 +38,12 @@ let
     buildPhase = ''
       HOME=. escript bootstrap
     '';
+
+    checkPhase = ''
+      HOME=. escript ./rebar3 ct
+    '';
+
+    doCheck = true;
 
     installPhase = ''
       mkdir -p $out/bin
@@ -63,6 +68,31 @@ let
       license = lib.licenses.asl20;
     };
 
+    passthru.updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -ox errexit
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          git
+          gnused
+          nix
+          (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
+        ]
+      }
+      latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      if [ "$latest" != "${version}" ]; then
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
+        update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
+        tmpdir=$(mktemp -d)
+        cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
+        (cd "$tmpdir" && rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
+      else
+        echo "rebar3 is already up-to-date"
+      fi
+    '';
   };
   rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
     let
@@ -77,10 +107,13 @@ let
         # instruct rebar3 to always load a certain plugin. It is necessary since
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
         patches = [ ./skip-plugins.patch ./global-plugins.patch ];
+
+        # our patches cause the tests to fail
+        doCheck = false;
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
-      inherit (rebar3) version bootstrapper;
+      inherit (rebar3) version;
       nativeBuildInputs = [ erlang makeWrapper ];
       unpackPhase = "true";
 
@@ -94,9 +127,11 @@ let
           {ok, _} = zip:extract(Archive, [{cwd, "'$out/lib'"}]),
           init:stop(0)
         '
+        cp ${./rebar_ignore_deps.erl} rebar_ignore_deps.erl
+        erlc -o $out/lib/rebar/ebin rebar_ignore_deps.erl
         mkdir -p $out/bin
         makeWrapper ${erlang}/bin/erl $out/bin/rebar3 \
-          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames}" \
+          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames} rebar_ignore_deps" \
           --suffix-each ERL_LIBS ":" "$out/lib ${toString pluginLibDirs}" \
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';

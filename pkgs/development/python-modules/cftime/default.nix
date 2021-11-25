@@ -2,25 +2,24 @@
 , fetchPypi
 , pytestCheckHook
 , coveralls
-, pytestcov
+, pytest-cov
 , cython
 , numpy
-, python
 }:
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.4.1";
+  version = "1.5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c55540bc164746c3c4f86a07c9c7b9ed4dfb0b0d988348ec63cec065c58766d";
+    sha256 = "6dc4d76ec7fe5a2d3c00dbe6604c757f1319613b75ef157554ef3648bf102a50";
   };
 
   checkInputs = [
     pytestCheckHook
     coveralls
-    pytestcov
+    pytest-cov
   ];
 
   nativeBuildInputs = [

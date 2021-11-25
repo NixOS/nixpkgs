@@ -39,6 +39,6 @@ buildPythonApplication rec {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
     license = licenses.asl20;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

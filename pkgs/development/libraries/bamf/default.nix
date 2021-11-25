@@ -7,7 +7,7 @@
 , which
 , fetchgit
 , libgtop
-, libwnck3
+, libwnck
 , glib
 , vala
 , pkg-config
@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bamf";
-  version = "0.5.4";
+  version = "0.5.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    rev = version;
-    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
+    rev = "${version}+21.10.20210710-0ubuntu1";
+    sha256 = "0iwz5z5cz9r56pmfjvjd2kcjlk416dw6g38svs33ynssjgsqbdm0";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,7 @@ stdenv.mkDerivation rec {
     glib
     libgtop
     libstartup_notification
-    libwnck3
-  ];
-
-  patches = [
-    # Port tests and checks to python3 lxml.
-    ./gtester2xunit-python3.patch
+    libwnck
   ];
 
   # Fix hard-coded path
@@ -99,6 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

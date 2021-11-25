@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "multitasking";
-  version = "0.0.9";
+  version = "0.0.10";
 
   # GitHub source releases aren't tagged
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b59d99f709d2e17d60ccaa2be09771b6e9ed9391c63f083c0701e724f624d2e0";
+    sha256 = "810640fa6670be41f4a712b287d9307a14ad849d966f06a17d2cf1593b66c3cd";
   };
 
   doCheck = false;  # No tests included

@@ -1,10 +1,12 @@
 { lib, stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU, libGL
 , wafHook }:
 
-stdenv.mkDerivation {
-  name = "wxmupen64plus-0.3";
+stdenv.mkDerivation rec {
+  pname = "wxmupen64plus";
+  version = "0.3";
+
   src = fetchurl {
-    url = "https://bitbucket.org/auria/wxmupen64plus/get/0.3.tar.bz2";
+    url = "https://bitbucket.org/auria/wxmupen64plus/get/${version}.tar.bz2";
     sha256 = "1mnxi4k011dd300k35li2p6x4wccwi6im21qz8dkznnz397ps67c";
   };
 

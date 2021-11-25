@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "15r2456g0mlq2q7gh2z52vl6zv6y0z8sdchrs80kg4idqd8sm8fd";
   };
 
-  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
-
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
@@ -42,6 +40,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"

@@ -11,15 +11,16 @@
 
 buildPythonPackage rec {
   pname = "motioneye-client";
-  version = "0.3.6";
+  version = "0.3.12";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j28rn7059km7q6z1kalp0pjcrd42wcm5mnbi94j93bvfld97w70";
+    sha256 = "sha256-vEB9ztz0RTGoolFUVQcMV7DUthCEAx1kpwkAS2186OU=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,9 @@ buildPythonPackage rec {
       --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
   '';
 
-  pythonImportsCheck = [ "motioneye_client" ];
+  pythonImportsCheck = [
+    "motioneye_client"
+  ];
 
   meta = with lib; {
     description = "Python library for motionEye";

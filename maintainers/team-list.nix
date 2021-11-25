@@ -48,6 +48,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  chia = {
+    members = [
+      atemu
+      lourkeur
+    ];
+    scope = "Maintain the Chia blockchain and its dependencies";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
@@ -70,13 +78,21 @@ with lib.maintainers; {
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
+  gcc = {
+    members = [
+      synthetica
+      vcunat
+      ericson2314
+    ];
+    scope = "Maintain GCC (GNU Compiler Collection) compilers";
+  };
+
   golang = {
     members = [
       c00w
       cstrahan
       Frostman
       kalbasit
-      mdlayher
       mic92
       orivej
       rvolosatovs
@@ -97,8 +113,9 @@ with lib.maintainers; {
 
   haskell = {
     members = [
-      maralorn
       cdepillabout
+      expipiplus1
+      maralorn
       sternenseemann
     ];
     scope = "Maintain Haskell packages and infrastructure.";
@@ -114,11 +131,23 @@ with lib.maintainers; {
     scope = "Maintain the Home Assistant ecosystem";
   };
 
+  iog = {
+    members = [
+      cleverca22
+      disassembler
+      jonringer
+      manveru
+      nrdxp
+    ];
+    scope = "Input-Output Global employees, which maintain critical software";
+  };
+
   jitsi = {
     members = [
-      mmilata
+      cleeyv
       petabyteboy
       ryantm
+      yuka
     ];
     scope = "Maintain Jitsi.";
   };
@@ -135,17 +164,52 @@ with lib.maintainers; {
     scope = "Maintain Kodi and related packages.";
   };
 
+  linux-kernel = {
+    members = [
+      TredwellGit
+      ma27
+      nequissimus
+      qyliss
+    ];
+    scope = "Maintain the Linux kernel.";
+  };
+
+  mate = {
+    members = [
+      j03
+      romildo
+    ];
+    scope = "Maintain Mate desktop environment and related packages.";
+  };
+
   matrix = {
     members = [
       ma27
-      pacien
       fadenb
       mguentner
       ekleog
       ralith
       mjlbach
+      dandellion
+      sumnerevans
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  openstack = {
+    members = [
+      angustrau
+      SuperSandro2000
+    ];
+    scope = "Maintain the ecosystem around OpenStack";
+  };
+
+  pantheon = {
+    members = [
+      davidak
+      bobby285271
+    ];
+    scope = "Maintain Pantheon desktop environment and platform.";
   };
 
   php = {
@@ -177,5 +241,22 @@ with lib.maintainers; {
       collares
     ];
     scope = "Maintain SageMath and the dependencies that are likely to break it.";
+  };
+
+  serokell = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      balsoft
+      mkaito
+    ];
+    scope = "Group registration for Serokell employees who collectively maintain packages.";
+  };
+
+  tts = {
+    members = [
+      hexa
+      mic92
+    ];
+    scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
   };
 }

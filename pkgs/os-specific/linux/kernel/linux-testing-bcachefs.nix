@@ -1,24 +1,32 @@
-{ lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
+{ lib
+, fetchpatch
+, kernel
+, date ? "2021-11-06"
+, commit ? "10669a2c540de3276c8d2fc0e43be62f2886f377"
+, diffHash ? "1rn72wd8jg919j74x8banl70b2bdd6r9fgvnw693j20dq96j5cnw"
+, kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
+, argsOverride ? {}
+, ...
+} @ args:
 
-buildLinux (args // {
-  version = "5.9.0-2020.11.20";
-  modDirVersion = "5.9.0";
+# NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
+(kernel.override ( args // {
+  argsOverride = {
+    version = "${kernel.version}-bcachefs-unstable-${date}";
+    extraMeta = {
+      branch = "master";
+      maintainers = with lib.maintainers; [ davidak chiiruno ];
+    };
+  } // argsOverride;
 
-  src = fetchFromGitHub {
-    owner = "koverstreet";
-    repo = "bcachefs";
-    # commit does not exist on any branch on the target repository
-    rev = "6a505b63ed3003faf5000f19fd08bbd477d93fbc";
-    sha256 = "1rf34gzv9npafp1c3i6lymk3b0gnqp4rb0wl33pw6yrpgnsry3cc";
-  };
+  kernelPatches = [ {
+      name = "bcachefs-${commit}";
+      patch = fetchpatch {
+        name = "bcachefs-${commit}.diff";
+        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${commit}&id2=v${lib.versions.majorMinor kernel.version}";
+        sha256 = diffHash;
+      };
+      extraConfig = "BCACHEFS_FS m";
+    } ] ++ kernelPatches;
 
-  extraConfig = "BCACHEFS_FS m";
-
-  extraMeta = {
-    branch = "master";
-    hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
-    maintainers = with lib.maintainers; [ davidak chiiruno ];
-    platforms = [ "x86_64-linux" ];
-  };
-
-} // (args.argsOverride or {}))
+}))

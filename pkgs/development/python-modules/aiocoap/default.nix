@@ -1,24 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, pytestCheckHook
+, pygments
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4b3";
+  version = "0.4.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = pname;
     rev = version;
-    sha256 = "1zjg475xgvi19rqg7jmfgy5nfabq50aph0231p9jba211ps7cmxw";
+    sha256 = "0k7ii2l3n139f8712ja6w3z73xiwlfsjgdc4k5c514ni2w6w2yjc";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m aiocoap.cli.defaults
-    ${python.interpreter} -m unittest discover -v
-  '';
+  propagatedBuildInputs = [
+    pygments
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Don't test the plugins
+    "tests/test_tls.py"
+    "tests/test_reverseproxy.py"
+    "tests/test_oscore_plugtest.py"
+  ];
+
+  disabledTests = [
+    # Communication is not properly mocked
+    "test_uri_parser"
+  ];
 
   pythonImportsCheck = [ "aiocoap" ];
 

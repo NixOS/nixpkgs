@@ -16,6 +16,7 @@
 , json-glib
 , libgda
 , libgpod
+, libhandy
 , libnotify
 , libpeas
 , libsoup
@@ -31,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.5";
+  version = "5.1.1";
 
   repoName = "music";
 
@@ -39,14 +40,15 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-3GZoBCu9rF+BnNk9APBzKWO1JYg1XYWwrEvwcjWvYDE=";
+    sha256 = "1wqsn4ss9acg0scaqpg514ll2dj3bl71wly4mm79qkinhy30yv9n";
   };
 
   patches = [
-    # Fix build with latest Vala.
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/music/pull/648
     (fetchpatch {
-      url = "https://github.com/elementary/music/commit/9ed3bbb3a0d68e289a772b4603f58e52a4973316.patch";
-      sha256 = "fFO97SQzTc2fYFJFGfFPSUCdkCgZxfX1fjDQ7GH4BUs=";
+      url = "https://github.com/elementary/music/commit/aea97103d59afd213467403a48788e476e47c4c3.patch";
+      sha256 = "1ayj8l6lb19hhl9bhsdfbq7jgchfmpjx0qkljnld90czcksn95yx";
     })
   ];
 
@@ -82,6 +84,7 @@ stdenv.mkDerivation rec {
     libgda
     libgee
     libgpod
+    libhandy
     libnotify
     libpeas
     libsignon-glib
@@ -91,7 +94,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dplugins=lastfm,audioplayer,cdrom,ipod"
+    "-Dplugins=audioplayer,cdrom,ipod"
   ];
 
   postPatch = ''
@@ -102,8 +105,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Music player and library designed for elementary OS";
     homepage = "https://github.com/elementary/music";
-    license = licenses.lgpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.music";
   };
 }

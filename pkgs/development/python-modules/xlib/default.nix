@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , six
-, setuptools_scm
+, setuptools-scm
 , xorg
 , python
 , mock
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ mock nose util-linux /* mcookie */ xorg.xauth xorg.xorgserver /* xvfb */ ];
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ xorg.libX11 ];
   propagatedBuildInputs = [ six ];
 

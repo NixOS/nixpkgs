@@ -2,8 +2,8 @@
 
 grafanaPlugin rec {
   pname = "doitintl-bigquery-datasource";
-  version = "2.0.1";
-  zipHash = "sha256-tZyvER/rxL+mo2tgxFvwSIAmjFm/AnZ0RgvmD1YAE2U=";
+  version = "2.0.2";
+  zipHash = "sha256-GE6DNuQ5WtS/2VmXbQBeRdVKDbLlLirWXW51i0RF6Cc=";
   meta = with lib; {
     description = "BigQuery DataSource for Grafana";
     license = licenses.mit;

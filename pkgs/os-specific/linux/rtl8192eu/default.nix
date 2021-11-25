@@ -5,37 +5,40 @@ with lib;
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
 
 in stdenv.mkDerivation rec {
-  name = "rtl8192eu-${kernel.version}-${version}";
-  version = "4.4.1.20200620";
+  pname = "rtl8192eu";
+  version = "${kernel.version}-4.4.1.20211023";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "925ac2be34dd608a7ca42daebf9713f0c1bcec74";
-    sha256 = "159vg0scq47wnn600karpgzx3naaiyl1rg8608c8d28nhm62gvjz";
+    rev = "744bbe52976e51895fce2c1d4075f97a98dca2b2";
+    sha256 = "1ayb3fljvpljwcgi47h8vj2d2w5imqyjxc7mvmfrvmilzg5d5cj7";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  buildInputs = [ bc ];
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
   makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p ${modDestDir}
     find . -name '*.ko' -exec cp --parents {} ${modDestDir} \;
     find ${modDestDir} -name '*.ko' -exec xz -f {} \;
+
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Realtek rtl8192eu driver";
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ troydm ];
   };
 }

@@ -13,7 +13,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.nginx-sso;
-      defaultText = "pkgs.nginx-sso";
+      defaultText = literalExpression "pkgs.nginx-sso";
       description = ''
         The nginx-sso package that should be used.
       '';
@@ -22,7 +22,7 @@ in {
     configuration = mkOption {
       type = types.attrsOf types.unspecified;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 

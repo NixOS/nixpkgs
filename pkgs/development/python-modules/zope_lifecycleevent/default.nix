@@ -4,7 +4,6 @@
 , isPy3k
 , zope_event
 , zope_component
-, zope_interface
 }:
 
 buildPythonPackage rec {

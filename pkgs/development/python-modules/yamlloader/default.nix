@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e96dc3dc6895d814c330c054c966d993fc81ef1dbf5a30a4bdafeb256359e058";
+    sha256 = "8a297c7a197683ba02e5e2b882ffd6c6180d01bdefb534b69cd3962df020bfe6";
   };
 
   propagatedBuildInputs = [

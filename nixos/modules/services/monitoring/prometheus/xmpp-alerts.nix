@@ -4,21 +4,29 @@ with lib;
 
 let
   cfg = config.services.prometheus.xmpp-alerts;
-
-  configFile = pkgs.writeText "prometheus-xmpp-alerts.yml" (builtins.toJSON cfg.configuration);
-
+  settingsFormat = pkgs.formats.yaml {};
+  configFile = settingsFormat.generate "prometheus-xmpp-alerts.yml" cfg.settings;
 in
-
 {
-  options.services.prometheus.xmpp-alerts = {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "prometheus" "xmpp-alerts" "configuration" ]
+      [ "services" "prometheus" "xmpp-alerts" "settings" ])
+  ];
 
+  options.services.prometheus.xmpp-alerts = {
     enable = mkEnableOption "XMPP Web hook service for Alertmanager";
 
-    configuration = mkOption {
-      type = types.attrs;
-      description = "Configuration as attribute set which will be converted to YAML";
-    };
+    settings = mkOption {
+      type = settingsFormat.type;
+      default = {};
 
+      description = ''
+        Configuration for prometheus xmpp-alerts, see
+        <link xlink:href="https://github.com/jelmer/prometheus-xmpp-alerts/blob/master/xmpp-alerts.yml.example"/>
+        for supported values.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {

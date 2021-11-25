@@ -1,26 +1,23 @@
-{ buildGoPackage, fetchFromGitHub, go-bindata, openssh, makeWrapper, lib }:
+{ buildGoModule, fetchFromGitHub, go-bindata, openssh, makeWrapper, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "morph";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "064ccvvq4yk17jy5jvi1nxfp5ajvnvn2k4zvh9v0n3ragcl3rd20";
+    sha256 = "0aibs4gsb9pl21nd93bf963kdzf0661qn0liaw8v8ak2xbz7nbs8";
   };
 
-  goPackagePath = "github.com/dbcdk/morph";
-  goDeps = ./deps.nix;
+  vendorSha256 = "08zzp0h4c4i5hk4whz06a3da7qjms6lr36596vxz0d8q0n7rspr9";
 
   nativeBuildInputs = [ makeWrapper go-bindata ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X
-    main.version=${version}
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+  ];
 
   postPatch = ''
     go-bindata -pkg assets -o assets/assets.go data/
@@ -28,7 +25,7 @@ buildGoPackage rec {
 
   postInstall = ''
     mkdir -p $lib
-    cp -v go/src/$goPackagePath/data/*.nix $lib
+    cp -v ./data/*.nix $lib
     wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
   '';
 

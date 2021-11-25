@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, libX11, xorgproto, unzip }:
 
 stdenv.mkDerivation {
-  name = "seturgent-2012-08-17";
+  pname = "seturgent";
+  version = "unstable-2012-08-17";
 
   src = fetchurl {
     url = "https://github.com/hiltjo/seturgent/archive/ada70dcb15865391e5cdcab27a0739a304a17e03.zip";
@@ -10,7 +11,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
-    libX11 xorgproto
+    libX11
+    xorgproto
   ];
 
   installPhase = ''
@@ -19,10 +21,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      platforms = lib.platforms.linux;
-      description = "Set an application's urgency hint (or not)";
-      maintainers = [ lib.maintainers.yarr ];
-      homepage = "https://github.com/hiltjo/seturgent";
-      license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    description = "Set an application's urgency hint (or not)";
+    maintainers = [ lib.maintainers.yarr ];
+    homepage = "https://github.com/hiltjo/seturgent";
+    license = lib.licenses.mit;
   };
 }

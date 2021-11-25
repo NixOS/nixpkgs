@@ -2,15 +2,18 @@
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
-  version = "2019.11.28+matrix.1";
+  version = "2020.12.05+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "0vsd68izv1ix0hb1gm74qq3zff0sxmhfhjyh7y9005zzp2gpi62v";
+    sha256 = "1z49b8va7wdyr714c8ixb2sldi0igffcjj3xpbmga58ph0z985vy";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.certifi";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.certifi";
+    };
   };
 
   meta = with lib; {

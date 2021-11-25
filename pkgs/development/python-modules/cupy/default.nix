@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "8.5.0";
+  version = "9.6.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb3f8d3b3454beb249b9880502a45fe493c5a44efacc4c72914cbe1a5dbdf803";
+    sha256 = "22469ea1ad51ffbb4af2b139ed0820ac5d0b78f1265b2a095ed5e5d5299aab91";
   };
 
   preConfigure = ''

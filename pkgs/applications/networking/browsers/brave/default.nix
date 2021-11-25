@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl
 , dpkg
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -36,17 +36,19 @@
 , nspr
 , nss
 , pango
+, pipewire
 , udev
 , xorg
 , zlib
 , xdg-utils
 , wrapGAppsHook
+, commandLineArgs ? ""
 }:
 
 let
 
 rpath = lib.makeLibraryPath [
-  alsaLib
+  alsa-lib
   at-spi2-atk
   at-spi2-core
   atk
@@ -80,6 +82,7 @@ rpath = lib.makeLibraryPath [
   nspr
   nss
   pango
+  pipewire
   udev
   xdg-utils
   xorg.libxcb
@@ -90,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.24.82";
+  version = "1.31.91";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "iWUJ5yLWWQvg510Atf+Pd9ya/1NnMNW2Sp/RVFn4PCc=";
+    sha256 = "LuzflA96UQehLHUVYdPDTXs+YuFLEkpzTdO2liGrWtE=";
   };
 
   dontConfigure = true;
@@ -124,9 +127,11 @@ stdenv.mkDerivation rec {
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
+      for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+          --set-rpath "${rpath}" $exe
+      done
 
       # Fix paths
       substituteInPlace $out/share/applications/brave-browser.desktop \
@@ -152,6 +157,11 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
 
       runHook postInstall
+  '';
+
+  preFixup = ''
+    # Add command line args to wrapGApp.
+    gappsWrapperArgs+=(--add-flags ${lib.escapeShellArg commandLineArgs})
   '';
 
   installCheckPhase = ''

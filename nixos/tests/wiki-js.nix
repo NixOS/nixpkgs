@@ -119,7 +119,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     with subtest("Setup"):
         result = machine.succeed(
-            "set -o pipefail; curl -sSf localhost:3000/finalize -X POST -d "
+            "curl -sSf localhost:3000/finalize -X POST -d "
             + "@${payloads.finalize} -H 'Content-Type: application/json' "
             + "| jq .ok | xargs echo"
         )
@@ -132,7 +132,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     with subtest("Base functionality"):
         auth = machine.succeed(
-            "set -o pipefail; curl -sSf localhost:3000/graphql -X POST "
+            "curl -sSf localhost:3000/graphql -X POST "
             + "-d @${payloads.login} -H 'Content-Type: application/json' "
             + "| jq '.[0].data.authentication.login.jwt' | xargs echo"
         ).strip()
@@ -140,7 +140,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         assert auth
 
         create = machine.succeed(
-            "set -o pipefail; curl -sSf localhost:3000/graphql -X POST "
+            "curl -sSf localhost:3000/graphql -X POST "
             + "-d @${payloads.content} -H 'Content-Type: application/json' "
             + f"-H 'Authorization: Bearer {auth}' "
             + "| jq '.[0].data.pages.create.responseResult.succeeded'|xargs echo"

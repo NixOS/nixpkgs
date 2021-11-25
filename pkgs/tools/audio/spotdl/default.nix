@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "3.5.2";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "v${version}";
-    sha256 = "sha256-V9jIA+ULjZRj+uVy4Yh55PapPiqFy9I9ZVln1nt/bJw=";
+    sha256 = "sha256-ftSnlruSv+RtvjTpZPYg9Z2EK4th8NbDhVlG2eIc87s=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -25,6 +25,8 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
     beautifulsoup4
     requests
+    unidecode
+    youtube-dl
   ];
 
   checkInputs = with python3.pkgs; [
@@ -34,6 +36,9 @@ python3.pkgs.buildPythonApplication rec {
     pyfakefs
     pytest-subprocess
   ];
+
+  # requires networking
+  doCheck = false;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])

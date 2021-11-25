@@ -4,14 +4,14 @@
 , mock
 , parameterized
 , pytestCheckHook
-, dateutil
+, python-dateutil
 , pytz
 , regex
 , tzlocal
 , convertdate
 , umalqurra
 , jdatetime
-, ruamel_yaml
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
@@ -39,9 +39,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    python-dateutil pytz regex tzlocal
     # extra_requires
-    convertdate umalqurra jdatetime ruamel_yaml
+    convertdate umalqurra jdatetime ruamel-yaml
   ];
 
   pythonImportsCheck = [ "dateparser" ];

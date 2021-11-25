@@ -1,11 +1,21 @@
 { lib, stdenv, fetchurl, autoreconfHook, fuse, curl, pkg-config, glib, zlib }:
 
-stdenv.mkDerivation {
-  name = "curlftpfs-0.9.2";
+stdenv.mkDerivation rec {
+  pname = "curlftpfs";
+  version = "0.9.2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/curlftpfs/curlftpfs-0.9.2.tar.gz";
+    url = "mirror://sourceforge/curlftpfs/curlftpfs-${version}.tar.gz";
     sha256 = "0n397hmv21jsr1j7zx3m21i7ryscdhkdsyqpvvns12q7qwwlgd2f";
   };
+
+  patches = [
+    # This removes AC_FUNC_MALLOC and AC_FUNC_REALLOC from configure.ac because
+    # it is known to cause problems. Search online for "rpl_malloc" and
+    # "rpl_realloc" to find out more.
+    ./fix-rpl_malloc.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl glib zlib ];
 
@@ -24,7 +34,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Filesystem for accessing FTP hosts based on FUSE and libcurl";
     homepage = "http://curlftpfs.sourceforge.net";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
   };
 }

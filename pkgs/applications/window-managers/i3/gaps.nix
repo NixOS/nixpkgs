@@ -1,13 +1,14 @@
-{ fetchurl, lib, i3, autoreconfHook }:
+{ fetchFromGitHub, lib, i3 }:
 
 i3.overrideAttrs (oldAttrs : rec {
+  pname = "i3-gaps";
+  version = "4.20";
 
-  name = "i3-gaps-${version}";
-  version = "4.19.1";
-
-  src = fetchurl {
-    url = "https://github.com/Airblader/i3/releases/download/${version}/i3-${version}.tar.xz";
-    sha256 = "sha256-+yZ4Pc7zPZfwgBKbjQsrlXxIaxJBmIdE47lljx8FZG0=";
+  src = fetchFromGitHub {
+    owner = "Airblader";
+    repo = "i3";
+    rev = version;
+    sha256 = "sha256-D16wMwCabEOG0AfAhohwcCHeUSvVF93i3zT/yu0FCu8=";
   };
 
   meta = with lib; {

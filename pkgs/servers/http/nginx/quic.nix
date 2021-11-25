@@ -6,8 +6,8 @@
 callPackage ./generic.nix args {
   src = fetchhg {
     url = "https://hg.nginx.org/nginx-quic";
-    rev = "12f18e0bca09"; # branch=quic
-    sha256 = "1lr6zlny26kamczgk8ddscmy5fp5mzxqcppwhjhvq1a029a0r4b7";
+    rev = "6d1488b62dc5"; # branch=quic
+    sha256 = "18xrkzzi4cxl4zi7clikwww9ad9l7vilrfs67hhzx7898jkws5fi";
   };
 
   preConfigure = ''

@@ -10,7 +10,7 @@ let
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql;
+                        pkgs.postgresql_12;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -117,6 +117,7 @@ let
       shared.path = "${cfg.statePath}/shared";
       gitaly.client_path = "${cfg.packages.gitaly}/bin";
       backup = {
+        gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
         path = cfg.backup.path;
         keep_time = cfg.backup.keepTime;
       } // (optionalAttrs (cfg.backup.uploadOptions != {}) {
@@ -140,12 +141,20 @@ let
           port = 3807;
         };
       };
+      registry = lib.optionalAttrs cfg.registry.enable {
+        enabled = true;
+        host = cfg.registry.externalAddress;
+        port = cfg.registry.externalPort;
+        key = cfg.registry.keyFile;
+        api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
+        issuer = "gitlab-issuer";
+      };
       extra = {};
       uploads.storage_path = cfg.statePath;
     };
   };
 
-  gitlabEnv = {
+  gitlabEnv = cfg.packages.gitlab.gitlabEnv // {
     HOME = "${cfg.statePath}/home";
     PUMA_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
@@ -156,7 +165,7 @@ let
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
-  };
+  } // cfg.extraEnv;
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -230,36 +239,36 @@ in {
       packages.gitlab = mkOption {
         type = types.package;
         default = pkgs.gitlab;
-        defaultText = "pkgs.gitlab";
+        defaultText = literalExpression "pkgs.gitlab";
         description = "Reference to the gitlab package";
-        example = "pkgs.gitlab-ee";
+        example = literalExpression "pkgs.gitlab-ee";
       };
 
       packages.gitlab-shell = mkOption {
         type = types.package;
         default = pkgs.gitlab-shell;
-        defaultText = "pkgs.gitlab-shell";
+        defaultText = literalExpression "pkgs.gitlab-shell";
         description = "Reference to the gitlab-shell package";
       };
 
       packages.gitlab-workhorse = mkOption {
         type = types.package;
         default = pkgs.gitlab-workhorse;
-        defaultText = "pkgs.gitlab-workhorse";
+        defaultText = literalExpression "pkgs.gitlab-workhorse";
         description = "Reference to the gitlab-workhorse package";
       };
 
       packages.gitaly = mkOption {
         type = types.package;
         default = pkgs.gitaly;
-        defaultText = "pkgs.gitaly";
+        defaultText = literalExpression "pkgs.gitaly";
         description = "Reference to the gitaly package";
       };
 
       packages.pages = mkOption {
         type = types.package;
         default = pkgs.gitlab-pages;
-        defaultText = "pkgs.gitlab-pages";
+        defaultText = literalExpression "pkgs.gitlab-pages";
         description = "Reference to the gitlab-pages package";
       };
 
@@ -274,6 +283,14 @@ in {
           exist already. Its parent directories must be owned by
           either <literal>root</literal> or the user set in
           <option>services.gitlab.user</option>.
+        '';
+      };
+
+      extraEnv = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        description = ''
+          Additional environment variables for the GitLab environment.
         '';
       };
 
@@ -339,7 +356,7 @@ in {
       backup.uploadOptions = mkOption {
         type = types.attrs;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             # Fog storage connection settings, see http://fog.io/storage/
             connection = {
@@ -462,7 +479,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
         description = ''
           GitLab server port for copy-paste URLs, e.g. 80 or 443 if you're
@@ -506,6 +523,56 @@ in {
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
         '';
+      };
+
+      registry = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable GitLab container registry.";
+        };
+        host = mkOption {
+          type = types.str;
+          default = config.services.gitlab.host;
+          description = "GitLab container registry host name.";
+        };
+        port = mkOption {
+          type = types.int;
+          default = 4567;
+          description = "GitLab container registry port.";
+        };
+        certFile = mkOption {
+          type = types.path;
+          description = "Path to GitLab container registry certificate.";
+        };
+        keyFile = mkOption {
+          type = types.path;
+          description = "Path to GitLab container registry certificate-key.";
+        };
+        defaultForProjects = mkOption {
+          type = types.bool;
+          default = cfg.registry.enable;
+          description = "If GitLab container registry should be enabled by default for projects.";
+        };
+        issuer = mkOption {
+          type = types.str;
+          default = "gitlab-issuer";
+          description = "GitLab container registry issuer.";
+        };
+        serviceName = mkOption {
+          type = types.str;
+          default = "container_registry";
+          description = "GitLab container registry service name.";
+        };
+        externalAddress = mkOption {
+          type = types.str;
+          default = "";
+          description = "External address used to access registry from the internet";
+        };
+        externalPort = mkOption {
+          type = types.int;
+          description = "External port used to access registry from the internet";
+        };
       };
 
       smtp = {
@@ -752,10 +819,44 @@ in {
         '';
       };
 
+      logrotate = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Enable rotation of log files.
+          '';
+        };
+
+        frequency = mkOption {
+          type = types.str;
+          default = "daily";
+          description = "How often to rotate the logs.";
+        };
+
+        keep = mkOption {
+          type = types.int;
+          default = 30;
+          description = "How many rotations to keep.";
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = ''
+            copytruncate
+            compress
+          '';
+          description = ''
+            Extra logrotate config options for this path. Refer to
+            <link xlink:href="https://linux.die.net/man/8/logrotate"/> for details.
+          '';
+        };
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             gitlab = {
               default_projects_features = {
@@ -841,6 +942,10 @@ in {
         assertion = cfg.secrets.jwsFile != null;
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
+      {
+        assertion = versionAtLeast postgresqlPackage.version "12.0.0";
+        message = "PostgreSQL >=12 is required to run GitLab 14. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+      }
     ];
 
     environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
@@ -857,6 +962,21 @@ in {
     services.postgresql = optionalAttrs databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = singleton { name = cfg.databaseUsername; };
+    };
+
+    # Enable rotation of log files
+    services.logrotate = {
+      enable = cfg.logrotate.enable;
+      paths = {
+        gitlab = {
+          path = "${cfg.statePath}/log/*.log";
+          user = cfg.user;
+          group = cfg.group;
+          frequency = cfg.logrotate.frequency;
+          keep = cfg.logrotate.keep;
+          extraConfig = cfg.logrotate.extraConfig;
+        };
+      };
     };
 
     # The postgresql module doesn't currently support concepts like
@@ -898,6 +1018,44 @@ in {
         User = pgsql.superUser;
         Type = "oneshot";
         RemainAfterExit = true;
+      };
+    };
+
+    systemd.services.gitlab-registry-cert = optionalAttrs cfg.registry.enable {
+      path = with pkgs; [ openssl ];
+
+      script = ''
+        mkdir -p $(dirname ${cfg.registry.keyFile})
+        mkdir -p $(dirname ${cfg.registry.certFile})
+        openssl req -nodes -newkey rsa:4096 -keyout ${cfg.registry.keyFile} -out /tmp/registry-auth.csr -subj "/CN=${cfg.registry.issuer}"
+        openssl x509 -in /tmp/registry-auth.csr -out ${cfg.registry.certFile} -req -signkey ${cfg.registry.keyFile} -days 3650
+        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.keyFile})
+        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.certFile})
+        chown ${cfg.user}:${cfg.group} ${cfg.registry.keyFile}
+        chown ${cfg.user}:${cfg.group} ${cfg.registry.certFile}
+      '';
+
+      serviceConfig = {
+        ConditionPathExists = "!${cfg.registry.certFile}";
+      };
+    };
+
+    # Ensure Docker Registry launches after the certificate generation job
+    systemd.services.docker-registry = optionalAttrs cfg.registry.enable {
+      wants = [ "gitlab-registry-cert.service" ];
+    };
+
+    # Enable Docker Registry, if GitLab-Container Registry is enabled
+    services.dockerRegistry = optionalAttrs cfg.registry.enable {
+      enable = true;
+      enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+      extraConfig = {
+        auth.token = {
+          realm = "http${if cfg.https == true then "s" else ""}://${cfg.host}/jwt/auth";
+          service = cfg.registry.serviceName;
+          issuer = cfg.registry.issuer;
+          rootcertbundle = cfg.registry.certFile;
+        };
       };
     };
 
@@ -952,7 +1110,7 @@ in {
       path = with pkgs; [
         jq
         openssl
-        replace
+        replace-secret
         git
       ];
       serviceConfig = {
@@ -994,8 +1152,7 @@ in {
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
               ${optionalString (cfg.smtp.passwordFile != null) ''
-                  smtp_password=$(<'${cfg.smtp.passwordFile}')
-                  replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+                  replace-secret '@smtpPassword@' '${cfg.smtp.passwordFile}' '${cfg.statePath}/config/initializers/smtp_settings.rb'
               ''}
           ''}
 
@@ -1190,7 +1347,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         ExecStart =
-          "${cfg.packages.gitlab-workhorse}/bin/gitlab-workhorse "
+          "${cfg.packages.gitlab-workhorse}/bin/workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
@@ -1243,9 +1400,8 @@ in {
         procps
         gnupg
       ];
-
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";

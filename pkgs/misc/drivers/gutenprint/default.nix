@@ -6,10 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gutenprint-5.3.4";
+  pname = "gutenprint";
+  version = "5.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gimp-print/${name}.tar.bz2";
+    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.bz2";
     sha256 = "0s0b14hjwvbxksq7af5v8z9g2rfqv9jdmxd9d81m57f5mh6rad0p";
   };
 

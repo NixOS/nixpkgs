@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, nano }:
 
-stdenv.mkDerivation {
-  name = "cvs-1.12.13";
+stdenv.mkDerivation rec {
+  pname = "cvs";
+  version = "1.12.13";
 
   src = fetchurl {
-    url = "mirror://savannah/cvs/source/feature/1.12.13/cvs-1.12.13.tar.bz2";
+    url = "mirror://savannah/cvs/source/feature/${version}/cvs-${version}.tar.bz2";
     sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
   };
 

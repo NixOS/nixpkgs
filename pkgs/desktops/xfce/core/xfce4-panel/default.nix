@@ -5,7 +5,7 @@
 , gobject-introspection
 , gtk3
 , libdbusmenu-gtk3
-, libwnck3
+, libwnck
 , libxfce4ui
 , libxfce4util
 , tzdata
@@ -18,7 +18,7 @@ mkXfceDerivation {
   pname = "xfce4-panel";
   version = "4.16.3";
 
-  sha256 = "085hxllsf792sgi8nn0qjfj5vclbrw2dgrgzl6gy55lxcbhkml9x";
+  sha256 = "sha256-PdE64WKdluKfof/l1wTPi7JdpJMYWIvi0yIdpyntsCA=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -30,7 +30,7 @@ mkXfceDerivation {
     garcon
     libdbusmenu-gtk3
     libxfce4ui
-    libwnck3
+    libwnck
     xfconf
     tzdata
   ];

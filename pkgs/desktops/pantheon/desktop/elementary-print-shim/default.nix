@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/print";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.print";
   };
 }

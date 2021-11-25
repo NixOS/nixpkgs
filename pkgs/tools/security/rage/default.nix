@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vag448zpjyplcjpf1ir81l8ip3yxm9vkrxffqr78zslb4k6hw2w";
+    sha256 = "1dzsqppkcxvajyybmday8xnwwwqv3g44hb5fzqy4whkblwxbn2gk";
   };
 
-  cargoSha256 = "06jfhq9vnkq5g5bw1zl2sxsih63yajcyk9zaizhzkdsbhydr4955";
+  cargoSha256 = "1bcj1rd78kgiy1xqpkxffzl6v9xdp778y66g6nhikjq2yarz77ji";
 
   nativeBuildInputs = [ installShellFiles ];
 

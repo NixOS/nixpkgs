@@ -7,7 +7,8 @@
 , uselibtirpc ? stdenv.isLinux
 , libtirpc
 , zlib
-, szip ? null
+, szipSupport ? false
+, szip
 , javaSupport ? false
 , jdk
 }:
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
       sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
     })
+    ./darwin-aarch64.patch
   ];
 
   nativeBuildInputs = [
@@ -54,10 +56,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg
-    szip
     zlib
   ]
   ++ lib.optional javaSupport jdk
+  ++ lib.optional szipSupport szip
   ++ lib.optional uselibtirpc libtirpc;
 
   preConfigure = lib.optionalString uselibtirpc ''
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/cmake/FindXDR.cmake \
       --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
                 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
-  '' + lib.optionalString (szip != null) ''
+  '' + lib.optionalString szipSupport ''
     export SZIP_INSTALL=${szip}
   '';
 
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     "-DJAVA_HOME=${jdk}"
     "-DJAVA_AWT_LIBRARY=${javabase}/libawt.so"
     "-DJAVA_JVM_LIBRARY=${javabase}/server/libjvm.so"
-  ] ++ lib.optionals (szip != null) [
+  ] ++ lib.optionals szipSupport [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
   ];
@@ -117,6 +119,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin "$bin"
   '';
+
+  passthru = {
+    inherit
+      uselibtirpc
+      libtirpc
+      szipSupport
+      szip
+      javaSupport
+      jdk
+    ;
+  };
 
   meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";

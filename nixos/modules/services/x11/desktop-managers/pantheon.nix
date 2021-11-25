@@ -18,7 +18,7 @@ in
 
   meta = {
     doc = ./pantheon.xml;
-    maintainers = pkgs.pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
   options = {
@@ -43,7 +43,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -86,7 +86,7 @@ in
 
     environment.pantheon.excludePackages = mkOption {
       default = [];
-      example = literalExample "[ pkgs.pantheon.elementary-camera ]";
+      example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
     };
@@ -134,6 +134,9 @@ in
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
+      services.fwupd.enable = mkDefault true;
+      services.touchegg.enable = mkDefault true;
+      services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.pantheon; [
@@ -162,12 +165,11 @@ in
         isAllowed = true;
         isSystem = true;
       };
-      # Use gnome-settings-daemon fork
       services.udev.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.gnome.gnome-settings-daemon338
       ];
       systemd.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.gnome.gnome-settings-daemon338
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -180,7 +182,6 @@ in
         gnome.adwaita-icon-theme
         gtk3.out
         hicolor-icon-theme
-        lightlocker
         onboard
         qgnomeplatform
         shared-mime-info
@@ -208,24 +209,29 @@ in
 
         # Services
         elementary-capnet-assist
-        elementary-dpms-helper
         elementary-notifications
         elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
       ]) ++ (gnome.removePackagesByName [
-        gnome.geary
-        gnome.epiphany
         gnome.gnome-font-viewer
+        gnome.gnome-settings-daemon338
       ] config.environment.pantheon.excludePackages);
 
       programs.evince.enable = mkDefault true;
+      programs.evince.package = pkgs.pantheon.evince;
       programs.file-roller.enable = mkDefault true;
+      programs.file-roller.package = pkgs.pantheon.file-roller;
 
       # Settings from elementary-default-settings
       environment.sessionVariables.GTK_CSD = "1";
-      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      xdg.portal.extraPortals = with pkgs; [
+        pantheon.elementary-files
+        pantheon.elementary-settings-daemon
+        xdg-desktop-portal-pantheon
+      ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -254,13 +260,15 @@ in
 
       # Default Fonts
       fonts.fonts = with pkgs; [
+        inter
+        open-dyslexic
         open-sans
         roboto-mono
       ];
 
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Roboto Mono" ];
-        sansSerif = [ "Open Sans" ];
+        sansSerif = [ "Inter" ];
       };
     })
 
@@ -271,14 +279,17 @@ in
         elementary-camera
         elementary-code
         elementary-files
+        elementary-mail
         elementary-music
         elementary-photos
-        elementary-screenshot-tool
+        elementary-screenshot
+        elementary-tasks
         elementary-terminal
         elementary-videos
+        epiphany
       ] config.environment.pantheon.excludePackages);
 
-      # needed by screenshot-tool
+      # needed by screenshot
       fonts.fonts = [
         pkgs.pantheon.elementary-redacted-script
       ];

@@ -2,26 +2,14 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, ffmpeg_3
 , freetype
-, gdal_2
 , glib
 , libGL
 , libGLU
-, libICE
 , libSM
-, libXi
-, libXv
-, libav_12
 
 , libXrender
-, libXrandr
-, libXfixes
-, libXcursor
-, libXinerama
-, libXext
 , libX11
-, libXcomposite
 
 , libxcb
 , sqlite
@@ -34,11 +22,8 @@
 , dbus
 , makeWrapper
 
-, qtlocation
-, qtwebkit
-, qtx11extras
-, qtsensors
-, qtscript
+, cups
+, alsa-lib
 
 , xkeyboardconfig
 , autoPatchelfHook
@@ -50,49 +35,34 @@ let
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.3.7786";
+  version = "7.3.4.8248";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "1s3cakwrgf702g33rh8qs657d8bl68wgg8k89rksgvswwpd2zbb3";
+    sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
   propagatedBuildInputs = [ xkeyboardconfig ];
   buildInputs = [
     dbus
-    ffmpeg_3
+    cups
     fontconfig
     freetype
-    gdal_2
     glib
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     libGL
     libGLU
-    libICE
     libSM
     libX11
-    libXcomposite
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
     libXrender
-    libXv
-    libav_12
     libproxy
     libxcb
     libxml2
-    qtlocation
-    qtscript
-    qtsensors
-    qtwebkit
-    qtx11extras
     sqlite
     zlib
+    alsa-lib
   ];
 
   doInstallCheck = true;
@@ -131,17 +101,6 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall = ''
-    find "$out/opt/google/earth/pro" -name "*.so.*" | \
-      egrep -v 'libssl*|libcrypto*|libicu*' | \
-      xargs rm
-    find "$out/opt/google/earth/pro" -name "*.so" | \
-      egrep -v 'libgoogle*|libauth*|libbase*|libcommon*|libcommon_gui*|libcommon_platform*|libcommon_webbrowser*|libcomponentframework*|libgeobase*|libgeobaseutils*|libge_net*|libgdata*|libgoogleapi*|libmath*|libmoduleframework*|libmaps*|libport*|libprintmodule*|libprofile*|librender*|libreporting*|libsgutil*|libspatial*|libxsltransform*|libbase*|libport*|libport*|libbase*|libcomponentframework*|libIGCore*|libIGUtils*|libaction*|libapiloader*|libapiloader*|libIGCore*|libIGUtils*|libIGMath*|libfusioncommon*|libge_exif*|libaction*|libfusioncommon*|libapiloader*|liblayer*|libapiloader*|libIGAttrs*|libIGCore*|libIGGfx*|libIGMath*|libIGSg*|libIGUtils*|libwmsbase*|libwebbrowser*|libevllpro*|libalchemyext*|libge_cache*|libflightsim*|libnpgeinprocessplugin*|libmeasure*|libviewsync*|libcapture*|libtheme*|libgps*|libgisingest*|libsearchmodule*|libinput_plugin*|libnavigate*|libspnav*|libsearch*|libLeap*' | \
-      xargs rm
-  '';
-
-  autoPatchelfIgnoreMissingDeps=true;
-
   installCheckPhase = ''
     $out/bin/gpsbabel -V > /dev/null
   '';
@@ -159,5 +118,6 @@ mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ friedelino shamilton ];
     platforms = platforms.linux;
+    knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
   };
 }

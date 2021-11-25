@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0ppfsgdigza2jppbkg4qanjhlkpnq7p115c4471vc6vpikpfrlk3";
   };
 
-  cargoSha256 = "1gnyig87a0yqgkng52fpn6hv629vym6k7ydljnxrhb5phmj2qbqx";
+  cargoSha256 = "0pmpvlmy4pw252is34r9af1ysrp78xs8pz8cw4rys9s4fh2hmhjb";
 
   buildInputs = lib.optionals useNcurses [ ncurses ]
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
 
   # I'm picking pancurses for Windows simply because that's the example given in Cursive's
   # documentation for picking an alternative backend. We could just as easily pick crossterm.
-  cargoBuildFlags = lib.optionals (!useNcurses) [ "--no-default-features" "--features pancurses-backend" ];
+  buildNoDefaultFeatures = !useNcurses;
+  buildFeatures = lib.optional (!useNcurses) "pancurses-backend";
 
   meta = with lib; {
     description = "A visual hex viewer for the terminal";

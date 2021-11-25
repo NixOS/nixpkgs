@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "civetweb";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6qBsM9zkN838cMtpE3+c7qcrFpZCS/Av7Ch7EWmlnD4=";
+    sha256 = "sha256-Qh6BGPk7a01YzCeX42+Og9M+fjXRs7kzNUCyT4mYab4=";
   };
 
   makeFlags = [

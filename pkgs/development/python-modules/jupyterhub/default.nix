@@ -7,13 +7,13 @@
 , alembic
 , async_generator
 , certipy
-, dateutil
+, python-dateutil
 , entrypoints
 , jinja2
 , jupyter-telemetry
 , oauthlib
 , pamela
-, prometheus_client
+, prometheus-client
 , requests
 , sqlalchemy
 , tornado
@@ -115,13 +115,13 @@ buildPythonPackage rec {
     alembic
     async_generator
     certipy
-    dateutil
+    python-dateutil
     entrypoints
     jinja2
     jupyter-telemetry
     oauthlib
     pamela
-    prometheus_client
+    prometheus-client
     requests
     sqlalchemy
     tornado

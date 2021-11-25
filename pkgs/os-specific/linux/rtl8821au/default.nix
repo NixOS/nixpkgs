@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
-  name = "rtl8821au-${kernel.version}-${version}";
-  version = "5.1.5+41";
+  pname = "rtl8821au";
+  version = "${kernel.version}-unstable-2021-11-05";
 
   src = fetchFromGitHub {
-    owner = "zebulon2";
-    repo = "rtl8812au";
-    rev = "ecd3494c327c54110d21346ca335ef9e351cb0be";
-    sha256 = "1kmdxgbh0s0v9809kdsi39p0jbm5cf10ivy40h8qj9hn70g1gw8q";
+    owner = "morrownr";
+    repo = "8821au-20210708";
+    rev = "dd9f442d86535fb749ab06f38f97160484d9f04b";
+    sha256 = "0d90zd45b8934wxy51q1x39lx4n3i28zjm6jcq98wkm4lypgphxv";
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
@@ -34,10 +34,12 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
-    description = "rtl8821AU, rtl8812AU and rtl8811AU chipset driver with firmware";
-    homepage = "https://github.com/zebulon2/rtl8812au";
-    license = licenses.gpl2;
+    description = "rtl8821AU and rtl8812AU chipset driver with firmware";
+    homepage = "https://github.com/morrownr/8821au";
+    license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ plchldr ];
   };

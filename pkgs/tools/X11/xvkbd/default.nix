@@ -13,9 +13,11 @@ stdenv.mkDerivation {
   buildInputs = [ libXt libXaw libXtst xorgproto libXi Xaw3d libXpm ];
   installTargets = [ "install" "install.man" ];
   makeFlags = [
-    "BINDIR=$(out)/bin"
-    "XAPPLOADDIR=$(out)/etc/X11/app-defaults"
-    "MANPATH=$(out)/man"
+    "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
+    "LIBDIR=${placeholder "out"}/lib/X11"
+    "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
+    "MANPATH=${placeholder "out"}/man"
   ];
 
   meta = with lib; {

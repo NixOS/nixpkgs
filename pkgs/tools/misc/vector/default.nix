@@ -2,42 +2,77 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
-, openssl
 , pkg-config
+, llvmPackages
+, openssl
 , protobuf
+, rdkafka
+, oniguruma
+, zstd
 , Security
 , libiconv
-, rdkafka
-, tzdata
 , coreutils
 , CoreServices
-, features ? ([ "jemallocator" "rdkafka" "rdkafka/dynamic_linking" ]
-    ++ (lib.optional stdenv.targetPlatform.isUnix "unix")
-    ++ [ "sinks" "sources" "transforms" ])
+, tzdata
+  # kafka is optional but one of the most used features
+, enableKafka ? true
+  # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
+  # "disk-buffer" is using leveldb TODO: investigate how useful
+  # it would be, perhaps only for massive scale?
+, features ? ([ "sinks" "sources" "transforms" ]
+    # the second feature flag is passed to the rdkafka dependency
+    # building on linux fails without this feature flag (both x86_64 and AArch64)
+    ++ lib.optionals enableKafka [ "rdkafka-plain" "rdkafka/dynamic_linking" ]
+    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
 }:
 
-rustPlatform.buildRustPackage rec {
+let
   pname = "vector";
-  version = "0.13.1";
+  version = "0.18.0";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "timberio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ige0138alZ0KAmPakPVmDVydz5qco6m0xK7AEzScyXc=";
+    sha256 = "sha256-vkiTvJevslXEF2lDTr2IL2vFBQ+dj1N636Livncsso4=";
   };
 
-  cargoSha256 = "sha256-oK4M6zTfI0QVW9kQTgpP/vSxFt2VlRABmKvQ4aAqC74=";
+  cargoSha256 = "sha256-u7GzqQex5pqU7DuueMfbxMSOpAzd+uLQTZ2laG/aC+4=";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl protobuf rdkafka ]
-    ++ lib.optional stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
+  RUSTONIG_SYSTEM_LIBONIG = true;
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  cargoBuildFlags = [ "--no-default-features" "--features" (lib.concatStringsSep "," features) ];
-  checkPhase = "TZDIR=${tzdata}/share/zoneinfo cargo test --no-default-features --features ${lib.concatStringsSep "," features} -- --test-threads 1";
+  TZDIR = "${tzdata}/share/zoneinfo";
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = features;
+
+  # TODO investigate compilation failure for tests
+  # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
+  # compilation fails because of a missing http2 include
+  doCheck = !stdenv.isDarwin;
+
+  checkFlags = [
+    # tries to make a network access
+    "--skip=sinks::loki::tests::healthcheck_grafana_cloud"
+
+    # flaky on linux-aarch64
+    "--skip=kubernetes::api_watcher::tests::test_stream_errors"
+
+    # flaky on linux-x86_64
+    "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
+
+    "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
+  ];
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
   # vector.dev during the checkPhase, which obviously isn't going to work.

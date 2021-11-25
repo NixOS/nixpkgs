@@ -5,7 +5,7 @@
 , pytestCheckHook
 , ffmpeg
 , future
-, pytestrunner
+, pytest-runner
 , pytest-mock
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ future ];
   checkInputs = [ pytestCheckHook pytest-mock ];
 

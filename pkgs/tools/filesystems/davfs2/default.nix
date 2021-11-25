@@ -9,10 +9,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.6.0";
+  pname = "davfs2";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://savannah/davfs2/${name}.tar.gz";
+    url = "mirror://savannah/davfs2/davfs2-${version}.tar.gz";
     sha256 = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
   };
 

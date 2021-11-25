@@ -6,43 +6,57 @@
 , which
 , nodejs
 , mkYarnPackage
+, fetchYarnDeps
 , python2
 , nixosTests
 , buildGoModule
 }:
 
 let
+  pinData = lib.importJSON ./pin.json;
+
   # we need a different version than the one already available in nixpkgs
   esbuild-hedgedoc = buildGoModule rec {
     pname = "esbuild";
-    version = "0.11.20";
+    version = "0.12.27";
 
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
       rev = "v${version}";
-      sha256 = "009f2mfgzkzgxjh3034mzdkcvm5vz17sgy1cs604f0425i22z8qm";
+      sha256 = "sha256-UclUTfm6fxoYEEdEEmO/j+WLZLe8SFzt7+Tej4bR0RU=";
     };
 
-    vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
+    vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
   };
 in
 
 mkYarnPackage rec {
-  name = "hedgedoc";
-  version = "1.8.2";
+  pname = "hedgedoc";
+  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "1h2wyhap264iqm2jh0i05w0hb2j86jsq1plyl7k3an90w7wngyg1";
+    sha256 = pinData.srcHash;
   };
 
   nativeBuildInputs = [ which makeWrapper ];
   extraBuildInputs = [ python2 esbuild-hedgedoc ];
 
-  yarnNix = ./yarn.nix;
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    sha256 = pinData.yarnHash;
+  };
+
+  # FIXME(@Ma27) on the bump to 1.9.0 I had to patch this file manually:
+  # I replaced `midi "https://github.com/paulrosen/MIDI.js.git#abcjs"` with
+  # `midi "git+https://github.com/paulrosen/MIDI.js.git#abcjs"` on all occurrences.
+  #
+  # Without this change `yarn` attempted to download the code directly from GitHub, with
+  # the `git+`-prefix it actually uses the `midi.js` version from the offline cache
+  # created by `yarn2nix`. On future bumps this may be necessary as well!
   yarnLock = ./yarn.lock;
   packageJSON = ./package.json;
 
@@ -93,7 +107,10 @@ mkYarnPackage rec {
     runHook postDist
   '';
 
-  passthru.tests = { inherit (nixosTests) hedgedoc; };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) hedgedoc; };
+  };
 
   meta = with lib; {
     description = "Realtime collaborative markdown notes on all platforms";

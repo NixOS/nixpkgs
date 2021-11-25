@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pywilight";
-  version = "0.0.68";
+  version = "0.0.70";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s1xyw5hkfr4rlni1p9z4941pp1740fsg4a3b23a618hv2p1i4ww";
+    sha256 = "sha256-PLahGx75oEp4NIZB9PVRdA3cLBxhQsHTsnquy7WSEC8=";
   };
 
   propagatedBuildInputs = [

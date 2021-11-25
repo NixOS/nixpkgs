@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "simplekml";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17h48r1dsfz4g9xcxh1xq85h20hiz7qzzymc1gla96bj2wh4wyv5";
+    sha256 = "cda687be2754395fcab664e908ebf589facd41e8436d233d2be37a69efb1c536";
   };
 
   # no tests are defined in 1.3.5

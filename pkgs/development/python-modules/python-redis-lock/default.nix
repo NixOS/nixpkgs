@@ -1,11 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , redis
 , pytestCheckHook
 , process-tests
 , pkgs
-, withDjango ? false, django_redis
+, withDjango ? false, django-redis
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-  ] ++ lib.optional withDjango django_redis;
+  ] ++ lib.optional withDjango django-redis;
 
   checkInputs = [
     pytestCheckHook
@@ -30,6 +31,10 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/ionelmc/python-redis-lock/issues/86
     "test_no_overlap2"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fail on Darwin because it defaults to multiprocessing `spawn`
+    "test_reset_signalizes"
+    "test_reset_all_signalizes"
   ];
 
   meta = with lib; {

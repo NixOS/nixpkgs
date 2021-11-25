@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "amazon_kclpy";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-kinesis-client-python";
     rev = "v${version}";
-    sha256 = "13iq217fg0bxafp2rl684pg1rz4jbwid8cc8ip4rim07kzn65lbg";
+    sha256 = "12yxcwml6g86sv1pj3wc2k97md9szdj6xx07qwri1mr9bdkzw7rv";
   };
 
   # argparse is just required for python2.6

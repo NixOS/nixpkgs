@@ -21,7 +21,7 @@ in
 
     networking.hosts = lib.mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = literalExample ''
+      example = literalExpression ''
         {
           "127.0.0.1" = [ "foo.bar.baz" ];
           "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
@@ -34,8 +34,8 @@ in
 
     networking.hostFiles = lib.mkOption {
       type = types.listOf types.path;
-      defaultText = lib.literalExample "Hosts from `networking.hosts` and `networking.extraHosts`";
-      example = lib.literalExample ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
+      defaultText = literalDocBook "Hosts from <option>networking.hosts</option> and <option>networking.extraHosts</option>";
+      example = literalExpression ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
       description = ''
         Files that should be concatenated together to form <filename>/etc/hosts</filename>.
       '';
@@ -190,7 +190,7 @@ in
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.runCommandNoCC "hosts" {} ''
+        hosts.source = pkgs.runCommand "hosts" {} ''
           cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
 

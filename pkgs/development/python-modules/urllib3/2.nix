@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , cryptography
-, dateutil
+, python-dateutil
 , fetchpatch
 , fetchPypi
 , idna
@@ -13,7 +13,6 @@
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
-, pythonOlder
 , tornado
 , trustme
 }:
@@ -45,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

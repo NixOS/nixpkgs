@@ -1,72 +1,85 @@
 { stdenv, lib
-, buildPythonPackage, fetchPypi, pythonOlder, setuptools_scm, pytestCheckHook
+, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm, pytestCheckHook
 , aiohttp
 , aiohttp-cors
-, appdirs
 , attrs
 , click
+, colorama
 , dataclasses
 , mypy-extensions
 , pathspec
+, parameterized
+, platformdirs
 , regex
-, toml
+, tomli
 , typed-ast
-, typing-extensions }:
+, typing-extensions
+, uvloop
+}:
+
 
 buildPythonPackage rec {
   pname = "black";
-  version = "20.8b1";
+  version = "21.10b0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1spv6sldp3mcxr740dh3ywp25lly9s8qlvs946fin44rl1x5a0hw";
+    sha256 = "sha256-qZUiKQkuMl/l89rlbYH2ObI/cTHrhAeBlH5LKIYDDzM=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs =  [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook parameterized ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
+
+    # The top directory /build matches black's DEFAULT_EXCLUDE regex.
+    # Make /build the project root for black tests to avoid excluding files.
+    touch ../.git
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Work around https://github.com/psf/black/issues/2105
+    export TMPDIR="/tmp"
   '';
 
   disabledTests = [
-    # Don't know why these tests fails
-    "test_cache_multiple_files"
-    "test_failed_formatting_does_not_get_cached"
     # requires network access
     "test_gen_check_output"
-    "test_process_queue"
   ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     "test_expression_diff"
+    # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
+    "test_bpo_2142_workaround"
+    "test_skip_magic_trailing_comma"
   ];
 
   propagatedBuildInputs = [
     aiohttp
     aiohttp-cors
-    appdirs
     attrs
     click
+    colorama
     mypy-extensions
     pathspec
+    platformdirs
     regex
-    toml
-    typed-ast
-    typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+    tomli
+    typed-ast # required for tests and python2 extra
+    uvloop
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses
+    ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";
-    homepage    = "https://github.com/psf/black";
-    changelog   = "https://github.com/psf/black/blob/${version}/CHANGES.md";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ sveitser ];
+    homepage = "https://github.com/psf/black";
+    changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

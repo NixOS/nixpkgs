@@ -7,30 +7,25 @@
 , qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
-, randomx, zeromq, libgcrypt, libgpgerror
+, randomx, zeromq, libgcrypt, libgpg-error
 , hidapi, rapidjson, quirc
-, trezorSupport ? true
-,   libusb1
-,   protobuf
-,   python3
+, trezorSupport ? true, libusb1, protobuf, python3
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.2.1";
+  version = "0.17.2.3";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1apjvpvn6hg0k0ak6wpg4prcdcslnb6fqhzzg2p4iy846f0ai9ji";
+    sha256 = "1d8y5yqyw0db2jdv9mwkczwm2qcwhzyslvq994yq5rvs4vkd8xjg";
   };
 
   nativeBuildInputs = [
     cmake pkg-config wrapQtAppsHook
-    (getDev qttools)
+    (lib.getDev qttools)
   ];
 
   buildInputs = [
@@ -38,11 +33,11 @@ stdenv.mkDerivation rec {
     qtmultimedia qtquickcontrols qtquickcontrols2
     qtxmlpatterns
     monero miniupnpc unbound readline
-    randomx libgcrypt libgpgerror
+    randomx libgcrypt libgpg-error
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson quirc
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
-    ++ optionals stdenv.isDarwin [ qtmacextras ];
+  ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -98,7 +93,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = {
+  meta = with lib; {
     description  = "Private, secure, untraceable currency";
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;

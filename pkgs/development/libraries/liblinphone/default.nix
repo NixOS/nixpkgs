@@ -10,7 +10,7 @@
 , cyrus_sasl
 , doxygen
 , fetchFromGitLab
-, ffmpeg_3
+, ffmpeg
 , gdk-pixbuf
 , glib
 , graphviz
@@ -35,6 +35,7 @@
 , python3
 , readline
 , soci
+, boost
 , speex
 , sqlite
 , lib, stdenv
@@ -46,7 +47,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "4.5.1";
+  version = "4.5.17";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "05ybbxq2yqzy3f3vzq8c3szs3qr0zl64la53icpqnmfakwnps5gs";
+    sha256 = "sha256-ryyT4bG3lnE72ydvCAoiT3IeHY4mZwX9nCqaTRC1wyc=";
   };
 
   # Do not build static libraries
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg_3
+    ffmpeg
     gdk-pixbuf
     glib
     gtk2
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     pango
     readline
     soci
+    boost
     speex
     sqlite
     udev

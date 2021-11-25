@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --replace "bottle==" "bottle>="
   '';
 
-  nativeBuildInputs = with python3Packages; [ pytestrunner ];
+  nativeBuildInputs = with python3Packages; [ pytest-runner ];
   propagatedBuildInputs = with python3Packages; [
     daemonocle
     dnspython

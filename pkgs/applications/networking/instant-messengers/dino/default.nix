@@ -4,9 +4,8 @@
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
-, fetchpatch
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -18,23 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "0wy1hb3kz3k4gqqwx308n37cqag2d017jwfz0b5s30nkx2pbwspw";
+    sha256 = "sha256-uYP3D2uyvfRP91fq/1jKOaKgp/+How0SUwmxSrLLH4c=";
   };
-
-  patches = [
-    # Fixes https://github.com/dino/dino/issues/1010 (double' is not a supported generic type argument)
-    (fetchpatch {
-      name = "dino-vala-boxing.patch";
-      url = "https://github.com/dino/dino/commit/9acb54df9254609f2fe4de83c9047d408412de28.patch";
-      sha256 = "1jz4r7d8b1ljwgq846wihp864b6gjdkgh6fnmxh13b2i10x52xsm";
-    })
-  ];
 
   nativeBuildInputs = [
     vala
@@ -60,7 +50,7 @@ stdenv.mkDerivation rec {
     libgcrypt
     libsoup
     pcre
-    epoxy
+    libepoxy
     at-spi2-core
     dbus
     icu
@@ -91,8 +81,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ mic92 qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

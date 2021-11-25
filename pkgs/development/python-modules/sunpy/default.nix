@@ -17,9 +17,9 @@
 , numpy
 , pandas
 , parfive
+, pytestCheckHook
 , pytest-astropy
 , pytest-mock
-, pytestcov
 , python-dateutil
 , scikitimage
 , scipy
@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "2.1.2";
+  version = "3.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8bbc440e606a4f3fcbd1441150d81da6f0208adace9dc06f6afd2c9cb7c08908";
+    sha256 = "c8fcd3700d8f4b7880a669f28c44f784422da1dbfe59fb175f155703817695ed";
   };
 
   nativeBuildInputs = [
@@ -67,17 +67,45 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
+    pytestCheckHook
     pytest-astropy
-    pytestcov
     pytest-mock
   ];
 
   # darwin has write permission issues
   doCheck = stdenv.isLinux;
-  # ignore documentation tests
-  checkPhase = ''
-    PY_IGNORE_IMPORTMISMATCH=1 HOME=$(mktemp -d) pytest sunpy -k 'not rst'
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    "rst"
+  ];
+
+  disabledTestPaths = [
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/helioprojective-1.0.0.yaml"
+    "sunpy/io/special/asdf/schemas/sunpy.org/sunpy/coordinates/frames/heliocentric-1.0.0.yaml"
+    # requires mpl-animators package
+    "sunpy/map/tests/test_compositemap.py"
+    "sunpy/map/tests/test_mapbase.py"
+    "sunpy/map/tests/test_mapsequence.py"
+    "sunpy/map/tests/test_plotting.py"
+    "sunpy/map/tests/test_reproject_to.py"
+    "sunpy/net/tests/test_helioviewer.py"
+    "sunpy/timeseries/tests/test_timeseriesbase.py"
+    "sunpy/visualization/animator/tests/test_basefuncanimator.py"
+    "sunpy/visualization/animator/tests/test_mapsequenceanimator.py"
+    "sunpy/visualization/animator/tests/test_wcs.py"
+    "sunpy/visualization/colormaps/tests/test_cm.py"
+    # requires cdflib package
+    "sunpy/timeseries/tests/test_timeseries_factory.py"
+  ];
+
+  pytestFlagsArray = [
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_nonexisting_module"
+    "--deselect=sunpy/tests/tests/test_self_test.py::test_main_stdlib_module"
+  ];
 
   meta = with lib; {
     description = "SunPy: Python for Solar Physics";

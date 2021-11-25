@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Perl Console Twitter Client";
     homepage    = "http://oysttyer.github.io/";
     maintainers = with maintainers; [ woffs ];

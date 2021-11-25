@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerinstance";
-  version = "7.0.0";
+  version = "9.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "9f624df0664ba80ba886bc96ffe5e468c620eb5b681bc3bc2a28ce26042fd465";
+    sha256 = "22164b0c59138b37bc48ba6d476bf635152bc428dcb420b521a14b8c25c797ad";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "azure.mgmt.containerinstance" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Container Instance Client Library";

@@ -192,6 +192,12 @@ rec {
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
+            lambda = loc: defs: arg: anything.merge
+              (loc ++ [ "<function body>" ])
+              (map (def: {
+                file = def.file;
+                value = def.value arg;
+              }) defs);
             # Otherwise fall back to only allowing all equal definitions
           }.${commonType} or mergeEqualOption;
         in mergeFunction loc defs;
@@ -285,6 +291,13 @@ rec {
       description = "string";
       check = isString;
       merge = mergeEqualOption;
+    };
+
+    nonEmptyStr = mkOptionType {
+      name = "nonEmptyStr";
+      description = "non-empty string";
+      check = x: str.check x && builtins.match "[ \t\n]*" x == null;
+      inherit (str) merge;
     };
 
     strMatching = pattern: mkOptionType {
@@ -492,17 +505,36 @@ rec {
           then setFunctionArgs (args: unify (value args)) (functionArgs value)
           else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
 
-        allModules = defs: modules ++ imap1 (n: { value, file }:
+        allModules = defs: imap1 (n: { value, file }:
           if isAttrs value || isFunction value then
             # Annotate the value with the location of its definition for better error messages
             coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
           else value
         ) defs;
 
-        freeformType = (evalModules {
-          inherit modules specialArgs;
-          args.name = "‹name›";
-        })._module.freeformType;
+        base = evalModules {
+          inherit specialArgs;
+          modules = [{
+            # This is a work-around for the fact that some sub-modules,
+            # such as the one included in an attribute set, expects an "args"
+            # attribute to be given to the sub-module. As the option
+            # evaluation does not have any specific attribute name yet, we
+            # provide a default for the documentation and the freeform type.
+            #
+            # This is necessary as some option declaration might use the
+            # "name" attribute given as argument of the submodule and use it
+            # as the default of option declarations.
+            #
+            # We use lookalike unicode single angle quotation marks because
+            # of the docbook transformation the options receive. In all uses
+            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+            # would be used, and use of `<` and `>` would break the XML document.
+            # It shouldn't cause an issue since this is cosmetic for the manual.
+            _module.args.name = lib.mkOptionDefault "‹name›";
+          }] ++ modules;
+        };
+
+        freeformType = base._module.freeformType;
 
       in
       mkOptionType rec {
@@ -510,32 +542,13 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
-          (evalModules {
-            modules = allModules defs;
-            inherit specialArgs;
-            args.name = last loc;
+          (base.extendModules {
+            modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
-        getSubOptions = prefix: (evalModules
-          { inherit modules prefix specialArgs;
-            # This is a work-around due to the fact that some sub-modules,
-            # such as the one included in an attribute set, expects a "args"
-            # attribute to be given to the sub-module. As the option
-            # evaluation does not have any specific attribute name, we
-            # provide a default one for the documentation.
-            #
-            # This is mandatory as some option declaration might use the
-            # "name" attribute given as argument of the submodule and use it
-            # as the default of option declarations.
-            #
-            # Using lookalike unicode single angle quotation marks because
-            # of the docbook transformation the options receive. In all uses
-            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
-            # would be used, and use of `<` and `>` would break the XML document.
-            # It shouldn't cause an issue since this is cosmetic for the manual.
-            args.name = "‹name›";
-          }).options // optionalAttrs (freeformType != null) {
+        getSubOptions = prefix: (base.extendModules
+          { inherit prefix; }).options // optionalAttrs (freeformType != null) {
             # Expose the sub options of the freeform type. Note that the option
             # discovery doesn't care about the attribute name used here, so this
             # is just to avoid conflicts with potential options from the submodule
@@ -581,7 +594,17 @@ rec {
       in
       mkOptionType rec {
         name = "enum";
-        description = "one of ${concatMapStringsSep ", " show values}";
+        description =
+          # Length 0 or 1 enums may occur in a design pattern with type merging
+          # where an "interface" module declares an empty enum and other modules
+          # provide implementations, each extending the enum with their own
+          # identifier.
+          if values == [] then
+            "impossible (empty enum)"
+          else if builtins.length values == 1 then
+            "value ${show (builtins.head values)} (singular enum)"
+          else
+            "one of ${concatMapStringsSep ", " show values}";
         check = flip elem values;
         merge = mergeEqualOption;
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };

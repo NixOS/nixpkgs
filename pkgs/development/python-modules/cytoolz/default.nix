@@ -5,7 +5,6 @@
 , nose
 , toolz
 , python
-, fetchpatch
 , isPy27
 }:
 

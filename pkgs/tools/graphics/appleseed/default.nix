@@ -1,11 +1,12 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
-eigen, libpng, python, libGLU, qt4, openexr, openimageio,
-opencolorio, xercesc, ilmbase, osl, seexpr, makeWrapper
+eigen, libpng, python3, libGLU, qt4, openexr, openimageio,
+opencolorio_1, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
 let boost_static = boost165.override {
   enableStatic = true;
   enablePython = true;
+  python = python3;
 };
 in stdenv.mkDerivation rec {
 
@@ -20,8 +21,8 @@ in stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
-    boost_static guile eigen libpng python
-    libGLU qt4 openexr openimageio opencolorio xercesc
+    boost_static guile eigen libpng python3
+    libGLU qt4 openexr openimageio opencolorio_1 xercesc
     osl seexpr
   ];
 
@@ -59,7 +60,7 @@ in stdenv.mkDerivation rec {
   # Work around a bug in the CMake build:
   postInstall = ''
     chmod a+x $out/bin/*
-    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python}
+    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python3}
   '';
 }
 

@@ -1,6 +1,6 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo, writeText, ... }:
+{ lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
 with lib;
 
@@ -71,6 +71,8 @@ stdenv.mkDerivation ({
 // lib.optionalAttrs (emacs.nativeComp or false) {
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+
+  nativeBuildInputs = [ gcc ];
 
   addEmacsNativeLoadPath = true;
 

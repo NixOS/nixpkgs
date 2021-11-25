@@ -1,6 +1,6 @@
-diff -Naur terraform.old/command/init.go terraform.new/command/init.go
---- terraform.old/command/init.go
-+++ terraform.new/command/init.go
+diff -Naur terraform.old/internal/command/init.go terraform.new/internal/command/init.go
+--- terraform.old/internal/command/init.go
++++ terraform.new/internal/command/init.go
 @@ -3,6 +3,7 @@
  import (
  	"context"

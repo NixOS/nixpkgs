@@ -1,15 +1,20 @@
-diff -ru PySDL2-0.9.7-old/sdl2/dll.py PySDL2-0.9.7/sdl2/dll.py
---- PySDL2-0.9.7-old/sdl2/dll.py	2020-02-15 09:36:29.000000000 +0100
-+++ PySDL2-0.9.7/sdl2/dll.py	2020-09-23 20:24:09.365497270 +0200
-@@ -94,15 +94,16 @@
+diff --git a/sdl2/dll.py b/sdl2/dll.py
+index 6e30259..12e1f7d 100644
+--- a/sdl2/dll.py
++++ b/sdl2/dll.py
+@@ -145,7 +145,7 @@ class DLL(object):
      """Function wrapper around the different DLL functions. Do not use or
      instantiate this one directly from your user code.
      """
 -    def __init__(self, libinfo, libnames, path=None):
 +    def __init__(self, libinfo, libfile):
          self._dll = None
+         self._deps = None
          self._libname = libinfo
-         self._version = None
+@@ -157,11 +157,12 @@ class DLL(object):
+             "SDL2_image": 2001,
+             "SDL2_gfx": 1003
+         }
 -        foundlibs = _findlib(libnames, path)
 -        dllmsg = "PYSDL2_DLL_PATH: %s" % (os.getenv("PYSDL2_DLL_PATH") or "unset")
 -        if len(foundlibs) == 0:
@@ -24,10 +29,10 @@ diff -ru PySDL2-0.9.7-old/sdl2/dll.py PySDL2-0.9.7/sdl2/dll.py
          for libfile in foundlibs:
              try:
                  self._dll = CDLL(libfile)
-@@ -117,9 +118,9 @@
-         if self._dll is None:
-             raise RuntimeError("found %s, but it's not usable for the library %s" %
+@@ -185,19 +186,19 @@ class DLL(object):
                                 (foundlibs, libinfo))
+         if _using_ms_store_python():
+             self._deps = _preload_deps(libinfo, self._libfile)
 -        if path is not None and sys.platform in ("win32",) and \
 -            path in self._libfile:
 -            os.environ["PATH"] = "%s;%s" % (path, os.environ["PATH"])
@@ -37,20 +42,31 @@ diff -ru PySDL2-0.9.7-old/sdl2/dll.py PySDL2-0.9.7/sdl2/dll.py
  
      def bind_function(self, funcname, args=None, returns=None, added=None):
          """Binds the passed argument and return value types to the specified
-@@ -220,7 +221,7 @@
+         function. If the version of the loaded library is older than the
+         version where the function was added, an informative exception will
+         be raised if the bound function is called.
+         
+         Args:
+             funcname (str): The name of the function to bind.
+             args (List or None, optional): The data types of the C function's 
+                 arguments. Should be 'None' if function takes no arguments.
+             returns (optional): The return type of the bound C function. Should
+                 be 'None' if function returns 'void'.
+@@ -288,7 +289,7 @@ def nullfunc(*args):
      return
  
  try:
--    dll = DLL("SDL2", ["SDL2", "SDL2-2.0"], os.getenv("PYSDL2_DLL_PATH"))
+-    dll = DLL("SDL2", ["SDL2", "SDL2-2.0", "SDL2-2.0.0"], os.getenv("PYSDL2_DLL_PATH"))
 +    dll = DLL("SDL2", "@sdl2@")
  except RuntimeError as exc:
      raise ImportError(exc)
  
-diff -ru PySDL2-0.9.7-old/sdl2/sdlgfx.py PySDL2-0.9.7/sdl2/sdlgfx.py
---- PySDL2-0.9.7-old/sdl2/sdlgfx.py	2020-02-02 11:07:00.000000000 +0100
-+++ PySDL2-0.9.7/sdl2/sdlgfx.py	2020-09-23 20:23:56.997419129 +0200
-@@ -39,8 +39,7 @@
-            ]
+diff --git a/sdl2/sdlgfx.py b/sdl2/sdlgfx.py
+index 090752e..a8a7488 100644
+--- a/sdl2/sdlgfx.py
++++ b/sdl2/sdlgfx.py
+@@ -50,8 +50,7 @@ __all__ = [
+ 
  
  try:
 -    dll = DLL("SDL2_gfx", ["SDL2_gfx", "SDL2_gfx-1.0"],
@@ -59,11 +75,20 @@ diff -ru PySDL2-0.9.7-old/sdl2/sdlgfx.py PySDL2-0.9.7/sdl2/sdlgfx.py
  except RuntimeError as exc:
      raise ImportError(exc)
  
-diff -ru PySDL2-0.9.7-old/sdl2/sdlimage.py PySDL2-0.9.7/sdl2/sdlimage.py
---- PySDL2-0.9.7-old/sdl2/sdlimage.py	2020-02-02 11:07:00.000000000 +0100
-+++ PySDL2-0.9.7/sdl2/sdlimage.py	2020-09-23 20:23:50.085375658 +0200
-@@ -27,8 +27,7 @@
-            ]
+diff --git a/sdl2/sdlimage.py b/sdl2/sdlimage.py
+index a6884e8..95d96df 100644
+--- a/sdl2/sdlimage.py
++++ b/sdl2/sdlimage.py
+@@ -32,15 +32,14 @@ __all__ = [
+     "IMG_LoadXCF_RW", "IMG_LoadWEBP_RW", "IMG_LoadXPM_RW",
+     "IMG_LoadXV_RW", "IMG_ReadXPMFromArray",
+     "IMG_GetError", "IMG_SetError", "IMG_SaveJPG", "IMG_SaveJPG_RW",
+-    
++
+     # Python Functions
+     "get_dll_file"
+ ]
+ 
  
  try:
 -    dll = DLL("SDL2_image", ["SDL2_image", "SDL2_image-2.0"],
@@ -72,11 +97,12 @@ diff -ru PySDL2-0.9.7-old/sdl2/sdlimage.py PySDL2-0.9.7/sdl2/sdlimage.py
  except RuntimeError as exc:
      raise ImportError(exc)
  
-diff -ru PySDL2-0.9.7-old/sdl2/sdlmixer.py PySDL2-0.9.7/sdl2/sdlmixer.py
---- PySDL2-0.9.7-old/sdl2/sdlmixer.py	2020-02-02 11:07:00.000000000 +0100
-+++ PySDL2-0.9.7/sdl2/sdlmixer.py	2020-09-23 20:23:46.117350771 +0200
-@@ -53,8 +53,7 @@
-           ]
+diff --git a/sdl2/sdlmixer.py b/sdl2/sdlmixer.py
+index 9ad9b85..1c36289 100644
+--- a/sdl2/sdlmixer.py
++++ b/sdl2/sdlmixer.py
+@@ -76,8 +76,7 @@ __all__ = [
+ ]
  
  try:
 -    dll = DLL("SDL2_mixer", ["SDL2_mixer", "SDL2_mixer-2.0"],
@@ -85,11 +111,12 @@ diff -ru PySDL2-0.9.7-old/sdl2/sdlmixer.py PySDL2-0.9.7/sdl2/sdlmixer.py
  except RuntimeError as exc:
      raise ImportError(exc)
  
-diff -ru PySDL2-0.9.7-old/sdl2/sdlttf.py PySDL2-0.9.7/sdl2/sdlttf.py
---- PySDL2-0.9.7-old/sdl2/sdlttf.py	2020-02-02 11:07:00.000000000 +0100
-+++ PySDL2-0.9.7/sdl2/sdlttf.py	2020-09-23 20:23:40.069312931 +0200
-@@ -39,8 +39,7 @@
-           ]
+diff --git a/sdl2/sdlttf.py b/sdl2/sdlttf.py
+index 9c2d951..bd5a16a 100644
+--- a/sdl2/sdlttf.py
++++ b/sdl2/sdlttf.py
+@@ -54,8 +54,7 @@ __all__ = [
+ 
  
  try:
 -    dll = DLL("SDL2_ttf", ["SDL2_ttf", "SDL2_ttf-2.0"],

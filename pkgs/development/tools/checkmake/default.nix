@@ -37,7 +37,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Experimental tool for linting and checking Makefiles";
-    homepage = https://github.com/mrtazz/checkmake;
+    homepage = "https://github.com/mrtazz/checkmake";
     license = licenses.mit;
     maintainers = with maintainers; [ vidbina ];
     platforms = platforms.linux;

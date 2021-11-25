@@ -89,13 +89,13 @@ rec {
         => "usr/local/bin"
   */
   concatStringsSep = builtins.concatStringsSep or (separator: list:
-    concatStrings (intersperse separator list));
+    lib.foldl' (x: y: x + y) "" (intersperse separator list));
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
      elements.
 
-     Type: concatMapStringsSep :: string -> (string -> string) -> [string] -> string
+     Type: concatMapStringsSep :: string -> (a -> string) -> [a] -> string
 
      Example:
         concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
@@ -112,7 +112,7 @@ rec {
   /* Same as `concatMapStringsSep`, but the mapping function
      additionally receives the position of its argument.
 
-     Type: concatIMapStringsSep :: string -> (int -> string -> string) -> [string] -> string
+     Type: concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
 
      Example:
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
@@ -361,6 +361,19 @@ rec {
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
     if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
     then s else escapeNixString s;
+
+  /* Escapes a string such that it is safe to include verbatim in an XML
+     document.
+
+     Type: string -> string
+
+     Example:
+       escapeXML ''"test" 'test' < & >''
+       => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+  */
+  escapeXML = builtins.replaceStrings
+    ["\"" "'" "<" ">" "&"]
+    ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
   # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (

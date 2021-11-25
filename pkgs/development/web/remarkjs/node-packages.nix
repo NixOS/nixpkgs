@@ -3674,7 +3674,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Static analysis tool for JavaScript";
-      homepage = "http://jshint.com/";
+      homepage = "https://jshint.com/";
       license = "MIT";
     };
     production = true;

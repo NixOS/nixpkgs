@@ -12,8 +12,18 @@ let
   { ... }:
   { options =
     { password = mkOption {
-      type = types.str;
-      description = "Authorized password to the opposite end of the tunnel.";
+        type = types.str;
+        description = "Authorized password to the opposite end of the tunnel.";
+      };
+      login = mkOption {
+        default = "";
+        type = types.str;
+        description = "(optional) name your peer has for you";
+      };
+      peerName = mkOption {
+        default = "";
+        type = types.str;
+        description = "(optional) human-readable name for peer";
       };
       publicKey = mkOption {
         type = types.str;
@@ -29,7 +39,7 @@ let
   };
 
   # Additional /etc/hosts entries for peers with an associated hostname
-  cjdnsExtraHosts = pkgs.runCommandNoCC "cjdns-hosts" {} ''
+  cjdnsExtraHosts = pkgs.runCommand "cjdns-hosts" {} ''
     exec >$out
     ${concatStringsSep "\n" (mapAttrsToList (k: v:
         optionalString (v.hostname != "")
@@ -140,7 +150,7 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = literalExample ''
+          example = literalExpression ''
             {
               "192.168.1.1:27313" = {
                 hostname = "homer.hype";
@@ -187,7 +197,7 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = literalExample ''
+          example = literalExpression ''
             {
               "01:02:03:04:05:06" = {
                 hostname = "homer.hype";

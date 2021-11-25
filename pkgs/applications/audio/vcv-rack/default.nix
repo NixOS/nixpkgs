@@ -1,5 +1,5 @@
 { lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
-, alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
+, alsa-lib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
 let
@@ -75,7 +75,7 @@ with lib; stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
+  buildInputs = [ alsa-lib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = [ "Rack" ];
 

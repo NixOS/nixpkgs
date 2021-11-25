@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.15.0";
-  name = "${varnish.name}-modules-${version}";
+  pname = "${varnish.name}-modules";
 
   src = fetchFromGitHub {
     owner = "varnish";

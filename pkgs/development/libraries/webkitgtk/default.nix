@@ -1,4 +1,5 @@
 { lib, stdenv
+, runCommand
 , fetchurl
 , perl
 , python3
@@ -13,13 +14,14 @@
 , libnotify
 , gnutls
 , libgcrypt
+, libgpg-error
 , gtk3
 , wayland
 , libwebp
 , enchant2
 , xorg
 , libxkbcommon
-, epoxy
+, libepoxy
 , at-spi2-core
 , libxml2
 , libsoup
@@ -34,10 +36,12 @@
 , libidn
 , libedit
 , readline
+, apple_sdk
 , libGL
 , libGLU
 , mesa
 , libintl
+, lcms2
 , libmanette
 , openjpeg
 , enableGeoLocation ? true
@@ -60,7 +64,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.1";
+  version = "2.34.1";
 
   outputs = [ "out" "dev" ];
 
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "05v9hgpkc6mi2klrd8nqql1n8xzq8rgdz3hvyy369xkhgwqifq8k";
+    sha256 = "sha256-RDwTFnBd4CR0F0joX+MjJNKZ2e5o5v6zQLieSgQHPe4=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -96,6 +100,7 @@ stdenv.mkDerivation rec {
     gperf
     ninja
     perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
     pkg-config
     python3
     ruby
@@ -107,7 +112,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     enchant2
-    epoxy
+    libepoxy
     gnutls
     gst-plugins-bad
     gst-plugins-base
@@ -116,8 +121,10 @@ stdenv.mkDerivation rec {
     libGLU
     mesa # for libEGL headers
     libgcrypt
+    libgpg-error
     libidn
     libintl
+    lcms2
   ] ++ lib.optionals stdenv.isLinux [
     libmanette
   ] ++ [
@@ -143,7 +150,15 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
+    # Pull a header that contains a definition of proc_pid_rusage().
+    # (We pick just that one because using the other headers from `sdk` is not
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommand "${pname}_headers" {} ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
     systemd
@@ -161,6 +176,7 @@ stdenv.mkDerivation rec {
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_WPE_RENDERER=OFF"
+    "-DUSE_SOUP2=${if lib.versions.major libsoup.version == "2" then "ON" else "OFF"}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -194,5 +210,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
+    broken = stdenv.isDarwin;
   };
 }

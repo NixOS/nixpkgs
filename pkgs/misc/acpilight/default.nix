@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   pyenv = python3.withPackages (pythonPackages: with pythonPackages; [
-    ConfigArgParse
+    configargparse
   ]);
 
   postConfigure = ''

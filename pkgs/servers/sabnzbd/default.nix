@@ -20,26 +20,30 @@ let
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "3.2.1";
+  version = "3.4.0";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-y2uaXa2DPZHBLukAdwKTwXauaJHX5Uft35vsthzGwME=";
+    sha256 = "sha256-zax+PuvCmYOlEhRmiCp7UOd9VI0i8dbgTPyTtqLuGUM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pythonEnv ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R * $out/
     mkdir $out/bin
     echo "${pythonEnv}/bin/python $out/SABnzbd.py \$*" > $out/bin/sabnzbd
     chmod +x $out/bin/sabnzbd
     wrapProgram $out/bin/sabnzbd --set PATH ${path}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

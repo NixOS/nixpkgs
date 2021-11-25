@@ -59,7 +59,7 @@ in
 
     package = mkOption {
       default = pkgs.restic-rest-server;
-      defaultText = "pkgs.restic-rest-server";
+      defaultText = literalExpression "pkgs.restic-rest-server";
       type = types.package;
       description = "Restic REST server package to use.";
     };

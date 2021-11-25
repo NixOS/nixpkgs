@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pam, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "pam-krb5-4.10";
+  pname = "pam-krb5";
+  version = "4.10";
 
   src = fetchurl {
-    url = "https://archives.eyrie.org/software/kerberos/${name}.tar.gz";
+    url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${version}.tar.gz";
     sha256 = "09wzxd5zrj5bzqpb01qf148npj5k8hmd2bx2ij1qsy40hdxqyq79";
   };
 

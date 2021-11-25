@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, pytest, pytestcov, pytest_xdist
+, pytest, pytest-cov, pytest-xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing
 }:
@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
-    pytest_xdist
+    pytest-cov
+    pytest-xdist
   ];
 
   propagatedBuildInputs = [

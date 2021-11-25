@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, shared-mime-info }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
@@ -13,10 +13,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
 
-  nativeBuildInputs = [ shared-mime-info ];
+  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   preCheck = ''
     export HOME=$TEMPDIR
+  '';
+
+  postInstall = ''
+    installShellCompletion \
+      --zsh  completions/_handlr \
+      --fish completions/handlr.fish
   '';
 
   meta = with lib; {

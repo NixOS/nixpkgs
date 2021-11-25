@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "workstyle";
-  version = "0.2.1";
+  version = "unstable-2021-05-09";
 
   src = fetchFromGitHub {
     owner = "pierrechevalier83";
     repo = pname;
-    rev = "43b0b5bc0a66d40289ff26b8317f50510df0c5f9";
-    sha256 = "0f4hwf236823qmqy31fczjb1hf3fvvac3x79jz2l7li55r6fd8hn";
+    rev = "f2023750d802259ab3ee7d7d1762631ec157a0b1";
+    sha256 = "04xds691sw4pi2nq8xvdhn0312wwia60gkd8b1bjqy11zrqbivbx";
   };
 
-  cargoSha256 = "1hy68wvsxncsy4yx4biigfvwyq18c7yp1g543c6nca15cdzs1c54";
+  cargoSha256 = "0xwv8spr96z4aimjlr15bhwl6i3zqp7jr45d9zr3sbi9d8dbdja2";
 
   doCheck = false; # No tests
 

@@ -1,8 +1,8 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
-, setuptools_scm
+, setuptools-scm
 , cheroot, portend, more-itertools, zc_lockfile, routes
 , jaraco_collections
-, objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
+, objgraph, pytest, pytest-cov, pathpy, requests-toolbelt, pytest-services
 , fetchpatch
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     # required
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    objgraph pytest pytestcov pathpy requests_toolbelt pytest-services
+    objgraph pytest pytest-cov pathpy requests-toolbelt pytest-services
   ];
 
   # Keyboard interrupt ends test suite run
@@ -60,7 +60,7 @@ buildPythonPackage rec {
       --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
       --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
       ${lib.optionalString stdenv.isDarwin
-        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
+        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block --deselect=cherrypy/test/test_config_server.py"}
   '';
 
   __darwinAllowLocalNetworking = true;

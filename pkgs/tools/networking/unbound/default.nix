@@ -5,8 +5,15 @@
 , nettle
 , expat
 , libevent
+, libsodium
+, protobufc
+, hiredis
 , dns-root-data
 , pkg-config
+, makeWrapper
+, symlinkJoin
+, bison
+, nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -20,19 +27,26 @@
 , systemd ? null
   # optionally support DNS-over-HTTPS as a server
 , withDoH ? false
+, withECS ? false
+, withDNSCrypt ? false
+, withDNSTAP ? false
+, withTFO ? false
+, withRedis ? false
 , libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchurl {
-    url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hQTZe4/FvYlzRcldEW4O4N34yP+ZWQqytL0TJ4yfULg=";
+    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
+    sha256 = "sha256-ChO1R/O5KgJrXr0EI/VMmR5XGAN/2fckRYF/agQOGoM=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ openssl nettle expat libevent ]
     ++ lib.optionals withSystemd [ pkg-config systemd ]
@@ -54,12 +68,41 @@ stdenv.mkDerivation rec {
     "--enable-systemd"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
+  ] ++ lib.optionals withECS [
+    "--enable-subnet"
+  ] ++ lib.optionals withDNSCrypt [
+    "--enable-dnscrypt"
+    "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
+  ] ++ lib.optionals withDNSTAP [
+    "--enable-dnstap"
+    "--with-protobuf-c=${protobufc}"
+  ] ++ lib.optionals withTFO [
+    "--enable-tfo-client"
+    "--enable-tfo-server"
+  ] ++ lib.optionals withRedis [
+    "--enable-cachedb"
+    "--with-libhiredis=${hiredis}"
   ];
+
+  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
+
+  # Remove references to compile-time dependencies that are included in the configure flags
+  postConfigure = let
+    inherit (builtins) storeDir;
+  in ''
+    sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
+  '';
+
+  checkInputs = [ bison ];
+
+  doCheck = true;
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
   postInstall = ''
     make unbound-event-install
+    wrapProgram $out/bin/unbound-control-setup \
+      --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
@@ -70,6 +113,9 @@ stdenv.mkDerivation rec {
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
       buildPhase
+      if [ -n "$doCheck" ]; then
+          checkPhase
+      fi
       installPhase
     ''
   # get rid of runtime dependencies on $dev outputs
@@ -77,6 +123,8 @@ stdenv.mkDerivation rec {
   + lib.concatMapStrings
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
+
+  passthru.tests = nixosTests.unbound;
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";

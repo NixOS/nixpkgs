@@ -6,23 +6,26 @@
 , dpkg
 , atomEnv
 , libuuid
+, libappindicator-gtk3
 , pulseaudio
 , at-spi2-atk
 , coreutils
 , gawk
 , xdg-utils
-, systemd }:
+, systemd
+, nodePackages
+, enableRectOverlay ? false }:
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.4.00.7556";
+  version = "1.4.00.26453";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "0yak3jxh0gdn57wjss0s7sdjssf1b70j0klrcpv66bizqvw1xl7b";
+    sha256 = "0ndqk893l17m42hf5fiiv6mka0v7v8r54kblvb67jsxajdvva5gf";
   };
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
 
   unpackCmd = "dpkg -x $curSrc .";
 
@@ -34,13 +37,30 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     (lib.getLib systemd)
     pulseaudio
+    libappindicator-gtk3
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
+    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
     gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
     gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
   '';
+
+
+  buildPhase = ''
+    runHook preBuild
+
+    asar extract share/teams/resources/app.asar "$TMP/work"
+    substituteInPlace $TMP/work/main.bundle.js \
+        --replace "/usr/share/pixmaps/" "$out/share/pixmaps" \
+        --replace "/usr/bin/xdg-mime" "${xdg-utils}/bin/xdg-mime" \
+        --replace "Exec=/usr/bin/" "Exec=" # Remove usage of absolute path in autostart.
+    asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" share/teams/resources/app.asar
+
+    runHook postBuild
+  '';
+
+  preferLocalBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -55,9 +75,11 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/teams/teams $out/bin/
 
+    ${lib.optionalString (!enableRectOverlay) ''
     # Work-around screen sharing bug
     # https://docs.microsoft.com/en-us/answers/questions/42095/sharing-screen-not-working-anymore-bug.html
     rm $out/opt/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
+    ''}
 
     runHook postInstall
   '';

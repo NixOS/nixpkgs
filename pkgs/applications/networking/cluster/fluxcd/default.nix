@@ -1,38 +1,47 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.13.3";
+  version = "0.23.0";
+  sha256 = "15j4r43hy3slyahx4am7lj7jns4x3axrcbr9qwiznmk8qbvrzrdy";
+  manifestsSha256 = "10rh0q1la5dq6n9y1yvw9ilj5lhzx8vh1zi2lznfjsvc5niwx7wf";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    sha256 = "sha256-+2JvJFzH1CjU/WQ7MLtqd5Adfi/ktX9lPq4IyxPcUD8=";
+    sha256 = manifestsSha256;
     stripRoot = false;
   };
 in
 
 buildGoModule rec {
-  inherit version;
-
   pname = "fluxcd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "sha256-RaQOefVqDPHvTF1qMtgAFNpA1Gx7Vo2JKiwteePsGyo=";
+    inherit sha256;
   };
 
-  vendorSha256 = "sha256-GR40BgNMHi3TXVQVN1FaPNVi0HXYVm3vbg4NTXfYBes=";
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  subPackages = [ "cmd/flux" ];
-
-  buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];
+  vendorSha256 = "sha256-vFm9ai+VWOPLRckKJ7gfD/0iQ8b4o5HNQE4cekb0vA0=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
   '';
+
+  patches = [
+    ./patches/disable-tests-ssh_key.patch
+  ];
+
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  subPackages = [ "cmd/flux" ];
+
+  # Required to workaround test error:
+  #   panic: mkdir /homeless-shelter: permission denied
+  HOME="$TMPDIR";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -46,6 +55,8 @@ buildGoModule rec {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Open and extensible continuous delivery solution for Kubernetes";
     longDescription = ''
@@ -55,7 +66,6 @@ buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ jlesquembre bryanasdev000 ];
   };
 }

@@ -1,11 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , hypothesis
-, setuptools_scm
+, setuptools-scm
 , six
 , attrs
 , py
 , setuptools
-, pytestcov
+, pytest-cov
 , pytest-timeout
 , pytest-tornado
 , mock
@@ -18,23 +18,24 @@
 , tornado
 , requests
 , GitPython
+, jupyter-server-mathjax
 , notebook
 , jinja2
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "2.1.0";
+  version = "3.1.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e3efdcfda31c3074cb565cd8e76e2e5421b1c4560c3a00c56f8679dd15590e5";
+    sha256 = "67767320e971374f701a175aa59abd3a554723039d39fae908e72d16330d648b";
   };
 
   checkInputs = [
     hypothesis
-    pytestcov
+    pytest-cov
     pytest-timeout
     pytest-tornado
     jsonschema
@@ -52,13 +53,14 @@ buildPythonPackage rec {
     "test_merge"
   ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     attrs
     py
     setuptools
     six
+    jupyter-server-mathjax
     nbformat
     colorama
     pygments

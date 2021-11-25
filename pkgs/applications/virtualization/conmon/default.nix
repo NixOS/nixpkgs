@@ -4,23 +4,24 @@
 , pkg-config
 , glib
 , glibc
+, libseccomp
 , systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.27";
+  version = "2.0.30";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LMvhSoKd652XVPzuId8Ortf0f08FUP1zCn06PgtRwkA=";
+    sha256 = "sha256-NZMuHhQyo+95QTJcR79cyZr86ytkbo4nmaqTF0Bdt+s=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib systemd ]
+  buildInputs = [ glib libseccomp systemd ]
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   # manpage requires building the vendored go-md2man

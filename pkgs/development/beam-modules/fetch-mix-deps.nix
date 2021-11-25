@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }:
+{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }@inputs:
 
 { pname
 , version
@@ -7,6 +7,9 @@
 , mixEnv ? "prod"
 , debug ? false
 , meta ? { }
+, patches ? []
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
 , ...
 }@attrs:
 
@@ -35,6 +38,8 @@ stdenvNoCC.mkDerivation (attrs // {
     export REBAR_CACHE_DIR="$TMPDIR/rebar3.cache"
     runHook postConfigure
   '';
+
+  inherit patches;
 
   dontBuild = true;
 

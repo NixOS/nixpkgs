@@ -1,28 +1,34 @@
-{ lib, stdenv  , fetchurl, libpcap, libnet
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, libnet
 }:
 
 stdenv.mkDerivation rec {
-   pkgname = "tcptraceroute";
-   name = "${pkgname}-${version}";
-   version = "1.5beta7";
+  pname = "tcptraceroute";
+  version = "1.5beta7";
 
-   src = fetchurl {
-     url = "https://github.com/mct/${pkgname}/archive/${name}.tar.gz";
-     sha256 = "1rz8bgc6r1isb40awv1siirpr2i1paa2jc1cd3l5pg1m9522xzap";
-   };
+  src = fetchFromGitHub {
+    owner = "mct";
+    repo = "tcptraceroute";
+    rev = "${pname}-${version}";
+    hash = "sha256-KU4MLWtOFzzNr+I99fRbhBokhS1JUNL+OgVltkOGav4=";
+  };
 
-   # for reasons unknown --disable-static configure flag doesn't disable static
-   # linking.. we instead override CFLAGS with -static omitted
-   preBuild = ''
-      makeFlagsArray=(CFLAGS=" -g -O2 -Wall")
-   '';
 
-   buildInputs = [ libpcap libnet ];
+  # for reasons unknown --disable-static configure flag doesn't disable static
+  # linking.. we instead override CFLAGS with -static omitted
+  preBuild = ''
+    makeFlagsArray=(CFLAGS=" -g -O2 -Wall")
+  '';
 
-   meta = {
-     description = "A traceroute implementation using TCP packets";
-     homepage = "https://github.com/mct/tcptraceroute";
-     license = lib.licenses.gpl2;
-     maintainers = [ ];
-   };
+  buildInputs = [ libpcap libnet ];
+
+  meta = {
+    description = "A traceroute implementation using TCP packets";
+    homepage = "https://github.com/mct/tcptraceroute";
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
+  };
 }

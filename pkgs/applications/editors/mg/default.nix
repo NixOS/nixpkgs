@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "6.8.1";
+  version = "6.9";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
-    rev = "mg-6.8.1";
-    sha256 = "0fyqyi5sag13jx8bc22bvkgybddvsr0wdili9ikxnpnqg2w84fx7";
+    rev = "mg-${version}";
+    sha256 = "1w49yb9v1657rv1w5w7rc9ih1d2vzv6ym3mzhf2wgmh04pdm6hid";
   };
 
   enableParallelBuilding = true;

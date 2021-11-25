@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , substituteAll
@@ -13,13 +12,11 @@
 , libgee
 , gettext
 , gtk3
-, appstream
 , gnome-menus
 , json-glib
 , elementary-dock
 , bamf
 , switchboard-with-plugs
-, libunity
 , libsoup
 , wingpanel
 , zeitgeist
@@ -29,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.7.1";
+  version = "2.9.1";
 
   repoName = "applications-menu";
 
@@ -37,17 +34,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
+    sha256 = "sha256-Q0ee8S8wWhK0Y16SWfE79Us6QD/oRE5Pxm3o//eb/po=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
+    })
+  ];
 
   nativeBuildInputs = [
-    appstream
     gettext
     meson
     ninja
@@ -59,14 +56,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    gnome-menus
     granite
     gtk3
     json-glib
     libgee
     libhandy
     libsoup
-    libunity
     switchboard-with-plugs
     wingpanel
     zeitgeist
@@ -82,29 +77,22 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  patches = [
-    # Port to Libhandy-1
-    (fetchpatch {
-      url = "https://github.com/elementary/applications-menu/commit/8eb2430e8513e9d37f875c5c9b8b15a968c27127.patch";
-      sha256 = "8Uw9mUw7U5nrAwUDGVpAwoRqb9ah503wQCr9kPbBJIo=";
-    })
-
-    (substituteAll {
-      src = ./fix-paths.patch;
-      bc = "${bc}/bin/bc";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
     homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

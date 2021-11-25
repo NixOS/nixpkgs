@@ -4,6 +4,7 @@
 , pytestCheckHook
 , freezegun
 , google-cloud-core
+, google-cloud-datacatalog
 , google-cloud-storage
 , google-cloud-testutils
 , google-resumable-media
@@ -17,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "2.13.1";
+  version = "2.28.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "915f93c61c03d1d6024d5b19355bb96af25da9f924d0b5bab5cde851e1bd48f4";
+    sha256 = "sha256-DiNT2X5SktyM5URHtxL7nolJbnFLXKz8PVNmFNHEYdw=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     mock
     pandas
     psutil
+    google-cloud-datacatalog
     google-cloud-storage
     pytestCheckHook
   ];
@@ -51,6 +53,20 @@ buildPythonPackage rec {
     # requires credentials
     "test_bigquery_magic"
     "TestBigQuery"
+    "test_arrow_extension_types_same_for_storage_and_REST_APIs_894"
+    "test_query_retry_539"
+    "test_list_rows_empty_table"
+    "test_list_rows_page_size"
+    "test_list_rows_scalars"
+    "test_list_rows_scalars_extreme"
+    # Mocking of _ensure_bqstorage_client fails
+    "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
+    # requires network
+    "test_dbapi_create_view"
+    "test_list_rows_nullable_scalars_dtypes"
+    "test_parameterized_types_round_trip"
+    "test_structs"
+    "test_table_snapshots"
   ];
 
   pythonImportsCheck = [

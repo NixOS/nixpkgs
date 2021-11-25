@@ -2,41 +2,47 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, pytest
+, pytestCheckHook
 , blis
 , catalogue
 , cymem
 , cython
-, darwin
+, Accelerate
+, CoreFoundation
+, CoreGraphics
+, CoreVideo
 , hypothesis
 , mock
 , murmurhash
 , numpy
-, pathlib
 , plac
+, pythonOlder
 , preshed
 , pydantic
 , srsly
 , tqdm
+, typing-extensions
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.2";
+  version = "8.0.10";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20f033b3d9fbd02389d8f828cebcd3a42aee3e17ed4c2d56c6d5163af83a9cee";
+    hash = "sha256-teTbjSTmvopfHkoXhUdyt5orVgIkUZ9Qoh85UcokAB8=";
   };
 
-  buildInputs = [ cython ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = [ cython ]
+    ++ lib.optionals stdenv.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics
     CoreVideo
-  ]);
+  ];
 
   propagatedBuildInputs = [
     blis
@@ -50,27 +56,20 @@ buildPythonPackage rec {
     tqdm
     pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
-
+  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
 
   checkInputs = [
     hypothesis
     mock
-    pytest
+    pytestCheckHook
   ];
 
   # Cannot find cython modules.
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "blis>=0.4.0,<0.8.0" "blis>=0.4.0,<1.0" \
-      --replace "pydantic>=1.7.1,<1.8.0" "pydantic~=1.7"
-  '';
-
-  checkPhase = ''
-    pytest thinc/tests
-  '';
+  pytestFlagsArray = [
+    "thinc/tests"
+  ];
 
   pythonImportsCheck = [ "thinc" ];
 
@@ -78,6 +77,6 @@ buildPythonPackage rec {
     description = "Practical Machine Learning for NLP in Python";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu ];
   };
 }

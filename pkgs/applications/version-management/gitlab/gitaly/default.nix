@@ -20,24 +20,31 @@ let
         };
       };
   };
-in buildGoModule rec {
-  version = "13.11.2";
+
+  version = "14.4.2";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+in
+
+buildGoModule {
   pname = "gitaly";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-qcrvNmnlrdJYXAlt65bA0Ij7zuX7QwVukC3A4KGL3sk=";
+    sha256 = "sha256-MzYUSoG+HjW9o2zn6Q9Pd5NfI7hZkw1xFXOXHbbxJvo=";
   };
 
-  vendorSha256 = "sha256-VAXQPVyB+XdfOqGaT1H/83ed6xV+4Tr5fkBu1eyPe2k=";
+  vendorSha256 = "sha256-9RhPQosen70E9t1iAoc2SeKs9pYMMpMqgXLekWfKNf8=";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  buildFlags = [ "-tags=static,system_libgit2" ];
+  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+
+  tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
   doCheck = false;
@@ -45,6 +52,7 @@ in buildGoModule rec {
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
+    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];

@@ -28,7 +28,7 @@ existing packages here and modify it as necessary.
 
 let
 
-  minQtVersion = "5.14";
+  minQtVersion = "5.15";
   broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [

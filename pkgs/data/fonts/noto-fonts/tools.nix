@@ -3,11 +3,11 @@
 , defcon, fontmath, fontparts, fontpens, fonttools, lxml
 , mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
 , toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools_scm }:
+, pillow, six, bash, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "0.2.13";
+  version = "0.2.16";
 
   disabled = pythonOlder "3.6";
 
@@ -15,14 +15,14 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "nototools";
     rev = "v${version}";
-    sha256 = "0ggp65xgkf9y7jamncm65lkm84wapsa47abf133pcb702875v8jz";
+    sha256 = "14rrdamkmhrykff8ln07fq9cm8zwj3k113lzwjcy0lgz23g51jyl";
   };
 
   postPatch = ''
     sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     afdko

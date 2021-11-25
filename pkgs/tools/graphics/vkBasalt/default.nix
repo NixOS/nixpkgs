@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "A Vulkan post processing layer for Linux";
     homepage = "https://github.com/DadSchoorse/vkBasalt";
     license = licenses.zlib;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
   };
 }

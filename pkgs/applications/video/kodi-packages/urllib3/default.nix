@@ -2,15 +2,18 @@
 buildKodiAddon rec {
   pname = "urllib3";
   namespace = "script.module.urllib3";
-  version = "1.25.8+matrix.1";
+  version = "1.26.4+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "080yq8ns0sag6rmdag1hjwi0whcmp35wzqjp3by92m81cpszs75q";
+    sha256 = "1d2k6gbsnhdadcl1xc7igz4m71z2fcnpln5ppfjv455cmkk110vf";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.urllib3";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.urllib3";
+    };
   };
 
   meta = with lib; {

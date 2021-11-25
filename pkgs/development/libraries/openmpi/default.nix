@@ -13,20 +13,21 @@
 
 # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
+
+# Enable Fortran support
+, fortranSupport ? true
 }:
 
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.1.1";
-
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  inherit version;
+  version = "4.1.1";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
@@ -44,17 +45,19 @@ in stdenv.mkDerivation rec {
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
-  buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl pmix ucx ]
+  buildInputs = [ zlib ]
+    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
-    ++ lib.optional (isLinux || isFreeBSD) rdma-core
+    ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optional fabricSupport [ libpsm2 libfabric ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    ++ lib.optionals fortranSupport [ gfortran ];
 
-  configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optionals isLinux  [
+  configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
+    ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
+    ++ lib.optionals stdenv.isLinux  [
       "--with-libnl=${libnl.dev}"
       "--with-pmix=${pmix}"
       "--with-pmix-libdir=${pmix}/lib"
@@ -69,6 +72,16 @@ in stdenv.mkDerivation rec {
     ;
 
   enableParallelBuilding = true;
+
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/127608
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-openmpi-4.1.1.drv-0/ccg7QqR8.s:13:15: error: index must be an integer in range [-256, 255].
+  #         ldr     x2, [x2, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   postInstall = ''
     rm -f $out/lib/*.la
@@ -86,6 +99,7 @@ in stdenv.mkDerivation rec {
 
     sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
        $out/share/openmpi/mpic++-wrapper-data.txt
+  '' + lib.optionalString fortranSupport ''
 
     sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
        $out/share/openmpi/mpifort-wrapper-data.txt

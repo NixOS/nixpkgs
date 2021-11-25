@@ -13,10 +13,10 @@ let
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
-    alsa-monitor = (builtins.fromJSON (builtins.readFile ./alsa-monitor.conf.json));
-    bluez-monitor = (builtins.fromJSON (builtins.readFile ./bluez-monitor.conf.json));
-    media-session = (builtins.fromJSON (builtins.readFile ./media-session.conf.json));
-    v4l2-monitor = (builtins.fromJSON (builtins.readFile ./v4l2-monitor.conf.json));
+    alsa-monitor = lib.importJSON ./media-session/alsa-monitor.conf.json;
+    bluez-monitor = lib.importJSON ./media-session/bluez-monitor.conf.json;
+    media-session = lib.importJSON ./media-session/media-session.conf.json;
+    v4l2-monitor = lib.importJSON ./media-session/v4l2-monitor.conf.json;
   };
 
   configs = {
@@ -37,14 +37,14 @@ in {
       enable = mkOption {
         type = types.bool;
         default = config.services.pipewire.enable;
-        defaultText = "config.services.pipewire.enable";
+        defaultText = literalExpression "config.services.pipewire.enable";
         description = "Example pipewire session manager";
       };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pipewire.mediaSession;
-        example = literalExample "pkgs.pipewire.mediaSession";
+        default = pkgs.pipewire-media-session;
+        defaultText = literalExpression "pkgs.pipewire-media-session";
         description = ''
           The pipewire-media-session derivation to use.
         '';
@@ -55,7 +55,7 @@ in {
           type = json.type;
           description = ''
             Configuration for the media session core. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
+            https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
           '';
           default = {};
         };
@@ -64,7 +64,7 @@ in {
           type = json.type;
           description = ''
             Configuration for the alsa monitor. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
+            https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
           '';
           default = {};
         };
@@ -73,7 +73,7 @@ in {
           type = json.type;
           description = ''
             Configuration for the bluez5 monitor. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
+            https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
           '';
           default = {};
         };
@@ -82,7 +82,7 @@ in {
           type = json.type;
           description = ''
             Configuration for the V4L2 monitor. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
+            https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
           '';
           default = {};
         };

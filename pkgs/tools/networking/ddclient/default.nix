@@ -1,18 +1,20 @@
-{ lib, fetchurl, perlPackages, iproute2, perl }:
+{ lib, fetchFromGitHub, perlPackages, iproute2, perl }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.9.0";
+  version = "3.9.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ddclient/${pname}-${version}.tar.gz";
-    sha256 = "0fwyhab8yga2yi1kdfkbqxa83wxhwpagmj1w1mwkg2iffh1fjjlw";
+  src = fetchFromGitHub {
+    owner = "ddclient";
+    repo = "ddclient";
+    rev = "v${version}";
+    sha256 = "0hf377g4j9r9sac75xp17nk2h58mazswz4vkg4g2gl2yyhvzq91w";
   };
 
   # perl packages by default get devdoc which isn't present
   outputs = [ "out" ];
 
-  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP ];
+  buildInputs = with perlPackages; [ IOSocketSSL DigestSHA1 DataValidateIP JSONPP IOSocketInet6 ];
 
   # Use iproute2 instead of ifconfig
   preConfigure = ''
@@ -38,9 +40,10 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     description = "Client for updating dynamic DNS service entries";
-    homepage    = "https://sourceforge.net/p/ddclient/wiki/Home/";
-    license     = licenses.gpl2Plus;
+    homepage = "https://ddclient.net/";
+    license = licenses.gpl2Plus;
     # Mostly since `iproute` is Linux only.
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

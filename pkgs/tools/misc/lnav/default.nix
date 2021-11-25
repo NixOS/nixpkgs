@@ -2,20 +2,26 @@
 , readline, zlib, bzip2, autoconf, automake, curl }:
 
 stdenv.mkDerivation rec {
-
-  name = "lnav-${meta.version}";
+  pname = "lnav";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${meta.version}";
-    sha256 = "1frdrr3yjlk2fns3ny0qbr30rpswhwlvv3kyhdl3l6a0q5cqaqsg";
-    inherit name;
+    rev = "v${version}";
+    sha256 = "sha256-1b4mVKIUotMSK/ADHnpiM42G98JF0abL8sXXGFyS3sw=";
   };
 
+  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace "SUBDIRS = src test" "SUBDIRS = src"
+  '';
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf
-    automake
     zlib
     bzip2
     ncurses
@@ -24,10 +30,6 @@ stdenv.mkDerivation rec {
     sqlite
     curl
   ];
-
-  postPatch = ''
-    sed -ie '/DUMP_INTERNALS/d' src/Makefile.am
-  '';
 
   preConfigure = ''
     ./autogen.sh
@@ -47,7 +49,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.9.0";
     maintainers = with maintainers; [ dochang ma27 ];
     platforms = platforms.unix;
   };

@@ -5,7 +5,7 @@
 , configparser
 , cryptography
 , pyopenssl
-, dateutil
+, python-dateutil
 , pytz
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    certifi configparser cryptography pyopenssl dateutil pytz
+    certifi configparser cryptography pyopenssl python-dateutil pytz
   ];
 
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164

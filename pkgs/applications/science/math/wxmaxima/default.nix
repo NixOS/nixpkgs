@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
-  version = "21.02.0";
+  version = "21.05.2";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "sha256-5nvaaKsvSEs7QxOszjDK1Xkana2er1BCMZ83b1JZSqc=";
+    sha256 = "sha256-HPqdxGrPxe5FZNOimTpAP+c9VpDBkXu3Z1c1Aaf3+UA=";
   };
 
   buildInputs = [ wxGTK maxima gnome.adwaita-icon-theme ];
@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
     platforms = platforms.linux;
-    maintainers = [ maintainers.peti ];
   };
 }

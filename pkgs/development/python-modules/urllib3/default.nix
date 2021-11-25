@@ -2,7 +2,7 @@
 , brotli
 , buildPythonPackage
 , cryptography
-, dateutil
+, python-dateutil
 , fetchPypi
 , idna
 , isPy27
@@ -12,18 +12,17 @@
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
-, pythonOlder
 , tornado
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.4";
+  version = "1.26.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dw9w9bs3hmr5dp3r3h43jyzzb1g1046ag7lj8pqf58i4kvj3c77";
+    sha256 = "sha256-SYfGVVT3otvzDBj9SHeO8SSvb6t3GjdxA9oFheIzbs4=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    dateutil
+    python-dateutil
     mock
     pytest-freezegun
     pytest-timeout

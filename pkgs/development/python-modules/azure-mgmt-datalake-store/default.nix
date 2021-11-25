@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
-, pythonNamespacesHook
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg

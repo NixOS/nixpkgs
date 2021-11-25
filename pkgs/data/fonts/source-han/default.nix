@@ -1,55 +1,66 @@
 { stdenvNoCC
 , lib
 , fetchzip
-, fetchurl
 }:
 
 let
-  makePackage = { family, description, rev, sha256 }: let
-    Family =
+  makePackage =
+    { family
+    , description
+    , rev
+    , sha256
+    , postFetch ? ''
+        install -m444 -Dt $out/share/fonts/opentype/source-han-${family} $downloadedFile
+      ''
+    , zip ? ""
+    }:
+    let Family =
       lib.toUpper (lib.substring 0 1 family) +
       lib.substring 1 (lib.stringLength family) family;
+    in
+    fetchzip {
+      name = "source-han-${family}-${lib.removeSuffix "R" rev}";
 
-    ttc = fetchurl {
-      url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc";
-      inherit sha256;
+      url = "https://github.com/adobe-fonts/source-han-${family}/releases/download/${rev}/SourceHan${Family}.ttc${zip}";
+      inherit sha256 postFetch;
+
+      meta = {
+        description = "An open source Pan-CJK ${description} typeface";
+        homepage = "https://github.com/adobe-fonts/source-han-${family}";
+        license = lib.licenses.ofl;
+        maintainers = with lib.maintainers; [ taku0 emily ];
+      };
     };
-  in stdenvNoCC.mkDerivation {
-    pname = "source-han-${family}";
-    version = lib.removeSuffix "R" rev;
-
-    buildCommand = ''
-      mkdir -p $out/share/fonts/opentype/source-han-${family}
-      ln -s ${ttc} $out/share/fonts/opentype/source-han-${family}/SourceHan${Family}.ttc
-    '';
-
-    meta = {
-      description = "An open source Pan-CJK ${description} typeface";
-      homepage = "https://github.com/adobe-fonts/source-han-${family}";
-      license = lib.licenses.ofl;
-      maintainers = with lib.maintainers; [ taku0 emily ];
-    };
-  };
 in
 {
   sans = makePackage {
     family = "sans";
     description = "sans-serif";
-    rev = "2.001R";
-    sha256 = "101p8q0sagf1sd1yzwdrmmxvkqq7j0b8hi0ywsfck9w56r4zx54y";
+    rev = "2.004R";
+    sha256 = "052d17hvz435zc4r2y1p9cgkkgn0ps8g74mfbvnbm1pv8ykj40m9";
+    postFetch = ''
+      mkdir -p $out/share/fonts/opentype/source-han-sans
+      unzip $downloadedFile -d $out/share/fonts/opentype/source-han-sans
+    '';
+    zip = ".zip";
   };
 
   serif = makePackage {
     family = "serif";
     description = "serif";
-    rev = "1.001R";
-    sha256 = "1d968h30qvvwy3s77m9y3f1glq8zlr6bnfw00yinqa18l97n7k45";
+    rev = "2.000R";
+    sha256 = "0x3n6s4khdd6l0crwd7g9sjaqp8lkvksglhc7kj3cv80hldab9wp";
+    postFetch = ''
+      mkdir -p $out/share/fonts/opentype/source-han-serif
+      unzip $downloadedFile -d $out/share/fonts/opentype/source-han-serif
+    '';
+    zip = ".zip";
   };
 
   mono = makePackage {
     family = "mono";
     description = "monospaced";
     rev = "1.002";
-    sha256 = "1haqffkcgz0cc24y8rc9bg36v8x9hdl8fdl3xc8qz14hvr42868c";
+    sha256 = "010h1y469c21bjavwdmkpbwk3ny686inz8i062wh1dhcv8cnqk3c";
   };
 }

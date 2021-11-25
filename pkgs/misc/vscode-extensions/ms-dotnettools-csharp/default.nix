@@ -7,26 +7,23 @@
 , icu
 , stdenv
 , openssl
-, mono6
+, mono
 }:
 
 let
   # Get as close as possible as the `package.json` required version.
   # This is what drives omnisharp.
-  mono = mono6;
-
-  rtDepsSrcsFromJson = builtins.fromJSON (builtins.readFile ./rt-deps-bin-srcs.json);
+  rtDepsSrcsFromJson = lib.importJSON ./rt-deps-bin-srcs.json;
 
   rtDepsBinSrcs = builtins.mapAttrs (k: v:
       let
         # E.g: "OmniSharp-x86_64-linux"
-        kSplit = builtins.split "(-)" k;
+        kSplit = builtins.split "(__)" k;
         name = builtins.elemAt kSplit 0;
-        arch = builtins.elemAt kSplit 2;
-        platform = builtins.elemAt kSplit 4;
+        system = builtins.elemAt kSplit 2;
       in
       {
-        inherit name arch platform;
+        inherit name system;
         installPath = v.installPath;
         binaries = v.binaries;
         bin-src = fetchurl {
@@ -37,11 +34,8 @@ let
     )
     rtDepsSrcsFromJson;
 
-  arch = "x86_64";
-  platform = "linux";
-
   rtDepBinSrcByName = bSrcName:
-    rtDepsBinSrcs."${bSrcName}-${arch}-${platform}";
+    rtDepsBinSrcs."${bSrcName}__${stdenv.targetPlatform.system}";
 
   omnisharp = rtDepBinSrcByName "OmniSharp";
   vsdbg = rtDepBinSrcByName "Debugger";
@@ -52,8 +46,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "1.23.2";
-    sha256 = "0ydaiy8jfd1bj50bqiaz5wbl7r6qwmbz9b29bydimq0rdjgapaar";
+    version = "1.23.15";
+    sha256 = "0b74jr45zl7lzirjgj8s2lbf3viy9pbwlgjh055rcwmy77wcml1x";
   };
 
   nativeBuildInputs = [
@@ -114,7 +108,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     declare omnisharp_dir="$PWD/${omnisharp.installPath}"
     unzip_to "${omnisharp.bin-src}" "$omnisharp_dir"
     rm "$omnisharp_dir/bin/mono"
-    ln -s -T "${mono6}/bin/mono" "$omnisharp_dir/bin/mono"
+    ln -s -T "${mono}/bin/mono" "$omnisharp_dir/bin/mono"
     chmod a+x "$omnisharp_dir/run"
     touch "$omnisharp_dir/install.Lock"
 
@@ -136,6 +130,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = with lib; {
     description = "C# for Visual Studio Code (powered by OmniSharp)";
+    homepage = "https://github.com/OmniSharp/omnisharp-vscode";
     license = licenses.mit;
     maintainers = [ maintainers.jraygauthier ];
     platforms = [ "x86_64-linux" ];

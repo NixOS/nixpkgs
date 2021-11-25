@@ -38,10 +38,11 @@ assert enableNginxWebApplication -> nginx != null;
 assert enableS6RCService -> s6-rc != null;
 assert enableXinetdService -> xinetd != null;
 
-stdenv.mkDerivation {
-  name = "dysnomia-0.10.1";
+stdenv.mkDerivation rec {
+  pname = "dysnomia";
+  version = "0.10.1";
   src = fetchurl {
-    url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-0.10.1/dysnomia-0.10.1.tar.gz";
+    url = "https://github.com/svanderburg/dysnomia/releases/download/dysnomia-${version}/dysnomia-${version}.tar.gz";
     sha256 = "0w9601g8zpaxrmynx6mh8zz85ldpb8psp7cc6ls8v3srjpj1l5n3";
   };
 

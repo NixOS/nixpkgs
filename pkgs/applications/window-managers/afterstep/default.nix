@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config
-, libjpeg, libtiff, libpng, freetype
+, libtiff
 , fltk, gtk
-, libX11, libXext, libICE
+, libICE, libSM
 , dbus
 , fetchpatch
 }:
@@ -22,10 +22,26 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
       sha256 = "1vipy2lzzd2gqrsqk85pwgcdhargy815fxlbn57hsm45zglc3lj4";
     })
+
+    # Fix pending upstream inclusion for binutils-2.36 support:
+    #  https://github.com/afterstep/afterstep/pull/7
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
+      sha256 = "1kk97max05r2p1a71pvpaza79ff0klz32rggik342p7ki3516qv8";
+    })
   ];
 
+  postPatch = ''
+    # Causes fatal ldconfig cache generation attempt on non-NixOS Linux
+    for mkfile in autoconf/Makefile.common.lib.in libAfter{Base,Image}/Makefile.in; do
+      substituteInPlace $mkfile \
+        --replace 'test -w /etc' 'false'
+    done
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
+  buildInputs = [ libtiff fltk gtk libICE libSM dbus ];
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''

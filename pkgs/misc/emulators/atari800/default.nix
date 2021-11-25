@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
-, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
+, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
   };
 
-  nativeBuildInputs = [ autoreconfHook unzip ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ zlib SDL readline libGLU libGL libX11 ];
 

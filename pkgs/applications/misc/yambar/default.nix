@@ -1,67 +1,92 @@
-{ stdenv
-, lib
-, fetchgit
-, pkg-config
-, meson
-, ninja
-, scdoc
-, alsaLib
+{ lib
+, stdenv
+, fetchFromGitea
+, alsa-lib
 , fcft
 , json_c
 , libmpdclient
 , libxcb
 , libyaml
+, meson
+, ninja
 , pixman
+, pkg-config
+, scdoc
 , tllist
 , udev
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xcbutil
 , xcbutilcursor
 , xcbutilerrors
 , xcbutilwm
+, waylandSupport ? true
+, x11Support ? true
 }:
 
+let
+  # Courtesy of sternenseemann and FRidh
+  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+in
 stdenv.mkDerivation rec {
   pname = "yambar";
-  version = "1.6.1";
+  version = "1.7.0";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/yambar.git";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "yambar";
     rev = version;
-    sha256 = "p47tFsEWsYNe6IVV65xGG211u6Vm2biRf4pmUDylBOQ=";
+    sha256 = "sha256-NzJrlPOkzstMbw37yBTah/uFYezlPB/1hrxCiXduSmc=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    scdoc
+    wayland-scanner
+  ];
+
   buildInputs = [
-    alsaLib
+    alsa-lib
     fcft
     json_c
     libmpdclient
-    libxcb
     libyaml
     pixman
     tllist
     udev
+  ] ++ lib.optionals (waylandSupport) [
     wayland
     wayland-protocols
+  ] ++ lib.optionals (x11Support) [
     xcbutil
     xcbutilcursor
     xcbutilerrors
     xcbutilwm
   ];
 
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    (mesonFeatureFlag "backend-x11" x11Support)
+    (mesonFeatureFlag "backend-wayland" waylandSupport)
+  ];
+
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/yambar";
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${version}";
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
       yambar is a lightweight and configurable status panel (bar, for short) for
       X11 and Wayland, that goes to great lengths to be both CPU and battery
       efficient - polling is only done when absolutely necessary.
 
-      It has a number of modules that provide information in the form of
-      tags. For example, the clock module has a date tag that contains the
-      current date.
+      It has a number of modules that provide information in the form of tags.
+      For example, the clock module has a date tag that contains the current
+      date.
 
       The modules do not know how to present the information though. This is
       instead done by particles. And the user, you, decides which particles (and

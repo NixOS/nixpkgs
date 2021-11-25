@@ -2,8 +2,6 @@
 , pkg-config, boost, expat, scipy, cgal, gmp, mpfr
 , gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
 , buildPythonPackage
-, fetchpatch
-, pythonAtLeast
 , lib
 }:
 

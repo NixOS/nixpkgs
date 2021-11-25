@@ -81,9 +81,6 @@ in stdenv.mkDerivation {
     description = "Cross-platform file manager";
     license = licenses.gpl3;
     maintainers = with maintainers; [ volth ];
-    # build is broken on MacOS
-    # https://github.com/NixOS/nixpkgs/pull/105784
-    broken = stdenv.isDarwin;
     platforms = platforms.all;
   };
 }

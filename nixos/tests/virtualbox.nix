@@ -430,7 +430,7 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
 
 
     create_vm_simple()
-    machine.succeed(ru("VirtualBox &"))
+    machine.succeed(ru("VirtualBox >&2 &"))
     machine.wait_until_succeeds(ru("xprop -name 'Oracle VM VirtualBox Manager'"))
     machine.sleep(5)
     machine.screenshot("gui_manager_started")

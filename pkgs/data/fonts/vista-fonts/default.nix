@@ -14,11 +14,12 @@ stdenvNoCC.mkDerivation {
   unpackPhase = ''
     cabextract --lowercase --filter ppviewer.cab $src
     cabextract --lowercase --filter '*.TTF' ppviewer.cab
+    cabextract --lowercase --filter '*.TTC' ppviewer.cab
   '';
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+    cp *.ttf *.ttc $out/share/fonts/truetype
 
     # Set up no-op font configs to override any aliases set up by
     # other packages.

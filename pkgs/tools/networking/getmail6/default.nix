@@ -1,16 +1,20 @@
-{ fetchFromGitHub, python3Packages, lib }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.15";
+  version = "6.18.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cvwvlhilrqlcvza06lsrm5l1yazzvym3s5kcjxcm9cminfaf4qb";
+    sha256 = "1bckrnvjkkbrybs9ccknd4vakzvd7vpp541p2cpv4isaizyxp2ji";
   };
 
+  # needs a Docker setup
   doCheck = false;
 
   pythonImportsCheck = [ "getmailcore" ];
@@ -26,6 +30,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://getmail6.org";
     updateWalker = true;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe dotlambda ];
   };
 }

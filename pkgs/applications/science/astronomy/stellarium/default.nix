@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-LOBWfKLtoFemiWBUVayIBG0DORvjI6h9kgaPH9hGmKY=";
+    sha256 = "sha256-bh00o++l3sqELX5kgRhiCcQOLVqvjEyEMcJTnnVPNU8=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
@@ -28,15 +28,11 @@ mkDerivation rec {
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Stellarium.app/Contents")'
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out"/Stellarium.app/Contents/MacOS/stellarium
-  '';
-
   meta = with lib; {
     description = "Free open-source planetarium";
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti ma27 ];
+    maintainers = with maintainers; [ ma27 ];
   };
 }

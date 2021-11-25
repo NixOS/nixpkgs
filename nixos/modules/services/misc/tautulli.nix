@@ -47,7 +47,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.tautulli;
-        defaultText = "pkgs.tautulli";
+        defaultText = literalExpression "pkgs.tautulli";
         description = ''
           The Tautulli package to use.
         '';

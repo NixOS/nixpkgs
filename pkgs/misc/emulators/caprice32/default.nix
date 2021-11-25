@@ -5,6 +5,9 @@ stdenv.mkDerivation rec {
 
   pname = "caprice32";
   version = "4.6.0";
+  # NOTE: When bumping version beyond 4.6.0, you likely need to remove
+  #       string.patch below. The fix of this patch has already been
+  #       done upstream but is not yet part of a release
 
   src = fetchFromGitHub {
     repo = "caprice32";
@@ -15,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ desktop-file-utils pkg-config ];
   buildInputs = [ libpng SDL freetype zlib ];
+
+  patches = [ ./string.patch ];
 
   makeFlags = [
     "APP_PATH=${placeholder "out"}/share/caprice32"

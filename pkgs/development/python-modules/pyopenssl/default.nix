@@ -11,7 +11,6 @@
 , flaky
 , glibcLocales
 , six
-, fetchpatch
 }:
 
 let

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+{ lib, buildPythonPackage, fetchPypi, nose
 , lxml
 , requests
 , pyparsing

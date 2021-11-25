@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "lwt_camlp4";
-  version = "git-20180325";
+  version = "unstable-2018-03-25";
 
   src = fetchFromGitHub {
     owner = "ocsigen";

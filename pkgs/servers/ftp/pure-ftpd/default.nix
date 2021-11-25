@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "pure-ftpd-1.0.49";
+  pname = "pure-ftpd";
+  version = "1.0.49";
 
   src = fetchurl {
-    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/${name}.tar.gz";
+    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${version}.tar.gz";
     sha256 = "19cjr262n6h560fi9nm7l1srwf93k34bp8dp1c6gh90bqxcg8yvn";
   };
 

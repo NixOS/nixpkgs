@@ -3,8 +3,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pytestcov
-, pytest_xdist
+, pytest-cov
+, pytest-xdist
 , pytest-django
 , mock
 }:
@@ -22,8 +22,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytestcov
-    pytest_xdist
+    pytest-cov
+    pytest-xdist
     pytest-django
     mock
   ];
@@ -31,6 +31,15 @@ buildPythonPackage rec {
   # Darwin sandbox causes most tests to fail.
   doCheck = !stdenv.isDarwin;
   pythonImportsCheck = [ "diskcache" ];
+
+  disabledTests = [
+    # very time sensitive, can fail on over subscribed machines
+    "test_incr_update_keyerror"
+  ];
+
+  pytestFlagsArray = [
+    "-n $NIX_BUILD_CORES"
+  ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";

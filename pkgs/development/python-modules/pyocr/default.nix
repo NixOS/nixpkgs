@@ -1,6 +1,15 @@
-{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools_scm,
-setuptools-scm-git-archive , tesseract, cuneiform, isPy3k, substituteAll,
-pytest, tox }:
+{ lib
+, fetchFromGitLab
+, buildPythonPackage
+, pillow
+, setuptools-scm
+, setuptools-scm-git-archive
+, tesseract
+, cuneiform
+, isPy3k
+, substituteAll
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyocr";
@@ -17,20 +26,25 @@ buildPythonPackage rec {
     sha256 = "09ab86bmizpv94w3mdvdqkjyyvk1vafw3jqhkiw5xx7p180xn3il";
   };
 
-  patches = [ (substituteAll {
-    src = ./paths.patch;
-    inherit cuneiform tesseract;
-  })
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      inherit cuneiform tesseract;
+    })
   ];
 
-  buildInputs = [ setuptools_scm setuptools-scm-git-archive ];
-  propagatedBuildInputs = [ pillow ];
-  checkInputs = [ pytest tox ];
-  checkPhase = "pytest";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  meta = {
+  buildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+
+  propagatedBuildInputs = [ pillow ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A Python wrapper for Tesseract and Cuneiform";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }

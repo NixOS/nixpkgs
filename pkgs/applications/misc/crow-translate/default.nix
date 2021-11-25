@@ -34,31 +34,37 @@ let
   qonlinetranslator = fetchFromGitHub {
     owner = "crow-translate";
     repo = "QOnlineTranslator";
-    rev = "1.4.1";
-    sha256 = "1c6a8mdxms5vh8l7shi2kqdhafbzm50pbz6g1hhgg6qslla0vfn0";
+    rev = "df89083d2f680a8f856b1df00b8846f995cf1fae";
+    sha256 = "sha256-I64KGInnYd/QdI5kANJERsF95wMvRlr8kgQhUqXXN/0=";
   };
   circleflags = fetchFromGitHub {
     owner = "HatScripts";
     repo = "circle-flags";
-    rev = "v2.0.0";
-    sha256 = "1xz5b6nhcxxzalcgwnw36npap71i70s50g6b63avjgjkwz1ys5j4";
+    rev = "v2.3.0";
+    sha256 = "sha256-KabmewF1Xf/1JQuzolrlRyLJR8O5j+/iT+29/QtOQVE=";
+  };
+  fluent = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = "Fluent-icon-theme";
+    rev = "2021-08-15";
+    sha256 = "sha256-uBu0vbKfhhnPKGwrnSBjPwS9ncH1iAlmeefAcpckOm4=";
   };
 in
 mkDerivation rec {
   pname = "crow-translate";
-  version = "2.8.1";
+  version = "2.8.7";
 
   src = fetchFromGitHub {
     owner = "crow-translate";
-    repo = "crow-translate";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-fmlNUhNorV/MUdfdDXM6puAblTTa6p2slVT/EKy5THg=";
+    sha256 = "sha256-0bq9itbFyzdOhdNuUtdCYLTCIhc91MM+YRhJgXC5PPw=";
   };
 
   patches = [
     (substituteAll {
       src = ./dont-fetch-external-libs.patch;
-      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags;
+      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags fluent;
     })
     (substituteAll {
       # See https://github.com/NixOS/nixpkgs/issues/86054
@@ -67,7 +73,10 @@ mkDerivation rec {
     })
   ];
 
-  postPatch = "cp -r ${circleflags}/flags/* data/icons";
+  postPatch = ''
+    cp -r ${circleflags}/flags/* data/icons
+    cp -r ${fluent}/src/* data/icons
+  '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
 

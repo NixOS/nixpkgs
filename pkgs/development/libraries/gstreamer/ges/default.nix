@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
-  version = "1.18.2";
+  version = "1.18.4";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pv2k8zlpn3vv2sdlspi3m63ixcwzi90pjly2ypbkg59ab97rb15";
+    sha256 = "010xg960qsh5dwmf0y9l1q13h0cymmrgapzla2zsw66ylxqbi1s6";
   };
 
   patches = [
@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   postPatch = ''

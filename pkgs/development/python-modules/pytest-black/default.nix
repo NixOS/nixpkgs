@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , black
 , pytest
-, setuptools_scm
+, setuptools-scm
 , toml
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "1d339b004f764d6cd0f06e690f6dd748df3d62e6fe1a692d6a5500ac2c5b75a5";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 

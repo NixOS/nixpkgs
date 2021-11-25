@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s7kirgh5iz91m3qy8xiq0j4gljy8zrcnylf4szl5h0lrsaqj7ya";
   };
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildInputs = [ libX11 ];
 

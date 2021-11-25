@@ -61,10 +61,12 @@ in
     environment.etc."ntpd.conf".text = configFile;
 
     users.users.ntp = {
-      uid = config.ids.uids.ntp;
+      isSystemUser = true;
+      group = "ntp";
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
+    users.groups.ntp = {};
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";

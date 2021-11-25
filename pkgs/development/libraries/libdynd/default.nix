@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-let version = "0.7.2"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libdynd";
-  inherit version;
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "libdynd";

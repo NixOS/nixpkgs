@@ -22,12 +22,11 @@ let
   # Use upstream config files passed through spa-json-dump as the base
   # Patched here as necessary for them to work with this module
   defaults = {
-    client = builtins.fromJSON (builtins.readFile ./client.conf.json);
-    client-rt = builtins.fromJSON (builtins.readFile ./client-rt.conf.json);
-    jack = builtins.fromJSON (builtins.readFile ./jack.conf.json);
-    # Remove session manager invocation from the upstream generated file, it points to the wrong path
-    pipewire = builtins.fromJSON (builtins.readFile ./pipewire.conf.json);
-    pipewire-pulse = builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json);
+    client = lib.importJSON ./daemon/client.conf.json;
+    client-rt = lib.importJSON ./daemon/client-rt.conf.json;
+    jack = lib.importJSON ./daemon/jack.conf.json;
+    pipewire = lib.importJSON ./daemon/pipewire.conf.json;
+    pipewire-pulse = lib.importJSON ./daemon/pipewire-pulse.conf.json;
   };
 
   configs = {
@@ -51,8 +50,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.pipewire;
-        defaultText = "pkgs.pipewire";
-        example = literalExample "pkgs.pipewire";
+        defaultText = literalExpression "pkgs.pipewire";
         description = ''
           The pipewire derivation to use.
         '';
@@ -194,7 +192,7 @@ in {
     };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
+      lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
 
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
     systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, gnugrep, findutils }:
 
 let
-  version = "22-1.1ubuntu1"; # Zesty
+  version = "28-1ubuntu4"; # impish 2021-06-24
 
 in stdenv.mkDerivation {
   pname = "kmod-blacklist";
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
-    sha256 = "1k749g707ccb82l4xmrkp53khl71f57cpj9fzd1qyzrz147fjyhi";
+    sha256 = "sha256-K8tWpaLmCm3Jcxw3OZ+D7Koiug7epooRn1YMfqjGAiw=";
   };
 
   installPhase = ''
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://packages.ubuntu.com/source/zesty/kmod";
+    homepage = "https://launchpad.net/ubuntu/+source/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;
     license = with licenses; [ gpl2Plus lgpl21Plus ];

@@ -5,7 +5,7 @@ then throw "bin_prot-112.24.00 is not available for OCaml ${ocaml.version}"
 else
 
 buildOcaml rec {
-  name = "bin_prot";
+  pname = "bin_prot";
   version = "112.24.00";
 
   minimumSupportedOcamlVersion = "4.00";

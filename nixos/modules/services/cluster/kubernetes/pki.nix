@@ -189,6 +189,7 @@ in
         # manually paste it in place. Just symlink.
         # otherwise, create the target file, ready for users to insert the token
 
+        mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else

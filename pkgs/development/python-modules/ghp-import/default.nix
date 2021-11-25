@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+, python-dateutil
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-wiqc4Qw3dT4miNFk12WnANrkuNefptsKLDEyuniBiU8=";
   };
 
-  propagatedBuildInputs = [ dateutil ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   # Does not include any unit tests
   doCheck = false;

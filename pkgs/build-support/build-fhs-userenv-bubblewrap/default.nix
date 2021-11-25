@@ -62,9 +62,11 @@ let
       # Fonts
       "fonts"
       # ALSA
+      "alsa"
       "asound.conf"
       # SSL
       "ssl/certs"
+      "ca-certificates"
       "pki"
     ];
   in concatStringsSep "\n  "

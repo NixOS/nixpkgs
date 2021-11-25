@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , gtk2
 , libXrandr
 , libXScrnSaver
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     zlib
 
     # Run-time libraries (loaded with dlopen)
-    alsaLib # ALSA sound
+    alsa-lib # ALSA sound
     libXrandr # X11 resolution detection
     libXScrnSaver # X11 screensaver prevention
     udev # udev input drivers
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
     license = licenses.unfree;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
   };
 }

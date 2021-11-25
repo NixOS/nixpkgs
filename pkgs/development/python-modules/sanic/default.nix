@@ -1,24 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, doCheck ? true
-, aiofiles, httptools, multidict, sanic-routing, ujson, uvloop, websockets
-, pytestCheckHook, beautifulsoup4, gunicorn, uvicorn, sanic-testing
-, pytest-benchmark, pytest-sanic, pytest-sugar, pytestcov
+{ lib
+, stdenv
+, aiofiles
+, beautifulsoup4
+, buildPythonPackage
+, doCheck ? true
+, fetchFromGitHub
+, gunicorn
+, httptools
+, multidict
+, pytest-asyncio
+, pytest-benchmark
+, pytest-sugar
+, pytestCheckHook
+, sanic-routing
+, sanic-testing
+, ujson
+, uvicorn
+, uvloop
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "21.3.4";
+  version = "21.9.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1cbd12b9138b3ca69656286b0be91fff02b826e8cb72dd76a2ca8c5eb1288d8e";
+  src = fetchFromGitHub {
+    owner = "sanic-org";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-TRrJr/L8AXLAARPjhBi2FxNh+jvxxdeMN24cT1njmqY=";
   };
 
   postPatch = ''
     # Loosen dependency requirements.
     substituteInPlace setup.py \
-      --replace '"pytest==5.2.1"' '"pytest"' \
+      --replace '"pytest==6.2.5"' '"pytest"' \
       --replace '"gunicorn==20.0.4"' '"gunicorn"' \
-      --replace '"pytest-sanic",' ""
+      --replace '"pytest-sanic",' "" \
     # Patch a request headers test to allow brotli encoding
     # (we build httpx with brotli support, upstream doesn't).
     substituteInPlace tests/test_headers.py \
@@ -26,27 +44,65 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    sanic-routing httptools uvloop ujson aiofiles websockets multidict
+    aiofiles
+    httptools
+    multidict
+    sanic-routing
+    ujson
+    uvloop
+    websockets
   ];
 
   checkInputs = [
-    sanic-testing gunicorn pytestcov beautifulsoup4 pytest-sanic pytest-sugar
-    pytest-benchmark pytestCheckHook uvicorn
+    beautifulsoup4
+    gunicorn
+    pytest-asyncio
+    pytest-benchmark
+    pytest-sugar
+    pytestCheckHook
+    sanic-testing
+    uvicorn
   ];
 
   inherit doCheck;
 
+  preCheck = ''
+    # Some tests depends on sanic on PATH
+    PATH="$out/bin:$PATH"
+  '';
+
   disabledTests = [
-    "test_gunicorn" # No "examples" directory in pypi distribution.
-    "test_zero_downtime" # No "examples.delayed_response.app" module in pypi distribution.
+    # Tests are flaky
+    "test_keep_alive_client_timeout"
+    "test_check_timeouts_request_timeout"
+    "test_check_timeouts_response_timeout"
+    "test_reloader_live"
+    "test_zero_downtime"
+    # Not working from 21.9.1
+    "test_create_server_main"
+    "test_create_server_main_convenience"
+    "test_debug"
+    "test_auto_reload"
+    "test_no_exceptions_when_cancel_pending_request"
+    "test_ipv6_address_is_not_wrapped"
+    # These appear to be very sensitive to output of commands
+    "test_access_logs"
+    "test_auto_reload"
+    "test_host_port"
+    "test_no_exceptions_when_cancel_pending_request"
+    "test_num_workers"
+    "test_server_run"
+    "test_version"
   ];
 
+  # avoid usage of nixpkgs-review in darwin since tests will compete usage
+  # for the same local port
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
-    description = "A microframework based on uvloop, httptools, and learnings of flask";
+    description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc AluisioASG ];

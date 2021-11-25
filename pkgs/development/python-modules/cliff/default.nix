@@ -1,56 +1,54 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, autopage
+, cmd2
 , pbr
 , prettytable
 , pyparsing
-, six
-, stevedore
 , pyyaml
-, cmd2
-, pytestCheckHook
-, testtools
-, fixtures
-, which
+, stevedore
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "3.7.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "389c81960de13f05daf1cbd546f33199e86c518ba4266c79ec7a153a280980ea";
+    sha256 = "95363e9b43e2ec9599e33b5aea27a6953beda2d0673557916fa4f5796857daa3";
   };
 
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
+
   propagatedBuildInputs = [
+    autopage
+    cmd2
     pbr
     prettytable
     pyparsing
-    six
-    stevedore
     pyyaml
-    cmd2
+    stevedore
   ];
 
-  postPatch = ''
-    sed -i -e '/cmd2/c\cmd2' -e '/PrettyTable/c\PrettyTable' requirements.txt
-  '';
+  # check in passthru.tests.pytest to escape infinite recursion with stestr
+  doCheck = false;
 
-  checkInputs = [ fixtures pytestCheckHook testtools which ];
-  # add some tests
-  pytestFlagsArray = [
-    "cliff/tests/test_utils.py"
-    "cliff/tests/test_app.py"
-    "cliff/tests/test_command.py"
-    "cliff/tests/test_help.py"
-    "cliff/tests/test_lister.py"
-  ];
+  pythonImportsCheck = [ "cliff" ];
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = "https://docs.openstack.org/cliff/latest/";
+    homepage = "https://github.com/openstack/cliff";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = teams.openstack.members;
   };
 }

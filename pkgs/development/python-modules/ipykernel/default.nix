@@ -1,56 +1,41 @@
 { lib
-, stdenv
 , buildPythonPackage
+, callPackage
 , fetchPypi
-, flaky
-, ipython
-, jupyter_client
-, traitlets
-, tornado
 , pythonOlder
-, pytestCheckHook
-, nose
+, argcomplete
+, debugpy
+, ipython
+, jupyter-client
+, tornado
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.5.0";
+  version = "6.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98321abefdf0505fb3dc7601f60fc4087364d394bd8fad53107eb1adee9ff475";
+    sha256 = "df3355e5eec23126bc89767a676c5f0abfc7f4c3497d118c592b83b316e8c0cd";
   };
 
-  propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
-
-  checkInputs = [ pytestCheckHook nose flaky ];
-  dontUseSetuptoolsCheck = true;
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-  disabledTests = lib.optionals stdenv.isDarwin ([
-    # see https://github.com/NixOS/nixpkgs/issues/76197
-    "test_subprocess_print"
-    "test_subprocess_error"
-    "test_ipython_start_kernel_no_userns"
-
-    # https://github.com/ipython/ipykernel/issues/506
-    "test_unc_paths"
+  propagatedBuildInputs = [
+    debugpy
+    ipython
+    jupyter-client
+    tornado
+    traitlets
   ] ++ lib.optionals (pythonOlder "3.8") [
-    # flaky test https://github.com/ipython/ipykernel/issues/485
-    "test_shutdown"
+    argcomplete
+  ];
 
-    # test regression https://github.com/ipython/ipykernel/issues/486
-    "test_sys_path_profile_dir"
-    "test_save_history"
-    "test_help_output"
-    "test_write_kernel_spec"
-    "test_ipython_start_kernel_userns"
-    "ZMQDisplayPublisherTests"
-  ]);
+  # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
+  doCheck = false;
 
-  # Some of the tests use localhost networking.
-  __darwinAllowLocalNetworking = true;
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = {
     description = "IPython Kernel for Jupyter";

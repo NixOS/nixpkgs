@@ -15,6 +15,7 @@
 , libGLU
 , libXmu
 , libf2c
+, libredwg
 , libspnav
 , matplotlib
 , medfile
@@ -23,6 +24,7 @@
 , opencascade-occt
 , pivy
 , pkg-config
+, ply
 , pycollada
 , pyside2
 , pyside2-tools
@@ -60,6 +62,7 @@ mkDerivation rec {
     ninja
     pkg-config
     pyside2-tools
+    gfortran
     wrapQtAppsHook
   ];
 
@@ -68,7 +71,6 @@ mkDerivation rec {
     boost
     coin3d
     eigen
-    gfortran
     gts
     hdf5
     libGLU
@@ -80,6 +82,7 @@ mkDerivation rec {
     ode
     opencascade-occt
     pivy
+    ply # for openSCAD file support
     pycollada
     pyside2
     pyside2-tools
@@ -129,6 +132,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+    "--prefix PATH : ${libredwg}/bin"
   ];
 
   postFixup = ''

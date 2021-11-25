@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcyaml";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "tlsa";
     repo = "libcyaml";
     rev = "v${version}";
-    sha256 = "0428p0rwq71nhh5nzcbapsbrjxa0x5l6h6ns32nxv7j624f0zd93";
+    sha256 = "sha256-u5yLrAXaavALNArj6yw+v5Yn4eqXWTHmUxHe+pVCbXM=";
   };
 
   buildInputs = [ libyaml ];

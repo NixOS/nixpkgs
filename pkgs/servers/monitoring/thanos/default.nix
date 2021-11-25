@@ -1,29 +1,28 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.19.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "sha256-FryVKOabokw2+RyD94QLVpC9ZGIHPuSXZf5H+eitj80=";
+    sha256 = "sha256-JQp0Bg7sCA5obb24G/Ca7EcD7er+ux9x+BgRK0L7dJE=";
   };
 
-  vendorSha256 = "sha256-GBjPMZ6BwUOKywNf1Bc2WeA14qvKQ0R5gWvVxgO/7Lo=";
+  vendorSha256 = "sha256-I7d81A5FMAOY1M8vhhrPFsPl/1sh2ydAzKySM5i5VfM=";
 
   doCheck = false;
 
   subPackages = "cmd/thanos";
 
-  buildFlagsArray = let t = "github.com/prometheus/common/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=unknown
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-  '';
+  ldflags = let t = "github.com/prometheus/common/version"; in [
+    "-X ${t}.Version=${version}"
+    "-X ${t}.Revision=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+  ];
 
   meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";

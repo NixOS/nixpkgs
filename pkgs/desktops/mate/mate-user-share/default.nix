@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h4aabcby96nsg557brzzb0an1qvnawhim2rinzlzg4fhkvdfnr5";
+    sha256 = "1wh0b4qw5wzpl7sg44lpwjb9r6xllch3xfz8c2cchl8rcgbh2kph";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-httpd=${apacheHttpd.out}/bin/httpd"
-    "--with-modules-path=${apacheHttpd.dev}/modules"
+    "--with-modules-path=${apacheHttpd}/modules"
     "--with-cajadir=$(out)/lib/caja/extensions-2.0"
   ];
 
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

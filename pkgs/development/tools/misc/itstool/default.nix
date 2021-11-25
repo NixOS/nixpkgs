@@ -1,16 +1,19 @@
 { stdenv, lib, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "itstool-2.0.6";
+  pname = "itstool";
+  version = "2.0.6";
 
   src = fetchurl {
-    url = "http://files.itstool.org/itstool/${name}.tar.bz2";
+    url = "http://files.itstool.org/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1acjgf8zlyk7qckdk19iqaca4jcmywd7vxjbcs1mm6kaf8icqcv2";
   };
 
-  pythonPath = [ python3.pkgs.libxml2 ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
   buildInputs = [ python3 python3.pkgs.libxml2 ];
-  nativeBuildInputs = [ python3.pkgs.wrapPython ];
+  pythonPath = [ python3.pkgs.libxml2 ];
 
   postFixup = ''
     wrapPythonPrograms

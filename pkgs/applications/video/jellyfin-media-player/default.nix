@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-u19WJupSqIzA8W0QG9mue8Ticy+HxBAniuKIUFl7ONs=";
+    sha256 = "sha256-iqwOv95JFxQ1j/9B+oBFAp7mD1/1g2EJYvvUKbrDQes=";
   };
 
   jmpDist = fetchzip {
@@ -94,9 +94,6 @@ mkDerivation rec {
     mv $out/Resources/* "$out/Applications/Jellyfin Media Player.app/Contents/Resources/"
     rmdir $out/Resources
 
-    # fix 'Could not find the Qt platform plugin "cocoa" in ""' error
-    wrapQtApp "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player"
-
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
 
@@ -105,7 +102,7 @@ mkDerivation rec {
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch kranzes ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

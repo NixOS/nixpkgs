@@ -25,6 +25,6 @@ buildPythonPackage rec {
 checking library.";
     homepage    = "https://bitbucket.org/mchaput/whoosh";
     license     = licenses.bsd2;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

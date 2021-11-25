@@ -1,28 +1,40 @@
-{ lib, fetchFromGitHub, appstream-glib, desktop-file-utils, glib
-, gobject-introspection, gst_all_1, gtk3, libhandy, librsvg, meson, ninja
-, pkg-config, python3, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk4
+, libadwaita
+, libpulseaudio
+, librsvg
+, meson
+, ninja
+, pkg-config
+, python3
+, rustPlatform
+, wayland
+, wrapGAppsHook
+}:
 
-python3.pkgs.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "kooha";
-  version = "1.1.3";
-  format = "other";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    sha256 = "14lrx6wplvlk3cg3wij88h4ydp3m69pw7lvvzrq3j9qnh431bs36";
+    sha256 = "05ynpwjdpl7zp9f17zhhvb59rbz3gd7hc0amla1g85ldgfxbgl00";
   };
 
-  buildInputs = [
-    glib
-    gobject-introspection
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gtk3
-    libhandy
-    librsvg
-  ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256:16zf6vb001z7xdv2g4kpmb2vqsmaql2cpsx1rl9zrfhpl2z6frs9";
+  };
 
   nativeBuildInputs = [
     appstream-glib
@@ -31,21 +43,35 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     python3
     pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+    wayland
     wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib
+    gobject-introspection
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gtk4
+    libadwaita
+    libpulseaudio
+    librsvg
   ];
 
   propagatedBuildInputs = [ python3.pkgs.pygobject3 ];
 
   strictDeps = false;
 
-  buildPhase = ''
-    export GST_PLUGIN_SYSTEM_PATH_1_0="$out/lib/gstreamer-1.0/:$GST_PLUGIN_SYSTEM_PATH_1_0"
-  '';
-
   # Fixes https://github.com/NixOS/nixpkgs/issues/31168
   postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
+
+  installCheckPhase = ''
+    $out/bin/kooha --help
   '';
 
   meta = with lib; {

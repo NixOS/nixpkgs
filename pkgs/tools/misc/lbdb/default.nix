@@ -7,12 +7,11 @@
 }:
 
 let
-  version = "0.48.1";
   perl' = perl.withPackages (p: with p; [ ConvertASN1 perlldap AuthenSASL ]);
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lbdb";
-  inherit version;
+  version = "0.48.1";
   src = fetchurl {
     url = "https://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
     sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";

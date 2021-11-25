@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionals optionalString types;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -176,6 +176,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.mediawiki;
+        defaultText = literalExpression "pkgs.mediawiki";
         description = "Which MediaWiki package to use.";
       };
 
@@ -219,7 +220,7 @@ in
 
           Use <literal>null</literal> instead of path to enable extensions that are part of MediaWiki.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             Matomo = pkgs.fetchzip {
               url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
@@ -286,14 +287,14 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "/run/mysqld/mysqld.sock";
+          defaultText = literalExpression "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql";
-          defaultText = "true";
+          defaultText = literalExpression "true";
           description = ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
@@ -303,7 +304,7 @@ in
 
       virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExample ''
+        example = literalExpression ''
           {
             hostName = "mediawiki.example.org";
             adminAddr = "webmaster@example.org";

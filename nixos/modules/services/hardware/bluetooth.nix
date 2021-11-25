@@ -6,17 +6,13 @@ let
   inherit (lib)
     mkDefault mkEnableOption mkIf mkOption
     mkRenamedOptionModule mkRemovedOptionModule
-    concatStringsSep escapeShellArgs
+    concatStringsSep escapeShellArgs literalExpression
     optional optionals optionalAttrs recursiveUpdate types;
 
   cfgFmt = pkgs.formats.ini { };
 
-  # bluez will complain if some of the sections are not found, so just make them
-  # empty (but present in the file) for now
   defaults = {
     General.ControllerMode = "dual";
-    Controller = { };
-    GATT = { };
     Policy.AutoEnable = cfg.powerOnBoot;
   };
 
@@ -53,8 +49,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.bluez;
-        defaultText = "pkgs.bluez";
-        example = "pkgs.bluezFull";
+        defaultText = literalExpression "pkgs.bluez";
+        example = literalExpression "pkgs.bluezFull";
         description = ''
           Which BlueZ package to use.
 

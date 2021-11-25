@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.bsd3;
-    inherit version;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;
     downloadURLRegexp = "/re-.*[.]tar[.].*";

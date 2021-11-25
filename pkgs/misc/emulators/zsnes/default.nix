@@ -13,7 +13,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "zsnes-1.51";
+  pname = "zsnes";
+  version = "1.51";
 
   src = fetchFromGitHub {
     owner = "emillon";

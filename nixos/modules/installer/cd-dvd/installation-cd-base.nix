@@ -30,5 +30,21 @@ with lib;
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86.enable = true;
 
+  # An installation media cannot tolerate a host config defined file
+  # system layout on a fresh machine, before it has been formatted.
+  swapDevices = mkImageMediaOverride [ ];
+  fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
+
+  boot.postBootCommands = ''
+    for o in $(</proc/cmdline); do
+      case "$o" in
+        live.nixos.passwd=*)
+          set -- $(IFS==; echo $o)
+          echo "nixos:$2" | ${pkgs.shadow}/bin/chpasswd
+          ;;
+      esac
+    done
+  '';
+
   system.stateVersion = mkDefault "18.03";
 }

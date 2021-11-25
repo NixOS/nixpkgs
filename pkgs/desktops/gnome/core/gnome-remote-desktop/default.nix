@@ -7,22 +7,26 @@
 , python3
 , wrapGAppsHook
 , glib
+, nv-codec-headers-11
 , pipewire
 , systemd
 , libvncserver
 , libsecret
 , libnotify
+, libxkbcommon
 , gdk-pixbuf
 , freerdp
+, fuse3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "0.1.9";
+  version = "41.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-8iZtp4tBRT7NNRKuzwop3rcMvq16RG/I2sAlEIsJ0M8=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-wOiJsO2BGxGAm777FzOElNj1L/USC+bj/9O65angX98=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +40,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     freerdp
+    fuse3
     gdk-pixbuf # For libnotify
     glib
+    nv-codec-headers-11
     libnotify
     libsecret
     libvncserver
+    libxkbcommon
     pipewire
     systemd
   ];
@@ -53,6 +60,13 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
   ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      attrPath = "gnome.${pname}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";

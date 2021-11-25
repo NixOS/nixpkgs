@@ -47,6 +47,15 @@ let
         '';
       };
 
+      allowDiscards = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to allow TRIM requests to the underlying device. This option
+          has security implications; please read the LUKS documentation before
+          activating it.
+        '';
+      };
     };
 
   };
@@ -114,6 +123,28 @@ let
         '';
       };
 
+      discardPolicy = mkOption {
+        default = null;
+        example = "once";
+        type = types.nullOr (types.enum ["once" "pages" "both" ]);
+        description = ''
+          Specify the discard policy for the swap device. If "once", then the
+          whole swap space is discarded at swapon invocation. If "pages",
+          asynchronous discard on freed pages is performed, before returning to
+          the available pages pool. With "both", both policies are activated.
+          See swapon(8) for more information.
+        '';
+      };
+
+      options = mkOption {
+        default = [ "defaults" ];
+        example = [ "nofail" ];
+        type = types.listOf types.nonEmptyStr;
+        description = ''
+          Options used to mount the swap.
+        '';
+      };
+
       deviceName = mkOption {
         type = types.str;
         internal = true;
@@ -172,7 +203,6 @@ in
     ];
 
     # Create missing swapfiles.
-    # FIXME: support changing the size of existing swapfiles.
     systemd.services =
       let
 
@@ -192,17 +222,14 @@ in
                 ${optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
                   if [ "${toString sw.size}" != "$currentSize" ]; then
-                    fallocate -l ${toString sw.size}M "${sw.device}" ||
-                      dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                    if [ "${toString sw.size}" -lt "$currentSize" ]; then
-                      truncate --size "${toString sw.size}M" "${sw.device}"
-                    fi
+                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
+                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

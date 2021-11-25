@@ -1,6 +1,6 @@
 { lib, stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
 , autoconf-archive, libxslt, boost , gtkmm2 , imagemagick, sane-backends
-, tesseract4, udev, libusb1, gnum4 }:
+, tesseract4, udev, libusb1 }:
 
 
 let

@@ -9,12 +9,12 @@
 , portend
 , pyopenssl
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 , pytest-mock
 , requests
 , requests-toolbelt
 , requests-unixsocket
-, setuptools_scm
+, setuptools-scm
 , setuptools-scm-git-archive
 , six
 , trustme
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     sha256 = "f137d03fd5155b1364bea557a7c98168665c239f6c8cedd8f80e81cdfac01567";
   };
 
-  nativeBuildInputs = [ setuptools_scm setuptools-scm-git-archive ];
+  nativeBuildInputs = [ setuptools-scm setuptools-scm-git-archive ];
 
   propagatedBuildInputs = [
     # install_requires
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     portend
     pyopenssl
     pytestCheckHook
-    pytestcov
+    pytest-cov
     pytest-mock
     requests
     requests-toolbelt

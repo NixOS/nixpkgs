@@ -16,7 +16,7 @@
 , cryptography
 , beautifulsoup4
 , sqlalchemy-utils
-, prometheus_client
+, prometheus-client
 , celery
 , alembic
 , importlib-metadata
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     cryptography
     beautifulsoup4
     sqlalchemy-utils
-    prometheus_client
+    prometheus-client
 
     # Unofficial runtime dependencies?
     celery

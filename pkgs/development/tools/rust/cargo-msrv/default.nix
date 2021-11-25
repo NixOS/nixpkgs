@@ -3,24 +3,26 @@
 , fetchFromGitHub
 , nix-update-script
 , pkg-config
+, rustup
 , openssl
 , stdenv
 , libiconv
 , Security
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-msrv";
-  version = "0.4.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ynv5d2rxlc1gzq93v8qjyl5063w7q42g9m95250yh2lmf9hdj5i";
+    sha256 = "sha256-zc6jJqG7OGqfsPnb3VeKmEnz8AL2p1wHqgDvHQC5OX8=";
   };
 
-  cargoSha256 = "03rphdps17gzcmf8n5w14x5i5rjnfznsl150s3cz5vzhbmnlpszf";
+  cargoSha256 = "sha256-SjgYkDDe11SVN6rRZTi/fYB8CgYhu2kfSXrIyimlhkk=";
 
   passthru = {
     updateScript = nix-update-script {
@@ -35,7 +37,12 @@ rustPlatform.buildRustPackage rec {
     then [ libiconv Security ]
     else [ openssl ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+
+  # Depends at run-time on having rustup in PATH
+  postInstall = ''
+    wrapProgram $out/bin/cargo-msrv --prefix PATH : ${lib.makeBinPath [ rustup ]};
+  '';
 
   meta = with lib; {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";

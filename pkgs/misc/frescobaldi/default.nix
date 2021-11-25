@@ -12,7 +12,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip
+    lilypond pygame python-ly sip_4
     pyqt5 poppler-qt5
     pyqtwebengine
   ];

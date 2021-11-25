@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j6raymz128miq517h9drks4gj79dajw3lsr0msqxz0z3zm6cc4n";
+    sha256 = "0swav6fzz970wj4iic3b7y06haa05720s2wivc8w7wcw9nzcac7j";
   };
+
+  patches = [ ./desktop.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ]

@@ -1,16 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
+, pytest-runner
 }:
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
-  version = "0.6";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75787b6ab140ab267b313d37d045f3276f5dc6a9741074eddfbabc1635cb2efc";
+    sha256 = "1ad779f1bc0808d280ec1026c9de74f424de535568e21debd12830b5b0fa097e";
   };
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-runner
+  ];
 
   meta = with lib; {
     description = "MWParserFromHell is a parser for MediaWiki wikicode";

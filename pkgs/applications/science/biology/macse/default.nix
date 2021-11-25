@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  dontUnpack = true;
   dontBuild = true;
-  unpackPhase = ":";
 
   installPhase = ''
     runHook preInstall

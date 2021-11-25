@@ -9,19 +9,20 @@
 , oniguruma
 , libiconv
 , Security
+, libxcb
 , zlib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.4.0";
+  version = "1.7.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-6UveXa0rMWt5FbmhB0CsYRMGMXxL8FB/XivB4Ec93PY=";
+    sha256 = "sha256-qu8COcMuReV8zbDK5lm378SQY+TwDy/lo9T/ldNMfz0=";
   };
 
-  cargoHash = "sha256-c6U1ZOaXZ7RnKD7q0WTkam9gL8SL/naSeHGbB5I82lk=";
+  cargoHash = "sha256-ndFymXT2hA4ZztePDFhAYlMh8Iwxi1/ULZYGq+W5vpE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma libxcb ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib
@@ -75,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ dywedir ];
     license = with licenses; [ mit ];
   };
 }

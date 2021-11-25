@@ -5,17 +5,21 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pywizlight";
-  version = "0.4.7";
+  version = "0.4.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = pname;
     rev = version;
-    sha256 = "0zagdb90bxmf06fzpljhqgsgzg36zc1yhdibacfrx8bmnx3l657h";
+    sha256 = "sha256-XO9KmsC3DXgVcGWr5ss3m2wB8rVboWyQUWBidynhkP8=";
   };
 
   propagatedBuildInputs = [
@@ -28,14 +32,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Tests requires network features (e. g., discovery testing)
   disabledTests = [
+    # Tests requires network features (e. g., discovery testing)
     "test_Bulb_Discovery"
     "test_timeout"
     "test_timeout_PilotBuilder"
   ];
 
-  pythonImportsCheck = [ "pywizlight" ];
+  pythonImportsCheck = [
+    "pywizlight"
+  ];
 
   meta = with lib; {
     description = "Python connector for WiZ light bulbs";

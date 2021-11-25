@@ -6,7 +6,9 @@
 , cryptopp
 , curl
 , fetchFromGitHub
-, ffmpeg_3 # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523
+  # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
+  # to be re-enabled when patch available
+  # , ffmpeg
 , freeimage
 , gcc-unwrapped
 , libmediainfo
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg_3
+    # ffmpeg
     freeimage
     gcc-unwrapped
     libmediainfo
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    "--with-ffmpeg"
+    # "--with-ffmpeg"
     "--with-freeimage"
     "--with-libmediainfo"
     "--with-libuv"

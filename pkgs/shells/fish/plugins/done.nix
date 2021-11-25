@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "done";
-  version = "1.16.1";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
     rev = version;
-    sha256 = "NFysKzRZgDXXZW/sUlZNu7ZpMCKwbjAhIfspSK3UqCY=";
+    sha256 = "E0wveeDw1VzEH2kzn63q9hy1xkccfxQHBV2gVpu2IdQ=";
   };
 
   checkPlugins = [ fishtape ];

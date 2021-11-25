@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.11.9";
+  version = "0.11.10";
   pname = "applicationinsights";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hyjdv6xnswgqvip8y164piwfach9hjkbp7vc2qzhd7amjpim89h";
+    sha256 = "0b761f3ef0680acf4731906dfc1807faa6f2a57168ae74592db0084a6099f7b3";
   };
 
   propagatedBuildInputs = [ portalocker ];

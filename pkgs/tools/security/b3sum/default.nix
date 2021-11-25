@@ -1,21 +1,15 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "b3sum";
-  version = "0.3.7";
+  version = "1.1.0";
 
-  src = fetchFromGitHub {
-    owner = "BLAKE3-team";
-    repo = "BLAKE3";
-    rev = version;
-    sha256 = "0r3nj7jbrpb2gkkfa9h6nv6blrbv6dlrhxg131qnh340q1ysh0x7";
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-x5gdJLcRMnmd0VLbV8cU9vrA6Ef7GysTh25bXnw6tsE=";
   };
 
-  sourceRoot = "source/b3sum";
-
-  cargoSha256 = "0n8hp83hw7g260vmf4qcicpca75faam7k0zmb0k4cdzsar96gdrr";
-
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "sha256-+JVivP4Kppb+AoVq4XhXp4k8Hb+e9uX4u5n8KXp0kfk=";
 
   meta = {
     description = "BLAKE3 cryptographic hash function";

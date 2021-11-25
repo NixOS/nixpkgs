@@ -2,14 +2,15 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "21.5.0";
+  version = "21.10.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11dw8hij1vzqawlv5l1ax6i2zw6p4ccn4ww3v6q1kdmrwk46vi7r";
+    sha256 = "b347983fb78baab168f4dc4804ab2c59ca5b813bf62f8146dfb5fcb6ab6c8ba2";
   };
 
   patches = [
+    # substitute library paths for libpulse and librt
     (substituteAll {
       src = ./library-paths.patch;
       libpulse = "${libpulseaudio.out}/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -24,7 +25,8 @@ buildPythonPackage rec {
   checkInputs = [ pulseaudio ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest pulsectl.tests.all
+    export HOME=$TMPDIR
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with lib; {

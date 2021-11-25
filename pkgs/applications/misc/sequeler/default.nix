@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "090plqnby2wxzr1waq5kz89w3269j363mgxwfz9g7qg55lddaahz";
+    sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gettext wrapGAppsHook python3 desktop-file-utils ];
@@ -45,7 +45,8 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ etu ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.alecaddd.sequeler";
   };
 }

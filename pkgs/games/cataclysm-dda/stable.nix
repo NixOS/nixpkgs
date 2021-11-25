@@ -10,14 +10,19 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.E-3";
+    version = "0.F-2";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
       rev = version;
-      sha256 = "qhHtsm5cM0ct/7qXev0SiLInO2jqs2odxhWndLfRDIE=";
+      sha256 = "sha256-8AZOrO/Wxui+LqAZo8hURktMTycecIgOONUJmE3M+vM=";
     };
+
+    makeFlags = common.makeFlags ++ [
+      # Makefile declares version as 0.F, even under 0.F-2
+      "VERSION=${version}"
+    ];
 
     meta = common.meta // {
       maintainers = with lib.maintainers;

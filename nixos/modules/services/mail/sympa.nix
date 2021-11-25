@@ -153,7 +153,7 @@ in
         Email domains handled by this instance. There have
         to be MX records for keys of this attribute set.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           "lists.example.org" = {
             webHost = "lists.example.org";
@@ -200,7 +200,7 @@ in
       name = mkOption {
         type = str;
         default = if cfg.database.type == "SQLite" then "${dataDir}/sympa.sqlite" else "sympa";
-        defaultText = ''if database.type == "SQLite" then "${dataDir}/sympa.sqlite" else "sympa"'';
+        defaultText = literalExpression ''if database.type == "SQLite" then "${dataDir}/sympa.sqlite" else "sympa"'';
         description = ''
           Database name. When using SQLite this must be an absolute
           path to the database file.
@@ -279,7 +279,7 @@ in
     settings = mkOption {
       type = attrsOf (oneOf [ str int bool ]);
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           default_home = "lists";
           viewlogs_page_size = 50;
@@ -314,7 +314,7 @@ in
         config.source = mkIf (config.text != null) (mkDefault (pkgs.writeText "sympa-${baseNameOf name}" config.text));
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "list_data/lists.example.org/help" = {
             text = "subject This list provides help to users";

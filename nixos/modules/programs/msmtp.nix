@@ -78,6 +78,8 @@ in {
       source = "${pkgs.msmtp}/bin/sendmail";
       setuid = false;
       setgid = false;
+      owner = "root";
+      group = "root";
     };
 
     environment.etc."msmtprc".text = let

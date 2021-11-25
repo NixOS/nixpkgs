@@ -21,7 +21,15 @@ let
                                 ))
     else throw (traceSeq v "services.unbound.settings: unexpected type");
 
-  confFile = pkgs.writeText "unbound.conf" (concatStringsSep "\n" ((mapAttrsToList (toConf "") cfg.settings) ++ [""]));
+  confNoServer = concatStringsSep "\n" ((mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [""]);
+  confServer = concatStringsSep "\n" (mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ]));
+
+  confFile = pkgs.writeText "unbound.conf" ''
+    server:
+    ${optionalString (cfg.settings.server.define-tag != "") (toOption "  " "define-tag" cfg.settings.server.define-tag)}
+    ${confServer}
+    ${confNoServer}
+  '';
 
   rootTrustAnchorFile = "${cfg.stateDir}/root.key";
 
@@ -37,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unbound-with-systemd;
-        defaultText = "pkgs.unbound-with-systemd";
+        defaultText = literalExpression "pkgs.unbound-with-systemd";
         description = "The unbound package to use";
       };
 
@@ -120,7 +128,7 @@ in {
             };
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             server = {
               interface = [ "127.0.0.1" ];
@@ -170,6 +178,7 @@ in {
         # prevent race conditions on system startup when interfaces are not yet
         # configured
         ip-freebind = mkDefault true;
+        define-tag = mkDefault "";
       };
       remote-control = {
         control-enable = mkDefault false;

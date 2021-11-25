@@ -1,23 +1,22 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bottom-rs";
-  version = "unstable-2021-04-27";
+  version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "bottom-software-foundation";
-    repo = pname;
-    rev = "3451cdadd7c4e64fe8e7f43e986a18628a741dec";
-    sha256 = "0kr18q80021s1n9zzzff6w6yvbbjnk6zbbabi5b42b0rfv6fnfn2";
+  src = fetchCrate {
+    inherit version;
+    crateName = "bottomify";
+    sha256 = "sha256-R1zj+TFXoolonIFa1zJDd7CdrORfzAPlxJoJVYe9xdc=";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0nyzg6pg69bf9vvc3r5lnhmkb9s1508c1gqcra3y43zffdlwml1y";
+  cargoSha256 = "sha256-7xD65ookkK09XwCBH6fXqmWRYlmvpwAocojBg/dHzUI=";
 
   meta = with lib; {
     description = "Fantastic (maybe) CLI for translating between bottom and human-readable text";
     homepage = "https://github.com/bottom-software-foundation/bottom-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ winterqt ];
+    mainProgram = "bottomify";
   };
 }

@@ -56,7 +56,7 @@ in
     config = mkOption {
       type = attrs;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           videobridge = {
             ice.udp.port = 5000;
@@ -82,7 +82,7 @@ in
         See <link xlink:href="https://github.com/jitsi/jitsi-videobridge/blob/master/doc/muc.md" /> for more information.
       '';
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           "localhost" = {
             hostName = "localhost";
@@ -199,7 +199,7 @@ in
         Needed for monitoring jitsi.
       '';
       default = [];
-      example = literalExample "[ \"colibri\" \"rest\" ]";
+      example = literalExpression "[ \"colibri\" \"rest\" ]";
     };
   };
 

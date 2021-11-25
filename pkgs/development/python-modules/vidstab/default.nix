@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.7.3";
+  version = "1.7.4";
   pname = "vidstab";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "649a77a0c1b670d13a1bf411451945d7da439364dc0c33ee3636a23f1d82b456";
+    sha256 = "865c4a097e2a8527aa8bfc96ab0bcc0d280a88cc93eabcc36531268f5d343ce1";
   };
 
   propagatedBuildInputs = [ numpy pandas imutils progress matplotlib ];

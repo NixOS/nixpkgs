@@ -10,22 +10,23 @@
 , libva
 , libvdpau
 , libxkbcommon
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , openssl
 , libopus
 , ffmpeg
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
-  version = "3.1.1";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bz4wjl8zydw46bh2mdbrsx8prh2fw0cmzqliy912fdz5aal2b74";
+    sha256 = "1sg8svb6xvkczp9slqnlm0b6k0z3bzdi4zzvwzzy21kpj6im9002";
     fetchSubmodules = true;
   };
 
@@ -42,11 +43,12 @@ stdenv.mkDerivation rec {
     libva
     libvdpau
     libxkbcommon
-    alsaLib
+    alsa-lib
     libpulseaudio
     openssl
     libopus
     ffmpeg
+    wayland
   ];
 
   meta = with lib; {

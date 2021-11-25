@@ -11,7 +11,7 @@ in
       enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
         description = ''
           Port number where nix-serve will listen on.
@@ -69,13 +69,9 @@ in
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
           "--listen ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
         User = "nix-serve";
-        Group = "nogroup";
+        Group = "nix-serve";
+        DynamicUser = true;
       };
-    };
-
-    users.users.nix-serve = {
-      description = "Nix-serve user";
-      uid = config.ids.uids.nix-serve;
     };
   };
 }

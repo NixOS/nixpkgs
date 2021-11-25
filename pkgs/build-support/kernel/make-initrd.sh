@@ -43,9 +43,9 @@ done
 (cd root && find * .[^.*] -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
 if [ -n "$makeUInitrd" ]; then
-    mkimage -A $uInitrdArch -O linux -T ramdisk -C "$uInitrdCompression" -d $out/initrd"$extension" $out/initrd.img
+    mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
     # Compatibility symlink
-    ln -s "initrd.img" "$out/initrd"
+    ln -sf "initrd.img" "$out/initrd"
 else
     ln -s "initrd" "$out/initrd$extension"
 fi

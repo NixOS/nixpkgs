@@ -11,12 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "18c8zkdrmdbghqqz7b450vhgpykgz25mgigwn2nggcb2lxmvm9ks";
   };
 
-  uuid = "icon-hider@kalnitsky.org";
+  passthru = {
+    extensionUuid = "icon-hider@kalnitsky.org";
+    extensionPortalSlug = "icon-hider";
+  };
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "icon-hider@kalnitsky.org" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 

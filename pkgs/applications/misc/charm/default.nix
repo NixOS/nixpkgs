@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags= -s -w -X=main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   meta = with lib; {
     description = "Manage your charm account on the CLI";

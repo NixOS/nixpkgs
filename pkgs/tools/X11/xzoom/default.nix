@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = {
-    inherit version;
     description = "An X11 screen zoom tool";
     license = lib.licenses.free ;
     maintainers = [lib.maintainers.raskin];

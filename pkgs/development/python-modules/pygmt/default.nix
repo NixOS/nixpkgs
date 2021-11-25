@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.3.1";
+  version = "0.5.0";
 
   disabled = pythonOlder "3.6";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "v${version}";
-    sha256 = "0v57n3by9dwckjfmrgf1km4y3gwzj2gk0s9ly64hlaf05zihqnvc";
+    sha256 = "1mazljxwh162df971cvv7cwnqr300r17qfs7k09s6yd6hajyhz49";
   };
 
   postPatch = ''

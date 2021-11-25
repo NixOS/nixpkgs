@@ -1,11 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash -p wget -p gnupg -p cacert
+#!nix-shell --pure -i bash -p wget -p gnupg -p cacert -p nix
 
 # Update patch set for GNU Bash or Readline.
 
 if [ $# -ne 2 ]
 then
-    echo "Usage: $(basename $0) PROJECT VERSION"
+    echo "Usage: $(basename "$0") PROJECT VERSION"
     echo ""
     echo "Update the patch set for PROJECT (one of \`bash' or \`readline') for"
     echo "the given version (e.g., \`4.0').  Produce \`PROJECT-patches.nix'."
@@ -14,13 +14,11 @@ fi
 
 PROJECT="$1"
 VERSION="$2"
-VERSION_CONDENSED="$(echo $VERSION | sed -es/\\.//g)"
-PATCH_LIST="$PROJECT-$VERSION-patches.nix"
+DIR=$(dirname "$0")
+VERSION_CONDENSED="$(echo "$VERSION" | sed -es/\\.//g)"
+PATCH_LIST="$DIR/$PROJECT-$VERSION-patches.nix"
 
 set -e
-
-start=1
-end=100 # must be > 99 for correct padding
 
 rm -vf "$PATCH_LIST"
 
@@ -35,18 +33,20 @@ rm gpgkey.asc{,.md5}
   echo "patch: [" )							\
 >> "$PATCH_LIST"
 
-for i in `seq -w $start $end`
+for i in {001..100}
 do
-    wget ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i || break
-    wget ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig
-    gpg --verify $PROJECT$VERSION_CONDENSED-$i.sig
-    echo "(patch \"$i\" \"$(nix-hash --flat --type sha256 --base32 $PROJECT$VERSION_CONDENSED-$i)\")"	\
+    wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i" || break
+    wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig"
+    gpg --verify "$DIR/$PROJECT$VERSION_CONDENSED-$i.sig"
+    hash=$(nix-hash --flat --type sha256 --base32 "$DIR/$PROJECT$VERSION_CONDENSED-$i")
+    echo "(patch \"$i\" \"$hash\")"	\
     >> "$PATCH_LIST"
 
-    rm -f $PROJECT$VERSION_CONDENSED-$i{,.sig}
+    rm -f "$DIR/$PROJECT$VERSION_CONDENSED-$i"{,.sig}
 done
 
 echo "]" >> "$PATCH_LIST"
 
-echo "Got $(expr $i - 1) patches."
+# bash interprets numbers starting with 0 as octals
+echo "Got $((10#$i - 1)) patches."
 echo "Patch list has been written to \`$PATCH_LIST'."

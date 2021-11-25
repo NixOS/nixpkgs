@@ -4,7 +4,7 @@
 , isPy27
 , mock
 , pytest
-, pytestrunner
+, pytest-runner
 , sh
 , coverage
 , docopt
@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  version = "3.0.1";
+  version = "3.3.1";
   disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbb942ae5ef3d2b55388cb5b43e93a269544911535f1e750e1c656aef019ce60";
+    sha256 = "b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea";
   };
 
   checkInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   postPatch = ''

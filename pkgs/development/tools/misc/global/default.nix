@@ -6,11 +6,11 @@ let
   pygments = python3Packages.pygments;
 in stdenv.mkDerivation rec {
   pname = "global";
-  version = "6.6.6";
+  version = "6.6.7";
 
   src = fetchurl {
     url = "mirror://gnu/global/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dYB4r/+Y1MBRxYeFx62j7Rl3+rt3+Il/9le3HMYtTV0=";
+    sha256 = "sha256-aaD3f1OCfFVoF2wdOCFm3zYedCY6BH8LMFiqLyrVijw=";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];

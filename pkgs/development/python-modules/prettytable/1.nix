@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
-, setuptools_scm
+, setuptools-scm
 , wcwidth
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0wcpp1nkicrswb353yn6xd2x535cpif62nw5rgz33c1wj0wzbdvb";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ glibcLocales ];
 
   propagatedBuildInputs = [ wcwidth ];

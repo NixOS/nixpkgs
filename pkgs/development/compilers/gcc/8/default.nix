@@ -3,6 +3,7 @@
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
+, reproducibleBuild ? true
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
@@ -45,11 +46,15 @@ assert langGo -> langCC;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
+# profiledCompiler builds inject non-determinism in one of the compilation stages.
+# If turned on, we can't provide reproducible builds anymore
+assert reproducibleBuild -> profiledCompiler == false;
+
 with lib;
 with builtins;
 
 let majorVersion = "8";
-    version = "${majorVersion}.4.0";
+    version = "${majorVersion}.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -66,7 +71,9 @@ let majorVersion = "8";
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
+
+      ++ [ ../libsanitizer-no-cyclades-9.patch ];
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -83,7 +90,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1m1d3gfix56w4aq8myazzfffkl8bqcrx4jhhapnjf7qfs596w2p3";
+    sha256 = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
   };
 
   inherit patches;
@@ -96,9 +103,15 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
+  postPatch = ''
+    configureScripts=$(find . -name configure)
+    for configureScript in $configureScripts; do
+      patchShebangs $configureScript
+    done
+  ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  prePatch = lib.optionalString hostPlatform.isDarwin ''
+  + lib.optionalString hostPlatform.isDarwin ''
     substituteInPlace gcc/config/darwin-c.c \
       --replace 'if (stdinc)' 'if (0)'
 
@@ -107,14 +120,8 @@ stdenv.mkDerivation ({
 
     substituteInPlace libgfortran/configure \
       --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
-  '';
-
-  postPatch = ''
-    configureScripts=$(find . -name configure)
-    for configureScript in $configureScripts; do
-      patchShebangs $configureScript
-    done
-  '' + (
+  ''
+  + (
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
@@ -178,13 +185,12 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version hostPlatform langGo;
+    inherit version targetPlatform hostPlatform langGo;
   };
 
   dontDisableStatic = true;
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" "target" ];
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
@@ -272,13 +278,9 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = lib.teams.gcc.members;
 
-    platforms =
-      lib.platforms.linux ++
-      lib.platforms.freebsd ++
-      lib.platforms.illumos ++
-      lib.platforms.darwin;
+    platforms = lib.platforms.unix;
   };
 }
 

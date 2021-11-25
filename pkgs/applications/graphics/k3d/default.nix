@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
-, cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, cmake, ninja, libGLU, libGL, zlib, python2, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkg-config, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkg-config perl asciidoc ];
 
   buildInputs = [
-     libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     libGLU libGL zlib python2 expat libxml2 libsigcxx libuuid freetype libpng
      boost cairomm libjpeg libtiff
      ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];

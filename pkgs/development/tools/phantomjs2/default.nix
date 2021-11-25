@@ -75,8 +75,6 @@ in stdenv.mkDerivation rec {
 
   __impureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 
-  enableParallelBuilding = true;
-
   dontWrapQtApps = true;
 
   installPhase = ''

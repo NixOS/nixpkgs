@@ -1,44 +1,51 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libtool
-, gtk2, libGLU, libGL, readline, libX11, libXpm
-, docbook_xml_dtd_45, docbook_xsl
-, sdlSupport ? true, SDL2 ? null
-, termSupport ? true, ncurses ? null
-, wxSupport ? true, wxGTK ? null
-, wgetSupport ? false, wget ? null
-, curlSupport ? false, curl ? null
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, curl
+, docbook_xml_dtd_45
+, docbook_xsl
+, gtk2
+, libGL
+, libGLU
+, libX11
+, libXpm
+, libtool
+, ncurses
+, pkg-config
+, readline
+, wget
+, wxGTK
 }:
 
-assert sdlSupport -> (SDL2 != null);
-assert termSupport -> (ncurses != null);
-assert wxSupport -> (gtk2 != null && wxGTK != null);
-assert wgetSupport -> (wget != null);
-assert curlSupport -> (curl != null);
-
-with lib;
 stdenv.mkDerivation rec {
-
   pname = "bochs";
-  version = "2.6.11";
+  version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ql8q6y1k356li1g9gbvl21448mlxphxxi6kjb2b3pxvzd0pp2b3";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
-  patches = [
-    ./bochs-2.6.11-glibc-2.26.patch
-    ./fix-build-smp.patch
-    ./bochs_fix_narrowing_conv_warning.patch
+  nativeBuildInputs = [
+    docbook_xml_dtd_45
+    docbook_xsl
+    libtool
+    pkg-config
   ];
-
-  buildInputs =
-  [ pkg-config libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
-  ++ optionals termSupport [ ncurses ]
-  ++ optionals sdlSupport [ SDL2 ]
-  ++ optionals wxSupport [ wxGTK ]
-  ++ optionals wgetSupport [ wget ]
-  ++ optionals curlSupport [ curl ];
+  buildInputs = [
+    SDL2
+    curl
+    gtk2
+    libGL
+    libGLU
+    libX11
+    libXpm
+    ncurses
+    readline
+    wget
+    wxGTK
+  ];
 
   configureFlags = [
     "--with-x=yes"
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
 
     "--with-rfb=no"
     "--with-vncsrv=no"
-    "--with-svga=no" # it doesn't compile on NixOS
+    "--with-nogui"
 
     # These will always be "yes" on NixOS
     "--enable-ltdl-install=yes"
@@ -64,70 +71,66 @@ stdenv.mkDerivation rec {
     # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
     "--enable-3dnow=no"
     "--enable-monitor-mwait=no"
-    "--enable-raw-serial=no" ]
-    # Boolean flags
-    ++ optionals termSupport [ "--with-term" ]
-    ++ optionals sdlSupport [ "--with-sdl2" ]
-    ++ optionals wxSupport [ "--with-wx" ]
+    "--enable-raw-serial=no"
+
     # These are completely configurable, and they don't depend of external tools
-    ++ [ "--enable-cpu-level=6" # from 3 to 6
-         "--enable-largefile"
-         "--enable-idle-hack"
-         "--enable-plugins=no" # Plugins are a bit buggy in Bochs
-         "--enable-a20-pin"
-         "--enable-x86-64"
-         "--enable-smp"
-         "--enable-large-ramfile"
-         "--enable-repeat-speedups"
-         "--enable-handlers-chaining"
-         "--enable-trace-linking"
-         "--enable-configurable-msrs"
-         "--enable-show-ips"
-         "--enable-debugger" #conflicts with gdb-stub option
-         "--enable-disasm"
-         "--enable-debugger-gui"
-         "--enable-gdb-stub=no" # conflicts with debugger option
-         "--enable-iodebug"
-         "--enable-fpu"
-         "--enable-svm"
-         "--enable-avx"
-         "--enable-evex"
-         "--enable-x86-debugger"
-         "--enable-pci"
-         "--enable-usb"
-         "--enable-usb-ohci"
-         "--enable-usb-ehci"
-         "--enable-usb-xhci"
-         "--enable-ne2000"
-         "--enable-pnic"
-         "--enable-e1000"
-         "--enable-clgd54xx"
-         "--enable-voodoo"
-         "--enable-cdrom"
-         "--enable-sb16"
-         "--enable-es1370"
-         "--enable-busmouse" ];
-
-  NIX_CFLAGS_COMPILE="-I${gtk2.dev}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool.lib}/lib";
-
-  hardeningDisable = [ "format" ];
+    "--enable-a20-pin"
+    "--enable-avx"
+    "--enable-busmouse"
+    "--enable-cdrom"
+    "--enable-clgd54xx"
+    "--enable-configurable-msrs"
+    "--enable-cpu-level=6" # from 3 to 6
+    "--enable-debugger" #conflicts with gdb-stub option
+    "--enable-debugger-gui"
+    "--enable-e1000"
+    "--enable-es1370"
+    "--enable-evex"
+    "--enable-fpu"
+    "--enable-gdb-stub=no" # conflicts with debugger option
+    "--enable-handlers-chaining"
+    "--enable-idle-hack"
+    "--enable-iodebug"
+    "--enable-large-ramfile"
+    "--enable-largefile"
+    "--enable-ne2000"
+    "--enable-pci"
+    "--enable-plugins=yes"
+    "--enable-pnic"
+    "--enable-repeat-speedups"
+    "--enable-sb16"
+    "--enable-show-ips"
+    "--enable-smp"
+    "--enable-vmx=2"
+    "--enable-svm"
+    "--enable-trace-linking"
+    "--enable-usb"
+    "--enable-usb-ehci"
+    "--enable-usb-ohci"
+    "--enable-usb-xhci"
+    "--enable-voodoo"
+    "--enable-x86-64"
+    "--enable-x86-debugger"
+  ]
+  # Boolean flags
+  ++ lib.optionals (SDL2 != null) [ "--with-sdl2" ]
+  ++ lib.optionals (ncurses != null) [ "--with-term" ]
+  ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://bochs.sourceforge.io/";
     description = "An open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    homepage = "http://bochs.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }
-# TODO: plugins
-# TODO: svga support - the Bochs sources explicitly cite /usr/include/vga.h
 # TODO: a better way to organize the options
+# TODO: docbook (docbook-tools from RedHat mirrors should help)

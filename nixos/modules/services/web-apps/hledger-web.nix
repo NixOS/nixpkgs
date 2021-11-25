@@ -20,7 +20,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 5000;
-      example = "80";
+      example = 80;
       description = ''
         Port to listen on.
       '';
@@ -118,7 +118,7 @@ in {
         ++ extraOptions);
     in {
       description = "hledger-web - web-app for the hledger accounting tool.";
-      documentation = [ https://hledger.org/hledger-web.html ];
+      documentation = [ "https://hledger.org/hledger-web.html" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
       serviceConfig = mkMerge [

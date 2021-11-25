@@ -1,32 +1,29 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnetCorePackages, dotnetPackages, cacert
-, ffmpeg_4, alsaLib, SDL2, lttng-ust, numactl, alsaPlugins
+, ffmpeg_4, alsa-lib, SDL2, lttng-ust, numactl, alsa-plugins
 }:
 
 let
   runtimeDeps = [
-    ffmpeg_4 alsaLib SDL2 lttng-ust numactl
+    ffmpeg_4 alsa-lib SDL2 lttng-ust numactl
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-net = dotnetCorePackages.net_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
 
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "linux-x64";
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2021.502.0";
+  version = "2021.1113.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "IOneihYQry0pRXYaxZuVLIj2Ydei//khvpqwiJoakZ8=";
+    sha256 = "EDW3DGnDkdH6k4XKDc5xWFYeIMcoRN4S9nMBF+TeAl8=";
   };
-
-  patches = [ ./bypass-tamper-detection.patch ];
-  patchFlags = [ "--binary" "-p1" ];
 
   nativeBuildInputs = [
     dotnet-sdk dotnetPackages.Nuget makeWrapper
@@ -82,7 +79,7 @@ in stdenv.mkDerivation rec {
       --output $out/lib/osu
 
     makeWrapper $out/lib/osu/osu\! $out/bin/osu\! \
-      --set DOTNET_ROOT "${dotnet-net}" \
+      --set DOTNET_ROOT "${dotnet-runtime}" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
@@ -120,6 +117,7 @@ in stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "osu!";
   };
   passthru.updateScript = ./update.sh;
 }

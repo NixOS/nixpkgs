@@ -14,7 +14,7 @@
 , dnspython
 , sshpubkeys
 , weasyprint
-, prometheus_client
+, prometheus-client
 , python
 }:
 let
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pystache
     sshpubkeys
     weasyprint
-    prometheus_client
+    prometheus-client
     dnspython
   ];
 

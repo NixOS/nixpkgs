@@ -51,7 +51,7 @@ for my $src (sort keys %urls) {
   system "echo \Q$md5s{$src}\E' *'\Q$store_path\E | md5sum -c 1>&2";
   die "md5 check failed for $urls{$src}\n" if $?;
   print <<"EOF";
-    $src = fetchurl {
+    "$src" = fetchurl {
       url = "$urls{$src}";
       sha256 = "$sha256";
     };
@@ -68,8 +68,8 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "$OPAM_RELEASE";
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+  nativeBuildInputs = [ makeWrapper unzip ];
+  buildInputs = [ curl ncurses ocaml getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
 
   src = srcs.opam;
 
@@ -79,7 +79,7 @@ for my $src (sort keys %urls) {
   my($ext) = $urls{$src} =~ /(\.(?:t(?:ar\.|)|)(?:gz|bz2?))$/
     or die "could not find extension for $urls{$src}\n";
   print <<"EOF";
-    ln -sv \${srcs.$src} \$sourceRoot/src_ext/$src$ext
+    ln -sv \${srcs."$src"} \$sourceRoot/src_ext/$src$ext
 EOF
 }
 print <<'EOF';

@@ -1,10 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, dns, pyasn1 }:
+{ lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";
   version = "1.3.3";
 
-  propagatedBuildInputs = [ dns pyasn1 ];
+  propagatedBuildInputs = [ dnspython pyasn1 ];
 
   patches = [
     ./dnspython-ip6.patch

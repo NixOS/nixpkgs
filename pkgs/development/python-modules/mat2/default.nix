@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.1";
+  version = "0.12.2";
 
   disabled = pythonOlder "3.5";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    sha256 = "sha256-TxHelOr7ygp4R+dW+oJ034l2w9zrB4gn0QLs5Pa4EFE=";
+    sha256 = "sha256-KaHdBmTeBlCRaVkG3WsfDtFo45s/X69x7VGDYY7W5O8=";
   };
 
   patches = [

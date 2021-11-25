@@ -166,8 +166,8 @@ let
           <option>postsnap</option>.
         '';
         default = null;
-        example = literalExample ''
-          ''${pkgs.mariadb}/bin/mysql -e "set autocommit=0;flush tables with read lock;\\! ''${pkgs.coreutils}/bin/sleep 600" &  ''${pkgs.coreutils}/bin/echo $! > /tmp/mariadblock.pid ; sleep 10
+        example = literalExpression ''
+          '''''${pkgs.mariadb}/bin/mysql -e "set autocommit=0;flush tables with read lock;\\! ''${pkgs.coreutils}/bin/sleep 600" &  ''${pkgs.coreutils}/bin/echo $! > /tmp/mariadblock.pid ; sleep 10'''
         '';
       };
 
@@ -178,8 +178,8 @@ let
           e.g. for database unlocking. See also <option>presnap</option>.
         '';
         default = null;
-        example = literalExample ''
-          ''${pkgs.coreutils}/bin/kill `''${pkgs.coreutils}/bin/cat /tmp/mariadblock.pid`;''${pkgs.coreutils}/bin/rm /tmp/mariadblock.pid
+        example = literalExpression ''
+          "''${pkgs.coreutils}/bin/kill `''${pkgs.coreutils}/bin/cat /tmp/mariadblock.pid`;''${pkgs.coreutils}/bin/rm /tmp/mariadblock.pid"
         '';
       };
 
@@ -223,7 +223,7 @@ let
         type = attrsOf (destType config);
         description = "Additional destinations.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             local = {
               dataset = "btank/backup";
@@ -279,7 +279,7 @@ let
     src_plan = plan;
     tsformat = timestampFormat;
     zend_delay = toString sendDelay;
-  } // fold (a: b: a // b) {} (
+  } // foldr (a: b: a // b) {} (
     map mkDestAttrs (builtins.attrValues destinations)
   );
 
@@ -324,14 +324,14 @@ in
       autoCreation = mkOption {
         type = bool;
         default = false;
-        description = "Automatically create the destination dataset if it does not exists.";
+        description = "Automatically create the destination dataset if it does not exist.";
       };
 
       zetup = mkOption {
         type = attrsOf srcType;
         description = "Znapzend configuration.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "tank/home" = {
               # Make snapshots of tank/home every hour, keep those for 1 day,

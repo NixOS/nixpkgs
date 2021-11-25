@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
 , attrs
 , linkify-it-py
 , psutil
@@ -9,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +22,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GA7P2I8N+i2ISsVgx58zyhrfKMcZ7pL4X9T/trbsr1Y=";
+    sha256 = "0h7rn3rcqfwmnqs97qczwkw9w5g4df8bgn6sw7k149svfqgrkf56";
   };
 
   propagatedBuildInputs = [ attrs linkify-it-py ]
@@ -30,7 +34,7 @@ buildPythonPackage rec {
     pytest-regressions
     pytestCheckHook
   ];
-  pytestImportsCheck = [ "markdown_it" ];
+  pythonImportsCheck = [ "markdown_it" ];
 
   meta = with lib; {
     description = "Markdown parser done right";

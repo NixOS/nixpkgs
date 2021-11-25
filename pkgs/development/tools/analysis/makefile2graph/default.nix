@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, bash, gnumake }:
 
-stdenv.mkDerivation {
-  name = "makefile2graph-2018-01-03";
+stdenv.mkDerivation rec {
+  pname = "makefile2graph";
+  version = "unstable-2018-01-03";
 
   src = fetchFromGitHub {
     owner = "lindenb";

@@ -2,20 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gpt2tc";
-  version = "2020-12-30";
+  version = "2021-04-24";
 
   src = fetchurl {
-    url = "https://bellard.org/nncp/gpt2tc-${version}.tar.gz";
-    hash = "sha256-KFcl7E6iGx50JaJI1jwzKAdkrkbNngPbrEA/ZSyG+uY=";
+    url = "https://bellard.org/libnc/gpt2tc-${version}.tar.gz";
+    hash = "sha256-kHnRziSNRewifM/oKDQwG27rXRvntuUUX8M+PUNHpA4=";
   };
 
   patches = [
     # Add a shebang to the python script so that nix detects it as such and
     # wraps it properly. Otherwise, it runs in shell and freezes the system.
     ./0001-add-python-shebang.patch
-
-    # Update the source URL for the models because the old one is down.
-    ./0002-fix-download-url.patch
   ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -24,11 +21,11 @@ stdenv.mkDerivation rec {
     (python3.withPackages (p: with p; [ numpy tensorflow ]))
   ];
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
 
+    install -D -m755 -t $out/lib libnc${stdenv.hostPlatform.extensions.sharedLibrary}
+    addAutoPatchelfSearchPath $out/lib
     install -D -m755 -t $out/bin gpt2tc
     install -T -m755 download_model.sh $out/bin/gpt2-download-model
     install -T -m755 gpt2convert.py $out/bin/gpt2-convert

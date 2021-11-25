@@ -43,7 +43,7 @@ in
       voiceIP = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "0.0.0.0";
+        example = "[::]";
         description = ''
           IP on which the server instance will listen for incoming voice connections. Defaults to any IP.
         '';
@@ -60,7 +60,7 @@ in
       fileTransferIP = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "0.0.0.0";
+        example = "[::]";
         description = ''
           IP on which the server instance will listen for incoming file transfer connections. Defaults to any IP.
         '';
@@ -91,6 +91,18 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for the TeamSpeak3 server.";
+      };
+
+      openFirewallServerQuery = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for the TeamSpeak3 serverquery (administration) system. Requires openFirewall.";
+      };
+
     };
 
   };
@@ -114,6 +126,12 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.logPath}' - ${user} ${group} - -"
     ];
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.fileTransferPort ] ++ optionals (cfg.openFirewallServerQuery) [ cfg.queryPort (cfg.queryPort + 11) ];
+      # subsequent vServers will use the incremented voice port, let's just open the next 10
+      allowedUDPPortRanges = [ { from = cfg.defaultVoicePort; to = cfg.defaultVoicePort + 10; } ];
+    };
 
     systemd.services.teamspeak3-server = {
       description = "Teamspeak3 voice communication server daemon";

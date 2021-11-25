@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("ac_cv_check_sjlj=ssjlj")
   '';
 
+  # Fails parallel build due to missing dependency on autogenrated
+  # 'pth_p.h' file:
+  #     ./shtool scpp -o pth_p.h ...
+  #     ./libtool --mode=compile --quiet gcc -c -I. -O2 -pipe pth_uctx.c
+  #     pth_uctx.c:31:10: fatal error: pth_p.h: No such file
+  enableParallelBuilding = false;
+
   meta = with lib; {
     description = "The GNU Portable Threads library";
     homepage = "https://www.gnu.org/software/pth";

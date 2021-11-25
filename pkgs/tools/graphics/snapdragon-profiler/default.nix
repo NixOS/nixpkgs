@@ -4,7 +4,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , icoutils
-, mono6
+, mono
 , jre
 , androidenv
 , gtk-sharp-2_0
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    mono6
+    mono
     gtk-sharp-2_0
     gtk2
     libcxx
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     mv *.so $out/lib
     cp -r * $out/lib/snapdragon-profiler
-    makeWrapper "${mono6}/bin/mono" $out/bin/snapdragon-profiler \
+    makeWrapper "${mono}/bin/mono" $out/bin/snapdragon-profiler \
       --add-flags "$out/lib/snapdragon-profiler/SnapdragonProfiler.exe" \
       --suffix PATH : ${lib.makeBinPath [ jre androidenv.androidPkgs_9_0.platform-tools coreutils ]} \
       --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \

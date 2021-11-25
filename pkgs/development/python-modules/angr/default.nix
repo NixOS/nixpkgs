@@ -13,6 +13,7 @@
 , GitPython
 , itanium_demangler
 , mulpyplexer
+, nampa
 , networkx
 , progressbar2
 , protobuf
@@ -29,27 +30,28 @@
 let
   # Only the pinned release in setup.py works properly
   unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
+    pname = "unicorn";
+    version = "1.0.2-rc4";
+    src =  fetchFromGitHub {
+      owner = "unicorn-engine";
+      repo = pname;
+      rev = version;
+      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
     };
+    doCheck = false;
   });
 in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.6885";
+  version = "9.0.10651";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+d1CtouaGv2GussG3QlQMzX0qcmJht9V3QW8RwH6da8=";
+    sha256 = "sha256-aywfB2oEPyh+MbN5jb+qA3DMUi8Pp/f2OhuUzoTAIoA=";
   };
 
   propagatedBuildInputs = [
@@ -65,6 +67,7 @@ buildPythonPackage rec {
     GitPython
     itanium_demangler
     mulpyplexer
+    nampa
     networkx
     progressbar2
     protobuf
@@ -83,7 +86,13 @@ buildPythonPackage rec {
   doCheck = false;
 
   # See http://angr.io/api-doc/
-  pythonImportsCheck = [ "angr" "claripy" "cle" "pyvex" "archinfo" ];
+  pythonImportsCheck = [
+    "angr"
+    "claripy"
+    "cle"
+    "pyvex"
+    "archinfo"
+  ];
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";

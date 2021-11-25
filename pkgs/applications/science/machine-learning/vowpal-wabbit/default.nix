@@ -1,22 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost169, flatbuffers, fmt, rapidjson, spdlog, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, flatbuffers, rapidjson, spdlog, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";
-  version = "8.10.0";
+  version = "8.11.0";
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
     rev = version;
-    sha256 = "1vxnwanflsx6zf8m9mrxms28ii7rl61xfxp3556y3iawmy11d6pl";
+    sha256 = "sha256-F3la4n1ULMN2nktr+PVWFPl3V2RfCowR0ozL+dnbhgA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost169
+    boost
     flatbuffers
-    fmt
     rapidjson
     spdlog
     zlib

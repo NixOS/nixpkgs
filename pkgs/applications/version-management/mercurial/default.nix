@@ -1,95 +1,144 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
-, guiSupport ? false, tk ? null
+, fullBuild ? false
+, gitSupport ? fullBuild
+, guiSupport ? fullBuild, tk
+, highlightSupport ? fullBuild
 , ApplicationServices
 }:
 
 let
-  inherit (python3Packages) docutils python fb-re2;
+  inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
 
-in python3Packages.buildPythonApplication rec {
-  pname = "mercurial";
-  version = "5.8";
+  self = python3Packages.buildPythonApplication rec {
+    pname = "mercurial";
+    version = "5.9.3";
 
-  src = fetchurl {
-    url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-    sha256 = "17rhlmmkqz5ll3k68jfzpcifg3nndbcbc2nx7kw8xn3qcj7nlpgw";
+    src = fetchurl {
+      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+      sha256 = "sha256-O0P2iXetD6dap/HlyPCoO6k1YhqyOWEpq7SY5W0b4I4=";
+    };
+
+    format = "other";
+
+    passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
+
+    cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+      inherit src;
+      name = "${pname}-${version}";
+      sha256 = "sha256:1d911jaawdrcv2mdhlp2ylr10791zj7dhb69aiw5yy7vn7gry82n";
+      sourceRoot = "${pname}-${version}/rust";
+    } else null;
+    cargoRoot = if rustSupport then "rust" else null;
+
+    propagatedBuildInputs = lib.optional re2Support fb-re2
+      ++ lib.optional gitSupport pygit2
+      ++ lib.optional highlightSupport pygments;
+    nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
+      ++ lib.optionals rustSupport (with rustPlatform; [
+           cargoSetupHook
+           rust.cargo
+           rust.rustc
+         ]);
+    buildInputs = [ docutils ]
+      ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+
+    makeFlags = [ "PREFIX=$(out)" ]
+      ++ lib.optional rustSupport "PURE=--rust";
+
+    postInstall = (lib.optionalString guiSupport ''
+      mkdir -p $out/etc/mercurial
+      cp contrib/hgk $out/bin
+      cat >> $out/etc/mercurial/hgrc << EOF
+      [extensions]
+      hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
+      EOF
+      # setting HG so that hgk can be run itself as well (not only hg view)
+      WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
+                --set HG $out/bin/hg
+                --prefix PATH : ${tk}/bin "
+    '') + ''
+      for i in $(cd $out/bin && ls); do
+        wrapProgram $out/bin/$i \
+          $WRAP_TK
+      done
+
+      # copy hgweb.cgi to allow use in apache
+      mkdir -p $out/share/cgi-bin
+      cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
+      chmod u+x $out/share/cgi-bin/hgweb.cgi
+
+      installShellCompletion --cmd hg \
+        --bash contrib/bash_completion \
+        --zsh contrib/zsh_completion
+    '';
+
+    passthru.tests = {};
+
+    meta = with lib; {
+      description = "A fast, lightweight SCM system for very large distributed projects";
+      homepage = "https://www.mercurial-scm.org";
+      downloadPage = "https://www.mercurial-scm.org/release/";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ eelco lukegb ];
+      updateWalker = true;
+      platforms = platforms.unix;
+    };
   };
+in
+  self.overridePythonAttrs (origAttrs: {
+    passthru = origAttrs.passthru // rec {
+      # withExtensions takes a function which takes the python packages set and
+      # returns a list of extensions to install.
+      #
+      # for instance: mercurial.withExtension (pm: [ pm.hg-evolve ])
+      withExtensions = f: let
+        python = self.python;
+        mercurialHighPrio = ps: (ps.toPythonModule self).overrideAttrs (oldAttrs: {
+          meta = oldAttrs.meta // {
+            priority = 50;
+          };
+        });
+        plugins = (f python.pkgs) ++ [ (mercurialHighPrio python.pkgs) ];
+        env = python.withPackages (ps: plugins);
+      in stdenv.mkDerivation {
+        pname = "${self.pname}-with-extensions";
 
-  patches = [
-    # https://phab.mercurial-scm.org/D10638, needed for below patch to apply
-    (fetchpatch {
-      url = "https://phab.mercurial-scm.org/file/data/oymk4awh2dd7q6cwjbzu/PHID-FILE-bfcr7qrp5spg42wspxpd/D10638.diff";
-      sha256 = "0mfi324is02l7cnd3j0gbmg5rpyyqn3afg3f73flnfwmz5njqa5f";
-    })
-    # https://phab.mercurial-scm.org/D10639, fixes https://bz.mercurial-scm.org/show_bug.cgi?id=6514
-    (fetchpatch {
-      url = "https://phab.mercurial-scm.org/file/data/re4uqdhtknjiacx2ogwu/PHID-FILE-4m26id65dno5gzix2ngh/D10639.diff";
-      sha256 = "0h5ilrd2x1789fr6sf4k1mcvxdh0xdyr94yawdacw87v3x12c8cb";
-    })
-  ];
+        inherit (self) src version meta;
 
-  format = "other";
+        buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
+        nativeBuildInputs = self.nativeBuildInputs;
 
-  passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
+        phases = [ "installPhase" "installCheckPhase" ];
 
-  cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "1kc2giqvfwsdl5fb0qmz96ws1gdrs3skfdzvpiif2i8f7r4nqlhd";
-    sourceRoot = "${pname}-${version}/rust";
-  } else null;
-  cargoRoot = if rustSupport then "rust" else null;
+        installPhase = ''
+          runHook preInstall
 
-  propagatedBuildInputs = lib.optional re2Support fb-re2;
-  nativeBuildInputs = [ makeWrapper gettext ]
-    ++ lib.optionals rustSupport (with rustPlatform; [
-         cargoSetupHook
-         rust.cargo
-         rust.rustc
-       ]);
-  buildInputs = [ docutils ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+          mkdir -p $out/bin
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional rustSupport "PURE=--rust";
+          for bindir in ${lib.concatStringsSep " " (map (d: "${lib.getBin d}/bin") plugins)}; do
+            for bin in $bindir/*; do
+              ln -s ${env}/bin/$(basename $bin) $out/bin/
+            done
+          done
 
-  postInstall = (lib.optionalString guiSupport ''
-    mkdir -p $out/etc/mercurial
-    cp contrib/hgk $out/bin
-    cat >> $out/etc/mercurial/hgrc << EOF
-    [extensions]
-    hgk=$out/lib/${python.libPrefix}/site-packages/hgext/hgk.py
-    EOF
-    # setting HG so that hgk can be run itself as well (not only hg view)
-    WRAP_TK=" --set TK_LIBRARY ${tk}/lib/${tk.libPrefix}
-              --set HG $out/bin/hg
-              --prefix PATH : ${tk}/bin "
-  '') + ''
-    for i in $(cd $out/bin && ls); do
-      wrapProgram $out/bin/$i \
-        $WRAP_TK
-    done
+          ln -s ${self}/share $out/share
 
-    # copy hgweb.cgi to allow use in apache
-    mkdir -p $out/share/cgi-bin
-    cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
-    chmod u+x $out/share/cgi-bin/hgweb.cgi
+          runHook postInstall
+        '';
 
-    # install bash/zsh completions
-    install -v -m644 -D contrib/bash_completion $out/share/bash-completion/completions/_hg
-    install -v -m644 -D contrib/zsh_completion $out/share/zsh/site-functions/_hg
-  '';
+        installCheckPhase = ''
+          runHook preInstallCheck
 
-  meta = with lib; {
-    inherit version;
-    description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = "https://www.mercurial-scm.org";
-    downloadPage = "https://www.mercurial-scm.org/release/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco lukegb ];
-    updateWalker = true;
-    platforms = platforms.unix;
-  };
-}
+          $out/bin/hg help >/dev/null || exit 1
+
+          runHook postInstallCheck
+        '';
+      };
+
+      tests = origAttrs.passthru.tests // {
+        withExtensions = withExtensions (pm: [ pm.hg-evolve ]);
+      };
+    };
+  })

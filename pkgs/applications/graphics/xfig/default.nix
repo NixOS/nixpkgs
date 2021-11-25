@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.8a";
+  version = "3.2.8b";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    sha256 = "0y45i1gqg3r0aq55jk047l1hnv90kqis6ld9lppx6c5jhpmc0hxs";
+    sha256 = "0fndgbm1mkqb1sn2v2kj3nx9mxj70jbp31y2bjvzcmmkry0q3k5j";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gau";
-  version = "1.1.0";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1srbql603vvlxc6p1ibw0982icdq9kcr1iamxlr8bmgldbm8215w";
+    sha256 = "sha256-d9Cfd2KD+ymGnzOjlVQkSm3XBamoJIUKQLnRZzSDBtk=";
   };
 
-  vendorSha256 = "17ag2wvaxv2dyx3yx3fvlf36ww4a44660pn4gvpbrwacsan9as5s";
+  vendorSha256 = "sha256-u5ketxHPwZN2mV0uTgwJbY+ImusGZ9GTTmFAGvdH5yA=";
 
   meta = with lib; {
     description = "Tool to fetch known URLs";

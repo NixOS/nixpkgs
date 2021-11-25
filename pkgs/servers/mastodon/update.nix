@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/update.sh
     wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
-  phases = [ "installPhase" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ yarn2nix bundix coreutils diffutils nix-prefetch-github gnused jq ];

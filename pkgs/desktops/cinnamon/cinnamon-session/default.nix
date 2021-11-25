@@ -1,6 +1,7 @@
 { fetchFromGitHub
 , cinnamon-desktop
 , cinnamon-settings-daemon
+, cinnamon-translations
 , dbus-glib
 , docbook_xsl
 , docbook_xml_dtd_412
@@ -80,8 +81,14 @@ stdenv.mkDerivation rec {
     xmlto
   ];
 
-  # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-  mesonFlags = [ "-Dc_args=-I${glib.dev}/include/gio-unix-2.0" "-Dgconf=false" "-DENABLE_IPV6=true" ];
+  mesonFlags = [
+    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    "-Dgconf=false"
+    "-DENABLE_IPV6=true"
+    # use locales from cinnamon-translations
+    "--localedir=${cinnamon-translations}/share/locale"
+  ];
 
   postPatch = ''
     chmod +x data/meson_install_schemas.py # patchShebangs requires executable file

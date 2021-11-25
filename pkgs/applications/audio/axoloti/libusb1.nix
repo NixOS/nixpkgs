@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchurl, pkg-config, systemd ? null, libobjc, IOKit, fetchpatch }:
+{ stdenv, lib, fetchurl, pkg-config, systemd, libobjc, IOKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "libusb-1.0.19";
+  pname = "libusb";
+  version = "1.0.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libusb/${name}.tar.bz2";
+    url = "mirror://sourceforge/libusb/libusb-${version}.tar.bz2";
     sha256 = "0h38p9rxfpg9vkrbyb120i1diq57qcln82h5fr7hvy82c20jql3c";
   };
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
   buildInputs = [ pkg-config ];
-  propagatedBuildInputs =
-    lib.optional stdenv.isLinux systemd ++
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+  propagatedBuildInputs = lib.optional stdenv.isLinux systemd
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   patches = [
     (fetchpatch {
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.libusb.info";
     description = "User-space USB library";
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };

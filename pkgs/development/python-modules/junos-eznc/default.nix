@@ -18,12 +18,17 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.4";
+  version = "2.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
+    sha256 = "4eee93d0af203af7cee54a8f0c7bd28af683e829edf1fd68feba85d0ad737395";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "ncclient==0.6.9" "ncclient"
+  '';
 
   checkInputs = [ nose ];
 
@@ -34,6 +39,8 @@ buildPythonPackage rec {
   checkPhase = ''
     nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
   '';
+
+  pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
     homepage = "http://www.github.com/Juniper/py-junos-eznc";

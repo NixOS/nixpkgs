@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
-  version = "1.17.6";
+  version = "1.19.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ghsjs5bxl996pap910q9s21nywb26mfpjd92rbfywbnj8f2k2cy";
+    sha256 = "c5a2e948746da6fe504e8404284f457d8e98da6df5047c6bb3f71b18882e9d2a";
   };
 
   nativeBuildInputs = [ installShellFiles ];

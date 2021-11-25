@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "17.04";
 
   src = fetchFromGitHub {
-    owner  = "szcnick";
+    owner  = "jinfeihan57";
     repo   = pname;
     rev    = "v${version}";
     sha256 = "sha256-19F4hPV0nKVuFZNbOcXrcA1uW6Y3HQolaHVIYXGmh18=";
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
   postPatch = ''
     sed -i '/CC=\/usr/d' makefile.macosx_llvm_64bits
+    # Avoid writing timestamps into compressed manpages
+    # to maintain determinism.
+    substituteInPlace install.sh --replace 'gzip' 'gzip -n'
     chmod +x install.sh
 
     # I think this is a typo and should be CXX? Either way let's kill it
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
-    homepage = "https://github.com/szcnick/p7zip";
+    homepage = "https://github.com/jinfeihan57/p7zip";
     description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.raskin ];

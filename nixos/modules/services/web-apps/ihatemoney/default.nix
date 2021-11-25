@@ -33,11 +33,14 @@ let
           then "sqlite:////var/lib/ihatemoney/ihatemoney.sqlite"
           else "postgresql:///${db}"}'
         SQLALCHEMY_TRACK_MODIFICATIONS = False
-        MAIL_DEFAULT_SENDER = ("${cfg.defaultSender.name}", "${cfg.defaultSender.email}")
+        MAIL_DEFAULT_SENDER = (r"${cfg.defaultSender.name}", r"${cfg.defaultSender.email}")
         ACTIVATE_DEMO_PROJECT = ${toBool cfg.enableDemoProject}
-        ADMIN_PASSWORD = "${toString cfg.adminHashedPassword /*toString null == ""*/}"
+        ADMIN_PASSWORD = r"${toString cfg.adminHashedPassword /*toString null == ""*/}"
         ALLOW_PUBLIC_PROJECT_CREATION = ${toBool cfg.enablePublicProjectCreation}
         ACTIVATE_ADMIN_DASHBOARD = ${toBool cfg.enableAdminDashboard}
+        SESSION_COOKIE_SECURE = ${toBool cfg.secureCookie}
+        ENABLE_CAPTCHA = ${toBool cfg.enableCaptcha}
+        LEGAL_LINK = r"${toString cfg.legalLink}"
 
         ${cfg.extraConfig}
   '';
@@ -79,9 +82,20 @@ in
           description = "The email of the sender of ihatemoney emails";
         };
       };
+      secureCookie = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Use secure cookies. Disable this when ihatemoney is served via http instead of https";
+      };
       enableDemoProject = mkEnableOption "access to the demo project in ihatemoney";
       enablePublicProjectCreation = mkEnableOption "permission to create projects in ihatemoney by anyone";
       enableAdminDashboard = mkEnableOption "ihatemoney admin dashboard";
+      enableCaptcha = mkEnableOption "a simplistic captcha for some forms";
+      legalLink = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "The URL to a page explaining legal statements about your service, eg. GDPR-related information.";
+      };
       extraConfig = mkOption {
         type = types.str;
         default = "";

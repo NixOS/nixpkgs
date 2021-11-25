@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, isPy3k, prompt_toolkit }:
+{ lib, buildPythonApplication, fetchFromGitHub, isPy3k, prompt-toolkit }:
 
 buildPythonApplication rec {
   pname = "clintermission";
@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "09wl0rpw6c9hab51rs957z64b0v9j4fcbqbn726wnapf4z5w6yxv";
   };
 
-  propagatedBuildInputs = [ prompt_toolkit ];
+  propagatedBuildInputs = [ prompt-toolkit ];
 
   disabled = !isPy3k;
 

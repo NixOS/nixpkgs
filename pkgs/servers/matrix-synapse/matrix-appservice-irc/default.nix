@@ -1,15 +1,23 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, ... }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub }:
 
 let
-
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
-
   ourNodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
+  version = (lib.importJSON ./package.json).version;
 in
-ourNodePackages."${packageName}".override {
+ourNodePackages.package.override {
+  pname = "matrix-appservice-irc";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "matrix-appservice-irc";
+    rev = version;
+    sha256 = "sha256-EncodJKptrLC54B5XipkiHXFgJ5cD+crcT3SOPOc+7M=";
+  };
+
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
 
   postInstall = ''
@@ -18,10 +26,11 @@ ourNodePackages."${packageName}".override {
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ piegames ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
   };

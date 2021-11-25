@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, dateutil
+, python-dateutil
 , docopt
 , fetchPypi
 , pytestCheckHook
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     docopt
     pyyaml
     ruamel-yaml

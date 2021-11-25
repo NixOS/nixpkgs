@@ -24,18 +24,20 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.6";
+  version = "0.5.8";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tmGt50xBDV++/pqyXsuxHdrwv+XbkjvtrzsYBzQh7zE=";
+    sha256 = "sha256-16XEah5rgem/L8A/zo1zPrifrU15VMk652rFLZcvjig=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'click = "^7"' 'click = "*"' \
       --replace 'croniter = "^0"' 'croniter = "*"' \
+      --replace 'cryptography = "^3"' 'cryptography = "*"' \
       --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
   '';
 
@@ -44,24 +46,24 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    click
-    cryptography
-    construct
-    zeroconf
-    attrs
-    pytz
-    appdirs
-    tqdm
-    netifaces
     android-backup
+    appdirs
+    attrs
+    click
+    construct
     croniter
+    cryptography
     defusedxml
+    netifaces
+    pytz
+    pyyaml
+    tqdm
+    zeroconf
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
     pytest-mock
-    pyyaml
   ];
 
   pythonImportsCheck = [ "miio" ];
@@ -73,4 +75,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

@@ -1,10 +1,12 @@
 { elk7Version
-, enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
-, util-linux, gnugrep, coreutils
+, util-linux
+, gnugrep
+, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -15,22 +17,18 @@ let
   arch = elemAt info 0;
   plat = elemAt info 1;
   shas =
-    if enableUnfree
-    then {
-      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
-      x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
-    }
-    else {
-      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
-      x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
+    {
+      x86_64-linux  = "1ld7656b37l67vi4pyv0il865b168niqnbd4hzbvdnwrm35prp10";
+      x86_64-darwin = "11b180y11xw5q01l7aw6lyn15lp9ks8xmakjg1j7gp3z6c90hpn3";
+      aarch64-linux = "0s4ph79x17f90jk31wjwk259dk9dmhnmnkxdcn77m191wvf6m3wy";
     };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
+  pname = "elasticsearch";
   version = elk7Version;
-  name = "elasticsearch-${optionalString (!enableUnfree) "oss-"}${version}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}-${plat}-${arch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}-${plat}-${arch}.tar.gz";
     sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
@@ -46,15 +44,20 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ]
-             ++ optional enableUnfree zlib;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+
+  buildInputs = [ jre_headless util-linux zlib ];
+
+  runtimeDependencies = [ zlib ];
 
   installPhase = ''
     mkdir -p $out
     cp -R bin config lib modules plugins $out
 
     chmod +x $out/bin/*
+
+    substituteInPlace $out/bin/elasticsearch \
+      --replace 'bin/elasticsearch-keystore' "$out/bin/elasticsearch-keystore"
 
     wrapProgram $out/bin/elasticsearch \
       --prefix PATH : "${makeBinPath [ util-linux coreutils gnugrep ]}" \
@@ -63,22 +66,12 @@ stdenv.mkDerivation (rec {
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
 
-  passthru = { inherit enableUnfree; };
+  passthru = { enableUnfree = true; };
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    license = licenses.elastic;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
-} // optionalAttrs enableUnfree {
-  dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-  runtimeDependencies = [ zlib ];
-  postFixup = ''
-    for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
-      echo "patching $exe..."
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
-    done
-  '';
-})
+}

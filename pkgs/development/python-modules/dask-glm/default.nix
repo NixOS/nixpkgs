@@ -7,7 +7,7 @@
 , multipledispatch
 , setuptools-scm
 , scipy
-, scikitlearn
+, scikit-learn
 , pytestCheckHook
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikitlearn ];
+  propagatedBuildInputs = [ cloudpickle dask numpy toolz multipledispatch scipy scikit-learn ];
 
   meta = with lib; {
     homepage = "https://github.com/dask/dask-glm/";

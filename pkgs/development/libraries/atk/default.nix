@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     ./fix_pc.patch
   ];
 
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
+
   doCheck = true;
 
   passthru = {

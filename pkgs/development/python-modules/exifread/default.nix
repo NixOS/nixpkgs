@@ -16,7 +16,7 @@ buildPythonPackage rec {
     description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";
     homepage    = "https://github.com/ianare/exif-py";
     license     = licenses.bsd0;
-    maintainers = with maintainers; [ vozz ];
+    maintainers = with maintainers; [ ];
   };
 
 }

@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , nbval
 , ipywidgets
 , numpy
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  checkInputs = [ pytest pytestcov nbval ];
+  checkInputs = [ pytest pytest-cov nbval ];
 
   checkPhase = "pytest ipydatawidgets/tests";
 

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.1.0";
+  version = "2.2.0";
   disabled = !isPy3k; # only Python 3
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0239a4achk49ngagb6aqy6cgzfwgbxir07vwi13ysbpx78y0l4g9";
+    sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
   };
 
   propagatedBuildInputs = [ geographiclib ];

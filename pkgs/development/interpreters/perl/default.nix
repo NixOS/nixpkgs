@@ -1,4 +1,5 @@
-{ config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
+{ config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
+, callPackage
 , enableThreading ? true, coreutils, makeWrapper
 }:
 
@@ -36,15 +37,18 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
-         else ./no-sys-dirs-5.31.patch)
+        ./no-sys-dirs-5.31.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optional crossCompiling ./MakeMaker-cross.patch
-      # Backporting https://github.com/Perl/perl5/pull/17946, can be
-      # removed if there's ever a 5.30.x release with it included.
-      ++ optional (versionOlder version "5.32.1") ./aarch64-darwin.patch;
+      ++ optionals crossCompiling [
+        ./MakeMaker-cross.patch
+        # https://github.com/arsv/perl-cross/pull/120
+        (fetchpatch {
+          url = "https://github.com/arsv/perl-cross/commit/3c318ae6572f8b36cb077c8b49c851e2f5fe181e.patch";
+          sha256 = "0cmcy8bams3c68f6xadl52z2w378wcpdjzi3qi4pcyvcfs011l6g";
+        })
+      ];
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -62,7 +66,7 @@ let
       unset src
     '';
 
-    # Build a thread-safe Perl with a dynamic libperls.o.  We need the
+    # Build a thread-safe Perl with a dynamic libperl.so.  We need the
     # "installstyle" option to ensure that modules are put under
     # $out/lib/perl5 - this is the general default, but because $out
     # contains the string "perl", Configure would select $out/lib.
@@ -74,13 +78,14 @@ let
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
-        "-Duseshrplib"
+      ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads"
+      ++ optional stdenv.hostPlatform.isStatic "--all-static"
       ++ optionals (!crossCompiling) [
         "-Dprefix=${placeholder "out"}"
         "-Dman1dir=${placeholder "out"}/share/man/man1"
@@ -89,19 +94,37 @@ let
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
+    dontAddStaticConfigureFlags = true;
+
     dontAddPrefix = !crossCompiling;
 
     enableParallelBuilding = !crossCompiling;
 
+    # perl includes the build date, the uname of the build system and the
+    # username of the build user in some files.
+    # We override these to make it build deterministically.
+    # other distro solutions
+    # https://github.com/bmwiedemann/openSUSE/blob/master/packages/p/perl/perl-reproducible.patch
+    # https://github.com/archlinux/svntogit-packages/blob/packages/perl/trunk/config.over
+    # https://salsa.debian.org/perl-team/interpreter/perl/blob/debian-5.26/debian/config.over
+    # A ticket has been opened upstream to possibly clean some of this up: https://rt.perl.org/Public/Bug/Display.html?id=133452
     preConfigure = ''
-        substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
-        substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
+        cat > config.over <<EOF
+        ${lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) ''osvers="gnulinux"''}
+        myuname="nixpkgs"
+        myhostname="nixpkgs"
+        cf_by="nixpkgs"
+        cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
+        EOF
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
         # We need to do this because the bootstrap doesn't have a static libpthread
         sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
+
+    # Default perl does not support --host= & co.
+    configurePlatforms = [];
 
     setupHook = ./setup-hook.sh;
 
@@ -171,18 +194,22 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "e53999d0c340769792ba18d749751b0df3d1d177"; # Mar 21, 2021
+    crossVersion = "393821c7cf53774233aaf130ff2c8ccec701b0a9"; # Sep 22, 2021
 
-    perl-cross-src = fetchurl {
-      url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "14vcpwjhq667yh0cs7ism70df8l7068vn4a0ww59hdjyj7yc84i6";
+    perl-cross-src = fetchFromGitHub {
+      name = "perl-cross-${crossVersion}";
+      owner = "arsv";
+      repo = "perl-cross";
+      rev = crossVersion;
+      sha256 = "1fn35b1773aibi2z54m0mar7114737mvfyp81wkdwhakrmzr5nv1";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
-      cp -R perl-cross-${crossVersion}/* perl-${version}/
+      chmod -R u+w ${perl-cross-src.name}
+      cp -R ${perl-cross-src.name}/* perl-${version}/
     '';
 
     configurePlatforms = [ "build" "host" "target" ];
@@ -192,14 +219,6 @@ let
   });
 in {
   # Maint version
-  perl530 = common {
-    perl = pkgs.perl530;
-    buildPerl = buildPackages.perl530;
-    version = "5.30.3";
-    sha256 = "0vs0wwwlw47sswxaflkk4hw0y45cmc7arxx788kwpbminy5lrq1j";
-  };
-
-  # Maint version
   perl532 = common {
     perl = pkgs.perl532;
     buildPerl = buildPackages.perl532;
@@ -207,11 +226,19 @@ in {
     sha256 = "0b7brakq9xs4vavhg391as50nbhzryc7fy5i65r81bnq3j897dh3";
   };
 
+  # Maint version
+  perl534 = common {
+    perl = pkgs.perl534;
+    buildPerl = buildPackages.perl534;
+    version = "5.34.0";
+    sha256 = "16mywn5afpv1mczv9dlc1w84rbgjgrr0pyr4c0hhb2wnif0zq7jm";
+  };
+
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.8";
-    sha256 = "1zr6sdsfcmk86n3f8j65x07xkv29v0pi8bwc986ahmjx7x92xzgl";
+    version = "5.35.4";
+    sha256 = "1ss2r0qq5li6d2qghfv1iah5nl6nraymd7b7ib1iy1395rwyhl4q";
   };
 }

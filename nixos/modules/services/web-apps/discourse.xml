@@ -262,9 +262,42 @@ services.discourse = {
     <para>
       You can install <productname>Discourse</productname> plugins
       using the <xref linkend="opt-services.discourse.plugins" />
-      option. As long as a plugin supports the standard install
-      method, packaging it should only require fetching its source
-      with an appropriate fetcher.
+      option. Pre-packaged plugins are provided in
+      <literal>&lt;your_discourse_package_here&gt;.plugins</literal>. If
+      you want the full suite of plugins provided through
+      <literal>nixpkgs</literal>, you can also set the <xref
+      linkend="opt-services.discourse.package" /> option to
+      <literal>pkgs.discourseAllPlugins</literal>.
+    </para>
+
+    <para>
+      Plugins can be built with the
+      <literal>&lt;your_discourse_package_here&gt;.mkDiscoursePlugin</literal>
+      function. Normally, it should suffice to provide a
+      <literal>name</literal> and <literal>src</literal> attribute. If
+      the plugin has Ruby dependencies, however, they need to be
+      packaged in accordance with the <link
+      xlink:href="https://nixos.org/manual/nixpkgs/stable/#developing-with-ruby">Developing
+      with Ruby</link> section of the Nixpkgs manual and the
+      appropriate gem options set in <literal>bundlerEnvArgs</literal>
+      (normally <literal>gemdir</literal> is sufficient). A plugin's
+      Ruby dependencies are listed in its
+      <filename>plugin.rb</filename> file as function calls to
+      <literal>gem</literal>. To construct the corresponding
+      <filename>Gemfile</filename> manually, run <command>bundle
+      init</command>, then add the <literal>gem</literal> lines to it
+      verbatim.
+    </para>
+
+    <para>
+      Much of the packaging can be done automatically by the
+      <filename>nixpkgs/pkgs/servers/web-apps/discourse/update.py</filename>
+      script - just add the plugin to the <literal>plugins</literal>
+      list in the <function>update_plugins</function> function and run
+      the script:
+      <programlisting language="bash">
+./update.py update-plugins
+</programlisting>.
     </para>
 
     <para>
@@ -280,7 +313,10 @@ services.discourse = {
     <para>
       For example, to add the <link
       xlink:href="https://github.com/discourse/discourse-spoiler-alert">discourse-spoiler-alert</link>
-      plugin and disable it by default:
+      and <link
+      xlink:href="https://github.com/discourse/discourse-solved">discourse-solved</link>
+      plugins, and disable <literal>discourse-spoiler-alert</literal>
+      by default:
 
 <programlisting>
 services.discourse = {
@@ -301,13 +337,9 @@ services.discourse = {
     <link linkend="opt-services.discourse.mail.outgoing.passwordFile">passwordFile</link> = "/path/to/smtp_password_file";
   };
   <link linkend="opt-services.discourse.mail.incoming.enable">mail.incoming.enable</link> = true;
-  <link linkend="opt-services.discourse.mail.incoming.enable">plugins</link> = [
-    (pkgs.fetchFromGitHub {
-      owner = "discourse";
-      repo = "discourse-spoiler-alert";
-      rev = "e200cfa571d252cab63f3d30d619b370986e4cee";
-      sha256 = "0ya69ix5g77wz4c9x9gmng6l25ghb5xxlx3icr6jam16q14dzc33";
-    })
+  <link linkend="opt-services.discourse.mail.incoming.enable">plugins</link> = with config.services.discourse.package.plugins; [
+    discourse-spoiler-alert
+    discourse-solved
   ];
   <link linkend="opt-services.discourse.siteSettings">siteSettings</link> = {
     plugins = {

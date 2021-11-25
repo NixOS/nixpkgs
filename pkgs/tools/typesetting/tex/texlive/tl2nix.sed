@@ -32,3 +32,7 @@ s/^catalogue-version_(.*)/  version = "\1";/p
 # extract deps
 s/^depend ([^.]*)$/  deps."\1" = tl."\1";/p
 
+# extract hyphenation patterns and formats
+# (this may create duplicate lines, use uniq to remove them)
+/^execute\sAddHyphen/i\  hasHyphens = true;
+/^execute\sAddFormat/i\  hasFormats = true;

@@ -2,14 +2,16 @@
 
 buildPythonPackage rec {
   pname = "zeroc-ice";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "3b4897cc3f2adf3d03802368cedb72a038aa33c988663a667c1c48e42ea10797";
+    sha256 = "e8d8a7828e4994545bf57059bd0a0d431d387d31cc4af2eb5eeb93ef28c2d827";
   };
 
   buildInputs = [ openssl bzip2 ];
+
+  pythonImportsCheck = [ "Ice" ];
 
   meta = with lib; {
     homepage = "https://zeroc.com/";

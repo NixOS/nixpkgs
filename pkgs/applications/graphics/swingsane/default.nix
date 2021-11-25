@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontConfigure = true;
 
   installPhase = let
 

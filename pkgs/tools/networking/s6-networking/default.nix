@@ -19,8 +19,8 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 buildPackage {
   pname = "s6-networking";
-  version = "2.4.1.0";
-  sha256 = "023wnayv1gddklnsh3qv7i5jfy2fisbp24wa0nzjg0nfq3p807yc";
+  version = "2.5.0.0";
+  sha256 = "1fn3g9gkwgmnxallhk82f5rly81pnkilj7n49g5fbfmaalsq96mh";
 
   description = "A suite of small networking utilities for Unix systems";
 
@@ -57,7 +57,6 @@ buildPackage {
   postInstall = ''
     # remove all s6 executables from build directory
     rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
-    rm minidentd
     rm libs6net.* libstls.* libs6tls.* libsbearssl.*
 
     mv doc $doc/share/doc/s6-networking/html

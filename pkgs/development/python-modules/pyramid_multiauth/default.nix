@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid_multiauth";
-  version = "0.9.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lprqjyg3zcji6033p1l3s4nigjigc5423wgivkfhz46vq0jmniy";
+    sha256 = "6d8785558e1d0bbe0d0da43e296efc0fbe0de5071d1f9b1091e891f0e4ec9682";
   };
 
   propagatedBuildInputs = [ pyramid ];

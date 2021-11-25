@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "EBTKS";
-  name  = "${pname}-2017-09-23";
+  version  = "unstable-2017-09-23";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";

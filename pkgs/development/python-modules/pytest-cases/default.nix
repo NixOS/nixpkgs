@@ -10,12 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.4.6";
+  version = "3.6.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17w4s6622i97q81g15zamqm536ib00grgdfk2f4kk9bw2k7sdlq6";
+    sha256 = "sha256-JZfQI6dgYFHWUbCMuHD78eBi9svoV5zkX887V9xFLNw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +34,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "pytest-runner" ""
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
   '';
 
   # Tests have dependencies (pytest-harvest, pytest-steps) which
@@ -40,7 +43,9 @@ buildPythonPackage rec {
   # makefun, pytest-*) have circular dependecies.
   doCheck = false;
 
-  pythonImportsCheck = [ "pytest_cases" ];
+  pythonImportsCheck = [
+    "pytest_cases"
+  ];
 
   meta = with lib; {
     description = "Separate test code from test cases in pytest";

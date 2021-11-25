@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin";
-  version = "1.4.32";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-compiler-${version}.zip";
-    hash = "sha256-3+8ju4a9XzYWbU7BJnyN5Ts4J8RG1U6CMixrbarTWUw=";
+    sha256 = "sha256-F0yS4SpUwJAf2fC62s8VFMKLUZepVlTk2rF3UpPd4dw=";
   };
 
   propagatedBuildInputs = [ jre ] ;
@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://kotlinlang.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers;
-      [ ];
+    maintainers = with lib.maintainers; [ SubhrajyotiSen ];
     platforms = lib.platforms.all;
   };
 }

@@ -18,6 +18,8 @@
 , AudioToolbox
 , OpenGL
 , CoreFoundation
+, pillow
+, numpy
 }:
 
 buildPythonPackage rec {
@@ -41,6 +43,8 @@ buildPythonPackage rec {
   else
     [ wxGTK.gtk ]
   );
+
+  propagatedBuildInputs = [ pillow numpy ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 

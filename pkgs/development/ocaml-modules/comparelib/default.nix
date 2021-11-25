@@ -1,7 +1,7 @@
 {lib, buildOcaml, fetchurl, type_conv}:
 
 buildOcaml rec {
-  name = "comparelib";
+  pname = "comparelib";
   version = "113.00.00";
 
   minimumSupportedOcamlVersion = "4.00";

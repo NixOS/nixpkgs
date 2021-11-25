@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip, fetchpatch, cmake
 , libjpeg, openssl, zlib, libgcrypt, libpng
-, systemd
+, systemd, Carbon
 }:
 
 let
@@ -19,10 +19,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    libjpeg openssl libgcrypt libpng
-  ] ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = [ libjpeg openssl libgcrypt libpng ]
+    ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.isDarwin Carbon;
   propagatedBuildInputs = [ zlib ];
+
   meta = {
     inherit (s) version;
     description = "VNC server library";

@@ -17,7 +17,7 @@ in {
     enable = mkEnableOption "Haskell documentation server";
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8080;
       description = ''
         Port number Hoogle will be listening to.
@@ -27,8 +27,8 @@ in {
     packages = mkOption {
       type = types.functionTo (types.listOf types.package);
       default = hp: [];
-      defaultText = "hp: []";
-      example = "hp: with hp; [ text lens ]";
+      defaultText = literalExpression "hp: []";
+      example = literalExpression "hp: with hp; [ text lens ]";
       description = ''
         The Haskell packages to generate documentation for.
 
@@ -41,7 +41,7 @@ in {
     haskellPackages = mkOption {
       description = "Which haskell package set to use.";
       default = pkgs.haskellPackages;
-      defaultText = "pkgs.haskellPackages";
+      defaultText = literalExpression "pkgs.haskellPackages";
     };
 
     home = mkOption {

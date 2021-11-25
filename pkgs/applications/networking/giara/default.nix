@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonPath = with python3.pkgs; [
     pygobject3
     pycairo
-    dateutil
+    python-dateutil
     praw
     pillow
     mistune

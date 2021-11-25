@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config
-, libgcrypt, libgpgerror, libtasn1
+, libgcrypt, libgpg-error, libtasn1
 
 # Optional Dependencies
 , pam ? null, libidn ? null, gnutls ? null
@@ -22,10 +22,11 @@ let
 in
 with lib;
 stdenv.mkDerivation rec {
-  name = "shishi-1.0.2";
+  pname = "shishi";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnu/shishi/${name}.tar.gz";
+    url = "mirror://gnu/shishi/shishi-${version}.tar.gz";
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
+  buildInputs = [ libgcrypt libgpg-error libtasn1 optPam optLibidn optGnutls ];
 
   configureFlags = [
     (mkOther                      "sysconfdir"    "/etc")
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
   '' + ''
       -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
-      -e 's,\(-lgpg-error\),-L${libgpgerror.out}/lib \1,' \
+      -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 

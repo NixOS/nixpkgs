@@ -1,25 +1,34 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
+{ lib
+, stdenv
+, fetchPypi
+, python
+, buildPythonPackage
+, cython
+, gfortran
+, pythran
+, nose
+, pytest
+, pytest-xdist
+, numpy
+, pybind11
+}:
 
-let
-  pybind = pybind11.overridePythonAttrs(oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPYBIND11_TEST=off"
-    ];
-    doCheck = false; # Circular test dependency
-  });
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "scipy";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "048vd4c843xaq45yk3kn491gvqnvhp2i9rxhg671ddlh923fpz64";
+    sha256 = "6b47d5fa7ea651054362561a28b1ccc8da9368a39514c1bbf6c0977a1c376764";
   };
 
-  checkInputs = [ nose pytest ];
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas pybind ];
+  nativeBuildInputs = [ cython gfortran pythran ];
+
+  buildInputs = [ numpy.blas pybind11 ];
+
   propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ nose pytest pytest-xdist ];
 
   # Remove tests because of broken wrapper
   prePatch = ''
@@ -37,10 +46,20 @@ in buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
+  # disable stackprotector on aarch64-darwin for now
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-python3.9-scipy-1.6.3.drv-0/ccDEsw5U.s:109:15: error: index must be an integer in range [-256, 255].
+  #
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   checkPhase = ''
     runHook preCheck
     pushd dist
-    ${python.interpreter} -c 'import scipy; scipy.test("fast", verbose=10)'
+    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck
   '';

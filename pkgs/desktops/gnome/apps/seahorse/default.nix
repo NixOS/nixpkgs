@@ -7,6 +7,7 @@
 , pkg-config
 , gtk3
 , glib
+, glib-networking
 , wrapGAppsHook
 , itstool
 , gnupg
@@ -26,14 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "40.0";
+  version = "41.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-fscFezhousbqBB/aghQKOfXsnlsYi0UJFNRTvC1V0Cw=";
+    hash = "sha256-5u7AnoEESClfVH8YwdV3K2XD7cHZ5aJZXxC13eaJKfU=";
   };
-
-  doCheck = true;
 
   nativeBuildInputs = [
     meson
@@ -48,6 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
+    glib-networking
     gcr
     gsettings-desktop-schemas
     gnupg
@@ -63,8 +63,19 @@ stdenv.mkDerivation rec {
     libhandy
   ];
 
+  doCheck = true;
+
   postPatch = ''
     patchShebangs build-aux/
+  '';
+
+  preCheck = ''
+    # Add “org.gnome.crypto.pgp” GSettings schema to path
+    # to make it available for “gpgme-backend” test.
+    # It is used by Seahorse’s internal “common” library.
+    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaPath gcr}/../.."
+    # The same test also requires home directory so that it can store settings.
+    export HOME=$TMPDIR
   '';
 
   passthru = {

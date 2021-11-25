@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "libcredis-0.2.3";
+stdenv.mkDerivation rec {
+  pname = "libcredis";
+  version = "0.2.3";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-0.2.3.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/credis/credis-${version}.tar.gz";
     sha256 = "1l3hlw9rrc11qggbg9a2303p3bhxxx2vqkmlk8avsrbqw15r1ayr";
   };
 

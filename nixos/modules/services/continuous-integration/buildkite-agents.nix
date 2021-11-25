@@ -39,7 +39,7 @@ let
 
       package = mkOption {
         default = pkgs.buildkite-agent;
-        defaultText = "pkgs.buildkite-agent";
+        defaultText = literalExpression "pkgs.buildkite-agent";
         description = "Which buildkite-agent derivation to use";
         type = types.package;
       };
@@ -52,7 +52,7 @@ let
 
       runtimePackages = mkOption {
         default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
-        defaultText = "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
+        defaultText = literalExpression "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
         description = "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
       };
@@ -168,7 +168,7 @@ let
       hooksPath = mkOption {
         type = types.path;
         default = hooksDir config;
-        defaultText = "generated from services.buildkite-agents.<name>.hooks";
+        defaultText = literalDocBook "generated from <option>services.buildkite-agents.&lt;name&gt;.hooks</option>";
         description = ''
           Path to the directory storing the hooks.
           Consider using <option>services.buildkite-agents.&lt;name&gt;.hooks.&lt;name&gt;</option>
@@ -179,6 +179,7 @@ let
       shell = mkOption {
         type = types.str;
         default = "${pkgs.bash}/bin/bash -e -c";
+        defaultText = literalExpression ''"''${pkgs.bash}/bin/bash -e -c"'';
         description = ''
           Command that buildkite-agent 3 will execute when it spawns a shell.
         '';
@@ -238,8 +239,7 @@ in
         in
           optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
-            chmod 600 "${sshDir}"/id_rsa
+            install -m600 "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
           '' + ''
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"

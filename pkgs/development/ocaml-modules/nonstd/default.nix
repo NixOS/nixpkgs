@@ -14,7 +14,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = https://bitbucket.org/smondet/nonstd;
+    homepage = "https://bitbucket.org/smondet/nonstd";
     description = "Non-standard mini-library";
     license = licenses.isc;
     maintainers = [ maintainers.alexfmpe ];
