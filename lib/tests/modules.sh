@@ -3,6 +3,9 @@
 # This script is used to test that the module system is working as expected.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
 
+set -o errexit -o noclobber -o nounset -o pipefail
+shopt -s failglob inherit_errexit
+
 # https://stackoverflow.com/a/246128/6605742
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -23,15 +26,15 @@ reportFailure() {
     shift
     local script="import ./default.nix { modules = [ $* ];}"
     echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only"
-    evalConfig "$attr" "$@"
-    fail=$((fail + 1))
+    evalConfig "$attr" "$@" || true
+    ((++fail))
 }
 
 checkConfigOutput() {
     local outputContains=$1
     shift
     if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
-        pass=$((pass + 1))
+        ((++pass))
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
         reportFailure "$@"
@@ -47,7 +50,7 @@ checkConfigError() {
         reportFailure "$@"
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
-            pass=$((pass + 1))
+            ((++pass))
         else
             echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
             reportFailure "$@"
