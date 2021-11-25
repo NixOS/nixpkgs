@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "jsonwatch";
-  version = "0.2.0";
+  version = "0.6.0";
   disabled = isPyPy; # doesn't find setuptools
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "jsonwatch";
     rev = "v${version}";
-    sha256 = "sha256-yLN6jOxAz+B7zvV3tGT6Nxi17v9ZOtWpbtSi0o1h48U=";
+    sha256 = "0abmyv3nrfqhjmfnvpn4q3yc05a1gamfxj5frlbn1lidzzhb8rac";
   };
 
   propagatedBuildInputs = [ six ];
