@@ -1,4 +1,4 @@
-{ buildPackages, pkgs, newScope, stdenv }:
+{ buildPackages, pkgsBuildTarget, pkgs, newScope, stdenv }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
@@ -81,7 +81,7 @@ in {
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
@@ -98,7 +98,7 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_12;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
@@ -111,7 +111,7 @@ in {
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
@@ -126,7 +126,7 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_12;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
@@ -136,7 +136,7 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      buildLlvmPackages = buildPackages.llvmPackages_12;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
       libffi = pkgs.libffi;
     };

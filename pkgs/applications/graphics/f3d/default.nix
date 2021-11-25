@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://kitware.github.io/F3D";
+    homepage = "https://f3d-app.github.io/f3d";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;

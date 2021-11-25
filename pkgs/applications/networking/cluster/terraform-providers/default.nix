@@ -17,6 +17,7 @@ let
         inherit (data) owner repo rev sha256;
       };
       vendorSha256 = data.vendorSha256 or null;
+      deleteVendor = data.deleteVendor or false;
 
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.

@@ -16,7 +16,7 @@
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
@@ -117,7 +117,7 @@ let
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
-  ] ++ lib.optional useLLVM buildLlvmPackages.llvm;
+  ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
 

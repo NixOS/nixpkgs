@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pantheon
 , meson
@@ -17,28 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.2.7";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0yjqws7ryfid9lcafgzzbfnjjwccsankscwdwqfw486qid85whzc";
-  };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-sound/pull/203
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-sound/commit/1f3b9f001ace4c457ab194158dff04ba5e25d278.patch";
-      sha256 = "1lmf2bbif2wkfv500nxbqxp8jdmnjg8yk8xhx3g2g55d15rc5hk4";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-yHuboDpIcioZPNgpmnrM6J2eUCJpoNDdvgu27YuN65I=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +41,12 @@ stdenv.mkDerivation rec {
     pulseaudio
     switchboard
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Switchboard Sound Plug";

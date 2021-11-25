@@ -14,6 +14,8 @@
 buildPythonPackage rec {
   pname = "python-smarttub";
   version = "0.0.27";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -36,7 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "smarttub" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "aiohttp~=3.7.3" "aiohttp>=3.7.4,<4"
+  '';
+
+  pythonImportsCheck = [
+    "smarttub"
+  ];
 
   meta = with lib; {
     description = "Python API for SmartTub enabled hot tubs";
