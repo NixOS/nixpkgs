@@ -172,6 +172,41 @@
           </listitem>
         </itemizedlist>
       </listitem>
+      <listitem>
+        <para>
+          ORY Kratos was updated to version 0.8.0-alpha.3
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This release requires you to run SQL migrations. Please,
+              as always, create a backup of your database first!
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SDKs are now generated with tag v0alpha2 to reflect
+              that some signatures have changed in a breaking fashion.
+              Please update your imports from v0alpha1 to v0alpha2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SMTPS scheme used in courier config URL with
+              cleartext/StartTLS/TLS SMTP connection types is now only
+              supporting implicit TLS. For StartTLS and cleartext SMTP,
+              please use the SMTP scheme instead.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              for more details, see
+              <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.0-alpha.1">Release
+              Notes</link>.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
