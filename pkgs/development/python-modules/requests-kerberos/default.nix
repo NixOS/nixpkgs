@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
-  version = "0.12.0";
+  version = "0.13.0";
 
   # tests are not present in the PyPI version
   src = fetchFromGitHub {
     owner = "requests";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qw96aw84nljh9cip372mfv50p1yyirfgigavvavgpc3c5g278s6";
+    sha256 = "0yvfg2cj3d10l8fd8kyal4hmpd7fd1c3bca13cj9ril5l573in76";
   };
 
   propagatedBuildInputs = [
