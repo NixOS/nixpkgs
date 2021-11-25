@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-formtools";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1chkbl188yj6hvhh1wgjpfgql553k6hrfwxzb8vv4lfdq41jq9y5";
+    sha256 = "9663b6eca64777b68d6d4142efad8597fe9a685924673b25aa8a1dcff4db00c3";
   };
 
   propagatedBuildInputs = [ django ];
