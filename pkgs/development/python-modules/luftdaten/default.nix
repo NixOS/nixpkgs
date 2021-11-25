@@ -11,17 +11,16 @@
 
 buildPythonPackage rec {
   pname = "luftdaten";
-  version = "0.7.0";
+  version = "0.7.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-luftdaten";
     rev = version;
-    sha256 = "0ij56zmdxwlqla11ii32nrv0fxd96d9m7q4bzlkrvw5hkp9lvrqq";
+    sha256 = "sha256-76Y5TJet0WtzYXuK8Og0rmpsUIlXK7b37oesh+MliU8=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +43,6 @@ buildPythonPackage rec {
     description = "Python API for interacting with luftdaten.info";
     homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda fab ];
   };
 }
