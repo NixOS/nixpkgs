@@ -4,7 +4,7 @@
 , h5py
 , imgaug
 , ipython
-, Keras
+, keras
 , lib
 , matplotlib
 , numpy
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     h5py
     imgaug
     ipython
-    Keras
+    keras
     matplotlib
     numpy
     opencv3

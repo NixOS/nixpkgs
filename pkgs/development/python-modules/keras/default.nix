@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Keras";
+  pname = "keras";
   version = "2.4.3";
 
   src = fetchPypi {

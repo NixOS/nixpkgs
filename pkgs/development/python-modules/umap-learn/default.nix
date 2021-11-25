@@ -9,7 +9,7 @@
 , pynndescent
 , tensorflow
 , pytestCheckHook
-, Keras
+, keras
 }:
 
 buildPythonPackage rec {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     nose
     tensorflow
     pytestCheckHook
-    Keras
+    keras
   ];
 
   preCheck = ''
