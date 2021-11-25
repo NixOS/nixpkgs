@@ -127,9 +127,15 @@ let
   useLdGold = targetPlatform.linker == "gold" ||
     (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
+  # Tools GHC will need to call at runtime. Some of these were handled using
+  # propagatedBuildInputs before, however this allowed for GHC environment and
+  # a derivations build environment to interfere, especially when GHC is built.
   runtimeDeps = [
+    targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
+  ] ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -254,9 +260,6 @@ stdenv.mkDerivation (rec {
   depsBuildTarget = toolsForTarget;
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
-
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
-    ++ lib.optional useLLVM llvmPackages.llvm;
 
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
