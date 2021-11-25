@@ -7117,9 +7117,9 @@ with pkgs;
 
   nixnote2 = libsForQt514.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs-14_x;
+  nodejs = hiPrio nodejs-16_x;
 
-  nodejs-slim = nodejs-slim-14_x;
+  nodejs-slim = nodejs-slim-16_x;
 
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
@@ -7152,7 +7152,10 @@ with pkgs;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
-  nodePackages = dontRecurseIntoAttrs nodejs.pkgs;
+  nodePackages = (dontRecurseIntoAttrs nodejs.pkgs).override {
+    # It does not work on 16.x: https://github.com/NixOS/nixpkgs/issues/132456
+    nodejs = nodejs-14_x;
+  };
 
   np2kai = callPackage ../misc/emulators/np2kai { };
 
