@@ -167,13 +167,15 @@ in
       };
 
       downloadDirPermissions = mkOption {
-        type = types.str;
-        default = "770";
-        example = "775";
+        type = with types; nullOr str;
+        default = null;
+        example = "770";
         description = ''
-          The permissions set by <literal>systemd.activationScripts.transmission-daemon</literal>
-          on the directories <xref linkend="opt-services.transmission.settings.download-dir"/>
-          and <xref linkend="opt-services.transmission.settings.incomplete-dir"/>.
+          If not <code>null</code>, is used as the permissions
+          set by <literal>systemd.activationScripts.transmission-daemon</literal>
+          on the directories <xref linkend="opt-services.transmission.settings.download-dir"/>,
+          <xref linkend="opt-services.transmission.settings.incomplete-dir"/>.
+          and <xref linkend="opt-services.transmission.settings.watch-dir"/>.
           Note that you may also want to change
           <xref linkend="opt-services.transmission.settings.umask"/>.
         '';
@@ -246,15 +248,17 @@ in
     # when /home/foo is not owned by cfg.user.
     # Note also that using an ExecStartPre= wouldn't work either
     # because BindPaths= needs these directories before.
-    system.activationScripts.transmission-daemon = ''
-      install -d -m 700 '${cfg.home}/${settingsDir}'
-      chown -R '${cfg.user}:${cfg.group}' ${cfg.home}/${settingsDir}
-      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
-      '' + optionalString cfg.settings.incomplete-dir-enabled ''
-      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-      '' + optionalString cfg.settings.watch-dir-enabled ''
-      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
-      '';
+    system.activationScripts = mkIf (cfg.downloadDirPermissions != null)
+      { transmission-daemon = ''
+        install -d -m 700 '${cfg.home}/${settingsDir}'
+        chown -R '${cfg.user}:${cfg.group}' ${cfg.home}/${settingsDir}
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+        '' + optionalString cfg.settings.incomplete-dir-enabled ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+        '' + optionalString cfg.settings.watch-dir-enabled ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+        '';
+      };
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
@@ -313,6 +317,14 @@ in
             cfg.settings.script-torrent-done-filename ++
           optional (cfg.settings.watch-dir-enabled && !cfg.settings.trash-original-torrent-files)
             cfg.settings.watch-dir;
+        StateDirectory = [
+          "transmission"
+          "transmission/.config/transmission-daemon"
+          "transmission/.incomplete"
+          "transmission/Downloads"
+          "transmission/watch-dir"
+        ];
+        StateDirectoryMode = mkDefault 750;
         # The following options are only for optimizing:
         # systemd-analyze security transmission
         AmbientCapabilities = "";
