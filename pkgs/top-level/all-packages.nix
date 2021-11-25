@@ -5954,14 +5954,6 @@ with pkgs;
     libdevil = libdevil-nox;
   };
 
-  /* Readded by Michael Raskin. There are programs in the wild
-   * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
-   * objections before removal. The feature is libgraph.
-   */
-  graphviz_2_32 = (callPackage ../tools/graphics/graphviz/2.32.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  }).overrideAttrs(x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
-
   grin = callPackage ../tools/text/grin { };
 
   ripgrep = callPackage ../tools/text/ripgrep {
