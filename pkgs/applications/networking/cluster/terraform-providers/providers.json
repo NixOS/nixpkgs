@@ -34,11 +34,14 @@
     "version": "1.8.0"
   },
   "alicloud": {
-    "owner": "terraform-providers",
+    "deleteVendor": true,
+    "owner": "aliyun",
+    "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.86.0",
-    "sha256": "1hbv9ah7fd173sapwgsbg7790piwxw9zx90wfj5vz5b96ggbg28d",
-    "version": "1.86.0"
+    "rev": "v1.144.0",
+    "sha256": "14nphpz15p83n6fsvvrnaz96nb87wvb10ri21hlhlsm2579zcbqd",
+    "vendorSha256": "1k28fcfm7437i7gfbcbrigk2i50c1mix7z1rb2g617prih84wa6y",
+    "version": "1.144.0"
   },
   "archive": {
     "owner": "hashicorp",

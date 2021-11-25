@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI";
     maintainers = with maintainers; [ joelburget marsam ];
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
   };
 }
