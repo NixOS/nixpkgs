@@ -9,10 +9,11 @@ die() {
 }
 
 if test -n "${TEST_LIB:-}"; then
-  export NIX_PATH=nixpkgs="$(dirname "$TEST_LIB")"
+  NIX_PATH=nixpkgs="$(dirname "$TEST_LIB")"
 else
-  export NIX_PATH=nixpkgs="$(cd $(dirname ${BASH_SOURCE[0]})/../..; pwd)"
+  NIX_PATH=nixpkgs="$(cd $(dirname ${BASH_SOURCE[0]})/../..; pwd)"
 fi
+export NIX_PATH
 
 work="$(mktemp -d)"
 clean_up() {
