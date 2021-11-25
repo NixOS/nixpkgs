@@ -1,8 +1,22 @@
+commit e6f53948cd203e5f66f660474162ba2f01f1b3dc
+Author: Thomas Lübking <thomas.luebking@gmail.com>
+Date:   Mon Nov 8 15:24:11 2021 +0100
+
+    attempted Qt6 fix
+
 diff --git a/Qarma.cpp b/Qarma.cpp
-index ddf8592..6dc46d0 100644
+index bab600e..63abc32 100644
 --- a/Qarma.cpp
 +++ b/Qarma.cpp
-@@ -156,7 +156,11 @@ private:
+@@ -28,7 +28,6 @@
+ #include <QDBusConnection>
+ #include <QDBusConnectionInterface>
+ #include <QDBusInterface>
+-#include <QDesktopWidget>
+ #include <QDialogButtonBox>
+ #include <QEvent>
+ #include <QFileDialog>
+@@ -156,7 +155,11 @@ private:
  InputGuard *InputGuard::s_instance = NULL;
  
  #ifdef WS_X11
@@ -14,15 +28,7 @@ index ddf8592..6dc46d0 100644
  #include <X11/Xlib.h>
  #endif
  
-@@ -271,6 +275,7 @@ Qarma::Qarma(int &argc, char **argv) : QApplication(argc, argv)
-         QWindow *w = new QWindow;
-         w->setVisible(true);
-         m_caption = w->title();
-+        m_dialog->setWindowTitle(m_caption);
-         delete w;
- #endif
-         // close on ctrl+return in addition to ctrl+enter
-@@ -325,7 +330,13 @@ Qarma::Qarma(int &argc, char **argv) : QApplication(argc, argv)
+@@ -345,7 +348,13 @@ Qarma::Qarma(int &argc, char **argv) : QApplication(argc, argv)
          if (m_parentWindow) {
  #ifdef WS_X11
              m_dialog->setAttribute(Qt::WA_X11BypassTransientForHint);

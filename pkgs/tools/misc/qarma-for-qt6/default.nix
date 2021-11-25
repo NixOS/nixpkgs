@@ -1,6 +1,11 @@
 /*
 qt6 build is failing
 https://github.com/luebking/qarma/issues/41
+
+FIXME broken cmake files in qtbase?
+  #include <QX11Application>
+  QX11Application: No such file or directory
+  should be provided by /nix/store/*-qtbase-6.2.1-dev/include/QtGui/qguiapplication_platform.h
 */
 
 { mkDerivation
@@ -36,10 +41,16 @@ mkDerivation rec {
     ./qarma-qt6.patch
   ];
 
-  patchPhase = ''
-    sed -i.bak -E -e "s,(target\.path \+=) /usr/bin,\1 $out/bin," -e 's/x11extras/core-private/g' qarma.pro
+  postPatch = ''
+    # TODO fix upstream?
+    sed -i -E -e "s,(target\.path \+=) /usr/bin,\1 $out/bin," qarma.pro
+
     qmake2cmake qarma.pro
   '';
+
+  cmakeFlags = [
+    #"-DCMAKE_FIND_DEBUG_MODE=TRUE" "--trace-expand" # debug
+  ];
 
   buildInputs = [
     qtbase qtbase.dev qt5compat qt5compat.dev
