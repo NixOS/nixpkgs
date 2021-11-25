@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.3.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "PyDMD";
     rev = "v${version}";
-    sha256 = "1516dhmpwi12v9ly9jj18wpz9k696q5k6aamlrbby8wp8smajgrv";
+    sha256 = "1qwa3dyrrm20x0pzr7rklcw7433fd822n4m8bbbdd7z83xh6xm8g";
   };
 
   propagatedBuildInputs = [ future numpy scipy matplotlib ];
