@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "aiocron";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rX07m9iIl5NP/RiTf/I1q5+wE1goD9QOAUYf1fdjSL0=";
+    sha256 = "48546513faf2eb7901e65a64eba7b653c80106ed00ed9ca3419c3d10b6555a01";
   };
 
   propagatedBuildInputs = [
