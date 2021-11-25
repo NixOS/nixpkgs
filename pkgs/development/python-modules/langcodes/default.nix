@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.2.1";
+  version = "3.3.0";
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "779a6da5036f87b6b56c180b2782ab111ddd6aa9157670a9b918402b0e07cd93";
+    sha256 = "794d07d5a28781231ac335a1561b8442f8648ca07cd518310aeb45d6f0807ef6";
   };
 
   propagatedBuildInputs = [ marisa-trie ];
