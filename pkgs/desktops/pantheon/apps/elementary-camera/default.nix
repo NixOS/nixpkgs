@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "6.0.1";
+  version = "6.0.2";
 
   repoName = "camera";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-OdBinryF6XTcvtY4A1wdDVazjf/VritEGF97ts6d4RY=";
+    sha256 = "sha256-uVeV+LKA/W7WVUAvVWaSNRzeh1MUrhRjvS0HuhZZJ04=";
   };
 
   nativeBuildInputs = [
