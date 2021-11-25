@@ -9421,6 +9421,8 @@ in {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+  tololib = callPackage ../development/python-modules/tololib { };
+
   toml = callPackage ../development/python-modules/toml { };
 
   tomli = callPackage ../development/python-modules/tomli { };
