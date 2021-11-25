@@ -337,6 +337,8 @@ with pkgs;
 
   protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
 
+  protoc-gen-go-vtproto = callPackage ../development/tools/protoc-gen-go-vtproto { };
+
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
@@ -12353,6 +12355,7 @@ with pkgs;
     });
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
+  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
