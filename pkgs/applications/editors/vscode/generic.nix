@@ -71,7 +71,8 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ gtk2 at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = [ stdenv.cc.libc ]
+     ++ lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
     nativeBuildInputs = [unzip] ++ lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook wrapGAppsHook ];
 
