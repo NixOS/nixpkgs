@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.1.0";
+  version = "5.1.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd382d7ea181fbbcce157c133db9a829ce06edffe097bcf3ab945b435452b46d";
+    sha256 = "059f456c5a7c1c82b98c2e8c799f39c9b8128f6d0d46941ee118daace9eb70c7";
   };
 
   checkInputs = [ glibcLocales pytest mock ];
