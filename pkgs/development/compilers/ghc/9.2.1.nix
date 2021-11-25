@@ -12,7 +12,8 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, useLLVM ? !stdenv.targetPlatform.isx86
+, useLLVM ? !(stdenv.targetPlatform.isx86
+              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -126,9 +127,15 @@ let
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" || (targetPlatform.linker == "bfd" && !targetPlatform.isMusl);
 
+  # Tools GHC will need to call at runtime. Some of these were handled using
+  # propagatedBuildInputs before, however this allowed for GHC environment and
+  # a derivations build environment to interfere, especially when GHC is built.
   runtimeDeps = [
+    targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
-    coreutils
+    coreutils # for cat
+  ] ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -258,9 +265,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
-    ++ lib.optional useLLVM llvmPackages.llvm;
-
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
@@ -289,11 +293,11 @@ stdenv.mkDerivation (rec {
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
+    # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
   '';
 

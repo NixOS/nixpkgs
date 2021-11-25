@@ -140,9 +140,15 @@ let
   useLdGold = targetPlatform.linker == "gold" ||
     (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
+  # Tools GHC will need to call at runtime. Some of these were handled using
+  # propagatedBuildInputs before, however this allowed for GHC environment and
+  # a derivations build environment to interfere, especially when GHC is built.
   runtimeDeps = [
+    targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
-    coreutils
+    coreutils # for cat
+  ] ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
   ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
@@ -293,9 +299,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
-    ++ lib.optional useLLVM llvmPackages.llvm;
-
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
@@ -320,11 +323,11 @@ stdenv.mkDerivation (rec {
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
+    # Patch scripts to include runtime dependencies in $PATH.
     for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
   '';
 
