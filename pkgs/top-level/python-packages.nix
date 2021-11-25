@@ -659,6 +659,8 @@ in {
 
   asyncio-nats-client = callPackage ../development/python-modules/asyncio-nats-client { };
 
+  asyncmy = callPackage ../development/python-modules/asyncmy { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };

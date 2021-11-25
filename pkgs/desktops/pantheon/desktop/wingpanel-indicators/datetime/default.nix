@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , substituteAll
 , pantheon
@@ -40,7 +41,10 @@ stdenv.mkDerivation rec {
     })
     # Fix incorrect month shown on re-opening indicator if previously changed month
     # https://github.com/elementary/wingpanel-indicator-datetime/pull/284
-    ./fix-incorrect-month.patch
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/9b0bed98e09dfdad62f43a95d956d2f53d824e65.patch";
+      sha256 = "sha256-MQfz4Uzo59SmmfQNi58OA7CIHHkm2TODQz2fmmIall4=";
+    })
   ];
 
   nativeBuildInputs = [
