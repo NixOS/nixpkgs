@@ -14,6 +14,7 @@
 , systemd
 , util-linux
 , which
+, debug ? false
 }:
 stdenv.mkDerivation rec {
   inherit (sgx-sdk) version versionTag src;
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+  hardeningDisable = lib.optionals debug [
+    "fortify"
+  ];
+
   postPatch = ''
     # https://github.com/intel/linux-sgx/pull/730
     substituteInPlace buildenv.mk --replace '/bin/cp' 'cp'
@@ -84,6 +89,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "psw_install_pkg"
+  ] ++ lib.optionals debug [
+    "DEBUG=1"
   ];
 
   installFlags = [
