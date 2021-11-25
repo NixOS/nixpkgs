@@ -1,0 +1,54 @@
+diff --git a/Qarma.cpp b/Qarma.cpp
+index ddf8592..6dc46d0 100644
+--- a/Qarma.cpp
++++ b/Qarma.cpp
+@@ -156,7 +156,11 @@ private:
+ InputGuard *InputGuard::s_instance = NULL;
+ 
+ #ifdef WS_X11
++#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
++#include <QX11Application>
++#else
+ #include <QX11Info>
++#endif
+ #include <X11/Xlib.h>
+ #endif
+ 
+@@ -271,6 +275,7 @@ Qarma::Qarma(int &argc, char **argv) : QApplication(argc, argv)
+         QWindow *w = new QWindow;
+         w->setVisible(true);
+         m_caption = w->title();
++        m_dialog->setWindowTitle(m_caption);
+         delete w;
+ #endif
+         // close on ctrl+return in addition to ctrl+enter
+@@ -325,7 +330,13 @@ Qarma::Qarma(int &argc, char **argv) : QApplication(argc, argv)
+         if (m_parentWindow) {
+ #ifdef WS_X11
+             m_dialog->setAttribute(Qt::WA_X11BypassTransientForHint);
+-            XSetTransientForHint(QX11Info::display(), m_dialog->winId(), m_parentWindow);
++            Display *dpy;
++#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
++            dpy = QGuiApplication::nativeInterface<QX11Application*>()->display();
++#else
++            dpy = QX11Info::display();
++#endif
++            XSetTransientForHint(dpy, m_dialog->winId(), m_parentWindow);
+ #endif
+         }
+     }
+diff --git a/qarma.pro b/qarma.pro
+index 33da748..56a7bc2 100644
+--- a/qarma.pro
++++ b/qarma.pro
+@@ -1,7 +1,9 @@
+ HEADERS = Qarma.h
+ SOURCES = Qarma.cpp
+ QT      += dbus gui widgets
+-unix:!macx:QT += x11extras
++lessThan(QT_MAJOR_VERSION, 6){
++  unix:!macx:QT += x11extras
++}
+ TARGET  = qarma
+ 
+ unix:!macx:LIBS    += -lX11
