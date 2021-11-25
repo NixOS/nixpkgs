@@ -3,7 +3,8 @@ sample use
 nixpkgs/pkgs/tools/misc/qarma-for-qt6/default.nix
 */
 
-{ python3
+{ lib
+, python3
 , python3Packages
 , git
 , srcs
@@ -15,8 +16,10 @@ python3Packages.buildPythonPackage rec {
   sourceRoot = "qtbase-everywhere-src-${version}/util/cmake";
 
   propagatedBuildInputs =
-    (with python3Packages; [ pyparsing portalocker sympy pytest ])
+    (with python3Packages; [ pyparsing portalocker sympy ])
     ++ [ git ];
+
+  checkInputs = with python3Packages; [ pytest ];
 
   patchPhase = ''
     mv pro2cmake.py ${pname}
