@@ -32,7 +32,7 @@ function checkCommits {
              checkCommits "$user"
              ret=$?
              ;;
-        *)   printf "BAD STATUS: $(tail -n1 $tmp) for %s\n" "$user"; ret=1
+        *)   printf "BAD STATUS: $(tail -n1 "$tmp") for %s\n" "$user"; ret=1
              ret=1
              ;;
     esac
