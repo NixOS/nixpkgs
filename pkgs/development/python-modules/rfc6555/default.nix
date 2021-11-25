@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rfc6555";
-  version = "0.0.0";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05sjrd6jc0sdvx0z7d3llk82rx366jlmc7ijam0nalsv66hbn70r";
+    sha256 = "123905b8f68e2bec0c15f321998a262b27e2eaadea29a28bd270021ada411b67";
   };
 
   propagatedBuildInputs = with pythonPackages; [ selectors2 ];
