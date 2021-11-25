@@ -5,6 +5,7 @@
 , numpy
 , pandas
 , requests
+, lxml
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     numpy
     pandas
     requests
+    lxml
   ];
 
   doCheck = false;  # Tests require internet access

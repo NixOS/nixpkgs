@@ -5,7 +5,7 @@ let
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
-  version = builtins.replaceStrings [ "\n" ] [ "" ] (builtins.readFile ./REVISION);
+  version = (lib.importJSON ./package.json).version;
 in
 ourNodePackages.package.override {
   pname = "matrix-appservice-irc";
@@ -30,7 +30,7 @@ ourNodePackages.package.override {
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ piegames ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
   };
