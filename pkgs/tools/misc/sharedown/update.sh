@@ -3,11 +3,11 @@
 
 set -euo pipefail
 
+nix-update sharedown
+
 dirname="$(realpath "$(dirname "$0")")"
 sourceDir="$(nix-build -A sharedown.src --no-out-link)"
 tempDir="$(mktemp -d)"
-
-nix-update sharedown
 
 cp -r "$sourceDir"/* "$tempDir"
 cd "$tempDir"
