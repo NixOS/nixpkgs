@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "spacy-alignments";
-  version = "0.8.3";
+  version = "0.8.4";
 
   disabled = !isPy3k;
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     # https://github.com/explosion/spacy-alignments/pull/3
     (fetchpatch {
       url = "https://github.com/explosion/spacy-alignments/commit/7b0ba13ff0d245bfbbe344a36fb7bbd311dd4906.diff";
-      sha256 = "sha256-jx97SSC+3z+ByInNs8Uq58H50eCo4fDCwEi6VKxRs2k=";
+      sha256 = "d4702997f459d30e537f638fbb540151adfab88aa2969f9d0db3e3ba39f47bdb";
       excludes = [ ".gitignore" ];
     })
   ];
