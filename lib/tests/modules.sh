@@ -14,14 +14,14 @@ fail=0
 evalConfig() {
     local attr=$1
     shift
-    local script="import ./default.nix { modules = [ $@ ];}"
+    local script="import ./default.nix { modules = [ $* ];}"
     nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
 }
 
 reportFailure() {
     local attr=$1
     shift
-    local script="import ./default.nix { modules = [ $@ ];}"
+    local script="import ./default.nix { modules = [ $* ];}"
     echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only"
     evalConfig "$attr" "$@"
     fail=$((fail + 1))
