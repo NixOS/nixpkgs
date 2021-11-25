@@ -20,11 +20,12 @@ buildPythonApplication rec {
     sha256 = "sha256-uKoMMSp5AIvB1qTRYAh7n1+2dDLneFbssfkfTTshfcs=";
   };
 
-  patches = [
-    # Relax python-hglib requirement
-    # https://phabricator.services.mozilla.com/D131618
-    ./relax-hglib-version.diff
-  ];
+  # Relax python-hglib requirement
+  # https://phabricator.services.mozilla.com/D131618
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+  '';
 
   propagatedBuildInputs = [
     distro
