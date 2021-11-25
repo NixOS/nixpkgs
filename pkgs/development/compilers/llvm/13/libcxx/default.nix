@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optional (!isCxxHeaders) [ libcxxabi ];
+  buildInputs = lib.optionals (!isCxxHeaders) [ libcxxabi ];
 
   cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
