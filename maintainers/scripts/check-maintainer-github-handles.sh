@@ -4,7 +4,8 @@
 # Example how to work with the `lib.maintainers` attrset.
 # Can be used to check whether all user handles are still valid.
 
-set -e
+set -o errexit -o noclobber -o nounset -o pipefail
+shopt -s failglob inherit_errexit
 
 # nixpkgs='<nixpkgs>'
 # if [ -n "$1" ]; then
