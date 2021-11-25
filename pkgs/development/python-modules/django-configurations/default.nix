@@ -13,12 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.2";
+  version = "2.3.1";
   pname = "django-configurations";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915";
+    sha256 = "e2ca25530e184f0ee3b7f5ae69563461a93a8914493306ee0bf6d71e7d8ad1d0";
   };
 
   buildInputs = [ setuptools-scm ];
