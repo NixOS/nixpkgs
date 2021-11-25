@@ -20,6 +20,7 @@
 , "alex"
 , "alloy"
 , "asar"
+, "audiosprite"
 , "autoprefixer"
 , "aws-azure-login"
 , "awesome-lint"
@@ -209,6 +210,7 @@
 , "npm-check-updates"
 , "npm-merge-driver"
 , {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
+, "nrm"
 , "ocaml-language-server"
 , "parcel-bundler"
 , "parsoid"

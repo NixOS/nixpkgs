@@ -1087,6 +1087,8 @@ with pkgs;
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
 
+  notion-app-enhanced = callPackage ../applications/office/notion-app-enhanced { };
+
   pikchr = callPackage ../tools/graphics/pikchr { };
 
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
@@ -2428,6 +2430,8 @@ with pkgs;
                           };
 
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
+
+  cfm = callPackage ../applications/misc/cfm { };
 
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
@@ -19206,6 +19210,8 @@ with pkgs;
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
 
+  plasma-hud = callPackage ../misc/plasma-hud { };
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
@@ -24878,13 +24884,19 @@ with pkgs;
 
   keepass = callPackage ../applications/misc/keepass { };
 
+  keepass-charactercopy = callPackage ../applications/misc/keepass-plugins/charactercopy { };
+
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
 
   keepass-keepassrpc = callPackage ../applications/misc/keepass-plugins/keepassrpc { };
 
+  keepass-keetraytotp = callPackage ../applications/misc/keepass-plugins/keetraytotp { };
+
   keepass-otpkeyprov = callPackage ../applications/misc/keepass-plugins/otpkeyprov { };
+
+  keepass-qrcodeview = callPackage ../applications/misc/keepass-plugins/qrcodeview { };
 
   kerbrute = callPackage ../tools/security/kerbrute { };
 
@@ -26959,6 +26971,7 @@ with pkgs;
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
+    cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
