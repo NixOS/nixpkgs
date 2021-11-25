@@ -3,6 +3,7 @@
 , cmake
 , cups
 , fetchurl
+, fetchpatch
 , fontconfig
 , freetype
 , harfbuzzFull
@@ -41,6 +42,19 @@ mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
     sha256 = "sha256-MYMWss/Hp2GR0+DT+MImUUfa6gVwFiAo4kPCktgm+M4=";
   };
+
+  patches = [
+    # For harfbuzz >= 2.9.0
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/1b546978bc4ea0b2a73fbe4d7cf947887e865162.patch";
+      sha256 = "sha256-noRCaN63ZYFfXmAluEYXdFPNOk3s5W3KBAsLU1Syxv4=";
+    })
+    # For harfbuzz >= 3.0
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/68ec41169eaceea4a6e1d6f359762a191c7e61d5.patch";
+      sha256 = "sha256-xhp65qVvaof0md1jb3XHZw7uFX1RtNxPfUOaVnvZV1Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
