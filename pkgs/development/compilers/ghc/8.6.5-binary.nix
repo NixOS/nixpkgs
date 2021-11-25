@@ -30,6 +30,10 @@ let
 
   downloadsUrl = "https://downloads.haskell.org/ghc";
 
+  runtimeDeps = lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ];
+
 in
 
 stdenv.mkDerivation rec {
@@ -62,7 +66,6 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -129,6 +132,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.

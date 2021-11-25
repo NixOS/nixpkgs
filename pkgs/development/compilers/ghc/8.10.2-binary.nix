@@ -140,6 +140,10 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
+  runtimeDeps = lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ];
+
 in
 
 stdenv.mkDerivation rec {
@@ -156,7 +160,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
   propagatedBuildInputs =
-    lib.optionals useLLVM [ llvmPackages.llvm ]
     # Because musl bindists currently provide no way to tell where
     # libgmp is (see not [musl bindists have no .buildinfo]), we need
     # to propagate `gmp`, otherwise programs built by this ghc will
@@ -177,7 +180,7 @@ stdenv.mkDerivation rec {
     # fixing the above-mentioned release issue,
     # and for GHC >= 9.* it is not clear as of writing whether that switch
     # will be made there too.
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
+    lib.optionals stdenv.hostPlatform.isMusl [ gmp ]; # musl bindist needs this
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -277,6 +280,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the

@@ -155,6 +155,10 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
+  runtimeDeps = lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ];
+
 in
 
 stdenv.mkDerivation rec {
@@ -175,9 +179,6 @@ stdenv.mkDerivation rec {
   #       and update this comment accordingly.
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs =
-    lib.optionals useLLVM [ llvmPackages.llvm ]
-    ;
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -277,6 +278,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
   # When we strip, and then run the
