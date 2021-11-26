@@ -1,20 +1,20 @@
 { lib, stdenv, fetchurl, unzip, setJavaClassPath }:
 let
-  # Details from https://www.azul.com/downloads/?version=java-16-sts&os=macos&package=jdk
+  # Details from https://www.azul.com/downloads/?version=java-17-lts&os=macos&package=jdk
   # Note that the latest build may differ by platform
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "16.30.15";
-      jdkVersion = "16.0.1";
-      sha256 = "1jihn125dmxr9y5h9jq89zywm3z6rbwv5q7msfzsf2wzrr13jh0z";
+      zuluVersion = "17.30.15";
+      jdkVersion = "17.0.1";
+      sha256 = "1sqhmmn8mzzj5cg0waw2fq0p1dzv0a2bq49888a46frpfvjlzmh9";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "16.30.19";
-      jdkVersion = "16.0.1";
-      sha256 = "1i0bcjx3acb5dhslf6cabdcnd6mrz9728vxw9hb4al5y3f5fll4w";
+      zuluVersion = "17.30.15";
+      jdkVersion = "17.0.1";
+      sha256 = "04wrz9fcq69wkvc5nbaa24qibd6g8h4vrgpaxcizpzffx5f4446f";
     };
   }."${stdenv.hostPlatform.system}";
 
