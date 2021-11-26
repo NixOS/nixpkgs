@@ -27729,6 +27729,8 @@ with pkgs;
 
   protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
 
+  protonvpn-gui-legacy = python3Packages.callPackage ../applications/networking/protonvpn-gui-legacy { };
+
   ps2client = callPackage ../applications/networking/ps2client { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
