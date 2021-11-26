@@ -214,6 +214,12 @@ in
           };
       };
 
+    users.users._dhcpcd = {
+      isSystemUser = true;
+      group = "_dhcpcd";
+    };
+    users.groups._dhcpcd = {};
+
     environment.systemPackages = [ dhcpcd ];
 
     environment.etc."dhcpcd.exit-hook".source = exitHook;

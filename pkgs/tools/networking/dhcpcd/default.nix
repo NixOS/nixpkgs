@@ -6,6 +6,7 @@
 , runtimeShellPackage
 , runtimeShell
 , nixosTests
+, enablePrivSep ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+  ]
+  ++ lib.optionals enablePrivSep [
+    "--enable-privsep"
+    # dhcpcd disables privsep if it can't find the default user,
+    # so we explicitly specify the default.
+    "--privsepuser=_dhcpcd"
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
