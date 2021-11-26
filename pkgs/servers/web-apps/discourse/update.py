@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class DiscourseRepo:
-    version_regex = re.compile(r'^v\d+\.\d+\.\d+$')
+    version_regex = re.compile(r'^v\d+\.\d+\.\d+.beta\d+$')
     _latest_commit_sha = None
 
     def __init__(self, owner: str = 'discourse', repo: str = 'discourse'):
