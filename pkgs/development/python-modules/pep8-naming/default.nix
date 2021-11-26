@@ -30,7 +30,6 @@ buildPythonPackage rec {
     })
   ];
 
-
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} run_tests.py
