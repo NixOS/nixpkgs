@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    hashie (4.1.0)
+    hashie (5.0.0)
     net-ldap (0.14.0)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
@@ -16,7 +16,7 @@ GEM
     rubyntlm (0.3.4)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   net-ldap (= 0.14.0)
@@ -25,4 +25,4 @@ DEPENDENCIES
   rubyntlm (= 0.3.4)
 
 BUNDLED WITH
-   2.2.20
+   2.2.24

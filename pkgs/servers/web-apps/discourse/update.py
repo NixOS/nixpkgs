@@ -212,9 +212,8 @@ def update_plugins():
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
         {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
-        # We can't update this automatically at the moment because the plugin.rb
-        # tries to load a version number which breaks bundler called by this script.
-        # {'name': 'discourse-prometheus'},
+        {'name': 'discourse-prometheus'},
+        {'name': 'discourse-openid-connect'},
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
@@ -302,10 +301,18 @@ def update_plugins():
 
         rubyenv_dir = Path(filename).parent
         gemfile = rubyenv_dir / "Gemfile"
+        version_file_regex = re.compile(r'.*File\.expand_path\("\.\./(.*)", __FILE__\)')
         gemfile_text = ''
         for line in repo.get_file('plugin.rb', repo.latest_commit_sha).splitlines():
             if 'gem ' in line:
                 gemfile_text = gemfile_text + line + os.linesep
+
+                version_file_match = version_file_regex.match(line)
+                if version_file_match is not None:
+                    filename = version_file_match.groups()[0]
+                    content = repo.get_file(filename, repo.latest_commit_sha)
+                    with open(rubyenv_dir / filename, 'w') as f:
+                        f.write(content)
 
         if len(gemfile_text) > 0:
             if os.path.isfile(gemfile):
