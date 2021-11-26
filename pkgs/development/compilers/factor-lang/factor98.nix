@@ -196,7 +196,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = http://factorcode.org;
+    homepage = "https://factorcode.org/";
     license = licenses.bsd2;
     description = "A concatenative, stack-based programming language";
     maintainers = with maintainers; [ vrthra spacefrogg ];
