@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   passthru = { inherit bootForth; };
 
-  configureFlags = # [ "--enable-lib" ] ++
+  configureFlags =
     lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
 
   postInstall = ''
