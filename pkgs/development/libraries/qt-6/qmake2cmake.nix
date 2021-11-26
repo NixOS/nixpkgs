@@ -22,8 +22,8 @@ python3Packages.buildPythonPackage rec {
   checkInputs = with python3Packages; [ pytest ];
 
   patchPhase = ''
-    mv pro2cmake.py ${pname}
-    ln -s ${pname} pro2cmake.py # for tests
+    mv pro2cmake.py ${pname} # rename
+    ln -s ${pname} pro2cmake.py # alias
 
     cat >setup.py <<'EOF'
     #! ${python3.interpreter}
@@ -31,30 +31,19 @@ python3Packages.buildPythonPackage rec {
     setup(
       name='${pname}',
       version='${version}',
-      #packages=['distutils', 'distutils.command'],
       scripts=['${pname}'],
     )
     EOF
 
     # fix: read-only filesystem
     sed -i 's|cache_path = get_cache_location()|cache_path = "/tmp/${pname}-cache.json"|' condition_simplifier_cache.py
-
-    # copy dependencies
-    mkdir -p $out/bin
-    for f in *.py
-    do
-      cp $f $out/bin/
-    done
-    chmod -x $out/bin/*.py
-
-    # fix tests
-    export HOME=/tmp
   '';
 
-  # use original name as alias
+  # copy dependencies
   postInstall = ''
-    rm $out/bin/pro2cmake.py
-    ln -s ${pname} $out/bin/pro2cmake.py
+    chmod -x *.py
+    cp -a *.py $out/bin/
+    rm $out/bin/setup.py
   '';
 
   meta = with lib; {
