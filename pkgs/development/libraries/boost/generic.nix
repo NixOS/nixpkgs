@@ -21,6 +21,7 @@
 
 # Attributes inherit from specific versions
 , version, src
+, python3
 , ...
 }:
 
@@ -30,6 +31,9 @@ assert enableShared || enableStatic;
 # Python isn't supported when cross-compiling
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
+# Boost < 1.67 cannot be built with python3
+# https://github.com/boostorg/python/commit/660487c43fde76f3e64f1cb2e644500da92fe582
+assert enablePython && (python == python3) -> (lib.versionAtLeast version "1.68.0");
 
 # Boost <1.69 can't be build with clang >8, because pth was removed
 assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
