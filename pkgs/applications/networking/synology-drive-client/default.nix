@@ -13,7 +13,7 @@ let
   };
 
   linux = qt5.mkDerivation {
-    inherit pname version;
+    inherit pname version meta;
 
     src = fetchurl {
       url = "${baseUrl}/${version}-${buildNumber}/Ubuntu/Installer/x86_64/synology-drive-client-${buildNumber}.x86_64.deb";
@@ -43,7 +43,7 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version;
+    inherit pname version meta;
 
     src = fetchurl {
       url = "${baseUrl}/${version}-${buildNumber}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
