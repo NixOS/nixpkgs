@@ -1,0 +1,30 @@
+diff --git a/ccp4/csymlib.c b/ccp4/csymlib.c
+index 76bc70b..7a0c5dc 100644
+--- a/ccp4/csymlib.c
++++ b/ccp4/csymlib.c
+@@ -137,24 +137,7 @@ CCP4SPG *ccp4spg_load_spacegroup(const int numspg, const int ccp4numspg,
+   }
+ 
+   /* Open the symop file: */
+-  if (!(symopfile = getenv("SYMINFO"))) {
+-    if (debug)
+-      printf("Environment variable SYMINFO not set ... guessing location of symmetry file. \n");
+-    if (!(ccp4dir = getenv("CLIBD"))) {
+-      printf("Environment variable CLIBD not set ... big trouble! \n");
+-      return NULL;
+-    }
+-
+-    symopfile = ccp4_utils_malloc((strlen(ccp4dir)+22)*sizeof(char));
+-    strcpy(symopfile,ccp4_utils_joinfilenames(ccp4dir,"syminfo.lib"));
+-    symopfile[strlen(ccp4dir)+21] = '\0';
+-    ccp4printf(1," SYMINFO file set to %s \n",symopfile);
+-  } else {
+-    if (debug) {
+-      ccp4printf(1,"\n Spacegroup information obtained from library file: \n");
+-      ccp4printf(1," Logical Name: SYMINFO   Filename: %s\n\n",symopfile);
+-    }
+-  }
++  symopfile = NIX_PROVIDED_SYMOP_FILE;
+ 
+   filein = fopen(symopfile,"r");
+   if (!filein) {
