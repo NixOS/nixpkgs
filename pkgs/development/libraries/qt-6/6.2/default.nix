@@ -113,6 +113,7 @@ let
         inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
+        patches = [ ./qtbase-qmake-use-env-vars.patch ];
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};

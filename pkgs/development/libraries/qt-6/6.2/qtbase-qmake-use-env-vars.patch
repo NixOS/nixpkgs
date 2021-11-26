@@ -1,0 +1,27 @@
+# allow to set qmake variables via environment variables
+# for example QT_INSTALL_HEADERS
+#
+diff --git a/qmake/property.cpp b/qmake/property.cpp
+index 2a1c4170..9f88aeae 100644
+--- a/qmake/property.cpp
++++ b/qmake/property.cpp
+@@ -82,6 +82,19 @@ void QMakeProperty::reload()
+     QMakeLibraryInfo::reload();
+     for (unsigned i = 0; i < sizeof(propList)/sizeof(propList[0]); i++) {
+         QString name = QString::fromLatin1(propList[i].name);
++
++        QString env_val = qgetenv(propList[i].name);
++        if (env_val.length() > 0) {
++            // use value from environment variable
++            //std::cout << "qmake/property.cpp env_val[" << qPrintable(name) << "] = " << qPrintable(env_val) << "\n";
++            m_values[ProKey(name)] = env_val;
++            m_values[ProKey(name + "/src")] = env_val;
++            m_values[ProKey(name + "/get")] = env_val;
++            m_values[ProKey(name + "/dev")] = env_val;
++            m_values[ProKey(name + "/raw")] = env_val;
++            continue;
++        }
++
+         if (!propList[i].singular) {
+             m_values[ProKey(name + "/src")] = QMakeLibraryInfo::rawLocation(
+                     propList[i].loc, QMakeLibraryInfo::EffectiveSourcePaths);

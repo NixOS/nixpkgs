@@ -9,6 +9,7 @@ nix-shell -p cmake pkg-config dbus glib udev fontconfig freetype    libxkbcommon
 
 { stdenv, lib
 , src, patches ? [], version, qtCompatVersion
+, makeWrapper
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , python3Packages # debug: split ninja build
@@ -149,7 +150,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
     ] ++ lib.optional libGLSupported libGL
   );
 
-  buildInputs = [ python3 at-spi2-core ]
+  buildInputs = [ python3 at-spi2-core makeWrapper ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
@@ -614,6 +615,9 @@ qtbaseDrv = stdenv.mkDerivation rec {
     rm -rf $out/mkspecs || {
       echo FIXME preInstall remove failed
     }
+
+    wrapProgram $dev/bin/qmake \
+      --set QT_INSTALL_HEADERS $dev/include
 
     echo postInstall done
   '';
