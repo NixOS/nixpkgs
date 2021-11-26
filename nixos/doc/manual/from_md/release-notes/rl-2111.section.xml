@@ -17,11 +17,19 @@
     <itemizedlist>
       <listitem>
         <para>
-          Nix has been updated to version 2.4, reference its
+          The default Nix version remains at 2.3.16. Nix has not been
+          updated to version 2.4 due to regressions in non-experimental
+          behavior. To upgrade to 2.4, use the
+          <literal>nixos-unstable</literal> branch or set the
+          <literal>nix.package</literal> option to either of
+          <literal>nixFlakes</literal> or <literal>nix_2_4</literal>
+          packages. The <literal>nixUnstable</literal> attribute is a
+          pre-release of Nix 2.5. Read the
           <link xlink:href="https://discourse.nixos.org/t/nix-2-4-released/15822">release
-          notes</link> for more information on what has changed. The
-          previous version of Nix, 2.3.16, remains available for the
-          time being in the <literal>nix_2_3</literal> package.
+          notes</link> for more information on upcoming changes. Please
+          help us improve Nix by providing any
+          <link xlink:href="https://github.com/NixOS/nix/issues">breakage
+          reports</link>.
         </para>
       </listitem>
       <listitem>
