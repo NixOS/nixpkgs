@@ -35,7 +35,7 @@ while [ $# -gt 0 ]; do
           showUsage
           exit 1
         fi
-        networkExpr="$(readlink -f $1)"
+        networkExpr="$(readlink -f "$1")"
         ;;
     esac
 
@@ -50,4 +50,4 @@ fi
 
 # Build a network of VMs
 nix-build '<nixpkgs/nixos/modules/installer/tools/nixos-build-vms/build-vms.nix>' \
-    --argstr networkExpr $networkExpr "${nixBuildArgs[@]}"
+    --argstr networkExpr "$networkExpr" "${nixBuildArgs[@]}"
