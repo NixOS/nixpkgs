@@ -2573,6 +2573,10 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
+  clockify = callPackage ../applications/office/clockify {
+    electron = electron_11;
+  };
+
   contrast = callPackage ../applications/accessibility/contrast { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
@@ -16193,6 +16197,7 @@ with pkgs;
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     svt-av1 = if stdenv.isAarch64 then null else svt-av1;
     rav1e = null; # We already have SVT-AV1 for faster encoding
+    rtmpdump = null; # Prefer the built-in RTMP implementation
     # The following need to be fixed on Darwin
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
@@ -20122,6 +20127,8 @@ with pkgs;
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
+
+  wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
   inherit (callPackages ../development/libraries/wt {})
