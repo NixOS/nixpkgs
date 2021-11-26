@@ -27,6 +27,11 @@ buildPythonPackage rec {
     certifi
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "aiohttp~=3.7.4" "aiohttp>=3.7.4"
+  '';
+
   # Tests are only providing coverage
   doCheck = false;
 
