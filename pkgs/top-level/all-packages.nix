@@ -13008,6 +13008,8 @@ with pkgs;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    inherit (llvmPackages_11) stdenv;
   }));
 
   llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
