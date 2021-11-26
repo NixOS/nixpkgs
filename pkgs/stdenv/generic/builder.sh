@@ -21,6 +21,6 @@ mkdir "$out"
 # in stdenv.
 mkdir "${out}/nix-support"
 
-if [ "${propagatedUserEnvPkgs[*]}" ]; then
+if [ -n "${propagatedUserEnvPkgs[*]}" ]; then
     printf '%s ' "${propagatedUserEnvPkgs[@]}" > "$out/nix-support/propagated-user-env-packages"
 fi
