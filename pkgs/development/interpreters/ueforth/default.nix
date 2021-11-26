@@ -1,15 +1,14 @@
 { lib, stdenv, fetchFromGitHub
 , nodejs, python
 }:
-let
-  REVISION = "830e6b40d7d3a4c67302c65359c4989e2ff5a5de";
-in stdenv.mkDerivation {
-  name = "ueforth";
-  inherit REVISION;
+
+stdenv.mkDerivation rec {
+  pname = "ueforth";
+  version = "unstable-2021-09-20";
   src = fetchFromGitHub {
     owner = "flagxor";
     repo = "eforth";
-    rev = REVISION;
+    rev = "830e6b40d7d3a4c67302c65359c4989e2ff5a5de";
     sha256 = "0xc5s3vyq3h5xjkvdxrq3fklg6pq1xsq7gy1p7aih937x4vcrlgh";
   };
 
@@ -17,13 +16,13 @@ in stdenv.mkDerivation {
     sourceRoot=$sourceRoot/ueforth
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's_/usr/bin/env nodejs_${nodejs}/bin/node_' **/*.js
     sed -i 's_/usr/bin/env python_${python}/bin/python_' **/*.py
   '';
 
   buildPhase = ''
-    make "REVISION=$REVISION" out/posix/ueforth
+    make "REVISION=${src.rev}" out/posix/ueforth
   '';
 
   installPhase = ''
