@@ -4,7 +4,6 @@
 , fetchpatch
 , nix-update-script
 , substituteAll
-, pantheon
 , pkg-config
 , meson
 , ninja

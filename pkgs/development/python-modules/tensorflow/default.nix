@@ -3,10 +3,10 @@
 # Python deps
 , buildPythonPackage, pythonOlder, python
 # Python libraries
-, numpy, tensorflow-tensorboard_2, absl-py
+, numpy, tensorflow-tensorboard, absl-py
 , setuptools, wheel, Keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
 , dill, flatbuffers-python, tblib, typing-extensions
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
@@ -94,8 +94,8 @@ let
       setuptools
       six
       tblib
-      tensorflow-estimator_2
-      tensorflow-tensorboard_2
+      tensorflow-estimator
+      tensorflow-tensorboard
       termcolor
       typing-extensions
       wheel
@@ -457,12 +457,12 @@ in buildPythonPackage {
     protobuf
     six
     tblib
-    tensorflow-estimator_2
+    tensorflow-estimator
     termcolor
     typing-extensions
     wrapt
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard_2
+    tensorflow-tensorboard
   ];
 
   nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
