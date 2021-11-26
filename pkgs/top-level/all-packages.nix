@@ -20499,13 +20499,6 @@ in
     ];
   };
 
-  linux_5_14 = callPackage ../os-specific/linux/kernel/linux-5.14.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
   linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -20819,7 +20812,6 @@ in
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
-  linuxPackages_5_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_14);
   linuxPackages_5_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_15);
 
   # When adding to the list above:
@@ -20879,7 +20871,7 @@ in
   linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { });
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_14 { });
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_5_15 { });
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
   # Hardkernel (Odroid) kernels.
