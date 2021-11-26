@@ -20127,6 +20127,8 @@ with pkgs;
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
+  wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
+
   wt = wt4;
   inherit (callPackages ../development/libraries/wt {})
     wt3
