@@ -13,6 +13,7 @@
 , sox
 , vorbisSupport ? true
 , vorbis-tools
+, pulseaudio
 }:
 
 python3Packages.buildPythonApplication {
@@ -53,6 +54,11 @@ python3Packages.buildPythonApplication {
   ++ lib.optional flacSupport flac
   ++ lib.optional soxSupport sox
   ++ lib.optional vorbisSupport vorbis-tools;
+
+  # pulseaudio-dlna shells out to pactl to configure sinks and sources.
+  # As pactl might not be in $PATH, add --suffix it (so pactl configured by the
+  # user get priority)
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ pulseaudio ]}" ];
 
   # upstream has no tests
   checkPhase = ''
