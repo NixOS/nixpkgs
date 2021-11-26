@@ -6317,6 +6317,8 @@ with pkgs;
 
   http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
 
+  httpdirfs = callPackage ../tools/filesystems/httpdirfs { };
+
   httpdump = callPackage ../tools/security/httpdump { };
 
   httpie = callPackage ../tools/networking/httpie { };
