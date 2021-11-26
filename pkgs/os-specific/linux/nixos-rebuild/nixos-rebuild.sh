@@ -411,7 +411,7 @@ if [[ -n $buildNix && -z $flake ]]; then
             if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
                 nixStorePath="$(prebuiltNix "$(uname -m)")"
             fi
-            if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
+            if ! nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
                 echo "warning: don't know how to get latest Nix" >&2
             fi
@@ -529,6 +529,6 @@ fi
 if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
     cat >&2 <<EOF
 
-Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
+Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
 fi
