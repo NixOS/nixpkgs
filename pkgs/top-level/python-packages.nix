@@ -9230,6 +9230,7 @@ in {
   tensorflow-bin = self.tensorflow-bin_2;
 
   tensorflow-build_2 = callPackage ../development/python-modules/tensorflow {
+    inherit (pkgs.darwin) cctools;
     cudaSupport = pkgs.config.cudaSupport or false;
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
