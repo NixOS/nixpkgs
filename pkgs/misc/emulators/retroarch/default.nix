@@ -36,16 +36,18 @@
 with lib;
 
 let
+  mainVersion = "1.9.13";
+  revision = "2";
   libretroSuperSrc = fetchFromGitHub {
     owner = "libretro";
-    repo = "libretro-super";
-    sha256 = "sha256-4WB6/1DDec+smhMJKLCxWb4+LQlZN8v2ik69saKixkE=";
-    rev = "fa70d9843838df719623094965bd447e4db0d1b4";
+    repo = "libretro-core-info";
+    sha256 = "sha256-jM+iXNSCpJy4wOk1S72G1UjNGBzejyhs5LFFWCFjs2c=";
+    rev = "v${mainVersion}";
   };
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.9.13.2";
+  version = "${lib.concatStringsSep "." [ mainVersion revision ]}";
 
   src = fetchFromGitHub {
     owner = "libretro";
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
   postInstall = optionalString withVulkan ''
     mkdir -p $out/share/libretro/info
     # TODO: ideally each core should have its own core information
-    cp -r ${libretroSuperSrc}/dist/info/* $out/share/libretro/info
+    cp -r ${libretroSuperSrc}/* $out/share/libretro/info
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
