@@ -590,6 +590,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          ncurses6
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -748,6 +749,8 @@ rec {
         ncurses.man
         gnused
         bash
+        burning-oil
+        oil
         gawk
         gnugrep
         patch
@@ -763,6 +766,7 @@ rec {
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        ncurses6
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

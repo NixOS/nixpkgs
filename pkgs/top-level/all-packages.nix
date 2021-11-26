@@ -11373,15 +11373,42 @@ with pkgs;
   bash_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
     binutils = stdenv.cc.bintools;
   });
-  bash = lowPrio (callPackage ../shells/bash/5.1.nix {
-    binutils = stdenv.cc.bintools;
-  });
+  # bash = lowPrio (callPackage ../shells/bash/5.1.nix {
+  #   binutils = stdenv.cc.bintools;
+  # });
+  bash = lowPrio (burning-oil);
+  burning-oil = pkgs.runCommand "bash-oil" {
+    passthru.shellPath = "/bin/bash";
+    meta.platforms = lib.platforms.all;
+  } ''
+    mkdir -p $out/bin
+    cat <<PROG > $out/bin/bash
+    #!${oil-uninteractive}/bin/osh
+    exec ${oil-uninteractive}/bin/osh -x "\$@"
+    PROG
+    chmod +x "$out/bin/bash"
+    ln -s ${oil-uninteractive}/bin/osh $out/bin/sh
+  '';
+
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/5.1.nix {
-    binutils = stdenv.cc.bintools;
-    interactive = true;
-    withDocs = true;
-  };
+  # bashInteractive = callPackage ../shells/bash/5.1.nix {
+  #   binutils = stdenv.cc.bintools;
+  #   interactive = true;
+  #   withDocs = true;
+  # };
+  bashInteractive = burning-interactive-oil;
+  
+  burning-interactive-oil = pkgs.runCommand "bash-oil" {
+    passthru.shellPath = "/bin/bash";
+  } ''
+    mkdir -p $out/bin
+    cat <<PROG > $out/bin/bash
+    #!${oil}/bin/osh
+    exec ${oil}/bin/osh -x "\$@"
+    PROG
+    chmod +x "$out/bin/bash"
+    ln -s ${oil}/bin/osh $out/bin/sh
+  '';
 
   bashInteractive_4 = lowPrio (callPackage ../shells/bash/4.4.nix {
     binutils = stdenv.cc.bintools;
@@ -11430,6 +11457,7 @@ with pkgs;
   oh = callPackage ../shells/oh { };
 
   oil = callPackage ../shells/oil { };
+  oil-uninteractive = callPackage ../shells/oil { withReadline=false; };
 
   oksh = callPackage ../shells/oksh { };
 
