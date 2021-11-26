@@ -15172,6 +15172,8 @@ with pkgs;
 
   rnix-lsp = callPackage ../development/tools/rnix-lsp { };
 
+  rnginline = with python3Packages; toPythonApplication rnginline;
+
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr { };

@@ -8278,6 +8278,8 @@ in {
 
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
+  rnginline = callPackage ../development/python-modules/rnginline { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   roboschool = callPackage ../development/python-modules/roboschool {
