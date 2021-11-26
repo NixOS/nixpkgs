@@ -92,6 +92,15 @@
       </listitem>
       <listitem>
         <para>
+          If you declared admin users in
+          <literal>configuration.nix</literal>, the
+          <literal>nixos-install</literal> will now allow you to choose
+          between these users and <literal>root</literal> when setting
+          password.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
