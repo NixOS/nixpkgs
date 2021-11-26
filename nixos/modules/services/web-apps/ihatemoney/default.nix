@@ -79,6 +79,7 @@ in
         email = mkOption {
           type = types.str;
           default = "ihatemoney@${config.networking.hostName}";
+          defaultText = literalExpression ''"ihatemoney@''${config.networking.hostName}"'';
           description = "The email of the sender of ihatemoney emails";
         };
       };

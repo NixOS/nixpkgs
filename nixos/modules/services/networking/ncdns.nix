@@ -76,6 +76,7 @@ in
       identity.hostname = mkOption {
         type = types.str;
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
         description = ''
           The hostname of this ncdns instance, which defaults to the machine

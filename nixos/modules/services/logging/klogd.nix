@@ -10,6 +10,7 @@ with lib;
     services.klogd.enable = mkOption {
       type = types.bool;
       default = versionOlder (getVersion config.boot.kernelPackages.kernel) "3.5";
+      defaultText = literalExpression ''versionOlder (getVersion config.boot.kernelPackages.kernel) "3.5"'';
       description = ''
         Whether to enable klogd, the kernel log message processing
         daemon.  Since systemd handles logging of kernel messages on

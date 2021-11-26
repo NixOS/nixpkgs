@@ -55,6 +55,7 @@ in {
       domains = mkOption {
         type = types.str;
         default = "csl:${config.networking.hostName}";
+        defaultText = literalExpression ''"csl:''${config.networking.hostName}"'';
         example = "csl:example.com,mydomain.net";
         description = ''
           Local domains set (see <literal>opendkim(8)</literal> for more information on datasets).

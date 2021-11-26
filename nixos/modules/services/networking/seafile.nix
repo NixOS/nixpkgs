@@ -124,6 +124,7 @@ in {
       type = types.package;
       description = "Which package to use for the seafile server.";
       default = pkgs.seafile-server;
+      defaultText = literalExpression "pkgs.seafile-server";
     };
 
     seahubExtraConf = mkOption {

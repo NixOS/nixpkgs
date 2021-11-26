@@ -131,6 +131,7 @@ in
       validateConfig = mkOption {
         type = types.bool;
         default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
+        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
         description = "if true, the syntax of the nagios configuration file is checked at build time";
       };
 

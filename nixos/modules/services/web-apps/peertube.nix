@@ -234,6 +234,7 @@ in {
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.peertube;
+      defaultText = lib.literalExpression "pkgs.peertube";
       description = "Peertube package to use.";
     };
   };

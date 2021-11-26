@@ -58,6 +58,7 @@ in
       '';
       example = "nixos";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
     };
 
     runnerGroup = mkOption {

@@ -475,6 +475,7 @@ in {
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         description = "GitLab host name. Used e.g. for copy-paste URLs.";
       };
 
@@ -534,6 +535,7 @@ in {
         host = mkOption {
           type = types.str;
           default = config.services.gitlab.host;
+          defaultText = literalExpression "config.services.gitlab.host";
           description = "GitLab container registry host name.";
         };
         port = mkOption {

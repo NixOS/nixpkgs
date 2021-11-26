@@ -71,6 +71,9 @@ in
     originBase = mkOption {
       type = types.str;
       default = with config.networking; hostName + lib.optionalString (domain != null) ".${domain}";
+      defaultText = literalExpression ''
+        with config.networking; hostName + optionalString (domain != null) ".''${domain}"
+      '';
       description = ''
         Host name used by reverse-proxy and for default settings. Will host services at git."''${originBase}". For example: git.sr.ht
       '';

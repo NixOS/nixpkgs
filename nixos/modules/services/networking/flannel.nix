@@ -93,6 +93,9 @@ in {
       '';
       type = types.nullOr types.str;
       default = with config.networking; (hostName + optionalString (domain != null) ".${domain}");
+      defaultText = literalExpression ''
+        with config.networking; (hostName + optionalString (domain != null) ".''${domain}")
+      '';
       example = "node1.example.com";
     };
 

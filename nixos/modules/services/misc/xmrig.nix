@@ -18,6 +18,7 @@ with lib;
       package = mkOption {
         type = types.package;
         default = pkgs.xmrig;
+        defaultText = literalExpression "pkgs.xmrig";
         example = literalExpression "pkgs.xmrig-mo";
         description = "XMRig package to use.";
       };

@@ -80,6 +80,7 @@ in
         dbdHost = mkOption {
           type = types.str;
           default = config.networking.hostName;
+          defaultText = literalExpression "config.networking.hostName";
           description = ''
             Hostname of the machine where <literal>slurmdbd</literal>
             is running (i.e. name returned by <literal>hostname -s</literal>).

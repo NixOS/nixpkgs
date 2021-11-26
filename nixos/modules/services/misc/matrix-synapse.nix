@@ -227,6 +227,7 @@ in {
         type = types.str;
         example = "example.com";
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         description = ''
           The domain name of the server, with optional explicit port.
           This is used by remote servers to look up the server address.
@@ -379,6 +380,11 @@ in {
         default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "18.03"
+            then "psycopg2"
+            else "sqlite3"
+        '';
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';

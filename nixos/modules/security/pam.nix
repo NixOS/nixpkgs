@@ -38,6 +38,7 @@ let
 
       p11Auth = mkOption {
         default = config.security.pam.p11.enable;
+        defaultText = literalExpression "config.security.pam.p11.enable";
         type = types.bool;
         description = ''
           If set, keys listed in
@@ -49,6 +50,7 @@ let
 
       u2fAuth = mkOption {
         default = config.security.pam.u2f.enable;
+        defaultText = literalExpression "config.security.pam.u2f.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -61,6 +63,7 @@ let
 
       yubicoAuth = mkOption {
         default = config.security.pam.yubico.enable;
+        defaultText = literalExpression "config.security.pam.yubico.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -83,6 +86,7 @@ let
 
       usbAuth = mkOption {
         default = config.security.pam.usb.enable;
+        defaultText = literalExpression "config.security.pam.usb.enable";
         type = types.bool;
         description = ''
           If set, users listed in
@@ -93,6 +97,7 @@ let
 
       otpwAuth = mkOption {
         default = config.security.pam.enableOTPW;
+        defaultText = literalExpression "config.security.pam.enableOTPW";
         type = types.bool;
         description = ''
           If set, the OTPW system will be used (if
@@ -126,6 +131,7 @@ let
 
       fprintAuth = mkOption {
         default = config.services.fprintd.enable;
+        defaultText = literalExpression "config.services.fprintd.enable";
         type = types.bool;
         description = ''
           If set, fingerprint reader will be used (if exists and
@@ -135,6 +141,7 @@ let
 
       oathAuth = mkOption {
         default = config.security.pam.oath.enable;
+        defaultText = literalExpression "config.security.pam.oath.enable";
         type = types.bool;
         description = ''
           If set, the OATH Toolkit will be used.
@@ -249,6 +256,7 @@ let
 
       pamMount = mkOption {
         default = config.security.pam.mount.enable;
+        defaultText = literalExpression "config.security.pam.mount.enable";
         type = types.bool;
         description = ''
           Enable PAM mount (pam_mount) system to mount fileystems on user login.
