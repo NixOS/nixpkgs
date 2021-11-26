@@ -433,18 +433,46 @@ let
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
 
-  spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
-    inherit (cfg) mutableUsers;
-    users = mapAttrsToList (_: u:
-      { inherit (u)
-          name uid group description home homeMode createHome isSystemUser
-          password passwordFile hashedPassword
-          autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword;
-        shell = utils.toShellPath u.shell;
-      }) cfg.users;
-    groups = attrValues cfg.groups;
-  });
+  specPackage = pkgs.stdenv.mkDerivation {
+    name = "users-groups";
+    phases = [ "installPhase" ];
+    installPhase = let
+    admins = filterAttrs
+      (n: u: u.name == "root" || (
+        u.isNormalUser &&
+        config.security.sudo.enable &&
+        (elem u.name cfg.groups.wheel.members)))
+      cfg.users;
+    in ''
+      mkdir -p $out/share/nixos
+      cat <<EOF > $out/share/nixos/users-groups.json
+        ${(builtins.toJSON {
+          inherit (cfg) mutableUsers;
+          admins = mapAttrsToList (_: u: {
+            inherit (u) name;
+            hasPassword = any
+              (p: p != null)
+              (with u; [
+                password
+                passwordFile
+                hashedPassword
+                initialPassword
+                initialHashedPassword
+              ]);
+          }) admins;
+          users = mapAttrsToList (_: u:
+            { inherit (u)
+                name uid group description home homeMode createHome isSystemUser
+                password passwordFile hashedPassword
+                autoSubUidGidRange subUidRanges subGidRanges
+                initialPassword initialHashedPassword;
+              shell = utils.toShellPath u.shell;
+            }) cfg.users;
+          groups = attrValues cfg.groups;
+        })}
+      EOF
+    '';
+  };
 
   systemShells =
     let
@@ -595,7 +623,7 @@ in {
         install -m 0755 -d /home
 
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
-        -w ${./update-users-groups.pl} ${spec}
+        -w ${./update-users-groups.pl} ${specPackage}/share/nixos/users-groups.json
       '';
     };
 
@@ -603,7 +631,12 @@ in {
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
     # Install all the user shells
-    environment.systemPackages = systemShells;
+    environment.systemPackages = systemShells ++ [
+      # Used in nixos-install
+      specPackage
+    ];
+    # Expose users-groups.json to nixos-install
+    environment.pathsToLink = [ "/share/nixos" ];
 
     environment.etc = (mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
