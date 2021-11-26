@@ -30365,6 +30365,8 @@ with pkgs;
 
   nexuiz = callPackage ../games/nexuiz { };
 
+  nux = callPackage ../tools/misc/nux { };
+
   ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
