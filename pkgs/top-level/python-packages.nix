@@ -2503,6 +2503,8 @@ in {
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
 
+  django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
+
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
