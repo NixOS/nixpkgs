@@ -440,8 +440,6 @@ with self; with super; {
 
   pydns = callPackage ../development/python-modules/pydns { };
 
-  pydocstyle = callPackage ../development/python-modules/pydocstyle/2.nix { };
-
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
