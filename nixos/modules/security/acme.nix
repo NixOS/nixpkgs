@@ -391,8 +391,13 @@ let
           fi
 
         # Otherwise do a full run
-        else
-          lego ${runOpts}
+        elif ! lego ${runOpts}; then
+          # Produce a nice error for those doing their first nixos-rebuild with these certs
+          echo Failed to fetch certificates. \
+            This may mean your DNS records are set up incorrectly. \
+            ${optionalString (cfg.preliminarySelfsigned) "Selfsigned certs are in place and dependant services will still start."}
+          # Exit 2 so that users can potentially amend SuccessExitStatus to ignore this error.
+          exit 2
         fi
 
         mv domainhash.txt certificates/
