@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pypoolstation";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyPoolstation";
     inherit version;
-    sha256 = "0qacrjv3qybgx052i8jqs4il3k2g0cdhjcn2lqapv87iqyp287k0";
+    sha256 = "sha256-GsEYlaoitHS2cOBHtgwhlREcps4q2ObnWywvCSak0NY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pypoolstation" ];
+  pythonImportsCheck = [
+    "pypoolstation"
+  ];
 
   meta = with lib; {
     description = "Python library to interact the the Poolstation platform";
