@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
 }:
 
 stdenv.mkDerivation {

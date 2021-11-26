@@ -8283,6 +8283,8 @@ in {
 
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
+  rnginline = callPackage ../development/python-modules/rnginline { };
+
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   roboschool = callPackage ../development/python-modules/roboschool {
@@ -9226,15 +9228,13 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
-  tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
+  tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
   };
 
-  tensorflow-bin = self.tensorflow-bin_2;
-
-  tensorflow-build_2 = callPackage ../development/python-modules/tensorflow {
+  tensorflow-build = callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
     cudaSupport = pkgs.config.cudaSupport or false;
     cudatoolkit = pkgs.cudatoolkit_11_0;
@@ -9246,20 +9246,13 @@ in {
     lmdb-core = pkgs.lmdb;
   };
 
-  tensorflow-build = self.tensorflow-build_2;
-
-  tensorflow-estimator_2 = callPackage ../development/python-modules/tensorflow-estimator { };
-
-  tensorflow-estimator = self.tensorflow-estimator_2;
+  tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
-  tensorflow = self.tensorflow_2;
-  tensorflow_2 = self.tensorflow-build_2;
+  tensorflow = self.tensorflow-build;
 
-  tensorflow-tensorboard_2 = callPackage ../development/python-modules/tensorflow-tensorboard { };
-
-  tensorflow-tensorboard = self.tensorflow-tensorboard_2;
+  tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
   tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;

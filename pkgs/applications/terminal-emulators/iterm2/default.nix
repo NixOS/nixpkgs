@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
  /*
  This derivation is impure: it relies on an Xcode toolchain being installed
@@ -8,15 +8,15 @@
  option set to `relaxed` or `false`.
  */
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.4.0";
+  version = "3.4.13";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "09nhrmi25zxw3vp0wlib9kjr3p1j6am2zpwimdzqn0c80fq1lwvi";
+    sha256 = "sha256-GOUdXBQCvM0oJ2/3zgKqDpfyCkHNwd1Qdopg5Mpyekg=";
   };
 
   patches = [ ./disable_updates.patch ];

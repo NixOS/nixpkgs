@@ -6317,6 +6317,8 @@ with pkgs;
 
   http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
 
+  httpdirfs = callPackage ../tools/filesystems/httpdirfs { };
+
   httpdump = callPackage ../tools/security/httpdump { };
 
   httpie = callPackage ../tools/networking/httpie { };
@@ -15177,6 +15179,8 @@ with pkgs;
 
   rnix-lsp = callPackage ../development/tools/rnix-lsp { };
 
+  rnginline = with python3Packages; toPythonApplication rnginline;
+
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr { };
@@ -18807,7 +18811,7 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins { nix = nix_2_3; };
+  nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
