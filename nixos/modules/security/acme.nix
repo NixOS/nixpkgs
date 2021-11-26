@@ -842,8 +842,8 @@ in {
         # Create some targets which can be depended on to be "active" after cert renewals
         finishedTargets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
           wantedBy = [ "default.target" ];
-          requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
-          after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+          requires = [ "acme-${cert}.service" ];
+          after = [ "acme-${cert}.service" ];
         }) certConfigs;
 
         # Create targets to limit the number of simultaneous account creations
