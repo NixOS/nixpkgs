@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
       inherit networkmanagerapplet;
     })
   ];
-
 
   meta = with lib; {
     description = "Switchboard Networking Plug";
