@@ -19348,6 +19348,10 @@ with pkgs;
 
   libversion = callPackage ../development/libraries/libversion { };
 
+  libvgm = callPackage ../development/libraries/libvgm {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
+  };
+
   libvirt = callPackage ../development/libraries/libvirt {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
