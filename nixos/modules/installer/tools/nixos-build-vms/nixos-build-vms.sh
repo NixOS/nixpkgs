@@ -30,7 +30,7 @@ while [ $# -gt 0 ]; do
         nixBuildArgs+=("--option" "$1" "$2"); shift
         ;;
       *)
-        if [ ! -z "$networkExpr" ]; then
+        if [ -n "$networkExpr" ]; then
           echo "Network expression already set!"
           showUsage
           exit 1
