@@ -1,53 +1,53 @@
-{ stdenv
-, lib
-, git
-, curl
-, makeWrapper
-, runtimeShell
-, fetchurl
-, unzip
-, runCommand
-, writeScriptBin
-, interpreter
-, glib
-, pango
+{ lib
+, stdenv
 , cairo
-, gtk2-x11
+, curl
+, fetchurl
+, freealut
 , gdk-pixbuf
+, git
+, glib
 , gnome2
-, pcre
+, graphviz
+, gtk2-x11
+, interpreter
 , libGL
 , libGLU
-, freealut
-, openssl
-, udis86
-, openal
 , libogg
-, libvorbis
-, graphviz
 , librsvg
-, zlib
-, tzdata
+, libvorbis
+, makeWrapper
 , ncurses
+, openal
+, openssl
+, pango
+, pcre
+, runCommand
+, runtimeShell
+, tzdata
+, udis86
+, unzip
+, writeScriptBin
+, zlib
 }:
 let
   runtimeLibs = [
-    glib
-    pango
     cairo
-    gtk2-x11
+    freealut
     gdk-pixbuf
+    glib
     gnome2.gtkglext
-    pcre
+    graphviz
+    gtk2-x11
     libGL
     libGLU
-    freealut
-    openssl
-    udis86
-    openal
     libogg
     libvorbis
-    graphviz
+    openal
+    openssl
+    pango
+    pcre
+    udis86
     zlib
   ];
 
@@ -154,9 +154,9 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  # For now, the check phase runs, but should always return 0.  This way the
-  # logs contain the test failures until all unit tests are fixed.  Then, it
-  # should return 1 if any test failures have occured.
+  # For now, the check phase runs, but should always return 0. This way the logs
+  # contain the test failures until all unit tests are fixed. Then, it should
+  # return 1 if any test failures have occured.
   doCheck = false;
   checkPhase = ''
     runHook preCheck
@@ -197,8 +197,21 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://factorcode.org/";
-    license = licenses.bsd2;
     description = "A concatenative, stack-based programming language";
+    longDescription = ''
+      The Factor programming language is a concatenative, stack-based
+      programming language with high-level features including dynamic types,
+      extensible syntax, macros, and garbage collection. On a practical side,
+      Factor has a full-featured library, supports many different platforms, and
+      has been extensively documented.
+
+      The implementation is fully compiled for performance, while still
+      supporting interactive development. Factor applications are portable
+      between all common platforms. Factor can deploy stand-alone applications
+      on all platforms. Full source code for the Factor project is available
+      under a BSD license.
+    '';
+    license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
   };
