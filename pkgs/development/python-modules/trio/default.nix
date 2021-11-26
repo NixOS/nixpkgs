@@ -11,7 +11,6 @@
 , sniffio
 , stdenv
 , jedi
-, pylint
 , astor
 , yapf
 }:
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "895e318e5ec5e8cea9f60b473b6edb95b215e82d99556a03eb2d20c5e027efe1";
   };
 
-  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
+  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi yapf ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [
     "getnameinfo"
