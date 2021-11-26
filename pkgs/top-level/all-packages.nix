@@ -2573,6 +2573,10 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
+  clockify = callPackage ../applications/office/clockify {
+    electron = electron_11;
+  };
+
   contrast = callPackage ../applications/accessibility/contrast { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or {});
