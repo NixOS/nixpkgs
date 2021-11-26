@@ -121,7 +121,7 @@ in {
               moin = {
                 type = "normal";
                 pythonPackages = self: with self; [ moinmoin ];
-                socket = "${config.services.uwsgi.runDir}/uwsgi.sock";
+                socket = "''${config.services.uwsgi.runDir}/uwsgi.sock";
               };
             };
           }
