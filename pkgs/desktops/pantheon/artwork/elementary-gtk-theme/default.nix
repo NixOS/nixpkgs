@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , gettext

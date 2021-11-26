@@ -21,7 +21,6 @@
 , meson
 , ninja
 , packagekit
-, pantheon
 , pkg-config
 , python3
 , vala
