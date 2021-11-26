@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_14 ? pkgs.linuxKernel.packages.linux_5_14
+, linuxPackages_5_10 ? pkgs.linuxKernel.packages.linux_5_10
 }:
 
 with lib;
@@ -216,7 +216,7 @@ in {
   zfsStable = common {
     # check the release notes for compatible kernels
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    latestCompatibleLinuxPackages = linuxPackages_5_10;
 
     # this package should point to the latest release.
     version = "2.1.1";
@@ -227,7 +227,7 @@ in {
   zfsUnstable = common {
     # check the release notes for compatible kernels
     kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
-    latestCompatibleLinuxPackages = linuxPackages_5_14;
+    latestCompatibleLinuxPackages = linuxPackages_5_10;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
