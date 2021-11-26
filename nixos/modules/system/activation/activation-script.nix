@@ -150,7 +150,7 @@ in
       example = literalExpression ''
         { plasmaSetup = {
             text = '''
-              ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
+              ''${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
             ''';
             deps = [];
           };
