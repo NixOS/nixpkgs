@@ -2,25 +2,18 @@
 , lib
 , python3Packages
 , mp3Support ? true
-, lame ? null
+, lame
 , opusSupport ? true
-, opusTools ? null
+, opusTools
 , faacSupport ? false
-, faac ? null
+, faac
 , flacSupport ? true
-, flac ? null
+, flac
 , soxSupport ? true
-, sox ? null
+, sox
 , vorbisSupport ? true
-, vorbis-tools ? null
+, vorbis-tools
 }:
-
-assert mp3Support -> lame != null;
-assert opusSupport -> opusTools != null;
-assert faacSupport -> faac != null;
-assert flacSupport -> flac != null;
-assert soxSupport -> sox != null;
-assert vorbisSupport -> vorbis-tools != null;
 
 python3Packages.buildPythonApplication {
   pname = "pulseaudio-dlna";
