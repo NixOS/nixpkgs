@@ -2497,6 +2497,8 @@ in {
 
   django-anymail = callPackage ../development/python-modules/django-anymail { };
 
+  django-annoying = callPackage ../development/python-modules/django-annoying { };
+
   django-appconf = callPackage ../development/python-modules/django-appconf { };
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
