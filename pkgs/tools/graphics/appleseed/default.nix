@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
+{ lib, stdenv, fetchFromGitHub, cmake, boost168, pkg-config, guile,
 eigen, libpng, python3, libGLU, qt4, openexr, openimageio,
 opencolorio_1, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
-let boost_static = boost165.override {
+let boost_static = boost168.override {
   enableStatic = true;
   enablePython = true;
   python = python3;
