@@ -354,17 +354,22 @@ Use the following commands:
     fixing your `configuration.nix`.
 
     As the last step, `nixos-install` will ask you to set the password
-    for the `root` user, e.g.
+    for an admin user or the `root` user, e.g.
 
     ```plain
-    setting root password...
+    Please supply the username of an admin user and a new password.
+    Supplying no username will cause no password to be set.
+
+    Valid admin users are: jane root
+    Username: jane
+    setting jane password...
     New password: ***
     Retype new password: ***
     ```
 
     ::: {.note}
     For unattended installations, it is possible to use
-    `nixos-install --no-root-passwd` in order to disable the password
+    `nixos-install < /dev/null` in order to disable the password
     prompt entirely.
     :::
 
@@ -381,15 +386,13 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    You should log in and change the `root` password with `passwd`.
+    Use your declared user account to log in. If you didn't declare one,
+    you should still be able to log in using `root` user.
 
-    You'll probably want to create some user accounts as well, which can
-    be done with `useradd`:
-
-    ```ShellSession
-    $ useradd -c 'Eelco Dolstra' -m eelco
-    $ passwd eelco
-    ```
+    Note that some graphical display managers like SDDM do not allow
+    `root` login by default so you might need to switch to TTY.
+    Head to [](#sec-user-management) for more info regarding
+    declaring user accounts.
 
     You may also want to install some software. This will be covered in
     [](#sec-package-management).

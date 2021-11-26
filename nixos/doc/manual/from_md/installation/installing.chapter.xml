@@ -502,19 +502,24 @@ OK
         </para>
         <para>
           As the last step, <literal>nixos-install</literal> will ask
-          you to set the password for the <literal>root</literal> user,
-          e.g.
+          you to set the password for an admin user or the
+          <literal>root</literal> user, e.g.
         </para>
         <programlisting>
-setting root password...
+Please supply the username of an admin user and a new password.
+Supplying no username will cause no password to be set.
+
+Valid admin users are: jane root
+Username: jane
+setting jane password...
 New password: ***
 Retype new password: ***
 </programlisting>
         <note>
           <para>
             For unattended installations, it is possible to use
-            <literal>nixos-install --no-root-passwd</literal> in order
-            to disable the password prompt entirely.
+            <literal>nixos-install &lt; /dev/null</literal> in order to
+            disable the password prompt entirely.
           </para>
         </note>
       </listitem>
@@ -538,17 +543,17 @@ Retype new password: ***
           something goes wrong.
         </para>
         <para>
-          You should log in and change the <literal>root</literal>
-          password with <literal>passwd</literal>.
+          Use your declared user account to log in. If you didn’t
+          declare one, you should still be able to log in using
+          <literal>root</literal> user.
         </para>
         <para>
-          You’ll probably want to create some user accounts as well,
-          which can be done with <literal>useradd</literal>:
+          Note that some graphical display managers like SDDM do not
+          allow <literal>root</literal> login by default so you might
+          need to switch to TTY. Head to
+          <xref linkend="sec-user-management" /> for more info regarding
+          declaring user accounts.
         </para>
-        <programlisting>
-$ useradd -c 'Eelco Dolstra' -m eelco
-$ passwd eelco
-</programlisting>
         <para>
           You may also want to install some software. This will be
           covered in <xref linkend="sec-package-management" />.
