@@ -14,7 +14,7 @@ let
   bootForth = callPackage ./boot-forth.nix { };
 
 in stdenv.mkDerivation {
-  name = "gforth-${version}";
+  pname = "gforth";
   inherit version;
   src = fetchFromGitHub {
     owner = "forthy42";
