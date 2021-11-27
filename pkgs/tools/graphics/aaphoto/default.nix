@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # aaphoto.c:237:10: fatal error: 'omp.h' file not found
   };
 }
