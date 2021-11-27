@@ -9,6 +9,8 @@
 buildPythonPackage rec {
   pname = "md-toc";
   version = "8.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
@@ -26,9 +28,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "md_toc/tests/*.py" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "fpyutils>=2.0,<2.1" "fpyutils>=2.0,<3"
+  '';
 
-  pythonImportsCheck = [ "md_toc" ];
+  pytestFlagsArray = [
+    "md_toc/tests/*.py"
+  ];
+
+  pythonImportsCheck = [
+    "md_toc"
+  ];
 
   meta = with lib; {
     description = "Table of contents generator for Markdown";
