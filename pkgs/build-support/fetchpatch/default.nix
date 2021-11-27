@@ -12,8 +12,26 @@ in
 { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 let
+  urls_ =
+    if args ? urls && args.urls != [] && !(args ? url) then
+      (if lib.isList args.urls then args.urls
+       else throw "`urls` is not a list")
+    else if args ? url && args.url != "" && !(args ? urls) then
+      (if lib.isString args.url then [args.url]
+       else throw "`url` is not a string")
+    else throw "fetchpatch requires either `url` or `urls` to be set";
+
+  hash =
+    if args ? hash then { outputHashAlgo = null; outputHash = args.hash; }
+    else if args ? md5 then throw "fetchpatch does not support md5 anymore, please use sha256 or sha512"
+    else if (args ? outputHash && args ? outputHashAlgo) then { inherit (args) outputHashAlgo outputHash; }
+    else if args ? sha512 then { outputHashAlgo = "sha512"; outputHash = args.sha512; }
+    else if args ? sha256 then { outputHashAlgo = "sha256"; outputHash = args.sha256; }
+    else if args ? sha1 then { outputHashAlgo = "sha1";   outputHash = args.sha1; }
+    else throw "fetchpatch requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
+
   # Make base-64 encoded SRI hash filename-safe using RFC 4648 §5
-  tmpname = lib.replaceStrings [ "+" "/" "=" ] [ "-" "_" "" ] args.sha256;
+  tmpname = lib.replaceStrings [ "+" "/" "=" ] [ "-" "_" "" ] (if hash.outputHashAlgo != null then hash.outputHashAlgo + "-" + hash.outputHash else hash.outputHash);
 in
 fetchurl ({
   postFetch = ''
