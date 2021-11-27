@@ -6,6 +6,7 @@
 , nativeBuildInputs ? []
 , passthru ? {}
 , patches ? []
+, goPackage ? go
 
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
@@ -59,16 +60,19 @@ assert (runVend == true && proxyVendor == true) -> throw "can't use `runVend` an
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
 let
+  goPackage = args'.goPackage;
+in
+let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
 
   go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
 
-    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
+    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ goPackage git cacert ];
 
     inherit (args) src;
-    inherit (go) GOOS GOARCH;
+    inherit (goPackage) GOOS GOARCH;
 
     patches = args.patches or [];
     preBuild = args.preBuild or "";
@@ -142,9 +146,9 @@ let
   ) // overrideModAttrs modArgs) else "";
 
   package = stdenv.mkDerivation (args // {
-    nativeBuildInputs = [ go ] ++ nativeBuildInputs;
+    nativeBuildInputs = [ goPackage ] ++ nativeBuildInputs;
 
-    inherit (go) GOOS GOARCH;
+    inherit (goPackage) GOOS GOARCH;
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
@@ -221,7 +225,7 @@ let
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
-        dir=$GOPATH/bin/${go.GOOS}_${go.GOARCH}
+        dir=$GOPATH/bin/${goPackage.GOOS}_${goPackage.GOARCH}
         if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
           mv $dir/* $dir/..
         fi
