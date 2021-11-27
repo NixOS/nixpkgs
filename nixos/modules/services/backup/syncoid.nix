@@ -117,7 +117,7 @@ in
 
     localTargetAllow = mkOption {
       type = types.listOf types.str;
-      default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
+      default = [ "change-key" "compression" "create" "destroy" "mount" "mountpoint" "receive" "rollback" ];
       example = [ "create" "mount" "receive" "rollback" ];
       description = lib.mdDoc ''
         Permissions granted for the syncoid user for local target datasets.
