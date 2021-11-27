@@ -8803,6 +8803,8 @@ in {
 
   socialscan = callPackage ../development/python-modules/socialscan { };
 
+  socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
+
   sockjs = callPackage ../development/python-modules/sockjs { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
