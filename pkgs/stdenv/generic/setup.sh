@@ -31,7 +31,7 @@ runHook() {
     local hook
     # Hack around old bash being bad and thinking empty arrays are
     # undefined.
-    for hook in "_callImplicitHook 0 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
+    for hook in "_callImplicitHook 0 $hookName" ${!hooksSlice}; do
         _eval "$hook" "$@"
     done
 
@@ -48,7 +48,7 @@ runOneHook() {
 
     local hook ret=1
     # Hack around old bash like above
-    for hook in "_callImplicitHook 1 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
+    for hook in "_callImplicitHook 1 $hookName" ${!hooksSlice}; do
         if _eval "$hook" "$@"; then
             ret=0
             break
@@ -547,7 +547,7 @@ _activatePkgs() {
             (( hostOffset <= targetOffset )) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
-            for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
+            for pkg in ${!pkgsSlice}; do
                 activatePackage "$pkg" "$hostOffset" "$targetOffset"
             done
         done
@@ -601,7 +601,7 @@ _addToEnv() {
             else
                 local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
                 local pkgsSlice="${!pkgsRef}[@]"
-                for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
+                for pkg in ${!pkgsSlice}; do
                     runHook "${!hookRef}" "$pkg"
                 done
             fi
