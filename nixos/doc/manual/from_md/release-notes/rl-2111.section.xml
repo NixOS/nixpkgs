@@ -1862,15 +1862,6 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
-          Changing systemd <literal>.socket</literal> units now restarts
-          them and stops the service that is activated by them.
-          Additionally, services with
-          <literal>stopOnChange = false</literal> don’t break anymore
-          when they are socket-activated.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <literal>virtualisation.libvirtd</literal> module has been
           refactored and updated with new options:
         </para>
