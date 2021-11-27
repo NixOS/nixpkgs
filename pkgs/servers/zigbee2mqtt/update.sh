@@ -18,6 +18,7 @@ curl -LO $ZIGBEE2MQTT/npm-shrinkwrap.json
 node2nix \
   --composition node.nix \
   --lock npm-shrinkwrap.json \
+  --development \
   --no-copy-node-env \
   --node-env ../../development/node-packages/node-env.nix \
   --nodejs-14 \

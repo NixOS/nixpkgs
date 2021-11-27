@@ -17,6 +17,10 @@ package.override rec {
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
 
+  postInstall = ''
+    npm run build
+  '';
+
   meta = with pkgs.lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     license = licenses.gpl3;
