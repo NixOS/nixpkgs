@@ -282,6 +282,8 @@ in
             # Here we explicitly use the booted system to guarantee the stable API needed by ZFS.
             # Moreover syncoid may need zpool to get feature@extensible_dataset.
             path = [ "/run/booted-system/sw" ];
+            # Prevents missing snapshots during DST changes
+            environment.TZ = "UTC";
             serviceConfig = {
               ExecStartPre =
                 (map (buildAllowCommand c.localSourceAllow) (localDatasetName c.source)) ++
