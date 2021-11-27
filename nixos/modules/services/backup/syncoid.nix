@@ -115,7 +115,10 @@ in
 
     localTargetAllow = mkOption {
       type = types.listOf types.str;
-      default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
+      # Permission destroy is required to reset broken receive states (zfs receive -A),
+      # which syncoid does when it fails to resume a receive state,
+      # when the snapshot it refers to has been destroyed on the source.
+      default = [ "change-key" "compression" "create" "destroy" "mount" "mountpoint" "receive" "rollback" ];
       example = [ "create" "mount" "receive" "rollback" ];
       description = lib.mdDoc ''
         Permissions granted for the syncoid user for local target datasets.
