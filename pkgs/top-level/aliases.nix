@@ -1411,11 +1411,13 @@ mapAliases ({
   inherit (stdenv.hostPlatform) system; # Added 2021-10-22
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
+  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_git.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
-  });
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    inherit (llvmPackages_11) stdenv;
+  }));
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
