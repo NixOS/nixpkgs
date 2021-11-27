@@ -379,7 +379,6 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@timer"
               ];
               SystemCallArchitectures = "native";
               # This is for BindPaths= and BindReadOnlyPaths=
