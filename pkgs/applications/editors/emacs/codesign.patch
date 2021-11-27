@@ -1,0 +1,11 @@
+--- src/src/Makefile.in.orig	2021-11-27 15:38:14.424289798 +0100
++++ src/src/Makefile.in	2021-11-27 15:41:06.516685897 +0100
+@@ -804,6 +804,8 @@ $(lispsource)/loaddefs.el: $(VCSWITNESS)
+ ## files from loadup.el in source form.
+ 
+ bootstrap-emacs$(EXEEXT): temacs$(EXEEXT)
++	codesign -s - -f temacs
++	codesign -s - -f temacs$(EXEEXT)
+ 	$(MAKE) -C ../lisp update-subdirs
+ ifeq ($(DUMPING),unexec)
+ 	$(RUN_TEMACS) --batch $(BUILD_DETAILS) -l loadup --temacs=bootstrap

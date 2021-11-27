@@ -25051,7 +25051,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    UniformTypeIdentifiers = if stdenv.isAarch64 then darwin.apple_sdk.frameworks.UniformTypeIdentifiers else null;
+    sigtool = if stdenv.isAarch64 then darwin.sigtool else null;
+    stdenv = if stdenv.cc.isClang then llvmPackages_12.stdenv else stdenv;
   };
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {

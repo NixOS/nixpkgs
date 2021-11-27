@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
-, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson, sigtool
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit, UniformTypeIdentifiers
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext jansson
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
-  ];
+  ] ++ lib.optionals stdenv.isAarch64 [ UniformTypeIdentifiers sigtool ];
 
   postUnpack = ''
     mv $sourceRoot $name
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     # extract retina image resources
     tar xfv $hiresSrc --strip 1 -C $sourceRoot
   '';
+
+  patches = lib.optional stdenv.isAarch64 ./codesign.patch;
 
   postPatch = ''
     patch -p1 < patch-mac
@@ -70,6 +72,7 @@ stdenv.mkDerivation rec {
     "--with-mac"
     "--with-modules"
     "--enable-mac-app=$$out/Applications"
+    #"--enable-mac-self-contained"
   ];
 
   CFLAGS = "-O3";
