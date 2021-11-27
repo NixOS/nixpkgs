@@ -30517,8 +30517,6 @@ with pkgs;
 
   redeclipse = callPackage ../games/redeclipse { };
 
-  residualvm = callPackage ../games/residualvm { };
-
   rftg = callPackage ../games/rftg { };
 
   rigsofrods = callPackage ../games/rigsofrods {
