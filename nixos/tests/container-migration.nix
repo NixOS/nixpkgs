@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   clientIP = "192.168.1.23";
 
   base = { lib, ... }: {
-    networking.primaryIPAddress = hostIP;
+    networking.primaryIPAddress = lib.mkForce hostIP;
 
     # Switching network stacks entirely isn't really possible. So just reboot
     # (to simulate the update, a bootloader which boots into the new config is needed).
