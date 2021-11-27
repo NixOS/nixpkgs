@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
-  patches = [
+  patches = lib.optionals (useBoost?version -> lib.versionOlder useBoost.version "1.77") [
     # Upstream defaults to gcc on darwin, but we use clang.
     ./darwin-default-toolset.patch
   ];
