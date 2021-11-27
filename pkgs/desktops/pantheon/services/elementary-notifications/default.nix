@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -10,7 +11,6 @@
 , libgee
 , libhandy
 , libcanberra-gtk3
-, pantheon
 , python3
 , wrapGAppsHook
 }:

@@ -8,7 +8,6 @@
 , vala
 , pkg-config
 , libgee
-, pantheon
 , gtk3
 , glib
 , gettext

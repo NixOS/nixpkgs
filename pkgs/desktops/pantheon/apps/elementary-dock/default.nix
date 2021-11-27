@@ -21,7 +21,6 @@
 , gnome-menus
 , libgee
 , wrapGAppsHook
-, pantheon
 , meson
 , ninja
 , granite
