@@ -113,8 +113,16 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       # Now adding an alias to ensure that the certs are updated
       specialisation.nginx-aliases.configuration = { pkgs, ... }: {
-        services.nginx.virtualHosts."a.example.test" = {
+        services.nginx.virtualHosts."a.example.test" = (vhostBase pkgs) // {
           serverAliases = [ "b.example.test" ];
+        };
+      };
+
+      # Must be run after nginx-aliases
+      specialisation.remove-extra-domain.configuration = { pkgs, ... } : {
+        # This also validates that useACMEHost doesn't unexpectedly add the domain.
+        services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
+          useACMEHost = "a.example.test";
         };
       };
 
@@ -407,6 +415,18 @@ in import ./make-test-python.nix ({ lib, ... }: {
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
           check_connection(client, "b.example.test")
+
+      with subtest("Can remove extra domains from a cert"):
+          switch_to(webserver, "remove-extra-domain")
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          webserver.wait_for_unit("nginx.service")
+          check_connection(client, "a.example.test")
+          rc, _ = client.execute(
+              "openssl s_client -CAfile /tmp/ca.crt -connect b.example.test:443"
+              " </dev/null 2>/dev/null | openssl x509 -noout -text"
+              " | grep DNS: | grep b.example.test"
+          )
+          assert rc > 0, "Removed extraDomainName was not removed from the cert"
 
       with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
           try:

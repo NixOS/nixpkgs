@@ -156,6 +156,7 @@ let
       ${toString data.ocspMustStaple} ${data.keyType}
     '';
     certDir = mkHash hashData;
+    # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
     accountHash = (mkAccountHash acmeServer data);
     accountDir = accountDirRoot + accountHash;
@@ -372,22 +373,19 @@ let
 
         echo '${domainHash}' > domainhash.txt
 
-        # Check if we can renew
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
+        # Check if we can renew.
+        # We can only renew if the list of domains has not changed.
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
 
-          # When domains are updated, there's no need to do a full
-          # Lego run, but it's likely renew won't work if days is too low.
-          if [ -e certificates/domainhash.txt ] && cmp -s domainhash.txt certificates/domainhash.txt; then
+          # Even if a cert is not expired, it may be revoked by the CA.
+          # Try to renew, and silently fail if the cert is not expired.
+          # Avoids #85794 and resolves #129838
+          if ! lego ${renewOpts} --days ${toString cfg.validMinDays}; then
             if is_expiration_skippable out/full.pem; then
-              echo 1>&2 "nixos-acme: skipping renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
+              echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
             else
-              echo 1>&2 "nixos-acme: renewing now, because certificate expires within the configured ${toString cfg.validMinDays} days"
-              lego ${renewOpts} --days ${toString cfg.validMinDays}
+              exit 3
             fi
-          else
-            echo 1>&2 "certificate domain(s) have changed; will renew now"
-            # Any number > 90 works, but this one is over 9000 ;-)
-            lego ${renewOpts} --days 9001
           fi
 
         # Otherwise do a full run
@@ -406,8 +404,7 @@ let
         chown 'acme:${data.group}' certificates/*
 
         # Copy all certs to the "real" certs directory
-        CERT='certificates/${keyName}.crt'
-        if [ -e "$CERT" ] && ! cmp -s "$CERT" out/fullchain.pem; then
+        if ! cmp -s 'certificates/${keyName}.crt' out/fullchain.pem; then
           touch out/renewed
           echo Installing new certificate
           cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
