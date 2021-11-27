@@ -8829,6 +8829,8 @@ with pkgs;
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
+  teapot = callPackage ../applications/office/teapot { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
