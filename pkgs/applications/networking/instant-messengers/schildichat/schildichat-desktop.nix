@@ -7,13 +7,13 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchYarnDeps
-, yarn, nodejs, fixup_yarn_lock
+, yarn
+, nodejs
+, fixup_yarn_lock
 , electron
 , Security
 , AppKit
 , CoreServices
-
-, useWayland ? false
 }:
 
 let
@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
 
     # executable wrapper
     makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
-      --add-flags "$out/share/element/electron${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}"
+      --add-flags "$out/share/element/electron" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';
@@ -101,17 +102,17 @@ stdenv.mkDerivation rec {
   # https://github.com/schildichat/element-desktop/blob/sc/package.json
   desktopItems = [
     (makeDesktopItem {
-     name = "schildichat-desktop";
-     exec = "${executableName} %u";
-     icon = "schildichat";
-     desktopName = "SchildiChat";
-     genericName = "Matrix Client";
-     comment = meta.description;
-     categories = "Network;InstantMessaging;Chat;";
-     extraEntries = ''
-       StartupWMClass=schildichat
-       MimeType=x-scheme-handler/element;
-     '';
+      name = "schildichat-desktop";
+      exec = "${executableName} %u";
+      icon = "schildichat";
+      desktopName = "SchildiChat";
+      genericName = "Matrix Client";
+      comment = meta.description;
+      categories = "Network;InstantMessaging;Chat;";
+      extraEntries = ''
+        StartupWMClass=schildichat
+        MimeType=x-scheme-handler/element;
+      '';
     })
   ];
 

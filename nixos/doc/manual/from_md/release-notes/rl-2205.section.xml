@@ -543,6 +543,19 @@
       </listitem>
       <listitem>
         <para>
+          If you are using Wayland you can choose to use the Ozone
+          Wayland support in Chrome and several Electron apps by setting
+          the environment variable <literal>NIXOS_OZONE_WL=1</literal>
+          (for example via
+          <literal>environment.sessionVariables.NIXOS_OZONE_WL = &quot;1&quot;</literal>).
+          This is not enabled by default because Ozone Wayland is still
+          under heavy development and behavior is not always flawless.
+          Furthermore, not all Electron apps use the latest Electron
+          versions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>influxdb2</literal> package was split into
           <literal>influxdb2-server</literal> and
           <literal>influxdb2-cli</literal>, matching the split that took
