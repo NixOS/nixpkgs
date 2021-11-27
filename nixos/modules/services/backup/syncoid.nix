@@ -68,7 +68,7 @@ in
 
     package = lib.mkPackageOption pkgs "sanoid" {};
 
-    nftables.enable = mkEnableOption ''
+    nftables.enable = mkEnableOption (lib.mdDoc ''
       maintaining an nftables set of the active syncoid UIDs.
 
       This can be used like so (assuming `output-net`
@@ -76,7 +76,7 @@ in
       ```
       networking.nftables.ruleset = "table inet filter { chain output-net { skuid @nixos-syncoid-uids meta l4proto tcp accept } }";
       ```
-    '';
+    '');
 
     interval = mkOption {
       type = types.str;
@@ -96,6 +96,9 @@ in
       description = lib.mdDoc ''
         SSH private key file to use to login to the remote system. Can be
         overridden in individual commands.
+        For more SSH tuning, you may use syncoid's `--sshoption`
+        in {option}`services.syncoid.commonArgs`
+        and/or in the `extraArgs` of a specific command.
       '';
     };
 
@@ -104,9 +107,8 @@ in
       # Permissions snapshot and destroy are in case --no-sync-snap is not used
       default = [ "bookmark" "hold" "send" "snapshot" "destroy" ];
       description = lib.mdDoc ''
-        Permissions granted for the {option}`services.syncoid.user` user
-        for local source datasets. See
-        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
+        Permissions granted for the syncoid user for local source datasets.
+        See <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
       '';
     };
@@ -116,9 +118,8 @@ in
       default = [ "change-key" "compression" "create" "mount" "mountpoint" "receive" "rollback" ];
       example = [ "create" "mount" "receive" "rollback" ];
       description = lib.mdDoc ''
-        Permissions granted for the {option}`services.syncoid.user` user
-        for local target datasets. See
-        <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
+        Permissions granted for the syncoid user for local target datasets.
+        See <https://openzfs.github.io/openzfs-docs/man/8/zfs-allow.8.html>
         for available permissions.
         Make sure to include the `change-key` permission if you send raw encrypted datasets,
         the `compression` permission if you send raw compressed datasets, and so on.
@@ -222,13 +223,9 @@ in
             '';
           };
 
-          useCommonArgs = mkOption {
-            type = types.bool;
-            default = true;
-            description = lib.mdDoc ''
-              Whether to add the configured common arguments to this command.
-            '';
-          };
+          useCommonArgs = mkEnableOption (lib.mdDoc ''
+            configured common arguments to this command
+          '') // { default = true; };
 
           service = mkOption {
             type = types.attrs;
