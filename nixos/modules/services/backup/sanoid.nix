@@ -292,6 +292,13 @@ in
     };
 
     environment.etc."sanoid/sanoid.conf".text = configFile;
+
+    # Put those packages in the global environment
+    # so that syncoid can find them when targeting this host through ssh.
+    environment.systemPackages = with pkgs; [
+      lzop
+      mbuffer
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ lopsided98 ];
