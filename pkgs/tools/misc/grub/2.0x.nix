@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool
+{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool, bash
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
 , fetchpatch
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool ]
+  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -141,6 +141,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+    # just adding bash to buildInputs wasn't enough to fix the shebang
+    substituteInPlace $out/lib/grub/*/modinfo.sh \
+      --replace ${buildPackages.bash} "/usr/bin/bash"
   '';
 
   passthru.tests = {
