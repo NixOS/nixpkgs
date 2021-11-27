@@ -6,6 +6,7 @@
 , installShellFiles
 , astroid
 , isort
+, GitPython
 , mccabe
 , platformdirs
 , toml
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [
+    GitPython
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
@@ -56,6 +58,7 @@ buildPythonPackage rec {
   # calls executable in one of the tests
   preCheck = ''
     export PATH=$PATH:$out/bin
+    export HOME=$TEMPDIR
   '';
 
   pytestFlagsArray = [
