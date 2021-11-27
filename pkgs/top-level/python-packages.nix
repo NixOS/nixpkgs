@@ -10147,6 +10147,8 @@ in {
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
+  xmind = callPackage ../development/python-modules/xmind { };
+
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
   xmldiff = callPackage ../development/python-modules/xmldiff { };
