@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/77ed66050f7df889fcb7a10b702c7b8bcdeaa130.patch";
+      sha256 = "sha256-OegLxz6Xr/nxVwVOAd2oOY62ohZ3r6uYn1+YED5EBHQ=";
+    })
   ];
 
   buildInputs = [
