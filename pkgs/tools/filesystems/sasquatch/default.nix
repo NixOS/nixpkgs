@@ -45,7 +45,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Drop blanket -Werror to avoid build failure on fresh toolchains
     # like gcc-11.
-    substituteInPlace squashfs-tools/Makefile --replace ' -Werror' ' '
+    # Add -fcommon as a woarkaround for compiler that default to -fno-common
+    # like upstream gcc-10 or clang-11. Will be fixed upstream at:
+    #   https://github.com/devttys0/sasquatch/pull/44
+    substituteInPlace squashfs-tools/Makefile --replace ' -Werror' ' -fcommon'
     cd squashfs-tools
   '';
 
