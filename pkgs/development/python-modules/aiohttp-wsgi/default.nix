@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # makes http request to another server
+    # https://github.com/etianen/aiohttp-wsgi/issues/32
     "testEnviron"
   ];
 
