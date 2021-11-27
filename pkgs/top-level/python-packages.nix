@@ -3283,6 +3283,8 @@ in {
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
+  google-nest-sdm = callPackage ../development/python-modules/google-nest-sdm { };
+
   googlemaps = callPackage ../development/python-modules/googlemaps { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
@@ -5847,6 +5849,8 @@ in {
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
   python-glanceclient = callPackage ../development/python-modules/python-glanceclient { };
+
+  python-google-nest = callPackage ../development/python-modules/python-google-nest { };
 
   python-heatclient = callPackage ../development/python-modules/python-heatclient { };
 
@@ -9418,6 +9422,8 @@ in {
   tokenize-rt = toPythonModule (callPackage ../development/python-modules/tokenize-rt { });
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
+
+  tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };
 

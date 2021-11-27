@@ -8830,6 +8830,8 @@ with pkgs;
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
+  teapot = callPackage ../applications/office/teapot { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
@@ -30506,8 +30508,6 @@ with pkgs;
   randtype = callPackage ../games/randtype { };
 
   redeclipse = callPackage ../games/redeclipse { };
-
-  residualvm = callPackage ../games/residualvm { };
 
   rftg = callPackage ../games/rftg { };
 
