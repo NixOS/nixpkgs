@@ -377,6 +377,13 @@
         "sha256": "rms+T8JOp/TJ/T5a5uLj8lu1LLz/GAsJZ7UbK42C9yU=",
         "fetchSubmodules": false
     },
+    "pcsx2": {
+        "owner": "libretro",
+        "repo": "pcsx2",
+        "rev": "18e0685ed4f191796c8e923caf4f5e96a930057e",
+        "sha256": "V2eS741us2p+JC+ghmHjAtFeptB0UcBlwZuisZ8Co7M=",
+        "fetchSubmodules": false
+    },
     "pcsx_rearmed": {
         "owner": "libretro",
         "repo": "pcsx_rearmed",
