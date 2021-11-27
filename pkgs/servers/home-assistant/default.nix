@@ -179,10 +179,13 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "async_timeout==3.0.1" "async_timeout" \
+      --replace "awesomeversion==21.10.1" "awesomeversion" \
+      --replace "aiohttp==3.7.4.post0" "aiohttp" \
       --replace "bcrypt==3.1.7" "bcrypt" \
       --replace "pip>=8.0.3,<20.3" "pip" \
       --replace "pyyaml==6.0" "pyyaml" \
-      --replace "yarl==1.6.3" "yarl==1.7.0"
+      --replace "yarl==1.6.3" "yarl"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
