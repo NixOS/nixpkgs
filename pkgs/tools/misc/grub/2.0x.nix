@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
+{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
 , fetchpatch
@@ -51,10 +51,9 @@ stdenv.mkDerivation rec {
   pname = "grub";
   inherit version;
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/grub.git";
-    rev = "${pname}-${version}";
-    sha256 = "1vkxr6b4p7h259vayjw8bfgqj57x68byy939y4bmyaz6g7fgrv0f";
+  src = fetchurl {
+    url = "mirror://gnu/grub/grub-${version}.tar.xz";
+    sha256 = "sha256-t56kSvkbk9F80/6Ava5u1DdwZ4qaWuGSzOqAPrtlfuE=";
   };
 
   patches = [
@@ -75,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake gettext freetype ];
+  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
@@ -108,8 +107,6 @@ stdenv.mkDerivation rec {
       unset CPP # setting CPP intereferes with dependency calculation
 
       patchShebangs .
-
-      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
       substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
