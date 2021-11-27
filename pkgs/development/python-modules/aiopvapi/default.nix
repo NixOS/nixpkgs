@@ -2,22 +2,35 @@
 , aiohttp
 , async-timeout
 , buildPythonPackage
+, fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "1.6.14";
+  version = "unstable-2021-09-27";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "02bl7q166j6rb8av9n1jz11xlwhrzmbkjq70mwr86qaj63pcxrak";
+  src = fetchFromGitHub {
+    owner = "sander76";
+    repo = "aio-powerview-api";
+    rev = "7b362e28a8ec8c9a53905879d8b519e03fd88e13";
+    sha256 = "sha256-7bZLCv9PEJr61vimw39m89w/rha3tQWM8TWMtfd8kjQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Drop loop= kwarg from async_timeout and ClientSession calls
+      # https://github.com/sander76/aio-powerview-api/pull/13
+      url = "https://github.com/sander76/aio-powerview-api/commit/7be67268050fbbf7652ce5a020d2ff26f34d0b27.patch";
+      sha256 = "sha256-7QPwrMP1Sbrayg63YZJcRkVDAqcm6hqh0fuJdrUk5WY=";
+    })
+  ];
 
   propagatedBuildInputs = [
     aiohttp
