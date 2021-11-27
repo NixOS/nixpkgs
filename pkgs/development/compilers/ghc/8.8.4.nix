@@ -128,6 +128,8 @@ let
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
+  # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
+  # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
@@ -139,21 +141,6 @@ let
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
     (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
-
-  # Tools GHC will need to call at runtime. Some of these were handled using
-  # propagatedBuildInputs before, however this allowed for GHC environment and
-  # a derivations build environment to interfere, especially when GHC is built.
-  runtimeDeps = [
-    targetPackages.stdenv.cc
-    targetPackages.stdenv.cc.bintools
-    coreutils # for cat
-  ] ++ lib.optionals useLLVM [
-    (lib.getBin llvmPackages.llvm)
-  ]
-  # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
-  ];
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -203,6 +190,7 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
+  # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
   preConfigure =
     # Aarch64 allow backward bootstrapping since earlier versions are unstable.
     # Same for musl, as earlier versions do not provide a musl bindist for bootstrapping.
@@ -226,6 +214,16 @@ stdenv.mkDerivation (rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+  '' + lib.optionalString useLLVM ''
+    export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
+  '' + lib.optionalString (targetCC.isClang || (useLLVM && stdenv.targetPlatform.isDarwin)) (let
+    # LLVM backend on Darwin needs clang, if we are already using clang, might as well set the environment variable.
+    # See also https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    clang = if targetCC.isClang then targetCC else llvmPackages.clang;
+  in ''
+    export CLANG="${clang}/bin/${clang.targetPrefix}clang"
+  '') + ''
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -322,13 +320,6 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
-
-    # Patch scripts to include runtime dependencies in $PATH.
-    for i in "$out/bin/"*; do
-      test ! -h "$i" || continue
-      isScript "$i" || continue
-      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
-    done
   '';
 
   passthru = {
