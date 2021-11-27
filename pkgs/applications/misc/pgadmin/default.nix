@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      sha256 = "09hp7s3zjz80rpx2j3xyznwswwfxzi70z7c05dzrdk74mqjjpkfk";
+      hash = "sha256-080rJa7kzJZ/K4CdD0783XGuuf2+Dyn6zQB9+Yc+FyY=";
       name = "843344.patch";
       url = "https://sources.debian.net/data/main/p/pgadmin3/1.22.2-1/debian/patches/843344";
     })
