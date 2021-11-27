@@ -14,6 +14,7 @@
 , hexdump
 , hidapi
 , icu
+, libaio
 , libGL
 , libGLU
 , libevdev
@@ -21,6 +22,7 @@
 , libpcap
 , libpng
 , libvorbis
+, libxml2
 , libzip
 , makeWrapper
 , nasm
@@ -36,6 +38,8 @@
 , udev
 , which
 , xorg
+, xxd
+, xz
 , zlib
 }:
 
@@ -667,6 +671,38 @@ in
       sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
     '';
+  };
+
+  pcsx2 = mkLibRetroCore {
+    core = "pcsx2";
+    version = "unstable-2021-11-27";
+    description = "Port of PCSX2 to libretro";
+    license = lib.licenses.gpl3Plus;
+    extraNativeBuildInputs = [
+      cmake
+      gettext
+      pkg-config
+    ];
+    extraBuildInputs = [
+      libaio
+      libGL
+      libGLU
+      libpcap
+      libpng
+      libxml2
+      xz
+      xxd
+    ];
+    makefile = "Makefile";
+    cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DLIBRETRO=ON"
+    ];
+    postPatch = ''
+      # remove ccache
+      substituteInPlace CMakeLists.txt --replace "ccache" ""
+    '';
+    postBuild = "cd /build/source/build/pcsx2";
   };
 
   pcsx_rearmed = mkLibRetroCore {
