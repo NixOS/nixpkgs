@@ -238,4 +238,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };
+  passthru = {
+    inherit enableFlight enableJemalloc enableS3 enableGcs;
+  };
 }
