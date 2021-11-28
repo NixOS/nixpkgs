@@ -5085,6 +5085,8 @@ in {
 
   language-data = callPackage ../development/python-modules/language-data { };
 
+  language-tags = callPackage ../development/python-modules/language-tags { };
+
   lark = callPackage ../development/python-modules/lark { };
 
   latexcodec = callPackage ../development/python-modules/latexcodec { };
