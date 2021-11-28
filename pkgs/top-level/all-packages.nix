@@ -20971,7 +20971,7 @@ with pkgs;
   mod_timestamp = apacheHttpdPackages.mod_timestamp;
 
   inherit (callPackages ../servers/mpd {
-    stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv;
+    stdenv = if (with stdenv; cc.isClang && isx86_64) then llvmPackages_8.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit;
   }) mpd mpd-small mpdWithFeatures;
 
