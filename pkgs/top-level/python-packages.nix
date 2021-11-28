@@ -5712,6 +5712,8 @@ in {
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
 
+  mf2py = callPackage ../development/python-modules/mf2py { };
+
   micawber = callPackage ../development/python-modules/micawber { };
 
   microdata = callPackage ../development/python-modules/microdata { };
