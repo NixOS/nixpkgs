@@ -29752,16 +29752,16 @@ with pkgs;
 
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
-  monero = callPackage ../applications/blockchains/monero {
+  monero-cli = callPackage ../applications/blockchains/monero-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost17x;
   };
 
-  oxen = callPackage ../applications/blockchains/oxen {
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
     boost = boost17x;
   };
 
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
+  oxen = callPackage ../applications/blockchains/oxen {
     boost = boost17x;
   };
 
