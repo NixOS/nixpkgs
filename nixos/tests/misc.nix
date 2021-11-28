@@ -50,18 +50,17 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
 
 
       def get_path_info(path):
-          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
+          result = machine.succeed(f"nix path-info --json {path}")
           parsed = json.loads(result)
           return parsed
 
 
       with subtest("nix-db"):
           info = get_path_info("${foo}")
-          print(info)
 
           if (
               info[0]["narHash"]
-              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
+              != "sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"
           ):
               raise Exception("narHash not set")
 
