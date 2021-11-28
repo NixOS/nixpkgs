@@ -5,9 +5,11 @@ let
 
 in {
   security.acme = {
-    server = "https://${caDomain}/dir";
-    email = "hostmaster@example.test";
     acceptTerms = true;
+    defaults = {
+      server = "https://${caDomain}/dir";
+      email = "hostmaster@example.test";
+    };
   };
 
   security.pki.certificateFiles = [ caCert ];

@@ -128,7 +128,7 @@ let
   };
 
   certToConfig = cert: data: let
-    acmeServer = if data.server != null then data.server else cfg.server;
+    acmeServer = data.server;
     useDns = data.dnsProvider != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
@@ -211,7 +211,7 @@ let
       description = "Renew ACME Certificate for ${cert}";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = cfg.renewInterval;
+        OnCalendar = data.renewInterval;
         Unit = "acme-${cert}.service";
         Persistent = "yes";
 
@@ -356,7 +356,7 @@ let
           expiration_s=$[expiration_date - now]
           expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
 
-          [[ $expiration_days -gt ${toString cfg.validMinDays} ]]
+          [[ $expiration_days -gt ${toString data.validMinDays} ]]
         }
 
         ${optionalString (data.webroot != null) ''
@@ -380,11 +380,12 @@ let
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
           # Avoids #85794 and resolves #129838
-          if ! lego ${renewOpts} --days ${toString cfg.validMinDays}; then
+          if ! lego ${renewOpts} --days ${toString data.validMinDays}; then
             if is_expiration_skippable out/full.pem; then
-              echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't within the coming ${toString cfg.validMinDays} days"
+              echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't within the coming ${toString data.validMinDays} days"
             else
-              exit 3
+              # High number to avoid Systemd reserved codes.
+              exit 11
             fi
           fi
 
@@ -394,8 +395,9 @@ let
           echo Failed to fetch certificates. \
             This may mean your DNS records are set up incorrectly. \
             ${optionalString (cfg.preliminarySelfsigned) "Selfsigned certs are in place and dependant services will still start."}
-          # Exit 2 so that users can potentially amend SuccessExitStatus to ignore this error.
-          exit 2
+          # Exit 10 so that users can potentially amend SuccessExitStatus to ignore this error.
+          # High number to avoid Systemd reserved codes.
+          exit 10
         fi
 
         mv domainhash.txt certificates/
@@ -423,8 +425,182 @@ let
 
   certConfigs = mapAttrs certToConfig cfg.certs;
 
+  # These options can be specified within
+  # security.acme or security.acme.certs.<name>
+  inheritableOpts =
+    { inheritDefaults ? false, defaults ? null }: {
+      validMinDays = mkOption {
+        type = types.int;
+        default = if inheritDefaults then defaults.validMinDays else 30;
+        description = "Minimum remaining validity before renewal in days.";
+      };
+
+      renewInterval = mkOption {
+        type = types.str;
+        default = if inheritDefaults then defaults.renewInterval else "daily";
+        description = ''
+          Systemd calendar expression when to check for renewal. See
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
+        '';
+      };
+
+      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
+        default = if inheritDefaults then defaults.enableDebugLogs else true;
+      };
+
+      webroot = mkOption {
+        type = types.nullOr types.str;
+        default = if inheritDefaults then defaults.webroot else null;
+        example = "/var/lib/acme/acme-challenge";
+        description = ''
+          Where the webroot of the HTTP vhost is located.
+          <filename>.well-known/acme-challenge/</filename> directory
+          will be created below the webroot if it doesn't exist.
+          <literal>http://example.org/.well-known/acme-challenge/</literal> must also
+          be available (notice unencrypted HTTP).
+        '';
+      };
+
+      server = mkOption {
+        type = types.nullOr types.str;
+        default = if inheritDefaults then defaults.server else null;
+        description = ''
+          ACME Directory Resource URI. Defaults to Let's Encrypt's
+          production endpoint,
+          <link xlink:href="https://acme-v02.api.letsencrypt.org/directory"/>, if unset.
+        '';
+      };
+
+      email = mkOption {
+        type = types.str;
+        default = if inheritDefaults then defaults.email else null;
+        description = ''
+          Email address for account creation and correspondence from the CA.
+          It is recommended to use the same email for all certs to avoid account
+          creation limits.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = if inheritDefaults then defaults.group else "acme";
+        description = "Group running the ACME client.";
+      };
+
+      reloadServices = mkOption {
+        type = types.listOf types.str;
+        default = if inheritDefaults then defaults.reloadServices else [];
+        description = ''
+          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
+          on.
+        '';
+      };
+
+      postRun = mkOption {
+        type = types.lines;
+        default = if inheritDefaults then defaults.postRun else "";
+        example = "cp full.pem backup.pem";
+        description = ''
+          Commands to run after new certificates go live. Note that
+          these commands run as the root user.
+
+          Executed in the same directory with the new certificate.
+        '';
+      };
+
+      keyType = mkOption {
+        type = types.str;
+        default = if inheritDefaults then defaults.keyType else "ec256";
+        description = ''
+          Key type to use for private keys.
+          For an up to date list of supported values check the --key-type option
+          at <link xlink:href="https://go-acme.github.io/lego/usage/cli/#usage"/>.
+        '';
+      };
+
+      dnsProvider = mkOption {
+        type = types.nullOr types.str;
+        default = if inheritDefaults then defaults.dnsProvider else null;
+        example = "route53";
+        description = ''
+          DNS Challenge provider. For a list of supported providers, see the "code"
+          field of the DNS providers listed at <link xlink:href="https://go-acme.github.io/lego/dns/"/>.
+        '';
+      };
+
+      dnsResolver = mkOption {
+        type = types.nullOr types.str;
+        default = if inheritDefaults then defaults.dnsResolver else null;
+        example = "1.1.1.1:53";
+        description = ''
+          Set the resolver to use for performing recursive DNS queries. Supported:
+          host:port. The default is to use the system resolvers, or Google's DNS
+          resolvers if the system's cannot be determined.
+        '';
+      };
+
+      credentialsFile = mkOption {
+        type = types.path;
+        default = if inheritDefaults then defaults.credentialsFile else null;
+        description = ''
+          Path to an EnvironmentFile for the cert's service containing any required and
+          optional environment variables for your selected dnsProvider.
+          To find out what values you need to set, consult the documentation at
+          <link xlink:href="https://go-acme.github.io/lego/dns/"/> for the corresponding dnsProvider.
+        '';
+        example = "/var/src/secrets/example.org-route53-api-token";
+      };
+
+      dnsPropagationCheck = mkOption {
+        type = types.bool;
+        default = if inheritDefaults then defaults.dnsPropagationCheck else true;
+        description = ''
+          Toggles lego DNS propagation check, which is used alongside DNS-01
+          challenge to ensure the DNS entries required are available.
+        '';
+      };
+
+      ocspMustStaple = mkOption {
+        type = types.bool;
+        default = if inheritDefaults then defaults.ocspMustStaple else false;
+        description = ''
+          Turns on the OCSP Must-Staple TLS extension.
+          Make sure you know what you're doing! See:
+          <itemizedlist>
+            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/" /></para></listitem>
+            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html" /></para></listitem>
+          </itemizedlist>
+        '';
+      };
+
+      extraLegoFlags = mkOption {
+        type = types.listOf types.str;
+        default = if inheritDefaults then defaults.extraLegoFlags else [];
+        description = ''
+          Additional global flags to pass to all lego commands.
+        '';
+      };
+
+      extraLegoRenewFlags = mkOption {
+        type = types.listOf types.str;
+        default = if inheritDefaults then defaults.extraLegoRenewFlags else [];
+        description = ''
+          Additional flags to pass to lego renew.
+        '';
+      };
+
+      extraLegoRunFlags = mkOption {
+        type = types.listOf types.str;
+        default = if inheritDefaults then defaults.extraLegoRunFlags else [];
+        description = ''
+          Additional flags to pass to lego run.
+        '';
+      };
+    };
+
   certOpts = { name, ... }: {
-    options = {
+    options = (inheritableOpts { inherit (cfg) defaults; inheritDefaults = cfg.certs."${name}".inheritDefaults; }) // {
       # user option has been removed
       user = mkOption {
         visible = false;
@@ -443,87 +619,17 @@ let
         default = "_mkMergedOptionModule";
       };
 
-      enableDebugLogs = mkEnableOption "debug logging for this certificate" // { default = cfg.enableDebugLogs; };
-
-      webroot = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "/var/lib/acme/acme-challenge";
-        description = ''
-          Where the webroot of the HTTP vhost is located.
-          <filename>.well-known/acme-challenge/</filename> directory
-          will be created below the webroot if it doesn't exist.
-          <literal>http://example.org/.well-known/acme-challenge/</literal> must also
-          be available (notice unencrypted HTTP).
-        '';
-      };
-
-      listenHTTP = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = ":1360";
-        description = ''
-          Interface and port to listen on to solve HTTP challenges
-          in the form [INTERFACE]:PORT.
-          If you use a port other than 80, you must proxy port 80 to this port.
-        '';
-      };
-
-      server = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          ACME Directory Resource URI. Defaults to Let's Encrypt's
-          production endpoint,
-          <link xlink:href="https://acme-v02.api.letsencrypt.org/directory"/>, if unset.
-        '';
+      directory = mkOption {
+        type = types.str;
+        readOnly = true;
+        default = "/var/lib/acme/${name}";
+        description = "Directory where certificate and other state is stored.";
       };
 
       domain = mkOption {
         type = types.str;
         default = name;
         description = "Domain to fetch certificate for (defaults to the entry name).";
-      };
-
-      email = mkOption {
-        type = types.nullOr types.str;
-        default = cfg.email;
-        defaultText = literalExpression "config.${opt.email}";
-        description = "Contact email address for the CA to be able to reach you.";
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "acme";
-        description = "Group running the ACME client.";
-      };
-
-      reloadServices = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
-          on.
-        '';
-      };
-
-      postRun = mkOption {
-        type = types.lines;
-        default = "";
-        example = "cp full.pem backup.pem";
-        description = ''
-          Commands to run after new certificates go live. Note that
-          these commands run as the root user.
-
-          Executed in the same directory with the new certificate.
-        '';
-      };
-
-      directory = mkOption {
-        type = types.str;
-        readOnly = true;
-        default = "/var/lib/acme/${name}";
-        description = "Directory where certificate and other state is stored.";
       };
 
       extraDomainNames = mkOption {
@@ -540,92 +646,25 @@ let
         '';
       };
 
-      keyType = mkOption {
-        type = types.str;
-        default = "ec256";
-        description = ''
-          Key type to use for private keys.
-          For an up to date list of supported values check the --key-type option
-          at <link xlink:href="https://go-acme.github.io/lego/usage/cli/#usage"/>.
-        '';
-      };
-
-      dnsProvider = mkOption {
+      # This setting must be different for each configured certificate, otherwise
+      # two or more renewals may fail to bind to the address. Hence, it is not in
+      # the inheritableOpts.
+      listenHTTP = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "route53";
+        example = ":1360";
         description = ''
-          DNS Challenge provider. For a list of supported providers, see the "code"
-          field of the DNS providers listed at <link xlink:href="https://go-acme.github.io/lego/dns/"/>.
+          Interface and port to listen on to solve HTTP challenges
+          in the form [INTERFACE]:PORT.
+          If you use a port other than 80, you must proxy port 80 to this port.
         '';
       };
 
-      dnsResolver = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "1.1.1.1:53";
-        description = ''
-          Set the resolver to use for performing recursive DNS queries. Supported:
-          host:port. The default is to use the system resolvers, or Google's DNS
-          resolvers if the system's cannot be determined.
-        '';
-      };
-
-      credentialsFile = mkOption {
-        type = types.path;
-        description = ''
-          Path to an EnvironmentFile for the cert's service containing any required and
-          optional environment variables for your selected dnsProvider.
-          To find out what values you need to set, consult the documentation at
-          <link xlink:href="https://go-acme.github.io/lego/dns/"/> for the corresponding dnsProvider.
-        '';
-        example = "/var/src/secrets/example.org-route53-api-token";
-      };
-
-      dnsPropagationCheck = mkOption {
-        type = types.bool;
+      inheritDefaults = mkOption {
         default = true;
-        description = ''
-          Toggles lego DNS propagation check, which is used alongside DNS-01
-          challenge to ensure the DNS entries required are available.
-        '';
-      };
-
-      ocspMustStaple = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Turns on the OCSP Must-Staple TLS extension.
-          Make sure you know what you're doing! See:
-          <itemizedlist>
-            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/" /></para></listitem>
-            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html" /></para></listitem>
-          </itemizedlist>
-        '';
-      };
-
-      extraLegoFlags = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          Additional global flags to pass to all lego commands.
-        '';
-      };
-
-      extraLegoRenewFlags = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          Additional flags to pass to lego renew.
-        '';
-      };
-
-      extraLegoRunFlags = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          Additional flags to pass to lego run.
-        '';
+        example = true;
+        description = "Whether to inherit values set in `security.acme.defaults` or not.";
+        type = lib.types.bool;
       };
     };
   };
@@ -634,41 +673,6 @@ in {
 
   options = {
     security.acme = {
-
-      enableDebugLogs = mkEnableOption "debug logging for all certificates by default" // { default = true; };
-
-      validMinDays = mkOption {
-        type = types.int;
-        default = 30;
-        description = "Minimum remaining validity before renewal in days.";
-      };
-
-      email = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "Contact email address for the CA to be able to reach you.";
-      };
-
-      renewInterval = mkOption {
-        type = types.str;
-        default = "daily";
-        description = ''
-          Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
-        '';
-      };
-
-      server = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          ACME Directory Resource URI. Defaults to Let's Encrypt's
-          production endpoint,
-          <link xlink:href="https://acme-v02.api.letsencrypt.org/directory"/>, if unset.
-        '';
-      };
-
       preliminarySelfsigned = mkOption {
         type = types.bool;
         default = true;
@@ -688,6 +692,16 @@ in {
         description = ''
           Accept the CA's terms of service. The default provider is Let's Encrypt,
           you can find their ToS at <link xlink:href="https://letsencrypt.org/repository/"/>.
+        '';
+      };
+
+      defaults = mkOption {
+        type = types.submodule ({ ... }: { options = inheritableOpts {}; });
+        description = ''
+          Default values inheritable by all configured certs. You can
+          use this to define options shared by all your certs. These defaults
+          can also be ignored on a per-cert basis using the
+          `security.acme.certs.''${cert}.inheritDefaults' option.
         '';
       };
 
@@ -724,12 +738,16 @@ in {
 
       To use the let's encrypt staging server, use security.acme.server =
       "https://acme-staging-v02.api.letsencrypt.org/directory".
-    ''
-    )
+    '')
     (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
     (mkRemovedOptionModule [ "security" "acme" "preDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
     (mkRemovedOptionModule [ "security" "acme" "activationDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
-    (mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
+    (mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
+    (mkChangedOptionModule [ "security" "acme" "validMinDays" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMinDays))
+    (mkChangedOptionModule [ "security" "acme" "renewInterval" ] [ "security" "acme" "defaults" "renewInterval" ] (config: config.security.acme.renewInterval))
+    (mkChangedOptionModule [ "security" "acme" "email" ] [ "security" "acme" "defaults" "email" ] (config: config.security.acme.email))
+    (mkChangedOptionModule [ "security" "acme" "server" ] [ "security" "acme" "defaults" "server" ] (config: config.security.acme.server))
+    (mkChangedOptionModule [ "security" "acme" "enableDebugLogs" ] [ "security" "acme" "defaults" "enableDebugLogs" ] (config: config.security.acme.enableDebugLogs))
   ];
 
   config = mkMerge [
