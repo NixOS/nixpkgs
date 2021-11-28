@@ -6,7 +6,7 @@
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc)
-, doCheck ? false
+, doCheck ? false, link-lstdcpp ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
 
@@ -112,6 +112,8 @@ in
     preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
+
+    NIX_LDFLAGS = optional link-lstdcpp [ "-lstdc++"];
 
     # export PATH=$PWD/build/bin:${PATH}
     shellHook=''
