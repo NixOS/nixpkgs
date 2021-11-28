@@ -19504,6 +19504,8 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
+  pru = callPackage ../tools/text/pru { };
+
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_19;
