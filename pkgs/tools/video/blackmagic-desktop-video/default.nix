@@ -4,8 +4,8 @@
 
 stdenv.mkDerivation rec {
   pname = "blackmagic-desktop-video";
-  major = "12.0";
-  version = "${major}a14";
+  major = "12.2";
+  version = "${major}a12";
 
   buildInputs = [
     libcxx libcxxabi
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = requireFile {
     name = "Blackmagic_Desktop_Video_Linux_${major}.tar.gz";
-    url = "https://www.blackmagicdesign.com/support/download/76b2edbed5884e1dbbfea104071f1643/Linux";
-    sha256 = "e5a586ee705513cf5e6b024e1ec68621ab91d50b370981023e0bff73a19169c2";
+    url = "https://www.blackmagicdesign.com/support/download/33abc1034cd54cf99101f9acd2edd93d/Linux";
+    sha256 = "62954a18b60d9040aa4a959dff30ac9c260218ef78d6a63cbb243788f7abc05f";
   };
 
   setSourceRoot = ''

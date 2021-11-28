@@ -2,27 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "decklink";
-  major = "12.0";
-  version = "${major}a14";
+  major = "12.2";
+  version = "${major}a12";
 
   src = requireFile {
     name = "Blackmagic_Desktop_Video_Linux_${major}.tar.gz";
-    url = "https://www.blackmagicdesign.com/support/download/76b2edbed5884e1dbbfea104071f1643/Linux";
-    sha256 = "e5a586ee705513cf5e6b024e1ec68621ab91d50b370981023e0bff73a19169c2";
+    url = "https://www.blackmagicdesign.com/support/download/33abc1034cd54cf99101f9acd2edd93d/Linux";
+    sha256 = "62954a18b60d9040aa4a959dff30ac9c260218ef78d6a63cbb243788f7abc05f";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "01-fix-get_user_pages.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/01-fix-get_user_pages.patch?h=decklink&id=212ec426d96db3de0fedad803238d0604cc4df76";
-      sha256 = "193199d59kmwdajhyw9k98636lbxrxwnxwlbhhijp1qms6y1qn2j";
-    })
-    (fetchpatch {
-      name = "02-fix-have_unlocked_ioctl.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/02-fix-have_unlocked_ioctl.patch?h=decklink&id=212ec426d96db3de0fedad803238d0604cc4df76";
-      sha256 = "0yf3bwry28zr1yfnx6wyh650d8kac4q70x95kz4p7sr6r7ajwzdm";
-    })
-  ];
 
   KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   INSTALL_MOD_PATH = placeholder "out";
