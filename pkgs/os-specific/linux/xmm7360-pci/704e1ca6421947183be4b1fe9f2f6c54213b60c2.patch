@@ -1,0 +1,44 @@
+From 704e1ca6421947183be4b1fe9f2f6c54213b60c2 Mon Sep 17 00:00:00 2001
+From: Artur Rojek <contact@artur-rojek.eu>
+Date: Wed, 10 Nov 2021 14:19:08 +0100
+Subject: [PATCH] xmm7360: Add irq handler before device init
+
+Request the irq handler before a call to `xmm7360_dev_init`. This solves
+the `free_netdev` segfault stemming from ring creation timeouts.
+
+Fixes: 0060149958d0 ("Request a single interrupt only")
+Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+---
+ xmm7360.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/xmm7360.c b/xmm7360.c
+index ccd149d..ca7c0e6 100644
+--- a/xmm7360.c
++++ b/xmm7360.c
+@@ -1477,12 +1477,6 @@ static int xmm7360_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	init_waitqueue_head(&xmm->wq);
+ 	INIT_WORK(&xmm->init_work, xmm7360_dev_init_work);
+ 
+-	pci_set_drvdata(dev, xmm);
+-
+-	ret = xmm7360_dev_init(xmm);
+-	if (ret)
+-		goto fail;
+-
+ 	xmm->irq = pci_irq_vector(dev, 0);
+ 	ret = request_irq(xmm->irq, xmm7360_irq0, 0, "xmm7360", xmm);
+ 	if (ret) {
+@@ -1490,7 +1484,11 @@ static int xmm7360_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		goto fail;
+ 	}
+ 
+-	return ret;
++	pci_set_drvdata(dev, xmm);
++
++	ret = xmm7360_dev_init(xmm);
++	if (!ret)
++		return 0;
+ 
+ fail:
+ 	xmm7360_dev_deinit(xmm);

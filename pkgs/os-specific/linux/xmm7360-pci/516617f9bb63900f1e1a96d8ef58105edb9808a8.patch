@@ -1,0 +1,23 @@
+From 516617f9bb63900f1e1a96d8ef58105edb9808a8 Mon Sep 17 00:00:00 2001
+From: Olav Seyfarth <olav@seyfarth.de>
+Date: Thu, 16 Sep 2021 19:32:04 +0200
+Subject: [PATCH] Update xmm7360.c
+
+Signed-off-by: Olav Seyfarth <nursoda@users.noreply.github.com>
+---
+ xmm7360.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xmm7360.c b/xmm7360.c
+index ccd149d..af96186 100644
+--- a/xmm7360.c
++++ b/xmm7360.c
+@@ -1272,7 +1272,7 @@ static int xmm7360_tty_write(struct tty_struct *tty,
+ 	return written;
+ }
+ 
+-static int xmm7360_tty_write_room(struct tty_struct *tty)
++static unsigned xmm7360_tty_write_room(struct tty_struct *tty)
+ {
+ 	struct queue_pair *qp = tty->driver_data;
+ 	if (!xmm7360_qp_can_write(qp))

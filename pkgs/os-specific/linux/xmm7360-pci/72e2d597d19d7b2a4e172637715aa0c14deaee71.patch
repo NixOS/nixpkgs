@@ -1,0 +1,27 @@
+From 72e2d597d19d7b2a4e172637715aa0c14deaee71 Mon Sep 17 00:00:00 2001
+From: Artur Rojek <contact@artur-rojek.eu>
+Date: Sat, 20 Nov 2021 15:40:46 +0100
+Subject: [PATCH] xmm7360: Drop put_tty_driver
+
+As of v5.15, the `put_tty_driver` alias has been dropped in favor of
+directly calling `tty_driver_kref_put` (9f90a4ddef4e). Apply this change
+in the xmm7360 driver in order to allow building on recent kernels.
+
+Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+---
+ xmm7360.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xmm7360.c b/xmm7360.c
+index ccd149d..26858db 100644
+--- a/xmm7360.c
++++ b/xmm7360.c
+@@ -1555,7 +1555,7 @@ static void xmm7360_exit(void)
+ 	pci_unregister_driver(&xmm7360_driver);
+ 	unregister_chrdev_region(xmm_base, 8);
+ 	tty_unregister_driver(xmm7360_tty_driver);
+-	put_tty_driver(xmm7360_tty_driver);
++	tty_driver_kref_put(xmm7360_tty_driver);
+ }
+ 
+ module_init(xmm7360_init);
