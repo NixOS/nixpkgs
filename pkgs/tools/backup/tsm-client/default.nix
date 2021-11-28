@@ -1,16 +1,16 @@
 { lib
 , stdenv
-, autoPatchelfHook
-, buildEnv
 , fetchurl
-, gnugrep
-, makeWrapper
-, procps
+, autoPatchelfHook
 , zlib
-# optional packages that enable certain features
-, acl ? null  # EXT2/EXT3/XFS ACL support
-, jdk8 ? null  # Java GUI
-, lvm2 ? null  # LVM image backup and restore functions
+, lvm2  # LVM image backup and restore functions (optional)
+, acl  # EXT2/EXT3/XFS ACL support (optional)
+, gnugrep
+, procps
+, jdk8  # Java GUI (needed for `enableGui`)
+, buildEnv
+, makeWrapper
+, enableGui ? false  # enables Java GUI `dsmj`
 # path to `dsm.sys` configuration files
 , dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
 , dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
@@ -127,6 +127,9 @@ let
     '';
   };
 
+  binPath = lib.makeBinPath ([ acl gnugrep procps ]
+    ++ lib.optional enableGui jdk8);
+
 in
 
 buildEnv {
@@ -145,7 +148,7 @@ buildEnv {
   #   to the so-called "installation directories"
   # * Add symlinks to the "installation directories"
   #   that point to the `dsm.sys` configuration files
-  # * Drop the Java GUI executable unless `jdk` is present
+  # * Drop the Java GUI executable unless `enableGui` is set
   # * Create wrappers for the command-line interface to
   #   prepare `PATH` and `DSM_DIR` environment variables
   postBuild = ''
@@ -153,13 +156,13 @@ buildEnv {
     ln --symbolic --no-target-directory opt/tivoli/tsm/client/api/bin64 $out/dsmi_dir
     ln --symbolic --no-target-directory "${dsmSysCli}" $out/dsm_dir/dsm.sys
     ln --symbolic --no-target-directory "${dsmSysApi}" $out/dsmi_dir/dsm.sys
-    ${lib.optionalString (jdk8==null) "rm $out/bin/dsmj"}
+    ${lib.optionalString (!enableGui) "rm $out/bin/dsmj"}
     for bin in $out/bin/*
     do
       target=$(readlink "$bin")
       rm "$bin"
       makeWrapper "$target" "$bin" \
-        --prefix PATH : "$out/dsm_dir:${lib.makeBinPath [ procps gnugrep acl jdk8 ]}" \
+        --prefix PATH : "$out/dsm_dir:${binPath}" \
         --set DSM_DIR $out/dsm_dir
     done
   '';
