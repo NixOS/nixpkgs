@@ -56,5 +56,17 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     with subtest("Machine boots correctly"):
         machine.wait_for_unit("multi-user.target")
+
+    with subtest("Boot entries are installed"):
+        entries = machine.succeed("bootctl list")
+        print(entries)
+        error = "NixOS boot entry not found in bootctl list."
+        assert "version: Generation 1" in entries, error
+
+    with subtest("systemctl kexec detects the kernel"):
+        command = machine.succeed("systemctl kexec --dry-run 2>&1")
+        print(command)
+        error = "Kernel and initrd not detected by systemd"
+        assert "/boot/kernels" in command, error
   '';
 })
