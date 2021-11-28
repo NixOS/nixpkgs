@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ ... }:
+import ../make-test-python.nix ({ ... }:
 
 let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";

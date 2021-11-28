@@ -401,6 +401,9 @@ let
 
     };
 
+    # The resulting /etc/pam.d/* file contents are verified in
+    # nixos/tests/pam/pam-file-contents.nix. Please update tests there when
+    # changing the derivation.
     config = {
       name = mkDefault name;
       setLoginUid = mkDefault cfg.startSession;

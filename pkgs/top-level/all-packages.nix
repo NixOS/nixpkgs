@@ -8829,6 +8829,8 @@ with pkgs;
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
+  teapot = callPackage ../applications/office/teapot { };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
@@ -30525,8 +30527,6 @@ with pkgs;
 
   redeclipse = callPackage ../games/redeclipse { };
 
-  residualvm = callPackage ../games/residualvm { };
-
   rftg = callPackage ../games/rftg { };
 
   rigsofrods = callPackage ../games/rigsofrods {
@@ -32234,6 +32234,8 @@ with pkgs;
   emulationstation = callPackage ../misc/emulators/emulationstation { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
+
+  aaphoto = callPackage ../tools/graphics/aaphoto {};
 
   flam3 = callPackage ../tools/graphics/flam3 { };
 

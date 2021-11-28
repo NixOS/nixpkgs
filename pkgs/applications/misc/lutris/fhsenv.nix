@@ -67,14 +67,15 @@ in buildFHSUserEnv {
 
     # Redream // "redream is not available for the x86_64 architecture"
 
-    # ResidualVM
-    flac
 
     # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
     llvm
 
     # ScummVM
     nasm sndio
+
+    # ResidualVM is now merged with ScummVM and therefore does not exist anymore
+    flac
 
     # Snes9x
     libepoxy minizip
