@@ -13,7 +13,6 @@
 , libhandy
 , granite
 , gettext
-, clutter-gtk
 , elementary-icon-theme
 , wrapGAppsHook
 }:
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter-gtk
     elementary-icon-theme
     granite
     gtk3
