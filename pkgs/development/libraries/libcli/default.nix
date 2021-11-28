@@ -1,22 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libcli";
-  version = "1.9.7";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
-    sha256 = "08pmjhqkwldhmcwjhi2l27slf1fk6nxxfaihnk2637pqkycy8z0c";
-    rev = "v${version}";
+    sha256 = "1vqhkz8la6plwz0272m49dzkhv2b4p6gr92355mnmnkir5yrkn92";
+    rev = "V${version}";
     repo = "libcli";
     owner = "dparrish";
   };
-
-  patches =
-    [ (fetchurl {
-        url = "https://github.com/dparrish/libcli/commit/ebc5a09db457ee1be9996711463cbbafe5ea72d5.patch";
-        sha256 = "0szjiw3gd7by1sv924shnngfxvc98xvaqvx228b575xq93xxjcwl";
-      })
-    ];
 
   enableParallelBuilding = true;
 
@@ -24,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Emulate a Cisco-style telnet command-line interface";
-    homepage = "http://sites.dparrish.com/libcli";
+    homepage = "https://dparrish.com/pages/libcli";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };
