@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
+{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     sha256 = "15iw7982g6vc4jy1l9kk1z9sl5bm1bdbwr74y7nvwjs1nffhig7f";
   };
 
-  nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -190,6 +192,8 @@ stdenv.mkDerivation rec {
     # Always use our Meson, not the bundled version, which doesn't
     # have our patches and will be subtly broken because of that.
     "--meson=meson"
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+    "--cpu=${stdenv.hostPlatform.uname.processor}"
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
