@@ -2610,6 +2610,8 @@ in {
 
   django-q = callPackage ../development/python-modules/django-q { };
 
+  django-scopes = callPackage ../development/python-modules/django-scopes { };
+
   djangoql = callPackage ../development/python-modules/djangoql { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
