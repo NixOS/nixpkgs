@@ -129,6 +129,7 @@
 , "@gitbeaker/cli"
 , "gitmoji-cli"
 , "glob"
+, "gramma"
 , "graphql-cli"
 , "graphqurl"
 , "grunt-cli"
