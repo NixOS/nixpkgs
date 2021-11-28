@@ -4,7 +4,9 @@ import ./make-test-python.nix {
   machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
-      export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
+      export PATH=${lib.escapeShellArg (lib.makeBinPath [
+        pkgs.coreutils pkgs.util-linux
+      ])}
       ${lib.escapeShellArg pkgs.runtimeShell} 2>&1
       echo "exit-status:$?"
     '';
@@ -133,6 +135,15 @@ import ./make-test-python.nix {
         testScript = ''
           with subtest("check if all unit dependencies are included"):
               machine.succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek')
+        '';
+      }
+      { config.serviceConfig.UMask = "0077";
+        config.serviceConfig.User = "chroot-testuser";
+        config.serviceConfig.Group = "chroot-testgroup";
+        config.confinement.mode = "chroot-only";
+        testScript = ''
+          with subtest("check if umask affects leading store directories"):
+              machine.succeed('chroot-exec \'namei -m "$_"\' >&2')
         '';
       }
     ];
