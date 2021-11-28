@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
-, nodejs, python
-}:
+{ lib, stdenv, fetchFromGitHub, nodejs, python }:
 
 stdenv.mkDerivation rec {
   pname = "ueforth";
