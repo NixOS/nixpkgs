@@ -332,14 +332,12 @@ rec {
    *   name = "my-file";
    *   files = [ drv1 "${drv2}/path/to/file" ];
    * }
-   * # See also the `concatdText` helper function below.
+   * # See also the `concatText` helper function below.
    *
    * # Writes executable my-file to /nix/store/<store path>/bin/my-file
    * concatTextFile {
    *   name = "my-file";
-   *   files = ''
-   *     Contents of File
-   *   '';
+   *   files = [ drv1 "${drv2}/path/to/file" ];
    *   executable = true;
    *   destination = "/bin/my-file";
    * }
@@ -355,14 +353,12 @@ rec {
     runCommandLocal name
       { inherit files executable checkPhase meta destination; }
       ''
-        n=$out$destination
-        mkdir -p "$(dirname "$n")"
-        cat $files > "$n"
-        touch "$n"
+        file=$out$destination
+        mkdir -p "$(dirname "$file")"
+        cat $files > "$file"
 
+        (test -n "$executable" && chmod +x "$file") || true
         eval "$checkPhase"
-
-        (test -n "$executable" && chmod +x "$n") || true
       '';
 
 
@@ -381,7 +377,7 @@ rec {
    *
    * Example:
    * # Writes contents of files to /nix/store/<store path>
-   * concatdScript "my-file" [ file1 file2 ]
+   * concatScript "my-file" [ file1 file2 ]
    *
   */
   concatScript = name: files: concatTextFile { inherit name files; executable=true; };
