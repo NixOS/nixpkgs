@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = "reactiveData";
     rev = version;
-    sha256 = "sha256-z2qDdmlMOSbAnQppsjbIMRzXUOP4sT09R0LRT65/6ks=";
+    sha256 = "sha256-YLkacIbjxZQ/ThgSxjTqviBYih6eW2GX5H7iybQDv1A=";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild opaline ];
