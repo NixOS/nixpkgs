@@ -1,4 +1,4 @@
-{lib, buildOcaml, fetchurl, type_conv, pa_ounit}:
+{ lib, buildOcaml, fetchFromGitHub, type_conv, pa_ounit }:
 
 buildOcaml rec {
   pname = "pa_bench";
@@ -6,9 +6,11 @@ buildOcaml rec {
 
   minimumSupportedOcamlVersion = "4.00";
 
-  src = fetchurl {
-    url = "https://github.com/janestreet/pa_bench/archive/${version}.tar.gz";
-    sha256 = "1cd6291gdnk6h8ziclg6x3if8z5xy67nfz9gx8sx4k2cwv0j29k5";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = "pa_bench";
+    rev = version;
+    sha256 = "sha256-WaXB3lgNPHy/z6D7uHxfD5W4HYuTZ+ieRbxxHlPao7c=";
   };
 
   buildInputs = [ pa_ounit ];

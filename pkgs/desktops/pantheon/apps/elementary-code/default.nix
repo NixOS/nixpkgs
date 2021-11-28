@@ -21,7 +21,6 @@
 , libsoup
 , vte
 , webkitgtk
-, zeitgeist
 , ctags
 , libgit2-glib
 , wrapGAppsHook
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     libsoup
     vte
     webkitgtk
-    zeitgeist
   ];
 
   # install script fails with UnicodeDecodeError because of printing a fancy elipsis character
