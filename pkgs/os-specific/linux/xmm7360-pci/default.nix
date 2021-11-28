@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1wdb0phqg9rj9g9ycqdya0m7lx24kzjlh25yw0ifp898ddxrrr0c";
   };
 
+  patches = fetchpatch {
+    url = "https://github.com/xmm7360/xmm7360-pci/commit/72e2d597d19d7b2a4e172637715aa0c14deaee71.patch";
+    sha256 = "sha256-8vS9dApk3MdHsFs+dUOhy0VxfL/aOGHyLYaQQVX7Q+A=";
+  };
+
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -24,6 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ flokli hexa ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.14";
+    broken = kernel.kernelOlder "4.10";
   };
 }
