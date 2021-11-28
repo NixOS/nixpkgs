@@ -2574,6 +2574,8 @@ in {
 
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
 
+  django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
+
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
