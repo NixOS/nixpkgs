@@ -9553,6 +9553,8 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
+  recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
+
   recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
   });
