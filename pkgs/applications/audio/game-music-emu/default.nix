@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
     sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
-
+  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DENABLE_UBSAN=OFF" ];
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
