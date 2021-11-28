@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pandas
 , pytorch
+, scipy
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec";
   };
 
-  checkInputs = [ pytestCheckHook pandas pytorch ];
+  checkInputs = [ pytestCheckHook pandas pytorch scipy ];
 
   meta = with lib; {
     description = "Wraps tensor-like objects and provides a uniform slicing interface via __getitem__";
