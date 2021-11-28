@@ -1117,6 +1117,12 @@
     githubId = 1222;
     name = "Aaron VonderHaar";
   };
+  avieth = {
+    email = "aovieth@gmail.com";
+    github = "avieth";
+    name = "Alexander Vieth";
+    githubId = 1420272;
+  };
   avitex = {
     email = "theavitex@gmail.com";
     github = "avitex";
