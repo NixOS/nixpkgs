@@ -2114,4 +2114,7 @@ EOT
     brick = self.brick_0_64_2;
   };
 
+  # build newer version for `pkgs.shellcheck`
+  ShellCheck_0_8_0 = doDistribute super.ShellCheck_0_8_0;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
