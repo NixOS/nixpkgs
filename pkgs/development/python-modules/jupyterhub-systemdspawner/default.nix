@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , jupyterhub
 , tornado
 , bash
@@ -10,15 +10,22 @@ buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
   version = "0.15.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b6e2d981657aa5d3794abb89b1650d056524158a3d0f0f706007cae9b6dbeb2b";
+  src = fetchFromGitHub {
+    owner = "jupyterhub";
+    repo = "systemdspawner";
+    # Corresponds to 0.15.0
+    # Upstream didn't tag the latest release:
+    # https://github.com/jupyterhub/systemdspawner/issues/89
+    rev = "7d7cf42db76d9cfa5a4bc42fff14943877ac570b";
+    sha256 = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
   };
 
   propagatedBuildInputs = [
     jupyterhub
     tornado
   ];
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     substituteInPlace systemdspawner/systemd.py \
@@ -31,10 +38,16 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+  postInstall = ''
+    mkdir -p $out/bin
+    cp check-kernel.bash $out/bin/
+    patchShebangs $out/bin
+  '';
+
   meta = with lib; {
     description = "JupyterHub Spawner using systemd for resource isolation";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc erictapen ];
   };
 }

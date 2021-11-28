@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "monero";
+  pname = "monero-cli";
   version = "0.17.2.3";
 
   src = fetchFromGitHub {
