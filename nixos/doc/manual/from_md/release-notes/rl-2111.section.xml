@@ -2021,6 +2021,16 @@ Superuser created successfully.
           file.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          hydrus has been upgraded from version <literal>438</literal>
+          to <literal>462</literal>. Since upgrading between releases
+          this old is advised against, be sure to have a backup of your
+          data before upgrading. For details, see
+          <link xlink:href="https://hydrusnetwork.github.io/hydrus/help/getting_started_installing.html#big_updates">the
+          hydrus manual</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
