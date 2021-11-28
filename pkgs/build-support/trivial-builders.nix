@@ -380,7 +380,7 @@ rec {
    * concatScript "my-file" [ file1 file2 ]
    *
   */
-  concatScript = name: files: concatTextFile { inherit name files; executable=true; };
+  concatScript = name: files: concatTextFile { inherit name files; executable = true; };
 
 
   /*
