@@ -14,10 +14,9 @@ buildPythonApplication rec{
   propagatedBuildInputs = [ pexpect pyyaml openssh ];
 
   meta = with lib; {
-    description = "Bring your favorite shell wherever you go through the ssh";
+    description = "Bring your favorite shell wherever you go through ssh";
     homepage = "https://github.com/xxh/xxh";
     license = licenses.bsd2;
     maintainers = [ maintainers.pasqui23 ];
   };
-
 }
