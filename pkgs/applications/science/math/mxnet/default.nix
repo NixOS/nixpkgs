@@ -8,11 +8,12 @@ assert cudnnSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "mxnet";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://github.com/apache/incubator-mxnet/releases/download/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
-    sha256 = "1vvdb7pfh63kb9fzs6gqp95q550a3ck4cj9mqxlk9wwhkh30dsq1";
+    name = "apache-mxnet-src-${version}-incubating.tar.gz";
+    url = "https://dlcdn.apache.org/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    hash = "sha256-la/5hYlaukCcCNVRRRCuOLiEkM+2KBqzpf8PWCbI21Q=";
   };
 
   patches = [
