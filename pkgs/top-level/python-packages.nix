@@ -1385,6 +1385,8 @@ in {
 
   bleach = callPackage ../development/python-modules/bleach { };
 
+  bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
+
   bleak = callPackage ../development/python-modules/bleak { };
 
   bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
