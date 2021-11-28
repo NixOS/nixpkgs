@@ -17,7 +17,10 @@
                 !stdenv.targetPlatform.isWindows
 , elfutils # for DWARF support
 
-, useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
+, useLLVM ? !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isSparc
+              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -128,6 +131,8 @@ let
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ lib.optional enableDwarf elfutils;
 
+  # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
+  # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
@@ -139,15 +144,6 @@ let
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
     (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
-
-  runtimeDeps = [
-    targetPackages.stdenv.cc.bintools
-    coreutils
-  ]
-  # On darwin, we need unwrapped bintools as well (for otool)
-  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-    targetPackages.stdenv.cc.bintools.bintools
-  ];
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -174,6 +170,7 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
+  # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
   preConfigure = ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
@@ -191,6 +188,19 @@ stdenv.mkDerivation (rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+  '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
+    export INSTALL_NAME_TOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}install_name_tool"
+  '' + lib.optionalString useLLVM ''
+    export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
+  '' + lib.optionalString (targetCC.isClang || (useLLVM && stdenv.targetPlatform.isDarwin)) (let
+    # LLVM backend on Darwin needs clang, if we are already using clang, might as well set the environment variable.
+    # See also https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    clang = if targetCC.isClang then targetCC else llvmPackages.clang;
+  in ''
+    export CLANG="${clang}/bin/${clang.targetPrefix}clang"
+  '') + ''
 
     # otherwise haddock fails when generating the compiler docs
     export LANG=C.UTF-8
@@ -278,9 +288,6 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
-    ++ lib.optional useLLVM llvmPackages.llvm;
-
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
 
@@ -308,13 +315,6 @@ stdenv.mkDerivation (rec {
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
-
-    # Patch scripts to include "readelf" and "cat" in $PATH.
-    for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${lib.makeBinPath runtimeDeps}"' $i
-    done
   '';
 
   passthru = {
