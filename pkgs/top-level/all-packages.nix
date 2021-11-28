@@ -29640,8 +29640,6 @@ with pkgs;
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
-  dero = callPackage ../applications/blockchains/dero { boost = boost165; };
-
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte { withGui = true; };
   digibyted = callPackage ../applications/blockchains/digibyte { withGui = false; };
 
