@@ -3138,6 +3138,8 @@ in {
 
   extras = callPackage ../development/python-modules/extras { };
 
+  extruct = callPackage ../development/python-modules/extruct { };
+
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
