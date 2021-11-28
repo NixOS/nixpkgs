@@ -2280,6 +2280,8 @@ with pkgs;
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
+
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   btrbk = callPackage ../tools/backup/btrbk {
