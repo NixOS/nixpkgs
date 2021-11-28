@@ -59,6 +59,7 @@ let
     , src ? null
     , broken ? false
     , version ? "unstable-2021-11-22"
+    , platforms ? retroarch.meta.platforms
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation (
@@ -109,10 +110,9 @@ let
         };
 
         meta = with lib; {
-          inherit broken description license;
+          inherit broken description license platforms;
           homepage = "https://www.libretro.com/";
           maintainers = with maintainers; [ edwtjo hrdinka MP2E thiagokokada ];
-          platforms = platforms.unix;
         };
       }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
     );
@@ -193,7 +193,7 @@ in
     description = "Port of Mednafen's Saturn core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
   beetle-snes = mkLibRetroCore {
@@ -423,7 +423,7 @@ in
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    meta.platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
   fmsx = mkLibRetroCore {
@@ -701,6 +701,7 @@ in
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
     postBuild = "cd /build/source/build/pcsx2";
+    platforms = lib.platforms.x86;
   };
 
   pcsx_rearmed = mkLibRetroCore {
