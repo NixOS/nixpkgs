@@ -4872,6 +4872,8 @@ in {
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
 
+  jstyleson = callPackage ../development/python-modules/jstyleson { };
+
   jug = callPackage ../development/python-modules/jug { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
