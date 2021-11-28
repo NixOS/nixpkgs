@@ -322,6 +322,71 @@ rec {
     $CC -x c code.c -o "$n"
     '';
 
+
+  /* concat a list of files to the nix store.
+   * The contents of files are added to the file in the store.
+   *
+   * Examples:
+   * # Writes my-file to /nix/store/<store path>
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = [ drv1 "${drv2}/path/to/file" ];
+   * }
+   * # See also the `concatdText` helper function below.
+   *
+   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = ''
+   *     Contents of File
+   *   '';
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
+   */
+  concatTextFile =
+    { name # the name of the derivation
+    , files
+    , executable ? false # run chmod +x ?
+    , destination ? ""   # relative path appended to $out eg "/bin/foo"
+    , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , meta ? { }
+    }:
+    runCommandLocal name
+      { inherit files executable checkPhase meta destination; }
+      ''
+        n=$out$destination
+        mkdir -p "$(dirname "$n")"
+        cat $files > "$n"
+        touch "$n"
+
+        eval "$checkPhase"
+
+        (test -n "$executable" && chmod +x "$n") || true
+      '';
+
+
+  /*
+   * Writes a text file to nix store with no optional parameters available.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatText "my-file" [ file1 file2 ]
+   *
+  */
+  concatText = name: files: concatTextFile { inherit name files; };
+
+    /*
+   * Writes a text file to nix store with and mark it as executable.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatdScript "my-file" [ file1 file2 ]
+   *
+  */
+  concatScript = name: files: concatTextFile { inherit name files; executable=true; };
+
+
   /*
    * Create a forest of symlinks to the files in `paths'.
    *
