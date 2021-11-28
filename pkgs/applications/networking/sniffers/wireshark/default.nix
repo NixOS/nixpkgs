@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpg-error, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, makeWrapper
-, withQt ? true, qt5 ? null, wrapGAppsHook ? null
+, withQt ? true, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
 
@@ -33,9 +33,7 @@ in stdenv.mkDerivation {
   # Avoid referencing -dev paths because of debug assertions.
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
-  nativeBuildInputs = [
-    bison cmake flex makeWrapper pkg-config
-  ] ++ optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ bison cmake flex makeWrapper pkg-config ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
     gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
