@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/wolfSSL/wolfssl/commit/822aa92fccf77558e250131c1c6e9bb84d07afe8.patch";
       sha256 = "1n7774hy9ybbxmg8dldqnhw279k7fkxwvw1s2mjjhkzra9w5x2zy";
     })
+    (fetchpatch {
+      name = "CVE-2021-38597.patch";
+      url = "https://github.com/wolfSSL/wolfssl/commit/f93083be72a3b3d956b52a7ec13f307a27b6e093.patch";
+      sha256 = "1b9zxisc15mm1s6sl8dmpaw520hcndymf6b003xpwsb5070xcld0";
+    })
   ];
 
   # almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
