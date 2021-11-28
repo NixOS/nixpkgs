@@ -367,7 +367,6 @@ in
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
     makefile = "Makefile";
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DLIBRETRO=ON"
       "-DLIBRETRO_STATIC=1"
       "-DENABLE_QT=OFF"
@@ -695,7 +694,6 @@ in
     ];
     makefile = "Makefile";
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DLIBRETRO=ON"
     ];
     postPatch = ''
@@ -846,7 +844,6 @@ in
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DBUILD_LIBRETRO_CORE=ON"
     ];
     postPatch = "mkdir -p src/duckstation-libretro";
