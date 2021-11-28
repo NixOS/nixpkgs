@@ -1084,7 +1084,6 @@ dont-distribute-packages:
  - extract-dependencies
  - extrapolate
  - factual-api
- - fakedata-quickcheck
  - falling-turnip
  - fallingblocks
  - family-tree
@@ -1514,7 +1513,6 @@ dont-distribute-packages:
  - heavy-logger-instances
  - hecc
  - hedgehog-checkers-lens
- - hedgehog-fakedata
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson

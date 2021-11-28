@@ -1352,7 +1352,6 @@ broken-packages:
   - fadno-braids
   - failable-list
   - failure-detector
-  - fakedata
   - fake-type
   - faktory
   - f-algebra-gen
