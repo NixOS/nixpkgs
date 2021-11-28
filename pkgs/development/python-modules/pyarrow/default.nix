@@ -19,6 +19,7 @@ buildPythonPackage rec {
   PYARROW_BUILD_TYPE = "release";
 
   PYARROW_WITH_DATASET = true;
+  PYARROW_WITH_FLIGHT = _arrow-cpp.enableFlight;
   PYARROW_WITH_PARQUET = true;
 
   PYARROW_CMAKE_OPTIONS = [
@@ -28,9 +29,13 @@ buildPythonPackage rec {
     # ourselves
     "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
+
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _arrow-cpp;
 
+  ARROW_TEST_DATA = lib.optionalString doCheck _arrow-cpp.ARROW_TEST_DATA;
+
+  doCheck = true;
   dontUseCmakeConfigure = true;
 
   preBuild = ''
