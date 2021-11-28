@@ -25530,6 +25530,8 @@ with pkgs;
 
   lollypop = callPackage ../applications/audio/lollypop { };
 
+  losslessaudiochecker = callPackage ../applications/audio/losslessaudiochecker { };
+
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
   manim = python3Packages.callPackage ../applications/video/manim {
