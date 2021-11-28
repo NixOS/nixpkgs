@@ -32435,12 +32435,6 @@ with pkgs;
 
   mame = libsForQt514.callPackage ../misc/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-    # TODO: remove it on mame 0.238
-    stdenv =
-      if stdenv.cc.isClang then
-        overrideCC stdenv clang_6
-      else
-        stdenv;
   };
 
   martyr = callPackage ../development/libraries/martyr { };
