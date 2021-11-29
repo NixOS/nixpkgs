@@ -4269,6 +4269,8 @@ in {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  language-data = callPackage ../development/python-modules/language-data { };
+
   lark-parser = callPackage ../development/python-modules/lark-parser { };
 
   latexcodec = callPackage ../development/python-modules/latexcodec { };
