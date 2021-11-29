@@ -17,24 +17,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zrqBjaIjtF6bJMbmw7Zo+BeApN6sxxfLkrzsDjdvC78=";
+    sha256 = "sha256-1HApl/RZ0w5Tf2OPu1QBUa36uIqilp+dDbPjujn0e9s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit patches src;
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-YRyG2yflEXKklNqXiDD9oK3J1lq4o704+Eeu2hyY3xI=";
+    sha256 = "sha256-oFSruBnoodv6/0/OrmJ/2SVoWm3u3FGtzVJ9xgp0+Cg=";
   };
-
-  patches = [
-    # Add Cargo.lock, from upstream PR:
-    # https://github.com/explosion/spacy-alignments/pull/3
-    (fetchpatch {
-      url = "https://github.com/explosion/spacy-alignments/commit/7b0ba13ff0d245bfbbe344a36fb7bbd311dd4906.diff";
-      sha256 = "d4702997f459d30e537f638fbb540151adfab88aa2969f9d0db3e3ba39f47bdb";
-      excludes = [ ".gitignore" ];
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-rust
