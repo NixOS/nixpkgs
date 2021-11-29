@@ -4414,6 +4414,18 @@ final: prev:
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-neoclip-lua = buildVimPluginFrom2Nix {
+    pname = "nvim-neoclip.lua";
+    version = "2021-11-06";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-neoclip.lua";
+      rev = "cb4eff8bb7bb4bbb3d1629178a7dc62322773e05";
+      sha256 = "1szwg804gajq84icl39gsmbqkaxh3yffdb50wh0pcgj86b4w5hda";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-neoclip.lua/";
+  };
+
   nvim-nonicons = buildVimPluginFrom2Nix {
     pname = "nvim-nonicons";
     version = "2021-10-25";
