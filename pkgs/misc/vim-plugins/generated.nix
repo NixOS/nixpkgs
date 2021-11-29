@@ -6508,6 +6508,18 @@ final: prev:
     meta.homepage = "https://github.com/KabbAmine/vCoolor.vim/";
   };
 
+  venn-nvim = buildVimPluginFrom2Nix {
+    pname = "venn.nvim";
+    version = "2021-10-19";
+    src = fetchFromGitHub {
+      owner = "jbyuki";
+      repo = "venn.nvim";
+      rev = "d5a9c73fe7772c11414fc52acbb1d1bdb1ebc70f";
+      sha256 = "1mzxvx1vqnm89yzzy6n3s30y9w7s38lbjhnwdf4diy0kdzyq8x06";
+    };
+    meta.homepage = "https://github.com/jbyuki/venn.nvim/";
+  };
+
   verilog_systemverilog-vim = buildVimPluginFrom2Nix {
     pname = "verilog_systemverilog.vim";
     version = "2021-01-16";
