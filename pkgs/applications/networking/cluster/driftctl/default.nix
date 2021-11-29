@@ -23,12 +23,12 @@ buildGoModule rec {
     # and remove corresponding flags from --help, so things look tidy.
     find -name driftctl.go | \
       xargs sed -i -e '/("no-version-check"/ d'  -e '/("disable-telemetry"/ d'
-
-    # Presumably it can be done with ldflags, but I failed to find incantation
-    # that would work, we here we go old-school.
-    find -name version.go | xargs sed -i -e 's/"dev"/"${version}"/'
-    find -name build.go | xargs sed -i -e 's/"dev"/"release"/'
   '';
+
+  ldflags = [
+    "-X github.com/cloudskiff/driftctl/build.env=release"
+    "-X github.com/cloudskiff/driftctl/pkg/version.version=v${version}"
+  ];
 
   meta = with lib; {
     description = "Tool to track infrastructure drift";
