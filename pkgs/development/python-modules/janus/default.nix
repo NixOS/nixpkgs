@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "janus";
@@ -10,6 +12,10 @@ buildPythonPackage rec {
   };
 
   disabled = pythonOlder "3.6";
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   checkInputs = [ pytest-asyncio pytestCheckHook ];
 
