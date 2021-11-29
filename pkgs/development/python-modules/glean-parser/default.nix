@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytest-runner
 , pythonOlder
 , setuptools-scm
 # build inputs
@@ -26,6 +25,10 @@ buildPythonPackage rec {
     sha256 = "sha256-wZSro1pX/50TlSfFMh71JlmXlJlONVutTDFL06tkw+s=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "pytest-runner" ""
+  '';
+
   propagatedBuildInputs = [
     appdirs
     click
@@ -41,7 +44,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest-runner
   ];
   disabledTests = [
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1741668
