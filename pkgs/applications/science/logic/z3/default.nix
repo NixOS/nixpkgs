@@ -5,13 +5,14 @@
 , python
 , fixDarwinDylibNames
 , javaBindings ? false
-, ocamlBindings ? false
 , pythonBindings ? true
 , jdk ? null
 , ocaml ? null
 , findlib ? null
 , zarith ? null
 }:
+
+assert javaBindings -> jdk != null;
 
 with lib;
 
@@ -27,11 +28,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ cmake ] ;
+  buildInputs = [ cmake ]
+    ++ optional javaBindings jdk
+  ;
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
-  cmakeFlags = [];
+  cmakeFlags = []
+    ++ optional javaBindings ''
+        -DZ3_BUILD_JAVA_BINDINGS=True
+        -DZ3_INSTALL_JAVA_BINDINGS=True
+       ''
+  ;
 
   outputs = [ "out" "lib" "dev" ] ;
 
