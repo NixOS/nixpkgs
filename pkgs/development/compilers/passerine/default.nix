@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "passerine";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "vrtbl";
     repo = "passerine";
-    rev = "dd8a6f5efc5dcb03d45b102f61cc8a50d46e8e98";
-    sha256 = "sha256-/QzqKLkxAVqvTY4Uft1qk7nJat6nozykB/4X1YGqu/I=";
+    rev = "30757a528c1656c15ed3403d355d2b9dee028991";
+    sha256 = "1vffnl5472gsskq9065cifh4fk52z602sb448ghf1xq9n98drdjf";
   };
 
-  cargoSha256 = "sha256-8WiiDLIJ/abXELF8S+4s+BPA/Lr/rpKmC1NWPCLzQWA=";
+  cargoSha256 = "0bd8d5k6d6vwmlsbfkvxx1xbkb9wqihpnmym1lnhk875997hxsq3";
 
   meta = with lib; {
     description = "A small extensible programming language designed for concise expression with little code";
