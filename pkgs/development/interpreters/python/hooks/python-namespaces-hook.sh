@@ -24,6 +24,12 @@ pythonNamespacesHook() {
                 rm -v "$pathToRemove"
             fi
 
+            # remove ${pname}-${version}-${python-interpeter}-nspkg.pth
+            if [ -z ${dontRemovePth-} ]; then
+                # .pth files are located in the parent directory of a module
+                @findutils@/bin/find ${constructedPath}/../ -name '*-nspkg.pth' -exec rm -v "{}" +
+            fi
+
             # remove __pycache__/ entry, can be interpreter specific. E.g. __init__.cpython-38.pyc
             # use null characters to perserve potential whitespace in filepath
             if [ -d "$pycachePath" ]; then
