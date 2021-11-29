@@ -1,22 +1,24 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , aiohttp
-, backoff
-, poetry-core
-, packaging
-, yarl
 , aresponses
+, awesomeversion
+, backoff
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "wled";
   version = "0.10.0";
-  disabled = pythonOlder "3.8";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -31,8 +33,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    awesomeversion
     backoff
-    packaging
+    cachetools
     yarl
   ];
 
@@ -49,7 +52,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonImportsCheck = [ "wled" ];
+  pythonImportsCheck = [
+    "wled"
+  ];
 
   meta = with lib; {
     description = "Asynchronous Python client for WLED";
