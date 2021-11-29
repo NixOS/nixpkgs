@@ -22,18 +22,21 @@ let
       });
       werkzeug = self.callPackage ../../../development/python-modules/werkzeug/1.nix { };
       flask = self.callPackage ../../../development/python-modules/flask/1.nix { };
+      sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
+        meta = meta // { broken = false; };
+      });
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kv6XqsbGkaGEhfNxSOjCe6JbFOJnuqwM8CR/J9lJjks=";
+    sha256 = "sha256-SsOEmbyEAKU3pdzsyqi5SwDgJMGEAzyCywoio9iFQAA=";
     fetchSubmodules = true;
   };
 
