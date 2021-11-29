@@ -64,6 +64,7 @@ CORES = {
     "o2em": {"repo": "libretro-o2em"},
     "opera": {"repo": "opera-libretro"},
     "parallel-n64": {"repo": "parallel-n64"},
+    "pcsx2": {"repo": "pcsx2"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},
     "play": {"repo": "Play-", "owner": "jpd002", "fetch_submodules": True},

@@ -30,7 +30,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
+  pix = callPackage ./pix { };
   xapps = callPackage ./xapps { };
   warpinator = callPackage ./warpinator { };
+  xreader = callPackage ./xreader { };
   xviewer = callPackage ./xviewer { };
 })

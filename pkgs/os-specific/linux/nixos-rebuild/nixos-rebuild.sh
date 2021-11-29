@@ -1,4 +1,5 @@
 #! @runtimeShell@
+# shellcheck shell=bash
 
 if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
@@ -132,7 +133,7 @@ if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
 fi
 
-if [ -z "$buildHost" -a -n "$targetHost" ]; then
+if [[ -z "$buildHost" && -n "$targetHost" ]]; then
     buildHost="$targetHost"
 fi
 if [ "$targetHost" = localhost ]; then
@@ -217,8 +218,7 @@ nixBuild() {
 }
 
 nixFlakeBuild() {
-    if [[ -z "$buildHost" && -z "$targetHost" ]] &&
-       ! [ "$action" = switch -o "$action" = boot ]
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot ]]
     then
         nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result
@@ -273,7 +273,7 @@ if [ -z "$action" ]; then showSyntax; fi
 # executed, so it's safe to run nixos-rebuild against a potentially
 # untrusted tree.
 canRun=
-if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
+if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
     canRun=1
 fi
 
@@ -377,7 +377,7 @@ trap cleanup EXIT
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
-if [ -n "$rollback" -o "$action" = dry-build ]; then
+if [[ -n "$rollback" || "$action" = dry-build ]]; then
     buildNix=
 fi
 
@@ -411,7 +411,7 @@ if [[ -n $buildNix && -z $flake ]]; then
             if ! nixStorePath="$(nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
                 nixStorePath="$(prebuiltNix "$(uname -m)")"
             fi
-            if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
+            if ! nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
                 --option extra-binary-caches https://cache.nixos.org/; then
                 echo "warning: don't know how to get latest Nix" >&2
             fi
@@ -464,7 +464,7 @@ fi
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
-    if [ "$action" = switch -o "$action" = boot ]; then
+    if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
@@ -472,7 +472,7 @@ if [ -z "$rollback" ]; then
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
-    elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
+    elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
@@ -494,14 +494,14 @@ if [ -z "$rollback" ]; then
         showSyntax
     fi
     # Copy build to target host if we haven't already done it
-    if ! [ "$action" = switch -o "$action" = boot ]; then
+    if ! [[ "$action" = switch || "$action" = boot ]]; then
         copyToTarget "$pathToConfig"
     fi
 else # [ -n "$rollback" ]
-    if [ "$action" = switch -o "$action" = boot ]; then
+    if [[ "$action" = switch || "$action" = boot ]]; then
         targetHostCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
-    elif [ "$action" = test -o "$action" = build ]; then
+    elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
             targetHostCmd nix-env -p "$profile" --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
@@ -518,7 +518,7 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
+if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
     if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
         echo "warning: error(s) occurred while switching to the new configuration" >&2
         exit 1
@@ -526,9 +526,9 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = d
 fi
 
 
-if [ "$action" = build-vm -o "$action" = build-vm-with-bootloader ]; then
+if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
     cat >&2 <<EOF
 
-Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm)
+Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
 fi

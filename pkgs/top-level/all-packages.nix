@@ -2280,6 +2280,8 @@ with pkgs;
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
+
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   btrbk = callPackage ../tools/backup/btrbk {
@@ -3525,6 +3527,8 @@ with pkgs;
 
   restream = callPackage ../applications/misc/remarkable/restream { };
 
+  ropgadget = with python3Packages; toPythonApplication ropgadget;
+
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
@@ -4320,6 +4324,8 @@ with pkgs;
   cpufetch = callPackage ../tools/misc/cpufetch { };
 
   crackxls = callPackage ../tools/security/crackxls { };
+
+  crd2pulumi = callPackage ../development/tools/crd2pulumi { };
 
   create-cycle-app = nodePackages.create-cycle-app;
 
@@ -8596,7 +8602,7 @@ with pkgs;
   pinnwand = callPackage ../servers/pinnwand { };
 
   piping-server-rust = callPackage ../servers/piping-server-rust {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
@@ -11568,7 +11574,7 @@ with pkgs;
 
   dictu = callPackage ../development/compilers/dictu { };
 
-  dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
+  dotty = callPackage ../development/compilers/scala/dotty.nix { };
 
   ecl = callPackage ../development/compilers/ecl { };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
@@ -12075,7 +12081,15 @@ with pkgs;
   # current default compiler is”, if you bump this:
   haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8107;
 
-  inherit (haskellPackages) ghc;
+  # haskellPackages.ghc is build->host (it exposes the compiler used to build the
+  # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
+  # consistent with the gcc, gnat, clang etc. derivations
+  #
+  # We use targetPackages.haskellPackages.ghc if available since this also has
+  # the withPackages wrapper available. In the final cross-compiled package set
+  # however, targetPackages won't be populated, so we need to fall back to the
+  # plain, cross-compiled compiler (which is only theoretical at the moment).
+  ghc = targetPackages.haskellPackages.ghc or haskell.compiler.ghc8107;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
@@ -13008,8 +13022,8 @@ with pkgs;
 
   scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
   scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
-  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; jre = jdk8; };
-  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; jre = jdk8; };
+  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
 
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners {
@@ -15961,6 +15975,8 @@ with pkgs;
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
 
   ctpl = callPackage ../development/libraries/ctpl { };
+
+  cppe = callPackage ../development/libraries/science/chemistry/cppe { };
 
   cppdb = callPackage ../development/libraries/cppdb { };
 
@@ -27027,7 +27043,7 @@ with pkgs;
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
     else
-      libsForQt514.callPackage ../applications/audio/musescore { };
+      libsForQt5.callPackage ../applications/audio/musescore { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -28291,6 +28307,8 @@ with pkgs;
   skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
   soci = callPackage ../development/libraries/soci { };
+
+  socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
@@ -29686,8 +29704,6 @@ with pkgs;
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
-  dero = callPackage ../applications/blockchains/dero { boost = boost165; };
-
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte { withGui = true; };
   digibyted = callPackage ../applications/blockchains/digibyte { withGui = false; };
 
@@ -29749,13 +29765,17 @@ with pkgs;
 
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
-  monero = callPackage ../applications/blockchains/monero {
+  monero-cli = callPackage ../applications/blockchains/monero-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
-  oxen = callPackage ../applications/blockchains/oxen { };
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
+    boost = boost17x;
+  };
 
-  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
+  oxen = callPackage ../applications/blockchains/oxen {
+    boost = boost17x;
+  };
 
   masari = callPackage ../applications/blockchains/masari { boost = boost165; };
 
@@ -32429,12 +32449,6 @@ with pkgs;
 
   mame = libsForQt514.callPackage ../misc/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-    # TODO: remove it on mame 0.238
-    stdenv =
-      if stdenv.cc.isClang then
-        overrideCC stdenv clang_6
-      else
-        stdenv;
   };
 
   martyr = callPackage ../development/libraries/martyr { };

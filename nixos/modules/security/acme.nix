@@ -77,6 +77,7 @@ let
 
     unitConfig = {
       ConditionPathExists = "!/var/lib/acme/.minica/key.pem";
+      StartLimitIntervalSec = 0;
     };
 
     serviceConfig = commonServiceConfig // {
@@ -235,6 +236,7 @@ let
 
       unitConfig = {
         ConditionPathExists = "!/var/lib/acme/${cert}/key.pem";
+        StartLimitIntervalSec = 0;
       };
 
       serviceConfig = commonServiceConfig // {

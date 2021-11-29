@@ -1,6 +1,5 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "crownstone-sse";
-  version = "2.0.2";
+  version = "2.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,19 +17,13 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-sse";
     rev = version;
-    sha256 = "0rrr92j8pi5annrfa22k1hggsyyacl9asi9i8yrj4jqdjvwjn2gc";
+    sha256 = "sha256-O1joOH7HCXYCro26p6foMMpg0UXfOgXD0BXuN50OK7U=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    asynctest
     certifi
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "aiohttp~=3.7.4" "aiohttp>=3.7.4"
-  '';
 
   # Tests are only providing coverage
   doCheck = false;

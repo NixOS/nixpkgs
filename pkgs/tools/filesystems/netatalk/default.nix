@@ -1,6 +1,6 @@
-{ fetchurl, lib, stdenv, autoreconfHook, pkg-config, perl, python
+{ fetchurl, lib, stdenv, autoreconfHook, pkg-config, perl, python3
 , db, libgcrypt, avahi, libiconv, pam, openssl, acl
-, ed, libtirpc, libevent
+, ed, libtirpc, libevent, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +15,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-suid.patch
     ./omitLocalstatedirCreation.patch
+    (fetchpatch {
+      name = "make-afpstats-python3-compatible.patch";
+      url = "https://github.com/Netatalk/Netatalk/commit/916b515705cf7ba28dc53d13202811c6e1fe6a9e.patch";
+      sha256 = "sha256-DAABpYjQPJLsQBhmtP30gA357w0Qn+AsnFgAeyDC/Rg=";
+    })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl python python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook pkg-config perl python3 python3.pkgs.wrapPython ];
 
   buildInputs = [ db libgcrypt avahi libiconv pam openssl acl libevent ];
 
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    buildPythonPath ${python.pkgs.dbus-python}
+    buildPythonPath ${python3.pkgs.dbus-python}
     patchPythonScript $out/bin/afpstats
   '';
 
