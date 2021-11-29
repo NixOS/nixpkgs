@@ -62,4 +62,5 @@ nix-instantiate -A lib.maintainers --eval --strict --json \
     | jq -r '.[]|.github|select(.)' \
     | parallel -j5 checkUser
 
+# To check some arbitrary users:
 # parallel -j100 checkUser ::: "eelco" "profpatsch" "Profpatsch" "a"
