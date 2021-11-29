@@ -14,6 +14,7 @@
 , hexdump
 , hidapi
 , icu
+, libaio
 , libGL
 , libGLU
 , libevdev
@@ -21,6 +22,7 @@
 , libpcap
 , libpng
 , libvorbis
+, libxml2
 , libzip
 , makeWrapper
 , nasm
@@ -36,6 +38,8 @@
 , udev
 , which
 , xorg
+, xxd
+, xz
 , zlib
 }:
 
@@ -55,6 +59,7 @@ let
     , src ? null
     , broken ? false
     , version ? "unstable-2021-11-22"
+    , platforms ? retroarch.meta.platforms
     , ...
     }@args:
     lib.makeOverridable stdenv.mkDerivation (
@@ -105,10 +110,9 @@ let
         };
 
         meta = with lib; {
-          inherit broken description license;
+          inherit broken description license platforms;
           homepage = "https://www.libretro.com/";
           maintainers = with maintainers; [ edwtjo hrdinka MP2E thiagokokada ];
-          platforms = platforms.unix;
         };
       }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
     );
@@ -189,7 +193,7 @@ in
     description = "Port of Mednafen's Saturn core to libretro";
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
-    meta.platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
   beetle-snes = mkLibRetroCore {
@@ -363,7 +367,6 @@ in
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
     makefile = "Makefile";
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DLIBRETRO=ON"
       "-DLIBRETRO_STATIC=1"
       "-DENABLE_QT=OFF"
@@ -420,7 +423,7 @@ in
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
-    meta.platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
   fmsx = mkLibRetroCore {
@@ -669,6 +672,38 @@ in
     '';
   };
 
+  pcsx2 = mkLibRetroCore {
+    core = "pcsx2";
+    version = "unstable-2021-11-27";
+    description = "Port of PCSX2 to libretro";
+    license = lib.licenses.gpl3Plus;
+    extraNativeBuildInputs = [
+      cmake
+      gettext
+      pkg-config
+    ];
+    extraBuildInputs = [
+      libaio
+      libGL
+      libGLU
+      libpcap
+      libpng
+      libxml2
+      xz
+      xxd
+    ];
+    makefile = "Makefile";
+    cmakeFlags = [
+      "-DLIBRETRO=ON"
+    ];
+    postPatch = ''
+      # remove ccache
+      substituteInPlace CMakeLists.txt --replace "ccache" ""
+    '';
+    postBuild = "cd /build/source/build/pcsx2";
+    platforms = lib.platforms.x86;
+  };
+
   pcsx_rearmed = mkLibRetroCore {
     core = "pcsx_rearmed";
     description = "Port of PCSX ReARMed with GNU lightning to libretro";
@@ -810,7 +845,6 @@ in
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DBUILD_LIBRETRO_CORE=ON"
     ];
     postPatch = "mkdir -p src/duckstation-libretro";

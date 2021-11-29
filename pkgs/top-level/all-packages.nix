@@ -2280,6 +2280,8 @@ with pkgs;
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
+
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   btrbk = callPackage ../tools/backup/btrbk {
@@ -4320,6 +4322,8 @@ with pkgs;
   cpufetch = callPackage ../tools/misc/cpufetch { };
 
   crackxls = callPackage ../tools/security/crackxls { };
+
+  crd2pulumi = callPackage ../development/tools/crd2pulumi { };
 
   create-cycle-app = nodePackages.create-cycle-app;
 
