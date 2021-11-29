@@ -1,24 +1,34 @@
-{ lib, stdenv, fetchurl, fetchpatch, sbcl, texinfo, perl, python3, makeWrapper, autoreconfHook
-, rlwrap ? null, tk ? null, gnuplot ? null, ecl ? null, ecl-fasl ? false
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, texinfo
+, perl
+, python3
+, makeWrapper
+, autoreconfHook
+, rlwrap ? null
+, tk ? null
+, gnuplot ? null
+, ecl ? null
+, ecl-fasl ? false
+, sbcl
 }:
 
 let
-  name    = "maxima";
-  version = "5.45.0";
-
   lisp-compiler = if ecl-fasl then ecl else sbcl;
 
   searchPath =
     lib.makeBinPath
       (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
 in
-stdenv.mkDerivation ({
-  inherit version;
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "maxima";
+  version = "5.45.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "sha256-x2MfMmRIBc67e6/vOrUzHEus0sJ+OE/YgyO1A5pg0Ng=";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-/pAWJ2lwvvIUoaJENIVYZEUU1/36pPyLnQ6Hr8u059w=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +77,8 @@ stdenv.mkDerivation ({
       sha256 = "06961hn66rhjijfvyym21h39wk98sfxhp051da6gz0n9byhwc6zg";
     })
 
-    # undo https://sourceforge.net/p/maxima/code/ci/f5e9b0f7eb122c4e48ea9df144dd57221e5ea0ca, see see https://trac.sagemath.org/ticket/13364#comment:93
+    # undo https://sourceforge.net/p/maxima/code/ci/f5e9b0f7eb122c4e48ea9df144dd57221e5ea0ca
+    # see https://trac.sagemath.org/ticket/13364#comment:93
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
@@ -100,10 +111,10 @@ stdenv.mkDerivation ({
     ecl = ecl;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -111,7 +122,7 @@ stdenv.mkDerivation ({
       DOE-MACSYMA and licensed under the GPL. Its abilities include
       symbolic integration, 3D plotting, and an ODE solver.
     '';
-
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = platforms.unix;
   };
-})
+}
