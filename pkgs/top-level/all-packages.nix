@@ -3527,6 +3527,8 @@ with pkgs;
 
   restream = callPackage ../applications/misc/remarkable/restream { };
 
+  ropgadget = with python3Packages; toPythonApplication ropgadget;
+
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
@@ -28308,6 +28310,8 @@ with pkgs;
   skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
   soci = callPackage ../development/libraries/soci { };
+
+  socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
