@@ -47,6 +47,11 @@ These functions write `text` to the Nix store. This is useful for creating scrip
 
 Many more commands wrap `writeTextFile` including `writeText`, `writeTextDir`, `writeScript`, and `writeScriptBin`. These are convenience functions over `writeTextFile`.
 
+## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
+
+These functions concatenate `files` to the Nix store in a single file. This is useful for configuration files structured in lines of text. `concatTextFile` takes an attribute set and expects two arguments, `name` and `files`. `name` corresponds to the name used in the Nix store path. `files` will be the files to be concatenated. You can also set `executable` to true to make this file have the executable bit set.
+`concatText` and`concatScript` are simple wrappers over `concatTextFile`.
+
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
 
 This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
