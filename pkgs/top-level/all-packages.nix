@@ -2280,6 +2280,8 @@ with pkgs;
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
+
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   btrbk = callPackage ../tools/backup/btrbk {
@@ -4320,6 +4322,8 @@ with pkgs;
   cpufetch = callPackage ../tools/misc/cpufetch { };
 
   crackxls = callPackage ../tools/security/crackxls { };
+
+  crd2pulumi = callPackage ../development/tools/crd2pulumi { };
 
   create-cycle-app = nodePackages.create-cycle-app;
 
@@ -12074,7 +12078,15 @@ with pkgs;
   # current default compiler is”, if you bump this:
   haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc8107;
 
-  inherit (haskellPackages) ghc;
+  # haskellPackages.ghc is build->host (it exposes the compiler used to build the
+  # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
+  # consistent with the gcc, gnat, clang etc. derivations
+  #
+  # We use targetPackages.haskellPackages.ghc if available since this also has
+  # the withPackages wrapper available. In the final cross-compiled package set
+  # however, targetPackages won't be populated, so we need to fall back to the
+  # plain, cross-compiled compiler (which is only theoretical at the moment).
+  ghc = targetPackages.haskellPackages.ghc or haskell.compiler.ghc8107;
 
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
