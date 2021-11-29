@@ -4,17 +4,14 @@
 , pythonOlder
 , brotlipy
 , zopfli
-, fs
 , lxml
 , scipy
 , munkres
 , unicodedata2
 , sympy
-, matplotlib
 , reportlab
 , sphinx
 , pytestCheckHook
-, pytest-randomly
 , glibcLocales
 }:
 
@@ -34,13 +31,11 @@ buildPythonPackage rec {
 
   # all dependencies are optional, but
   # we run the checks with them
+
   checkInputs = [
     pytestCheckHook
-    pytest-randomly
     # etree extra
     lxml
-    # ufo extra
-    fs
     # woff extra
     brotlipy
     zopfli
@@ -49,8 +44,6 @@ buildPythonPackage rec {
     munkres
     # symfont
     sympy
-    # varLib
-    matplotlib
     # pens
     reportlab
     sphinx
@@ -71,6 +64,15 @@ buildPythonPackage rec {
     "test_recalc_timestamp_otf"
     "test_ttcompile_timestamp_calcs"
   ];
+
+  disabledTestPaths = [
+    # avoid test which depend on fs and matplotlib
+    # fs and matplotlib were removed to prevent strong cyclic dependencies
+    "Tests/misc/plistlib_test.py"
+    "Tests/pens"
+    "Tests/ufoLib"
+  ];
+
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
