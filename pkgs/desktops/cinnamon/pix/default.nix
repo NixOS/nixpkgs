@@ -11,27 +11,31 @@
 , gtk3
 , intltool
 , itstool
-, lcms2
-, libexif
-, libjpeg
-, libpeas
 , libtool
 , libxml2
 , pkg-config
 , shared-mime-info
 , wrapGAppsHook
 , xapps
-, yelp-tools }:
+, yelp-tools
+, libsecret
+, webkitgtk
+, libwebp
+, librsvg
+, json-glib
+, gnome
+, clutter
+}:
 
 stdenv.mkDerivation rec {
-  pname = "xviewer";
-  version = "3.0.2";
+  pname = "pix";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hvoTb9afyVdcm5suB1ZxkxUyNFSVRFjYuNVc0jE3RF0=";
+    sha256 = "qBF5lc7ZNwuTr6x4c4pJA6a7oXqOYsYA1lpTmQkylT0=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     cinnamon-desktop
     gdk-pixbuf
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
     intltool
@@ -51,20 +56,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    libexif
-    libjpeg
-    libpeas
-    libxml2
-    shared-mime-info
     xapps
-    lcms2
+    libsecret
+    webkitgtk
+    libwebp
+    librsvg
+    json-glib
+    clutter
   ];
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
-    homepage = "https://github.com/linuxmint/xviewer";
+    homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
+    maintainers = teams.cinnamon.members;
   };
 }
