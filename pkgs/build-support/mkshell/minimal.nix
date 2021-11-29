@@ -15,11 +15,8 @@ derivation ({
 
   name = "minimal-nix-shell";
 
-  # What is the need for this reference to stdenv?
-  # Well Nix itself, checks to see if this attribute exists
-  # and sources the file.
-  # We will setup our nix-shell environment here and do things
-  # like clear the $PATH
+  # Nix checks if the stdenv attribute exists and sources that
+  # We use it here to setup the pure enviroment and do to clear envs like PATH
   # reference: https://github.com/NixOS/nix/blob/94ec9e47030c2a7280503d338f0dca7ad92811f5/src/nix-build/nix-build.cc#L494
   "stdenv" = writeTextFile rec {
     name = "setup";
