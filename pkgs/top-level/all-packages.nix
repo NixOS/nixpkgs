@@ -28313,6 +28313,8 @@ with pkgs;
 
   soci = callPackage ../development/libraries/soci { };
 
+  socialscan = with python3.pkgs; toPythonApplication socialscan;
+
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };

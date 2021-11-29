@@ -8795,6 +8795,8 @@ in {
     usePython = true;
   });
 
+  socialscan = callPackage ../development/python-modules/socialscan { };
+
   sockjs = callPackage ../development/python-modules/sockjs { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
