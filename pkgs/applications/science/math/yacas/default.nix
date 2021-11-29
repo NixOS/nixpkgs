@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, perl
-, enableGui ? false, qt5
-, enableJupyter ? false, boost, jsoncpp, openssl, zmqpp
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, perl
+, enableGui ? false
+, qtbase
+, wrapQtAppsHook
+, qtwebengine
+, enableJupyter ? true
+, boost
+, jsoncpp
+, openssl
+, zmqpp
+, enableJava ? false
+, openjdk
+, gtest
 }:
 
 stdenv.mkDerivation rec {
@@ -19,21 +34,53 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_CYACAS_GUI=${if enableGui then "ON" else "OFF"}"
     "-DENABLE_CYACAS_KERNEL=${if enableJupyter then "ON" else "OFF"}"
+    "-DENABLE_JYACAS=${if enableJava then "ON" else "OFF"}"
+    "-DENABLE_CYACAS_UNIT_TESTS=ON"
+  ];
+  patches = [
+    # upstream issue: https://github.com/grzegorzmazur/yacas/issues/340
+    # Upstream patch which doesn't apply on 1.9.1 is:
+    # https://github.com/grzegorzmazur/yacas/pull/342
+    ./jsoncpp-fix-include.patch
+    # Fixes testing - https://github.com/grzegorzmazur/yacas/issues/339
+    # PR: https://github.com/grzegorzmazur/yacas/pull/343
+    (fetchpatch {
+      url = "https://github.com/grzegorzmazur/yacas/commit/8bc22d517ecfdde3ac94800dc8506f5405564d48.patch";
+      sha256 = "sha256-aPO5T8iYNkGtF8j12YxNJyUPJJPKrXje1DmfCPt317A=";
+    })
+  ];
+  preCheck = ''
+    patchShebangs ../tests/test-yacas
+  '';
+  checkInputs = [
+    gtest
+  ];
+  doCheck = true;
+
+  nativeBuildInputs = [
+    cmake
+    # Perl is only for the documentation
+    perl
+  ] ++ lib.optionals enableJava [
+    openjdk
+  ];
+  buildInputs = [
+  ] ++ lib.optionals enableGui [
+    qtbase
+    wrapQtAppsHook
+    qtwebengine
+  ] ++ lib.optionals enableJupyter [
+    boost
+    jsoncpp
+    openssl
+    zmqpp
   ];
 
-  # Perl is only for the documentation
-  nativeBuildInputs = [ cmake perl ];
-  buildInputs = [
-  ] ++ lib.optionals enableGui (with qt5; [ qtbase qtwebkit ])
-    ++ lib.optionals enableJupyter [ boost jsoncpp openssl zmqpp ]
-    ;
-
   meta = {
-    description = "Easy to use, general purpose Computer Algebra System";
+    description = "Easy to use, general purpose Computer Algebra System${lib.optionalString enableGui ", built with GUI."}";
     homepage = "http://www.yacas.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
-    broken = enableGui || enableJupyter;
   };
 }
