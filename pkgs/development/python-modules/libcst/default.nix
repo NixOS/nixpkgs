@@ -9,6 +9,7 @@
 , python
 , pythonOlder
 , pyyaml
+, setuptools-scm
 , typing-extensions
 , typing-inspect
 }:
@@ -26,6 +27,18 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1r4aiqpndqa75119faknsghi7zxyjrx5r6i7cb3d0liwiqrkzrvx";
   };
+
+  postPatch = ''
+    # test try to format files, which isn't necessary when consuming releases
+    sed -i libcst/codegen/generate.py \
+      -e '/ufmt/c\        pass'
+  '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     hypothesis
