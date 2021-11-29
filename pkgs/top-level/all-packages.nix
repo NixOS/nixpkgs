@@ -3527,6 +3527,8 @@ with pkgs;
 
   restream = callPackage ../applications/misc/remarkable/restream { };
 
+  ropgadget = with python3Packages; toPythonApplication ropgadget;
+
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
