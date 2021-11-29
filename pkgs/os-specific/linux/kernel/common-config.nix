@@ -473,6 +473,11 @@ let
 
       # Detect buffer overflows on the stack
       CC_STACKPROTECTOR_REGULAR = {optional = true; tristate = whenOlder "4.18" "y";};
+    } // optionalAttrs stdenv.hostPlatform.isx86 {
+      # Enable Intel SGX
+      X86_SGX     = whenAtLeast "5.11" yes;
+      # Allow KVM guests to load SGX enclaves
+      X86_SGX_KVM = whenAtLeast "5.13" yes;
     };
 
     microcode = {
