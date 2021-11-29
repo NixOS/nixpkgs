@@ -171,34 +171,27 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      description = "Caddy web server";
-      # upstream unit: https://github.com/caddyserver/dist/blob/master/init/caddy.service
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}";
-        ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
-        Type = "simple";
+        # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
+        # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
+        ExecStart = [ "" "${cfg.package}/bin/caddy run ${optionalString cfg.resume "--resume"} --config ${configJSON}" ];
+        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${configJSON}" ];
+
         User = cfg.user;
         Group = cfg.group;
+        ReadWriteDirectories = cfg.dataDir;
         Restart = "on-abnormal";
-        AmbientCapabilities = "cap_net_bind_service";
-        CapabilityBoundingSet = "cap_net_bind_service";
+
+        # TODO: attempt to upstream these options
         NoNewPrivileges = true;
-        LimitNPROC = 512;
-        LimitNOFILE = 1048576;
-        PrivateTmp = true;
         PrivateDevices = true;
         ProtectHome = true;
-        ProtectSystem = "full";
-        ReadWriteDirectories = cfg.dataDir;
-        KillMode = "mixed";
-        KillSignal = "SIGQUIT";
-        TimeoutStopSec = "5s";
       };
     };
 
