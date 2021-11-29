@@ -1,27 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, pythonPackages }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, selectors2
+}:
 
 buildPythonPackage rec {
   pname = "rfc6555";
   version = "0.1.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "123905b8f68e2bec0c15f321998a262b27e2eaadea29a28bd270021ada411b67";
+  src = fetchFromGitHub {
+    owner = "sethmlarson";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "Lmwgusc4EQlF0GHmMTUxWzUCjBk19cvurNwbOnT+1jM=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ selectors2 ];
+  propagatedBuildInputs = [
+    selectors2
+  ];
 
-  checkInputs = with pythonPackages; [ mock pytest ];
-  # disabling tests that require a functional DNS IPv{4,6} stack to pass.
-  patches = [ ./disable_network_tests.patch ];
-  # default doCheck = true; is not enough, apparently
-  postCheck = ''
-    py.test tests/
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Disabling tests that require a functional DNS IPv{4,6} stack to pass
+    "test_create_connection_has_proper_timeout"
+  ];
+
+  pythonImportsCheck = [
+    "rfc6555"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Happy Eyeballs Algorithm";
-    homepage = "https://pypi.org/project/rfc6555";
+    homepage = "https://github.com/sethmlarson/rfc6555";
     license = licenses.asl20;
     maintainers = with maintainers; [ endocrimes ];
   };
