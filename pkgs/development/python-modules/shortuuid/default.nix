@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, django
 , pep8
 }:
 
@@ -16,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "9435e87e5a64f3b92f7110c81f989a3b7bdb9358e22d2359829167da476cfc23";
   };
 
-  buildInputs = [pep8];
+  checkInputs = [
+    django
+    pep8
+  ];
 
   meta = with lib; {
     description = "A generator library for concise, unambiguous and URL-safe UUIDs";
