@@ -78,13 +78,12 @@ buildPythonPackage rec {
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '' + ''
-      # avoid matplotlib trying to download dependencies
+    '' +
+    # avoid matplotlib trying to download dependencies
+    ''
       echo "[libs]
       system_freetype=true
       system_qhull=true" > mplsetup.cfg
-      cat mplsetup.cfg
-      echo FFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     '';
 
   # Matplotlib needs to be built against a specific version of freetype in
