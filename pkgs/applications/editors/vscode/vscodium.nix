@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl, nixosTests }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests, useWayland ? false}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -27,7 +27,7 @@ let
   }.${system};
 in
   callPackage ./generic.nix rec {
-    inherit sourceRoot;
+    inherit sourceRoot useWayland;
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.

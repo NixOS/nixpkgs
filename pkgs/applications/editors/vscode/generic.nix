@@ -16,6 +16,8 @@
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
+
+, useWayland ? false
 }:
 
 let
@@ -100,6 +102,9 @@ let
       # Override the previously determined VSCODE_PATH with the one we know to be correct
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
       grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
+
+      substituteInPlace "$out/bin/${executableName}" \
+        --replace '"$ELECTRON" "$CLI"' '"$ELECTRON" "$CLI"${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}'
     '') + ''
       runHook postInstall
     '';
