@@ -1,0 +1,11 @@
+--- a/Makefile	2021-11-29 16:32:12.292438858 +0800
++++ b/Makefile	2021-11-29 16:32:02.695427703 +0800
+@@ -19,7 +19,7 @@
+ ifeq ($(OS),Linux)
+ 
+ # Linux C compiler flags
+-CC = cc
++CC ?= cc
+ CFLAGS_SOURCE = -D_GNU_SOURCE
+ # -D_BSD_SOURCE -D_POSIX_SOURCE
+ CFLAGS = $(COMMON_GCC_FLAGS) $(CFLAGS_SOURCE) 
