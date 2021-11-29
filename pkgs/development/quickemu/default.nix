@@ -20,6 +20,7 @@
 }:
 let
   runtimePaths = [
+    edk2
     qemu
     gnugrep
     jq
@@ -40,13 +41,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "2.2.7";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
-    owner = "wimpysworld";
+    owner = "quickemu-project";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TNG1pCePsi12QQafhayhj+V5EXq+v7qmaW5v5X8ER6s=";
+    sha256 = "sha256-15cilf7ccj88c9f4qw1b5mjzgi2f3c854b4xlz1k22xdlx8zwd3f";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
-    homepage = "https://github.com/wimpysworld/quickemu";
+    homepage = "https://github.com/quickemu-project/quickemu";
     license = licenses.mit;
     maintainers = with maintainers; [ fedx-sudo ];
   };
