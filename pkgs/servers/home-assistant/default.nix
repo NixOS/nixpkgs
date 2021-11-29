@@ -21,6 +21,9 @@
 
 let
   defaultOverrides = [
+    # Remove with Home Assistant 2021.12
+    (mkOverride "PyChromecast" "9.4.0" "sha256-Y8PLrjxZHml7BmklEJ/VXGqkRyneAy+QVA5rusPeBHQ=")
+
     # aiounify 29 breaks integration tests
     (self: super: {
       aiounifi = super.aiounifi.overridePythonAttrs (oldAttrs: rec {
