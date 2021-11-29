@@ -12466,7 +12466,7 @@
     githubId = 6016963;
     name = "Patrick Winter";
   };
-  winterqt = {
+  winter = {
     email = "nixos@winter.cafe";
     github = "winterqt";
     githubId = 78392041;
