@@ -10,20 +10,24 @@ shopt -s inherit_errexit
 export PATH=@path@:$PATH
 
 
-# open a new file descriptor called 3
-# save all '1>&3 2>&3' or piped to msgPipe or 'msg message' to systemd journal
+# save output piped to msgPipe or 'msg message' to systemd journal
 # 'journalctl -t nixos-rebuild' to inspect
 # tee is used so we still get output to the terminal
 # check if systemd-cat exists and if systemctl exits with 0. if it does not
 # then systemd isn't running(chroot) and we cannot use systemd-cat.
-command -v systemd-cat &>/dev/null && systemctl &>/dev/null && exec 3> >(tee >(systemd-cat -t nixos-rebuild)) || exec 3>&1
 
+# msg something
 msg() {
-  echo -e "$@" 1>&3 2>&3
+  if command -v systemd-cat &>/dev/null && systemctl &>/dev/null; then
+    echo -e "$@" | tee >(systemd-cat -t nixos-rebuild)
+  else
+    echo -e "$@"
+  fi
 }
 
+# echo something | msgPipe
 msgPipe() {
-  read -r in
+  in=$(cat)
   msg "$in"
 }
 
@@ -481,7 +485,7 @@ fi
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
-    echo "building the system configuration..." 1>&3 2>&3
+    msg "building the system configuration..."
     if [[ "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
@@ -489,7 +493,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostCmd nix-env -p "$profile" --set "$pathToConfig" 1>&3 2>&3
+        targetHostCmd nix-env -p "$profile" --set "$pathToConfig" 2>&1 | msgPipe
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
@@ -537,7 +541,7 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if ! $(targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action" 1>&3 2>&3); then
+    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action" 2>&1 | msgPipe; then
         msg "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi
