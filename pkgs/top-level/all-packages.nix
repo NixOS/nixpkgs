@@ -11128,6 +11128,8 @@ with pkgs;
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
+  zsh-better-npm-completion = callPackage ../shells/zsh/zsh-better-npm-completion { };
+
   zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
