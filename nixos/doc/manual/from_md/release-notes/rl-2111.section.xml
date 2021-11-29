@@ -1429,6 +1429,17 @@ Superuser created successfully.
           knob.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>/usr</literal> will always be included in the initial
+          ramdisk. See the
+          <literal>fileSystems.&lt;name&gt;.neededForBoot</literal>
+          option. If any files exist under <literal>/usr</literal>
+          (which is not typical for NixOS), they will be included in the
+          initial ramdisk, increasing its size to a possibly problematic
+          extent.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
