@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,11 +13,7 @@ buildPythonPackage rec {
     sha256 = "6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests toolz/tests
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";
