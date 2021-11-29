@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.4.13";
+  version = "3.4.14";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "sha256-GOUdXBQCvM0oJ2/3zgKqDpfyCkHNwd1Qdopg5Mpyekg=";
+    sha256 = "sha256-sDCnBO7xDpecu2cSjpHwync2DVsj9EKUmgpqEVLtxRM=";
   };
 
   patches = [ ./disable_updates.patch ];
