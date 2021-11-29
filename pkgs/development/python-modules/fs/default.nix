@@ -28,6 +28,9 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ glibcLocales ];
+
+  # strong cycle with paramaterized
+  doCheck = false;
   checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
