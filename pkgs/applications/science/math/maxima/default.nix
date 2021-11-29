@@ -10,17 +10,13 @@
 , rlwrap ? null
 , tk ? null
 , gnuplot ? null
-, ecl ? null
-, ecl-fasl ? false
-, sbcl
+, lisp-compiler
 }:
 
 let
-  lisp-compiler = if ecl-fasl then ecl else sbcl;
-
-  searchPath =
-    lib.makeBinPath
-      (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
+  # Allow to remove some executables from the $PATH of the wrapped binary
+  searchPath = lib.makeBinPath
+    (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
 in
 stdenv.mkDerivation rec {
   pname = "maxima";
@@ -59,7 +55,7 @@ stdenv.mkDerivation rec {
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   ''
-   + (lib.optionalString ecl-fasl ''
+   + (lib.optionalString (lisp-compiler.pname == "ecl") ''
      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${version}/binary-ecl/"
    '')
   ;
@@ -83,7 +79,7 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
     })
-  ] ++ lib.optionals ecl-fasl [
+  ] ++ lib.optionals (lisp-compiler.pname == "ecl") [
     # build fasl, needed for ECL support
     (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/maxima/patches/maxima.system.patch?id=07d6c37d18811e2b377a9689790a7c5e24da16ba";
@@ -108,7 +104,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    ecl = ecl;
+    inherit lisp-compiler;
   };
 
   meta = with lib; {
