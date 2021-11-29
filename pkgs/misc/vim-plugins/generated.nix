@@ -4426,6 +4426,18 @@ final: prev:
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-metals = buildVimPluginFrom2Nix {
+    pname = "nvim-metals";
+    version = "2021-11-29";
+    src = fetchFromGitHub {
+      owner = "scalameta";
+      repo = "nvim-metals";
+      rev = "25d148b6b03c7aeea917f296a5c2a60829810eb3";
+      sha256 = "1b7h5h6n1b2mpqnqpkmha689bpy6k85w40s65c2v7cbj7zn92ycw";
+    };
+    meta.homepage = "https://github.com/scalameta/nvim-metals/";
+  };
+
   nvim-neoclip-lua = buildVimPluginFrom2Nix {
     pname = "nvim-neoclip.lua";
     version = "2021-11-06";
