@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, cmake
 , fetchFromGitHub
 , python
 , fixDarwinDylibNames
@@ -11,9 +12,6 @@
 , findlib ? null
 , zarith ? null
 }:
-
-assert javaBindings -> jdk != null;
-assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 with lib;
 
@@ -29,43 +27,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ python ]
-    ++ optional javaBindings jdk
-    ++ optionals ocamlBindings [ ocaml findlib zarith ]
-  ;
+  buildInputs = [ cmake ] ;
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
-  postPatch = optionalString ocamlBindings ''
-    export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
-  '';
+  cmakeFlags = [];
 
-  configurePhase = concatStringsSep " "
-    (
-      [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
-        ++ optional javaBindings "--java"
-        ++ optional ocamlBindings "--ml"
-        ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
-    ) + "\n" + "cd build";
-
-  postInstall = ''
-    mkdir -p $dev $lib
-    mv $out/lib $lib/lib
-    mv $out/include $dev/include
-  '' + optionalString pythonBindings ''
-    mkdir -p $python/lib
-    mv $lib/lib/python* $python/lib/
-    ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + optionalString javaBindings ''
-    mkdir -p $java/share/java
-    mv com.microsoft.z3.jar $java/share/java
-    moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
-  '';
-
-  outputs = [ "out" "lib" "dev" "python" ]
-    ++ optional javaBindings "java"
-    ++ optional ocamlBindings "ocaml";
+  outputs = [ "out" "lib" "dev" ] ;
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
