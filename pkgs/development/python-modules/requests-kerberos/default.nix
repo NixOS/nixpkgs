@@ -4,7 +4,9 @@
 , cryptography
 , requests
 , pykerberos
+, pyspnego
 , pytestCheckHook
+, pytest-mock
 , mock
 }:
 
@@ -20,19 +22,24 @@ buildPythonPackage rec {
     sha256 = "0yvfg2cj3d10l8fd8kyal4hmpd7fd1c3bca13cj9ril5l573in76";
   };
 
+  # avoid needing to package krb5
+  postPatch = ''
+    substituteInPlace setup.py \
+    --replace "pyspnego[kerberos]" "pyspnego"
+  '';
+
   propagatedBuildInputs = [
     cryptography
     requests
     pykerberos
+    pyspnego
   ];
 
   checkInputs = [
     mock
     pytestCheckHook
+    pytest-mock
   ];
-
-  # they have a setup.py which mentions a test suite that doesn't exist...
-  patches = [ ./fix_setup.patch ];
 
   pythonImportsCheck = [ "requests_kerberos" ];
 
