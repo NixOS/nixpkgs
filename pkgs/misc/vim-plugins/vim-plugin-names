@@ -180,6 +180,7 @@ fruit-in/brainfuck-vim
 fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 garbas/vim-snipmate
+gbrlsnchs/telescope-lsp-handlers.nvim@trunk
 gcmt/taboo.vim
 gcmt/wildfire.vim
 gelguy/wilder.nvim
