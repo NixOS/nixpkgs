@@ -3250,6 +3250,18 @@ final: prev:
     meta.homepage = "https://github.com/l3mon4d3/luasnip/";
   };
 
+  luatab-nvim = buildVimPluginFrom2Nix {
+    pname = "luatab.nvim";
+    version = "2021-11-08";
+    src = fetchFromGitHub {
+      owner = "alvarosevilla95";
+      repo = "luatab.nvim";
+      rev = "05eacdfd818741ff3f92bae6213c026a91711be4";
+      sha256 = "0iy45hmn6f6dp3pym0yl091kngnrg25hrk5dlm93mj3yxbmgss4r";
+    };
+    meta.homepage = "https://github.com/alvarosevilla95/luatab.nvim/";
+  };
+
   lush-nvim = buildVimPluginFrom2Nix {
     pname = "lush.nvim";
     version = "2021-11-06";
@@ -5807,6 +5819,18 @@ final: prev:
       sha256 = "18lb4rs9zrgn35b2x6b7pycd3h64virkadlidcy3xhzhsynlvwgr";
     };
     meta.homepage = "https://github.com/vim-syntastic/syntastic/";
+  };
+
+  tabline-nvim = buildVimPluginFrom2Nix {
+    pname = "tabline.nvim";
+    version = "2021-11-10";
+    src = fetchFromGitHub {
+      owner = "kdheepak";
+      repo = "tabline.nvim";
+      rev = "3bac71db4e99b5af9a5fbfd1d134031aea4f01ab";
+      sha256 = "1fzmcfvp7bxskmb18885pmnyyfcir7z20zgz7ffw98rq97rdf02r";
+    };
+    meta.homepage = "https://github.com/kdheepak/tabline.nvim/";
   };
 
   tabmerge = buildVimPluginFrom2Nix {

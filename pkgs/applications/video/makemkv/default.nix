@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , pkg-config
+, curl
 , ffmpeg
 , openssl
 , qtbase
@@ -41,6 +42,8 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg openssl qtbase zlib ];
+
+  runtimeDependencies = [ (lib.getLib curl) ];
 
   qtWrapperArgs =
     let

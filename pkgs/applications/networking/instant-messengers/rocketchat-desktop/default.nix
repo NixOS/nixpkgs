@@ -1,15 +1,19 @@
-{ lib, stdenv, pkgs, fetchurl }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook }:
 let
   libPathNative = { packages }: lib.makeLibraryPath packages;
 in
 stdenv.mkDerivation rec {
   pname = "rocketchat-desktop";
-  version = "3.5.7";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/download/${version}/rocketchat_${version}_amd64.deb";
-    sha256 = "1ri8a60fsbqgq83f8wkyfnd59nqk4d0gpz1vanj54769zflpl71s";
+    sha256 = "1691mzg52hkvkzm4pvmjyc3n04ppxk36rjk7zxh8682ciszz9pl3";
   };
+
+  nativeBuildInputs = [
+    wrapGAppsHook #to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
+  ];
 
   buildInputs = with pkgs; [
     gtk3

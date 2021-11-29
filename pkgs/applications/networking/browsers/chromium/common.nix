@@ -34,7 +34,7 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
-, epoxy
+, libepoxy
 # postPatch:
 , glibc # gconv + locale
 
@@ -150,7 +150,7 @@ let
       libva
       libdrm wayland mesa.drivers libxkbcommon
       curl
-      epoxy
+      libepoxy
     ] ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]

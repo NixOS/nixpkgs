@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       variants = [
         { suffix = "ref10";         configureFlags = ["--enable-ref10"]; }
         { suffix = "donna";         configureFlags = ["--enable-donna"]; }
-      ] ++ lib.optionals (stdenv.isi686 || stdenv.isx86_64) [
+      ] ++ lib.optionals stdenv.hostPlatform.isx86 [
         { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2"]; }
       ] ++ lib.optionals stdenv.isx86_64 [
         { suffix = "amd64-51-30k";  configureFlags = ["--enable-amd64-51-30k"]; }

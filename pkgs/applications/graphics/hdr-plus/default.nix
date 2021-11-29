@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed -i '2a #include <array>' src/InputSource.h
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ halide libpng libjpeg libtiff libraw ];

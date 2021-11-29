@@ -1135,6 +1135,7 @@ broken-packages:
   - dotfs
   - dot-linker
   - doublify-toolkit
+  - dovetail
   - downloader
   - dozenal
   - dozens
@@ -1328,6 +1329,7 @@ broken-packages:
   - explicit-constraint-lens
   - explicit-determinant
   - explicit-iomodes
+  - exploring-interpreters
   - exposed-containers
   - expression-parser
   - expressions
@@ -1663,15 +1665,19 @@ broken-packages:
   - ghc-usage
   - gh-labeler
   - giak
+  - gi-cogl
   - Gifcurry
   - gi-graphene
   - gi-gsttag
+  - gi-gtk-layer-shell
   - gi-gtkosxapplication
   - gi-gtksheet
   - gi-handy
+  - gi-json
   - ginsu
   - gipeda
   - giphy-api
+  - gi-rsvg
   - gist
   - GiST
   - git
@@ -3456,6 +3462,7 @@ broken-packages:
   - onama
   - ONC-RPC
   - on-demand-ssh-tunnel
+  - one-line-aeson-text
   - one-liner-instances
   - oneormore
   - onpartitions
@@ -3784,6 +3791,7 @@ broken-packages:
   - polydata-core
   - polynom
   - polynomial
+  - polysemy-mocks
   - polysemy-plugin
   - polysemy-zoo
   - polytypeable
@@ -4722,6 +4730,7 @@ broken-packages:
   - stripe-http-streams
   - stripe-signature
   - stripe-tests
+  - stripe-wreq
   - strong-path
   - strongswan-sql
   - structural-traversal

@@ -1,7 +1,7 @@
-From 2c98ff115f7027bebde14cf3e74f2c51b343874c Mon Sep 17 00:00:00 2001
+From 67abd8f22f70d9348bc9d8e0e93dde4d325627ba Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
-Subject: [PATCH 02/19] Don't try to unmount /nix or /nix/store
+Subject: [PATCH 02/21] Don't try to unmount /nix or /nix/store
 
 They'll still be remounted read-only.
 

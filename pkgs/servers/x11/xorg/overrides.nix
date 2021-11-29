@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkg-config, llvm, libxslt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -452,6 +452,16 @@ self: super:
   });
 
   xf86videoqxl = super.xf86videoqxl.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-qxl/-/issues/12
+    postPatch = ''
+      patch -p1 <<EOF
+      --- a/src/qxl_option_helpers.c
+      +++ b/src/qxl_option_helpers.c
+      @@ -37 +37 @@
+      -        return options[option_index].value.bool;
+      +        return options[option_index].value.boolean;
+      EOF
+    '';
     buildInputs =  attrs.buildInputs ++ [ spice-protocol ];
   });
 
@@ -648,9 +658,17 @@ self: super:
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
+
+          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
+          # TODO: remove with xorgserver >= 1.21
+          (fetchpatch {
+            name = "stdbool.patch";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
+            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''

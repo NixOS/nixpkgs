@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl gnused common-updater-scripts
+#!nix-shell -i bash -p coreutils curl gnused common-updater-scripts nix-prefetch
 
 set -e
 
@@ -40,3 +40,11 @@ echo "${ffmpeg_args_x86}" > "$config_dir/ffmpeg_args_x86"
 pjsip_patches=$(sed -n '/UNPACK/,/HAVE_ANDROID/p' ${src}/daemon/contrib/src/pjproject/rules.mak | sed -n -E 's/.*pjproject\/(00.*patch).*/\1/p')
 echo -e "Patches for pjsip:\n${pjsip_patches}\n"
 echo "${pjsip_patches}" > "$config_dir/pjsip_patches"
+
+# Update pjsip version
+pjsip_version=$(sed -n -E 's/.*PJPROJECT_VERSION := ([0-9a-f]+).*/\1/p' ${src}/daemon/contrib/src/pjproject/rules.mak)
+nix-prefetch fetchFromGitHub \
+  --owner savoirfairelinux \
+  --repo pjproject \
+  --rev ${pjsip_version} \
+  --output nix > "${jami_dir}/pjproject-src.nix"

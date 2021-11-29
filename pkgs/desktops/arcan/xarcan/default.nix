@@ -4,7 +4,7 @@
 , arcan
 , audit
 , dbus
-, epoxy
+, libepoxy
 , fontutil
 , libGL
 , libX11
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     arcan
     audit
     dbus
-    epoxy
+    libepoxy
     fontutil
     libGL
     libX11

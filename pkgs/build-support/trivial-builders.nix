@@ -749,7 +749,7 @@ rec {
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
       version ? package.version,
-    }: runCommand "test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
+    }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       ${command} |& grep -Fw ${version}
       touch $out
     '';

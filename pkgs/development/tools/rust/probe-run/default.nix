@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.2.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bj5arngc49mdz1i7bbg4l7rb741x7dhalpdxrn55vzlvgbig8fv";
+    sha256 = "0qlpvy62wqc8k9sww6pbiqv0yrjwpnai1vgrijw5285qpvrdsdw2";
   };
 
-  cargoSha256 = "1kqgl1f91aa7kz1yprpyf9pl1vp4ahhw8ka5hrvfvk5i5i54pigz";
+  cargoSha256 = "10ybgzvv2iy5bjmmw48gmgvsx6rfqclsysyfbhd820dg2lshgi44";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Run embedded programs just like native ones.";
     homepage = "https://github.com/knurling-rs/probe-run";
+    changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ hoverbear ];
   };

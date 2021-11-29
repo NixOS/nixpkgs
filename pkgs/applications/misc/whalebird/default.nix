@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "4.4.5";
+  version = "4.4.6";
 
   src = fetchurl {
     url = "https://github.com/h3poteto/whalebird-desktop/releases/download/${version}/Whalebird-${version}-linux-x64.deb";
-    sha256 = "sha256-CIlj9Sc/hj2UMgQzfHA3iQYO6EPqcndqkNUCBecHq+E=";
+    sha256 = "sha256-Q67y6VO7U8EatMNWyJo4f9IHKylQSX7bNR0DH4bnH+A=";
   };
 
   nativeBuildInputs = [

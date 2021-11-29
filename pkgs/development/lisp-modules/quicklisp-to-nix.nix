@@ -4024,6 +4024,15 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-shellwords" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-shellwords" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-shellwords.nix {
+         inherit fetchurl;
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+       }));
+
+
   "cl-reexport" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-reexport" or (x: {}))

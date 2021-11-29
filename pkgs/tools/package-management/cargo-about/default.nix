@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-Am0VwF37fYsZvUogxnSlP/kwy20J7maFu3Is8f/1b1E=";
+    sha256 = "sha256-QLPqvlMwCdMfUGCVibCGQdI7UkHV1WBfpBi2Kwi3b1Q=";
   };
 
-  cargoSha256 = "sha256-gf5OtRGjXmGbnXA4ZYOys6JU+JkF+rYnRSnjy3JE7c0=";
+  cargoSha256 = "sha256-x9hx9wJlcrGo1zuugPYY4G4Os5x8tIOICKnKq8TuevI=";
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

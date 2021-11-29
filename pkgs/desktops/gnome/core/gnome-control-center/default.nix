@@ -60,7 +60,7 @@
 , tzdata
 , udisks2
 , upower
-, epoxy
+, libepoxy
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     colord
     colord-gtk
-    epoxy
+    libepoxy
     fontconfig
     gdk-pixbuf
     glib

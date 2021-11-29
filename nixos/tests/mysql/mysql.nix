@@ -64,10 +64,6 @@ in
       {
         imports = [ users ];
 
-        # prevent oom:
-        # Kernel panic - not syncing: Out of memory: compulsory panic_on_oom is enabled
-        virtualisation.memorySize = 1024;
-
         services.mysql.enable = true;
         services.mysql.initialDatabases = [
           { name = "testdb3"; schema = ./testdb.sql; }

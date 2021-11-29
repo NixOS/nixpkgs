@@ -36,16 +36,18 @@
 with lib;
 
 let
+  mainVersion = "1.9.13";
+  revision = "2";
   libretroSuperSrc = fetchFromGitHub {
     owner = "libretro";
-    repo = "libretro-super";
-    sha256 = "sha256-4WB6/1DDec+smhMJKLCxWb4+LQlZN8v2ik69saKixkE=";
-    rev = "fa70d9843838df719623094965bd447e4db0d1b4";
+    repo = "libretro-core-info";
+    sha256 = "sha256-jM+iXNSCpJy4wOk1S72G1UjNGBzejyhs5LFFWCFjs2c=";
+    rev = "v${mainVersion}";
   };
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.9.13.2";
+  version = "${lib.concatStringsSep "." [ mainVersion revision ]}";
 
   src = fetchFromGitHub {
     owner = "libretro";
@@ -55,21 +57,21 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # FIXME: The `retroarch.cfg` file is created once in the first run and only
-    # updated when needed. However, the file may have out-of-date paths
-    # In case of issues (e.g.: cores are not loading), please delete the
-    # `$XDG_CONFIG_HOME/retroarch/retroarch.cfg` file
-    # See: https://github.com/libretro/RetroArch/issues/13251
-    ./fix-config.patch
+    ./0001-Disable-menu_show_core_updater.patch
+    ./0002-Use-fixed-paths-on-libretro_info_path.patch
   ];
 
   postPatch = ''
-    substituteInPlace retroarch.cfg \
+    substituteInPlace "frontend/drivers/platform_unix.c" \
       --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
+    substituteInPlace "frontend/drivers/platform_darwin.m" \
+      --replace "@libretro_directory@" "$out/lib" \
+      --replace "@libretro_info_path@" "$out/share/libretro/info"
   '';
 
-  nativeBuildInputs = [ pkg-config wayland ] ++
+  nativeBuildInputs = [ pkg-config ] ++
+    optional stdenv.isLinux wayland ++
     optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg freetype libxml2 libGLU libGL python3 SDL2 which ] ++
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
   postInstall = optionalString withVulkan ''
     mkdir -p $out/share/libretro/info
     # TODO: ideally each core should have its own core information
-    cp -r ${libretroSuperSrc}/dist/info/* $out/share/libretro/info
+    cp -r ${libretroSuperSrc}/* $out/share/libretro/info
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
   '';
 
@@ -108,7 +110,10 @@ stdenv.mkDerivation rec {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
+    # FIXME: exits with error on macOS:
+    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
+    broken = stdenv.isDarwin;
   };
 }

@@ -22,7 +22,10 @@ let
         configAttr));
 
   configFile = pkgs.writeText "hbase-site.xml"
-    (buildProperty (defaultConfig // cfg.settings));
+    ''<configuration>
+        ${buildProperty (defaultConfig // cfg.settings)}
+      </configuration>
+    '';
 
   configDir = pkgs.runCommand "hbase-config-dir" { preferLocalBuild = true; } ''
     mkdir -p $out

@@ -21,7 +21,7 @@
 # Unfortunately, dotnet has no method for doing this automatically.
 # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null
-# The packages project file, which contains instructions on how to compile it.
+# The packages project file, which contains instructions on how to compile it. This can be an array of multiple project files as well.
 , projectFile ? null
 # The NuGet dependency file. This locks all NuGet dependency versions, as otherwise they cannot be deterministically fetched.
 # This can be generated using the `nuget-to-nix` tool.
@@ -102,13 +102,15 @@ let
 
       export HOME=$(mktemp -d)
 
-      dotnet restore "$projectFile" \
-        ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-        -p:ContinuousIntegrationBuild=true \
-        -p:Deterministic=true \
-        --source "${nuget-source}/lib" \
-        "''${dotnetRestoreFlags[@]}" \
-        "''${dotnetFlags[@]}"
+      for project in ''${projectFile[@]}; do
+        dotnet restore "$project" \
+          ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          --source "${nuget-source}/lib" \
+          "''${dotnetRestoreFlags[@]}" \
+          "''${dotnetFlags[@]}"
+      done
 
       runHook postConfigure
     '';
@@ -116,16 +118,18 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
-      dotnet build "$projectFile" \
-        -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
-        -p:BuildInParallel=${if enableParallelBuilding then "true" else "false"} \
-        -p:ContinuousIntegrationBuild=true \
-        -p:Deterministic=true \
-        -p:Version=${args.version} \
-        --configuration "$buildType" \
-        --no-restore \
-        "''${dotnetBuildFlags[@]}"  \
-        "''${dotnetFlags[@]}"
+      for project in ''${projectFile[@]}; do
+        dotnet build "$project" \
+          -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
+          -p:BuildInParallel=${if enableParallelBuilding then "true" else "false"} \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          -p:Version=${args.version} \
+          --configuration "$buildType" \
+          --no-restore \
+          "''${dotnetBuildFlags[@]}"  \
+          "''${dotnetFlags[@]}"
+      done
 
       runHook postBuild
     '';
@@ -133,16 +137,18 @@ let
     checkPhase = args.checkPhase or ''
       runHook preCheck
 
-      ${lib.getBin dotnet-test-sdk}/bin/dotnet test "$testProjectFile" \
-        -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
-        -p:ContinuousIntegrationBuild=true \
-        -p:Deterministic=true \
-        --configuration "$buildType" \
-        --no-build \
-        --logger "console;verbosity=normal" \
-        ${lib.optionalString (disabledTests != []) "--filter \"FullyQualifiedName!=${lib.concatStringsSep "|FullyQualifiedName!=" disabledTests}\""} \
-        "''${dotnetTestFlags[@]}"  \
-        "''${dotnetFlags[@]}"
+      for project in ''${testProjectFile[@]}; do
+        ${lib.getBin dotnet-test-sdk}/bin/dotnet test "$project" \
+          -maxcpucount:${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          --configuration "$buildType" \
+          --no-build \
+          --logger "console;verbosity=normal" \
+          ${lib.optionalString (disabledTests != []) "--filter \"FullyQualifiedName!=${lib.concatStringsSep "&FullyQualifiedName!=" disabledTests}\""} \
+          "''${dotnetTestFlags[@]}"  \
+          "''${dotnetFlags[@]}"
+      done
 
       runHook postCheck
     '';
@@ -150,15 +156,17 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      dotnet publish "$projectFile" \
-        -p:ContinuousIntegrationBuild=true \
-        -p:Deterministic=true \
-        --output $out/lib/${args.pname} \
-        --configuration "$buildType" \
-        --no-build \
-        --no-self-contained \
-        "''${dotnetInstallFlags[@]}"  \
-        "''${dotnetFlags[@]}"
+      for project in ''${projectFile[@]}; do
+        dotnet publish "$project" \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          --output $out/lib/${args.pname} \
+          --configuration "$buildType" \
+          --no-build \
+          --no-self-contained \
+          "''${dotnetInstallFlags[@]}"  \
+          "''${dotnetFlags[@]}"
+      done
     '' + (if executables != null then ''
       for executable in $executables; do
         execPath="$out/lib/${args.pname}/$executable"

@@ -6,7 +6,7 @@ let
 
   versions = {
     stable = { version = "2.3.56.9"; sha256 = "sha256-vv01wGQkrasKKjpGSDeDqZbd1X5/iTfGXYN5Jwz+FKE="; };
-    staging = { version = "2.3.57.0"; sha256 = "sha256-7o0AqgQcKYc6c+Hi3x5pC/pKJZPlEsYOYk9sC21+mvM="; };
+    latest = { version = "2.3.57.6"; sha256 = "sha256-ZCOtVmvNXDWLo9UMzxARCp+iyRTcy/ogd5sV0k86JG8="; };
   };
 
   override = { version, sha256 }: super: {

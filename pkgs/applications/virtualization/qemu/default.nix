@@ -18,7 +18,7 @@
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
-, openGLSupport ? sdlSupport, mesa, epoxy, libdrm
+, openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
+    ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
@@ -71,11 +72,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libaio libcap_ng libcap attr ]
+    ++ lib.optionals stdenv.isLinux [ libaio libcap_ng libcap attr ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
-    ++ lib.optionals openGLSupport [ mesa epoxy libdrm ]
+    ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
@@ -111,6 +112,12 @@ stdenv.mkDerivation rec {
       name = "fix-aio-discard-return-value.patch";
       url = "https://gitlab.com/qemu-project/qemu/-/commit/13a028336f2c05e7ff47dfdaf30dfac7f4883e80.patch";
       sha256 = "sha256-23xVixVl+JDBNdhe5j5WY8CB4MsnUo+sjrkAkG+JS6M=";
+    })
+    # Fixes managedsave (snapshot creation) with QXL video device. Remove with next release.
+    (fetchpatch {
+      name = "qxl-fix-pre-save-logic.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
+      sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
@@ -172,6 +179,9 @@ stdenv.mkDerivation rec {
     "--enable-guest-agent"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    # Always use our Meson, not the bundled version, which doesn't
+    # have our patches and will be subtly broken because of that.
+    "--meson=meson"
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"

@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "13.3.1.22";
+  version = "16.1.0.37";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "http://web.archive.org/web/20210602004133/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
+    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

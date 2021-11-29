@@ -5,6 +5,7 @@
 via upstream-info.json."""
 # Usage: ./update.py [--commit]
 
+import base64
 import csv
 import json
 import re
@@ -48,9 +49,10 @@ def nix_prefetch_git(url, rev):
 
 def get_file_revision(revision, file_path):
     """Fetches the requested Git revision of the given Chromium file."""
-    url = f'https://raw.githubusercontent.com/chromium/chromium/{revision}/{file_path}'
+    url = f'https://chromium.googlesource.com/chromium/src/+/refs/tags/{revision}/{file_path}?format=TEXT'
     with urlopen(url) as http_response:
-        return http_response.read()
+        resp = http_response.read()
+        return base64.b64decode(resp)
 
 
 def get_matching_chromedriver(version):
