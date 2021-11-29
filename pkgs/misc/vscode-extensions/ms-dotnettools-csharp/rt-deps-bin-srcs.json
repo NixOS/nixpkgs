@@ -1,27 +1,27 @@
 {
   "OmniSharp__x86_64-darwin": {
-    "installPath": ".omnisharp/1.37.15",
+    "installPath": ".omnisharp/1.37.16",
     "binaries": [
       "./mono.osx",
       "./run"
     ],
     "urls": [
-      "https://download.visualstudio.microsoft.com/download/pr/4fbf71ce-5375-4ca9-b70d-8024ba1b9e0a/bc6ac844afef87eedaab5191f11dc374/omnisharp-osx-1.37.15.zip",
-      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.15/omnisharp-osx-1.37.15.zip"
+      "https://download.visualstudio.microsoft.com/download/pr/03c32aa6-7c7a-4936-82a0-fd8f816d112f/0ea1ea1eae48552a1992ed6df782353a/omnisharp-osx-1.37.16.zip",
+      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.16/omnisharp-osx-1.37.16.zip"
     ],
-    "sha256": "03n3x70ml2xjm7ns58giv5kn2h4y689iyjzz4mw5vcnil5fwq8ng"
+    "sha256": "0hhgfx7zs1rljhn3n9c7lci7j15yp2448z3f1d3c47a95l1hmlip"
   },
   "OmniSharp__x86_64-linux": {
-    "installPath": ".omnisharp/1.37.15",
+    "installPath": ".omnisharp/1.37.16",
     "binaries": [
       "./mono.linux-x86_64",
       "./run"
     ],
     "urls": [
-      "https://download.visualstudio.microsoft.com/download/pr/4fbf71ce-5375-4ca9-b70d-8024ba1b9e0a/b96375395e639233d546a4937be3bd32/omnisharp-linux-x64-1.37.15.zip",
-      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.15/omnisharp-linux-x64-1.37.15.zip"
+      "https://download.visualstudio.microsoft.com/download/pr/03c32aa6-7c7a-4936-82a0-fd8f816d112f/9ae3ed99fc0c41c7139751dde6f2bc78/omnisharp-linux-x64-1.37.16.zip",
+      "https://roslynomnisharp.blob.core.windows.net/releases/1.37.16/omnisharp-linux-x64-1.37.16.zip"
     ],
-    "sha256": "0pchywkxy8niq0i6gq2r43cmf58blfhhj8w8zyibf0m9h09h165s"
+    "sha256": "0a2basc6dw42fnjv9zz93ff0bsw2i3446gvcjx5mn5d8dasi483i"
   },
   "Debugger__x86_64-darwin": {
     "installPath": ".debugger/x86_64",

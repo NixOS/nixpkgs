@@ -52,8 +52,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "1.23.15";
-    sha256 = "0b74jr45zl7lzirjgj8s2lbf3viy9pbwlgjh055rcwmy77wcml1x";
+    version = "1.23.16";
+    sha256 = "sha256-fM4vcSMi2tEjIox9Twh2sRiFhXgAeRwAM9to3vtcSqI=";
   };
 
   nativeBuildInputs = [
