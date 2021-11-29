@@ -545,8 +545,5 @@ fi
 
 
 if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
-    cat 1>&3 2>&3 <<EOF
-
-Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
-EOF
+    msg "\nDone.  The virtual machine can be started by running $(echo \"${pathToConfig}/bin/\"run-*-vm)"
 fi
