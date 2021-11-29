@@ -6123,6 +6123,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-symbols.nvim/";
   };
 
+  telescope-vim-bookmarks-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-vim-bookmarks.nvim";
+    version = "2021-08-12";
+    src = fetchFromGitHub {
+      owner = "tom-anders";
+      repo = "telescope-vim-bookmarks.nvim";
+      rev = "b7a436eba6102c2bc73f49766a12e79d24ab8fb5";
+      sha256 = "0lak83b8y963hv61z2yfi1nyaapvq2hnhpcx7bc6h8v4jzyjis0n";
+    };
+    meta.homepage = "https://github.com/tom-anders/telescope-vim-bookmarks.nvim/";
+  };
+
   telescope-z-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-z.nvim";
     version = "2021-10-10";

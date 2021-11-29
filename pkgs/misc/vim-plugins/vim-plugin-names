@@ -778,6 +778,7 @@ tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
+tom-anders/telescope-vim-bookmarks.nvim@main
 tomasiser/vim-code-dark
 tomasr/molokai
 tomlion/vim-solidity
