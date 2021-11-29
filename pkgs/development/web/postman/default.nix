@@ -1,17 +1,50 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, atk, at-spi2-atk, at-spi2-core, alsa-lib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
-, freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
-, libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
-, libXrender, libXtst, libXScrnSaver, libxkbcommon, libdrm, mesa
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, wrapGAppsHook
+, atk
+, at-spi2-atk
+, at-spi2-core
+, alsa-lib
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, freetype
+, fontconfig
+, nss
+, nspr
+, pango
+, udev
+, libuuid
+, libX11
+, libxcb
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libXtst
+, libXScrnSaver
+, libxkbcommon
+, libdrm
+, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "9.1.4";
+  version = "9.2.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "bUhJ1vbesTibXF8rZuVWd5EY8uBbGaYGEbPKSXAVAsE=";
+    sha256 = "CHZJ1LgWSRhZQM1CVG5AOnNTHLwrnu/EYaTlhvsDK9U=";
     name = "${pname}.tar.gz";
   };
 
@@ -69,6 +102,7 @@ stdenv.mkDerivation rec {
 
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/postman
     cp -R app/* $out/share/postman
     rm $out/share/postman/Postman
@@ -84,6 +118,7 @@ stdenv.mkDerivation rec {
     mkdir -p $iconSizeDir
     ln -s $out/share/postman/resources/app/assets/icon.png $iconRootDir/postman.png
     ln -s $out/share/postman/resources/app/assets/icon.png $iconSizeDir/postman.png
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -97,7 +132,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.getpostman.com";
+    homepage = "https://www.postman.com/";
     description = "API Development Environment";
     license = licenses.postman;
     platforms = [ "x86_64-linux" ];
