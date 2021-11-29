@@ -1,13 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "pex";
   version = "2.1.56";
-  format = "setuptools";
+  format = "flit";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   # A few more dependencies I don't want to handle right now...
