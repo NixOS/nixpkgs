@@ -1,5 +1,6 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
 , gnome
 , gnome-icon-theme
 , hicolor-icon-theme
