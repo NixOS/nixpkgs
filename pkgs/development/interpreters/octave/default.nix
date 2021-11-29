@@ -235,7 +235,7 @@ let
       homepage = "https://www.gnu.org/software/octave/";
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ raskin doronbehar ];
-      description = "Scientific Pragramming Language";
+      description = "Scientific Programming Language";
       # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
       broken = enableJIT;
       platforms = if overridePlatforms == null then
