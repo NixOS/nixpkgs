@@ -135,8 +135,6 @@ let
       then callPackage ../development/ocaml-modules/biniou { }
       else callPackage ../development/ocaml-modules/biniou/1.0.nix { };
 
-    bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
-
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
@@ -1611,13 +1609,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
       else variantslib_p4;
-
-    bin_prot =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.bin_prot
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
-      else bin_prot_p4;
 
     core_bench =
       if lib.versionOlder "4.03" ocaml.version
