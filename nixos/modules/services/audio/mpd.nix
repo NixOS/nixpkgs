@@ -120,13 +120,29 @@ in {
       user = mkOption {
         type = types.str;
         default = name;
-        description = "User account under which MPD runs.";
+        description = ''
+          User account under which MPD runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the user exists before the MPD service starts.
+          </para></note>
+        '';
       };
 
       group = mkOption {
         type = types.str;
         default = name;
-        description = "Group account under which MPD runs.";
+        description = ''
+          Group account under which MPD runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the user exists before the MPD service starts.
+          </para></note>
+        '';
       };
 
       network = {
