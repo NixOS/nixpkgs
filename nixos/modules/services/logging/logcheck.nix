@@ -121,7 +121,13 @@ in
         default = "logcheck";
         type = types.str;
         description = ''
-          Username for the logcheck user.
+          User account under which logcheck runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the user exists before the logcheck service starts.
+          </para></note>
         '';
       };
 
