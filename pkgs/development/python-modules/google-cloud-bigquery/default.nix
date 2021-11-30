@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
   version = "2.30.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -59,6 +60,8 @@ buildPythonPackage rec {
     "test_list_rows_page_size"
     "test_list_rows_scalars"
     "test_list_rows_scalars_extreme"
+    "test_dry_run"
+    "test_session"
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"
     # requires network
