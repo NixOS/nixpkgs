@@ -8534,6 +8534,8 @@ in {
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
+  schematics = callPackage ../development/python-modules/schematics { };
+
   schiene = callPackage ../development/python-modules/schiene { };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
