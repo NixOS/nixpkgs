@@ -5,6 +5,7 @@
 , filelock
 , importlib-metadata
 , packaging
+, pyyaml
 , requests
 , ruamel-yaml
 , tqdm
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     filelock
+    pyyaml
     requests
     ruamel-yaml
     tqdm
