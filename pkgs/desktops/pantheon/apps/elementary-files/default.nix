@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.0.4";
+  version = "6.1.0";
 
   repoName = "files";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-FH6EYtgKADp8jjBoCwsdRdknlKS9v3iOtPiT3CyEc/8=";
+    sha256 = "sha256-aGiFEeSvDV5rPD2Ll/BuDoWclEPhR1UuoCxUSS9CGmw=";
   };
 
   passthru = {
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-portal/LegacyFileChooserDialog.vala \
+    substituteInPlace filechooser-portal/FileChooserDialog.vala \
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
