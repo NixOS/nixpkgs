@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix nodejs-12_x curl jq nix
+#! nix-shell -i bash -p nodePackages.node2nix nodejs-12_x curl jq nix nix-prefetch-git
 
 set -euo pipefail
 # cd to the folder containing this script
@@ -23,6 +23,4 @@ wget -O package-lock-temp.json https://github.com/matrix-org/matrix-appservice-i
 
 rm ./package-lock-temp.json
 
-# Apparently this is done by r-ryantm, so only uncomment for manual usage
-#git add ./package.json ./node-packages.nix
-#git commit -m "matrix-appservice-irc: ${CURRENT_VERSION} -> ${TARGET_VERSION}"
+nix-prefetch-git --rev "$TARGET_VERSION" --url "https://github.com/matrix-org/matrix-appservice-irc" > ./src.json
