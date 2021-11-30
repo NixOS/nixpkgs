@@ -141,7 +141,7 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   runtimeDeps = [
     targetPackages.stdenv.cc.bintools
