@@ -29,7 +29,7 @@ let
 
   localConfig = {
     global = {
-      "config directory" = configDirectory;
+      "config directory" = "/etc/netdata/conf.d";
       "plugins directory" = concatStringsSep " " plugins;
     };
     web = {
@@ -179,6 +179,9 @@ in {
         }
       ];
 
+    environment.etc."netdata/netdata.conf".source = configFile;
+    environment.etc."netdata/conf.d".source = configDirectory;
+
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
@@ -191,8 +194,12 @@ in {
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
+      restartTriggers = [
+        config.environment.etc."netdata/netdata.conf".source
+        config.environment.etc."netdata/conf.d".source
+      ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         TimeoutStopSec = 60;
         Restart = "on-failure";
