@@ -3242,6 +3242,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  lifeograph = callPackage ../applications/editors/lifeograph { };
+
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
@@ -21709,6 +21711,8 @@ with pkgs;
 
   webdav = callPackage ../servers/webdav { };
 
+  webdav-server-rs = callPackage ../servers/webdav-server-rs { };
+
   webmetro = callPackage ../servers/webmetro { };
 
   wsdd = callPackage ../servers/wsdd { };
@@ -23994,6 +23998,8 @@ with pkgs;
   akira-unstable = callPackage ../applications/graphics/akira { };
 
   alembic = callPackage ../development/libraries/alembic {};
+
+  alfaview = callPackage ../applications/networking/instant-messengers/alfaview { };
 
   alchemy = callPackage ../applications/graphics/alchemy { };
 
