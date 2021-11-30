@@ -4,6 +4,7 @@
 , google-auth
 , googleapis-common-protos
 , grpcio
+, grpcio-status
 , protobuf
 , proto-plus
 , requests
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     googleapis-common-protos
     google-auth
     grpcio
+    grpcio-status
     protobuf
     proto-plus
     requests
