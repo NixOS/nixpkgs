@@ -354,8 +354,8 @@ let
       createPartitions = ''
         machine.succeed(
             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-            + " mkpart primary ext2 1M 50MB"  # /boot
-            + " mkpart primary linux-swap 50M 1024M"
+            + " mkpart primary ext2 1M 100MB"  # /boot
+            + " mkpart primary linux-swap 100M 1024M"
             + " mkpart primary 1024M -1s",  # LUKS
             "udevadm settle",
             "mkswap /dev/vda2 -L swap",
@@ -456,9 +456,9 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 50MiB"  # /boot
+          + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 50MiB 1024MiB"
+          + " mkpart primary linux-swap 100MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -483,8 +483,8 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 50MB"  # /boot
-          + " mkpart primary linux-swap 50MB 1024M"
+          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary linux-swap 100MB 1024M"
           + " mkpart primary ext2 1024M -1s",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -503,8 +503,8 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 50MB"  # /boot
-          + " mkpart primary linux-swap 50MB 1024M"
+          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary linux-swap 100MB 1024M"
           + " mkpart primary ext2 1024M -1s",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
@@ -599,8 +599,8 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary ext2 1M 50MB"  # /boot
-          + " mkpart primary linux-swap 50M 1024M"
+          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M 1280M"  # LUKS with keyfile
           + " mkpart primary 1280M -1s",
           "udevadm settle",
@@ -674,8 +674,8 @@ in {
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda --"
           + " mklabel msdos"
-          + " mkpart primary ext2 1M 50MB"  # /boot
-          + " mkpart primary 50MB 512MB  "  # swap
+          + " mkpart primary ext2 1M 100MB"  # /boot
+          + " mkpart primary 100MB 512MB  "  # swap
           + " mkpart primary 512MB 1024MB"  # Cache (typically SSD)
           + " mkpart primary 1024MB -1s ",  # Backing device (typically HDD)
           "modprobe bcache",
