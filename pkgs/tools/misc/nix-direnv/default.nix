@@ -2,9 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , gnugrep
-, nix
-, enableFlakes ? null # deprecated
+, nixStable
+, nixUnstable
+, enableFlakes ? false
 }:
+
+let
+  nix = if enableFlakes then nixUnstable else nixStable;
+in
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
   version = "1.5.0";
