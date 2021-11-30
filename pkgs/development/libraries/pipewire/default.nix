@@ -10,7 +10,6 @@
 , docutils
 , doxygen
 , graphviz
-, valgrind
 , glib
 , dbus
 , alsa-lib
@@ -28,6 +27,8 @@
 , makeFontsConf
 , callPackage
 , nixosTests
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind ? null
 , withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
@@ -121,7 +122,6 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      valgrind
       SDL2
       systemd
     ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
@@ -130,6 +130,9 @@ let
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi;
+
+    # Valgrind binary is required for running one optional test.
+    checkInputs = lib.optional withValgrind valgrind;
 
     mesonFlags = [
       "-Ddocs=enabled"
