@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , stdenv
 , makeWrapper
+, edk2
 , qemu
 , gnugrep
 , lsb-release
@@ -20,7 +21,6 @@
 }:
 let
   runtimePaths = [
-    edk2
     qemu
     gnugrep
     jq
