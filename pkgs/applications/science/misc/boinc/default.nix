@@ -37,10 +37,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-server" ];
 
-  meta = {
+  meta = with lib; {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
-    license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.linux;  # arbitrary choice
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;  # arbitrary choice
+    maintainers = with maintainers; [ Luflosi ];
   };
 }
