@@ -18,7 +18,7 @@
 
 # For an explanation of optional packages
 # (features provided by them, version limits), see
-# https://www-01.ibm.com/support/docview.wss?uid=swg21052223#Version%208.1
+# https://www.ibm.com/support/pages/node/660813#Version%208.1
 
 
 # IBM Tivoli Storage Manager Client uses a system-wide
@@ -40,21 +40,25 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/support/knowledgecenter/en/SSEQVQ_8.1.8/client/c_cfg_sapiunix.html
+# https://www.ibm.com/docs/en/spectrum-protect/8.1.8?topic=solaris-set-api-environment-variables
 
 
-# The newest version of TSM client should be discoverable
-# by going the the `downloadPage` (see `meta` below),
-# there to "Client Latest Downloads",
-# "IBM Spectrum Protect Client Downloads and READMEs",
-# then to "Linux x86_64 Ubuntu client" (as of 2019-07-15).
+# The newest version of TSM client should be discoverable by
+# going to the `downloadPage` (see `meta` below), then
+# * find section "Client Service Release",
+# * pick the latest version and follow the link
+#   "IBM Spectrum Protect Client .. Downloads and READMEs"
+# * in the table at the page's bottom, follow the
+#   "HTTPS" link of the "Linux x86_64 Ubuntu client"
+# * in the directory listing, pick the big `.tar` file
+# (as of 2021-12-13)
 
 
 let
 
   meta = {
-    homepage = "https://www.ibm.com/us-en/marketplace/data-protection-and-recovery";
-    downloadPage = "https://www-01.ibm.com/support/docview.wss?uid=swg21239415";
+    homepage = "https://www.ibm.com/products/data-protection-and-recovery";
+    downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
@@ -74,11 +78,19 @@ let
     '';
   };
 
+  mkSrcUrl = version:
+    let
+      major = lib.versions.major version;
+      minor = lib.versions.minor version;
+      patch = lib.versions.patch version;
+    in
+      "https://public.dhe.ibm.com/storage/tivoli-storage-management/maintenance/client/v${major}r${minor}/Linux/LinuxX86_DEB/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86_DEB.tar";
+
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
     version = "8.1.8.0";
     src = fetchurl {
-      url = "ftp://public.dhe.ibm.com/storage/tivoli-storage-management/maintenance/client/v8r1/Linux/LinuxX86_DEB/BA/v818/${version}-TIV-TSMBAC-LinuxX86_DEB.tar";
+      url = mkSrcUrl version;
       sha256 = "0c1d0jm0i7qjd314nhj2vj8fs7sncm1x2n4d6dg4049jniyvjhpk";
     };
     inherit meta;
