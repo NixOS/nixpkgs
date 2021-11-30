@@ -312,6 +312,11 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # While GHC >= 8.10.7 builds and works to an extent on aarch64-darwin,
+    # there are multiple unresolved issues degrading the quality of the
+    # `haskellPackages` set. As such, we can't call it a supported platform.
+    # Use `config.allowUnsupportedSystem` if you are feeling adventurous.
+    badPlatforms = [ "aarch64-darwin" ];
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

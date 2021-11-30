@@ -334,6 +334,11 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
     # ghcHEAD times out on aarch64-linux on Hydra.
     hydraPlatforms = builtins.filter (p: p != "aarch64-linux") ghc.meta.platforms;
+    # While GHC >= 8.10.7 builds and works to an extent on aarch64-darwin,
+    # there are multiple unresolved issues degrading the quality of the
+    # `haskellPackages` set. As such, we can't call it a supported platform.
+    # Use `config.allowUnsupportedSystem` if you are feeling adventurous.
+    badPlatforms = [ "aarch64-darwin" ];
   };
 
   dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);

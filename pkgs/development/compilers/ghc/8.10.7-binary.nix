@@ -397,6 +397,11 @@ stdenv.mkDerivation rec {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     hydraPlatforms = builtins.filter (p: minimal || p != "aarch64-linux") platforms;
+    # While GHC >= 8.10.7 builds and works to an extent on aarch64-darwin,
+    # there are multiple unresolved issues degrading the quality of the
+    # `haskellPackages` set. As such, we can't call it a supported platform.
+    # Use `config.allowUnsupportedSystem` if you are feeling adventurous.
+    badPlatforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
       prusnak
       domenkozar
