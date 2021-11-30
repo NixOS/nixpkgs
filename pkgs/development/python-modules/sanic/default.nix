@@ -12,6 +12,7 @@
 , pytest-benchmark
 , pytest-sugar
 , pytestCheckHook
+, pythonOlder
 , sanic-routing
 , sanic-testing
 , ujson
@@ -23,6 +24,9 @@
 buildPythonPackage rec {
   pname = "sanic";
   version = "21.9.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -85,6 +89,10 @@ buildPythonPackage rec {
     "test_auto_reload"
     "test_no_exceptions_when_cancel_pending_request"
     "test_ipv6_address_is_not_wrapped"
+    # Failure of the redirect tests seems to be related to httpx>0.20.0
+    "test_redirect"
+    "test_chained_redirect"
+    "test_unix_connection"
     # These appear to be very sensitive to output of commands
     "test_access_logs"
     "test_auto_reload"
@@ -99,7 +107,9 @@ buildPythonPackage rec {
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "sanic" ];
+  pythonImportsCheck = [
+    "sanic"
+  ];
 
   meta = with lib; {
     description = "Web server and web framework";
