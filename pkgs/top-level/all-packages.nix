@@ -978,6 +978,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
+  qflipper = callPackage ../tools/misc/qflipper { };
+
   quich = callPackage ../tools/misc/quich { } ;
 
   redfang = callPackage ../tools/networking/redfang { };
