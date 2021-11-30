@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "viking";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/viking/viking-${version}.tar.bz2";
-    sha256 = "0fybpy6k0vmjp231h5ckysl3c0rcnh2afznijwq6y78j4hywyjpy";
+    sha256 = "sha256-lFXIlfmLwT3iS9ayNM0PHV7NwbBotMvG62ZE9hJuRaw=";
   };
 
   nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ];

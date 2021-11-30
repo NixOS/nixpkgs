@@ -80,13 +80,13 @@ in
     users.users = mkIf (cfg.user == "webdav") {
       webdav = {
         description = "WebDAV daemon user";
-        isSystemUser = true;
         group = cfg.group;
+        uid = config.ids.uids.webdav;
       };
     };
 
     users.groups = mkIf (cfg.group == "webdav") {
-      webdav = { };
+      webdav.gid = config.ids.gids.webdav;
     };
 
     systemd.services.webdav = {
@@ -103,5 +103,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ pengmeiyu ];
+  meta.maintainers = with maintainers; [ pmy ];
 }

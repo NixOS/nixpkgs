@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, stdenv
 , cmake
 , cppe
 , eigen
@@ -12,6 +13,7 @@
 , pandas
 , polarizationsolver
 , pytest
+, llvmPackages
 }:
 
 buildPythonPackage rec {
@@ -31,7 +33,12 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ pybind11 ];
+  buildInputs = [ pybind11 ]
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+
+  NIX_CFLAGS_LINK = lib.optional stdenv.cc.isClang "-lomp";
+
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   checkInputs = [
     pytest
