@@ -9,6 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
+  patches = [
+    # Add support for ncurses-6.3. A backport of patch pending upstream
+    # inclusion: https://github.com/octo/liboping/pull/61
+    ./ncurses-6.3.patch
+  ];
+
   NIX_CFLAGS_COMPILE = lib.optionalString
     stdenv.cc.isGNU "-Wno-error=format-truncation";
 

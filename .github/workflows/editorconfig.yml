@@ -13,33 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-    - name: Get list of changed files from PR
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        echo 'PR_DIFF<<EOF' >> $GITHUB_ENV
-        gh api \
-          repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
-          | jq '.[] | select(.status != "removed") | .filename' \
-          >> $GITHUB_ENV
-        echo 'EOF' >> $GITHUB_ENV
     - uses: actions/checkout@v2
-      with:
-        # pull_request_target checks out the base branch by default
-        ref: refs/pull/${{ github.event.pull_request.number }}/merge
-      if: env.PR_DIFF
     - uses: cachix/install-nix-action@v16
-      if: env.PR_DIFF
       with:
         # nixpkgs commit is pinned so that it doesn't break
         nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/f93ecc4f6bc60414d8b73dbdf615ceb6a2c604df.tar.gz
     - name: install editorconfig-checker
       run: nix-env -iA editorconfig-checker -f '<nixpkgs>'
-      if: env.PR_DIFF
-    - name: Checking EditorConfig
-      if: env.PR_DIFF
+    - name: Get list of changed files from PR
       run: |
-        echo "$PR_DIFF" | xargs editorconfig-checker -disable-indent-size
+        git fetch origin --depth 1 ${{ github.event.pull_request.head.sha }}
+        git checkout ${{ github.event.pull_request.head.sha }}
+
+        git fetch origin --depth 1 ${{ github.event.pull_request.base.sha }}
+        git checkout ${{ github.event.pull_request.base.sha }}
+
+        git fetch origin --depth 1 pull/${{ github.event.pull_request.number }}/merge
+        # check this out last as editorconfig should check this commit
+        git checkout FETCH_HEAD
+
+        # everything except --diff-filter=D (deleted)
+        git diff --diff-filter=ACMRTUXB --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > $HOME/changed_files
+    - name: Checking EditorConfig
+      run: |
+        cat $HOME/changed_files | xargs -r editorconfig-checker -disable-indent-size
     - if: ${{ failure() }}
       run: |
         echo "::error :: Hey! It looks like your changes don't follow our editorconfig settings. Read https://editorconfig.org/#download to configure your editor so you never see this error again."

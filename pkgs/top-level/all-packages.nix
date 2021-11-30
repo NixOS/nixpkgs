@@ -6971,6 +6971,8 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  mani = callPackage ../development/tools/mani { };
+
   mapcache = callPackage ../servers/mapcache { };
 
   mapserver = callPackage ../servers/mapserver { };
@@ -7071,6 +7073,8 @@ with pkgs;
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
+
+  moz-phab = python3Packages.callPackage ../applications/misc/moz-phab { };
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
@@ -11126,6 +11130,8 @@ with pkgs;
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
+  zsh-better-npm-completion = callPackage ../shells/zsh/zsh-better-npm-completion { };
+
   zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
@@ -14930,9 +14936,7 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
-  python-language-server = callPackage ../development/dotnet-modules/python-language-server {
-    inherit (dotnetPackages) Nuget;
-  };
+  python-language-server = callPackage ../development/dotnet-modules/python-language-server { };
 
   minify = callPackage ../development/web/minify { };
 
@@ -27532,6 +27536,10 @@ with pkgs;
     wxGTK = wxGTK30-gtk3;
   };
 
+  jpsxdec = callPackage ../tools/games/jpsxdec {
+    jdk = openjdk8;
+  };
+
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
   pekwm = callPackage ../applications/window-managers/pekwm { };
@@ -28828,6 +28836,10 @@ with pkgs;
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
+
+  vengi-tools = callPackage ../applications/graphics/vengi-tools {
+    inherit (darwin.apple_sdk.frameworks) Carbon OpenCL;
+  };
 
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;
