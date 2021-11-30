@@ -4040,6 +4040,8 @@ in {
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
+  jschema-to-python = callPackage ../development/python-modules/jschema-to-python { };
+
   jsmin = callPackage ../development/python-modules/jsmin { };
 
   json5 = callPackage ../development/python-modules/json5 { };
