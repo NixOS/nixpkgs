@@ -195,6 +195,8 @@ in
               # Make the token inaccessible to the runner service user
               chmod 600 "$STATE_DIRECTORY/${currentConfigTokenFilename}"
               chown root:root "$STATE_DIRECTORY/${currentConfigTokenFilename}"
+              # If the runner was not (re)configured, the new token is not yet cleaned up
+              rm -f "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
             '';
             unconfigureRunner = writeScript "unconfigure" ''
               differs=
