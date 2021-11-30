@@ -2,7 +2,7 @@
 
 let
   name = "lunar-client";
-  version = "2.7.3";
+  version = "2.8.8";
 
   desktopItem = makeDesktopItem {
     name = "Lunar Client";
@@ -21,7 +21,7 @@ let
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
     name = "lunar-client.AppImage";
-    sha256 = "0ihi937rrj677y9b377b4hhp9wsarbqwrdrd6k3lhzx3jyh2fynf";
+    sha256 = "sha256-zPu0rc/Qi6+EyHXeXRJfkPHKK6Hr1JsENBvLt8a9WBM=";
   };
 in appimageTools.wrapType1 rec {
   inherit name src;
