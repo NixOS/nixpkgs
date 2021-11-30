@@ -556,6 +556,7 @@ in with py.pkgs; buildPythonApplication rec {
     "number"
     "nws"
     "nx584"
+    "octoprint"
     "omnilogic"
     "onboarding"
     "ondilo_ico"
