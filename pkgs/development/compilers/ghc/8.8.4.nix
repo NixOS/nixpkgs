@@ -219,13 +219,10 @@ stdenv.mkDerivation (rec {
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
-  '' + lib.optionalString (targetCC.isClang || (useLLVM && stdenv.targetPlatform.isDarwin)) (let
-    # LLVM backend on Darwin needs clang, if we are already using clang, might as well set the environment variable.
-    # See also https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    clang = if targetCC.isClang then targetCC else llvmPackages.clang;
-  in ''
-    export CLANG="${clang}/bin/${clang.targetPrefix}clang"
-  '') + ''
+  '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
+    export CLANG="${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+  '' + ''
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
