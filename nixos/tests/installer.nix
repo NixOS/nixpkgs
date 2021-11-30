@@ -76,8 +76,8 @@ let
       def assemble_qemu_flags():
           flags = "-cpu max"
           ${if (system == "x86_64-linux" || system == "i686-linux")
-            then ''flags += " -m 1500"''
-            else ''flags += " -m 1000 -enable-kvm -machine virt,gic-version=host"''
+            then ''flags += " -m 1024"''
+            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
           }
           return flags
 
@@ -288,7 +288,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 3096;
+          virtualisation.memorySize = 1536;
 
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is

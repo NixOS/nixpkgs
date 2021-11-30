@@ -34,12 +34,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--enable-boringssl=${boringssl}"
+    "--enable-boringssl=${lib.getDev boringssl}"
     "--enable-libsrtp2"
     "--enable-turn-rest-api"
     "--enable-json-logger"
     "--enable-gelf-event-handler"
     "--enable-post-processing"
+  ];
+
+  makeFlagsArray = [
+    "BORINGSSL_LIBS=-L${lib.getLib boringssl}/lib"
   ];
 
   outputs = [ "out" "dev" "doc" "man" ];

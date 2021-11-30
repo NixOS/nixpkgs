@@ -11,15 +11,15 @@
 
 mkDerivation rec {
   pname = "audacious";
-  version = "4.0.5";
+  version = "4.1";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "028zjgz0p7ys15lk2a30m5zcv9xrx3ga50wjsh4m4zxilgkakbji";
+    sha256 = "0p734psjjvjcmla2hg5h6a9v1prvy63jj9xm2g2ngs49jy7qan0z";
   };
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "0ny5w1agr9jaz5w3wyyxf1ygmzmd1sivaf97lcm4z4w6529520lz";
+    sha256 = "0k0xnqmxi5lna034i2cnzvfzrykxmv4fbs1nkrc9sd2ma1igrmns";
   };
 
   nativeBuildInputs = [ gettext pkg-config ];
@@ -36,8 +36,10 @@ mkDerivation rec {
     libopenmpt
   ];
 
+  configureFlags = [ "--disable-gtk" ];
+
   # Here we build both audacious and audacious-plugins in one
-  # derivations, since they really expect to be in the same prefix.
+  # derivation, since they really expect to be in the same prefix.
   # This is slighly tricky.
   builder = builtins.toFile "builder.sh" ''
     # First build audacious.

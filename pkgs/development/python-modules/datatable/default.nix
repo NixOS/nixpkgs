@@ -20,13 +20,16 @@ buildPythonPackage rec {
   # authors seem to have created their own build system
   format = "other";
 
-  # tarball doesn't appear to have been shipped totally ready-to-build
   postPatch = ''
+    # tarball doesn't appear to have been shipped totally ready-to-build
     substituteInPlace ci/ext.py \
       --replace \
         'shell_cmd(["git"' \
         '"0000000000000000000000000000000000000000" or shell_cmd(["git"'
     echo '${version}' > VERSION.txt
+
+    # don't make assumptions about architecture
+    sed -i '/-m64/d' ci/ext.py
   '';
   DT_RELEASE = "1";
 
