@@ -28,6 +28,11 @@ buildPythonPackage rec {
     sha256 = "f86a01a2e1e678865d2e42300c47552b5012cd81a2d354e47827a1fd074cc302";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "dask == 2021.11.2" "dask"
+  '';
+
   propagatedBuildInputs = [
     bokeh
     click
