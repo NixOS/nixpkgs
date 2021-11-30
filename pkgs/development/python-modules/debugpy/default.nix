@@ -59,6 +59,7 @@ buildPythonPackage rec {
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
       "x86_64-linux"   = "-shared -m64 -o attach_linux_amd64.so";
       "i686-linux"     = "-shared -m32 -o attach_linux_x86.so";
+      "aarch64-linux"  = "-shared -o attach_linux_arm64.so";
       "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
       "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
       "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch arm64 -o attach_arm64.dylib";
@@ -87,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/debugpy";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];
   };
 }
