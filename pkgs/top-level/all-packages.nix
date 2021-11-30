@@ -9022,6 +9022,8 @@ with pkgs;
 
   rep = callPackage ../development/tools/rep { };
 
+  repseek = callPackage ../applications/science/biology/repseek { };
+
   reicast = callPackage ../misc/emulators/reicast { };
 
   reredirect = callPackage ../tools/misc/reredirect { };
