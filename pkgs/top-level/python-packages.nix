@@ -967,6 +967,8 @@ in {
 
   azure-mgmt-servicefabricmanagedclusters = callPackage ../development/python-modules/azure-mgmt-servicefabricmanagedclusters { };
 
+  azure-mgmt-servicelinker = callPackage ../development/python-modules/azure-mgmt-servicelinker { };
+
   azure-mgmt-signalr = callPackage ../development/python-modules/azure-mgmt-signalr { };
 
   azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
@@ -1762,6 +1764,10 @@ in {
   coveralls = callPackage ../development/python-modules/coveralls { };
 
   cozy = callPackage ../development/python-modules/cozy { };
+
+  cppe = callPackage ../development/python-modules/cppe {
+    cppe = pkgs.cppe;
+  };
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
@@ -2694,6 +2700,8 @@ in {
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
+
+  fields = callPackage ../development/python-modules/fields { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
@@ -5926,6 +5934,8 @@ in {
   poetry2conda = callPackage ../development/python-modules/poetry2conda { };
 
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
+
+  polarizationsolver = callPackage ../development/python-modules/polarizationsolver { };
 
   polib = callPackage ../development/python-modules/polib { };
 

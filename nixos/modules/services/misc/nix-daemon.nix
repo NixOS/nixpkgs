@@ -74,6 +74,8 @@ in
   imports = [
     (mkRenamedOptionModule [ "nix" "useChroot" ] [ "nix" "useSandbox" ])
     (mkRenamedOptionModule [ "nix" "chrootDirs" ] [ "nix" "sandboxPaths" ])
+    (mkRenamedOptionModule [ "nix" "daemonIONiceLevel" ] [ "nix" "daemonIOSchedPriority" ])
+    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ];
 
   ###### interface
@@ -546,7 +548,7 @@ in
       [ nix
         pkgs.nix-info
       ]
-      ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
+      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
 
     environment.etc."nix/nix.conf".source = nixConf;
 

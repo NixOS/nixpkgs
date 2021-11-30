@@ -186,6 +186,7 @@ mapAliases ({
   deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # added 2018-02-23
   deadpixi-sam = deadpixi-sam-unstable;
   debian_devscripts = debian-devscripts; # added 2016-03-23
+  debugedit-unstable = debugedit; # added 2021-11-22
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
   deltachat-electron = deltachat-desktop; # added 2021-07-18
@@ -599,7 +600,7 @@ mapAliases ({
   nilfs_utils = nilfs-utils; # added 2018-04-25
   nix-direnv-flakes = nix-direnv;
   nix-review = nixpkgs-review; # added 2019-12-22
-  nixFlakes = nixStable; # added 2021-05-21
+  nixFlakes = nix_2_4; # added 2021-05-21
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nmap-unfree = nmap; # added 2021-04-06
   nologin = shadow; # added 2018-04-25

@@ -337,6 +337,8 @@ with pkgs;
 
   protoc-gen-go-grpc = callPackage ../development/tools/protoc-gen-go-grpc { };
 
+  protoc-gen-go-vtproto = callPackage ../development/tools/protoc-gen-go-vtproto { };
+
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
@@ -4436,12 +4438,12 @@ with pkgs;
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
-  debugedit-unstable = callPackage ../development/tools/misc/debugedit { };
+  debugedit = callPackage ../development/tools/misc/debugedit { };
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
   delta = callPackage ../applications/version-management/git-and-tools/delta {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
   };
 
   deno = callPackage ../development/web/deno {
@@ -5951,14 +5953,6 @@ with pkgs;
     withXorg = false;
     libdevil = libdevil-nox;
   };
-
-  /* Readded by Michael Raskin. There are programs in the wild
-   * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
-   * objections before removal. The feature is libgraph.
-   */
-  graphviz_2_32 = (callPackage ../tools/graphics/graphviz/2.32.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  }).overrideAttrs(x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
 
   grin = callPackage ../tools/text/grin { };
 
@@ -12328,6 +12322,7 @@ with pkgs;
     });
   graalvm11-ce = graalvmCEPackages.graalvm11-ce;
   graalvm17-ce = graalvmCEPackages.graalvm17-ce;
+  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -15933,6 +15928,8 @@ with pkgs;
 
   ctpl = callPackage ../development/libraries/ctpl { };
 
+  cppe = callPackage ../development/libraries/science/chemistry/cppe { };
+
   cppdb = callPackage ../development/libraries/cppdb { };
 
   cpp-utilities = callPackage ../development/libraries/cpp-utilities { };
@@ -18782,7 +18779,7 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins { nix = nix_2_3; };
+  nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
@@ -21998,6 +21995,8 @@ with pkgs;
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
   };
+
+  htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
@@ -25632,10 +25631,6 @@ with pkgs;
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
-
-  guitone = callPackage ../applications/version-management/guitone {
-    graphviz = graphviz_2_32;
-  };
 
   gv = callPackage ../applications/misc/gv { };
 
@@ -29648,8 +29643,6 @@ with pkgs;
 
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
-
-  dero = callPackage ../applications/blockchains/dero { boost = boost165; };
 
   digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte { withGui = true; };
   digibyted = callPackage ../applications/blockchains/digibyte { withGui = false; };

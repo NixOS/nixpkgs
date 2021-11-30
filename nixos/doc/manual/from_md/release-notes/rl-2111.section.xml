@@ -17,11 +17,19 @@
     <itemizedlist>
       <listitem>
         <para>
-          Nix has been updated to version 2.4, reference its
+          The default Nix version remains at 2.3.16. Nix has not been
+          updated to version 2.4 due to regressions in non-experimental
+          behavior. To upgrade to 2.4, use the
+          <literal>nixos-unstable</literal> branch or set the
+          <literal>nix.package</literal> option to either of
+          <literal>nixFlakes</literal> or <literal>nix_2_4</literal>
+          packages. The <literal>nixUnstable</literal> attribute is a
+          pre-release of Nix 2.5. Read the
           <link xlink:href="https://discourse.nixos.org/t/nix-2-4-released/15822">release
-          notes</link> for more information on what has changed. The
-          previous version of Nix, 2.3.16, remains available for the
-          time being in the <literal>nix_2_3</literal> package.
+          notes</link> for more information on upcoming changes. Please
+          help us improve Nix by providing any
+          <link xlink:href="https://github.com/NixOS/nix/issues">breakage
+          reports</link>.
         </para>
       </listitem>
       <listitem>
@@ -168,6 +176,41 @@
               These can be re-enabled, see the
               <link xlink:href="https://www.openssh.com/txt/release-8.8">OpenSSH
               changelog</link> for details
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          ORY Kratos was updated to version 0.8.0-alpha.3
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              This release requires you to run SQL migrations. Please,
+              as always, create a backup of your database first!
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SDKs are now generated with tag v0alpha2 to reflect
+              that some signatures have changed in a breaking fashion.
+              Please update your imports from v0alpha1 to v0alpha2.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The SMTPS scheme used in courier config URL with
+              cleartext/StartTLS/TLS SMTP connection types is now only
+              supporting implicit TLS. For StartTLS and cleartext SMTP,
+              please use the SMTP scheme instead.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              for more details, see
+              <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.8.0-alpha.1">Release
+              Notes</link>.
             </para>
           </listitem>
         </itemizedlist>
@@ -1827,15 +1870,6 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
-          Changing systemd <literal>.socket</literal> units now restarts
-          them and stops the service that is activated by them.
-          Additionally, services with
-          <literal>stopOnChange = false</literal> don’t break anymore
-          when they are socket-activated.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The <literal>virtualisation.libvirtd</literal> module has been
           refactored and updated with new options:
         </para>
@@ -1985,6 +2019,16 @@ Superuser created successfully.
           after the upgrade, please delete your
           <literal>$XDG_CONFIG_HOME/retroarch/retroarch.cfg</literal>
           file.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          hydrus has been upgraded from version <literal>438</literal>
+          to <literal>463</literal>. Since upgrading between releases
+          this old is advised against, be sure to have a backup of your
+          data before upgrading. For details, see
+          <link xlink:href="https://hydrusnetwork.github.io/hydrus/help/getting_started_installing.html#big_updates">the
+          hydrus manual</link>.
         </para>
       </listitem>
     </itemizedlist>
