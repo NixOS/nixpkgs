@@ -45,7 +45,15 @@ in
       user = mkOption {
         type = types.str;
         default = "graylog";
-        description = "User account under which graylog runs";
+        description = ''
+          User account under which graylog runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the user exists before the graylog service starts.
+          </para></note>
+        '';
       };
 
       isMaster = mkOption {
