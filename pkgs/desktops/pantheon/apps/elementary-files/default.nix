@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     bamf
     elementary-dock
     elementary-icon-theme
+    glib
     granite
     gtk3
     libcanberra
@@ -82,16 +83,9 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [
-    ./filechooser-portal-hardcode-gsettings-for-nixos.patch
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace filechooser-portal/FileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with lib; {
