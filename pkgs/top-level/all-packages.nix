@@ -23997,6 +23997,8 @@ with pkgs;
 
   alembic = callPackage ../development/libraries/alembic {};
 
+  alfaview = callPackage ../applications/networking/instant-messengers/alfaview { };
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
