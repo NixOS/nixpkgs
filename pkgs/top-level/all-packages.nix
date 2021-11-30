@@ -3278,6 +3278,8 @@ with pkgs;
 
   lynis = callPackage ../tools/security/lynis { };
 
+  maigret = callPackage ../tools/security/maigret { };
+
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
