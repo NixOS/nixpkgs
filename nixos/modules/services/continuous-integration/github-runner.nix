@@ -181,14 +181,12 @@ in
             ];
             ownConfigTokens = writeScript "own-config-tokens" ''
               # Copy current and new token file to runtime dir and make it accessible to the service user
-              cp ${escapeShellArg cfg.tokenFile} "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-              chmod 600 "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
-              chown "$USER" "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
+              install --owner="$USER" --mode=600 \
+                ${escapeShellArg cfg.tokenFile} "$RUNTIME_DIRECTORY/${newConfigTokenFilename}"
 
               if [[ -e "$STATE_DIRECTORY/${currentConfigTokenFilename}" ]]; then
-                cp "$STATE_DIRECTORY/${currentConfigTokenFilename}" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-                chmod 600 "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
-                chown "$USER" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
+                install --owner="$USER" --mode=600 \
+                  "$STATE_DIRECTORY/${currentConfigTokenFilename}" "$RUNTIME_DIRECTORY/${currentConfigTokenFilename}"
               fi
             '';
             disownConfigTokens = writeScript "disown-config-tokens" ''
