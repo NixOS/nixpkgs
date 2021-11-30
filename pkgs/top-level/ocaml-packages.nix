@@ -1349,8 +1349,6 @@ let
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
-    typerep_p4 = callPackage ../development/ocaml-modules/typerep { };
-
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
@@ -1582,13 +1580,6 @@ let
 
 
     # Core sublibs
-    typerep =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.typerep
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/typerep.nix {}
-      else typerep_p4;
-
     sexplib =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.sexplib
