@@ -3,12 +3,12 @@
 , fetchFromGitHub
 , gnugrep
 , nixStable
-, nixUnstable
+, nix_2_4
 , enableFlakes ? false
 }:
 
 let
-  nix = if enableFlakes then nixUnstable else nixStable;
+  nix = if enableFlakes then nix_2_4 else nixStable;
 in
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
