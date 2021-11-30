@@ -5,7 +5,7 @@ set -euo pipefail
 # cd to the folder containing this script
 cd "$(dirname "$0")"
 
-CURRENT_VERSION=$(nix eval --raw '(with import ../../../../. {}; matrix-appservice-irc.version)')
+CURRENT_VERSION=$(nix-instantiate ../../../../. --eval --strict -A matrix-appservice-irc.version | tr -d '"')
 TARGET_VERSION="$(curl https://api.github.com/repos/matrix-org/matrix-appservice-irc/releases/latest | jq --exit-status -r ".tag_name")"
 
 if [[ "$CURRENT_VERSION" == "$TARGET_VERSION" ]]; then
