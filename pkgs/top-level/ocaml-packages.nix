@@ -1376,8 +1376,6 @@ let
 
     uuuu = callPackage ../development/ocaml-modules/uuuu { };
 
-    variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
-
     vchan = callPackage ../development/ocaml-modules/vchan { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
@@ -1586,13 +1584,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
       else null;
-
-    variantslib =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.variantslib
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
-      else variantslib_p4;
 
     core_bench =
       if lib.versionOlder "4.03" ocaml.version
