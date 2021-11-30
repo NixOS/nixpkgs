@@ -14818,6 +14818,8 @@ with pkgs;
 
   kati = callPackage ../development/tools/build-managers/kati { };
 
+  kafkactl = callPackage ../development/tools/kafkactl { };
+
   kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
