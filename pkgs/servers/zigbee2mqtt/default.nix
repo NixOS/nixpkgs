@@ -1,27 +1,63 @@
-{ pkgs, stdenv, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
+{ mkYarnPackage
+, lib
+, fetchFromGitHub
+, nixosTests
+, python3
+, nodejs
+  # needed for the NixOS test
+, dataDir ? "/opt/zigbee2mqtt/data"
+}:
 let
-  package = (import ./node.nix { inherit pkgs; inherit (stdenv.hostPlatform) system; }).package;
+  inherit (lib.importJSON ./package.json) name version;
 in
-package.override rec {
-  # don't upgrade! Newer versions cause stack overflows and fail trunk-combined
-  # see https://github.com/NixOS/nixpkgs/pull/118400
-  version = "1.16.2";
-  reconstructLock = true;
-
-  src = pkgs.fetchFromGitHub {
+mkYarnPackage {
+  src = fetchFromGitHub {
     owner = "Koenkk";
-    repo = "zigbee2mqtt";
+    repo = name;
     rev = version;
-    sha256 = "0rpmm4pwm8s4i9fl26ql0czg5kijv42k9wwik7jb3ppi5jzxrakd";
+    sha256 = "sha256-HoheB+/K4THFqgcC79QZM71rDPv2JB+S6y4K1+sdASo=";
   };
+
+  postPatch = ''
+    # Prevent application from self updating
+    sed -i index.js \
+      -e '/await checkDist/d'
+    # Fix path to node modules; yarn and npm seems to have different packaging
+    sed -i lib/util/utils.ts \
+      -e "s/\('node_modules'\)/'..', '..', \1/"
+  '';
+
+  packageJSON = ./package.json;
+  yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
+
+  yarnFlags = [
+    "--offline"
+    "--frozen-lockfile"
+    "--no-progress"
+    "--non-interactive"
+  ];
+
+  yarnPreBuild = ''
+    export npm_config_nodedir=${nodejs}
+  '';
+
+  pkgConfig.unix-dgram.buildInputs = [ python3 ];
+  pkgConfig."@serialport/bindings".buildInputs = [ python3 ];
+
+  buildPhase = ''
+    yarn --offline build
+  '';
+
+  distPhase = ":";
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     license = licenses.gpl3;
     homepage = "https://github.com/Koenkk/zigbee2mqtt";
-    maintainers = with maintainers; [ sweber ];
+    maintainers = with maintainers; [ sweber ck3d ];
     platforms = platforms.linux;
   };
 }
