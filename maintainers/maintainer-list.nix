@@ -8974,12 +8974,6 @@
     githubId = 8641;
     name = "Pierre Carrier";
   };
-  pengmeiyu = {
-    email = "pengmyu@gmail.com";
-    github = "pmeiyu";
-    githubId = 8529551;
-    name = "Peng Mei Yu";
-  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
@@ -9254,6 +9248,12 @@
     github = "pmiddend";
     githubId = 178496;
     name = "Philipp Middendorf";
+  };
+  pmy = {
+    email = "pmy@xqzp.net";
+    github = "pmeiyu";
+    githubId = 8529551;
+    name = "Peng Mei Yu";
   };
   pmyjavec = {
     email = "pauly@myjavec.com";
