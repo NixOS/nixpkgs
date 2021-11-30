@@ -3278,6 +3278,8 @@ with pkgs;
 
   lynis = callPackage ../tools/security/lynis { };
 
+  maigret = callPackage ../tools/security/maigret { };
+
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
@@ -8952,6 +8954,8 @@ with pkgs;
   quickjs = callPackage ../development/interpreters/quickjs { };
 
   quickserve = callPackage ../tools/networking/quickserve { };
+
+  quictls = callPackage ../development/libraries/quictls { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
@@ -18835,6 +18839,10 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
+  nghttp3 = callPackage ../development/libraries/nghttp3 { };
+
+  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
+
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
@@ -26408,7 +26416,28 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kumactl = callPackage ../applications/networking/cluster/kumactl { };
+  kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
+  kuma-experimental = callPackage ../applications/networking/cluster/kuma {
+    isFull = true;
+    enableGateway = true;
+    pname = "kuma-experimental";
+  };
+  kumactl = callPackage ../applications/networking/cluster/kuma {
+    components = ["kumactl"];
+    pname = "kumactl";
+  };
+  kuma-cp = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-cp"];
+    pname = "kuma-cp";
+  };
+  kuma-dp = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-dp"];
+    pname = "kuma-dp";
+  };
+  kuma-prometheus-sd = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-prometheus-sd"];
+    pname = "kuma-prometheus-sd";
+  };
 
   kile-wl = callPackage ../applications/misc/kile-wl { };
 

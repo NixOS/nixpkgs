@@ -8808,6 +8808,8 @@ in {
 
   socialscan = callPackage ../development/python-modules/socialscan { };
 
+  socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
+
   sockjs = callPackage ../development/python-modules/sockjs { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
@@ -10151,6 +10153,8 @@ in {
   XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
 
   xlwt = callPackage ../development/python-modules/xlwt { };
+
+  xmind = callPackage ../development/python-modules/xmind { };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
