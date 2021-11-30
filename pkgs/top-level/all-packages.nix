@@ -8954,6 +8954,8 @@ with pkgs;
 
   quickserve = callPackage ../tools/networking/quickserve { };
 
+  quictls = callPackage ../development/libraries/quictls { };
+
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
@@ -18832,6 +18834,10 @@ with pkgs;
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
+
+  nghttp3 = callPackage ../development/libraries/nghttp3 { };
+
+  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
 
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
