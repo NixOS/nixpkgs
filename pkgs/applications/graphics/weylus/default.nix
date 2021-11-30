@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ lom ];
+    platforms = [ "x86_64-linux" ];
   };
 }
