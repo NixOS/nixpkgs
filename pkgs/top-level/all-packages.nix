@@ -204,6 +204,8 @@ with pkgs;
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
+  bakelite = callPackage ../tools/backup/bakelite { };
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
