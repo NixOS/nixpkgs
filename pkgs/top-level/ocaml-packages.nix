@@ -389,8 +389,6 @@ let
 
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
-    fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
-
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
@@ -1588,13 +1586,6 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/typerep.nix {}
       else typerep_p4;
-
-    fieldslib =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.fieldslib
-      else if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {}
-      else fieldslib_p4;
 
     sexplib =
       if lib.versionOlder "4.03" ocaml.version
