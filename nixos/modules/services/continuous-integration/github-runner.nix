@@ -249,10 +249,10 @@ in
             '';
           in
           map (x: "${x} ${escapeShellArgs [ stateDir runtimeDir logsDir ]}") [
-            "+${ownConfigTokens}" # runs as root
+            "!${ownConfigTokens}" # runs as root
             unconfigureRunner
             configureRunner
-            "+${disownConfigTokens}" # runs as root
+            "!${disownConfigTokens}" # runs as root
             setupRuntimeDir
           ];
 
