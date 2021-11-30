@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     ./0001-all-remove-deprecated-sys_errlist-and-replace-with-A.patch
 
     (fetchpatch {
-      name ="binutils-2.36.patch";
+      name = "binutils-2.36.patch";
       url = "https://github.com/cdesktopenv/cde/commit/0b7849e210a99a413ddeb52a0eb5aef9a08504a0.patch";
       sha256 = "0wlhs617hws3rwln9v74y1nw27n3pp7jkpnxlala7k5y64506ipj";
       stripLen = 1;
