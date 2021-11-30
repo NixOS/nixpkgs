@@ -15,7 +15,7 @@ ourNodePackages.package.override {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     rev = version;
-    sha256 = "sha256-EncodJKptrLC54B5XipkiHXFgJ5cD+crcT3SOPOc+7M=";
+    sha256 = "sha256-pJ024kIN7TJdOVV/mMB/DQJdaPQJI6yQci3uASyMZRs=";
   };
 
   nativeBuildInputs = [ makeWrapper nodePackages.node-gyp-build ];
