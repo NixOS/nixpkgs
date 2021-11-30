@@ -3527,6 +3527,8 @@ with pkgs;
 
   restream = callPackage ../applications/misc/remarkable/restream { };
 
+  ropgadget = with python3Packages; toPythonApplication ropgadget;
+
   ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
@@ -6969,6 +6971,8 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  mani = callPackage ../development/tools/mani { };
+
   mapcache = callPackage ../servers/mapcache { };
 
   mapserver = callPackage ../servers/mapserver { };
@@ -7069,6 +7073,8 @@ with pkgs;
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
+
+  moz-phab = python3Packages.callPackage ../applications/misc/moz-phab { };
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
@@ -8599,7 +8605,7 @@ with pkgs;
   pinnwand = callPackage ../servers/pinnwand { };
 
   piping-server-rust = callPackage ../servers/piping-server-rust {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
@@ -11124,6 +11130,8 @@ with pkgs;
 
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
+  zsh-better-npm-completion = callPackage ../shells/zsh/zsh-better-npm-completion { };
+
   zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
@@ -11571,7 +11579,7 @@ with pkgs;
 
   dictu = callPackage ../development/compilers/dictu { };
 
-  dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
+  dotty = callPackage ../development/compilers/scala/dotty.nix { };
 
   ecl = callPackage ../development/compilers/ecl { };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
@@ -13019,8 +13027,8 @@ with pkgs;
 
   scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
   scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
-  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; jre = jdk8; };
-  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; jre = jdk8; };
+  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
+  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
 
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners {
@@ -14928,9 +14936,7 @@ with pkgs;
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
-  python-language-server = callPackage ../development/dotnet-modules/python-language-server {
-    inherit (dotnetPackages) Nuget;
-  };
+  python-language-server = callPackage ../development/dotnet-modules/python-language-server { };
 
   minify = callPackage ../development/web/minify { };
 
@@ -27044,7 +27050,7 @@ with pkgs;
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
     else
-      libsForQt514.callPackage ../applications/audio/musescore { };
+      libsForQt5.callPackage ../applications/audio/musescore { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -27530,6 +27536,10 @@ with pkgs;
 
   pcsx2 = callPackage ../misc/emulators/pcsx2 {
     wxGTK = wxGTK30-gtk3;
+  };
+
+  jpsxdec = callPackage ../tools/games/jpsxdec {
+    jdk = openjdk8;
   };
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
@@ -28311,6 +28321,8 @@ with pkgs;
 
   soci = callPackage ../development/libraries/soci { };
 
+  socialscan = with python3.pkgs; toPythonApplication socialscan;
+
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
@@ -28826,6 +28838,10 @@ with pkgs;
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
+
+  vengi-tools = callPackage ../applications/graphics/vengi-tools {
+    inherit (darwin.apple_sdk.frameworks) Carbon OpenCL;
+  };
 
   verbiste = callPackage ../applications/misc/verbiste {
     inherit (gnome2) libgnomeui;

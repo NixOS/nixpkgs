@@ -9,8 +9,10 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    cgi (0.3.1)
     colorize (0.8.1)
     concurrent-ruby (1.1.9)
+    date (3.2.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     ejson (1.3.0)
@@ -61,10 +63,12 @@ GEM
       multi_json
       to_regexp (~> 0.2.1)
     jwt (2.3.0)
-    krane (2.3.2)
+    krane (2.3.4)
       activesupport (>= 5.0)
+      cgi
       colorize (~> 0.8)
       concurrent-ruby (~> 1.1)
+      date
       ejson (~> 1.0)
       googleauth (~> 0.8)
       jsonpath (~> 0.9.6)

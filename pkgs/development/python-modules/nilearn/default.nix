@@ -12,6 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
   disabledTests = [ "test_clean_confounds" ];  # https://github.com/nilearn/nilearn/issues/2608
+  pytestFlagsArray = [ "nilearn" ];
 
   propagatedBuildInputs = [
     joblib

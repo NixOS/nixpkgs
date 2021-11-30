@@ -3148,6 +3148,10 @@ in {
 
   glcontext = callPackage ../development/python-modules/glcontext { };
 
+  glean-parser = callPackage ../development/python-modules/glean-parser { };
+
+  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
+
   glfw = callPackage ../development/python-modules/glfw { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
@@ -7599,6 +7603,8 @@ in {
 
   python-gvm = callPackage ../development/python-modules/python-gvm { };
 
+  python-hglib = callPackage ../development/python-modules/python-hglib { };
+
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
@@ -8336,7 +8342,7 @@ in {
 
   rope = callPackage ../development/python-modules/rope { };
 
-  ROPGadget = callPackage ../development/python-modules/ROPGadget { };
+  ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
 
@@ -8794,6 +8800,8 @@ in {
     python = self.python;
     usePython = true;
   });
+
+  socialscan = callPackage ../development/python-modules/socialscan { };
 
   sockjs = callPackage ../development/python-modules/sockjs { };
 
