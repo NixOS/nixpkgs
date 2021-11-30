@@ -5,6 +5,7 @@
 , aws-sam-translator
 , importlib-metadata
 , importlib-resources
+, jschema-to-python
 , jsonpatch
 , jsonschema
 , junit-xml
@@ -12,6 +13,7 @@
 , pathlib2
 , pyyaml
 , requests
+, sarif-om
 , setuptools
 , six
 , mock
@@ -37,6 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aws-sam-translator
+    jschema-to-python
     jsonpatch
     jsonschema
     junit-xml
@@ -44,6 +47,7 @@ buildPythonPackage rec {
     pathlib2
     pyyaml
     requests
+    sarif-om
     setuptools
     six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
@@ -70,6 +74,7 @@ buildPythonPackage rec {
     # Tests depend on network access (fails in getaddrinfo)
     "test_update_resource_specs_python_2"
     "test_update_resource_specs_python_3"
+    "test_sarif_formatter"
   ];
 
   pythonImportsCheck = [
