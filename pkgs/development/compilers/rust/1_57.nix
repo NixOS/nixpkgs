@@ -33,7 +33,7 @@ import ./default.nix {
   llvmShared = llvm_13.override { enableSharedLibraries = true; };
 
   # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
-  llvmPackagesForBuild = pkgsBuildBuild.llvmPackages_13;
+  llvmPackages = llvmPackages_13;
 
   # Note: the version MUST be one version prior to the version we're
   # building

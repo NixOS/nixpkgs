@@ -1,5 +1,5 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
@@ -176,7 +176,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     llvm = llvmShared;
-    llvmPackages = llvmPackagesForBuild;
+    inherit llvmPackages;
   };
 
   meta = with lib; {
