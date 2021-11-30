@@ -5,11 +5,36 @@ copy config.summary to $out
 
 nix-shell -p cmake pkg-config dbus glib udev fontconfig freetype    libxkbcommon   libGL libdrm     libxml2 libxslt openssl sqlite sqlite.out sqlite.dev zlib harfbuzz icu libjpeg libpng pcre2 xlibsWrapper double-conversion util-linux
 
+FIXME
+DEBUG 1: /nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf:22: QMAKE_INCDIR_OPENGL_ES2 := /nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include/nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include
+DEBUG 1: /nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf:23: QMAKE_LIBDIR_OPENGL_ES2 := /nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib/nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib
+
+/nix/store/i9vknhf60qi16k64h5zspmq6ysiijym4-qtbase-6.2.1-dev/mkspecs/common/linux.conf
+QMAKE_INCDIR_OPENGL_ES2 = $$QMAKE_INCDIR_OPENGL/nix/store/j1dn71biz3xfjkvjabk04fi1wpb11b7j-libGL-1.3.4-dev/include
+QMAKE_LIBDIR_OPENGL_ES2 = $$QMAKE_LIBDIR_OPENGL/nix/store/z6wgyqy9h6fhb80j54cfpfs27bg8py9q-libGL-1.3.4/lib
+-> remove $$QMAKE_LIBDIR_OPENGL
+-> fix regex:
+      sed -i mkspecs/common/linux.conf \
+          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
+          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+
+TODO qtconfig for qt4 -> qt5ct for qt5 -> qt6ct for qt6?
+
+TODO wrapQtAppsHook to set QT_PLUGIN_PATH
+https://nixos.wiki/wiki/Qt#qt.qpa.plugin:_Could_not_find_the_Qt_platform_plugin_.22xcb.22_in_.22.22
+https://github.com/NixOS/nixpkgs/blob/nixos-19.09/pkgs/development/libraries/qt-5/hooks/wrap-qt-apps-hook.sh#L25
+https://github.com/NixOS/nixpkgs/issues/127277#issuecomment-865130858
+
+
+configure -headerdir $dev/include -> no effect, also not when setting -path $out
+-> try setting -path /, dirs must be subdirs of path?
+./cmake/QtProcessConfigureArgs.cmake
+  translate_path_input(headerdir INSTALL_INCLUDEDIR)
+
 */
 
 { stdenv, lib
 , src, patches ? [], version, qtCompatVersion
-, makeWrapper
 
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , python3Packages # debug: split ninja build
@@ -61,8 +86,15 @@ nix-shell -p cmake pkg-config dbus glib udev fontconfig freetype    libxkbcommon
 , libGLSupported ? !stdenv.isDarwin
 , libGL
 # TODO libGL or libglvnd? libglvnd is "better"?
+
+/*
 , buildExamples ? false
 , buildTests ? false
+*/
+# debug TODO remove
+, buildExamples ? true
+, buildTests ? true
+
 , debug ? false
 , developerBuild ? false
 , decryptSslTraffic ? false
@@ -83,7 +115,13 @@ let
 
 qtbaseDrv = stdenv.mkDerivation rec {
   pname = "qtbase";
+
   inherit qtCompatVersion src version;
+  /*
+  inherit qtCompatVersion version;
+  src = /tmp/qtbase/qtbase-everywhere-src-6.2.1;
+  */
+
   debug = debugSymbols;
   # note: git repo: git://code.qt.io/qt/qtbase.git
 
@@ -150,7 +188,7 @@ qtbaseDrv = stdenv.mkDerivation rec {
     ] ++ lib.optional libGLSupported libGL
   );
 
-  buildInputs = [ python3 at-spi2-core makeWrapper ]
+  buildInputs = [ python3 at-spi2-core ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
@@ -322,8 +360,14 @@ qtbaseDrv = stdenv.mkDerivation rec {
     "-docdir" "$(out)/$(qtDocPrefix)"
     "-libdir" "$(out)/lib"
     "-bindir" "$(bin)/bin"
-    "-headerdir" "$(dev)/include"
+    "-headerdir" "$(dev)/include" # no effect?
     #"-hostdatadir $(dev)" # Data used by qmake. $(dev) or $(out)?
+
+    "-DQT6_INSTALL_HEADERS=$(dev)/include" # TODO verify
+    # build/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake
+
+    "-DINSTALL_INCLUDEDIR=$(dev)/include" # TODO verify
+    # build/lib/cmake/Qt6BuildInternals/QtBuildInternalsExtra.cmake
 
     "-verbose"
     "-confirm-license"
@@ -616,9 +660,6 @@ qtbaseDrv = stdenv.mkDerivation rec {
       echo FIXME preInstall remove failed
     }
 
-    wrapProgram $dev/bin/qmake \
-      --set QT_INSTALL_HEADERS $dev/include
-
     echo postInstall done
   '';
 
@@ -719,7 +760,7 @@ in
 
 if !splitBuildInstall then qtbaseDrv
 else (qtbaseDrv // stdenv.mkDerivation rec {
-  buildInputs = [ qtbaseDrv ];
+  buildInputs = [ qtbaseDrv ] ++ qtbaseDrv.buildInputs;
   nativeBuildInputs = qtbaseDrv.nativeBuildInputs;
   inherit (qtbaseDrv) preHook fix_qt_builtin_paths fix_qt_module_paths; # fixQtModulePaths fixQtBuiltinPaths moveQtDevTools
   inherit (qtbaseDrv) pname version outputs;
@@ -862,6 +903,7 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     #source env-vars # load env from buildPhase
   '' + qtbaseDrv.preInstall;
 
+  # FIXME this is not called -> add "runHook postInstall" to installPhase?
   postInstall = ''
     echo "splitBuildInstall install: postInstall"
   '' + qtbaseDrv.postInstall;
@@ -1047,6 +1089,17 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     # .* = $$[QT_HOST_DATA/get] -> $dev
     sed -i -E 's,^(QMAKE_QT_CONFIG) = .*/(mkspecs/qconfig.pri)$,\1 = '$dev'/\2,' $dev/mkspecs/features/qt_config.prf
 
+    echo "writing $dev/bin/qt.conf"
+    cat >$dev/bin/qt.conf <<EOF
+    [Paths]
+    Prefix = $out
+    Binaries = $dev/bin
+    Headers = $dev/include
+    Plugins = $bin/$qtPluginPrefix
+    Qml2Imports = $bin/$qtQmlPrefix
+    Documentation = $dev/$qtDocPrefix
+    EOF
+
     echo "cached build: qtbaseDrv = ${qtbaseDrv}"
 
     echo "out = $out"
@@ -1054,3 +1107,8 @@ else (qtbaseDrv // stdenv.mkDerivation rec {
     echo "dev = $dev"
   '';
 })
+
+/*
+TODO? in qtModules, patch QMAKE_QT_CONFIG
+*/
+

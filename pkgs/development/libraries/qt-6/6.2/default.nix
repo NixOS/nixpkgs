@@ -106,6 +106,12 @@ let
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
+      # NOTE large packages:
+      # 150min qtdeclarative
+      # 90min qtbase
+      # 30min qtwayland
+      # qtquick3d?
+
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild decryptSslTraffic;
@@ -113,7 +119,6 @@ let
         inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
-        patches = [ ./qtbase-qmake-use-env-vars.patch ];
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
@@ -127,6 +132,17 @@ let
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
+
+      # experiment
+      qtbaseDistbuild = callPackage ../modules/qtbase.distbuild.nix {
+        inherit (srcs.qtbase) src version;
+        inherit bison cups harfbuzz libGL dconf gtk3 developerBuild decryptSslTraffic;
+        withGtk3 = true;
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
+        inherit (darwin) libobjc;
+      };
+
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
