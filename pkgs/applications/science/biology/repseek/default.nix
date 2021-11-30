@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "repseek-${version}";
+  pname = "repseek";
   version = "9Sep2014";
   src = fetchurl {
     url = "https://bioinfo.mnhn.fr/abi/public/RepSeek/RepSeek.${version}.tgz";
