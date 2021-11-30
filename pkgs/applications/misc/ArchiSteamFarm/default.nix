@@ -5,20 +5,23 @@
 , libkrb5
 , zlib
 , openssl
+, fetchpatch
 }:
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
-  version = "5.1.5.3";
+  version = "5.2.0.9";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-H038maKHZujmbKhbi8fxsKR/tcSPrcl9L5xnr77yyXg=";
+    sha256 = "sha256-BGd75l/p2rvRR/S8uz25aFws8txBpd60iB0xPbfTngM=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+
   nugetDeps = ./deps.nix;
 
   projectFile = "ArchiSteamFarm.sln";
@@ -26,17 +29,13 @@ buildDotnetModule rec {
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
-  # Without this, it attempts to write to the store even though the `--path` flag is supplied.
-  patches = [ ./mutable-customdir.patch ];
-
   doCheck = true;
 
   preInstall = ''
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
-      --add-flags "--path ~/.config/archisteamfarm"
-      --run "mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}"
-      --run "cd ~/.config/archisteamfarm"
+      --run "mkdir -p \"~/.config/archisteamfarm/{config,logs,plugins}\""
+      --set "ASF_PATH" "~/.config/archisteamfarm"
     )
   '';
 

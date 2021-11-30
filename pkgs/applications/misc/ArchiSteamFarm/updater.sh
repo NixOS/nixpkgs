@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_5
+#!nix-shell -i bash -p curl gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_6
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -30,7 +30,7 @@ dotnet restore ArchiSteamFarm.sln --packages ./nuget_pkgs
 
 nuget-to-nix ./nuget_pkgs > "$deps_file"
 
-trap ''
+trap '
   popd
   rm -r "$src"
-'' EXIT
+' EXIT
