@@ -13606,7 +13606,7 @@ with pkgs;
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
-  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python3Minimal pypy27 pypy37;
+  inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy37;
 
   # Python package sets.
   python27Packages = python27.pkgs;
@@ -13614,6 +13614,7 @@ with pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
   python39Packages = recurseIntoAttrs python39.pkgs;
   python310Packages = python310.pkgs;
+  python311Packages = python311.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
