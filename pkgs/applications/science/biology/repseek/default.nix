@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     mkdir -p $out/bin
-    substituteInPlace Makefile --replace "INSTALLDIR = \$\$HOME/bin" "INSTALLDIR = $out/bin/"
-    substituteInPlace Makefile --replace "CC= gcc" "CC = $CC"
+    substituteInPlace Makefile \
+      --replace "INSTALLDIR = \$\$HOME/bin" "INSTALLDIR = $out/bin/" \
+      --replace "CC= gcc" "CC = $CC"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace Makefile --replace "MACHINE = MACOSX" "MACHINE = LINUX"
   '';
