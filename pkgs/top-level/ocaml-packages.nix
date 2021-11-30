@@ -1475,8 +1475,6 @@ let
       inherit (pkgs) stdenv lib openssl;
     };
 
-    js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
-
     # Apps / from all-packages
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
