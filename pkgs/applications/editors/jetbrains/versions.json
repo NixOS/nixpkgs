@@ -27,6 +27,15 @@
       "version-major-minor": "2022.3",
       "build_number": "223.6646.21"
     },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}.tar.gz",
+      "version": "2022.3.1",
+      "sha256": "5f35ba820d10b28c4d430206a4b9dd4ed71b2581dcdd99f73fb512266d49482b",
+      "url": "https://download.jetbrains.com/python/dataspell-2022.3.1.tar.gz",
+      "version-major-minor": "2022.1",
+      "build_number": "223.8214.61"
+    },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
@@ -146,6 +155,15 @@
       "version-major-minor": "2022.3",
       "build_number": "223.6646.21"
     },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}.dmg",
+      "version": "2022.3.1",
+      "sha256": "ec54a766a3fa51df2660e0dccf261ec560a3242eb5eeb9851f45449fe6614fee",
+      "url": "https://download.jetbrains.com/python/dataspell-2022.3.1.dmg",
+      "version-major-minor": "2022.1",
+      "build_number": "223.8214.61"
+    },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
@@ -264,6 +282,15 @@
       "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-223.6646.21-aarch64.dmg",
       "version-major-minor": "2022.3",
       "build_number": "223.6646.21"
+    },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg",
+      "version": "2022.3.1",
+      "sha256": "176bfce793216c1bb6e683b656b58a068e93c6bc6d2f51c0776a151dfa3bec1f",
+      "url": "https://download.jetbrains.com/python/dataspell-2022.3.1-aarch64.dmg",
+      "version-major-minor": "2022.1",
+      "build_number": "223.8214.61"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
