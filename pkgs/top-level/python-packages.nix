@@ -8467,6 +8467,8 @@ in {
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
+  sarif-om = callPackage ../development/python-modules/sarif-om { };
+
   sarge = callPackage ../development/python-modules/sarge { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
