@@ -1477,8 +1477,6 @@ let
 
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
 
-    buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
-
     # Apps / from all-packages
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
