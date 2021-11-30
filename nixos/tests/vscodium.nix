@@ -4,9 +4,7 @@ let
       imports = [ ./common/wayland-cage.nix ];
 
       services.cage.program = ''
-        ${pkgs.vscodium}/bin/codium \
-          --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland
+        ${pkgs.vscodium.override { useWayland = true; }}/bin/codium
       '';
 
       fonts.fonts = with pkgs; [ dejavu_fonts ];

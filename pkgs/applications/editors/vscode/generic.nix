@@ -103,8 +103,10 @@ let
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
       grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
 
-      substituteInPlace "$out/bin/${executableName}" \
-        --replace '"$ELECTRON" "$CLI"' '"$ELECTRON" "$CLI"${lib.optionalString useWayland " --enable-features=UseOzonePlatform --ozone-platform=wayland"}'
+      ${lib.optionalString useWayland ''
+        wrapProgram $out/bin/${executableName} --add-flags \
+          "--enable-features=UseOzonePlatform --ozone-platform=wayland"
+      ''}
     '') + ''
       runHook postInstall
     '';
