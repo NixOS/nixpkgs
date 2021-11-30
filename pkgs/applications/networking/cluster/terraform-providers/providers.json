@@ -268,6 +268,14 @@
     "vendorSha256": null,
     "version": "2.16.0"
   },
+  "dhall": {
+    "owner": "awakesecurity",
+    "repo": "terraform-provider-dhall",
+    "rev": "v0.0.1",
+    "sha256": "1cymabpa03a5avf0j6jj2mpnc62ap9b82zmpsgzwdjrb3mf954fa",
+    "vendorSha256": "0m11cpis171j9aicw0c66y4m1ckg41gjknj86qvblh57ai96gc1n",
+    "version": "0.0.1"
+  },
   "dme": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-dme",
