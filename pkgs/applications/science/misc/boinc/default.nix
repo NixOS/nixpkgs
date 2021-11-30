@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-server" ];
 
+  postInstall = ''
+    install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"
+  '';
+
   meta = with lib; {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
