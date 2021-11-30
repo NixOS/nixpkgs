@@ -69,6 +69,24 @@ let
       };
     });
 
+  buildGateway = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "Gateway";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/remote-development/gateway/";
+        inherit description license;
+        longDescription = ''
+          Experience a new compact application that connects you to
+          any of your remote machines  via SSH without any hassle.
+          It serves as a single entry point to all your remote work,
+          and you don’t even need to have a JetBrains IDE installed.
+        '';
+        maintainers = with maintainers; [ ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildGoland = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -273,6 +291,19 @@ in
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
+  };
+
+  gateway = buildGateway rec {
+    name = "gateway-${version}";
+    version = "213.5744.213";
+    description = "Remote Development";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download-cdn.jetbrains.com/idea/gateway/JetBrainsGateway-${version}.tar.gz";
+      sha256 = "d48d661d163f76b5313b1aad287ddfc3dffea97421a15ae39c4770d8baf2f6ea";
+    };
+    wmClass = "jetbrains-gateway";
+    update-channel = "JetBrains Gateway RELEASE";
   };
 
   goland = buildGoland rec {
