@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
+, openssl
 , zlib
 , lvm2  # LVM image backup and restore functions (optional)
 , acl  # EXT2/EXT3/XFS ACL support (optional)
@@ -41,7 +42,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/spectrum-protect/8.1.8?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
@@ -89,10 +90,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.8.0";
+    version = "8.1.13.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "0c1d0jm0i7qjd314nhj2vj8fs7sncm1x2n4d6dg4049jniyvjhpk";
+      sha256 = "0fy9c224g6rkrgd6ls01vs30bk9j9mlhf2x6akd11r7h8bib19zn";
     };
     inherit meta;
 
@@ -100,6 +101,7 @@ let
       autoPatchelfHook
     ];
     buildInputs = [
+      openssl
       stdenv.cc.cc
       zlib
     ];
