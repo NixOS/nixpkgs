@@ -97,6 +97,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (gnome) file-roller gnome-bluetooth;
   };
 
+  file-roller-contract = callPackage ./desktop/file-roller-contract {
+    inherit (gnome) file-roller;
+  };
+
   gala = callPackage ./desktop/gala {
     inherit (gnome) gnome-desktop;
   };
