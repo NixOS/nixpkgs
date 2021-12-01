@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   patches = [
         ./no-ext-session-php_session.h-on-NixOS.patch
         ./additional-php-ldflags.patch
+        ./missing-arginfo-php8.patch # https://github.com/unbit/uwsgi/issues/2356
   ];
 
   nativeBuildInputs = [ python3 pkg-config ];
