@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -143,7 +143,7 @@ let
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
   useLdGold = targetPlatform.linker == "gold" ||
-    (targetPlatform.linker == "bfd" && (targetPackages.stdenv.cc.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
+    (targetPlatform.linker == "bfd" && (targetCC.bintools.bintools.hasGold or false) && !targetPlatform.isMusl);
 
   # Makes debugging easier to see which variant is at play in `nix-store -q --tree`.
   variantSuffix = lib.concatStrings [
@@ -152,6 +152,14 @@ let
   ];
 
 in
+
+# C compiler, bintools and LLVM are used at build time, but will also leak into
+# the resulting GHC's settings file and used at runtime. This means that we are
+# currently only able to build GHC if hostPlatform == buildPlatform.
+assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
+assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+
 stdenv.mkDerivation (rec {
   inherit version;
   inherit (src) rev;
