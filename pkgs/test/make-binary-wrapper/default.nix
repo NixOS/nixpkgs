@@ -29,6 +29,7 @@ let
     env = makeGoldenTest { name = "env"; filename = ./env.c; };
     prefix = makeGoldenTest { name = "prefix"; filename = ./prefix.c; };
     suffix = makeGoldenTest { name = "suffix"; filename = ./suffix.c; };
+    invalid-env = makeGoldenTest { name = "invalid-env"; filename = ./invalid-env.c; };
   };
 in runCommand "make-binary-wrapper-test" {
   passthru = tests;

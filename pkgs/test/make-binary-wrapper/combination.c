@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
+
+#define assert_success(e) do { if ((e) < 0) { perror(#e); exit(1); } } while (0)
 
 char *concat3(char *x, char *y, char *z) {
     int xn = strlen(x);
@@ -27,19 +30,19 @@ char *concat3(char *x, char *y, char *z) {
 void set_env_prefix(char *env, char *sep, char *val) {
     char *existing = getenv(env);
     if (existing) val = concat3(val, sep, existing);
-    setenv(env, val, 1);
+    assert_success(setenv(env, val, 1));
     if (existing) free(val);
 }
 
 void set_env_suffix(char *env, char *sep, char *val) {
     char *existing = getenv(env);
     if (existing) val = concat3(existing, sep, val);
-    setenv(env, val, 1);
+    assert_success(setenv(env, val, 1));
     if (existing) free(val);
 }
 
 int main(int argc, char **argv) {
-    setenv("MESSAGE", "HELLO", 0);
+    assert_success(setenv("MESSAGE", "HELLO", 0));
     set_env_prefix("PATH", ":", "/usr/bin/");
     set_env_suffix("PATH", ":", "/usr/local/bin/");
     putenv("MESSAGE2=WORLD");

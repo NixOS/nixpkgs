@@ -64,7 +64,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeBinaryWrapper
 makeCWrapper() {
     local argv0 n params cmd main flagsBefore flags executable params length
-    local uses_prefix uses_suffix uses_concat3 uses_assert
+    local uses_prefix uses_suffix uses_assert uses_assert_success uses_concat3
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -80,12 +80,14 @@ makeCWrapper() {
             --set-default)
                 cmd=$(setDefaultEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main    $cmd"$'\n'
+                uses_assert_success=1
                 n=$((n + 2))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
             --unset)
                 cmd=$(unsetEnv "${params[n + 1]}")
                 main="$main    $cmd"$'\n'
+                uses_assert_success=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
@@ -94,6 +96,7 @@ makeCWrapper() {
                 main="$main    $cmd"$'\n'
                 uses_prefix=1
                 uses_concat3=1
+                uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
@@ -103,6 +106,7 @@ makeCWrapper() {
                 main="$main    $cmd"$'\n'
                 uses_suffix=1
                 uses_concat3=1
+                uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
                 [ $n -ge "$length" ] && main="$main    #error makeCWrapper: $p takes 3 arguments"$'\n'
@@ -133,6 +137,8 @@ makeCWrapper() {
     printf '%s\n' "#include <stdlib.h>"
     [ -z "$uses_concat3" ] || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert" ]  || printf '%s\n' "#include <assert.h>"
+    [ -z "$uses_assert_success" ] || printf '%s\n' "#include <stdio.h>"
+    [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); exit(1); } } while (0)"
     [ -z "$uses_concat3" ] || printf '\n%s\n' "$(concat3Fn)"
     [ -z "$uses_prefix" ]  || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ]  || printf '\n%s\n' "$(setEnvSuffixFn)"
@@ -167,6 +173,7 @@ setEnvPrefix() {
     sep=$(escapeStringLiteral "$2")
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_prefix(\"$env\", \"$sep\", \"$val\");"
+    assertValidEnvName "$1"
 }
 
 # suffix ENV SEP VAL
@@ -176,6 +183,7 @@ setEnvSuffix() {
     sep=$(escapeStringLiteral "$2")
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_suffix(\"$env\", \"$sep\", \"$val\");"
+    assertValidEnvName "$1"
 }
 
 # setEnv KEY VALUE
@@ -184,6 +192,7 @@ setEnv() {
     key=$(escapeStringLiteral "$1")
     value=$(escapeStringLiteral "$2")
     printf '%s' "putenv(\"$key=$value\");"
+    assertValidEnvName "$1"
 }
 
 # setDefaultEnv KEY VALUE
@@ -191,14 +200,16 @@ setDefaultEnv() {
     local key value
     key=$(escapeStringLiteral "$1")
     value=$(escapeStringLiteral "$2")
-    printf '%s' "setenv(\"$key\", \"$value\", 0);"
+    printf '%s' "assert_success(setenv(\"$key\", \"$value\", 0));"
+    assertValidEnvName "$1"
 }
 
 # unsetEnv KEY
 unsetEnv() {
     local key
     key=$(escapeStringLiteral "$1")
-    printf '%s' "unsetenv(\"$key\");"
+    printf '%s' "assert_success(unsetenv(\"$key\"));"
+    assertValidEnvName "$1"
 }
 
 # Put the entire source code into const char* SOURCE_CODE to make it readable after compilation.
@@ -218,6 +229,13 @@ escapeStringLiteral() {
     result=${result//$'\n'/"\n"}
     result=${result//$'\r'/"\r"}
     printf '%s' "$result"
+}
+
+assertValidEnvName() {
+    case "$1" in
+        *=*) printf '\n%s\n' "    #error Illegal environment variable name \`$1\` (cannot contain \`=\`)";;
+        "")  printf '\n%s\n' "    #error Environment variable name can't be empty.";;
+    esac
 }
 
 concat3Fn() {
@@ -242,7 +260,7 @@ setEnvPrefixFn() {
 void set_env_prefix(char *env, char *sep, char *val) {
     char *existing = getenv(env);
     if (existing) val = concat3(val, sep, existing);
-    setenv(env, val, 1);
+    assert_success(setenv(env, val, 1));
     if (existing) free(val);
 }
 "
@@ -253,7 +271,7 @@ setEnvSuffixFn() {
 void set_env_suffix(char *env, char *sep, char *val) {
     char *existing = getenv(env);
     if (existing) val = concat3(existing, sep, val);
-    setenv(env, val, 1);
+    assert_success(setenv(env, val, 1));
     if (existing) free(val);
 }
 "
