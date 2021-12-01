@@ -5574,6 +5574,8 @@ in {
 
   passlib = callPackage ../development/python-modules/passlib { };
 
+  pass2csv = callPackage ../development/python-modules/pass2csv { };
+
   paste = callPackage ../development/python-modules/paste { };
 
   pastedeploy = callPackage ../development/python-modules/pastedeploy { };
