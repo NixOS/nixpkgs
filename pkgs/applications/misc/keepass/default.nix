@@ -76,7 +76,11 @@ with builtins; buildDotnetPackage rec {
     ];
   };
 
-  outputFiles = [ "Build/KeePass/Release/*" "Build/KeePassLib/Release/*" ];
+  outputFiles = [
+    "Build/KeePass/Release/*"
+    "Build/KeePassLib/Release/*"
+    "Ext/KeePass.config.xml" # contains <PreferUserConfiguration>true</PreferUserConfiguration>
+  ];
   dllFiles = [ "KeePassLib.dll" ];
   exeFiles = [ "KeePass.exe" ];
 
