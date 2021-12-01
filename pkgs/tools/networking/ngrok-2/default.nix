@@ -16,8 +16,8 @@ let versions = lib.importJSON ./versions.json;
 
 in
 stdenv.mkDerivation {
-  name = "ngrok-${version}";
-  version = version;
+  pname = "ngrok";
+  inherit version;
 
   # run ./update
   src = fetchurl { inherit sha256 url; };

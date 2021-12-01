@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "jade-${version}-${debpatch}";
+  pname = "jade";
   version = "1.2.1";
   debpatch = "47.3";
 
