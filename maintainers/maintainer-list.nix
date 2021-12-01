@@ -5283,6 +5283,12 @@
     githubId = 221929;
     name = "Jean-Baptiste Giraudeau";
   };
+  jceb = {
+    name = "jceb";
+    email = "jceb@e-jc.de";
+    github = "jceb";
+    githubId = 101593;
+  };
   jchw = {
     email = "johnwchadwick@gmail.com";
     github = "jchv";
