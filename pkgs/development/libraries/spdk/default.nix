@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  enableParallelBuilding = true;
+
   configureFlags = [ "--with-dpdk=${dpdk}" ];
 
   NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
