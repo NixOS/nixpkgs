@@ -106,6 +106,15 @@ compcert.overrideAttrs (o:
           })
         ];
       }
+      { cases = [ (isEq "8.14") "3.10" ];
+        out = [
+          # Support for Coq 8.14.1
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/a79f0f99831aa0b0742bf7cce459cc9353bd7cd0.patch";
+            sha256 = "sha256:0g20x8gfzvplpad9y9vr1p33k6qv6rsp691x6687v9ffvz7zsz94";
+          })
+        ];
+      }
     ] [];
   }
 )
