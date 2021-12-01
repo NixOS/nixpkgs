@@ -560,10 +560,10 @@ in
     environment.etc."nix/machines" =
       { enable = cfg.buildMachines != [];
         text =
-          concatMapStrings (machine:
-            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
-            + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
+          concatMapStrings (machine: with builtins;
+            "${if !isNull machine.sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
+            + (if !isNull machine.system then machine.system else concatStringsSep "," machine.systems)
+            + " ${if !isNull machine.sshKey then machine.sshKey else "-"} ${toString machine.maxJobs} "
             + toString (machine.speedFactor)
             + " "
             + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
