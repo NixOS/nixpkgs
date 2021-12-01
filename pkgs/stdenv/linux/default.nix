@@ -272,7 +272,14 @@ in
             mkdir -p "$out"/bin
             cp -a '${prevStage.bintools.bintools}'/bin/* "$out"/bin/
             chmod +w "$out"/bin/ld.bfd
-            patchelf --set-interpreter '${getLibc self}'/lib/ld*.so.? \
+
+            patchelf_options=""
+            # aarch64
+            if test -f $out/lib/ld-linux-aarch64.so.?; then
+               patchelf_options="$patchelf_options --page-size 65536"
+            fi
+
+            patchelf $patchelf_options --set-interpreter '${getLibc self}'/lib/ld*.so.? \
               --set-rpath "${getLibc self}/lib:$(patchelf --print-rpath "$out"/bin/ld.bfd)" \
               "$out"/bin/ld.bfd
           '';
