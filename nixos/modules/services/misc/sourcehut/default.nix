@@ -36,7 +36,7 @@ let
     (recursiveUpdate cfg.settings {
       # Those paths are mounted using BindPaths= or BindReadOnlyPaths=
       # for services needing access to them.
-      "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht/logs";
+      "builds.sr.ht::worker".buildlogs = "/var/log/sourcehut/buildsrht-worker";
       "git.sr.ht".post-update-script = "/usr/bin/gitsrht-update-hook";
       "git.sr.ht".repos = "/var/lib/sourcehut/gitsrht/repos";
       "hg.sr.ht".changegroup-script = "/usr/bin/hgsrht-hook-changegroup";
@@ -345,7 +345,7 @@ in
           buildlogs = mkOption {
             description = "Path to write build logs.";
             type = types.str;
-            default = "/var/log/sourcehut/buildsrht";
+            default = "/var/log/sourcehut/buildsrht-worker";
           };
           name = mkOption {
             description = ''
@@ -656,7 +656,17 @@ in
     };
 
     builds = {
-      enableWorker = mkEnableOption "worker for builds.sr.ht";
+      enableWorker = mkEnableOption ''
+        worker for builds.sr.ht
+
+        <warning><para>
+        For smaller deployments, job runners can be installed alongside the master server
+        but even if you only build your own software, integration with other services
+        may cause you to run untrusted builds
+        (e.g. automatic testing of patches via listssrht).
+        See <link xlink:href="https://man.sr.ht/builds.sr.ht/configuration.md#security-model"/>.
+        </para></warning>
+      '';
 
       images = mkOption {
         type = with types; attrsOf (attrsOf (attrsOf package));
@@ -917,10 +927,12 @@ in
         '';
         serviceConfig = {
           ExecStart = "${pkgs.sourcehut.buildsrht}/bin/builds.sr.ht-worker";
-          RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
-          # builds.sr.ht-worker looks up ../config.ini
+          BindPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
           LogsDirectory = [ "sourcehut/${serviceName}" ];
+          RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
           StateDirectory = [ "sourcehut/${serviceName}" ];
+          TimeoutStartSec = "1800s";
+          # builds.sr.ht-worker looks up ../config.ini
           WorkingDirectory = "-"+"/run/sourcehut/${serviceName}/subdir";
         };
       };
@@ -975,7 +987,7 @@ in
           # Allow nginx access to buildlogs
           users.users.${nginx.user}.extraGroups = [ cfg.builds.group ];
           systemd.services.nginx = {
-            serviceConfig.BindReadOnlyPaths = [ "${cfg.settings."builds.sr.ht::worker".buildlogs}:/var/log/nginx/buildsrht/logs" ];
+            serviceConfig.BindReadOnlyPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
           };
           services.nginx.virtualHosts."logs.${domain}" = mkMerge [ {
             /* FIXME: is a listen needed?
@@ -984,7 +996,7 @@ in
               let address = split ":" cfg.settings."builds.sr.ht::worker".name; in
               [{ addr = elemAt address 0; port = lib.toInt (elemAt address 2); }];
             */
-            locations."/logs/".alias = "/var/log/nginx/buildsrht/logs/";
+            locations."/logs/".alias = cfg.settings."builds.sr.ht::worker".buildlogs + "/";
           } cfg.nginx.virtualHost ];
         })
       ];

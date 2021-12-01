@@ -214,7 +214,7 @@ in
 
     services.nginx = mkIf cfg.nginx.enable {
       virtualHosts."${srv}.${cfg.settings."sr.ht".global-domain}" = mkMerge [ {
-        forceSSL = true;
+        forceSSL = mkDefault true;
         locations."/".proxyPass = "http://${cfg.listenAddress}:${toString srvCfg.port}";
         locations."/static" = {
           root = "${pkgs.sourcehut.${srvsrht}}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
