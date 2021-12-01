@@ -19,6 +19,7 @@ amiorin/ctrlp-z
 andersevenrud/compe-tmux@cmp
 andrep/vimacs
 andreshazard/vim-logreview
+AndrewRadev/bufferize.vim@main
 AndrewRadev/sideways.vim@main
 AndrewRadev/splitjoin.vim@main
 AndrewRadev/tagalong.vim
