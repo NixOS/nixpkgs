@@ -13474,8 +13474,6 @@ with pkgs;
 
   ### End of CuboCore
 
-  lush2 = callPackage ../development/interpreters/lush {};
-
   maude = callPackage ../development/interpreters/maude {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   };
@@ -31932,12 +31930,10 @@ with pkgs;
    };
 
   maxima = callPackage ../applications/science/math/maxima {
-    ecl = null;
+    lisp-compiler = sbcl;
   };
   maxima-ecl = maxima.override {
-    inherit ecl;
-    ecl-fasl = true;
-    sbcl = null;
+    lisp-compiler = ecl;
   };
 
   mxnet = callPackage ../applications/science/math/mxnet {
