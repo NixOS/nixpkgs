@@ -225,11 +225,11 @@ stdenv.mkDerivation (rec {
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
   '' + lib.optionalString useLLVM ''
-    export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
-    export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
+    export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
+    export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
   '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-    export CLANG="${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+    export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
