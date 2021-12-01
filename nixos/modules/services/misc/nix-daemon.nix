@@ -560,15 +560,17 @@ in
     environment.etc."nix/machines" =
       { enable = cfg.buildMachines != [];
         text =
-          concatMapStrings (machine: with builtins;
+          concatMapStrings (machine: let
+            concatComma = lst: concatStringsSep "," lst;
+          in with builtins;
             "${lib.optionalString (!isNull machine.sshUser) "${machine.sshUser}@"}${machine.hostName} "
-            + (if !isNull machine.system then machine.system else concatStringsSep "," machine.systems)
+            + (if !isNull machine.system then machine.system else concatComma machine.systems)
             + " ${if !isNull machine.sshKey then machine.sshKey else "-"} ${toString machine.maxJobs} "
             + toString (machine.speedFactor)
             + " "
-            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
+            + concatComma (machine.mandatoryFeatures ++ machine.supportedFeatures)
             + " "
-            + concatStringsSep "," machine.mandatoryFeatures
+            + concatComma machine.mandatoryFeatures
             + "\n"
           ) cfg.buildMachines;
       };
