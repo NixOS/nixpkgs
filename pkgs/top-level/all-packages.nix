@@ -12442,7 +12442,7 @@ with pkgs;
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
   julia_17-bin = callPackage ../development/compilers/julia/1.7-bin.nix { };
 
-  julia-lts-bin = julia_10-bin;
+  julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_17-bin;
   julia-bin = julia-stable-bin;
 
