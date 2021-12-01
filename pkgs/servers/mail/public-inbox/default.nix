@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, gcc, git, gnumake, openssl, xapian
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests
 , buildPerlPackage
 , coreutils
 , curl
@@ -17,11 +16,12 @@
 , DBI
 , EmailAddressXS
 , EmailMIME
-, highlight
 , IOSocketSSL
 , IPCRun
 , Inline
 , InlineC
+, LinuxInotify2
+, MailIMAPClient
 , ParseRecDescent
 , Plack
 , PlackMiddlewareReverseProxy
@@ -51,6 +51,31 @@ let
     #        got: 'makefile'
     #   expected: 'make'
     "hl_mod"
+    # Failed test 'clone + index v1 synced ->created_at'
+    # at t/lei-mirror.t line 175.
+    #        got: '1638378723'
+    #   expected: undef
+    # Failed test 'clone + index v1 synced ->created_at'
+    # at t/lei-mirror.t line 178.
+    #        got: '1638378723'
+    #   expected: undef
+    # May be due to the use of $ENV{HOME}.
+    "lei-mirror"
+    # Failed test 'child error (pure-Perl)'
+    # at t/spawn.t line 33.
+    #        got: '0'
+    #   expected: anything else
+    # waiting for child to reap grandchild...
+    "spawn"
+    # TODO: reenable after https://public-inbox.org/meta/20211208010730.f47xxgzj53nwgvja@sourcephile.fr/T/#m38685d23bd686442d91a4890bac3c018d427b96b
+    # has been merged
+    "lei-sigpipe"
+    # Fails at least when TMPDIR is on ZFS
+    "lei_to_mail"
+    # Disabled after 1.7.0
+    # https://public-inbox.org/public-inbox.git/commit/?id=7cb1f806dfa0173fb689048c56a755cb3874dcaf
+    "lei-watch"
+    "lei-auto-watch"
   ];
 
   testConditions = with lib;
@@ -60,11 +85,11 @@ in
 
 buildPerlPackage rec {
   pname = "public-inbox";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
-    sha256 = "0mr8f8qv15l0lx94im9084lmsw1qh8lzyb7mj1s5yhpw48k25709";
+    sha256 = "sha256-hQSpmAFFVuPmXZvc7q6yP5Zhl86oar83OLYFn+42yMk=";
   };
 
   outputs = [ "out" "devdoc" "sa_config" ];
@@ -72,6 +97,8 @@ buildPerlPackage rec {
   postConfigure = ''
     substituteInPlace Makefile --replace 'TEST_FILES = t/*.t' \
         'TEST_FILES = $(shell find t -name *.t ${testConditions})'
+    substituteInPlace lib/PublicInbox/TestCommon.pm \
+      --replace /bin/cp ${coreutils}/bin/cp
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -93,11 +120,25 @@ buildPerlPackage rec {
     SearchXapian
     TimeDate
     URI
+    libgit2 # For Gcf2
+    man
   ];
 
-  checkInputs = [ git openssl xapian ];
+  checkInputs = [
+    MailIMAPClient
+    curl
+    git
+    openssl
+    pkg-config
+    sqlite
+    xapian
+  ] ++ lib.optionals stdenv.isLinux [
+    LinuxInotify2
+  ];
   preCheck = ''
     perl certs/create-certs.perl
+    export HOME="$NIX_BUILD_TOP"/home
+    mkdir -p "$HOME"/.cache/public-inbox/inline-c
   '';
 
   installTargets = [ "install" ];
@@ -114,10 +155,14 @@ buildPerlPackage rec {
     mv sa_config $sa_config
   '';
 
+  passthru.tests = {
+    nixos-public-inbox = nixosTests.public-inbox;
+  };
+
   meta = with lib; {
     homepage = "https://public-inbox.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ qyliss julm ];
+    maintainers = with maintainers; [ julm qyliss ];
     platforms = platforms.all;
   };
 }
