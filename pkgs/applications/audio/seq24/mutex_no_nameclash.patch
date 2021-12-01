@@ -1,0 +1,58 @@
+--- a/src/mutex.cpp
++++ b/src/mutex.cpp
+@@ -20,23 +20,23 @@
+ 
+ #include "mutex.h"
+ 
+-const pthread_mutex_t mutex::recmutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
++const pthread_mutex_t mutex_no_nameclash::recmutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+ const pthread_cond_t condition_var::cond  = PTHREAD_COND_INITIALIZER;
+ 
+-mutex::mutex( )
++mutex_no_nameclash::mutex_no_nameclash( )
+ {
+     m_mutex_lock = recmutex;
+ }
+ 
+ void
+-mutex::lock( )
++mutex_no_nameclash::lock( )
+ {
+     pthread_mutex_lock( &m_mutex_lock );
+ }
+ 
+ 
+ void
+-mutex::unlock( )
++mutex_no_nameclash::unlock( )
+ {
+     pthread_mutex_unlock( &m_mutex_lock );
+ }
+--- a/src/mutex.h
++++ b/src/mutex.h
+@@ -24,7 +24,7 @@
+ 
+ #include <pthread.h>
+ 
+-class mutex {
++class mutex_no_nameclash {
+ 
+ private:
+ 
+@@ -37,14 +37,14 @@
+ 
+ public:
+ 
+-    mutex();
++    mutex_no_nameclash();
+ 
+     void lock();
+     void unlock();
+ 
+ };
+ 
+-class condition_var : public mutex {
++class condition_var : public mutex_no_nameclash {
+ 
+ private:
+ 

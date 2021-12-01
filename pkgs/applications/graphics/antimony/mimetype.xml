@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-antimony">
+    <comment xml:lang="en">Antimony model</comment>
+    <glob pattern="*.sb"/>
+  </mime-type>
+</mime-info>

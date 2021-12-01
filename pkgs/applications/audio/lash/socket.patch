@@ -1,0 +1,16 @@
+Via http://bugs.gentoo.org/show_bug.cgi?id=229603
+
+--- lash-0.5.4/liblash/socket.c	2008-06-26 15:20:44.227064193 +0200
++++ lash-0.5.4/liblash/socket.c	2008-06-26 15:21:18.245063129 +0200
+@@ -20,6 +20,11 @@ 
+ 
+ #define _POSIX_SOURCE /* addrinfo */
+ 
++#ifdef LASH_BUILD
++#define _GNU_SOURCE
++#include "config.h"
++#endif /* LASH_BUILD */
++
+ #include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>

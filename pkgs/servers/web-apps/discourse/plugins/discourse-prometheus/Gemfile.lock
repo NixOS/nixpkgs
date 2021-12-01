@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    prometheus_exporter (0.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  prometheus_exporter (= 0.5.0)
+
+BUNDLED WITH
+   2.1.4

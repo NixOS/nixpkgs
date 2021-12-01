@@ -1,0 +1,26 @@
+Index: libgksu-2.0.12/libgksu/Makefile.am
+===================================================================
+--- libgksu-2.0.12.orig/libgksu/Makefile.am
++++ libgksu-2.0.12/libgksu/Makefile.am
+@@ -27,7 +27,7 @@ pkglib_PROGRAMS = gksu-run-helper
+ gksu_run_helper_LDFLAGS = `pkg-config --libs glib-2.0`
+ gksu_run_helper_SOURCES = gksu-run-helper.c
+ 
+-noinst_PROGRAMS = test-gksu
++EXTRA_PROGRAMS = test-gksu
+ test_gksu_SOURCES = test-gksu.c
+ test_gksu_LDADD = libgksu2.la
+ test_gksu_LDFLAGS = `pkg-config --libs glib-2.0`
+Index: libgksu-2.0.12/libgksuui/Makefile.am
+===================================================================
+--- libgksu-2.0.12.orig/libgksuui/Makefile.am
++++ libgksu-2.0.12/libgksuui/Makefile.am
+@@ -9,7 +9,7 @@ libgksuui1_0_la_LDFLAGS = -Wl,-O1 `pkg-c
+ noinst_HEADERS = defines.h gksuui.h gksuui-dialog.h
+ includedir = ${prefix}/include/$(PACKAGE)
+ 
+-noinst_PROGRAMS = test-gksuui
++EXTRA_PROGRAMS = test-gksuui
+ test_gksuui_SOURCES = test-gksuui.c
+ test_gksuui_LDADD = libgksuui1.0.la
+ test_gksuui_LDFLAGS = `pkg-config --libs glib-2.0`

@@ -1,0 +1,11 @@
+--- a/speech-dispatcherd.service.in
++++ b/speech-dispatcherd.service.in
+@@ -19,7 +19,7 @@
+ [Service]
+ Type=forking
+ ExecStart=@bindir@/speech-dispatcher -d
+-ExecReload=/bin/kill -HUP $MAINPID
++ExecReload=@utillinux@/bin/kill -HUP $MAINPID
+ 
+ [Install]
+ WantedBy=multi-user.target

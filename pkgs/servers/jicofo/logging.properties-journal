@@ -1,0 +1,10 @@
+handlers = java.util.logging.ConsoleHandler
+java.util.logging.ConsoleHandler.level = ALL
+java.util.logging.ConsoleHandler.formatter = net.java.sip.communicator.util.ScLogFormatter
+.level = INFO
+net.sf.level = SEVERE
+net.java.sip.communicator.plugin.reconnectplugin.level = FINE
+org.ice4j.level = SEVERE
+org.jitsi.impl.neomedia.level = SEVERE
+net.java.sip.communicator.service.resources.AbstractResourcesService.level = SEVERE
+net.java.sip.communicator.util.ScLogFormatter.disableTimestamp = true

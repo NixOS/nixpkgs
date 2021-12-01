@@ -1,0 +1,16 @@
+diff --git i/utilaudio.js w/utilaudio.js
+index 983b29c..7a94de8 100644
+--- i/utilaudio.js
++++ w/utilaudio.js
+@@ -11,10 +11,7 @@
+ */
+ 
+ const GIRepository = imports.gi.GIRepository;
+-GIRepository.Repository.prepend_search_path("/usr/lib/gnome-shell");
+-GIRepository.Repository.prepend_library_path("/usr/lib/gnome-shell");
+-GIRepository.Repository.prepend_search_path("/usr/lib64/gnome-shell");
+-GIRepository.Repository.prepend_library_path("/usr/lib64/gnome-shell");
++GIRepository.Repository.prepend_search_path("@gnomeShell@/lib/gnome-shell");
+ const Gvc = imports.gi.Gvc;
+ const Lang = imports.lang;
+ 

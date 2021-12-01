@@ -1,0 +1,17 @@
+--- a/src/bin/pg_config/pg_config.c
++++ b/src/bin/pg_config/pg_config.c
+@@ -220,11 +220,13 @@ show_sysconfdir(bool all)
+ static void
+ show_pgxs(bool all)
+ {
+-	char		path[MAXPGPATH];
++	char		path[MAXPGPATH] = "HARDCODED_PGXS_PATH";
+ 
+ 	if (all)
+ 		printf("PGXS = ");
++  /* commented out to be able to point to nix $out path
+ 	get_pkglib_path(mypath, path);
++  */
+ 	strlcat(path, "/pgxs/src/makefiles/pgxs.mk", sizeof(path));
+ 	cleanup_path(path);
+ 	printf("%s\n", path);

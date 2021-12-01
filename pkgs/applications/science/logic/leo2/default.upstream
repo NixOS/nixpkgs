@@ -1,0 +1,6 @@
+url http://page.mi.fu-berlin.de/cbenzmueller/leo/download.html
+version_link '[.]tgz'
+version '.*_v([0-9.]+)[.][a-z0-9]+$' '\1'
+do_overwrite () {
+  do_overwrite_just_version
+}

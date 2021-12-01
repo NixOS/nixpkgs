@@ -1,0 +1,22 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p jq
+# shellcheck shell=bash
+
+# Update all providers which have specified provider source address
+set -euo pipefail
+
+providers=$(
+  jq -r 'to_entries
+  | map_values(.value + { alias: .key })
+  | .[]
+  | select(."provider-source-address"?)
+  | .alias' providers.json
+)
+
+echo "Will update providers:"
+echo "$providers"
+
+for provider in $providers; do
+  echo "Updating $provider"
+  ./update-provider "$provider"
+done

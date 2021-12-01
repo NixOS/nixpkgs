@@ -1,0 +1,29 @@
+name: Backport
+on:
+  pull_request_target:
+    types: [closed, labeled]
+jobs:
+  backport:
+    name: Backport Pull Request
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # required to find all branches
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Create backport PRs
+        # should be kept in sync with `version`
+        uses: zeebe-io/backport-action@v0.0.5
+        with:
+          # Config README: https://github.com/zeebe-io/backport-action#backport-action
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_workspace: ${{ github.workspace }}
+          # should be kept in sync with `uses`
+          version: v0.0.5
+          pull_description: |-
+            Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
+
+            * [ ] Before merging, ensure that this backport complies with the [Criteria for Backporting](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#criteria-for-backporting-changes).
+              * Even as a non-commiter, if you find that it does not comply, leave a comment.

@@ -1,0 +1,12 @@
+--- a/protocol/protocol-icon.vala	2013-08-27 12:53:57 +0000
++++ b/protocol/protocol-icon.vala	2021-04-13 22:34:41 +0000
+@@ -185,7 +185,7 @@
+   }
+ 
+   /* Added to GIcon interface in 2.37 */
+-  private Variant serialize ()
++  private Variant? serialize ()
+   {
+     Variant? ret = null;
+     return ret;
+
