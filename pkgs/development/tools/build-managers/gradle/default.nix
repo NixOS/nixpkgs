@@ -89,9 +89,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_7 = gen {
-    version = "7.3";
+    version = "7.3.1";
     nativeVersion = "0.22-milestone-21";
-    sha256 = "04741q7avmn7rv9h5s6dqj4ibnvdylxrlhvj9wb5kixx96nm53yy";
+    sha256 = "0rkb9pdmvq0zidv8lv4im2j7gs949lg35r79l1hwf4pwi2k3ryws";
     defaultJava = jdk17;
   };
 
