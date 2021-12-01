@@ -10397,6 +10397,8 @@ in {
 
   yamale = callPackage ../development/python-modules/yamale { };
 
+  yamlfix = callPackage ../development/python-modules/yamlfix { };
+
   yamllint = callPackage ../development/python-modules/yamllint { };
 
   yamlloader = callPackage ../development/python-modules/yamlloader { };

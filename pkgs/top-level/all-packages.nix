@@ -11175,6 +11175,8 @@ with pkgs;
 
   yank = callPackage ../tools/misc/yank { };
 
+  yamlfix = with python3Packages; toPythonApplication yamlfix;
+
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   yaml-merge = callPackage ../tools/text/yaml-merge { };
