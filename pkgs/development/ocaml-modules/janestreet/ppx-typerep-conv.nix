@@ -3,7 +3,7 @@
 
 buildOcamlJane {
   pname = "ppx_typerep_conv";
-  hash = "0dldlx73r07j6w0i7h4hxly0v678naa79na5rafsk2974gs5ih9g";
+  hash = "0000000000000000000000000000000000000000000000000000";
   propagatedBuildInputs = [ ppx_core ppx_tools ppx_type_conv typerep ];
 
   meta = with lib; {

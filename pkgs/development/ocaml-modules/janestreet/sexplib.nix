@@ -5,7 +5,7 @@ buildOcamlJane {
   pname = "sexplib";
   version = "113.33.03";
 
-  hash = "1klar4qw4s7bj47ig7kxz2m4j1q3c60pfppis4vxrxv15r0kfh22";
+  hash = "0000000000000000000000000000000000000000000000000000";
 
   propagatedBuildInputs = [ type_conv ];
 

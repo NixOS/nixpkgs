@@ -7,7 +7,7 @@
 
 buildOcamlJane {
   pname = "ppx_jane";
-  hash  = "1la0rp8fhzfglwb15gqh1pl1ld8ls4cnidaw9mjc5q1hb0yj1qd9";
+  hash  = "0000000000000000000000000000000000000000000000000000";
   propagatedBuildInputs =
     [ ppx_assert ppx_bench ppx_bin_prot ppx_compare ppx_custom_printf
       ppx_driver ppx_enumerate ppx_expect ppx_fail ppx_fields_conv

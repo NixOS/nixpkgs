@@ -4,7 +4,7 @@ buildOcamlJane {
   pname = "bin_prot";
   version = "113.33.03";
   minimumSupportedOcamlVersion = "4.02";
-  hash = "0jlarpfby755j0kikz6vnl1l6q0ga09b9zrlw6i84r22zchnqdsh";
+  hash = "0000000000000000000000000000000000000000000000000000";
 
   propagatedBuildInputs = [ type_conv ];
 

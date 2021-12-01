@@ -3,7 +3,7 @@
 
 buildOcamlJane {
   pname = "ppx_sexp_message";
-  hash = "0inbff25qii868p141jb1y8n3vjfyz66jpnsl9nma6nkkyjkp05j";
+  hash = "0000000000000000000000000000000000000000000000000000";
   propagatedBuildInputs = [ ppx_core ppx_driver ppx_here ppx_sexp_conv ppx_tools ];
 
   meta = with lib; {

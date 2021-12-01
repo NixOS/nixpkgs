@@ -3,7 +3,7 @@
 
 buildOcamlJane {
   pname = "ppx_compare";
-  hash = "05cnwxfxm8201lpfmcqkcqfy6plh5c2151jbj4qsnxhlvvjli459";
+  hash = "0000000000000000000000000000000000000000000000000000";
   propagatedBuildInputs =
     [ppx_core ppx_driver ppx_tools ppx_type_conv ];
 

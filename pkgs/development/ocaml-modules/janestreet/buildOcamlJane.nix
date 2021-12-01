@@ -1,4 +1,4 @@
-{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchFromGitHub } :
 
 { pname, version ? "113.33.03", buildInputs ? [],
   hash ? "",
@@ -7,8 +7,10 @@
 
 buildOcaml (args // {
   inherit pname version minimumSupportedOcamlVersion;
-  src = fetchurl {
-    url = "https://github.com/janestreet/${pname}/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "janestreet";
+    repo = pname;
+    rev = version;
     sha256 = hash;
   };
 
