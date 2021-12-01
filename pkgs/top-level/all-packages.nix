@@ -4992,7 +4992,9 @@ with pkgs;
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
-  etcher = callPackage ../tools/misc/etcher { };
+  etcher = callPackage ../tools/misc/etcher {
+    electron = electron_14;
+  };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
