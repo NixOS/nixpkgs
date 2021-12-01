@@ -12,7 +12,7 @@ let
 
     src = fetchurl {
       url = "https://content.runescape.com/downloads/ubuntu/pool/non-free/r/${pname}/${pname}_${version}_amd64.deb";
-      sha256 = "0r5v1pwh0aas31b1d3pkrc8lqmqz9b4fml2b4kxmg5xzp677h271";
+      sha256 = "10ly44lbgbbqc65lx7mhfzfjaiz1xj0mfjqlwlxz0sdjyw4a6ij6";
     };
 
     nativeBuildInputs = [
@@ -76,7 +76,7 @@ let
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
       license = licenses.unfree;
-      maintainers = with lib.maintainers; [ grburst ];
+      maintainers = with maintainers; [ grburst ];
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -100,4 +100,12 @@ in
    ];
    multiPkgs = pkgs: [ libGL ];
    runScript = "runescape-launcher";
+
+   meta = with lib; {
+     description = "Launcher for RuneScape 3";
+     homepage = "https://www.runescape.com/";
+     license = licenses.unfree;
+     maintainers = with maintainers; [ grburst ];
+     platforms = [ "x86_64-linux" ];
+   };
 }
