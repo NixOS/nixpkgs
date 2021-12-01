@@ -125,6 +125,24 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
+  # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
+  # derivation for certain tools depending on the platform.
+  bintoolsFor = {
+    # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
+    # part of the bintools wrapper (due to codesigning requirements), but not on
+    # x86_64-darwin.
+    install_name_tool =
+      if stdenv.targetPlatform.isAarch64
+      then targetCC.bintools
+      else targetCC.bintools.bintools;
+    # Same goes for strip.
+    strip =
+      # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
+      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+      then targetCC.bintools
+      else targetCC.bintools.bintools;
+  };
+
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
   # see #84670 and #49071 for more background.
@@ -173,10 +191,10 @@ stdenv.mkDerivation (rec {
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+    export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
     export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
-    export INSTALL_NAME_TOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}install_name_tool"
+    export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin llvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin llvmPackages.llvm}/bin/opt"
