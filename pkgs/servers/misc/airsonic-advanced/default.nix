@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "airsonic-advanced";
   version = "11.0.0-SNAPSHOT.20211116202136";
 
