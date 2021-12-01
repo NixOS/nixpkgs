@@ -15,7 +15,8 @@
 , ninja
 , pkg-config
 , python3
-, lib, stdenv
+, lib
+, stdenv
 , systemd
 , wrapGAppsHook
 , xapps

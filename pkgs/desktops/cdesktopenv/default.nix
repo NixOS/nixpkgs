@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
+{ lib, stdenv, fetchurl
+, fetchpatch
+, xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
 , ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
@@ -27,6 +29,13 @@ in stdenv.mkDerivation rec {
   patches = [
     ./2.3.2.patch
     ./0001-all-remove-deprecated-sys_errlist-and-replace-with-A.patch
+
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/cdesktopenv/cde/commit/0b7849e210a99a413ddeb52a0eb5aef9a08504a0.patch";
+      sha256 = "0wlhs617hws3rwln9v74y1nw27n3pp7jkpnxlala7k5y64506ipj";
+      stripLen = 1;
+    })
   ];
 
   buildInputs = [

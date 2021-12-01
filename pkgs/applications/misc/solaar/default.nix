@@ -13,13 +13,13 @@
 # logitech-udev-rules instead of adding this to services.udev.packages on NixOS
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     rev = version;
-    sha256 = "sha256-RQ7iSiw/0xbPOYhuHg4cQpuJyRcaigWKVw4Jt12T9Uw=";
+    sha256 = "sha256-rNz296pKw2/WaryxHekWHSAS1jdTviZxXDgO/L/PJCU=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gdk-pixbuf ];

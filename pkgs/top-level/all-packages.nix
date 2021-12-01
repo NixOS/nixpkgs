@@ -204,6 +204,8 @@ with pkgs;
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
+  bakelite = callPackage ../tools/backup/bakelite { };
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
@@ -975,6 +977,8 @@ with pkgs;
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   pferd = callPackage ../tools/misc/pferd {};
+
+  qflipper = callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -3242,6 +3246,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  lifeograph = callPackage ../applications/editors/lifeograph { };
+
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
@@ -3277,6 +3283,8 @@ with pkgs;
   kaggle = with python3Packages; toPythonApplication kaggle;
 
   lynis = callPackage ../tools/security/lynis { };
+
+  maigret = callPackage ../tools/security/maigret { };
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
@@ -8952,6 +8960,8 @@ with pkgs;
 
   quickserve = callPackage ../tools/networking/quickserve { };
 
+  quictls = callPackage ../development/libraries/quictls { };
+
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
@@ -12466,6 +12476,8 @@ with pkgs;
   kotlin = callPackage ../development/compilers/kotlin { };
   kotlin-native = callPackage ../development/compilers/kotlin/native.nix { };
 
+  kotlin-language-server = callPackage ../development/tools/kotlin-language-server {};
+
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
   };
@@ -14392,7 +14404,8 @@ with pkgs;
   cvehound = callPackage ../development/tools/analysis/cvehound { };
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
-    inherit (llvmPackages_11) llvm libclang;
+    # cvise keeps up with fresh llvm releases and supports wide version range
+    inherit (llvmPackages_latest) llvm libclang;
   };
 
   cwltool = callPackage ../applications/science/misc/cwltool { };
@@ -18831,6 +18844,10 @@ with pkgs;
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
+  nghttp3 = callPackage ../development/libraries/nghttp3 { };
+
+  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
+
   nix-plugins = callPackage ../development/libraries/nix-plugins { };
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
@@ -21701,6 +21718,8 @@ with pkgs;
 
   webdav = callPackage ../servers/webdav { };
 
+  webdav-server-rs = callPackage ../servers/webdav-server-rs { };
+
   webmetro = callPackage ../servers/webmetro { };
 
   wsdd = callPackage ../servers/wsdd { };
@@ -23988,6 +24007,8 @@ with pkgs;
   akira-unstable = callPackage ../applications/graphics/akira { };
 
   alembic = callPackage ../development/libraries/alembic {};
+
+  alfaview = callPackage ../applications/networking/instant-messengers/alfaview { };
 
   alchemy = callPackage ../applications/graphics/alchemy { };
 
@@ -26411,7 +26432,28 @@ with pkgs;
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
-  kumactl = callPackage ../applications/networking/cluster/kumactl { };
+  kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
+  kuma-experimental = callPackage ../applications/networking/cluster/kuma {
+    isFull = true;
+    enableGateway = true;
+    pname = "kuma-experimental";
+  };
+  kumactl = callPackage ../applications/networking/cluster/kuma {
+    components = ["kumactl"];
+    pname = "kumactl";
+  };
+  kuma-cp = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-cp"];
+    pname = "kuma-cp";
+  };
+  kuma-dp = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-dp"];
+    pname = "kuma-dp";
+  };
+  kuma-prometheus-sd = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-prometheus-sd"];
+    pname = "kuma-prometheus-sd";
+  };
 
   kile-wl = callPackage ../applications/misc/kile-wl { };
 
