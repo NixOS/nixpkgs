@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     sha256 = "0vyj0kng8c9inv2rbw1qdr43ic15s5x8fvk9mbw0vpc6g723x99g";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   dontConfigure = true;
   dontBuild = true;
 
@@ -34,10 +32,22 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall = ''
-    # `ffmpeg-full` is used here to bring in `ffplay`, which is used to display
-    # the reMarkable framebuffer
-    wrapProgram "$out/bin/restream" --suffix PATH ":" "${lib.makeBinPath [ ffmpeg-full lz4 openssh netcat ]}"
+  postInstall = let
+    deps = [
+      # `ffmpeg-full` is used here to bring in `ffplay`, which is used
+      # to display the reMarkable framebuffer
+      ffmpeg-full
+      lz4
+      openssh
+      # Libressl netcat brings in `nc` which used for --uncompressed mode.
+      netcat
+    ];
+  in ''
+    # This `sed` command has the same effect as `wrapProgram`, except
+    # without .restream-wrapped store paths appearing everywhere.
+    sed -i \
+      '2i export PATH=$PATH''${PATH:+':'}${lib.makeBinPath deps}' \
+      "$out/bin/restream"
   '';
 
   meta = with lib; {
