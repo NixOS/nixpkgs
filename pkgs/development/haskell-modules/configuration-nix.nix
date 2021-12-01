@@ -230,6 +230,11 @@ self: super: builtins.intersectAttrs super {
     xmonad = self.xmonad_0_17_0;
   };
 
+  xmonad-extras_0_17_0 = super.xmonad-extras_0_17_0.override {
+    xmonad = self.xmonad_0_17_0;
+    xmonad-contrib = self.xmonad-contrib_0_17_0;
+  };
+
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK30; };
