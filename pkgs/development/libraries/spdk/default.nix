@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , ncurses
 , python3
 , cunit
@@ -23,6 +22,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-/hynuYVdzIfiHUUfuuOY8SBJ18DqJr2Fos2JjQQVvbg=";
   };
+
+  patches = [
+    # Backport of upstream patch for ncurses-6.3 support.
+    # Will be in next release after 21.10.
+    ./ncurses-6.3.patch
+  ];
 
   nativeBuildInputs = [
     python3
