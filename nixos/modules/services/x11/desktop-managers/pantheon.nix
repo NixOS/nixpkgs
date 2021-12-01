@@ -300,6 +300,7 @@ in
         contractor
         extra-elementary-contracts
         file-roller-contract
+        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [

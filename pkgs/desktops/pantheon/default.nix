@@ -105,6 +105,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (gnome) gnome-desktop;
   };
 
+  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
+    inherit (gnome) gnome-bluetooth;
+  };
+
   wingpanel = callPackage ./desktop/wingpanel { };
 
   wingpanel-with-indicators = callPackage ./desktop/wingpanel/wrapper.nix {
