@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define assert_success(e) do { if ((e) < 0) { perror(#e); exit(1); } } while (0)
+#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)
 
 int main(int argc, char **argv) {
     putenv("PART1=HELLO");

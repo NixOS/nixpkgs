@@ -12,7 +12,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define assert_success(e) do { if ((e) < 0) { perror(#e); exit(1); } } while (0)
+#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)
 
 char *concat3(char *x, char *y, char *z) {
     int xn = strlen(x);

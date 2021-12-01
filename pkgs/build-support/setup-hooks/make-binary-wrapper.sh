@@ -138,7 +138,7 @@ makeCWrapper() {
     [ -z "$uses_concat3" ] || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert" ]  || printf '%s\n' "#include <assert.h>"
     [ -z "$uses_assert_success" ] || printf '%s\n' "#include <stdio.h>"
-    [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); exit(1); } } while (0)"
+    [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
     [ -z "$uses_concat3" ] || printf '\n%s\n' "$(concat3Fn)"
     [ -z "$uses_prefix" ]  || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ]  || printf '\n%s\n' "$(setEnvSuffixFn)"
