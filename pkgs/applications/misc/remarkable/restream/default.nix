@@ -5,6 +5,7 @@
 , ffmpeg-full
 , fetchFromGitHub
 , openssh
+, netcat
 , makeWrapper
 }:
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # `ffmpeg-full` is used here to bring in `ffplay`, which is used to display
     # the reMarkable framebuffer
-    wrapProgram "$out/bin/restream" --suffix PATH ":" "${lib.makeBinPath [ ffmpeg-full lz4 openssh ]}"
+    wrapProgram "$out/bin/restream" --suffix PATH ":" "${lib.makeBinPath [ ffmpeg-full lz4 openssh netcat ]}"
   '';
 
   meta = with lib; {
