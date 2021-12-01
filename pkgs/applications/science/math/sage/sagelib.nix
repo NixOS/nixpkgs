@@ -10,7 +10,7 @@
 , cypari2
 , cysignals
 , cython
-, ecl
+, lisp-compiler
 , eclib
 , ecm
 , flint
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     jupyter_core
     pkg-config
     pip # needed to query installed packages
-    ecl
+    lisp-compiler
   ];
 
   buildInputs = [
@@ -92,7 +92,7 @@ buildPythonPackage rec {
     arb
     brial
     cliquer
-    ecl
+    lisp-compiler
     eclib
     ecm
     fflas-ffpack

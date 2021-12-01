@@ -15,8 +15,7 @@
 , pkg-config
 , pari
 , gap
-, ecl
-, maxima-ecl
+, maxima
 , singular
 , fflas-ffpack
 , givaro
@@ -77,8 +76,8 @@ let
     pkg-config
     pari
     gap
-    ecl
-    maxima-ecl
+    maxima.lisp-compiler
+    maxima
     singular
     giac
     palp
