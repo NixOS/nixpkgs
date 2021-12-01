@@ -155,7 +155,7 @@ addFlags() {
         flag=$(escapeStringLiteral "${flags[$n]}")
         result="$result    ${var}[$((n+1))] = \"$flag\";"$'\n'
     done
-    printf '    %s\n' "char **$var = malloc(sizeof(*$var) * ($((n+1)) + argc));"
+    printf '    %s\n' "char **$var = calloc($((n+1)) + argc, sizeof(*$var));"
     printf '    %s\n' "assert($var != NULL);"
     printf '    %s\n' "${var}[0] = argv[0];"
     printf '%s' "$result"

@@ -7,7 +7,7 @@
 #include <assert.h>
 
 int main(int argc, char **argv) {
-    char **argv_tmp = malloc(sizeof(*argv_tmp) * (5 + argc));
+    char **argv_tmp = calloc(5 + argc, sizeof(*argv_tmp));
     assert(argv_tmp != NULL);
     argv_tmp[0] = argv[0];
     argv_tmp[1] = "-x";
