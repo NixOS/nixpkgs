@@ -87,6 +87,7 @@ in
 stdenvNoCC.mkDerivation rec {
   pname = "open-watcom-bin";
   version = "1.9";
+  name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
     url = "http://ftp.openwatcom.org/install/open-watcom-c-linux-${version}";
