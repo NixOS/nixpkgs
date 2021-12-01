@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-soLnjltoATjqNHRpcVcqiTSQGJwSSzxwKEMk/cr42YU=";
   };
 
-  buildCommand = ''
+  installPhase = ''
     mkdir -p "$out/webapps"
     cp "$src" "$out/webapps/airsonic.war"
   '';
