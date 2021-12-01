@@ -22,6 +22,8 @@ buildPythonPackage rec {
     substituteInPlace vex/Makefile-gcc --replace '/usr/bin/ar' 'ar'
   '';
 
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [ "--plat-name" "linux" ];
+
   propagatedBuildInputs = [
     archinfo
     bitstring
@@ -45,7 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/angr/pyvex";
     license = with licenses; [ bsd2 gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ fab ];
-    # ERROR: pyvex-X-py3-none-manylinux1_aarch64.whl is not a supported wheel on this platform.
-    broken = stdenv.isAarch64;
   };
 }
