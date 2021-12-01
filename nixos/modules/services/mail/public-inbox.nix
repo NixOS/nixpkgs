@@ -355,9 +355,9 @@ in
       groups.public-inbox = {};
     };
     networking.firewall = mkIf cfg.openFirewall
-      { allowedTCPPorts = mkMerge (map (proto:
-          (mkIf (cfg.${proto}.enable && types.port.check cfg.proto.port) [ cfg.proto.port ])
-        ["imap" "http" "nntp"]));
+      { allowedTCPPorts = mkMerge
+        (map (proto: (mkIf (cfg.${proto}.enable && types.port.check cfg.${proto}.port) [ cfg.${proto}.port ]))
+        ["imap" "http" "nntp"]);
       };
     services.postfix = mkIf (cfg.postfix.enable && cfg.mda.enable) {
       # Not sure limiting to 1 is necessary, but better safe than sorry.
